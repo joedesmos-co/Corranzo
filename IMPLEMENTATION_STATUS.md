@@ -13,8 +13,8 @@
 | Phase 2 (complete) | `bb83f5b` |
 | Phase 3 | `2576e2a` |
 | Status update | `3dcb745` |
-| Phase 4 | *(this session)* |
-| Phase 5 | *(this session)* |
+| Phase 4 | `78904a6` |
+| Phase 5 | `a5c4a8b` |
 
 Branch: `main`
 

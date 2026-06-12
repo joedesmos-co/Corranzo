@@ -55,7 +55,7 @@
 | Phase 3 | `2576e2a` |
 | Status | `3dcb745` |
 | Phase 4 | `78904a6` |
-| Phase 5 | *(see git log after this commit)* |
+| Phase 5 | `a5c4a8b` |
 
 ## Files added (this completion)
 
