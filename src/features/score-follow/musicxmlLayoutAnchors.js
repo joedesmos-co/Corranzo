@@ -5,22 +5,17 @@ import { createAnchorId } from './scoreFollowStorage.js'
 const MIN_LAYOUT_COVERAGE = 0.55
 const MIN_SYSTEM_MONOTONIC_RATIO = 0.8
 
-function isAutoSystemAnchor(anchor) {
+function isAutoSystemStartAnchor(anchor) {
   const source = anchor?.source
-  return (
-    source === ANCHOR_SOURCE.AUTO_SYSTEM ||
-    source === ANCHOR_SOURCE.AUTO ||
-    anchor?.meta?.role === 'system-start'
-  )
+  const role = anchor?.meta?.role
+  if (role === 'system-end') {
+    return false
+  }
+  return role === 'system-start' || source === ANCHOR_SOURCE.AUTO_SYSTEM || source === ANCHOR_SOURCE.AUTO
 }
 
 function isAutoSystemEndAnchor(anchor) {
-  const source = anchor?.source
-  return (
-    source === ANCHOR_SOURCE.AUTO_SYSTEM ||
-    source === ANCHOR_SOURCE.AUTO ||
-    anchor?.meta?.role === 'system-end'
-  )
+  return anchor?.meta?.role === 'system-end'
 }
 
 /**
@@ -92,7 +87,7 @@ function pairSystemSpanAnchors(systemAnchors) {
   let pendingStart = null
 
   for (const anchor of sorted) {
-    if (anchor.meta?.role === 'system-start' || isAutoSystemAnchor(anchor)) {
+    if (anchor.meta?.role === 'system-start' || isAutoSystemStartAnchor(anchor)) {
       pendingStart = anchor
       continue
     }

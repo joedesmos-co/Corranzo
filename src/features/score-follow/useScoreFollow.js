@@ -16,9 +16,7 @@ import {
   analyzeSemiAutoScoreSetup,
   shouldAutoApplySemiAutoResult,
 } from './semiAutoScoreAlignment.js'
-import { computeScoreFollowCursor } from './scoreFollowCursor.js'
-import { filterTrustedAnchors } from './trustedAnchors.js'
-import { validateScoreFollowPosition } from './scoreFollowStartSanity.js'
+import { resolveScoreFollowCursor } from './resolveScoreFollowCursor.js'
 import {
   findNextUnmarkedMeasureNumber,
   getScoreFollowMarkingProgress,
@@ -259,32 +257,21 @@ export default function useScoreFollow({
     }
   }, [alignmentMode, currentMeasure?.number])
 
-  const cursorRaw = useMemo(
+  const resolved = useMemo(
     () =>
       hasTiming && trustedAnchors.length > 0 && anchorTrust.showCursor
-        ? computeScoreFollowCursor({
+        ? resolveScoreFollowCursor({
             timingMap,
             practiceTime,
             trustedAnchors,
+            trust: anchorTrust,
           })
-        : { visible: false },
-    [hasTiming, trustedAnchors, anchorTrust.showCursor, timingMap, practiceTime],
+        : { cursor: { visible: false }, needsSetup: anchorTrust.needsSetup, confidence: 'none' },
+    [hasTiming, trustedAnchors, anchorTrust, timingMap, practiceTime],
   )
 
-  const positionCheck = useMemo(
-    () =>
-      validateScoreFollowPosition({
-        timingMap,
-        trustedAnchors,
-        cursor: cursorRaw,
-        practiceTime,
-        trust: anchorTrust,
-      }),
-    [timingMap, trustedAnchors, cursorRaw, practiceTime, anchorTrust],
-  )
-
-  const cursor = positionCheck.cursor
-  const followNeedsSetup = positionCheck.needsSetup || anchorTrust.needsSetup
+  const cursor = resolved.cursor
+  const followNeedsSetup = anchorTrust.needsSetup
 
   const lockExactCursor = Boolean(cursor?.lockExact || cursor?.forcedStart)
   const smoothCursorActive = Boolean(

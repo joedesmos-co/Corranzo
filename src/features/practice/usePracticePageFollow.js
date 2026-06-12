@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 const SCROLL_ALPHA = 0.11
 const LOOKAHEAD_RATIO = 0.36
 const PAGE_SWITCH_DEBOUNCE_MS = 280
+const USER_SCROLL_SUSPEND_MS = 2000
 
 /**
  * Gentle PDF scroll + page advance to keep the score-follow cursor in view.
@@ -15,9 +16,10 @@ export default function usePracticePageFollow({
   numPages,
   onGoToPage,
 }) {
-  const scrollStateRef = useRef({ top: 0 })
+  const scrollStateRef = useRef({ top: 0, seeded: false })
   const pageSwitchTimerRef = useRef(null)
   const lastRequestedPageRef = useRef(pageNumber)
+  const userScrollUntilRef = useRef(0)
 
   useEffect(() => {
     if (!active || !scrollContainerRef?.current || !cursor?.visible) {
@@ -49,7 +51,28 @@ export default function usePracticePageFollow({
   }, [pageNumber])
 
   useEffect(() => {
+    const container = scrollContainerRef?.current
+    if (!active || !container) {
+      return undefined
+    }
+
+    const markUserScroll = () => {
+      userScrollUntilRef.current = Date.now() + USER_SCROLL_SUSPEND_MS
+      scrollStateRef.current.top = container.scrollTop
+    }
+
+    container.addEventListener('wheel', markUserScroll, { passive: true })
+    container.addEventListener('touchmove', markUserScroll, { passive: true })
+
+    return () => {
+      container.removeEventListener('wheel', markUserScroll)
+      container.removeEventListener('touchmove', markUserScroll)
+    }
+  }, [active, scrollContainerRef])
+
+  useEffect(() => {
     if (!active || !scrollContainerRef?.current || !cursor?.visible || cursor.page !== pageNumber) {
+      scrollStateRef.current.seeded = false
       return undefined
     }
 
@@ -63,19 +86,30 @@ export default function usePracticePageFollow({
         return
       }
 
-      const containerRect = container.getBoundingClientRect()
-      const frameRect = pageFrame.getBoundingClientRect()
-      const cursorPixelY = frameRect.top - containerRect.top + cursor.y * frameRect.height + container.scrollTop
-      const targetScrollTop = cursorPixelY - container.clientHeight * LOOKAHEAD_RATIO
-      const maxScroll = Math.max(0, container.scrollHeight - container.clientHeight)
-      const clampedTarget = Math.min(maxScroll, Math.max(0, targetScrollTop))
+      if (!scrollStateRef.current.seeded) {
+        scrollStateRef.current.top = container.scrollTop
+        scrollStateRef.current.seeded = true
+      }
 
-      const current = scrollStateRef.current.top
-      const next = current + (clampedTarget - current) * SCROLL_ALPHA
-      scrollStateRef.current.top = next
+      const userSuspended = Date.now() < userScrollUntilRef.current
+      if (!userSuspended) {
+        const containerRect = container.getBoundingClientRect()
+        const frameRect = pageFrame.getBoundingClientRect()
+        const cursorPixelY =
+          frameRect.top - containerRect.top + cursor.y * frameRect.height + container.scrollTop
+        const targetScrollTop = cursorPixelY - container.clientHeight * LOOKAHEAD_RATIO
+        const maxScroll = Math.max(0, container.scrollHeight - container.clientHeight)
+        const clampedTarget = Math.min(maxScroll, Math.max(0, targetScrollTop))
 
-      if (Math.abs(next - container.scrollTop) > 0.5) {
-        container.scrollTop = next
+        const current = scrollStateRef.current.top
+        const next = current + (clampedTarget - current) * SCROLL_ALPHA
+        scrollStateRef.current.top = next
+
+        if (Math.abs(next - container.scrollTop) > 0.5) {
+          container.scrollTop = next
+        }
+      } else {
+        scrollStateRef.current.top = container.scrollTop
       }
 
       frameId = requestAnimationFrame(tick)
