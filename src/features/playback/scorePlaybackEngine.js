@@ -1,6 +1,11 @@
 import * as Tone from 'tone'
 import { getTimeline } from '../musicxml/timeline.js'
-import { buildCombinedPlaybackSchedule } from './scorePlaybackSchedule.js'
+import {
+  applyPlaybackRate,
+  buildCombinedPlaybackSchedule,
+  buildMetronomeSchedule,
+  buildScoreNoteSchedule,
+} from './scorePlaybackSchedule.js'
 
 const LOOKAHEAD_SECONDS = 2.5
 const SCHEDULE_TICK_MS = 200
@@ -37,6 +42,16 @@ function createPianoVoice() {
   return { synth, filter, chorus, reverb }
 }
 
+function createMetronomeVoice() {
+  const synth = new Tone.MembraneSynth({
+    pitchDecay: 0.008,
+    octaves: 2,
+    envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.05 },
+    volume: -18,
+  }).toDestination()
+  return synth
+}
+
 const MIDI_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
 function midiNumberToName(midi) {
@@ -49,14 +64,20 @@ function softenVelocity(velocity) {
   return Math.min(0.92, Math.max(0.22, value ** 1.15 * 0.78 + 0.14))
 }
 
+function eventKey(event) {
+  return `${event.type}:${event.scoreTimeSeconds.toFixed(5)}`
+}
+
 /**
  * Windowed playback engine driven by the performed score timeline.
- * MIDI events are mapped onto performed time; MusicXML notes are the XML-only source.
  */
 export class ScorePlaybackEngine {
   constructor() {
-    this.events = []
+    this.timingMap = null
+    this.noteEvents = []
+    this.metronomeEvents = []
     this.tracks = []
+    this.mappingWarning = null
     this.onTimeUpdate = null
     this.progressFrameId = null
     this.scheduleTimerId = null
@@ -66,39 +87,50 @@ export class ScorePlaybackEngine {
     this.playing = false
     this.playStartedAt = 0
     this.scheduledUntilScore = 0
+    this.scheduledKeys = new Set()
     this.duration = 0
     this.voice = null
+    this.metronome = null
     this.output = null
+    this.metronomeEnabled = false
+    this.metronomeLevel = 0.6
   }
 
-  ensureVoice() {
-    if (this.voice) {
-      return
-    }
-    this.output = new Tone.Gain(1).toDestination()
-    this.voice = createPianoVoice()
-    this.voice.reverb.connect(this.output)
-  }
-
-  disposeVoice() {
+  ensureVoices() {
     if (!this.voice) {
-      return
+      this.output = new Tone.Gain(1).toDestination()
+      this.voice = createPianoVoice()
+      this.voice.reverb.connect(this.output)
     }
-    this.voice.synth.dispose()
-    this.voice.filter.dispose()
-    this.voice.chorus.dispose()
-    this.voice.reverb.dispose()
-    this.output?.dispose()
-    this.voice = null
-    this.output = null
+    if (!this.metronome) {
+      this.metronome = createMetronomeVoice()
+    }
   }
 
-  async load({ timingMap, midiArrayBuffer = null }) {
+  disposeVoices() {
+    if (this.voice) {
+      this.voice.synth.dispose()
+      this.voice.filter.dispose()
+      this.voice.chorus.dispose()
+      this.voice.reverb.dispose()
+      this.output?.dispose()
+      this.voice = null
+      this.output = null
+    }
+    if (this.metronome) {
+      this.metronome.dispose()
+      this.metronome = null
+    }
+  }
+
+  async load({ timingMap, midiArrayBuffer = null, alignmentDiagnostics = null }) {
     const loadToken = ++this.loadToken
     this.stopInternal()
 
     if (!timingMap) {
-      this.events = []
+      this.timingMap = null
+      this.noteEvents = []
+      this.metronomeEvents = []
       this.duration = 0
       this.tracks = []
       return null
@@ -106,21 +138,42 @@ export class ScorePlaybackEngine {
 
     const schedule = await buildCombinedPlaybackSchedule(timingMap, midiArrayBuffer, {
       rate: this.playbackRate,
+      alignmentDiagnostics,
     })
     if (loadToken !== this.loadToken) {
       return null
     }
 
-    this.events = schedule.events
+    this.timingMap = timingMap
+    this.noteEvents = schedule.noteEvents ?? schedule.events ?? []
+    this.metronomeEvents = schedule.metronomeEvents ?? []
+    this.mappingWarning = schedule.mappingWarning ?? null
     this.duration = getTimeline(timingMap).performedDurationSeconds
     this.tracks = schedule.tracks ?? []
     this.offsetScoreSeconds = 0
     this.scheduledUntilScore = 0
+    this.scheduledKeys.clear()
 
     return {
       duration: this.duration,
       tracks: this.tracks,
-      eventCount: this.events.length,
+      eventCount: this.noteEvents.length,
+      mappingMethod: schedule.mappingMethod,
+      mappingWarning: this.mappingWarning,
+    }
+  }
+
+  setMetronomeEnabled(enabled) {
+    this.metronomeEnabled = Boolean(enabled)
+    if (this.playing) {
+      this.rescheduleFrom(this.getCurrentScoreTime())
+    }
+  }
+
+  setMetronomeLevel(level) {
+    this.metronomeLevel = Math.max(0, Math.min(1, level))
+    if (this.metronome) {
+      this.metronome.volume.value = Tone.gainToDb(0.15 + this.metronomeLevel * 0.55)
     }
   }
 
@@ -131,6 +184,9 @@ export class ScorePlaybackEngine {
     }
     const scoreTime = this.getCurrentScoreTime()
     this.playbackRate = next
+    if (this.timingMap) {
+      this.metronomeEvents = buildMetronomeSchedule(this.timingMap, { rate: this.playbackRate })
+    }
     this.rescheduleFrom(scoreTime)
   }
 
@@ -146,30 +202,48 @@ export class ScorePlaybackEngine {
     return this.offsetScoreSeconds
   }
 
-  scheduleWindow(fromScoreSeconds, toScoreSeconds) {
-    this.ensureVoice()
-    const now = Tone.now()
-    const baseWall = this.playStartedAt - this.offsetScoreSeconds / this.playbackRate
+  wallTimeForScoreTime(scoreTimeSeconds) {
+    return this.playStartedAt - this.offsetScoreSeconds / this.playbackRate + scoreTimeSeconds / this.playbackRate
+  }
 
-    for (const event of this.events) {
+  scheduleWindow(fromScoreSeconds, toScoreSeconds) {
+    this.ensureVoices()
+    const now = Tone.now()
+    this.metronome.volume.value = Tone.gainToDb(0.15 + this.metronomeLevel * 0.55)
+
+    const events = this.metronomeEnabled
+      ? [...this.noteEvents, ...this.metronomeEvents]
+      : this.noteEvents
+
+    for (const event of events) {
       if (event.scoreTimeSeconds < fromScoreSeconds || event.scoreTimeSeconds >= toScoreSeconds) {
         continue
       }
 
-      const wallAt = baseWall + event.scoreTimeSeconds / this.playbackRate
+      const key = eventKey(event)
+      if (this.scheduledKeys.has(key)) {
+        continue
+      }
+
+      const wallAt = this.wallTimeForScoreTime(event.scoreTimeSeconds)
       const delay = wallAt - now
       if (delay < -0.05) {
         continue
       }
 
-      const name = event.name ?? midiNumberToName(event.midi)
-      const velocity = softenVelocity(event.velocity ?? 0.75)
-      this.voice.synth.triggerAttackRelease(
-        name,
-        event.durationSeconds,
-        Math.max(now, now + delay),
-        velocity,
-      )
+      const at = Math.max(now, now + delay)
+
+      if (event.type === 'metronome') {
+        const pitch = event.accent ? 'C5' : 'G4'
+        this.metronome.triggerAttackRelease(pitch, 0.04, at)
+      } else {
+        const name = event.name ?? midiNumberToName(event.midi)
+        const velocity = softenVelocity(event.velocity ?? 0.75)
+        const duration = (event.baseDurationSeconds ?? 0.03) / this.playbackRate
+        this.voice.synth.triggerAttackRelease(name, duration, at, velocity)
+      }
+
+      this.scheduledKeys.add(key)
     }
 
     this.scheduledUntilScore = toScoreSeconds
@@ -178,6 +252,7 @@ export class ScorePlaybackEngine {
   rescheduleFrom(scoreSeconds) {
     const wasPlaying = this.playing
     this.releaseAll()
+    this.scheduledKeys.clear()
     this.scheduledUntilScore = scoreSeconds
     if (wasPlaying) {
       this.playStartedAt = Tone.now()
@@ -213,7 +288,7 @@ export class ScorePlaybackEngine {
   }
 
   async playFromUserGesture(audioContextStart) {
-    if (!this.events.length && this.duration <= 0) {
+    if (!this.noteEvents.length && this.duration <= 0) {
       return
     }
 
@@ -224,6 +299,7 @@ export class ScorePlaybackEngine {
     }
 
     this.releaseAll()
+    this.scheduledKeys.clear()
     this.playing = true
     this.playStartedAt = Tone.now()
     this.scheduledUntilScore = this.offsetScoreSeconds
@@ -251,6 +327,7 @@ export class ScorePlaybackEngine {
     this.stopInternal(false)
     this.offsetScoreSeconds = clamped
     this.scheduledUntilScore = clamped
+    this.scheduledKeys.clear()
 
     if (wasPlaying) {
       this.playing = true
@@ -268,6 +345,7 @@ export class ScorePlaybackEngine {
     this.stopProgressLoop()
     this.stopScheduleLoop()
     this.releaseAll()
+    this.scheduledKeys.clear()
     if (resetOffset) {
       this.offsetScoreSeconds = 0
       this.scheduledUntilScore = 0
@@ -284,6 +362,10 @@ export class ScorePlaybackEngine {
 
   getTracks() {
     return this.tracks
+  }
+
+  getMappingWarning() {
+    return this.mappingWarning
   }
 
   setTrackMuted(trackId, muted) {
@@ -322,8 +404,10 @@ export class ScorePlaybackEngine {
   dispose() {
     this.loadToken += 1
     this.stopInternal(true)
-    this.disposeVoice()
-    this.events = []
+    this.disposeVoices()
+    this.timingMap = null
+    this.noteEvents = []
+    this.metronomeEvents = []
     this.tracks = []
     this.duration = 0
   }

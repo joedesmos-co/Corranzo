@@ -18,7 +18,7 @@ function PracticePositionTick() {
       measureNavigation={session.measure}
       beatNavigation={session.beat}
       timingMap={session.timing.timingMap}
-      practiceTime={tick.livePracticeTime}
+      practiceTime={tick.practiceTime}
       compact
     />
   )

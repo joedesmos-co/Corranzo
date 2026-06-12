@@ -15,7 +15,7 @@ function PracticeFullscreenHudTick({
   const { session } = usePracticeSessionContext()
   const tick = usePracticeTick()
   const timingMap = session.timing.timingMap
-  const practiceTime = tick.playbackIsPlaying ? tick.playbackCurrentTime : session.livePracticeTime
+  const practiceTime = tick.practiceTime
   const progress = timingMap ? computePracticeProgress(timingMap, practiceTime) : null
   const performedTotal = timingMap?.performedMeasureTimeline?.entries?.length ?? null
 

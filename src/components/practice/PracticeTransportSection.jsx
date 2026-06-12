@@ -1,4 +1,5 @@
 import MidiTransportControls from './MidiTransportControls.jsx'
+import PracticePlaybackSettings from './PracticePlaybackSettings.jsx'
 
 export default function PracticeTransportSection({
   hasMusicXml,
@@ -14,6 +15,14 @@ export default function PracticeTransportSection({
   isPlaying,
   currentTime,
   duration,
+  playbackRate,
+  effectiveTempo,
+  metronomeEnabled,
+  metronomeLevel,
+  mappingWarning,
+  onPlaybackRateChange,
+  onMetronomeEnabledChange,
+  onMetronomeLevelChange,
   onPlay,
   onPause,
   onStop,
@@ -68,6 +77,18 @@ export default function PracticeTransportSection({
               {transportHint}
             </p>
           )}
+
+          <PracticePlaybackSettings
+            playbackRate={playbackRate ?? 1}
+            onPlaybackRateChange={onPlaybackRateChange}
+            effectiveTempo={effectiveTempo}
+            metronomeEnabled={metronomeEnabled ?? false}
+            onMetronomeEnabledChange={onMetronomeEnabledChange}
+            metronomeLevel={metronomeLevel ?? 0.6}
+            onMetronomeLevelChange={onMetronomeLevelChange}
+            mappingWarning={mappingWarning}
+            disabled={disabled || isLoading}
+          />
 
           <MidiTransportControls
             disabled={disabled || isLoading}

@@ -62,10 +62,13 @@ export default function usePracticeSession({
 
   const timing = useMusicXmlTiming(musicXmlSource, 0)
 
+  const alignment = useAlignmentDiagnostics(midiSource, timing.timingMap)
+
   const playback = useScorePlayback({
     timingMap: timing.timingMap,
     midiSource,
     timingLoading: timing.isLoading,
+    alignmentDiagnostics: alignment.diagnostics,
   })
 
   const hasMidi = Boolean(midiSource?.data)
@@ -91,17 +94,7 @@ export default function usePracticeSession({
     sourcesRevision,
   })
 
-  const livePracticeTime = useMemo(() => {
-    if (!hasMusicXml) {
-      return 0
-    }
-    if (playback.isPlaying) {
-      return playback.currentTime
-    }
-    return clock.practiceTime
-  }, [hasMusicXml, playback.isPlaying, playback.currentTime, clock.practiceTime])
-
-  const alignment = useAlignmentDiagnostics(midiSource, timing.timingMap)
+  const practiceTime = clock.practiceTime
 
   const importReadiness = useImportReadiness({
     hasPdf,
@@ -122,10 +115,10 @@ export default function usePracticeSession({
   const timingDisabled = !timing.timingMap || timing.isLoading
 
   const currentMeasureForLoop = timing.timingMap
-    ? getMeasureAtTime(timing.timingMap, livePracticeTime)
+    ? getMeasureAtTime(timing.timingMap, practiceTime)
     : null
   const currentBeatForLoop = timing.timingMap
-    ? getBeatAtTime(timing.timingMap, livePracticeTime)
+    ? getBeatAtTime(timing.timingMap, practiceTime)
     : null
 
   const ensurePaused = useCallback(() => {
@@ -283,13 +276,13 @@ export default function usePracticeSession({
 
   const measure = useMeasureNavigation(
     timing.timingMap,
-    livePracticeTime,
+    practiceTime,
     seekToPracticeTimeWithWfy,
   )
 
   const beat = useBeatNavigation(
     timing.timingMap,
-    livePracticeTime,
+    practiceTime,
     seekToPracticeTimeWithWfy,
   )
 
@@ -415,7 +408,7 @@ export default function usePracticeSession({
         : null,
     },
     clock,
-    livePracticeTime,
+    practiceTime,
     timing,
     alignment,
     measure,

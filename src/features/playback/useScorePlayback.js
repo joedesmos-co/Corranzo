@@ -1,13 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as Tone from 'tone'
 import { formatMidiImportError } from '../import/formatImportError.js'
+import { displayTempoAtTime } from './scorePlaybackSchedule.js'
 import { ScorePlaybackEngine } from './scorePlaybackEngine.js'
 
 /**
  * Playback hook driven by the performed score timeline (MusicXML required).
- * Optional MIDI is mapped onto performed time; XML-only silent playback is supported.
  */
-export default function useScorePlayback({ timingMap, midiSource, timingLoading = false }) {
+export default function useScorePlayback({
+  timingMap,
+  midiSource,
+  timingLoading = false,
+  alignmentDiagnostics = null,
+}) {
   const engineRef = useRef(null)
   const loadGenerationRef = useRef(0)
   const [tracks, setTracks] = useState([])
@@ -17,6 +22,9 @@ export default function useScorePlayback({ timingMap, midiSource, timingLoading 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [playbackRate, setPlaybackRateState] = useState(1)
+  const [metronomeEnabled, setMetronomeEnabledState] = useState(false)
+  const [metronomeLevel, setMetronomeLevelState] = useState(0.6)
+  const [mappingWarning, setMappingWarning] = useState(null)
 
   useEffect(() => {
     const engine = new ScorePlaybackEngine()
@@ -51,6 +59,7 @@ export default function useScorePlayback({ timingMap, midiSource, timingLoading 
         setCurrentTime(0)
         setIsPlaying(false)
         setError(null)
+        setMappingWarning(null)
         setIsLoading(false)
       }
       return undefined
@@ -66,12 +75,14 @@ export default function useScorePlayback({ timingMap, midiSource, timingLoading 
       setDuration(0)
       setCurrentTime(0)
       setIsPlaying(false)
+      setMappingWarning(null)
       engine.stop()
 
       try {
         const result = await engine.load({
           timingMap,
           midiArrayBuffer: midiData ?? null,
+          alignmentDiagnostics,
         })
         if (loadGenerationRef.current !== loadGeneration) {
           return
@@ -85,6 +96,7 @@ export default function useScorePlayback({ timingMap, midiSource, timingLoading 
         }
         setTracks(result.tracks)
         setDuration(result.duration)
+        setMappingWarning(result.mappingWarning ?? null)
         setCurrentTime(0)
         setIsPlaying(false)
       } catch (loadError) {
@@ -107,7 +119,22 @@ export default function useScorePlayback({ timingMap, midiSource, timingLoading 
     return () => {
       loadGenerationRef.current += 1
     }
-  }, [timingMap, timingRevision, timingLoading, midiData, midiFileName, midiData?.byteLength])
+  }, [
+    timingMap,
+    timingRevision,
+    timingLoading,
+    midiData,
+    midiFileName,
+    midiData?.byteLength,
+    alignmentDiagnostics,
+  ])
+
+  const effectiveTempo = useMemo(() => {
+    if (!timingMap) {
+      return null
+    }
+    return Math.round(displayTempoAtTime(timingMap, currentTime, playbackRate))
+  }, [timingMap, currentTime, playbackRate])
 
   const play = useCallback(() => {
     const engine = engineRef.current
@@ -145,6 +172,16 @@ export default function useScorePlayback({ timingMap, midiSource, timingLoading 
     setPlaybackRateState(rate)
   }, [])
 
+  const setMetronomeEnabled = useCallback((enabled) => {
+    engineRef.current?.setMetronomeEnabled(enabled)
+    setMetronomeEnabledState(enabled)
+  }, [])
+
+  const setMetronomeLevel = useCallback((level) => {
+    engineRef.current?.setMetronomeLevel(level)
+    setMetronomeLevelState(level)
+  }, [])
+
   const testSound = useCallback(() => {
     const engine = engineRef.current
     if (!engine) {
@@ -172,11 +209,17 @@ export default function useScorePlayback({ timingMap, midiSource, timingLoading 
     isLoading,
     error,
     playbackRate,
+    metronomeEnabled,
+    metronomeLevel,
+    effectiveTempo,
+    mappingWarning,
     play,
     pause,
     stop,
     seek,
     setPlaybackRate,
+    setMetronomeEnabled,
+    setMetronomeLevel,
     testSound,
     setTrackMuted,
   }

@@ -1,43 +1,122 @@
 import { describe, expect, it } from 'vitest'
+import { getTimeline } from '../src/features/musicxml/timeline.js'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import {
   buildMetronomeSchedule,
   buildScoreNoteSchedule,
+  displayTempoAtTime,
 } from '../src/features/playback/scorePlaybackSchedule.js'
+import {
+  mapMidiEventsMeasureAligned,
+  mapMidiEventsProportional,
+  mapMidiEventsToPerformedTimeline,
+  MIDI_MAP_METHOD,
+} from '../src/features/playback/midiToPerformedMapping.js'
+import { ALIGNMENT_ASSESSMENT } from '../src/features/practice/computeAlignmentDiagnostics.js'
 import * as F from './helpers/buildXml.js'
 
-describe('score playback schedule', () => {
-  it('builds performed note events at 1.0× rate', () => {
-    const t = parseMusicXml(F.straight4())
-    const events = buildScoreNoteSchedule(t, { rate: 1 })
-    expect(events.length).toBeGreaterThan(0)
-    expect(events[0].scoreTimeSeconds).toBe(0)
-    expect(events[0].wallTimeSeconds).toBe(0)
-    const last = events[events.length - 1]
-    expect(last.scoreTimeSeconds).toBeLessThanOrEqual(8)
+function measure(t, n) {
+  return t.measures.find((m) => m.number === n)
+}
+
+describe('tempo fixture integrity', () => {
+  it('repeatWithTempoChange restores 120 BPM in m3 (explicit test-data correction)', () => {
+    // m3 includes <sound tempo="120"/> — prior failure was incomplete fixture data.
+    // Written m3 starts at 6s; performed m3 (after repeat) starts at 12s.
+    const t = parseMusicXml(F.repeatWithTempoChange())
+    expect(measure(t, 3).startTimeSeconds).toBeCloseTo(6, 6)
+    expect(measure(t, 3).endTimeSeconds - measure(t, 3).startTimeSeconds).toBeCloseTo(2, 6)
+    const tl = getTimeline(t)
+    expect(tl.performedStartForMeasure(3)).toBeCloseTo(12, 6)
+    expect(tl.performedDurationSeconds).toBeCloseTo(14, 6)
   })
 
-  it('scales wall time at 0.5× rate', () => {
+  it('tempo persists into following measures when no later restoration exists', () => {
+    const t = parseMusicXml(F.repeatWithTempoChangeNoRestore())
+    // m2 sets 60 BPM; m3 inherits → 4 quarters at 60 = 4 written seconds
+    expect(measure(t, 3).startTimeSeconds).toBeCloseTo(6, 6)
+    expect(measure(t, 3).endTimeSeconds).toBeCloseTo(10, 6)
+    expect(t.tempoChanges.filter((c) => c.bpm === 60)).toHaveLength(1)
+    const tl = getTimeline(t)
+    expect(tl.performedStartForMeasure(3)).toBeCloseTo(12, 6)
+    expect(tl.performedDurationSeconds).toBeCloseTo(16, 6)
+  })
+
+  it('mid-measure tempo from midMeasureTempoChange still persists into m3', () => {
+    const t = parseMusicXml(F.midMeasureTempoChange())
+    expect(measure(t, 3).startTimeSeconds).toBeCloseTo(5, 6)
+    const change = t.tempoChanges.find((c) => c.bpm === 60)
+    expect(change?.quarterTime).toBeCloseTo(6, 6)
+  })
+})
+
+describe('MIDI-to-performed mapping', () => {
+  const timingMap = parseMusicXml(F.straight4())
+  const midiNotes = [
+    { time: 0, duration: 0.5, name: 'C4', velocity: 0.8 },
+    { time: 2, duration: 0.5, name: 'E4', velocity: 0.8 },
+    { time: 6, duration: 0.5, name: 'G4', velocity: 0.8 },
+  ]
+  const midiDuration = 8
+
+  it('uses measure-aligned mapping when alignment is not unlikely', () => {
+    const result = mapMidiEventsToPerformedTimeline(midiNotes, midiDuration, timingMap, {
+      assessment: ALIGNMENT_ASSESSMENT.LIKELY_MATCH,
+    })
+    expect(result.method).toBe(MIDI_MAP_METHOD.MEASURE_ALIGNED)
+    expect(result.events[0].scoreTimeSeconds).toBeCloseTo(0, 6)
+    expect(result.events[2].scoreTimeSeconds).toBeCloseTo(6, 6)
+  })
+
+  it('falls back to proportional mapping with warning when alignment is unlikely', () => {
+    const result = mapMidiEventsToPerformedTimeline(midiNotes, midiDuration, timingMap, {
+      assessment: ALIGNMENT_ASSESSMENT.UNLIKELY_MATCH,
+    })
+    expect(result.method).toBe(MIDI_MAP_METHOD.PROPORTIONAL)
+    expect(result.warning).toMatch(/proportional/i)
+    expect(result.events[2].scoreTimeSeconds).toBeCloseTo(6, 6)
+  })
+
+  it('measure-aligned maps note within measure proportionally', () => {
+    const aligned = mapMidiEventsMeasureAligned(midiNotes, midiDuration, timingMap)
+    expect(aligned.events[1].scoreTimeSeconds).toBeCloseTo(2, 6)
+    expect(aligned.events[1].measureNumber).toBe(2)
+  })
+
+  it('proportional mapping is explicitly low confidence', () => {
+    const prop = mapMidiEventsProportional(midiNotes, midiDuration, 8)
+    expect(prop.confidence).toBe('low')
+  })
+})
+
+describe('score playback schedule', () => {
+  it('builds performed note events', () => {
     const t = parseMusicXml(F.straight4())
-    const full = buildScoreNoteSchedule(t, { rate: 1 })
-    const half = buildScoreNoteSchedule(t, { rate: 0.5 })
-    expect(half[0].scoreTimeSeconds).toBe(full[0].scoreTimeSeconds)
-    expect(half[10].wallTimeSeconds).toBeCloseTo(full[10].wallTimeSeconds * 2, 6)
+    const events = buildScoreNoteSchedule(t)
+    expect(events.length).toBeGreaterThan(0)
+    expect(events[0].baseDurationSeconds).toBeGreaterThan(0)
+  })
+
+  it('display tempo scales with playback rate', () => {
+    const t = parseMusicXml(F.straight4())
+    expect(displayTempoAtTime(t, 0, 1)).toBeCloseTo(120, 6)
+    expect(displayTempoAtTime(t, 0, 0.5)).toBeCloseTo(60, 6)
+  })
+
+  it('metronome ticks align with performed beats', () => {
+    const t = parseMusicXml(F.straight4())
+    const clicks = buildMetronomeSchedule(t)
+    expect(clicks[0].scoreTimeSeconds).toBe(0)
+    expect(clicks[1].scoreTimeSeconds).toBeCloseTo(0.5, 6)
+    expect(clicks.filter((c) => c.accent)).toHaveLength(4)
   })
 
   it('duplicates notes across repeat passes', () => {
     const t = parseMusicXml(F.oneRepeat())
-    const events = buildScoreNoteSchedule(t, { rate: 1 })
+    const events = buildScoreNoteSchedule(t)
     const m1FirstBeats = events.filter(
       (e) => e.measureNumber === 1 && Math.abs(e.scoreTimeSeconds % 4) < 1e-6,
     )
     expect(m1FirstBeats.map((e) => e.repeatPass).sort()).toEqual([1, 2])
-  })
-
-  it('aligns metronome ticks with performed beats', () => {
-    const t = parseMusicXml(F.straight4())
-    const clicks = buildMetronomeSchedule(t, { rate: 1 })
-    expect(clicks[0].scoreTimeSeconds).toBe(0)
-    expect(clicks[1].scoreTimeSeconds).toBeCloseTo(0.5, 6)
   })
 })

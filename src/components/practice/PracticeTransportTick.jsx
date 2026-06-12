@@ -24,6 +24,14 @@ function PracticeTransportTick() {
       isPlaying={tick.playbackIsPlaying}
       currentTime={tick.playbackCurrentTime}
       duration={tick.playbackDuration}
+      playbackRate={stable.playback.playbackRate}
+      effectiveTempo={stable.playback.effectiveTempo}
+      metronomeEnabled={stable.playback.metronomeEnabled}
+      metronomeLevel={stable.playback.metronomeLevel}
+      mappingWarning={stable.playback.mappingWarning}
+      onPlaybackRateChange={stable.playback.setPlaybackRate}
+      onMetronomeEnabledChange={stable.playback.setMetronomeEnabled}
+      onMetronomeLevelChange={stable.playback.setMetronomeLevel}
       onPlay={stable.handlePlay}
       onPause={stable.playback.pause}
       onStop={stable.handleMidiStop}

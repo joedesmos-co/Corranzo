@@ -227,12 +227,21 @@ export function chordFixture() {
   return scoreWrap(`<part id="P1">${xml}</part>`)
 }
 
-/** Repeat fixture with tempo change inside the repeated section; tempo restored after. */
+/** Repeat fixture: tempo drops in m2, explicit 120 BPM restore in m3 after the repeat. */
 export function repeatWithTempoChange() {
   const xml =
     `<measure number="1">${attributes()}${soundTempo(120)}${forwardRepeat}${fourQuarters()}</measure>` +
     `<measure number="2">${soundTempo(60)}${fourQuarters()}${backwardRepeat()}</measure>` +
     `<measure number="3">${soundTempo(120)}${fourQuarters()}</measure>`
+  return scoreWrap(`<part id="P1">${xml}</part>`)
+}
+
+/** Same repeat layout but m3 has no tempo restoration — 60 BPM persists (MusicXML semantics). */
+export function repeatWithTempoChangeNoRestore() {
+  const xml =
+    `<measure number="1">${attributes()}${soundTempo(120)}${forwardRepeat}${fourQuarters()}</measure>` +
+    `<measure number="2">${soundTempo(60)}${fourQuarters()}${backwardRepeat()}</measure>` +
+    `<measure number="3">${fourQuarters()}</measure>`
   return scoreWrap(`<part id="P1">${xml}</part>`)
 }
 

@@ -74,15 +74,7 @@ export default function useImportReadiness({
       isDemoPiece,
     })
 
-    const demoHiddenWarningIds = new Set([
-      'xml-multi-part',
-      'pair-low-overlap',
-      'pair-duration-mismatch',
-      'pair-first-note-offset',
-    ])
-    const visibleWarnings = isDemoPiece
-      ? warnings.filter((warning) => !demoHiddenWarningIds.has(warning.id))
-      : warnings
+    const visibleWarnings = warnings
 
     return {
       warnings: visibleWarnings,
