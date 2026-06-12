@@ -1,16 +1,36 @@
-# React + Vite
+# ScoreFlow
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Practice tool for piano scores: import a PDF + MusicXML (and optional MIDI), follow a moving cursor, loop passages, and use **Wait For You** with microphone or MIDI input.
 
-Currently, two official plugins are available:
+## Quick start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev      # http://localhost:5173
+npm test
+npm run build
+```
 
-## React Compiler
+Open **Library** to import files or try the demo piece, then **Practice**.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- MusicXML-only synthesized playback (Tone.js piano) with optional MIDI backing
+- Performed-timeline repeats and tempo map
+- Speed control (50%–150%), metronome
+- Score-follow cursor with semi-auto system calibration
+- Measure/beat loops on performed time
+- Wait For You checkpoints (beat or note mode)
+- Practice statistics in Profile
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for timeline, playback engine, and cursor design.
+
+## Development
+
+| Command | Purpose |
+|---------|---------|
+| `npm test` | Vitest regression suite |
+| `npm run lint` | ESLint |
+| `npm run fixtures:anchors` | Regenerate demo anchor bundle |
+
+Implementation history: `IMPLEMENTATION_STATUS.md`, `SCOREFLOW_COMPLETION_REPORT.md`.

@@ -245,8 +245,6 @@ export default function PdfViewer({
               onEnabledChange={scoreFollow?.setEnabled ?? (() => {})}
               alignmentMode={scoreFollow?.alignmentMode ?? false}
               onAlignmentModeChange={scoreFollow?.setAlignmentMode ?? (() => {})}
-              beatInterpolation={scoreFollow?.beatInterpolation ?? true}
-              onBeatInterpolationChange={scoreFollow?.setBeatInterpolation ?? (() => {})}
               placementMeasureNumber={scoreFollow?.placementMeasureNumber ?? 1}
               onPlacementMeasureNumberChange={
                 scoreFollow?.setPlacementMeasureNumber ?? (() => {})

@@ -1,6 +1,6 @@
 /**
  * Duration-weighted measure x positions within a staff-system band.
- * Used for bundled demo anchors and other high-confidence timing-only layouts.
+ * Tooling-only — used by generate-demo-anchors.mjs.
  */
 
 function measurePlaybackDuration(measure) {
@@ -9,10 +9,6 @@ function measurePlaybackDuration(measure) {
   return Math.max(0.001, end - start)
 }
 
-/**
- * @param {object[]} measuresInBand — timingMap.measures filtered to one system
- * @param {{ xStart: number, xEnd: number, page: number, y: number, yEnd?: number, source: string, meta?: object, systemIndex?: number }} band
- */
 export function buildDurationWeightedMeasureAnchors(measuresInBand, band) {
   if (!measuresInBand.length) {
     return []
@@ -51,12 +47,6 @@ export function buildDurationWeightedMeasureAnchors(measuresInBand, band) {
   return anchors
 }
 
-/**
- * Build measure anchors for each entry in systemBands using timingMap measure durations.
- *
- * @param {import('../musicxml/parseMusicXml.js').TimingMap} timingMap
- * @param {Array<{ page: number, y: number, yEnd?: number, measureStart: number, measureEnd: number, xStart?: number, xEnd?: number, systemIndex?: number }>} systemBands
- */
 export function buildTimingMeasureAnchorsForBands(timingMap, systemBands, { source, meta = {} } = {}) {
   if (!timingMap?.measures?.length || !systemBands?.length || !source) {
     return []

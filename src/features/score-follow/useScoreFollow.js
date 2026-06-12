@@ -110,7 +110,6 @@ export default function useScoreFollow({
   const [alignmentMode, setAlignmentModeState] = useState(false)
   const [setupPanelOpen, setSetupPanelOpen] = useState(false)
   const manualPlacementStackRef = useRef([])
-  const [beatInterpolation, setBeatInterpolation] = useState(true)
   const [placementMeasureNumber, setPlacementMeasureNumber] = useState(1)
   const [semiAutoSetup, setSemiAutoSetup] = useState({
     status: 'idle',
@@ -807,8 +806,6 @@ export default function useScoreFollow({
     markingProgress,
     advancePlacementMeasure,
     undoLastMarker,
-    beatInterpolation,
-    setBeatInterpolation,
     placementMeasureNumber,
     setPlacementMeasureNumber,
     anchors,

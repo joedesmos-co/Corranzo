@@ -11,7 +11,8 @@ import {
   resolveFirstMeasureTrustedAnchor,
   resolveTrustedAnchorForMeasure,
 } from './trustedAnchors.js'
-import { clamp, lerp, sortAnchorsByMeasure } from './scoreFollowInterpolation.js'
+import { sortAnchorsByMeasure } from './anchorSort.js'
+import { clamp, lerp } from './scoreFollowEasing.js'
 import { smoothstep } from './scoreFollowEasing.js'
 
 export const START_LOCK_THRESHOLD_SECONDS = 0.15

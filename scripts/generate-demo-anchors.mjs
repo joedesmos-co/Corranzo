@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import { DEMO_PIECE } from '../src/dev/fixturePaths.js'
 import { ANCHOR_SOURCE } from '../src/features/score-follow/anchorUtils.js'
-import { buildTimingMeasureAnchorsForBands } from '../src/features/score-follow/timingMeasureAnchors.js'
+import { buildTimingMeasureAnchorsForBands } from './timingMeasureAnchors.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const fixturesDir = join(root, 'public', 'fixtures')

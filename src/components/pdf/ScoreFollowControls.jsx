@@ -69,8 +69,6 @@ export default function ScoreFollowControls({
   onEnabledChange,
   alignmentMode,
   onAlignmentModeChange,
-  beatInterpolation,
-  onBeatInterpolationChange,
   placementMeasureNumber,
   onPlacementMeasureNumberChange,
   measureBounds,
@@ -297,19 +295,6 @@ export default function ScoreFollowControls({
         />
         <span>Show moving cursor while practicing</span>
       </label>
-
-      <details className="score-follow-controls__details">
-        <summary>Fine-tuning</summary>
-        <label className="score-follow-controls__row">
-          <input
-            type="checkbox"
-            checked={beatInterpolation}
-            onChange={(event) => onBeatInterpolationChange(event.target.checked)}
-            disabled={!enabled || alignmentMode}
-          />
-          <span>Smooth cursor between measures</span>
-        </label>
-      </details>
 
       {!embedded && anchors.length === 0 && !alignmentMode && (
         <p className="score-follow-controls__empty">
