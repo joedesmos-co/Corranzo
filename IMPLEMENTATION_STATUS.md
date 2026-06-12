@@ -1,57 +1,79 @@
 # ScoreFlow Implementation Status
 
-**Last updated:** 2026-06-12 (Phase 2 in progress)
+**Last updated:** 2026-06-12
 
-## Git
+## Git commits (preserved)
 
-| Item | Value |
+| Milestone | Commit |
 |---|---|
-| Branch | `main` |
 | Baseline | `2146791` |
 | Phase 0 | `3a5bdd9` |
 | Phase 1 | `2778761` |
-| Phase 2 | *(pending commit)* |
+| Phase 2 (partial) | `054743a`, `e9b3c3e` |
+| Phase 2 (complete) | `bb83f5b` |
+| Phase 3 | `2576e2a` |
+
+Branch: `main` (clean)
 
 ## Test results
 
 ```
-npm test → 39/39 pass (5 files)
+npm test  → 51/51 pass (6 files)
 npm run build → green
 ```
 
-## Completed
+## Integrity checks (this session)
+
+### Tempo fixture `repeatWithTempoChange`
+**Legitimate test-data correction**, not weakened assertion. MusicXML tempo persists until the next `<sound tempo>` mark. The fixture originally omitted restoration on m3 while tests expected 120 BPM (2s measure duration after repeat). Adding `<sound tempo="120"/>` to m3 is correct MusicXML. Separate fixture `repeatWithTempoChangeNoRestore()` proves 60 BPM persists into m3 when no restoration exists (`playbackSchedule.test.js`).
+
+### MIDI mapping
+Proportional mapping retained only as **explicit low-confidence fallback** in `midiToPerformedMapping.js`. Primary path is measure-aligned piecewise mapping when alignment assessment ≠ `unlikely-match`. Fallback emits user-visible `mappingWarning` in playback UI.
+
+## Completed by phase
 
 ### Phase 1 (`2778761`)
-- Ordered MusicXML parser (`xmlTree.js`, `parseMusicXml.js`)
-- Repeat interpreter rewrite (`parseMeasureRepeats.js`)
-- Timeline API (`timeline.js`) + loop/WFY wiring
+- Ordered parser (`xmlTree.js`, `parseMusicXml.js`)
+- Repeat interpreter rewrite
+- Timeline API + loop/WFY performed-time wiring
 - Demo anchors regenerated (96 quarters, ~41.14s)
 
-### Phase 2 (partial, uncommitted)
-- `scorePlaybackSchedule.js` — pure performed-timeline event builder (tested)
-- `scorePlaybackEngine.js` — windowed scheduler, rate support
-- `useScorePlayback.js` — XML-only + optional MIDI on performed clock
-- Removed Safari UA playback gate (`isSafariPlaybackLimited()` → false)
-- `usePracticeSession` uses score playback when MusicXML present
-- Loop wrap works for XML-only playback
-- Transport UI updated for MusicXML-first playback
+### Phase 2 (`bb83f5b`)
+- `ScorePlaybackEngine` — windowed scheduler, deduped events, rate support
+- `PracticePlaybackSettings` — speed slider, metronome toggle/level, effective tempo display
+- Measure-aligned MIDI mapper + proportional fallback with warnings
+- Unified practice clock (`clock.practiceTime`; removed `livePracticeTime`)
+- Removed `demoHiddenWarningIds` suppression
+- Tests: tempo persistence, MIDI mapping, schedule, rate/tempo display
 
-## Current Phase 2 task
+### Phase 3 (`2576e2a`)
+- `resolveScoreFollowCursor.js` — exact + interpolated cursor, gap-safe needsSetup
+- `useScoreFollow.js` — single resolver (removed compute+validate duplicate path)
+- `pairSystemSpanAnchors` role fix — layout anchors promote per measure
+- `usePracticePageFollow.js` — scroll seed from `scrollTop`, 2s user-scroll suspend
+- Display smoothing reachable (`lockExact` only at start lock)
+- Tests: `cursorResolver.test.js` (gap interpolation, layout promotion)
 
-Wire tempo-rate UI; metronome event stream; delete `livePracticeTime` duplicate; remove demo warning suppression after alignment passes.
+## Remaining (Phases 4–5)
 
-## Remaining
+### Phase 4
+- WFY calibration UX simplification (per-system taps)
+- Note-target geometry shared with cursor resolver
+- Count-in UI on metronome stream
+- Manual iPad protocol (not performed this session)
 
-- **Phase 2:** tempo UI, metronome, MIDI measure-mapper (replace proportional), `livePracticeTime` cleanup
-- **Phase 3:** unified cursor resolver, anchor promotion fix, page-follow
-- **Phase 4:** WFY polish, calibration UX
-- **Phase 5:** iPad profiling, lint zero, cleanup, docs
+### Phase 5
+- Lint ratchet toward zero (currently ~636 repo-wide; `.venv-fixtures/` may still inflate)
+- Delete dead code: `scoreFollowCursor.js` compute path, `scoreFollowStartSanity.js` validator, `beatInterpolation` placebo toggle
+- `ARCHITECTURE.md`
+- iPad 60fps profiling (requires device)
 
-## Exact next file/function
+## Exact next work
 
-Expose `playback.setPlaybackRate` in practice UI; add metronome ticks to `scorePlaybackEngine.scheduleWindow`
+Phase 4: wire `resolveScoreFollowCursor` geometry into `noteTargetContext.js`; remove `beatInterpolation` dead toggle.
 
-## Manual verification (not performed this session)
+## Manual verification not performed
 
-- iPad Safari: tap Play on demo → audio unlock + cursor advance
-- XML-only piece without MIDI: Play enabled, audible synth
+- iPad Safari Play + cursor
+- Browser audio audition
+- Real-device 60fps profiling
