@@ -105,6 +105,7 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null) {
       beat: beatAtTime?.beat ?? null,
       timeSeconds: group.timeSeconds,
       quarterTime: group.notes[0].quarterTime,
+      repeatPass: group.notes[0].repeatPass ?? beatAtTime?.repeatPass ?? 1,
       label: labels,
       expectedMidi: midis[0],
       expectedMidis: midis,

@@ -9,10 +9,17 @@ export default function PracticePlaybackSettings({
   metronomeLevel,
   onMetronomeLevelChange,
   mappingWarning,
+  audioSource,
   disabled = false,
 }) {
   return (
     <div className="practice-playback-settings">
+      {audioSource && (
+        <p className="practice-playback-settings__source" aria-live="polite">
+          Audio: {audioSource === 'midi' ? 'MIDI backing' : 'MusicXML synth'}
+        </p>
+      )}
+
       <div className="practice-playback-settings__row">
         <label className="practice-playback-settings__label" htmlFor="playback-rate">
           Speed {Math.round(playbackRate * 100)}%

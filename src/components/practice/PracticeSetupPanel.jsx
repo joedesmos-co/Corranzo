@@ -37,12 +37,12 @@ export default function PracticeSetupPanel({ session, scoreFollow, isDemoPiece =
             Load PDF + score timing (MusicXML/MXL). Auto-setup links staff systems only.
           </li>
           <li>
-            A thin cursor appears for the <strong>demo sample</strong>, manual markers, or scores with
-            layout data — not from PDF guessing alone.
+            Tap each <strong>staff system</strong> start on the PDF — layout data fills in measure
+            positions when MusicXML is available.
           </li>
           <li>
-            Use <strong>Fix / add markers manually</strong> if alignment looks off. Manual markers are
-            never overwritten.
+            Use <strong>Fix / add markers manually</strong> to correct individual measures. Manual
+            markers are never overwritten.
           </li>
         </ol>
         {scoreFollow && (
@@ -53,8 +53,6 @@ export default function PracticeSetupPanel({ session, scoreFollow, isDemoPiece =
             onEnabledChange={scoreFollow.setEnabled}
             alignmentMode={scoreFollow.alignmentMode}
             onAlignmentModeChange={scoreFollow.setAlignmentMode}
-            beatInterpolation={scoreFollow.beatInterpolation}
-            onBeatInterpolationChange={scoreFollow.setBeatInterpolation}
             placementMeasureNumber={scoreFollow.placementMeasureNumber}
             onPlacementMeasureNumberChange={scoreFollow.setPlacementMeasureNumber}
             measureBounds={measureBounds}

@@ -1,11 +1,25 @@
 import { getMeasureByNumber } from '../musicxml/measureNavigation.js'
-import { sortAnchorsByMeasure } from '../score-follow/scoreFollowInterpolation.js'
+import { sortAnchorsByMeasure } from '../score-follow/anchorSort.js'
+import { getMeasurePlaybackWindow, usesPerformedTimeline } from '../musicxml/performedTimeline.js'
 import { clamp, lerp } from '../score-follow/scoreFollowEasing.js'
 
-export function getMeasureTimingWindow(timingMap, measureNumber) {
+export function getMeasureTimingWindow(timingMap, measureNumber, practiceTime = null) {
   const measure = getMeasureByNumber(timingMap, measureNumber)
   if (!measure) {
     return null
+  }
+
+  if (usesPerformedTimeline(timingMap) && practiceTime != null) {
+    const window = getMeasurePlaybackWindow(timingMap, measureNumber, practiceTime)
+    if (window) {
+      return {
+        measure,
+        startTimeSeconds: window.startTimeSeconds,
+        endTimeSeconds: window.endTimeSeconds,
+        durationSeconds: Math.max(0.05, window.endTimeSeconds - window.startTimeSeconds),
+        repeatPass: window.repeatPass,
+      }
+    }
   }
 
   const measures = timingMap.measures
@@ -131,12 +145,12 @@ function measureXBoundsFromNeighbors(before, after, measureNumber) {
 /**
  * Horizontal extent and staff corridor for a measure from score-follow anchors.
  */
-export function buildMeasureAnchorGeometry(anchors, timingMap, measureNumber) {
+export function buildMeasureAnchorGeometry(anchors, timingMap, measureNumber, practiceTime = 0) {
   if (!anchors?.length || measureNumber == null) {
     return null
   }
 
-  const sorted = sortAnchorsByMeasure(anchors, timingMap)
+  const sorted = sortAnchorsByMeasure(anchors, timingMap, practiceTime)
   const exact = sorted.find((anchor) => anchor.measureNumber === measureNumber)
   const systemSpan = findSystemSpanAnchors(sorted, measureNumber)
   const neighbors = findNeighborAnchors(sorted, measureNumber)

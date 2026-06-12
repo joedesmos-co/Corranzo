@@ -20,6 +20,7 @@ export default function PracticeTransportSection({
   metronomeEnabled,
   metronomeLevel,
   mappingWarning,
+  audioSource,
   onPlaybackRateChange,
   onMetronomeEnabledChange,
   onMetronomeLevelChange,
@@ -87,6 +88,7 @@ export default function PracticeTransportSection({
             metronomeLevel={metronomeLevel ?? 0.6}
             onMetronomeLevelChange={onMetronomeLevelChange}
             mappingWarning={mappingWarning}
+            audioSource={audioSource}
             disabled={disabled || isLoading}
           />
 

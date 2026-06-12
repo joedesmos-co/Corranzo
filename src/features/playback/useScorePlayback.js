@@ -25,6 +25,7 @@ export default function useScorePlayback({
   const [metronomeEnabled, setMetronomeEnabledState] = useState(false)
   const [metronomeLevel, setMetronomeLevelState] = useState(0.6)
   const [mappingWarning, setMappingWarning] = useState(null)
+  const [audioSource, setAudioSource] = useState('musicxml')
 
   useEffect(() => {
     const engine = new ScorePlaybackEngine()
@@ -60,6 +61,7 @@ export default function useScorePlayback({
         setIsPlaying(false)
         setError(null)
         setMappingWarning(null)
+        setAudioSource('musicxml')
         setIsLoading(false)
       }
       return undefined
@@ -76,6 +78,7 @@ export default function useScorePlayback({
       setCurrentTime(0)
       setIsPlaying(false)
       setMappingWarning(null)
+      setAudioSource('musicxml')
       engine.stop()
 
       try {
@@ -97,6 +100,9 @@ export default function useScorePlayback({
         setTracks(result.tracks)
         setDuration(result.duration)
         setMappingWarning(result.mappingWarning ?? null)
+        setAudioSource(
+          result.mappingMethod && result.mappingMethod !== 'none' ? 'midi' : 'musicxml',
+        )
         setCurrentTime(0)
         setIsPlaying(false)
       } catch (loadError) {
@@ -213,6 +219,7 @@ export default function useScorePlayback({
     metronomeLevel,
     effectiveTempo,
     mappingWarning,
+    audioSource,
     play,
     pause,
     stop,

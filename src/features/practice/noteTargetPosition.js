@@ -1,5 +1,6 @@
 import { noteHasLayout } from '../musicxml/readNoteLayout.js'
 import { clamp, lerp } from '../score-follow/scoreFollowEasing.js'
+import { resolveScoreFollowCursor } from '../score-follow/resolveScoreFollowCursor.js'
 import { CHECKPOINT_KIND } from './waitForYouCheckpoints.js'
 import {
   buildMeasureAnchorGeometry,
@@ -171,14 +172,35 @@ export function resolveNoteTargetPosition({
   }
 
   const measureNumber = checkpoint.measureNumber
-  const geometry = buildMeasureAnchorGeometry(anchors, timingMap, measureNumber)
+  const checkpointTime = checkpoint.timeSeconds
+
+  const sharedCursor = resolveScoreFollowCursor({
+    timingMap,
+    practiceTime: checkpointTime,
+    trustedAnchors: anchors,
+    trust: { showCursor: true, needsSetup: false },
+  })
+
+  const geometry = buildMeasureAnchorGeometry(anchors, timingMap, measureNumber, checkpointTime)
   if (!geometry) {
     return { visible: false, reason: 'no-geometry' }
   }
 
-  const timingWindow = getMeasureTimingWindow(timingMap, measureNumber)
+  if (sharedCursor.cursor?.visible) {
+    geometry.page = sharedCursor.cursor.page
+    geometry.xMeasureStart = sharedCursor.cursor.x
+    geometry.xMeasureEnd = sharedCursor.cursor.x + 0.05
+    geometry.yCenter = sharedCursor.cursor.y
+    geometry.yTop = clamp(sharedCursor.cursor.y - 0.04, 0.06, 0.94)
+    geometry.yBottom = clamp(sharedCursor.cursor.y + 0.04, 0.06, 0.94)
+    geometry.staffSplitY = sharedCursor.cursor.y
+    if (sharedCursor.confidence === 'exact') {
+      geometry.placement = 'exact-anchor'
+    }
+  }
+
+  const timingWindow = getMeasureTimingWindow(timingMap, measureNumber, checkpointTime)
   const layoutExtents = getMeasureLayoutExtents(timingMap, measureNumber)
-  const checkpointTime = checkpoint.timeSeconds
 
   const placements = notes.map((note) =>
     resolveSingleNotePosition({
