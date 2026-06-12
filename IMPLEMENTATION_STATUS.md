@@ -1,52 +1,57 @@
 # ScoreFlow Implementation Status
 
-**Last updated:** 2026-06-12 (Phase 1 complete, Phase 2 starting)
+**Last updated:** 2026-06-12 (Phase 2 in progress)
 
 ## Git
 
 | Item | Value |
 |---|---|
 | Branch | `main` |
-| Baseline (untouched) | `2146791` |
-| Phase 0 commit | `3a5bdd9` |
-| Phase 1 commit | *(pending commit)* |
+| Baseline | `2146791` |
+| Phase 0 | `3a5bdd9` |
+| Phase 1 | `2778761` |
+| Phase 2 | *(pending commit)* |
 
 ## Test results
 
 ```
-npm test → 35/35 pass (4 files)
-  parserTiming.test.js      11/11
-  timelineExpansion.test.js 11/11
-  timelineApi.test.js       10/10
-  loopWfyDomain.test.js      3/3
+npm test → 39/39 pass (5 files)
+npm run build → green
 ```
 
-All former Phase 0 red tests (audit P1–P10, time-domain) now green.
+## Completed
 
-## Completed work
+### Phase 1 (`2778761`)
+- Ordered MusicXML parser (`xmlTree.js`, `parseMusicXml.js`)
+- Repeat interpreter rewrite (`parseMeasureRepeats.js`)
+- Timeline API (`timeline.js`) + loop/WFY wiring
+- Demo anchors regenerated (96 quarters, ~41.14s)
 
-### Phase 0 (`3a5bdd9`)
-- Vitest + fixtures + regression suite; build verified
-
-### Phase 1 (complete)
-- **`xmlTree.js`**: ordered XML walk (`preserveOrder`)
-- **`parseMusicXml.js`**: document-order parser — fixes P1–P4, P10
-- **`parseMeasureRepeats.js`**: explicit repeat interpreter — fixes P5–P9
-- **`timeline.js`**: unified written/performed API (`getTimeline`, `locate`, `windowsForMeasure`, `performedBeats`, `performedNotes`)
-- Wired timeline into `practiceLoopRegion.js`, `waitForYouCheckpoints.js`, `measureNavigation.js`
-- Regenerated `demo-minuet-in-g.anchors.json` (96 quarters, m1=3q, ~41.14s)
+### Phase 2 (partial, uncommitted)
+- `scorePlaybackSchedule.js` — pure performed-timeline event builder (tested)
+- `scorePlaybackEngine.js` — windowed scheduler, rate support
+- `useScorePlayback.js` — XML-only + optional MIDI on performed clock
+- Removed Safari UA playback gate (`isSafariPlaybackLimited()` → false)
+- `usePracticeSession` uses score playback when MusicXML present
+- Loop wrap works for XML-only playback
+- Transport UI updated for MusicXML-first playback
 
 ## Current Phase 2 task
 
-Replace schedule-everything MIDI engine with transport-driven clock; enable XML-only playback; remove Safari UA gate.
+Wire tempo-rate UI; metronome event stream; delete `livePracticeTime` duplicate; remove demo warning suppression after alignment passes.
 
-## Remaining phases
+## Remaining
 
-- **Phase 2:** Unified playback engine, tempo rate, metronome, capability probes
-- **Phase 3:** Single cursor resolver, anchor promotion, page-follow
-- **Phase 4:** WFY polish, tempo UI, calibration UX
-- **Phase 5:** iPad hardening, cleanup, docs, lint zero
+- **Phase 2:** tempo UI, metronome, MIDI measure-mapper (replace proportional), `livePracticeTime` cleanup
+- **Phase 3:** unified cursor resolver, anchor promotion fix, page-follow
+- **Phase 4:** WFY polish, calibration UX
+- **Phase 5:** iPad profiling, lint zero, cleanup, docs
 
 ## Exact next file/function
 
-`src/features/practice/midiPlaybackEngine.js` → windowed scheduler on performed timeline
+Expose `playback.setPlaybackRate` in practice UI; add metronome ticks to `scorePlaybackEngine.scheduleWindow`
+
+## Manual verification (not performed this session)
+
+- iPad Safari: tap Play on demo → audio unlock + cursor advance
+- XML-only piece without MIDI: Play enabled, audible synth

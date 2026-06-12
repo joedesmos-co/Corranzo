@@ -1,9 +1,10 @@
 import MidiTransportControls from './MidiTransportControls.jsx'
-import { isSafariPlaybackLimited } from '../../features/platform/browserPracticeSupport.js'
 
 export default function PracticeTransportSection({
+  hasMusicXml,
   hasMidi,
   playbackFileName,
+  timingFileName,
   isLoading,
   error,
   disabled,
@@ -20,10 +21,7 @@ export default function PracticeTransportSection({
   onTestSound,
   compact = false,
 }) {
-  const safariLimited = isSafariPlaybackLimited()
-  const playbackBlockedTitle = safariLimited
-    ? 'MIDI playback is not available in Safari — use Chrome or Edge, or practice with Wait For You and measure navigation'
-    : undefined
+  const canPlay = Boolean(hasMusicXml)
 
   return (
     <section
@@ -33,18 +31,23 @@ export default function PracticeTransportSection({
       <h3 className="practice-section__title practice-section__title--static">Playback</h3>
 
       <p className="practice-section__hint practice-section__hint--sound">
-        MIDI files contain note data only — ScoreFlow synthesizes a basic built-in piano sound in
-        your browser (not a recorded performance). It will not match a real piano, but playback
-        stays reliable without a large sound library.
+        ScoreFlow synthesizes a basic built-in piano from your MusicXML timing
+        {hasMidi ? ' (MIDI backing mapped to the score clock when provided)' : ''}. Tap Play once
+        to unlock audio in Safari and on iPad.
       </p>
 
-      {!hasMidi ? (
+      {!canPlay ? (
         <p className="practice-section__hint">
-          Optional: add a sound file (.mid) in Library for backing audio playback.
+          Add a MusicXML or MXL timing file in Library to enable playback and measure navigation.
         </p>
       ) : (
         <div className="practice-section__body practice-section__body--flat">
-          {playbackFileName && (
+          {timingFileName && (
+            <p className="practice-section__file" title={timingFileName}>
+              {timingFileName}
+            </p>
+          )}
+          {hasMidi && playbackFileName && (
             <p className="practice-section__file" title={playbackFileName}>
               {playbackFileName}
             </p>
@@ -68,10 +71,8 @@ export default function PracticeTransportSection({
 
           <MidiTransportControls
             disabled={disabled || isLoading}
-            playDisabled={playDisabled || isLoading || safariLimited}
-            seekDisabled={seekDisabled || isLoading || safariLimited}
-            playbackBlockedTitle={playbackBlockedTitle}
-            testSoundDisabled={disabled || isLoading || safariLimited}
+            playDisabled={playDisabled || isLoading}
+            seekDisabled={seekDisabled || isLoading}
             isPlaying={isPlaying}
             currentTime={isLoading ? 0 : currentTime}
             duration={isLoading ? 0 : duration}

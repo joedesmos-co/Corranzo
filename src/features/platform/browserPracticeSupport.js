@@ -1,8 +1,32 @@
 import { isSafariBrowser } from '../playback/audioEnvironment.js'
 
-/** Safari (incl. iOS): no built-in MIDI playback transport in this app. */
+let audioCapabilityCache = null
+
+/** Probe Web Audio unlock (user-gesture Tone.start). Result is cached for the session. */
+export async function probeAudioPlaybackCapability() {
+  if (audioCapabilityCache != null) {
+    return audioCapabilityCache
+  }
+  if (typeof window === 'undefined') {
+    audioCapabilityCache = false
+    return false
+  }
+  try {
+    const tone = await import('tone')
+    await tone.start()
+    audioCapabilityCache = tone.getContext().state === 'running'
+  } catch {
+    audioCapabilityCache = false
+  }
+  return audioCapabilityCache
+}
+
+/**
+ * Legacy name — no longer blocks transport. Safari/iPad playback is gated on
+ * {@link probeAudioPlaybackCapability} and user-gesture unlock instead of UA sniffing.
+ */
 export function isSafariPlaybackLimited() {
-  return isSafariBrowser()
+  return false
 }
 
 export function isIosOrIpadDevice() {
@@ -26,5 +50,10 @@ export function isTabletLikeDevice() {
   return Boolean(window.matchMedia?.('(pointer: coarse) and (max-width: 1100px)')?.matches)
 }
 
+/** True when the browser identifies as Safari (for informational UI only). */
+export function isSafariFamilyBrowser() {
+  return isSafariBrowser()
+}
+
 export const BROWSER_SUPPORT_SUMMARY =
-  'Chrome or Edge on desktop gives the fullest experience (MIDI playback, Web MIDI, and sound). Safari and tablets work well for reading the score, annotations, measure navigation, and Wait For You with Manual continue.'
+  'Playback and practice features work in Chrome, Edge, and Safari (including iPad) after audio unlock from a tap. Web MIDI is unavailable on Safari; use mic input or Manual continue for Wait For You.'

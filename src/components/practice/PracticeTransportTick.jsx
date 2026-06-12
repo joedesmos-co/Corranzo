@@ -11,8 +11,10 @@ function PracticeTransportTick() {
 
   return (
     <PracticeTransportSection
+      hasMusicXml={stable.hasMusicXml}
       hasMidi={stable.hasMidi}
       playbackFileName={stable.sources.playbackFileName}
+      timingFileName={stable.sources.timingFileName}
       isLoading={stable.playback.isLoading}
       error={stable.playback.error}
       disabled={stable.playback.controlsDisabled}

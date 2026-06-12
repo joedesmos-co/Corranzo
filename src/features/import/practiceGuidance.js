@@ -1,5 +1,3 @@
-import { isSafariPlaybackLimited } from '../platform/browserPracticeSupport.js'
-
 /**
  * Short “what to do next” steps after files load (non-alarming).
  */
@@ -10,7 +8,6 @@ export function buildPracticeGuidance({
   timingReady,
   timingError,
   midiError,
-  midiPlayable,
   isDemoPiece = false,
 }) {
   const steps = []
@@ -42,15 +39,7 @@ export function buildPracticeGuidance({
       steps.push(
         'Score follow may need a quick Setup pass on your PDF — mark a few measures if the cursor looks off.',
       )
-      if (midiPlayable && !isSafariPlaybackLimited()) {
-        steps.push('Press Play (Space) to hear your backing track while you read the score.')
-      } else if (isSafariPlaybackLimited()) {
-        steps.push(
-          'On Safari, use measure arrows and Wait For You — for backing sound, try Chrome or Edge on desktop.',
-        )
-      } else {
-        steps.push('Use measure arrows or loops to work through a section at your pace.')
-      }
+      steps.push('Press Play (Space) to hear the score and move through measures with the cursor.')
       steps.push('Wait For You: Manual continue always works; MIDI and microphone are optional.')
     }
   }

@@ -7,7 +7,7 @@ import { isMicrophoneSupported } from '../microphone-input/micEnvironment.js'
 import { WFY_INPUT_SOURCE } from '../microphone-input/micInputConstants.js'
 import { idleFeedbackForCheckpoint } from './waitForYouInputFeedback.js'
 import useWaitForYouMicInput from './useWaitForYouMicInput.js'
-import useMidiPlayback from '../playback/useMidiPlayback.js'
+import useScorePlayback from '../playback/useScorePlayback.js'
 import useMusicXmlTiming from '../musicxml/useMusicXmlTiming.js'
 import usePracticeClock from './usePracticeClock.js'
 import useAlignmentDiagnostics from './useAlignmentDiagnostics.js'
@@ -24,7 +24,6 @@ import useWaitForYouMatchSettings from './useWaitForYouMatchSettings.js'
 import useWaitForYouReferencePlayback from './useWaitForYouReferencePlayback.js'
 import useImportReadiness from '../import/useImportReadiness.js'
 import { savePracticePrefs, loadPracticePrefs } from '../session/practicePrefsStorage.js'
-import { isSafariPlaybackLimited } from '../platform/browserPracticeSupport.js'
 
 /**
  * Wires playback, timing, navigation, loop, and Wait For You hooks for the Practice view.
@@ -61,7 +60,13 @@ export default function usePracticeSession({
     prefs.wfyInputSource ?? defaultWfyInputSource,
   )
 
-  const playback = useMidiPlayback(midiSource)
+  const timing = useMusicXmlTiming(musicXmlSource, 0)
+
+  const playback = useScorePlayback({
+    timingMap: timing.timingMap,
+    midiSource,
+    timingLoading: timing.isLoading,
+  })
 
   const hasMidi = Boolean(midiSource?.data)
   const hasMusicXml = Boolean(musicXmlSource?.data)
@@ -82,7 +87,7 @@ export default function usePracticeSession({
     hasMidi,
     hasMusicXml,
     isPlaying: playback.isPlaying,
-    midiCurrentTime: playback.currentTime,
+    playbackCurrentTime: playback.currentTime,
     sourcesRevision,
   })
 
@@ -90,19 +95,11 @@ export default function usePracticeSession({
     if (!hasMusicXml) {
       return 0
     }
-    if (hasMidi && hasMusicXml && playback.isPlaying) {
+    if (playback.isPlaying) {
       return playback.currentTime
     }
     return clock.practiceTime
-  }, [
-    hasMidi,
-    hasMusicXml,
-    playback.isPlaying,
-    playback.currentTime,
-    clock.practiceTime,
-  ])
-
-  const timing = useMusicXmlTiming(musicXmlSource, livePracticeTime)
+  }, [hasMusicXml, playback.isPlaying, playback.currentTime, clock.practiceTime])
 
   const alignment = useAlignmentDiagnostics(midiSource, timing.timingMap)
 
@@ -156,23 +153,14 @@ export default function usePracticeSession({
 
   const seekToPracticeTime = useCallback(
     (seconds) => {
-      if (hasMidi) {
+      if (hasMusicXml) {
         playback.seek(seconds)
-        if (hasMusicXml && clock.canManualScrub) {
-          clock.syncManualTimeToMidi(seconds)
+        if (clock.canManualScrub) {
+          clock.syncManualTimeToPlayback(seconds)
         }
-      } else if (hasMusicXml) {
-        clock.setManualTime(seconds)
       }
     },
-    [
-      hasMidi,
-      hasMusicXml,
-      playback,
-      clock.canManualScrub,
-      clock.syncManualTimeToMidi,
-      clock.setManualTime,
-    ],
+    [hasMusicXml, playback, clock.canManualScrub, clock.syncManualTimeToPlayback],
   )
 
   const referencePlayback = useWaitForYouReferencePlayback({
@@ -316,7 +304,7 @@ export default function usePracticeSession({
     enabled: loop.enabled && !isWaitForYou,
     region: loop.region,
     isPlaying: playback.isPlaying,
-    hasMidi,
+    hasPlayback: hasMusicXml,
     currentTime: playback.currentTime,
     onLoopRestart: handleLoopRestart,
   })
@@ -324,9 +312,6 @@ export default function usePracticeSession({
   const handlePlay = useCallback(() => {
     if (isWaitForYou) {
       ensurePaused()
-      return
-    }
-    if (isSafariPlaybackLimited()) {
       return
     }
     playback.play()
@@ -422,10 +407,9 @@ export default function usePracticeSession({
     },
     playback: {
       ...playback,
-      controlsDisabled: !hasMidi || playback.isLoading,
-      playDisabled:
-        !hasMidi || playback.isLoading || isWaitForYou || isSafariPlaybackLimited(),
-      seekDisabled: isWaitForYou || isSafariPlaybackLimited(),
+      controlsDisabled: !hasMusicXml || playback.isLoading,
+      playDisabled: !hasMusicXml || playback.isLoading || isWaitForYou,
+      seekDisabled: !hasMusicXml || isWaitForYou,
       transportHint: isWaitForYou
         ? 'Paused in Wait For You — press Enter or tap “I’m ready” to continue.'
         : null,

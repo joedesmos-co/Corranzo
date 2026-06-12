@@ -15,8 +15,8 @@ export const PRACTICE_SYNC_LABELS = {
 }
 
 export function getPracticeSyncStatus({ hasMidi, hasMusicXml, isPlaying }) {
-  if (hasMidi && hasMusicXml && isPlaying) {
-    return PRACTICE_SYNC_STATUS.FOLLOWING_MIDI
+  if (hasMusicXml && isPlaying) {
+    return hasMidi ? PRACTICE_SYNC_STATUS.FOLLOWING_MIDI : PRACTICE_SYNC_STATUS.MUSICXML_ONLY
   }
   if (hasMidi && hasMusicXml) {
     return PRACTICE_SYNC_STATUS.BOTH_LOADED
@@ -30,28 +30,22 @@ export function getPracticeSyncStatus({ hasMidi, hasMusicXml, isPlaying }) {
   return PRACTICE_SYNC_STATUS.NONE
 }
 
-export function canManualScrubMusicXml({ hasMidi, isPlaying }) {
-  return !hasMidi || !isPlaying
+export function canManualScrubMusicXml({ isPlaying }) {
+  return !isPlaying
 }
 
 export function resolvePracticeTime({
-  hasMidi,
   hasMusicXml,
   isPlaying,
-  midiCurrentTime,
+  playbackCurrentTime,
   manualTime,
 }) {
   if (!hasMusicXml) {
     return 0
   }
 
-  const followMidi = hasMidi && hasMusicXml && isPlaying
-  if (followMidi) {
-    return midiCurrentTime
-  }
-
-  if (hasMidi && hasMusicXml) {
-    return manualTime
+  if (isPlaying) {
+    return playbackCurrentTime
   }
 
   return manualTime

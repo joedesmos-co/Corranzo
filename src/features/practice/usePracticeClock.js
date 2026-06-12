@@ -9,7 +9,7 @@ export default function usePracticeClock({
   hasMidi,
   hasMusicXml,
   isPlaying,
-  midiCurrentTime,
+  playbackCurrentTime,
   sourcesRevision = '',
 }) {
   const [manualTime, setManualTime] = useState(0)
@@ -20,22 +20,15 @@ export default function usePracticeClock({
     [hasMidi, hasMusicXml, isPlaying],
   )
 
-  const isFollowingMidi = syncStatus === 'following-midi'
-  const canManualScrub = canManualScrubMusicXml({ hasMidi, isPlaying })
+  const isFollowingPlayback = hasMusicXml && isPlaying
+  const canManualScrub = canManualScrubMusicXml({ isPlaying })
 
   const practiceTime = resolvePracticeTime({
-    hasMidi,
     hasMusicXml,
     isPlaying,
-    midiCurrentTime,
+    playbackCurrentTime,
     manualTime,
   })
-
-  useEffect(() => {
-    if (!hasMidi) {
-      setManualTime(0)
-    }
-  }, [hasMidi])
 
   useEffect(() => {
     setManualTime(0)
@@ -43,13 +36,13 @@ export default function usePracticeClock({
 
   useEffect(() => {
     const wasPlaying = wasPlayingRef.current
-    if (wasPlaying && !isPlaying && hasMidi && hasMusicXml) {
-      setManualTime(midiCurrentTime)
+    if (wasPlaying && !isPlaying && hasMusicXml) {
+      setManualTime(playbackCurrentTime)
     }
     wasPlayingRef.current = isPlaying
-  }, [isPlaying, midiCurrentTime, hasMidi, hasMusicXml])
+  }, [isPlaying, playbackCurrentTime, hasMusicXml])
 
-  function syncManualTimeToMidi(seconds) {
+  function syncManualTimeToPlayback(seconds) {
     setManualTime(seconds)
   }
 
@@ -57,9 +50,11 @@ export default function usePracticeClock({
     practiceTime,
     manualTime,
     setManualTime,
-    syncManualTimeToMidi,
+    syncManualTimeToMidi: syncManualTimeToPlayback,
+    syncManualTimeToPlayback,
     syncStatus,
-    isFollowingMidi,
+    isFollowingMidi: syncStatus === 'following-midi' || isFollowingPlayback,
+    isFollowingPlayback,
     canManualScrub,
   }
 }
