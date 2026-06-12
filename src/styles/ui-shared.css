@@ -1,0 +1,202 @@
+/**
+ * Cross-app UI polish: focus, buttons, cards, empty states.
+ */
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--sf-focus-ring);
+}
+
+button:focus:not(:focus-visible),
+[role='button']:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+/* —— Shared card surfaces —— */
+
+.panel,
+.profile-panel,
+.profile-stat,
+.profile-level,
+.practice-section,
+.practice-view__empty,
+.practice-view__panel,
+.library-welcome,
+.session-restore-overlay__card {
+  border-color: var(--sf-border);
+}
+
+.panel,
+.profile-panel,
+.profile-level,
+.practice-view__empty,
+.practice-view__panel {
+  background: var(--sf-bg-panel);
+}
+
+/* —— Button hierarchy (ghost / secondary / primary) —— */
+
+.topbar__nav-btn,
+.session-restore-banner__btn,
+.library-welcome__btn,
+.profile-footer__reset,
+.profile-dev-tools__btn,
+.profile-name-form__cancel,
+.profile-name-form__save,
+.upload-btn,
+.pdf-fullscreen__close,
+.midi-transport__btn,
+.practice-fullscreen-hud__play,
+.wait-for-you__btn,
+.wait-for-you__btn--primary {
+  transition:
+    background var(--sf-duration-fast) var(--sf-ease),
+    border-color var(--sf-duration-fast) var(--sf-ease),
+    color var(--sf-duration-fast) var(--sf-ease),
+    filter var(--sf-duration-fast) var(--sf-ease),
+    box-shadow var(--sf-duration-fast) var(--sf-ease),
+    opacity var(--sf-duration-fast) var(--sf-ease);
+}
+
+.topbar__nav-btn:focus-visible,
+.session-restore-banner__btn:focus-visible,
+.library-welcome__btn:focus-visible,
+.profile-footer__reset:focus-visible,
+.profile-dev-tools__btn:focus-visible,
+.profile-name-form__save:focus-visible,
+.profile-name-form__cancel:focus-visible,
+.upload-btn:focus-visible,
+.pdf-fullscreen__close:focus-visible,
+.midi-transport__btn:focus-visible,
+.practice-fullscreen-hud__play:focus-visible,
+.wait-for-you__btn:focus-visible,
+.practice-section__toggle:focus-visible {
+  box-shadow: var(--sf-focus-ring);
+}
+
+/* —— Empty states —— */
+
+.profile-empty,
+.practice-workspace__empty,
+.library-panel__empty {
+  line-height: 1.55;
+  color: var(--sf-text-muted);
+}
+
+.profile-empty {
+  padding: var(--sf-space-3xl) var(--sf-space-2xl);
+  text-align: center;
+  background: var(--sf-bg-panel);
+  border: 1px dashed var(--sf-border-strong);
+  border-radius: var(--sf-radius-xl);
+}
+
+.profile-panel__empty {
+  margin: var(--sf-space-sm) 0 0;
+  color: var(--sf-text-muted);
+  font-size: var(--sf-font-small);
+  line-height: 1.5;
+}
+
+.library-panel__empty {
+  margin: var(--sf-space-lg) 0 0;
+  padding: var(--sf-space-md) var(--sf-space-lg);
+  border-radius: var(--sf-radius-md);
+  background: var(--sf-bg-panel-inset);
+  border: 1px solid var(--sf-border-muted);
+}
+
+/* —— Top bar —— */
+
+.topbar__nav-btn--muted {
+  opacity: 0.55;
+}
+
+.topbar__nav-btn--muted:hover {
+  opacity: 0.85;
+}
+
+/* —— Dev tools: subtle, not a separate “dev panel” —— */
+
+.profile-dev-tools {
+  margin-top: var(--sf-space-2xl);
+  padding: var(--sf-space-md) 0 0;
+  border: none;
+  border-top: 1px solid var(--sf-border-muted);
+  border-radius: 0;
+  background: transparent;
+}
+
+.profile-dev-tools__label {
+  margin: 0 0 var(--sf-space-sm);
+  font-size: var(--sf-font-caption);
+  font-weight: 500;
+  color: var(--sf-text-disabled);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.profile-dev-tools__btn {
+  padding: 7px 12px;
+  border-radius: var(--sf-radius-sm);
+  border: 1px solid var(--sf-border);
+  background: var(--sf-bg-panel-inset);
+  color: var(--sf-text-muted);
+  font-size: var(--sf-font-caption);
+  font-weight: 500;
+}
+
+.profile-dev-tools__btn:hover {
+  border-color: var(--sf-border-strong);
+  color: var(--sf-text-secondary);
+  background: var(--sf-bg-panel);
+}
+
+.profile-dev-tools__btn--muted {
+  background: transparent;
+}
+
+/* —— Mobile / tablet spacing —— */
+
+@media (max-width: 768px) {
+  .library-panel {
+    padding: var(--sf-space-lg) var(--sf-space-md) var(--sf-space-2xl);
+  }
+
+  .library-welcome-wrap {
+    padding: var(--sf-space-md) var(--sf-space-lg) 0;
+  }
+
+  .panel {
+    padding: var(--sf-space-xl) var(--sf-space-lg);
+  }
+
+  .session-restore-banner {
+    padding: var(--sf-space-md) var(--sf-space-lg);
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    height: auto;
+    min-height: var(--sf-topbar-height);
+    padding: var(--sf-space-md) var(--sf-space-lg);
+    flex-wrap: wrap;
+    gap: var(--sf-space-md);
+  }
+
+  .topbar__nav {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .topbar__nav-btn {
+    flex: 1;
+    padding: var(--sf-space-md) var(--sf-space-sm);
+    text-align: center;
+  }
+}

@@ -1,0 +1,43 @@
+import { memo } from 'react'
+import { usePracticeSessionContextOptional } from '../../context/PracticeSessionContext.jsx'
+import { useScoreFollowCursorOptional } from '../../context/PracticeTickContext.jsx'
+import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
+
+export function usePracticeScoreFollowOverlayProps() {
+  const practiceContext = usePracticeSessionContextOptional()
+  const cursorState = useScoreFollowCursorOptional()
+  const scoreFollow = practiceContext?.scoreFollow ?? null
+  const practiceSession = practiceContext?.session ?? null
+
+  if (!scoreFollow || !cursorState) {
+    return null
+  }
+
+  const wfyNoteMode =
+    practiceSession?.isWaitForYou &&
+    practiceSession?.checkpointMode === WFY_CHECKPOINT_MODE.NOTE
+
+  return {
+    enabled: scoreFollow.enabled,
+    alignmentMode: scoreFollow.alignmentMode,
+    semiAutoPreview: scoreFollow.semiAutoPreview,
+    showAnchorMarkers: scoreFollow.showAnchorMarkers,
+    showSystemBands: scoreFollow.showSystemBands,
+    pagePreviewSystems: scoreFollow.pagePreviewSystems,
+    displayAnchors: scoreFollow.displayAnchors,
+    placementMeasureNumber: scoreFollow.placementMeasureNumber,
+    cursor: cursorState.displayCursor,
+    cursorVisibility: cursorState.cursorVisibility,
+    noteTarget: cursorState.noteTarget,
+    showNoteTarget: cursorState.showNoteTarget,
+    anchors: scoreFollow.anchors,
+    placeAnchorAt: scoreFollow.placeAnchorAt,
+  }
+}
+
+function PracticePdfCursorLayer({ children }) {
+  const scoreFollowProps = usePracticeScoreFollowOverlayProps()
+  return children(scoreFollowProps)
+}
+
+export default memo(PracticePdfCursorLayer)

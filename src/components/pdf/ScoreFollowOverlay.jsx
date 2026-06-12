@@ -1,0 +1,189 @@
+import { memo, useCallback, useRef } from 'react'
+import {
+  ANCHOR_SOURCE,
+  isAutomaticAnchorSource,
+  normalizeAnchorSource,
+} from '../../features/score-follow/anchorUtils.js'
+
+function clientToNormalized(clientX, clientY, rect) {
+  return {
+    x: Math.min(1, Math.max(0, (clientX - rect.left) / rect.width)),
+    y: Math.min(1, Math.max(0, (clientY - rect.top) / rect.height)),
+  }
+}
+
+function scoreFollowOverlayPropsEqual(prev, next) {
+  if (prev.pageNumber !== next.pageNumber) return false
+  if (prev.alignmentMode !== next.alignmentMode) return false
+  if (prev.semiAutoPreview !== next.semiAutoPreview) return false
+  if (prev.showAnchorMarkers !== next.showAnchorMarkers) return false
+  if (prev.showSystemBands !== next.showSystemBands) return false
+  if (prev.showNoteTarget !== next.showNoteTarget) return false
+  if (prev.placementMeasureNumber !== next.placementMeasureNumber) return false
+  if (prev.cursorVisibility?.show !== next.cursorVisibility?.show) return false
+  if (prev.pageSystems !== next.pageSystems) return false
+  if (prev.anchors !== next.anchors) return false
+  const pc = prev.cursor
+  const nc = next.cursor
+  if (pc?.visible !== nc?.visible) return false
+  if (pc?.page !== nc?.page) return false
+  if (pc?.x !== nc?.x || pc?.y !== nc?.y) return false
+  const pt = prev.noteTarget
+  const nt = next.noteTarget
+  if (pt?.x !== nt?.x || pt?.y !== nt?.y) return false
+  return true
+}
+
+function ScoreFollowOverlay({
+  pageNumber,
+  alignmentMode,
+  semiAutoPreview = false,
+  showAnchorMarkers = false,
+  showSystemBands = false,
+  pageSystems = [],
+  placementMeasureNumber,
+  cursorVisibility,
+  cursor,
+  noteTarget = null,
+  showNoteTarget = false,
+  anchors,
+  onPlaceAnchor,
+}) {
+  const layerRef = useRef(null)
+
+  const showCursor = cursorVisibility?.show ?? false
+  const pageAnchors = anchors.filter((anchor) => anchor.page === pageNumber)
+  const hasBands = showSystemBands && pageSystems.length > 0
+  const hasMarkers = showAnchorMarkers && pageAnchors.length > 0
+  const cursorX = showCursor ? cursor?.x : null
+  const cursorY = showCursor ? cursor?.y : null
+
+  const handlePointerDown = useCallback(
+    (event) => {
+      if (!alignmentMode || !onPlaceAnchor || event.button !== 0) {
+        return
+      }
+      const rect = layerRef.current?.getBoundingClientRect()
+      if (!rect?.width) {
+        return
+      }
+      event.preventDefault()
+      event.stopPropagation()
+      const { x, y } = clientToNormalized(event.clientX, event.clientY, rect)
+      onPlaceAnchor(pageNumber, x, y)
+    },
+    [alignmentMode, onPlaceAnchor, pageNumber],
+  )
+
+  if (!alignmentMode && !showCursor && !showNoteTarget && !hasBands && !hasMarkers) {
+    return null
+  }
+
+  return (
+    <div
+      ref={layerRef}
+      className={`score-follow-overlay${alignmentMode ? ' score-follow-overlay--align' : ''}${
+        semiAutoPreview ? ' score-follow-overlay--semi-auto-preview' : ''
+      }`}
+      onPointerDown={alignmentMode ? handlePointerDown : undefined}
+    >
+      {hasBands &&
+        pageSystems.map((system) => (
+          <div
+            key={system.id}
+            className="score-follow-overlay__system-band"
+            style={{
+              left: `${system.x0 * 100}%`,
+              top: `${system.y0 * 100}%`,
+              width: `${(system.x1 - system.x0) * 100}%`,
+              height: `${(system.y1 - system.y0) * 100}%`,
+            }}
+            title={system.label}
+          >
+            <span className="score-follow-overlay__system-band-label">{system.label}</span>
+          </div>
+        ))}
+
+      {hasMarkers &&
+        pageAnchors.map((anchor) => {
+          const isAuto =
+            isAutomaticAnchorSource(anchor.source) &&
+            normalizeAnchorSource(anchor) !== ANCHOR_SOURCE.MANUAL
+          const isPreview = semiAutoPreview
+          const isNext =
+            alignmentMode && anchor.measureNumber === placementMeasureNumber
+          const role = anchor.meta?.role
+          return (
+            <span
+              key={anchor.id}
+              className={`score-follow-overlay__anchor-marker${
+                alignmentMode
+                  ? ' score-follow-overlay__anchor-marker--align'
+                  : isPreview
+                    ? ' score-follow-overlay__anchor-marker--preview'
+                    : ' score-follow-overlay__anchor-marker--setup'
+              }${isAuto ? ' score-follow-overlay__anchor-marker--auto' : ' score-follow-overlay__anchor-marker--manual'}${
+                isNext ? ' score-follow-overlay__anchor-marker--next' : ''
+              }${role === 'system-end' ? ' score-follow-overlay__anchor-marker--system-end' : ''}`}
+              style={{
+                left: `${anchor.x * 100}%`,
+                top: `${anchor.y * 100}%`,
+              }}
+              title={`Measure ${anchor.measureNumber}${role ? ` (${role})` : ''}${isAuto ? ` · ${anchor.source ?? 'auto'}` : ''}`}
+            />
+          )
+        })}
+
+      {showCursor && cursorX != null && cursorY != null && (
+        <div
+          className={`score-follow-cursor${cursor?.smoothed ? ' score-follow-cursor--active' : ''}`}
+          style={{
+            left: `${cursorX * 100}%`,
+            top: `${cursorY * 100}%`,
+          }}
+          aria-hidden
+        >
+          <span className="score-follow-cursor__line" />
+        </div>
+      )}
+
+      {showNoteTarget && noteTarget && (
+        <div
+          className={`score-follow-overlay__note-target${
+            noteTarget.isWideChord
+              ? ' score-follow-overlay__note-target--wide-chord'
+              : noteTarget.isChord
+                ? ' score-follow-overlay__note-target--chord'
+                : ''
+          }`}
+          style={{
+            left: `${noteTarget.x * 100}%`,
+            top: `${noteTarget.y * 100}%`,
+          }}
+          role="img"
+          aria-label={`Your note${noteTarget.isChord ? ' chord' : ''} at measure ${noteTarget.measureNumber ?? ''}`}
+        >
+          <span className="score-follow-overlay__note-target-glow" />
+          <span className="score-follow-overlay__note-target-ring" />
+          <span className="score-follow-overlay__note-target-dot" />
+          <span className="score-follow-overlay__note-target-label">Your note</span>
+        </div>
+      )}
+
+      {alignmentMode && (
+        <p className="score-follow-overlay__align-hint">
+          Tap measure {placementMeasureNumber ?? '—'} start · <kbd>Enter</kbd> skip ·{' '}
+          <kbd>⌫</kbd> undo · <kbd>Esc</kbd> done
+        </p>
+      )}
+
+      {semiAutoPreview && (
+        <p className="score-follow-overlay__align-hint score-follow-overlay__align-hint--semi-auto">
+          Shaded regions = detected staff systems · cyan dots = rough guides (not every measure)
+        </p>
+      )}
+    </div>
+  )
+}
+
+export default memo(ScoreFollowOverlay, scoreFollowOverlayPropsEqual)

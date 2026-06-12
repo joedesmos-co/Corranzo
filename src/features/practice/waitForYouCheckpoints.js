@@ -1,0 +1,124 @@
+import { getBeatAtTime } from '../musicxml/timingQuery.js'
+
+export const CHECKPOINT_KIND = {
+  BEAT: 'beat',
+  NOTE: 'note',
+}
+
+const TIME_GROUP_EPSILON = 0.001
+
+function filterByLoopRegion(items, loopRegion, timeKey = 'timeSeconds') {
+  if (!loopRegion?.isValid) {
+    return items
+  }
+  return items.filter(
+    (item) =>
+      item[timeKey] >= loopRegion.startTimeSeconds - TIME_GROUP_EPSILON &&
+      item[timeKey] < loopRegion.endTimeSeconds,
+  )
+}
+
+function groupNotesByTime(notes) {
+  const groups = []
+
+  for (const note of notes) {
+    const last = groups[groups.length - 1]
+    if (
+      !last ||
+      Math.abs(note.timeSeconds - last.timeSeconds) > TIME_GROUP_EPSILON
+    ) {
+      groups.push({ timeSeconds: note.timeSeconds, notes: [note] })
+    } else {
+      last.notes.push(note)
+    }
+  }
+
+  return groups
+}
+
+/**
+ * Build ordered practice checkpoints from MusicXML beat timing.
+ */
+export function buildBeatCheckpoints(timingMap, loopRegion = null) {
+  if (!timingMap?.beats?.length) {
+    return []
+  }
+
+  const beats = filterByLoopRegion(timingMap.beats, loopRegion)
+
+  return beats.map((beat, index) => ({
+    id: `beat-m${beat.measureNumber}-b${beat.beat}`,
+    kind: CHECKPOINT_KIND.BEAT,
+    index,
+    measureNumber: beat.measureNumber,
+    beat: beat.beat,
+    timeSeconds: beat.timeSeconds,
+    quarterTime: beat.quarterTime,
+    label: `Measure ${beat.measureNumber}, beat ${beat.beat}`,
+    expectedMidi: null,
+    expectedMidis: [],
+    isChord: false,
+  }))
+}
+
+/**
+ * Build note-level checkpoints; chords at the same time become one checkpoint.
+ */
+export function buildNoteCheckpoints(timingMap, loopRegion = null) {
+  if (!timingMap?.notes?.length) {
+    return []
+  }
+
+  let notes = timingMap.notes.filter((note) => !note.isRest && note.midi != null)
+  notes = filterByLoopRegion(notes, loopRegion)
+
+  const groups = groupNotesByTime(notes)
+
+  return groups.map((group, index) => {
+    const midis = group.notes.map((note) => note.midi)
+    const labels = group.notes.map((note) => note.label).join(' + ')
+    const beatAtTime = timingMap ? getBeatAtTime(timingMap, group.timeSeconds) : null
+    const measureNumber = group.notes[0].measureNumber
+
+    return {
+      id: `note-m${measureNumber}-t${group.timeSeconds.toFixed(3)}-${index}`,
+      kind: CHECKPOINT_KIND.NOTE,
+      index,
+      measureNumber,
+      beat: beatAtTime?.beat ?? null,
+      timeSeconds: group.timeSeconds,
+      quarterTime: group.notes[0].quarterTime,
+      label: labels,
+      expectedMidi: midis[0],
+      expectedMidis: midis,
+      isChord: midis.length > 1,
+      notes: group.notes,
+    }
+  })
+}
+
+export function buildCheckpoints(timingMap, loopRegion, mode) {
+  if (mode === 'note') {
+    return buildNoteCheckpoints(timingMap, loopRegion)
+  }
+  return buildBeatCheckpoints(timingMap, loopRegion)
+}
+
+export function findCheckpointIndexAtTime(checkpoints, timeSeconds) {
+  if (!checkpoints.length) {
+    return 0
+  }
+
+  let closestIndex = 0
+  let closestDistance = Infinity
+
+  checkpoints.forEach((checkpoint, index) => {
+    const distance = Math.abs(checkpoint.timeSeconds - timeSeconds)
+    if (distance < closestDistance) {
+      closestDistance = distance
+      closestIndex = index
+    }
+  })
+
+  return closestIndex
+}

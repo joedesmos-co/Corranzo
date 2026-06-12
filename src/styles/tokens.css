@@ -1,0 +1,73 @@
+/**
+ * ScoreFlow design tokens — shared surfaces, type, spacing, motion.
+ */
+:root {
+  /* Surfaces */
+  --sf-bg-app: #081120;
+  --sf-bg-raised: #0a1424;
+  --sf-bg-panel: #101c30;
+  --sf-bg-panel-inset: #0d1628;
+  --sf-bg-topbar: #0f1a2e;
+  --sf-bg-overlay: rgba(13, 22, 40, 0.92);
+
+  /* Borders */
+  --sf-border: #243552;
+  --sf-border-muted: #1a2a44;
+  --sf-border-strong: #334a72;
+  --sf-border-focus: #4a6a9a;
+
+  /* Text */
+  --sf-text-primary: #f4f7fc;
+  --sf-text-secondary: #e8eef8;
+  --sf-text-body: #c8d6ef;
+  --sf-text-muted: #9fb3d9;
+  --sf-text-subtle: #8fa3c7;
+  --sf-text-faint: #7a92b8;
+  --sf-text-disabled: #6b82a8;
+
+  /* Accent */
+  --sf-accent: #6d4aff;
+  --sf-accent-hover: #7d5fff;
+  --sf-accent-muted: rgba(109, 74, 255, 0.22);
+  --sf-accent-secondary: #3b82c4;
+  --sf-accent-green: #2d6a4f;
+
+  /* Spacing */
+  --sf-space-xs: 4px;
+  --sf-space-sm: 8px;
+  --sf-space-md: 12px;
+  --sf-space-lg: 16px;
+  --sf-space-xl: 20px;
+  --sf-space-2xl: 24px;
+  --sf-space-3xl: 28px;
+  --sf-space-4xl: 32px;
+
+  /* Radius */
+  --sf-radius-sm: 8px;
+  --sf-radius-md: 10px;
+  --sf-radius-lg: 12px;
+  --sf-radius-xl: 16px;
+  --sf-radius-pill: 999px;
+
+  /* Typography */
+  --sf-font-title: 1.5rem;
+  --sf-font-heading: 1.125rem;
+  --sf-font-section: 1rem;
+  --sf-font-body: 0.9rem;
+  --sf-font-small: 0.8125rem;
+  --sf-font-caption: 0.75rem;
+
+  /* Layout */
+  --sf-sidebar-width: 300px;
+  --sf-topbar-height: 72px;
+  --sf-content-max: 1100px;
+
+  /* Motion */
+  --sf-ease: ease;
+  --sf-duration-fast: 0.15s;
+  --sf-duration: 0.2s;
+
+  /* Focus */
+  --sf-focus-ring: 0 0 0 2px var(--sf-bg-app), 0 0 0 4px rgba(109, 74, 255, 0.5);
+  --sf-focus-ring-subtle: 0 0 0 2px var(--sf-bg-panel), 0 0 0 4px rgba(90, 130, 190, 0.45);
+}
