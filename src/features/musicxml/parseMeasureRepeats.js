@@ -1,105 +1,14 @@
-import { asNumber, ensureArray } from './xmlUtils.js'
-
-function parseEndingNumbers(value) {
-  if (value == null || value === '') {
-    return []
-  }
-  return String(value)
-    .split(/[, ]+/)
-    .map((part) => Number(part.trim()))
-    .filter((number) => Number.isFinite(number) && number > 0)
-}
-
-function readBarlineRepeat(barline) {
-  const repeat = barline.repeat
-  if (!repeat) {
-    return null
-  }
-  const node = ensureArray(repeat)[0] ?? repeat
-  return {
-    direction: node['@_direction'] ?? null,
-    times: asNumber(node['@_times'], NaN),
-  }
-}
-
-function readBarlineEnding(barline) {
-  const ending = barline.ending
-  if (!ending) {
-    return null
-  }
-  const node = ensureArray(ending)[0] ?? ending
-  return {
-    type: node['@_type'] ?? null,
-    numbers: parseEndingNumbers(node['@_number']),
-  }
-}
-
 /**
- * Read repeat / ending marks on a written measure (barline children).
+ * Repeat / ending expansion — explicit interpreter over written measures.
+ *
+ * Each repeat section owns its own pass counter. Leaving a section resets pass to 1.
+ * Same-measure forward+backward, repeat-to-beginning, times=N, and multi-measure
+ * voltas are handled explicitly.
  */
-export function extractMeasureRepeatMarkings(measureNode) {
-  let forwardRepeat = false
-  let backwardRepeat = false
-  let backwardRepeatTimes = null
-  let endingStartNumbers = null
-  let endingStop = false
-  let endingDiscontinue = false
 
-  for (const [key, value] of Object.entries(measureNode)) {
-    if (key.startsWith('@_')) {
-      continue
-    }
-    if (key !== 'barline') {
-      continue
-    }
-    for (const barline of ensureArray(value)) {
-      const location = barline['@_location'] ?? 'right'
-      const repeat = readBarlineRepeat(barline)
-      if (repeat?.direction === 'forward' && (location === 'left' || location === 'both')) {
-        forwardRepeat = true
-      }
-      if (repeat?.direction === 'backward' && (location === 'right' || location === 'both')) {
-        backwardRepeat = true
-        if (Number.isFinite(repeat.times) && repeat.times > 1) {
-          backwardRepeatTimes = repeat.times
-        }
-      }
-
-      const ending = readBarlineEnding(barline)
-      if (ending?.type === 'start' && ending.numbers.length > 0) {
-        endingStartNumbers = ending.numbers
-      }
-      if (ending?.type === 'stop') {
-        endingStop = true
-      }
-      if (ending?.type === 'discontinue') {
-        endingDiscontinue = true
-      }
-    }
-  }
-
-  return {
-    forwardRepeat,
-    backwardRepeat,
-    backwardRepeatTimes,
-    endingStartNumbers,
-    endingStop,
-    endingDiscontinue,
-  }
-}
-
-function findForwardRepeatIndex(markings, backwardIndex) {
-  for (let index = backwardIndex - 1; index >= 0; index -= 1) {
-    if (markings[index]?.forwardRepeat) {
-      return index
-    }
-  }
-  return -1
-}
-
-function shouldPlayMeasureOnPass(marking, pass, endingBracketNumbers) {
-  if (endingBracketNumbers?.length) {
-    return endingBracketNumbers.includes(pass)
+function shouldPlayMeasureOnPass(marking, pass, activeEndingNumbers) {
+  if (activeEndingNumbers?.length) {
+    return activeEndingNumbers.includes(pass)
   }
   if (marking.endingStartNumbers?.length) {
     return marking.endingStartNumbers.includes(pass)
@@ -144,22 +53,77 @@ function buildPerformedBeats(entries, writtenBeats, measures) {
   return performedBeats
 }
 
+/** Index of the forward repeat that opens the current section (same measure counts). */
+function findSectionStartIndex(markings, backwardIndex) {
+  const backward = markings[backwardIndex]
+  if (backward?.forwardRepeat) {
+    return backwardIndex
+  }
+  for (let index = backwardIndex; index >= 0; index -= 1) {
+    if (markings[index]?.forwardRepeat) {
+      return index
+    }
+  }
+  return -1
+}
+
+/** Heuristic scan for repeat marks that cannot be interpreted reliably. */
+function detectMalformedRepeats(markings) {
+  let seenForward = false
+  let openForwardIndex = -1
+  let uncertain = false
+
+  for (let index = 0; index < markings.length; index += 1) {
+    const marking = markings[index] ?? {}
+
+    if (marking.backwardRepeat && !marking.forwardRepeat && !seenForward) {
+      // Backward repeat before any forward repeat — only valid as repeat-to-beginning
+      // when it is not the first measure (measure 1 backward with no partner is malformed).
+      if (index === 0) {
+        uncertain = true
+      }
+    }
+
+    if (marking.forwardRepeat) {
+      seenForward = true
+      openForwardIndex = index
+    }
+
+    if (marking.backwardRepeat) {
+      const sectionStart = findSectionStartIndex(markings, index)
+      if (sectionStart < 0 && index === 0) {
+        uncertain = true
+      }
+      openForwardIndex = -1
+    }
+  }
+
+  if (openForwardIndex >= 0) {
+    uncertain = true
+  }
+
+  return uncertain
+}
+
 /**
- * Expand written measures into a performed playback order (repeats + simple voltas).
- * Written measure times stay unchanged; performed entries use a cumulative performed clock.
+ * Expand written measures into performed playback order (repeats + voltas).
+ * Written measure times stay unchanged; performed entries use a cumulative clock.
  */
 export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) {
   const repeatSections = []
   const endings = []
   const entries = []
-  let uncertain = false
+  let uncertain = detectMalformedRepeats(markings)
+  let navigationUnsupported = false
 
   let index = 0
-  let pass = 1
+  /** Pass within the active repeat section (resets when a section completes). */
+  let sectionPass = 1
   let performedTime = 0
   let steps = 0
-  let endingBracketNumbers = null
-  const maxSteps = measures.length * 32 + 8
+  /** Ending bracket active across measures until stop/discontinue. */
+  let activeEndingNumbers = null
+  const maxSteps = measures.length * 40 + 16
 
   while (index < measures.length && steps < maxSteps) {
     steps += 1
@@ -172,14 +136,18 @@ export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) 
         measureNumber: measure.number,
         numbers: marking.endingStartNumbers,
       })
-      endingBracketNumbers = marking.endingStartNumbers
+      activeEndingNumbers = marking.endingStartNumbers
     }
 
-    if (marking.endingStop || marking.endingDiscontinue) {
-      endingBracketNumbers = null
-    }
+    const skipForVolta = !shouldPlayMeasureOnPass(marking, sectionPass, activeEndingNumbers)
 
-    if (!shouldPlayMeasureOnPass(marking, pass, endingBracketNumbers)) {
+    // Decide stop/discontinue membership before clearing the bracket (P8).
+    const endingClosesHere = marking.endingStop || marking.endingDiscontinue
+
+    if (skipForVolta) {
+      if (endingClosesHere) {
+        activeEndingNumbers = null
+      }
       index += 1
       continue
     }
@@ -189,30 +157,45 @@ export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) 
       performedIndex: entries.length,
       writtenMeasureIndex: index,
       writtenMeasureNumber: measure.number,
-      repeatPass: pass,
+      repeatPass: sectionPass,
       startTimeSeconds: performedTime,
       endTimeSeconds: performedTime + duration,
     })
     performedTime += duration
 
+    if (endingClosesHere) {
+      activeEndingNumbers = null
+    }
+
     if (marking.backwardRepeat) {
-      const forwardIndex = findForwardRepeatIndex(markings, index)
-      if (forwardIndex >= 0) {
+      const sectionStart = findSectionStartIndex(markings, index)
+      const maxPasses = marking.backwardRepeatTimes ?? 2
+
+      if (sectionStart >= 0) {
         repeatSections.push({
-          forwardMeasureIndex: forwardIndex,
-          forwardMeasureNumber: measures[forwardIndex].number,
+          forwardMeasureIndex: sectionStart,
+          forwardMeasureNumber: measures[sectionStart].number,
           backwardMeasureIndex: index,
           backwardMeasureNumber: measure.number,
+          maxPasses,
         })
 
-        const maxPasses = marking.backwardRepeatTimes ?? 2
-        if (pass < maxPasses) {
-          pass += 1
-          index = forwardIndex
+        if (sectionPass < maxPasses) {
+          sectionPass += 1
+          index = sectionStart
           continue
         }
+
+        // Section complete — reset pass for what follows.
+        sectionPass = 1
       } else {
-        uncertain = true
+        // Repeat-to-beginning: no forward repeat in this section (P7).
+        if (sectionPass < maxPasses) {
+          sectionPass += 1
+          index = 0
+          continue
+        }
+        sectionPass = 1
       }
     }
 
@@ -223,16 +206,23 @@ export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) 
     uncertain = true
   }
 
-  const hasRepeatMarks =
-    repeatSections.length > 0 ||
-    endings.length > 0 ||
-    markings.some((mark) => mark.forwardRepeat || mark.backwardRepeat)
+  const hasRepeatMarks = markings.some(
+    (mark) =>
+      mark.forwardRepeat ||
+      mark.backwardRepeat ||
+      mark.endingStartNumbers?.length ||
+      mark.endingStop ||
+      mark.endingDiscontinue,
+  )
 
   const expanded = entries.length > measures.length
   const usesPerformedTimeline = expanded
 
   let warning = null
-  if (uncertain) {
+  if (navigationUnsupported) {
+    warning =
+      'Navigation marks (D.C., D.S., Fine, Coda) are not supported yet. Playback follows written order.'
+  } else if (uncertain) {
     warning =
       'Some repeat marks could not be linked reliably. Measure display follows written score order.'
   } else if (hasRepeatMarks && !expanded) {
@@ -253,10 +243,11 @@ export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) 
       performedMeasureCount: entries.length,
       repeatSections,
       endings,
-      endingPassCount: pass,
+      endingPassCount: sectionPass,
       hasRepeatMarks,
-      fullyInterpreted: !uncertain,
+      fullyInterpreted: !uncertain && !navigationUnsupported,
       usesPerformedTimeline,
+      navigationUnsupported,
       warning,
     },
   }

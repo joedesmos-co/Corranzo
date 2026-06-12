@@ -1,4 +1,6 @@
 import { getBeatAtTime } from '../musicxml/timingQuery.js'
+import { getTimeline } from '../musicxml/timeline.js'
+import { usesPerformedTimeline } from '../musicxml/performedTimeline.js'
 
 export const CHECKPOINT_KIND = {
   BEAT: 'beat',
@@ -40,20 +42,26 @@ function groupNotesByTime(notes) {
  * Build ordered practice checkpoints from MusicXML beat timing.
  */
 export function buildBeatCheckpoints(timingMap, loopRegion = null) {
-  if (!timingMap?.beats?.length) {
+  const sourceBeats = usesPerformedTimeline(timingMap)
+    ? getTimeline(timingMap).performedBeats
+    : timingMap?.beats
+
+  if (!sourceBeats?.length) {
     return []
   }
 
-  const beats = filterByLoopRegion(timingMap.beats, loopRegion)
+  const beats = filterByLoopRegion(sourceBeats, loopRegion)
 
   return beats.map((beat, index) => ({
-    id: `beat-m${beat.measureNumber}-b${beat.beat}`,
+    id: `beat-m${beat.measureNumber}-b${beat.beat}-p${beat.repeatPass ?? 1}-i${beat.performedMeasureIndex ?? index}`,
     kind: CHECKPOINT_KIND.BEAT,
     index,
     measureNumber: beat.measureNumber,
     beat: beat.beat,
     timeSeconds: beat.timeSeconds,
     quarterTime: beat.quarterTime,
+    repeatPass: beat.repeatPass ?? 1,
+    performedIndex: beat.performedMeasureIndex ?? null,
     label: `Measure ${beat.measureNumber}, beat ${beat.beat}`,
     expectedMidi: null,
     expectedMidis: [],
@@ -69,7 +77,16 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null) {
     return []
   }
 
-  let notes = timingMap.notes.filter((note) => !note.isRest && note.midi != null)
+  const sourceNotes = usesPerformedTimeline(timingMap)
+    ? getTimeline(timingMap)
+        .performedNotes()
+        .map((note) => ({
+          ...note,
+          timeSeconds: note.performedSeconds,
+        }))
+    : timingMap.notes.filter((note) => !note.isRest && note.midi != null)
+
+  let notes = sourceNotes.filter((note) => !note.isRest && note.midi != null)
   notes = filterByLoopRegion(notes, loopRegion)
 
   const groups = groupNotesByTime(notes)

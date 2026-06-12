@@ -7,6 +7,8 @@ import {
   getBeatListIndex,
   getBeatStartTime,
 } from '../musicxml/beatNavigation.js'
+import { getTimeline } from '../musicxml/timeline.js'
+import { usesPerformedTimeline } from '../musicxml/performedTimeline.js'
 
 const LOOP_WRAP_THRESHOLD_SECONDS = 0.05
 
@@ -74,8 +76,19 @@ export function buildMeasureLoopRegion(timingMap, startMeasureNumber, endMeasure
     return null
   }
 
-  const startTimeSeconds = normalized.startMeasure.startTimeSeconds
-  const endTimeSeconds = normalized.endMeasure.endTimeSeconds
+  let startTimeSeconds = normalized.startMeasure.startTimeSeconds
+  let endTimeSeconds = normalized.endMeasure.endTimeSeconds
+
+  if (usesPerformedTimeline(timingMap)) {
+    const timeline = getTimeline(timingMap)
+    const startWindows = timeline.windowsForMeasure(normalized.startMeasure.number)
+    const endWindows = timeline.windowsForMeasure(normalized.endMeasure.number)
+    if (startWindows.length && endWindows.length) {
+      startTimeSeconds = startWindows[0].startTimeSeconds
+      endTimeSeconds = endWindows[endWindows.length - 1].endTimeSeconds
+    }
+  }
+
   const durationSeconds = endTimeSeconds - startTimeSeconds
 
   return {

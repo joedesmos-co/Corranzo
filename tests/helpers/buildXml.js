@@ -227,12 +227,12 @@ export function chordFixture() {
   return scoreWrap(`<part id="P1">${xml}</part>`)
 }
 
-/** Repeat fixture with mid-measure tempo inside the repeated section. */
+/** Repeat fixture with tempo change inside the repeated section; tempo restored after. */
 export function repeatWithTempoChange() {
   const xml =
     `<measure number="1">${attributes()}${soundTempo(120)}${forwardRepeat}${fourQuarters()}</measure>` +
     `<measure number="2">${soundTempo(60)}${fourQuarters()}${backwardRepeat()}</measure>` +
-    `<measure number="3">${fourQuarters()}</measure>`
+    `<measure number="3">${soundTempo(120)}${fourQuarters()}</measure>`
   return scoreWrap(`<part id="P1">${xml}</part>`)
 }
 

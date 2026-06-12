@@ -1,8 +1,6 @@
 import { getMeasureAtTime } from './timingQuery.js'
-import {
-  getPerformedEntryAtTime,
-  usesPerformedTimeline,
-} from './performedTimeline.js'
+import { getTimeline } from './timeline.js'
+import { usesPerformedTimeline } from './performedTimeline.js'
 
 export function getMeasureByNumber(timingMap, measureNumber) {
   if (!timingMap?.measures?.length || measureNumber == null) {
@@ -29,9 +27,9 @@ export function getMeasureListIndex(timingMap, measure) {
 export function getNeighborMeasure(timingMap, measure, offset, timeSeconds = null) {
   if (usesPerformedTimeline(timingMap) && timeSeconds != null) {
     const timeline = timingMap.performedMeasureTimeline?.entries
-    const current = getPerformedEntryAtTime(timingMap, timeSeconds)
-    if (timeline?.length && current) {
-      const target = timeline[current.performedIndex + offset]
+    const current = getTimeline(timingMap).locate(timeSeconds)
+    if (timeline?.length && current?.occurrenceIndex != null) {
+      const target = timeline[current.occurrenceIndex + offset]
       if (!target) {
         return null
       }
@@ -72,25 +70,20 @@ export function getPerformedNeighborStartTime(timingMap, timeSeconds, offset) {
   }
 
   const timeline = timingMap.performedMeasureTimeline?.entries
-  const current = getPerformedEntryAtTime(timingMap, timeSeconds)
-  if (!timeline?.length || !current) {
+  const current = getTimeline(timingMap).locate(timeSeconds)
+  if (!timeline?.length || current?.occurrenceIndex == null) {
     return null
   }
 
-  const target = timeline[current.performedIndex + offset]
+  const target = timeline[current.occurrenceIndex + offset]
   return target?.startTimeSeconds ?? null
 }
 
 export function getFirstPerformedStartForMeasure(timingMap, measureNumber) {
-  const timeline = timingMap.performedMeasureTimeline?.entries
-  if (!timeline?.length || measureNumber == null) {
+  if (measureNumber == null) {
     return null
   }
-
-  const entry = timeline.find(
-    (candidate) => candidate.writtenMeasureNumber === measureNumber,
-  )
-  return entry?.startTimeSeconds ?? null
+  return getTimeline(timingMap).performedStartForMeasure(measureNumber)
 }
 
 export function resolveCurrentMeasure(timingMap, timeSeconds) {
