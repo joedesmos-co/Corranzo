@@ -8,6 +8,7 @@ export function buildPracticeGuidance({
   timingReady,
   timingError,
   midiError,
+  midiPlayable = true,
   isDemoPiece = false,
 }) {
   const steps = []
@@ -47,7 +48,7 @@ export function buildPracticeGuidance({
   if (midiError) {
     steps.push('Your sound file did not load — try uploading it again from Library.')
   } else if (!hasMidi && timingReady) {
-    steps.push('Optional: add a MIDI sound file in Library if you want audio playback.')
+    steps.push('Optional: add a MIDI sound file in Library for alternate backing audio.')
   } else if (hasMidi && !midiPlayable) {
     steps.push('Your sound file has no notes — you can still practice with Wait For You.')
   }
