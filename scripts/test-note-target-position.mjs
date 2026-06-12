@@ -186,7 +186,7 @@ const pageTarget = resolveNoteTargetPosition({
 assert(pageTarget.page === 2, 'system break should map measure 5 to page 2')
 
 // --- parse real fixture ---
-const xmlPath = join(__dirname, '../public/fixtures/sample.musicxml')
+const xmlPath = join(__dirname, '../tests/fixtures/sample.musicxml')
 const xml = readFileSync(xmlPath, 'utf8')
 const parsed = parseMusicXml(xml)
 const noteCheckpoints = buildNoteCheckpoints(parsed, null)
