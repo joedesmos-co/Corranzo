@@ -80,7 +80,10 @@ export default function usePracticePageFollow({
 
     const tick = () => {
       const container = scrollContainerRef.current
-      const pageFrame = container?.querySelector('.pdf-page-frame')
+      // Prefer the actual react-pdf page element so cursor.y (normalized to page
+      // dimensions) maps correctly even if the pdf-page-frame wrapper has extra space.
+      const pdfPage = container?.querySelector('.react-pdf__Page')
+      const pageFrame = pdfPage || container?.querySelector('.pdf-page-frame')
       if (!container || !pageFrame) {
         frameId = requestAnimationFrame(tick)
         return

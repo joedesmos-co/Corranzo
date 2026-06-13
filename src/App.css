@@ -937,6 +937,12 @@
   gap: 0;
 }
 
+/* In practice mode the floating toolbar (position:absolute; top:10px; ~40px tall)
+   sits above the PDF body. Reserve space so the first system is never hidden. */
+.pdf-viewer-section--practice .pdf-viewer-stage {
+  padding-top: 52px;
+}
+
 .pdf-viewer-section--library .pdf-viewer-body,
 .pdf-viewer-section--practice .pdf-viewer-body {
   flex: 1;

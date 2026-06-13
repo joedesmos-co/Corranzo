@@ -2,37 +2,124 @@
  * Writes bundled demo score-follow anchors for Minuet in G (Mutopia PDF, 1 page).
  * Run: npm run fixtures:anchors  (or npm run fixtures)
  *
- * Strategy: per-measure anchors from MusicXML timing + Mutopia system bands.
- * Duration-weighted x within each staff system (not even spacing by measure count).
+ * Strategy: per-measure anchors derived directly from PDF bar-line positions extracted
+ * with PyMuPDF (see scripts/extract-pdf-barlines.py). The PDF has SIX grand-staff
+ * systems (not four as the original estimate assumed). Measure counts per system:
+ *   sys 0: M1-5   sys 1: M6-10   sys 2: M11-16
+ *   sys 3: M17-21 sys 4: M22-26  sys 5: M27-32
+ *
+ * x values are the normalised x-position of the START barline of each measure.
+ * y values are the mid-point of the grand staff (between treble top and bass bottom).
+ * Both are normalised to [0,1] over the page dimensions (595.3 × 841.9 pt, A4).
  */
-import { readFileSync, writeFileSync } from 'node:fs'
+import { writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import { DEMO_PIECE } from '../src/dev/fixturePaths.js'
 import { ANCHOR_SOURCE } from '../src/features/score-follow/anchorUtils.js'
-import { buildTimingMeasureAnchorsForBands } from './timingMeasureAnchors.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const fixturesDir = join(root, 'public', 'fixtures')
-const xmlPath = join(fixturesDir, 'demo-minuet-in-g.musicxml')
 const outPath = join(fixturesDir, 'demo-minuet-in-g.anchors.json')
 
-/** Four systems × eight measures — Mutopia single-page minuet layout. */
-const MUTOPIA_MINUET_SYSTEMS = [
-  { page: 1, y: 0.31, yEnd: 0.34, measureStart: 1, measureEnd: 8, systemIndex: 0 },
-  { page: 1, y: 0.45, yEnd: 0.48, measureStart: 9, measureEnd: 16, systemIndex: 1 },
-  { page: 1, y: 0.59, yEnd: 0.62, measureStart: 17, measureEnd: 24, systemIndex: 2 },
-  { page: 1, y: 0.73, yEnd: 0.76, measureStart: 25, measureEnd: 32, systemIndex: 3 },
+/**
+ * Six systems extracted from PDF staff-line and bar-line analysis (PyMuPDF).
+ * Page dimensions: w=595.3, h=841.9 pts (A4).
+ *
+ * Each entry: { systemIndex, y (normalised grand-staff midpoint), measures: [{ n, x }] }
+ * x = normalised x of the START of that measure (left barline or staff left edge).
+ */
+const SYSTEMS = [
+  {
+    systemIndex: 0,
+    y: 0.1631, // mid of treble(103.2-124.1) + bass(150.5-171.5) = 137.35/841.9
+    measures: [
+      { n: 1,  x: 0.1194 }, // staff left edge after clef/key/time = 71.1/595.3
+      { n: 2,  x: 0.3563 }, // barline at 212.1
+      { n: 3,  x: 0.4942 }, // barline at 294.2
+      { n: 4,  x: 0.6548 }, // barline at 389.8
+      { n: 5,  x: 0.7911 }, // barline at 470.9
+    ],
+  },
+  {
+    systemIndex: 1,
+    y: 0.2937, // 247.3/841.9
+    measures: [
+      { n: 6,  x: 0.0480 }, // staff left = 28.6
+      { n: 7,  x: 0.2792 }, // 166.2
+      { n: 8,  x: 0.4443 }, // 264.5
+      { n: 9,  x: 0.6305 }, // 375.3
+      { n: 10, x: 0.8023 }, // 477.6
+    ],
+  },
+  {
+    systemIndex: 2,
+    y: 0.4242, // 357.1/841.9
+    measures: [
+      { n: 11, x: 0.0480 }, // 28.6
+      { n: 12, x: 0.2493 }, // 148.4
+      { n: 13, x: 0.3933 }, // 234.1
+      { n: 14, x: 0.5404 }, // 321.7
+      { n: 15, x: 0.6903 }, // 410.9
+      { n: 16, x: 0.8401 }, // 500.1 (section A ends with double bar at 561.9/565.4)
+    ],
+  },
+  {
+    systemIndex: 3,
+    y: 0.5547, // 467.0/841.9
+    measures: [
+      { n: 17, x: 0.1132 }, // 67.4 (after repeat-open bar at 63.9/67.4)
+      { n: 18, x: 0.2814 }, // 167.5
+      { n: 19, x: 0.4415 }, // 262.8
+      { n: 20, x: 0.6039 }, // 359.5
+      { n: 21, x: 0.7684 }, // 457.4
+    ],
+  },
+  {
+    systemIndex: 4,
+    y: 0.6902, // 581.1/841.9
+    measures: [
+      { n: 22, x: 0.0480 }, // 28.6
+      { n: 23, x: 0.2701 }, // 160.8
+      { n: 24, x: 0.4351 }, // 259.0
+      { n: 25, x: 0.5989 }, // 356.5
+      { n: 26, x: 0.7753 }, // 461.5
+    ],
+  },
+  {
+    systemIndex: 5,
+    y: 0.8259, // 695.3/841.9
+    measures: [
+      { n: 27, x: 0.0480 }, // 28.6
+      { n: 28, x: 0.2320 }, // 138.1
+      { n: 29, x: 0.3815 }, // 227.1
+      { n: 30, x: 0.5444 }, // 324.1
+      { n: 31, x: 0.6730 }, // 400.6
+      { n: 32, x: 0.8136 }, // 484.3 (section B ends with double bar at 561.9/565.4)
+    ],
+  },
 ]
 
 function main() {
-  const xml = readFileSync(xmlPath, 'utf8')
-  const timingMap = parseMusicXml(xml, 'demo-minuet-in-g.musicxml')
-  const anchors = buildTimingMeasureAnchorsForBands(timingMap, MUTOPIA_MINUET_SYSTEMS, {
-    source: ANCHOR_SOURCE.DEMO,
-    meta: { calibrated: 'mutopia-a4', bundled: true },
-  })
+  const anchors = []
+  for (const sys of SYSTEMS) {
+    for (const { n, x } of sys.measures) {
+      anchors.push({
+        page: 1,
+        x,
+        y: sys.y,
+        measureNumber: n,
+        source: ANCHOR_SOURCE.DEMO,
+        meta: {
+          role: 'measure',
+          density: 'pdf-extracted',
+          systemIndex: sys.systemIndex,
+          calibrated: 'pymupdf-barline',
+          bundled: true,
+        },
+      })
+    }
+  }
 
   const payload = {
     version: 1,
@@ -41,8 +128,8 @@ function main() {
     timingFile: 'Minuet in G.musicxml',
     generatedAt: new Date().toISOString(),
     alignmentNote:
-      'Bundled demo anchors for Minuet in G: 32 per-measure positions from MusicXML timing ' +
-      'and Mutopia staff-system bands (duration-weighted horizontal placement). ' +
+      'Bundled demo anchors for Minuet in G: 32 per-measure positions extracted from ' +
+      'the actual PDF using PyMuPDF bar-line detection (6 systems, not 4). ' +
       'Loaded only for the sample piece; never saved to user localStorage.',
     anchors,
   }

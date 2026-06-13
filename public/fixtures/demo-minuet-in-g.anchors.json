@@ -3,454 +3,454 @@
   "pieceId": "minuet-in-g",
   "pdfFile": "Minuet in G.pdf",
   "timingFile": "Minuet in G.musicxml",
-  "generatedAt": "2026-06-12T20:32:15.888Z",
-  "alignmentNote": "Bundled demo anchors for Minuet in G: 32 per-measure positions from MusicXML timing and Mutopia staff-system bands (duration-weighted horizontal placement). Loaded only for the sample piece; never saved to user localStorage.",
+  "generatedAt": "2026-06-13T04:20:00.000Z",
+  "alignmentNote": "Bundled demo anchors for Minuet in G: 32 per-measure positions extracted from the actual PDF using PyMuPDF bar-line detection. The PDF has 6 grand-staff systems (not 4 as previously estimated). System y-midpoints and measure x-positions come directly from staff-line and bar-line coordinates in the PDF. Loaded only for the sample piece; never saved to user localStorage.",
   "anchors": [
     {
       "page": 1,
-      "x": 0.1,
-      "y": 0.31,
+      "x": 0.1194,
+      "y": 0.1631,
       "measureNumber": 1,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
+        "density": "pdf-extracted",
         "systemIndex": 0,
-        "calibrated": "mutopia-a4",
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.1975,
-      "y": 0.3105625,
+      "x": 0.3563,
+      "y": 0.1631,
       "measureNumber": 2,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
+        "density": "pdf-extracted",
         "systemIndex": 0,
-        "calibrated": "mutopia-a4",
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.29500000000000004,
-      "y": 0.311125,
+      "x": 0.4942,
+      "y": 0.1631,
       "measureNumber": 3,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
+        "density": "pdf-extracted",
         "systemIndex": 0,
-        "calibrated": "mutopia-a4",
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.39249999999999996,
-      "y": 0.3116875,
+      "x": 0.6548,
+      "y": 0.1631,
       "measureNumber": 4,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
+        "density": "pdf-extracted",
         "systemIndex": 0,
-        "calibrated": "mutopia-a4",
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.49,
-      "y": 0.31225,
+      "x": 0.7911,
+      "y": 0.1631,
       "measureNumber": 5,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
+        "density": "pdf-extracted",
         "systemIndex": 0,
-        "calibrated": "mutopia-a4",
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.5875,
-      "y": 0.3128125,
+      "x": 0.0480,
+      "y": 0.2937,
       "measureNumber": 6,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 0,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 1,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.6849999999999999,
-      "y": 0.313375,
+      "x": 0.2792,
+      "y": 0.2937,
       "measureNumber": 7,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 0,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 1,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.7824999999999999,
-      "y": 0.3139375,
+      "x": 0.4443,
+      "y": 0.2937,
       "measureNumber": 8,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 0,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 1,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.1,
-      "y": 0.45,
+      "x": 0.6305,
+      "y": 0.2937,
       "measureNumber": 9,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
+        "density": "pdf-extracted",
         "systemIndex": 1,
-        "calibrated": "mutopia-a4",
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.19749999999999993,
-      "y": 0.45056250000000003,
+      "x": 0.8023,
+      "y": 0.2937,
       "measureNumber": 10,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
+        "density": "pdf-extracted",
         "systemIndex": 1,
-        "calibrated": "mutopia-a4",
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.29499999999999993,
-      "y": 0.451125,
+      "x": 0.0480,
+      "y": 0.4242,
       "measureNumber": 11,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 1,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.39249999999999985,
-      "y": 0.4516875,
+      "x": 0.2493,
+      "y": 0.4242,
       "measureNumber": 12,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 1,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.4899999999999999,
-      "y": 0.45225,
+      "x": 0.3933,
+      "y": 0.4242,
       "measureNumber": 13,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 1,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.5875,
-      "y": 0.4528125,
+      "x": 0.5404,
+      "y": 0.4242,
       "measureNumber": 14,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 1,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.6849999999999999,
-      "y": 0.45337500000000003,
+      "x": 0.6903,
+      "y": 0.4242,
       "measureNumber": 15,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 1,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.7824999999999999,
-      "y": 0.4539375,
+      "x": 0.8401,
+      "y": 0.4242,
       "measureNumber": 16,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 1,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.1,
-      "y": 0.59,
+      "x": 0.1132,
+      "y": 0.5547,
       "measureNumber": 17,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 2,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 3,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.19749999999999995,
-      "y": 0.5905625,
+      "x": 0.2814,
+      "y": 0.5547,
       "measureNumber": 18,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 2,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 3,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.2949999999999999,
-      "y": 0.591125,
+      "x": 0.4415,
+      "y": 0.5547,
       "measureNumber": 19,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 2,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 3,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.39249999999999985,
-      "y": 0.5916874999999999,
+      "x": 0.6039,
+      "y": 0.5547,
       "measureNumber": 20,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 2,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 3,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.49,
-      "y": 0.5922499999999999,
+      "x": 0.7684,
+      "y": 0.5547,
       "measureNumber": 21,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 2,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 3,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.5874999999999999,
-      "y": 0.5928125,
+      "x": 0.0480,
+      "y": 0.6902,
       "measureNumber": 22,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 2,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 4,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.6849999999999998,
-      "y": 0.593375,
+      "x": 0.2701,
+      "y": 0.6902,
       "measureNumber": 23,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 2,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 4,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.7825000000000001,
-      "y": 0.5939375,
+      "x": 0.4351,
+      "y": 0.6902,
       "measureNumber": 24,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 2,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 4,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.1,
-      "y": 0.73,
+      "x": 0.5989,
+      "y": 0.6902,
       "measureNumber": 25,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 3,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 4,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.19750000000000018,
-      "y": 0.7305625,
+      "x": 0.7753,
+      "y": 0.6902,
       "measureNumber": 26,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 3,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 4,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.2950000000000001,
-      "y": 0.731125,
+      "x": 0.0480,
+      "y": 0.8259,
       "measureNumber": 27,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 3,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 5,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.39249999999999996,
-      "y": 0.7316874999999999,
+      "x": 0.2320,
+      "y": 0.8259,
       "measureNumber": 28,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 3,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 5,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.4899999999999999,
-      "y": 0.73225,
+      "x": 0.3815,
+      "y": 0.8259,
       "measureNumber": 29,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 3,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 5,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.5874999999999998,
-      "y": 0.7328125,
+      "x": 0.5444,
+      "y": 0.8259,
       "measureNumber": 30,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 3,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 5,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.6849999999999996,
-      "y": 0.733375,
+      "x": 0.6730,
+      "y": 0.8259,
       "measureNumber": 31,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 3,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 5,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     },
     {
       "page": 1,
-      "x": 0.7824999999999995,
-      "y": 0.7339375,
+      "x": 0.8136,
+      "y": 0.8259,
       "measureNumber": 32,
       "source": "demo",
       "meta": {
         "role": "measure",
-        "density": "duration-weighted",
-        "systemIndex": 3,
-        "calibrated": "mutopia-a4",
+        "density": "pdf-extracted",
+        "systemIndex": 5,
+        "calibrated": "pymupdf-barline",
         "bundled": true
       }
     }
