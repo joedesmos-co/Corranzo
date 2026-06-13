@@ -6,6 +6,7 @@ export const FOLLOW_TRUST_LEVEL = {
   CALIBRATED: 'calibrated',
   MANUAL: 'manual',
   LAYOUT: 'layout',
+  AUTO: 'auto',
   NONE: 'none',
 }
 
@@ -29,17 +30,11 @@ export function assessScoreFollowTrust({ anchors, timingMap, isDemoSession = fal
   const layoutCount = trusted.filter(
     (anchor) => anchor.source === ANCHOR_SOURCE.MUSICXML_LAYOUT,
   ).length
+  const autoSystemCount = trusted.filter(
+    (anchor) =>
+      anchor.source === ANCHOR_SOURCE.AUTO_SYSTEM || anchor.source === ANCHOR_SOURCE.AUTO,
+  ).length
   const autoCount = anchors.filter((anchor) => isAutomaticAnchorSource(anchor.source)).length
-
-  if (autoCount > 0 && demoCount === 0 && manualCount === 0 && layoutCount === 0) {
-    return {
-      level: FOLLOW_TRUST_LEVEL.NONE,
-      showCursor: false,
-      needsSetup: true,
-      approximate: false,
-      label: null,
-    }
-  }
 
   if (isDemoSession && demoCount >= 1) {
     return {
@@ -69,6 +64,19 @@ export function assessScoreFollowTrust({ anchors, timingMap, isDemoSession = fal
       needsSetup: false,
       approximate: true,
       label: 'Approximate — MusicXML layout',
+    }
+  }
+
+  // Auto-detected system anchors: show an approximate cursor so the user gets
+  // immediate feedback after uploading PDF + MusicXML. The position is coarser
+  // than manual or layout anchors but far more useful than no cursor.
+  if (autoSystemCount >= 2 || autoCount >= 2) {
+    return {
+      level: FOLLOW_TRUST_LEVEL.AUTO,
+      showCursor: true,
+      needsSetup: false,
+      approximate: true,
+      label: 'Approximate — auto-detected systems',
     }
   }
 

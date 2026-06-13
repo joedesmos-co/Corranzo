@@ -4,6 +4,7 @@ import PdfPageOverlayStack from './PdfPageOverlayStack.jsx'
 import PdfOverlayLayer from './PdfOverlayLayer.jsx'
 import AnnotationLayer from './AnnotationLayer.jsx'
 import ScoreFollowOverlay from './ScoreFollowOverlay.jsx'
+import { ANNOTATION_TOOLS } from './annotationConstants.js'
 
 export default function PdfPageFrame({
   pageNumber,
@@ -69,6 +70,10 @@ export default function PdfPageFrame({
 
   const alignmentMode = scoreFollow?.alignmentMode ?? false
   const semiAutoPreview = scoreFollow?.semiAutoPreview ?? false
+  // In pointer mode the annotation overlay must not intercept any pointer events —
+  // the SVG inside already has pointer-events:none but its wrapping PdfOverlayLayer
+  // div was still set to 'auto', blocking scroll, tap, and toolbar clicks.
+  const isPointerTool = activeTool === ANNOTATION_TOOLS.POINTER
   const showScoreFollowLayer =
     scoreFollow &&
     (alignmentMode ||
@@ -121,7 +126,7 @@ export default function PdfPageFrame({
           <PdfOverlayLayer
             id="annotations"
             zIndex={20}
-            pointerEvents={alignmentMode ? 'none' : 'auto'}
+            pointerEvents={alignmentMode || isPointerTool ? 'none' : 'auto'}
             className={alignmentMode ? 'pdf-overlay-layer--disabled' : ''}
           >
             {innerLayout && (

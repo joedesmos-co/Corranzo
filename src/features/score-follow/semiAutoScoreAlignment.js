@@ -18,8 +18,11 @@ import {
 import { validateAutoAlignResult } from './autoAlignValidation.js'
 import { clearPdfAnalysisCache, getPageInkRatio, renderPdfPageImageData } from './pdfPageAnalysis.js'
 
-const LOW_CONFIDENCE_THRESHOLD = 0.58
-const AUTO_APPLY_CONFIDENCE_THRESHOLD = 0.62
+// Lower thresholds so uploaded PDF+MusicXML can get a cursor without needing
+// near-perfect system detection. Even a low-confidence auto result is more
+// useful than the "needs setup" wall. Manual markers always override.
+const LOW_CONFIDENCE_THRESHOLD = 0.30
+const AUTO_APPLY_CONFIDENCE_THRESHOLD = 0.42
 const HARD_REFUSE_MIN_SYSTEMS = 1
 
 function getWrittenMeasureNumbers(timingMap) {

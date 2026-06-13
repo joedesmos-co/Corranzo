@@ -11,22 +11,25 @@ const LOOKAHEAD_SECONDS = 2.5
 const SCHEDULE_TICK_MS = 200
 
 function createPianoVoice() {
-  // Softer, less beepy tone: sine oscillator (no upper harmonics), slower
-  // attack to remove the click, lower sustain, and a darker filter cutoff.
-  const reverb = new Tone.Reverb({ decay: 2.0, wet: 0.18 })
+  // Piano-like timbre: triangle8 gives the fundamental + odd harmonics up to
+  // the 8th partial, approximating the warm brightness of a piano string.
+  // The envelope mimics a real piano key: fast attack, long continuous decay,
+  // NO sustain (a real piano always decays), quick release.
+  // This eliminates the "beepy/droney" quality of a sine with sustain.
+  const reverb = new Tone.Reverb({ decay: 2.5, wet: 0.22 })
   reverb.generate()
 
   const chorus = new Tone.Chorus({
-    frequency: 0.6,
-    delayTime: 3.0,
-    depth: 0.15,
-    wet: 0.10,
+    frequency: 0.5,
+    delayTime: 3.5,
+    depth: 0.12,
+    wet: 0.08,
   })
   chorus.start()
 
-  // Darker cutoff (2000 Hz) rolls off harshness that makes sine sound "beepy"
-  // in WebAudio; -24 dB/oct is steeper for a warmer roll-off.
-  const filter = new Tone.Filter({ type: 'lowpass', frequency: 2000, rolloff: -24 })
+  // Bright cutoff (3800 Hz) preserves the piano's upper partials; -12 dB/oct
+  // is gentler than the previous -24 to let harmonics through.
+  const filter = new Tone.Filter({ type: 'lowpass', frequency: 3800, rolloff: -12 })
 
   const synth = new Tone.PolySynth({
     voice: Tone.Synth,
@@ -34,11 +37,11 @@ function createPianoVoice() {
   })
 
   synth.set({
-    volume: -13,
-    oscillator: { type: 'sine' },
-    // Slower attack → no click; lower sustain → notes decay naturally;
-    // longer release → smooth tail without abrupt cutoff.
-    envelope: { attack: 0.04, decay: 0.38, sustain: 0.18, release: 1.8 },
+    volume: -14,
+    oscillator: { type: 'triangle8' },
+    // Real piano envelope: fast attack, long decay filling the note, sustain 0
+    // (the sound decays to nothing without holding the key), quick release.
+    envelope: { attack: 0.006, decay: 2.2, sustain: 0.0, release: 0.35 },
   })
 
   synth.connect(filter)

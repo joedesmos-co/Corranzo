@@ -5,7 +5,13 @@ import {
 } from './anchorUtils.js'
 
 /**
- * Anchors that may drive the visible cursor (never auto-system PDF guesses).
+ * Anchors that may drive the visible cursor.
+ *
+ * AUTO_SYSTEM anchors (system-start/end pairs from the PDF pixel analyser) are
+ * now included so that a user who uploads PDF + MusicXML gets an approximate
+ * cursor immediately after auto-setup, without needing manual measure markers.
+ * The cursor will be less precise than manually-marked anchors but is far
+ * better than no cursor at all.
  */
 export function filterTrustedAnchors(anchors) {
   if (!anchors?.length) {
@@ -21,6 +27,10 @@ export function filterTrustedAnchors(anchors) {
       return true
     }
     if (source === ANCHOR_SOURCE.MUSICXML_LAYOUT) {
+      return true
+    }
+    // Auto-detected system anchors: approximate but useful for uploaded scores.
+    if (source === ANCHOR_SOURCE.AUTO_SYSTEM || source === ANCHOR_SOURCE.AUTO) {
       return true
     }
     return false

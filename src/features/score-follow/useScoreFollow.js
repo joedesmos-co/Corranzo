@@ -59,6 +59,7 @@ export default function useScoreFollow({
   timingLoading = false,
   timingSourceId = null,
   practiceTime,
+  getScoreTime = null,
   pdfFingerprint,
   pdfFileName,
   pdfSource,
@@ -286,11 +287,32 @@ export default function useScoreFollow({
 
   const resetSnapKey = `${timingSourceId ?? ''}:${practiceTime <= 0.15 ? 'start' : Math.floor(practiceTime * 4)}`
 
+  // Real-time cursor resolver: called every animation frame by the display
+  // cursor hook so the cursor position advances continuously (not just at the
+  // 5 Hz React state update rate).  Memoised on the inputs that rarely change;
+  // getScoreTime() is called lazily inside the RAF loop.
+  const resolveRealtimeCursor = useCallback(
+    (t) => {
+      if (!hasTiming || trustedAnchors.length === 0 || !anchorTrust.showCursor) {
+        return { visible: false }
+      }
+      return resolveScoreFollowCursor({
+        timingMap,
+        practiceTime: t,
+        trustedAnchors,
+        trust: anchorTrust,
+      }).cursor
+    },
+    [hasTiming, trustedAnchors, anchorTrust, timingMap],
+  )
+
   const displayCursor = useScoreFollowDisplayCursor({
     targetCursor: cursor,
     active: smoothCursorActive,
     resetSnapKey,
     lockExact: lockExactCursor,
+    getScoreTime: smoothCursorActive ? getScoreTime : null,
+    resolveRealtimeCursor: smoothCursorActive ? resolveRealtimeCursor : null,
   })
 
   const cursorVisibility = useMemo(
@@ -461,13 +483,30 @@ export default function useScoreFollow({
           return
         }
 
+        // Even when confidence is below the auto-apply threshold, apply the
+        // anchors as a best-effort approximate result so the user gets a cursor
+        // immediately. Manual markers always override these auto guides.
+        if (preview.proposedAnchors?.length >= 2) {
+          setAutoAnchors(preview.proposedAnchors)
+          setEnabled(true)
+          setSemiAutoSetup({
+            status: 'confirmed',
+            progress: 1,
+            message: '',
+            error: null,
+            preview: null,
+          })
+          setSetupStatus({ phase: 'ready', message: setupReadyMessage })
+          return
+        }
+
         setSemiAutoSetup({
           status: 'failed',
           progress: 0,
           message: '',
           error:
             preview.validationMessage ||
-            'Score layout could not be matched reliably enough for automatic setup.',
+            'No staff systems found — try marking system starts manually.',
           preview: null,
         })
         setSetupStatus({

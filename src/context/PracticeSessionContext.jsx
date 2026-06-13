@@ -84,6 +84,7 @@ export function PracticeSessionProvider({
     timingLoading: session.timing.isLoading,
     timingSourceId: session.sources.timingFileName ?? session.timing.timingMap?.fileName ?? null,
     practiceTime: session.clock.practiceTime,
+    getScoreTime: session.playback.getScoreTime,
     pdfFingerprint,
     pdfFileName: pdfMeta?.fileName ?? pdfFileName ?? null,
     pdfSource: pdfFile ?? null,

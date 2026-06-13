@@ -11,55 +11,37 @@ function getSetupStatus({
   followNeedsSetup,
 }) {
   if (setupPhase === 'running') {
-    return {
-      tone: 'active',
-      title: 'Setting up score follow',
-      detail: 'Analyzing staff systems on your PDF…',
-    }
+    return { tone: 'active', title: 'Scanning PDF…', detail: null }
   }
   if (alignmentMode) {
     return {
       tone: 'active',
-      title: 'Manual correction',
-      detail: `Next: measure ${markingProgress?.nextMeasure ?? '—'} — tap where it begins on the PDF.`,
+      title: `Mark measure ${markingProgress?.nextMeasure ?? '—'}`,
+      detail: 'Tap where it begins on the score.',
     }
   }
   if (setupPhase === 'needs-setup' || followNeedsSetup) {
     return {
       tone: 'setup',
-      title: 'Score follow needs setup',
-      detail:
-        'Auto-detected staff guides are not enough for a cursor. Mark measures manually, or use the demo sample.',
+      title: 'Cursor needs setup',
+      detail: 'Mark system starts below, or load MusicXML.',
     }
   }
   if (!anchors.length) {
     return {
       tone: 'setup',
-      title: 'Connect the score to timing',
-      detail: 'Score follow starts automatically when PDF and timing are loaded.',
+      title: 'Waiting for PDF + timing',
+      detail: null,
     }
   }
   if (!enabled) {
-    return {
-      tone: 'setup',
-      title: 'Markers placed',
-      detail: 'Turn on the moving cursor to see your place while you practice.',
-    }
+    return { tone: 'setup', title: 'Cursor off', detail: null }
   }
   if (canFollow) {
-    return {
-      tone: 'ready',
-      title: 'Ready to follow',
-      detail: `${markingProgress?.markedCount ?? anchors.length} measure${
-        (markingProgress?.markedCount ?? anchors.length) === 1 ? '' : 's'
-      } linked — thin cursor follows playback (approximate unless demo).`,
-    }
+    const count = markingProgress?.markedCount ?? anchors.length
+    return { tone: 'ready', title: 'Following', detail: `${count} position${count === 1 ? '' : 's'} linked` }
   }
-  return {
-    tone: 'setup',
-    title: 'Almost ready',
-    detail: 'Check that you are on the page shown below, or add another marker.',
-  }
+  return { tone: 'setup', title: 'Almost ready', detail: 'Add a marker on this page.' }
 }
 
 export default function ScoreFollowControls({
@@ -108,8 +90,7 @@ export default function ScoreFollowControls({
       <Root className={rootClass} aria-label="Score follow">
         {!embedded && <h4 className="score-follow-controls__title">Score follow</h4>}
         <p className="score-follow-controls__empty">
-          Add score timing (MusicXML/MXL) in Library — PDF alone cannot place measures; MIDI is
-          playback only.
+          Load MusicXML in Library to enable score follow.
         </p>
       </Root>
     )
@@ -178,8 +159,16 @@ export default function ScoreFollowControls({
           role="status"
         >
           <p className="score-follow-controls__status-title">{cardStatus.title}</p>
-          <p className="score-follow-controls__status-detail">{cardStatus.detail}</p>
+          {cardStatus.detail && (
+            <p className="score-follow-controls__status-detail">{cardStatus.detail}</p>
+          )}
         </div>
+      )}
+
+      {semiAutoSetup?.status === 'failed' && semiAutoSetup?.error && (
+        <p className="score-follow-controls__auto-error" role="alert">
+          {semiAutoSetup.error}
+        </p>
       )}
 
       <button
@@ -188,20 +177,8 @@ export default function ScoreFollowControls({
         onClick={onRetryAutoSetup}
         disabled={!onRetryAutoSetup || isSemiAutoAnalyzing || alignmentMode}
       >
-        {isSemiAutoAnalyzing ? 'Retrying…' : 'Retry auto setup'}
+        {isSemiAutoAnalyzing ? 'Scanning…' : 'Re-run auto setup'}
       </button>
-
-      {semiAutoSetup?.status === 'failed' && semiAutoSetup?.error && (
-        <p className="score-follow-controls__auto-error" role="alert">
-          {semiAutoSetup.error}
-        </p>
-      )}
-
-      {hasAutoAnchors && !alignmentMode && (
-        <p className="score-follow-controls__system-hint">
-          Automatic setup linked staff systems. Manual markers override auto guides.
-        </p>
-      )}
 
       {hasAutoAnchors && (
         <button
@@ -210,7 +187,7 @@ export default function ScoreFollowControls({
           onClick={onResetSemiAutoSetup}
           disabled={isSemiAutoAnalyzing}
         >
-          Clear automatic guides
+          Clear auto guides
         </button>
       )}
 

@@ -207,6 +207,14 @@ export default function useScorePlayback({
     )
   }, [])
 
+  // Stable callback: returns the engine's real-time score position (wall-clock
+  // interpolated).  Used by the display-cursor RAF loop so the cursor position
+  // updates every animation frame instead of only every SCHEDULE_TICK_MS (200 ms).
+  const getScoreTime = useCallback(
+    () => engineRef.current?.getCurrentScoreTime() ?? 0,
+    [],
+  )
+
   return {
     tracks,
     duration,
@@ -229,5 +237,6 @@ export default function useScorePlayback({
     setMetronomeLevel,
     testSound,
     setTrackMuted,
+    getScoreTime,
   }
 }
