@@ -1,5 +1,6 @@
 /**
- * Shown when isSafariPlaybackLimited() is true (caller responsibility).
+ * Informational note for Safari-family browsers (including iPad).
+ * Playback works after a tap unlocks audio; Web MIDI is the one gap.
  */
 export default function SafariAudioCompatibilityNotice({ className = '' }) {
   return (
@@ -8,12 +9,12 @@ export default function SafariAudioCompatibilityNotice({ className = '' }) {
       role="status"
     >
       <p className="practice-safari-audio-notice__lead">
-        <strong>Chrome or Edge recommended</strong> for MIDI playback and backing sound.
+        <strong>Safari tip:</strong> press Play once to unlock sound — playback and the metronome
+        work after that first tap.
       </p>
       <p className="practice-safari-audio-notice__hint">
-        Safari is great for reading the score, annotations, measure navigation, and Wait For You
-        with <strong>Manual continue</strong>. Microphone input may work but is less predictable
-        than on Chrome.
+        Web MIDI keyboards are not available on Safari. For Wait For You, use the microphone or
+        <strong> Manual continue</strong>; on a Mac, Chrome and Edge also support MIDI keyboards.
       </p>
     </div>
   )

@@ -1,11 +1,11 @@
 import SafariAudioCompatibilityNotice from './SafariAudioCompatibilityNotice.jsx'
 import {
-  isSafariPlaybackLimited,
+  isSafariFamilyBrowser,
   isTabletLikeDevice,
 } from '../../features/platform/browserPracticeSupport.js'
 
 export default function PracticeEnvironmentNotices() {
-  const showSafari = isSafariPlaybackLimited()
+  const showSafari = isSafariFamilyBrowser()
   const showTablet = isTabletLikeDevice()
 
   if (!showSafari && !showTablet) {

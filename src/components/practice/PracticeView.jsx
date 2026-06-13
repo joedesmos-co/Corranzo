@@ -12,6 +12,7 @@ import '../../styles/practice.css'
 export default function PracticeView({
   pdfFile,
   fileName,
+  pdfMeta = null,
   pageNumber,
   numPages,
   paperTheme,
@@ -117,6 +118,7 @@ export default function PracticeView({
               variant="practice"
               file={pdfFile}
               fileName={fileName}
+              pdfMeta={pdfMeta}
               pageNumber={pageNumber}
               numPages={numPages}
               paperTheme={paperTheme}

@@ -2,7 +2,7 @@ import {
   WEB_MIDI_PERMISSION_LABELS,
   WEB_MIDI_SUPPORT,
 } from '../../features/midi-input/webMidiConstants.js'
-import { isSafariPlaybackLimited } from '../../features/platform/browserPracticeSupport.js'
+import { isSafariFamilyBrowser } from '../../features/platform/browserPracticeSupport.js'
 
 export default function MidiInputStatusPanel({
   support,
@@ -17,7 +17,7 @@ export default function MidiInputStatusPanel({
   compact = false,
 }) {
   const supported = support === WEB_MIDI_SUPPORT.SUPPORTED
-  const isSafari = isSafariPlaybackLimited()
+  const isSafari = isSafariFamilyBrowser()
 
   return (
     <section
@@ -31,10 +31,10 @@ export default function MidiInputStatusPanel({
           ? devices.length > 0
             ? `${devices.length} device(s) connected`
             : 'No keyboard detected — plug one in and refresh'
-          : isSafari
-            ? 'Web MIDI is limited on Safari — try Chrome or Edge for a MIDI keyboard, or use Manual continue'
-            : supported
-              ? 'Allow access to hear your playing in Wait For You'
+          : supported
+            ? 'Allow access to hear your playing in Wait For You'
+            : isSafari
+              ? 'Web MIDI is unavailable on Safari — use the microphone or Manual continue for Wait For You'
               : 'Web MIDI is not available in this browser — try Chrome or Edge, or use Manual continue'}
         {lastNote ? ` · Last: ${lastNote.label}` : ''}
       </p>

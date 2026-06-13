@@ -6,6 +6,7 @@ import {
   buildMusicXmlLayoutAnchors,
 } from './musicxmlLayoutAnchors.js'
 import { assessScoreFollowTrust } from './scoreFollowTrust.js'
+import { filterTrustedAnchors } from './trustedAnchors.js'
 import {
   buildAutoSetupKey,
   clearAutoSetupAttempted,

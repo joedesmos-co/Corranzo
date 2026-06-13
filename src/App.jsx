@@ -398,6 +398,7 @@ export default function App() {
             <PdfViewer
               file={pdfFile}
               fileName={fileName}
+              pdfMeta={pdfMeta}
               pageNumber={pageNumber}
               numPages={numPages}
               paperTheme={paperTheme}
@@ -416,6 +417,7 @@ export default function App() {
         <PracticeView
           pdfFile={pdfFile}
           fileName={fileName}
+          pdfMeta={pdfMeta}
           pageNumber={pageNumber}
           numPages={numPages}
           paperTheme={paperTheme}

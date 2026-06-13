@@ -21,6 +21,7 @@ import { usePracticeSessionContextOptional } from '../context/PracticeSessionCon
 export default function PdfViewer({
   file,
   fileName,
+  pdfMeta = null,
   pageNumber,
   numPages,
   paperTheme,
@@ -64,6 +65,7 @@ export default function PdfViewer({
   const { exportAnnotations, importAnnotations } = useAnnotationPersistence({
     file,
     fileName,
+    pdfMeta,
     strokesByPage,
     toolSettings,
     replaceAnnotations,

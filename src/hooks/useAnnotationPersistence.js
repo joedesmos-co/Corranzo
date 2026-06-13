@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import {
   getFileFingerprint,
   loadAnnotations,
@@ -6,12 +6,43 @@ import {
   saveAnnotations,
   serializeAnnotationsExport,
 } from '../utils/annotationStorage.js'
+import { buildPdfFingerprint } from '../features/score-follow/scoreFollowStorage.js'
 
 const AUTOSAVE_MS = 600
+
+/**
+ * Annotations were briefly saved under this key for every PDF because the
+ * object-URL string was passed where a File was expected. Adopt that bucket
+ * once when its recorded fileName matches the current score.
+ */
+export const LEGACY_BROKEN_FINGERPRINT = 'undefined::undefined::undefined'
+
+/**
+ * Storage identity for a PDF's annotations. Prefers the same
+ * fileName::size::lastModified fingerprint used by score-follow anchors and
+ * session restore; falls back to a real File object if one is ever passed.
+ * Returns null when no stable identity exists (persistence is skipped).
+ */
+export function resolveAnnotationFingerprint({ pdfMeta, file }) {
+  const fromMeta = buildPdfFingerprint(pdfMeta)
+  if (fromMeta) {
+    return fromMeta
+  }
+  if (
+    file != null &&
+    typeof file === 'object' &&
+    typeof file.name === 'string' &&
+    file.size != null
+  ) {
+    return getFileFingerprint(file)
+  }
+  return null
+}
 
 export default function useAnnotationPersistence({
   file,
   fileName,
+  pdfMeta = null,
   strokesByPage,
   toolSettings,
   replaceAnnotations,
@@ -19,8 +50,13 @@ export default function useAnnotationPersistence({
   const fingerprintRef = useRef(null)
   const skipNextSaveRef = useRef(false)
 
+  const fingerprint = useMemo(
+    () => resolveAnnotationFingerprint({ pdfMeta, file }),
+    [pdfMeta, file],
+  )
+
   useEffect(() => {
-    if (!file) {
+    if (!file || !fingerprint) {
       fingerprintRef.current = null
       return
     }
@@ -28,9 +64,16 @@ export default function useAnnotationPersistence({
     let cancelled = false
 
     async function restore() {
-      const fingerprint = getFileFingerprint(file)
       fingerprintRef.current = fingerprint
-      const saved = loadAnnotations(fingerprint)
+      let saved = loadAnnotations(fingerprint)
+
+      if (!saved?.strokesByPage) {
+        const legacy = loadAnnotations(LEGACY_BROKEN_FINGERPRINT)
+        if (legacy?.strokesByPage && legacy.fileName === fileName) {
+          saved = legacy
+          saveAnnotations(fingerprint, legacy)
+        }
+      }
 
       if (cancelled) {
         return
@@ -49,7 +92,7 @@ export default function useAnnotationPersistence({
     return () => {
       cancelled = true
     }
-  }, [file, replaceAnnotations])
+  }, [file, fileName, fingerprint, replaceAnnotations])
 
   useEffect(() => {
     if (!file || !fingerprintRef.current) {

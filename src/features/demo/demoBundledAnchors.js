@@ -63,7 +63,7 @@ export function validateDemoBundledPayload(payload) {
     return { ok: false, reason: 'measure-1-not-on-system-1' }
   }
 
-  if (import.meta.env?.DEV ?? process.env.NODE_ENV !== 'production') {
+  if (import.meta.env?.DEV ?? globalThis.process?.env?.NODE_ENV !== 'production') {
     console.info('[score-follow] demo bundle validated', {
       count: sorted.length,
       measure1: {
