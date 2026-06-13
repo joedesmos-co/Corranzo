@@ -1581,20 +1581,26 @@
   z-index: 2;
 }
 
-/* Score-follow cursor — thin vertical line only (no staff band) */
+/* Score-follow cursor — vertical bar spanning the full grand staff */
 
 .score-follow-cursor {
   position: absolute;
+  /* Centre the bar on the anchor point (grand-staff midpoint) */
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 2;
+  /* 9 % of the PDF-page height ≈ treble-top to bass-bottom + ~4 pt padding
+     on each side.  The overlay has a definite px height (same as the page),
+     so the % resolves correctly at any zoom level. */
+  height: 9%;
+  width: 0;
 }
 
 .score-follow-cursor__line {
   display: block;
   width: 2px;
-  height: 28px;
-  margin: -14px 0 0 -1px;
+  height: 100%;
+  margin: 0 0 0 -1px;
   border-radius: 1px;
   background: rgba(125, 100, 255, 0.92);
   box-shadow:

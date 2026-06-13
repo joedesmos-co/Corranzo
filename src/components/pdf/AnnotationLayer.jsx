@@ -237,6 +237,7 @@ export default function AnnotationLayer({
   }
 
   const allStrokes = draftStroke ? [...strokes, draftStroke] : strokes
+  const isPointer = activeTool === ANNOTATION_TOOLS.POINTER
   const isEraser = activeTool === ANNOTATION_TOOLS.ERASER
   const brushRadiusPx = pageRect
     ? (strokeStyle.eraserRadius ?? strokeStyle.width) * pageRect.width
@@ -254,6 +255,9 @@ export default function AnnotationLayer({
           top: layout.top,
           width: layout.width,
           height: layout.height,
+          // In pointer mode the layer is transparent to all pointer events so
+          // the user can scroll, tap playback controls, and interact normally.
+          pointerEvents: isPointer ? 'none' : undefined,
         }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -294,7 +298,7 @@ export default function AnnotationLayer({
       </svg>
 
       <BrushCursor
-        visible={cursor.visible && !drawingRef.current}
+        visible={!isPointer && cursor.visible && !drawingRef.current}
         x={cursor.x}
         y={cursor.y}
         radiusPx={brushRadiusPx}

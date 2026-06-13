@@ -1,4 +1,5 @@
 export const ANNOTATION_TOOLS = {
+  POINTER: 'pointer',
   PEN: 'pen',
   HIGHLIGHTER: 'highlighter',
   ERASER: 'eraser',

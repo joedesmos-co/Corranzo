@@ -11,18 +11,22 @@ const LOOKAHEAD_SECONDS = 2.5
 const SCHEDULE_TICK_MS = 200
 
 function createPianoVoice() {
-  const reverb = new Tone.Reverb({ decay: 1.8, wet: 0.14 })
+  // Softer, less beepy tone: sine oscillator (no upper harmonics), slower
+  // attack to remove the click, lower sustain, and a darker filter cutoff.
+  const reverb = new Tone.Reverb({ decay: 2.0, wet: 0.18 })
   reverb.generate()
 
   const chorus = new Tone.Chorus({
-    frequency: 0.8,
-    delayTime: 2.5,
-    depth: 0.18,
-    wet: 0.12,
+    frequency: 0.6,
+    delayTime: 3.0,
+    depth: 0.15,
+    wet: 0.10,
   })
   chorus.start()
 
-  const filter = new Tone.Filter({ type: 'lowpass', frequency: 3200, rolloff: -12 })
+  // Darker cutoff (2000 Hz) rolls off harshness that makes sine sound "beepy"
+  // in WebAudio; -24 dB/oct is steeper for a warmer roll-off.
+  const filter = new Tone.Filter({ type: 'lowpass', frequency: 2000, rolloff: -24 })
 
   const synth = new Tone.PolySynth({
     voice: Tone.Synth,
@@ -30,9 +34,11 @@ function createPianoVoice() {
   })
 
   synth.set({
-    volume: -11,
-    oscillator: { type: 'triangle' },
-    envelope: { attack: 0.018, decay: 0.42, sustain: 0.32, release: 1.35 },
+    volume: -13,
+    oscillator: { type: 'sine' },
+    // Slower attack → no click; lower sustain → notes decay naturally;
+    // longer release → smooth tail without abrupt cutoff.
+    envelope: { attack: 0.04, decay: 0.38, sustain: 0.18, release: 1.8 },
   })
 
   synth.connect(filter)
@@ -43,11 +49,13 @@ function createPianoVoice() {
 }
 
 function createMetronomeVoice() {
+  // Slightly longer attack (3 ms) and shorter decay soften the click while
+  // keeping the metronome distinct from the musical notes.
   const synth = new Tone.MembraneSynth({
-    pitchDecay: 0.008,
+    pitchDecay: 0.006,
     octaves: 2,
-    envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.05 },
-    volume: -18,
+    envelope: { attack: 0.003, decay: 0.06, sustain: 0, release: 0.04 },
+    volume: -20,
   }).toDestination()
   return synth
 }

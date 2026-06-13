@@ -6,7 +6,7 @@ import {
 
 export default function useAnnotations() {
   const [strokesByPage, setStrokesByPage] = useState({})
-  const [activeTool, setActiveTool] = useState(ANNOTATION_TOOLS.PEN)
+  const [activeTool, setActiveTool] = useState(ANNOTATION_TOOLS.POINTER)
   const [toolSettings, setToolSettings] = useState(DEFAULT_TOOL_SETTINGS)
 
   const getStrokes = useCallback(
@@ -104,7 +104,7 @@ export default function useAnnotations() {
   const reset = useCallback(() => {
     setStrokesByPage({})
     setToolSettings(DEFAULT_TOOL_SETTINGS)
-    setActiveTool(ANNOTATION_TOOLS.PEN)
+    setActiveTool(ANNOTATION_TOOLS.POINTER)
   }, [])
 
   return {

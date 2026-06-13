@@ -4,6 +4,7 @@ import AnnotationToolSettings from './AnnotationToolSettings.jsx'
 import ToolbarPopover, { ToolbarIconButton } from '../ui/ToolbarPopover.jsx'
 
 const DRAW_TOOLS = [
+  { id: ANNOTATION_TOOLS.POINTER, icon: '↖', label: 'Select / navigate' },
   { id: ANNOTATION_TOOLS.PEN, icon: '✎', label: 'Pen' },
   { id: ANNOTATION_TOOLS.HIGHLIGHTER, icon: '▬', label: 'Highlighter' },
   { id: ANNOTATION_TOOLS.ERASER, icon: '⌫', label: 'Eraser' },

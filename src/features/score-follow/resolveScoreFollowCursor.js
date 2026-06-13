@@ -150,6 +150,48 @@ export function resolveScoreFollowCursor({
 
   const exact = resolveTrustedAnchorForMeasure(trustedAnchors, currentMeasure.number)
   if (exact) {
+    // Intra-measure glide: if the next measure's anchor is on the same system
+    // (same page, y within 0.02), advance x proportionally to beat progress
+    // so the cursor glides continuously across the measure rather than jumping.
+    const nextAnchor = resolveTrustedAnchorForMeasure(
+      trustedAnchors,
+      currentMeasure.number + 1,
+    )
+    if (
+      nextAnchor &&
+      nextAnchor.page === exact.page &&
+      Math.abs(nextAnchor.y - exact.y) < 0.02
+    ) {
+      const measureWindow = getMeasurePlaybackWindow(
+        timingMap,
+        currentMeasure.number,
+        practiceTime,
+      )
+      if (measureWindow) {
+        const progress = beatWeightedProgress(
+          timingMap,
+          practiceTime,
+          measureWindow.startTimeSeconds,
+          measureWindow.endTimeSeconds,
+        )
+        return {
+          cursor: {
+            visible: true,
+            page: exact.page,
+            x: lerp(exact.x, nextAnchor.x, progress),
+            y: exact.y,
+            measureNumber: exact.measureNumber,
+            progress,
+            lockExact: false,
+            interpolated: true,
+            confidence: 'exact',
+          },
+          needsSetup: trust?.needsSetup ?? false,
+          confidence: 'exact',
+        }
+      }
+    }
+
     return {
       cursor: {
         visible: true,
