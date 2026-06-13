@@ -1,9 +1,8 @@
 # ScoreFlow Visual Practice Fix Report
 
 **Date:** 2026-06-13
-**Commit:** (see below)
+**Commits:** visual-practice fix `b162fac`/`a5b5a51`; UX polish `989765a`
 **Branch:** main
-**Prior commit:** `a5b5a51`
 
 ---
 
@@ -119,12 +118,14 @@ off. Changed to prefer `.react-pdf__Page` with `.pdf-page-frame` as fallback.
 ## Test results
 
 ```
-Test Files  11 passed (11)
-     Tests  79 passed (79)   ← was 64 before this pass; +15 visual practice tests
+Test Files  12 passed (12)
+     Tests  91 passed (91)   ← +12 in tests/uxFixes.test.js (UX polish pass)
+                              ← +15 in tests/visualPractice.test.js (anchor fix)
+                              ← 64 before this work began
 ```
 
-`npm run build`: green (1 chunk, same pre-existing warnings, no new errors)
-`npm run lint`: 71 problems (unchanged, all pre-existing `no-unused-vars`/react-hooks)
+`npm run build`: green (same pre-existing chunk-size/dynamic-import warnings, no new errors)
+`npm run lint`: 71 problems (unchanged baseline, all pre-existing `no-unused-vars`/react-hooks)
 `no-undef` pinned at 0 by staticIntegrity test.
 
 ---
@@ -145,15 +146,18 @@ Test Files  11 passed (11)
 
 ## What still needs manual verification on device
 
-The following items require a real browser (or Claude in Chrome on the user's Mac):
+The following items require a real browser (Safari on Mac/iPad):
 
-1. **Visual cursor placement at each system**: play the demo, verify the purple cursor bar
-   sits visually on the correct staff system as playback advances through systems 0→5.
-2. **Seek to 94–96%**: drag the seek slider to near end, confirm cursor jumps to system 5
-   (bottom of the page) at the correct x-position within that system.
-3. **Toolbar clearance**: confirm the floating toolbar bar does not overlap any staff lines
-   in the practice view (system 0 treble at y≈0.163 should be fully visible below the bar).
-4. **Page-follow smoothness**: in fit-width mode (wider PDF), verify that scroll tracks the
-   cursor without jumping.
-5. **iPad Safari**: same checks on the physical device using the iPad Safari test checklist
-   in `BROWSER_SMOKE_REPORT.md`.
+1. **Cursor spans full grand staff**: play the demo, confirm the purple bar covers both
+   treble and bass staves at every system (should be ~9 % of page height, not a tiny mark).
+2. **Cursor glides within measures**: watch x advance smoothly across each measure;
+   no more hard jump at each measure boundary.
+3. **Seek snaps**: drag the seek slider to 40 %, 75 %, 96 %; cursor should appear
+   instantly at the new position, not slide from the old one.
+4. **Synth tone**: play the demo in Safari; notes should sound like a soft piano, not
+   harsh beeps. Metronome should be quieter and less clicky.
+5. **Annotation pointer mode**: open the PDF viewer, confirm ↖ pointer button is present
+   and active by default. Tap ✎ Pen, draw a stroke, then tap ↖ again — drawing must
+   stop and normal scroll/tap interaction must resume.
+6. **Toolbar clearance**: system 0 treble (y ≈ 0.163) must be fully visible below the bar.
+7. **iPad Safari**: same checks on the physical device.
