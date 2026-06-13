@@ -23,6 +23,8 @@ function scoreFollowOverlayPropsEqual(prev, next) {
   if (prev.cursorVisibility?.show !== next.cursorVisibility?.show) return false
   if (prev.pageSystems !== next.pageSystems) return false
   if (prev.anchors !== next.anchors) return false
+  if (prev.systemStartMode !== next.systemStartMode) return false
+  if (prev.systemStartMarks !== next.systemStartMarks) return false
   const pc = prev.cursor
   const nc = next.cursor
   if (pc?.visible !== nc?.visible) return false
@@ -48,34 +50,48 @@ function ScoreFollowOverlay({
   showNoteTarget = false,
   anchors,
   onPlaceAnchor,
+  systemStartMode = false,
+  systemStartMarks = [],
+  onPlaceSystemStart,
 }) {
   const layerRef = useRef(null)
 
   const showCursor = cursorVisibility?.show ?? false
   const pageAnchors = anchors.filter((anchor) => anchor.page === pageNumber)
+  const pageSystemStartMarks = systemStartMarks.filter((m) => m.page === pageNumber)
   const hasBands = showSystemBands && pageSystems.length > 0
   const hasMarkers = showAnchorMarkers && pageAnchors.length > 0
+  const hasSystemStartMarks = systemStartMode && pageSystemStartMarks.length > 0
   const cursorX = showCursor ? cursor?.x : null
   const cursorY = showCursor ? cursor?.y : null
 
   const handlePointerDown = useCallback(
     (event) => {
-      if (!alignmentMode || !onPlaceAnchor || event.button !== 0) {
+      if (event.button !== 0) {
         return
       }
       const rect = layerRef.current?.getBoundingClientRect()
       if (!rect?.width) {
         return
       }
-      event.preventDefault()
-      event.stopPropagation()
       const { x, y } = clientToNormalized(event.clientX, event.clientY, rect)
-      onPlaceAnchor(pageNumber, x, y)
+
+      if (systemStartMode && onPlaceSystemStart) {
+        event.preventDefault()
+        event.stopPropagation()
+        onPlaceSystemStart(pageNumber, x, y)
+        return
+      }
+      if (alignmentMode && onPlaceAnchor) {
+        event.preventDefault()
+        event.stopPropagation()
+        onPlaceAnchor(pageNumber, x, y)
+      }
     },
-    [alignmentMode, onPlaceAnchor, pageNumber],
+    [alignmentMode, onPlaceAnchor, systemStartMode, onPlaceSystemStart, pageNumber],
   )
 
-  if (!alignmentMode && !showCursor && !showNoteTarget && !hasBands && !hasMarkers) {
+  if (!alignmentMode && !systemStartMode && !showCursor && !showNoteTarget && !hasBands && !hasMarkers) {
     return null
   }
 
@@ -83,9 +99,9 @@ function ScoreFollowOverlay({
     <div
       ref={layerRef}
       className={`score-follow-overlay${alignmentMode ? ' score-follow-overlay--align' : ''}${
-        semiAutoPreview ? ' score-follow-overlay--semi-auto-preview' : ''
-      }`}
-      onPointerDown={alignmentMode ? handlePointerDown : undefined}
+        systemStartMode ? ' score-follow-overlay--system-start' : ''
+      }${semiAutoPreview ? ' score-follow-overlay--semi-auto-preview' : ''}`}
+      onPointerDown={alignmentMode || systemStartMode ? handlePointerDown : undefined}
     >
       {hasBands &&
         pageSystems.map((system) => (
@@ -170,10 +186,28 @@ function ScoreFollowOverlay({
         </div>
       )}
 
+      {hasSystemStartMarks &&
+        pageSystemStartMarks.map((mark, idx) => (
+          <span
+            key={mark.id}
+            className="score-follow-overlay__system-start-mark"
+            style={{ left: `${mark.x * 100}%`, top: `${mark.y * 100}%` }}
+            title={`System ${idx + 1}`}
+          >
+            <span className="score-follow-overlay__system-start-label">{idx + 1}</span>
+          </span>
+        ))}
+
       {alignmentMode && (
         <p className="score-follow-overlay__align-hint">
           Tap measure {placementMeasureNumber ?? '—'} start · <kbd>Enter</kbd> skip ·{' '}
           <kbd>⌫</kbd> undo · <kbd>Esc</kbd> done
+        </p>
+      )}
+
+      {systemStartMode && (
+        <p className="score-follow-overlay__align-hint score-follow-overlay__align-hint--system-start">
+          Tap the start of each staff line · <kbd>⌫</kbd> undo · <kbd>Esc</kbd> cancel
         </p>
       )}
 

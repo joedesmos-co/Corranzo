@@ -71,6 +71,13 @@ export default function ScoreFollowControls({
   anchorCounts,
   followNeedsSetup = false,
   embedded = false,
+  // System-start fallback mode
+  systemStartMode = false,
+  systemStartMarkCount = 0,
+  onEnterSystemStartMode,
+  onConfirmSystemStartMarks,
+  onUndoSystemStartMark,
+  onExitSystemStartMode,
 }) {
   const Root = embedded ? 'div' : 'aside'
   const rootClass = `score-follow-controls${embedded ? ' score-follow-controls--embedded' : ''}`
@@ -165,103 +172,155 @@ export default function ScoreFollowControls({
         </div>
       )}
 
-      {semiAutoSetup?.status === 'failed' && semiAutoSetup?.error && (
-        <p className="score-follow-controls__auto-error" role="alert">
-          {semiAutoSetup.error}
-        </p>
-      )}
-
-      <button
-        type="button"
-        className="score-follow-controls__auto-btn score-follow-controls__auto-btn--secondary"
-        onClick={onRetryAutoSetup}
-        disabled={!onRetryAutoSetup || isSemiAutoAnalyzing || alignmentMode}
-      >
-        {isSemiAutoAnalyzing ? 'Scanning…' : 'Re-run auto setup'}
-      </button>
-
-      {hasAutoAnchors && (
-        <button
-          type="button"
-          className="score-follow-controls__auto-btn score-follow-controls__auto-btn--secondary"
-          onClick={onResetSemiAutoSetup}
-          disabled={isSemiAutoAnalyzing}
-        >
-          Clear auto guides
-        </button>
-      )}
-
-      {!alignmentMode ? (
-        <button
-          type="button"
-          className="score-follow-controls__mark-start-btn score-follow-controls__mark-start-btn--secondary"
-          onClick={handleStartMarking}
-          disabled={isSemiAutoAnalyzing}
-        >
-          Fix / add markers manually
-        </button>
-      ) : alignmentMode ? (
-        <div className="score-follow-controls__marking-panel">
-          <div className="score-follow-controls__progress" role="status">
-            <p className="score-follow-controls__progress-label">
-              Marked <strong>{markedCount}</strong> of <strong>{totalMeasures}</strong> measures
-            </p>
-            <p className="score-follow-controls__progress-next">
-              Next: <strong>measure {nextMeasure}</strong>
-            </p>
-            <div
-              className="score-follow-controls__progress-bar"
-              aria-hidden
-            >
-              <span
-                className="score-follow-controls__progress-fill"
-                style={{ width: `${progressRatio * 100}%` }}
-              />
-            </div>
-          </div>
-
+      {/* System-start mode panel (shown when user is tapping system starts) */}
+      {systemStartMode ? (
+        <div className="score-follow-controls__system-start-panel">
+          <p className="score-follow-controls__system-start-instruction">
+            Tap the start of each staff line on the score.
+          </p>
+          <p className="score-follow-controls__system-start-count" role="status">
+            {systemStartMarkCount === 0
+              ? 'No systems marked yet'
+              : `${systemStartMarkCount} system${systemStartMarkCount === 1 ? '' : 's'} marked`}
+          </p>
           <div className="score-follow-controls__marking-actions">
             <button
               type="button"
               className="score-follow-controls__action-btn"
-              onClick={() => onUndoLastMarker?.()}
+              onClick={onUndoSystemStartMark}
+              disabled={systemStartMarkCount === 0}
             >
-              Undo last marker
+              Undo last
             </button>
             <button
               type="button"
               className="score-follow-controls__action-btn score-follow-controls__action-btn--secondary"
-              onClick={() => onAdvancePlacementMeasure?.()}
+              onClick={onExitSystemStartMode}
             >
-              Skip measure
+              Cancel
             </button>
             <button
               type="button"
               className="score-follow-controls__mark-done-btn"
-              onClick={handleDoneMarking}
+              onClick={onConfirmSystemStartMarks}
+              disabled={systemStartMarkCount === 0}
             >
-              Done marking
+              Done
             </button>
           </div>
-
-          <p className="score-follow-controls__shortcuts" aria-label="Marking keyboard shortcuts">
-            <kbd>Enter</kbd> skip to next measure · <kbd>Backspace</kbd> undo · <kbd>Esc</kbd> exit
+          <p className="score-follow-controls__shortcuts">
+            <kbd>⌫</kbd> undo · <kbd>Esc</kbd> cancel
           </p>
-
-          <label className="score-follow-controls__row score-follow-controls__row--number">
-            <span>Jump to measure</span>
-            <input
-              type="number"
-              min={measureBounds?.min ?? 1}
-              max={measureBounds?.max ?? totalMeasures}
-              value={placementMeasureNumber}
-              onChange={(event) =>
-                onPlacementMeasureNumberChange(Number(event.target.value))
-              }
-            />
-          </label>
         </div>
-      ) : null}
+      ) : (
+        <>
+          {/* Auto-setup failed: offer "Mark system starts" as primary fallback */}
+          {semiAutoSetup?.status === 'failed' && (
+            <div className="score-follow-controls__auto-failed" role="alert">
+              <p className="score-follow-controls__auto-error">
+                Auto setup couldn't detect systems.
+              </p>
+              <button
+                type="button"
+                className="score-follow-controls__system-start-btn"
+                onClick={onEnterSystemStartMode}
+                disabled={!onEnterSystemStartMode || alignmentMode}
+              >
+                Mark system starts
+              </button>
+            </div>
+          )}
+
+          <button
+            type="button"
+            className="score-follow-controls__auto-btn score-follow-controls__auto-btn--secondary"
+            onClick={onRetryAutoSetup}
+            disabled={!onRetryAutoSetup || isSemiAutoAnalyzing || alignmentMode}
+          >
+            {isSemiAutoAnalyzing ? 'Scanning…' : 'Re-run auto setup'}
+          </button>
+
+          {hasAutoAnchors && (
+            <button
+              type="button"
+              className="score-follow-controls__auto-btn score-follow-controls__auto-btn--secondary"
+              onClick={onResetSemiAutoSetup}
+              disabled={isSemiAutoAnalyzing}
+            >
+              Clear auto guides
+            </button>
+          )}
+
+          {!alignmentMode ? (
+            <button
+              type="button"
+              className="score-follow-controls__mark-start-btn score-follow-controls__mark-start-btn--secondary"
+              onClick={handleStartMarking}
+              disabled={isSemiAutoAnalyzing}
+            >
+              Fix / add markers manually
+            </button>
+          ) : (
+            <div className="score-follow-controls__marking-panel">
+              <div className="score-follow-controls__progress" role="status">
+                <p className="score-follow-controls__progress-label">
+                  Marked <strong>{markedCount}</strong> of <strong>{totalMeasures}</strong> measures
+                </p>
+                <p className="score-follow-controls__progress-next">
+                  Next: <strong>measure {nextMeasure}</strong>
+                </p>
+                <div className="score-follow-controls__progress-bar" aria-hidden>
+                  <span
+                    className="score-follow-controls__progress-fill"
+                    style={{ width: `${progressRatio * 100}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="score-follow-controls__marking-actions">
+                <button
+                  type="button"
+                  className="score-follow-controls__action-btn"
+                  onClick={() => onUndoLastMarker?.()}
+                >
+                  Undo last marker
+                </button>
+                <button
+                  type="button"
+                  className="score-follow-controls__action-btn score-follow-controls__action-btn--secondary"
+                  onClick={() => onAdvancePlacementMeasure?.()}
+                >
+                  Skip measure
+                </button>
+                <button
+                  type="button"
+                  className="score-follow-controls__mark-done-btn"
+                  onClick={handleDoneMarking}
+                >
+                  Done marking
+                </button>
+              </div>
+
+              <p className="score-follow-controls__shortcuts" aria-label="Marking keyboard shortcuts">
+                <kbd>Enter</kbd> skip · <kbd>Backspace</kbd> undo · <kbd>Esc</kbd> exit
+              </p>
+
+              <label className="score-follow-controls__row score-follow-controls__row--number">
+                <span>Jump to measure</span>
+                <input
+                  type="number"
+                  min={measureBounds?.min ?? 1}
+                  max={measureBounds?.max ?? totalMeasures}
+                  value={placementMeasureNumber}
+                  onChange={(event) =>
+                    onPlacementMeasureNumberChange(Number(event.target.value))
+                  }
+                />
+              </label>
+            </div>
+          )}
+        </>
+      )}
 
       <label className="score-follow-controls__row">
         <input

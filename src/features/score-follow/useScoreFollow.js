@@ -17,6 +17,8 @@ import {
   analyzeSemiAutoScoreSetup,
   shouldAutoApplySemiAutoResult,
 } from './semiAutoScoreAlignment.js'
+import { buildAnchorsFromSystemStarts } from './buildAnchorsFromSystemStarts.js'
+import { createAnchorId } from './scoreFollowStorage.js'
 import { resolveScoreFollowCursor } from './resolveScoreFollowCursor.js'
 import {
   findNextUnmarkedMeasureNumber,
@@ -122,6 +124,12 @@ export default function useScoreFollow({
   })
   const [setupStatus, setSetupStatus] = useState({ phase: 'idle', message: '' })
 
+  // System-start fallback mode: user taps the start of each staff system
+  // instead of marking every measure. Used when auto PDF analysis fails.
+  const [systemStartMode, setSystemStartMode] = useState(false)
+  const [systemStartMarks, setSystemStartMarks] = useState([])
+  const systemStartStackRef = useRef([])
+
   const autoSetupKey = useMemo(
     () => buildAutoSetupKey(pdfFingerprint, timingSourceId),
     [pdfFingerprint, timingSourceId],
@@ -170,6 +178,8 @@ export default function useScoreFollow({
   const showSystemBands = semiAutoPreview
   const showAnchorMarkers =
     alignmentMode || setupPanelOpen || semiAutoPreview || setupStatus.phase === 'running'
+  // System-start marks are shown as separate visual indicators during fallback mode
+  const showSystemStartMarkers = systemStartMode && systemStartMarks.length > 0
 
   const setAlignmentMode = useCallback(
     (value) => {
@@ -385,6 +395,82 @@ export default function useScoreFollow({
       }),
     )
   }, [clearManualAnchors, anchors, minMeasureNumber, maxMeasureNumber])
+
+  // ---------------------------------------------------------------------------
+  // System-start fallback mode
+  // ---------------------------------------------------------------------------
+
+  const enterSystemStartMode = useCallback(() => {
+    setSystemStartMode(true)
+    setSystemStartMarks([])
+    systemStartStackRef.current = []
+    setAlignmentModeState(false)
+  }, [])
+
+  const exitSystemStartMode = useCallback(() => {
+    setSystemStartMode(false)
+    setSystemStartMarks([])
+    systemStartStackRef.current = []
+  }, [])
+
+  const addSystemStartMark = useCallback((page, x, y) => {
+    const mark = { id: createAnchorId(), page, x, y }
+    setSystemStartMarks((prev) => [...prev, mark])
+    systemStartStackRef.current.push(mark)
+  }, [])
+
+  const undoLastSystemStartMark = useCallback(() => {
+    const last = systemStartStackRef.current.pop()
+    if (!last) {
+      return false
+    }
+    setSystemStartMarks((prev) => prev.filter((m) => m.id !== last.id))
+    return true
+  }, [])
+
+  const confirmSystemStartMarks = useCallback(() => {
+    if (systemStartMarks.length === 0 || !timingMap) {
+      return
+    }
+    const generatedAnchors = buildAnchorsFromSystemStarts(systemStartMarks, timingMap)
+    if (generatedAnchors.length === 0) {
+      return
+    }
+    setAutoAnchors(generatedAnchors)
+    setEnabled(true)
+    setSystemStartMode(false)
+    setSystemStartMarks([])
+    systemStartStackRef.current = []
+    setSemiAutoSetup({
+      status: 'confirmed',
+      progress: 1,
+      message: '',
+      error: null,
+      preview: null,
+    })
+    setSetupStatus({ phase: 'ready', message: setupReadyMessage })
+  }, [systemStartMarks, timingMap, setAutoAnchors, setupReadyMessage])
+
+  // Keyboard shortcuts in system-start mode: Escape = cancel, Backspace = undo
+  useEffect(() => {
+    if (!systemStartMode) {
+      return undefined
+    }
+    function handleKeyDown(event) {
+      if (isEditableTarget(event.target)) {
+        return
+      }
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        exitSystemStartMode()
+      } else if (event.key === 'Backspace' || event.key === 'Delete') {
+        event.preventDefault()
+        undoLastSystemStartMark()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown, true)
+    return () => window.removeEventListener('keydown', handleKeyDown, true)
+  }, [systemStartMode, exitSystemStartMode, undoLastSystemStartMark])
 
   const runSemiAutoSetupInternal = useCallback(
     async ({ force = false } = {}) => {
@@ -843,6 +929,7 @@ export default function useScoreFollow({
     setupPanelOpen,
     setSetupPanelOpen,
     showAnchorMarkers,
+    showSystemStartMarkers,
     markingProgress,
     advancePlacementMeasure,
     undoLastMarker,
@@ -880,5 +967,13 @@ export default function useScoreFollow({
     anchorTrust,
     followNeedsSetup,
     followApproximateLabel: anchorTrust.label,
+    // System-start fallback mode
+    systemStartMode,
+    systemStartMarks,
+    enterSystemStartMode,
+    exitSystemStartMode,
+    addSystemStartMark,
+    undoLastSystemStartMark,
+    confirmSystemStartMarks,
   }
 }

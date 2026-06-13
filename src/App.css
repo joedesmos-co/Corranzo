@@ -1500,6 +1500,67 @@
   line-height: 1.35;
 }
 
+.score-follow-overlay__align-hint--system-start {
+  bottom: 12px;
+  max-width: 90%;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.35;
+  background: rgba(16, 24, 40, 0.82);
+  color: #fbbf24;
+}
+
+/* System-start mark: golden crosshair dropped on each tapped system start */
+.score-follow-overlay__system-start-mark {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-follow-overlay__system-start-mark::before,
+.score-follow-overlay__system-start-mark::after {
+  content: '';
+  position: absolute;
+  background: #fbbf24;
+  border-radius: 1px;
+}
+
+/* Horizontal bar of the crosshair */
+.score-follow-overlay__system-start-mark::before {
+  width: 16px;
+  height: 2px;
+}
+
+/* Vertical bar of the crosshair */
+.score-follow-overlay__system-start-mark::after {
+  width: 2px;
+  height: 16px;
+}
+
+.score-follow-overlay__system-start-label {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(16, 24, 40, 0.75);
+  padding: 1px 3px;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+/* Cursor style in system-start mode */
+.score-follow-overlay--system-start {
+  cursor: crosshair;
+}
+
 .score-follow-controls__semi-auto-btn {
   display: block;
   width: 100%;
@@ -1840,14 +1901,65 @@
 }
 
 .score-follow-controls__auto-error {
-  margin: 0 0 10px;
+  margin: 0 0 6px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #f0b8b8;
+}
+
+.score-follow-controls__auto-failed {
+  margin: 0 0 8px;
   padding: 8px 10px;
   border-radius: 8px;
   background: rgba(180, 60, 60, 0.15);
   border: 1px solid rgba(220, 100, 100, 0.35);
-  font-size: 0.8rem;
-  line-height: 1.45;
-  color: #f0b8b8;
+}
+
+/* Primary fallback button: "Mark system starts" */
+.score-follow-controls__system-start-btn {
+  display: block;
+  width: 100%;
+  margin: 6px 0 0;
+  padding: 9px 10px;
+  border-radius: 8px;
+  border: 1px solid #fbbf24;
+  background: linear-gradient(180deg, #4a3400 0%, #2d1f00 100%);
+  color: #fde68a;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.score-follow-controls__system-start-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.score-follow-controls__system-start-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* System-start mode panel */
+.score-follow-controls__system-start-panel {
+  margin: 0 0 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #fbbf24;
+  background: rgba(251, 191, 36, 0.08);
+}
+
+.score-follow-controls__system-start-instruction {
+  margin: 0 0 6px;
+  font-size: 0.82rem;
+  color: #fde68a;
+  font-weight: 500;
+}
+
+.score-follow-controls__system-start-count {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  color: #94a3b8;
 }
 
 .score-follow-controls__source-badge {

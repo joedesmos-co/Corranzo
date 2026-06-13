@@ -32,6 +32,11 @@ export function usePracticeScoreFollowOverlayProps() {
     showNoteTarget: cursorState.showNoteTarget,
     anchors: scoreFollow.anchors,
     placeAnchorAt: scoreFollow.placeAnchorAt,
+    // System-start fallback mode
+    systemStartMode: scoreFollow.systemStartMode,
+    systemStartMarks: scoreFollow.systemStartMarks,
+    addSystemStartMark: scoreFollow.addSystemStartMark,
+    showSystemStartMarkers: scoreFollow.showSystemStartMarkers,
   }
 }
 

@@ -70,6 +70,7 @@ export default function PdfPageFrame({
 
   const alignmentMode = scoreFollow?.alignmentMode ?? false
   const semiAutoPreview = scoreFollow?.semiAutoPreview ?? false
+  const systemStartMode = scoreFollow?.systemStartMode ?? false
   // In pointer mode the annotation overlay must not intercept any pointer events —
   // the SVG inside already has pointer-events:none but its wrapping PdfOverlayLayer
   // div was still set to 'auto', blocking scroll, tap, and toolbar clicks.
@@ -77,6 +78,7 @@ export default function PdfPageFrame({
   const showScoreFollowLayer =
     scoreFollow &&
     (alignmentMode ||
+      systemStartMode ||
       scoreFollow.enabled ||
       semiAutoPreview ||
       scoreFollow.showNoteTarget)
@@ -104,7 +106,7 @@ export default function PdfPageFrame({
             <PdfOverlayLayer
               id="score-follow"
               zIndex={15}
-              pointerEvents={alignmentMode ? 'auto' : 'none'}
+              pointerEvents={alignmentMode || systemStartMode ? 'auto' : 'none'}
             >
               <ScoreFollowOverlay
                 pageNumber={pageNumber}
@@ -120,6 +122,9 @@ export default function PdfPageFrame({
                 showNoteTarget={scoreFollow.showNoteTarget}
                 anchors={scoreFollow.displayAnchors ?? scoreFollow.anchors}
                 onPlaceAnchor={scoreFollow.placeAnchorAt}
+                systemStartMode={systemStartMode}
+                systemStartMarks={scoreFollow.systemStartMarks ?? []}
+                onPlaceSystemStart={scoreFollow.addSystemStartMark}
               />
             </PdfOverlayLayer>
           )}

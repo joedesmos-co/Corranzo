@@ -44,6 +44,12 @@ export default function PracticeSetupPanel({ session, scoreFollow }) {
             anchorCounts={scoreFollow.anchorCounts}
             followNeedsSetup={scoreFollow.followNeedsSetup}
             embedded
+            systemStartMode={scoreFollow.systemStartMode}
+            systemStartMarkCount={scoreFollow.systemStartMarks?.length ?? 0}
+            onEnterSystemStartMode={scoreFollow.enterSystemStartMode}
+            onConfirmSystemStartMarks={scoreFollow.confirmSystemStartMarks}
+            onUndoSystemStartMark={scoreFollow.undoLastSystemStartMark}
+            onExitSystemStartMode={scoreFollow.exitSystemStartMode}
           />
         )}
       </section>
