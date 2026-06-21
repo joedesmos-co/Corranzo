@@ -149,6 +149,47 @@ export function cleanPianoPage({
   return img
 }
 
+/**
+ * Page where the title sits just above the first staff with only a thin gap, so
+ * the detector's first band merges title + first system and straddles the header
+ * cutoff — the exact layout that used to drop the first system entirely.
+ */
+export function titledFirstSystemPage({ systems = 4, measuresPerSystem = 4, width = 460 } = {}) {
+  const lineGap = 5
+  const innerGap = 10
+  const staffHeight = 4 * lineGap + innerGap + 4 * lineGap // 50
+  const gap = 34
+  // Tall page so the header cutoff (~11% tolerant) lands in pixels, and place the
+  // title + first staff near the very top with only a thin gap, so they merge
+  // into one band that straddles the cutoff (the Minuet failure mode).
+  const pageHeight = 640
+  const titleTop = 26
+  const firstStaffTop = 56 // y0 ≈ 0.088 < tolerant cutoff 0.11 → straddles
+  const img = createPage(width, pageHeight)
+  const x0 = Math.floor(width * 0.08)
+  const x1 = Math.floor(width * 0.92)
+
+  // Title / composer block just above the first staff (thin gap → merges).
+  for (let line = 0; line < 2; line += 1) {
+    hLine(img, titleTop + line * 6, Math.floor(width * 0.32), Math.floor(width * 0.68), 50)
+  }
+
+  const systemBands = []
+  for (let s = 0; s < systems; s += 1) {
+    const sysTop = firstStaffTop + s * (staffHeight + gap)
+    const band = drawGrandStaff(img, sysTop, x0, x1, { lineGap, innerGap })
+    systemBands.push(band)
+    for (let m = 0; m <= measuresPerSystem; m += 1) {
+      const bx = Math.floor(x0 + ((x1 - x0) * m) / measuresPerSystem)
+      vLine(img, bx, band.top, band.bottom)
+      vLine(img, bx + 1, band.top, band.bottom)
+    }
+  }
+  img.systemBands = systemBands
+  img.firstStaffCenterNorm = (systemBands[0].top + systemBands[0].bottom) / (2 * pageHeight)
+  return img
+}
+
 /** Dense arrangement (anime/game style): many noteheads, ledger lines, stems. */
 export function densePianoPage({
   width = 480,

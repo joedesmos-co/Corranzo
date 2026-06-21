@@ -123,6 +123,9 @@ export default function useScoreFollow({
     preview: null,
   })
   const [setupStatus, setSetupStatus] = useState({ phase: 'idle', message: '' })
+  // Dev-only structured report of the last auto-setup analysis (systems, measure
+  // ranges, hints used, stage/confidence). Surfaced via `debug`, not normal UI.
+  const [autoSetupReport, setAutoSetupReport] = useState(null)
 
   // System-start fallback mode: user taps the start of each staff system
   // instead of marking every measure. Used when auto PDF analysis fails.
@@ -555,13 +558,14 @@ export default function useScoreFollow({
         }
 
         const { preview } = result
+        setAutoSetupReport(preview.debugReport ?? null)
 
-        // Apply whenever we have at least a system-start + system-end pair.
-        // High-confidence conservative results read "Auto setup complete";
-        // tolerant / geometric / low-confidence results read "Approximate
-        // cursor". Either way the cursor shows immediately — manual markers
-        // always override these auto guides.
-        if (preview.proposedAnchors?.length >= 2) {
+        // Apply only when the page→system mapping is plausible AND we have at
+        // least a system-start + system-end pair. A plausible high-confidence
+        // conservative result reads "Auto setup complete"; tolerant / geometric
+        // / reconciled / low-confidence reads "Approximate cursor". Manual
+        // markers always override these auto guides.
+        if (preview.proposedAnchors?.length >= 2 && preview.plausible) {
           setAutoAnchors(preview.proposedAnchors)
           // Barline-derived per-measure anchors refine the coarse system spans.
           if (preview.supplementalMeasureAnchors?.length >= 2) {
@@ -584,16 +588,19 @@ export default function useScoreFollow({
           return
         }
 
+        // Implausible mapping (e.g. detected system count can't be reconciled
+        // with MusicXML) → do NOT show a confidently-wrong cursor. Fall back to
+        // a short "Needs quick setup" prompt instead.
         setSemiAutoSetup({
           status: 'failed',
           progress: 0,
           message: '',
-          error: result.noSystems ? SCORE_FOLLOW_NO_SYSTEMS : preview.validationMessage || '',
+          error: result.noSystems ? SCORE_FOLLOW_NO_SYSTEMS : SCORE_FOLLOW_NEEDS_QUICK_SETUP,
           preview: null,
         })
         setSetupStatus({
-          phase: 'failed',
-          message: setupFailedMessage,
+          phase: 'needs-setup',
+          message: SCORE_FOLLOW_NEEDS_QUICK_SETUP,
         })
       } catch (error) {
         markAutoSetupAttempted(autoSetupKey)
@@ -640,6 +647,7 @@ export default function useScoreFollow({
     autoSetupTriggerKeyRef.current = null
     demoBundledLoadRef.current = null
     layoutSupplementKeyRef.current = null
+    setAutoSetupReport(null)
     setDemoBundledStatus({ loading: false, applied: false, error: null })
   }, [autoSetupKey])
 
@@ -916,8 +924,18 @@ export default function useScoreFollow({
       cursorVisibleOnPage: cursorVisibility.show,
       followTrustLevel: anchorTrust.level,
       followApproximate: anchorTrust.approximate,
+      // Dev-only auto-setup analysis report (null until auto setup runs).
+      autoSetup: autoSetupReport,
     }),
-    [currentMeasure, cursorVisibility, visiblePageNumber, anchors.length, anchorCounts, anchorTrust],
+    [
+      currentMeasure,
+      cursorVisibility,
+      visiblePageNumber,
+      anchors.length,
+      anchorCounts,
+      anchorTrust,
+      autoSetupReport,
+    ],
   )
 
   return {

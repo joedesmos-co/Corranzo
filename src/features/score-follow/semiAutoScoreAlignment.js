@@ -21,6 +21,7 @@ import {
   systemStartAnchorPosition,
 } from './detectStaffSystems.js'
 import { validateAutoAlignResult } from './autoAlignValidation.js'
+import { collectMeasureDefaultXHints } from './musicxmlLayoutAnchors.js'
 import { clearPdfAnalysisCache, getPageInkRatio, renderPdfPageImageData } from './pdfPageAnalysis.js'
 
 // Lower thresholds so uploaded PDF+MusicXML can get a cursor without needing
@@ -59,6 +60,79 @@ function systemCountHintFromMusicXml(measureNumbers, timingMap) {
   return groups.length > 1 ? groups.length : null
 }
 
+const round3 = (value) => (value == null ? null : Math.round(value * 1000) / 1000)
+const round2 = (value) => (value == null ? null : Math.round(value * 100) / 100)
+
+/**
+ * Structured, dev-only auto-setup debug report. Surfaces exactly why a mapping
+ * landed where it did: detected systems + y positions, allocated measure ranges,
+ * first/last measure per system, anchor sources, MusicXML hints used, and the
+ * stage/confidence/plausibility used. Never shown in normal production UI.
+ */
+function buildAutoSetupDebugReport({
+  systemEntries,
+  spans,
+  proposedAnchors,
+  supplementalMeasureAnchors,
+  pageStages,
+  overallStage,
+  confidence,
+  systemCountHint,
+  expectedSystemCount,
+  reconciled,
+  plausible,
+  timingMap,
+}) {
+  const systems = spans.map((span, index) => {
+    const entry = systemEntries[index]
+    const startAnchor = proposedAnchors.find(
+      (a) => a.meta?.systemIndex === index && a.meta?.role === 'system-start',
+    )
+    return {
+      index,
+      page: entry?.page ?? null,
+      stage: entry?.stage ?? null,
+      y0: entry ? round3(entry.system.y0) : null,
+      y1: entry ? round3(entry.system.y1) : null,
+      center: entry ? round3(entry.system.center) : null,
+      measureStart: span.measureStart,
+      measureEnd: span.measureEnd,
+      measureCount: span.measuresInSpan,
+      startX: startAnchor ? round3(startAnchor.x) : null,
+    }
+  })
+
+  const measures = timingMap?.measures ?? []
+  const hasSystemBreaks = measures.some((m, i) => i > 0 && m.systemBreakBefore)
+  const hasPageBreaks = measures.some((m) => m.pageBreakBefore)
+  const defaultXHints = collectMeasureDefaultXHints(timingMap)
+  const defaultXCoverage = measures.length > 0 ? defaultXHints.size / measures.length : 0
+
+  const sourceCounts = {}
+  for (const anchor of [...proposedAnchors, ...supplementalMeasureAnchors]) {
+    sourceCounts[anchor.source] = (sourceCounts[anchor.source] ?? 0) + 1
+  }
+
+  return {
+    stage: overallStage,
+    confidence: round2(confidence),
+    plausible,
+    reconciled,
+    detectedSystemCount: systemEntries.length,
+    expectedSystemCount: expectedSystemCount ?? null,
+    systemCountHint: systemCountHint ?? null,
+    hintsUsed: {
+      systemBreaks: hasSystemBreaks,
+      pageBreaks: hasPageBreaks,
+      defaultX: defaultXCoverage > 0,
+      defaultXCoverage: round2(defaultXCoverage),
+    },
+    perPage: pageStages.map((p) => ({ page: p.page, stage: p.stage, systemCount: p.count })),
+    systems,
+    anchorSourceCounts: sourceCounts,
+  }
+}
+
 /**
  * Per-page staff-system detection cascade — STAGES 2→4.
  *
@@ -79,23 +153,36 @@ function collectSystemEntriesForPages(renderedPages, { systemCountHint = null } 
   for (const { page, imageData } of renderedPages) {
     const contentBounds = detectContentBounds(imageData)
 
-    let stage = DETECTION_STAGE.CONSERVATIVE
-    let systems = detectConservativeStaffSystems(imageData, contentBounds)
+    // Run both passes and CHOOSE — do not just take the first that returns ≥1.
+    // Conservative under-detection (e.g. only the clean first system passes the
+    // strict scorer) must not be silently accepted as the whole page.
+    const conservative = detectConservativeStaffSystems(imageData, contentBounds)
+    const tolerant = detectTolerantStaffSystems(imageData, contentBounds, {
+      maxSystems: TOLERANT_MAX_SYSTEMS_PER_PAGE,
+    })
 
-    // Escalate to tolerant detection when conservative finds nothing or an
-    // implausibly large staff-line count (dense/over-segmented input).
-    if (systems.length < 1 || systems.length > MAX_SYSTEMS_PER_PAGE) {
-      const tolerant = detectTolerantStaffSystems(imageData, contentBounds, {
-        maxSystems: TOLERANT_MAX_SYSTEMS_PER_PAGE,
-      })
-      if (tolerant.length >= 1) {
-        systems = tolerant
-        stage = DETECTION_STAGE.TOLERANT
-      }
-    }
+    let systems
+    let stage
+    // Under-detection (dropping a real system) is the dangerous failure — it
+    // shifts every later measure onto the wrong system. So prefer the higher
+    // recall count, only keeping the high-precision conservative result when it
+    // finds at least as many systems as tolerant (or tolerant is clearly
+    // over-segmenting relative to it).
+    const tolerantOverSegments =
+      conservative.length >= 2 && tolerant.length > conservative.length * 1.8
+    const conservativeTrusted =
+      conservative.length >= 1 &&
+      conservative.length <= MAX_SYSTEMS_PER_PAGE &&
+      (tolerantOverSegments || conservative.length >= tolerant.length)
 
-    // Last resort: estimate bands purely from inked geometry + MusicXML hint.
-    if (systems.length < 1) {
+    if (conservativeTrusted) {
+      systems = conservative
+      stage = DETECTION_STAGE.CONSERVATIVE
+    } else if (tolerant.length >= 1) {
+      systems = tolerant
+      stage = DETECTION_STAGE.TOLERANT
+    } else {
+      // Last resort: estimate bands purely from inked geometry + MusicXML hint.
       const perPageHint =
         inkedPageCount === 1 && Number.isFinite(systemCountHint) ? systemCountHint : null
       systems = estimateSystemBandsFromContent(imageData, contentBounds, {
@@ -111,7 +198,7 @@ function collectSystemEntriesForPages(renderedPages, { systemCountHint = null } 
     }
 
     if (systems.length >= 1) {
-      pageStages.push({ page, stage, count: systems.length })
+      pageStages.push({ page, stage, count: systems.length, contentBounds })
     }
 
     for (const system of systems) {
@@ -119,6 +206,47 @@ function collectSystemEntriesForPages(renderedPages, { systemCountHint = null } 
       // when MusicXML has no system-break hints (Stage 4 width distribution).
       const inkWidth = systemInkWidthRatio(imageData, contentBounds, system)
       systemEntries.push({ page, system, imageData, contentBounds, stage, inkWidth })
+    }
+  }
+
+  // ── Reconcile detected count with the MusicXML-implied system count ─────────
+  // If MusicXML says N systems but pixel detection disagrees by more than one,
+  // the page→measure mapping would be wrong. For a single inked page, rebuild
+  // bands geometrically to EXACTLY the expected count, preserving MusicXML
+  // structure rather than accepting a bad detected count.
+  let reconciled = false
+  if (
+    inkedPageCount === 1 &&
+    Number.isFinite(systemCountHint) &&
+    systemCountHint >= 1 &&
+    Math.abs(systemEntries.length - systemCountHint) > 1
+  ) {
+    const { page, imageData } = renderedPages[0]
+    const contentBounds = detectContentBounds(imageData)
+    const geo = estimateSystemBandsFromContent(imageData, contentBounds, {
+      systemCount: systemCountHint,
+      maxSystems: TOLERANT_MAX_SYSTEMS_PER_PAGE,
+    })
+    if (geo.length >= 1) {
+      systemEntries.length = 0
+      pageStages.length = 0
+      for (const system of geo) {
+        systemEntries.push({
+          page,
+          system,
+          imageData,
+          contentBounds,
+          stage: DETECTION_STAGE.GEOMETRIC,
+          inkWidth: systemInkWidthRatio(imageData, contentBounds, system),
+        })
+      }
+      pageStages.push({
+        page,
+        stage: DETECTION_STAGE.GEOMETRIC,
+        count: geo.length,
+        contentBounds,
+      })
+      reconciled = true
     }
   }
 
@@ -130,7 +258,13 @@ function collectSystemEntriesForPages(renderedPages, { systemCountHint = null } 
     }
   }
 
-  return { entries: systemEntries, pageStages, overallStage }
+  return {
+    entries: systemEntries,
+    pageStages,
+    overallStage,
+    reconciled,
+    expectedSystemCount: systemCountHint ?? null,
+  }
 }
 
 /**
@@ -368,10 +502,13 @@ export async function analyzeSemiAutoScoreSetup({
   onProgress?.(0.9, 'Finding staff systems…')
 
   const systemCountHint = systemCountHintFromMusicXml(measureNumbers, timingMap)
-  const { entries: systemEntries, pageStages, overallStage } = collectSystemEntriesForPages(
-    renderedPages,
-    { systemCountHint },
-  )
+  const {
+    entries: systemEntries,
+    pageStages,
+    overallStage,
+    reconciled,
+    expectedSystemCount,
+  } = collectSystemEntriesForPages(renderedPages, { systemCountHint })
 
   // Truly last resort: not a single inked page yielded even one band. Only here
   // do we ask the user to mark system starts (concise fallback copy lives in UI).
@@ -415,14 +552,41 @@ export async function analyzeSemiAutoScoreSetup({
   // A failed strict validation no longer blocks the cursor — geometric/tolerant
   // results are intentionally approximate. Confidence alone gates auto-apply.
   const lowConfidence = confidence < LOW_CONFIDENCE_THRESHOLD
-  const approximate = overallStage !== DETECTION_STAGE.CONSERVATIVE || lowConfidence
+
+  // Guardrail: the page→system mapping is implausible when MusicXML implies a
+  // system count we couldn't match (and couldn't reconcile). Such a mapping
+  // would put the cursor on the wrong system, so we downgrade to "needs setup"
+  // rather than show a confidently-wrong cursor.
+  const systemCountMismatch =
+    Number.isFinite(expectedSystemCount) &&
+    expectedSystemCount >= 1 &&
+    Math.abs(systemEntries.length - expectedSystemCount) > 1 &&
+    !reconciled
+  const plausible = !systemCountMismatch && proposedAnchors.length >= 2
+
+  const approximate =
+    plausible && (overallStage !== DETECTION_STAGE.CONSERVATIVE || reconciled || lowConfidence)
 
   onProgress?.(1, 'Finishing setup…')
 
-  const autoApplyRecommended = shouldAutoApplySemiAutoResult({
+  const autoApplyRecommended =
+    plausible &&
+    !approximate &&
+    shouldAutoApplySemiAutoResult({ proposedAnchors, confidence, lowConfidence })
+
+  const debugReport = buildAutoSetupDebugReport({
+    systemEntries,
+    spans,
     proposedAnchors,
+    supplementalMeasureAnchors,
+    pageStages,
+    overallStage,
     confidence,
-    lowConfidence,
+    systemCountHint,
+    expectedSystemCount,
+    reconciled,
+    plausible,
+    timingMap,
   })
 
   return {
@@ -436,15 +600,19 @@ export async function analyzeSemiAutoScoreSetup({
       confidence,
       lowConfidence,
       approximate,
+      plausible,
+      reconciled,
       stage: overallStage,
       pageStages,
       systemCountHint,
+      expectedSystemCount,
       validationMessage: validation.ok ? null : validation.reason,
       measureCount: measureNumbers.length,
       systemCount: systemEntries.length,
       anchorCount: proposedAnchors.length,
       inkPages,
       autoApplyRecommended,
+      debugReport,
     },
   }
 }

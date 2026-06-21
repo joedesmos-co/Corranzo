@@ -333,6 +333,49 @@ const MAX_SYSTEMS_PER_PAGE = 6
 const TOLERANT_MAX_SYSTEMS_PER_PAGE = 14
 
 /**
+ * Resolve a candidate band against the header zone so the FIRST staff system
+ * is never silently dropped just because the title sits above it.
+ *
+ *  - fully below the cutoff → keep unchanged
+ *  - straddling (title merged with the first staff) → trim the title off at the
+ *    lowest-density gap near the header line, preserving the staff portion
+ *  - entirely within the header (pure title / composer text) → drop (null)
+ */
+function resolveHeaderBand(band, rowDensity, height, headerCutoff) {
+  if (band.y0 >= headerCutoff) {
+    return band
+  }
+  const cutoffPx = Math.round(headerCutoff * height)
+  const y0px = Math.floor(band.y0 * height)
+  const y1px = Math.ceil(band.y1 * height)
+  const minStaffPx = Math.round(height * 0.045)
+
+  // Pure header band — never extends meaningfully past the header line.
+  if (y1px <= cutoffPx + minStaffPx) {
+    return null
+  }
+
+  // Straddles the header line: snap the new top to the lowest-density row near
+  // the cutoff (the natural title↔staff gap), trimming the title away.
+  const window = Math.round(height * 0.04)
+  const from = Math.max(y0px, cutoffPx - window)
+  const to = Math.max(from, Math.min(cutoffPx + window, y1px - minStaffPx))
+  let bestY = Math.max(cutoffPx, from)
+  let bestDensity = Infinity
+  for (let y = from; y <= to; y += 1) {
+    if (rowDensity[y] <= bestDensity) {
+      bestDensity = rowDensity[y]
+      bestY = y
+    }
+  }
+  const trimmedY0 = bestY / height
+  if (band.y1 - trimmedY0 < 0.05) {
+    return band
+  }
+  return { ...band, y0: trimmedY0, center: (trimmedY0 + band.y1) / 2 }
+}
+
+/**
  * Conservative staff list: drops header/title bands and non-staff ink regions.
  */
 export function systemInkWidthRatio(imageData, contentBounds, band) {
@@ -368,19 +411,19 @@ function staffHorizontalInkRatio(imageData, contentBounds, band) {
 export function detectConservativeStaffSystems(imageData, contentBounds = null) {
   const bounds = contentBounds ?? detectContentBounds(imageData)
   const rowDensity = computeRowDensityInContent(imageData, bounds)
+  const { height } = imageData
   const candidates = detectStaffSystems(imageData, bounds)
 
   return candidates
+    .map((system) => resolveHeaderBand(system, rowDensity, height, HEADER_CUTOFF_NORM))
+    .filter(Boolean)
     .map((system) => ({
-      system,
+      system: { ...system, contentBounds: bounds },
       score: scoreStaffBandQuality(imageData, system, rowDensity),
       inkWidth: staffHorizontalInkRatio(imageData, bounds, system),
     }))
     .filter(
-      (entry) =>
-        entry.score >= 0.62 &&
-        entry.system.y0 >= HEADER_CUTOFF_NORM &&
-        entry.inkWidth >= MIN_STAFF_INK_WIDTH_RATIO,
+      (entry) => entry.score >= 0.62 && entry.inkWidth >= MIN_STAFF_INK_WIDTH_RATIO,
     )
     .sort((a, b) => a.system.y0 - b.system.y0)
     .map((entry) => entry.system)
@@ -400,6 +443,7 @@ export function detectTolerantStaffSystems(imageData, contentBounds = null, opti
   const bounds = contentBounds ?? detectContentBounds(imageData)
   const rowDensity = computeRowDensityInContent(imageData, bounds)
   const smoothed = smoothFloatArray(rowDensity, 2)
+  const { height } = imageData
   const candidates = detectStaffSystems(imageData, bounds, {
     denseThreshold: 0.02,
     minBandHeightNorm: STAFF_BAND_QUALITY_TOLERANT.minBandHeightNorm,
@@ -411,16 +455,16 @@ export function detectTolerantStaffSystems(imageData, contentBounds = null, opti
   })
 
   const scored = candidates
+    .map((system) => resolveHeaderBand(system, smoothed, height, TOLERANT_HEADER_CUTOFF_NORM))
+    .filter(Boolean)
     .map((system) => ({
-      system,
+      system: { ...system, contentBounds: bounds },
       score: scoreStaffBandQuality(imageData, system, smoothed, STAFF_BAND_QUALITY_TOLERANT),
       inkWidth: staffHorizontalInkRatio(imageData, bounds, system),
     }))
     .filter(
       (entry) =>
-        entry.score > 0 &&
-        entry.system.y0 >= TOLERANT_HEADER_CUTOFF_NORM &&
-        entry.inkWidth >= TOLERANT_MIN_STAFF_INK_WIDTH_RATIO,
+        entry.score > 0 && entry.inkWidth >= TOLERANT_MIN_STAFF_INK_WIDTH_RATIO,
     )
     .sort((a, b) => b.score - a.score)
     .slice(0, maxSystems)

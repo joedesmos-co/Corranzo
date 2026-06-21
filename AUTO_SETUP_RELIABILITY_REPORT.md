@@ -6,6 +6,55 @@ uploads a normal sheet-music PDF plus a matching MusicXML/MIDI file, ScoreFlow
 should produce a usable approximate score-follow cursor automatically in most
 cases. Manual marking is now a rare last-resort rescue path, not normal flow.
 
+---
+
+## Accuracy pass (follow-up)
+
+The first pass made the cursor *appear* automatically. This pass makes it
+*land in the right place* — the cursor must be on the correct page and system
+and reasonably close to the current measure, not merely visible somewhere.
+
+**Root cause of the "ridiculously off" cursor.** On the real Minuet PDF the
+detector found all six staff bands, but the first band merged the title with the
+first grand staff, so its top sat above the header cutoff and the **entire first
+system was dropped**. With five systems instead of six, every measure was mapped
+one system too low (≈13% of page height off — a whole system). The MIDI-derived
+demo MusicXML has no system-break hints, so nothing caught the under-count.
+
+**Fixes.**
+1. *First-system preservation* — instead of dropping a band whose top is above
+   the header cutoff, the detector now trims the title off at the title↔staff
+   density gap and keeps the staff. Pure title bands are still dropped.
+2. *Stage selection by recall* — the cascade runs conservative AND tolerant
+   detection and prefers the higher-recall count (guarding against
+   over-segmentation), because under-detection is what shifts the cursor.
+3. *System-count reconciliation* — when MusicXML system/page breaks imply N
+   systems but detection disagrees by more than one, a single-page result is
+   rebuilt geometrically to exactly N bands (MusicXML structure wins).
+4. *Allocation from breaks* — when MusicXML has system breaks, measures follow
+   them exactly (e.g. 32 measures → 5,5,6,5,5,6), not a flat even split.
+5. *Plausibility guardrail* — an unreconcilable system-count mismatch is flagged
+   implausible and downgraded to "Needs quick setup" rather than shown as a
+   confidently-wrong cursor. "Auto setup complete" is reserved for plausible,
+   high-precision results; "Approximate cursor" for plausible coarse ones.
+6. *Dev debug report* — `scoreFollow.debug.autoSetup` exposes detected systems,
+   y-positions, per-system measure ranges, anchor sources, MusicXML hints used,
+   and stage/confidence (dev-only, not in normal UI).
+
+**Result on the real Minuet PDF (measured against PyMuPDF ground-truth anchors):**
+
+| Metric | Before accuracy pass | After |
+|--------|---------------------|-------|
+| Systems detected | 5 of 6 (first dropped) | 6 of 6 |
+| First-system position error | ≈0.13 (a full system) | 0.001 |
+| Max per-system y error | ≈0.13 | 0.015 |
+| Cursor y error at 25/50/75/95% seek | up to ≈0.13 | 0.004–0.015 |
+
+The cursor now sits on the correct system at every seek point (within ~1.5% of
+page height). With no MusicXML break hints, within-system measure boundaries are
+still approximate (even distribution); with breaks present, measure ranges are
+exact.
+
 ## The core bug this pass fixed
 
 Pixel analysis ignored the alpha channel. Many PDFs — especially engraving-tool
@@ -99,10 +148,10 @@ where it isn't.
 
 ## Where it still falls short / what remains approximate
 
-- On the real Minuet PDF, raster detection currently finds 5 of 6 systems (the
-  first system sits near the header cutoff). The cursor is approximate but tracks
-  the right region; precision improves if the MusicXML carries `new-system`
-  hints or `default-x` layout.
+- On the real Minuet PDF, raster detection now finds all 6 systems (the accuracy
+  pass fixed the dropped first system); per-system y error is ≈0.015. Without
+  MusicXML break hints, within-system measure boundaries remain approximate
+  (even distribution); precision is exact when `new-system` hints are present.
 - Conservative (high-precision) detection still misses very imperfect/real
   engraving and hands off to tolerant/geometric — by design, but it means the
   high-confidence "complete" label is reserved for clean scores.

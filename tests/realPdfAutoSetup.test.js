@@ -24,6 +24,7 @@ import {
 } from '../src/features/score-follow/detectStaffSystems.js'
 import { assessScoreFollowTrust } from '../src/features/score-follow/scoreFollowTrust.js'
 import { resolveScoreFollowCursor } from '../src/features/score-follow/resolveScoreFollowCursor.js'
+import { getMeasureAtTime } from '../src/features/musicxml/timingQuery.js'
 import { renderPagesFromArray } from './helpers/syntheticScore.js'
 
 const pdfPath = fileURLToPath(
@@ -74,6 +75,20 @@ try {
   ready = pages.length > 0 && Boolean(timingMap?.measures?.length)
 } catch (error) {
   skipReason = error instanceof Error ? error.message : String(error)
+}
+
+// Ground-truth anchors (PyMuPDF-extracted) for accuracy comparison.
+let gtCenters = []
+let gtByMeasure = new Map()
+try {
+  const gtPath = fileURLToPath(
+    new URL('../public/fixtures/demo-minuet-in-g.anchors.json', import.meta.url),
+  )
+  const gt = JSON.parse(readFileSync(gtPath, 'utf8')).anchors
+  gtByMeasure = new Map(gt.map((a) => [a.measureNumber, a]))
+  gtCenters = [...new Set(gt.map((a) => a.y))].sort((a, b) => a - b)
+} catch {
+  // optional
 }
 
 if (!ready) {
@@ -130,5 +145,62 @@ describe('real PDF (Minuet in G) — automatic score-follow setup', () => {
     expect(Math.min(...measureNumbers)).toBe(1)
     // The last system-end anchor should reach the final measures of the piece.
     expect(Math.max(...measureNumbers)).toBeGreaterThanOrEqual(28)
+  })
+
+  // ── ACCURACY: the cursor must be near the CORRECT system, not just visible ──
+
+  maybe('detected systems align with the ground-truth system positions', async () => {
+    const result = await analyzeSemiAutoScoreSetup({
+      pdfSource: 'minuet',
+      numPages: pages.length,
+      timingMap,
+      renderPage: renderPagesFromArray(pages),
+    })
+    const detected = result.preview.debugReport.systems.map((s) => s.center)
+    // The page has six grand-staff systems; recover at least five.
+    expect(detected.length).toBeGreaterThanOrEqual(5)
+    // The FIRST system (near the title) must be preserved — this is the exact
+    // bug that shifted every measure down a system.
+    expect(Math.abs(detected[0] - gtCenters[0])).toBeLessThan(0.04)
+    // Detected system centers align with ground truth (within ~4% page height).
+    const n = Math.min(detected.length, gtCenters.length)
+    let maxError = 0
+    for (let i = 0; i < n; i += 1) {
+      maxError = Math.max(maxError, Math.abs(detected[i] - gtCenters[i]))
+    }
+    expect(maxError).toBeLessThan(0.04)
+  })
+
+  maybe('cursor stays on the correct system when seeking to 25/50/75/95%', async () => {
+    const result = await analyzeSemiAutoScoreSetup({
+      pdfSource: 'minuet',
+      numPages: pages.length,
+      timingMap,
+      renderPage: renderPagesFromArray(pages),
+    })
+    const trust = assessScoreFollowTrust({
+      anchors: result.preview.proposedAnchors,
+      timingMap,
+    })
+    const duration =
+      timingMap.performedMeasureTimeline?.performedDurationSeconds ?? timingMap.durationSeconds
+
+    for (const fraction of [0.25, 0.5, 0.75, 0.95]) {
+      const t = duration * fraction
+      const measure = getMeasureAtTime(timingMap, t)?.number
+      const groundTruth = gtByMeasure.get(measure)
+      const { cursor } = resolveScoreFollowCursor({
+        timingMap,
+        practiceTime: t,
+        trustedAnchors: result.preview.proposedAnchors,
+        trust,
+      })
+      expect(cursor.visible).toBe(true)
+      if (groundTruth) {
+        // Cursor vertical position within ~4% of the true measure location —
+        // i.e. on the correct system, not a system away.
+        expect(Math.abs(cursor.y - groundTruth.y)).toBeLessThan(0.04)
+      }
+    }
   })
 })
