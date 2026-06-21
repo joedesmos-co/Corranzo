@@ -34,6 +34,9 @@ export function assessScoreFollowTrust({ anchors, timingMap, isDemoSession = fal
     (anchor) =>
       anchor.source === ANCHOR_SOURCE.AUTO_SYSTEM || anchor.source === ANCHOR_SOURCE.AUTO,
   ).length
+  const autoMeasureCount = trusted.filter(
+    (anchor) => anchor.source === ANCHOR_SOURCE.AUTO_MEASURE,
+  ).length
   const autoCount = anchors.filter((anchor) => isAutomaticAnchorSource(anchor.source)).length
 
   if (isDemoSession && demoCount >= 1) {
@@ -64,6 +67,17 @@ export function assessScoreFollowTrust({ anchors, timingMap, isDemoSession = fal
       needsSetup: false,
       approximate: true,
       label: 'Approximate — MusicXML layout',
+    }
+  }
+
+  // Barline-derived per-measure anchors: more precise than system spans.
+  if (autoMeasureCount >= 2) {
+    return {
+      level: FOLLOW_TRUST_LEVEL.AUTO,
+      showCursor: true,
+      needsSetup: false,
+      approximate: true,
+      label: 'Approximate — measure barlines',
     }
   }
 

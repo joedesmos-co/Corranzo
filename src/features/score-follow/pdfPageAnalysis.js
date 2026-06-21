@@ -71,6 +71,12 @@ export async function renderPdfPageImageData(pdfSource, pageNumber, targetWidth 
     throw new Error('Could not create canvas for PDF analysis.')
   }
 
+  // Paint white first: many PDFs (esp. engraving exports) don't draw their own
+  // background, so the canvas would otherwise stay transparent and every pixel
+  // would read as black ink, breaking staff/barline detection.
+  context.fillStyle = '#ffffff'
+  context.fillRect(0, 0, canvas.width, canvas.height)
+
   await page.render({ canvasContext: context, viewport }).promise
 
   return {
@@ -90,7 +96,7 @@ export function getPageInkRatio(imageData) {
     for (let x = bounds.left; x <= bounds.right; x += 2) {
       const index = (y * width + x) * 4
       total += 1
-      const lum = 0.299 * data[index] + 0.587 * data[index + 1] + 0.114 * data[index + 2]
+      const lum = compositeLuminance(data, index)
       if (lum < 200) {
         dark += 1
       }
@@ -98,6 +104,13 @@ export function getPageInkRatio(imageData) {
   }
 
   return total > 0 ? dark / total : 0
+}
+
+/** Luminance composited over white so transparent PDF backgrounds aren't ink. */
+function compositeLuminance(data, index) {
+  const alpha = data[index + 3] / 255
+  const lum = 0.299 * data[index] + 0.587 * data[index + 1] + 0.114 * data[index + 2]
+  return lum * alpha + 255 * (1 - alpha)
 }
 
 function detectInkBoundsQuick(imageData) {
@@ -110,7 +123,7 @@ function detectInkBoundsQuick(imageData) {
   for (let x = 0; x < width; x += 1) {
     for (let y = 0; y < height; y += 4) {
       const index = (y * width + x) * 4
-      if (data[index] < 240) {
+      if (compositeLuminance(data, index) < 240) {
         left = x
         x = width
         break
@@ -121,7 +134,7 @@ function detectInkBoundsQuick(imageData) {
   for (let x = width - 1; x >= 0; x -= 1) {
     for (let y = 0; y < height; y += 4) {
       const index = (y * width + x) * 4
-      if (data[index] < 240) {
+      if (compositeLuminance(data, index) < 240) {
         right = x
         x = -1
         break

@@ -101,12 +101,16 @@ describe('Fix C1: filterTrustedAnchors includes AUTO_SYSTEM anchors', () => {
     expect(filterTrustedAnchors(anchors)).toHaveLength(1)
   })
 
-  it('excludes AUTO_MEASURE anchors (not in trusted set)', () => {
-    const anchors = [makeAnchor(ANCHOR_SOURCE.AUTO_MEASURE, 1)]
-    // AUTO_MEASURE is not explicitly trusted — verify consistent with source
+  it('includes AUTO_MEASURE anchors (barline-derived, approximate cursor)', () => {
+    const anchors = [
+      makeAnchor(ANCHOR_SOURCE.AUTO_MEASURE, 1),
+      makeAnchor(ANCHOR_SOURCE.AUTO_MEASURE, 2),
+    ]
+    // AUTO_MEASURE anchors are produced by barline detection and are MORE
+    // precise than AUTO_SYSTEM spans. They must be trusted so the approximate
+    // cursor shows without manual setup.
     const trusted = filterTrustedAnchors(anchors)
-    // AUTO_MEASURE is NOT listed in filterTrustedAnchors → expect 0
-    expect(trusted).toHaveLength(0)
+    expect(trusted).toHaveLength(2)
   })
 })
 
@@ -287,13 +291,15 @@ describe('Fix E: setup panel has no long instruction blocks', () => {
     expect(src).not.toMatch(/score-follow system needs/)
   })
 
-  it('ScoreFollowControls "Following" status is a short title', () => {
+  it('ScoreFollowControls ready status is a short title', () => {
     const src = readFileSync(
       join(__dir, '..', 'src', 'components', 'pdf', 'ScoreFollowControls.jsx'),
       'utf8',
     )
-    // Title is just "Following" — not a long sentence
-    expect(src).toMatch(/'Following'|"Following"/)
+    // Ready title is a short label ("Cursor ready") — not a long sentence.
+    const match = src.match(/title: '(Cursor ready|Following)'/)
+    expect(match).toBeTruthy()
+    expect(match[1].length).toBeLessThan(20)
   })
 
   it('no PracticeHelpTip component used in PracticeSetupPanel', () => {

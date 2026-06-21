@@ -29,8 +29,14 @@ export function filterTrustedAnchors(anchors) {
     if (source === ANCHOR_SOURCE.MUSICXML_LAYOUT) {
       return true
     }
-    // Auto-detected system anchors: approximate but useful for uploaded scores.
-    if (source === ANCHOR_SOURCE.AUTO_SYSTEM || source === ANCHOR_SOURCE.AUTO) {
+    // Auto-detected anchors: approximate but useful for uploaded scores.
+    // AUTO_MEASURE (barline-derived, per-measure) is more precise than
+    // AUTO_SYSTEM (system start/end spans); both drive an approximate cursor.
+    if (
+      source === ANCHOR_SOURCE.AUTO_MEASURE ||
+      source === ANCHOR_SOURCE.AUTO_SYSTEM ||
+      source === ANCHOR_SOURCE.AUTO
+    ) {
       return true
     }
     return false

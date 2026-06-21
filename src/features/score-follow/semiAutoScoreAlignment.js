@@ -3,6 +3,7 @@ import { ANCHOR_SOURCE } from './anchorUtils.js'
 import {
   allocateMeasureSpansToSystems,
   buildSystemsByPage,
+  groupMeasuresBySystemBreaks,
 } from './allocateMeasuresToSystems.js'
 import {
   detectBarlinePositionsInSystem,
@@ -11,8 +12,12 @@ import {
 import {
   detectConservativeStaffSystems,
   detectContentBounds,
+  detectTolerantStaffSystems,
+  estimateSystemBandsFromContent,
   MAX_SYSTEMS_PER_PAGE,
+  TOLERANT_MAX_SYSTEMS_PER_PAGE,
   systemEndAnchorPosition,
+  systemInkWidthRatio,
   systemStartAnchorPosition,
 } from './detectStaffSystems.js'
 import { validateAutoAlignResult } from './autoAlignValidation.js'
@@ -21,9 +26,22 @@ import { clearPdfAnalysisCache, getPageInkRatio, renderPdfPageImageData } from '
 // Lower thresholds so uploaded PDF+MusicXML can get a cursor without needing
 // near-perfect system detection. Even a low-confidence auto result is more
 // useful than the "needs setup" wall. Manual markers always override.
-const LOW_CONFIDENCE_THRESHOLD = 0.30
+const LOW_CONFIDENCE_THRESHOLD = 0.3
 const AUTO_APPLY_CONFIDENCE_THRESHOLD = 0.42
 const HARD_REFUSE_MIN_SYSTEMS = 1
+
+/** Detection stages, in order of decreasing precision (Stage 2 → Stage 4). */
+export const DETECTION_STAGE = {
+  CONSERVATIVE: 'conservative',
+  TOLERANT: 'tolerant',
+  GEOMETRIC: 'geometric',
+}
+
+const STAGE_RANK = {
+  [DETECTION_STAGE.CONSERVATIVE]: 3,
+  [DETECTION_STAGE.TOLERANT]: 2,
+  [DETECTION_STAGE.GEOMETRIC]: 1,
+}
 
 function getWrittenMeasureNumbers(timingMap) {
   if (!timingMap?.measures?.length) {
@@ -32,28 +50,87 @@ function getWrittenMeasureNumbers(timingMap) {
   return timingMap.measures.map((measure) => measure.number)
 }
 
-function collectConservativeSystemEntries(renderedPages) {
+/**
+ * Number of systems implied by MusicXML system/page break hints, if any.
+ * Used to validate detected counts and to seed the geometric fallback.
+ */
+function systemCountHintFromMusicXml(measureNumbers, timingMap) {
+  const groups = groupMeasuresBySystemBreaks(measureNumbers, timingMap)
+  return groups.length > 1 ? groups.length : null
+}
+
+/**
+ * Per-page staff-system detection cascade — STAGES 2→4.
+ *
+ *   Stage 2a conservative  → high precision; used whenever it yields a sane count.
+ *   Stage 2b tolerant      → dense / anime / lyric / uneven scans.
+ *   Stage 4  geometric     → split inked content into bands (last resort, always
+ *                            returns ≥1 band per inked page).
+ *
+ * Never hard-rejects a page for having "too many" systems — it clamps instead.
+ * Returns the collected entries plus the lowest (weakest) stage that ran, so the
+ * caller can label confidence and status honestly.
+ */
+function collectSystemEntriesForPages(renderedPages, { systemCountHint = null } = {}) {
   const systemEntries = []
+  const pageStages = []
+  const inkedPageCount = renderedPages.length
 
   for (const { page, imageData } of renderedPages) {
     const contentBounds = detectContentBounds(imageData)
-    const systems = detectConservativeStaffSystems(imageData, contentBounds)
 
-    if (systems.length > MAX_SYSTEMS_PER_PAGE) {
-      return { entries: [], rejected: true, page }
+    let stage = DETECTION_STAGE.CONSERVATIVE
+    let systems = detectConservativeStaffSystems(imageData, contentBounds)
+
+    // Escalate to tolerant detection when conservative finds nothing or an
+    // implausibly large staff-line count (dense/over-segmented input).
+    if (systems.length < 1 || systems.length > MAX_SYSTEMS_PER_PAGE) {
+      const tolerant = detectTolerantStaffSystems(imageData, contentBounds, {
+        maxSystems: TOLERANT_MAX_SYSTEMS_PER_PAGE,
+      })
+      if (tolerant.length >= 1) {
+        systems = tolerant
+        stage = DETECTION_STAGE.TOLERANT
+      }
+    }
+
+    // Last resort: estimate bands purely from inked geometry + MusicXML hint.
+    if (systems.length < 1) {
+      const perPageHint =
+        inkedPageCount === 1 && Number.isFinite(systemCountHint) ? systemCountHint : null
+      systems = estimateSystemBandsFromContent(imageData, contentBounds, {
+        systemCount: perPageHint,
+        maxSystems: TOLERANT_MAX_SYSTEMS_PER_PAGE,
+      })
+      stage = DETECTION_STAGE.GEOMETRIC
+    }
+
+    // Clamp to a sane maximum so a noisy page can't flood the allocator.
+    if (systems.length > TOLERANT_MAX_SYSTEMS_PER_PAGE) {
+      systems = systems.slice(0, TOLERANT_MAX_SYSTEMS_PER_PAGE)
+    }
+
+    if (systems.length >= 1) {
+      pageStages.push({ page, stage, count: systems.length })
     }
 
     for (const system of systems) {
-      systemEntries.push({
-        page,
-        system,
-        imageData,
-        contentBounds,
-      })
+      // Horizontal ink extent → used to weight measure allocation across systems
+      // when MusicXML has no system-break hints (Stage 4 width distribution).
+      const inkWidth = systemInkWidthRatio(imageData, contentBounds, system)
+      systemEntries.push({ page, system, imageData, contentBounds, stage, inkWidth })
     }
   }
 
-  return { entries: systemEntries, rejected: false }
+  // Overall stage = weakest stage that contributed any system.
+  let overallStage = DETECTION_STAGE.CONSERVATIVE
+  for (const { stage } of pageStages) {
+    if (STAGE_RANK[stage] < STAGE_RANK[overallStage]) {
+      overallStage = stage
+    }
+  }
+
+  return { entries: systemEntries, pageStages, overallStage }
 }
 
 /**
@@ -194,6 +271,12 @@ export function shouldAutoApplySemiAutoResult(preview) {
   return preview.confidence >= AUTO_APPLY_CONFIDENCE_THRESHOLD
 }
 
+const STAGE_BASE_CONFIDENCE = {
+  [DETECTION_STAGE.CONSERVATIVE]: 0.5,
+  [DETECTION_STAGE.TOLERANT]: 0.4,
+  [DETECTION_STAGE.GEOMETRIC]: 0.32,
+}
+
 function scoreSemiAutoConfidence({
   measureCount,
   anchorCount,
@@ -201,34 +284,45 @@ function scoreSemiAutoConfidence({
   inkPages,
   systemsPerPage,
   validationOk,
+  stage = DETECTION_STAGE.CONSERVATIVE,
+  systemCountHint = null,
 }) {
   if (systemCount < HARD_REFUSE_MIN_SYSTEMS || measureCount < 1) {
     return 0
   }
 
-  let score = 0.4
+  let score = STAGE_BASE_CONFIDENCE[stage] ?? 0.36
 
   if (validationOk) {
-    score += 0.28
+    score += 0.22
   } else {
-    score += 0.08
+    score += 0.06
   }
 
   if (anchorCount >= systemCount && anchorCount <= systemCount * 2) {
-    score += 0.18
+    score += 0.16
   }
 
   const anchorRatio = anchorCount / measureCount
   if (anchorRatio >= 0.04 && anchorRatio <= 0.5) {
-    score += 0.12
-  }
-
-  if (systemsPerPage > 0 && systemsPerPage <= MAX_SYSTEMS_PER_PAGE) {
     score += 0.1
   }
 
+  if (systemsPerPage > 0 && systemsPerPage <= MAX_SYSTEMS_PER_PAGE) {
+    score += 0.08
+  }
+
+  // Detected system count agreeing with MusicXML system-break hints is a strong
+  // signal that the page→measure mapping is plausible.
+  if (Number.isFinite(systemCountHint) && systemCountHint >= 1) {
+    const ratio = systemCount / systemCountHint
+    if (ratio >= 0.75 && ratio <= 1.34) {
+      score += 0.12
+    }
+  }
+
   if (inkPages > 0) {
-    score += 0.06
+    score += 0.04
   }
 
   return Math.min(1, Math.max(0, score))
@@ -242,6 +336,8 @@ export async function analyzeSemiAutoScoreSetup({
   numPages,
   timingMap,
   onProgress,
+  // Injectable for tests / fixture scripts: (pdfSource, page) => { imageData }.
+  renderPage = renderPdfPageImageData,
 }) {
   const measureNumbers = getWrittenMeasureNumbers(timingMap)
   if (!pdfSource || !numPages || numPages < 1) {
@@ -251,14 +347,16 @@ export async function analyzeSemiAutoScoreSetup({
     return { ok: false, message: 'Load score timing (MusicXML) first.' }
   }
 
-  clearPdfAnalysisCache()
+  if (renderPage === renderPdfPageImageData) {
+    clearPdfAnalysisCache()
+  }
 
   const renderedPages = []
   let inkPages = 0
 
   for (let page = 1; page <= numPages; page += 1) {
     onProgress?.(((page - 1) / numPages) * 0.82, `Scanning page ${page} of ${numPages}…`)
-    const rendered = await renderPdfPageImageData(pdfSource, page)
+    const rendered = await renderPage(pdfSource, page)
     const ink = getPageInkRatio(rendered.imageData)
     if (ink < 0.006) {
       continue
@@ -269,21 +367,19 @@ export async function analyzeSemiAutoScoreSetup({
 
   onProgress?.(0.9, 'Finding staff systems…')
 
-  const { entries: systemEntries, rejected, page: rejectedPage } =
-    collectConservativeSystemEntries(renderedPages)
+  const systemCountHint = systemCountHintFromMusicXml(measureNumbers, timingMap)
+  const { entries: systemEntries, pageStages, overallStage } = collectSystemEntriesForPages(
+    renderedPages,
+    { systemCountHint },
+  )
 
-  if (rejected) {
-    return {
-      ok: false,
-      message: `Too many staff regions on page ${rejectedPage}. Use manual correction or a cleaner PDF scan.`,
-    }
-  }
-
+  // Truly last resort: not a single inked page yielded even one band. Only here
+  // do we ask the user to mark system starts (concise fallback copy lives in UI).
   if (systemEntries.length < HARD_REFUSE_MIN_SYSTEMS) {
     return {
       ok: false,
-      message:
-        'No staff systems were detected reliably. Try manual marking, or a PDF with clearer staff lines.',
+      message: 'Auto setup could not find systems. Mark system starts.',
+      noSystems: true,
     }
   }
 
@@ -312,9 +408,14 @@ export async function analyzeSemiAutoScoreSetup({
     inkPages,
     systemsPerPage,
     validationOk: validation.ok,
+    stage: overallStage,
+    systemCountHint,
   })
 
-  const lowConfidence = confidence < LOW_CONFIDENCE_THRESHOLD || !validation.ok
+  // A failed strict validation no longer blocks the cursor — geometric/tolerant
+  // results are intentionally approximate. Confidence alone gates auto-apply.
+  const lowConfidence = confidence < LOW_CONFIDENCE_THRESHOLD
+  const approximate = overallStage !== DETECTION_STAGE.CONSERVATIVE || lowConfidence
 
   onProgress?.(1, 'Finishing setup…')
 
@@ -334,6 +435,10 @@ export async function analyzeSemiAutoScoreSetup({
       supplementalMeasureAnchors,
       confidence,
       lowConfidence,
+      approximate,
+      stage: overallStage,
+      pageStages,
+      systemCountHint,
       validationMessage: validation.ok ? null : validation.reason,
       measureCount: measureNumbers.length,
       systemCount: systemEntries.length,

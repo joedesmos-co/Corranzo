@@ -1,7 +1,10 @@
 import { computeRowDensityInContent } from './detectStaffSystems.js'
 
 function pixelLuminance(data, index) {
-  return 0.299 * data[index] + 0.587 * data[index + 1] + 0.114 * data[index + 2]
+  const alpha = data[index + 3] / 255
+  const lum = 0.299 * data[index] + 0.587 * data[index + 1] + 0.114 * data[index + 2]
+  // Composite over white so transparent PDF backgrounds don't read as ink.
+  return lum * alpha + 255 * (1 - alpha)
 }
 
 function isDark(data, index, threshold = 185) {

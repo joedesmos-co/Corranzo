@@ -53,7 +53,7 @@ export function allocateMeasureSpansToSystems(systemEntries, measureNumbers, tim
   }
 
   if (spans.length === 0) {
-    return allocateEvenMeasureSpans(systemEntries, measureNumbers)
+    return allocateWeightedMeasureSpans(systemEntries, measureNumbers)
   }
 
   if (spans.length < systemEntries.length) {
@@ -108,20 +108,71 @@ export function groupMeasuresBySystemBreaks(measureNumbers, timingMap) {
   return groups.length > 1 ? groups : []
 }
 
-function allocateEvenMeasureSpans(systemEntries, measureNumbers) {
+/**
+ * Integer measures-per-system from per-system weights (largest-remainder method).
+ * Every system gets ≥1 measure when measures ≥ systems; otherwise the first
+ * `total` systems get one each. Falls back to even weighting when no usable
+ * widths are supplied.
+ */
+export function computeWeightedMeasureCounts(weights, total) {
+  const n = weights.length
+  if (n === 0 || total <= 0) {
+    return new Array(n).fill(0)
+  }
+  if (total <= n) {
+    return weights.map((_, index) => (index < total ? 1 : 0))
+  }
+
+  const safeWeights = weights.map((weight) => {
+    const value = Number(weight)
+    return Number.isFinite(value) && value > 0 ? value : 0
+  })
+  const positiveSum = safeWeights.reduce((sum, weight) => sum + weight, 0)
+  // No usable widths → even weighting.
+  const effective = positiveSum > 0 ? safeWeights : weights.map(() => 1)
+  const effectiveSum = positiveSum > 0 ? positiveSum : n
+
+  const remaining = total - n
+  const ideal = effective.map((weight) => (weight / effectiveSum) * remaining)
+  const extra = ideal.map((value) => Math.floor(value))
+  let assignedExtra = extra.reduce((sum, value) => sum + value, 0)
+
+  const byRemainder = ideal
+    .map((value, index) => ({ index, frac: value - Math.floor(value) }))
+    .sort((a, b) => b.frac - a.frac)
+
+  let cursor = 0
+  while (assignedExtra < remaining && byRemainder.length > 0) {
+    extra[byRemainder[cursor % byRemainder.length].index] += 1
+    assignedExtra += 1
+    cursor += 1
+  }
+
+  return effective.map((_, index) => 1 + extra[index])
+}
+
+/**
+ * Distribute measures across systems by visual system width (Stage 4), using
+ * each entry's `inkWidth` as the weight. Equal/absent widths reduce to even
+ * distribution, preserving prior behaviour.
+ */
+function allocateWeightedMeasureSpans(systemEntries, measureNumbers) {
+  const weights = systemEntries.map((entry) => entry?.inkWidth)
+  const counts = computeWeightedMeasureCounts(weights, measureNumbers.length)
+
   const spans = []
   let measureIndex = 0
 
   for (let systemIndex = 0; systemIndex < systemEntries.length; systemIndex += 1) {
-    if (measureIndex >= measureNumbers.length) {
-      break
+    const measuresInSpan = counts[systemIndex]
+    if (!measuresInSpan || measureIndex >= measureNumbers.length) {
+      continue
     }
-
-    const remainingMeasures = measureNumbers.length - measureIndex
-    const remainingSystems = systemEntries.length - systemIndex
-    const measuresInSpan = Math.max(1, Math.ceil(remainingMeasures / remainingSystems))
     const slice = measureNumbers.slice(measureIndex, measureIndex + measuresInSpan)
-    measureIndex += measuresInSpan
+    measureIndex += slice.length
+    if (slice.length === 0) {
+      continue
+    }
 
     spans.push({
       systemIndex,

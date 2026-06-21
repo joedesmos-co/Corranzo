@@ -13,10 +13,7 @@ import {
   hasAutoSetupBeenAttempted,
   markAutoSetupAttempted,
 } from './scoreFollowAutoSetupStorage.js'
-import {
-  analyzeSemiAutoScoreSetup,
-  shouldAutoApplySemiAutoResult,
-} from './semiAutoScoreAlignment.js'
+import { analyzeSemiAutoScoreSetup } from './semiAutoScoreAlignment.js'
 import { buildAnchorsFromSystemStarts } from './buildAnchorsFromSystemStarts.js'
 import { createAnchorId } from './scoreFollowStorage.js'
 import { resolveScoreFollowCursor } from './resolveScoreFollowCursor.js'
@@ -35,9 +32,12 @@ import {
   isDemoFixtureFileSet,
 } from '../demo/demoBundledAnchors.js'
 import {
+  SCORE_FOLLOW_NEEDS_QUICK_SETUP,
   SCORE_FOLLOW_NEEDS_SETUP,
+  SCORE_FOLLOW_NO_SYSTEMS,
+  SCORE_FOLLOW_SETUP_APPROXIMATE,
+  SCORE_FOLLOW_SETUP_COMPLETE,
   SCORE_FOLLOW_SETUP_FAILED_DEMO,
-  SCORE_FOLLOW_SETUP_NEEDS_CORRECTION,
   SCORE_FOLLOW_SETUP_READY_DEMO,
   SCORE_FOLLOW_SETUP_READY_USER,
   SCORE_FOLLOW_SETUP_RUNNING,
@@ -77,7 +77,7 @@ export default function useScoreFollow({
 
   const setupFailedMessage = isDemoSession
     ? SCORE_FOLLOW_SETUP_FAILED_DEMO
-    : SCORE_FOLLOW_SETUP_NEEDS_CORRECTION
+    : SCORE_FOLLOW_NEEDS_QUICK_SETUP
   const setupReadyMessage = isDemoSession
     ? SCORE_FOLLOW_SETUP_READY_DEMO
     : SCORE_FOLLOW_SETUP_READY_USER
@@ -555,25 +555,18 @@ export default function useScoreFollow({
         }
 
         const { preview } = result
-        if (shouldAutoApplySemiAutoResult(preview)) {
-          setAutoAnchors(preview.proposedAnchors)
-          setEnabled(true)
-          setSemiAutoSetup({
-            status: 'confirmed',
-            progress: 1,
-            message: '',
-            error: null,
-            preview: null,
-          })
-          setSetupStatus({ phase: 'ready', message: setupReadyMessage })
-          return
-        }
 
-        // Even when confidence is below the auto-apply threshold, apply the
-        // anchors as a best-effort approximate result so the user gets a cursor
-        // immediately. Manual markers always override these auto guides.
+        // Apply whenever we have at least a system-start + system-end pair.
+        // High-confidence conservative results read "Auto setup complete";
+        // tolerant / geometric / low-confidence results read "Approximate
+        // cursor". Either way the cursor shows immediately — manual markers
+        // always override these auto guides.
         if (preview.proposedAnchors?.length >= 2) {
           setAutoAnchors(preview.proposedAnchors)
+          // Barline-derived per-measure anchors refine the coarse system spans.
+          if (preview.supplementalMeasureAnchors?.length >= 2) {
+            setSupplementalAnchors(preview.supplementalMeasureAnchors)
+          }
           setEnabled(true)
           setSemiAutoSetup({
             status: 'confirmed',
@@ -582,7 +575,12 @@ export default function useScoreFollow({
             error: null,
             preview: null,
           })
-          setSetupStatus({ phase: 'ready', message: setupReadyMessage })
+          const readyMessage = isDemoSession
+            ? SCORE_FOLLOW_SETUP_READY_DEMO
+            : preview.approximate
+              ? SCORE_FOLLOW_SETUP_APPROXIMATE
+              : SCORE_FOLLOW_SETUP_COMPLETE
+          setSetupStatus({ phase: 'ready', message: readyMessage })
           return
         }
 
@@ -590,9 +588,7 @@ export default function useScoreFollow({
           status: 'failed',
           progress: 0,
           message: '',
-          error:
-            preview.validationMessage ||
-            'No staff systems found — try marking system starts manually.',
+          error: result.noSystems ? SCORE_FOLLOW_NO_SYSTEMS : preview.validationMessage || '',
           preview: null,
         })
         setSetupStatus({
@@ -628,6 +624,9 @@ export default function useScoreFollow({
       anchors.length,
       clearAutoAnchors,
       setAutoAnchors,
+      setSupplementalAnchors,
+      isDemoSession,
+      setupFailedMessage,
     ],
   )
 

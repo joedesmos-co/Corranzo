@@ -16,7 +16,12 @@ function smoothFloatArray(values, radius) {
 }
 
 function pixelLuminance(data, index) {
-  return 0.299 * data[index] + 0.587 * data[index + 1] + 0.114 * data[index + 2]
+  const alpha = data[index + 3] / 255
+  const lum = 0.299 * data[index] + 0.587 * data[index + 1] + 0.114 * data[index + 2]
+  // Composite over white: PDFs that don't paint a white background render onto
+  // a transparent canvas (RGB 0, alpha 0). Without this, every pixel — ink and
+  // blank alike — would read as black and defeat staff detection on real scores.
+  return lum * alpha + 255 * (1 - alpha)
 }
 
 function isDark(data, index, threshold = 185) {
@@ -103,9 +108,10 @@ function mergeNearbyBands(bands, minGap) {
   return merged
 }
 
-function splitBandByRowValleys(rowDensity, band, height) {
+function splitBandByRowValleys(rowDensity, band, height, options = {}) {
+  const { minSplitHeightRatio = 0.45, valleyThreshold = 0.01, minSubBandNorm = 0.055 } = options
   const bandHeightPx = Math.floor((band.y1 - band.y0) * height)
-  if (bandHeightPx < height * 0.45) {
+  if (bandHeightPx < height * minSplitHeightRatio) {
     return [band]
   }
 
@@ -117,7 +123,7 @@ function splitBandByRowValleys(rowDensity, band, height) {
   let gapStart = yStart
 
   for (let y = yStart; y < yEnd; y += 1) {
-    if (rowDensity[y] < 0.01) {
+    if (rowDensity[y] < valleyThreshold) {
       if (gapRun === 0) {
         gapStart = y
       }
@@ -142,7 +148,7 @@ function splitBandByRowValleys(rowDensity, band, height) {
   for (let index = 0; index < splitPoints.length - 1; index += 1) {
     const y0 = splitPoints[index] / height
     const y1 = splitPoints[index + 1] / height
-    if (y1 - y0 >= 0.055) {
+    if (y1 - y0 >= minSubBandNorm) {
       subBands.push({ y0, y1, center: (y0 + y1) / 2 })
     }
   }
@@ -150,37 +156,72 @@ function splitBandByRowValleys(rowDensity, band, height) {
   return subBands.length > 0 ? subBands : [band]
 }
 
-function filterPlausibleSystems(bands) {
+function filterPlausibleSystems(bands, options = {}) {
+  const {
+    minBandHeightNorm = 0.055,
+    maxBandHeightNorm = 0.28,
+    centerMin = 0.12,
+    centerMax = 0.96,
+  } = options
   return bands.filter((band) => {
     const bandHeight = band.y1 - band.y0
-    if (bandHeight < 0.055 || bandHeight > 0.28) {
+    if (bandHeight < minBandHeightNorm || bandHeight > maxBandHeightNorm) {
       return false
     }
-    if (band.center < 0.12 || band.center > 0.96) {
+    if (band.center < centerMin || band.center > centerMax) {
       return false
     }
     return true
   })
 }
 
+/** Default band-quality scoring parameters (conservative / high-precision). */
+export const STAFF_BAND_QUALITY_DEFAULTS = {
+  minBandHeightNorm: 0.055,
+  maxBandHeightNorm: 0.28,
+  peakDensityThreshold: 0.035,
+  minPeaks: 3,
+  maxPeaks: 10,
+  minMeanDensity: 0.025,
+  maxMeanDensity: 0.32,
+  baseScore: 0.55,
+}
+
+/**
+ * Looser scoring for dense piano music, anime/game arrangements, lyrics and
+ * uneven scans: a denser, taller band with many ink peaks is still a staff.
+ */
+export const STAFF_BAND_QUALITY_TOLERANT = {
+  minBandHeightNorm: 0.045,
+  maxBandHeightNorm: 0.46,
+  peakDensityThreshold: 0.03,
+  minPeaks: 2,
+  maxPeaks: 80,
+  minMeanDensity: 0.015,
+  maxMeanDensity: 0.62,
+  baseScore: 0.46,
+}
+
 /**
  * Staff lines show several horizontal ink peaks; title blocks are denser or too shallow.
+ * Accepts an options object so tolerant detection can relax thresholds for dense notation.
  */
-export function scoreStaffBandQuality(imageData, band, rowDensity) {
+export function scoreStaffBandQuality(imageData, band, rowDensity, options = {}) {
+  const params = { ...STAFF_BAND_QUALITY_DEFAULTS, ...options }
   const { height } = imageData
   const y0 = Math.floor(band.y0 * height)
   const y1 = Math.ceil(band.y1 * height)
   const bandHeightPx = Math.max(1, y1 - y0)
   const bandHeightNorm = bandHeightPx / height
 
-  if (bandHeightNorm < 0.055 || bandHeightNorm > 0.28) {
+  if (bandHeightNorm < params.minBandHeightNorm || bandHeightNorm > params.maxBandHeightNorm) {
     return 0
   }
 
   let peaks = 0
   for (let y = y0 + 1; y < y1 - 1; y += 1) {
     if (
-      rowDensity[y] > 0.035 &&
+      rowDensity[y] > params.peakDensityThreshold &&
       rowDensity[y] >= rowDensity[y - 1] &&
       rowDensity[y] >= rowDensity[y + 1]
     ) {
@@ -188,7 +229,7 @@ export function scoreStaffBandQuality(imageData, band, rowDensity) {
     }
   }
 
-  if (peaks < 3 || peaks > 10) {
+  if (peaks < params.minPeaks || peaks > params.maxPeaks) {
     return 0
   }
 
@@ -198,20 +239,30 @@ export function scoreStaffBandQuality(imageData, band, rowDensity) {
   }
   const meanDensity = densitySum / bandHeightPx
 
-  if (meanDensity > 0.32) {
+  if (meanDensity > params.maxMeanDensity) {
     return 0
   }
-  if (meanDensity < 0.025) {
+  if (meanDensity < params.minMeanDensity) {
     return 0
   }
 
-  return 0.55 + Math.min(0.35, peaks * 0.04)
+  return params.baseScore + Math.min(0.35, peaks * 0.04)
 }
 
 /**
  * Find horizontal staff/system bands from row ink density (content area only).
+ * Options let tolerant detection widen the accepted band geometry.
  */
-export function detectStaffSystems(imageData, contentBounds = null) {
+export function detectStaffSystems(imageData, contentBounds = null, options = {}) {
+  const {
+    denseThreshold = 0.024,
+    minBandHeightNorm = 0.055,
+    maxBandHeightNorm = 0.28,
+    centerMin = 0.12,
+    centerMax = 0.96,
+    valleyThreshold = 0.01,
+    minSplitHeightRatio = 0.45,
+  } = options
   const { height } = imageData
   const bounds = contentBounds ?? detectContentBounds(imageData)
   const rowDensity = computeRowDensityInContent(imageData, bounds)
@@ -225,7 +276,7 @@ export function detectStaffSystems(imageData, contentBounds = null) {
   let gapRun = 0
 
   for (let y = 0; y < height; y += 1) {
-    const dense = smoothed[y] > 0.024
+    const dense = smoothed[y] > denseThreshold
     if (dense) {
       if (!inBand) {
         startY = y
@@ -257,19 +308,37 @@ export function detectStaffSystems(imageData, contentBounds = null) {
   }
 
   const merged = mergeNearbyBands(rawBands, Math.max(6, Math.floor(height * 0.02)))
-  const split = merged.flatMap((band) => splitBandByRowValleys(smoothed, band, height))
-  const filtered = filterPlausibleSystems(split)
+  const split = merged.flatMap((band) =>
+    splitBandByRowValleys(smoothed, band, height, {
+      valleyThreshold,
+      minSplitHeightRatio,
+      minSubBandNorm: minBandHeightNorm,
+    }),
+  )
+  const filtered = filterPlausibleSystems(split, {
+    minBandHeightNorm,
+    maxBandHeightNorm,
+    centerMin,
+    centerMax,
+  })
 
   return filtered.map((band) => ({ ...band, contentBounds: bounds }))
 }
 
 const HEADER_CUTOFF_NORM = 0.16
+const TOLERANT_HEADER_CUTOFF_NORM = 0.11
 const MIN_STAFF_INK_WIDTH_RATIO = 0.42
+const TOLERANT_MIN_STAFF_INK_WIDTH_RATIO = 0.26
 const MAX_SYSTEMS_PER_PAGE = 6
+const TOLERANT_MAX_SYSTEMS_PER_PAGE = 14
 
 /**
  * Conservative staff list: drops header/title bands and non-staff ink regions.
  */
+export function systemInkWidthRatio(imageData, contentBounds, band) {
+  return staffHorizontalInkRatio(imageData, contentBounds, band)
+}
+
 function staffHorizontalInkRatio(imageData, contentBounds, band) {
   const { width, height, data } = imageData
   const y0 = Math.floor(band.y0 * height)
@@ -317,6 +386,158 @@ export function detectConservativeStaffSystems(imageData, contentBounds = null) 
     .map((entry) => entry.system)
 }
 
+/**
+ * Tolerant staff list — STAGE 2 of auto setup.
+ *
+ * Trades precision for recall so dense piano scores, anime/game arrangements,
+ * lyric-heavy charts and uneven scans still produce usable system bands. Uses
+ * the looser quality scorer, a wider accepted band geometry and a more
+ * aggressive valley split so merged systems get separated. Header/title ink is
+ * still dropped. Returns at most `maxSystems` bands (kept by descending score).
+ */
+export function detectTolerantStaffSystems(imageData, contentBounds = null, options = {}) {
+  const { maxSystems = TOLERANT_MAX_SYSTEMS_PER_PAGE } = options
+  const bounds = contentBounds ?? detectContentBounds(imageData)
+  const rowDensity = computeRowDensityInContent(imageData, bounds)
+  const smoothed = smoothFloatArray(rowDensity, 2)
+  const candidates = detectStaffSystems(imageData, bounds, {
+    denseThreshold: 0.02,
+    minBandHeightNorm: STAFF_BAND_QUALITY_TOLERANT.minBandHeightNorm,
+    maxBandHeightNorm: STAFF_BAND_QUALITY_TOLERANT.maxBandHeightNorm,
+    centerMin: 0.1,
+    centerMax: 0.97,
+    valleyThreshold: 0.018,
+    minSplitHeightRatio: 0.3,
+  })
+
+  const scored = candidates
+    .map((system) => ({
+      system,
+      score: scoreStaffBandQuality(imageData, system, smoothed, STAFF_BAND_QUALITY_TOLERANT),
+      inkWidth: staffHorizontalInkRatio(imageData, bounds, system),
+    }))
+    .filter(
+      (entry) =>
+        entry.score > 0 &&
+        entry.system.y0 >= TOLERANT_HEADER_CUTOFF_NORM &&
+        entry.inkWidth >= TOLERANT_MIN_STAFF_INK_WIDTH_RATIO,
+    )
+    .sort((a, b) => b.score - a.score)
+    .slice(0, maxSystems)
+
+  return scored.sort((a, b) => a.system.y0 - b.system.y0).map((entry) => entry.system)
+}
+
+/**
+ * Geometric fallback — STAGE 4 last-resort band estimate.
+ *
+ * When pixel-based detection can't isolate staff systems, split the inked
+ * content region (below the header) into bands. When a `systemCount` hint is
+ * available (e.g. from MusicXML system breaks) we target that many bands and
+ * snap cut points to the nearest row-density valley; otherwise we estimate the
+ * count from strong valleys. Always returns ≥1 band when the page has ink, so
+ * an approximate cursor can still be shown.
+ */
+export function estimateSystemBandsFromContent(imageData, contentBounds = null, options = {}) {
+  const { systemCount = null, maxSystems = TOLERANT_MAX_SYSTEMS_PER_PAGE, headerCutoff = TOLERANT_HEADER_CUTOFF_NORM } =
+    options
+  const { height } = imageData
+  const bounds = contentBounds ?? detectContentBounds(imageData)
+  const rowDensity = computeRowDensityInContent(imageData, bounds)
+  const smoothed = smoothFloatArray(rowDensity, 2)
+
+  // Inked vertical extent below the header band.
+  const inkThreshold = 0.012
+  const headerPx = Math.floor(headerCutoff * height)
+  let top = -1
+  let bottom = -1
+  for (let y = headerPx; y < height; y += 1) {
+    if (smoothed[y] > inkThreshold) {
+      if (top === -1) {
+        top = y
+      }
+      bottom = y
+    }
+  }
+
+  if (top === -1 || bottom <= top) {
+    return []
+  }
+
+  const regionHeight = bottom - top
+  if (regionHeight < height * 0.04) {
+    // A single thin band of ink — treat the whole inked region as one system.
+    const y0 = top / height
+    const y1 = bottom / height
+    return [{ y0, y1, center: (y0 + y1) / 2, contentBounds: bounds, estimated: true }]
+  }
+
+  // Collect candidate valleys (low-density gaps) inside the inked region.
+  const valleys = []
+  let runStart = -1
+  for (let y = top; y <= bottom; y += 1) {
+    if (smoothed[y] < inkThreshold) {
+      if (runStart === -1) {
+        runStart = y
+      }
+    } else if (runStart !== -1) {
+      valleys.push((runStart + y) / 2)
+      runStart = -1
+    }
+  }
+
+  let targetBands
+  if (Number.isFinite(systemCount) && systemCount >= 1) {
+    targetBands = Math.min(maxSystems, Math.max(1, Math.round(systemCount)))
+  } else {
+    targetBands = Math.min(maxSystems, Math.max(1, valleys.length + 1))
+  }
+
+  if (targetBands <= 1) {
+    const y0 = top / height
+    const y1 = bottom / height
+    return [{ y0, y1, center: (y0 + y1) / 2, contentBounds: bounds, estimated: true }]
+  }
+
+  // Even partition points, snapped to the nearest valley when one is close.
+  const cutsPx = []
+  for (let index = 1; index < targetBands; index += 1) {
+    const evenCut = top + (regionHeight * index) / targetBands
+    let snapped = evenCut
+    let bestDist = regionHeight / targetBands / 2
+    for (const valley of valleys) {
+      const dist = Math.abs(valley - evenCut)
+      if (dist < bestDist) {
+        bestDist = dist
+        snapped = valley
+      }
+    }
+    cutsPx.push(snapped)
+  }
+
+  const boundariesPx = [top, ...cutsPx.sort((a, b) => a - b), bottom]
+  const bands = []
+  for (let index = 0; index < boundariesPx.length - 1; index += 1) {
+    const y0 = boundariesPx[index] / height
+    const y1 = boundariesPx[index + 1] / height
+    if (y1 - y0 > 0.012) {
+      bands.push({ y0, y1, center: (y0 + y1) / 2, contentBounds: bounds, estimated: true })
+    }
+  }
+
+  return bands.length > 0
+    ? bands
+    : [
+        {
+          y0: top / height,
+          y1: bottom / height,
+          center: (top + bottom) / (2 * height),
+          contentBounds: bounds,
+          estimated: true,
+        },
+      ]
+}
+
 export function systemStartAnchorPosition(system, contentBounds) {
   const inset = 0.05
   const x =
@@ -340,4 +561,9 @@ export function systemEndAnchorPosition(system, contentBounds) {
   }
 }
 
-export { HEADER_CUTOFF_NORM, MAX_SYSTEMS_PER_PAGE }
+export {
+  HEADER_CUTOFF_NORM,
+  TOLERANT_HEADER_CUTOFF_NORM,
+  MAX_SYSTEMS_PER_PAGE,
+  TOLERANT_MAX_SYSTEMS_PER_PAGE,
+}
