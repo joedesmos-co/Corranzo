@@ -8,6 +8,43 @@ cases. Manual marking is now a rare last-resort rescue path, not normal flow.
 
 ---
 
+## Light-classical pass (adaptive detection)
+
+A clean classical piano score (Satie's *Gymnopédie No. 1*) failed with "Auto
+setup could not find systems," while dense Guren worked. The staff-line detector
+used a **fixed** ink threshold (luminance < 170) and a fixed run-coverage
+requirement — fine for dense dark engraving, but light/thin classical staff
+lines (luminance ~185–210) fell below it, so no staff-line rows were found, and
+very light lines even read as a *blank* page (skipped).
+
+**Fixes (detection only — Guren mapping untouched).**
+- **Adaptive ink threshold** (`estimateInkThreshold`): the midpoint between the
+  page's paper background and its ink level. Dark engraving → low threshold
+  (precise); light engraving → high threshold (catches faint lines). Drives both
+  staff-line and barline detection.
+- **Broken-line + multi-pass detection**: a row qualifies as a staff line by its
+  longest contiguous dark run OR its total dark fraction (handles lines crossed
+  by noteheads/slurs); passes run strict→permissive (coverage and short-system
+  tolerant) and accept the first plausible result.
+- **Consistent-separation pairing**: treble/bass are grouped into grand-staff
+  systems when the chunk-boundary gaps *consistently* exceed the within-pair
+  gaps — not by a fixed ratio. Satie's airy engraving has a within-pair gap only
+  ~12% smaller than the system gap, but the separation is clean, so it pairs
+  correctly; uniform spacing (merged staves) is left unchunked.
+- **Adaptive ink ratio** so a light page is never skipped as blank.
+- The staff-detection failure path now emits a debug trace (analysis threshold,
+  candidate rows, max run coverage, clusters, reason).
+
+**Result:** the real Gymnopédie PDF + MXL now auto-detects 15 systems (≈5 per
+page) at the staff-line stage with barline-counted measure ranges and a smooth
+per-measure cursor — no manual setup. Guren is byte-for-byte unchanged (19
+systems, exact acceptance starts). A synthetic light-classical fixture (thin
+light lines, short systems, whitespace, slurs) and a dense-arrangement
+regression are covered by tests, and "a clean page with visible staff lines can
+never return no-systems" is asserted across a range of line intensities.
+
+---
+
 ## Playback-following pass (cursor movement)
 
 With PDF mapping correct, the cursor was on the right system but moved wrong

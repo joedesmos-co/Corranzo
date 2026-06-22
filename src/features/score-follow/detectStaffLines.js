@@ -29,51 +29,77 @@ function contentColumns(imageData, contentBounds) {
 }
 
 /**
- * Per-row fraction of the content width covered by the longest contiguous run
- * of dark pixels. Staff lines → high (≈0.7–1.0); note rows → low (notes don't
- * span the width as one run).
+ * Adaptive ink threshold: the midpoint between the paper background and the ink
+ * level. Dark engravings get a low threshold (precise, no over-detection);
+ * light/thin engravings (Satie-style classical) get a high threshold so their
+ * faint staff lines still register. Avoids the fixed-170 cutoff that dropped
+ * light scores to coarse fallbacks or "no systems".
  */
-export function computeHorizontalRunCoverage(imageData, contentBounds, darkThreshold = 170) {
+export function estimateInkThreshold(imageData, contentBounds) {
   const { width, height, data } = imageData
-  const { left, right, span } = contentColumns(imageData, contentBounds)
-  const coverage = new Float32Array(height)
-  for (let y = 0; y < height; y += 1) {
-    let run = 0
-    let best = 0
+  const { left, right } = contentColumns(imageData, contentBounds)
+  const lums = []
+  const stepY = Math.max(1, Math.floor(height / 320))
+  const stepX = Math.max(1, Math.floor((right - left + 1) / 320))
+  for (let y = 0; y < height; y += stepY) {
     const rowOffset = y * width
-    for (let x = left; x <= right; x += 1) {
-      const index = (rowOffset + x) * 4
-      if (compositeLuminance(data, index) < darkThreshold) {
-        run += 1
-        if (run > best) best = run
-      } else {
-        run = 0
-      }
+    for (let x = left; x <= right; x += stepX) {
+      lums.push(compositeLuminance(data, (rowOffset + x) * 4))
     }
-    coverage[y] = best / span
   }
-  return coverage
+  if (lums.length === 0) {
+    return 170
+  }
+  lums.sort((a, b) => a - b)
+  const background = lums[Math.floor(lums.length * 0.9)] // paper (high percentile)
+  const inkPixels = lums.filter((l) => l < background - 15)
+  if (inkPixels.length < lums.length * 0.002) {
+    return 170 // near-blank region — keep the conservative default
+  }
+  const inkLevel = inkPixels[Math.floor(inkPixels.length * 0.5)] // median ink
+  return Math.min(235, Math.max(150, (background + inkLevel) / 2))
 }
 
 /**
- * Detect individual staves (each a thin band of ~5 staff lines) from staff-line
- * rows. Returns bands { y0, y1, center } in normalized page coordinates.
+ * Per-row staff-line scores over the content width:
+ *   - run:  longest contiguous dark run / content width (solid staff lines)
+ *   - dark: total dark fraction / content width (handles BROKEN lines where
+ *           noteheads/stems interrupt the staff line)
  */
-export function detectStaffLineStaves(imageData, contentBounds, options = {}) {
-  const { coverageThreshold = 0.5, darkThreshold = 170, minGapNorm = 0.018 } = options
-  const { height } = imageData
-  const coverage = computeHorizontalRunCoverage(imageData, contentBounds, darkThreshold)
-
-  const lineRows = []
+export function computeRowStaffScores(imageData, contentBounds, darkThreshold = 170) {
+  const { width, height, data } = imageData
+  const { left, right, span } = contentColumns(imageData, contentBounds)
+  const run = new Float32Array(height)
+  const dark = new Float32Array(height)
   for (let y = 0; y < height; y += 1) {
-    if (coverage[y] > coverageThreshold) {
-      lineRows.push(y)
+    let current = 0
+    let best = 0
+    let total = 0
+    const rowOffset = y * width
+    for (let x = left; x <= right; x += 1) {
+      if (compositeLuminance(data, (rowOffset + x) * 4) < darkThreshold) {
+        current += 1
+        total += 1
+        if (current > best) best = current
+      } else {
+        current = 0
+      }
     }
+    run[y] = best / span
+    dark[y] = total / span
   }
+  return { run, dark }
+}
+
+/** Backwards-compatible: longest-run coverage per row. */
+export function computeHorizontalRunCoverage(imageData, contentBounds, darkThreshold = 170) {
+  return computeRowStaffScores(imageData, contentBounds, darkThreshold).run
+}
+
+function clusterStaffLineRows(lineRows, height, minGapNorm) {
   if (lineRows.length === 0) {
     return []
   }
-
   const gapPx = Math.max(3, Math.floor(height * minGapNorm))
   const clusters = []
   let current = [lineRows[0]]
@@ -85,14 +111,66 @@ export function detectStaffLineStaves(imageData, contentBounds, options = {}) {
     current.push(lineRows[i])
   }
   clusters.push(current)
-
   return clusters
     .map((rows) => {
       const y0 = rows[0] / height
       const y1 = rows[rows.length - 1] / height
       return { y0, y1, center: (y0 + y1) / 2, lineCount: rows.length }
     })
-    .filter((stave) => stave.lineCount >= 2) // a real stave shows several line rows
+    .filter((stave) => stave.lineCount >= 2)
+}
+
+/**
+ * Detect individual staves from staff-line rows, using an adaptive ink
+ * threshold and multiple passes (strict → looser) so the detector handles:
+ * dense dark arrangements, thin/light classical engraving, shorter systems
+ * that don't span the page, and broken staff lines crossed by noteheads/slurs.
+ *
+ * Returns the detected staves; attaches `lastTrace` to the function for the
+ * dev debug report when nothing is found.
+ */
+export function detectStaffLineStaves(imageData, contentBounds, options = {}) {
+  const { minGapNorm = 0.018 } = options
+  const { height } = imageData
+  const adaptive = options.darkThreshold ?? estimateInkThreshold(imageData, contentBounds)
+
+  // Passes from precise to permissive. Each accepts a row as a staff line when
+  // its longest run OR (for broken lines) its total dark fraction is high.
+  const passes = [
+    { dark: adaptive, runCov: 0.5, darkCov: 0.85 },
+    { dark: adaptive, runCov: 0.35, darkCov: 0.6 },
+    { dark: Math.min(235, adaptive + 25), runCov: 0.3, darkCov: 0.55 },
+  ]
+
+  let trace = null
+  for (const pass of passes) {
+    const { run, dark } = computeRowStaffScores(imageData, contentBounds, pass.dark)
+    const lineRows = []
+    let maxRun = 0
+    for (let y = 0; y < height; y += 1) {
+      if (run[y] > maxRun) maxRun = run[y]
+      if (run[y] > pass.runCov || dark[y] > pass.darkCov) {
+        lineRows.push(y)
+      }
+    }
+    const staves = clusterStaffLineRows(lineRows, height, minGapNorm)
+    trace = {
+      adaptiveThreshold: Math.round(adaptive),
+      passDarkThreshold: Math.round(pass.dark),
+      runCoverage: pass.runCov,
+      darkCoverage: pass.darkCov,
+      candidateRows: lineRows.length,
+      maxRunCoverage: Number(maxRun.toFixed(3)),
+      staves: staves.length,
+    }
+    if (staves.length >= 1) {
+      detectStaffLineStaves.lastTrace = { ...trace, accepted: true }
+      return staves
+    }
+  }
+
+  detectStaffLineStaves.lastTrace = { ...trace, accepted: false, reason: 'no staff-line rows passed any threshold' }
+  return []
 }
 
 /**
@@ -117,10 +195,12 @@ export function groupStavesIntoSystems(staves, stavesPerSystem = 1) {
   const perSystem = Math.max(1, Math.round(stavesPerSystem))
 
   // Hypothesis test for chunking by `stavesPerSystem` (e.g. pair treble+bass):
-  // it's correct only when the gaps WITHIN a chunk are clearly smaller than the
-  // gaps BETWEEN chunks. This works whether treble/bass are detected as two
-  // staves (chunk them) or merged into one (don't) — without a brittle fixed
-  // ratio on the raw gap spread.
+  // correct only when the gaps WITHIN a chunk are consistently smaller than the
+  // gaps BETWEEN chunks. Works whether treble/bass are detected as two staves
+  // (chunk them) or merged into one (don't). Uses a CONSISTENT-SEPARATION test
+  // rather than a fixed ratio, because airy classical engraving (Satie) has a
+  // within-pair gap only slightly smaller than the between-system gap — but the
+  // separation is still clean (every inter-gap exceeds every intra-gap).
   if (perSystem >= 2 && staves.length > perSystem && staves.length % perSystem === 0) {
     const intra = []
     const inter = []
@@ -132,7 +212,7 @@ export function groupStavesIntoSystems(staves, stavesPerSystem = 1) {
         intra.push(gap) // gap inside a chunk
       }
     }
-    if (inter.length > 0 && intra.length > 0 && median(inter) > median(intra) * 1.2) {
+    if (chunkingIsConsistent(inter, intra)) {
       const systems = []
       for (let i = 0; i < staves.length; i += perSystem) {
         systems.push(mergeStaveGroup(staves.slice(i, i + perSystem)))
@@ -144,6 +224,26 @@ export function groupStavesIntoSystems(staves, stavesPerSystem = 1) {
   // Otherwise each detected cluster is already a whole system (a merged grand
   // staff, or genuinely single-staff systems).
   return staves.map((stave) => ({ ...stave, staveCount: 1 }))
+}
+
+/**
+ * True when chunk-boundary gaps consistently exceed within-chunk gaps — i.e.
+ * the staves really do pair up. Median must be a touch larger AND most boundary
+ * gaps must clear the largest within-chunk gap, so uniform spacing (a merged
+ * grand staff or evenly-spaced single staves) is NOT falsely chunked.
+ */
+function chunkingIsConsistent(inter, intra) {
+  if (inter.length === 0 || intra.length === 0) {
+    return false
+  }
+  const medInter = median(inter)
+  const medIntra = median(intra)
+  if (medInter <= medIntra * 1.04) {
+    return false // gaps are essentially uniform → not paired
+  }
+  const maxIntra = Math.max(...intra)
+  const interClearingIntra = inter.filter((g) => g > maxIntra * 0.9).length / inter.length
+  return interClearingIntra >= 0.7
 }
 
 function median(values) {
@@ -220,17 +320,27 @@ export function detectSystemBarlinePositions(imageData, contentBounds, system, o
  */
 export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
   const { stavesPerSystem = 1, countBarlines = true } = options
-  const staves = detectStaffLineStaves(imageData, contentBounds, options)
+  // Adaptive ink threshold drives BOTH staff-line and barline detection so light
+  // engravings register consistently.
+  const inkThreshold = options.darkThreshold ?? estimateInkThreshold(imageData, contentBounds)
+  const staves = detectStaffLineStaves(imageData, contentBounds, {
+    ...options,
+    darkThreshold: inkThreshold,
+  })
+  const trace = detectStaffLineStaves.lastTrace ?? null
   const grouped = groupStavesIntoSystems(staves, stavesPerSystem)
 
+  // Barlines are darker than staff lines, so bias the threshold toward ink but
+  // never below the staff-line threshold.
+  const barlineThreshold = Math.min(inkThreshold, Math.max(150, inkThreshold - 20))
   const systems = grouped.map((system) => {
     const barlineCount = countBarlines
-      ? countSystemBarlines(imageData, contentBounds, system, options)
+      ? countSystemBarlines(imageData, contentBounds, system, { darkThreshold: barlineThreshold })
       : 0
     // N barlines (start + internal + end) bound N-1 measures.
     const measureEstimate = barlineCount >= 2 ? barlineCount - 1 : null
     return { ...system, barlineCount, measureEstimate, contentBounds }
   })
 
-  return { staves, systems }
+  return { staves, systems, inkThreshold: Math.round(inkThreshold), trace }
 }

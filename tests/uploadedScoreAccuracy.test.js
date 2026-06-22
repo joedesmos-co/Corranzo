@@ -222,3 +222,34 @@ describe('real uploaded Guren PDF + MXL (guarded)', () => {
     expect(starts).toEqual(GUREN_EXPECTED_STARTS)
   })
 })
+
+// ── Guarded: the genuine uploaded Gymnopédie No. 1 (light classical) ──────────
+let gymReady = false
+let gymPages = []
+let gymTiming = null
+try {
+  const meta = JSON.parse(readFileSync('/tmp/gym/r1000/meta.json', 'utf8'))
+  gymPages = meta.map((m) => ({
+    width: m.width,
+    height: m.height,
+    data: new Uint8ClampedArray(readFileSync(`/tmp/gym/r1000/page${m.page}.rgba`)),
+  }))
+  gymTiming = parseMusicXml(readFileSync('/tmp/gym/score.xml', 'utf8'))
+  gymReady = gymPages.length >= 1 && gymTiming.measures.length > 0
+} catch {
+  gymPages = []
+}
+const gymIt = gymReady ? it : it.skip
+
+describe('real uploaded Gymnopédie PDF + MXL (guarded)', () => {
+  gymIt('auto-detects systems on this clean light classical score', async () => {
+    const result = await analyze(gymPages, gymTiming)
+    expect(result.ok).toBe(true) // must NOT be "Auto setup could not find systems"
+    expect(result.preview.stage).toBe(DETECTION_STAGE.STAFF_LINES)
+    expect(result.preview.systemCount).toBeGreaterThanOrEqual(10)
+    // Treble/bass paired into grand-staff systems on every page (≈5 per page).
+    expect(result.preview.debugReport.perPage.every((p) => p.systemCount >= 4)).toBe(true)
+    // One stable per-measure anchor for every written measure.
+    expect(result.preview.supplementalMeasureAnchors.length).toBe(gymTiming.measures.length)
+  })
+})

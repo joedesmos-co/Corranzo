@@ -246,6 +246,70 @@ export function multiPageScore({
   )
 }
 
+/**
+ * Light classical-piano page (Satie / Gymnopédie style): THIN, LIGHT-gray staff
+ * lines, SHORTER systems that don't span the page, large vertical whitespace,
+ * and slur arcs that cross the gaps between systems. This is the layout that
+ * defeated the fixed-threshold detector and returned "no systems".
+ */
+export function lightClassicalPage({
+  width = 480,
+  height = 1000,
+  systems = 4,
+  measuresPerSystem = 4,
+  lineValue = 185, // light gray (not near-black)
+} = {}) {
+  const img = createPage(width, height)
+  // Short systems: ~68% of width, centered-ish (lots of left/right margin).
+  const x0 = Math.floor(width * 0.17)
+  const x1 = Math.floor(width * 0.85)
+  const lineGap = 4 // thin staff (5 lines × 4px)
+  const staffHeight = 4 * lineGap // 16
+  const innerGap = 22 // treble↔bass: detected as two separate staves
+  const grandHeight = staffHeight + innerGap + staffHeight // 54
+  const systemGap = 52 // > innerGap → clean bimodal separation for pairing
+  const top = Math.floor(height * 0.14)
+
+  const drawLightStaff = (topY) => {
+    for (let l = 0; l < 5; l += 1) {
+      hLine(img, topY + l * lineGap, x0, x1, lineValue)
+    }
+  }
+
+  const systemBands = []
+  for (let s = 0; s < systems; s += 1) {
+    const sysTop = top + s * (grandHeight + systemGap)
+    drawLightStaff(sysTop)
+    const bassTop = sysTop + staffHeight + innerGap
+    drawLightStaff(bassTop)
+    const bandBottom = bassTop + staffHeight
+    systemBands.push({ top: sysTop, bottom: bandBottom })
+
+    // Light barlines spanning the grand staff (treble top → bass bottom).
+    for (let m = 0; m <= measuresPerSystem; m += 1) {
+      const bx = Math.floor(x0 + ((x1 - x0) * m) / measuresPerSystem)
+      vLine(img, bx, sysTop, bandBottom, lineValue)
+    }
+    // A couple of sparse noteheads.
+    for (let n = 0; n < measuresPerSystem * 2; n += 1) {
+      const cx = x0 + Math.floor(((x1 - x0) * n) / (measuresPerSystem * 2)) + 6
+      fillRect(img, cx, sysTop + 6, cx + 3, sysTop + 9, 60)
+    }
+
+    // Slur arc in the whitespace BELOW the system (crosses toward the next one).
+    if (s < systems - 1) {
+      const arcY = bandBottom + Math.floor(systemGap / 2)
+      for (let k = 0; k <= 30; k += 1) {
+        const ax = x0 + Math.floor(((x1 - x0) * 0.3 * k) / 30)
+        const ay = arcY - Math.round(6 * Math.sin((Math.PI * k) / 30))
+        setPx(img, ax, ay, 90)
+      }
+    }
+  }
+  img.systemBands = systemBands
+  return img
+}
+
 /** Blank page (no ink) — used to assert the concise no-systems failure. */
 export function blankPage(width = 460, height = 620) {
   return createPage(width, height)

@@ -99,7 +99,9 @@ export function getPageInkRatio(imageData) {
       const index = (y * width + x) * 4
       total += 1
       const lum = compositeLuminance(data, index)
-      if (lum < 200) {
+      // 230 (not 200) so light/thin classical staff lines count as ink and the
+      // page isn't skipped as blank. Clean white paper (~255) stays well above.
+      if (lum < 230) {
         dark += 1
       }
     }
