@@ -376,6 +376,60 @@ export function buildSystemSpanAnchors(systemEntries, spans) {
 }
 
 /**
+ * One canonical visual anchor per WRITTEN measure, evenly spaced across each
+ * detected system's horizontal range. This is what drives the playback cursor:
+ * with an anchor for every measure, the resolver glides smoothly measure→measure
+ * instead of stalling on the system start then jumping/bouncing across a single
+ * start→end span. Each anchor records the system-end x so the final measure of a
+ * system can glide to the edge before the cursor drops to the next system.
+ *
+ * x is evenly distributed from the system measure count (stable, monotonic) —
+ * barline x-positions are intentionally NOT used here because they are noisy and
+ * caused the end-jitter; the measure COUNT already came from barline detection.
+ */
+export function buildPerMeasureSystemAnchors(systemEntries, spans) {
+  const anchors = []
+
+  spans.forEach((span, index) => {
+    const entry = systemEntries[index]
+    const measureNumbers = span?.measureNumbers
+    if (!entry || !measureNumbers?.length) {
+      return
+    }
+
+    const startPos = systemStartAnchorPosition(entry.system, entry.contentBounds)
+    const endPos = systemEndAnchorPosition(entry.system, entry.contentBounds)
+    const xStart = startPos.x
+    const xEnd = endPos.x
+    const count = measureNumbers.length
+
+    measureNumbers.forEach((measureNumber, i) => {
+      // Measure i starts at i/count across the system; the last measure gets the
+      // remaining span to glide into (via systemEndX in the resolver).
+      const x = count <= 1 ? xStart : xStart + (xEnd - xStart) * (i / count)
+      anchors.push({
+        id: createAnchorId(),
+        page: entry.page,
+        x,
+        y: startPos.y,
+        measureNumber,
+        source: ANCHOR_SOURCE.AUTO_MEASURE,
+        meta: {
+          role: 'measure',
+          systemIndex: index,
+          measuresInSpan: count,
+          indexInSystem: i,
+          lastInSystem: i === count - 1,
+          systemEndX: xEnd,
+        },
+      })
+    })
+  })
+
+  return anchors.sort((left, right) => left.measureNumber - right.measureNumber)
+}
+
+/**
  * Per-measure anchors from barline peaks — only when every system span has a confident barline fit.
  */
 export function buildBarlineMeasureAnchorsIfConfident(systemEntries, spans) {
@@ -579,10 +633,10 @@ export async function analyzeSemiAutoScoreSetup({
     ? allocateSpansByCounts(systemEntries, measureNumbers, measureCounts)
     : allocateMeasureSpansToSystems(systemEntries, measureNumbers, timingMap)
   const proposedAnchors = buildSystemSpanAnchors(systemEntries, spans)
-  const supplementalMeasureAnchors = buildBarlineMeasureAnchorsIfConfident(
-    systemEntries,
-    spans,
-  )
+  // One canonical anchor per written measure drives the cursor (AUTO_MEASURE
+  // outranks the AUTO_SYSTEM start/end spans during dedupe), so playback glides
+  // measure-by-measure instead of stalling then jumping across a whole system.
+  const supplementalMeasureAnchors = buildPerMeasureSystemAnchors(systemEntries, spans)
   const systemsByPage = buildSystemsByPage(systemEntries, spans)
 
   const validation = validateAutoAlignResult({

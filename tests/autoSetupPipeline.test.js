@@ -248,15 +248,19 @@ describe('analyzeSemiAutoScoreSetup — fixture matrix', () => {
     expect(pagesWithAnchors.has(2)).toBe(true)
   })
 
-  it('Fixture 4: visible staves, weak barlines → system spans, no measure anchors', async () => {
+  it('Fixture 4: visible staves, weak barlines → still one anchor per measure', async () => {
     const result = await analyze(
       [weakBarlinePage({ systems: 3, measuresPerSystem: 4 })],
       buildTimingMap(12, { breakEvery: 4 }),
     )
     expect(result.ok).toBe(true)
     expect(result.preview.proposedAnchors.length).toBeGreaterThanOrEqual(2)
-    // No reliable barlines → fall back to system-span anchors only.
-    expect(result.preview.supplementalMeasureAnchors.length).toBe(0)
+    // Even without reliable barlines, every written measure gets a stable
+    // (evenly-spaced) per-measure anchor so the cursor follows measure-by-measure.
+    expect(result.preview.supplementalMeasureAnchors.length).toBe(12)
+    expect(
+      result.preview.supplementalMeasureAnchors.every((a) => a.source === ANCHOR_SOURCE.AUTO_MEASURE),
+    ).toBe(true)
   })
 
   it('Fixture 5: no MusicXML system hints → still maps measures across systems', async () => {

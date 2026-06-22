@@ -150,18 +150,29 @@ export function resolveScoreFollowCursor({
 
   const exact = resolveTrustedAnchorForMeasure(trustedAnchors, currentMeasure.number)
   if (exact) {
-    // Intra-measure glide: if the next measure's anchor is on the same system
-    // (same page, y within 0.02), advance x proportionally to beat progress
-    // so the cursor glides continuously across the measure rather than jumping.
+    // Intra-measure glide: advance x within the measure toward a glide target so
+    // the cursor moves continuously instead of stalling, then snapping.
+    //   - next measure on the SAME system → glide toward it.
+    //   - last measure of a system → glide toward the system's right edge
+    //     (systemEndX), so it reaches the end before dropping to the next line.
+    // The target is always to the RIGHT of exact.x (forward only), so x stays
+    // monotonic within the measure — no backward jitter.
     const nextAnchor = resolveTrustedAnchorForMeasure(
       trustedAnchors,
       currentMeasure.number + 1,
     )
-    if (
+    const nextSameSystem =
       nextAnchor &&
       nextAnchor.page === exact.page &&
       Math.abs(nextAnchor.y - exact.y) < 0.02
-    ) {
+    let glideTargetX = null
+    if (nextSameSystem && nextAnchor.x > exact.x) {
+      glideTargetX = nextAnchor.x
+    } else if (typeof exact.meta?.systemEndX === 'number' && exact.meta.systemEndX > exact.x) {
+      glideTargetX = exact.meta.systemEndX
+    }
+
+    if (glideTargetX != null) {
       const measureWindow = getMeasurePlaybackWindow(
         timingMap,
         currentMeasure.number,
@@ -178,7 +189,7 @@ export function resolveScoreFollowCursor({
           cursor: {
             visible: true,
             page: exact.page,
-            x: lerp(exact.x, nextAnchor.x, progress),
+            x: lerp(exact.x, glideTargetX, progress),
             y: exact.y,
             measureNumber: exact.measureNumber,
             progress,

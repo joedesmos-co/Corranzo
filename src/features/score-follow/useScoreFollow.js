@@ -940,6 +940,18 @@ export default function useScoreFollow({
       cursorShownBecause: anchorTrust.showCursor
         ? `trust=${anchorTrust.level}`
         : `blocked: needsSetup=${anchorTrust.needsSetup}`,
+      // Live cursor decision (a dev trace: log `debug` each frame while playing).
+      playbackTime: practiceTime,
+      cursorScoreMeasure: cursor?.measureNumber ?? null,
+      cursorBeatProgress: cursor?.progress ?? null,
+      cursorX: cursor?.x ?? null,
+      cursorY: cursor?.y ?? null,
+      cursorConfidence: cursor?.confidence ?? null,
+      cursorInterpolated: Boolean(cursor?.interpolated),
+      cursorMotion: cursor?.lockExact ? 'locked' : cursor?.interpolated ? 'glide' : 'hold',
+      // The cursor's single timing source of truth is the MusicXML timeline.
+      timingSource: 'musicxml',
+      timingSourceId: timingSourceId ?? null,
       // Dev-only auto-setup analysis report (null until auto setup runs).
       autoSetup: autoSetupReport,
     }),
@@ -951,6 +963,9 @@ export default function useScoreFollow({
       anchorCounts,
       anchorTrust,
       autoSetupReport,
+      cursor,
+      practiceTime,
+      timingSourceId,
       pdfFileName,
       pdfFingerprint,
       useBundledDemoAnchors,

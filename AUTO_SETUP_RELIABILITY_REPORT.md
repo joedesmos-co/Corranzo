@@ -8,6 +8,45 @@ cases. Manual marking is now a rare last-resort rescue path, not normal flow.
 
 ---
 
+## Playback-following pass (cursor movement)
+
+With PDF mapping correct, the cursor was on the right system but moved wrong
+during playback: it stalled on the first measure, jumped to the system end, and
+jittered backward before dropping to the next line.
+
+**Cause (proven with a cursor trace on the real Guren anchors):** each system
+had only **two** anchors — a start (measure 1, x≈0.085) and an end (measure 5,
+x≈0.901). Measure 1 had no next-measure anchor to glide to, so it *sat*;
+measures 2–4 had no anchors at all and were bracket-interpolated across the
+*entire* start→end span, producing a jump to ~x0.57 then non-monotonic
+backward bounces.
+
+**Fix.**
+- **One canonical anchor per written measure** (`buildPerMeasureSystemAnchors`):
+  evenly spaced across each detected system's x-range (stable and monotonic; the
+  measure *count* still comes from barline detection). These `AUTO_MEASURE`
+  anchors outrank the `AUTO_SYSTEM` start/end spans during dedupe, so there is
+  exactly one canonical visual anchor per measure — no duplicate bouncing.
+- **Resolver glide** (`resolveScoreFollowCursor`): within a measure the cursor
+  glides toward the next measure's anchor on the same system, or — for the last
+  measure of a system — toward the system's right edge (`systemEndX`). The glide
+  target is always to the right of the current x, so movement is **forward-only
+  and monotonic**; the system end is reached only on the actual last measure.
+- Written-measure anchors are never repeat-expanded; repeats affect playback
+  order only. The resolver's single timing source of truth is the MusicXML
+  performed timeline (measure lookup and anchor times come from the same map).
+- The dev debug object (`scoreFollow.debug`) gained a live cursor trace:
+  playback time, score measure, beat progress, x/y, motion (locked/glide/hold),
+  confidence, and timing source.
+
+**Result on the real Guren PDF (full sweep, 0:00→end):** the cursor glides
+smoothly through measures 1–5 on system 1, drops to system 2 exactly at measure
+6, and so on (system changes at 6, 11, 15, 19, 23, 27, 31, 35, 38, 41, …) with
+**zero backward-x events within a system** — no stall, no early end-jump, no
+jitter.
+
+---
+
 ## Uploaded-score pass (PDF-geometry-primary rewrite)
 
 The demo's bundled anchors were masking a broken pipeline: real multi-page
