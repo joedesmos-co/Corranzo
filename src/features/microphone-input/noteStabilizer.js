@@ -1,5 +1,13 @@
 /**
- * Require stable pitch + a short silence gap between note-ons (reduces sustain/reverb re-triggers).
+ * Turn a noisy stream of per-frame pitch estimates into reliable note-ons.
+ *
+ * Reliability rules:
+ *  - skip the attack transient at note onset (pitch is unstable then),
+ *  - require a stable pitch held for a few frames above a confidence floor,
+ *  - suppress octave-jump glitches (a transient ±12 jump shouldn't reset or
+ *    re-trigger the note),
+ *  - require a short silence gap before the same note can fire again
+ *    (sustain / reverb should not re-trigger).
  */
 export function createNoteStabilizer({
   holdFrames = 6,
@@ -8,6 +16,8 @@ export function createNoteStabilizer({
   minSilenceFrames = 12,
   minSameNoteGapMs = 200,
   minRms = 0.01,
+  attackFrames = 2,
+  octaveReject = true,
 } = {}) {
   return {
     holdFrames,
@@ -16,9 +26,13 @@ export function createNoteStabilizer({
     minSilenceFrames,
     minSameNoteGapMs,
     minRms,
+    attackFrames,
+    octaveReject,
     candidateMidi: null,
     stableCount: 0,
     silenceFrames: 0,
+    onsetFrames: 0,
+    octaveGlitch: 0,
     armed: true,
     lastEmitAt: 0,
     lastEmitMidi: null,
@@ -38,6 +52,8 @@ export function pushStableNote(
 
   if (belowThreshold) {
     state.silenceFrames += 1
+    state.onsetFrames = 0
+    state.octaveGlitch = 0
     if (state.silenceFrames >= state.minSilenceFrames) {
       state.candidateMidi = null
       state.stableCount = 0
@@ -47,6 +63,13 @@ export function pushStableNote(
   }
 
   state.silenceFrames = 0
+  state.onsetFrames += 1
+
+  // Ignore the attack transient right after a note onset — pitch estimates are
+  // unstable during the initial hammer/pluck and produce false notes.
+  if (state.onsetFrames <= state.attackFrames) {
+    return null
+  }
 
   if (!state.armed) {
     state.candidateMidi = midi
@@ -61,6 +84,25 @@ export function pushStableNote(
   ) {
     return null
   }
+
+  // Octave-jump suppression: a single-frame ±12 jump from a building candidate
+  // is almost always a harmonic/octave estimation error. Ignore it unless the
+  // octave persists (≥2 frames), in which case switch the candidate.
+  if (
+    state.octaveReject &&
+    state.candidateMidi != null &&
+    Math.abs(midi - state.candidateMidi) === 12
+  ) {
+    state.octaveGlitch += 1
+    if (state.octaveGlitch < 2) {
+      return null
+    }
+    state.candidateMidi = midi
+    state.stableCount = 1
+    state.octaveGlitch = 0
+    return null
+  }
+  state.octaveGlitch = 0
 
   if (
     state.candidateMidi == null ||
@@ -91,6 +133,8 @@ export function resetNoteStabilizer(state) {
   state.candidateMidi = null
   state.stableCount = 0
   state.silenceFrames = 0
+  state.onsetFrames = 0
+  state.octaveGlitch = 0
   state.armed = true
   state.lastEmitMidi = null
 }

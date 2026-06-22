@@ -1114,6 +1114,37 @@
   color: #8fa3c7;
 }
 
+/* Small live tuning offset next to the detected note. */
+.mic-test__cents {
+  font-size: 0.72rem;
+  color: #8fa3c7;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Quick mic calibration status line (small, unobtrusive). */
+.mic-input-status__calibration {
+  margin: 4px 0 0;
+  font-size: 0.74rem;
+  line-height: 1.4;
+  color: #9bb4d4;
+}
+
+.mic-input-status__calibration--measuring {
+  color: #b9c6dd;
+}
+
+.mic-input-status__calibration--room-noisy {
+  color: #f0c674;
+}
+
+.mic-input-status__calibration--no-input {
+  color: #f0b8b8;
+}
+
+.mic-input-status__calibration--ready {
+  color: #8fcf9f;
+}
+
 .mic-test__meter-row {
   display: flex;
   align-items: center;

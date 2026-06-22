@@ -4,6 +4,9 @@ import {
   MIC_SUPPORT,
 } from '../../features/microphone-input/micInputConstants.js'
 import { isMicSafariOrIos } from '../../features/microphone-input/micEnvironment.js'
+import {
+  MIC_CALIBRATION_STATUS_LABELS,
+} from '../../features/microphone-input/micCalibration.js'
 import { midiToNoteLabel } from '../../features/midi-input/midiNoteLabel.js'
 import { MIC_CHORD_MODES } from '../../features/practice/waitForYouMatchSettings.js'
 import MicTestPanel from './MicTestPanel.jsx'
@@ -22,6 +25,7 @@ export default function MicrophoneInputStatusPanel({
   isListening,
   lastHeardMidi,
   liveFrame = null,
+  calibration = null,
   inputFeedback = null,
   isChordCheckpoint = false,
   chordMicMode = MIC_CHORD_MODES.ANY_TONE,
@@ -69,6 +73,20 @@ export default function MicrophoneInputStatusPanel({
       )}
 
       <p className="practice-section__hint practice-section__hint--inline">{statusLine}</p>
+
+      {isListening && (liveFrame?.calibrating || calibration) && (
+        <p
+          className={`mic-input-status__calibration mic-input-status__calibration--${
+            liveFrame?.calibrating ? 'measuring' : calibration?.status ?? 'ready'
+          }`}
+          role="status"
+          aria-live="polite"
+        >
+          {liveFrame?.calibrating
+            ? MIC_CALIBRATION_STATUS_LABELS.measuring
+            : MIC_CALIBRATION_STATUS_LABELS[calibration?.status] ?? ''}
+        </p>
+      )}
 
       {heardLine && (
         <p

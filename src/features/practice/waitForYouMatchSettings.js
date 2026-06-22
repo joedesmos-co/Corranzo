@@ -11,12 +11,18 @@ export const WFY_MATCH_DEFAULTS = {
   transpositionOffset: 0,
   chordWindowMs: 450,
   micChordMode: MIC_CHORD_MODES.ANY_TONE,
+  // Cents tolerance for accepting a microphone pitch as the expected note. A
+  // little slack absorbs real-world tuning/intonation. MIDI input is exact and
+  // ignores this.
+  micCentsTolerance: 30,
 }
 
 export const CHORD_WINDOW_MS_MIN = 200
 export const CHORD_WINDOW_MS_MAX = 2000
 export const TRANSPOSITION_MIN = -24
 export const TRANSPOSITION_MAX = 24
+export const MIC_CENTS_TOLERANCE_MIN = 15
+export const MIC_CENTS_TOLERANCE_MAX = 50
 
 /**
  * Normalize raw settings from UI into values safe for matching.
@@ -49,6 +55,14 @@ export function normalizeMatchSettings(settings) {
     ? base.micChordMode
     : MIC_CHORD_MODES.ANY_TONE
 
+  const micCentsTolerance = Math.min(
+    MIC_CENTS_TOLERANCE_MAX,
+    Math.max(
+      MIC_CENTS_TOLERANCE_MIN,
+      Number(base.micCentsTolerance) || WFY_MATCH_DEFAULTS.micCentsTolerance,
+    ),
+  )
+
   return {
     exactPitch,
     allowOctaveMistakes,
@@ -56,5 +70,6 @@ export function normalizeMatchSettings(settings) {
     transpositionOffset,
     chordWindowMs,
     micChordMode,
+    micCentsTolerance,
   }
 }

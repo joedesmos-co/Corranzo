@@ -15,6 +15,10 @@ export default function MicTestPanel({ liveFrame, lastStableMidi, isListening })
     liveFrame?.noteLabel ??
     (lastStableMidi != null ? midiToNoteLabel(lastStableMidi) : null)
   const clarity = liveFrame?.clarityPercent ?? 0
+  // Tuning offset of the live detected note (e.g. "+8¢" / "−12¢").
+  const centsOffset = liveFrame?.midi != null && Number.isFinite(liveFrame?.centsOffset)
+    ? `${liveFrame.centsOffset >= 0 ? '+' : '−'}${Math.abs(Math.round(liveFrame.centsOffset))}¢`
+    : null
   const signalLabel =
     liveFrame?.signalLabel ??
     MIC_SIGNAL_QUALITY_LABELS[liveFrame?.signalQuality] ??
@@ -41,7 +45,10 @@ export default function MicTestPanel({ liveFrame, lastStableMidi, isListening })
       <dl className="mic-test__readout">
         <div>
           <dt>Detected note</dt>
-          <dd>{noteLabel ?? '—'}</dd>
+          <dd>
+            {noteLabel ?? '—'}
+            {centsOffset && <span className="mic-test__cents"> {centsOffset}</span>}
+          </dd>
         </div>
         <div>
           <dt>Clarity</dt>

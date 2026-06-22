@@ -33,9 +33,11 @@ export default function useWaitForYouMicInput({
   )
   const [lastHeardMidi, setLastHeardMidi] = useState(null)
   const [liveFrame, setLiveFrame] = useState(null)
+  const [calibration, setCalibration] = useState(null)
   const feedbackOutcomeRef = useRef(inputFeedback.outcome)
 
   const detectEnabled = Boolean(active && microphone?.isListening)
+  const micCentsTolerance = matchSettings?.micCentsTolerance ?? 30
 
   const matchingEnabled =
     detectEnabled &&
@@ -164,8 +166,10 @@ export default function useWaitForYouMicInput({
     analyserRef: microphone?.analyser,
     getTimeDomainBuffer: microphone?.getTimeDomainBuffer,
     sampleRate: microphone?.sampleRate ?? 44100,
+    centsTolerance: micCentsTolerance,
     onFrame: handleFrame,
     onStableMidi: matchingEnabled ? handleStableMidi : undefined,
+    onCalibration: setCalibration,
   })
 
   const isChordCheckpoint = Boolean(currentCheckpoint?.isChord)
@@ -178,6 +182,7 @@ export default function useWaitForYouMicInput({
     resetFeedback,
     lastHeardMidi,
     liveFrame,
+    calibration: detectEnabled ? calibration : null,
     isChordCheckpoint,
     expectedCount,
     chordMicMode: chordTargets.mode,

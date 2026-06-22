@@ -105,6 +105,14 @@ export function frequencyToMidi(frequency) {
   return midi
 }
 
+/** Signed cents from a fractional MIDI value to its nearest semitone. */
+export function midiCentsOffset(midi) {
+  if (midi == null || !Number.isFinite(midi)) {
+    return null
+  }
+  return (midi - Math.round(midi)) * 100
+}
+
 export function quantizeMidi(midi, centsTolerance = 30) {
   if (midi == null || !Number.isFinite(midi)) {
     return null
@@ -116,16 +124,31 @@ export function quantizeMidi(midi, centsTolerance = 30) {
   return Math.min(MAX_MIDI, Math.max(MIN_MIDI, rounded))
 }
 
-export function pitchToMidiNote(pitch, { minClarity = 0.28 } = {}) {
+/**
+ * True when a detected frequency is within `centsTolerance` of an expected
+ * MIDI note. Used for cents-accurate matching of mic pitch to the score note.
+ */
+export function frequencyMatchesMidi(frequency, expectedMidi, centsTolerance = 30) {
+  const midi = frequencyToMidi(frequency)
+  if (midi == null || expectedMidi == null) {
+    return false
+  }
+  return Math.abs(midi - expectedMidi) * 100 <= centsTolerance
+}
+
+export function pitchToMidiNote(pitch, { minClarity = 0.28, centsTolerance = 30 } = {}) {
   if (!pitch || pitch.clarity < minClarity) {
     return null
   }
-  const midi = quantizeMidi(frequencyToMidi(pitch.frequency))
+  const midiFloat = frequencyToMidi(pitch.frequency)
+  const midi = quantizeMidi(midiFloat, centsTolerance)
   if (midi == null) {
     return null
   }
   return {
     midi,
+    midiFloat,
+    centsOffset: midiCentsOffset(midiFloat),
     frequency: pitch.frequency,
     clarity: pitch.clarity,
     rms: pitch.rms,

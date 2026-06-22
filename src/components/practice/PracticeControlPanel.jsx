@@ -152,6 +152,7 @@ export default function PracticeControlPanel({
             isListening={session.microphone.isListening}
             lastHeardMidi={session.waitForYouMic.lastHeardMidi}
             liveFrame={session.waitForYouMic.liveFrame}
+            calibration={session.waitForYouMic.calibration}
             inputFeedback={session.waitForYouMic.inputFeedback}
             isChordCheckpoint={session.waitForYouMic.isChordCheckpoint}
             chordMicMode={session.waitForYouMic.chordMicMode}

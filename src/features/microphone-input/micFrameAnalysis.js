@@ -30,10 +30,11 @@ function highPassInPlace(samples, strength = 0.965) {
 /**
  * Analyze one analyser frame for pitch, level, and user-facing quality.
  */
-export function analyzeMicFrame(samples, sampleRate, noiseFloorTracker) {
+export function analyzeMicFrame(samples, sampleRate, noiseFloorTracker, options = {}) {
   if (!samples?.length || !sampleRate) {
     return null
   }
+  const { centsTolerance = 30 } = options
 
   highPassInPlace(samples)
 
@@ -44,7 +45,7 @@ export function analyzeMicFrame(samples, sampleRate, noiseFloorTracker) {
   rms = Math.sqrt(rms / samples.length)
 
   const pitch = detectPitchAutocorrelation(samples, sampleRate)
-  const note = pitchToMidiNote(pitch)
+  const note = pitchToMidiNote(pitch, { centsTolerance })
   const hasPitch = note?.midi != null
 
   const isQuietFrame = !hasPitch && rms < (noiseFloorTracker?.floor ?? 0.006) * 4
@@ -67,6 +68,7 @@ export function analyzeMicFrame(samples, sampleRate, noiseFloorTracker) {
     gateOpen,
     pitch,
     midi: note?.midi ?? null,
+    centsOffset: note?.centsOffset ?? null,
     noteLabel: note?.midi != null ? midiToNoteLabel(note.midi) : null,
     clarity: note?.clarity ?? pitch?.clarity ?? 0,
     clarityPercent: clarityPercent(note?.clarity ?? pitch?.clarity ?? 0),
