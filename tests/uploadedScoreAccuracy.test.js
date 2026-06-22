@@ -252,4 +252,21 @@ describe('real uploaded Gymnopédie PDF + MXL (guarded)', () => {
     // One stable per-measure anchor for every written measure.
     expect(result.preview.supplementalMeasureAnchors.length).toBe(gymTiming.measures.length)
   })
+
+  gymIt('measure 1 beat 1 skips the clef/key/time; later measures are local', async () => {
+    const result = await analyze(gymPages, gymTiming)
+    const perMeasure = result.preview.supplementalMeasureAnchors
+    const m1 = perMeasure.find((a) => a.measureNumber === 1)
+    const m2 = perMeasure.find((a) => a.measureNumber === 2)
+    // Measure 1's beat 1 sits well right of the page's far-left margin (past the
+    // brace/clef/key/time), not at the system start.
+    expect(m1.x).toBeGreaterThan(0.14)
+    expect(m1.meta.xSource).toContain('default-x')
+    // Measure 2 starts at its OWN left boundary (after measure 1's wide span),
+    // and its beat 1 is near that boundary — it does not inherit m1's padding.
+    expect(m2.meta.measureStartX).toBeGreaterThan(m1.meta.playableEndX - 0.02)
+    const m1Lead = (m1.x - m1.meta.measureStartX) / (m1.meta.playableEndX - m1.meta.measureStartX)
+    const m2Lead = (m2.x - m2.meta.measureStartX) / (m2.meta.playableEndX - m2.meta.measureStartX)
+    expect(m2Lead).toBeLessThan(m1Lead)
+  })
 })

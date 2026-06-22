@@ -8,6 +8,41 @@ cases. Manual marking is now a rare last-resort rescue path, not normal flow.
 
 ---
 
+## Measure-local x pass (beat 1 placement)
+
+The cursor sat slightly "behind" — beat 1 of measure 1 landed at the far-left
+system margin (brace/clef/key/time area) instead of at the first note, and every
+measure on a system was placed by even spacing from that same left edge, so
+later measures inherited measure 1's clef padding.
+
+**Fix — a measure-local x model (no global or system-wide offset, no
+hardcoding).** Each written measure now carries its own visual span:
+`measureStartX`, `measurePlayableStartX` (beat 1), `measurePlayableEndX`.
+
+- **Measure boundaries** come from cumulative MusicXML engraved widths
+  (`<measure width>`, newly parsed) anchored onto the detected barlines (first &
+  last) of each system. Verified: predicted boundaries land within ~0.001 of the
+  detected barlines on the real Gymnopédie. This makes measure 1 (wide, with the
+  clef) occupy its true wide span while later measures get their own narrower
+  spans — no inherited padding.
+- **Beat 1 inside each measure** comes from the first note's `default-x`, which
+  the engraver placed *after* the clef/key/time on a system's first measure. So
+  measure 1's beat 1 sits at the first note, not the margin; middle measures sit
+  just past their own barline. A clamp guards against a mis-encoded default-x
+  pushing beat 1 past the notes. When widths/default-x are absent, a conservative
+  per-measure lead is used (larger for a system's first measure).
+- **The resolver glides within the current measure's own span**
+  (`playableStartX → playableEndX`), keeping movement monotonic and snapping to
+  the next measure's beat 1 only at the boundary.
+
+**Result on the real Gymnopédie:** measure 1 beat 1 maps to x≈0.205 (past the
+clef/key/time, at the first chord — was ≈0.08); measures 2–5 start at their own
+barlines (0.356, 0.503, 0.654, 0.801) and do not inherit measure 1's padding.
+Guren is unchanged (19 systems, exact starts, 0 backward-x). The dev trace
+exposes each active measure's start / playable-start / playable-end / x-source.
+
+---
+
 ## Light-classical pass (adaptive detection)
 
 A clean classical piano score (Satie's *Gymnopédie No. 1*) failed with "Auto

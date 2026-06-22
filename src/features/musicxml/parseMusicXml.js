@@ -386,6 +386,7 @@ function walkPart({
       const lengthQuarters =
         lengthFromTimeSignature > 0 ? lengthFromTimeSignature : notatedLengthQuarters
       const { newSystem, newPage } = measurePrintFlags(measureNode)
+      const engravedWidth = numberOf(attr(measureNode, 'width'), NaN)
 
       boundaries.push({
         number: measureNumber,
@@ -398,6 +399,9 @@ function walkPart({
         divisions,
         systemBreakBefore: index === 0 || newSystem || newPage,
         pageBreakBefore: newPage,
+        // Engraved measure width in tenths (<measure width>), if present — used
+        // to map MusicXML horizontal layout onto detected PDF barline spans.
+        engravedWidth: Number.isFinite(engravedWidth) && engravedWidth > 0 ? engravedWidth : null,
         marking: extractMarkings(measureNode),
       })
       measureStartQuarters += lengthQuarters
@@ -518,6 +522,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     divisions: boundary.divisions,
     systemBreakBefore: boundary.systemBreakBefore,
     pageBreakBefore: boundary.pageBreakBefore,
+    engravedWidth: boundary.engravedWidth,
   }))
 
   const beats = []

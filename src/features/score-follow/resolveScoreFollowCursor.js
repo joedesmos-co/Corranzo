@@ -165,8 +165,14 @@ export function resolveScoreFollowCursor({
       nextAnchor &&
       nextAnchor.page === exact.page &&
       Math.abs(nextAnchor.y - exact.y) < 0.02
+    // Glide within the CURRENT measure's own visual span (playableStartX →
+    // playableEndX). This keeps beat 1 at the measure's first-note x and sweeps
+    // only across that measure — later measures don't inherit measure 1's clef
+    // padding. Falls back to the next measure's x, then the system end.
     let glideTargetX = null
-    if (nextSameSystem && nextAnchor.x > exact.x) {
+    if (typeof exact.meta?.playableEndX === 'number' && exact.meta.playableEndX > exact.x) {
+      glideTargetX = exact.meta.playableEndX
+    } else if (nextSameSystem && nextAnchor.x > exact.x) {
       glideTargetX = nextAnchor.x
     } else if (typeof exact.meta?.systemEndX === 'number' && exact.meta.systemEndX > exact.x) {
       glideTargetX = exact.meta.systemEndX

@@ -21,7 +21,7 @@ import {
   systemInkWidthRatio,
   systemStartAnchorPosition,
 } from './detectStaffSystems.js'
-import { detectStaffLineSystems } from './detectStaffLines.js'
+import { detectStaffLineSystems, detectSystemBarlinePositions } from './detectStaffLines.js'
 import { validateAutoAlignResult } from './autoAlignValidation.js'
 import { collectMeasureDefaultXHints } from './musicxmlLayoutAnchors.js'
 import { clearPdfAnalysisCache, getPageInkRatio, renderPdfPageImageData } from './pdfPageAnalysis.js'
@@ -190,6 +190,7 @@ function collectSystemEntriesForPages(
           stage: DETECTION_STAGE.STAFF_LINES,
           inkWidth: systemInkWidthRatio(imageData, contentBounds, system),
           measureEstimate: system.measureEstimate,
+          inkThreshold: staffLine.inkThreshold,
         })
       }
       pageStages.push({
@@ -387,7 +388,14 @@ export function buildSystemSpanAnchors(systemEntries, spans) {
  * barline x-positions are intentionally NOT used here because they are noisy and
  * caused the end-jitter; the measure COUNT already came from barline detection.
  */
-export function buildPerMeasureSystemAnchors(systemEntries, spans) {
+export function buildPerMeasureSystemAnchors(systemEntries, spans, timingMap = null) {
+  const widthByMeasure = new Map(
+    (timingMap?.measures ?? []).map((m) => [m.number, m.engravedWidth]),
+  )
+  // First (leftmost) note default-x per measure — beat 1's engraved offset
+  // INSIDE its measure (tenths). Inherently skips the clef/key/time of a
+  // system's first measure, because the engraver placed the note after them.
+  const defaultXByMeasure = collectMeasureDefaultXHints(timingMap)
   const anchors = []
 
   spans.forEach((span, index) => {
@@ -399,19 +407,71 @@ export function buildPerMeasureSystemAnchors(systemEntries, spans) {
 
     const startPos = systemStartAnchorPosition(entry.system, entry.contentBounds)
     const endPos = systemEndAnchorPosition(entry.system, entry.contentBounds)
-    const xStart = startPos.x
-    const xEnd = endPos.x
+    const y = startPos.y
+
+    // Anchor the MusicXML tenths axis onto the PDF using detected barlines
+    // (first & last) when available — these are the measure boundaries. Falls
+    // back to the system's inset content range.
+    const barlineThreshold = Math.max(150, (entry.inkThreshold ?? 170) - 20)
+    const barlines = entry.imageData
+      ? detectSystemBarlinePositions(entry.imageData, entry.contentBounds, entry.system, {
+          darkThreshold: barlineThreshold,
+        })
+      : []
+    let sysLeftX = startPos.x
+    let sysRightX = endPos.x
+    let anchorKind = 'estimated'
+    if (barlines.length >= 2 && barlines[barlines.length - 1] > barlines[0]) {
+      sysLeftX = barlines[0]
+      sysRightX = barlines[barlines.length - 1]
+      anchorKind = 'barline'
+    }
+
+    // Cumulative engraved widths give each measure's left edge; equal widths if
+    // the MusicXML has no <measure width>.
+    const widths = measureNumbers.map((m) => {
+      const w = widthByMeasure.get(m)
+      return Number.isFinite(w) && w > 0 ? w : 1
+    })
+    const haveWidths = measureNumbers.some((m) => Number.isFinite(widthByMeasure.get(m)))
+    const totalWidth = widths.reduce((a, b) => a + b, 0) || measureNumbers.length
+    const leftTenths = []
+    let acc = 0
+    for (const w of widths) {
+      leftTenths.push(acc)
+      acc += w
+    }
+    const tenthsToX = (t) => sysLeftX + (t / totalWidth) * (sysRightX - sysLeftX)
     const count = measureNumbers.length
 
     measureNumbers.forEach((measureNumber, i) => {
-      // Measure i starts at i/count across the system; the last measure gets the
-      // remaining span to glide into (via systemEndX in the resolver).
-      const x = count <= 1 ? xStart : xStart + (xEnd - xStart) * (i / count)
+      const measureStartX = tenthsToX(leftTenths[i])
+      const measureEndX = tenthsToX(leftTenths[i] + widths[i])
+      const measureSpan = Math.max(0, measureEndX - measureStartX)
+
+      // measurePlayableStartX: where beat 1 sits inside THIS measure.
+      const dx = defaultXByMeasure.get(measureNumber)
+      let playableStartX
+      let xSource
+      if (haveWidths && Number.isFinite(dx)) {
+        // Clamp the offset so a mis-encoded default-x can't push beat 1 past the
+        // bulk of the measure (guard: never far right of the first note).
+        const offset = Math.min(Math.max(dx, 0), 0.85 * widths[i])
+        playableStartX = tenthsToX(leftTenths[i] + offset)
+        xSource = anchorKind === 'barline' ? 'default-x+barline' : 'default-x'
+      } else {
+        // Conservative local lead: skip the clef/key area on a system's first
+        // measure, a small margin past the barline on the rest.
+        const lead = i === 0 ? 0.18 : 0.05
+        playableStartX = measureStartX + lead * measureSpan
+        xSource = anchorKind
+      }
+
       anchors.push({
         id: createAnchorId(),
         page: entry.page,
-        x,
-        y: startPos.y,
+        x: playableStartX,
+        y,
         measureNumber,
         source: ANCHOR_SOURCE.AUTO_MEASURE,
         meta: {
@@ -420,7 +480,12 @@ export function buildPerMeasureSystemAnchors(systemEntries, spans) {
           measuresInSpan: count,
           indexInSystem: i,
           lastInSystem: i === count - 1,
-          systemEndX: xEnd,
+          // Per-measure visual span the cursor glides within.
+          measureStartX,
+          playableStartX,
+          playableEndX: measureEndX,
+          systemEndX: sysRightX,
+          xSource,
         },
       })
     })
@@ -636,7 +701,7 @@ export async function analyzeSemiAutoScoreSetup({
   // One canonical anchor per written measure drives the cursor (AUTO_MEASURE
   // outranks the AUTO_SYSTEM start/end spans during dedupe), so playback glides
   // measure-by-measure instead of stalling then jumping across a whole system.
-  const supplementalMeasureAnchors = buildPerMeasureSystemAnchors(systemEntries, spans)
+  const supplementalMeasureAnchors = buildPerMeasureSystemAnchors(systemEntries, spans, timingMap)
   const systemsByPage = buildSystemsByPage(systemEntries, spans)
 
   const validation = validateAutoAlignResult({
