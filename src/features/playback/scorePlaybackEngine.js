@@ -90,6 +90,7 @@ export class ScorePlaybackEngine {
               onStatus: (status) => this.handleInstrumentStatus(status),
             })
             this.voice.output.connect(this.output)
+            this.syncOutputMute()
           }
           if (!this.metronome) {
             this.metronome = createMetronomeVoice()
@@ -379,6 +380,10 @@ export class ScorePlaybackEngine {
     if (track) {
       track.muted = muted
     }
+    this.syncOutputMute()
+  }
+
+  syncOutputMute() {
     if (this.output) {
       const anyUnmuted = this.tracks.some((item) => !item.muted)
       this.output.gain.value = anyUnmuted || this.tracks.length === 0 ? 1 : 0

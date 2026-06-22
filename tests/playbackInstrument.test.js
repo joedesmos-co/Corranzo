@@ -436,6 +436,19 @@ describe('sampled piano — playback engine integration', () => {
     expect(engine.output.gain.value).toBe(1)
   })
 
+  it('keeps all tracks muted when the lazy output is created', () => {
+    const engine = new ScorePlaybackEngine()
+    engine.tracks = [
+      { id: 1, muted: true },
+      { id: 2, muted: true },
+    ]
+    engine.output = { gain: { value: 1 } }
+
+    engine.syncOutputMute()
+
+    expect(engine.output.gain.value).toBe(0)
+  })
+
   it('MIDI track muting still controls its per-track output gain', () => {
     const engine = new MidiPlaybackEngine()
     const output = { gain: { value: 1 } }
