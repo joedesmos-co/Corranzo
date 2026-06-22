@@ -1,15 +1,13 @@
 import * as Tone from 'tone'
 import { getTimeline } from '../musicxml/timeline.js'
 import {
-  applyPlaybackRate,
   buildCombinedPlaybackSchedule,
   buildMetronomeSchedule,
-  buildScoreNoteSchedule,
 } from './scorePlaybackSchedule.js'
-import { createPianoInstrument } from './pianoInstrument.js'
 
 const LOOKAHEAD_SECONDS = 2.5
 const SCHEDULE_TICK_MS = 200
+const loadPianoInstrumentModule = () => import('./pianoInstrument.js')
 
 function createMetronomeVoice() {
   // Slightly longer attack (3 ms) and shorter decay soften the click while
@@ -43,7 +41,7 @@ function eventKey(event) {
  * Windowed playback engine driven by the performed score timeline.
  */
 export class ScorePlaybackEngine {
-  constructor() {
+  constructor({ loadPianoInstrument = loadPianoInstrumentModule } = {}) {
     this.timingMap = null
     this.noteEvents = []
     this.metronomeEvents = []
@@ -67,23 +65,41 @@ export class ScorePlaybackEngine {
     this.metronomeLevel = 0.6
     this.onInstrumentStatus = null
     this.instrumentStatus = null
+    this.loadPianoInstrument = loadPianoInstrument
+    this.createPianoInstrument = null
+    this.voiceLoadPromise = null
   }
 
-  ensureVoices() {
-    if (!this.voice) {
-      this.output = new Tone.Gain(1).toDestination()
-      // Sampled piano with automatic synth fallback. Routed through the same
-      // output gain, so timing, tempo, loops, muting and the audio-unlock path
-      // are all unchanged — only the timbre improves.
-      this.voice = createPianoInstrument({
-        tone: Tone,
-        onStatus: (status) => this.handleInstrumentStatus(status),
-      })
-      this.voice.output.connect(this.output)
+  async ensureVoices() {
+    if (this.voice) {
+      return
     }
-    if (!this.metronome) {
-      this.metronome = createMetronomeVoice()
+    if (!this.voiceLoadPromise) {
+      this.voiceLoadPromise = Promise.resolve()
+        .then(async () => {
+          if (!this.createPianoInstrument) {
+            const module = await this.loadPianoInstrument()
+            this.createPianoInstrument = module.createPianoInstrument
+          }
+          if (!this.voice) {
+            this.output = new Tone.Gain(1).toDestination()
+            // The instrument module and samples are first requested here, after
+            // the Play/Test Sound gesture has already unlocked Web Audio.
+            this.voice = this.createPianoInstrument({
+              tone: Tone,
+              onStatus: (status) => this.handleInstrumentStatus(status),
+            })
+            this.voice.output.connect(this.output)
+          }
+          if (!this.metronome) {
+            this.metronome = createMetronomeVoice()
+          }
+        })
+        .finally(() => {
+          this.voiceLoadPromise = null
+        })
     }
+    await this.voiceLoadPromise
   }
 
   handleInstrumentStatus(status) {
@@ -194,7 +210,9 @@ export class ScorePlaybackEngine {
   }
 
   scheduleWindow(fromScoreSeconds, toScoreSeconds) {
-    this.ensureVoices()
+    if (!this.voice || !this.metronome) {
+      return
+    }
     const now = Tone.now()
     this.metronome.volume.value = Tone.gainToDb(0.15 + this.metronomeLevel * 0.55)
 
@@ -285,6 +303,7 @@ export class ScorePlaybackEngine {
       await Tone.start()
     }
 
+    await this.ensureVoices()
     this.releaseAll()
     this.scheduledKeys.clear()
     this.playing = true
@@ -376,7 +395,7 @@ export class ScorePlaybackEngine {
     // Reuse the real instrument so the test tone also benefits from the sampled
     // piano (and starts loading it). It plays on the synth immediately if the
     // samples have not finished loading yet.
-    this.ensureVoices()
+    await this.ensureVoices()
     const now = Tone.now()
     this.voice.triggerAttackRelease('C4', 0.32, now, 0.55)
     this.voice.triggerAttackRelease('E4', 0.32, now + 0.22, 0.5)

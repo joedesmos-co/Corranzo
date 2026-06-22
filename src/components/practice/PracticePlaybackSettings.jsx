@@ -1,7 +1,7 @@
 import {
   INSTRUMENT_STATUS,
   INSTRUMENT_STATUS_LABEL,
-} from '../../features/playback/pianoInstrument.js'
+} from '../../features/playback/pianoInstrumentStatus.js'
 
 const RATE_STOPS = [0.5, 0.75, 1, 1.25, 1.5]
 
@@ -26,7 +26,7 @@ export default function PracticePlaybackSettings({
     <div className="practice-playback-settings">
       {audioSource && (
         <p className="practice-playback-settings__source" aria-live="polite">
-          Audio: {audioSource === 'midi' ? 'MIDI backing' : 'MusicXML synth'}
+          Audio: {audioSource === 'midi' ? 'MIDI backing' : 'MusicXML score'}
         </p>
       )}
 

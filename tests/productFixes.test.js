@@ -6,7 +6,7 @@
  *  C. User-score cursor       — AUTO_SYSTEM anchors trusted; auto trust level shows cursor
  *  D. Cursor smoothness       — useScoreFollowDisplayCursor accepts real-time callbacks
  *  E. UI copy conciseness     — setup panel has no long instruction blocks
- *  F. Piano synth             — triangle8 oscillator, sustain 0, long decay
+ *  F. Piano fallback          — triangle8 oscillator, sustain 0, long decay
  */
 
 import { describe, expect, it } from 'vitest'
@@ -312,33 +312,29 @@ describe('Fix E: setup panel has no long instruction blocks', () => {
 })
 
 // ---------------------------------------------------------------------------
-// Fix F: Piano synth — triangle8 oscillator, no sustain, long decay
+// Fix F: Piano fallback — triangle8 oscillator, no sustain, long decay
 // ---------------------------------------------------------------------------
 
-describe('Fix F: scorePlaybackEngine uses piano-like synth config', () => {
+describe('Fix F: sampled piano keeps the piano-like synth fallback', () => {
+  const pianoInstrumentSource = () => readFileSync(
+    join(__dir, '..', 'src', 'features', 'playback', 'pianoInstrument.js'),
+    'utf8',
+  )
+
   it('oscillator type is triangle8 (not sine)', () => {
-    const src = readFileSync(
-      join(__dir, '..', 'src', 'features', 'playback', 'scorePlaybackEngine.js'),
-      'utf8',
-    )
+    const src = pianoInstrumentSource()
     expect(src).toMatch(/type\s*:\s*['"]triangle8['"]/)
     // Must not still use plain sine
     expect(src).not.toMatch(/type\s*:\s*['"]sine['"]/)
   })
 
   it('sustain is 0 (piano decay, no sustain plateau)', () => {
-    const src = readFileSync(
-      join(__dir, '..', 'src', 'features', 'playback', 'scorePlaybackEngine.js'),
-      'utf8',
-    )
+    const src = pianoInstrumentSource()
     expect(src).toMatch(/sustain\s*:\s*0\.0|sustain\s*:\s*0[^.]/)
   })
 
   it('decay is >= 1.5 s (long piano-like decay)', () => {
-    const src = readFileSync(
-      join(__dir, '..', 'src', 'features', 'playback', 'scorePlaybackEngine.js'),
-      'utf8',
-    )
+    const src = pianoInstrumentSource()
     const match = src.match(/decay\s*:\s*([\d.]+)/)
     expect(match).toBeTruthy()
     const decay = parseFloat(match[1])
@@ -346,10 +342,7 @@ describe('Fix F: scorePlaybackEngine uses piano-like synth config', () => {
   })
 
   it('attack is short (<= 0.02 s for snappy piano attack)', () => {
-    const src = readFileSync(
-      join(__dir, '..', 'src', 'features', 'playback', 'scorePlaybackEngine.js'),
-      'utf8',
-    )
+    const src = pianoInstrumentSource()
     const match = src.match(/attack\s*:\s*([\d.]+)/)
     expect(match).toBeTruthy()
     const attack = parseFloat(match[1])
@@ -357,23 +350,17 @@ describe('Fix F: scorePlaybackEngine uses piano-like synth config', () => {
   })
 
   it('filter frequency is >= 3000 Hz (brighter, not overly muffled)', () => {
-    const src = readFileSync(
-      join(__dir, '..', 'src', 'features', 'playback', 'scorePlaybackEngine.js'),
-      'utf8',
-    )
+    const src = pianoInstrumentSource()
     // Find the Tone.Filter block — frequency is an integer ≥ 100 (not 0.x like chorus)
-    const match = src.match(/Tone\.Filter\s*\(\s*\{[^}]*frequency\s*:\s*(\d{3,})/s)
+    const match = src.match(/tone\.Filter\s*\(\s*\{[^}]*frequency\s*:\s*(\d{3,})/s)
     expect(match).toBeTruthy()
     const freq = parseInt(match[1], 10)
     expect(freq).toBeGreaterThanOrEqual(3000)
   })
 
   it('reverb is applied (wet > 0)', () => {
-    const src = readFileSync(
-      join(__dir, '..', 'src', 'features', 'playback', 'scorePlaybackEngine.js'),
-      'utf8',
-    )
-    expect(src).toMatch(/Tone\.Reverb/)
+    const src = pianoInstrumentSource()
+    expect(src).toMatch(/tone\.Reverb/)
     const match = src.match(/wet\s*:\s*([\d.]+)/)
     expect(match).toBeTruthy()
     const wet = parseFloat(match[1])

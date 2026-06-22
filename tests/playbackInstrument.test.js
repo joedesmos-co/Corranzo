@@ -24,6 +24,8 @@ import {
   DEFAULT_PIANO_SAMPLE_BASE_URL,
   __resetSharedPianoBuffers,
 } from '../src/features/playback/pianoInstrument.js'
+import { MidiPlaybackEngine } from '../src/features/playback/midiPlaybackEngine.js'
+import { ScorePlaybackEngine } from '../src/features/playback/scorePlaybackEngine.js'
 
 // ─── fake Tone backend ────────────────────────────────────────────────────────
 
@@ -371,5 +373,97 @@ describe('piano instrument — release, dispose, labels', () => {
     expect(PIANO_SAMPLE_URLS.C4).toBe('C4.mp3')
     expect(PIANO_SAMPLE_URLS['F#4']).toBe('Fs4.mp3')
     expect(Object.keys(PIANO_SAMPLE_URLS).length).toBeLessThanOrEqual(20)
+  })
+})
+
+// ─── engine integration invariants ────────────────────────────────────────────
+
+describe('sampled piano — playback engine integration', () => {
+  it('keeps instrument code lazy until playback asks for it', () => {
+    const scoreLoader = vi.fn()
+    const midiLoader = vi.fn()
+
+    new ScorePlaybackEngine({ loadPianoInstrument: scoreLoader })
+    new MidiPlaybackEngine({ loadPianoInstrument: midiLoader })
+
+    expect(scoreLoader).not.toHaveBeenCalled()
+    expect(midiLoader).not.toHaveBeenCalled()
+  })
+
+  it('score playback sends the correct note and rate-adjusted duration', () => {
+    const calls = []
+    const engine = new ScorePlaybackEngine()
+    engine.voice = {
+      triggerAttackRelease: (...args) => calls.push(args),
+    }
+    engine.metronome = {
+      volume: { value: 0 },
+      triggerAttackRelease: vi.fn(),
+    }
+    engine.playbackRate = 0.5
+    engine.playStartedAt = 0
+    engine.noteEvents = [{
+      type: 'note',
+      scoreTimeSeconds: 0.1,
+      midi: 60,
+      baseDurationSeconds: 0.5,
+      velocity: 0.8,
+    }]
+
+    engine.scheduleWindow(0, 1)
+
+    expect(calls).toHaveLength(1)
+    expect(calls[0][0]).toBe('C4')
+    expect(calls[0][1]).toBeCloseTo(1)
+    expect(calls[0][3]).toBeGreaterThan(0)
+  })
+
+  it('score playback muting still follows the shared output gain', () => {
+    const engine = new ScorePlaybackEngine()
+    engine.output = { gain: { value: 1 } }
+    engine.tracks = [
+      { id: 1, muted: false },
+      { id: 2, muted: false },
+    ]
+
+    engine.setTrackMuted(1, true)
+    expect(engine.output.gain.value).toBe(1)
+
+    engine.setTrackMuted(2, true)
+    expect(engine.output.gain.value).toBe(0)
+
+    engine.setTrackMuted(1, false)
+    expect(engine.output.gain.value).toBe(1)
+  })
+
+  it('MIDI track muting still controls its per-track output gain', () => {
+    const engine = new MidiPlaybackEngine()
+    const output = { gain: { value: 1 } }
+    engine.trackStates = [{ id: 7, muted: false, output }]
+
+    engine.setTrackMuted(7, true)
+    expect(engine.trackStates[0].muted).toBe(true)
+    expect(output.gain.value).toBe(0)
+
+    engine.setTrackMuted(7, false)
+    expect(output.gain.value).toBe(1)
+  })
+
+  it('MIDI playback preserves note timing and trims a note when seeking into it', () => {
+    const calls = []
+    const engine = new MidiPlaybackEngine()
+    engine.trackStates = [{
+      notes: [{ time: 1, name: 'D4', duration: 1, velocity: 0.7 }],
+      instrument: {
+        triggerAttackRelease: (...args) => calls.push(args),
+      },
+    }]
+
+    engine.scheduleNotesFrom(1.25)
+
+    expect(calls).toHaveLength(1)
+    expect(calls[0][0]).toBe('D4')
+    expect(calls[0][1]).toBeCloseTo(0.75)
+    expect(calls[0][3]).toBe(0.7)
   })
 })

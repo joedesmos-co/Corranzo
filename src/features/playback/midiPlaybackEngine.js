@@ -1,6 +1,8 @@
 import * as Tone from 'tone'
 import { parseMidiFile } from './parseMidiFile.js'
-import { createPianoInstrument, INSTRUMENT_STATUS } from './pianoInstrument.js'
+import { INSTRUMENT_STATUS } from './pianoInstrumentStatus.js'
+
+const loadPianoInstrumentModule = () => import('./pianoInstrument.js')
 
 function resolvePlaybackDuration(midi, parsedDuration) {
   if (parsedDuration > 0) {
@@ -32,7 +34,7 @@ function normalizeNoteEvents(trackNotes) {
 }
 
 export class MidiPlaybackEngine {
-  constructor() {
+  constructor({ loadPianoInstrument = loadPianoInstrumentModule } = {}) {
     this.midi = null
     this.trackStates = []
     this.onTimeUpdate = null
@@ -43,18 +45,23 @@ export class MidiPlaybackEngine {
     this.playStartedAt = 0
     this.onInstrumentStatus = null
     this.instrumentStatus = null
+    this.loadPianoInstrument = loadPianoInstrument
+    this.createPianoInstrument = null
+    this.instrumentLoadPromise = null
   }
 
-  // Aggregate the per-track instrument statuses into one: sampled if any track
-  // has samples, loading while any is still loading, otherwise synth fallback.
+  // Aggregate per-track status without claiming a fallback before playback has
+  // actually created an instrument or attempted to load samples.
   recomputeInstrumentStatus() {
-    const statuses = this.trackStates.map((track) => track.instrument?.status)
+    const statuses = this.trackStates
+      .map((track) => track.instrument?.status)
+      .filter(Boolean)
     let next = null
     if (statuses.length > 0) {
-      if (statuses.includes(INSTRUMENT_STATUS.SAMPLED)) {
-        next = INSTRUMENT_STATUS.SAMPLED
-      } else if (statuses.includes(INSTRUMENT_STATUS.LOADING)) {
+      if (statuses.includes(INSTRUMENT_STATUS.LOADING)) {
         next = INSTRUMENT_STATUS.LOADING
+      } else if (statuses.includes(INSTRUMENT_STATUS.SAMPLED)) {
+        next = INSTRUMENT_STATUS.SAMPLED
       } else {
         next = INSTRUMENT_STATUS.SYNTH
       }
@@ -73,7 +80,7 @@ export class MidiPlaybackEngine {
 
   async load(arrayBuffer) {
     const loadToken = ++this.loadToken
-    this.clearScheduledPlayback()
+    this.stopPlaybackInternal()
 
     const { midi, duration: parsedDuration, tracks } = await parseMidiFile(arrayBuffer)
     if (loadToken !== this.loadToken) {
@@ -90,22 +97,13 @@ export class MidiPlaybackEngine {
       const output = new Tone.Gain(1)
       output.toDestination()
 
-      // Each track gets its own sampled-piano instrument (with synth fallback),
-      // routed through the track's gain so per-track muting is unchanged. The
-      // decoded samples are shared across tracks, so they are fetched once.
-      const instrument = createPianoInstrument({
-        tone: Tone,
-        onStatus: () => this.recomputeInstrumentStatus(),
-      })
-      instrument.output.connect(output)
-
       return {
         id: index,
         name: tracks[index].name,
         noteCount: tracks[index].noteCount,
         muted: false,
         notes: normalizeNoteEvents(track.notes),
-        instrument,
+        instrument: null,
         output,
       }
     })
@@ -140,7 +138,7 @@ export class MidiPlaybackEngine {
           continue
         }
 
-        track.instrument.triggerAttackRelease(
+        track.instrument?.triggerAttackRelease(
           note.name,
           duration,
           now + delay,
@@ -153,18 +151,55 @@ export class MidiPlaybackEngine {
   releaseAllVoices() {
     const now = Tone.now()
     for (const track of this.trackStates) {
-      track.instrument.releaseAll(now)
+      track.instrument?.releaseAll(now)
     }
   }
 
-  rebuildTrackSynths() {
+  async ensureTrackInstruments() {
+    if (this.trackStates.every((track) => track.instrument)) {
+      return
+    }
+    if (!this.instrumentLoadPromise) {
+      this.instrumentLoadPromise = Promise.resolve()
+        .then(async () => {
+          if (!this.createPianoInstrument) {
+            const module = await this.loadPianoInstrument()
+            this.createPianoInstrument = module.createPianoInstrument
+          }
+          for (const track of this.trackStates) {
+            if (track.instrument) {
+              continue
+            }
+            const instrument = this.createPianoInstrument({
+              tone: Tone,
+              onStatus: () => this.recomputeInstrumentStatus(),
+            })
+            instrument.output.connect(track.output)
+            track.instrument = instrument
+          }
+          this.recomputeInstrumentStatus()
+        })
+        .finally(() => {
+          this.instrumentLoadPromise = null
+        })
+    }
+    await this.instrumentLoadPromise
+  }
+
+  rebuildTrackInstruments() {
+    if (!this.createPianoInstrument) {
+      return
+    }
     for (const track of this.trackStates) {
+      if (!track.instrument) {
+        continue
+      }
       const muted = track.muted
       track.instrument.dispose()
 
       // Recreated from the shared, already-decoded sample buffers, so this is a
       // memory-only rebuild (no re-fetch) and stays on the sampled piano.
-      const instrument = createPianoInstrument({
+      const instrument = this.createPianoInstrument({
         tone: Tone,
         onStatus: () => this.recomputeInstrumentStatus(),
       })
@@ -175,12 +210,12 @@ export class MidiPlaybackEngine {
     this.recomputeInstrumentStatus()
   }
 
-  clearScheduledPlayback() {
+  clearScheduledPlayback({ rebuildInstruments = true } = {}) {
     this.playing = false
     this.stopProgressLoop()
     this.releaseAllVoices()
-    if (this.trackStates.length > 0) {
-      this.rebuildTrackSynths()
+    if (rebuildInstruments && this.trackStates.length > 0) {
+      this.rebuildTrackInstruments()
     }
   }
 
@@ -196,6 +231,7 @@ export class MidiPlaybackEngine {
     }
 
     this.clearScheduledPlayback()
+    await this.ensureTrackInstruments()
 
     this.playing = true
     this.playStartedAt = Tone.now()
@@ -255,7 +291,11 @@ export class MidiPlaybackEngine {
       await Tone.start()
     }
 
-    const instrument = createPianoInstrument({ tone: Tone })
+    if (!this.createPianoInstrument) {
+      const module = await this.loadPianoInstrument()
+      this.createPianoInstrument = module.createPianoInstrument
+    }
+    const instrument = this.createPianoInstrument({ tone: Tone })
     instrument.output.connect(Tone.getDestination())
 
     const now = Tone.now()
@@ -295,20 +335,19 @@ export class MidiPlaybackEngine {
 
   dispose() {
     this.loadToken += 1
-    this.clearScheduledPlayback()
-    this.disposeTracks()
+    this.stopPlaybackInternal()
     this.midi = null
     this.playbackDuration = 0
   }
 
   stopPlaybackInternal() {
-    this.clearScheduledPlayback()
+    this.clearScheduledPlayback({ rebuildInstruments: false })
     this.disposeTracks()
   }
 
   disposeTracks() {
     this.trackStates.forEach((track) => {
-      track.instrument.dispose()
+      track.instrument?.dispose()
       track.output.dispose()
     })
     this.trackStates = []

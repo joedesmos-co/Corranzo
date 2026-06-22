@@ -19,22 +19,18 @@
  *   - If loading fails or times out, it stays on the synth and reports an
  *     honest fallback status.
  *
- * `tone` is injected (the engines pass the real Tone module). This module never
- * imports Tone itself, which keeps it pure and unit-testable without an
+ * `tone` is injected (the engines pass the real Tone module). This module is
+ * dynamically imported by the engines on the first Play/Test Sound action and
+ * never imports Tone itself, keeping it lazy and unit-testable without an
  * AudioContext.
  */
 
-export const INSTRUMENT_STATUS = {
-  LOADING: 'loading',
-  SAMPLED: 'sampled',
-  SYNTH: 'synth',
-}
+import { INSTRUMENT_STATUS } from './pianoInstrumentStatus.js'
 
-export const INSTRUMENT_STATUS_LABEL = {
-  [INSTRUMENT_STATUS.LOADING]: 'Loading piano samples…',
-  [INSTRUMENT_STATUS.SAMPLED]: 'Piano samples loaded',
-  [INSTRUMENT_STATUS.SYNTH]: 'Using basic synth fallback',
-}
+export {
+  INSTRUMENT_STATUS,
+  INSTRUMENT_STATUS_LABEL,
+} from './pianoInstrumentStatus.js'
 
 /** Public, CORS-enabled Salamander Grand Piano samples (no server required). */
 export const DEFAULT_PIANO_SAMPLE_BASE_URL = 'https://tonejs.github.io/audio/salamander/'
@@ -312,16 +308,23 @@ export function createPianoInstrument(options = {}) {
     }
     setStatus(INSTRUMENT_STATUS.LOADING)
 
-    readyPromise = Promise.resolve()
-      .then(() =>
-        loadSampler({
-          tone,
-          baseUrl: resolveSampleBaseUrl(sampleBaseUrl),
-          urls: sampleUrls,
-          volume: sampledVolume,
-          timeoutMs: sampleLoadTimeoutMs,
-        }),
-      )
+    let samplerLoad
+    try {
+      // Invoke the loader now, rather than in a later microtask. This starts the
+      // sample request as soon as playback creates the instrument while still
+      // routing the first notes through the already-connected synth fallback.
+      samplerLoad = loadSampler({
+        tone,
+        baseUrl: resolveSampleBaseUrl(sampleBaseUrl),
+        urls: sampleUrls,
+        volume: sampledVolume,
+        timeoutMs: sampleLoadTimeoutMs,
+      })
+    } catch (error) {
+      samplerLoad = Promise.reject(error)
+    }
+
+    readyPromise = Promise.resolve(samplerLoad)
       .then((loaded) => {
         if (disposed) {
           loaded?.dispose?.()
@@ -387,4 +390,5 @@ export function createPianoInstrument(options = {}) {
 /** Test/inspection helper: clear the shared decoded-buffer cache. */
 export function __resetSharedPianoBuffers() {
   sharedBufferPromises.clear()
+  sharedBuffersResolved.clear()
 }
