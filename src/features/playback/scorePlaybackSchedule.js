@@ -79,7 +79,23 @@ export async function buildCombinedPlaybackSchedule(
   }
 
   const { midi, duration: midiDuration, tracks } = await parseMidiFile(midiArrayBuffer)
-  const allMidiNotes = midi.tracks.flatMap((track) => track.notes)
+  // Carry each note's position on the MIDI's OWN bar grid (tempo + time-signature
+  // aware) so measure-aligned mapping can place it correctly even when measures
+  // have unequal durations (tempo changes) — instead of assuming equal slices.
+  const ticksToMeasures =
+    typeof midi.header?.ticksToMeasures === 'function'
+      ? (ticks) => midi.header.ticksToMeasures(ticks)
+      : null
+  const allMidiNotes = midi.tracks
+    .flatMap((track) => track.notes)
+    .map((note) => ({
+      time: note.time,
+      duration: note.duration,
+      name: note.name,
+      velocity: note.velocity,
+      measurePosition:
+        ticksToMeasures && Number.isFinite(note.ticks) ? ticksToMeasures(note.ticks) : null,
+    }))
   const mapped = mapMidiEventsToPerformedTimeline(
     allMidiNotes,
     midiDuration || performedDuration,

@@ -6,10 +6,47 @@ export const MIDI_MAP_METHOD = {
   PROPORTIONAL: 'proportional',
 }
 
+const clamp01 = (value) => Math.min(1, Math.max(0, value))
+
 /**
- * Piecewise-linear map: MIDI time → performed score time using measure boundaries.
- * Each written measure occupies an equal slice of the MIDI file; within a slice,
- * time interpolates between performed measure window start/end (first occurrence).
+ * Map one MIDI note onto a performed-timeline entry using the MIDI's OWN bar
+ * position (`note.measurePosition`, e.g. 6.75 = three-quarters through the 7th
+ * played bar). The integer part selects the performed entry (which already
+ * encodes repeats + real, possibly-unequal measure durations); the fractional
+ * part places the note inside that measure's performed window.
+ *
+ * This is the structurally-correct alignment: it honours tempo changes,
+ * time-signature changes, and repeats, because it reuses the MIDI's bar grid
+ * instead of assuming every measure is the same length.
+ */
+function mapByMidiBarPosition(note, entries) {
+  const pos = note.measurePosition
+  const idx = Math.min(entries.length - 1, Math.max(0, Math.floor(pos)))
+  const entry = entries[idx]
+  const localT = clamp01(pos - Math.floor(pos))
+  const scoreStart = entry.startTimeSeconds
+  const scoreSpan = Math.max(entry.endTimeSeconds - entry.startTimeSeconds, 1e-6)
+  return {
+    scoreTimeSeconds: scoreStart + localT * scoreSpan,
+    durationSeconds: Math.max(note.duration, 0.03),
+    name: note.name,
+    velocity: note.velocity,
+    source: 'midi',
+    measureNumber: entry.writtenMeasureNumber,
+  }
+}
+
+/**
+ * Map MIDI time → performed score time using measure boundaries.
+ *
+ * Preferred path: when notes carry `measurePosition` (the MIDI file's own bar
+ * grid, derived from its tempo + time-signature map), each note is placed in
+ * the matching performed entry — correct even when measure durations differ
+ * (tempo changes) or repeats expand the timeline.
+ *
+ * Fallback path (no bar grid available): the legacy equal-slice approximation,
+ * which assumes every written measure occupies an equal slice of the MIDI file.
+ * Only correct for constant-tempo, equal-length measures.
  */
 export function mapMidiEventsMeasureAligned(midiNotes, midiDuration, timingMap) {
   const measures = timingMap?.measures ?? []
@@ -18,10 +55,27 @@ export function mapMidiEventsMeasureAligned(midiNotes, midiDuration, timingMap) 
   }
 
   const tl = getTimeline(timingMap)
+  const entries = tl.entries ?? []
+
+  // Preferred: align by the MIDI's real bar grid when entries + positions exist.
+  const haveBarGrid =
+    entries.length > 0 && midiNotes.some((note) => Number.isFinite(note?.measurePosition))
+  if (haveBarGrid) {
+    const events = midiNotes.map((note) =>
+      Number.isFinite(note?.measurePosition)
+        ? mapByMidiBarPosition(note, entries)
+        : null,
+    )
+    // If every note had a position, we're done; otherwise fill gaps below.
+    if (events.every(Boolean)) {
+      return { events, method: MIDI_MAP_METHOD.MEASURE_ALIGNED, confidence: 'structural' }
+    }
+  }
+
   const performedStarts = new Map()
   const performedEnds = new Map()
 
-  for (const entry of tl.entries) {
+  for (const entry of entries) {
     const number = entry.writtenMeasureNumber
     if (!performedStarts.has(number)) {
       performedStarts.set(number, entry.startTimeSeconds)
@@ -33,6 +87,10 @@ export function mapMidiEventsMeasureAligned(midiNotes, midiDuration, timingMap) 
   const sliceDuration = midiDuration / measureCount
 
   const events = midiNotes.map((note) => {
+    if (Number.isFinite(note?.measurePosition) && entries.length > 0) {
+      return mapByMidiBarPosition(note, entries)
+    }
+
     const rawIndex = Math.min(
       measureCount - 1,
       Math.max(0, Math.floor(note.time / sliceDuration)),
