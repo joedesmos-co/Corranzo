@@ -30,6 +30,7 @@ function PracticeTransportTick() {
       metronomeLevel={stable.playback.metronomeLevel}
       mappingWarning={stable.playback.mappingWarning}
       audioSource={stable.playback.audioSource}
+      instrumentStatus={stable.playback.instrumentStatus}
       onPlaybackRateChange={stable.playback.setPlaybackRate}
       onMetronomeEnabledChange={stable.playback.setMetronomeEnabled}
       onMetronomeLevelChange={stable.playback.setMetronomeLevel}

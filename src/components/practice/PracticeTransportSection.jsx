@@ -21,6 +21,7 @@ export default function PracticeTransportSection({
   metronomeLevel,
   mappingWarning,
   audioSource,
+  instrumentStatus,
   onPlaybackRateChange,
   onMetronomeEnabledChange,
   onMetronomeLevelChange,
@@ -41,7 +42,7 @@ export default function PracticeTransportSection({
       <h3 className="practice-section__title practice-section__title--static">Playback</h3>
 
       <p className="practice-section__hint practice-section__hint--sound">
-        ScoreFlow synthesizes a basic built-in piano from your MusicXML timing
+        ScoreFlow plays your MusicXML timing on a built-in piano
         {hasMidi ? ' (MIDI backing mapped to the score clock when provided)' : ''}. Tap Play once
         to unlock audio in Safari and on iPad.
       </p>
@@ -89,6 +90,7 @@ export default function PracticeTransportSection({
             onMetronomeLevelChange={onMetronomeLevelChange}
             mappingWarning={mappingWarning}
             audioSource={audioSource}
+            instrumentStatus={instrumentStatus}
             disabled={disabled || isLoading}
           />
 

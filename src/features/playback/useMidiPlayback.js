@@ -12,6 +12,7 @@ export default function useMidiPlayback(midiSource) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [instrumentStatus, setInstrumentStatus] = useState(null)
 
   useEffect(() => {
     const engine = new MidiPlaybackEngine()
@@ -19,6 +20,9 @@ export default function useMidiPlayback(midiSource) {
       setCurrentTime(time)
       setDuration(total)
       setIsPlaying(engine.isPlaying())
+    }
+    engine.onInstrumentStatus = (status) => {
+      setInstrumentStatus(status)
     }
     engineRef.current = engine
 
@@ -159,6 +163,7 @@ export default function useMidiPlayback(midiSource) {
     isPlaying,
     isLoading,
     error,
+    instrumentStatus,
     play,
     pause,
     stop,

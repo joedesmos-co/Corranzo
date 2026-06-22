@@ -26,6 +26,7 @@ export default function useScorePlayback({
   const [metronomeLevel, setMetronomeLevelState] = useState(0.6)
   const [mappingWarning, setMappingWarning] = useState(null)
   const [audioSource, setAudioSource] = useState('musicxml')
+  const [instrumentStatus, setInstrumentStatus] = useState(null)
 
   useEffect(() => {
     const engine = new ScorePlaybackEngine()
@@ -33,6 +34,9 @@ export default function useScorePlayback({
       setCurrentTime(time)
       setDuration(total)
       setIsPlaying(engine.isPlaying())
+    }
+    engine.onInstrumentStatus = (status) => {
+      setInstrumentStatus(status)
     }
     engineRef.current = engine
 
@@ -228,6 +232,7 @@ export default function useScorePlayback({
     effectiveTempo,
     mappingWarning,
     audioSource,
+    instrumentStatus,
     play,
     pause,
     stop,

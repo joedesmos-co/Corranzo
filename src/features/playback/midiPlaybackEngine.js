@@ -1,5 +1,6 @@
 import * as Tone from 'tone'
 import { parseMidiFile } from './parseMidiFile.js'
+import { createPianoInstrument, INSTRUMENT_STATUS } from './pianoInstrument.js'
 
 function resolvePlaybackDuration(midi, parsedDuration) {
   if (parsedDuration > 0) {
@@ -13,50 +14,6 @@ function resolvePlaybackDuration(midi, parsedDuration) {
     }
   }
   return endTime
-}
-
-function createPianoVoice() {
-  const reverb = new Tone.Reverb({
-    decay: 1.8,
-    wet: 0.14,
-  })
-  reverb.generate()
-
-  const chorus = new Tone.Chorus({
-    frequency: 0.8,
-    delayTime: 2.5,
-    depth: 0.18,
-    wet: 0.12,
-  })
-  chorus.start()
-
-  const filter = new Tone.Filter({
-    type: 'lowpass',
-    frequency: 3200,
-    rolloff: -12,
-  })
-
-  const synth = new Tone.PolySynth({
-    voice: Tone.Synth,
-    maxPolyphony: 24,
-  })
-
-  synth.set({
-    volume: -11,
-    oscillator: { type: 'triangle' },
-    envelope: {
-      attack: 0.018,
-      decay: 0.42,
-      sustain: 0.32,
-      release: 1.35,
-    },
-  })
-
-  synth.connect(filter)
-  filter.connect(chorus)
-  chorus.connect(reverb)
-
-  return { synth, filter, chorus, reverb }
 }
 
 function softenVelocity(velocity) {
@@ -84,6 +41,34 @@ export class MidiPlaybackEngine {
     this.offsetSeconds = 0
     this.playing = false
     this.playStartedAt = 0
+    this.onInstrumentStatus = null
+    this.instrumentStatus = null
+  }
+
+  // Aggregate the per-track instrument statuses into one: sampled if any track
+  // has samples, loading while any is still loading, otherwise synth fallback.
+  recomputeInstrumentStatus() {
+    const statuses = this.trackStates.map((track) => track.instrument?.status)
+    let next = null
+    if (statuses.length > 0) {
+      if (statuses.includes(INSTRUMENT_STATUS.SAMPLED)) {
+        next = INSTRUMENT_STATUS.SAMPLED
+      } else if (statuses.includes(INSTRUMENT_STATUS.LOADING)) {
+        next = INSTRUMENT_STATUS.LOADING
+      } else {
+        next = INSTRUMENT_STATUS.SYNTH
+      }
+    }
+    if (next !== this.instrumentStatus) {
+      this.instrumentStatus = next
+      if (this.onInstrumentStatus) {
+        this.onInstrumentStatus(next)
+      }
+    }
+  }
+
+  getInstrumentStatus() {
+    return this.instrumentStatus
   }
 
   async load(arrayBuffer) {
@@ -105,8 +90,14 @@ export class MidiPlaybackEngine {
       const output = new Tone.Gain(1)
       output.toDestination()
 
-      const voice = createPianoVoice()
-      voice.reverb.connect(output)
+      // Each track gets its own sampled-piano instrument (with synth fallback),
+      // routed through the track's gain so per-track muting is unchanged. The
+      // decoded samples are shared across tracks, so they are fetched once.
+      const instrument = createPianoInstrument({
+        tone: Tone,
+        onStatus: () => this.recomputeInstrumentStatus(),
+      })
+      instrument.output.connect(output)
 
       return {
         id: index,
@@ -114,10 +105,11 @@ export class MidiPlaybackEngine {
         noteCount: tracks[index].noteCount,
         muted: false,
         notes: normalizeNoteEvents(track.notes),
-        ...voice,
+        instrument,
         output,
       }
     })
+    this.recomputeInstrumentStatus()
 
     return {
       duration,
@@ -148,7 +140,7 @@ export class MidiPlaybackEngine {
           continue
         }
 
-        track.synth.triggerAttackRelease(
+        track.instrument.triggerAttackRelease(
           note.name,
           duration,
           now + delay,
@@ -161,23 +153,26 @@ export class MidiPlaybackEngine {
   releaseAllVoices() {
     const now = Tone.now()
     for (const track of this.trackStates) {
-      track.synth.releaseAll(now)
+      track.instrument.releaseAll(now)
     }
   }
 
   rebuildTrackSynths() {
     for (const track of this.trackStates) {
       const muted = track.muted
-      track.synth.dispose()
-      track.filter.dispose()
-      track.chorus.dispose()
-      track.reverb.dispose()
+      track.instrument.dispose()
 
-      const voice = createPianoVoice()
-      voice.reverb.connect(track.output)
-      Object.assign(track, voice)
+      // Recreated from the shared, already-decoded sample buffers, so this is a
+      // memory-only rebuild (no re-fetch) and stays on the sampled piano.
+      const instrument = createPianoInstrument({
+        tone: Tone,
+        onStatus: () => this.recomputeInstrumentStatus(),
+      })
+      instrument.output.connect(track.output)
+      track.instrument = instrument
       track.output.gain.value = muted ? 0 : 1
     }
+    this.recomputeInstrumentStatus()
   }
 
   clearScheduledPlayback() {
@@ -260,20 +255,17 @@ export class MidiPlaybackEngine {
       await Tone.start()
     }
 
-    const { synth, filter, chorus, reverb } = createPianoVoice()
-    reverb.connect(Tone.getDestination())
+    const instrument = createPianoInstrument({ tone: Tone })
+    instrument.output.connect(Tone.getDestination())
 
     const now = Tone.now()
-    synth.triggerAttackRelease('C4', 0.32, now, 0.55)
-    synth.triggerAttackRelease('E4', 0.32, now + 0.22, 0.5)
-    synth.triggerAttackRelease('G4', 0.45, now + 0.44, 0.48)
+    instrument.triggerAttackRelease('C4', 0.32, now, 0.55)
+    instrument.triggerAttackRelease('E4', 0.32, now + 0.22, 0.5)
+    instrument.triggerAttackRelease('G4', 0.45, now + 0.44, 0.48)
 
     window.setTimeout(() => {
-      synth.releaseAll()
-      synth.dispose()
-      filter.dispose()
-      chorus.dispose()
-      reverb.dispose()
+      instrument.releaseAll()
+      instrument.dispose()
     }, 1400)
   }
 
@@ -316,13 +308,11 @@ export class MidiPlaybackEngine {
 
   disposeTracks() {
     this.trackStates.forEach((track) => {
-      track.synth.dispose()
-      track.filter.dispose()
-      track.chorus.dispose()
-      track.reverb.dispose()
+      track.instrument.dispose()
       track.output.dispose()
     })
     this.trackStates = []
+    this.recomputeInstrumentStatus()
   }
 
   startProgressLoop() {

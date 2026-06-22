@@ -6,50 +6,10 @@ import {
   buildMetronomeSchedule,
   buildScoreNoteSchedule,
 } from './scorePlaybackSchedule.js'
+import { createPianoInstrument } from './pianoInstrument.js'
 
 const LOOKAHEAD_SECONDS = 2.5
 const SCHEDULE_TICK_MS = 200
-
-function createPianoVoice() {
-  // Piano-like timbre: triangle8 gives the fundamental + odd harmonics up to
-  // the 8th partial, approximating the warm brightness of a piano string.
-  // The envelope mimics a real piano key: fast attack, long continuous decay,
-  // NO sustain (a real piano always decays), quick release.
-  // This eliminates the "beepy/droney" quality of a sine with sustain.
-  const reverb = new Tone.Reverb({ decay: 2.5, wet: 0.22 })
-  reverb.generate()
-
-  const chorus = new Tone.Chorus({
-    frequency: 0.5,
-    delayTime: 3.5,
-    depth: 0.12,
-    wet: 0.08,
-  })
-  chorus.start()
-
-  // Bright cutoff (3800 Hz) preserves the piano's upper partials; -12 dB/oct
-  // is gentler than the previous -24 to let harmonics through.
-  const filter = new Tone.Filter({ type: 'lowpass', frequency: 3800, rolloff: -12 })
-
-  const synth = new Tone.PolySynth({
-    voice: Tone.Synth,
-    maxPolyphony: 24,
-  })
-
-  synth.set({
-    volume: -14,
-    oscillator: { type: 'triangle8' },
-    // Real piano envelope: fast attack, long decay filling the note, sustain 0
-    // (the sound decays to nothing without holding the key), quick release.
-    envelope: { attack: 0.006, decay: 2.2, sustain: 0.0, release: 0.35 },
-  })
-
-  synth.connect(filter)
-  filter.connect(chorus)
-  chorus.connect(reverb)
-
-  return { synth, filter, chorus, reverb }
-}
 
 function createMetronomeVoice() {
   // Slightly longer attack (3 ms) and shorter decay soften the click while
@@ -105,25 +65,41 @@ export class ScorePlaybackEngine {
     this.output = null
     this.metronomeEnabled = false
     this.metronomeLevel = 0.6
+    this.onInstrumentStatus = null
+    this.instrumentStatus = null
   }
 
   ensureVoices() {
     if (!this.voice) {
       this.output = new Tone.Gain(1).toDestination()
-      this.voice = createPianoVoice()
-      this.voice.reverb.connect(this.output)
+      // Sampled piano with automatic synth fallback. Routed through the same
+      // output gain, so timing, tempo, loops, muting and the audio-unlock path
+      // are all unchanged — only the timbre improves.
+      this.voice = createPianoInstrument({
+        tone: Tone,
+        onStatus: (status) => this.handleInstrumentStatus(status),
+      })
+      this.voice.output.connect(this.output)
     }
     if (!this.metronome) {
       this.metronome = createMetronomeVoice()
     }
   }
 
+  handleInstrumentStatus(status) {
+    this.instrumentStatus = status
+    if (this.onInstrumentStatus) {
+      this.onInstrumentStatus(status)
+    }
+  }
+
+  getInstrumentStatus() {
+    return this.instrumentStatus
+  }
+
   disposeVoices() {
     if (this.voice) {
-      this.voice.synth.dispose()
-      this.voice.filter.dispose()
-      this.voice.chorus.dispose()
-      this.voice.reverb.dispose()
+      this.voice.dispose()
       this.output?.dispose()
       this.voice = null
       this.output = null
@@ -251,7 +227,7 @@ export class ScorePlaybackEngine {
         const name = event.name ?? midiNumberToName(event.midi)
         const velocity = softenVelocity(event.velocity ?? 0.75)
         const duration = (event.baseDurationSeconds ?? 0.03) / this.playbackRate
-        this.voice.synth.triggerAttackRelease(name, duration, at, velocity)
+        this.voice.triggerAttackRelease(name, duration, at, velocity)
       }
 
       this.scheduledKeys.add(key)
@@ -294,7 +270,7 @@ export class ScorePlaybackEngine {
 
   releaseAll() {
     if (this.voice) {
-      this.voice.synth.releaseAll(Tone.now())
+      this.voice.releaseAll(Tone.now())
     }
   }
 
@@ -397,19 +373,14 @@ export class ScorePlaybackEngine {
       await Tone.start()
     }
 
-    const { synth, filter, chorus, reverb } = createPianoVoice()
-    reverb.connect(Tone.getDestination())
+    // Reuse the real instrument so the test tone also benefits from the sampled
+    // piano (and starts loading it). It plays on the synth immediately if the
+    // samples have not finished loading yet.
+    this.ensureVoices()
     const now = Tone.now()
-    synth.triggerAttackRelease('C4', 0.32, now, 0.55)
-    synth.triggerAttackRelease('E4', 0.32, now + 0.22, 0.5)
-    synth.triggerAttackRelease('G4', 0.45, now + 0.44, 0.48)
-    window.setTimeout(() => {
-      synth.releaseAll()
-      synth.dispose()
-      filter.dispose()
-      chorus.dispose()
-      reverb.dispose()
-    }, 1400)
+    this.voice.triggerAttackRelease('C4', 0.32, now, 0.55)
+    this.voice.triggerAttackRelease('E4', 0.32, now + 0.22, 0.5)
+    this.voice.triggerAttackRelease('G4', 0.45, now + 0.44, 0.48)
   }
 
   dispose() {

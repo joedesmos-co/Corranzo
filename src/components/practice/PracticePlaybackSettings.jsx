@@ -1,3 +1,8 @@
+import {
+  INSTRUMENT_STATUS,
+  INSTRUMENT_STATUS_LABEL,
+} from '../../features/playback/pianoInstrument.js'
+
 const RATE_STOPS = [0.5, 0.75, 1, 1.25, 1.5]
 
 export default function PracticePlaybackSettings({
@@ -10,13 +15,29 @@ export default function PracticePlaybackSettings({
   onMetronomeLevelChange,
   mappingWarning,
   audioSource,
+  instrumentStatus,
   disabled = false,
 }) {
+  const instrumentLabel = instrumentStatus
+    ? INSTRUMENT_STATUS_LABEL[instrumentStatus]
+    : null
+
   return (
     <div className="practice-playback-settings">
       {audioSource && (
         <p className="practice-playback-settings__source" aria-live="polite">
           Audio: {audioSource === 'midi' ? 'MIDI backing' : 'MusicXML synth'}
+        </p>
+      )}
+
+      {instrumentLabel && (
+        <p
+          className={`practice-playback-settings__instrument practice-playback-settings__instrument--${instrumentStatus}`}
+          aria-live="polite"
+        >
+          {instrumentStatus === INSTRUMENT_STATUS.LOADING ? '⏳ ' : ''}
+          {instrumentStatus === INSTRUMENT_STATUS.SAMPLED ? '🎹 ' : ''}
+          {instrumentLabel}
         </p>
       )}
 
