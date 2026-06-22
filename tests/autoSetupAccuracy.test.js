@@ -68,13 +68,14 @@ describe('measure allocation accuracy', () => {
     ])
   })
 
-  it('32 measures over 6 systems follows MusicXML breaks (not even spread)', async () => {
-    // Real engraving: systems hold 5,5,6,5,5,6 — NOT a flat 32/6 split.
-    const result = await analyze(
-      [cleanPianoPage({ systems: 6, measuresPerSystem: 5 })],
-      timingWithBreaks(32, [6, 11, 17, 22, 27]),
-    )
+  it('32 measures over 6 systems uses PDF barline counts, not a flat 32/6 split', async () => {
+    // Real engraving: systems hold a non-uniform 5,5,6,5,5,6 measures. The PDF's
+    // own barlines (not MusicXML breaks, which can disagree with the engraving)
+    // recover the exact ranges.
+    const page = cleanPianoPage({ measuresPerSystemList: [5, 5, 6, 5, 5, 6] })
+    const result = await analyze([page], timingWithBreaks(32))
     expect(result.ok).toBe(true)
+    expect(result.preview.allocationMode).toBe('barline-counts')
     expect(ranges(result.preview)).toEqual([
       [1, 5],
       [6, 10],

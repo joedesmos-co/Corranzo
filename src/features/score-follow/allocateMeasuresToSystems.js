@@ -188,6 +188,92 @@ function allocateWeightedMeasureSpans(systemEntries, measureNumbers) {
 }
 
 /**
+ * Reconcile per-system measure counts (e.g. from barline detection) to an exact
+ * total, preserving their shape. When the raw counts already sum to the total
+ * they are returned unchanged; otherwise they are scaled proportionally and
+ * rounded (largest-remainder) so the sum equals the total exactly.
+ */
+export function reconcileCountsToTotal(counts, total) {
+  const n = counts.length
+  if (n === 0 || total <= 0) {
+    return new Array(n).fill(0)
+  }
+  const clean = counts.map((c) => {
+    const value = Number(c)
+    return Number.isFinite(value) && value > 0 ? value : 0
+  })
+  const rawTotal = clean.reduce((a, b) => a + b, 0)
+  if (rawTotal === total && clean.every((c) => c >= 1)) {
+    return clean
+  }
+  if (rawTotal <= 0) {
+    return computeWeightedMeasureCounts(counts.map(() => 1), total)
+  }
+  if (total <= n) {
+    return clean.map((_, i) => (i < total ? 1 : 0))
+  }
+
+  const scaled = clean.map((c) => (c / rawTotal) * total)
+  const floored = scaled.map((v) => Math.max(1, Math.floor(v)))
+  let assigned = floored.reduce((a, b) => a + b, 0)
+  const order = scaled
+    .map((v, i) => ({ i, frac: v - Math.floor(v) }))
+    .sort((a, b) => b.frac - a.frac)
+  let cursor = 0
+  // Add measures to the largest fractional remainders until we hit the total.
+  while (assigned < total && cursor < order.length * 4) {
+    floored[order[cursor % order.length].i] += 1
+    assigned += 1
+    cursor += 1
+  }
+  // Remove from the smallest counts if we overshot (keeping every system ≥1).
+  const removeOrder = floored
+    .map((v, i) => ({ i, v }))
+    .sort((a, b) => a.v - b.v)
+  cursor = 0
+  while (assigned > total && cursor < removeOrder.length * 4) {
+    const idx = removeOrder[cursor % removeOrder.length].i
+    if (floored[idx] > 1) {
+      floored[idx] -= 1
+      assigned -= 1
+    }
+    cursor += 1
+  }
+  return floored
+}
+
+/**
+ * Build spans by assigning each system a fixed number of consecutive measures.
+ * Used by the staff-line + barline detection path, where per-system measure
+ * counts come from the PDF itself (not from MusicXML break hints).
+ */
+export function allocateSpansByCounts(systemEntries, measureNumbers, perSystemCounts) {
+  const counts = reconcileCountsToTotal(perSystemCounts, measureNumbers.length)
+  const spans = []
+  let measureIndex = 0
+  for (let systemIndex = 0; systemIndex < systemEntries.length; systemIndex += 1) {
+    const take = counts[systemIndex]
+    if (!take || measureIndex >= measureNumbers.length) {
+      continue
+    }
+    const slice = measureNumbers.slice(measureIndex, measureIndex + take)
+    measureIndex += slice.length
+    if (slice.length === 0) {
+      continue
+    }
+    spans.push({
+      systemIndex,
+      page: systemEntries[systemIndex].page,
+      measureStart: slice[0],
+      measureEnd: slice[slice.length - 1],
+      measuresInSpan: slice.length,
+      measureNumbers: slice,
+    })
+  }
+  return spans
+}
+
+/**
  * Group systems + spans for overlay rendering per page.
  */
 export function buildSystemsByPage(systemEntries, spans) {

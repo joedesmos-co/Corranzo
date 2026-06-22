@@ -1,4 +1,6 @@
-const ANALYSIS_WIDTH = 520
+// Higher analysis resolution so thin staff lines and barlines survive
+// rasterisation on real high-DPI score PDFs (needed by the staff-line detector).
+const ANALYSIS_WIDTH = 1000
 
 let cachedDocumentKey = null
 let cachedDocument = null

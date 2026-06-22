@@ -201,8 +201,10 @@ describe('analyzeSemiAutoScoreSetup — fixture matrix', () => {
     expect(result.ok).toBe(true)
     expect(result.preview.systemCount).toBe(6)
     expect(result.preview.proposedAnchors.length).toBeGreaterThanOrEqual(2)
-    // Clean engraving → high-precision conservative stage → "Auto setup complete".
-    expect(result.preview.stage).toBe(DETECTION_STAGE.CONSERVATIVE)
+    // Clean engraving → staff-line detection + barline-counted ranges → precise
+    // "Auto setup complete".
+    expect(result.preview.stage).toBe(DETECTION_STAGE.STAFF_LINES)
+    expect(result.preview.precise).toBe(true)
     expect(result.preview.approximate).toBe(false)
     expect(result.preview.autoApplyRecommended).toBe(true)
   })
@@ -222,13 +224,16 @@ describe('analyzeSemiAutoScoreSetup — fixture matrix', () => {
     ).toBe(true)
   })
 
-  it('Fixture 2: dense arrangement → tolerant stage still produces anchors', async () => {
+  it('Fixture 2: dense arrangement still produces systems + anchors', async () => {
     const result = await analyze(
       [densePianoPage({ systems: 5, measuresPerSystem: 6 })],
       buildTimingMap(30),
     )
     expect(result.ok).toBe(true)
-    expect(result.preview.stage).toBe(DETECTION_STAGE.TOLERANT)
+    // Staff-line detection is robust on dense notation (row-density bands fail).
+    expect([DETECTION_STAGE.STAFF_LINES, DETECTION_STAGE.TOLERANT]).toContain(
+      result.preview.stage,
+    )
     expect(result.preview.systemCount).toBeGreaterThanOrEqual(4)
     expect(result.preview.proposedAnchors.length).toBeGreaterThanOrEqual(2)
   })

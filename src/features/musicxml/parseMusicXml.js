@@ -182,6 +182,20 @@ function getMeasureNumberOrdered(measureNode, fallbackIndex) {
   return Number.isFinite(parsed) ? parsed : fallbackIndex + 1
 }
 
+/** Number of staves a part uses (max <staves> across its measures; default 1). */
+function countPartStaves(partNode) {
+  let staves = 1
+  for (const measureNode of findChildren(partNode, 'measure')) {
+    for (const attributes of findChildren(measureNode, 'attributes')) {
+      const value = numberOf(childText(attributes, 'staves'), NaN)
+      if (Number.isFinite(value) && value > staves) {
+        staves = value
+      }
+    }
+  }
+  return staves
+}
+
 function getWorkTitle(scoreNode) {
   const work = findChild(scoreNode, 'work')
   const title = work ? childText(work, 'work-title') : null
@@ -596,7 +610,11 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
         name: partNames.get(id) ?? id,
         measureCount: findChildren(partNode, 'measure').length,
         noteCount: pitchNotes.filter((note) => note.partId === id).length,
+        staves: countPartStaves(partNode),
       }
     }),
+    // Total staves drawn per system (e.g. 2 for a piano grand staff). Used to
+    // group detected PDF staff lines into systems during auto score-follow.
+    stavesPerSystem: partNodes.reduce((sum, partNode) => sum + countPartStaves(partNode), 0),
   }
 }

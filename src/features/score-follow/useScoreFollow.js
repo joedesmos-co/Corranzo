@@ -28,6 +28,7 @@ import {
 import useScoreFollowAnchors from './useScoreFollowAnchors.js'
 import useScoreFollowDisplayCursor from './useScoreFollowDisplayCursor.js'
 import {
+  areBundledDemoAnchorsDisabled,
   fetchDemoBundledAnchors,
   isDemoFixtureFileSet,
 } from '../demo/demoBundledAnchors.js'
@@ -74,6 +75,9 @@ export default function useScoreFollow({
 }) {
   const isDemoSession =
     isDemoPiece || isDemoFixtureFileSet(pdfFileName, timingSourceId ?? null)
+  // When bundled demo anchors are disabled (dev/test honesty switch), the demo
+  // piece runs the SAME automatic setup pipeline as a user upload.
+  const useBundledDemoAnchors = isDemoSession && !areBundledDemoAnchorsDisabled()
 
   const setupFailedMessage = isDemoSession
     ? SCORE_FOLLOW_SETUP_FAILED_DEMO
@@ -693,7 +697,7 @@ export default function useScoreFollow({
   ])
 
   useEffect(() => {
-    if (!isDemoSession || !sessionReady || !isHydrated || timingLoading || !hasTiming) {
+    if (!useBundledDemoAnchors || !sessionReady || !isHydrated || timingLoading || !hasTiming) {
       return
     }
     if (anchorCounts.manual > 0) {
@@ -740,7 +744,7 @@ export default function useScoreFollow({
       cancelled = true
     }
   }, [
-    isDemoSession,
+    useBundledDemoAnchors,
     sessionReady,
     isHydrated,
     timingLoading,
@@ -771,7 +775,9 @@ export default function useScoreFollow({
       return
     }
 
-    if (isDemoSession) {
+    // Only defer to bundled demo anchors when they're actually in use. With the
+    // honesty switch on, the demo falls through to the real auto-setup pipeline.
+    if (useBundledDemoAnchors) {
       if (demoBundledStatus.loading) {
         setSetupStatus({ phase: 'running', message: SCORE_FOLLOW_SETUP_RUNNING })
         return
@@ -809,7 +815,7 @@ export default function useScoreFollow({
     runSemiAutoSetupInternal,
     isPlaying,
     sessionReady,
-    isDemoSession,
+    useBundledDemoAnchors,
     demoBundledStatus.loading,
     demoBundledStatus.error,
     demoBundledStatus.applied,
@@ -924,6 +930,16 @@ export default function useScoreFollow({
       cursorVisibleOnPage: cursorVisibility.show,
       followTrustLevel: anchorTrust.level,
       followApproximate: anchorTrust.approximate,
+      // Provenance — which anchor source is actually driving the cursor.
+      fileName: pdfFileName ?? null,
+      fingerprint: pdfFingerprint ?? null,
+      bundledAnchorsUsed: anchorCounts.demo > 0,
+      autoAnchorsUsed: anchorCounts.auto > 0,
+      manualAnchorsUsed: anchorCounts.manual > 0,
+      bundledAnchorsDisabled: !useBundledDemoAnchors && isDemoSession,
+      cursorShownBecause: anchorTrust.showCursor
+        ? `trust=${anchorTrust.level}`
+        : `blocked: needsSetup=${anchorTrust.needsSetup}`,
       // Dev-only auto-setup analysis report (null until auto setup runs).
       autoSetup: autoSetupReport,
     }),
@@ -935,6 +951,10 @@ export default function useScoreFollow({
       anchorCounts,
       anchorTrust,
       autoSetupReport,
+      pdfFileName,
+      pdfFingerprint,
+      useBundledDemoAnchors,
+      isDemoSession,
     ],
   )
 

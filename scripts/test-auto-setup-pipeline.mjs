@@ -71,9 +71,12 @@ function analyze(pages, tm) {
     timingMap(30, { breakEvery: 5 }),
   )
   assert(result.ok, 'clean page should produce an auto-setup result')
-  assert(result.preview.stage === DETECTION_STAGE.CONSERVATIVE, 'clean page should use conservative stage')
+  assert(
+    result.preview.stage === DETECTION_STAGE.STAFF_LINES,
+    'clean page should use staff-line detection',
+  )
   assert(result.preview.proposedAnchors.length >= 2, 'clean page should produce anchors')
-  assert(result.preview.approximate === false, 'clean conservative result should not be flagged approximate')
+  assert(result.preview.approximate === false, 'clean precise result should not be flagged approximate')
 }
 
 // 3. Weak barlines → system spans, no per-measure anchors, still a cursor.

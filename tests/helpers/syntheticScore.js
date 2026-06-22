@@ -105,9 +105,13 @@ export function cleanPianoPage({
   height = 640,
   systems = 3,
   measuresPerSystem = 4,
+  measuresPerSystemList = null,
   barlines = true,
   header = true,
 } = {}) {
+  const systemCount = measuresPerSystemList ? measuresPerSystemList.length : systems
+  const measuresFor = (s) =>
+    measuresPerSystemList ? measuresPerSystemList[s] : measuresPerSystem
   // Fixed grand-staff height + a modest inter-system gap, like engraved music.
   // (Large gaps would make the valley-split detector return loose bands.)
   const lineGap = 5
@@ -118,7 +122,7 @@ export function cleanPianoPage({
 
   const pageHeight = Math.max(
     height,
-    Math.ceil((Math.floor(640 * topFrac) + systems * (staffHeight + gap) + 40)),
+    Math.ceil((Math.floor(640 * topFrac) + systemCount * (staffHeight + gap) + 40)),
   )
   const img = createPage(width, pageHeight)
   const x0 = Math.floor(width * 0.08)
@@ -130,13 +134,14 @@ export function cleanPianoPage({
   const top = Math.floor(pageHeight * topFrac)
   const systemBands = []
 
-  for (let s = 0; s < systems; s += 1) {
+  for (let s = 0; s < systemCount; s += 1) {
     const sysTop = top + s * (staffHeight + gap)
     const band = drawGrandStaff(img, sysTop, x0, x1, { lineGap, innerGap })
     systemBands.push(band)
     if (barlines) {
-      for (let m = 0; m <= measuresPerSystem; m += 1) {
-        const bx = Math.floor(x0 + ((x1 - x0) * m) / measuresPerSystem)
+      const measures = measuresFor(s)
+      for (let m = 0; m <= measures; m += 1) {
+        const bx = Math.floor(x0 + ((x1 - x0) * m) / measures)
         // 2px wide: the column peak survives ±2 smoothing in barline detection
         // without flooding the inter-line gaps (which would look "dense").
         vLine(img, bx, band.top, band.bottom)
@@ -147,6 +152,18 @@ export function cleanPianoPage({
 
   img.systemBands = systemBands
   return img
+}
+
+/**
+ * Multi-page synthetic score with explicit per-page, per-system measure counts —
+ * the structure needed to reproduce a real piece's visual layout (e.g. Guren).
+ * `pageSpecs` is an array (one per page) of arrays of measures-per-system.
+ * Returns an array of page ImageData.
+ */
+export function multiPageScoreWithCounts(pageSpecs) {
+  return pageSpecs.map((measuresPerSystemList) =>
+    cleanPianoPage({ measuresPerSystemList, barlines: true, header: true }),
+  )
 }
 
 /**

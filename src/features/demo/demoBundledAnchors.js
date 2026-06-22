@@ -7,6 +7,30 @@ export const DEMO_BUNDLED_ANCHORS_PATH = FIXTURE_PATHS.demoAnchors
 let cachedBundled = null
 let cachedBundledPromise = null
 
+// Dev/test switch: when disabled, the demo piece must go through the SAME
+// automatic setup pipeline as user uploads (no bundled-anchor shortcut). This
+// is the honesty check — if the demo can't auto-configure without its bundle,
+// the auto pipeline isn't really working.
+let bundledAnchorsDisabled = false
+
+export function setBundledDemoAnchorsDisabled(disabled) {
+  bundledAnchorsDisabled = Boolean(disabled)
+}
+
+export function areBundledDemoAnchorsDisabled() {
+  if (bundledAnchorsDisabled) {
+    return true
+  }
+  if (typeof globalThis !== 'undefined' && globalThis.__SCOREFLOW_DISABLE_BUNDLED_ANCHORS__) {
+    return true
+  }
+  try {
+    return import.meta.env?.VITE_DISABLE_BUNDLED_ANCHORS === 'true'
+  } catch {
+    return false
+  }
+}
+
 export function isDemoFixtureFileSet(pdfFileName, timingFileName) {
   return (
     pdfFileName === FIXTURE_FILENAMES.pdf &&

@@ -8,6 +8,67 @@ cases. Manual marking is now a rare last-resort rescue path, not normal flow.
 
 ---
 
+## Uploaded-score pass (PDF-geometry-primary rewrite)
+
+The demo's bundled anchors were masking a broken pipeline: real multi-page
+uploads mapped the cursor to the wrong system. Investigating the real
+**Guren no Yumiya** upload (4-page PDF + MXL) revealed why, and drove a rewrite.
+
+**Key findings on the real files.**
+- The MXL embeds a **5-page** layout (page 1 systems at 1, 6, 10, 14); the actual
+  **PDF is 4 pages** (systems at 1, 6, 11, 15, 19). So MusicXML's embedded
+  page/system breaks come from a *different engraving* than the PDF the user
+  follows — **they cannot be trusted as the visual layout**. A "MusicXML-
+  layout-first" approach would map every page wrong.
+- Row-density band detection found 3 / 0 / 4 / 2 systems on the four pages (true
+  counts 5 / 6 / 5 / 3) — dense piano ink has no clean valleys between systems.
+- The old global in-order allocation cascaded: under-detecting one page by a
+  single system shifted every later measure and dropped the final system.
+
+**The rewrite — PDF geometry is primary, MusicXML supplies count + staff layout.**
+1. **Staff-line detection** (`detectStaffLines.js`): staff systems are found from
+   long, near-full-width horizontal runs of ink (staff lines), which survive even
+   in dense music where row-density bands fail.
+2. **Staves-per-system from MusicXML** (`<staves>` summed across parts; 2 for
+   piano) groups detected staves into systems. Grouping uses a gap-consistency
+   test (within-chunk gaps clearly smaller than between-chunk gaps), robust to
+   whether treble/bass render as one merged staff or two.
+3. **Barline counting** per system (full-system-height vertical runs, distinct
+   from short note stems) gives measures-per-system; sequential allocation across
+   pages yields exact, page-anchored measure ranges. Counts are reconciled to the
+   MusicXML measure total (repeat/double-bar over-counts are normalised away).
+4. **Honesty switch** (`areBundledDemoAnchorsDisabled` / `setBundledDemoAnchorsDisabled`):
+   disables the demo's bundled anchors so the sample runs the *same* pipeline as
+   uploads. The committed real-PDF tests already run the demo through the real
+   pipeline (no bundle).
+5. **Guardrails**: implausible mappings (unreconcilable per-page system-count
+   mismatch, or measure 1 landing in the title/header) are downgraded to
+   "Needs quick setup" rather than shown as a confidently-wrong cursor. Analysis
+   resolution was raised to 1000px so thin staff lines/barlines survive.
+6. **Debug report** (`scoreFollow.debug.autoSetup`, dev-only): file name /
+   fingerprint, bundled-vs-auto-vs-manual provenance, pages analysed, detected
+   systems per page, MusicXML measure count + break/`default-x` hints, allocation
+   mode, per-system measure ranges, first/last anchor x, stage/confidence, and
+   why the cursor is shown or blocked.
+
+**Result on the real Guren PDF + MXL** (run through the actual pipeline): all 19
+system starts are exact — page 1 **1, 6, 11, 15, 19**; page 2 **23, 27, 31, 35,
+38, 41**; page 3 **45, 49, 53, 57, 61**; page 4 **65, 69, 74** — total 75 = MXL.
+Every acceptance checkpoint passes (m1→p1s1, m6→p1s2, m15→p1s4, m23→p2s1,
+m45→p3s1, m65→p4s1, m70→p4s2, m74→p4s3), confidence 1.0, stage `staff-lines`,
+allocation `barline-counts`. The Minuet demo, run *without* its bundled anchors,
+also maps to its 6 systems correctly.
+
+**Honest limitation:** correctness depends on the PDF's staff lines and barlines
+being detectable at 1000px. Very low-quality scans, handwritten scores, or
+exotic notation may still fall back (tolerant/geometric detection → "Approximate
+cursor", or "Needs quick setup" when implausible). The pipeline downgrades
+honestly in those cases rather than showing a wrong cursor. This was verified on
+two real PDFs (Guren, Minuet) plus synthetic fixtures; it is not a guarantee for
+every possible PDF.
+
+---
+
 ## Accuracy pass (follow-up)
 
 The first pass made the cursor *appear* automatically. This pass makes it

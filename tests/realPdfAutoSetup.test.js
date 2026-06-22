@@ -34,7 +34,7 @@ const xmlPath = fileURLToPath(
   new URL('../public/fixtures/demo-minuet-in-g.musicxml', import.meta.url),
 )
 
-const ANALYSIS_WIDTH = 520
+const ANALYSIS_WIDTH = 1000
 
 let ready = false
 let skipReason = ''
