@@ -11,11 +11,102 @@ function formatNoteRef(note) {
   return `MIDI ${note.midi} @ ${formatTime(note.timeSeconds)}`
 }
 
+/**
+ * Phase 4 (flag-gated, diagnostics-only) next-gen alignment summary. Surfaces
+ * the new reconciliation / confidence-decision / anchor-coverage view-model.
+ * Rendered ONLY when `nextGen` is supplied (the score-follow hook supplies it
+ * only when the feature flag is enabled), so default behavior is unchanged.
+ */
+function NextGenAlignmentBlock({ nextGen, showCandidates, onToggleCandidates }) {
+  if (!nextGen?.available) {
+    return null
+  }
+  const { decision, layoutConfidenceLabel, coverage, model, pageSystem } = nextGen
+  const missing = coverage?.missingMeasures ?? []
+  const weak = coverage?.weakSystems ?? []
+  return (
+    <details className="alignment-diagnostics__nextgen">
+      <summary>Alignment engine (diagnostics)</summary>
+      <p className="alignment-diagnostics__nextgen-note">
+        Experimental next-gen alignment. Diagnostics only — does not drive the
+        cursor or change setup.
+      </p>
+      <dl className="alignment-diagnostics__grid">
+        <div>
+          <dt>Recommended action</dt>
+          <dd>{decision?.label ?? decision?.action ?? '—'}</dd>
+        </div>
+        <div>
+          <dt>Layout confidence</dt>
+          <dd>{layoutConfidenceLabel ?? nextGen.layoutConfidence ?? '—'}</dd>
+        </div>
+        <div>
+          <dt>Anchor coverage</dt>
+          <dd>
+            {coverage
+              ? `${coverage.measuresCovered}/${coverage.measuresExpected} (${coverage.trust})`
+              : '—'}
+          </dd>
+        </div>
+        <div>
+          <dt>Missing measures</dt>
+          <dd>{missing.length ? `${missing.length} (m${missing.join(', m')})` : 'none'}</dd>
+        </div>
+        <div>
+          <dt>Weak systems</dt>
+          <dd>{weak.length ? weak.map((index) => index + 1).join(', ') : 'none'}</dd>
+        </div>
+        <div>
+          <dt>Page/system</dt>
+          <dd>{pageSystem?.label ?? '—'}</dd>
+        </div>
+      </dl>
+
+      {(decision?.reasons ?? []).length > 0 && (
+        <ul className="alignment-diagnostics__nextgen-reasons">
+          {decision.reasons.map((reason) => (
+            <li key={reason}>{reason}</li>
+          ))}
+        </ul>
+      )}
+
+      {(model ?? []).length > 0 && (
+        <ul className="alignment-diagnostics__nextgen-model">
+          {model.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
+      )}
+
+      {onToggleCandidates && (
+        <label className="alignment-diagnostics__nextgen-toggle">
+          <input
+            type="checkbox"
+            checked={Boolean(showCandidates)}
+            onChange={(event) => onToggleCandidates(event.target.checked)}
+          />
+          Show candidate anchors on the score (debug overlay)
+        </label>
+      )}
+    </details>
+  )
+}
+
 export default function AlignmentDiagnosticsSection({
   diagnostics,
   isLoading,
   error,
+  nextGen = null,
+  showCandidates = false,
+  onToggleCandidates = null,
 }) {
+  const nextGenBlock = (
+    <NextGenAlignmentBlock
+      nextGen={nextGen}
+      showCandidates={showCandidates}
+      onToggleCandidates={onToggleCandidates}
+    />
+  )
   if (isLoading) {
     return (
       <section className="alignment-diagnostics" aria-label="Alignment diagnostics">
@@ -30,12 +121,21 @@ export default function AlignmentDiagnosticsSection({
       <section className="alignment-diagnostics" aria-label="Alignment diagnostics">
         <h4 className="alignment-diagnostics__title">Alignment diagnostics</h4>
         <p className="alignment-diagnostics__error">{error}</p>
+        {nextGenBlock}
       </section>
     )
   }
 
   if (!diagnostics) {
-    return null
+    if (!nextGen?.available) {
+      return null
+    }
+    return (
+      <section className="alignment-diagnostics" aria-label="Alignment diagnostics">
+        <h4 className="alignment-diagnostics__title">Alignment diagnostics</h4>
+        {nextGenBlock}
+      </section>
+    )
   }
 
   const assessmentClass =
@@ -110,6 +210,7 @@ export default function AlignmentDiagnosticsSection({
           </dd>
         </div>
       </dl>
+      {nextGenBlock}
     </section>
   )
 }

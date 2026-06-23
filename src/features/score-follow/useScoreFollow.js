@@ -27,6 +27,8 @@ import {
 } from './scoreFollowVisibility.js'
 import useScoreFollowAnchors from './useScoreFollowAnchors.js'
 import useScoreFollowDisplayCursor from './useScoreFollowDisplayCursor.js'
+import { isNextGenAlignmentDiagnosticsEnabled } from './nextGenAlignmentFlag.js'
+import { deriveNextGenAlignmentDiagnostics } from './nextGenAlignmentDiagnostics.js'
 import {
   areBundledDemoAnchorsDisabled,
   fetchDemoBundledAnchors,
@@ -934,6 +936,37 @@ export default function useScoreFollow({
   ])
   const isSemiAutoAnalyzing = semiAutoSetup.status === 'analyzing'
 
+  // ---------------------------------------------------------------------------
+  // Phase 4 — next-gen alignment diagnostics (FLAG-GATED, DISPLAY-ONLY).
+  //
+  // When the flag is OFF (public default) this is null and nothing changes.
+  // When ON, it derives the new reconciliation / confidence-decision / anchor-
+  // coverage view-model from the EXISTING auto-setup report. It NEVER touches
+  // the cursor, auto-setup, manual setup, or bundled demo anchors. Candidate
+  // anchors are display-only (tagged `meta.candidate`) and are surfaced for an
+  // opt-in debug overlay; they are never added to `anchors`.
+  // ---------------------------------------------------------------------------
+  const nextGenEnabled = useMemo(() => isNextGenAlignmentDiagnosticsEnabled(), [])
+  const [showNextGenCandidates, setShowNextGenCandidates] = useState(false)
+
+  const nextGenDiagnostics = useMemo(() => {
+    if (!nextGenEnabled) {
+      return null
+    }
+    const result = deriveNextGenAlignmentDiagnostics({
+      timingMap,
+      autoSetupReport,
+    })
+    return result.available ? result : null
+  }, [nextGenEnabled, timingMap, autoSetupReport])
+
+  const nextGenCandidateAnchors = useMemo(() => {
+    if (!nextGenEnabled || !showNextGenCandidates) {
+      return null
+    }
+    return nextGenDiagnostics?.candidateAnchors ?? null
+  }, [nextGenEnabled, showNextGenCandidates, nextGenDiagnostics])
+
   const debug = useMemo(
     () => ({
       currentMeasureNumber: currentMeasure?.number ?? null,
@@ -1044,5 +1077,12 @@ export default function useScoreFollow({
     addSystemStartMark,
     undoLastSystemStartMark,
     confirmSystemStartMarks,
+    // Phase 4 (flag-gated, display-only): next-gen alignment diagnostics +
+    // opt-in candidate-anchor debug overlay. null/false when the flag is off.
+    nextGenEnabled,
+    nextGenDiagnostics,
+    nextGenCandidateAnchors,
+    showNextGenCandidates,
+    setShowNextGenCandidates,
   }
 }

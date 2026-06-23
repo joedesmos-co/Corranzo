@@ -25,6 +25,8 @@ function scoreFollowOverlayPropsEqual(prev, next) {
   if (prev.anchors !== next.anchors) return false
   if (prev.systemStartMode !== next.systemStartMode) return false
   if (prev.systemStartMarks !== next.systemStartMarks) return false
+  if (prev.showCandidateAnchors !== next.showCandidateAnchors) return false
+  if (prev.candidateAnchors !== next.candidateAnchors) return false
   const pc = prev.cursor
   const nc = next.cursor
   if (pc?.visible !== nc?.visible) return false
@@ -53,12 +55,21 @@ function ScoreFollowOverlay({
   systemStartMode = false,
   systemStartMarks = [],
   onPlaceSystemStart,
+  // Phase 4 (flag-gated, debug-only): generated candidate anchors. These NEVER
+  // drive the cursor — they are a diagnostic overlay shown only when opted in.
+  candidateAnchors = null,
+  showCandidateAnchors = false,
 }) {
   const layerRef = useRef(null)
 
   const showCursor = cursorVisibility?.show ?? false
   const pageAnchors = anchors.filter((anchor) => anchor.page === pageNumber)
   const pageSystemStartMarks = systemStartMarks.filter((m) => m.page === pageNumber)
+  const pageCandidateAnchors =
+    showCandidateAnchors && Array.isArray(candidateAnchors)
+      ? candidateAnchors.filter((anchor) => anchor.page === pageNumber)
+      : []
+  const hasCandidates = pageCandidateAnchors.length > 0
   const hasBands = showSystemBands && pageSystems.length > 0
   // Auto "guide" dots only belong while actively aligning or reviewing the auto
   // preview. In plain practice / setup-panel views they are diagnostic markers
@@ -98,7 +109,15 @@ function ScoreFollowOverlay({
     [alignmentMode, onPlaceAnchor, systemStartMode, onPlaceSystemStart, pageNumber],
   )
 
-  if (!alignmentMode && !systemStartMode && !showCursor && !showNoteTarget && !hasBands && !hasMarkers) {
+  if (
+    !alignmentMode &&
+    !systemStartMode &&
+    !showCursor &&
+    !showNoteTarget &&
+    !hasBands &&
+    !hasMarkers &&
+    !hasCandidates
+  ) {
     return null
   }
 
@@ -156,6 +175,19 @@ function ScoreFollowOverlay({
             />
           )
         })}
+
+      {hasCandidates &&
+        pageCandidateAnchors.map((anchor) => (
+          <span
+            key={anchor.id}
+            className="score-follow-overlay__candidate-marker"
+            style={{
+              left: `${anchor.x * 100}%`,
+              top: `${anchor.y * 100}%`,
+            }}
+            title={`Candidate m${anchor.measureNumber}${anchor.trust ? ` · ${anchor.trust}` : ''} (diagnostic)`}
+          />
+        ))}
 
       {showCursor && cursorX != null && cursorY != null && (
         <div

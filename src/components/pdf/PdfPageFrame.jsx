@@ -81,7 +81,8 @@ export default function PdfPageFrame({
       systemStartMode ||
       scoreFollow.enabled ||
       semiAutoPreview ||
-      scoreFollow.showNoteTarget)
+      scoreFollow.showNoteTarget ||
+      scoreFollow.showCandidateAnchors)
 
   const innerLayout = overlayLayout
     ? {
@@ -125,6 +126,8 @@ export default function PdfPageFrame({
                 systemStartMode={systemStartMode}
                 systemStartMarks={scoreFollow.systemStartMarks ?? []}
                 onPlaceSystemStart={scoreFollow.addSystemStartMark}
+                candidateAnchors={scoreFollow.candidateAnchors ?? null}
+                showCandidateAnchors={scoreFollow.showCandidateAnchors ?? false}
               />
             </PdfOverlayLayer>
           )}

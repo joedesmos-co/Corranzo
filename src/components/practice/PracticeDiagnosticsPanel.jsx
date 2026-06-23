@@ -86,6 +86,15 @@ export default function PracticeDiagnosticsPanel({ session, scoreFollow }) {
                 <dd>{scoreFollow.debug.anchorCount ?? 0}</dd>
               </div>
             </dl>
+
+            {scoreFollow.nextGenDiagnostics?.available && (
+              <AlignmentDiagnosticsSection
+                diagnostics={null}
+                nextGen={scoreFollow.nextGenDiagnostics}
+                showCandidates={scoreFollow.showNextGenCandidates}
+                onToggleCandidates={scoreFollow.setShowNextGenCandidates}
+              />
+            )}
           </div>
         </details>
       )}

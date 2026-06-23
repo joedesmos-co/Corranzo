@@ -1776,6 +1776,18 @@
   background: rgba(109, 74, 255, 0.9);
 }
 
+/* Phase 4 diagnostics-only: generated candidate anchors (never the cursor). */
+.score-follow-overlay__candidate-marker {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 2px;
+  background: rgba(244, 114, 182, 0.55);
+  border: 1px dashed rgba(190, 24, 93, 0.95);
+  pointer-events: none;
+}
+
 .score-follow-overlay__anchor-marker--align.score-follow-overlay__anchor-marker--auto {
   width: 12px;
   height: 12px;

@@ -37,6 +37,10 @@ export function usePracticeScoreFollowOverlayProps() {
     systemStartMarks: scoreFollow.systemStartMarks,
     addSystemStartMark: scoreFollow.addSystemStartMark,
     showSystemStartMarkers: scoreFollow.showSystemStartMarkers,
+    // Phase 4 (flag-gated, debug-only) candidate-anchor overlay. null/false
+    // unless the flag is on AND the user opted into the debug overlay.
+    candidateAnchors: scoreFollow.nextGenCandidateAnchors ?? null,
+    showCandidateAnchors: Boolean(scoreFollow.showNextGenCandidates),
   }
 }
 
