@@ -16,24 +16,8 @@ import PracticeCollapsibleSection from './PracticeCollapsibleSection.jsx'
 import PracticeSetupPanel from './PracticeSetupPanel.jsx'
 import PracticeDiagnosticsPanel from './PracticeDiagnosticsPanel.jsx'
 import PracticeEnvironmentNotices from './PracticeEnvironmentNotices.jsx'
+import PracticeStatusStrip from './PracticeStatusStrip.jsx'
 import { buildDiagnosticsSummary, buildSetupSummary } from './practicePanelSummaries.js'
-
-function buildFilesSummary({ pdfFileName, hasMusicXml, hasMidi }) {
-  const parts = []
-  if (pdfFileName) {
-    parts.push('PDF')
-  }
-  if (hasMusicXml) {
-    parts.push('Timing')
-  }
-  if (hasMidi) {
-    parts.push('Sound')
-  }
-  if (parts.length === 0) {
-    return 'Nothing loaded yet'
-  }
-  return parts.join(' · ')
-}
 
 export default function PracticeControlPanel({
   pdfFileName,
@@ -53,11 +37,6 @@ export default function PracticeControlPanel({
   const openSetupByDefault = needsScoreFollowSetup && !session.isDemoPiece
 
   const filesReady = Boolean(pdfFileName && session.hasMusicXml)
-  const filesSummary = buildFilesSummary({
-    pdfFileName,
-    hasMusicXml: session.hasMusicXml,
-    hasMidi: session.hasMidi,
-  })
 
   const importWarnings = [...(session.importReadiness?.warnings ?? [])]
   if (scoreFollow?.anchorStorageWarning) {
@@ -67,6 +46,12 @@ export default function PracticeControlPanel({
       message: scoreFollow.anchorStorageWarning,
     })
   }
+  const visibleWarnings = importWarnings.filter(
+    (warning) => warning.strength === 'strong',
+  )
+  const detailWarnings = importWarnings.filter(
+    (warning) => warning.strength !== 'strong',
+  )
 
   const filesBlock = (
     <PracticeFilesSummary
@@ -82,30 +67,15 @@ export default function PracticeControlPanel({
 
   return (
     <aside className="practice-control-panel" aria-label="Practice controls">
-      {filesReady ? (
-        <PracticeCollapsibleSection
-          title="Your files"
-          summary={filesSummary}
-          defaultOpen={false}
-        >
-          {filesBlock}
-        </PracticeCollapsibleSection>
-      ) : (
-        filesBlock
-      )}
+      <PracticeStatusStrip session={session} scoreFollow={scoreFollow} />
 
       <PracticeImportNotices
-        warnings={importWarnings}
-        guidance={session.importReadiness?.guidance ?? []}
-        maxGuidance={3}
+        warnings={visibleWarnings}
+        guidance={[]}
       />
-
-      <PracticeEnvironmentNotices />
 
       <div className="practice-control-panel__primary practice-control-panel__primary--focus">
         <PracticeTransportTick />
-
-        <PracticePositionTick />
 
         <PracticeModeSection
           practiceMode={session.practiceMode}
@@ -117,8 +87,32 @@ export default function PracticeControlPanel({
 
         <PracticeLoopCompactSection session={session} />
 
-        <PracticeTracksCompactSection session={session} />
+        <PracticePositionTick collapsible />
       </div>
+
+      <WaitForYouSection
+        active={session.waitForYou.active}
+        status={session.waitForYou.status}
+        checkpointMode={session.checkpointMode}
+        noteTarget={waitForYouNoteTarget?.target ?? null}
+        noteTargetWrongPage={waitForYouNoteTarget?.wrongPage ?? false}
+        onCheckpointModeChange={session.setCheckpointMode}
+        currentCheckpoint={session.waitForYou.currentCheckpoint}
+        checkpointIndex={session.waitForYou.checkpointIndex}
+        totalCheckpoints={session.waitForYou.totalCheckpoints}
+        inputSource={session.wfyInputSource}
+        onInputSourceChange={session.setWfyInputSource}
+        midiAvailable={isWebMidiSupported()}
+        microphoneAvailable={isMicrophoneSupported()}
+        inputMatchingActive={session.waitForYouInput.matchingEnabled}
+        inputFeedback={session.waitForYouInput.inputFeedback}
+        onMarkCorrect={session.waitForYou.markCorrectAndContinue}
+        onRestart={session.waitForYou.restart}
+        onPlayReference={session.referencePlayback.playCheckpointReference}
+        referencePlaying={session.referencePlayback.isPlaying}
+        showMatchSettings={false}
+        compact
+      />
 
       {session.isWaitForYou &&
         session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
@@ -134,8 +128,8 @@ export default function PracticeControlPanel({
             onRefreshDevices={session.webMidi.refreshDevices}
             listenHint={
               session.waitForYouInput.matchingEnabled
-                ? 'Listening for your playing in Wait For You.'
-                : 'Enable MIDI to play along in Wait For You.'
+                ? 'Listening'
+                : 'Enable MIDI to continue automatically.'
             }
             compact
           />
@@ -162,37 +156,36 @@ export default function PracticeControlPanel({
           />
         )}
 
-      <WaitForYouSection
-        active={session.waitForYou.active}
-        status={session.waitForYou.status}
-        checkpointMode={session.checkpointMode}
-        noteTarget={waitForYouNoteTarget?.target ?? null}
-        noteTargetWrongPage={waitForYouNoteTarget?.wrongPage ?? false}
-        onCheckpointModeChange={session.setCheckpointMode}
-        currentCheckpoint={session.waitForYou.currentCheckpoint}
-        checkpointIndex={session.waitForYou.checkpointIndex}
-        totalCheckpoints={session.waitForYou.totalCheckpoints}
-        inputSource={session.wfyInputSource}
-        onInputSourceChange={session.setWfyInputSource}
-        midiAvailable={isWebMidiSupported()}
-        microphoneAvailable={isMicrophoneSupported()}
-        inputMatchingActive={session.waitForYouInput.matchingEnabled}
-        inputFeedback={session.waitForYouInput.inputFeedback}
-        onMarkCorrect={session.waitForYou.markCorrectAndContinue}
-        onRestart={session.waitForYou.restart}
-        onPlayReference={session.referencePlayback.playCheckpointReference}
-        referencePlaying={session.referencePlayback.isPlaying}
-        showMatchSettings={false}
-        compact
-      />
-
       <div className="practice-control-panel__footer">
-        <p className="practice-shortcuts-hint" aria-label="Keyboard shortcuts">
-          <span className="practice-shortcuts-hint__keys">
-            <kbd>Space</kbd> play · <kbd>Enter</kbd> continue · <kbd>←</kbd>
-            <kbd>→</kbd> pages · <kbd>F</kbd> fullscreen
-          </span>
-        </p>
+        <PracticeCollapsibleSection
+          title="More"
+          summary="Files, tracks & shortcuts"
+          defaultOpen={false}
+        >
+          <div className="practice-more">
+            {filesReady ? filesBlock : null}
+            <PracticeImportNotices
+              warnings={detailWarnings}
+              guidance={session.importReadiness?.guidance ?? []}
+              maxGuidance={2}
+            />
+            <PracticeEnvironmentNotices />
+            <PracticeTracksCompactSection session={session} />
+            <p className="practice-shortcuts-hint" aria-label="Keyboard shortcuts">
+              <kbd>Space</kbd> play · <kbd>Enter</kbd> continue · <kbd>←</kbd>
+              <kbd>→</kbd> pages · <kbd>F</kbd> fullscreen
+            </p>
+            <PracticeCollapsibleSection
+              title="Advanced"
+              summary={diagnosticsSummary}
+              defaultOpen={false}
+            >
+              <PracticeDiagnosticsPanel session={session} scoreFollow={scoreFollow} />
+            </PracticeCollapsibleSection>
+          </div>
+        </PracticeCollapsibleSection>
+
+        {!filesReady && filesBlock}
 
         <PracticeCollapsibleSection
           title="Setup"
@@ -207,13 +200,6 @@ export default function PracticeControlPanel({
           />
         </PracticeCollapsibleSection>
 
-        <PracticeCollapsibleSection
-          title="Technical details"
-          summary={diagnosticsSummary}
-          defaultOpen={false}
-        >
-          <PracticeDiagnosticsPanel session={session} scoreFollow={scoreFollow} />
-        </PracticeCollapsibleSection>
       </div>
     </aside>
   )

@@ -1,11 +1,9 @@
 import MidiTransportControls from './MidiTransportControls.jsx'
 import PracticePlaybackSettings from './PracticePlaybackSettings.jsx'
+import PracticeHelpTip from './PracticeHelpTip.jsx'
 
 export default function PracticeTransportSection({
   hasMusicXml,
-  hasMidi,
-  playbackFileName,
-  timingFileName,
   isLoading,
   error,
   disabled,
@@ -20,8 +18,6 @@ export default function PracticeTransportSection({
   metronomeEnabled,
   metronomeLevel,
   mappingWarning,
-  audioSource,
-  instrumentStatus,
   onPlaybackRateChange,
   onMetronomeEnabledChange,
   onMetronomeLevelChange,
@@ -36,36 +32,23 @@ export default function PracticeTransportSection({
 
   return (
     <section
-      className={`practice-section${compact ? ' practice-section--compact' : ''}`}
+      className={`practice-section practice-transport${compact ? ' practice-section--compact' : ''}`}
       aria-label="Playback"
     >
-      <h3 className="practice-section__title practice-section__title--static">Playback</h3>
-
-      <p className="practice-section__hint practice-section__hint--sound">
-        ScoreFlow plays your MusicXML timing on a built-in piano
-        {hasMidi ? ' (MIDI backing mapped to the score clock when provided)' : ''}. Tap Play once
-        to unlock audio in Safari and on iPad.
-      </p>
+      <h3 className="practice-section__title practice-section__title--static practice-section__title--with-tip">
+        Playback
+        <PracticeHelpTip label="About playback">
+          Plays the score with the built-in piano. MIDI backing is optional.
+        </PracticeHelpTip>
+      </h3>
 
       {!canPlay ? (
-        <p className="practice-section__hint">
-          Add a MusicXML or MXL timing file in Library to enable playback and measure navigation.
-        </p>
+        <p className="practice-section__hint">Timing file required.</p>
       ) : (
         <div className="practice-section__body practice-section__body--flat">
-          {timingFileName && (
-            <p className="practice-section__file" title={timingFileName}>
-              {timingFileName}
-            </p>
-          )}
-          {hasMidi && playbackFileName && (
-            <p className="practice-section__file" title={playbackFileName}>
-              {playbackFileName}
-            </p>
-          )}
           {isLoading && (
             <p className="practice-section__status practice-section__status--loading" role="status">
-              Preparing playback…
+              Loading…
             </p>
           )}
           {!isLoading && error && (
@@ -75,9 +58,7 @@ export default function PracticeTransportSection({
           )}
 
           {transportHint && (
-            <p className="practice-section__hint practice-section__hint--inline">
-              {transportHint}
-            </p>
+            <span className="practice-status-chip">Wait For You active</span>
           )}
 
           <PracticePlaybackSettings
@@ -89,8 +70,6 @@ export default function PracticeTransportSection({
             metronomeLevel={metronomeLevel ?? 0.6}
             onMetronomeLevelChange={onMetronomeLevelChange}
             mappingWarning={mappingWarning}
-            audioSource={audioSource}
-            instrumentStatus={instrumentStatus}
             disabled={disabled || isLoading}
           />
 

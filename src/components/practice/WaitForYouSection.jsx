@@ -1,8 +1,5 @@
 import { WFY_STATUS } from '../../features/practice/waitForYouEngine.js'
-import {
-  WFY_CHECKPOINT_MODE,
-  WFY_CHECKPOINT_MODE_LABELS,
-} from '../../features/practice/waitForYouCheckpointMode.js'
+import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
 import { getExpectedMidis } from '../../features/practice/waitForYouNoteMatch.js'
 import { WFY_INPUT_OUTCOME } from '../../features/practice/waitForYouInputFeedback.js'
 import { midiToNoteLabel } from '../../features/midi-input/midiNoteLabel.js'
@@ -11,19 +8,22 @@ import WaitForYouMatchSettingsPanel from './WaitForYouMatchSettingsPanel.jsx'
 import WaitForYouInputSourceSelector from './WaitForYouInputSourceSelector.jsx'
 import PracticeHelpTip from './PracticeHelpTip.jsx'
 
+const CHECKPOINT_LABELS = {
+  [WFY_CHECKPOINT_MODE.BEAT]: 'Beat',
+  [WFY_CHECKPOINT_MODE.NOTE]: 'Note',
+}
+
 function statusMessage(status, currentCheckpoint, checkpointMode) {
   if (status === WFY_STATUS.NO_CHECKPOINTS) {
-    return checkpointMode === WFY_CHECKPOINT_MODE.NOTE
-      ? 'Nothing to play here yet — try another section or add timing data.'
-      : 'Nothing to wait on here yet — try another section.'
+    return 'No checkpoints'
   }
   if (status === WFY_STATUS.COMPLETE) {
-    return 'Lovely work — you finished this section. Switch to Normal playback or start again.'
+    return 'Section complete'
   }
   if (status === WFY_STATUS.WAITING && currentCheckpoint) {
-    return 'Your turn — the app waits until you play the right note.'
+    return checkpointMode === WFY_CHECKPOINT_MODE.NOTE ? 'Play the note' : ''
   }
-  return 'Getting ready…'
+  return 'Ready'
 }
 
 function feedbackClassName(outcome) {
@@ -89,6 +89,11 @@ export default function WaitForYouSection({
     inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
     currentCheckpoint?.isChord &&
     status === WFY_STATUS.WAITING
+  const currentStatusMessage = statusMessage(
+    status,
+    currentCheckpoint,
+    checkpointMode,
+  )
 
   return (
     <section className={sectionClass} aria-label="Wait For You">
@@ -96,8 +101,7 @@ export default function WaitForYouSection({
         <h3 className="practice-section__title practice-section__title--static practice-section__title--with-tip">
           Wait For You
           <PracticeHelpTip label="About Wait For You">
-            Playback waits at each checkpoint until you play the right notes (or tap continue).
-            Great for slow practice — like a patient teacher who never rushes ahead.
+            Pauses at each checkpoint until you play or tap Continue.
           </PracticeHelpTip>
         </h3>
         {status === WFY_STATUS.WAITING && (
@@ -106,11 +110,6 @@ export default function WaitForYouSection({
           </span>
         )}
       </div>
-
-      <p className="wait-for-you__explainer">
-        The app waits until you play the right note, then continues — like a patient accompanist.
-        <strong> Manual continue</strong> always works; MIDI and microphone are optional.
-      </p>
 
       <WaitForYouInputSourceSelector
         checkpointMode={checkpointMode}
@@ -122,7 +121,7 @@ export default function WaitForYouSection({
       />
 
       <div className="wait-for-you__checkpoint-mode" role="radiogroup" aria-label="Checkpoint type">
-        <span className="wait-for-you__checkpoint-mode-label">Wait at each</span>
+        <span className="wait-for-you__checkpoint-mode-label">Step by</span>
         {Object.values(WFY_CHECKPOINT_MODE).map((mode) => (
           <label key={mode} className="wait-for-you__checkpoint-mode-option">
             <input
@@ -131,7 +130,7 @@ export default function WaitForYouSection({
               checked={checkpointMode === mode}
               onChange={() => onCheckpointModeChange(mode)}
             />
-            <span>{WFY_CHECKPOINT_MODE_LABELS[mode]}</span>
+            <span>{CHECKPOINT_LABELS[mode]}</span>
           </label>
         ))}
       </div>
@@ -147,14 +146,16 @@ export default function WaitForYouSection({
         />
       )}
 
-      <p className={`wait-for-you__status wait-for-you__status--${status}`}>
-        {statusMessage(status, currentCheckpoint, checkpointMode)}
-      </p>
+      {currentStatusMessage && (
+        <p className={`wait-for-you__status wait-for-you__status--${status}`}>
+          {currentStatusMessage}
+        </p>
+      )}
 
       {totalCheckpoints > 0 && (
         <div className="wait-for-you__progress-block">
           <div className="wait-for-you__progress-header">
-            <span>Through this section</span>
+            <span>Progress</span>
             <span>{progressPercent}%</span>
           </div>
           <div className="wait-for-you__progress-track">
@@ -169,38 +170,25 @@ export default function WaitForYouSection({
       {inputMatchingActive && (
         <p className="wait-for-you__listening">
           {inputSource === WFY_INPUT_SOURCE.MICROPHONE
-            ? 'Listening via microphone…'
-            : 'Listening for your playing…'}
+            ? 'Mic listening'
+            : 'MIDI listening'}
         </p>
       )}
 
       {showMicChordHint && (
         <p className="wait-for-you__mic-chord-hint" role="status">
-          Microphone chord spots are experimental — one pitch at a time, not full harmony. Use MIDI
-          or &ldquo;I&apos;m ready — continue&rdquo; if notes are missed.
+          Mic hears one chord tone at a time. Use Continue if needed.
         </p>
       )}
 
       {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && status === WFY_STATUS.WAITING && (
         <p className="wait-for-you__note-target-status" role="status">
           {noteTargetWrongPage && noteTarget?.visible ? (
-            <>
-              The amber <strong>Your note</strong> ring is on page {noteTarget.page} — switch pages
-              to see it.
-            </>
+            <>Note marker: page {noteTarget.page}</>
           ) : noteTarget?.visible ? (
-            <>
-              Look for the amber <strong>Your note</strong> ring on the score
-              {noteTarget.confidence != null && noteTarget.confidence < 0.7
-                ? ' — approximate position is normal'
-                : ' — that is where to play'}
-              . Tap <strong>I&apos;m ready — continue</strong> if it looks off.
-            </>
+            <>Note marker ready{noteTarget.confidence != null && noteTarget.confidence < 0.7 ? ' · approximate' : ''}</>
           ) : (
-            <>
-              Open <strong>Setup</strong> below to link the PDF to your timing file — then the amber
-              note ring can appear.
-            </>
+            <>Open Setup to show the note marker.</>
           )}
         </p>
       )}
@@ -261,7 +249,7 @@ export default function WaitForYouSection({
           disabled={status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS}
           onClick={onMarkCorrect}
         >
-          I&apos;m ready — continue
+          Continue
         </button>
         <button
           type="button"
@@ -269,19 +257,9 @@ export default function WaitForYouSection({
           disabled={totalCheckpoints === 0}
           onClick={onRestart}
         >
-          Restart section
+          Restart
         </button>
       </div>
-
-      <p className="wait-for-you__hint">
-        {checkpointMode === WFY_CHECKPOINT_MODE.NOTE
-          ? inputSource === WFY_INPUT_SOURCE.MANUAL
-            ? 'Tap “I’m ready — continue” or press Enter when you have played the note.'
-            : inputSource === WFY_INPUT_SOURCE.MICROPHONE
-              ? 'Play the note shown. Microphone detection is approximate — use “I’m ready” if unsure.'
-              : 'Play the notes shown, or tap “Hear it”. Press Enter or tap “I’m ready” to move on.'
-          : 'The music pauses at each beat. Press Enter or tap “I’m ready” to continue.'}
-      </p>
     </section>
   )
 }

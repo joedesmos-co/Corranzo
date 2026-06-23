@@ -43,33 +43,37 @@ export default function PracticeLoopControls({
       )}
 
       {(!isCompact || showSnapInCompact) && (
-        <div
-          className={`practice-loop__snap${isCompact ? ' practice-loop__snap--compact' : ''}`}
-          role="group"
-          aria-label="Loop snap mode"
-        >
-          <span className="practice-loop__snap-label">Snap</span>
-          <label className="practice-loop__snap-option">
-            <input
-              type="radio"
-              name={snapGroupName}
-              checked={snapMode === LOOP_SNAP_MODE.MEASURE}
-              disabled={disabled}
-              onChange={() => onSnapModeChange(LOOP_SNAP_MODE.MEASURE)}
-            />
-            <span>Measure</span>
-          </label>
-          <label className="practice-loop__snap-option">
-            <input
-              type="radio"
-              name={snapGroupName}
-              checked={snapMode === LOOP_SNAP_MODE.BEAT}
-              disabled={disabled}
-              onChange={() => onSnapModeChange(LOOP_SNAP_MODE.BEAT)}
-            />
-            <span>Beat</span>
-          </label>
-        </div>
+        <details className="practice-loop__options">
+          <summary>
+            Snap: {snapMode === LOOP_SNAP_MODE.BEAT ? 'Beat' : 'Measure'}
+          </summary>
+          <div
+            className={`practice-loop__snap${isCompact ? ' practice-loop__snap--compact' : ''}`}
+            role="group"
+            aria-label="Loop snap mode"
+          >
+            <label className="practice-loop__snap-option">
+              <input
+                type="radio"
+                name={snapGroupName}
+                checked={snapMode === LOOP_SNAP_MODE.MEASURE}
+                disabled={disabled}
+                onChange={() => onSnapModeChange(LOOP_SNAP_MODE.MEASURE)}
+              />
+              <span>Measure</span>
+            </label>
+            <label className="practice-loop__snap-option">
+              <input
+                type="radio"
+                name={snapGroupName}
+                checked={snapMode === LOOP_SNAP_MODE.BEAT}
+                disabled={disabled}
+                onChange={() => onSnapModeChange(LOOP_SNAP_MODE.BEAT)}
+              />
+              <span>Beat</span>
+            </label>
+          </div>
+        </details>
       )}
 
       <div className="practice-loop__actions">
@@ -124,7 +128,7 @@ export default function PracticeLoopControls({
           <p className="practice-loop__hint">Turn on loop to repeat this section during playback.</p>
         )}
         {isCompact && hasMidi && hasLoop && !enabled && (
-          <p className="practice-loop__hint">Turn on loop to repeat this section.</p>
+          <p className="practice-loop__hint">Loop is off.</p>
         )}
       </div>
     </div>

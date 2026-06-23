@@ -1,5 +1,10 @@
-import { PRACTICE_MODE, PRACTICE_MODE_LABELS } from '../../features/practice/practiceMode.js'
+import { PRACTICE_MODE } from '../../features/practice/practiceMode.js'
 import PracticeHelpTip from './PracticeHelpTip.jsx'
+
+const MODE_LABELS = {
+  [PRACTICE_MODE.NORMAL]: 'Playback',
+  [PRACTICE_MODE.WAIT_FOR_YOU]: 'Wait For You',
+}
 
 export default function PracticeModeSection({
   practiceMode,
@@ -14,21 +19,25 @@ export default function PracticeModeSection({
       aria-label="Practice mode"
     >
       <h3 className="practice-section__title practice-section__title--static practice-section__title--with-tip">
-        Practice mode
+        Mode
         <PracticeHelpTip label="About practice modes">
-          Normal playback follows your sound file. Wait For You waits until you play the right
-          note (or tap continue) before moving on.
+          Playback moves normally. Wait For You pauses for your input.
         </PracticeHelpTip>
       </h3>
 
       {!hasMusicXml ? (
         <p className="practice-section__hint practice-empty-state">
-          Add MusicXML/MXL in Library to unlock Wait For You.
+          Timing file required.
         </p>
       ) : (
         <div className="practice-mode__options" role="radiogroup" aria-label="Practice mode">
           {Object.values(PRACTICE_MODE).map((mode) => (
-            <label key={mode} className="practice-mode__option">
+            <label
+              key={mode}
+              className={`practice-mode__option${
+                practiceMode === mode ? ' practice-mode__option--selected' : ''
+              }`}
+            >
               <input
                 type="radio"
                 name="practice-mode"
@@ -37,7 +46,7 @@ export default function PracticeModeSection({
                 disabled={disabled}
                 onChange={() => onPracticeModeChange(mode)}
               />
-              <span>{PRACTICE_MODE_LABELS[mode]}</span>
+              <span>{MODE_LABELS[mode]}</span>
             </label>
           ))}
         </div>

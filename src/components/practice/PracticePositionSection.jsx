@@ -12,6 +12,7 @@ export default function PracticePositionSection({
   timingMap,
   practiceTime,
   compact = false,
+  showTitle = true,
 }) {
   const sectionClass = `practice-section practice-section--position-focus${
     compact ? ' practice-section--compact' : ''
@@ -21,11 +22,10 @@ export default function PracticePositionSection({
   if (!hasMusicXml) {
     return (
       <section className={sectionClass} aria-label="Position">
-        <h3 className="practice-section__title practice-section__title--static">Where you are</h3>
-        <p className="practice-section__hint practice-empty-state">
-          Add a score timing file from the Library so the app can show measure and beat as you
-          practice.
-        </p>
+        {showTitle && (
+          <h3 className="practice-section__title practice-section__title--static">Position</h3>
+        )}
+        <p className="practice-section__hint practice-empty-state">Timing unavailable.</p>
       </section>
     )
   }
@@ -33,7 +33,9 @@ export default function PracticePositionSection({
   if (timingLoading && !timingMap) {
     return (
       <section className={sectionClass} aria-label="Position">
-        <h3 className="practice-section__title practice-section__title--static">Where you are</h3>
+        {showTitle && (
+          <h3 className="practice-section__title practice-section__title--static">Position</h3>
+        )}
         <p className="practice-section__status practice-section__status--loading" role="status">
           Reading score timing…
         </p>
@@ -43,7 +45,9 @@ export default function PracticePositionSection({
 
   return (
     <section className={sectionClass} aria-label="Position">
-      <h3 className="practice-section__title practice-section__title--static">Where you are</h3>
+      {showTitle && (
+        <h3 className="practice-section__title practice-section__title--static">Position</h3>
+      )}
       <div className="practice-section__body practice-section__body--flat">
         <PracticePositionPanel
           disabled={disabled}

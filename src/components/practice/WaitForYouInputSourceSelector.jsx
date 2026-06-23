@@ -21,25 +21,25 @@ export default function WaitForYouInputSourceSelector({
       id: WFY_INPUT_SOURCE.MIDI,
       label: WFY_INPUT_SOURCE_LABELS[WFY_INPUT_SOURCE.MIDI],
       available: midiAvailable,
-      hint: 'Most accurate',
+      hint: 'Most accurate input',
     },
     {
       id: WFY_INPUT_SOURCE.MICROPHONE,
       label: WFY_INPUT_SOURCE_LABELS[WFY_INPUT_SOURCE.MICROPHONE],
       available: microphoneAvailable,
-      hint: 'Acoustic piano — less exact',
+      hint: 'For acoustic instruments',
     },
     {
       id: WFY_INPUT_SOURCE.MANUAL,
       label: WFY_INPUT_SOURCE_LABELS[WFY_INPUT_SOURCE.MANUAL],
       available: true,
-      hint: 'Tap when ready',
+      hint: 'Continue manually',
     },
   ]
 
   return (
     <div className="wfy-input-source" role="radiogroup" aria-label="How you continue">
-      <p className="wfy-input-source__label">How you continue</p>
+      <p className="wfy-input-source__label">Input</p>
       <div className="wfy-input-source__options">
         {options.map((option) => (
           <label
@@ -47,6 +47,7 @@ export default function WaitForYouInputSourceSelector({
             className={`wfy-input-source__option${
               !option.available ? ' wfy-input-source__option--disabled' : ''
             }${inputSource === option.id ? ' wfy-input-source__option--selected' : ''}`}
+            title={option.hint}
           >
             <input
               type="radio"
@@ -56,10 +57,7 @@ export default function WaitForYouInputSourceSelector({
               disabled={disabled || !option.available}
               onChange={() => onInputSourceChange(option.id)}
             />
-            <span className="wfy-input-source__option-text">
-              <span className="wfy-input-source__option-label">{option.label}</span>
-              <span className="wfy-input-source__option-hint">{option.hint}</span>
-            </span>
+            <span className="wfy-input-source__option-label">{option.label}</span>
           </label>
         ))}
       </div>

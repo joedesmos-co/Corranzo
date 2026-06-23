@@ -1,20 +1,26 @@
-import {
-  SCORE_FOLLOW_NEEDS_SETUP,
-  SCORE_FOLLOW_SETUP_RUNNING,
-} from '../../features/score-follow/scoreFollowUserMessages.js'
-
 const STATUS_LABELS = {
-  running: SCORE_FOLLOW_SETUP_RUNNING,
-  'needs-setup': SCORE_FOLLOW_NEEDS_SETUP,
+  running: 'Setting up score…',
+  warning: 'Check score setup',
 }
 
 export default function ScoreFollowSetupStatus({ setupStatus }) {
   const phase = setupStatus?.phase
-  if (!phase || phase === 'idle' || phase === 'skipped') {
+  if (
+    !phase ||
+    phase === 'idle' ||
+    phase === 'skipped' ||
+    phase === 'ready' ||
+    phase === 'needs-setup'
+  ) {
     return null
   }
 
-  const message = setupStatus.message || STATUS_LABELS[phase] || ''
+  const message =
+    (phase === 'warning' || phase === 'failed'
+      ? setupStatus.message
+      : STATUS_LABELS[phase]) ||
+    STATUS_LABELS[phase] ||
+    (phase === 'failed' ? 'Setup failed' : '')
   if (!message) {
     return null
   }

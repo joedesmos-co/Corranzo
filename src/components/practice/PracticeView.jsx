@@ -3,7 +3,6 @@ import PracticePageFollowController from './PracticePageFollowController.jsx'
 import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
 import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
 import usePracticeKeyboardShortcuts from '../../features/practice/usePracticeKeyboardShortcuts.js'
-import { WFY_STATUS } from '../../features/practice/waitForYouEngine.js'
 import PdfViewer from '../PdfViewer.jsx'
 import PracticeControlPanel from './PracticeControlPanel.jsx'
 import ScoreFollowSetupStatus from './ScoreFollowSetupStatus.jsx'
@@ -81,8 +80,7 @@ export default function PracticeView({
         <div className="practice-workspace__empty">
           <h2>Nothing loaded yet</h2>
           <p className="practice-workspace__empty-lead">
-            Go to <strong>Library</strong> to upload a PDF and MusicXML/MXL, then come back here to
-            practice.
+            Open a PDF and timing file from <strong>Library</strong>.
           </p>
         </div>
       ) : (

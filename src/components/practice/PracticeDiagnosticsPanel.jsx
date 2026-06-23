@@ -24,11 +24,6 @@ export default function PracticeDiagnosticsPanel({ session, scoreFollow }) {
         showAlignment
       />
 
-      <p className="practice-diagnostics__intro">
-        For troubleshooting only — timing, playback sync, and score-follow status. You do not need
-        this for everyday practice.
-      </p>
-
       <details className="practice-diagnostics__group">
         <summary>Timing &amp; position</summary>
         <div className="practice-diagnostics__group-body">

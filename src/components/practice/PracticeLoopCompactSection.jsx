@@ -42,7 +42,7 @@ export default function PracticeLoopCompactSection({ session }) {
 
       {isWaitForYou && (
         <p className="practice-section__hint practice-loop-compact__hint">
-          Playback won&apos;t auto-loop in Wait For You; the range still shapes checkpoints.
+          Range sets Wait For You checkpoints.
         </p>
       )}
     </section>

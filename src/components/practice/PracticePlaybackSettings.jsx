@@ -1,8 +1,3 @@
-import {
-  INSTRUMENT_STATUS,
-  INSTRUMENT_STATUS_LABEL,
-} from '../../features/playback/pianoInstrumentStatus.js'
-
 const RATE_STOPS = [0.5, 0.75, 1, 1.25, 1.5]
 
 export default function PracticePlaybackSettings({
@@ -14,37 +9,17 @@ export default function PracticePlaybackSettings({
   metronomeLevel,
   onMetronomeLevelChange,
   mappingWarning,
-  audioSource,
-  instrumentStatus,
   disabled = false,
 }) {
-  const instrumentLabel = instrumentStatus
-    ? INSTRUMENT_STATUS_LABEL[instrumentStatus]
-    : null
-
   return (
     <div className="practice-playback-settings">
-      {(audioSource || instrumentLabel) && (
-        <p className="practice-playback-settings__source" aria-live="polite">
-          {audioSource && (
-            <span>Sound: {audioSource === 'midi' ? 'MIDI backing' : 'MusicXML score'}</span>
-          )}
-          {instrumentLabel && (
-            <span
-              className={`practice-playback-settings__instrument practice-playback-settings__instrument--${instrumentStatus}`}
-            >
-              {audioSource ? ' · ' : ''}
-              {instrumentStatus === INSTRUMENT_STATUS.LOADING ? '⏳ ' : ''}
-              {instrumentStatus === INSTRUMENT_STATUS.SAMPLED ? '🎹 ' : ''}
-              {instrumentLabel}
-            </span>
-          )}
-        </p>
-      )}
-
       <div className="practice-playback-settings__row">
         <label className="practice-playback-settings__label" htmlFor="playback-rate">
-          Speed {Math.round(playbackRate * 100)}%
+          Tempo
+          <span>
+            {Math.round(playbackRate * 100)}%
+            {effectiveTempo != null ? ` · ${effectiveTempo} BPM` : ''}
+          </span>
         </label>
         <input
           id="playback-rate"
@@ -64,13 +39,7 @@ export default function PracticePlaybackSettings({
         </datalist>
       </div>
 
-      {effectiveTempo != null && (
-        <p className="practice-playback-settings__tempo" aria-live="polite">
-          Tempo {effectiveTempo} BPM
-        </p>
-      )}
-
-      <div className="practice-playback-settings__row">
+      <div className="practice-playback-settings__row practice-playback-settings__row--metronome">
         <label className="practice-playback-settings__check">
           <input
             type="checkbox"
@@ -93,7 +62,7 @@ export default function PracticePlaybackSettings({
       </div>
 
       {mappingWarning && (
-        <p className="practice-section__hint practice-section__hint--inline">{mappingWarning}</p>
+        <p className="practice-section__error">{mappingWarning}</p>
       )}
     </div>
   )

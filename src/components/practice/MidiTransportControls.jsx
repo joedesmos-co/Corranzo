@@ -31,10 +31,13 @@ function MidiTransportControls({
       <div className="midi-transport__buttons">
         <button
           type="button"
-          className="midi-transport__btn"
+          className={`midi-transport__btn${
+            isPlaying ? ' midi-transport__btn--active' : ''
+          }`}
           disabled={disabled || playDisabled}
           onClick={onPlay}
           aria-label={playTitle}
+          aria-pressed={isPlaying}
           title={playTitle}
         >
           ▶

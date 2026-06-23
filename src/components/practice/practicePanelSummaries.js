@@ -1,10 +1,6 @@
 export function buildSetupSummary(session, scoreFollow) {
   const parts = []
 
-  if (session.hasMusicXml) {
-    parts.push(session.loop.hasLoop ? session.loop.region?.label ?? 'Loop set' : 'No loop')
-  }
-
   if (scoreFollow?.hasTiming) {
     if (scoreFollow.semiAutoPreview) {
       parts.push('Review staff systems')
@@ -23,7 +19,11 @@ export function buildSetupSummary(session, scoreFollow) {
     }
   }
 
-  return parts.length > 0 ? parts.join(' · ') : 'Loop, score cursor, tracks'
+  if (session.isWaitForYou) {
+    parts.push('Note matching')
+  }
+
+  return parts.length > 0 ? parts.join(' · ') : 'Score following'
 }
 
 export function buildDiagnosticsSummary(session) {
@@ -34,10 +34,10 @@ export function buildDiagnosticsSummary(session) {
     return 'Timing error'
   }
   if (session.hasMusicXml && session.hasMidi) {
-    return 'Timing data & file comparison'
+    return 'Timing & playback'
   }
   if (session.hasMusicXml) {
-    return 'Timing data details'
+    return 'Timing details'
   }
-  return 'Optional technical info'
+  return 'Technical info'
 }

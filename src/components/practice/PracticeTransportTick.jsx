@@ -12,9 +12,6 @@ function PracticeTransportTick() {
   return (
     <PracticeTransportSection
       hasMusicXml={stable.hasMusicXml}
-      hasMidi={stable.hasMidi}
-      playbackFileName={stable.sources.playbackFileName}
-      timingFileName={stable.sources.timingFileName}
       isLoading={stable.playback.isLoading}
       error={stable.playback.error}
       disabled={stable.playback.controlsDisabled}
@@ -29,8 +26,6 @@ function PracticeTransportTick() {
       metronomeEnabled={stable.playback.metronomeEnabled}
       metronomeLevel={stable.playback.metronomeLevel}
       mappingWarning={stable.playback.mappingWarning}
-      audioSource={stable.playback.audioSource}
-      instrumentStatus={stable.playback.instrumentStatus}
       onPlaybackRateChange={stable.playback.setPlaybackRate}
       onMetronomeEnabledChange={stable.playback.setMetronomeEnabled}
       onMetronomeLevelChange={stable.playback.setMetronomeLevel}

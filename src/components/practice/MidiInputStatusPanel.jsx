@@ -18,26 +18,29 @@ export default function MidiInputStatusPanel({
 }) {
   const supported = support === WEB_MIDI_SUPPORT.SUPPORTED
   const isSafari = isSafariFamilyBrowser()
+  const statusLabel = isGranted
+    ? devices.length > 0
+      ? 'MIDI ready'
+      : 'MIDI disconnected'
+    : supported
+      ? 'MIDI off'
+      : 'MIDI unavailable'
 
   return (
     <section
       className={`practice-section midi-input-status${compact ? ' practice-section--compact' : ''}`}
       aria-label="MIDI keyboard"
     >
-      <h3 className="practice-section__title practice-section__title--static">MIDI keyboard</h3>
-
-      <p className="practice-section__hint practice-section__hint--inline">
-        {isGranted
-          ? devices.length > 0
-            ? `${devices.length} device(s) connected`
-            : 'No keyboard detected — plug one in and refresh'
-          : supported
-            ? 'Allow access to hear your playing in Wait For You'
-            : isSafari
-              ? 'Web MIDI is unavailable on Safari — use the microphone or Manual continue for Wait For You'
-              : 'Web MIDI is not available in this browser — try Chrome or Edge, or use Manual continue'}
-        {lastNote ? ` · Last: ${lastNote.label}` : ''}
-      </p>
+      <div className="practice-input-status__header">
+        <h3 className="practice-section__title practice-section__title--static">Input</h3>
+        <span
+          className={`practice-status-chip${
+            isGranted && devices.length > 0 ? ' practice-status-chip--ready' : ''
+          }`}
+        >
+          {statusLabel}
+        </span>
+      </div>
 
       {!compact && (
         <dl className="midi-input-status__grid">
@@ -61,7 +64,6 @@ export default function MidiInputStatusPanel({
       )}
 
       {errorMessage && <p className="practice-section__error">{errorMessage}</p>}
-      {listenHint && <p className="practice-section__hint">{listenHint}</p>}
 
       <div className="midi-input-status__actions">
         {supported && !isGranted && (
@@ -75,6 +77,30 @@ export default function MidiInputStatusPanel({
           </button>
         )}
       </div>
+
+      {compact && (
+        <details className="practice-input-details">
+          <summary>Details</summary>
+          <p className="practice-section__hint">
+            {isGranted
+              ? devices.length > 0
+                ? `${devices.length} keyboard${devices.length === 1 ? '' : 's'} connected`
+                : 'Plug in a keyboard, then reopen Practice.'
+              : supported
+                ? 'Enable MIDI for automatic note matching.'
+                : isSafari
+                  ? 'Safari does not support Web MIDI. Use Mic or Manual.'
+                  : 'Use Chrome or Edge for Web MIDI.'}
+            {lastNote ? ` Last note: ${lastNote.label}.` : ''}
+          </p>
+          {listenHint && <p className="practice-section__hint">{listenHint}</p>}
+          {supported && isGranted && (
+            <button type="button" className="midi-input-status__btn" onClick={onRefreshDevices}>
+              Refresh devices
+            </button>
+          )}
+        </details>
+      )}
     </section>
   )
 }

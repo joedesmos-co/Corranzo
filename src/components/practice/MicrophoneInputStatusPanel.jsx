@@ -36,18 +36,17 @@ export default function MicrophoneInputStatusPanel({
   const supported = support === MIC_SUPPORT.SUPPORTED
   const showIosSafari = isMicSafariOrIos()
 
-  let statusLine = 'Enable your microphone to play along.'
+  let statusLine = 'Mic off'
   if (!supported) {
-    statusLine = 'Microphone input is not available in this browser.'
+    statusLine = 'Mic unavailable'
   } else if (permission === MIC_PERMISSION.DENIED) {
-    statusLine =
-      'Microphone access was blocked. Allow the mic in your browser settings, or choose Manual continue below.'
+    statusLine = 'Mic blocked'
   } else if (permission === MIC_PERMISSION.ERROR) {
-    statusLine = errorMessage || 'Could not open the microphone.'
+    statusLine = 'Mic error'
   } else if (isListening) {
-    statusLine = 'Listening for single notes — works best in a quiet room.'
+    statusLine = 'Mic listening'
   } else if (isGranted) {
-    statusLine = 'Microphone ready — use the test area below, then play the highlighted note.'
+    statusLine = 'Mic ready'
   }
 
   const heardLine =
@@ -63,30 +62,16 @@ export default function MicrophoneInputStatusPanel({
       className={`practice-section mic-input-status${compact ? ' practice-section--compact' : ''}`}
       aria-label="Microphone input"
     >
-      <h3 className="practice-section__title practice-section__title--static">Microphone</h3>
-
-      {showIosSafari && (
-        <p className="mic-input-status__safari" role="note">
-          On iPhone or iPad, microphone listening can be less steady. Use Manual continue anytime,
-          or try Chrome on a computer with a MIDI keyboard for the most reliable match.
-        </p>
-      )}
-
-      <p className="practice-section__hint practice-section__hint--inline">{statusLine}</p>
-
-      {isListening && (liveFrame?.calibrating || calibration) && (
-        <p
-          className={`mic-input-status__calibration mic-input-status__calibration--${
-            liveFrame?.calibrating ? 'measuring' : calibration?.status ?? 'ready'
+      <div className="practice-input-status__header">
+        <h3 className="practice-section__title practice-section__title--static">Input</h3>
+        <span
+          className={`practice-status-chip${
+            isListening || isGranted ? ' practice-status-chip--ready' : ''
           }`}
-          role="status"
-          aria-live="polite"
         >
-          {liveFrame?.calibrating
-            ? MIC_CALIBRATION_STATUS_LABELS.measuring
-            : MIC_CALIBRATION_STATUS_LABELS[calibration?.status] ?? ''}
-        </p>
-      )}
+          {statusLine}
+        </span>
+      </div>
 
       {heardLine && (
         <p
@@ -123,23 +108,6 @@ export default function MicrophoneInputStatusPanel({
         </p>
       )}
 
-      <p className="mic-input-status__mvp-note">
-        Microphone mode listens for one note at a time — not full chords. Manual continue always
-        works if a note is missed.
-      </p>
-
-      {isChordCheckpoint && (
-        <p className="mic-input-status__chord-note" role="note">
-          {MIC_CHORD_MODE_HINTS[chordMicMode] ?? MIC_CHORD_MODE_HINTS[MIC_CHORD_MODES.ANY_TONE]}
-        </p>
-      )}
-
-      <MicTestPanel
-        liveFrame={liveFrame}
-        lastStableMidi={lastHeardMidi}
-        isListening={isListening}
-      />
-
       <div className="mic-input-status__actions">
         {supported && !isGranted && (
           <button type="button" className="mic-input-status__btn" onClick={onRequestAccess}>
@@ -152,6 +120,44 @@ export default function MicrophoneInputStatusPanel({
           </button>
         )}
       </div>
+
+      {compact && (
+        <details className="practice-input-details">
+          <summary>Test & details</summary>
+          {showIosSafari && (
+            <p className="mic-input-status__safari" role="note">
+              Mic input may be less steady on iPhone and iPad. Manual always works.
+            </p>
+          )}
+          {isListening && (liveFrame?.calibrating || calibration) && (
+            <p
+              className={`mic-input-status__calibration mic-input-status__calibration--${
+                liveFrame?.calibrating ? 'measuring' : calibration?.status ?? 'ready'
+              }`}
+              role="status"
+              aria-live="polite"
+            >
+              {liveFrame?.calibrating
+                ? MIC_CALIBRATION_STATUS_LABELS.measuring
+                : MIC_CALIBRATION_STATUS_LABELS[calibration?.status] ?? ''}
+            </p>
+          )}
+          <p className="mic-input-status__mvp-note">
+            Listens for one note at a time. Use Continue if a note is missed.
+          </p>
+          {isChordCheckpoint && (
+            <p className="mic-input-status__chord-note" role="note">
+              {MIC_CHORD_MODE_HINTS[chordMicMode] ??
+                MIC_CHORD_MODE_HINTS[MIC_CHORD_MODES.ANY_TONE]}
+            </p>
+          )}
+          <MicTestPanel
+            liveFrame={liveFrame}
+            lastStableMidi={lastHeardMidi}
+            isListening={isListening}
+          />
+        </details>
+      )}
     </section>
   )
 }

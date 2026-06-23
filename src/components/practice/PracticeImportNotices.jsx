@@ -13,7 +13,7 @@ export default function PracticeImportNotices({ warnings = [], guidance = [], ma
     <div className="practice-import-notices" aria-label="Import notes">
       {visibleGuidance.length > 0 && (
         <div className="practice-import-notices__guidance">
-          <p className="practice-import-notices__heading">Suggested next steps</p>
+          <p className="practice-import-notices__heading">Notes</p>
           <ul className="practice-import-notices__list">
             {visibleGuidance.map((step) => (
               <li key={step}>{step}</li>
