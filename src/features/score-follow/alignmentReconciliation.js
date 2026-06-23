@@ -45,17 +45,18 @@ function sumFinite(values) {
 }
 
 /**
- * Pickup (anacrusis) detection.
+ * Pickup (anacrusis) detection — honest, never faked.
  *
- * Prefers MusicXML's explicit `implicit="yes"` marker when the parser surfaces
- * it; otherwise falls back to the structural heuristic "first measure is shorter
- * than a full bar for its own time signature".
+ * Signals, in order of authority:
+ *   1. MusicXML `implicit="yes"` on the first measure (parser surfaces it as
+ *      `measure.implicit`, Phase 2).
+ *   2. A genuinely short first bar via `notatedLengthQuarters` (the true notated
+ *      length the parser now preserves, distinct from the time-signature-padded
+ *      `lengthQuarters` used for timing).
+ *   3. `lengthQuarters` as a last resort for synthetic / MIDI-derived measure
+ *      models that carry neither of the above.
  *
- * NOTE: the current `parseMusicXml` neither surfaces `implicit` nor preserves a
- * short first-measure length (it pads measure 1 to the time signature), so this
- * returns false on today's parser output. Surfacing `implicit` is a tracked
- * Phase 2 parser task; this helper is already correct for that data and for
- * MIDI-derived measures that are not padded.
+ * Returns false when no real signal is present — it does not guess.
  */
 export function detectPickupMeasure(measures) {
   const first = measures?.[0]
@@ -67,12 +68,95 @@ export function detectPickupMeasure(measures) {
   }
   const beats = Number(first.beats)
   const beatType = Number(first.beatType)
-  const lengthQuarters = Number(first.lengthQuarters)
-  if (![beats, beatType, lengthQuarters].every(Number.isFinite) || beatType <= 0) {
+  const notated = Number(
+    first.notatedLengthQuarters != null ? first.notatedLengthQuarters : first.lengthQuarters,
+  )
+  if (![beats, beatType, notated].every(Number.isFinite) || beatType <= 0) {
     return false
   }
   const fullBarQuarters = beats * (4 / beatType)
-  return lengthQuarters > 0 && lengthQuarters < fullBarQuarters - 1e-6
+  return notated > 0 && notated < fullBarQuarters - 1e-6
+}
+
+/** Written measure number containing a given quarter-time position. */
+function measureNumberAtQuarter(measures, quarterTime) {
+  if (!measures?.length || !Number.isFinite(quarterTime)) {
+    return null
+  }
+  for (const measure of measures) {
+    if (quarterTime >= measure.startQuarters - 1e-6 && quarterTime < measure.endQuarters - 1e-6) {
+      return measure.number
+    }
+  }
+  const last = measures[measures.length - 1]
+  return quarterTime >= last.startQuarters - 1e-6 ? last.number : measures[0].number
+}
+
+/**
+ * Measure numbers where a change (tempo / time signature) takes effect.
+ * The first entry (quarter-time 0) is the starting value, not a change.
+ */
+function changeMeasures(changes, measures) {
+  return (changes ?? [])
+    .filter((_, index) => index > 0)
+    .map((change) => measureNumberAtQuarter(measures, Number(change.quarterTime)))
+    .filter((number) => number != null)
+}
+
+/**
+ * Repeat / volta structure from the performed measure timeline (the honest
+ * source). Falls back to performed-vs-written duration when the timeline is
+ * unavailable. Reports whether the performed order differs from the written one.
+ */
+function summarizeRepeatStructure(timingMap) {
+  const writtenMeasureCount = timingMap?.measures?.length ?? 0
+  const entries = timingMap?.performedMeasureTimeline?.entries
+
+  if (Array.isArray(entries) && entries.length) {
+    let maxRepeatPass = 1
+    const seen = new Set()
+    const repeated = new Set()
+    for (const entry of entries) {
+      const pass = Number(entry.repeatPass) || 1
+      if (pass > maxRepeatPass) {
+        maxRepeatPass = pass
+      }
+      const number = entry.writtenMeasureNumber
+      if (seen.has(number)) {
+        repeated.add(number)
+      } else {
+        seen.add(number)
+      }
+    }
+    const performedMeasureCount = entries.length
+    const performedDiffersFromWritten =
+      performedMeasureCount !== writtenMeasureCount || maxRepeatPass > 1 || repeated.size > 0
+    return {
+      performedMeasureCount,
+      writtenMeasureCount,
+      hasRepeats: performedDiffersFromWritten,
+      maxRepeatPass,
+      repeatedMeasureNumbers: [...repeated].sort((a, b) => a - b),
+      performedDiffersFromWritten,
+    }
+  }
+
+  // No performed timeline — fall back to duration expansion.
+  const durationSeconds = Number(timingMap?.durationSeconds)
+  const writtenDurationSeconds = Number(timingMap?.writtenDurationSeconds)
+  const hasRepeats =
+    Number.isFinite(durationSeconds) &&
+    Number.isFinite(writtenDurationSeconds) &&
+    writtenDurationSeconds > 0 &&
+    durationSeconds > writtenDurationSeconds + 1e-6
+  return {
+    performedMeasureCount: hasRepeats ? null : writtenMeasureCount,
+    writtenMeasureCount,
+    hasRepeats,
+    maxRepeatPass: hasRepeats ? 2 : 1,
+    repeatedMeasureNumbers: [],
+    performedDiffersFromWritten: hasRepeats,
+  }
 }
 
 /**
@@ -106,11 +190,6 @@ function summarizeScoreModel(timingMap) {
 
   const durationSeconds = Number(timingMap?.durationSeconds)
   const writtenDurationSeconds = Number(timingMap?.writtenDurationSeconds)
-  const hasRepeats =
-    Number.isFinite(durationSeconds) &&
-    Number.isFinite(writtenDurationSeconds) &&
-    writtenDurationSeconds > 0 &&
-    durationSeconds > writtenDurationSeconds + 1e-6
   const repeatExpansionRatio =
     Number.isFinite(durationSeconds) &&
     Number.isFinite(writtenDurationSeconds) &&
@@ -118,14 +197,20 @@ function summarizeScoreModel(timingMap) {
       ? durationSeconds / writtenDurationSeconds
       : 1
 
+  const repeats = summarizeRepeatStructure(timingMap)
+  const tempoChangeMeasures = changeMeasures(timingMap?.tempoChanges, measures)
+  const timeSignatureChangeMeasures = changeMeasures(timingMap?.timeSignatures, measures)
+
   return {
     expectedMeasureCount,
     firstMeasureNumber: measures[0]?.number ?? 1,
-    hasRepeats,
     repeatExpansionRatio,
+    ...repeats,
     hasPickup: detectPickupMeasure(measures),
     tempoChangeCount: Math.max(0, (timingMap?.tempoChanges?.length ?? 0) - 1),
+    tempoChangeMeasures,
     timeSignatureChangeCount: Math.max(0, (timingMap?.timeSignatures?.length ?? 0) - 1),
+    timeSignatureChangeMeasures,
     musicXmlSystemStarts: systemStartsFromMusicXml(timingMap),
     musicXmlPageCount: pageCountFromMusicXml(timingMap),
   }
@@ -218,9 +303,16 @@ export function reconcilePdfLayoutWithScore({
   const flags = {
     hasRepeats: score.hasRepeats,
     repeatExpansionRatio: score.repeatExpansionRatio,
+    performedDiffersFromWritten: score.performedDiffersFromWritten,
+    performedMeasureCount: score.performedMeasureCount,
+    writtenMeasureCount: score.writtenMeasureCount,
+    maxRepeatPass: score.maxRepeatPass,
+    repeatedMeasureNumbers: score.repeatedMeasureNumbers,
     hasPickup: score.hasPickup,
     tempoChangeCount: score.tempoChangeCount,
+    tempoChangeMeasures: score.tempoChangeMeasures,
     timeSignatureChangeCount: score.timeSignatureChangeCount,
+    timeSignatureChangeMeasures: score.timeSignatureChangeMeasures,
     systemCountMismatch:
       musicXmlHasLayoutHints &&
       systemCount > 0 &&

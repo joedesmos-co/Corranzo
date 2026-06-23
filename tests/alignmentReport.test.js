@@ -12,9 +12,10 @@ import {
 import {
   buildAlignmentReport,
   formatAlignmentReportText,
+  formatModelSummary,
   serializeAlignmentReport,
 } from '../src/features/score-follow/alignmentReport.js'
-import { straight4 } from './helpers/buildXml.js'
+import { straight4, oneRepeat } from './helpers/buildXml.js'
 
 const timingMap = parseMusicXml(straight4(), 'straight4')
 const clean = reconcilePdfLayoutWithScore({ timingMap, perSystemBarlineCounts: [2, 2] })
@@ -111,5 +112,42 @@ describe('buildAlignmentReport', () => {
     expect(parsed.version).toBe(1)
     expect(parsed.perSystem).toHaveLength(2)
     expect(parsed.decision.action).toBe(FOLLOW_ACTION.AUTO)
+  })
+})
+
+describe('Phase 2: concise model summary', () => {
+  const repeatRecon = reconcilePdfLayoutWithScore({
+    timingMap: parseMusicXml(oneRepeat(), 'oneRepeat'),
+    perSystemBarlineCounts: [4],
+  })
+
+  it('emits the five honest model lines', () => {
+    const report = buildAlignmentReport({ reconciliation: clean, layoutConfidence: LAYOUT_CONFIDENCE.EXACT })
+    const lines = formatModelSummary(report)
+    expect(lines).toHaveLength(5)
+    expect(lines[0]).toBe('Pickup: no')
+    expect(lines[1]).toBe('Repeats/voltas: no')
+    expect(lines[2]).toBe('Tempo changes: 0')
+    expect(lines[3]).toBe('Time-signature changes: 0')
+    expect(lines[4]).toBe('Page/system: aligned')
+  })
+
+  it('describes repeats with performed-vs-written and revisited measures', () => {
+    const report = buildAlignmentReport({ reconciliation: repeatRecon, layoutConfidence: LAYOUT_CONFIDENCE.GOOD })
+    const repeatsLine = formatModelSummary(report).find((l) => l.startsWith('Repeats/voltas:'))
+    expect(repeatsLine).toMatch(/yes/)
+    expect(repeatsLine).toMatch(/performed 6 vs written 4/)
+    expect(repeatsLine).toMatch(/m1, m2/)
+  })
+
+  it('includes the Model block in the rendered text report', () => {
+    const report = buildAlignmentReport({ reconciliation: clean, layoutConfidence: LAYOUT_CONFIDENCE.EXACT })
+    const text = formatAlignmentReportText(report)
+    expect(text).toMatch(/Model:/)
+    expect(text).toMatch(/Pickup:/)
+    expect(text).toMatch(/Repeats\/voltas:/)
+    expect(text).toMatch(/Tempo changes:/)
+    expect(text).toMatch(/Time-signature changes:/)
+    expect(text).toMatch(/Page\/system:/)
   })
 })

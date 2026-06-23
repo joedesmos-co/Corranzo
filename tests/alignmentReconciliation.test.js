@@ -135,60 +135,115 @@ describe('reconcilePdfLayoutWithScore — structural flags', () => {
     expect(result.flags.hasRepeats).toBe(true)
   })
 
-  it('detects pickup measures from explicit or structural signals', () => {
-    // The current parser pads measure 1 and drops `implicit`, so it carries no
-    // pickup signal (asserted here) — surfacing `implicit` is a Phase 2 parser
-    // task. The reconciler already fires on a measure model that does carry it.
-    const parsed = parseMusicXml(pickupFixture(), 'pickup')
-    expect(reconcilePdfLayoutWithScore({ timingMap: parsed, perSystemBarlineCounts: [3] }).flags.hasPickup).toBe(
-      false,
-    )
-
-    const implicitMap = {
-      measures: [{ number: 1, beats: 4, beatType: 4, lengthQuarters: 4, implicit: 'yes' }],
-      durationSeconds: 8,
-      writtenDurationSeconds: 8,
-      tempoChanges: [],
-      timeSignatures: [],
-    }
-    expect(reconcilePdfLayoutWithScore({ timingMap: implicitMap, perSystemBarlineCounts: [1] }).flags.hasPickup).toBe(
-      true,
-    )
-
-    const shortBarMap = {
-      measures: [{ number: 1, beats: 4, beatType: 4, lengthQuarters: 1 }],
-      durationSeconds: 1,
-      writtenDurationSeconds: 1,
-      tempoChanges: [],
-      timeSignatures: [],
-    }
-    expect(reconcilePdfLayoutWithScore({ timingMap: shortBarMap, perSystemBarlineCounts: [1] }).flags.hasPickup).toBe(
-      true,
-    )
-  })
-
-  it('counts tempo changes', () => {
-    const result = reconcilePdfLayoutWithScore({
-      timingMap: parseMusicXml(measureStartTempoChange(), 'tempo'),
-      perSystemBarlineCounts: [3],
-    })
-    expect(result.flags.tempoChangeCount).toBe(1)
-  })
-
-  it('counts time-signature changes', () => {
-    const result = reconcilePdfLayoutWithScore({
-      timingMap: parseMusicXml(timeSignatureChangeFixture(), 'timesig'),
-      perSystemBarlineCounts: [2],
-    })
-    expect(result.flags.timeSignatureChangeCount).toBe(1)
-  })
-
   it('flags a system-count mismatch only when the score has layout hints', () => {
     const timingMap = parseMusicXml(systemsAndPages(), 'systemsAndPages') // breaks before m3, m5
     const matched = reconcilePdfLayoutWithScore({ timingMap, perSystemBarlineCounts: [2, 2, 2] })
     expect(matched.flags.systemCountMismatch).toBe(false)
     const mismatched = reconcilePdfLayoutWithScore({ timingMap, perSystemBarlineCounts: [3, 3] })
     expect(mismatched.flags.systemCountMismatch).toBe(true)
+  })
+})
+
+// --- Phase 2: honest model surfacing ----------------------------------------
+
+function implicitPickupFixture() {
+  // MusicXML pickup: measure 0 with implicit="yes" holding a single quarter.
+  return (
+    '<?xml version="1.0"?><score-partwise version="3.1">' +
+    '<part-list><score-part id="P1"><part-name>M</part-name></score-part></part-list>' +
+    '<part id="P1"><measure number="0" implicit="yes"><attributes><divisions>1</divisions>' +
+    '<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>' +
+    '<note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type></note></measure>' +
+    `<measure number="1">${fourQuarters()}</measure></part></score-partwise>`
+  )
+}
+
+describe('Phase 2: parser surfaces honest pickup metadata', () => {
+  it('preserves implicit="yes" on the measure', () => {
+    const tm = parseMusicXml(implicitPickupFixture(), 'implicit')
+    expect(tm.measures[0].implicit).toBe(true)
+  })
+
+  it('exposes the true notated length without changing timing length', () => {
+    const tm = parseMusicXml(pickupFixture(), 'pickup')
+    expect(tm.measures[0].notatedLengthQuarters).toBe(1) // one quarter actually written
+    expect(tm.measures[0].lengthQuarters).toBe(4) // timing length unchanged (padded)
+    const full = parseMusicXml(straight4(), 'straight4')
+    expect(full.measures[0].notatedLengthQuarters).toBe(4)
+    expect(full.measures[0].implicit).toBe(false)
+  })
+})
+
+describe('Phase 2: pickup detection uses real metadata (not faked)', () => {
+  it('detects an explicit implicit="yes" pickup', () => {
+    const tm = parseMusicXml(implicitPickupFixture(), 'implicit')
+    expect(reconcilePdfLayoutWithScore({ timingMap: tm, perSystemBarlineCounts: [2] }).flags.hasPickup).toBe(true)
+  })
+
+  it('detects a structurally short first bar via notatedLengthQuarters', () => {
+    const tm = parseMusicXml(pickupFixture(), 'pickup')
+    expect(reconcilePdfLayoutWithScore({ timingMap: tm, perSystemBarlineCounts: [3] }).flags.hasPickup).toBe(true)
+  })
+
+  it('does not flag a normal full first bar', () => {
+    const tm = parseMusicXml(straight4(), 'straight4')
+    expect(reconcilePdfLayoutWithScore({ timingMap: tm, perSystemBarlineCounts: [2, 2] }).flags.hasPickup).toBe(false)
+  })
+})
+
+describe('Phase 2: repeat/volta reporting from the performed timeline', () => {
+  it('reports performed vs written and which measures are revisited (repeat)', () => {
+    const result = reconcilePdfLayoutWithScore({
+      timingMap: parseMusicXml(oneRepeat(), 'oneRepeat'),
+      perSystemBarlineCounts: [4],
+    })
+    const f = result.flags
+    expect(f.hasRepeats).toBe(true)
+    expect(f.performedDiffersFromWritten).toBe(true)
+    expect(f.writtenMeasureCount).toBe(4)
+    expect(f.performedMeasureCount).toBe(6) // 1,2,1,2,3,4
+    expect(f.maxRepeatPass).toBe(2)
+    expect(f.repeatedMeasureNumbers).toEqual([1, 2])
+  })
+
+  it('reports voltas as a performed/written difference', () => {
+    const f = reconcilePdfLayoutWithScore({
+      timingMap: parseMusicXml(singleMeasureVoltas(), 'voltas'),
+      perSystemBarlineCounts: [4],
+    }).flags
+    expect(f.performedDiffersFromWritten).toBe(true)
+    expect(f.repeatedMeasureNumbers).toContain(1)
+  })
+
+  it('reports no difference for a straight piece', () => {
+    const f = reconcilePdfLayoutWithScore({
+      timingMap: parseMusicXml(straight4(), 'straight4'),
+      perSystemBarlineCounts: [2, 2],
+    }).flags
+    expect(f.hasRepeats).toBe(false)
+    expect(f.performedDiffersFromWritten).toBe(false)
+    expect(f.performedMeasureCount).toBe(4)
+    expect(f.repeatedMeasureNumbers).toEqual([])
+  })
+})
+
+describe('Phase 2: tempo / time-signature changes with affected measures', () => {
+  it('reports the measure where a tempo change takes effect', () => {
+    const f = reconcilePdfLayoutWithScore({
+      timingMap: parseMusicXml(measureStartTempoChange(), 'tempo'),
+      perSystemBarlineCounts: [3],
+    }).flags
+    expect(f.tempoChangeCount).toBe(1)
+    expect(f.tempoChangeMeasures).toEqual([2])
+  })
+
+  it('reports the measure where a time-signature change takes effect', () => {
+    const f = reconcilePdfLayoutWithScore({
+      timingMap: parseMusicXml(timeSignatureChangeFixture(), 'timesig'),
+      perSystemBarlineCounts: [2],
+    }).flags
+    expect(f.timeSignatureChangeCount).toBe(1)
+    expect(f.timeSignatureChangeMeasures).toEqual([2])
   })
 })
 

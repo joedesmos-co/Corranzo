@@ -77,24 +77,29 @@ Tooling / tests / docs:
 - `tests/alignmentReconciliation.test.js`, `tests/alignmentReport.test.js`.
 - `docs/AUTO_ALIGN_BROWSER_CHECKLIST.md` (manual browser verification).
 
-### Honest gap found while building Phase 1
+### Honest gap found while building Phase 1 — RESOLVED in Phase 2
 
-`parseMusicXml` does **not** surface MusicXML `implicit="yes"` and pads the first
-measure to a full bar, so today's `timingMap` carries **no pickup signal**.
-`detectPickupMeasure` is correct for data that does carry it, but
-`hasPickup` is reported `false` on current parser output rather than faked.
-**Phase 2 parser task:** surface `implicit` (and the true first-bar length).
+`parseMusicXml` did not surface MusicXML `implicit="yes"` and padded the first
+measure to a full bar, so Phase 1's `timingMap` carried no pickup signal.
+**Phase 2 fixed this additively** (no timing change): the parser now preserves
+`measure.implicit` and `measure.notatedLengthQuarters` (the true pre-padding
+length), and `detectPickupMeasure` uses them honestly.
 
 ---
 
 ## 4. Roadmap (subsequent phases, small commits each)
 
-**Phase 2 — fixtures + parser truthing.**
-Add a license-safe fixture set (Objective 6): fixed Minuet, Gymnopédie (PD),
-Guren, Carol, Turkish March (Mutopia PD — see demo evaluation), one dense/fast,
-one multi-page, one repeats/voltas. Each fixture = MusicXML + per-system barline
-counts (hand-checked once) → golden reconciliation snapshot. Surface `implicit`
-and time-signature-change boundaries in `parseMusicXml`. Commit per fixture.
+**Phase 2 — parser truthing (DONE) + fixtures (pending).**
+Done: parser surfaces `implicit` + `notatedLengthQuarters`; reconciliation now
+reports pickup (real metadata), repeats/voltas from the performed timeline
+(performed-vs-written, revisited measures, max repeat pass), and tempo /
+time-signature change counts **with affected measure numbers**; the diagnostic
+prints a concise honest model summary.
+Pending (Phase 2b): a license-safe fixture set (Objective 6) — fixed Minuet,
+Gymnopédie (PD), Guren, Carol, Turkish March (Mutopia PD — see demo evaluation),
+one dense/fast, one multi-page, one repeats/voltas — each MusicXML + per-system
+barline counts (hand-checked once) → golden reconciliation snapshot, one commit
+per fixture.
 
 **Phase 3 — unified anchor generation from reconciliation.**
 A single `generateAnchorsFromLayout(reconciliation, pageLayout)` producing

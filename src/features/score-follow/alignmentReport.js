@@ -41,21 +41,54 @@ function collectWarnings(reconciliation) {
     warnings.push('PDF page count differs from the score layout.')
   }
   if (flags.hasPickup) {
-    warnings.push('Score begins with a pickup (anacrusis) measure — verify measure 1 alignment.')
-  }
-  if (flags.hasRepeats) {
-    warnings.push(
-      `Score contains repeats/voltas (performed ≈ ${fmt(flags.repeatExpansionRatio)}× written) — ` +
-        'the cursor revisits written measures; per-measure anchors stay valid.',
-    )
-  }
-  if (flags.timeSignatureChangeCount > 0) {
-    warnings.push(`${flags.timeSignatureChangeCount} time-signature change(s) in the score.`)
-  }
-  if (flags.tempoChangeCount > 0) {
-    warnings.push(`${flags.tempoChangeCount} tempo change(s) in the score.`)
+    // Actionable: anacrusis affects where measure 1 sits. Structural facts
+    // (repeats, tempo, time-sig) live in the concise model summary instead.
+    warnings.push('Pickup (anacrusis) — verify measure 1 alignment.')
   }
   return warnings
+}
+
+function describeRepeats(flags) {
+  if (!flags?.hasRepeats) {
+    return 'no'
+  }
+  const parts = []
+  if (Number.isFinite(flags.performedMeasureCount) && Number.isFinite(flags.writtenMeasureCount)) {
+    parts.push(`performed ${flags.performedMeasureCount} vs written ${flags.writtenMeasureCount} measures`)
+  }
+  if (flags.repeatedMeasureNumbers?.length) {
+    parts.push(`revisits m${flags.repeatedMeasureNumbers.join(', m')}`)
+  } else if (Number.isFinite(flags.repeatExpansionRatio) && flags.repeatExpansionRatio > 1) {
+    parts.push(`≈${fmt(flags.repeatExpansionRatio)}× expansion`)
+  }
+  return parts.length ? `yes — ${parts.join('; ')}` : 'yes'
+}
+
+function describeChanges(count, measures) {
+  if (!count) {
+    return '0'
+  }
+  return measures?.length ? `${count} (m${measures.join(', m')})` : String(count)
+}
+
+function describePageSystem(flags) {
+  const reasons = flags?.layoutMismatchReasons ?? []
+  if (flags?.systemCountMismatch || flags?.pageCountMismatch || reasons.length) {
+    return reasons.length ? reasons.join('; ') : 'mismatch'
+  }
+  return 'aligned'
+}
+
+/** Concise, honest model summary lines (pickup / repeats / tempo / time-sig / layout). */
+export function formatModelSummary(report) {
+  const flags = report?.flags ?? {}
+  return [
+    `Pickup: ${flags.hasPickup ? 'yes' : 'no'}`,
+    `Repeats/voltas: ${describeRepeats(flags)}`,
+    `Tempo changes: ${describeChanges(flags.tempoChangeCount, flags.tempoChangeMeasures)}`,
+    `Time-signature changes: ${describeChanges(flags.timeSignatureChangeCount, flags.timeSignatureChangeMeasures)}`,
+    `Page/system: ${describePageSystem(flags)}`,
+  ]
 }
 
 /**
@@ -128,6 +161,12 @@ export function formatAlignmentReportText(report) {
       `Systems: ${totals.systemCount ?? '—'} | ` +
       `Mean conf: ${fmt(totals.meanConfidence)} | Min conf: ${fmt(totals.minConfidence)}`,
   )
+
+  lines.push('')
+  lines.push('Model:')
+  for (const line of formatModelSummary(report)) {
+    lines.push(`  ${line}`)
+  }
 
   lines.push('')
   lines.push(
