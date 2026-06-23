@@ -128,6 +128,58 @@ export function anchorPriority(anchor) {
   }
 }
 
+/**
+ * A per-measure auto anchor is "fresh" only if it carries the current
+ * measure-local x metadata (measureStartX / playableStartX / playableEndX) that
+ * the resolver and overlay rely on. Anchors persisted before that schema lack
+ * these fields.
+ */
+function isFreshAutoMeasureAnchor(anchor) {
+  const meta = anchor?.meta
+  return (
+    meta?.role === 'measure' &&
+    Number.isFinite(meta.measureStartX) &&
+    Number.isFinite(meta.playableStartX) &&
+    Number.isFinite(meta.playableEndX)
+  )
+}
+
+/**
+ * Drop restored AUTOMATIC anchors when they are stale — i.e. they predate the
+ * current per-measure schema (no usable measure-local x fields), so they would
+ * place the cursor at coarse/old positions and also block regeneration. Manual
+ * and bundled-demo anchors are always preserved. When the restored auto set is
+ * already fresh (every measure anchor has the current fields) it is kept as-is.
+ *
+ * Returns a NEW array; safe to call on every hydration.
+ */
+export function dropStaleAutoAnchors(anchors) {
+  if (!anchors?.length) {
+    return anchors ?? []
+  }
+
+  const auto = anchors.filter(
+    (anchor) =>
+      isAutomaticAnchorSource(anchor.source) && anchor.source !== ANCHOR_SOURCE.DEMO,
+  )
+  if (auto.length === 0) {
+    return anchors
+  }
+
+  const measureAnchors = auto.filter((anchor) => anchor.meta?.role === 'measure')
+  const fresh =
+    measureAnchors.length > 0 && measureAnchors.every(isFreshAutoMeasureAnchor)
+  if (fresh) {
+    return anchors
+  }
+
+  // Stale auto set → keep only manual + bundled-demo so auto-setup regenerates.
+  return anchors.filter(
+    (anchor) =>
+      isManualAnchorSource(anchor.source) || anchor.source === ANCHOR_SOURCE.DEMO,
+  )
+}
+
 export function countAnchorsBySource(anchors) {
   let manual = 0
   let autoSystem = 0

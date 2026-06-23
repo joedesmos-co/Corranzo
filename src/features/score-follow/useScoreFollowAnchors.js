@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   ANCHOR_SOURCE,
+  dropStaleAutoAnchors,
   filterAutoAnchorsReplacedByManual,
   isAutomaticAnchorSource,
   isManualAnchorSource,
@@ -78,7 +79,12 @@ export default function useScoreFollowAnchors({ fingerprint, fileName }) {
       return
     }
 
-    const loaded = loadScoreFollowAnchors({ fingerprint, fileName }).map(normalizeAnchor)
+    // Discard stale auto anchors (pre measure-local-x schema) on restore so the
+    // cursor never uses old coarse positions and auto-setup can regenerate fresh
+    // anchors. Manual + bundled-demo anchors are preserved.
+    const loaded = dropStaleAutoAnchors(
+      loadScoreFollowAnchors({ fingerprint, fileName }).map(normalizeAnchor),
+    )
     setAnchors(loaded)
     setHydratedKey(storageKey)
     setStorageWarning(null)

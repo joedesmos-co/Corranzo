@@ -60,7 +60,14 @@ function ScoreFollowOverlay({
   const pageAnchors = anchors.filter((anchor) => anchor.page === pageNumber)
   const pageSystemStartMarks = systemStartMarks.filter((m) => m.page === pageNumber)
   const hasBands = showSystemBands && pageSystems.length > 0
-  const hasMarkers = showAnchorMarkers && pageAnchors.length > 0
+  // Auto "guide" dots only belong while actively aligning or reviewing the auto
+  // preview. In plain practice / setup-panel views they are diagnostic markers
+  // that can drift, so show only user-placed (manual) markers there.
+  const showAutoMarkers = alignmentMode || semiAutoPreview
+  const markerAnchors = showAutoMarkers
+    ? pageAnchors
+    : pageAnchors.filter((anchor) => normalizeAnchorSource(anchor) === ANCHOR_SOURCE.MANUAL)
+  const hasMarkers = showAnchorMarkers && markerAnchors.length > 0
   const hasSystemStartMarks = systemStartMode && pageSystemStartMarks.length > 0
   const cursorX = showCursor ? cursor?.x : null
   const cursorY = showCursor ? cursor?.y : null
@@ -121,7 +128,7 @@ function ScoreFollowOverlay({
         ))}
 
       {hasMarkers &&
-        pageAnchors.map((anchor) => {
+        markerAnchors.map((anchor) => {
           const isAuto =
             isAutomaticAnchorSource(anchor.source) &&
             normalizeAnchorSource(anchor) !== ANCHOR_SOURCE.MANUAL
