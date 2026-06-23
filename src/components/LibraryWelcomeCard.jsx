@@ -1,10 +1,10 @@
 import { dismissOnboarding } from '../features/session/practicePrefsStorage.js'
 import {
   BETA_LABEL,
-  FEEDBACK_URL,
   LOCAL_ONLY_MESSAGE,
 } from '../features/beta/betaInfo.js'
 import DemoPieceCard from './DemoPieceCard.jsx'
+import FeedbackButton from './FeedbackButton.jsx'
 
 export default function LibraryWelcomeCard({
   onDismiss,
@@ -62,9 +62,10 @@ export default function LibraryWelcomeCard({
       <footer className="library-welcome__footer">
         <p className="library-welcome__privacy">{LOCAL_ONLY_MESSAGE}</p>
         <div className="library-welcome__actions">
-          <a href={FEEDBACK_URL} target="_blank" rel="noreferrer">
-            Send feedback
-          </a>
+          <FeedbackButton
+            label="Copy feedback prompt"
+            copiedLabel="Copied — send to your beta contact"
+          />
           <button type="button" className="library-welcome__btn" onClick={handleDismiss}>
             Continue to Library
           </button>

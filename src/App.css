@@ -77,9 +77,13 @@
 }
 
 .topbar__feedback {
+  min-height: 36px;
+  padding: 7px 0;
+  border: 0;
+  background: transparent;
   color: var(--sf-text-muted);
   font-size: var(--sf-font-small);
-  text-decoration: none;
+  cursor: pointer;
 }
 
 .topbar__feedback:hover {
@@ -2793,13 +2797,80 @@
   flex-shrink: 0;
 }
 
-.library-welcome__actions a {
-  color: var(--sf-text-muted);
-  font-size: var(--sf-font-caption);
-  text-decoration: none;
+.feedback-button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
-.library-welcome__actions a:hover {
+.feedback-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sf-space-xl);
+  background: rgba(7, 12, 22, 0.72);
+}
+
+.feedback-dialog {
+  width: min(480px, 100%);
+  padding: var(--sf-space-2xl);
+  border: 1px solid var(--sf-border-strong);
+  border-radius: var(--sf-radius-xl);
+  background: var(--sf-bg-panel);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.feedback-dialog h2 {
+  margin: 0;
+  color: var(--sf-text-primary);
+  font-size: var(--sf-font-heading);
+}
+
+.feedback-dialog p {
+  margin: var(--sf-space-sm) 0 var(--sf-space-lg);
+  color: var(--sf-text-muted);
+  font-size: var(--sf-font-small);
+  line-height: 1.5;
+}
+
+.feedback-dialog textarea {
+  display: block;
+  width: 100%;
+  resize: vertical;
+  padding: var(--sf-space-md);
+  border: 1px solid var(--sf-border-strong);
+  border-radius: var(--sf-radius-md);
+  background: var(--sf-bg-panel-inset);
+  color: var(--sf-text-secondary);
+  font: inherit;
+  font-size: var(--sf-font-small);
+  line-height: 1.5;
+}
+
+.feedback-dialog__close {
+  display: block;
+  margin: var(--sf-space-lg) 0 0 auto;
+  padding: 9px var(--sf-space-xl);
+  border: 1px solid transparent;
+  border-radius: var(--sf-radius-md);
+  background: var(--sf-accent);
+  color: #fff;
+  font-size: var(--sf-font-small);
+  cursor: pointer;
+}
+
+.library-welcome__actions .feedback-button {
+  min-height: 36px;
+  padding: var(--sf-space-sm) 0;
+  color: var(--sf-text-muted);
+  font-size: var(--sf-font-caption);
+  text-align: left;
+}
+
+.library-welcome__actions .feedback-button:hover {
   color: var(--sf-text-primary);
 }
 

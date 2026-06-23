@@ -13,6 +13,7 @@ import ProfileView from './components/profile/ProfileView.jsx'
 import useWorkspacePreferences from './hooks/useWorkspacePreferences.js'
 import useSessionPersistence from './hooks/useSessionPersistence.js'
 import {
+  dismissOnboarding,
   isOnboardingDismissed,
   loadPracticePrefs,
   savePracticePrefs,
@@ -228,6 +229,7 @@ export default function App() {
 
       setPdfSoftWarning(null)
       setShowWelcome(false)
+      dismissOnboarding()
       setDemoPieceActive(true)
       const clearedPrefs = {
         ...(loadPracticePrefs() ?? {}),
@@ -374,9 +376,6 @@ export default function App() {
             midiFileName={midiSource?.fileName}
             musicXmlFileName={musicXmlSource?.fileName}
             uploadsDisabled={isRestoring}
-            showOpenPractice={
-              Boolean(pdfFile && musicXmlSource?.data && !midiSource?.data)
-            }
             onOpenPractice={() => {
               setActiveView('practice')
               setLibraryFeedback({

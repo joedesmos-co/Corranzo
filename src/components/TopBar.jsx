@@ -1,8 +1,8 @@
 import {
   BETA_LABEL,
   BETA_VERSION,
-  FEEDBACK_URL,
 } from '../features/beta/betaInfo.js'
+import FeedbackButton from './FeedbackButton.jsx'
 
 const VIEWS = [
   { id: 'library', label: 'Library' },
@@ -48,14 +48,7 @@ export default function TopBar({ activeView, onNavigate, practiceReady = true })
             </button>
           ))}
         </nav>
-        <a
-          className="topbar__feedback"
-          href={FEEDBACK_URL}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Feedback
-        </a>
+        <FeedbackButton className="topbar__feedback" />
       </div>
     </header>
   )

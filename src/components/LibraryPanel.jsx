@@ -29,7 +29,6 @@ export default function LibraryPanel({
   onMusicXmlSelect,
   onImportFeedback,
   onLoadSampleFixtures,
-  showOpenPractice = false,
   onOpenPractice,
   sampleLoadLoading = false,
   sampleLoadError = null,
