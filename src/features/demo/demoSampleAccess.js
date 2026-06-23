@@ -1,4 +1,4 @@
-/** Dev-only sample piece, or production when VITE_ENABLE_DEMO_SAMPLE=true. */
+/** The calibrated public-domain demo ships with the private beta. */
 export function isDemoSampleEnabled() {
-  return import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_SAMPLE === 'true'
+  return true
 }

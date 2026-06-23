@@ -1,6 +1,6 @@
-import { lazy, Suspense } from 'react'
 import LibraryAccuracyGuide from './LibraryAccuracyGuide.jsx'
 import MultiFileUpload from './MultiFileUpload.jsx'
+import DemoPieceCard from './DemoPieceCard.jsx'
 import {
   ACCEPT_ATTRIBUTES,
   isAcceptedScoreTimingFile,
@@ -8,11 +8,6 @@ import {
   MUSESCORE_PLANNED_MESSAGE,
 } from '../features/import/sourceNotationFiles.js'
 import { isAcceptedFileType } from '../features/import/fileImportLimits.js'
-import { isDemoSampleEnabled } from '../features/demo/demoSampleAccess.js'
-
-const DevSampleLoadPanel = isDemoSampleEnabled()
-  ? lazy(() => import('../dev/DevSampleLoadPanel.jsx'))
-  : null
 
 function rejectMessage(kind) {
   if (kind === 'pdf') {
@@ -40,6 +35,7 @@ export default function LibraryPanel({
   sampleLoadError = null,
   importFeedback = null,
   uploadsDisabled = false,
+  showDemo = true,
 }) {
   const hasPdf = Boolean(fileName)
   const hasMusicXml = Boolean(musicXmlFileName)
@@ -99,24 +95,21 @@ export default function LibraryPanel({
 
   return (
     <aside className={`library-panel ${className}`.trim()}>
-      {isDemoSampleEnabled() && onLoadSampleFixtures && DevSampleLoadPanel && (
-        <Suspense fallback={null}>
-          <DevSampleLoadPanel
-            loading={sampleLoadLoading}
-            error={sampleLoadError}
-            onLoad={onLoadSampleFixtures}
-          />
-        </Suspense>
-      )}
-
       <header className="library-panel__hero">
-        <p className="library-panel__tagline">
-          Upload your sheet music and practice interactively.
-        </p>
+        <p className="library-panel__tagline">Your practice library</p>
         <p className="library-panel__browser-hint" role="note">
-          Best on Chrome or Edge (desktop) for playback &amp; MIDI.
+          Add PDF + MusicXML. MIDI is optional.
         </p>
       </header>
+
+      {showDemo && onLoadSampleFixtures && (
+        <DemoPieceCard
+          compact
+          loading={sampleLoadLoading}
+          error={sampleLoadError}
+          onLoad={onLoadSampleFixtures}
+        />
+      )}
 
       <MultiFileUpload
         hasPdf={hasPdf}
@@ -179,7 +172,7 @@ export default function LibraryPanel({
             {fileName}
           </p>
         ) : (
-          <p className="library-panel__empty">No PDF yet</p>
+          <p className="library-panel__empty">Choose the score you want to read.</p>
         )}
       </div>
 
@@ -209,7 +202,7 @@ export default function LibraryPanel({
             {musicXmlFileName}
           </p>
         ) : (
-          <p className="library-panel__empty">Required — export from MuseScore, etc.</p>
+          <p className="library-panel__empty">Export MusicXML or MXL from your notation app.</p>
         )}
       </div>
 
@@ -237,7 +230,7 @@ export default function LibraryPanel({
             {midiFileName}
           </p>
         ) : (
-          <p className="library-panel__empty">Optional — backing audio only.</p>
+          <p className="library-panel__empty">Add MIDI only if you want backing playback.</p>
         )}
       </div>
       </details>

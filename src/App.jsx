@@ -359,6 +359,7 @@ export default function App() {
               isDemoSampleEnabled() && restoreGateOpen ? handleLoadSampleFixtures : undefined
             }
             sampleLoading={sampleLoadState.loading}
+            sampleError={sampleLoadState.error}
           />
         </div>
       )}
@@ -393,6 +394,7 @@ export default function App() {
             sampleLoadLoading={sampleLoadState.loading}
             sampleLoadError={sampleLoadState.error}
             importFeedback={libraryFeedback}
+            showDemo={!showWelcome}
           />
           <div className="main-layout__score">
             <PdfViewer

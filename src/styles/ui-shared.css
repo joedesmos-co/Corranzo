@@ -41,8 +41,10 @@ button:focus:not(:focus-visible),
 /* —— Button hierarchy (ghost / secondary / primary) —— */
 
 .topbar__nav-btn,
+.topbar__feedback,
 .session-restore-banner__btn,
 .library-welcome__btn,
+.demo-piece__button,
 .profile-footer__reset,
 .profile-dev-tools__btn,
 .profile-name-form__cancel,
@@ -63,8 +65,10 @@ button:focus:not(:focus-visible),
 }
 
 .topbar__nav-btn:focus-visible,
+.topbar__feedback:focus-visible,
 .session-restore-banner__btn:focus-visible,
 .library-welcome__btn:focus-visible,
+.demo-piece__button:focus-visible,
 .profile-footer__reset:focus-visible,
 .profile-dev-tools__btn:focus-visible,
 .profile-name-form__save:focus-visible,

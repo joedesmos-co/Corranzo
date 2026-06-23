@@ -1,38 +1,75 @@
 import { dismissOnboarding } from '../features/session/practicePrefsStorage.js'
+import {
+  BETA_LABEL,
+  FEEDBACK_URL,
+  LOCAL_ONLY_MESSAGE,
+} from '../features/beta/betaInfo.js'
+import DemoPieceCard from './DemoPieceCard.jsx'
 
-export default function LibraryWelcomeCard({ onDismiss, onTrySample, sampleLoading = false }) {
+export default function LibraryWelcomeCard({
+  onDismiss,
+  onTrySample,
+  sampleLoading = false,
+  sampleError = null,
+}) {
   function handleDismiss() {
     dismissOnboarding()
     onDismiss?.()
   }
 
   return (
-    <section className="library-welcome" aria-label="Welcome">
-      <h2 className="library-welcome__title">Welcome to ScoreFlow</h2>
-      <p className="library-welcome__lead">
-        Upload a <strong>PDF</strong> to read and <strong>MusicXML/MXL</strong> for timing
-        (MIDI optional for sound), then practice interactively.
-      </p>
-      {onTrySample && (
-        <p className="library-welcome__note">
-          New here? Try the sample piece to see it in action.
+    <section className="library-welcome" aria-labelledby="welcome-heading">
+      <div className="library-welcome__intro">
+        <p className="library-welcome__eyebrow">{BETA_LABEL}</p>
+        <h2 id="welcome-heading" className="library-welcome__title">
+          Practice with the score in front of you.
+        </h2>
+        <p className="library-welcome__lead">
+          Load a PDF and MusicXML. ScoreFlow follows along, loops passages, and can wait
+          for you.
         </p>
-      )}
-      <div className="library-welcome__actions">
-        {onTrySample && (
-          <button
-            type="button"
-            className="library-welcome__btn library-welcome__btn--sample"
-            disabled={sampleLoading}
-            onClick={onTrySample}
-          >
-            {sampleLoading ? 'Loading sample…' : 'Try sample piece'}
-          </button>
-        )}
-        <button type="button" className="library-welcome__btn" onClick={handleDismiss}>
-          Got it
-        </button>
       </div>
+
+      <div className="library-welcome__how" aria-label="How it works">
+        <h3 className="library-welcome__section-title">How it works</h3>
+        <ol className="library-welcome__steps">
+          <li>
+            <span>1</span>
+            <strong>Add a score</strong>
+            <small>PDF + MusicXML</small>
+          </li>
+          <li>
+            <span>2</span>
+            <strong>Practice</strong>
+            <small>Play, loop, or wait</small>
+          </li>
+          <li>
+            <span>3</span>
+            <strong>Keep your history</strong>
+            <small>Stored on this device</small>
+          </li>
+        </ol>
+      </div>
+
+      {onTrySample && (
+        <DemoPieceCard
+          loading={sampleLoading}
+          error={sampleError}
+          onLoad={onTrySample}
+        />
+      )}
+
+      <footer className="library-welcome__footer">
+        <p className="library-welcome__privacy">{LOCAL_ONLY_MESSAGE}</p>
+        <div className="library-welcome__actions">
+          <a href={FEEDBACK_URL} target="_blank" rel="noreferrer">
+            Send feedback
+          </a>
+          <button type="button" className="library-welcome__btn" onClick={handleDismiss}>
+            Continue to Library
+          </button>
+        </div>
+      </footer>
     </section>
   )
 }

@@ -69,8 +69,8 @@ export default function ProfileView() {
 
       {!hasStats ? (
         <div className="profile-empty">
-          <h3>No practice stats yet</h3>
-          <p>Open a score in Practice to start building your local history.</p>
+          <h3>Your practice history starts here</h3>
+          <p>Finish a Practice session and it will appear here on this device.</p>
         </div>
       ) : (
         <div className="profile-panels">

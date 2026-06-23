@@ -78,7 +78,7 @@ export default function PracticeView({
     <section className="practice-workspace" aria-label="Practice">
       {!pdfFile ? (
         <div className="practice-workspace__empty">
-          <h2>Nothing loaded yet</h2>
+          <h2>Choose a piece first</h2>
           <p className="practice-workspace__empty-lead">
             Open a PDF and timing file from <strong>Library</strong>.
           </p>

@@ -266,7 +266,7 @@ export default function PdfViewer({
           >
           {!file ? (
             <p className="pdf-canvas__placeholder">
-              Upload your sheet music in Library to get started.
+              Your score will appear here.
             </p>
           ) : isFullscreen ? null : (
             <Document
