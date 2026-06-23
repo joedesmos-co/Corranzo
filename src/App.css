@@ -150,13 +150,12 @@
   pointer-events: none;
 }
 
-/* Reserve the same right column width as Practice so PDF fit matches when sidebar is hidden. */
-.main-layout--sidebar-hidden::after {
-  content: '';
-  flex: 0 0 300px;
-  width: 300px;
-  max-width: 36vw;
-  pointer-events: none;
+/* With the sidebar collapsed, the score column takes the full width so the PDF
+   preview (and its stage-centered toolbar) sit centered in the available area.
+   No reserved right-hand column — that empty strip left the closed state looking
+   off-center and two-toned (half app-background, half PDF canvas). */
+.main-layout--sidebar-hidden .main-layout__score {
+  justify-content: center;
 }
 
 .main-layout--empty-score .main-layout__score {
@@ -1608,10 +1607,6 @@
   }
 
   .main-layout--sidebar-hidden .library-panel {
-    display: none;
-  }
-
-  .main-layout--sidebar-hidden::after {
     display: none;
   }
 

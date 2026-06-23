@@ -58,6 +58,7 @@ export default function App() {
   const {
     sidebarOpen,
     paperTheme,
+    setSidebarOpen,
     toggleSidebar,
     togglePaperTheme,
   } = useWorkspacePreferences()
@@ -232,6 +233,9 @@ export default function App() {
       setShowWelcome(false)
       dismissOnboarding()
       setDemoPieceActive(true)
+      // Demo is loaded — the upload/demo sidebar is no longer useful, so collapse
+      // it. The PDF viewer's sidebar toggle still reopens it on demand.
+      setSidebarOpen(false)
       const clearedPrefs = {
         ...(loadPracticePrefs() ?? {}),
         practiceTime: 0,
@@ -253,7 +257,7 @@ export default function App() {
             : 'Could not load the sample score. Check your connection and try again.',
       })
     }
-  }, [])
+  }, [setSidebarOpen])
 
   function handleDocumentLoadSuccess({ numPages: total }) {
     setNumPages(total)
