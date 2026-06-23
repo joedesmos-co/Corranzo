@@ -188,7 +188,6 @@ export default function PracticeControlPanel({
 
       <div className="practice-control-panel__footer">
         <p className="practice-shortcuts-hint" aria-label="Keyboard shortcuts">
-          <span className="practice-shortcuts-hint__touch">Use the on-screen controls on touch devices.</span>
           <span className="practice-shortcuts-hint__keys">
             <kbd>Space</kbd> play · <kbd>Enter</kbd> continue · <kbd>←</kbd>
             <kbd>→</kbd> pages · <kbd>F</kbd> fullscreen

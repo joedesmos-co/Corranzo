@@ -23,7 +23,7 @@ export default function PracticeModeSection({
 
       {!hasMusicXml ? (
         <p className="practice-section__hint practice-empty-state">
-          Add a score timing file from the Library to unlock Wait For You and measure tracking.
+          Add MusicXML/MXL in Library to unlock Wait For You.
         </p>
       ) : (
         <div className="practice-mode__options" role="radiogroup" aria-label="Practice mode">

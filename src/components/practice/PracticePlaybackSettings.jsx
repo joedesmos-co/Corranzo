@@ -24,20 +24,21 @@ export default function PracticePlaybackSettings({
 
   return (
     <div className="practice-playback-settings">
-      {audioSource && (
+      {(audioSource || instrumentLabel) && (
         <p className="practice-playback-settings__source" aria-live="polite">
-          Audio: {audioSource === 'midi' ? 'MIDI backing' : 'MusicXML score'}
-        </p>
-      )}
-
-      {instrumentLabel && (
-        <p
-          className={`practice-playback-settings__instrument practice-playback-settings__instrument--${instrumentStatus}`}
-          aria-live="polite"
-        >
-          {instrumentStatus === INSTRUMENT_STATUS.LOADING ? '⏳ ' : ''}
-          {instrumentStatus === INSTRUMENT_STATUS.SAMPLED ? '🎹 ' : ''}
-          {instrumentLabel}
+          {audioSource && (
+            <span>Sound: {audioSource === 'midi' ? 'MIDI backing' : 'MusicXML score'}</span>
+          )}
+          {instrumentLabel && (
+            <span
+              className={`practice-playback-settings__instrument practice-playback-settings__instrument--${instrumentStatus}`}
+            >
+              {audioSource ? ' · ' : ''}
+              {instrumentStatus === INSTRUMENT_STATUS.LOADING ? '⏳ ' : ''}
+              {instrumentStatus === INSTRUMENT_STATUS.SAMPLED ? '🎹 ' : ''}
+              {instrumentLabel}
+            </span>
+          )}
         </p>
       )}
 
@@ -65,7 +66,7 @@ export default function PracticePlaybackSettings({
 
       {effectiveTempo != null && (
         <p className="practice-playback-settings__tempo" aria-live="polite">
-          Effective tempo: {effectiveTempo} BPM
+          Tempo {effectiveTempo} BPM
         </p>
       )}
 

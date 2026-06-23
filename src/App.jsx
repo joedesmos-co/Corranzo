@@ -102,8 +102,8 @@ export default function App() {
         setLibraryFeedback({
           type: 'info',
           message: validation.softWarning
-            ? `${validation.softWarning} PDF updated — confirm your sound and timing files still match this score.`
-            : `PDF updated to ${file.name}. Your sound and timing files were kept — check they still match.`,
+            ? `${validation.softWarning} PDF updated — check timing/sound still match.`
+            : `PDF updated. Check your timing & sound files still match.`,
         })
       } else {
         setLibraryFeedback(
@@ -142,7 +142,7 @@ export default function App() {
         type: 'success',
         message: fullSet
           ? `Loaded ${file.name}. All files ready — opening Practice.`
-          : `Loaded ${file.name}. Add PDF and score timing to auto-open Practice, or open Practice when ready.`,
+          : `Loaded ${file.name}. Add a PDF + timing to open Practice.`,
       })
       if (fullSet) {
         setActiveView('practice')
@@ -173,7 +173,7 @@ export default function App() {
         type: 'success',
         message: fullSet
           ? `Loaded ${file.name}. All files ready — opening Practice.`
-          : `Loaded ${file.name}. You can open Practice when your PDF is loaded.`,
+          : `Loaded ${file.name}. Add a PDF to open Practice.`,
       })
       if (fullSet) {
         setActiveView('practice')

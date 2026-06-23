@@ -10,23 +10,14 @@ export default function LibraryWelcomeCard({ onDismiss, onTrySample, sampleLoadi
     <section className="library-welcome" aria-label="Welcome">
       <h2 className="library-welcome__title">Welcome to ScoreFlow</h2>
       <p className="library-welcome__lead">
-        Upload your sheet music and practice interactively.
+        Upload a <strong>PDF</strong> to read and <strong>MusicXML/MXL</strong> for timing
+        (MIDI optional for sound), then practice interactively.
       </p>
-      <ol className="library-welcome__roles">
-        <li>
-          <strong>Sheet music (PDF)</strong> — the score you read
-        </li>
-        <li>
-          <strong>Score timing (MusicXML/MXL)</strong> — where measures and notes live in time
-        </li>
-        <li>
-          <strong>Sound (optional MIDI)</strong> — backing audio if you want it
-        </li>
-      </ol>
-      <p className="library-welcome__note">
-        For best accuracy, export MusicXML or MXL from MuseScore or your notation app — not a PDF
-        scan alone.
-      </p>
+      {onTrySample && (
+        <p className="library-welcome__note">
+          New here? Try the sample piece to see it in action.
+        </p>
+      )}
       <div className="library-welcome__actions">
         {onTrySample && (
           <button

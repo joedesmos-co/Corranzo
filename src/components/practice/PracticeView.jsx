@@ -79,27 +79,10 @@ export default function PracticeView({
     <section className="practice-workspace" aria-label="Practice">
       {!pdfFile ? (
         <div className="practice-workspace__empty">
-          <h2>Upload your sheet music and practice interactively</h2>
+          <h2>Nothing loaded yet</h2>
           <p className="practice-workspace__empty-lead">
-            Head to <strong>Library</strong> and follow the quick start:
-          </p>
-          <ol className="practice-workspace__steps">
-            <li>
-              <strong>Upload PDF</strong> — sheet music to read
-            </li>
-            <li>
-              <strong>Upload MusicXML/MXL</strong> — score timing (required)
-            </li>
-            <li>
-              <strong>Optional MIDI</strong> — backing sound
-            </li>
-            <li>
-              <strong>Open Practice</strong>
-            </li>
-          </ol>
-          <p className="practice-workspace__empty-hint">
-            MusicXML/MXL tells ScoreFlow where each measure is. A PDF alone cannot power Wait For
-            You or the moving cursor.
+            Go to <strong>Library</strong> to upload a PDF and MusicXML/MXL, then come back here to
+            practice.
           </p>
         </div>
       ) : (

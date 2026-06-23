@@ -15,12 +15,12 @@ const DevSampleLoadPanel = isDemoSampleEnabled()
 
 function rejectMessage(kind) {
   if (kind === 'pdf') {
-    return 'That file is not a PDF. Choose a .pdf sheet music export.'
+    return 'Not a PDF — choose a .pdf file.'
   }
   if (kind === 'midi') {
-    return 'That file is not MIDI. Choose a .mid or .midi sound export.'
+    return 'Not a MIDI file — choose .mid or .midi.'
   }
-  return 'That file is not a supported score timing file. Choose .mxl, .musicxml, or .xml.'
+  return 'Unsupported — choose .mxl, .musicxml, or .xml.'
 }
 
 export default function LibraryPanel({
@@ -112,12 +112,8 @@ export default function LibraryPanel({
         <p className="library-panel__tagline">
           Upload your sheet music and practice interactively.
         </p>
-        <p className="library-panel__hero-hint">
-          PDF for reading · MusicXML/MXL for timing · MIDI optional for sound
-        </p>
         <p className="library-panel__browser-hint" role="note">
-          Best on Chrome or Edge (desktop) for playback and MIDI. Safari and tablets are great for
-          reading, annotations, and Wait For You with Manual continue.
+          Best on Chrome or Edge (desktop) for playback &amp; MIDI.
         </p>
       </header>
 
@@ -132,60 +128,26 @@ export default function LibraryPanel({
 
       <LibraryAccuracyGuide hasPdf={hasPdf} hasMusicXml={hasMusicXml} />
 
-      <div className="library-panel__workflow" aria-label="Quick start">
-        <p className="library-panel__workflow-title">Quick start</p>
-        <ol className="library-panel__workflow-steps">
-          <li className={hasPdf ? 'library-panel__workflow-step--done' : ''}>
-            <span className="library-panel__step-num">1</span>
-            <span>
-              <strong>Upload PDF</strong> — sheet music to read
-            </span>
-          </li>
-          <li className={hasMusicXml ? 'library-panel__workflow-step--done' : ''}>
-            <span className="library-panel__step-num">2</span>
-            <span>
-              <strong>Upload MusicXML/MXL</strong> — score timing (required for Practice)
-            </span>
-          </li>
-          <li className={hasMidi ? 'library-panel__workflow-step--done' : ''}>
-            <span className="library-panel__step-num">3</span>
-            <span>
-              <strong>Optional:</strong> upload MIDI for backing sound
-            </span>
-          </li>
-          <li className={canOpenPractice ? 'library-panel__workflow-step--done' : ''}>
-            <span className="library-panel__step-num">4</span>
-            <span>
-              <strong>Open Practice</strong> — play, loop, Wait For You
-            </span>
-          </li>
-        </ol>
-
-        {canOpenPractice && onOpenPractice && (
-          <div className="library-panel__open-practice">
-            <button type="button" className="upload-btn upload-btn--practice" onClick={onOpenPractice}>
-              Open Practice
-            </button>
-            {!hasMidi && (
-              <p className="library-panel__open-practice-text">
-                Sound is optional — you can add MIDI anytime for backing audio.
-              </p>
-            )}
-          </div>
-        )}
-
-        {hasPdf && !hasMusicXml && (
-          <p className="library-panel__workflow-next" role="status">
-            Next: add score timing (MusicXML/MXL) so Practice knows where each measure is.
-          </p>
-        )}
-      </div>
+      {canOpenPractice && onOpenPractice ? (
+        <div className="library-panel__workflow library-panel__open-practice">
+          <button type="button" className="upload-btn upload-btn--practice" onClick={onOpenPractice}>
+            Open Practice
+          </button>
+          {!hasMidi && (
+            <p className="library-panel__open-practice-text">Sound (MIDI) is optional.</p>
+          )}
+        </div>
+      ) : hasPdf && !hasMusicXml ? (
+        <p className="library-panel__workflow library-panel__workflow-next" role="status">
+          Next: add MusicXML/MXL timing to enable Practice.
+        </p>
+      ) : null}
 
       <div className="panel library-panel__upload-card">
         <h2 className="panel__title">
           <span className="panel__step-badge">1</span> Sheet music
         </h2>
-        <p className="panel__hint">PDF — the score you see on screen. Does not provide note timing.</p>
+        <p className="panel__hint">PDF — the score you read on screen.</p>
 
         <label className={`upload-btn${uploadsDisabled ? ' upload-btn--disabled' : ''}`}>
           Upload PDF
@@ -212,7 +174,7 @@ export default function LibraryPanel({
           <span className="panel__step-badge">2</span> Score timing
         </h2>
         <p className="panel__hint">
-          MusicXML or MXL from your notation app — powers Practice, loops, and Wait For You.
+          MusicXML/MXL — required; powers Practice, loops &amp; Wait For You.
         </p>
 
         <label
@@ -233,7 +195,7 @@ export default function LibraryPanel({
             {musicXmlFileName}
           </p>
         ) : (
-          <p className="library-panel__empty">Required before Practice — export from MuseScore, etc.</p>
+          <p className="library-panel__empty">Required — export from MuseScore, etc.</p>
         )}
       </div>
 
@@ -241,9 +203,7 @@ export default function LibraryPanel({
         <h2 className="panel__title">
           <span className="panel__step-badge">3</span> Sound <span className="panel__optional">(optional)</span>
         </h2>
-        <p className="panel__hint">
-          MIDI backing audio in Practice. Not required for timing or Wait For You.
-        </p>
+        <p className="panel__hint">MIDI — backing audio in Practice.</p>
 
         <label
           className={`upload-btn upload-btn--midi${uploadsDisabled ? ' upload-btn--disabled' : ''}`}
