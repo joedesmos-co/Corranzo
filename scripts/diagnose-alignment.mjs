@@ -102,8 +102,43 @@ function runFile(args) {
   }
 }
 
+async function runFixtures() {
+  // Test fixtures live under tests/; load lazily so --check stays self-contained.
+  const { RUNNABLE_FIXTURES, METADATA_FIXTURES } = await import(
+    '../tests/fixtures/alignmentFixtures.js'
+  )
+
+  for (const fixture of RUNNABLE_FIXTURES) {
+    const inputs = fixture.makeInputs()
+    const reconciliation = reconcilePdfLayoutWithScore(inputs)
+    const report = buildAlignmentReport({
+      reconciliation,
+      timingMap: inputs.timingMap,
+      layoutConfidence: inputs.layoutConfidence,
+      pieceId: fixture.id,
+    })
+    console.log('='.repeat(60))
+    console.log(`${fixture.title}  [${fixture.license}]`)
+    console.log(formatAlignmentReportText(report))
+    console.log('')
+  }
+
+  console.log('='.repeat(60))
+  console.log('Metadata-only fixtures (not bundled — documented):')
+  for (const fixture of METADATA_FIXTURES) {
+    const d = fixture.documented
+    console.log(
+      `  ${fixture.title} [${fixture.license}] — expected: ${d.expectedAction}` +
+        ` | repeats: ${d.hasRepeats ? 'yes' : 'no'} | pickup: ${d.hasPickup ? 'yes' : 'no'}`,
+    )
+    console.log(`      reason: ${fixture.reason}`)
+  }
+}
+
 const args = process.argv.slice(2)
-if (args.length === 0 || args.includes('--check')) {
+if (args.includes('--fixtures')) {
+  await runFixtures()
+} else if (args.length === 0 || args.includes('--check')) {
   runCheck()
 } else {
   runFile(args)
