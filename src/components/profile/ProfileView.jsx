@@ -48,7 +48,7 @@ export default function ProfileView() {
   const hasStats = stats.totalSessions > 0 || stats.recentSessions.length > 0
 
   return (
-    <section className="profile-view" aria-labelledby="profile-heading">
+    <main className="profile-view" aria-labelledby="profile-heading">
       <header className="profile-header">
         <h2 id="profile-heading" className="profile-header__title">
           Practice stats
@@ -132,6 +132,6 @@ export default function ProfileView() {
           Clear stats
         </button>
       </footer>
-    </section>
+    </main>
   )
 }

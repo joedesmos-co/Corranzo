@@ -1,6 +1,6 @@
-# ScoreFlow Architecture
+# Corranzo Architecture
 
-ScoreFlow is a practice-focused web app: PDF score + MusicXML timing, optional MIDI backing, cursor follow, loops, and Wait For You input.
+Corranzo is a practice-focused web app: PDF score + MusicXML timing, optional MIDI backing, cursor follow, loops, and Wait For You input.
 
 ## Timeline API (`src/features/musicxml/timeline.js`)
 
@@ -42,7 +42,7 @@ Pure function: `(timingMap, practiceTime, trustedAnchors) → { cursor, needsSet
 ## Testing
 
 ```bash
-npm test          # Vitest unit/regression (59 tests)
+npm test          # Vitest regression suite
 npm run build     # production build
 npm run lint      # ESLint
 npm run test:scripts  # optional script harnesses

@@ -43,7 +43,7 @@ export function isMuseScoreSourceFile(file) {
   return matchesExtension(file.name, SCORE_TIMING_ROLE.plannedExtensions)
 }
 
-/** Files ScoreFlow can parse into measure/beat timing today. */
+/** Files Corranzo can parse into measure/beat timing today. */
 export function isParsedScoreTimingFile(file) {
   return isMusicXmlFile(file)
 }

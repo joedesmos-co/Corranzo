@@ -361,7 +361,7 @@ export default function App() {
       />
 
       {showLibraryIntro && (
-        <div className="library-welcome-wrap">
+        <main className="library-welcome-wrap">
           <LibraryWelcomeCard
             onDismiss={() => setShowWelcome(false)}
             onTrySample={
@@ -370,7 +370,7 @@ export default function App() {
             sampleLoading={sampleLoadState.loading}
             sampleError={sampleLoadState.error}
           />
-        </div>
+        </main>
       )}
 
       {showLibraryWorkspace && (

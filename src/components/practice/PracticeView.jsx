@@ -75,7 +75,7 @@ export default function PracticeView({
   })
 
   return (
-    <section className="practice-workspace" aria-label="Practice">
+    <main className="practice-workspace" aria-label="Practice">
       {!pdfFile ? (
         <div className="practice-workspace__empty">
           <h2>Choose a piece first</h2>
@@ -118,7 +118,7 @@ export default function PracticeView({
           />
         </PracticeWorkspaceLayout>
       )}
-    </section>
+    </main>
   )
 }
 
