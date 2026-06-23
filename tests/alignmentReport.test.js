@@ -15,6 +15,11 @@ import {
   formatModelSummary,
   serializeAlignmentReport,
 } from '../src/features/score-follow/alignmentReport.js'
+import {
+  generateAnchorsFromLayout,
+  ANCHOR_TRUST,
+} from '../src/features/score-follow/generateAnchorsFromLayout.js'
+import { RUNNABLE_FIXTURES } from './fixtures/alignmentFixtures.js'
 import { straight4, oneRepeat } from './helpers/buildXml.js'
 
 const timingMap = parseMusicXml(straight4(), 'straight4')
@@ -149,5 +154,83 @@ describe('Phase 2: concise model summary', () => {
     expect(text).toMatch(/Tempo changes:/)
     expect(text).toMatch(/Time-signature changes:/)
     expect(text).toMatch(/Page\/system:/)
+  })
+})
+
+describe('Phase 3: anchor coverage in alignment reports', () => {
+  function reportWithAnchorCoverage(fixtureId) {
+    const fixture = RUNNABLE_FIXTURES.find((f) => f.id === fixtureId)
+    const reconciliation = reconcilePdfLayoutWithScore(fixture.makeInputs())
+    const generated = generateAnchorsFromLayout(reconciliation, fixture.makePageLayout())
+    return buildAlignmentReport({
+      reconciliation,
+      timingMap: fixture.makeInputs().timingMap,
+      layoutConfidence: fixture.makeInputs().layoutConfidence,
+      pieceId: fixture.id,
+      anchorCoverage: generated.coverage,
+    })
+  }
+
+  it('embeds anchor coverage on the structured report', () => {
+    const report = reportWithAnchorCoverage('minuet-in-g')
+    expect(report.anchorCoverage).toMatchObject({
+      trust: ANCHOR_TRUST.TRUSTED,
+      anchorsGenerated: 32,
+      measuresExpected: 32,
+      measuresCovered: 32,
+      missingMeasures: [],
+    })
+  })
+
+  it('omits the Anchors block when anchor coverage is not supplied', () => {
+    const report = buildAlignmentReport({ reconciliation: clean, layoutConfidence: LAYOUT_CONFIDENCE.EXACT })
+    expect(report.anchorCoverage).toBeNull()
+    expect(formatAlignmentReportText(report)).not.toMatch(/^Anchors:/m)
+  })
+
+  it('renders trusted anchor coverage summary', () => {
+    const text = formatAlignmentReportText(reportWithAnchorCoverage('minuet-in-g'))
+    expect(text).toMatch(/Anchors:/)
+    expect(text).toMatch(/32\/32 measures/)
+    expect(text).toMatch(/trust: trusted/)
+    expect(text).toMatch(/missing: 0/)
+  })
+
+  it('renders confirm-required trust when layout confidence is approximate', () => {
+    const fixture = RUNNABLE_FIXTURES.find((f) => f.id === 'multi-page')
+    const reconciliation = reconcilePdfLayoutWithScore(fixture.makeInputs())
+    const generated = generateAnchorsFromLayout(reconciliation, {
+      ...fixture.makePageLayout(),
+      layoutConfidence: LAYOUT_CONFIDENCE.APPROXIMATE,
+    })
+    const report = buildAlignmentReport({
+      reconciliation,
+      layoutConfidence: LAYOUT_CONFIDENCE.APPROXIMATE,
+      anchorCoverage: generated.coverage,
+    })
+    const text = formatAlignmentReportText(report)
+    expect(generated.coverage.trust).toBe(ANCHOR_TRUST.CONFIRM_REQUIRED)
+    expect(text).toMatch(/trust: confirm-required/)
+    expect(text).toMatch(/6\/6 measures/)
+  })
+
+  it('renders manual trust with zero generated anchors', () => {
+    const generated = generateAnchorsFromLayout(weak, {
+      layoutConfidence: LAYOUT_CONFIDENCE.GOOD,
+      systems: [
+        { systemIndex: 0, page: 1, y: 0.2, startX: 0.08, endX: 0.92, barlineXs: [0.1, 0.5] },
+        { systemIndex: 1, page: 1, y: 0.5, startX: 0.08, endX: 0.92, barlineXs: [0.1, 0.5] },
+      ],
+    })
+    const report = buildAlignmentReport({
+      reconciliation: weak,
+      layoutConfidence: LAYOUT_CONFIDENCE.GOOD,
+      anchorCoverage: generated.coverage,
+    })
+    const text = formatAlignmentReportText(report)
+    expect(generated.coverage.trust).toBe(ANCHOR_TRUST.MANUAL)
+    expect(text).toMatch(/trust: manual/)
+    expect(text).toMatch(/0\/4 measures/)
+    expect(text).toMatch(/missing: 4/)
   })
 })

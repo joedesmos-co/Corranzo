@@ -8,6 +8,8 @@
  *
  * Usage:
  *   node scripts/diagnose-alignment.mjs --check
+ *   node scripts/diagnose-alignment.mjs --fixtures
+ *   node scripts/diagnose-alignment.mjs --anchors
  *   node scripts/diagnose-alignment.mjs <score.musicxml> --counts 5,5,6,5,5,6
  *   node scripts/diagnose-alignment.mjs <score.musicxml> --anchors anchors.json [--json report.json]
  */
@@ -135,8 +137,34 @@ async function runFixtures() {
   }
 }
 
+async function runAnchors() {
+  const { RUNNABLE_FIXTURES } = await import('../tests/fixtures/alignmentFixtures.js')
+  const { generateAnchorsFromLayout } = await import(
+    '../src/features/score-follow/generateAnchorsFromLayout.js'
+  )
+
+  for (const fixture of RUNNABLE_FIXTURES) {
+    const inputs = fixture.makeInputs()
+    const reconciliation = reconcilePdfLayoutWithScore(inputs)
+    const generated = generateAnchorsFromLayout(reconciliation, fixture.makePageLayout())
+    const report = buildAlignmentReport({
+      reconciliation,
+      timingMap: inputs.timingMap,
+      layoutConfidence: inputs.layoutConfidence,
+      pieceId: fixture.id,
+      anchorCoverage: generated.coverage,
+    })
+    console.log('='.repeat(60))
+    console.log(`${fixture.title}  [${fixture.license}]`)
+    console.log(formatAlignmentReportText(report))
+    console.log('')
+  }
+}
+
 const args = process.argv.slice(2)
-if (args.includes('--fixtures')) {
+if (args.includes('--anchors')) {
+  await runAnchors()
+} else if (args.includes('--fixtures')) {
   await runFixtures()
 } else if (args.length === 0 || args.includes('--check')) {
   runCheck()

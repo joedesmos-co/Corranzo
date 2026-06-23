@@ -104,6 +104,7 @@ export function buildAlignmentReport({
   timingMap = null,
   layoutConfidence = null,
   pieceId = null,
+  anchorCoverage = null,
   generatedAt = new Date().toISOString(),
 } = {}) {
   const decision = decideFollowAction({ layoutConfidence, reconciliation })
@@ -121,6 +122,8 @@ export function buildAlignmentReport({
     totals: reconciliation?.totals ?? null,
     flags: reconciliation?.flags ?? null,
     perSystem: reconciliation?.perSystem ?? [],
+    // Optional Phase 3 anchor-generation coverage (tests/diagnostics only).
+    anchorCoverage: anchorCoverage ?? null,
     warnings: collectWarnings(reconciliation),
   }
 }
@@ -182,6 +185,22 @@ export function formatAlignmentReportText(report) {
         pad(system.delta ?? '—', 5) +
         pad(fmt(system.confidence) + (system.weak ? ' !' : ''), 7),
     )
+  }
+
+  const coverage = report.anchorCoverage
+  if (coverage) {
+    lines.push('')
+    lines.push('Anchors:')
+    lines.push(
+      `  ${coverage.anchorsGenerated}/${coverage.measuresExpected} measures` +
+        ` | trust: ${coverage.trust}` +
+        ` | missing: ${(coverage.missingMeasures ?? []).length}` +
+        ` | weak systems: ${(coverage.weakSystems ?? []).length}` +
+        ` | conf mean/min: ${fmt(coverage.meanConfidence)}/${fmt(coverage.minConfidence)}`,
+    )
+    if ((coverage.estimatedGeometrySystems ?? []).length) {
+      lines.push(`  estimated geometry on systems: ${coverage.estimatedGeometrySystems.join(', ')}`)
+    }
   }
 
   if ((report.warnings ?? []).length) {

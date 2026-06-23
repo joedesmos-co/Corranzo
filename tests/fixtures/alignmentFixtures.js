@@ -96,6 +96,58 @@ function denseFastInputs() {
   }
 }
 
+// --- Page-layout geometry (for Phase 3 anchor generation) --------------------
+
+/** Real Minuet geometry, reconstructed from the bundled (calibrated) anchors. */
+function minuetPageLayout() {
+  const anchors = JSON.parse(
+    readFileSync(join(fixturesDir, 'demo-minuet-in-g.anchors.json'), 'utf8'),
+  ).anchors
+  const bySystem = new Map()
+  for (const anchor of anchors) {
+    const systemIndex = anchor.meta?.systemIndex ?? 0
+    if (!bySystem.has(systemIndex)) {
+      bySystem.set(systemIndex, {
+        systemIndex,
+        page: anchor.page,
+        y: anchor.y,
+        endX: anchor.meta.systemEndX,
+        barlineXs: [],
+      })
+    }
+    bySystem.get(systemIndex).barlineXs.push(anchor.meta.measureStartX)
+  }
+  const systems = [...bySystem.values()].sort((a, b) => a.systemIndex - b.systemIndex)
+  for (const system of systems) {
+    system.barlineXs.sort((a, b) => a - b)
+    system.startX = system.barlineXs[0]
+  }
+  return { pageCount: 1, layoutConfidence: LAYOUT_CONFIDENCE.EXACT, systems }
+}
+
+/** Even-spaced synthetic geometry (no PDF) from per-system counts + page map. */
+function syntheticPageLayout({ perSystemCounts, pageOf, layoutConfidence }) {
+  const startX = 0.08
+  const endX = 0.92
+  const perPage = {}
+  const systems = perSystemCounts.map((count, i) => {
+    const page = pageOf[i]
+    const idxOnPage = (perPage[page] = (perPage[page] ?? -1) + 1)
+    const barlineXs = Array.from({ length: count }, (_, j) =>
+      Number((startX + (endX - startX) * (j / count)).toFixed(4)),
+    )
+    return {
+      systemIndex: i,
+      page,
+      y: Number((0.16 + idxOnPage * 0.16).toFixed(4)),
+      startX,
+      endX,
+      barlineXs,
+    }
+  })
+  return { pageCount: Math.max(...pageOf), layoutConfidence, systems }
+}
+
 // --- Runnable fixtures (model runs; golden asserted) -------------------------
 
 export const RUNNABLE_FIXTURES = [
@@ -106,6 +158,7 @@ export const RUNNABLE_FIXTURES = [
     license: 'Public Domain',
     redistributable: true,
     makeInputs: minuetInputs,
+    makePageLayout: minuetPageLayout,
     golden: {
       writtenMeasures: 32,
       pdfPageCount: 1,
@@ -128,6 +181,8 @@ export const RUNNABLE_FIXTURES = [
     license: 'N/A (generated)',
     redistributable: true,
     makeInputs: repeatsVoltasInputs,
+    makePageLayout: () =>
+      syntheticPageLayout({ perSystemCounts: [2, 3], pageOf: [1, 1], layoutConfidence: LAYOUT_CONFIDENCE.GOOD }),
     golden: {
       writtenMeasures: 5,
       pdfPageCount: 1,
@@ -150,6 +205,8 @@ export const RUNNABLE_FIXTURES = [
     license: 'N/A (generated)',
     redistributable: true,
     makeInputs: multiPageInputs,
+    makePageLayout: () =>
+      syntheticPageLayout({ perSystemCounts: [2, 2, 2], pageOf: [1, 1, 2], layoutConfidence: LAYOUT_CONFIDENCE.GOOD }),
     golden: {
       writtenMeasures: 6,
       pdfPageCount: 2,
@@ -172,6 +229,8 @@ export const RUNNABLE_FIXTURES = [
     license: 'N/A (generated)',
     redistributable: true,
     makeInputs: denseFastInputs,
+    makePageLayout: () =>
+      syntheticPageLayout({ perSystemCounts: [4, 4, 4], pageOf: [1, 1, 1], layoutConfidence: LAYOUT_CONFIDENCE.GOOD }),
     golden: {
       writtenMeasures: 12,
       pdfPageCount: 1,
