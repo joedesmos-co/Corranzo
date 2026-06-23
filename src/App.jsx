@@ -292,6 +292,7 @@ export default function App() {
     setPageNumber(payload.pageNumber ?? 1)
     setInitialPracticePrefs(payload.practicePrefs)
     setActiveView(payload.musicXmlSource ? payload.activeView ?? 'library' : 'library')
+    setShowWelcome(false)
     setPdfSoftWarning(null)
     setDemoPieceActive(false)
   }, [])
@@ -327,15 +328,20 @@ export default function App() {
       return
     }
     if (meta?.blocked) {
+      dismissOnboarding()
+      setShowWelcome(false)
       setLibraryFeedback({
         type: 'info',
-        message: 'In Library, upload a PDF and MusicXML/MXL first — then Practice will open.',
+        message: 'Add a PDF and MusicXML/MXL first — then Practice will open.',
       })
       setActiveView('library')
       return
     }
     setActiveView(view)
   }
+
+  const showLibraryIntro = activeView === 'library' && showWelcome && restoreGateOpen
+  const showLibraryWorkspace = activeView === 'library' && !showLibraryIntro
 
   const appBody = (
     <div className={`app${isRestoring ? ' app--restoring' : ''}`}>
@@ -354,7 +360,7 @@ export default function App() {
         onClearSaved={sessionPersistence.clearSavedSession}
       />
 
-      {activeView === 'library' && showWelcome && restoreGateOpen && (
+      {showLibraryIntro && (
         <div className="library-welcome-wrap">
           <LibraryWelcomeCard
             onDismiss={() => setShowWelcome(false)}
@@ -367,9 +373,9 @@ export default function App() {
         </div>
       )}
 
-      {activeView === 'library' && (
+      {showLibraryWorkspace && (
         <main
-          className={`main-layout${sidebarOpen ? '' : ' main-layout--sidebar-hidden'}`}
+          className={`main-layout${sidebarOpen ? '' : ' main-layout--sidebar-hidden'}${pdfFile ? '' : ' main-layout--empty-score'}`}
         >
           <LibraryPanel
             className={sidebarOpen ? '' : 'library-panel--hidden'}

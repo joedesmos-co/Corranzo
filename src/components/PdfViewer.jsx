@@ -35,7 +35,9 @@ export default function PdfViewer({
   actionsRef,
 }) {
   const isPracticeEmbed = variant === 'practice'
-  const showSidebarToggle = !isPracticeEmbed && onToggleSidebar
+  const hasPdf = Boolean(file)
+  const isEmptyLibraryViewer = !isPracticeEmbed && !hasPdf
+  const showSidebarToggle = !isPracticeEmbed && hasPdf && onToggleSidebar
   // Score-follow setup lives in Practice; keep PDF column layout identical to Practice embed.
   const showScoreFollowPanel = false
   const canvasRef = useRef(null)
@@ -159,8 +161,6 @@ export default function PdfViewer({
     activeTool === ANNOTATION_TOOLS.HIGHLIGHTER ||
     activeTool === ANNOTATION_TOOLS.ERASER
 
-  const hasPdf = Boolean(file)
-
   const practiceHud =
     isPracticeEmbed && practiceSession ? (
       <PracticeFullscreenHudTick
@@ -191,7 +191,7 @@ export default function PdfViewer({
 
   return (
     <section
-      className={`pdf-viewer-section${isPracticeEmbed ? ' pdf-viewer-section--practice' : ' pdf-viewer-section--library'}`}
+      className={`pdf-viewer-section${isPracticeEmbed ? ' pdf-viewer-section--practice' : ' pdf-viewer-section--library'}${isEmptyLibraryViewer ? ' pdf-viewer-section--empty' : ''}`}
       aria-label="PDF viewer"
     >
       {showSidebarToggle && (
@@ -266,7 +266,7 @@ export default function PdfViewer({
           >
           {!file ? (
             <p className="pdf-canvas__placeholder">
-              Your score will appear here.
+              Add a PDF to preview your score.
             </p>
           ) : isFullscreen ? null : (
             <Document
