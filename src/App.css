@@ -93,23 +93,47 @@
 /* —— Library + viewer layout —— */
 
 .main-layout {
+  --sf-library-preview-height: clamp(
+    360px,
+    calc(100vh - var(--sf-topbar-height) - 48px),
+    680px
+  );
+
   flex: 1;
   display: flex;
   align-items: stretch;
+  height: var(--sf-library-preview-height);
+  max-height: var(--sf-library-preview-height);
   min-height: 0;
   min-width: 0;
   overflow: hidden;
   transition: gap 0.25s ease;
 }
 
-/* Library score column — same scroll/fit shell as Practice. */
+.session-restore-banner + .main-layout {
+  --sf-library-preview-height: clamp(
+    360px,
+    calc(100vh - var(--sf-topbar-height) - 96px),
+    680px
+  );
+}
+
+.library-welcome-wrap + .main-layout {
+  --sf-library-preview-height: clamp(
+    340px,
+    calc(100vh - var(--sf-topbar-height) - 360px),
+    520px
+  );
+}
+
+/* Library score column — keep the preview contained; PDF scrolling stays inside the canvas. */
 .main-layout__score {
   flex: 1;
   min-width: 0;
   min-height: 0;
   display: flex;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -1150,6 +1174,13 @@
   overflow: visible;
 }
 
+.pdf-viewer-section--library {
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .pdf-viewer-section--library .pdf-viewer-stage,
 .pdf-viewer-section--practice .pdf-viewer-stage {
   position: relative;
@@ -1174,12 +1205,20 @@
   min-width: 0;
 }
 
+.pdf-viewer-section--library .pdf-viewer-body {
+  max-height: 100%;
+}
+
 .pdf-viewer-section--library .pdf-canvas,
 .pdf-viewer-section--practice .pdf-canvas {
   flex: 1;
   min-height: 0;
   min-width: 0;
   width: 100%;
+}
+
+.pdf-viewer-section--library .pdf-canvas {
+  max-height: 100%;
 }
 
 .pdf-viewer-section--library .pdf-canvas--fit-width,
@@ -1548,6 +1587,8 @@
 @media (max-width: 640px) {
   .main-layout {
     display: block;
+    height: auto;
+    max-height: none;
     overflow: visible;
   }
 
@@ -1566,7 +1607,9 @@
   }
 
   .main-layout__score {
+    height: clamp(420px, 68vh, 560px);
     min-height: 420px;
+    overflow: hidden;
   }
 
   .topbar {
