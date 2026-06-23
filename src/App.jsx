@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import TopBar from './components/TopBar.jsx'
 import LibraryPanel from './components/LibraryPanel.jsx'
 import LibraryWelcomeCard from './components/LibraryWelcomeCard.jsx'
+import AppFooter from './components/AppFooter.jsx'
 import SessionRestoreBanner from './components/SessionRestoreBanner.jsx'
 import SessionRestoreOverlay from './components/SessionRestoreOverlay.jsx'
 import useRestoreUploadGate from './features/import/useRestoreUploadGate.js'
@@ -413,6 +414,8 @@ export default function App() {
           </div>
         </main>
       )}
+
+      {activeView === 'library' && <AppFooter />}
 
       {activeView === 'practice' && restoreGateOpen && (
         <PracticeView

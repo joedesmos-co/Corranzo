@@ -1,4 +1,4 @@
-/** The calibrated public-domain demo ships with the private beta. */
+/** The calibrated public-domain demo ships with the public beta. */
 export function isDemoSampleEnabled() {
   return true
 }

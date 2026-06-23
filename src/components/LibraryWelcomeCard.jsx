@@ -4,7 +4,7 @@ import {
   LOCAL_ONLY_MESSAGE,
 } from '../features/beta/betaInfo.js'
 import DemoPieceCard from './DemoPieceCard.jsx'
-import FeedbackButton from './FeedbackButton.jsx'
+import FeedbackLink from './FeedbackLink.jsx'
 
 export default function LibraryWelcomeCard({
   onDismiss,
@@ -22,11 +22,11 @@ export default function LibraryWelcomeCard({
       <div className="library-welcome__intro">
         <p className="library-welcome__eyebrow">{BETA_LABEL}</p>
         <h2 id="welcome-heading" className="library-welcome__title">
-          Practice with the score in front of you.
+          Practice piano with the score in front of you.
         </h2>
         <p className="library-welcome__lead">
-          Load a PDF and MusicXML. ScoreFlow follows along, loops passages, and can wait
-          for you.
+          This is an early beta. Load a PDF with MusicXML, then follow the score,
+          loop passages, or use Wait For You.
         </p>
       </div>
 
@@ -51,6 +51,15 @@ export default function LibraryWelcomeCard({
         </ol>
       </div>
 
+      <div className="library-welcome__works" aria-label="What works best right now">
+        <h3 className="library-welcome__section-title">What works best right now</h3>
+        <ul>
+          <li>Piano PDF + MusicXML/MIDI</li>
+          <li>Demo piece included</li>
+          <li>Some PDFs may need setup</li>
+        </ul>
+      </div>
+
       {onTrySample && (
         <DemoPieceCard
           loading={sampleLoading}
@@ -62,12 +71,9 @@ export default function LibraryWelcomeCard({
       <footer className="library-welcome__footer">
         <p className="library-welcome__privacy">{LOCAL_ONLY_MESSAGE}</p>
         <div className="library-welcome__actions">
-          <FeedbackButton
-            label="Copy feedback prompt"
-            copiedLabel="Copied — send to your beta contact"
-          />
+          <FeedbackLink label="Email feedback" />
           <button type="button" className="library-welcome__btn" onClick={handleDismiss}>
-            Continue to Library
+            Start practicing
           </button>
         </div>
       </footer>

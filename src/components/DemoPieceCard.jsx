@@ -15,7 +15,7 @@ export default function DemoPieceCard({ loading = false, error = null, onLoad, c
           disabled={loading}
           onClick={onLoad}
         >
-          {loading ? 'Opening…' : 'Open demo'}
+          {loading ? 'Opening…' : 'Try demo'}
         </button>
         <p className="demo-piece__credit">{DEMO_PIECE.attribution}</p>
       </div>

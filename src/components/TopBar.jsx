@@ -2,7 +2,7 @@ import {
   BETA_LABEL,
   BETA_VERSION,
 } from '../features/beta/betaInfo.js'
-import FeedbackButton from './FeedbackButton.jsx'
+import FeedbackLink from './FeedbackLink.jsx'
 
 const VIEWS = [
   { id: 'library', label: 'Library' },
@@ -48,7 +48,7 @@ export default function TopBar({ activeView, onNavigate, practiceReady = true })
             </button>
           ))}
         </nav>
-        <FeedbackButton className="topbar__feedback" />
+        <FeedbackLink className="topbar__feedback" label="Feedback" />
       </div>
     </header>
   )

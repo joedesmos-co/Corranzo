@@ -1,16 +1,28 @@
 import { describe, expect, it } from 'vitest'
 import {
+  BETA_LABEL,
   BETA_VERSION,
-  FEEDBACK_TEMPLATE,
+  FEEDBACK_BODY,
+  FEEDBACK_EMAIL,
+  FEEDBACK_MAILTO,
+  FEEDBACK_SUBJECT,
   LOCAL_ONLY_MESSAGE,
 } from '../src/features/beta/betaInfo.js'
 
-describe('private beta polish', () => {
-  it('provides a self-contained feedback prompt without a fragile external link', () => {
-    expect(FEEDBACK_TEMPLATE).toContain(`v${BETA_VERSION}`)
-    expect(FEEDBACK_TEMPLATE).toContain('What happened:')
-    expect(FEEDBACK_TEMPLATE).toContain('Browser / device:')
-    expect(FEEDBACK_TEMPLATE).not.toContain('http')
+describe('public beta polish', () => {
+  it('builds a prefilled email feedback link', () => {
+    expect(BETA_LABEL).toBe('Public beta')
+    expect(BETA_VERSION).toBe('0.1')
+    expect(FEEDBACK_EMAIL).toBe('joedesmos-co@gmail.com')
+    expect(FEEDBACK_SUBJECT).toBe('ScoreFlow beta feedback')
+    expect(FEEDBACK_BODY).toContain('Device/browser:')
+    expect(FEEDBACK_BODY).toContain('What broke or confused me:')
+    expect(FEEDBACK_BODY).toContain('Score file type used:')
+    expect(FEEDBACK_MAILTO).toBe(
+      `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent(
+        FEEDBACK_SUBJECT,
+      )}&body=${encodeURIComponent(FEEDBACK_BODY)}`,
+    )
   })
 
   it('keeps the local-only explanation short and explicit', () => {
