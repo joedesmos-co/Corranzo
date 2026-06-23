@@ -360,7 +360,7 @@ describe('piano instrument — release, dispose, labels', () => {
   })
 
   it('status labels are user-facing and correct', () => {
-    expect(INSTRUMENT_STATUS_LABEL[INSTRUMENT_STATUS.SAMPLED]).toBe('Piano samples loaded')
+    expect(INSTRUMENT_STATUS_LABEL[INSTRUMENT_STATUS.SAMPLED]).toBe('Piano ready')
     expect(INSTRUMENT_STATUS_LABEL[INSTRUMENT_STATUS.SYNTH]).toBe('Using basic synth fallback')
     expect(INSTRUMENT_STATUS_LABEL[INSTRUMENT_STATUS.LOADING]).toMatch(/loading/i)
   })

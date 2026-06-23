@@ -183,7 +183,9 @@ function createSynthVoice(tone, { volume = SYNTH_VOLUME_DB } = {}) {
   const chorus = new tone.Chorus({ frequency: 0.5, delayTime: 3.5, depth: 0.12, wet: 0.08 })
   chorus.start?.()
 
-  const synth = new tone.PolySynth({ voice: tone.Synth, maxPolyphony: 24 })
+  // High polyphony so dense two-hand chords + sustained/overlapping notes are
+  // never voice-stolen on the synth fallback. (The sampler is not voice-capped.)
+  const synth = new tone.PolySynth({ voice: tone.Synth, maxPolyphony: 64 })
   synth.set?.({
     volume,
     oscillator: { type: 'triangle8' },

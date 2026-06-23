@@ -5,7 +5,7 @@ export const INSTRUMENT_STATUS = {
 }
 
 export const INSTRUMENT_STATUS_LABEL = {
-  [INSTRUMENT_STATUS.LOADING]: 'Loading piano samples…',
-  [INSTRUMENT_STATUS.SAMPLED]: 'Piano samples loaded',
+  [INSTRUMENT_STATUS.LOADING]: 'Loading piano…',
+  [INSTRUMENT_STATUS.SAMPLED]: 'Piano ready',
   [INSTRUMENT_STATUS.SYNTH]: 'Using basic synth fallback',
 }

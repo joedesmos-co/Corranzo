@@ -7,6 +7,11 @@ import {
 
 const LOOKAHEAD_SECONDS = 2.5
 const SCHEDULE_TICK_MS = 200
+// On Play, wait up to this long for the sampled piano before starting, so the
+// first note is real piano rather than the synth fallback. Samples preloaded at
+// score-load usually make this resolve instantly; on failure/timeout we proceed
+// on the synth rather than blocking playback.
+const PLAY_READY_TIMEOUT_MS = 5000
 const loadPianoInstrumentModule = () => import('./pianoInstrument.js')
 
 function createMetronomeVoice() {
@@ -28,13 +33,13 @@ function midiNumberToName(midi) {
   return `${MIDI_NAMES[((midi % 12) + 12) % 12]}${octave}`
 }
 
+// Map a 0–1 MIDI/score velocity to an expressive-but-not-harsh gain. Wider
+// dynamic range than a flat value so chords and accents breathe, with a floor
+// so soft inner/bass voices stay audible and a ceiling that avoids clipping.
 function softenVelocity(velocity) {
   const value = typeof velocity === 'number' ? velocity : 0.82
-  return Math.min(0.92, Math.max(0.22, value ** 1.15 * 0.78 + 0.14))
-}
-
-function eventKey(event) {
-  return `${event.type}:${event.scoreTimeSeconds.toFixed(5)}`
+  const clamped = Math.min(1, Math.max(0, value))
+  return Math.min(0.98, Math.max(0.28, clamped ** 1.25 * 0.86 + 0.16))
 }
 
 /**
@@ -56,7 +61,7 @@ export class ScorePlaybackEngine {
     this.playing = false
     this.playStartedAt = 0
     this.scheduledUntilScore = 0
-    this.scheduledKeys = new Set()
+    this.scheduledEvents = new Set()
     this.duration = 0
     this.voice = null
     this.metronome = null
@@ -101,6 +106,33 @@ export class ScorePlaybackEngine {
         })
     }
     await this.voiceLoadPromise
+  }
+
+  /**
+   * Create the instrument and begin fetching/decoding samples ahead of Play, so
+   * the first note plays on the sampled piano (no synth/beep intro). Safe before
+   * audio unlock — the suspended context still fetches + decodes buffers.
+   */
+  async preload() {
+    try {
+      await this.ensureVoices()
+    } catch {
+      // Non-fatal — playFromUserGesture will retry instrument creation.
+    }
+  }
+
+  /** Resolve once the sampled piano is ready (or fell back), capped by timeout. */
+  whenInstrumentReady(timeoutMs = PLAY_READY_TIMEOUT_MS) {
+    const ready = this.voice?.whenReady?.() ?? Promise.resolve(null)
+    if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) {
+      return ready
+    }
+    return Promise.race([
+      ready,
+      new Promise((resolve) => {
+        setTimeout(() => resolve('timeout'), timeoutMs)
+      }),
+    ])
   }
 
   handleInstrumentStatus(status) {
@@ -156,7 +188,7 @@ export class ScorePlaybackEngine {
     this.tracks = schedule.tracks ?? []
     this.offsetScoreSeconds = 0
     this.scheduledUntilScore = 0
-    this.scheduledKeys.clear()
+    this.scheduledEvents.clear()
 
     return {
       duration: this.duration,
@@ -226,8 +258,16 @@ export class ScorePlaybackEngine {
         continue
       }
 
-      const key = eventKey(event)
-      if (this.scheduledKeys.has(key)) {
+      // De-dupe by event IDENTITY (not by time) so every note of a chord — and
+      // both hands sounding at the same instant — is scheduled. A time+type key
+      // collapsed simultaneous notes into one, dropping bass/inner voices.
+      if (this.scheduledEvents.has(event)) {
+        continue
+      }
+
+      // Per-track (hand) muting: don't schedule notes from a muted track. Left
+      // un-added so it re-evaluates if the track is later unmuted.
+      if (event.type === 'note' && this.isTrackMuted(event.trackId)) {
         continue
       }
 
@@ -249,7 +289,7 @@ export class ScorePlaybackEngine {
         this.voice.triggerAttackRelease(name, duration, at, velocity)
       }
 
-      this.scheduledKeys.add(key)
+      this.scheduledEvents.add(event)
     }
 
     this.scheduledUntilScore = toScoreSeconds
@@ -258,7 +298,7 @@ export class ScorePlaybackEngine {
   rescheduleFrom(scoreSeconds) {
     const wasPlaying = this.playing
     this.releaseAll()
-    this.scheduledKeys.clear()
+    this.scheduledEvents.clear()
     this.scheduledUntilScore = scoreSeconds
     if (wasPlaying) {
       this.playStartedAt = Tone.now()
@@ -305,8 +345,12 @@ export class ScorePlaybackEngine {
     }
 
     await this.ensureVoices()
+    // Wait briefly for the sampled piano so the first note is real piano, not
+    // the synth fallback. Instant when samples were preloaded at score-load;
+    // proceeds on the synth only if samples genuinely fail/time out.
+    await this.whenInstrumentReady()
     this.releaseAll()
-    this.scheduledKeys.clear()
+    this.scheduledEvents.clear()
     this.playing = true
     this.playStartedAt = Tone.now()
     this.scheduledUntilScore = this.offsetScoreSeconds
@@ -334,7 +378,7 @@ export class ScorePlaybackEngine {
     this.stopInternal(false)
     this.offsetScoreSeconds = clamped
     this.scheduledUntilScore = clamped
-    this.scheduledKeys.clear()
+    this.scheduledEvents.clear()
 
     if (wasPlaying) {
       this.playing = true
@@ -352,7 +396,7 @@ export class ScorePlaybackEngine {
     this.stopProgressLoop()
     this.stopScheduleLoop()
     this.releaseAll()
-    this.scheduledKeys.clear()
+    this.scheduledEvents.clear()
     if (resetOffset) {
       this.offsetScoreSeconds = 0
       this.scheduledUntilScore = 0
@@ -381,6 +425,19 @@ export class ScorePlaybackEngine {
       track.muted = muted
     }
     this.syncOutputMute()
+    // Re-schedule so a (un)muted hand takes effect within the current window.
+    // Notes already triggered keep ringing briefly; new notes honour the mute.
+    if (this.playing) {
+      this.rescheduleFrom(this.getCurrentScoreTime())
+    }
+  }
+
+  isTrackMuted(trackId) {
+    if (trackId == null || this.tracks.length === 0) {
+      return false
+    }
+    const track = this.tracks.find((item) => item.id === trackId)
+    return Boolean(track?.muted)
   }
 
   syncOutputMute() {

@@ -5,6 +5,11 @@ import {
   mapMidiEventsToPerformedTimeline,
   MIDI_MAP_METHOD,
 } from './midiToPerformedMapping.js'
+import {
+  applySustainToNotes,
+  collectSustainEvents,
+  extractSustainSpans,
+} from './sustainPedal.js'
 
 /**
  * Pure performed-timeline note schedule for tests and the playback engine.
@@ -86,32 +91,58 @@ export async function buildCombinedPlaybackSchedule(
     typeof midi.header?.ticksToMeasures === 'function'
       ? (ticks) => midi.header.ticksToMeasures(ticks)
       : null
-  const allMidiNotes = midi.tracks
-    .flatMap((track) => track.notes)
-    .map((note) => ({
-      time: note.time,
-      duration: note.duration,
-      name: note.name,
-      velocity: note.velocity,
-      measurePosition:
-        ticksToMeasures && Number.isFinite(note.ticks) ? ticksToMeasures(note.ticks) : null,
-    }))
-  const mapped = mapMidiEventsToPerformedTimeline(
-    allMidiNotes,
-    midiDuration || performedDuration,
-    timingMap,
-    alignmentDiagnostics,
-  )
+  const mapMidiDuration = midiDuration || performedDuration
 
-  const noteEvents = mapped.events.map((event) => ({
-    type: 'note',
-    scoreTimeSeconds: event.scoreTimeSeconds,
-    baseDurationSeconds: Math.max(event.durationSeconds, 0.03),
-    name: event.name,
-    velocity: event.velocity,
-    source: event.source,
-    measureNumber: event.measureNumber,
-  }))
+  // Sustain pedal (CC64), global across tracks: lengthen note releases so
+  // pedalled passages ring like a real piano. Applied to MIDI durations BEFORE
+  // mapping — onsets are unchanged, so alignment/timing is untouched.
+  const sustainSpans = extractSustainSpans(collectSustainEvents(midi))
+
+  // Map each track separately so every note keeps its trackId (for per-hand
+  // muting). The bar-grid mapping is per-note independent, so per-track mapping
+  // is identical to mapping all notes at once — just grouped + tagged.
+  const noteEvents = []
+  let mappingMethod = null
+  let mappingWarning = null
+  midi.tracks.forEach((track, trackId) => {
+    if (!track.notes?.length) {
+      return
+    }
+    const trackNotes = applySustainToNotes(
+      track.notes.map((note) => ({
+        time: note.time,
+        duration: note.duration,
+        name: note.name,
+        velocity: note.velocity,
+        measurePosition:
+          ticksToMeasures && Number.isFinite(note.ticks) ? ticksToMeasures(note.ticks) : null,
+      })),
+      sustainSpans,
+    )
+    const mapped = mapMidiEventsToPerformedTimeline(
+      trackNotes,
+      mapMidiDuration,
+      timingMap,
+      alignmentDiagnostics,
+    )
+    if (mappingMethod == null) {
+      mappingMethod = mapped.method
+      mappingWarning = mapped.warning ?? null
+    }
+    for (const event of mapped.events) {
+      noteEvents.push({
+        type: 'note',
+        scoreTimeSeconds: event.scoreTimeSeconds,
+        baseDurationSeconds: Math.max(event.durationSeconds, 0.03),
+        name: event.name,
+        velocity: event.velocity,
+        source: event.source,
+        measureNumber: event.measureNumber,
+        trackId,
+      })
+    }
+  })
+  noteEvents.sort((a, b) => a.scoreTimeSeconds - b.scoreTimeSeconds)
 
   return {
     events: noteEvents.length > 0 ? noteEvents : scoreEvents,
@@ -120,8 +151,9 @@ export async function buildCombinedPlaybackSchedule(
     duration: performedDuration,
     tracks: tracks.map(({ id, name, noteCount, muted }) => ({ id, name, noteCount, muted })),
     usesMidi: noteEvents.length > 0,
-    mappingMethod: mapped.method ?? MIDI_MAP_METHOD.PROPORTIONAL,
-    mappingWarning: mapped.warning ?? null,
+    mappingMethod: mappingMethod ?? MIDI_MAP_METHOD.PROPORTIONAL,
+    mappingWarning,
+    sustainSpanCount: sustainSpans.length,
   }
 }
 

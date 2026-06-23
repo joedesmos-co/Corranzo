@@ -109,6 +109,9 @@ export default function useScorePlayback({
         )
         setCurrentTime(0)
         setIsPlaying(false)
+        // Begin fetching/decoding the sampled piano now, while the user reads the
+        // score, so the first note on Play is real piano (no synth/beep intro).
+        engine.preload?.()
       } catch (loadError) {
         if (loadGenerationRef.current === loadGeneration) {
           setError(formatMidiImportError(loadError))
