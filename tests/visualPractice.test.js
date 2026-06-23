@@ -113,6 +113,34 @@ describe('demo bundled anchor structure', () => {
       expect(anchor.y).toBeGreaterThan(0.10)
     }
   })
+
+  it('includes system-end metadata for smooth line-end cursor motion', () => {
+    const { anchors } = loadDemoAnchors()
+    const systems = new Set(anchors.map((a) => a.meta?.systemIndex))
+
+    for (const systemIndex of systems) {
+      const sysAnchors = anchors
+        .filter((a) => a.meta?.systemIndex === systemIndex)
+        .sort((a, b) => a.measureNumber - b.measureNumber)
+
+      expect(sysAnchors.length).toBeGreaterThan(0)
+
+      for (let index = 0; index < sysAnchors.length; index += 1) {
+        const anchor = sysAnchors[index]
+        const next = sysAnchors[index + 1]
+
+        expect(anchor.meta.systemEndX).toBeGreaterThan(anchor.x)
+        expect(anchor.meta.playableEndX).toBeGreaterThan(anchor.x)
+        expect(anchor.meta.playableEndX).toBeLessThanOrEqual(anchor.meta.systemEndX)
+
+        if (next) {
+          expect(anchor.meta.playableEndX).toBeCloseTo(next.x, 4)
+        } else {
+          expect(anchor.meta.playableEndX).toBeCloseTo(anchor.meta.systemEndX, 4)
+        }
+      }
+    }
+  })
 })
 
 // ---------------------------------------------------------------------------
@@ -218,6 +246,26 @@ describe('cursor resolver with demo timing and PDF-extracted anchors', () => {
     expect(cursor.y).toBeGreaterThan(0.80)
     // Old system 3 y was 0.733 → cursor y must NOT be in that range
     expect(cursor.y).not.toBeLessThan(0.78)
+  })
+
+  it('cursor glides through the final measure of a system instead of holding at the barline', () => {
+    const m16 = anchors.find((a) => a.measureNumber === 16)
+    const measure16 = timingMap.measures.find((measure) => measure.number === 16)
+    const t =
+      measure16.startTimeSeconds +
+      (measure16.endTimeSeconds - measure16.startTimeSeconds) * 0.75
+
+    const { cursor } = resolveScoreFollowCursor({
+      timingMap,
+      practiceTime: t,
+      trustedAnchors: anchors,
+      trust,
+    })
+
+    expect(cursor.visible).toBe(true)
+    expect(cursor.measureNumber).toBe(16)
+    expect(cursor.x).toBeGreaterThan(m16.x + 0.04)
+    expect(cursor.x).toBeLessThanOrEqual(m16.meta.systemEndX)
   })
 })
 

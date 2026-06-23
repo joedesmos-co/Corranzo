@@ -76,14 +76,13 @@ export default function usePracticeSession({
   const isWaitForYou = practiceMode === PRACTICE_MODE.WAIT_FOR_YOU
 
   const sourcesRevision = useMemo(
-    () =>
-      [
-        midiSource?.fileName ?? '',
-        midiSource?.data?.byteLength ?? 0,
-        musicXmlSource?.fileName ?? '',
-        musicXmlSource?.data?.byteLength ?? 0,
-      ].join('|'),
-    [midiSource, musicXmlSource],
+    () => ({
+      midiFileName: midiSource?.fileName ?? '',
+      midiData: midiSource?.data ?? null,
+      musicXmlFileName: musicXmlSource?.fileName ?? '',
+      musicXmlData: musicXmlSource?.data ?? null,
+    }),
+    [midiSource?.fileName, midiSource?.data, musicXmlSource?.fileName, musicXmlSource?.data],
   )
 
   const clock = usePracticeClock({

@@ -3,8 +3,8 @@
   "pieceId": "minuet-in-g",
   "pdfFile": "Minuet in G.pdf",
   "timingFile": "Minuet in G.musicxml",
-  "generatedAt": "2026-06-13T04:20:00.000Z",
-  "alignmentNote": "Bundled demo anchors for Minuet in G: 32 per-measure positions extracted from the actual PDF using PyMuPDF bar-line detection. The PDF has 6 grand-staff systems (not 4 as previously estimated). System y-midpoints and measure x-positions come directly from staff-line and bar-line coordinates in the PDF. Loaded only for the sample piece; never saved to user localStorage.",
+  "generatedAt": "2026-06-23T20:08:30.122Z",
+  "alignmentNote": "Bundled demo anchors for Minuet in G: 32 per-measure positions extracted from the actual PDF using PyMuPDF bar-line detection (6 systems, not 4). System-end metadata is included so the cursor can glide through the final measure of each staff. Loaded only for the sample piece; never saved to user localStorage.",
   "anchors": [
     {
       "page": 1,
@@ -17,7 +17,11 @@
         "density": "pdf-extracted",
         "systemIndex": 0,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.1194,
+        "playableStartX": 0.1194,
+        "playableEndX": 0.3563,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -31,7 +35,11 @@
         "density": "pdf-extracted",
         "systemIndex": 0,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.3563,
+        "playableStartX": 0.3563,
+        "playableEndX": 0.4942,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -45,7 +53,11 @@
         "density": "pdf-extracted",
         "systemIndex": 0,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.4942,
+        "playableStartX": 0.4942,
+        "playableEndX": 0.6548,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -59,7 +71,11 @@
         "density": "pdf-extracted",
         "systemIndex": 0,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.6548,
+        "playableStartX": 0.6548,
+        "playableEndX": 0.7911,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -73,12 +89,16 @@
         "density": "pdf-extracted",
         "systemIndex": 0,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.7911,
+        "playableStartX": 0.7911,
+        "playableEndX": 0.9515,
+        "systemEndX": 0.9515
       }
     },
     {
       "page": 1,
-      "x": 0.0480,
+      "x": 0.048,
       "y": 0.2937,
       "measureNumber": 6,
       "source": "demo",
@@ -87,7 +107,11 @@
         "density": "pdf-extracted",
         "systemIndex": 1,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.048,
+        "playableStartX": 0.048,
+        "playableEndX": 0.2792,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -101,7 +125,11 @@
         "density": "pdf-extracted",
         "systemIndex": 1,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.2792,
+        "playableStartX": 0.2792,
+        "playableEndX": 0.4443,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -115,7 +143,11 @@
         "density": "pdf-extracted",
         "systemIndex": 1,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.4443,
+        "playableStartX": 0.4443,
+        "playableEndX": 0.6305,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -129,7 +161,11 @@
         "density": "pdf-extracted",
         "systemIndex": 1,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.6305,
+        "playableStartX": 0.6305,
+        "playableEndX": 0.8023,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -143,12 +179,16 @@
         "density": "pdf-extracted",
         "systemIndex": 1,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.8023,
+        "playableStartX": 0.8023,
+        "playableEndX": 0.9515,
+        "systemEndX": 0.9515
       }
     },
     {
       "page": 1,
-      "x": 0.0480,
+      "x": 0.048,
       "y": 0.4242,
       "measureNumber": 11,
       "source": "demo",
@@ -157,7 +197,11 @@
         "density": "pdf-extracted",
         "systemIndex": 2,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.048,
+        "playableStartX": 0.048,
+        "playableEndX": 0.2493,
+        "systemEndX": 0.9499
       }
     },
     {
@@ -171,7 +215,11 @@
         "density": "pdf-extracted",
         "systemIndex": 2,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.2493,
+        "playableStartX": 0.2493,
+        "playableEndX": 0.3933,
+        "systemEndX": 0.9499
       }
     },
     {
@@ -185,7 +233,11 @@
         "density": "pdf-extracted",
         "systemIndex": 2,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.3933,
+        "playableStartX": 0.3933,
+        "playableEndX": 0.5404,
+        "systemEndX": 0.9499
       }
     },
     {
@@ -199,7 +251,11 @@
         "density": "pdf-extracted",
         "systemIndex": 2,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.5404,
+        "playableStartX": 0.5404,
+        "playableEndX": 0.6903,
+        "systemEndX": 0.9499
       }
     },
     {
@@ -213,7 +269,11 @@
         "density": "pdf-extracted",
         "systemIndex": 2,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.6903,
+        "playableStartX": 0.6903,
+        "playableEndX": 0.8401,
+        "systemEndX": 0.9499
       }
     },
     {
@@ -227,7 +287,11 @@
         "density": "pdf-extracted",
         "systemIndex": 2,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.8401,
+        "playableStartX": 0.8401,
+        "playableEndX": 0.9499,
+        "systemEndX": 0.9499
       }
     },
     {
@@ -241,7 +305,11 @@
         "density": "pdf-extracted",
         "systemIndex": 3,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.1132,
+        "playableStartX": 0.1132,
+        "playableEndX": 0.2814,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -255,7 +323,11 @@
         "density": "pdf-extracted",
         "systemIndex": 3,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.2814,
+        "playableStartX": 0.2814,
+        "playableEndX": 0.4415,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -269,7 +341,11 @@
         "density": "pdf-extracted",
         "systemIndex": 3,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.4415,
+        "playableStartX": 0.4415,
+        "playableEndX": 0.6039,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -283,7 +359,11 @@
         "density": "pdf-extracted",
         "systemIndex": 3,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.6039,
+        "playableStartX": 0.6039,
+        "playableEndX": 0.7684,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -297,12 +377,16 @@
         "density": "pdf-extracted",
         "systemIndex": 3,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.7684,
+        "playableStartX": 0.7684,
+        "playableEndX": 0.9515,
+        "systemEndX": 0.9515
       }
     },
     {
       "page": 1,
-      "x": 0.0480,
+      "x": 0.048,
       "y": 0.6902,
       "measureNumber": 22,
       "source": "demo",
@@ -311,7 +395,11 @@
         "density": "pdf-extracted",
         "systemIndex": 4,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.048,
+        "playableStartX": 0.048,
+        "playableEndX": 0.2701,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -325,7 +413,11 @@
         "density": "pdf-extracted",
         "systemIndex": 4,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.2701,
+        "playableStartX": 0.2701,
+        "playableEndX": 0.4351,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -339,7 +431,11 @@
         "density": "pdf-extracted",
         "systemIndex": 4,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.4351,
+        "playableStartX": 0.4351,
+        "playableEndX": 0.5989,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -353,7 +449,11 @@
         "density": "pdf-extracted",
         "systemIndex": 4,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.5989,
+        "playableStartX": 0.5989,
+        "playableEndX": 0.7753,
+        "systemEndX": 0.9515
       }
     },
     {
@@ -367,12 +467,16 @@
         "density": "pdf-extracted",
         "systemIndex": 4,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.7753,
+        "playableStartX": 0.7753,
+        "playableEndX": 0.9515,
+        "systemEndX": 0.9515
       }
     },
     {
       "page": 1,
-      "x": 0.0480,
+      "x": 0.048,
       "y": 0.8259,
       "measureNumber": 27,
       "source": "demo",
@@ -381,12 +485,16 @@
         "density": "pdf-extracted",
         "systemIndex": 5,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.048,
+        "playableStartX": 0.048,
+        "playableEndX": 0.232,
+        "systemEndX": 0.9499
       }
     },
     {
       "page": 1,
-      "x": 0.2320,
+      "x": 0.232,
       "y": 0.8259,
       "measureNumber": 28,
       "source": "demo",
@@ -395,7 +503,11 @@
         "density": "pdf-extracted",
         "systemIndex": 5,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.232,
+        "playableStartX": 0.232,
+        "playableEndX": 0.3815,
+        "systemEndX": 0.9499
       }
     },
     {
@@ -409,7 +521,11 @@
         "density": "pdf-extracted",
         "systemIndex": 5,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.3815,
+        "playableStartX": 0.3815,
+        "playableEndX": 0.5444,
+        "systemEndX": 0.9499
       }
     },
     {
@@ -423,12 +539,16 @@
         "density": "pdf-extracted",
         "systemIndex": 5,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.5444,
+        "playableStartX": 0.5444,
+        "playableEndX": 0.673,
+        "systemEndX": 0.9499
       }
     },
     {
       "page": 1,
-      "x": 0.6730,
+      "x": 0.673,
       "y": 0.8259,
       "measureNumber": 31,
       "source": "demo",
@@ -437,7 +557,11 @@
         "density": "pdf-extracted",
         "systemIndex": 5,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.673,
+        "playableStartX": 0.673,
+        "playableEndX": 0.8136,
+        "systemEndX": 0.9499
       }
     },
     {
@@ -451,7 +575,11 @@
         "density": "pdf-extracted",
         "systemIndex": 5,
         "calibrated": "pymupdf-barline",
-        "bundled": true
+        "bundled": true,
+        "measureStartX": 0.8136,
+        "playableStartX": 0.8136,
+        "playableEndX": 0.9499,
+        "systemEndX": 0.9499
       }
     }
   ]

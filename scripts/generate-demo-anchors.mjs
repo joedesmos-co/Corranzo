@@ -26,13 +26,15 @@ const outPath = join(fixturesDir, 'demo-minuet-in-g.anchors.json')
  * Six systems extracted from PDF staff-line and bar-line analysis (PyMuPDF).
  * Page dimensions: w=595.3, h=841.9 pts (A4).
  *
- * Each entry: { systemIndex, y (normalised grand-staff midpoint), measures: [{ n, x }] }
+ * Each entry: { systemIndex, y (normalised grand-staff midpoint), endX, measures: [{ n, x }] }
  * x = normalised x of the START of that measure (left barline or staff left edge).
+ * endX = normalised x of the final visible barline / system right edge.
  */
 const SYSTEMS = [
   {
     systemIndex: 0,
     y: 0.1631, // mid of treble(103.2-124.1) + bass(150.5-171.5) = 137.35/841.9
+    endX: 0.9515, // final barline at 566.4/595.3
     measures: [
       { n: 1,  x: 0.1194 }, // staff left edge after clef/key/time = 71.1/595.3
       { n: 2,  x: 0.3563 }, // barline at 212.1
@@ -44,6 +46,7 @@ const SYSTEMS = [
   {
     systemIndex: 1,
     y: 0.2937, // 247.3/841.9
+    endX: 0.9515, // final barline at 566.4/595.3
     measures: [
       { n: 6,  x: 0.0480 }, // staff left = 28.6
       { n: 7,  x: 0.2792 }, // 166.2
@@ -55,6 +58,7 @@ const SYSTEMS = [
   {
     systemIndex: 2,
     y: 0.4242, // 357.1/841.9
+    endX: 0.9499, // double bar right edge at 565.4/595.3
     measures: [
       { n: 11, x: 0.0480 }, // 28.6
       { n: 12, x: 0.2493 }, // 148.4
@@ -67,6 +71,7 @@ const SYSTEMS = [
   {
     systemIndex: 3,
     y: 0.5547, // 467.0/841.9
+    endX: 0.9515, // final barline at 566.4/595.3
     measures: [
       { n: 17, x: 0.1132 }, // 67.4 (after repeat-open bar at 63.9/67.4)
       { n: 18, x: 0.2814 }, // 167.5
@@ -78,6 +83,7 @@ const SYSTEMS = [
   {
     systemIndex: 4,
     y: 0.6902, // 581.1/841.9
+    endX: 0.9515, // final barline at 566.4/595.3
     measures: [
       { n: 22, x: 0.0480 }, // 28.6
       { n: 23, x: 0.2701 }, // 160.8
@@ -89,6 +95,7 @@ const SYSTEMS = [
   {
     systemIndex: 5,
     y: 0.8259, // 695.3/841.9
+    endX: 0.9499, // double bar right edge at 565.4/595.3
     measures: [
       { n: 27, x: 0.0480 }, // 28.6
       { n: 28, x: 0.2320 }, // 138.1
@@ -103,7 +110,10 @@ const SYSTEMS = [
 function main() {
   const anchors = []
   for (const sys of SYSTEMS) {
-    for (const { n, x } of sys.measures) {
+    for (let index = 0; index < sys.measures.length; index += 1) {
+      const { n, x } = sys.measures[index]
+      const nextMeasure = sys.measures[index + 1]
+      const playableEndX = nextMeasure?.x ?? sys.endX
       anchors.push({
         page: 1,
         x,
@@ -116,6 +126,10 @@ function main() {
           systemIndex: sys.systemIndex,
           calibrated: 'pymupdf-barline',
           bundled: true,
+          measureStartX: x,
+          playableStartX: x,
+          playableEndX,
+          systemEndX: sys.endX,
         },
       })
     }
@@ -130,6 +144,7 @@ function main() {
     alignmentNote:
       'Bundled demo anchors for Minuet in G: 32 per-measure positions extracted from ' +
       'the actual PDF using PyMuPDF bar-line detection (6 systems, not 4). ' +
+      'System-end metadata is included so the cursor can glide through the final measure of each staff. ' +
       'Loaded only for the sample piece; never saved to user localStorage.',
     anchors,
   }

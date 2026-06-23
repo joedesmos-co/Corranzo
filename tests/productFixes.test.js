@@ -241,6 +241,17 @@ describe('Fix D: useScoreFollowDisplayCursor accepts real-time callbacks (source
     // Must return it
     expect(src).toMatch(/return.*getScoreTime|getScoreTime.*return/s)
   })
+
+  it('same-file demo reloads still reset because source revision tracks buffer identity', () => {
+    const src = readFileSync(
+      join(__dir, '..', 'src', 'features', 'practice', 'usePracticeSession.js'),
+      'utf8',
+    )
+
+    expect(src).toMatch(/midiData:\s*midiSource\?\.data/)
+    expect(src).toMatch(/musicXmlData:\s*musicXmlSource\?\.data/)
+    expect(src).toMatch(/midiSource\?\.data,\s*musicXmlSource\?\.fileName/)
+  })
 })
 
 // ---------------------------------------------------------------------------
