@@ -43,6 +43,7 @@ import {
   SCORE_FOLLOW_SETUP_READY_USER,
   SCORE_FOLLOW_SETUP_RUNNING,
 } from './scoreFollowUserMessages.js'
+import { LAYOUT_MISMATCH_MESSAGE } from './layoutAssessment.js'
 
 function isEditableTarget(target) {
   if (!target || !(target instanceof HTMLElement)) {
@@ -583,11 +584,17 @@ export default function useScoreFollow({
             error: null,
             preview: null,
           })
-          const readyMessage = isDemoSession
+          const baseReadyMessage = isDemoSession
             ? SCORE_FOLLOW_SETUP_READY_DEMO
             : preview.approximate
               ? SCORE_FOLLOW_SETUP_APPROXIMATE
               : SCORE_FOLLOW_SETUP_COMPLETE
+          // When the printed PDF layout disagrees with the score-data layout, say
+          // so plainly — the PDF layout is what the cursor follows.
+          const readyMessage =
+            preview.layoutMismatch?.mismatch && !isDemoSession
+              ? LAYOUT_MISMATCH_MESSAGE
+              : baseReadyMessage
           setSetupStatus({ phase: 'ready', message: readyMessage })
           return
         }

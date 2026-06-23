@@ -25,6 +25,13 @@ import { detectStaffLineSystems, detectSystemBarlinePositions } from './detectSt
 import { validateAutoAlignResult } from './autoAlignValidation.js'
 import { collectMeasureDefaultXHints } from './musicxmlLayoutAnchors.js'
 import { clearPdfAnalysisCache, getPageInkRatio, renderPdfPageImageData } from './pdfPageAnalysis.js'
+import {
+  assessLayoutConfidence,
+  detectLayoutMismatch,
+  pageCountFromMusicXml,
+  systemStartsFromMusicXml,
+  systemStartsFromSpans,
+} from './layoutAssessment.js'
 
 /** Sum of staves across MusicXML parts (e.g. 2 for piano). Default 1. */
 function getStavesPerSystem(timingMap) {
@@ -104,6 +111,8 @@ function buildAutoSetupDebugReport({
   allocationMode = null,
   stavesPerSystem = null,
   timingMap,
+  layoutMismatch = null,
+  layoutConfidence = null,
 }) {
   const lastAnchorByMeasure = new Map(proposedAnchors.map((a) => [a.measureNumber, a]))
   const systems = spans.map((span, index) => {
@@ -145,6 +154,12 @@ function buildAutoSetupDebugReport({
     confidence: round2(confidence),
     plausible,
     reconciled,
+    // Honest layout assessment — PDF vs MusicXML layout + graded confidence.
+    layoutConfidence: layoutConfidence?.level ?? null,
+    layoutConfidenceReasons: layoutConfidence?.reasons ?? [],
+    layoutMismatch: layoutMismatch?.mismatch ?? false,
+    layoutMismatchReasons: layoutMismatch?.reasons ?? [],
+    weakestSystemIndex: layoutConfidence?.weakestSystem ?? null,
     measureCount: measures.length,
     stavesPerSystem,
     detectedSystemCount: systemEntries.length,
@@ -788,6 +803,24 @@ export async function analyzeSemiAutoScoreSetup({
     !approximate &&
     shouldAutoApplySemiAutoResult({ proposedAnchors, confidence, lowConfidence })
 
+  // Honest layout assessment: does the PDF-derived allocation disagree with the
+  // MusicXML-implied layout, and how confident is the overall alignment? The PDF
+  // allocation is always preferred; this only reports + grades it.
+  const layoutMismatch = detectLayoutMismatch({
+    pdfStarts: systemStartsFromSpans(spans),
+    musicXmlStarts: systemStartsFromMusicXml(timingMap),
+    pdfPageCount: inkPages,
+    musicXmlPageCount: pageCountFromMusicXml(timingMap),
+  })
+  const layoutConfidence = assessLayoutConfidence({
+    stage: overallStage,
+    allocationMode,
+    plausible,
+    lowConfidence,
+    mismatch: layoutMismatch.mismatch,
+    perSystemInk: systemEntries.map((entry) => entry.inkWidth),
+  })
+
   const debugReport = buildAutoSetupDebugReport({
     systemEntries,
     spans,
@@ -803,11 +836,15 @@ export async function analyzeSemiAutoScoreSetup({
     allocationMode,
     stavesPerSystem,
     timingMap,
+    layoutMismatch,
+    layoutConfidence,
   })
 
   return {
     ok: true,
     preview: {
+      layoutMismatch,
+      layoutConfidence,
       systemsByPage,
       systemEntries,
       spans,

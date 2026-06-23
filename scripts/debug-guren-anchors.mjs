@@ -22,6 +22,13 @@ import {
   groupMeasuresBySystemBreaks,
 } from '../src/features/score-follow/allocateMeasuresToSystems.js'
 import { buildAnchorDebugTable } from '../src/features/score-follow/scoreFollowDebug.js'
+import {
+  ALLOCATION_MODE,
+  assessLayoutConfidence,
+  detectLayoutMismatch,
+  pageCountFromMusicXml,
+  systemStartsFromMusicXml,
+} from '../src/features/score-follow/layoutAssessment.js'
 
 const DEFAULTS = [
   'uploads/attack-on-titan-opening-1-guren-no-yumiya.mxl',
@@ -99,6 +106,26 @@ async function main() {
     'match printed?               :',
     JSON.stringify(startsOf(printedSpans)) === JSON.stringify(PRINTED_STARTS),
   )
+
+  // Honest layout assessment: PDF (printed) layout vs MusicXML layout.
+  const musicXmlStarts = systemStartsFromMusicXml(timingMap)
+  const mismatch = detectLayoutMismatch({
+    pdfStarts: PRINTED_STARTS,
+    musicXmlStarts,
+    pdfPageCount: 4, // printed PDF pages (from the user)
+    musicXmlPageCount: pageCountFromMusicXml(timingMap),
+  })
+  const confidence = assessLayoutConfidence({
+    stage: 'staff-lines',
+    allocationMode: ALLOCATION_MODE.BARLINE_COUNTS,
+    plausible: true,
+    lowConfidence: false,
+    mismatch: mismatch.mismatch,
+  })
+  console.log('\n=== LAYOUT ASSESSMENT (PDF source of truth) ===')
+  console.log('mismatch:', mismatch.mismatch, '| reasons:', JSON.stringify(mismatch.reasons))
+  console.log('status  :', mismatch.message ?? '(layouts agree)')
+  console.log('confidence:', confidence.level, '| reasons:', JSON.stringify(confidence.reasons))
 
   const breakAnchors = buildPerMeasureSystemAnchors(syntheticEntries(breakSpans.length), breakSpans, timingMap)
   const printedAnchors = buildPerMeasureSystemAnchors(printedEntries, printedSpans, timingMap)
