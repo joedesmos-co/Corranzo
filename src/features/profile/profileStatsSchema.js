@@ -1,121 +1,130 @@
 export const PROFILE_STATS_VERSION = 1
-export const PROFILE_META_VERSION = 1
-
-export const MAX_STORED_SESSIONS = 150
-export const MIN_SESSION_ACTIVE_SECONDS = 60
-
-export const INPUT_MODE = {
-  MIDI: 'midi',
-  MICROPHONE: 'microphone',
-  MANUAL: 'manual',
-  MIXED: 'mixed',
-}
-
-export function createDefaultProfile() {
-  return {
-    version: PROFILE_META_VERSION,
-    displayName: 'Musician',
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
-  }
-}
-
-export function createEmptyStatsStore() {
-  return {
-    version: PROFILE_STATS_VERSION,
-    sessions: [],
-    totals: {
-      practiceSecondsActive: 0,
-      waitForYouSeconds: 0,
-      sessionsCompleted: 0,
-      notesMatched: 0,
-      notesAttempted: 0,
-      loopsPracticed: 0,
-      xp: 0,
-    },
-    streak: {
-      current: 0,
-      longest: 0,
-      lastPracticeDay: null,
-    },
-    pieces: {},
-  }
-}
-
-export function createSessionDraft({ pieceId, pieceTitle, isDemoPiece = false }) {
-  return {
-    id: `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    startedAt: Date.now(),
-    endedAt: null,
-    pieceId,
-    pieceTitle,
-    isDemoPiece,
-    practiceSecondsActive: 0,
-    waitForYouSeconds: 0,
-    loopsPracticed: 0,
-    practiceMode: 'normal',
-    inputModesUsed: {
-      midi: 0,
-      microphone: 0,
-      manual: 0,
-    },
-    wfyNotesMatched: 0,
-    wfyNotesAttempted: 0,
-    completed: false,
-  }
-}
+export const MAX_RECENT_SESSIONS = 20
 
 function isRecord(value) {
   return value != null && typeof value === 'object' && !Array.isArray(value)
 }
 
-export function normalizeProfile(raw) {
-  if (!isRecord(raw)) {
-    return createDefaultProfile()
-  }
-  const displayName =
-    typeof raw.displayName === 'string' && raw.displayName.trim()
-      ? raw.displayName.trim().slice(0, 40)
-      : 'Musician'
+function nonNegativeNumber(value) {
+  const number = Number(value)
+  return Number.isFinite(number) ? Math.max(0, number) : 0
+}
+
+function normalizeTimestamp(value) {
+  const timestamp = Number(value)
+  return Number.isFinite(timestamp) && timestamp > 0 ? timestamp : null
+}
+
+export function createEmptyStats() {
   return {
-    version: PROFILE_META_VERSION,
-    displayName,
-    createdAt: Number(raw.createdAt) || Date.now(),
-    updatedAt: Number(raw.updatedAt) || Date.now(),
+    version: PROFILE_STATS_VERSION,
+    totalPracticeSeconds: 0,
+    totalSessions: 0,
+    lastPracticedAt: null,
+    pieces: {},
+    recentSessions: [],
   }
 }
 
-export function normalizeStatsStore(raw) {
-  if (!isRecord(raw)) {
-    return createEmptyStatsStore()
+function normalizeSession(session) {
+  if (!isRecord(session)) {
+    return null
   }
 
-  const sessions = Array.isArray(raw.sessions)
-    ? raw.sessions.filter((session) => isRecord(session)).slice(0, MAX_STORED_SESSIONS)
-    : []
+  const pieceId = String(session.pieceId ?? '').trim()
+  if (!pieceId) {
+    return null
+  }
 
-  const totals = isRecord(raw.totals) ? raw.totals : {}
-  const streak = isRecord(raw.streak) ? raw.streak : {}
-  const pieces = isRecord(raw.pieces) ? raw.pieces : {}
+  const endedAt = normalizeTimestamp(session.endedAt)
+  const startedAt = normalizeTimestamp(session.startedAt) ?? endedAt
+
+  return {
+    id:
+      typeof session.id === 'string' && session.id
+        ? session.id
+        : `session-${endedAt ?? startedAt ?? 0}-${pieceId}`,
+    pieceId,
+    pieceTitle:
+      typeof session.pieceTitle === 'string' && session.pieceTitle.trim()
+        ? session.pieceTitle.trim().slice(0, 120)
+        : 'Untitled piece',
+    startedAt,
+    endedAt,
+    durationSeconds: nonNegativeNumber(
+      session.durationSeconds ?? session.practiceSecondsActive,
+    ),
+  }
+}
+
+function normalizePieces(rawPieces) {
+  if (!isRecord(rawPieces)) {
+    return {}
+  }
+
+  const pieces = {}
+  for (const [key, value] of Object.entries(rawPieces)) {
+    if (!isRecord(value)) {
+      continue
+    }
+
+    const id = String(value.id ?? key).trim()
+    if (!id) {
+      continue
+    }
+
+    pieces[id] = {
+      id,
+      title:
+        typeof value.title === 'string' && value.title.trim()
+          ? value.title.trim().slice(0, 120)
+          : 'Untitled piece',
+      totalPracticeSeconds: nonNegativeNumber(
+        value.totalPracticeSeconds ?? value.totalSeconds,
+      ),
+      totalSessions: nonNegativeNumber(value.totalSessions ?? value.sessionCount),
+      lastPracticedAt: normalizeTimestamp(value.lastPracticedAt),
+    }
+  }
+
+  return pieces
+}
+
+export function normalizeStats(raw) {
+  if (!isRecord(raw)) {
+    return createEmptyStats()
+  }
+
+  const recentSessionsSource = Array.isArray(raw.recentSessions)
+    ? raw.recentSessions
+    : Array.isArray(raw.sessions)
+      ? raw.sessions
+      : []
+  const recentSessions = recentSessionsSource
+    .map(normalizeSession)
+    .filter(Boolean)
+    .sort((left, right) => (right.endedAt ?? 0) - (left.endedAt ?? 0))
+    .slice(0, MAX_RECENT_SESSIONS)
+
+  const totalPracticeSeconds = nonNegativeNumber(
+    raw.totalPracticeSeconds ?? raw.totals?.practiceSecondsActive,
+  )
+  const totalSessions = Math.max(
+    nonNegativeNumber(
+      raw.totalSessions ?? raw.totals?.sessionsCompleted,
+    ),
+    recentSessions.length,
+  )
 
   return {
     version: PROFILE_STATS_VERSION,
-    sessions,
-    totals: {
-      practiceSecondsActive: Math.max(0, Number(totals.practiceSecondsActive) || 0),
-      waitForYouSeconds: Math.max(0, Number(totals.waitForYouSeconds) || 0),
-      sessionsCompleted: Math.max(0, Number(totals.sessionsCompleted) || 0),
-      notesMatched: Math.max(0, Number(totals.notesMatched) || 0),
-      notesAttempted: Math.max(0, Number(totals.notesAttempted) || 0),
-      loopsPracticed: Math.max(0, Number(totals.loopsPracticed) || 0),
-      xp: Math.max(0, Number(totals.xp) || 0),
-    },
-    streak: {
-      current: Math.max(0, Number(streak.current) || 0),
-      longest: Math.max(0, Number(streak.longest) || 0),
-      lastPracticeDay:
-        typeof streak.lastPracticeDay === 'string' ? streak.lastPracticeDay : null,
-    },
-    pieces,
+    totalPracticeSeconds,
+    totalSessions,
+    lastPracticedAt:
+      normalizeTimestamp(raw.lastPracticedAt) ??
+      recentSessions[0]?.endedAt ??
+      null,
+    pieces: normalizePieces(raw.pieces),
+    recentSessions,
   }
 }
