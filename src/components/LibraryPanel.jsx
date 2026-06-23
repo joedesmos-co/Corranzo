@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import LibraryAccuracyGuide from './LibraryAccuracyGuide.jsx'
+import MultiFileUpload from './MultiFileUpload.jsx'
 import {
   ACCEPT_ATTRIBUTES,
   isAcceptedScoreTimingFile,
@@ -117,6 +118,16 @@ export default function LibraryPanel({
         </p>
       </header>
 
+      <MultiFileUpload
+        hasPdf={hasPdf}
+        hasMusicXml={hasMusicXml}
+        hasMidi={hasMidi}
+        onFileSelect={onFileSelect}
+        onMusicXmlSelect={onMusicXmlSelect}
+        onMidiSelect={onMidiSelect}
+        disabled={uploadsDisabled}
+      />
+
       {importFeedback?.message && (
         <p
           className={`library-panel__feedback library-panel__feedback--${importFeedback.type ?? 'info'}`}
@@ -142,6 +153,9 @@ export default function LibraryPanel({
           Next: add MusicXML/MXL timing to enable Practice.
         </p>
       ) : null}
+
+      <details className="library-panel__advanced">
+        <summary className="library-panel__advanced-summary">Advanced upload (one file at a time)</summary>
 
       <div className="panel library-panel__upload-card">
         <h2 className="panel__title">
@@ -223,9 +237,10 @@ export default function LibraryPanel({
             {midiFileName}
           </p>
         ) : (
-          <p className="library-panel__empty">Skip if you only want to read and play along yourself</p>
+          <p className="library-panel__empty">Optional — backing audio only.</p>
         )}
       </div>
+      </details>
     </aside>
   )
 }
