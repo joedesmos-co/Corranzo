@@ -7,7 +7,7 @@ import {
 export default function AppFooter() {
   return (
     <footer className="app-footer">
-      <span>ScoreFlow Beta v{BETA_VERSION}</span>
+      <span>Corranzo Beta v{BETA_VERSION}</span>
       <span>
         Feedback:{' '}
         <a href={FEEDBACK_MAILTO}>{FEEDBACK_EMAIL}</a>

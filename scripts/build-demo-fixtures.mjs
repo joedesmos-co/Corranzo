@@ -45,7 +45,7 @@ function patchMusicXmlMetadata(xml) {
   }
   patched = patched.replace(
     /<creator[^>]*>music21[^<]*<\/creator>/,
-    '<creator type="software">ScoreFlow demo fixture</creator>',
+    '<creator type="software">Corranzo demo fixture</creator>',
   )
   patched = patched.replace(/<part-name>one:<\/part-name>/, '<part-name>Piano (treble)</part-name>')
   patched = patched.replace(/<part-name>two:<\/part-name>/, '<part-name>Piano (bass)</part-name>')
@@ -103,7 +103,7 @@ async function main() {
 
   writeFileSync(
     join(outDir, 'README.md'),
-    `# ScoreFlow demo fixtures
+    `# Corranzo demo fixtures
 
 Public-domain **Minuet in G** (BWV Anh. 114, Notebook for Anna Magdalena Bach; often attributed to Christian Petzold).
 

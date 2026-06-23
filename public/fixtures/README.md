@@ -1,4 +1,4 @@
-# ScoreFlow demo fixtures
+# Corranzo demo fixtures
 
 Public-domain **Minuet in G** (BWV Anh. 114, Notebook for Anna Magdalena Bach; often attributed to Christian Petzold).
 

@@ -22,10 +22,10 @@ export default function LibraryWelcomeCard({
       <div className="library-welcome__intro">
         <p className="library-welcome__eyebrow">{BETA_LABEL}</p>
         <h2 id="welcome-heading" className="library-welcome__title">
-          Practice piano with the score in front of you.
+          Practice music with a score that follows you.
         </h2>
         <p className="library-welcome__lead">
-          This is an early beta. Load a PDF with MusicXML, then follow the score,
+          Corranzo is an early beta. Load a PDF with MusicXML, then follow the score,
           loop passages, or use Wait For You.
         </p>
       </div>

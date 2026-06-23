@@ -1,7 +1,7 @@
 export const BETA_LABEL = 'Public beta'
 export const BETA_VERSION = '0.1'
 export const FEEDBACK_EMAIL = 'joedesmos-co@gmail.com'
-export const FEEDBACK_SUBJECT = 'ScoreFlow beta feedback'
+export const FEEDBACK_SUBJECT = 'Corranzo beta feedback'
 
 export const FEEDBACK_BODY = `Device/browser:
 What I tried:

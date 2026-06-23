@@ -43,7 +43,7 @@ export function formatMusicXmlImportError(error) {
   }
 
   if (lower.includes('xml') || lower.includes('parse')) {
-    return 'Could not read this MusicXML file. The file may be damaged or use features ScoreFlow does not support yet.'
+    return 'Could not read this MusicXML file. The file may be damaged or use features Corranzo does not support yet.'
   }
 
   return raw || 'Could not load this score timing file.'

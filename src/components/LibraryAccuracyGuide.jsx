@@ -19,7 +19,7 @@ export default function LibraryAccuracyGuide({ hasPdf, hasMusicXml }) {
         <summary>Why MusicXML matters</summary>
         <div className="library-accuracy-guide__body">
           <p className="library-accuracy-guide__intro">
-            ScoreFlow is most accurate with <strong>MusicXML or MXL</strong> from your notation app.
+            Corranzo is most accurate with <strong>MusicXML or MXL</strong> from your notation app.
             A PDF alone is great for reading, but cannot tell the app exactly which note is which.
           </p>
 

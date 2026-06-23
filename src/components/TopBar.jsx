@@ -22,7 +22,7 @@ export default function TopBar({ activeView, onNavigate, practiceReady = true })
   return (
     <header className="topbar">
       <div className="topbar__brand">
-        <h1 className="topbar__title">ScoreFlow</h1>
+        <h1 className="topbar__title">Corranzo</h1>
         <span className="topbar__beta">
           {BETA_LABEL} <span aria-hidden="true">·</span> v{BETA_VERSION}
         </span>

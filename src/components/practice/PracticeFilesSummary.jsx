@@ -24,7 +24,7 @@ export default function PracticeFilesSummary({
         <span className="practice-files__label-row">
           <span className="practice-files__label">Score timing</span>
           <PracticeHelpTip label="About score timing">
-            MusicXML/MXL (or future MuseScore source files) tells ScoreFlow where measures and beats
+            MusicXML/MXL (or future MuseScore source files) tells Corranzo where measures and beats
             fall in time — measure display, loops, Wait For You, and score follow. PDF alone cannot
             provide this; MIDI is playback only.
           </PracticeHelpTip>

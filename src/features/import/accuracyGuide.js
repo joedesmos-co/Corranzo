@@ -15,14 +15,14 @@ export const ACCURACY_TIERS = [
     label: 'Good',
     summary: 'PDF + MusicXML / MXL',
     detail:
-      'The PDF is what you read; the timing file tells ScoreFlow where measures and beats are. This is the recommended Practice setup today.',
+      'The PDF is what you read; the timing file tells Corranzo where measures and beats are. This is the recommended Practice setup today.',
   },
   {
     id: 'basic',
     label: 'Basic',
     summary: 'PDF only',
     detail:
-      'Read and annotate the score, but without a timing file ScoreFlow cannot follow measures or notes exactly.',
+      'Read and annotate the score, but without a timing file Corranzo cannot follow measures or notes exactly.',
   },
 ]
 

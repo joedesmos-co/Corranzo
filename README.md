@@ -1,4 +1,4 @@
-# ScoreFlow
+# Corranzo
 
 Practice tool for piano scores: import a PDF + MusicXML (and optional MIDI), follow a moving cursor, loop passages, and use **Wait For You** with microphone or MIDI input.
 

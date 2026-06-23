@@ -12,7 +12,7 @@ DIV = "        <divisions>1</divisions>\n"
 MUSIC_XML = f"""<?xml version="1.0" encoding="UTF-8"?>
 <score-partwise version="3.1">
   <work>
-    <work-title>ScoreFlow Sample</work-title>
+    <work-title>Corranzo Sample</work-title>
   </work>
   <part-list>
     <score-part id="P1">
@@ -92,7 +92,7 @@ PDF = b"""%PDF-1.4
 2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj
 3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 300 200]/Contents 4 0 R/Resources<</Font<</F1 5 0 R>>>>>>endobj
 4 0 obj<</Length 55>>stream
-BT /F1 16 Tf 24 120 Td (ScoreFlow Sample) Tj ET
+BT /F1 16 Tf 24 120 Td (Corranzo Sample) Tj ET
 endstream
 endobj
 5 0 obj<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>endobj
@@ -140,7 +140,7 @@ def main() -> None:
     (OUT / "sample.pdf").write_bytes(PDF)
     (OUT / "sample.mid").write_bytes(build_midi())
     (OUT / "README.md").write_text(
-        """# ScoreFlow dev fixtures
+        """# Corranzo dev fixtures
 
 Tiny sample files for local smoke testing. Regenerate with:
 

@@ -14,7 +14,7 @@ describe('public beta polish', () => {
     expect(BETA_LABEL).toBe('Public beta')
     expect(BETA_VERSION).toBe('0.1')
     expect(FEEDBACK_EMAIL).toBe('joedesmos-co@gmail.com')
-    expect(FEEDBACK_SUBJECT).toBe('ScoreFlow beta feedback')
+    expect(FEEDBACK_SUBJECT).toBe('Corranzo beta feedback')
     expect(FEEDBACK_BODY).toContain('Device/browser:')
     expect(FEEDBACK_BODY).toContain('What broke or confused me:')
     expect(FEEDBACK_BODY).toContain('Score file type used:')
