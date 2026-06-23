@@ -125,6 +125,14 @@ function minuetPageLayout() {
   return { pageCount: 1, layoutConfidence: LAYOUT_CONFIDENCE.EXACT, systems }
 }
 
+/** Trusted reference anchors (the hand-calibrated bundled Minuet anchors). Used
+ *  by the Phase 5a comparison framework as promotion ground truth. */
+function minuetReferenceAnchors() {
+  return JSON.parse(
+    readFileSync(join(fixturesDir, 'demo-minuet-in-g.anchors.json'), 'utf8'),
+  ).anchors
+}
+
 /** Even-spaced synthetic geometry (no PDF) from per-system counts + page map. */
 function syntheticPageLayout({ perSystemCounts, pageOf, layoutConfidence }) {
   const startX = 0.08
@@ -159,6 +167,8 @@ export const RUNNABLE_FIXTURES = [
     redistributable: true,
     makeInputs: minuetInputs,
     makePageLayout: minuetPageLayout,
+    // Trusted reference for Phase 5a anchor comparison (promotion ground truth).
+    makeReferenceAnchors: minuetReferenceAnchors,
     golden: {
       writtenMeasures: 32,
       pdfPageCount: 1,

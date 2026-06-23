@@ -10,6 +10,7 @@
  *   node scripts/diagnose-alignment.mjs --check
  *   node scripts/diagnose-alignment.mjs --fixtures
  *   node scripts/diagnose-alignment.mjs --anchors
+ *   node scripts/diagnose-alignment.mjs --compare
  *   node scripts/diagnose-alignment.mjs <score.musicxml> --counts 5,5,6,5,5,6
  *   node scripts/diagnose-alignment.mjs <score.musicxml> --anchors anchors.json [--json report.json]
  */
@@ -161,8 +162,69 @@ async function runAnchors() {
   }
 }
 
+/**
+ * Phase 5a — compare generated anchors against trusted reference (bundled)
+ * anchors across all runnable fixtures, and print a promotion-readiness report.
+ * Proof that generation is accurate enough to *eventually* replace bundled
+ * anchors; it does not change any runtime behaviour.
+ */
+async function runCompare() {
+  const { RUNNABLE_FIXTURES } = await import('../tests/fixtures/alignmentFixtures.js')
+  const { generateAnchorsFromLayout } = await import(
+    '../src/features/score-follow/generateAnchorsFromLayout.js'
+  )
+  const {
+    compareAnchorSets,
+    assessPromotionReadiness,
+    formatAnchorComparisonText,
+    PROMOTION_STATUS,
+  } = await import('../src/features/score-follow/anchorComparison.js')
+
+  const comparableStatuses = []
+
+  for (const fixture of RUNNABLE_FIXTURES) {
+    const reconciliation = reconcilePdfLayoutWithScore(fixture.makeInputs())
+    const generated = generateAnchorsFromLayout(reconciliation, fixture.makePageLayout())
+    const reference = fixture.makeReferenceAnchors ? fixture.makeReferenceAnchors() : null
+    const comparison = compareAnchorSets(generated.anchors, reference)
+    const readiness = comparison.comparable ? assessPromotionReadiness(comparison) : null
+
+    console.log('='.repeat(60))
+    console.log(`${fixture.title}  [${fixture.license}]`)
+    console.log(formatAnchorComparisonText(comparison, readiness))
+    console.log('')
+
+    if (readiness) {
+      comparableStatuses.push({ id: fixture.id, status: readiness.status })
+    }
+  }
+
+  console.log('='.repeat(60))
+  console.log('Promotion readiness (fixtures with trusted reference anchors):')
+  if (comparableStatuses.length === 0) {
+    console.log('  (none)')
+  }
+  for (const entry of comparableStatuses) {
+    console.log(`  ${entry.id}: ${entry.status}`)
+  }
+
+  const allReady =
+    comparableStatuses.length > 0 &&
+    comparableStatuses.every((entry) => entry.status === PROMOTION_STATUS.READY)
+  console.log(
+    `\nOverall: ${allReady ? 'READY for promotion' : 'NOT yet — review the per-fixture status above.'}`,
+  )
+
+  if (comparableStatuses.some((entry) => entry.status === PROMOTION_STATUS.NOT_SAFE)) {
+    console.error('\ndiagnose-alignment --compare: a comparable fixture is NOT_SAFE.')
+    process.exit(1)
+  }
+}
+
 const args = process.argv.slice(2)
-if (args.includes('--anchors')) {
+if (args.includes('--compare')) {
+  await runCompare()
+} else if (args.includes('--anchors')) {
   await runAnchors()
 } else if (args.includes('--fixtures')) {
   await runFixtures()
