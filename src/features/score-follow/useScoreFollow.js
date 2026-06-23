@@ -829,15 +829,25 @@ export default function useScoreFollow({
       return
     }
     setAutoAnchors(preview.proposedAnchors)
+    // Apply the per-measure anchors too, so the follow cursor starts at each
+    // measure's playable content — including system-start measures, which sit
+    // after the clef/key area rather than at the far-left margin. Mirrors the
+    // auto-apply path.
+    const hasSupplemental = preview.supplementalMeasureAnchors?.length >= 2
+    if (hasSupplemental) {
+      setSupplementalAnchors(preview.supplementalMeasureAnchors)
+    }
     setEnabled(true)
     setSemiAutoSetup({
       status: 'confirmed',
       progress: 1,
-      message: `Linked ${preview.systemCount} staff systems (${preview.anchorCount} guides). Mark measures manually to show a follow cursor.`,
+      message: hasSupplemental
+        ? `Linked ${preview.systemCount} staff systems with a follow cursor.`
+        : `Linked ${preview.systemCount} staff systems (${preview.anchorCount} guides). Mark measures manually to show a follow cursor.`,
       error: null,
       preview: null,
     })
-  }, [semiAutoSetup.preview, setAutoAnchors])
+  }, [semiAutoSetup.preview, setAutoAnchors, setSupplementalAnchors])
 
   const cancelSemiAutoPreview = useCallback(() => {
     setSemiAutoSetup({

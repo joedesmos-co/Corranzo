@@ -73,6 +73,16 @@ function systemCountHintFromMusicXml(measureNumbers, timingMap) {
 const round3 = (value) => (value == null ? null : Math.round(value * 1000) / 1000)
 const round2 = (value) => (value == null ? null : Math.round(value * 100) / 100)
 
+/** Median of a numeric array (used to estimate a system's typical measure width). */
+function medianOf(values) {
+  if (!values?.length) {
+    return 0
+  }
+  const sorted = [...values].sort((a, b) => a - b)
+  const mid = Math.floor(sorted.length / 2)
+  return sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid]
+}
+
 /**
  * Structured, dev-only auto-setup debug report. Surfaces exactly why a mapping
  * landed where it did: detected systems + y positions, allocated measure ranges,
@@ -454,15 +464,29 @@ export function buildPerMeasureSystemAnchors(systemEntries, spans, timingMap = n
       let playableStartX
       let xSource
       if (haveWidths && Number.isFinite(dx)) {
-        // Clamp the offset so a mis-encoded default-x can't push beat 1 past the
+        // PRIMARY: the engraved first-note default-x already sits after any
+        // clef/key/time. Clamp so a mis-encoded value can't push beat 1 past the
         // bulk of the measure (guard: never far right of the first note).
         const offset = Math.min(Math.max(dx, 0), 0.85 * widths[i])
         playableStartX = tenthsToX(leftTenths[i] + offset)
         xSource = anchorKind === 'barline' ? 'default-x+barline' : 'default-x'
+      } else if (i === 0 && haveWidths && count > 1) {
+        // SYSTEM-START FALLBACK (no default-x): a system's first measure is
+        // engraved wider to hold the clef/key/(time). Estimate that lead as how
+        // much wider it is than the system's other measures, so beat 1 clears the
+        // clef/key area instead of sitting at the far-left margin. Clamped so it
+        // never collapses to the margin nor overshoots the first note.
+        const otherWidths = widths.filter((_, j) => j !== i)
+        const clefKeyLead = Math.min(
+          Math.max(widths[i] - medianOf(otherWidths), 0.12 * widths[i]),
+          0.6 * widths[i],
+        )
+        playableStartX = tenthsToX(leftTenths[i] + clefKeyLead)
+        xSource = 'system-start-width'
       } else {
-        // Conservative local lead: skip the clef/key area on a system's first
-        // measure, a small margin past the barline on the rest.
-        const lead = i === 0 ? 0.18 : 0.05
+        // Conservative local lead: a larger inset on a system's first measure to
+        // clear the clef/key area, a small margin past the barline on the rest.
+        const lead = i === 0 ? 0.3 : 0.05
         playableStartX = measureStartX + lead * measureSpan
         xSource = anchorKind
       }
