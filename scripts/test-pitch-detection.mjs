@@ -36,6 +36,21 @@ function synthSine(frequency, sampleRate, durationSeconds) {
   return buffer
 }
 
+function synthHarmonicTone(fundamental, harmonics, sampleRate, durationSeconds) {
+  const length = Math.floor(sampleRate * durationSeconds)
+  const buffer = new Float32Array(length)
+  for (let index = 0; index < length; index += 1) {
+    let sample = 0
+    for (const { multiple, amplitude } of harmonics) {
+      sample +=
+        Math.sin((2 * Math.PI * fundamental * multiple * index) / sampleRate) *
+        amplitude
+    }
+    buffer[index] = sample
+  }
+  return buffer
+}
+
 function synthSilence(sampleRate, durationSeconds) {
   return new Float32Array(Math.floor(sampleRate * durationSeconds))
 }
@@ -46,6 +61,19 @@ const pitch = detectPitchAutocorrelation(a4, sampleRate)
 assert(pitch, 'should detect A4')
 const note = pitchToMidiNote(pitch)
 assert(note?.midi === 69, `expected A4 midi 69 got ${note?.midi}`)
+
+const harmonicA3 = synthHarmonicTone(
+  220,
+  [
+    { multiple: 1, amplitude: 0.12 },
+    { multiple: 2, amplitude: 0.35 },
+  ],
+  sampleRate,
+  0.25,
+)
+const harmonicPitch = detectPitchAutocorrelation(harmonicA3, sampleRate)
+const harmonicNote = pitchToMidiNote(harmonicPitch, { minClarity: 0.12, centsTolerance: 50 })
+assert(harmonicNote?.midi === 57, `expected harmonic-heavy A3 midi 57 got ${harmonicNote?.midi}`)
 
 const stabilizer = createNoteStabilizer({
   holdFrames: 4,

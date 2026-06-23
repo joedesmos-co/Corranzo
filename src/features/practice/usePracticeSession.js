@@ -356,6 +356,8 @@ export default function usePracticeSession({
         enabled: loop.enabled,
         startMeasureNumber: loop.startMeasureNumber,
         endMeasureNumber: loop.endMeasureNumber,
+        startBeat: loop.startBeat,
+        endBeat: loop.endBeat,
       },
       matchSettings: matchSettingsState.rawSettings,
     }),
@@ -368,6 +370,8 @@ export default function usePracticeSession({
       loop.enabled,
       loop.startMeasureNumber,
       loop.endMeasureNumber,
+      loop.startBeat,
+      loop.endBeat,
       matchSettingsState.rawSettings,
     ],
   )

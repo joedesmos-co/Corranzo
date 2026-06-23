@@ -62,15 +62,21 @@ export function detectPitchAutocorrelation(samples, sampleRate) {
 
   let period = bestPeriod
 
-  // Prefer fundamental over harmonics (period too short → pitch too high).
+  // Prefer the shortest strong period, but do not chase weak harmonics.  The
+  // raw maximum can land on a long subharmonic (e.g. 2×/4× the true period),
+  // while harmonic-rich piano tones can also make an octave-up period look
+  // plausible. Step down only while the shorter period remains nearly as strong
+  // as the currently selected period.
+  let selectedCorrelation = bestCorrelation
   for (const divisor of [2, 3, 4]) {
     const candidate = Math.floor(bestPeriod / divisor)
     if (candidate < minPeriod) {
       continue
     }
     const candidateCorrelation = correlationAtPeriod(candidate)
-    if (candidateCorrelation > bestCorrelation * 0.52 && candidate < period) {
+    if (candidateCorrelation > selectedCorrelation * 0.9 && candidate < period) {
       period = candidate
+      selectedCorrelation = candidateCorrelation
     }
   }
 

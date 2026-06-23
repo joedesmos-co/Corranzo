@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
-import { buildMeasureLoopRegion, shouldRestartLoop } from '../src/features/practice/practiceLoopRegion.js'
+import {
+  buildBeatLoopRegion,
+  buildMeasureLoopRegion,
+  shouldRestartLoop,
+} from '../src/features/practice/practiceLoopRegion.js'
 import { buildBeatCheckpoints } from '../src/features/practice/waitForYouCheckpoints.js'
 import * as F from './helpers/buildXml.js'
 
@@ -43,5 +47,16 @@ describe('loop and WFY use performed time domain', () => {
     )
     expect(m2pass2).toHaveLength(4)
     expect(m2pass2[0].timeSeconds).toBeCloseTo(6, 6)
+  })
+
+  it('beat loop ending on the last performed beat uses performed end time', () => {
+    const t = parseMusicXml(F.oneRepeat())
+    const lastBeat = t.performedMeasureTimeline.performedBeats.at(-1)
+    const region = buildBeatLoopRegion(t, lastBeat, lastBeat)
+
+    expect(lastBeat.measureNumber).toBe(4)
+    expect(region.isValid).toBe(true)
+    expect(region.startTimeSeconds).toBeCloseTo(11.5, 6)
+    expect(region.endTimeSeconds).toBeCloseTo(12, 6)
   })
 })

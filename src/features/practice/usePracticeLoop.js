@@ -101,5 +101,7 @@ export default function usePracticeLoop(timingMap, currentMeasure, currentBeat, 
     clearLoop,
     startMeasureNumber,
     endMeasureNumber,
+    startBeat,
+    endBeat,
   }
 }

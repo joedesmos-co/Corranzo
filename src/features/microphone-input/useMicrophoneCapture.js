@@ -12,11 +12,21 @@ function stopStream(stream) {
   })
 }
 
+function createAudioContext() {
+  const AudioContextConstructor = globalThis.AudioContext ?? globalThis.webkitAudioContext
+  if (!AudioContextConstructor) {
+    throw new Error('AudioContext is not available in this browser.')
+  }
+  return new AudioContextConstructor()
+}
+
 export default function useMicrophoneCapture({ active = false } = {}) {
   const streamRef = useRef(null)
   const contextRef = useRef(null)
   const analyserRef = useRef(null)
   const bufferRef = useRef(null)
+  const activeRef = useRef(active)
+  const requestTokenRef = useRef(0)
 
   const support = isMicrophoneSupported()
     ? MIC_SUPPORT.SUPPORTED
@@ -27,8 +37,9 @@ export default function useMicrophoneCapture({ active = false } = {}) {
   )
   const [errorMessage, setErrorMessage] = useState(null)
   const [isListening, setIsListening] = useState(false)
+  const [sampleRate, setSampleRate] = useState(44100)
 
-  const teardown = useCallback(() => {
+  const closeCurrentCapture = useCallback(() => {
     stopStream(streamRef.current)
     streamRef.current = null
     analyserRef.current = null
@@ -41,18 +52,30 @@ export default function useMicrophoneCapture({ active = false } = {}) {
     }
 
     setIsListening(false)
+    setSampleRate(44100)
   }, [])
+
+  const teardown = useCallback(() => {
+    requestTokenRef.current += 1
+    closeCurrentCapture()
+  }, [closeCurrentCapture])
 
   const requestAccess = useCallback(async () => {
     if (support !== MIC_SUPPORT.SUPPORTED) {
       return false
     }
 
+    const requestToken = requestTokenRef.current + 1
+    requestTokenRef.current = requestToken
+
     setErrorMessage(null)
-    teardown()
+    closeCurrentCapture()
+
+    let stream = null
+    let context = null
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
@@ -61,27 +84,47 @@ export default function useMicrophoneCapture({ active = false } = {}) {
         video: false,
       })
 
-      const context = new AudioContext()
+      if (requestTokenRef.current !== requestToken || !activeRef.current) {
+        stopStream(stream)
+        return false
+      }
+
+      context = createAudioContext()
       const source = context.createMediaStreamSource(stream)
       const analyser = context.createAnalyser()
       analyser.fftSize = 2048
       analyser.smoothingTimeConstant = 0.85
       source.connect(analyser)
 
+      if (context.state === 'suspended') {
+        await context.resume()
+      }
+
+      if (requestTokenRef.current !== requestToken || !activeRef.current) {
+        stopStream(stream)
+        if (context.state !== 'closed') {
+          context.close().catch(() => {})
+        }
+        return false
+      }
+
       streamRef.current = stream
       contextRef.current = context
       analyserRef.current = analyser
       bufferRef.current = new Float32Array(analyser.fftSize)
 
-      if (context.state === 'suspended') {
-        await context.resume()
-      }
-
       setPermission(MIC_PERMISSION.GRANTED)
       setIsListening(true)
+      setSampleRate(context.sampleRate)
       return true
     } catch (error) {
-      teardown()
+      stopStream(stream)
+      if (context && context.state !== 'closed') {
+        context.close().catch(() => {})
+      }
+      if (requestTokenRef.current !== requestToken) {
+        return false
+      }
       const message = error instanceof Error ? error.message : 'Microphone access failed'
       if (error?.name === 'NotAllowedError' || message.toLowerCase().includes('denied')) {
         setPermission(MIC_PERMISSION.DENIED)
@@ -94,7 +137,7 @@ export default function useMicrophoneCapture({ active = false } = {}) {
       }
       return false
     }
-  }, [support, teardown])
+  }, [support, closeCurrentCapture])
 
   const disable = useCallback(() => {
     teardown()
@@ -105,9 +148,12 @@ export default function useMicrophoneCapture({ active = false } = {}) {
   }, [support, teardown])
 
   useEffect(() => {
+    activeRef.current = active
     if (!active) {
-      teardown()
+      const teardownTimer = globalThis.setTimeout(teardown, 0)
+      return () => globalThis.clearTimeout(teardownTimer)
     }
+    return undefined
   }, [active, teardown])
 
   useEffect(() => () => teardown(), [teardown])
@@ -130,6 +176,6 @@ export default function useMicrophoneCapture({ active = false } = {}) {
     analyser: analyserRef,
     audioContext: contextRef,
     getTimeDomainBuffer: () => bufferRef.current,
-    sampleRate: contextRef.current?.sampleRate ?? 44100,
+    sampleRate,
   }
 }

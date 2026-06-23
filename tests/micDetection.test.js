@@ -37,6 +37,21 @@ function synthSine(frequency, amplitude = 0.35, seconds = 0.25) {
   return buffer
 }
 
+function synthHarmonicTone(fundamental, harmonics, seconds = 0.25) {
+  const length = Math.floor(SAMPLE_RATE * seconds)
+  const buffer = new Float32Array(length)
+  for (let i = 0; i < length; i += 1) {
+    let sample = 0
+    for (const { multiple, amplitude } of harmonics) {
+      sample +=
+        Math.sin((2 * Math.PI * fundamental * multiple * i) / SAMPLE_RATE) *
+        amplitude
+    }
+    buffer[i] = sample
+  }
+  return buffer
+}
+
 function feed(stabilizer, frames, sample) {
   let emitted = null
   for (let i = 0; i < frames; i += 1) {
@@ -52,6 +67,18 @@ describe('pitch detection', () => {
   it('detects a clean A4 sine as MIDI 69', () => {
     const note = pitchToMidiNote(detectPitchAutocorrelation(synthSine(440), SAMPLE_RATE))
     expect(note?.midi).toBe(69)
+  })
+
+  it('keeps the fundamental for harmonic-heavy piano tones', () => {
+    const tone = synthHarmonicTone(220, [
+      { multiple: 1, amplitude: 0.12 },
+      { multiple: 2, amplitude: 0.35 },
+    ])
+    const note = pitchToMidiNote(detectPitchAutocorrelation(tone, SAMPLE_RATE), {
+      minClarity: 0.12,
+      centsTolerance: 50,
+    })
+    expect(note?.midi).toBe(57)
   })
 
   it('ignores a near-silent signal (too quiet)', () => {

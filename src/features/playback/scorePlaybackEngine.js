@@ -298,11 +298,15 @@ export class ScorePlaybackEngine {
   rescheduleFrom(scoreSeconds) {
     const wasPlaying = this.playing
     this.releaseAll()
+    this.offsetScoreSeconds = Math.max(0, Math.min(scoreSeconds, this.duration || scoreSeconds))
     this.scheduledEvents.clear()
-    this.scheduledUntilScore = scoreSeconds
+    this.scheduledUntilScore = this.offsetScoreSeconds
     if (wasPlaying) {
       this.playStartedAt = Tone.now()
-      this.scheduleWindow(scoreSeconds, scoreSeconds + LOOKAHEAD_SECONDS)
+      this.scheduleWindow(
+        this.offsetScoreSeconds,
+        this.offsetScoreSeconds + LOOKAHEAD_SECONDS,
+      )
       this.startScheduleLoop()
     }
   }

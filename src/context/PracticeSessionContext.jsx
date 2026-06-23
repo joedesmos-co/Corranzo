@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useRef } from 'react'
+import * as Tone from 'tone'
 import { disposeReferencePlayer } from '../features/practice/referenceNotePlayer.js'
 import { setupAudioVisibilityResume } from '../features/audio/audioLifecycle.js'
 import { isDemoFixtureFileSet } from '../features/demo/demoBundledAnchors.js'
@@ -127,7 +128,7 @@ export function PracticeSessionProvider({
   }, [])
 
   useEffect(() => {
-    return setupAudioVisibilityResume(() => [])
+    return setupAudioVisibilityResume(() => [Tone.getContext()])
   }, [])
 
   useEffect(() => {

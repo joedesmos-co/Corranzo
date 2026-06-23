@@ -1,6 +1,10 @@
 import { getDisplayBeatAtTime, getMeasureAtTime } from './timingQuery.js'
 import { getMeasureByNumber, getMeasureStartTime } from './measureNavigation.js'
-import { getPerformedEntryAtTime, usesPerformedTimeline } from './performedTimeline.js'
+import {
+  getPerformedEntryAtIndex,
+  getPerformedEntryAtTime,
+  usesPerformedTimeline,
+} from './performedTimeline.js'
 
 function getActiveBeats(timingMap) {
   if (usesPerformedTimeline(timingMap)) {
@@ -64,6 +68,13 @@ export function getBeatEndTime(timingMap, beat) {
   const nextBeat = getNeighborBeat(timingMap, beat, 1)
   if (nextBeat) {
     return nextBeat.timeSeconds
+  }
+
+  if (usesPerformedTimeline(timingMap) && beat.performedMeasureIndex != null) {
+    const entry = getPerformedEntryAtIndex(timingMap, beat.performedMeasureIndex)
+    if (entry?.endTimeSeconds != null) {
+      return entry.endTimeSeconds
+    }
   }
 
   const measure = getMeasureByNumber(timingMap, beat.measureNumber)
