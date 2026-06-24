@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "description": "Public-domain alignment benchmark corpus. CI runs entries with runInCi !== false (synthetic/local). Remote Mutopia entries require --download and benchmarks/cache/.",
+  "entries": [
+    {
+      "id": "synthetic-clean-1page",
+      "title": "Clean piano (1 page)",
+      "composer": "Synthetic",
+      "source": "tests/helpers/syntheticScore.js",
+      "license": "N/A (generated)",
+      "tags": ["simple", "one-page", "classical"],
+      "runner": "synthetic",
+      "runInCi": true,
+      "synthetic": {
+        "pages": [{ "kind": "cleanPianoPage", "systems": 3, "measuresPerSystem": 4 }],
+        "timing": { "measures": 12, "breakEvery": 4, "staves": 2 }
+      },
+      "expected": { "pages": 1, "measures": 12, "systems": 3 }
+    },
+    {
+      "id": "synthetic-multipage",
+      "title": "Clean piano (2 pages)",
+      "composer": "Synthetic",
+      "source": "tests/helpers/syntheticScore.js",
+      "license": "N/A (generated)",
+      "tags": ["multi-page", "classical"],
+      "runner": "synthetic",
+      "runInCi": true,
+      "synthetic": {
+        "pages": [{ "kind": "multiPageScore", "pages": 2, "systemsPerPage": 3, "measuresPerSystem": 4 }],
+        "timing": { "measures": 24, "breakEvery": 4, "staves": 2 }
+      },
+      "expected": { "pages": 2, "measures": 24, "systems": 6 }
+    },
+    {
+      "id": "synthetic-dense",
+      "title": "Dense piano (1 page)",
+      "composer": "Synthetic",
+      "source": "tests/helpers/syntheticScore.js",
+      "license": "N/A (generated)",
+      "tags": ["dense", "fast", "one-page"],
+      "runner": "synthetic",
+      "runInCi": true,
+      "synthetic": {
+        "pages": [{ "kind": "densePianoPage", "systems": 5, "measuresPerSystem": 6 }],
+        "timing": { "measures": 30, "breakEvery": 6, "staves": 2 }
+      },
+      "expected": { "pages": 1, "measures": 30, "systems": 5 }
+    },
+    {
+      "id": "synthetic-light-classical",
+      "title": "Light classical (1 page)",
+      "composer": "Synthetic",
+      "source": "tests/helpers/syntheticScore.js",
+      "license": "N/A (generated)",
+      "tags": ["slow", "spacious", "one-page", "classical"],
+      "runner": "synthetic",
+      "runInCi": true,
+      "synthetic": {
+        "pages": [{ "kind": "lightClassicalPage", "systems": 4, "measuresPerSystem": 4 }],
+        "timing": { "measures": 16, "breakEvery": 4, "staves": 2 }
+      },
+      "expected": { "pages": 1, "measures": 16, "systems": 4 }
+    },
+    {
+      "id": "synthetic-uneven",
+      "title": "Uneven measures (1 page)",
+      "composer": "Synthetic",
+      "source": "tests/helpers/syntheticScore.js",
+      "license": "N/A (generated)",
+      "tags": ["uneven", "one-page"],
+      "runner": "synthetic",
+      "runInCi": true,
+      "synthetic": {
+        "pages": [{ "kind": "unevenMeasurePage" }],
+        "timing": { "measures": 8, "breakEvery": 4, "staves": 2 }
+      },
+      "expected": { "pages": 1, "measures": 8, "systems": 2 }
+    },
+    {
+      "id": "synthetic-repeats-voltas",
+      "title": "Repeats + voltas (synthetic timing)",
+      "composer": "Synthetic",
+      "source": "tests/helpers/buildXml.js",
+      "license": "N/A (generated)",
+      "tags": ["repeats", "simple", "one-page"],
+      "runner": "synthetic",
+      "runInCi": true,
+      "synthetic": {
+        "pages": [{ "kind": "cleanPianoPage", "systems": 2, "measuresPerSystem": 3 }],
+        "timing": { "kind": "repeats-voltas" }
+      },
+      "expected": { "pages": 1, "measures": 5, "systems": 2 }
+    },
+    {
+      "id": "minuet-in-g",
+      "title": "Minuet in G",
+      "composer": "BWV Anh. 114 (attrib. Petzold)",
+      "source": "Mutopia Project #75",
+      "license": "Public Domain",
+      "tags": ["simple", "one-page", "classical", "bundled-demo"],
+      "runner": "local",
+      "runInCi": true,
+      "assets": {
+        "pdf": "public/fixtures/demo-minuet-in-g.pdf",
+        "musicxml": "public/fixtures/demo-minuet-in-g.musicxml"
+      },
+      "mutopia": {
+        "pieceInfo": "https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=75",
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWVAnh114/anna-magdalena-04/anna-magdalena-04-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWVAnh114/anna-magdalena-04/anna-magdalena-04.mid"
+      },
+      "expected": { "pages": 1, "measures": 32, "systems": 6 },
+      "skipIfMissing": ["pdf"]
+    },
+    {
+      "id": "turkish-march",
+      "title": "Rondo Alla Turca (Turkish March)",
+      "composer": "W. A. Mozart, K.331 mvt 3",
+      "source": "Mutopia Project #108",
+      "license": "Public Domain",
+      "tags": ["dense", "fast", "multi-page", "classical"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pieceInfo": "https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=108",
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/MozartWA/KV331/KV331_3_RondoAllaTurca/KV331_3_RondoAllaTurca-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/MozartWA/KV331/KV331_3_RondoAllaTurca/KV331_3_RondoAllaTurca.mid"
+      },
+      "expected": { "pages": 5, "measures": 128, "systems": 27 }
+    },
+    {
+      "id": "bach-prelude-bwv846",
+      "title": "Prelude in C major, BWV 846",
+      "composer": "J. S. Bach",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["classical", "multi-page", "dense"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV846/bwv846-prelude-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV846/bwv846-prelude.mid"
+      },
+      "expected": { "pages": 4, "measures": null, "systems": null }
+    },
+    {
+      "id": "beethoven-fur-elise",
+      "title": "Für Elise",
+      "composer": "L. van Beethoven",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["simple", "classical", "one-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BeethovenLV/fur-elise/fur-elise-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BeethovenLV/fur-elise/fur-elise.mid"
+      },
+      "expected": { "pages": 2, "measures": null, "systems": null }
+    }
+  ]
+}
