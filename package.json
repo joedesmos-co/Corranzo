@@ -15,7 +15,8 @@
     "fixtures": "node scripts/build-demo-fixtures.mjs",
     "fixtures:anchors": "node scripts/generate-demo-anchors.mjs",
     "fixtures:minimal": "node scripts/generate-fixtures.mjs",
-    "benchmark:alignment": "node scripts/benchmark-alignment-corpus.mjs --ci-only --json /tmp/alignment-benchmark.json"
+    "benchmark:alignment": "node scripts/benchmark-alignment-corpus.mjs --ci-only --json /tmp/alignment-benchmark.json",
+    "dataset:barline:export": "node scripts/export-barline-dataset.mjs --dry-run --json /tmp/barline-dataset-manifest.json"
   },
   "dependencies": {
     "@tonejs/midi": "^2.0.28",

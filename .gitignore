@@ -26,3 +26,7 @@ dist-ssr
 dist-ci
 benchmarks/cache/
 benchmarks/reports/
+datasets/barline-training/crops/
+datasets/barline-training/manifest.json
+datasets/barline-training/labels.json
+datasets/barline-training/*.partial.json

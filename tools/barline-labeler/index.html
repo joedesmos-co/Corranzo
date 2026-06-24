@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Corranzo barline labeler</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #111418;
+      --panel: #1a1f27;
+      --text: #e8ecf1;
+      --muted: #9aa7b5;
+      --accent: #5b9fd4;
+      --border: #2c3540;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header, footer {
+      padding: 12px 16px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+    }
+    footer { border-top: 1px solid var(--border); border-bottom: none; }
+    main { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 120px); }
+    aside {
+      border-right: 1px solid var(--border);
+      padding: 12px;
+      overflow: auto;
+    }
+    .content { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+    button, label.file-btn {
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font: inherit;
+    }
+    button:hover, label.file-btn:hover { border-color: var(--accent); }
+    button.primary { background: #234; border-color: var(--accent); }
+    .stats { color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .crop-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 24px;
+    }
+    .crop-wrap img {
+      image-rendering: pixelated;
+      max-height: 360px;
+      border: 1px solid #ccc;
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+      font-size: 13px;
+    }
+    .meta dt { color: var(--muted); }
+    .meta dd { margin: 0 0 8px; font-family: ui-monospace, monospace; }
+    .labels {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .labels button.selected { outline: 2px solid var(--accent); background: #1e2d3d; }
+    .queue button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+    .queue button.labeled { opacity: 0.65; }
+    .queue button.active { border-color: var(--accent); }
+    input[type="file"] { display: none; }
+    .hint { color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>Corranzo barline labeler</strong>
+    <span class="hint"> — local-only, no server. Load manifest.json + crop folder via file picker.</span>
+  </header>
+  <main>
+    <aside>
+      <p>
+        <label class="file-btn">Load manifest.json<input id="manifestInput" type="file" accept=".json,application/json" /></label>
+      </p>
+      <p>
+        <label class="file-btn">Load crop images (multi-select)<input id="cropsInput" type="file" accept="image/png" multiple /></label>
+      </p>
+      <p>
+        <label class="file-btn">Load existing labels.json<input id="labelsInput" type="file" accept=".json,application/json" /></label>
+      </p>
+      <div class="stats" id="stats">No manifest loaded.</div>
+      <div class="queue" id="queue"></div>
+    </aside>
+    <section class="content">
+      <div class="crop-wrap"><img id="cropImg" alt="barline crop" /></div>
+      <dl class="meta" id="meta"></dl>
+      <div class="labels" id="labelButtons"></div>
+      <p class="hint">Shortcuts: 1 real · 2 stem · 3 notehead · 4 beam · 5 unsure · 6 missing · ←/→ navigate · S save labels.json</p>
+      <p>
+        <button class="primary" id="saveBtn" type="button">Download labels.json</button>
+        <button id="skipBtn" type="button">Skip</button>
+      </p>
+    </section>
+  </main>
+  <footer class="hint">
+    Open this file directly (file://) or serve statically. Crops are matched by filename to manifest sample ids.
+  </footer>
+  <script type="module">
+    const BARLINE_LABEL = {
+      REAL_BARLINE: 'real-barline',
+      FAKE_STEM: 'fake-stem',
+      FAKE_NOTEHEAD_CLUSTER: 'fake-notehead-cluster',
+      FAKE_BEAM: 'fake-beam',
+      UNSURE: 'unsure',
+      MISSING_BARLINE: 'missing-barline',
+    }
+    const LABEL_OPTIONS = [
+      { key: '1', label: BARLINE_LABEL.REAL_BARLINE, title: 'Real barline' },
+      { key: '2', label: BARLINE_LABEL.FAKE_STEM, title: 'Fake stem' },
+      { key: '3', label: BARLINE_LABEL.FAKE_NOTEHEAD_CLUSTER, title: 'Fake notehead cluster' },
+      { key: '4', label: BARLINE_LABEL.FAKE_BEAM, title: 'Fake beam' },
+      { key: '5', label: BARLINE_LABEL.UNSURE, title: 'Unsure' },
+      { key: '6', label: BARLINE_LABEL.MISSING_BARLINE, title: 'Missing barline slot' },
+    ]
+
+    const state = {
+      manifest: null,
+      samples: [],
+      cropUrls: new Map(),
+      labels: {},
+      index: 0,
+    }
+
+    const manifestInput = document.getElementById('manifestInput')
+    const cropsInput = document.getElementById('cropsInput')
+    const labelsInput = document.getElementById('labelsInput')
+    const statsEl = document.getElementById('stats')
+    const queueEl = document.getElementById('queue')
+    const cropImg = document.getElementById('cropImg')
+    const metaEl = document.getElementById('meta')
+    const labelButtons = document.getElementById('labelButtons')
+    const saveBtn = document.getElementById('saveBtn')
+    const skipBtn = document.getElementById('skipBtn')
+
+    for (const opt of LABEL_OPTIONS) {
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.textContent = `${opt.key}. ${opt.title}`
+      btn.dataset.label = opt.label
+      btn.addEventListener('click', () => applyLabel(opt.label))
+      labelButtons.appendChild(btn)
+    }
+
+    manifestInput.addEventListener('change', async (event) => {
+      const file = event.target.files?.[0]
+      if (!file) return
+      const manifest = JSON.parse(await file.text())
+      state.manifest = manifest
+      state.samples = manifest.samples ?? []
+      state.index = 0
+      render()
+    })
+
+    cropsInput.addEventListener('change', (event) => {
+      for (const url of state.cropUrls.values()) URL.revokeObjectURL(url)
+      state.cropUrls.clear()
+      for (const file of event.target.files ?? []) {
+        const id = file.name.replace(/\.png$/i, '')
+        state.cropUrls.set(id, URL.createObjectURL(file))
+      }
+      render()
+    })
+
+    labelsInput.addEventListener('change', async (event) => {
+      const file = event.target.files?.[0]
+      if (!file) return
+      const data = JSON.parse(await file.text())
+      state.labels = { ...(data.labels ?? data) }
+      render()
+    })
+
+    saveBtn.addEventListener('click', downloadLabels)
+    skipBtn.addEventListener('click', () => {
+      state.index = Math.min(state.samples.length - 1, state.index + 1)
+      render()
+    })
+
+    document.addEventListener('keydown', (event) => {
+      if (event.target.matches('input, textarea')) return
+      const opt = LABEL_OPTIONS.find((o) => o.key === event.key)
+      if (opt) {
+        event.preventDefault()
+        applyLabel(opt.label)
+        return
+      }
+      if (event.key === 'ArrowRight') {
+        event.preventDefault()
+        state.index = Math.min(state.samples.length - 1, state.index + 1)
+        render()
+      }
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault()
+        state.index = Math.max(0, state.index - 1)
+        render()
+      }
+      if (event.key.toLowerCase() === 's') {
+        event.preventDefault()
+        downloadLabels()
+      }
+    })
+
+    function applyLabel(label) {
+      const sample = state.samples[state.index]
+      if (!sample) return
+      state.labels[sample.id] = label
+      if (state.index < state.samples.length - 1) state.index += 1
+      render()
+    }
+
+    function downloadLabels() {
+      const payload = {
+        version: 1,
+        updatedAt: new Date().toISOString(),
+        manifestGeneratedAt: state.manifest?.generatedAt ?? null,
+        labels: state.labels,
+      }
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })
+      const a = document.createElement('a')
+      a.href = URL.createObjectURL(blob)
+      a.download = 'labels.json'
+      a.click()
+      URL.revokeObjectURL(a.href)
+    }
+
+    function render() {
+      const total = state.samples.length
+      const labeled = Object.keys(state.labels).length
+      statsEl.textContent = total
+        ? `${labeled}/${total} labeled · piece filter: all`
+        : 'No manifest loaded.'
+
+      queueEl.innerHTML = ''
+      state.samples.slice(0, 200).forEach((sample, i) => {
+        const btn = document.createElement('button')
+        btn.type = 'button'
+        btn.textContent = sample.id
+        if (state.labels[sample.id]) btn.classList.add('labeled')
+        if (i === state.index) btn.classList.add('active')
+        btn.addEventListener('click', () => {
+          state.index = i
+          render()
+        })
+        queueEl.appendChild(btn)
+      })
+      if (total > 200) {
+        const more = document.createElement('div')
+        more.className = 'hint'
+        more.textContent = `… ${total - 200} more (use ←/→)`
+        queueEl.appendChild(more)
+      }
+
+      const sample = state.samples[state.index]
+      if (!sample) {
+        cropImg.removeAttribute('src')
+        metaEl.innerHTML = ''
+        return
+      }
+
+      const cropUrl = state.cropUrls.get(sample.id)
+      if (cropUrl) cropImg.src = cropUrl
+      else cropImg.removeAttribute('src')
+
+      metaEl.innerHTML = `
+        <div><dt>id</dt><dd>${sample.id}</dd></div>
+        <div><dt>piece</dt><dd>${sample.pieceId}</dd></div>
+        <div><dt>page / system</dt><dd>p${sample.page} · s${sample.systemIndex}</dd></div>
+        <div><dt>x</dt><dd>${sample.x} (${sample.xPx}px)</dd></div>
+        <div><dt>detector</dt><dd>${sample.detector.decision}${sample.detector.rejectReason ? ' · ' + sample.detector.rejectReason : ''}</dd></div>
+        <div><dt>expected measures/system</dt><dd>${sample.expectedMeasuresPerSystem ?? '—'}</dd></div>
+        <div><dt>features</dt><dd>stem=${sample.features.stemSignals} score=${sample.features.score ?? '—'}</dd></div>
+        <div><dt>label</dt><dd>${state.labels[sample.id] ?? '—'}</dd></div>
+      `
+
+      for (const btn of labelButtons.querySelectorAll('button')) {
+        btn.classList.toggle('selected', btn.dataset.label === state.labels[sample.id])
+      }
+    }
+  </script>
+</body>
+</html>
