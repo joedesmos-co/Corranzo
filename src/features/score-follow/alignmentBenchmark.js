@@ -7,7 +7,11 @@ import { PROMOTION_STATUS } from './anchorComparison.js'
 export const BENCHMARK_MANIFEST_VERSION = 1
 
 export const BLOCKER_CATEGORIES = {
+  /** @deprecated Use true-edition-mismatch / midi-derived-layout-missing instead */
   SOURCE_MISMATCH: 'source-mismatch',
+  TRUE_EDITION_MISMATCH: 'true-edition-mismatch',
+  MIDI_DERIVED_LAYOUT_MISSING: 'midi-derived-layout-missing',
+  PDF_LAYOUT_MISMATCH: 'pdf-layout-mismatch',
   MEASURE_COUNT_MISMATCH: 'measure-count-mismatch',
   DENSE_FALSE_BARLINES: 'dense-false-barlines',
   MISSING_BARLINES: 'missing-barlines',
@@ -17,6 +21,50 @@ export const BLOCKER_CATEGORIES = {
   CALIBRATION_INCOMPLETE: 'calibration-incomplete',
   SETUP_FAILED: 'setup-failed',
   MISSING_ASSETS: 'missing-assets',
+}
+
+/** Source-alignment tags reported separately from geometry blockers. */
+export const SOURCE_BLOCKER_CATEGORIES = [
+  BLOCKER_CATEGORIES.TRUE_EDITION_MISMATCH,
+  BLOCKER_CATEGORIES.MIDI_DERIVED_LAYOUT_MISSING,
+  BLOCKER_CATEGORIES.PDF_LAYOUT_MISMATCH,
+  BLOCKER_CATEGORIES.MEASURE_COUNT_MISMATCH,
+]
+
+/** Map source diagnostics to granular benchmark blocker tags. */
+export function classifySourceBlockers(source = {}) {
+  const blockers = []
+  const indicators = new Set(source.indicators ?? [])
+
+  if (indicators.has('measure-count-mismatch')) {
+    blockers.push(BLOCKER_CATEGORIES.MEASURE_COUNT_MISMATCH)
+  }
+
+  const midiDerivedLayoutMissing =
+    source.midiDerivedLayoutMissing === true ||
+    indicators.has('midi-derived-layout-missing')
+
+  const pdfLayoutMismatch =
+    source.pdfLayoutMismatch === true ||
+    indicators.has('pdf-layout-mismatch') ||
+    indicators.has('page-count-mismatch') ||
+    indicators.has('system-count-mismatch') ||
+    indicators.has('layout-start-mismatch')
+
+  const trueEditionMismatch =
+    source.trueEditionMismatchLikely === true || indicators.has('true-edition-mismatch')
+
+  if (midiDerivedLayoutMissing) {
+    blockers.push(BLOCKER_CATEGORIES.MIDI_DERIVED_LAYOUT_MISSING)
+  }
+  if (pdfLayoutMismatch) {
+    blockers.push(BLOCKER_CATEGORIES.PDF_LAYOUT_MISMATCH)
+  }
+  if (trueEditionMismatch) {
+    blockers.push(BLOCKER_CATEGORIES.TRUE_EDITION_MISMATCH)
+  }
+
+  return [...new Set(blockers)]
 }
 
 /** Validate manifest shape; returns { ok, errors }. */
@@ -87,24 +135,7 @@ export function categorizeBlockers({
     blockers.push(BLOCKER_CATEGORIES.CALIBRATION_INCOMPLETE)
   }
 
-  for (const indicator of source.indicators ?? []) {
-    if (indicator === 'measure-count-mismatch') {
-      blockers.push(BLOCKER_CATEGORIES.MEASURE_COUNT_MISMATCH)
-    }
-    if (indicator === 'system-count-mismatch') {
-      blockers.push(BLOCKER_CATEGORIES.WRONG_SYSTEM_GROUPING)
-    }
-    if (indicator === 'page-count-mismatch') {
-      blockers.push(BLOCKER_CATEGORIES.PAGE_MISMATCH)
-    }
-    if (indicator.includes('midi') || indicator === 'layout-start-mismatch') {
-      blockers.push(BLOCKER_CATEGORIES.SOURCE_MISMATCH)
-    }
-  }
-
-  if (source.editionConflictLikely) {
-    blockers.push(BLOCKER_CATEGORIES.SOURCE_MISMATCH)
-  }
+  blockers.push(...classifySourceBlockers(source))
 
   if ((systems.weak ?? 0) > 0) {
     blockers.push(BLOCKER_CATEGORIES.WEAK_SYSTEMS)
@@ -265,6 +296,11 @@ export function buildPieceBenchmarkRecord({
     readiness: diagnostics?.readiness?.status ?? PROMOTION_STATUS.NOT_SAFE,
     allocationMode: diagnostics?.allocationMode ?? calibration?.allocationMode ?? null,
     sourceIndicators: diagnostics?.source?.indicators ?? [],
+    sourceClassification: {
+      trueEditionMismatch: diagnostics?.source?.trueEditionMismatchLikely ?? false,
+      midiDerivedLayoutMissing: diagnostics?.source?.midiDerivedLayoutMissing ?? false,
+      pdfLayoutMismatch: diagnostics?.source?.pdfLayoutMismatch ?? false,
+    },
     failureReasons: [...new Set(failureReasons)].slice(0, 12),
     blockers,
   }
@@ -283,16 +319,24 @@ export function summarizeBenchmarkResults(records = []) {
   }
   const actionCounts = { auto: 0, confirm: 0, manual: 0 }
   const blockerCounts = {}
+  const sourceBlockerCounts = {}
 
   for (const record of ran) {
     readinessCounts[record.readiness] = (readinessCounts[record.readiness] ?? 0) + 1
     actionCounts[record.alignmentAction] = (actionCounts[record.alignmentAction] ?? 0) + 1
     for (const blocker of record.blockers ?? []) {
       blockerCounts[blocker] = (blockerCounts[blocker] ?? 0) + 1
+      if (SOURCE_BLOCKER_CATEGORIES.includes(blocker)) {
+        sourceBlockerCounts[blocker] = (sourceBlockerCounts[blocker] ?? 0) + 1
+      }
     }
   }
 
   const topBlockers = Object.entries(blockerCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([category, count]) => ({ category, count }))
+
+  const topSourceBlockers = Object.entries(sourceBlockerCounts)
     .sort((a, b) => b[1] - a[1])
     .map(([category, count]) => ({ category, count }))
 
@@ -304,7 +348,9 @@ export function summarizeBenchmarkResults(records = []) {
     readiness: readinessCounts,
     alignmentAction: actionCounts,
     blockerCounts,
+    sourceBlockerCounts,
     topBlockers,
+    topSourceBlockers,
     records,
   }
 }
@@ -326,6 +372,13 @@ export function formatBenchmarkSummaryText(summary) {
   if (summary.topBlockers?.length) {
     lines.push('', 'Top blockers:')
     summary.topBlockers.slice(0, 8).forEach(({ category, count }) => {
+      lines.push(`  ${count}× ${category}`)
+    })
+  }
+
+  if (summary.topSourceBlockers?.length) {
+    lines.push('', 'Source alignment (granular):')
+    summary.topSourceBlockers.forEach(({ category, count }) => {
       lines.push(`  ${count}× ${category}`)
     })
   }
@@ -390,7 +443,9 @@ export function serializeBenchmarkReport(summary) {
         readiness: summary.readiness,
         alignmentAction: summary.alignmentAction,
         blockerCounts: summary.blockerCounts,
+        sourceBlockerCounts: summary.sourceBlockerCounts,
         topBlockers: summary.topBlockers,
+        topSourceBlockers: summary.topSourceBlockers,
       },
       pieces: summary.records,
     },

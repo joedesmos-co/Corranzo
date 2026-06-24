@@ -85,8 +85,42 @@ describe('calibrationWorkflow — source alignment', () => {
     expect(source.expectedMeasures).toBe(128)
     expect(source.detectedMeasures).toBe(147)
     expect(source.indicators).toContain('measure-count-mismatch')
+    expect(source.midiDerivedLayoutMissing).toBe(true)
+    expect(source.trueEditionMismatchLikely).toBe(false)
     expect(source.editionConflictLikely).toBe(true)
     expect(['moderate', 'severe']).toContain(source.severity)
+  })
+
+  it('flags true edition mismatch when engraved layout disagrees with PDF', () => {
+    let xml = ''
+    for (let m = 1; m <= 12; m += 1) {
+      xml += `<measure number="${m}">`
+      if (m === 1) {
+        xml +=
+          '<attributes><divisions>1</divisions><staves>2</staves>' +
+          '<time><beats>4</beats><beat-type>4</beat-type></time></attributes>' +
+          F.soundTempo(120)
+      }
+      if (m === 7) {
+        xml += '<print new-system="yes"/><print new-page="yes"/>'
+      }
+      xml += F.fourQuarters()
+      xml += '</measure>'
+    }
+    const timingMap = parseMusicXml(F.scoreWrap(`<part id="P1">${xml}</part>`))
+    const entries = makeSystemEntries([6, 6, 6, 6])
+
+    const source = assessSourceAlignment({
+      timingMap,
+      systemEntries: entries,
+      pdfPageCount: 2,
+      timingSource: 'engraved.musicxml',
+    })
+
+    expect(source.midiDerivedLayoutMissing).toBe(false)
+    expect(source.pdfLayoutMismatch).toBe(true)
+    expect(source.trueEditionMismatchLikely).toBe(true)
+    expect(source.indicators).toContain('true-edition-mismatch')
   })
 
   it('detects MIDI-derived MusicXML when breaks and layout are absent', () => {

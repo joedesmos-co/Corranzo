@@ -86,9 +86,12 @@ Flat table for spreadsheets — id, readiness, measures, blockers, tags, etc.
 
 | Blocker | Typical cause |
 |---------|----------------|
-| `source-mismatch` | PDF vs MIDI/MusicXML edition disagreement |
-| `measure-count-mismatch` | Barline total ≠ written measures |
-| `dense-false-barlines` | Stem/density false positives (`too-dense`, `stem-like`) |
+| `midi-derived-layout-missing` | Timing from MIDI/music21 without system/page breaks or engraved layout |
+| `true-edition-mismatch` | PDF barline totals vs written score when timing is not MIDI-only |
+| `pdf-layout-mismatch` | PDF page/system/layout start differs from MusicXML |
+| `measure-count-mismatch` | Detected barline measure total ≠ written measures |
+| `source-mismatch` | *(legacy umbrella — superseded by granular source tags above)* |
+| `dense-false-barlines` | Stem/density false positives (`too-dense`, ambiguous density) |
 | `missing-barlines` | Unreliable or missing measure estimates |
 | `wrong-system-grouping` | System count mismatch |
 | `page-mismatch` | PDF pages ≠ MusicXML page breaks |

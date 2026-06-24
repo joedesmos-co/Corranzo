@@ -190,6 +190,36 @@ export function assessSourceAlignment({
     indicators.push('midi-timing-source')
   }
 
+  const musicXmlHasLayoutHints =
+    midiDerived.hasPageBreaks ||
+    (timingMap?.measures ?? []).some((m) => Number.isFinite(m.engravedWidth)) ||
+    (musicXmlSystemCount > 1 && midiDerived.hasSystemBreaks)
+
+  const midiDerivedLayoutMissing =
+    (!musicXmlHasLayoutHints && midiDerived.likely) ||
+    Boolean(timingSource && /\.mid$/i.test(timingSource))
+
+  const pdfLayoutMismatch =
+    indicators.includes('page-count-mismatch') ||
+    indicators.includes('system-count-mismatch') ||
+    indicators.includes('layout-start-mismatch')
+
+  const trueEditionMismatchLikely =
+    measureCountMismatch &&
+    !midiDerivedLayoutMissing &&
+    (Math.abs(measureDelta) > measureTolerance * 2 ||
+      (pdfLayoutMismatch && musicXmlHasLayoutHints))
+
+  if (midiDerivedLayoutMissing) {
+    indicators.push('midi-derived-layout-missing')
+  }
+  if (pdfLayoutMismatch) {
+    indicators.push('pdf-layout-mismatch')
+  }
+  if (trueEditionMismatchLikely) {
+    indicators.push('true-edition-mismatch')
+  }
+
   const editionConflictLikely =
     measureCountMismatch ||
     indicators.includes('system-count-mismatch') ||
@@ -222,6 +252,10 @@ export function assessSourceAlignment({
     issues,
     indicators,
     editionConflictLikely,
+    trueEditionMismatchLikely,
+    midiDerivedLayoutMissing,
+    pdfLayoutMismatch,
+    musicXmlHasLayoutHints,
     severity,
     safeToCalibrate,
     midiDerived,
@@ -515,6 +549,10 @@ export function buildCalibrationDiagnostics({
     source: {
       severity: source.severity ?? 'unknown',
       editionConflictLikely: source.editionConflictLikely ?? false,
+      trueEditionMismatchLikely: source.trueEditionMismatchLikely ?? false,
+      midiDerivedLayoutMissing: source.midiDerivedLayoutMissing ?? false,
+      pdfLayoutMismatch: source.pdfLayoutMismatch ?? false,
+      musicXmlHasLayoutHints: source.musicXmlHasLayoutHints ?? false,
       safeToCalibrate: source.safeToCalibrate ?? null,
       indicators: source.indicators ?? [],
       issues: source.issues ?? [],

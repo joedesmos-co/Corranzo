@@ -7,6 +7,7 @@ import {
   selectManifestEntries,
   buildPieceBenchmarkRecord,
   categorizeBlockers,
+  classifySourceBlockers,
   summarizeBenchmarkResults,
   formatBenchmarkSummaryText,
   pieceRecordsToCsv,
@@ -48,8 +49,11 @@ describe('alignmentBenchmark reporting', () => {
         calibrationOk: true,
         allocationMode: 'hybrid-reconciled',
         source: {
-          indicators: ['measure-count-mismatch', 'midi-derived-timing'],
+          indicators: ['measure-count-mismatch', 'midi-derived-timing', 'midi-derived-layout-missing'],
           editionConflictLikely: true,
+          trueEditionMismatchLikely: false,
+          midiDerivedLayoutMissing: true,
+          pdfLayoutMismatch: false,
           pdfPages: 5,
         },
         systems: {
@@ -81,6 +85,9 @@ describe('alignmentBenchmark reporting', () => {
     expect(record.readiness).toBe(PROMOTION_STATUS.NEEDS_REVIEW)
     expect(record.alignmentAction).toBe('confirm')
     expect(record.blockers).toContain(BLOCKER_CATEGORIES.MEASURE_COUNT_MISMATCH)
+    expect(record.blockers).toContain(BLOCKER_CATEGORIES.MIDI_DERIVED_LAYOUT_MISSING)
+    expect(record.blockers).not.toContain(BLOCKER_CATEGORIES.TRUE_EDITION_MISMATCH)
+    expect(record.blockers).not.toContain(BLOCKER_CATEGORIES.SOURCE_MISMATCH)
     expect(record.blockers).toContain(BLOCKER_CATEGORIES.DENSE_FALSE_BARLINES)
     expect(record.falsePositiveHints.tooDense).toBeGreaterThan(0)
   })
@@ -99,7 +106,10 @@ describe('alignmentBenchmark reporting', () => {
         status: 'ok',
         readiness: PROMOTION_STATUS.NOT_SAFE,
         alignmentAction: 'manual',
-        blockers: [BLOCKER_CATEGORIES.MEASURE_COUNT_MISMATCH, BLOCKER_CATEGORIES.SOURCE_MISMATCH],
+        blockers: [
+          BLOCKER_CATEGORIES.MEASURE_COUNT_MISMATCH,
+          BLOCKER_CATEGORIES.TRUE_EDITION_MISMATCH,
+        ],
       },
       { id: 'c', status: 'skipped', skipReason: 'missing-assets' },
     ])
@@ -136,7 +146,11 @@ describe('alignmentBenchmark reporting', () => {
 
   it('categorizes blockers from diagnostics fields', () => {
     const blockers = categorizeBlockers({
-      source: { indicators: ['page-count-mismatch'], editionConflictLikely: false },
+      source: {
+        indicators: ['page-count-mismatch', 'pdf-layout-mismatch'],
+        pdfLayoutMismatch: true,
+        editionConflictLikely: false,
+      },
       systems: {
         weak: 1,
         perSystem: [
@@ -150,10 +164,49 @@ describe('alignmentBenchmark reporting', () => {
       calibrationOk: false,
       setupOk: true,
     })
-    expect(blockers).toContain(BLOCKER_CATEGORIES.PAGE_MISMATCH)
+    expect(blockers).toContain(BLOCKER_CATEGORIES.PDF_LAYOUT_MISMATCH)
+    expect(blockers).not.toContain(BLOCKER_CATEGORIES.PAGE_MISMATCH)
     expect(blockers).toContain(BLOCKER_CATEGORIES.DENSE_FALSE_BARLINES)
     expect(blockers).toContain(BLOCKER_CATEGORIES.CALIBRATION_INCOMPLETE)
     expect(blockers).not.toContain(BLOCKER_CATEGORIES.MISSING_BARLINES)
+  })
+
+  it('classifies MIDI-derived layout separately from true edition mismatch', () => {
+    const midiOnly = classifySourceBlockers({
+      indicators: ['midi-derived-timing', 'midi-derived-layout-missing'],
+      midiDerivedLayoutMissing: true,
+      trueEditionMismatchLikely: false,
+    })
+    expect(midiOnly).toContain(BLOCKER_CATEGORIES.MIDI_DERIVED_LAYOUT_MISSING)
+    expect(midiOnly).not.toContain(BLOCKER_CATEGORIES.TRUE_EDITION_MISMATCH)
+    expect(midiOnly).not.toContain(BLOCKER_CATEGORIES.SOURCE_MISMATCH)
+
+    const trueEdition = classifySourceBlockers({
+      indicators: ['measure-count-mismatch', 'true-edition-mismatch'],
+      trueEditionMismatchLikely: true,
+      midiDerivedLayoutMissing: false,
+    })
+    expect(trueEdition).toContain(BLOCKER_CATEGORIES.TRUE_EDITION_MISMATCH)
+    expect(trueEdition).toContain(BLOCKER_CATEGORIES.MEASURE_COUNT_MISMATCH)
+  })
+
+  it('summarizes source blockers separately in benchmark summary', () => {
+    const summary = summarizeBenchmarkResults([
+      {
+        id: 'remote',
+        status: 'ok',
+        readiness: PROMOTION_STATUS.NEEDS_REVIEW,
+        alignmentAction: 'confirm',
+        blockers: [
+          BLOCKER_CATEGORIES.MIDI_DERIVED_LAYOUT_MISSING,
+          BLOCKER_CATEGORIES.PDF_LAYOUT_MISMATCH,
+          BLOCKER_CATEGORIES.DENSE_FALSE_BARLINES,
+        ],
+      },
+    ])
+    expect(summary.sourceBlockerCounts[BLOCKER_CATEGORIES.MIDI_DERIVED_LAYOUT_MISSING]).toBe(1)
+    expect(summary.topSourceBlockers.length).toBeGreaterThan(0)
+    expect(formatBenchmarkSummaryText(summary)).toContain('Source alignment (granular)')
   })
 
   it('does not flag dense-false-barlines from routine stem-like scan rejections alone', () => {
