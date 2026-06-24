@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import {
   BARLINE_DATASET_VERSION,
   BARLINE_LABEL,
@@ -111,5 +114,25 @@ describe('barlineDataset export', () => {
       samples,
     }
     expect(validateBarlineDatasetManifest(manifest).ok).toBe(true)
+  })
+})
+
+const __barlineTestDir = dirname(fileURLToPath(import.meta.url))
+
+describe('barline labeler static UX', () => {
+  const html = readFileSync(
+    join(__barlineTestDir, '..', 'tools', 'barline-labeler', 'index.html'),
+    'utf8',
+  )
+
+  it('includes zoom preview, navigation, and autosave for long sessions', () => {
+    expect(html).toMatch(/cropImgZoom/)
+    expect(html).toMatch(/image-rendering:\s*pixelated/)
+    expect(html).toMatch(/id="prevBtn"/)
+    expect(html).toMatch(/id="nextBtn"/)
+    expect(html).toMatch(/progressFill/)
+    expect(html).toMatch(/pieceFilter/)
+    expect(html).toMatch(/localStorage/)
+    expect(html).toMatch(/<kbd>1<\/kbd>\s*real barline/)
   })
 })

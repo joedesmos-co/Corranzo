@@ -93,8 +93,23 @@ Detector decisions: `accepted-high`, `accepted-low`, `rejected`, `thinned`, `ign
 2. Open [`tools/barline-labeler/index.html`](../tools/barline-labeler/index.html) in a browser (double-click or `open tools/barline-labeler/index.html`).
 3. **Load manifest.json** from your export directory.
 4. **Load crop images** — multi-select all files in `datasets/barline-training/crops/`.
-5. Optionally **load existing labels.json** to resume.
-6. Label with buttons or keys **1–6**; **←/→** navigate; **S** downloads updated `labels.json`.
+5. Optionally **load existing labels.json** to resume (or rely on browser autosave for the same manifest).
+6. Label with large buttons or keys **1–6**; **←/→** or **Previous/Next** navigate; filter by piece in the sidebar; use **2×–8×** zoom on crops; **S** downloads `labels.json`.
+
+### Labeler shortcuts
+
+| Key | Label |
+|-----|-------|
+| `1` | Real barline |
+| `2` | Fake stem |
+| `3` | Fake notehead cluster |
+| `4` | Fake beam |
+| `5` | Unsure |
+| `6` | Missing barline slot |
+| `←` `→` | Previous / next sample |
+| `S` | Download labels.json |
+
+Progress, piece filter, and labels autosave to `localStorage` while you work (same manifest only).
 
 Merge partial label files:
 
