@@ -51,11 +51,25 @@ describe('detectBarlineCandidates — grand-staff barline vs stem classification
     expect(diagnostics.candidatesRaw).toBeGreaterThan(positions.length)
     const totalRejected = Object.values(diagnostics.rejected).reduce((a, b) => a + b, 0)
     expect(totalRejected).toBeGreaterThan(0)
-    expect(diagnostics.densityAmbiguous).toBe(true)
-    expect(summarizeBarlineDiagnostics(diagnostics)).toMatch(/too-dense=|density-ambiguous/)
+    expect(diagnostics.thinningRemoved).toBeGreaterThan(0)
+    expect(diagnostics.densityAmbiguous).toBe(false)
+    expect(summarizeBarlineDiagnostics(diagnostics)).toMatch(/too-dense=|thinning-removed=/)
   })
 
-  it('requires multiple stem signals before hard-rejecting borderline columns', () => {
+  it('clears density ambiguity after thinning when final spacing is healthy', () => {
+    const page = densePianoPage({ systems: 1, measuresPerSystem: 6 })
+    const bounds = detectContentBounds(page)
+    const system = { y0: page.systemBands[0].top / page.height, y1: page.systemBands[0].bottom / page.height }
+    const { positions, diagnostics } = detectBarlineCandidates(page, bounds, system)
+    expect(diagnostics.thinningRemoved).toBeGreaterThan(0)
+    expect(diagnostics.densityAmbiguous).toBe(false)
+    const reliability = assessBarlineReliability(positions, bounds, diagnostics)
+    expect(reliability.measureWidthFrac).toBeGreaterThanOrEqual(0.055)
+    expect(reliability.confident).toBe(false)
+    expect(reliability.reason).toBe('density-thinned')
+  })
+
+  it('discounts stem signals when inter-staff gap continuity is strong', () => {
     const page = densePianoPage({ systems: 1, measuresPerSystem: 6 })
     const bounds = detectContentBounds(page)
     const system = { y0: page.systemBands[0].top / page.height, y1: page.systemBands[0].bottom / page.height }
@@ -105,16 +119,25 @@ describe('detectBarlineCandidates — grand-staff barline vs stem classification
     const bounds = detectContentBounds(page)
     const { systems } = detectStaffLineSystems(page, bounds, { stavesPerSystem: 2 })
     const system = systems[0]
+    expect(system.barlineThinningRemoved).toBeGreaterThan(0)
     expect(system.barlineConfident).toBe(false)
-    expect(['ambiguous-density', 'barline-grid-too-dense']).toContain(system.barlineReliabilityReason)
     expect(system.measureEstimate).toBeNull()
+    expect(['density-thinned', 'ambiguous-density', 'barline-grid-too-dense']).toContain(
+      system.barlineReliabilityReason,
+    )
     const reliability = assessBarlineReliability(
-      Array.from({ length: system.barlineCount }, (_, i) => 0.1 + i * 0.08),
+      Array.from({ length: 12 }, (_, i) => 0.08 + i * 0.03),
       bounds,
-      { densityAmbiguous: true, retainedLowConfidence: 0, rejected: {} },
+      {
+        densityAmbiguous: true,
+        retainedLowConfidence: 0,
+        rejected: { [BARLINE_REJECT_REASON.TOO_DENSE]: 8 },
+        thinningRemoved: 8,
+      },
     )
     expect(reliability.confident).toBe(false)
     expect(reliability.confidenceLevel).not.toBe('high')
+    expect(['ambiguous-density', 'barline-grid-too-dense']).toContain(reliability.reason)
   })
 
   it('keeps confident measure counts when spacing is healthy despite borderline candidates', () => {

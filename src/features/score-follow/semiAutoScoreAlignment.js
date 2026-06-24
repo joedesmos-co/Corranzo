@@ -138,6 +138,7 @@ function buildAutoSetupDebugReport({
       barlineAccepted: entry?.system?.barlineAccepted ?? null,
       barlineRejected: entry?.system?.barlineRejected ?? null,
       barlineRetainedLowConfidence: entry?.system?.barlineRetainedLowConfidence ?? null,
+      barlineThinningRemoved: entry?.system?.barlineThinningRemoved ?? null,
       barlineDensityAmbiguous: entry?.system?.barlineDensityAmbiguous ?? null,
       barlineConfidenceLevel: entry?.system?.barlineConfidenceLevel ?? null,
       firstAnchorX: startAnchor ? round3(startAnchor.x) : null,

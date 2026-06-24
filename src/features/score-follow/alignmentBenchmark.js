@@ -157,14 +157,20 @@ export function categorizeBlockers({
 
   const rejectionHints = aggregateRejectionHints(systems.perSystem)
   const perSystem = systems.perSystem ?? []
-  const hasDenseThinning = (rejectionHints['too-dense'] ?? 0) > 0
-  const hasAmbiguousDensity =
-    perSystem.some((s) => s.barlineDensityAmbiguous === true) ||
-    perSystem.some((s) =>
-      ['ambiguous-density', 'barline-grid-too-dense', 'too-many-barlines'].includes(
-        s.barlineReliabilityReason,
-      ),
-    )
+  const hasDenseThinning =
+    (rejectionHints['too-dense'] ?? 0) > 0 ||
+    perSystem.some((s) => (s.barlineThinningRemoved ?? 0) > 0)
+  const hasAmbiguousDensity = perSystem.some(
+    (s) =>
+      s.barlineConfident === false &&
+      (s.barlineDensityAmbiguous === true ||
+        ['ambiguous-density', 'barline-grid-too-dense', 'too-many-barlines', 'density-thinned'].includes(
+          s.barlineReliabilityReason,
+        )) &&
+      (s.measureEstimate == null ||
+        (s.barlineRejected?.['too-dense'] ?? 0) > 0 ||
+        (s.barlineThinningRemoved ?? 0) > 0),
+  )
   const hasRetainedLowConfidence = perSystem.some(
     (s) =>
       (s.barlineRetainedLowConfidence ?? 0) > 0 &&

@@ -359,10 +359,13 @@ export function analyzeSystemMeasureCounts({
       barlineReliabilityReason: sys.barlineReliabilityReason,
       barlineConfidenceLevel: sys.barlineConfidenceLevel ?? null,
       barlineRetainedLowConfidence: sys.barlineRetainedLowConfidence ?? 0,
+      barlineThinningRemoved: sys.barlineThinningRemoved ?? 0,
       barlineDensityAmbiguous: sys.barlineDensityAmbiguous ?? false,
+      barlineRejected: sys.barlineRejected ?? null,
       rejectedSummary: summarizeBarlineDiagnostics({
         rejected: sys.barlineRejected,
         retainedLowConfidence: sys.barlineRetainedLowConfidence,
+        thinningRemoved: sys.barlineThinningRemoved,
         densityAmbiguous: sys.barlineDensityAmbiguous,
       }),
       status,

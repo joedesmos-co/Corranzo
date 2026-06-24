@@ -173,6 +173,9 @@ export function summarizeBarlineDiagnostics(diagnostics) {
   if (Number(diagnostics.retainedLowConfidence) > 0) {
     parts.push(`retained-low-confidence=${diagnostics.retainedLowConfidence}`)
   }
+  if (Number(diagnostics.thinningRemoved) > 0) {
+    parts.push(`thinning-removed=${diagnostics.thinningRemoved}`)
+  }
   if (diagnostics.densityAmbiguous) {
     parts.push('density-ambiguous')
   }

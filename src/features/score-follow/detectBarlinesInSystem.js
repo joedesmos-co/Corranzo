@@ -105,6 +105,7 @@ function emptyBarlineDiagnostics() {
     candidatesRaw: 0,
     accepted: 0,
     retainedLowConfidence: 0,
+    thinningRemoved: 0,
     densityAmbiguous: false,
     rejected: {
       [BARLINE_REJECT_REASON.STEM_LIKE]: 0,
@@ -169,6 +170,11 @@ function countStemLikeSignals({
     signals += 1
   }
 
+  // Full grand-staff continuity through the inter-staff gap is a strong barline signal.
+  if (gapStrong && trebleStrong && bassStrong) {
+    signals = Math.max(0, signals - 1)
+  }
+
   return signals
 }
 
@@ -191,6 +197,57 @@ function gapSpacingStats(positions, contentBounds) {
     positions.length > SPARSE_LAYOUT_MAX_CANDIDATES &&
     measureWidthFrac < AMBIGUOUS_MEASURE_WIDTH_FRAC
   return { medGap, measureWidthFrac, coefficientOfVariation, tightGrid }
+}
+
+/** Post-thin density ambiguity: require multiple independent stem-grid signals. */
+function assessDensityAmbiguity(positions, contentBounds, context = {}) {
+  const { thinningAmbiguous = false, rejected = {}, preThinCount = 0 } = context
+  if (thinningAmbiguous) {
+    return true
+  }
+
+  const spacing = gapSpacingStats(positions, contentBounds)
+  if (positions.length <= SPARSE_LAYOUT_MAX_CANDIDATES && !spacing.tightGrid) {
+    return false
+  }
+
+  if (!spacing.tightGrid) {
+    return false
+  }
+
+  const rejectedDense = rejected[BARLINE_REJECT_REASON.TOO_DENSE] ?? 0
+  const rejectedInconsistent = rejected[BARLINE_REJECT_REASON.INCONSISTENT] ?? 0
+  if (rejectedInconsistent > 0) {
+    return true
+  }
+
+  const cv = spacing.coefficientOfVariation
+  // Regular tight spacing is the stem-grid signature; irregular tight spacing may be real music.
+  if (cv != null && cv < 0.14) {
+    return true
+  }
+
+  if (rejectedDense >= 3 && spacing.measureWidthFrac < AMBIGUOUS_MEASURE_WIDTH_FRAC) {
+    return true
+  }
+
+  if (preThinCount > SPARSE_LAYOUT_MAX_CANDIDATES + 2 && positions.length > SPARSE_LAYOUT_MAX_CANDIDATES) {
+    return true
+  }
+
+  return false
+}
+
+function candidateScore({ trebleStats, bassStats, gapStats, fullStats, gapStrong, trebleStrong, bassStrong }) {
+  return (
+    trebleStats.maxRunFrac +
+    bassStats.maxRunFrac +
+    gapStats.maxRunFrac +
+    fullStats.maxRunFrac * 0.5 -
+    fullStats.transitions * 0.015 +
+    (gapStrong ? 0.22 : 0) +
+    (trebleStrong && bassStrong ? 0.12 : 0)
+  )
 }
 
 /**
@@ -265,12 +322,15 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
       rawCandidates.push({
         x: xNorm,
         confidence: 'high',
-        score:
-          trebleStats.maxRunFrac +
-          bassStats.maxRunFrac +
-          gapStats.maxRunFrac +
-          fullStats.maxRunFrac * 0.5 -
-          fullStats.transitions * 0.015,
+        score: candidateScore({
+          trebleStats,
+          bassStats,
+          gapStats,
+          fullStats,
+          gapStrong,
+          trebleStrong,
+          bassStrong,
+        }),
       })
       continue
     }
@@ -302,12 +362,15 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
         x: xNorm,
         confidence: 'low',
         score:
-          trebleStats.maxRunFrac +
-          bassStats.maxRunFrac +
-          gapStats.maxRunFrac +
-          fullStats.maxRunFrac * 0.4 -
-          fullStats.transitions * 0.02 -
-          0.15,
+          candidateScore({
+            trebleStats,
+            bassStats,
+            gapStats,
+            fullStats,
+            gapStrong,
+            trebleStrong,
+            bassStrong,
+          }) - 0.15,
       })
       diagnostics.retainedLowConfidence += 1
       continue
@@ -337,30 +400,29 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
   diagnostics.accepted = positions.length
   diagnostics.retainedLowConfidence = merged.filter((c) => c.confidence === 'low').length
 
-  const spacing = gapSpacingStats(positions, contentBounds)
-  if (spacing.tightGrid) {
-    diagnostics.densityAmbiguous = true
-  }
+  const preThinCount = positions.length
+  const preSpacing = gapSpacingStats(positions, contentBounds)
+  let thinningAmbiguous = false
 
   // Sparse/simple layouts: never thin — real barlines are preserved as-is.
-  if (positions.length > SPARSE_LAYOUT_MAX_CANDIDATES && spacing.tightGrid) {
+  if (preThinCount > SPARSE_LAYOUT_MAX_CANDIDATES && preSpacing.tightGrid) {
     const thinned = thinBarlineGrid(merged, contentBounds, { conservative: true })
-    if (thinned.positions.length < positions.length) {
-      diagnostics.rejected[BARLINE_REJECT_REASON.TOO_DENSE] += positions.length - thinned.positions.length
-      if (thinned.ambiguous) {
-        diagnostics.densityAmbiguous = true
-      }
+    const removed = preThinCount - thinned.positions.length
+    if (removed > 0) {
+      diagnostics.rejected[BARLINE_REJECT_REASON.TOO_DENSE] += removed
+      diagnostics.thinningRemoved = removed
     }
+    thinningAmbiguous = thinned.ambiguous
     positions = thinned.positions
     diagnostics.accepted = positions.length
     diagnostics.retainedLowConfidence = thinned.retainedLowConfidence
-  } else if (positions.length > 3 && spacing.measureWidthFrac != null) {
-    const cv = spacing.coefficientOfVariation
-    if (cv != null && cv < 0.12 && spacing.tightGrid) {
-      diagnostics.densityAmbiguous = true
-      diagnostics.rejected[BARLINE_REJECT_REASON.INCONSISTENT] += 0
-    }
   }
+
+  diagnostics.densityAmbiguous = assessDensityAmbiguity(positions, contentBounds, {
+    thinningAmbiguous,
+    rejected: diagnostics.rejected,
+    preThinCount,
+  })
 
   return { positions, diagnostics }
 }
