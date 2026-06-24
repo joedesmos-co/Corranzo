@@ -42,4 +42,17 @@ describe('AdSense site preparation', () => {
   it('documents contact email for privacy inquiries', () => {
     expect(CONTACT_EMAIL).toBe('joedesmos.co@gmail.com')
   })
+
+  it('uses Wrangler SPA fallback instead of Netlify _redirects', () => {
+    expect(() => readFileSync(join(root, 'public', '_redirects'), 'utf8')).toThrow()
+    const wrangler = readFileSync(join(root, 'wrangler.toml'), 'utf8')
+    expect(wrangler).toContain('not_found_handling = "single-page-application"')
+    expect(wrangler).toContain('directory = "./dist"')
+  })
+
+  it('keeps static SEO files in public/', () => {
+    for (const file of ['ads.txt', 'robots.txt', 'sitemap.xml']) {
+      expect(readFileSync(join(root, 'public', file), 'utf8').length).toBeGreaterThan(0)
+    }
+  })
 })

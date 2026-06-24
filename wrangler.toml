@@ -1,0 +1,8 @@
+name = "corranzo"
+compatibility_date = "2026-06-24"
+
+# Static SPA: serve index.html for /privacy, /terms, /contact while keeping
+# ads.txt, robots.txt, sitemap.xml, and other dist/ files as real assets.
+[assets]
+directory = "./dist"
+not_found_handling = "single-page-application"
