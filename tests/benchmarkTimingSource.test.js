@@ -85,13 +85,12 @@ describe('benchmarkTimingSource', () => {
   })
 
   it('does not flag midi-derived layout missing for declared real MusicXML', () => {
-    const timingMap = parseMusicXml(
-      F.scoreWrap(`<part id="P1">${Array.from({ length: 12 }, (_, i) => {
-        const m = i + 1
-        return `<measure number="${m}">${m === 1 ? F.attributes() + F.soundTempo(120) : ''}${F.fourQuarters()}</measure>`
-      }).join('')}</part>`),
-    )
-    const entries = Array.from({ length: 3 }, (_, systemIndex) => ({
+    let xml = ''
+    for (let m = 1; m <= 12; m += 1) {
+      xml += `<measure number="${m}">${m === 1 ? F.attributes() + F.soundTempo(120) : ''}${F.fourQuarters()}</measure>`
+    }
+    const timingMap = parseMusicXml(F.scoreWrap(`<part id="P1">${xml}</part>`))
+    const entries = [0, 1, 2].map(() => ({
       system: { measureEstimate: 4 },
     }))
 
