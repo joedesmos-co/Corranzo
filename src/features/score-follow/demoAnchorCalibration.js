@@ -100,7 +100,9 @@ function makeBundledMeasureAnchor({
 }) {
   return {
     page,
-    x: measureStartX,
+    // Cursor start-lock and exact holds use anchor.x — must be the first playable
+    // beat, not the left barline / clef margin.
+    x: playableStartX,
     y,
     measureNumber,
     source: ANCHOR_SOURCE.DEMO,
@@ -311,6 +313,35 @@ export function manualSystemsFromBundledPayload(payload) {
     }))
 }
 
+/** Validate that bundled measure anchors place the cursor in playable content, not margins. */
+export function assessBundledMeasureCursorX(anchor) {
+  if (anchor?.meta?.role !== 'measure') {
+    return { ok: true }
+  }
+
+  const x = anchor.x
+  const measureStartX = anchor.meta?.measureStartX
+  const playableStartX = anchor.meta?.playableStartX
+
+  if (Number.isFinite(playableStartX) && x < playableStartX - 0.01) {
+    return { ok: false, reason: 'cursor-before-playable-start' }
+  }
+
+  // Reject hybrid bundles that park x on the left barline when beat-1 metadata
+  // sits past the clef/key area (Hungarian Dance regression).
+  if (
+    anchor.measureNumber === 1 &&
+    Number.isFinite(measureStartX) &&
+    Number.isFinite(playableStartX) &&
+    playableStartX - measureStartX > 0.05 &&
+    x < measureStartX + 0.02
+  ) {
+    return { ok: false, reason: 'measure-1-on-clef-margin' }
+  }
+
+  return { ok: true }
+}
+
 /** Validate a bundled payload (piece-agnostic; optional measure-1 guard). */
 export function validateBundledAnchorPayload(payload, options = {}) {
   const {
@@ -348,6 +379,18 @@ export function validateBundledAnchorPayload(payload, options = {}) {
   }
   if (requireMeasureOneOnPage1 && (measureOne.page !== 1 || measureOne.y > maxMeasureOneY)) {
     return { ok: false, reason: 'measure-1-not-on-system-1' }
+  }
+
+  const measureOneCursor = assessBundledMeasureCursorX(measureOne)
+  if (!measureOneCursor.ok) {
+    return measureOneCursor
+  }
+
+  for (const anchor of anchors) {
+    const cursor = assessBundledMeasureCursorX(anchor)
+    if (!cursor.ok) {
+      return cursor
+    }
   }
 
   return { ok: true, anchors, warnings: payload.calibration?.warnings ?? [] }

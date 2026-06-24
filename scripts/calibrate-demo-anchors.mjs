@@ -64,6 +64,7 @@ Options:
   --diagnose                   Print calibration diagnostics (source + system analysis)
   --report <path>              Write diagnostics JSON report
   --strict                     Strict calibration (no count reconciliation; legacy behaviour)
+  --export-preview             Export per-measure anchors from auto-setup preview (playable x)
   --no-refuse                  Allow hybrid reconcile even on severe source mismatch
   --auto                       Run PDF pixel pipeline (default when --pdf is set)
   --validate-minuet            Validate against bundled Minuet anchors (round-trip by default)
@@ -206,6 +207,47 @@ async function buildFromAutoPipeline({
   return { payload, calibration, setup }
 }
 
+/** Export supplemental per-measure anchors from analyzeSemiAutoScoreSetup (playable beat-1 x). */
+async function buildFromAutoPreviewExport({ pdfPath, musicxmlPath, meta }) {
+  const timingMap = await loadTimingMap(musicxmlPath)
+  const { numPages, pages } = await renderPdfToPages(pdfPath, { rootDir: root })
+  const renderPage = makeRenderPageCallback(pages)
+
+  const setup = await analyzeSemiAutoScoreSetup({
+    pdfSource: pdfPath,
+    numPages,
+    timingMap,
+    renderPage,
+  })
+
+  if (!setup.ok) {
+    throw new Error(setup.message ?? 'Auto setup failed.')
+  }
+
+  const supplemental = setup.preview.supplementalMeasureAnchors ?? []
+  if (supplemental.length < 2) {
+    throw new Error('Auto setup produced too few per-measure anchors for bundling.')
+  }
+
+  const warnings = []
+  if (!setup.preview.plausible) {
+    warnings.push(
+      'Auto-setup page/system mapping marked implausible — preview anchors exported for demo cursor only.',
+    )
+  }
+
+  const payload = buildBundledAnchorsFromAutoAnchors(supplemental, {
+    ...meta,
+    calibrated: CALIBRATION_SOURCE.AUTO,
+    warnings,
+    alignmentNote:
+      'Bundled demo anchors from auto-setup per-measure preview (playable beat-1 x). ' +
+        'Re-export with --export-preview after visual validation.',
+  })
+
+  return { payload, setup }
+}
+
 function runValidation(generated, referencePath, { label = 'validation' } = {}) {
   const reference = readReference(referencePath)
   const structural = validateBundledAnchorPayload(generated, { pieceId: reference.pieceId })
@@ -306,6 +348,7 @@ async function main() {
   const counts = parseCounts(argValue(args, '--counts'))
   const pieceId = argValue(args, '--piece-id') ?? 'demo-piece'
   const strict = hasFlag(args, '--strict')
+  const exportPreview = hasFlag(args, '--export-preview')
   const diagnose = hasFlag(args, '--diagnose')
   const reportPath = argValue(args, '--report')
   const refuseOnSourceMismatch = !hasFlag(args, '--no-refuse')
@@ -322,54 +365,72 @@ async function main() {
       calibrated: CALIBRATION_SOURCE.MANUAL,
     })
   } else if (pdfPath && musicxmlPath) {
-    const result = await buildFromAutoPipeline({
-      pdfPath,
-      musicxmlPath,
-      counts,
-      manualBarlinesPath: argValue(args, '--manual-barlines'),
-      manualCountOverridesPath: argValue(args, '--system-counts'),
-      strict,
-      refuseOnSourceMismatch,
-      meta: {
-        pieceId,
-        pdfFile: argValue(args, '--pdf-file') ?? basename(pdfPath),
-        timingFile: argValue(args, '--timing-file') ?? basename(musicxmlPath),
-      },
-    })
-    payload = result.payload
-    calibrationResult = result.calibration
-    setupResult = result.setup
-
-    const referencePath = validateRef ?? null
-    const diagnostics = buildCalibrationDiagnostics({
-      calibrationResult,
-      setup: setupResult,
-      payload,
-      referencePayload: referencePath ? readReference(referencePath) : null,
-    })
-
-    if (diagnose || reportPath) {
-      console.log(formatCalibrationDiagnosticsText(diagnostics))
-      console.log('')
-    }
-    if (reportPath) {
-      writeFileSync(reportPath, `${serializeCalibrationDiagnostics(diagnostics)}\n`)
-      console.log(`Wrote diagnostics → ${reportPath}`)
-    }
-
-    if (result.calibration.warnings.length) {
-      console.warn('Calibration warnings:')
-      result.calibration.warnings.forEach((w) => console.warn(`  - ${w}`))
-    }
-    if (result.calibration.refused) {
-      console.error('\nCalibration refused — sources likely disagree. Fix sources or use hybrid overrides.')
-      if (!outPath && !validateRef) {
-        process.exit(1)
+    if (exportPreview) {
+      const result = await buildFromAutoPreviewExport({
+        pdfPath,
+        musicxmlPath,
+        meta: {
+          pieceId,
+          pdfFile: argValue(args, '--pdf-file') ?? basename(pdfPath),
+          timingFile: argValue(args, '--timing-file') ?? basename(musicxmlPath),
+        },
+      })
+      payload = result.payload
+      setupResult = result.setup
+      if (result.payload.calibration?.warnings?.length) {
+        console.warn('Export warnings:')
+        result.payload.calibration.warnings.forEach((w) => console.warn(`  - ${w}`))
       }
-    } else if (!result.calibration.ok) {
-      console.warn(
-        '\nCalibration weak or incomplete — do not ship as a public demo without manual review.',
-      )
+    } else {
+      const result = await buildFromAutoPipeline({
+        pdfPath,
+        musicxmlPath,
+        counts,
+        manualBarlinesPath: argValue(args, '--manual-barlines'),
+        manualCountOverridesPath: argValue(args, '--system-counts'),
+        strict,
+        refuseOnSourceMismatch,
+        meta: {
+          pieceId,
+          pdfFile: argValue(args, '--pdf-file') ?? basename(pdfPath),
+          timingFile: argValue(args, '--timing-file') ?? basename(musicxmlPath),
+        },
+      })
+      payload = result.payload
+      calibrationResult = result.calibration
+      setupResult = result.setup
+
+      const referencePath = validateRef ?? null
+      const diagnostics = buildCalibrationDiagnostics({
+        calibrationResult,
+        setup: setupResult,
+        payload,
+        referencePayload: referencePath ? readReference(referencePath) : null,
+      })
+
+      if (diagnose || reportPath) {
+        console.log(formatCalibrationDiagnosticsText(diagnostics))
+        console.log('')
+      }
+      if (reportPath) {
+        writeFileSync(reportPath, `${serializeCalibrationDiagnostics(diagnostics)}\n`)
+        console.log(`Wrote diagnostics → ${reportPath}`)
+      }
+
+      if (result.calibration.warnings.length) {
+        console.warn('Calibration warnings:')
+        result.calibration.warnings.forEach((w) => console.warn(`  - ${w}`))
+      }
+      if (result.calibration.refused) {
+        console.error('\nCalibration refused — sources likely disagree. Fix sources or use hybrid overrides.')
+        if (!outPath && !validateRef) {
+          process.exit(1)
+        }
+      } else if (!result.calibration.ok) {
+        console.warn(
+          '\nCalibration weak or incomplete — do not ship as a public demo without manual review.',
+        )
+      }
     }
   } else {
     usage()

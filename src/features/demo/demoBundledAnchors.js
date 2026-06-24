@@ -1,6 +1,10 @@
 import { FIXTURE_FILENAMES, FIXTURE_PATHS, DEMO_PIECE } from '../../dev/fixturePaths.js'
 import { ANCHOR_SOURCE } from '../score-follow/anchorUtils.js'
 import { createAnchorId } from '../score-follow/scoreFollowStorage.js'
+import {
+  assessBundledMeasureCursorX,
+  validateBundledAnchorPayload,
+} from '../score-follow/demoAnchorCalibration.js'
 
 export const DEMO_BUNDLED_ANCHORS_PATH = FIXTURE_PATHS.demoAnchors
 
@@ -41,12 +45,15 @@ export function isDemoFixtureFileSet(pdfFileName, timingFileName) {
 function normalizeBundledAnchor(raw) {
   const measureNumber = Number(raw.measureNumber)
   const page = Number(raw.page)
-  const x = Number(raw.x)
+  const rawX = Number(raw.x)
   const y = Number(raw.y)
+  const playableStartX = Number(raw.meta?.playableStartX)
+  const resolvedX =
+    raw.meta?.role === 'measure' && Number.isFinite(playableStartX) ? playableStartX : rawX
   if (
     !Number.isFinite(measureNumber) ||
     !Number.isFinite(page) ||
-    !Number.isFinite(x) ||
+    !Number.isFinite(resolvedX) ||
     !Number.isFinite(y)
   ) {
     return null
@@ -54,7 +61,7 @@ function normalizeBundledAnchor(raw) {
   return {
     id: raw.id ?? createAnchorId(),
     page,
-    x: Math.min(1, Math.max(0, x)),
+    x: Math.min(1, Math.max(0, resolvedX)),
     y: Math.min(1, Math.max(0, y)),
     measureNumber,
     source: ANCHOR_SOURCE.DEMO,
@@ -63,45 +70,40 @@ function normalizeBundledAnchor(raw) {
 }
 
 export function validateDemoBundledPayload(payload) {
-  if (!payload || payload.pieceId !== DEMO_PIECE.id) {
-    return { ok: false, reason: 'piece-mismatch' }
+  const structural = validateBundledAnchorPayload(payload, { pieceId: DEMO_PIECE.id })
+  if (!structural.ok) {
+    return structural
   }
-  const anchors = Array.isArray(payload.anchors) ? payload.anchors : []
-  const normalized = anchors.map(normalizeBundledAnchor).filter(Boolean)
+  const normalized = structural.anchors.map((anchor) => {
+    const fromRaw = payload.anchors.find((item) => item.measureNumber === anchor.measureNumber)
+    return normalizeBundledAnchor({ ...fromRaw, source: ANCHOR_SOURCE.DEMO }) ?? anchor
+  })
   if (normalized.length < 2) {
     return { ok: false, reason: 'too-few-anchors' }
   }
 
-  const sorted = normalized.sort((a, b) => a.measureNumber - b.measureNumber)
-  const measureNumbers = sorted.map((anchor) => anchor.measureNumber)
-  const uniqueMeasures = new Set(measureNumbers)
-  if (uniqueMeasures.size !== measureNumbers.length) {
-    return { ok: false, reason: 'duplicate-measure-anchors' }
-  }
-
-  const measureOne = sorted.find((anchor) => anchor.measureNumber === 1)
-  if (!measureOne) {
-    return { ok: false, reason: 'missing-measure-1' }
-  }
-  if (measureOne.page !== 1 || measureOne.y > 0.38) {
-    return { ok: false, reason: 'measure-1-not-on-system-1' }
+  const measureOne = normalized.find((anchor) => anchor.measureNumber === 1)
+  const measureOneCursor = assessBundledMeasureCursorX(measureOne)
+  if (!measureOneCursor.ok) {
+    return measureOneCursor
   }
 
   if (import.meta.env?.DEV ?? globalThis.process?.env?.NODE_ENV !== 'production') {
     console.info('[score-follow] demo bundle validated', {
-      count: sorted.length,
+      count: normalized.length,
       measure1: {
         page: measureOne.page,
         x: measureOne.x,
         y: measureOne.y,
         systemIndex: measureOne.meta?.systemIndex,
+        playableStartX: measureOne.meta?.playableStartX,
       },
     })
   }
 
   return {
     ok: true,
-    anchors: sorted,
+    anchors: normalized.sort((a, b) => a.measureNumber - b.measureNumber),
     alignmentNote: payload.alignmentNote ?? null,
   }
 }

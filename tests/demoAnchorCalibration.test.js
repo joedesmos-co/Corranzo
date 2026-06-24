@@ -47,6 +47,30 @@ describe('demoAnchorCalibration', () => {
     expect(result.anchors).toHaveLength(32)
   })
 
+  it('buildBundledAnchorsFromAutoAnchors uses playableStartX for cursor x', () => {
+    const bundled = buildBundledAnchorsFromAutoAnchors(
+      [
+        {
+          page: 1,
+          x: 0.28,
+          y: 0.2,
+          measureNumber: 1,
+          source: 'auto-measure',
+          meta: {
+            role: 'measure',
+            measureStartX: 0.12,
+            playableStartX: 0.28,
+            playableEndX: 0.45,
+            systemEndX: 0.95,
+          },
+        },
+      ],
+      { pieceId: 'test', calibrated: CALIBRATION_SOURCE.AUTO },
+    )
+    expect(bundled.anchors[0].x).toBe(0.28)
+    expect(bundled.anchors[0].meta.measureStartX).toBe(0.12)
+  })
+
   it('calibrateAnchorsFromDetection builds full measure coverage on synthetic PDF', async () => {
     const page = cleanPianoPage({ systems: 3, measuresPerSystem: 4 })
     const timingMap = parseMusicXml(

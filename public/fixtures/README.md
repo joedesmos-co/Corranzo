@@ -9,7 +9,9 @@ Public-domain **Hungarian Dance No. 5** (Johannes Brahms, WoO 1 — piano arrang
 | `hungarian-dance-no5/hungarian-dance-no5.pdf` | Sheet music (4 pages) |
 | `hungarian-dance-no5/hungarian-dance-no5.mxl` | Score timing (104 measures) |
 | `hungarian-dance-no5/hungarian-dance-no5.mid` | Playback MIDI |
-| `hungarian-dance-no5/hungarian-dance-no5.anchors.json` | Pre-calibrated score-follow (demo only) |
+| `hungarian-dance-no5/hungarian-dance-no5.anchors.json` | Pre-calibrated score-follow (auto-preview export) |
+
+Bundled anchors are exported from the **auto-setup per-measure preview** (playable beat-1 `x`), not hybrid-reconciled barline bundles. Hybrid `--no-refuse` output is rejected by the cursor guard.
 
 Regenerate demo anchors:
 
@@ -18,10 +20,11 @@ node scripts/calibrate-demo-anchors.mjs \
   --pdf public/fixtures/hungarian-dance-no5/hungarian-dance-no5.pdf \
   --musicxml public/fixtures/hungarian-dance-no5/hungarian-dance-no5.mxl \
   --piece-id hungarian-dance-no5 \
-  --pdf-file "Hungarian Dance No. 5.pdf" \
-  --timing-file "Hungarian Dance No. 5.mxl" \
+  --export-preview \
   --out public/fixtures/hungarian-dance-no5/hungarian-dance-no5.anchors.json
 ```
+
+Do **not** use `--no-refuse` hybrid reconciliation for the public demo.
 
 ## Internal regression fixture (Minuet in G)
 
