@@ -78,6 +78,8 @@ async function benchmarkPiece(entry, options) {
       timingMap: assets.timingMap,
       pdfPageCount: assets.numPages,
       timingSource: assets.musicxmlPath,
+      timingSourceKind: assets.timingSourceKind,
+      layoutHints: assets.layoutHints,
       allowReconcile: true,
       refuseOnSourceMismatch: false,
     })
@@ -92,6 +94,9 @@ async function benchmarkPiece(entry, options) {
       calibrationResult: calibration,
       setup,
       payload,
+      timingSourceKind: assets.timingSourceKind,
+      layoutHints: assets.layoutHints,
+      timingMeta: assets.timingMeta,
     })
 
     const perSystemCounts = setup.preview.systemEntries.map(
@@ -122,6 +127,9 @@ async function benchmarkPiece(entry, options) {
       calibration,
       diagnostics,
       alignmentReport,
+      timingSourceKind: assets.timingSourceKind,
+      layoutHints: assets.layoutHints,
+      timingMeta: assets.timingMeta,
     })
   } catch (error) {
     return buildPieceBenchmarkRecord({

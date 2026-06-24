@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Public-domain alignment benchmark corpus. CI runs entries with runInCi !== false (synthetic/local). Remote Mutopia entries require --download and benchmarks/cache/.",
+  "description": "Public-domain alignment benchmark corpus. CI runs entries with runInCi !== false (synthetic/local). Remote Mutopia entries require --download and benchmarks/cache/. Optional timing.musicxmlUrl / timing.mxlUrl (or mutopia.*) prefer same-edition engraved MusicXML over MIDI conversion.",
   "entries": [
     {
       "id": "synthetic-clean-1page",
@@ -101,6 +101,7 @@
       "tags": ["simple", "one-page", "classical", "bundled-demo"],
       "runner": "local",
       "runInCi": true,
+      "timing": { "kind": "real-musicxml" },
       "assets": {
         "pdf": "public/fixtures/demo-minuet-in-g.pdf",
         "musicxml": "public/fixtures/demo-minuet-in-g.musicxml"

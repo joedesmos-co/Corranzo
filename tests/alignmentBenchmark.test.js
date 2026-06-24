@@ -197,16 +197,27 @@ describe('alignmentBenchmark reporting', () => {
         status: 'ok',
         readiness: PROMOTION_STATUS.NEEDS_REVIEW,
         alignmentAction: 'confirm',
+        timingSource: 'midi-derived-musicxml',
         blockers: [
           BLOCKER_CATEGORIES.MIDI_DERIVED_LAYOUT_MISSING,
           BLOCKER_CATEGORIES.PDF_LAYOUT_MISMATCH,
           BLOCKER_CATEGORIES.DENSE_FALSE_BARLINES,
         ],
       },
+      {
+        id: 'synthetic-clean-1page',
+        status: 'ok',
+        readiness: PROMOTION_STATUS.READY,
+        alignmentAction: 'auto',
+        timingSource: 'synthetic',
+        blockers: [],
+      },
     ])
     expect(summary.sourceBlockerCounts[BLOCKER_CATEGORIES.MIDI_DERIVED_LAYOUT_MISSING]).toBe(1)
+    expect(summary.timingSourceCounts['midi-derived-musicxml']).toBe(1)
+    expect(summary.timingSourceCounts.synthetic).toBe(1)
     expect(summary.topSourceBlockers.length).toBeGreaterThan(0)
-    expect(formatBenchmarkSummaryText(summary)).toContain('Source alignment (granular)')
+    expect(formatBenchmarkSummaryText(summary)).toContain('Timing source:')
   })
 
   it('does not flag dense-false-barlines from routine stem-like scan rejections alone', () => {

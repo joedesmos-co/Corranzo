@@ -86,6 +86,20 @@ export function validateManifest(manifest) {
     if (!entry?.license) {
       errors.push(`entries[${index}] (${entry?.id ?? '?'}): missing license`)
     }
+    const timing = entry.timing ?? {}
+    if (timing.musicxmlUrl != null && typeof timing.musicxmlUrl !== 'string') {
+      errors.push(`entries[${index}] (${entry?.id ?? '?'}): timing.musicxmlUrl must be a string`)
+    }
+    if (timing.mxlUrl != null && typeof timing.mxlUrl !== 'string') {
+      errors.push(`entries[${index}] (${entry?.id ?? '?'}): timing.mxlUrl must be a string`)
+    }
+    const mutopia = entry.mutopia ?? {}
+    if (mutopia.musicxmlUrl != null && typeof mutopia.musicxmlUrl !== 'string') {
+      errors.push(`entries[${index}] (${entry?.id ?? '?'}): mutopia.musicxmlUrl must be a string`)
+    }
+    if (mutopia.mxlUrl != null && typeof mutopia.mxlUrl !== 'string') {
+      errors.push(`entries[${index}] (${entry?.id ?? '?'}): mutopia.mxlUrl must be a string`)
+    }
   })
   return { ok: errors.length === 0, errors }
 }
@@ -200,6 +214,9 @@ export function buildPieceBenchmarkRecord({
   calibration = null,
   diagnostics = null,
   alignmentReport = null,
+  timingSourceKind = null,
+  layoutHints = null,
+  timingMeta = null,
 }) {
   const base = {
     id: entry.id,
@@ -301,6 +318,13 @@ export function buildPieceBenchmarkRecord({
       midiDerivedLayoutMissing: diagnostics?.source?.midiDerivedLayoutMissing ?? false,
       pdfLayoutMismatch: diagnostics?.source?.pdfLayoutMismatch ?? false,
     },
+    timingSource:
+      timingSourceKind ??
+      diagnostics?.source?.timingSourceKind ??
+      timingMeta?.kind ??
+      null,
+    layoutHints: layoutHints ?? diagnostics?.source?.layoutHints ?? null,
+    timingMeta: timingMeta ?? diagnostics?.source?.timingMeta ?? null,
     failureReasons: [...new Set(failureReasons)].slice(0, 12),
     blockers,
   }
@@ -320,10 +344,14 @@ export function summarizeBenchmarkResults(records = []) {
   const actionCounts = { auto: 0, confirm: 0, manual: 0 }
   const blockerCounts = {}
   const sourceBlockerCounts = {}
+  const timingSourceCounts = {}
 
   for (const record of ran) {
     readinessCounts[record.readiness] = (readinessCounts[record.readiness] ?? 0) + 1
     actionCounts[record.alignmentAction] = (actionCounts[record.alignmentAction] ?? 0) + 1
+    if (record.timingSource) {
+      timingSourceCounts[record.timingSource] = (timingSourceCounts[record.timingSource] ?? 0) + 1
+    }
     for (const blocker of record.blockers ?? []) {
       blockerCounts[blocker] = (blockerCounts[blocker] ?? 0) + 1
       if (SOURCE_BLOCKER_CATEGORIES.includes(blocker)) {
@@ -349,6 +377,7 @@ export function summarizeBenchmarkResults(records = []) {
     alignmentAction: actionCounts,
     blockerCounts,
     sourceBlockerCounts,
+    timingSourceCounts,
     topBlockers,
     topSourceBlockers,
     records,
@@ -383,6 +412,15 @@ export function formatBenchmarkSummaryText(summary) {
     })
   }
 
+  if (summary.timingSourceCounts && Object.keys(summary.timingSourceCounts).length) {
+    lines.push('', 'Timing source:')
+    Object.entries(summary.timingSourceCounts)
+      .sort((a, b) => b[1] - a[1])
+      .forEach(([kind, count]) => {
+        lines.push(`  ${count}× ${kind}`)
+      })
+  }
+
   return lines.join('\n')
 }
 
@@ -400,6 +438,10 @@ export function pieceRecordsToCsv(records = []) {
     'expectedMeasures',
     'detectedMeasures',
     'measureDelta',
+    'timingSource',
+    'layoutPageBreaks',
+    'layoutSystemBreaks',
+    'layoutEngravedWidths',
     'weakSystems',
     'blockers',
     'tags',
@@ -417,6 +459,10 @@ export function pieceRecordsToCsv(records = []) {
       record.expectedMeasures ?? '',
       record.detectedMeasures ?? '',
       record.measureDelta ?? '',
+      record.timingSource ?? '',
+      record.layoutHints?.pageBreaks ?? '',
+      record.layoutHints?.systemBreaks ?? '',
+      record.layoutHints?.engravedWidths ?? '',
       record.barlineReliability?.weakSystems ?? '',
       (record.blockers ?? []).join('|'),
       (record.tags ?? []).join('|'),
@@ -444,6 +490,7 @@ export function serializeBenchmarkReport(summary) {
         alignmentAction: summary.alignmentAction,
         blockerCounts: summary.blockerCounts,
         sourceBlockerCounts: summary.sourceBlockerCounts,
+        timingSourceCounts: summary.timingSourceCounts,
         topBlockers: summary.topBlockers,
         topSourceBlockers: summary.topSourceBlockers,
       },

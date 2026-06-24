@@ -85,7 +85,7 @@ export function detectMidiDerivedMusicXml(timingMap) {
     return { likely: false, reasons: [] }
   }
   const reasons = []
-  const hasSystemBreaks = measures.some((m) => m.systemBreakBefore)
+  const hasSystemBreaks = measures.some((m) => m.systemBreakBefore && m.number !== 1)
   const hasPageBreaks = measures.some((m) => m.pageBreakBefore)
   const hasEngravedWidth = measures.some((m) => Number.isFinite(m.engravedWidth))
 
@@ -116,6 +116,8 @@ export function assessSourceAlignment({
   systemEntries = [],
   pdfPageCount = null,
   timingSource = null,
+  timingSourceKind = null,
+  layoutHints = null,
 }) {
   const measureNumbers = getWrittenMeasureNumbers(timingMap)
   const expectedMeasures = measureNumbers.length
@@ -125,6 +127,13 @@ export function assessSourceAlignment({
   const musicXmlStarts = systemStartsFromMusicXml(timingMap)
   const musicXmlPages = pageCountFromMusicXml(timingMap)
   const midiDerived = detectMidiDerivedMusicXml(timingMap)
+  const isMidiDerivedKind =
+    timingSourceKind === 'midi-derived-musicxml' ||
+    (!timingSourceKind && midiDerived.likely && !/\.mxl$/i.test(timingSource ?? ''))
+  const isDeclaredRealOrSynthetic =
+    timingSourceKind === 'synthetic' ||
+    timingSourceKind === 'real-musicxml' ||
+    timingSourceKind === 'real-mxl'
 
   const measureDelta = detectedTotal - expectedMeasures
   const measureTolerance = Math.max(
@@ -180,7 +189,7 @@ export function assessSourceAlignment({
     indicators.push('layout-start-mismatch')
   }
 
-  if (midiDerived.likely) {
+  if (isMidiDerivedKind && midiDerived.likely) {
     issues.push(...midiDerived.reasons)
     indicators.push('midi-derived-timing')
   }
@@ -190,14 +199,25 @@ export function assessSourceAlignment({
     indicators.push('midi-timing-source')
   }
 
+  const hintedLayout = layoutHints ?? {
+    hasPageBreaks: midiDerived.hasPageBreaks,
+    hasSystemBreaks: midiDerived.hasSystemBreaks,
+    hasEngravedWidths: (timingMap?.measures ?? []).some((m) =>
+      Number.isFinite(m.engravedWidth),
+    ),
+  }
+
   const musicXmlHasLayoutHints =
-    midiDerived.hasPageBreaks ||
-    (timingMap?.measures ?? []).some((m) => Number.isFinite(m.engravedWidth)) ||
+    hintedLayout.hasPageBreaks === true ||
+    hintedLayout.hasSystemBreaks === true ||
+    hintedLayout.hasEngravedWidths === true ||
     (musicXmlSystemCount > 1 && midiDerived.hasSystemBreaks)
 
   const midiDerivedLayoutMissing =
-    (!musicXmlHasLayoutHints && midiDerived.likely) ||
-    Boolean(timingSource && /\.mid$/i.test(timingSource))
+    isMidiDerivedKind &&
+    !musicXmlHasLayoutHints &&
+    (midiDerived.likely || Boolean(timingSource && /\.mid$/i.test(timingSource))) &&
+    !isDeclaredRealOrSynthetic
 
   const pdfLayoutMismatch =
     indicators.includes('page-count-mismatch') ||
@@ -223,7 +243,7 @@ export function assessSourceAlignment({
   const editionConflictLikely =
     measureCountMismatch ||
     indicators.includes('system-count-mismatch') ||
-    (midiDerived.likely && measureCountMismatch)
+    (isMidiDerivedKind && midiDerived.likely && measureCountMismatch)
 
   const severity =
     !issues.length
@@ -260,6 +280,8 @@ export function assessSourceAlignment({
     safeToCalibrate,
     midiDerived,
     layoutMismatch,
+    timingSourceKind: timingSourceKind ?? null,
+    layoutHints: hintedLayout,
   }
 }
 
@@ -373,6 +395,8 @@ export function calibrateAnchorsHybrid({
   timingMap,
   pdfPageCount = null,
   timingSource = null,
+  timingSourceKind = null,
+  layoutHints = null,
   forcedMeasureCounts = null,
   manualCountOverrides = null,
   manualBarlinesBySystem = null,
@@ -384,6 +408,8 @@ export function calibrateAnchorsHybrid({
     systemEntries,
     pdfPageCount,
     timingSource,
+    timingSourceKind,
+    layoutHints,
   })
 
   const countAnalysis = analyzeSystemMeasureCounts({
@@ -508,6 +534,9 @@ export function buildCalibrationDiagnostics({
   setup = null,
   referencePayload = null,
   payload = null,
+  timingSourceKind = null,
+  layoutHints = null,
+  timingMeta = null,
 }) {
   const source = calibrationResult.source ?? {}
   const countAnalysis = calibrationResult.countAnalysis ?? {}
@@ -553,6 +582,9 @@ export function buildCalibrationDiagnostics({
       midiDerivedLayoutMissing: source.midiDerivedLayoutMissing ?? false,
       pdfLayoutMismatch: source.pdfLayoutMismatch ?? false,
       musicXmlHasLayoutHints: source.musicXmlHasLayoutHints ?? false,
+      timingSourceKind: timingSourceKind ?? source.timingSourceKind ?? timingMeta?.kind ?? null,
+      layoutHints: layoutHints ?? source.layoutHints ?? null,
+      timingMeta: timingMeta ?? null,
       safeToCalibrate: source.safeToCalibrate ?? null,
       indicators: source.indicators ?? [],
       issues: source.issues ?? [],
