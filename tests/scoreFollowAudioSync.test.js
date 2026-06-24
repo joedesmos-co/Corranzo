@@ -120,6 +120,16 @@ describe('audio clock cursor resolution', () => {
     expect(mid.x).toBeLessThan(sparse[0].x + 0.15)
   })
 
+  it('keeps moving across the barline after the final note of a measure', () => {
+    const atBeat4 = resolveAtAudioTime(1.5)
+    const lateTail = resolveAtAudioTime(1.88)
+    expect(lateTail.x).toBeGreaterThan(atBeat4.x + 0.001)
+    expect(lateTail.progressMode).toMatch(/bridge|note/)
+    const nextDownbeat = resolveAtAudioTime(2)
+    expect(nextDownbeat.measureNumber).toBe(2)
+    expect(nextDownbeat.x).toBeGreaterThanOrEqual(lateTail.x - 0.0001)
+  })
+
   it('page transition does not add extra delay at boundary', () => {
     const crossPage = [
       { id: 'a1', page: 1, x: 0.1, y: 0.3, measureNumber: 1, source: 'manual', meta: { playableEndX: 0.22 } },

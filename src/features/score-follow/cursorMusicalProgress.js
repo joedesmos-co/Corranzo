@@ -52,9 +52,17 @@ function noteXInMeasureSpan(note, layoutExtents, xStart, xEnd) {
 }
 
 /**
- * Build time→x knots for a measure: measure start, each note/chord onset, measure end.
+ * Build time→x knots for a measure: measure start, each note/chord onset,
+ * and optionally a terminal knot at the measure window end.
  */
-export function buildMeasureMusicalEvents(timingMap, measureNumber, window, xStart, xEnd) {
+export function buildMeasureMusicalEvents(
+  timingMap,
+  measureNumber,
+  window,
+  xStart,
+  xEnd,
+  { includeMeasureEnd = true } = {},
+) {
   if (!window || xEnd <= xStart) {
     return []
   }
@@ -114,7 +122,9 @@ export function buildMeasureMusicalEvents(timingMap, measureNumber, window, xSta
     }
   }
 
-  events.push({ timeSeconds: window.endTimeSeconds, x: xEnd, kind: 'measure-end' })
+  if (includeMeasureEnd) {
+    events.push({ timeSeconds: window.endTimeSeconds, x: xEnd, kind: 'measure-end' })
+  }
 
   events.sort((a, b) => a.timeSeconds - b.timeSeconds || a.x - b.x)
 
@@ -139,8 +149,41 @@ export function buildMeasureMusicalEvents(timingMap, measureNumber, window, xSta
   return deduped
 }
 
+function firstMusicalEventInMeasure(timingMap, measureNumber, window, xStart, xEnd) {
+  const events = buildMeasureMusicalEvents(timingMap, measureNumber, window, xStart, xEnd, {
+    includeMeasureEnd: false,
+  })
+  return (
+    events.find((event) => event.kind === 'note' || event.kind === 'chord') ??
+    events.find((event) => event.kind === 'measure-start') ??
+    null
+  )
+}
+
+function appendMeasureBridge(events, bridgeTarget) {
+  if (!bridgeTarget || bridgeTarget.timeSeconds <= events[0]?.timeSeconds) {
+    return events
+  }
+  const last = events[events.length - 1]
+  if (last && bridgeTarget.timeSeconds - last.timeSeconds < 0.001) {
+    if (bridgeTarget.x > last.x) {
+      events[events.length - 1] = { ...last, x: bridgeTarget.x, kind: 'bridge-next' }
+    }
+    return events
+  }
+  const x = Math.max(last?.x ?? bridgeTarget.x, bridgeTarget.x)
+  events.push({
+    timeSeconds: bridgeTarget.timeSeconds,
+    x,
+    kind: 'bridge-next',
+  })
+  return events
+}
+
 /**
  * Map playback time to horizontal position inside a measure using note/chord onsets.
+ * When `measureBridge` is set, the tail of the measure continues into the next
+ * measure's first onset instead of clamping at playableEndX until the barline.
  */
 export function resolveMusicalXInMeasure({
   timingMap,
@@ -148,13 +191,44 @@ export function resolveMusicalXInMeasure({
   measureNumber,
   xStart,
   xEnd,
+  measureBridge = null,
 }) {
   const window = getMeasurePlaybackWindow(timingMap, measureNumber, practiceTime)
   if (!window) {
     return null
   }
 
-  const events = buildMeasureMusicalEvents(timingMap, measureNumber, window, xStart, xEnd)
+  let events = buildMeasureMusicalEvents(timingMap, measureNumber, window, xStart, xEnd, {
+    includeMeasureEnd: !measureBridge,
+  })
+
+  if (measureBridge) {
+    const nextWindow = getMeasurePlaybackWindow(
+      timingMap,
+      measureBridge.measureNumber,
+      practiceTime,
+    )
+    if (nextWindow) {
+      const firstNext = firstMusicalEventInMeasure(
+        timingMap,
+        measureBridge.measureNumber,
+        nextWindow,
+        measureBridge.xStart,
+        measureBridge.xEnd,
+      )
+      if (firstNext) {
+        events = appendMeasureBridge(events, firstNext)
+      } else {
+        events = appendMeasureBridge(events, {
+          timeSeconds: nextWindow.startTimeSeconds,
+          x: measureBridge.xStart,
+          kind: 'measure-start',
+        })
+      }
+    } else {
+      events.push({ timeSeconds: window.endTimeSeconds, x: xEnd, kind: 'measure-end' })
+    }
+  }
   if (events.length < 2) {
     const fallback = beatWeightedProgress(
       timingMap,
@@ -217,7 +291,9 @@ export function resolveMusicalXInMeasure({
     progress,
     mode: events.some((event) => event.kind === 'note' || event.kind === 'chord')
       ? 'note-interpolate'
-      : 'beat-interpolate',
+      : events.some((event) => event.kind === 'bridge-next')
+        ? 'measure-bridge'
+        : 'beat-interpolate',
     atOnset: atNoteOnset || atNextOnset,
     events,
     nearestEvent: local < 0.5 ? before : after,

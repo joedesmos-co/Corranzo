@@ -188,12 +188,25 @@ export function resolveScoreFollowCursor({
     }
 
     if (glideTargetX != null) {
+      const measureBridge =
+        nextSameSystem && nextAnchor
+          ? {
+              measureNumber: nextAnchor.measureNumber,
+              xStart: nextAnchor.x,
+              xEnd:
+                typeof nextAnchor.meta?.playableEndX === 'number' &&
+                nextAnchor.meta.playableEndX > nextAnchor.x
+                  ? nextAnchor.meta.playableEndX
+                  : nextAnchor.x + 0.08,
+            }
+          : null
       const musical = resolveMusicalXInMeasure({
         timingMap,
         practiceTime,
         measureNumber: currentMeasure.number,
         xStart: exact.x,
         xEnd: glideTargetX,
+        measureBridge,
       })
       if (musical) {
         return {

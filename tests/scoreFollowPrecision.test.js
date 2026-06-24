@@ -154,6 +154,32 @@ describe('resolveScoreFollowCursor precision', () => {
     }
   })
 
+  it('does not hold at playableEndX after the last note before the barline', () => {
+    const tail = []
+    for (let t = 1.52; t < 2; t += 0.04) {
+      const { cursor } = resolveScoreFollowCursor({
+        timingMap,
+        practiceTime: t,
+        trustedAnchors: anchors,
+        trust: { showCursor: true, needsSetup: false },
+      })
+      expect(cursor.measureNumber).toBe(1)
+      tail.push(cursor.x)
+    }
+    expect(tail[tail.length - 1] - tail[0]).toBeGreaterThan(0.002)
+    for (let index = 1; index < tail.length; index += 1) {
+      expect(tail[index]).toBeGreaterThanOrEqual(tail[index - 1] - 0.0001)
+    }
+    const atDownbeat2 = resolveScoreFollowCursor({
+      timingMap,
+      practiceTime: 2,
+      trustedAnchors: anchors,
+      trust: { showCursor: true, needsSetup: false },
+    }).cursor
+    expect(atDownbeat2.measureNumber).toBe(2)
+    expect(atDownbeat2.x).toBeCloseTo(anchors[1].x, 3)
+  })
+
   it('defers page flip until late in the gap (no early cross-page jump)', () => {
     const crossPage = [
       {
