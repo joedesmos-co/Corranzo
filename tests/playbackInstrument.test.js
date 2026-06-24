@@ -56,6 +56,8 @@ function makeFakeTone() {
       return Promise.resolve(this)
     }
   }
+  class Compressor extends Node {}
+  class Limiter extends Node {}
   class Filter extends Node {}
   class Chorus extends Node {
     start() {
@@ -119,7 +121,7 @@ function makeFakeTone() {
     }
   }
 
-  const tone = { Gain, Reverb, Filter, Chorus, PolySynth, Synth, ToneAudioBuffers, Sampler }
+  const tone = { Gain, Reverb, Compressor, Limiter, Filter, Chorus, PolySynth, Synth, ToneAudioBuffers, Sampler }
   return { tone, created }
 }
 
@@ -306,6 +308,25 @@ describe('piano instrument — shared buffers and sync fast path', () => {
 // ─── release / dispose / status labels ─────────────────────────────────────────
 
 describe('piano instrument — release, dispose, labels', () => {
+  it('releaseAll resets voice-mix state', async () => {
+    const { tone } = makeFakeTone()
+    const sampler = makeFakeSampler()
+    const inst = createPianoInstrument({
+      tone,
+      loadSampler: () => Promise.resolve(sampler),
+      createSamplerSync: () => null,
+    })
+    await inst.whenReady()
+
+    for (let i = 0; i < 5; i += 1) {
+      inst.triggerAttackRelease('C4', 0.5, 0, 0.85)
+    }
+    expect(inst.getVoiceDiagnostics().maxSimultaneous).toBeGreaterThanOrEqual(5)
+
+    inst.releaseAll(1)
+    expect(inst.getVoiceDiagnostics().activeVoices).toBe(0)
+  })
+
   it('releaseAll forwards to the synth (and sampler when present)', async () => {
     const { tone, created } = makeFakeTone()
     const sampler = makeFakeSampler()

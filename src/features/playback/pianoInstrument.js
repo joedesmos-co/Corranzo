@@ -26,6 +26,14 @@
  */
 
 import { INSTRUMENT_STATUS } from './pianoInstrumentStatus.js'
+import {
+  createVoiceMixState,
+  getVoiceMixDiagnostics,
+  planNoteTrigger,
+  pruneVoices,
+  resetVoiceMix,
+} from './pianoVoiceMix.js'
+import { logPianoDiagnostics } from './pianoPlaybackDiagnostics.js'
 
 export {
   INSTRUMENT_STATUS,
@@ -63,8 +71,9 @@ export const PIANO_SAMPLE_URLS = {
 }
 
 const DEFAULT_SAMPLE_LOAD_TIMEOUT_MS = 12000
-const SAMPLED_VOLUME_DB = -8
+const SAMPLED_VOLUME_DB = -11
 const SYNTH_VOLUME_DB = -14
+const SAMPLED_RELEASE = 1.15
 
 /**
  * Optional self-hosting override. Set VITE_PIANO_SAMPLE_BASE_URL to serve the
@@ -144,7 +153,8 @@ function buildSamplerFromBuffers({ tone, buffers, urls, volume, release }) {
   }
   return new tone.Sampler({
     urls: bufferUrls,
-    release: release ?? 0.9,
+    release: release ?? SAMPLED_RELEASE,
+    attack: 0.001,
     volume: volume ?? SAMPLED_VOLUME_DB,
   })
 }
@@ -215,12 +225,12 @@ function createSynthVoice(tone, { volume = SYNTH_VOLUME_DB } = {}) {
   }
 
   // High polyphony so dense two-hand chords + sustained/overlapping notes are
-  // never voice-stolen on the synth fallback. (The sampler is not voice-capped.)
+  // never voice-stolen on the synth fallback.
   const synth = new tone.PolySynth({ voice: tone.Synth, maxPolyphony: 64 })
   synth.set?.({
     volume,
     oscillator: { type: 'triangle8' },
-    envelope: { attack: 0.006, decay: 2.2, sustain: 0.0, release: 0.35 },
+    envelope: { attack: 0.006, decay: 2.2, sustain: 0.0, release: 0.55 },
   })
 
   synth.connect(filter)
@@ -276,12 +286,23 @@ export function createPianoInstrument(options = {}) {
   // their existing per-voice / per-track gain, so all mute / volume / routing
   // behaviour is unchanged by construction.
   const output = new tone.Gain(1)
+  const voiceMix = createVoiceMixState()
 
-  // Gentle shared ambience for both the synth and the sampler. Low wet so it
-  // never smears the note attack.
-  const reverb = new tone.Reverb({ decay: 2.2, wet: 0.18 })
+  const compressor = new tone.Compressor({
+    threshold: -20,
+    ratio: 2.5,
+    attack: 0.005,
+    release: 0.14,
+    knee: 8,
+  })
+  const limiter = new tone.Limiter(-1)
+
+  // Gentle shared ambience. Low wet so dense chords stay clear.
+  const reverb = new tone.Reverb({ decay: 2.0, wet: 0.14 })
   reverb.generate?.()
-  reverb.connect(output)
+  reverb.connect(compressor)
+  compressor.connect(limiter)
+  limiter.connect(output)
 
   const synthVoice = createSynthVoice(tone, { volume: synthVolume })
   synthVoice.connect(reverb)
@@ -400,12 +421,30 @@ export function createPianoInstrument(options = {}) {
       if (disposed) {
         return
       }
+      const safeDuration = Math.max(duration, 0.03)
+      pruneVoices(voiceMix, time)
+      const { velocity: mixedVelocity, density } = planNoteTrigger(voiceMix, {
+        time,
+        velocity,
+        duration: safeDuration,
+      })
       const target = usingSampler && sampler ? sampler : synthVoice
-      target.triggerAttackRelease(note, duration, time, velocity)
+      target.triggerAttackRelease(note, safeDuration, time, mixedVelocity)
+      if (density >= 6) {
+        logPianoDiagnostics('dense trigger', {
+          note,
+          density,
+          velocity: mixedVelocity,
+        })
+      }
     },
     releaseAll(time) {
+      resetVoiceMix(voiceMix)
       synthVoice.releaseAll(time)
       sampler?.releaseAll?.(time)
+    },
+    getVoiceDiagnostics() {
+      return getVoiceMixDiagnostics(voiceMix)
     },
     setSampledVolume(db) {
       if (sampler?.volume) {
@@ -416,6 +455,8 @@ export function createPianoInstrument(options = {}) {
       disposed = true
       synthVoice.dispose()
       sampler?.dispose?.()
+      compressor.dispose?.()
+      limiter.dispose?.()
       reverb.dispose?.()
       output.dispose?.()
     },

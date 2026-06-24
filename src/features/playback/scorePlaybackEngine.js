@@ -5,6 +5,7 @@ import {
   buildCombinedPlaybackSchedule,
   buildMetronomeSchedule,
 } from './scorePlaybackSchedule.js'
+import { alignChordScoreTime } from './pianoVoiceMix.js'
 
 const LOOKAHEAD_SECONDS = 2.5
 const SCHEDULE_TICK_MS = 200
@@ -39,7 +40,7 @@ function midiNumberToName(midi) {
 function softenVelocity(velocity) {
   const value = typeof velocity === 'number' ? velocity : 0.82
   const clamped = Math.min(1, Math.max(0, value))
-  return Math.min(0.98, Math.max(0.28, clamped ** 1.25 * 0.86 + 0.16))
+  return Math.min(0.9, Math.max(0.28, clamped ** 1.25 * 0.82 + 0.14))
 }
 
 /**
@@ -276,13 +277,17 @@ export class ScorePlaybackEngine {
         continue
       }
 
-      const wallAt = this.wallTimeForScoreTime(event.scoreTimeSeconds)
+      const scoreTime =
+        event.type === 'note'
+          ? alignChordScoreTime(event.scoreTimeSeconds)
+          : event.scoreTimeSeconds
+      const wallAt = this.wallTimeForScoreTime(scoreTime)
       const delay = wallAt - now
       if (delay < -0.05) {
         continue
       }
 
-      const at = Math.max(now, now + delay)
+      const at = Math.max(now, wallAt)
 
       if (event.type === 'metronome') {
         const pitch = event.accent ? 'C5' : 'G4'
