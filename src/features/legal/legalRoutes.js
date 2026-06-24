@@ -21,3 +21,7 @@ export function getViewFromPathname(pathname) {
 export function pathForLegalView(view) {
   return LEGAL_PATHS[view] ?? '/'
 }
+
+export function isLegalPathname(pathname) {
+  return getViewFromPathname(pathname) != null
+}

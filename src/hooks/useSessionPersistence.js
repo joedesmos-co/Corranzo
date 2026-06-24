@@ -8,6 +8,7 @@ import {
   saveSessionMeta,
   validateRestoredSession,
 } from '../features/session/sessionPersistence.js'
+import { shouldDeferSessionRestore } from '../features/session/sessionRestoreRouting.js'
 
 const SAVE_DEBOUNCE_MS = 1200
 
@@ -21,9 +22,20 @@ export const RESTORE_STATUS = {
   NONE: 'none',
 }
 
-function initialRestoreStatus() {
+function hasSavedSessionMeta() {
   try {
-    return loadSessionMeta() ? RESTORE_STATUS.RESTORING : RESTORE_STATUS.NONE
+    return Boolean(loadSessionMeta())
+  } catch {
+    return false
+  }
+}
+
+function initialRestoreStatus(restoreSuspended) {
+  try {
+    if (restoreSuspended || shouldDeferSessionRestore(window.location.pathname)) {
+      return RESTORE_STATUS.NONE
+    }
+    return hasSavedSessionMeta() ? RESTORE_STATUS.RESTORING : RESTORE_STATUS.NONE
   } catch {
     return RESTORE_STATUS.NONE
   }
@@ -38,11 +50,15 @@ export default function useSessionPersistence({
   pageNumber,
   practicePrefs,
   onRestore,
+  restoreSuspended = false,
 }) {
-  const [restoreStatus, setRestoreStatus] = useState(initialRestoreStatus)
+  const [restoreStatus, setRestoreStatus] = useState(() => initialRestoreStatus(restoreSuspended))
   const [restoreMessage, setRestoreMessage] = useState(null)
   const restoreAttemptedRef = useRef(false)
   const saveTimerRef = useRef(null)
+  const deferredRestoreRef = useRef(
+    restoreSuspended || shouldDeferSessionRestore(window.location.pathname),
+  )
 
   const isRestoring = restoreStatus === RESTORE_STATUS.RESTORING
   const restoreGateOpen = !isRestoring
@@ -110,10 +126,27 @@ export default function useSessionPersistence({
   }, [onRestore])
 
   useEffect(() => {
+    if (restoreSuspended) {
+      if (hasSavedSessionMeta()) {
+        deferredRestoreRef.current = true
+      }
+      return
+    }
+
+    if (deferredRestoreRef.current && hasSavedSessionMeta() && !restoreAttemptedRef.current) {
+      deferredRestoreRef.current = false
+      setRestoreStatus(RESTORE_STATUS.RESTORING)
+    }
+  }, [restoreSuspended])
+
+  useEffect(() => {
+    if (restoreSuspended) {
+      return
+    }
     if (restoreStatus === RESTORE_STATUS.RESTORING) {
       attemptRestore()
     }
-  }, [attemptRestore, restoreStatus])
+  }, [attemptRestore, restoreStatus, restoreSuspended])
 
   const scheduleSave = useCallback(() => {
     if (!restoreGateOpen) {

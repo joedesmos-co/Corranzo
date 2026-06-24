@@ -37,9 +37,11 @@ import {
 import { isDemoSampleEnabled } from './features/demo/demoSampleAccess.js'
 import {
   getViewFromPathname,
+  isLegalPathname,
   isLegalView,
   pathForLegalView,
 } from './features/legal/legalRoutes.js'
+import { resolveRestoredActiveView } from './features/session/sessionRestoreRouting.js'
 import './App.css'
 import './styles/profile.css'
 import './styles/legal.css'
@@ -96,6 +98,13 @@ export default function App() {
   }, [])
 
   useEffect(() => {
+    const pathView = getViewFromPathname(window.location.pathname)
+    if (pathView) {
+      if (activeView !== pathView) {
+        setActiveView(pathView)
+      }
+      return
+    }
     syncUrlForView(activeView)
   }, [activeView, syncUrlForView])
 
@@ -340,12 +349,20 @@ export default function App() {
     setMusicXmlSource(payload.musicXmlSource)
     setPageNumber(payload.pageNumber ?? 1)
     setInitialPracticePrefs(payload.practicePrefs)
-    setActiveView(payload.musicXmlSource ? payload.activeView ?? 'library' : 'library')
+    setActiveView(
+      resolveRestoredActiveView({
+        pathname: window.location.pathname,
+        savedActiveView: payload.activeView,
+        hasMusicXml: Boolean(payload.musicXmlSource),
+      }),
+    )
     setShowWelcome(false)
     setPdfSoftWarning(null)
     setDemoPieceActive(false)
     markDemoCardHidden()
   }, [markDemoCardHidden])
+
+  const onLegalRoute = isLegalView(activeView) || isLegalPathname(window.location.pathname)
 
   const sessionPersistence = useSessionPersistence({
     pdfBuffer,
@@ -356,6 +373,7 @@ export default function App() {
     pageNumber,
     practicePrefs: practicePrefsRef.current,
     onRestore: handleSessionRestore,
+    restoreSuspended: onLegalRoute,
   })
 
   const { restoreGateOpen, isRestoring } = sessionPersistence
