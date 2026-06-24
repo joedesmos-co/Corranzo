@@ -11,7 +11,7 @@ import {
   pageCountFromMusicXml,
   systemStartsFromMusicXml,
 } from './layoutAssessment.js'
-import { summarizeBarlineRejections, summarizeBarlineDiagnostics } from './pdfPageAnalysis.js'
+import { summarizeBarlineDiagnostics } from './pdfPageAnalysis.js'
 import {
   buildBundledAnchorsFromAutoAnchors,
   calibrateAnchorsFromDetection,

@@ -125,7 +125,6 @@ function emptyBarlineDiagnostics() {
 function countStemLikeSignals({
   trebleStats,
   bassStats,
-  gapStats,
   fullStats,
   trebleStrong,
   bassStrong,
@@ -249,7 +248,6 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
     const stemSignals = countStemLikeSignals({
       trebleStats,
       bassStats,
-      gapStats,
       fullStats,
       trebleStrong,
       bassStrong,
