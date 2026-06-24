@@ -30,3 +30,10 @@ datasets/barline-training/crops/
 datasets/barline-training/manifest.json
 datasets/barline-training/labels.json
 datasets/barline-training/*.partial.json
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
