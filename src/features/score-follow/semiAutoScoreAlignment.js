@@ -21,7 +21,7 @@ import {
   systemInkWidthRatio,
   systemStartAnchorPosition,
 } from './detectStaffSystems.js'
-import { detectStaffLineSystems, detectSystemBarlinePositions } from './detectStaffLines.js'
+import { detectStaffLineSystems, detectSystemBarlinePositions, buildStaffDetectionDiagnostics } from './detectStaffLines.js'
 import { validateAutoAlignResult } from './autoAlignValidation.js'
 import { collectMeasureDefaultXHints } from './musicxmlLayoutAnchors.js'
 import { clearPdfAnalysisCache, getPageInkRatio, renderPdfPageImageData } from './pdfPageAnalysis.js'
@@ -180,7 +180,12 @@ function buildAutoSetupDebugReport({
       defaultX: defaultXCoverage > 0,
       defaultXCoverage: round2(defaultXCoverage),
     },
-    perPage: pageStages.map((p) => ({ page: p.page, stage: p.stage, systemCount: p.count })),
+    perPage: pageStages.map((p) => ({
+      page: p.page,
+      stage: p.stage,
+      systemCount: p.count,
+      staffDetection: p.staffDetection ?? null,
+    })),
     systems,
     anchorSourceCounts: sourceCounts,
   }
@@ -208,12 +213,12 @@ function collectSystemEntriesForPages(
 
   for (const { page, imageData } of renderedPages) {
     const contentBounds = detectContentBounds(imageData)
-
-    // ── PRIMARY: staff-line detection ──────────────────────────────────────
-    // Long near-full-width horizontal runs are staff lines (robust even in
-    // dense music). Group them into systems using MusicXML staves-per-system,
-    // and count barlines per system for a measures-per-system estimate.
     const staffLine = detectStaffLineSystems(imageData, contentBounds, { stavesPerSystem })
+    const staffDetection = buildStaffDetectionDiagnostics(imageData, {
+      contentBounds,
+      stavesPerSystem,
+      staffLineResult: staffLine,
+    })
     if (staffLine.systems.length >= 1) {
       for (const system of staffLine.systems) {
         systemEntries.push({
@@ -232,6 +237,7 @@ function collectSystemEntriesForPages(
         stage: DETECTION_STAGE.STAFF_LINES,
         count: staffLine.systems.length,
         contentBounds,
+        staffDetection,
       })
       continue
     }
@@ -272,7 +278,7 @@ function collectSystemEntriesForPages(
     }
 
     if (systems.length >= 1) {
-      pageStages.push({ page, stage, count: systems.length, contentBounds })
+      pageStages.push({ page, stage, count: systems.length, contentBounds, staffDetection })
     }
 
     for (const system of systems) {

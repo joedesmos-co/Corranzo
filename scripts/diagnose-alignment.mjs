@@ -12,6 +12,7 @@
  *   node scripts/diagnose-alignment.mjs --anchors
  *   node scripts/diagnose-alignment.mjs --compare
  *   node scripts/diagnose-alignment.mjs --detect
+ *   node scripts/diagnose-alignment.mjs --staff-detect score.pdf
  *   node scripts/diagnose-alignment.mjs <score.musicxml> --counts 5,5,6,5,5,6
  *   node scripts/diagnose-alignment.mjs <score.musicxml> --anchors anchors.json [--json report.json]
  */
@@ -386,8 +387,53 @@ async function runDetect() {
   console.log('PDF geometry detection: all expected-READY cases pass against ground truth.')
 }
 
+async function runStaffDetect(pdfPath) {
+  const { buildStaffDetectionDiagnostics } = await import(
+    '../src/features/score-follow/detectStaffLines.js'
+  )
+  const { renderPdfToPages } = await import('./lib/renderPdfPages.mjs')
+  const { pages } = await renderPdfToPages(pdfPath, { rootDir: root })
+  console.log(`Staff detection diagnostics for ${pdfPath} (${pages.length} page(s))`)
+  pages.forEach((imageData, index) => {
+    const diagnostics = buildStaffDetectionDiagnostics(imageData, { stavesPerSystem: 2 })
+    console.log('='.repeat(60))
+    console.log(`Page ${index + 1}`)
+    console.log(
+      `  preprocess: ${imageData.width}x${imageData.height} ink=${diagnostics.preprocessing.inkRatio} ` +
+        `paper=${diagnostics.preprocessing.paperLevel} adaptive=${diagnostics.preprocessing.adaptiveThreshold} ` +
+        `faint=${diagnostics.preprocessing.faintStaffLineThreshold}`,
+    )
+    console.log(
+      `  staff-lines: staves=${diagnostics.staffLines.staveCount} systems=${diagnostics.staffLines.systemCount} ` +
+        `stage=${diagnostics.chosenStage}`,
+    )
+    const trace = diagnostics.staffLines.trace
+    if (trace) {
+      console.log(
+        `  trace: accepted=${trace.accepted} pass=${trace.pass ?? '—'} ` +
+          `maxRun=${trace.maxRunCoverage} candidates=${trace.candidateRows} ` +
+          `reason=${trace.reason ?? '—'}`,
+      )
+    }
+    console.log(
+      `  fallbacks: conservative=${diagnostics.fallbacks.conservative} ` +
+        `tolerant=${diagnostics.fallbacks.tolerant} geometric=${diagnostics.fallbacks.geometric}`,
+    )
+    if (diagnostics.rejectionReason) {
+      console.log(`  note: ${diagnostics.rejectionReason}`)
+    }
+  })
+}
+
 const args = process.argv.slice(2)
-if (args.includes('--detect')) {
+if (args.includes('--staff-detect')) {
+  const pdfArg = args.find((arg) => arg.endsWith('.pdf'))
+  if (!pdfArg) {
+    console.error('Usage: node scripts/diagnose-alignment.mjs --staff-detect <file.pdf>')
+    process.exit(1)
+  }
+  await runStaffDetect(pdfArg)
+} else if (args.includes('--detect')) {
   await runDetect()
 } else if (args.includes('--compare')) {
   await runCompare()

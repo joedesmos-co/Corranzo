@@ -1,39 +1,48 @@
 # Corranzo demo fixtures
 
-Public-domain **Minuet in G** (BWV Anh. 114, Notebook for Anna Magdalena Bach; often attributed to Christian Petzold).
+## Built-in demo (Library card)
 
-Regenerate with:
-
-```bash
-npm run fixtures
-```
-
-Requires a one-time Python venv:
-
-```bash
-python3 -m venv .venv-fixtures
-.venv-fixtures/bin/pip install music21
-```
-
-## Files
+Public-domain **Hungarian Dance No. 5** (Johannes Brahms, WoO 1 — piano arrangement).
 
 | File | Role |
 |------|------|
-| `demo-minuet-in-g.pdf` | Sheet music (Mutopia PDF) |
-| `demo-minuet-in-g.musicxml` | Score timing — treble + bass parts |
-| `demo-minuet-in-g.mid` | Optional playback (Mutopia MIDI) |
-| `demo-minuet-in-g.anchors.json` | Pre-calibrated score-follow (demo only; not saved as user data) |
+| `hungarian-dance-no5/hungarian-dance-no5.pdf` | Sheet music (4 pages) |
+| `hungarian-dance-no5/hungarian-dance-no5.mxl` | Score timing (104 measures) |
+| `hungarian-dance-no5/hungarian-dance-no5.mid` | Playback MIDI |
+| `hungarian-dance-no5/hungarian-dance-no5.anchors.json` | Pre-calibrated score-follow (demo only) |
 
-Regenerate anchors only:
+Regenerate demo anchors:
 
 ```bash
-npm run fixtures:anchors
+node scripts/calibrate-demo-anchors.mjs \
+  --pdf public/fixtures/hungarian-dance-no5/hungarian-dance-no5.pdf \
+  --musicxml public/fixtures/hungarian-dance-no5/hungarian-dance-no5.mxl \
+  --piece-id hungarian-dance-no5 \
+  --pdf-file "Hungarian Dance No. 5.pdf" \
+  --timing-file "Hungarian Dance No. 5.mxl" \
+  --out public/fixtures/hungarian-dance-no5/hungarian-dance-no5.anchors.json
+```
+
+## Internal regression fixture (Minuet in G)
+
+Kept for tests and calibration scripts — not shown on the Library demo card.
+
+| File | Role |
+|------|------|
+| `demo-minuet-in-g.pdf` | Mutopia PDF |
+| `demo-minuet-in-g.musicxml` | Timing |
+| `demo-minuet-in-g.mid` | MIDI |
+| `demo-minuet-in-g.anchors.json` | Bundled anchors reference |
+
+```bash
+npm run fixtures:anchors   # Minuet anchors (legacy script)
+node scripts/calibrate-demo-anchors.mjs --validate-minuet
 ```
 
 ## How demo alignment works
 
-The sample uses the **Mutopia PDF** for reading and **MusicXML** (exported from the same MIDI) for timing. Staff auto-detect often fails on this engraved PDF, so Practice loads **bundled anchors** (`source: demo`) that map each system’s measures to normalized x/y on page 1. User uploads still use conservative semi-auto only — bundled anchors never mix with localStorage.
+The demo uses the **PDF** for reading and **MXL** for timing. Practice loads **bundled anchors** (`source: demo`) when available; otherwise it runs the same semi-auto setup pipeline as user uploads. Bundled anchors never mix with localStorage.
 
 ## License
 
-Mutopia Project — [public domain](https://www.mutopiaproject.org/legal.html#publicdomain).
+Public-domain repertoire (Brahms); Minuet via [Mutopia Project](https://www.mutopiaproject.org/legal.html#publicdomain).

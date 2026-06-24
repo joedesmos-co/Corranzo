@@ -18,5 +18,9 @@ export const SCORE_FOLLOW_SETUP_NEEDS_CORRECTION = SCORE_FOLLOW_NEEDS_QUICK_SETU
 
 export const SCORE_FOLLOW_SETUP_FAILED_DEMO = 'Sample setup needs a quick retry'
 
+/** When MusicXML/MXL layout cannot be reconciled with the uploaded PDF. */
+export const SCORE_FOLLOW_SETUP_FILE_MISMATCH =
+  'This score file does not appear to match the PDF closely enough for automatic setup. Try a matching MusicXML/MXL file, or use Quick Setup.'
+
 /** Concise last-resort copy shown only when no systems could be detected. */
 export const SCORE_FOLLOW_NO_SYSTEMS = 'Auto setup could not find systems. Mark system starts.'

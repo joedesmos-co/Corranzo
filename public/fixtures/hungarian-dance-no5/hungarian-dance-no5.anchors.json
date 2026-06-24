@@ -1,0 +1,2000 @@
+{
+  "version": 1,
+  "pieceId": "hungarian-dance-no5",
+  "pdfFile": "Hungarian Dance No. 5.pdf",
+  "timingFile": "Hungarian Dance No. 5.mxl",
+  "generatedAt": "2026-06-24T05:33:15.131Z",
+  "alignmentNote": "Bundled demo anchors from hybrid calibration (hybrid-reconciled). Review diagnostics before shipping as a public demo.",
+  "calibration": {
+    "source": "auto+manual-overrides",
+    "warnings": [
+      "PDF barline measure total (135) differs from written score (104) by +31.",
+      "System count: PDF 21 vs MusicXML 18.",
+      "Reconciled per-system counts (135 detected → 104 written). Review 21 system(s) flagged for correction.",
+      "System p1 y≈0.847: unreliable barline count (density-thinned).",
+      "System p2 y≈0.847: unreliable barline count (density-thinned).",
+      "System p3 y≈0.847: unreliable barline count (density-thinned).",
+      "System p4 y≈0.087: unreliable barline count (density-thinned).",
+      "System p4 y≈0.228: unreliable barline count (density-thinned).",
+      "System p4 y≈0.374: unreliable barline count (density-thinned)."
+    ]
+  },
+  "anchors": [
+    {
+      "page": 1,
+      "x": 0.12,
+      "y": 0.20353356890459362,
+      "measureNumber": 1,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 0,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.12,
+        "playableStartX": 0.25038928057553955,
+        "playableEndX": 0.41361202877697845,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.41361202877697845,
+      "y": 0.20353356890459362,
+      "measureNumber": 2,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 0,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.41361202877697845,
+        "playableStartX": 0.42796023021582735,
+        "playableEndX": 0.5911710215827337,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.5911710215827337,
+      "y": 0.20353356890459362,
+      "measureNumber": 3,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 0,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.5911710215827337,
+        "playableStartX": 0.6112585035971222,
+        "playableEndX": 0.7842141151079136,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.7842141151079136,
+      "y": 0.20353356890459362,
+      "measureNumber": 4,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 0,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.7842141151079136,
+        "playableStartX": 0.7985623165467626,
+        "playableEndX": 0.951,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.063,
+      "y": 0.3646643109540636,
+      "measureNumber": 5,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 1,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.07344531793720654,
+        "playableEndX": 0.1993549212386171,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.1993549212386171,
+      "y": 0.3646643109540636,
+      "measureNumber": 6,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 1,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.1993549212386171,
+        "playableStartX": 0.20980023917582363,
+        "playableEndX": 0.3207730378270288,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.3207730378270288,
+      "y": 0.3646643109540636,
+      "measureNumber": 7,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 1,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.3207730378270288,
+        "playableStartX": 0.39504795279218163,
+        "playableEndX": 0.5450079006440103,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.5450079006440103,
+      "y": 0.3646643109540636,
+      "measureNumber": 8,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 1,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.5450079006440103,
+        "playableStartX": 0.5554532185812169,
+        "playableEndX": 0.6753567640687337,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.6753567640687337,
+      "y": 0.3646643109540636,
+      "measureNumber": 9,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 1,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.6753567640687337,
+        "playableStartX": 0.6858020820059402,
+        "playableEndX": 0.8206511365752764,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.8206511365752764,
+      "y": 0.3646643109540636,
+      "measureNumber": 10,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 1,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.8206511365752764,
+        "playableStartX": 0.831096454512483,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.063,
+      "y": 0.5254416961130742,
+      "measureNumber": 11,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.07205511954403919,
+        "playableEndX": 0.1626494346013074,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.1626494346013074,
+      "y": 0.5254416961130742,
+      "measureNumber": 12,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.1626494346013074,
+        "playableStartX": 0.16911737713276395,
+        "playableEndX": 0.2433639674417757,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.2433639674417757,
+      "y": 0.5254416961130742,
+      "measureNumber": 13,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.2433639674417757,
+        "playableStartX": 0.2893564287925414,
+        "playableEndX": 0.3868337126937013,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.3868337126937013,
+      "y": 0.5254416961130742,
+      "measureNumber": 14,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.3868337126937013,
+        "playableStartX": 0.39330165522515786,
+        "playableEndX": 0.49077893912631776,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.49077893912631776,
+      "y": 0.5254416961130742,
+      "measureNumber": 15,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.49077893912631776,
+        "playableStartX": 0.4972468816577743,
+        "playableEndX": 0.5864883187355463,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.5864883187355463,
+      "y": 0.5254416961130742,
+      "measureNumber": 16,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.5864883187355463,
+        "playableStartX": 0.5929562612670028,
+        "playableEndX": 0.6660709616330096,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.6660709616330096,
+      "y": 0.5254416961130742,
+      "measureNumber": 17,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.6660709616330096,
+        "playableStartX": 0.6725389041644662,
+        "playableEndX": 0.7400211045759963,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.7400211045759963,
+      "y": 0.5254416961130742,
+      "measureNumber": 18,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.7400211045759963,
+        "playableStartX": 0.7464890471074529,
+        "playableEndX": 0.8139712475189831,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.8139712475189831,
+      "y": 0.5254416961130742,
+      "measureNumber": 19,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 2,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.8139712475189831,
+        "playableStartX": 0.867078445654351,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.063,
+      "y": 0.6865724381625442,
+      "measureNumber": 20,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 3,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.07202828965762652,
+        "playableEndX": 0.17625237018020995,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.17625237018020995,
+      "y": 0.6865724381625442,
+      "measureNumber": 21,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 3,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.17625237018020995,
+        "playableStartX": 0.18528065983783645,
+        "playableEndX": 0.30241519457082583,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.30241519457082583,
+      "y": 0.6865724381625442,
+      "measureNumber": 22,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 3,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.30241519457082583,
+        "playableStartX": 0.31144348422845236,
+        "playableEndX": 0.4156675647510357,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.4156675647510357,
+      "y": 0.6865724381625442,
+      "measureNumber": 23,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 3,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.4156675647510357,
+        "playableStartX": 0.42830717027171283,
+        "playableEndX": 0.5549665505934982,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.5549665505934982,
+      "y": 0.6865724381625442,
+      "measureNumber": 24,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 3,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.5549665505934982,
+        "playableStartX": 0.5639948402511247,
+        "playableEndX": 0.6682189207737081,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.6682189207737081,
+      "y": 0.6865724381625442,
+      "measureNumber": 25,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 3,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.6682189207737081,
+        "playableStartX": 0.7324175838141473,
+        "playableEndX": 0.8501088630760236,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.8501088630760236,
+      "y": 0.6865724381625442,
+      "measureNumber": 26,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 3,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.8501088630760236,
+        "playableStartX": 0.8591371527336501,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.063,
+      "y": 0.8473498233215548,
+      "measureNumber": 27,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 4,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.11218370038243439,
+        "playableEndX": 0.5584086773044968,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 1,
+      "x": 0.5584086773044968,
+      "y": 0.8473498233215548,
+      "measureNumber": 28,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 4,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.5584086773044968,
+        "playableStartX": 0.5935398918633785,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.063,
+      "y": 0.11802120141342756,
+      "measureNumber": 29,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 5,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.11896837944664032,
+        "playableEndX": 0.948,
+        "systemEndX": 0.948,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.063,
+      "y": 0.3003533568904594,
+      "measureNumber": 30,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 6,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.067908518047648,
+        "playableEndX": 0.140615941628434,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.140615941628434,
+      "y": 0.3003533568904594,
+      "measureNumber": 31,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 6,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.140615941628434,
+        "playableStartX": 0.17551959537891765,
+        "playableEndX": 0.37661748935934986,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.37661748935934986,
+      "y": 0.3003533568904594,
+      "measureNumber": 32,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 6,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.37661748935934986,
+        "playableStartX": 0.3834076059919296,
+        "playableEndX": 0.5736535846553534,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.5736535846553534,
+      "y": 0.3003533568904594,
+      "measureNumber": 33,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 6,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.5736535846553534,
+        "playableStartX": 0.6147215189873416,
+        "playableEndX": 0.6666168260461001,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.6666168260461001,
+      "y": 0.3003533568904594,
+      "measureNumber": 34,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 6,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.6666168260461001,
+        "playableStartX": 0.6734887513128073,
+        "playableEndX": 0.7226598308551211,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.7226598308551211,
+      "y": 0.3003533568904594,
+      "measureNumber": 35,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 6,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.7226598308551211,
+        "playableStartX": 0.7275683489027691,
+        "playableEndX": 0.7783592394008068,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.7783592394008068,
+      "y": 0.3003533568904594,
+      "measureNumber": 36,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 6,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.7783592394008068,
+        "playableStartX": 0.7832677574484548,
+        "playableEndX": 0.8536395445249017,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.8536395445249017,
+      "y": 0.3003533568904594,
+      "measureNumber": 37,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 6,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.8536395445249017,
+        "playableStartX": 0.8585480625725497,
+        "playableEndX": 0.9023197722624507,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.9023197722624507,
+      "y": 0.3003533568904594,
+      "measureNumber": 38,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 6,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.9023197722624507,
+        "playableStartX": 0.9072282903100988,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.063,
+      "y": 0.48268551236749113,
+      "measureNumber": 39,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 7,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.08038222628213493,
+        "playableEndX": 0.2602448127365261,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.2602448127365261,
+      "y": 0.48268551236749113,
+      "measureNumber": 40,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 7,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.2602448127365261,
+        "playableStartX": 0.4029673757014223,
+        "playableEndX": 0.705838183479055,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.705838183479055,
+      "y": 0.48268551236749113,
+      "measureNumber": 41,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 7,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.705838183479055,
+        "playableStartX": 0.72322040976119,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.063,
+      "y": 0.665017667844523,
+      "measureNumber": 42,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 8,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.07010264711483527,
+        "playableEndX": 0.13658426966292136,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.13658426966292136,
+      "y": 0.665017667844523,
+      "measureNumber": 43,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 8,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.13658426966292136,
+        "playableStartX": 0.14165758903066084,
+        "playableEndX": 0.21731346410207578,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.21731346410207578,
+      "y": 0.665017667844523,
+      "measureNumber": 44,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 8,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.21731346410207578,
+        "playableStartX": 0.22238678346981525,
+        "playableEndX": 0.3089629784802894,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.3089629784802894,
+      "y": 0.665017667844523,
+      "measureNumber": 45,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 8,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.3089629784802894,
+        "playableStartX": 0.34503850695105687,
+        "playableEndX": 0.41423858312702333,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.41423858312702333,
+      "y": 0.665017667844523,
+      "measureNumber": 46,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 8,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.41423858312702333,
+        "playableStartX": 0.4213412302418586,
+        "playableEndX": 0.48596686345458,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.48596686345458,
+      "y": 0.665017667844523,
+      "measureNumber": 47,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 8,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.48596686345458,
+        "playableStartX": 0.4910401828223195,
+        "playableEndX": 0.565381222624262,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.565381222624262,
+      "y": 0.665017667844523,
+      "measureNumber": 48,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 8,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.565381222624262,
+        "playableStartX": 0.5723993144163017,
+        "playableEndX": 0.6671435536088364,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.6671435536088364,
+      "y": 0.665017667844523,
+      "measureNumber": 49,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 8,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.6671435536088364,
+        "playableStartX": 0.7024454008760235,
+        "playableEndX": 0.7565438964006854,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.7565438964006854,
+      "y": 0.665017667844523,
+      "measureNumber": 50,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 8,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.7565438964006854,
+        "playableStartX": 0.8053027232908017,
+        "playableEndX": 0.8497111788230813,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.8497111788230813,
+      "y": 0.665017667844523,
+      "measureNumber": 51,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 8,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.8497111788230813,
+        "playableStartX": 0.8571097695677014,
+        "playableEndX": 0.9015182250999809,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.9015182250999809,
+      "y": 0.665017667844523,
+      "measureNumber": 52,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 8,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.9015182250999809,
+        "playableStartX": 0.9065915444677204,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.063,
+      "y": 0.8473498233215548,
+      "measureNumber": 53,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 9,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.1060406333306406,
+        "playableEndX": 0.4827896437515147,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 2,
+      "x": 0.4827896437515147,
+      "y": 0.8473498233215548,
+      "measureNumber": 54,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 9,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.4827896437515147,
+        "playableStartX": 0.5258302770821552,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.063,
+      "y": 0.11802120141342756,
+      "measureNumber": 55,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 10,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.07125521761360995,
+        "playableEndX": 0.1435158891247424,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.1435158891247424,
+      "y": 0.11802120141342756,
+      "measureNumber": 56,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 10,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.1435158891247424,
+        "playableStartX": 0.15177110673835234,
+        "playableEndX": 0.22403177824948478,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.22403177824948478,
+      "y": 0.11802120141342756,
+      "measureNumber": 57,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 10,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.22403177824948478,
+        "playableStartX": 0.23228699586309473,
+        "playableEndX": 0.3045476673742272,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.3045476673742272,
+      "y": 0.11802120141342756,
+      "measureNumber": 58,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 10,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.3045476673742272,
+        "playableStartX": 0.3838871879890302,
+        "playableEndX": 0.4552879409987449,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.4552879409987449,
+      "y": 0.11802120141342756,
+      "measureNumber": 59,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 10,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.4552879409987449,
+        "playableStartX": 0.4673268000185928,
+        "playableEndX": 0.5408945476518802,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.5408945476518802,
+      "y": 0.11802120141342756,
+      "measureNumber": 60,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 10,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.5408945476518802,
+        "playableStartX": 0.5491497652654901,
+        "playableEndX": 0.6227175128987774,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.6227175128987774,
+      "y": 0.11802120141342756,
+      "measureNumber": 61,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 10,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.6227175128987774,
+        "playableStartX": 0.6309727305123873,
+        "playableEndX": 0.7045404781456748,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.7045404781456748,
+      "y": 0.11802120141342756,
+      "measureNumber": 62,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 10,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.7045404781456748,
+        "playableStartX": 0.7127956957592847,
+        "playableEndX": 0.7873540695062053,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.7873540695062053,
+      "y": 0.11802120141342756,
+      "measureNumber": 63,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 10,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.7873540695062053,
+        "playableStartX": 0.7956092871198153,
+        "playableEndX": 0.8691770347531025,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.8691770347531025,
+      "y": 0.11802120141342756,
+      "measureNumber": 64,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 10,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.8691770347531025,
+        "playableStartX": 0.8774322523667124,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.063,
+      "y": 0.3003533568904594,
+      "measureNumber": 65,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 11,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.07943672653371445,
+        "playableEndX": 0.2259153544933331,
+        "systemEndX": 0.892,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.2259153544933331,
+      "y": 0.3003533568904594,
+      "measureNumber": 66,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 11,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.2259153544933331,
+        "playableStartX": 0.38388599375444044,
+        "playableEndX": 0.6237937147861143,
+        "systemEndX": 0.892,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.6237937147861143,
+      "y": 0.3003533568904594,
+      "measureNumber": 67,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 11,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.6237937147861143,
+        "playableStartX": 0.6477639409811146,
+        "playableEndX": 0.8919999999999999,
+        "systemEndX": 0.892,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.063,
+      "y": 0.48268551236749113,
+      "measureNumber": 68,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 12,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.07577070025527019,
+        "playableEndX": 0.2655326637983725,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.2655326637983725,
+      "y": 0.48268551236749113,
+      "measureNumber": 69,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 12,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.2655326637983725,
+        "playableStartX": 0.27830336405364264,
+        "playableEndX": 0.4680653275967449,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.4680653275967449,
+      "y": 0.48268551236749113,
+      "measureNumber": 70,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 12,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.4680653275967449,
+        "playableStartX": 0.48083602785201507,
+        "playableEndX": 0.6721304754257498,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.6721304754257498,
+      "y": 0.48268551236749113,
+      "measureNumber": 71,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 12,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.6721304754257498,
+        "playableStartX": 0.794867547129109,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.063,
+      "y": 0.665017667844523,
+      "measureNumber": 72,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 13,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.07313525081321691,
+        "playableEndX": 0.19704713804713803,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.19704713804713803,
+      "y": 0.665017667844523,
+      "measureNumber": 73,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 13,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.19704713804713803,
+        "playableStartX": 0.2112364891856417,
+        "playableEndX": 0.34203190093020597,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.34203190093020597,
+      "y": 0.665017667844523,
+      "measureNumber": 74,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 13,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.34203190093020597,
+        "playableStartX": 0.3521671517434229,
+        "playableEndX": 0.46846915482508694,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.46846915482508694,
+      "y": 0.665017667844523,
+      "measureNumber": 75,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 13,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.46846915482508694,
+        "playableStartX": 0.47860440563830386,
+        "playableEndX": 0.6093998173828681,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.6093998173828681,
+      "y": 0.665017667844523,
+      "measureNumber": 76,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 13,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.6093998173828681,
+        "playableStartX": 0.619535068196085,
+        "playableEndX": 0.7358370712777491,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.7358370712777491,
+      "y": 0.665017667844523,
+      "measureNumber": 77,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 13,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.7358370712777491,
+        "playableStartX": 0.8079071506020657,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.063,
+      "y": 0.8473498233215548,
+      "measureNumber": 78,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 14,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.0954769132303191,
+        "playableEndX": 0.4605444820334643,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 3,
+      "x": 0.4605444820334643,
+      "y": 0.8473498233215548,
+      "measureNumber": 79,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 14,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.4605444820334643,
+        "playableStartX": 0.4930213952637834,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.063,
+      "y": 0.08692579505300353,
+      "measureNumber": 80,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 15,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.09539792040375786,
+        "playableEndX": 0.45957754400899936,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.45957754400899936,
+      "y": 0.08692579505300353,
+      "measureNumber": 81,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 15,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.45957754400899936,
+        "playableStartX": 0.5049346325742604,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.158,
+      "y": 0.16219081272084807,
+      "measureNumber": 82,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 16,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.158,
+        "playableStartX": 0.16670219530088978,
+        "playableEndX": 0.2645221223123083,
+        "systemEndX": 0.929,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.2645221223123083,
+      "y": 0.16219081272084807,
+      "measureNumber": 83,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 16,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.2645221223123083,
+        "playableStartX": 0.3264019827310521,
+        "playableEndX": 0.45768185067439193,
+        "systemEndX": 0.929,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.45768185067439193,
+      "y": 0.16219081272084807,
+      "measureNumber": 84,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 16,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.45768185067439193,
+        "playableStartX": 0.4663840459752817,
+        "playableEndX": 0.5976566620892041,
+        "systemEndX": 0.929,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.5976566620892041,
+      "y": 0.16219081272084807,
+      "measureNumber": 85,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 16,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.5976566620892041,
+        "playableStartX": 0.6063588573900939,
+        "playableEndX": 0.7189072499482684,
+        "systemEndX": 0.929,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.7189072499482684,
+      "y": 0.16219081272084807,
+      "measureNumber": 86,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 16,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.7189072499482684,
+        "playableStartX": 0.7309452867811659,
+        "playableEndX": 0.8209187343629489,
+        "systemEndX": 0.929,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.8209187343629489,
+      "y": 0.16219081272084807,
+      "measureNumber": 87,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 16,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.8209187343629489,
+        "playableStartX": 0.8331018077841946,
+        "playableEndX": 0.929,
+        "systemEndX": 0.929,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.146,
+      "y": 0.22791519434628976,
+      "measureNumber": 88,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 17,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.146,
+        "playableStartX": 0.24098525073746313,
+        "playableEndX": 0.951,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.063,
+      "y": 0.28339222614840986,
+      "measureNumber": 89,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 18,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.11598406416289656,
+        "playableEndX": 0.19275600478284885,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.19275600478284885,
+      "y": 0.28339222614840986,
+      "measureNumber": 90,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 18,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.19275600478284885,
+        "playableStartX": 0.20020717986728293,
+        "playableEndX": 0.3067030997615568,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.3067030997615568,
+      "y": 0.28339222614840986,
+      "measureNumber": 91,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 18,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.3067030997615568,
+        "playableStartX": 0.31415427484599084,
+        "playableEndX": 0.3802710350952025,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.3802710350952025,
+      "y": 0.28339222614840986,
+      "measureNumber": 92,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 18,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.3802710350952025,
+        "playableStartX": 0.38772221017963654,
+        "playableEndX": 0.45383897042884813,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.45383897042884813,
+      "y": 0.28339222614840986,
+      "measureNumber": 93,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 18,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.45383897042884813,
+        "playableStartX": 0.4612901455132822,
+        "playableEndX": 0.5380620861332345,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.5380620861332345,
+      "y": 0.28339222614840986,
+      "measureNumber": 94,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 18,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.5380620861332345,
+        "playableStartX": 0.5484937312514422,
+        "playableEndX": 0.6467933585528385,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.6467933585528385,
+      "y": 0.28339222614840986,
+      "measureNumber": 95,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 18,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.6467933585528385,
+        "playableStartX": 0.6542445336372725,
+        "playableEndX": 0.7203612938864843,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.7203612938864843,
+      "y": 0.28339222614840986,
+      "measureNumber": 96,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 18,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.7203612938864843,
+        "playableStartX": 0.7815416506422582,
+        "playableEndX": 0.8558112382963547,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.8558112382963547,
+      "y": 0.28339222614840986,
+      "measureNumber": 97,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 18,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.8558112382963547,
+        "playableStartX": 0.8632624133807888,
+        "playableEndX": 0.9509999999999998,
+        "systemEndX": 0.951,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.063,
+      "y": 0.37420494699646645,
+      "measureNumber": 98,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 19,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.1221525707586669,
+        "playableEndX": 0.946,
+        "systemEndX": 0.946,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.063,
+      "y": 0.43109540636042404,
+      "measureNumber": 99,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 20,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.063,
+        "playableStartX": 0.06976304451890857,
+        "playableEndX": 0.15729374820488273,
+        "systemEndX": 0.946,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.15729374820488273,
+      "y": 0.43109540636042404,
+      "measureNumber": 100,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 20,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.15729374820488273,
+        "playableStartX": 0.16676201053135473,
+        "playableEndX": 0.24820033827987872,
+        "systemEndX": 0.946,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.24820033827987872,
+      "y": 0.43109540636042404,
+      "measureNumber": 101,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 20,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.24820033827987872,
+        "playableStartX": 0.2549633827987873,
+        "playableEndX": 0.34935294080102125,
+        "systemEndX": 0.946,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.34935294080102125,
+      "y": 0.43109540636042404,
+      "measureNumber": 102,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 20,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.34935294080102125,
+        "playableStartX": 0.4047704547630446,
+        "playableEndX": 0.6059203063666827,
+        "systemEndX": 0.946,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.6059203063666827,
+      "y": 0.43109540636042404,
+      "measureNumber": 103,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 20,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.6059203063666827,
+        "playableStartX": 0.6079492197223553,
+        "playableEndX": 0.7907937641614808,
+        "systemEndX": 0.946,
+        "xSource": "default-x"
+      }
+    },
+    {
+      "page": 4,
+      "x": 0.7907937641614808,
+      "y": 0.43109540636042404,
+      "measureNumber": 104,
+      "source": "demo",
+      "meta": {
+        "role": "measure",
+        "density": "pdf-extracted",
+        "systemIndex": 20,
+        "calibrated": "auto+manual-overrides",
+        "bundled": true,
+        "measureStartX": 0.7907937641614808,
+        "playableStartX": 0.7975568086803894,
+        "playableEndX": 0.946,
+        "systemEndX": 0.946,
+        "xSource": "default-x"
+      }
+    }
+  ]
+}

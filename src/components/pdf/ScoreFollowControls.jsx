@@ -9,6 +9,8 @@ function getSetupStatus({
   markingProgress,
   setupPhase,
   followNeedsSetup,
+  hasPdf,
+  hasTiming,
 }) {
   if (setupPhase === 'running') {
     return { tone: 'active', title: 'Scanning PDF…', detail: null }
@@ -20,7 +22,14 @@ function getSetupStatus({
       detail: 'Tap where it begins on the score.',
     }
   }
-  if (setupPhase === 'needs-setup' || followNeedsSetup) {
+  if (setupPhase === 'needs-setup' || setupPhase === 'failed') {
+    return {
+      tone: 'setup',
+      title: 'Needs quick setup',
+      detail: null,
+    }
+  }
+  if (followNeedsSetup && anchors.length > 0) {
     return {
       tone: 'setup',
       title: 'Needs quick setup',
@@ -30,7 +39,8 @@ function getSetupStatus({
   if (!anchors.length) {
     return {
       tone: 'setup',
-      title: 'Waiting for PDF + timing',
+      title:
+        hasPdf && hasTiming ? 'Preparing score follow…' : 'Waiting for PDF + timing',
       detail: null,
     }
   }
@@ -120,6 +130,8 @@ export default function ScoreFollowControls({
     markingProgress,
     setupPhase: setupStatus?.phase,
     followNeedsSetup,
+    hasPdf,
+    hasTiming,
   })
 
   const hasAutoAnchors = (anchorCounts?.auto ?? 0) > 0
@@ -280,7 +292,7 @@ export default function ScoreFollowControls({
         /* Last-resort fallback — only shown when auto setup genuinely failed. */
         <div className="score-follow-controls__auto-failed" role="group">
           <p className="score-follow-controls__auto-error">
-            Auto setup could not find systems. Mark system starts.
+            {semiAutoSetup?.error ?? 'Auto setup could not find systems. Mark system starts.'}
           </p>
           <button
             type="button"
@@ -444,6 +456,91 @@ export default function ScoreFollowControls({
             </button>
           )}
         </div>
+      )}
+
+      {debug?.autoSetupRuntime && (
+        <details className="score-follow-controls__auto-setup-debug">
+          <summary>Advanced diagnostics</summary>
+          <dl className="score-follow-controls__debug">
+            <div>
+              <dt>Setup phase</dt>
+              <dd>{debug.autoSetupRuntime.setupStatusPhase ?? '—'}</dd>
+            </div>
+            <div>
+              <dt>Setup status</dt>
+              <dd>{debug.autoSetupRuntime.semiAutoSetupStatus ?? '—'}</dd>
+            </div>
+            <div>
+              <dt>Detected systems</dt>
+              <dd>{debug.autoSetupRuntime.detectedSystemCount ?? '—'}</dd>
+            </div>
+            <div>
+              <dt>Timing measures</dt>
+              <dd>{debug.autoSetupRuntime.timingMeasureCount ?? '—'}</dd>
+            </div>
+            <div>
+              <dt>PDF pages</dt>
+              <dd>{debug.autoSetupRuntime.pdfPageCount ?? '—'}</dd>
+            </div>
+            <div>
+              <dt>Expected systems (MXL)</dt>
+              <dd>{debug.autoSetupRuntime.expectedSystemCount ?? '—'}</dd>
+            </div>
+            <div>
+              <dt>Allocation mode</dt>
+              <dd>{debug.autoSetupRuntime.allocationMode ?? '—'}</dd>
+            </div>
+            <div>
+              <dt>Layout confidence</dt>
+              <dd>{debug.autoSetupRuntime.layoutConfidenceLevel ?? '—'}</dd>
+            </div>
+            <div>
+              <dt>Validation</dt>
+              <dd>
+                {debug.autoSetupRuntime.validationOk == null
+                  ? '—'
+                  : debug.autoSetupRuntime.validationOk
+                    ? 'ok'
+                    : debug.autoSetupRuntime.validationMessage ?? 'failed'}
+              </dd>
+            </div>
+            <div>
+              <dt>Plausible</dt>
+              <dd>
+                {debug.autoSetupRuntime.plausible == null
+                  ? '—'
+                  : debug.autoSetupRuntime.plausible
+                    ? 'yes'
+                    : 'no'}
+              </dd>
+            </div>
+            <div>
+              <dt>Confidence</dt>
+              <dd>{debug.autoSetupRuntime.confidence ?? '—'}</dd>
+            </div>
+            <div className="score-follow-controls__debug-wide">
+              <dt>Per-system allocation</dt>
+              <dd>
+                {debug.autoSetupRuntime.perSystemAllocation?.length
+                  ? debug.autoSetupRuntime.perSystemAllocation
+                      .map(
+                        (system) =>
+                          `#${system.index} p${system.page} m${system.measureStart}-${system.measureEnd} (${system.measureCount})`,
+                      )
+                      .join(' · ')
+                  : '—'}
+              </dd>
+            </div>
+            <div className="score-follow-controls__debug-wide">
+              <dt>Setup error</dt>
+              <dd>{debug.autoSetupRuntime.setupError ?? '—'}</dd>
+            </div>
+            <div className="score-follow-controls__debug-wide">
+              <dt>Needs quick setup reason</dt>
+              <dd>{debug.autoSetupRuntime.needsQuickSetupReason ?? '—'}</dd>
+            </div>
+          </dl>
+        </details>
       )}
 
       {!embedded && debug && (

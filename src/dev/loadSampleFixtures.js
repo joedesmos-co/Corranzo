@@ -10,7 +10,7 @@ async function fetchAsFile(url, fileName, type) {
 }
 
 /**
- * Loads bundled demo piece (Minuet in G) — same shape as user uploads.
+ * Loads bundled demo piece (Hungarian Dance No. 5) — same shape as user uploads.
  */
 export async function fetchSampleFixtureFiles() {
   const [pdfFile, midiFile, musicXmlFile] = await Promise.all([
@@ -19,7 +19,7 @@ export async function fetchSampleFixtureFiles() {
     fetchAsFile(
       FIXTURE_PATHS.musicXml,
       FIXTURE_FILENAMES.musicXml,
-      'application/vnd.recordare.musicxml+xml',
+      'application/vnd.recordare.musicxml',
     ),
   ])
 

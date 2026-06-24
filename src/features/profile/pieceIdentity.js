@@ -1,6 +1,8 @@
 /**
  * Stable local key for aggregating stats per score.
  */
+import { DEMO_PIECE } from '../../dev/fixturePaths.js'
+
 export function buildPieceIdentity({
   pdfMeta,
   musicXmlSource,
@@ -17,7 +19,7 @@ export function buildPieceIdentity({
     title = pdfName.replace(/\.pdf$/i, '').replace(/^Demo — /i, '')
   }
   if (!title) {
-    title = isDemoPiece ? 'Minuet in G (sample)' : 'Untitled piece'
+    title = isDemoPiece ? `${DEMO_PIECE.title} (sample)` : 'Untitled piece'
   }
 
   return {

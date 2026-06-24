@@ -18,6 +18,7 @@ export function hasAutoSetupBeenAttempted(setupKey) {
   }
 }
 
+/** Session flag: auto setup succeeded and anchors were applied for this PDF+timing. */
 export function markAutoSetupAttempted(setupKey) {
   if (!setupKey) {
     return
@@ -38,4 +39,9 @@ export function clearAutoSetupAttempted(setupKey) {
   } catch {
     // ignore
   }
+}
+
+/** Clear a success flag left by older builds that marked every run, not only successes. */
+export function shouldClearStaleAutoSetupFlag({ attempted, autoAnchorCount }) {
+  return Boolean(attempted) && (autoAnchorCount ?? 0) < 2
 }

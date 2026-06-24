@@ -6,7 +6,12 @@ export default function DemoPieceCard({ loading = false, error = null, onLoad, c
       <div className="demo-piece__copy">
         <p className="demo-piece__badge">Built-in demo</p>
         <h3 className="demo-piece__title">{DEMO_PIECE.title}</h3>
-        <p className="demo-piece__subtitle">{DEMO_PIECE.subtitle}</p>
+        <p className="demo-piece__subtitle">
+          {DEMO_PIECE.subtitle}
+          {DEMO_PIECE.measureCount != null && DEMO_PIECE.pageCount != null
+            ? ` · ${DEMO_PIECE.measureCount} measures · ${DEMO_PIECE.pageCount} pages`
+            : ''}
+        </p>
       </div>
       <div className="demo-piece__action">
         <button

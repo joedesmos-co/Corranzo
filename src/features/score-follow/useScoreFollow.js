@@ -12,7 +12,9 @@ import {
   clearAutoSetupAttempted,
   hasAutoSetupBeenAttempted,
   markAutoSetupAttempted,
+  shouldClearStaleAutoSetupFlag,
 } from './scoreFollowAutoSetupStorage.js'
+import { buildAutoSetupRuntimeDiagnostics, describeAutoSetupRejection } from './autoSetupRuntimeDiagnostics.js'
 import { analyzeSemiAutoScoreSetup } from './semiAutoScoreAlignment.js'
 import { buildAnchorsFromSystemStarts } from './buildAnchorsFromSystemStarts.js'
 import { createAnchorId } from './scoreFollowStorage.js'
@@ -38,6 +40,7 @@ import {
 } from '../demo/demoBundledAnchors.js'
 import {
   SCORE_FOLLOW_NEEDS_QUICK_SETUP,
+  SCORE_FOLLOW_SETUP_FILE_MISMATCH,
   SCORE_FOLLOW_NEEDS_SETUP,
   SCORE_FOLLOW_NO_SYSTEMS,
   SCORE_FOLLOW_SETUP_APPROXIMATE,
@@ -135,6 +138,7 @@ export default function useScoreFollow({
   // Dev-only structured report of the last auto-setup analysis (systems, measure
   // ranges, hints used, stage/confidence). Surfaced via `debug`, not normal UI.
   const [autoSetupReport, setAutoSetupReport] = useState(null)
+  const [autoSetupRuntimeDiagnostics, setAutoSetupRuntimeDiagnostics] = useState(null)
 
   // System-start fallback mode: user taps the start of each staff system
   // instead of marking every measure. Used when auto PDF analysis fails.
@@ -502,7 +506,7 @@ export default function useScoreFollow({
         return
       }
 
-      if (!force && anchors.length > 0) {
+      if (!force && (anchorCounts.demo > 0 || anchorTrust.showCursor)) {
         setSetupStatus({
           phase: 'ready',
           message: setupReadyMessage,
@@ -510,7 +514,7 @@ export default function useScoreFollow({
         return
       }
 
-      if (!force && hasAutoSetupBeenAttempted(autoSetupKey)) {
+      if (!force && hasAutoSetupBeenAttempted(autoSetupKey) && anchorCounts.auto >= 2) {
         return
       }
 
@@ -549,9 +553,24 @@ export default function useScoreFollow({
           },
         })
 
-        markAutoSetupAttempted(autoSetupKey)
+        const recordAutoSetupRuntime = (partial) => {
+          setAutoSetupRuntimeDiagnostics(
+            buildAutoSetupRuntimeDiagnostics({
+              timingMap,
+              numPages,
+              autoSetupAttempted: hasAutoSetupBeenAttempted(autoSetupKey),
+              ...partial,
+            }),
+          )
+        }
 
         if (!result.ok) {
+          recordAutoSetupRuntime({
+            result,
+            preview: null,
+            setupStatus: { phase: 'failed', message: setupFailedMessage },
+            semiAutoSetup: { status: 'failed', error: result.message },
+          })
           setSemiAutoSetup({
             status: 'failed',
             progress: 0,
@@ -575,6 +594,7 @@ export default function useScoreFollow({
         // / reconciled / low-confidence reads "Approximate cursor". Manual
         // markers always override these auto guides.
         if (preview.proposedAnchors?.length >= 2 && preview.plausible) {
+          markAutoSetupAttempted(autoSetupKey)
           setAutoAnchors(preview.proposedAnchors)
           // Barline-derived per-measure anchors refine the coarse system spans.
           if (preview.supplementalMeasureAnchors?.length >= 2) {
@@ -599,6 +619,12 @@ export default function useScoreFollow({
             preview.layoutMismatch?.mismatch && !isDemoSession
               ? LAYOUT_MISMATCH_MESSAGE
               : baseReadyMessage
+          recordAutoSetupRuntime({
+            result,
+            preview,
+            setupStatus: { phase: 'ready', message: readyMessage },
+            semiAutoSetup: { status: 'confirmed', error: null },
+          })
           setSetupStatus({ phase: 'ready', message: readyMessage })
           return
         }
@@ -606,27 +632,48 @@ export default function useScoreFollow({
         // Implausible mapping (e.g. detected system count can't be reconciled
         // with MusicXML) → do NOT show a confidently-wrong cursor. Fall back to
         // a short "Needs quick setup" prompt instead.
+        const rejection = describeAutoSetupRejection(result, preview)
+        const needsSetupError = result.noSystems
+          ? SCORE_FOLLOW_NO_SYSTEMS
+          : rejection?.code === 'implausible-mapping' || rejection?.code === 'too-few-anchors'
+            ? SCORE_FOLLOW_SETUP_FILE_MISMATCH
+            : SCORE_FOLLOW_NEEDS_QUICK_SETUP
+        recordAutoSetupRuntime({
+          result,
+          preview,
+          setupStatus: { phase: 'needs-setup', message: SCORE_FOLLOW_NEEDS_QUICK_SETUP },
+          semiAutoSetup: { status: 'failed', error: needsSetupError },
+        })
         setSemiAutoSetup({
           status: 'failed',
           progress: 0,
           message: '',
-          error: result.noSystems ? SCORE_FOLLOW_NO_SYSTEMS : SCORE_FOLLOW_NEEDS_QUICK_SETUP,
-          preview: null,
+          error: needsSetupError,
+          preview,
         })
         setSetupStatus({
           phase: 'needs-setup',
           message: SCORE_FOLLOW_NEEDS_QUICK_SETUP,
         })
       } catch (error) {
-        markAutoSetupAttempted(autoSetupKey)
+        const setupError =
+          error instanceof Error ? error.message : 'Automatic setup failed.'
+        setAutoSetupRuntimeDiagnostics(
+          buildAutoSetupRuntimeDiagnostics({
+            result: { ok: false },
+            preview: null,
+            timingMap,
+            numPages,
+            setupStatus: { phase: 'failed', message: setupFailedMessage },
+            semiAutoSetup: { status: 'failed', error: setupError },
+            autoSetupAttempted: hasAutoSetupBeenAttempted(autoSetupKey),
+          }),
+        )
         setSemiAutoSetup({
           status: 'failed',
           progress: 0,
           message: '',
-          error:
-            error instanceof Error
-              ? error.message
-              : 'Automatic setup failed.',
+          error: setupError,
           preview: null,
         })
         setSetupStatus({
@@ -643,7 +690,9 @@ export default function useScoreFollow({
       timingMap,
       autoSetupKey,
       anchorCounts.manual,
-      anchors.length,
+      anchorCounts.auto,
+      anchorCounts.demo,
+      anchorTrust.showCursor,
       clearAutoAnchors,
       setAutoAnchors,
       setSupplementalAnchors,
@@ -663,6 +712,7 @@ export default function useScoreFollow({
     demoBundledLoadRef.current = null
     layoutSupplementKeyRef.current = null
     setAutoSetupReport(null)
+    setAutoSetupRuntimeDiagnostics(null)
     setDemoBundledStatus({ loading: false, applied: false, error: null })
   }, [autoSetupKey])
 
@@ -781,7 +831,7 @@ export default function useScoreFollow({
       return
     }
 
-    if (anchorCounts.manual > 0 || anchorCounts.demo > 0 || anchors.length > 0) {
+    if (anchorCounts.manual > 0 || anchorCounts.demo > 0 || anchorTrust.showCursor) {
       setSetupStatus({ phase: 'ready', message: setupReadyMessage })
       return
     }
@@ -802,12 +852,13 @@ export default function useScoreFollow({
     if (autoSetupTriggerKeyRef.current === triggerKey) {
       return
     }
-    if (hasAutoSetupBeenAttempted(autoSetupKey)) {
-      setSetupStatus({
-        phase: 'failed',
-        message: setupFailedMessage,
+    if (
+      shouldClearStaleAutoSetupFlag({
+        attempted: hasAutoSetupBeenAttempted(autoSetupKey),
+        autoAnchorCount: anchorCounts.auto,
       })
-      return
+    ) {
+      clearAutoSetupAttempted(autoSetupKey)
     }
 
     autoSetupTriggerKeyRef.current = triggerKey
@@ -822,7 +873,8 @@ export default function useScoreFollow({
     autoSetupKey,
     anchorCounts.manual,
     anchorCounts.demo,
-    anchors.length,
+    anchorCounts.auto,
+    anchorTrust.showCursor,
     runSemiAutoSetupInternal,
     isPlaying,
     sessionReady,
@@ -831,7 +883,6 @@ export default function useScoreFollow({
     demoBundledStatus.error,
     demoBundledStatus.applied,
     setupReadyMessage,
-    setupFailedMessage,
   ])
 
   const confirmSemiAutoSetup = useCallback(() => {
@@ -913,7 +964,13 @@ export default function useScoreFollow({
   )
 
   useEffect(() => {
-    if (!hasTiming || !hasAnchors || alignmentMode || semiAutoPreview) {
+    if (!hasTiming || alignmentMode || semiAutoPreview) {
+      return
+    }
+    if (semiAutoSetup.status === 'analyzing' || setupStatus.phase === 'running') {
+      return
+    }
+    if (!hasAnchors) {
       return
     }
     if (followNeedsSetup || !anchorTrust.showCursor) {
@@ -931,10 +988,11 @@ export default function useScoreFollow({
     hasAnchors,
     alignmentMode,
     semiAutoPreview,
+    semiAutoSetup.status,
+    setupStatus.phase,
     followNeedsSetup,
     anchorTrust.showCursor,
     isDemoSession,
-    setupStatus.phase,
   ])
   const isSemiAutoAnalyzing = semiAutoSetup.status === 'analyzing'
 
@@ -1012,6 +1070,33 @@ export default function useScoreFollow({
     })
   }, [nextGenEnabled, nextGenDiagnostics, anchors, anchorCounts, isDemoSession])
 
+  const autoSetupRuntimeForDebug = useMemo(() => {
+    if (!autoSetupRuntimeDiagnostics) {
+      return null
+    }
+    if (autoSetupRuntimeDiagnostics.needsQuickSetupReason) {
+      return autoSetupRuntimeDiagnostics
+    }
+    if (
+      hasAnchors &&
+      (setupStatus.phase === 'needs-setup' || setupStatus.phase === 'failed') &&
+      (followNeedsSetup || !anchorTrust.showCursor)
+    ) {
+      return {
+        ...autoSetupRuntimeDiagnostics,
+        needsQuickSetupReason:
+          'ui-state: setup phase needs-setup/failed with no trusted cursor anchors',
+      }
+    }
+    return autoSetupRuntimeDiagnostics
+  }, [
+    autoSetupRuntimeDiagnostics,
+    hasAnchors,
+    setupStatus.phase,
+    followNeedsSetup,
+    anchorTrust.showCursor,
+  ])
+
   const debug = useMemo(
     () => ({
       currentMeasureNumber: currentMeasure?.number ?? null,
@@ -1049,6 +1134,7 @@ export default function useScoreFollow({
       timingSourceId: timingSourceId ?? null,
       // Dev-only auto-setup analysis report (null until auto setup runs).
       autoSetup: autoSetupReport,
+      autoSetupRuntime: autoSetupRuntimeForDebug,
       // Phase 5b: which anchor source is active + the promotion decision.
       anchorSource: anchorPromotion.activeSource,
       anchorPromotion,
@@ -1061,6 +1147,8 @@ export default function useScoreFollow({
       anchorCounts,
       anchorTrust,
       autoSetupReport,
+      autoSetupRuntimeDiagnostics,
+      autoSetupRuntimeForDebug,
       anchorPromotion,
       cursor,
       practiceTime,

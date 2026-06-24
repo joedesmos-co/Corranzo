@@ -18,6 +18,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { basename, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
+import { loadMusicXmlFile } from '../src/features/musicxml/loadMusicXmlFile.js'
 import { analyzeSemiAutoScoreSetup } from '../src/features/score-follow/semiAutoScoreAlignment.js'
 import {
   buildBundledAnchorsFromAutoAnchors,
@@ -95,6 +96,16 @@ function loadJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'))
 }
 
+async function loadTimingMap(musicxmlPath) {
+  const fileName = basename(musicxmlPath)
+  if (musicxmlPath.toLowerCase().endsWith('.mxl')) {
+    const file = new File([readFileSync(musicxmlPath)], fileName)
+    const xml = await loadMusicXmlFile(file)
+    return parseMusicXml(xml, fileName)
+  }
+  return parseMusicXml(readFileSync(musicxmlPath, 'utf8'), fileName)
+}
+
 function readReference(path) {
   return loadJson(path)
 }
@@ -118,7 +129,7 @@ async function buildFromAutoPipeline({
     throw new Error(`PDF not found: ${pdfPath}`)
   }
 
-  const timingMap = parseMusicXml(readFileSync(musicxmlPath, 'utf8'), musicxmlPath)
+  const timingMap = await loadTimingMap(musicxmlPath)
   const { numPages, pages } = await renderPdfToPages(pdfPath, { rootDir: root })
   const renderPage = makeRenderPageCallback(pages)
 

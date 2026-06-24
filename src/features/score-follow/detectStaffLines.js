@@ -2,6 +2,13 @@ import {
   detectBarlineCandidates,
   BARLINE_REJECT_REASON,
 } from './detectBarlinesInSystem.js'
+import { getPageInkRatio } from './pdfPageAnalysis.js'
+import {
+  detectConservativeStaffSystems,
+  detectContentBounds,
+  detectTolerantStaffSystems,
+  estimateSystemBandsFromContent,
+} from './detectStaffSystems.js'
 
 /**
  * Staff-line-based staff-system detection — the primary, dense-music-robust
@@ -33,14 +40,7 @@ function contentColumns(imageData, contentBounds) {
   return { left, right, span: Math.max(1, right - left + 1) }
 }
 
-/**
- * Adaptive ink threshold: the midpoint between the paper background and the ink
- * level. Dark engravings get a low threshold (precise, no over-detection);
- * light/thin engravings (Satie-style classical) get a high threshold so their
- * faint staff lines still register. Avoids the fixed-170 cutoff that dropped
- * light scores to coarse fallbacks or "no systems".
- */
-export function estimateInkThreshold(imageData, contentBounds) {
+function sampleContentLuminances(imageData, contentBounds) {
   const { width, height, data } = imageData
   const { left, right } = contentColumns(imageData, contentBounds)
   const lums = []
@@ -52,10 +52,22 @@ export function estimateInkThreshold(imageData, contentBounds) {
       lums.push(compositeLuminance(data, (rowOffset + x) * 4))
     }
   }
+  lums.sort((a, b) => a - b)
+  return lums
+}
+
+/**
+ * Adaptive ink threshold: the midpoint between the paper background and the ink
+ * level. Dark engravings get a low threshold (precise, no over-detection);
+ * light/thin engravings (Satie-style classical) get a high threshold so their
+ * faint staff lines still register. Avoids the fixed-170 cutoff that dropped
+ * light scores to coarse fallbacks or "no systems".
+ */
+export function estimateInkThreshold(imageData, contentBounds) {
+  const lums = sampleContentLuminances(imageData, contentBounds)
   if (lums.length === 0) {
     return 170
   }
-  lums.sort((a, b) => a - b)
   const background = lums[Math.floor(lums.length * 0.9)] // paper (high percentile)
   const inkPixels = lums.filter((l) => l < background - 15)
   if (inkPixels.length < lums.length * 0.002) {
@@ -63,6 +75,24 @@ export function estimateInkThreshold(imageData, contentBounds) {
   }
   const inkLevel = inkPixels[Math.floor(inkPixels.length * 0.5)] // median ink
   return Math.min(235, Math.max(150, (background + inkLevel) / 2))
+}
+
+/**
+ * Threshold for faint staff lines when dense note ink pulls the adaptive
+ * threshold below the staff-line luminance (Hungarian Dance / light scan style).
+ */
+export function estimateFaintStaffLineThreshold(imageData, contentBounds) {
+  const lums = sampleContentLuminances(imageData, contentBounds)
+  if (lums.length === 0) {
+    return null
+  }
+  const paper = lums[Math.floor(lums.length * 0.92)]
+  const faintBand = lums.filter((l) => l < paper - 5 && l > paper - 75)
+  if (faintBand.length < lums.length * 0.003) {
+    return null
+  }
+  const faintLevel = faintBand[Math.floor(faintBand.length * 0.55)]
+  return Math.min(235, Math.max(178, faintLevel + 10))
 }
 
 /**
@@ -125,6 +155,34 @@ function clusterStaffLineRows(lineRows, height, minGapNorm) {
     .filter((stave) => stave.lineCount >= 2)
 }
 
+function runStaffLinePass(imageData, contentBounds, height, pass, minGapNorm) {
+  const { run, dark } = computeRowStaffScores(imageData, contentBounds, pass.dark)
+  const lineRows = []
+  let maxRun = 0
+  for (let y = 0; y < height; y += 1) {
+    if (run[y] > maxRun) maxRun = run[y]
+    const qualifies = pass.runOnly
+      ? run[y] > pass.runCov
+      : run[y] > pass.runCov || dark[y] > pass.darkCov
+    if (qualifies) {
+      lineRows.push(y)
+    }
+  }
+  const staves = clusterStaffLineRows(lineRows, height, minGapNorm)
+  return {
+    staves,
+    trace: {
+      pass: pass.name ?? 'standard',
+      passDarkThreshold: Math.round(pass.dark),
+      runCoverage: pass.runCov,
+      darkCoverage: pass.darkCov,
+      candidateRows: lineRows.length,
+      maxRunCoverage: Number(maxRun.toFixed(3)),
+      staves: staves.length,
+    },
+  }
+}
+
 /**
  * Detect individual staves from staff-line rows, using an adaptive ink
  * threshold and multiple passes (strict → looser) so the detector handles:
@@ -138,43 +196,70 @@ export function detectStaffLineStaves(imageData, contentBounds, options = {}) {
   const { minGapNorm = 0.018 } = options
   const { height } = imageData
   const adaptive = options.darkThreshold ?? estimateInkThreshold(imageData, contentBounds)
+  const faintThreshold = estimateFaintStaffLineThreshold(imageData, contentBounds)
 
   // Passes from precise to permissive. Each accepts a row as a staff line when
   // its longest run OR (for broken lines) its total dark fraction is high.
   const passes = [
-    { dark: adaptive, runCov: 0.5, darkCov: 0.85 },
-    { dark: adaptive, runCov: 0.35, darkCov: 0.6 },
-    { dark: Math.min(235, adaptive + 25), runCov: 0.3, darkCov: 0.55 },
+    { name: 'strict-run', dark: adaptive, runCov: 0.5, darkCov: 0.85 },
+    { name: 'moderate-run', dark: adaptive, runCov: 0.35, darkCov: 0.6 },
+    { name: 'loose-run', dark: Math.min(235, adaptive + 25), runCov: 0.3, darkCov: 0.55 },
   ]
+  if (faintThreshold != null && faintThreshold > adaptive + 8) {
+    // Dense notation breaks staff lines into short runs and pulls the adaptive
+    // threshold toward note ink — faint printed lines sit above it.
+    passes.push({
+      name: 'faint-broken-lines',
+      dark: faintThreshold,
+      runCov: 0.1,
+      darkCov: 0.55,
+      runOnly: true,
+    })
+  }
 
+  const passTraces = []
   let trace = null
-  for (const pass of passes) {
-    const { run, dark } = computeRowStaffScores(imageData, contentBounds, pass.dark)
-    const lineRows = []
-    let maxRun = 0
-    for (let y = 0; y < height; y += 1) {
-      if (run[y] > maxRun) maxRun = run[y]
-      if (run[y] > pass.runCov || dark[y] > pass.darkCov) {
-        lineRows.push(y)
-      }
-    }
-    const staves = clusterStaffLineRows(lineRows, height, minGapNorm)
+  const minPlausibleStaves = Math.max(2, Math.floor(height * 0.006))
+  for (let passIndex = 0; passIndex < passes.length; passIndex += 1) {
+    const pass = passes[passIndex]
+    const result = runStaffLinePass(imageData, contentBounds, height, pass, minGapNorm)
+    passTraces.push(result.trace)
     trace = {
       adaptiveThreshold: Math.round(adaptive),
-      passDarkThreshold: Math.round(pass.dark),
-      runCoverage: pass.runCov,
-      darkCoverage: pass.darkCov,
-      candidateRows: lineRows.length,
-      maxRunCoverage: Number(maxRun.toFixed(3)),
-      staves: staves.length,
+      faintStaffLineThreshold: faintThreshold != null ? Math.round(faintThreshold) : null,
+      minPlausibleStaves,
+      ...result.trace,
     }
-    if (staves.length >= 1) {
-      detectStaffLineStaves.lastTrace = { ...trace, accepted: true }
-      return staves
+    const isLastPass = passIndex === passes.length - 1
+    const shouldDeferForFaint =
+      faintThreshold != null &&
+      !pass.runOnly &&
+      result.staves.length > 0 &&
+      result.staves.length < minPlausibleStaves
+    if (result.staves.length >= 1 && !shouldDeferForFaint) {
+      detectStaffLineStaves.lastTrace = {
+        ...trace,
+        accepted: true,
+        passHistory: passTraces,
+      }
+      return result.staves
+    }
+    if (isLastPass && result.staves.length >= 1) {
+      detectStaffLineStaves.lastTrace = {
+        ...trace,
+        accepted: true,
+        passHistory: passTraces,
+      }
+      return result.staves
     }
   }
 
-  detectStaffLineStaves.lastTrace = { ...trace, accepted: false, reason: 'no staff-line rows passed any threshold' }
+  detectStaffLineStaves.lastTrace = {
+    ...trace,
+    accepted: false,
+    reason: 'no staff-line rows passed any threshold',
+    passHistory: passTraces,
+  }
   return []
 }
 
@@ -486,4 +571,87 @@ export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
   })
 
   return { staves, systems, inkThreshold: Math.round(inkThreshold), trace }
+}
+
+/**
+ * Full-page staff detection diagnostics for debug scripts and auto-setup reports.
+ * Runs the primary staff-line path plus fallbacks and records rejection reasons.
+ */
+export function buildStaffDetectionDiagnostics(imageData, options = {}) {
+  const { stavesPerSystem = 2 } = options
+  const contentBounds = options.contentBounds ?? detectContentBounds(imageData)
+  const lums = sampleContentLuminances(imageData, contentBounds)
+  const paperLevel = lums.length > 0 ? lums[Math.floor(lums.length * 0.92)] : null
+  const inkLevel =
+    lums.length > 0
+      ? lums[Math.floor(lums.length * 0.1)]
+      : null
+  const adaptiveThreshold = estimateInkThreshold(imageData, contentBounds)
+  const faintStaffLineThreshold = estimateFaintStaffLineThreshold(imageData, contentBounds)
+
+  const staffLine =
+    options.staffLineResult ??
+    detectStaffLineSystems(imageData, contentBounds, { stavesPerSystem })
+  const conservative = detectConservativeStaffSystems(imageData, contentBounds)
+  const tolerant = detectTolerantStaffSystems(imageData, contentBounds)
+  const geometric = estimateSystemBandsFromContent(imageData, contentBounds)
+
+  let chosenStage = 'none'
+  let chosenCount = 0
+  let rejectionReason = null
+  if (staffLine.systems.length >= 1) {
+    chosenStage = 'staff-lines'
+    chosenCount = staffLine.systems.length
+  } else if (conservative.length >= 1) {
+    chosenStage = 'conservative'
+    chosenCount = conservative.length
+    rejectionReason = 'staff-lines: no staves clustered from row scores'
+  } else if (tolerant.length >= 1) {
+    chosenStage = 'tolerant'
+    chosenCount = tolerant.length
+    rejectionReason = 'staff-lines+conservative: no bands passed quality gates'
+  } else if (geometric.length >= 1) {
+    chosenStage = 'geometric'
+    chosenCount = geometric.length
+    rejectionReason = 'pixel band detectors failed — using ink-region split'
+  } else {
+    rejectionReason = 'all stages returned zero systems'
+  }
+
+  return {
+    preprocessing: {
+      width: imageData.width,
+      height: imageData.height,
+      inkRatio: Number(getPageInkRatio(imageData).toFixed(4)),
+      contentBounds,
+      paperLevel: paperLevel != null ? Math.round(paperLevel) : null,
+      inkLevel: inkLevel != null ? Math.round(inkLevel) : null,
+      adaptiveThreshold: Math.round(adaptiveThreshold),
+      faintStaffLineThreshold:
+        faintStaffLineThreshold != null ? Math.round(faintStaffLineThreshold) : null,
+    },
+    staffLines: {
+      staveCount: staffLine.staves.length,
+      systemCount: staffLine.systems.length,
+      trace: staffLine.trace ?? detectStaffLineStaves.lastTrace ?? null,
+      systems: staffLine.systems.map((system, index) => ({
+        index,
+        y0: Number(system.y0.toFixed(4)),
+        y1: Number(system.y1.toFixed(4)),
+        staveCount: system.staveCount,
+        barlineCount: system.barlineCount,
+        measureEstimate: system.measureEstimate,
+        barlineConfident: system.barlineConfident,
+        barlineReliabilityReason: system.barlineReliabilityReason,
+      })),
+    },
+    fallbacks: {
+      conservative: conservative.length,
+      tolerant: tolerant.length,
+      geometric: geometric.length,
+    },
+    chosenStage,
+    chosenCount,
+    rejectionReason,
+  }
 }

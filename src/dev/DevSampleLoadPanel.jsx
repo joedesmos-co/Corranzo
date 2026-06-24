@@ -6,13 +6,14 @@ export default function DevSampleLoadPanel({ loading, error, onLoad }) {
       <p className="library-sample__badge">Demo score</p>
       <h2 className="panel__title">Try sample piece</h2>
       <p className="panel__hint">
-        <strong>{DEMO_PIECE.title}</strong> — a familiar public-domain minuet with real sheet
-        music, timing, and playback. One click loads everything and opens Practice.
+        <strong>{DEMO_PIECE.title}</strong> — {DEMO_PIECE.measureCount} measures across{' '}
+        {DEMO_PIECE.pageCount} pages with real sheet music, timing, and playback. One click loads
+        everything and opens Practice.
       </p>
       <ul className="library-sample__features">
         <li>Score follow &amp; loops</li>
         <li>Wait For You &amp; note guide</li>
-        <li>Treble + bass (two hands)</li>
+        <li>Dense piano playback</li>
       </ul>
       <button
         type="button"

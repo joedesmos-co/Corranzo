@@ -52,9 +52,9 @@ function fillRect(img, x0, y0, x1, y1, value = INK) {
 }
 
 /** Draw a 5-line staff. Returns the bottom y. */
-function drawStaff(img, topY, x0, x1, { lineGap = 5 } = {}) {
+function drawStaff(img, topY, x0, x1, { lineGap = 5, lineValue = INK } = {}) {
   for (let line = 0; line < 5; line += 1) {
-    hLine(img, topY + line * lineGap, x0, x1)
+    hLine(img, topY + line * lineGap, x0, x1, lineValue)
   }
   return topY + 4 * lineGap
 }
@@ -317,6 +317,54 @@ export function lightClassicalPage({
       }
     }
   }
+  img.systemBands = systemBands
+  img.systemBarlineFracs = systemBarlineFracs
+  return img
+}
+
+/**
+ * Hungarian Dance-style page: full-width grand staves with thin/light staff lines
+ * plus very dense piano notation (broken staff-line runs). Exercises the faint-
+ * line pass that dense dark ink otherwise hides from the adaptive threshold.
+ */
+export function hungarianDanceStylePage({
+  width = 480,
+  height = 1200,
+  systems = 5,
+  measuresPerSystem = 4,
+  lineValue = 200,
+} = {}) {
+  const lineGap = 5
+  const innerGap = 10
+  const staffHeight = 4 * lineGap + innerGap + 4 * lineGap
+  const gap = 28
+  const top = Math.floor(height * 0.12)
+  const img = createPage(width, height)
+  const x0 = Math.floor(width * 0.08)
+  const x1 = Math.floor(width * 0.92)
+  drawHeader(img)
+
+  const systemBands = []
+  const systemBarlineFracs = []
+  for (let s = 0; s < systems; s += 1) {
+    const sysTop = top + s * (staffHeight + gap)
+    const trebleBottom = drawStaff(img, sysTop, x0, x1, { lineGap, lineValue })
+    const bassTop = trebleBottom + innerGap
+    const bassBottom = drawStaff(img, bassTop, x0, x1, { lineGap, lineValue })
+    const band = { top: sysTop, bottom: bassBottom }
+    systemBands.push(band)
+
+    const fracs = []
+    for (let m = 0; m <= measuresPerSystem; m += 1) {
+      const bx = Math.floor(x0 + ((x1 - x0) * m) / measuresPerSystem)
+      vLine(img, bx, band.top, band.bottom)
+      vLine(img, bx + 1, band.top, band.bottom)
+      fracs.push(bx / width)
+    }
+    systemBarlineFracs.push(fracs)
+    addDenseNotation(img, band.top, band.bottom, x0, x1, { columns: 34 })
+  }
+
   img.systemBands = systemBands
   img.systemBarlineFracs = systemBarlineFracs
   return img
