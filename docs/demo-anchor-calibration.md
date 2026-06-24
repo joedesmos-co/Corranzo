@@ -104,6 +104,55 @@ node scripts/calibrate-demo-anchors.mjs \
 
 The CLI prints calibration warnings (unreliable barline counts, count mismatches, weak systems). **Do not ship** if warnings indicate incomplete coverage or low barline confidence without manual overrides.
 
+### 5. Hybrid workflow (default for `--pdf`)
+
+The CLI uses **hybrid calibration** by default (see `src/features/score-follow/calibrationWorkflow.js`):
+
+1. **Source check** — compares PDF barline totals, system/page counts, and MusicXML layout hints; flags MIDI-derived timing without `<print>` breaks.
+2. **Reconcile** — when barline totals are close but not exact, scales per-system counts to the written measure total.
+3. **Refuse** — when sources likely disagree (edition mismatch), calibration refuses unless you pass overrides (`--no-refuse` only for diagnosis).
+4. **Partial correction** — fix only flagged systems via `--system-counts` or `--manual-barlines`.
+
+Run diagnostics without writing anchors:
+
+```bash
+node scripts/calibrate-demo-anchors.mjs \
+  --pdf score.pdf --musicxml score.musicxml \
+  --piece-id turkish-march --diagnose --report /tmp/calibration-report.json
+```
+
+Per-system count overrides (JSON map of `systemIndex → measures`):
+
+```bash
+node scripts/calibrate-demo-anchors.mjs \
+  --pdf score.pdf --musicxml score.musicxml \
+  --system-counts overrides.json --out out.anchors.json --diagnose
+```
+
+`overrides.json` example (correct only problematic systems; other systems are re-reconciled):
+
+```json
+{ "25": 5, "26": 5 }
+```
+
+Legacy strict mode (no reconciliation — old behaviour):
+
+```bash
+node scripts/calibrate-demo-anchors.mjs --pdf score.pdf --musicxml score.musicxml --strict --counts 5,5,6,5,5,6
+```
+
+### Diagnostics output
+
+`--diagnose` reports:
+
+| Field | Meaning |
+|-------|---------|
+| `expectedMeasures` / `detectedMeasures` | Written score vs PDF barline sum |
+| `source.indicators` | e.g. `measure-count-mismatch`, `midi-derived-timing` |
+| `systems.mismatchIndices` | Systems needing manual count or barline correction |
+| `systems.suggestedCounts` | Reconciled `--counts` candidate |
+| `readiness.status` | `ready` / `needs-review` / `not-safe` |
+
 ## Validate anchors
 
 ### Bundled Minuet reference (CI)
@@ -152,3 +201,4 @@ Tooling-only changes do not swap the demo; wiring a new piece into the app requi
 | `scripts/generate-demo-anchors.mjs` | Regenerate Minuet bundled anchors from the hand table |
 | `scripts/diagnose-alignment.mjs` | Layout reconciliation and geometry detection reports |
 | `src/features/score-follow/demoAnchorCalibration.js` | Shared calibration library (tests + CLI) |
+| `src/features/score-follow/calibrationWorkflow.js` | Source mismatch, hybrid calibration, diagnostics |

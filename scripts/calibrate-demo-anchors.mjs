@@ -31,6 +31,13 @@ import {
   PROMOTION_STATUS,
   DEMO_CALIBRATION_VALIDATE_TOLERANCES,
 } from '../src/features/score-follow/demoAnchorCalibration.js'
+import {
+  buildCalibrationDiagnostics,
+  buildHybridBundledPayload,
+  calibrateAnchorsHybrid,
+  formatCalibrationDiagnosticsText,
+  serializeCalibrationDiagnostics,
+} from '../src/features/score-follow/calibrationWorkflow.js'
 import { renderPdfToPages, makeRenderPageCallback } from './lib/renderPdfPages.mjs'
 import { FIXTURE_FILENAMES } from '../src/dev/fixturePaths.js'
 
@@ -52,6 +59,11 @@ Options:
   --counts <n,n,...>           Forced per-system measure counts
   --manual-systems <path>      JSON array of manual system tables (see docs)
   --manual-barlines <path>     JSON map of systemIndex → normalised barline x positions
+  --system-counts <path>       JSON map of systemIndex → measure count override (hybrid)
+  --diagnose                   Print calibration diagnostics (source + system analysis)
+  --report <path>              Write diagnostics JSON report
+  --strict                     Strict calibration (no count reconciliation; legacy behaviour)
+  --no-refuse                  Allow hybrid reconcile even on severe source mismatch
   --auto                       Run PDF pixel pipeline (default when --pdf is set)
   --validate-minuet            Validate against bundled Minuet anchors (round-trip by default)
   --validate <path>            Compare generated output to a reference anchors JSON
@@ -97,6 +109,9 @@ async function buildFromAutoPipeline({
   musicxmlPath,
   counts,
   manualBarlinesPath,
+  manualCountOverridesPath,
+  strict = false,
+  refuseOnSourceMismatch = true,
   meta,
 }) {
   if (!existsSync(pdfPath)) {
@@ -119,37 +134,63 @@ async function buildFromAutoPipeline({
   }
 
   const manualBarlinesBySystem = manualBarlinesPath ? loadJson(manualBarlinesPath) : null
-  const calibration = calibrateAnchorsFromDetection({
-    systemEntries: setup.preview.systemEntries,
-    timingMap,
-    forcedMeasureCounts: counts,
-    manualBarlinesBySystem,
-  })
+  const manualCountOverrides = manualCountOverridesPath ? loadJson(manualCountOverridesPath) : null
+
+  const calibration = strict
+    ? calibrateAnchorsFromDetection({
+        systemEntries: setup.preview.systemEntries,
+        timingMap,
+        forcedMeasureCounts: counts,
+        manualBarlinesBySystem,
+      })
+    : calibrateAnchorsHybrid({
+        systemEntries: setup.preview.systemEntries,
+        timingMap,
+        pdfPageCount: numPages,
+        timingSource: musicxmlPath,
+        forcedMeasureCounts: counts,
+        manualCountOverrides,
+        manualBarlinesBySystem,
+        allowReconcile: !strict,
+        refuseOnSourceMismatch,
+      })
 
   const warnings = [...calibration.warnings]
   if (!calibration.ok) {
-    warnings.push(
-      calibration.allocationMode === 'unusable-auto-counts'
-        ? 'Calibration incomplete — supply --counts or --manual-barlines.'
-        : `Expected ${timingMap.measures?.length ?? '?'} measure anchors, got ${calibration.supplemental?.length ?? 0}.`,
-    )
+    if (calibration.refused) {
+      warnings.push('Calibration refused due to source mismatch — see --diagnose output.')
+    } else {
+      warnings.push(
+        calibration.allocationMode === 'unusable-auto-counts'
+          ? 'Calibration incomplete — supply --counts, --system-counts, or --manual-barlines.'
+          : `Expected ${timingMap.measures?.length ?? '?'} measure anchors, got ${calibration.supplemental?.length ?? 0}.`,
+      )
+    }
   }
 
   const calibrated =
-    manualBarlinesBySystem != null
+    manualBarlinesBySystem != null || manualCountOverrides != null
       ? CALIBRATION_SOURCE.HYBRID
-      : counts
-        ? CALIBRATION_SOURCE.AUTO
+      : calibration.allocationMode?.includes('hybrid')
+        ? CALIBRATION_SOURCE.HYBRID
         : CALIBRATION_SOURCE.AUTO
 
-  const payload = buildBundledAnchorsFromAutoAnchors(calibration.supplemental, {
-    ...meta,
-    calibrated,
-    warnings,
-    alignmentNote:
-      `Bundled demo anchors from PDF auto-setup (${calibration.allocationMode ?? 'unknown'}). ` +
-        'Review warnings before shipping as a public demo.',
-  })
+  const payload = strict
+    ? buildBundledAnchorsFromAutoAnchors(calibration.supplemental, {
+        ...meta,
+        calibrated,
+        warnings,
+        alignmentNote:
+          `Bundled demo anchors from PDF auto-setup (${calibration.allocationMode ?? 'unknown'}). ` +
+            'Review warnings before shipping as a public demo.',
+      })
+    : buildHybridBundledPayload(calibration, {
+        ...meta,
+        calibrated,
+        alignmentNote:
+          `Bundled demo anchors from hybrid calibration (${calibration.allocationMode ?? 'unknown'}). ` +
+            'Review diagnostics before shipping as a public demo.',
+      })
 
   return { payload, calibration, setup }
 }
@@ -253,8 +294,14 @@ async function main() {
   const validateRef = argValue(args, '--validate')
   const counts = parseCounts(argValue(args, '--counts'))
   const pieceId = argValue(args, '--piece-id') ?? 'demo-piece'
+  const strict = hasFlag(args, '--strict')
+  const diagnose = hasFlag(args, '--diagnose')
+  const reportPath = argValue(args, '--report')
+  const refuseOnSourceMismatch = !hasFlag(args, '--no-refuse')
 
   let payload
+  let calibrationResult = null
+  let setupResult = null
 
   if (manualSystemsPath) {
     payload = buildFromManualSystems(manualSystemsPath, {
@@ -269,6 +316,9 @@ async function main() {
       musicxmlPath,
       counts,
       manualBarlinesPath: argValue(args, '--manual-barlines'),
+      manualCountOverridesPath: argValue(args, '--system-counts'),
+      strict,
+      refuseOnSourceMismatch,
       meta: {
         pieceId,
         pdfFile: argValue(args, '--pdf-file') ?? basename(pdfPath),
@@ -276,12 +326,36 @@ async function main() {
       },
     })
     payload = result.payload
+    calibrationResult = result.calibration
+    setupResult = result.setup
+
+    const referencePath = validateRef ?? null
+    const diagnostics = buildCalibrationDiagnostics({
+      calibrationResult,
+      setup: setupResult,
+      payload,
+      referencePayload: referencePath ? readReference(referencePath) : null,
+    })
+
+    if (diagnose || reportPath) {
+      console.log(formatCalibrationDiagnosticsText(diagnostics))
+      console.log('')
+    }
+    if (reportPath) {
+      writeFileSync(reportPath, `${serializeCalibrationDiagnostics(diagnostics)}\n`)
+      console.log(`Wrote diagnostics → ${reportPath}`)
+    }
 
     if (result.calibration.warnings.length) {
       console.warn('Calibration warnings:')
       result.calibration.warnings.forEach((w) => console.warn(`  - ${w}`))
     }
-    if (!result.calibration.ok) {
+    if (result.calibration.refused) {
+      console.error('\nCalibration refused — sources likely disagree. Fix sources or use hybrid overrides.')
+      if (!outPath && !validateRef) {
+        process.exit(1)
+      }
+    } else if (!result.calibration.ok) {
       console.warn(
         '\nCalibration weak or incomplete — do not ship as a public demo without manual review.',
       )

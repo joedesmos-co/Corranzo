@@ -367,19 +367,20 @@ export const METADATA_FIXTURES = [
       'avoid adding large binaries before anchor generation changes. Metadata-only for now; see ' +
       'the demo-replacement evaluation for the density/reliability assessment.',
     documented: {
-      writtenMeasures: null, // ~127 in the full rondo; not asserted without the asset
-      pdfPageCount: 3, // typical Mutopia A4 engraving
-      systemCount: null,
+      writtenMeasures: 128,
+      pdfPageCount: 5,
+      systemCount: 27,
       perSystemExpected: null,
       systemStarts: null,
-      hasRepeats: true, // rondo form revisits sections
+      hasRepeats: true,
       tempoChangeCount: 0,
       timeSignatureChangeCount: 0,
       hasPickup: false,
       expectedAction: 'confirm',
       rationale:
-        'Dense, fast, multi-page with running sixteenths. Even with clean detection, the ' +
-        'safety-first stance is to confirm before auto-follow; weak systems would drop to manual.',
+        'Dense, fast, 5-page Mutopia engraving. PDF barline totals (~147) exceed written ' +
+        'MIDI-derived measures (128) — hybrid calibration can reconcile counts but flagged ' +
+        'systems still need manual barline correction before READY demo bundling.',
     },
   },
 ]
