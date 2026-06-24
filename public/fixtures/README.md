@@ -11,7 +11,7 @@ Public-domain **Hungarian Dance No. 5** (Johannes Brahms, WoO 1 — piano arrang
 | `hungarian-dance-no5/hungarian-dance-no5.mid` | Playback MIDI |
 | `hungarian-dance-no5/hungarian-dance-no5.anchors.json` | Pre-calibrated score-follow (auto-preview export) |
 
-Bundled anchors are exported from the **auto-setup per-measure preview** (playable beat-1 `x`), not hybrid-reconciled barline bundles. Hybrid `--no-refuse` output is rejected by the cursor guard.
+Bundled anchors are exported from the **auto-setup per-measure preview** (playable beat-1 `x`), not hybrid-reconciled barline bundles. Page 4 measures 96–104 are repaired when six single staves are detected instead of three grand staffs.
 
 Regenerate demo anchors:
 

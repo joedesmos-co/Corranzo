@@ -85,6 +85,58 @@ export function buildBundledAnchorsFromAutoAnchors(supplementalAnchors, meta = {
   return wrapBundledPayload(anchors, meta)
 }
 
+/**
+ * Hungarian Dance page 4 is detected as six single staves (grand-staff pairing
+ * fails on tight vertical spacing). Measures 96–104 were mapped onto the wrong
+ * staff bands; rebuild them on the lower two grand-staff pairs only.
+ */
+export function repairHungarianDancePage4SupplementalAnchors(
+  supplementalAnchors,
+  systemEntries,
+  timingMap,
+) {
+  const page4Entries = (systemEntries ?? []).filter((entry) => entry.page === 4)
+  if (page4Entries.length < 6) {
+    return supplementalAnchors
+  }
+
+  const mergeGrandStaffPair = (entryA, entryB) => {
+    const y0 = entryA.system.y0
+    const y1 = entryB.system.y1
+    return {
+      ...entryA,
+      system: {
+        y0,
+        y1,
+        center: (y0 + y1) / 2,
+        staveCount: 2,
+      },
+    }
+  }
+
+  const mergedSystems = [
+    mergeGrandStaffPair(page4Entries[2], page4Entries[3]),
+    mergeGrandStaffPair(page4Entries[4], page4Entries[5]),
+  ]
+  const spans = [
+    { measureNumbers: [96, 97, 98, 99, 100, 101] },
+    { measureNumbers: [102, 103, 104] },
+  ]
+
+  const repairedTail = buildPerMeasureSystemAnchors(mergedSystems, spans, timingMap)
+  if (repairedTail.length < 2) {
+    return supplementalAnchors
+  }
+
+  const byMeasure = new Map(
+    (supplementalAnchors ?? []).map((anchor) => [anchor.measureNumber, anchor]),
+  )
+  for (const anchor of repairedTail) {
+    byMeasure.set(anchor.measureNumber, anchor)
+  }
+  return [...byMeasure.values()].sort((a, b) => a.measureNumber - b.measureNumber)
+}
+
 function makeBundledMeasureAnchor({
   page,
   y,

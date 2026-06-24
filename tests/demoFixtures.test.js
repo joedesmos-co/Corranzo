@@ -151,4 +151,42 @@ describe('Hungarian Dance demo fixtures', () => {
     const pagesWithAnchors = new Set(result.preview.proposedAnchors.map((anchor) => anchor.page))
     expect(pagesWithAnchors.size).toBe(4)
   }, 120_000)
+
+  describe('page 4 final-system geometry', () => {
+    const payload = JSON.parse(readFileSync(fixturePath(FIXTURE_PATHS.demoAnchors), 'utf8'))
+    const anchor = (measureNumber) =>
+      payload.anchors.find((item) => item.measureNumber === measureNumber)
+
+    it('keeps measure 89 on the first page-4 system (unchanged from pages 1–3)', () => {
+      expect(anchor(89).page).toBe(4)
+      expect(anchor(89).y).toBeLessThan(0.12)
+      expect(anchor(89).x).toBeGreaterThan(0.12)
+    })
+
+    it('places measure 96 on the second grand staff, not the bass band of system 1', () => {
+      expect(anchor(96).page).toBe(4)
+      expect(anchor(96).y).toBeGreaterThan(0.22)
+      expect(anchor(96).y).toBeLessThan(0.32)
+      expect(anchor(96).y).toBeGreaterThan(anchor(89).y + 0.1)
+      expect(anchor(96).x).toBeGreaterThan(0.13)
+      expect(anchor(96).x).toBeLessThan(0.28)
+      expect(assessBundledMeasureCursorX(anchor(96)).ok).toBe(true)
+    })
+
+    it('places measure 102 on the third grand staff', () => {
+      expect(anchor(102).page).toBe(4)
+      expect(anchor(102).y).toBeGreaterThan(0.35)
+      expect(anchor(102).y).toBeLessThan(0.45)
+      expect(anchor(102).y).toBeGreaterThan(anchor(96).y + 0.1)
+      expect(anchor(102).x).toBeGreaterThan(0.13)
+      expect(anchor(102).x).toBeLessThan(0.28)
+    })
+
+    it('places measure 104 near the final measure region on system 3', () => {
+      expect(anchor(104).page).toBe(4)
+      expect(anchor(104).y).toBeCloseTo(anchor(102).y, 2)
+      expect(anchor(104).x).toBeGreaterThan(0.65)
+      expect(anchor(104).x).toBeLessThan(0.85)
+    })
+  })
 })

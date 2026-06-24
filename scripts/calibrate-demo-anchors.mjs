@@ -27,6 +27,7 @@ import {
   compareBundledAnchorsToReference,
   formatCalibrationSummary,
   manualSystemsFromBundledPayload,
+  repairHungarianDancePage4SupplementalAnchors,
   validateBundledAnchorPayload,
   CALIBRATION_SOURCE,
   PROMOTION_STATUS,
@@ -236,12 +237,27 @@ async function buildFromAutoPreviewExport({ pdfPath, musicxmlPath, meta }) {
     )
   }
 
-  const payload = buildBundledAnchorsFromAutoAnchors(supplemental, {
+  let exportAnchors = supplemental
+  if (meta.pieceId === 'hungarian-dance-no5') {
+    exportAnchors = repairHungarianDancePage4SupplementalAnchors(
+      supplemental,
+      setup.preview.systemEntries,
+      timingMap,
+    )
+    warnings.push(
+      'Page 4 grand-staff pairing repaired for measures 96–104 (six single-stave detections).',
+    )
+  }
+
+  const payload = buildBundledAnchorsFromAutoAnchors(exportAnchors, {
     ...meta,
     calibrated: CALIBRATION_SOURCE.AUTO,
     warnings,
     alignmentNote:
       'Bundled demo anchors from auto-setup per-measure preview (playable beat-1 x). ' +
+        (meta.pieceId === 'hungarian-dance-no5'
+          ? 'Page 4 measures 96–104 use repaired grand-staff geometry. '
+          : '') +
         'Re-export with --export-preview after visual validation.',
   })
 
