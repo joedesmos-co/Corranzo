@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "npm run build && wrangler dev",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:scripts": "node scripts/test-pitch-detection.mjs && node scripts/test-auto-align-heuristics.mjs && node scripts/test-note-target-position.mjs && node scripts/test-auto-setup-pipeline.mjs && node scripts/diagnose-alignment.mjs --check && node scripts/diagnose-alignment.mjs --compare && node scripts/diagnose-alignment.mjs --detect && node scripts/calibrate-demo-anchors.mjs --validate-minuet && node scripts/benchmark-alignment-corpus.mjs --ci-only --json /tmp/alignment-benchmark-ci.json",
@@ -16,7 +16,8 @@
     "fixtures:anchors": "node scripts/generate-demo-anchors.mjs",
     "fixtures:minimal": "node scripts/generate-fixtures.mjs",
     "benchmark:alignment": "node scripts/benchmark-alignment-corpus.mjs --ci-only --json /tmp/alignment-benchmark.json",
-    "dataset:barline:export": "node scripts/export-barline-dataset.mjs --dry-run --json /tmp/barline-dataset-manifest.json"
+    "dataset:barline:export": "node scripts/export-barline-dataset.mjs --dry-run --json /tmp/barline-dataset-manifest.json",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@tonejs/midi": "^2.0.28",
@@ -28,6 +29,7 @@
     "tone": "^15.1.22"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.42.2",
     "@eslint/js": "^10.0.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -37,7 +39,8 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
     "vite": "^8.0.12",
-    "vitest": "^3.2.6"
+    "vitest": "^3.2.6",
+    "wrangler": "^4.104.0"
   },
   "optionalDependencies": {
     "@rollup/rollup-darwin-arm64": "^4.61.1"
