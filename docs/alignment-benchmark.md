@@ -106,7 +106,7 @@ Use **top blockers** in the summary to prioritize recognition work (e.g. if `den
    node scripts/benchmark-alignment-corpus.mjs --all --download --json /tmp/report.json
    ```
 
-4. Convert cached MIDI → MusicXML offline (same workflow as `npm run fixtures`) if needed.
+4. Cached MIDI is converted to MusicXML automatically when `.venv-fixtures` is present (same as `npm run fixtures`); otherwise install music21 in that venv.
 5. Inspect JSON row; do **not** commit cache files.
 6. Set `runInCi: true` only for synthetic or repo-local assets available in CI.
 

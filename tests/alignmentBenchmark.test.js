@@ -23,7 +23,7 @@ describe('alignmentBenchmark manifest', () => {
   it('validates the bundled corpus manifest', () => {
     const result = validateManifest(manifest)
     expect(result.ok).toBe(true)
-    expect(manifest.entries.length).toBeGreaterThanOrEqual(5)
+    expect(manifest.entries.length).toBeGreaterThanOrEqual(25)
   })
 
   it('selects CI-safe entries without remote-only pieces', () => {

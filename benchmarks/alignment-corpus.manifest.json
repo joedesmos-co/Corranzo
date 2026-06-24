@@ -131,33 +131,367 @@
     },
     {
       "id": "bach-prelude-bwv846",
-      "title": "Prelude in C major, BWV 846",
+      "title": "Prelude in C major, BWV 846 (WTC I)",
       "composer": "J. S. Bach",
-      "source": "Mutopia Project",
+      "source": "Mutopia Project #5",
       "license": "Public Domain",
-      "tags": ["classical", "multi-page", "dense"],
+      "tags": ["classical", "multi-page", "dense", "baroque"],
       "runner": "remote",
       "runInCi": false,
       "mutopia": {
-        "pdfUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV846/bwv846-prelude-a4.pdf",
-        "midiUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV846/bwv846-prelude.mid"
+        "pieceInfo": "https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=5",
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV846/wtk1-prelude1/wtk1-prelude1-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV846/wtk1-prelude1/wtk1-prelude1.mid"
       },
-      "expected": { "pages": 4, "measures": null, "systems": null }
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "bach-fugue-bwv846",
+      "title": "Fugue in C major, BWV 846 (WTC I)",
+      "composer": "J. S. Bach",
+      "source": "Mutopia Project #4",
+      "license": "Public Domain",
+      "tags": ["classical", "dense", "baroque", "multi-voice"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pieceInfo": "https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=4",
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV846/wtk1-fugue1/wtk1-fugue1-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV846/wtk1-fugue1/wtk1-fugue1.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "bach-lute-prelude-bwv997",
+      "title": "Lute Suite BWV 997: Prelude",
+      "composer": "J. S. Bach",
+      "source": "Mutopia Project #50",
+      "license": "Public Domain",
+      "tags": ["classical", "baroque", "multi-page", "slow"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pieceInfo": "https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=50",
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV997/bwv997-01prelude/bwv997-01prelude-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV997/bwv997-01prelude/bwv997-01prelude.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "bach-sheep-may-safely",
+      "title": "Sheep May Safely Graze, BWV 208",
+      "composer": "J. S. Bach",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["classical", "slow", "vocal", "baroque"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV208/Sheep/Sheep-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV208/Sheep/Sheep.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "bach-chorale-bwv259",
+      "title": "Chorale BWV 259",
+      "composer": "J. S. Bach",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["classical", "simple", "chorale", "baroque"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV259/bwv-259/bwv-259-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV259/bwv-259/bwv-259.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "bach-chorale-bwv264",
+      "title": "Chorale BWV 264",
+      "composer": "J. S. Bach",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["classical", "simple", "chorale", "baroque"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV264/bwv-264/bwv-264-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BachJS/BWV264/bwv-264/bwv-264.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "mozart-ave-verum",
+      "title": "Ave verum corpus, K.618",
+      "composer": "W. A. Mozart",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["classical", "slow", "vocal", "simple"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/MozartWA/AveverumM/AveverumM-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/MozartWA/AveverumM/AveverumM.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "mozart-menuet-k2",
+      "title": "Menuet in F major, K.2",
+      "composer": "W. A. Mozart",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["classical", "simple", "one-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/MozartWA/KV2/menuet_k2/menuet_k2-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/MozartWA/KV2/menuet_k2/menuet_k2.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "mozart-k153",
+      "title": "Five Minuettes: No. 1, K.153",
+      "composer": "W. A. Mozart",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["classical", "simple", "one-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/MozartWA/KV153/k153/k153-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/MozartWA/KV153/k153/k153.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "mozart-symphony25-m1",
+      "title": "Symphony No. 25, K.183 — mvt 1",
+      "composer": "W. A. Mozart",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["classical", "orchestral", "multi-page", "dense"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/MozartWA/KV183/Symphony25_1/Symphony25_1-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/MozartWA/KV183/Symphony25_1/Symphony25_1.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
     },
     {
       "id": "beethoven-fur-elise",
       "title": "Für Elise",
-      "composer": "L. van Beethoven",
-      "source": "Mutopia Project",
+      "composer": "L. van Beethoven, WoO 59",
+      "source": "Mutopia Project #931",
       "license": "Public Domain",
-      "tags": ["simple", "classical", "one-page"],
+      "tags": ["simple", "classical", "one-page", "romantic"],
       "runner": "remote",
       "runInCi": false,
       "mutopia": {
-        "pdfUrl": "https://www.mutopiaproject.org/ftp/BeethovenLV/fur-elise/fur-elise-a4.pdf",
-        "midiUrl": "https://www.mutopiaproject.org/ftp/BeethovenLV/fur-elise/fur-elise.mid"
+        "pieceInfo": "https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=931",
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BeethovenLv/WoO59/fur_Elise_WoO59/fur_Elise_WoO59-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BeethovenLv/WoO59/fur_Elise_WoO59/fur_Elise_WoO59.mid"
       },
-      "expected": { "pages": 2, "measures": null, "systems": null }
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "beethoven-sonata-op2-m1",
+      "title": "Piano Sonata Op. 2 No. 1 — mvt 1",
+      "composer": "L. van Beethoven",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["classical", "multi-page", "dense", "sonata"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BeethovenLv/O2/LVB_Sonate_02no1_1/LVB_Sonate_02no1_1-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BeethovenLv/O2/LVB_Sonate_02no1_1/LVB_Sonate_02no1_1.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "chopin-nocturne-op9-n2",
+      "title": "Nocturne Op. 9 No. 2",
+      "composer": "F. Chopin",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["romantic", "slow", "multi-page", "expressive"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/ChopinFF/O9/chopin_nocturne_op9_n2/chopin_nocturne_op9_n2-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/ChopinFF/O9/chopin_nocturne_op9_n2/chopin_nocturne_op9_n2.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "chopin-etude-op10-12",
+      "title": "Étude Op. 10 No. 12 (Revolutionary)",
+      "composer": "F. Chopin",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["romantic", "dense", "fast", "multi-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/ChopinFF/O10/op-10-12-wfi/op-10-12-wfi-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/ChopinFF/O10/op-10-12-wfi/op-10-12-wfi.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "chopin-etude-op10-01",
+      "title": "Étude Op. 10 No. 1",
+      "composer": "F. Chopin",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["romantic", "dense", "multi-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/ChopinFF/O10/chp-10-01/chp-10-01-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/ChopinFF/O10/chp-10-01/chp-10-01.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "chopin-mazurka-op6-no1",
+      "title": "Mazurka Op. 6 No. 1",
+      "composer": "F. Chopin",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["romantic", "simple", "one-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/ChopinFF/O6/Mazurka-Op6-No1/Mazurka-Op6-No1-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/ChopinFF/O6/Mazurka-Op6-No1/Mazurka-Op6-No1.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "schubert-erlkonig",
+      "title": "Erlkönig, D.328",
+      "composer": "F. Schubert",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["romantic", "dense", "fast", "vocal", "multi-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/SchubertF/D328/Erlkoenig/Erlkoenig-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/SchubertF/D328/Erlkoenig/Erlkoenig.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "schubert-heidenroeslein",
+      "title": "Heidenröslein, D.257",
+      "composer": "F. Schubert",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["romantic", "simple", "vocal", "one-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/SchubertF/D257/SchubertF-D257-Heidenroeslein/SchubertF-D257-Heidenroeslein-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/SchubertF/D257/SchubertF-D257-Heidenroeslein/SchubertF-D257-Heidenroeslein.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "brahms-lullaby",
+      "title": "Wiegenlied (Lullaby), Op. 49 No. 4",
+      "composer": "J. Brahms",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["romantic", "simple", "slow", "one-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BrahmsJ/LullabyBrahms-C/LullabyBrahms-C-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BrahmsJ/LullabyBrahms-C/LullabyBrahms-C.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "brahms-waltz-op39-3",
+      "title": "Waltz Op. 39 No. 3",
+      "composer": "J. Brahms",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["romantic", "simple", "one-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/BrahmsJ/O39/brahms-vals3/brahms-vals3-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/BrahmsJ/O39/brahms-vals3/brahms-vals3.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "grieg-troldtog",
+      "title": "March of the Trolls, Op. 54 No. 3",
+      "composer": "E. Grieg",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["romantic", "dense", "fast", "multi-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/GriegE/O54/Troldtog/Troldtog-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/GriegE/O54/Troldtog/Troldtog.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "tchaikovsky-old-french-song",
+      "title": "Old French Song, Op. 39 No. 16",
+      "composer": "P. Tchaikovsky",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["romantic", "simple", "slow", "one-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/TchaikovskyPI/O39/16OldFrenchSong/16OldFrenchSong-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/TchaikovskyPI/O39/16OldFrenchSong/16OldFrenchSong.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "handel-gavotte",
+      "title": "Gavotte (Aylesford Suite)",
+      "composer": "G. F. Handel",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["baroque", "simple", "one-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/HandelGF/Aylesford/03-gavotte/03-gavotte-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/HandelGF/Aylesford/03-gavotte/03-gavotte.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
+    },
+    {
+      "id": "vivaldi-mentre-dormi",
+      "title": "Mentre dormi, RV 725",
+      "composer": "A. Vivaldi",
+      "source": "Mutopia Project",
+      "license": "Public Domain",
+      "tags": ["baroque", "vocal", "multi-page"],
+      "runner": "remote",
+      "runInCi": false,
+      "mutopia": {
+        "pdfUrl": "https://www.mutopiaproject.org/ftp/VivaldiA/rv725/MentreDormi/MentreDormi-a4.pdf",
+        "midiUrl": "https://www.mutopiaproject.org/ftp/VivaldiA/rv725/MentreDormi/MentreDormi.mid"
+      },
+      "expected": { "pages": null, "measures": null, "systems": null }
     }
   ]
 }

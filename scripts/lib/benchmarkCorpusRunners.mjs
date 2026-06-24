@@ -4,6 +4,8 @@
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { spawnSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
 import { parseMusicXml } from '../../src/features/musicxml/parseMusicXml.js'
 import { renderPdfToPages, makeRenderPageCallback } from './renderPdfPages.mjs'
 import {
@@ -15,6 +17,9 @@ import {
   renderPagesFromArray,
 } from '../../tests/helpers/syntheticScore.js'
 import * as F from '../../tests/helpers/buildXml.js'
+
+const rootDir = join(fileURLToPath(import.meta.url), '..', '..', '..')
+const venvPython = join(rootDir, '.venv-fixtures', 'bin', 'python3')
 
 const SYNTHETIC_PAGE_BUILDERS = {
   cleanPianoPage,
@@ -150,6 +155,33 @@ export async function downloadMutopiaAssets(entry, rootDir) {
   return { pdfPath, midiPath, cacheDir }
 }
 
+function ensureMusicXmlFromMidi(midiPath, musicxmlPath) {
+  if (!existsSync(venvPython)) {
+    return {
+      ok: false,
+      detail:
+        'Missing .venv-fixtures — run: python3 -m venv .venv-fixtures && .venv-fixtures/bin/pip install music21',
+    }
+  }
+
+  const script = `
+from music21 import converter
+s = converter.parse(${JSON.stringify(midiPath)})
+s.write('musicxml', ${JSON.stringify(musicxmlPath)})
+`
+  const result = spawnSync(venvPython, ['-c', script], { encoding: 'utf8' })
+  if (result.status !== 0) {
+    return {
+      ok: false,
+      detail: result.stderr?.trim() || result.stdout?.trim() || 'music21 MIDI conversion failed',
+    }
+  }
+  if (!existsSync(musicxmlPath)) {
+    return { ok: false, detail: `music21 did not write ${musicxmlPath}` }
+  }
+  return { ok: true }
+}
+
 export async function resolveRemoteEntry(entry, rootDir, { download = false } = {}) {
   const cacheDir = cacheDirForEntry(entry, rootDir)
   const pdfPath = join(cacheDir, 'score.pdf')
@@ -166,24 +198,31 @@ export async function resolveRemoteEntry(entry, rootDir, { download = false } = 
     await downloadMutopiaAssets(entry, rootDir)
   }
 
-  if (existsSync(musicxmlPath)) {
-    const timingMap = parseMusicXml(readFileSync(musicxmlPath, 'utf8'), musicxmlPath)
-    return {
-      ok: true,
-      timingMap,
-      pdfPath,
-      musicxmlPath,
-      async loadRenderPage() {
-        const { numPages, pages } = await renderPdfToPages(pdfPath, { rootDir })
-        return { numPages, renderPage: makeRenderPageCallback(pages) }
-      },
+  if (!existsSync(musicxmlPath)) {
+    const midiPath = join(cacheDir, 'score.mid')
+    if (!existsSync(midiPath)) {
+      return {
+        ok: false,
+        skipReason: 'missing-assets',
+        detail: 'Cached PDF without MIDI — cannot derive MusicXML timing',
+      }
+    }
+    const converted = ensureMusicXmlFromMidi(midiPath, musicxmlPath)
+    if (!converted.ok) {
+      return { ok: false, skipReason: 'missing-assets', detail: converted.detail }
     }
   }
 
+  const timingMap = parseMusicXml(readFileSync(musicxmlPath, 'utf8'), musicxmlPath)
   return {
-    ok: false,
-    skipReason: 'missing-assets',
-    detail: 'Cached PDF without MusicXML — convert MIDI to MusicXML offline before benchmarking',
+    ok: true,
+    timingMap,
+    pdfPath,
+    musicxmlPath,
+    async loadRenderPage() {
+      const { numPages, pages } = await renderPdfToPages(pdfPath, { rootDir })
+      return { numPages, renderPage: makeRenderPageCallback(pages) }
+    },
   }
 }
 
