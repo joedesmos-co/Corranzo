@@ -1,4 +1,5 @@
 import { memo, useCallback, useRef } from 'react'
+import useScoreFollowCursorElement from '../../features/score-follow/useScoreFollowCursorElement.js'
 import {
   ANCHOR_SOURCE,
   isAutomaticAnchorSource,
@@ -31,7 +32,7 @@ function scoreFollowOverlayPropsEqual(prev, next) {
   const nc = next.cursor
   if (pc?.visible !== nc?.visible) return false
   if (pc?.page !== nc?.page) return false
-  if (pc?.x !== nc?.x || pc?.y !== nc?.y) return false
+  if (pc?.smoothed !== nc?.smoothed) return false
   const pt = prev.noteTarget
   const nt = next.noteTarget
   if (pt?.x !== nt?.x || pt?.y !== nt?.y) return false
@@ -61,8 +62,14 @@ function ScoreFollowOverlay({
   showCandidateAnchors = false,
 }) {
   const layerRef = useRef(null)
+  const cursorRef = useRef(null)
 
   const showCursor = cursorVisibility?.show ?? false
+  useScoreFollowCursorElement({
+    elementRef: cursorRef,
+    pageNumber,
+    showCursor,
+  })
   const pageAnchors = anchors.filter((anchor) => anchor.page === pageNumber)
   const pageSystemStartMarks = systemStartMarks.filter((m) => m.page === pageNumber)
   const pageCandidateAnchors =
@@ -80,8 +87,7 @@ function ScoreFollowOverlay({
     : pageAnchors.filter((anchor) => normalizeAnchorSource(anchor) === ANCHOR_SOURCE.MANUAL)
   const hasMarkers = showAnchorMarkers && markerAnchors.length > 0
   const hasSystemStartMarks = systemStartMode && pageSystemStartMarks.length > 0
-  const cursorX = showCursor ? cursor?.x : null
-  const cursorY = showCursor ? cursor?.y : null
+  const cursorSmoothed = cursor?.smoothed ?? false
 
   const handlePointerDown = useCallback(
     (event) => {
@@ -189,13 +195,11 @@ function ScoreFollowOverlay({
           />
         ))}
 
-      {showCursor && cursorX != null && cursorY != null && (
+      {showCursor && (
         <div
-          className={`score-follow-cursor${cursor?.smoothed ? ' score-follow-cursor--active' : ''}`}
-          style={{
-            left: `${cursorX * 100}%`,
-            top: `${cursorY * 100}%`,
-          }}
+          ref={cursorRef}
+          className={`score-follow-cursor${cursorSmoothed ? ' score-follow-cursor--active' : ''}`}
+          style={{ display: 'none' }}
           aria-hidden
         >
           <span className="score-follow-cursor__line" />

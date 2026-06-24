@@ -87,8 +87,8 @@ export function buildBundledAnchorsFromAutoAnchors(supplementalAnchors, meta = {
 
 /**
  * Hungarian Dance page 4 is detected as six single staves (grand-staff pairing
- * fails on tight vertical spacing). Measures 96–104 were mapped onto the wrong
- * staff bands; rebuild them on the lower two grand-staff pairs only.
+ * fails on tight vertical spacing). Re-map measures onto merged grand-staff
+ * pairs: system 1 (89–95) gets grand-staff Y only; systems 2–3 are rebuilt.
  */
 export function repairHungarianDancePage4SupplementalAnchors(
   supplementalAnchors,
@@ -114,6 +114,37 @@ export function repairHungarianDancePage4SupplementalAnchors(
     }
   }
 
+  /** Page-4 system 1: bbox midpoint sits below the visible gap between staves. */
+  const mergeGrandStaffVisualCenter = (entryA, entryB) => {
+    const merged = mergeGrandStaffPair(entryA, entryB)
+    return {
+      ...merged,
+      system: {
+        ...merged.system,
+        center: (entryA.system.center + entryB.system.center) / 2,
+      },
+    }
+  }
+
+  const byMeasure = new Map(
+    (supplementalAnchors ?? []).map((anchor) => [anchor.measureNumber, anchor]),
+  )
+
+  const mergedSystem1 = mergeGrandStaffVisualCenter(page4Entries[0], page4Entries[1])
+  const system1Y = buildPerMeasureSystemAnchors(
+    [mergedSystem1],
+    [{ measureNumbers: [89, 90, 91, 92, 93, 94, 95] }],
+    timingMap,
+  )
+  for (const repaired of system1Y) {
+    const existing = byMeasure.get(repaired.measureNumber)
+    if (!existing) {
+      continue
+    }
+    // Horizontal geometry was already correct — only adjust Y to the grand-staff visual center.
+    byMeasure.set(repaired.measureNumber, { ...existing, y: repaired.y })
+  }
+
   const mergedSystems = [
     mergeGrandStaffPair(page4Entries[2], page4Entries[3]),
     mergeGrandStaffPair(page4Entries[4], page4Entries[5]),
@@ -125,12 +156,9 @@ export function repairHungarianDancePage4SupplementalAnchors(
 
   const repairedTail = buildPerMeasureSystemAnchors(mergedSystems, spans, timingMap)
   if (repairedTail.length < 2) {
-    return supplementalAnchors
+    return [...byMeasure.values()].sort((a, b) => a.measureNumber - b.measureNumber)
   }
 
-  const byMeasure = new Map(
-    (supplementalAnchors ?? []).map((anchor) => [anchor.measureNumber, anchor]),
-  )
   for (const anchor of repairedTail) {
     byMeasure.set(anchor.measureNumber, anchor)
   }

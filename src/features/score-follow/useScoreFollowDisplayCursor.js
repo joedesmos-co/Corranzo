@@ -1,21 +1,19 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import {
+  publishScoreFollowCursor,
+  resetScoreFollowCursorRuntime,
+} from './scoreFollowCursorRuntime.js'
 
-const ALPHA_Y = 1
 const PAGE_CHANGE_ALPHA = 0.55
-const SNAP_THRESHOLD = 0.004
+const SNAP_THRESHOLD = 0.0005
 
 /**
- * RAF-smoothed cursor for stable on-screen motion during playback.
- *
- * When `getScoreTime` and `resolveRealtimeCursor` are provided (during active
- * playback), the RAF tick reads the engine's real-time score position every
- * frame and resolves the cursor there.  This makes the cursor update at 60 fps
- * instead of the React-state update rate (≈5 Hz / 200 ms), eliminating the
- * visible "jumping between positions" during playback.
- *
- * Skips smoothing when lockExact is set (startup / page-change snap).
+ * Audio-clock cursor driver. During playback the RAF loop reads
+ * `getScoreTime()` (Tone-synchronized) and publishes to the imperative runtime
+ * store so the overlay can paint at 60 fps without React re-rendering the
+ * practice tree every frame.
  */
-export default function useScoreFollowDisplayCursor({
+export default function useScoreFollowCursorDriver({
   targetCursor,
   active,
   resetSnapKey = '',
@@ -23,37 +21,40 @@ export default function useScoreFollowDisplayCursor({
   getScoreTime = null,
   resolveRealtimeCursor = null,
 }) {
-  const [displayCursor, setDisplayCursor] = useState(targetCursor ?? { visible: false })
+  const targetRef = useRef(targetCursor)
+  targetRef.current = targetCursor
+
+  const getScoreTimeRef = useRef(getScoreTime)
+  getScoreTimeRef.current = getScoreTime
+  const resolveRealtimeCursorRef = useRef(resolveRealtimeCursor)
+  resolveRealtimeCursorRef.current = resolveRealtimeCursor
+
   const stateRef = useRef({
     x: 0,
     y: 0,
     page: 1,
+    measureNumber: null,
     initialized: false,
   })
-  const targetRef = useRef(targetCursor)
-  targetRef.current = targetCursor
-
-  // Stable refs so the RAF closure always has the latest callbacks.
-  // Writing .current during render is intentional here (standard React pattern
-  // for keeping stale-closure-free callbacks in a RAF loop).
-  const getScoreTimeRef = useRef(getScoreTime)
-  // eslint-disable-next-line react-hooks/refs
-  getScoreTimeRef.current = getScoreTime
-  const resolveRealtimeCursorRef = useRef(resolveRealtimeCursor)
-  // eslint-disable-next-line react-hooks/refs
-  resolveRealtimeCursorRef.current = resolveRealtimeCursor
 
   useEffect(() => {
     stateRef.current.initialized = false
+    if (targetCursor?.visible) {
+      publishScoreFollowCursor({ ...targetCursor, smoothed: false })
+    } else {
+      resetScoreFollowCursorRuntime({ visible: false, page: 1, x: 0, y: 0 })
+    }
   }, [resetSnapKey])
 
   useEffect(() => {
     if (lockExact || !active) {
-      setDisplayCursor(targetCursor ?? { visible: false })
-      if (targetCursor?.visible) {
-        stateRef.current.x = targetCursor.x
-        stateRef.current.y = targetCursor.y
-        stateRef.current.page = targetCursor.page
+      const next = targetCursor ?? { visible: false }
+      publishScoreFollowCursor({ ...next, smoothed: false })
+      if (next.visible) {
+        stateRef.current.x = next.x
+        stateRef.current.y = next.y
+        stateRef.current.page = next.page
+        stateRef.current.measureNumber = next.measureNumber ?? null
         stateRef.current.initialized = true
       } else {
         stateRef.current.initialized = false
@@ -69,16 +70,13 @@ export default function useScoreFollowDisplayCursor({
     let frameId = 0
 
     const tick = () => {
-      // If real-time resolution is available, compute cursor at the actual
-      // engine position every frame (smooth 60 fps).  Otherwise fall back to
-      // the React-state target (5 Hz with alpha-blend smoothing).
       const rtResolve = resolveRealtimeCursorRef.current
       const rtGetTime = getScoreTimeRef.current
       const target =
         rtResolve && rtGetTime ? rtResolve(rtGetTime()) : targetRef.current
 
       if (!target?.visible) {
-        setDisplayCursor(target ?? { visible: false })
+        publishScoreFollowCursor(target ?? { visible: false })
         frameId = requestAnimationFrame(tick)
         return
       }
@@ -88,31 +86,23 @@ export default function useScoreFollowDisplayCursor({
         state.x = target.x
         state.y = target.y
         state.page = target.page
+        state.measureNumber = target.measureNumber ?? null
         state.initialized = true
-        setDisplayCursor({ ...target })
+        publishScoreFollowCursor({ ...target, smoothed: false })
         frameId = requestAnimationFrame(tick)
         return
       }
 
-      // When resolving in real-time the target already advances smoothly —
-      // set the display cursor directly without additional alpha-blend lag.
       if (rtResolve && rtGetTime) {
-        if (
-          Math.abs(target.x - state.x) > SNAP_THRESHOLD ||
-          Math.abs(target.y - state.y) > SNAP_THRESHOLD ||
-          target.measureNumber !== state.measureNumber
-        ) {
-          state.x = target.x
-          state.y = target.y
-          state.page = target.page
-          state.measureNumber = target.measureNumber
-          setDisplayCursor({ ...target, smoothed: true })
-        }
+        state.x = target.x
+        state.y = target.y
+        state.page = target.page
+        state.measureNumber = target.measureNumber ?? null
+        publishScoreFollowCursor({ ...target, smoothed: false })
         frameId = requestAnimationFrame(tick)
         return
       }
 
-      // Fallback: alpha-blend toward the (stale) React-state target.
       const dx = target.x - state.x
       const dy = target.y - state.y
       const alphaX = Math.abs(dx) > 0.2 ? PAGE_CHANGE_ALPHA : 0.42
@@ -125,13 +115,9 @@ export default function useScoreFollowDisplayCursor({
         state.y = target.y
       }
       state.page = target.page
+      state.measureNumber = target.measureNumber ?? null
 
-      if (Math.abs(dx) < SNAP_THRESHOLD && Math.abs(dy) < SNAP_THRESHOLD) {
-        frameId = requestAnimationFrame(tick)
-        return
-      }
-
-      setDisplayCursor({
+      publishScoreFollowCursor({
         ...target,
         x: state.x,
         y: state.y,
@@ -145,6 +131,4 @@ export default function useScoreFollowDisplayCursor({
     frameId = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frameId)
   }, [active, lockExact])
-
-  return displayCursor
 }

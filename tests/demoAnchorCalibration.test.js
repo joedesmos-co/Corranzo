@@ -9,6 +9,7 @@ import {
   calibrateAnchorsFromDetection,
   compareBundledAnchorsToReference,
   manualSystemsFromBundledPayload,
+  repairHungarianDancePage4SupplementalAnchors,
   validateBundledAnchorPayload,
   CALIBRATION_SOURCE,
   PROMOTION_STATUS,
@@ -69,6 +70,50 @@ describe('demoAnchorCalibration', () => {
     )
     expect(bundled.anchors[0].x).toBe(0.28)
     expect(bundled.anchors[0].meta.measureStartX).toBe(0.12)
+  })
+
+  it('repairHungarianDancePage4 lifts system-1 Y to grand-staff center without changing X', () => {
+    const supplemental = [89, 90, 95].map((measureNumber) => ({
+      page: 4,
+      x: 0.1345,
+      y: 0.0869,
+      measureNumber,
+      source: 'auto-measure',
+      meta: { role: 'measure' },
+    }))
+    const page4Entries = [
+      { page: 4, system: { y0: 0.0749, y1: 0.0989, center: 0.0869 }, contentBounds: { x0: 0.036, x1: 0.966 }, imageData: null, inkThreshold: 170 },
+      { page: 4, system: { y0: 0.1371, y1: 0.1873, center: 0.1622 }, contentBounds: { x0: 0.036, x1: 0.966 }, imageData: null, inkThreshold: 170 },
+      { page: 4, system: { y0: 0.2155, y1: 0.2403, center: 0.2279 }, contentBounds: { x0: 0.036, x1: 0.966 }, imageData: null, inkThreshold: 170 },
+      { page: 4, system: { y0: 0.2643, y1: 0.3025, center: 0.2834 }, contentBounds: { x0: 0.036, x1: 0.966 }, imageData: null, inkThreshold: 170 },
+      { page: 4, system: { y0: 0.3569, y1: 0.3915, center: 0.3742 }, contentBounds: { x0: 0.036, x1: 0.966 }, imageData: null, inkThreshold: 170 },
+      { page: 4, system: { y0: 0.4191, y1: 0.4431, center: 0.4311 }, contentBounds: { x0: 0.036, x1: 0.966 }, imageData: null, inkThreshold: 170 },
+    ]
+    const timingMap = parseMusicXml(
+      F.scoreWrap(`<part id="P1">${Array.from({ length: 104 }, (_, i) => {
+        const m = i + 1
+        let xml = `<measure number="${m}">`
+        if (m === 1) {
+          xml +=
+            '<attributes><divisions>1</divisions><staves>2</staves>' +
+            '<time><beats>2</beats><beat-type>4</beat-type></time></attributes>' +
+            F.soundTempo(108)
+        }
+        if (m === 89 || m === 96 || m === 102) xml += '<print new-system="yes"/>'
+        return xml + F.fourQuarters() + '</measure>'
+      }).join('')}</part>`),
+    )
+    const repaired = repairHungarianDancePage4SupplementalAnchors(
+      supplemental,
+      page4Entries,
+      timingMap,
+    )
+    const m89 = repaired.find((anchor) => anchor.measureNumber === 89)
+    expect(m89.x).toBeCloseTo(0.1345, 3)
+    expect(m89.y).toBeCloseTo(0.12455, 3)
+    expect(m89.y).not.toBeCloseTo(0.0869, 2)
+    expect(m89.y).not.toBeCloseTo(0.1311, 3)
+    expect(repaired.find((anchor) => anchor.measureNumber === 95).y).toBeCloseTo(m89.y, 4)
   })
 
   it('calibrateAnchorsFromDetection builds full measure coverage on synthetic PDF', async () => {

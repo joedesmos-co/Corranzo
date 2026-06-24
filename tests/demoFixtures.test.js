@@ -157,10 +157,23 @@ describe('Hungarian Dance demo fixtures', () => {
     const anchor = (measureNumber) =>
       payload.anchors.find((item) => item.measureNumber === measureNumber)
 
-    it('keeps measure 89 on the first page-4 system (unchanged from pages 1–3)', () => {
-      expect(anchor(89).page).toBe(4)
-      expect(anchor(89).y).toBeLessThan(0.12)
-      expect(anchor(89).x).toBeGreaterThan(0.12)
+    it('page-4 system 1 uses grand-staff center Y, not the treble band alone', () => {
+      const m89 = anchor(89)
+      const m95 = anchor(95)
+      const m96 = anchor(96)
+      const m102 = anchor(102)
+      expect(m89.page).toBe(4)
+      expect(m89.x).toBeGreaterThan(0.12)
+      expect(m89.y).toBeCloseTo(0.12455, 2)
+      expect(m89.y).toBeGreaterThan(0.12)
+      expect(m89.y).toBeLessThan(0.13)
+      expect(m89.y).not.toBeCloseTo(0.087, 2)
+      expect(m95.y).toBeCloseTo(m89.y, 3)
+      const gapToSystem2 = m96.y - m89.y
+      const gapToSystem3 = m102.y - m96.y
+      expect(gapToSystem2).toBeGreaterThan(0.1)
+      expect(gapToSystem2).toBeLessThan(0.2)
+      expect(Math.abs(gapToSystem2 - gapToSystem3)).toBeLessThan(0.05)
     })
 
     it('places measure 96 on the second grand staff, not the bass band of system 1', () => {

@@ -18,7 +18,10 @@ import { buildAutoSetupRuntimeDiagnostics, describeAutoSetupRejection } from './
 import { analyzeSemiAutoScoreSetup } from './semiAutoScoreAlignment.js'
 import { buildAnchorsFromSystemStarts } from './buildAnchorsFromSystemStarts.js'
 import { createAnchorId } from './scoreFollowStorage.js'
-import { resolveScoreFollowCursor } from './resolveScoreFollowCursor.js'
+import {
+  resolveScoreFollowCursor,
+  START_LOCK_THRESHOLD_SECONDS,
+} from './resolveScoreFollowCursor.js'
 import {
   findNextUnmarkedMeasureNumber,
   getScoreFollowMarkingProgress,
@@ -28,7 +31,9 @@ import {
   getCursorVisibilityState,
 } from './scoreFollowVisibility.js'
 import useScoreFollowAnchors from './useScoreFollowAnchors.js'
-import useScoreFollowDisplayCursor from './useScoreFollowDisplayCursor.js'
+import useScoreFollowCursorDriver from './useScoreFollowDisplayCursor.js'
+import { getScoreFollowCursorSnapshot } from './scoreFollowCursorRuntime.js'
+import { buildScoreFollowPrecisionReport } from './scoreFollowPrecisionDiagnostics.js'
 import { isNextGenAlignmentDiagnosticsEnabled } from './nextGenAlignmentFlag.js'
 import { deriveNextGenAlignmentDiagnostics } from './nextGenAlignmentDiagnostics.js'
 import { compareAnchorSets, assessPromotionReadiness } from './anchorComparison.js'
@@ -301,17 +306,16 @@ export default function useScoreFollow({
   const followNeedsSetup = anchorTrust.needsSetup
 
   const lockExactCursor = Boolean(cursor?.lockExact || cursor?.forcedStart)
-  const smoothCursorActive = Boolean(
+  const realtimeCursorActive = Boolean(
     enabled &&
       isPlaying &&
       !alignmentMode &&
       !semiAutoPreview &&
       cursor?.visible &&
-      !lockExactCursor &&
-      practiceTime > 0.15,
+      !lockExactCursor,
   )
 
-  const resetSnapKey = `${timingSourceId ?? ''}:${practiceTime <= 0.15 ? 'start' : Math.floor(practiceTime * 4)}`
+  const resetSnapKey = `${timingSourceId ?? ''}`
 
   // Real-time cursor resolver: called every animation frame by the display
   // cursor hook so the cursor position advances continuously (not just at the
@@ -332,14 +336,18 @@ export default function useScoreFollow({
     [hasTiming, trustedAnchors, anchorTrust, timingMap],
   )
 
-  const displayCursor = useScoreFollowDisplayCursor({
+  useScoreFollowCursorDriver({
     targetCursor: cursor,
-    active: smoothCursorActive,
+    active: realtimeCursorActive,
     resetSnapKey,
     lockExact: lockExactCursor,
-    getScoreTime: smoothCursorActive ? getScoreTime : null,
-    resolveRealtimeCursor: smoothCursorActive ? resolveRealtimeCursor : null,
+    getScoreTime: realtimeCursorActive ? getScoreTime : null,
+    resolveRealtimeCursor: realtimeCursorActive ? resolveRealtimeCursor : null,
   })
+
+  const displayCursor = realtimeCursorActive
+    ? getScoreFollowCursorSnapshot()
+    : (cursor ?? { visible: false })
 
   const cursorVisibility = useMemo(
     () =>
@@ -1097,6 +1105,18 @@ export default function useScoreFollow({
     anchorTrust.showCursor,
   ])
 
+  const precisionReport = useMemo(
+    () =>
+      buildScoreFollowPrecisionReport({
+        timingMap,
+        practiceTime,
+        audioTime: getScoreTime?.() ?? practiceTime,
+        targetCursor: cursor,
+        displayCursor,
+      }),
+    [timingMap, practiceTime, getScoreTime, cursor, displayCursor],
+  )
+
   const debug = useMemo(
     () => ({
       currentMeasureNumber: currentMeasure?.number ?? null,
@@ -1128,7 +1148,16 @@ export default function useScoreFollow({
       cursorY: cursor?.y ?? null,
       cursorConfidence: cursor?.confidence ?? null,
       cursorInterpolated: Boolean(cursor?.interpolated),
-      cursorMotion: cursor?.lockExact ? 'locked' : cursor?.interpolated ? 'glide' : 'hold',
+      cursorMotion: cursor?.lockExact
+        ? 'locked'
+        : cursor?.atOnset
+          ? 'onset-snap'
+          : cursor?.interpolated
+            ? cursor?.progressMode ?? 'glide'
+            : 'hold',
+      cursorProgressMode: cursor?.progressMode ?? null,
+      cursorAtOnset: Boolean(cursor?.atOnset),
+      precision: precisionReport,
       // The cursor's single timing source of truth is the MusicXML timeline.
       timingSource: 'musicxml',
       timingSourceId: timingSourceId ?? null,
@@ -1151,7 +1180,9 @@ export default function useScoreFollow({
       autoSetupRuntimeForDebug,
       anchorPromotion,
       cursor,
+      displayCursor,
       practiceTime,
+      precisionReport,
       timingSourceId,
       pdfFileName,
       pdfFingerprint,
@@ -1196,7 +1227,7 @@ export default function useScoreFollow({
     cursor,
     displayCursor,
     cursorVisibility,
-    smoothCursorActive,
+    realtimeCursorActive,
     canFollow,
     currentMeasure,
     hasTiming,

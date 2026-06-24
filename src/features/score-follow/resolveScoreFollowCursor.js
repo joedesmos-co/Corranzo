@@ -13,9 +13,12 @@ import {
 } from './trustedAnchors.js'
 import { sortAnchorsByMeasure } from './anchorSort.js'
 import { clamp, lerp } from './scoreFollowEasing.js'
-import { smoothstep } from './scoreFollowEasing.js'
+import { resolveMusicalXInMeasure } from './cursorMusicalProgress.js'
 
-export const START_LOCK_THRESHOLD_SECONDS = 0.15
+/** Brief start lock — only until the first audible beat, not a full quarter note. */
+export const START_LOCK_THRESHOLD_SECONDS = 0.05
+
+const PAGE_TRANSITION_PROGRESS = 0.88
 
 function findAnchorBracket(sorted, timingMap, practiceTime) {
   let beforeIndex = -1
@@ -77,18 +80,24 @@ function interpolateBetweenAnchors(timingMap, practiceTime, before, after, curre
   }
 
   const progress = beatWeightedProgress(timingMap, practiceTime, t0, t1)
-  const eased = smoothstep(progress)
 
   return {
     visible: true,
-    page: before.page === after.page ? before.page : progress < 0.5 ? before.page : after.page,
-    x: lerp(before.x, after.x, eased),
-    y: lerp(before.y, after.y, eased),
+    page:
+      before.page === after.page
+        ? before.page
+        : progress >= PAGE_TRANSITION_PROGRESS
+          ? after.page
+          : before.page,
+    x: lerp(before.x, after.x, progress),
+    y: lerp(before.y, after.y, progress),
     measureNumber: currentMeasure.number,
-    progress: eased,
+    progress,
     lockExact: false,
     interpolated: true,
+    progressMode: 'beat-gap',
     confidence: 'interpolated',
+    transitionPage: after.page,
   }
 }
 
@@ -179,28 +188,29 @@ export function resolveScoreFollowCursor({
     }
 
     if (glideTargetX != null) {
-      const measureWindow = getMeasurePlaybackWindow(
+      const musical = resolveMusicalXInMeasure({
         timingMap,
-        currentMeasure.number,
         practiceTime,
-      )
-      if (measureWindow) {
-        const progress = beatWeightedProgress(
-          timingMap,
-          practiceTime,
-          measureWindow.startTimeSeconds,
-          measureWindow.endTimeSeconds,
-        )
+        measureNumber: currentMeasure.number,
+        xStart: exact.x,
+        xEnd: glideTargetX,
+      })
+      if (musical) {
         return {
           cursor: {
             visible: true,
             page: exact.page,
-            x: lerp(exact.x, glideTargetX, progress),
+            x: musical.x,
             y: exact.y,
             measureNumber: exact.measureNumber,
-            progress,
+            progress: musical.progress,
             lockExact: false,
-            interpolated: true,
+            interpolated: !musical.atOnset,
+            atOnset: musical.atOnset,
+            progressMode: musical.mode,
+            meta: exact.meta,
+            anchorBeat1X: exact.x,
+            playableEndX: glideTargetX,
             confidence: 'exact',
           },
           needsSetup: trust?.needsSetup ?? false,

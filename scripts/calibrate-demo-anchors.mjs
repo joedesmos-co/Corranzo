@@ -245,7 +245,7 @@ async function buildFromAutoPreviewExport({ pdfPath, musicxmlPath, meta }) {
       timingMap,
     )
     warnings.push(
-      'Page 4 grand-staff pairing repaired for measures 96–104 (six single-stave detections).',
+      'Page 4 grand-staff pairing repaired (system 1 Y; systems 2–3 X/Y) for six single-stave detections.',
     )
   }
 

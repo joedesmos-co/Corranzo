@@ -161,7 +161,17 @@ export function PracticeSessionProvider({
 
   const cursorValue = useMemo(
     () => ({
-      displayCursor: scoreFollow.displayCursor ?? scoreFollow.cursor,
+      displayCursor: hidePlaybackScoreFollowCursor || wfyNoteTargetVisible
+        ? { visible: false }
+        : {
+            visible: Boolean(scoreFollow.displayCursor?.visible ?? scoreFollow.cursor?.visible),
+            page: scoreFollow.displayCursor?.page ?? scoreFollow.cursor?.page ?? 1,
+            measureNumber:
+              scoreFollow.displayCursor?.measureNumber ??
+              scoreFollow.cursor?.measureNumber ??
+              null,
+            smoothed: Boolean(scoreFollow.displayCursor?.smoothed),
+          },
       cursorVisibility:
         hidePlaybackScoreFollowCursor || wfyNoteTargetVisible
           ? {
@@ -177,8 +187,13 @@ export function PracticeSessionProvider({
       hidePlaybackScoreFollowCursor,
     }),
     [
-      scoreFollow.displayCursor,
-      scoreFollow.cursor,
+      scoreFollow.displayCursor?.visible,
+      scoreFollow.displayCursor?.page,
+      scoreFollow.displayCursor?.measureNumber,
+      scoreFollow.displayCursor?.smoothed,
+      scoreFollow.cursor?.visible,
+      scoreFollow.cursor?.page,
+      scoreFollow.cursor?.measureNumber,
       scoreFollow.cursorVisibility,
       hidePlaybackScoreFollowCursor,
       waitForYouNoteTarget?.target,
