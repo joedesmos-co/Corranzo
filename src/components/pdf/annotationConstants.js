@@ -21,6 +21,53 @@ export const DEFAULT_TOOL_SETTINGS = {
   },
 }
 
+/**
+ * Normalize stroke style for AnnotationLayer. Warm PDF slots and restored
+ * sessions may pass null or partial settings — never crash the layer.
+ */
+export function resolveAnnotationStrokeStyle(
+  strokeStyle,
+  activeTool = ANNOTATION_TOOLS.POINTER,
+) {
+  const tool = activeTool ?? ANNOTATION_TOOLS.POINTER
+  const defaults =
+    DEFAULT_TOOL_SETTINGS[tool] ??
+    DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.PEN]
+
+  if (!strokeStyle || typeof strokeStyle !== 'object') {
+    if (tool === ANNOTATION_TOOLS.ERASER) {
+      const width = defaults.width ?? DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.ERASER].width
+      return { color: 'transparent', opacity: 1, width, eraserRadius: width }
+    }
+    return {
+      color: defaults.color ?? '#e8eef8',
+      opacity: defaults.opacity ?? 1,
+      width: defaults.width ?? 0.004,
+    }
+  }
+
+  const width =
+    strokeStyle.width ??
+    defaults.width ??
+    DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.PEN].width
+
+  if (tool === ANNOTATION_TOOLS.ERASER) {
+    return {
+      color: 'transparent',
+      opacity: 1,
+      width,
+      eraserRadius: strokeStyle.eraserRadius ?? width,
+    }
+  }
+
+  return {
+    color: strokeStyle.color ?? defaults.color ?? '#e8eef8',
+    opacity: strokeStyle.opacity ?? defaults.opacity ?? 1,
+    width,
+    eraserRadius: strokeStyle.eraserRadius ?? width,
+  }
+}
+
 export const PEN_COLORS = [
   '#e8eef8',
   '#ffffff',

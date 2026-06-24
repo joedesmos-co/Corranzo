@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ANNOTATION_TOOLS } from './annotationConstants.js'
+import { ANNOTATION_TOOLS, resolveAnnotationStrokeStyle } from './annotationConstants.js'
 import { findStrokesToErase, pointsToSvgPath } from '../../utils/annotationGeometry.js'
 import {
   getPointerPressure,
@@ -24,6 +24,7 @@ export default function AnnotationLayer({
   onErase,
   onLiveErase,
 }) {
+  const resolvedStrokeStyle = resolveAnnotationStrokeStyle(strokeStyle, activeTool)
   const layerRef = useRef(null)
   const [pageRect, setPageRect] = useState(null)
   const [draftStroke, setDraftStroke] = useState(null)
@@ -116,7 +117,8 @@ export default function AnnotationLayer({
 
       if (previous.tool === ANNOTATION_TOOLS.ERASER) {
         if (erasedLiveRef.current.size === 0) {
-          const ids = findStrokesToErase(strokes, points, previous.eraserRadius)
+          const radius = previous.eraserRadius ?? previous.width ?? resolvedStrokeStyle.width
+          const ids = findStrokesToErase(strokes, points, radius)
           onErase(ids)
         }
       } else {
@@ -134,7 +136,7 @@ export default function AnnotationLayer({
     })
 
     drawingRef.current = false
-  }, [onErase, onStrokeComplete, strokes])
+  }, [onErase, onStrokeComplete, resolvedStrokeStyle.width, strokes])
 
   function addPoint(event) {
     const point = clientToNormalized(event.clientX, event.clientY, pageRect)
@@ -155,8 +157,8 @@ export default function AnnotationLayer({
     const { point, pressure } = addPoint(event)
     const width =
       activeTool === ANNOTATION_TOOLS.ERASER
-        ? strokeStyle.width
-        : scaleWidth(strokeStyle.width, pressure, activeTool)
+        ? resolvedStrokeStyle.width
+        : scaleWidth(resolvedStrokeStyle.width, pressure, activeTool)
 
     drawingRef.current = true
     erasedLiveRef.current = new Set()
@@ -165,10 +167,10 @@ export default function AnnotationLayer({
     setDraftStroke({
       tool: activeTool,
       points: [point],
-      color: strokeStyle.color,
+      color: resolvedStrokeStyle.color,
       width,
-      opacity: strokeStyle.opacity,
-      eraserRadius: strokeStyle.eraserRadius ?? strokeStyle.width,
+      opacity: resolvedStrokeStyle.opacity,
+      eraserRadius: resolvedStrokeStyle.eraserRadius ?? resolvedStrokeStyle.width,
     })
   }
 
@@ -192,7 +194,7 @@ export default function AnnotationLayer({
     event.stopPropagation()
 
     if (activeTool !== ANNOTATION_TOOLS.ERASER) {
-      point.width = scaleWidth(strokeStyle.width, pressure, activeTool)
+      point.width = scaleWidth(resolvedStrokeStyle.width, pressure, activeTool)
     }
 
     pendingPointsRef.current.push(point)
@@ -200,7 +202,10 @@ export default function AnnotationLayer({
 
     if (activeTool === ANNOTATION_TOOLS.ERASER && draftStroke) {
       const sample = [point]
-      applyLiveErase(sample, strokeStyle.eraserRadius ?? strokeStyle.width)
+      applyLiveErase(
+        sample,
+        resolvedStrokeStyle.eraserRadius ?? resolvedStrokeStyle.width,
+      )
     }
   }
 
@@ -240,7 +245,7 @@ export default function AnnotationLayer({
   const isPointer = activeTool === ANNOTATION_TOOLS.POINTER
   const isEraser = activeTool === ANNOTATION_TOOLS.ERASER
   const brushRadiusPx = pageRect
-    ? (strokeStyle.eraserRadius ?? strokeStyle.width) * pageRect.width
+    ? (resolvedStrokeStyle.eraserRadius ?? resolvedStrokeStyle.width) * pageRect.width
     : 0
 
   return (

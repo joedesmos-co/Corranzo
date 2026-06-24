@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import PdfPageFrame from './PdfPageFrame.jsx'
-import { ANNOTATION_TOOLS } from './annotationConstants.js'
+import { ANNOTATION_TOOLS, resolveAnnotationStrokeStyle } from './annotationConstants.js'
 import {
   beginPageSwitch,
   completePageSwitch,
@@ -24,7 +24,7 @@ function windowPageNumbers(pageNumber, numPages) {
 const INACTIVE_FRAME_PROPS = {
   strokes: [],
   activeTool: ANNOTATION_TOOLS.POINTER,
-  strokeStyle: null,
+  strokeStyle: resolveAnnotationStrokeStyle(null, ANNOTATION_TOOLS.POINTER),
   onStrokeComplete: () => {},
   onErase: () => {},
   onLiveErase: () => {},

@@ -39,21 +39,26 @@ export default function useAnnotations() {
 
   const getStrokeStyle = useCallback(
     (tool) => {
-      const settings = toolSettings[tool] ?? toolSettings[ANNOTATION_TOOLS.PEN]
+      const settings =
+        toolSettings[tool] ??
+        toolSettings[ANNOTATION_TOOLS.PEN] ??
+        DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.PEN]
 
       if (tool === ANNOTATION_TOOLS.ERASER) {
+        const width =
+          settings?.width ?? DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.ERASER].width
         return {
           color: 'transparent',
           opacity: 1,
-          width: settings.width,
-          eraserRadius: settings.width,
+          width,
+          eraserRadius: width,
         }
       }
 
       return {
-        color: settings.color,
-        opacity: settings.opacity,
-        width: settings.width,
+        color: settings?.color ?? DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.PEN].color,
+        opacity: settings?.opacity ?? DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.PEN].opacity,
+        width: settings?.width ?? DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.PEN].width,
       }
     },
     [toolSettings],
