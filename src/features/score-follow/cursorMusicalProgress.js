@@ -437,16 +437,24 @@ export function resolveMusicalXInMeasure({
   })
 
   if (measureBridge) {
-    const bridgeLookupTime = Math.max(
-      practiceTime,
-      window.endTimeSeconds - 0.001,
-    )
+    // Look the next measure's window up at a time just PAST this measure's end so
+    // it lands inside the next window. The performed timeline (repeats) matches
+    // `time >= start` with no tolerance, so `window.endTimeSeconds - 0.001` falls
+    // 1ms short of the next window and silently drops the bridge — which froze the
+    // cursor at xEnd (the measure-end stall). Look up just past the barline.
+    const bridgeLookupTime = window.endTimeSeconds + 0.0005
     const nextWindow = getMeasurePlaybackWindow(
       timingMap,
       measureBridge.measureNumber,
       bridgeLookupTime,
     )
-    if (nextWindow) {
+    // Only bridge across a CONTIGUOUS barline (the next window begins where this
+    // one ends). A non-contiguous jump (e.g. a repeat) is a hard section edge, not
+    // a bridge — settle at the measure end as before.
+    const contiguous =
+      nextWindow != null &&
+      Math.abs(nextWindow.startTimeSeconds - window.endTimeSeconds) < 0.01
+    if (contiguous) {
       const firstNext = firstMusicalEventInMeasure(
         timingMap,
         measureBridge.measureNumber,
@@ -518,12 +526,20 @@ export function resolveMusicalXInMeasure({
 
   const span = after.timeSeconds - before.timeSeconds
   const local = span > 0 ? clamp((practiceTime - before.timeSeconds) / span, 0, 1) : 0
+  // A same-system bridge target (next measure's first onset) lives BEYOND the
+  // current measure's playableEndX (xEnd). Motion toward it must not be clamped
+  // at xEnd or the cursor stalls at the barline. The hard cap stays at xEnd only
+  // when there is no bridge — i.e. a measure-end / cross-system boundary.
+  const bridgeEvent = events.find((event) => event.kind === 'bridge-next')
+  const motionMaxX = bridgeEvent ? Math.max(xEnd, bridgeEvent.x) : xEnd
   const segmentMaxX =
-    after.kind === 'bridge-next' || after.kind === 'measure-end'
-      ? Math.min(after.x, xEnd)
-      : xEnd
+    after.kind === 'bridge-next'
+      ? Math.max(xEnd, after.x)
+      : after.kind === 'measure-end'
+        ? Math.min(after.x, xEnd)
+        : xEnd
   let x = interpolateSegment(before, after, prior, practiceTime, events, beforeIndex, segmentMaxX)
-  x = Math.min(x, xEnd)
+  x = Math.min(x, motionMaxX)
   const progress = clamp((x - xStart) / Math.max(0.001, xEnd - xStart), 0, 1)
   const atNoteOnset =
     (before.kind === 'note' || before.kind === 'chord') &&

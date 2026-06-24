@@ -212,10 +212,22 @@ export function resolveScoreFollowCursor({
       if (musical) {
         const systemEndX =
           typeof exact.meta?.systemEndX === 'number' ? exact.meta.systemEndX : null
-        const visualMaxX =
-          systemEndX != null && !nextSameSystem
-            ? Math.min(glideTargetX, systemEndX)
-            : glideTargetX
+        const bridgeEvent =
+          musical.events?.find((event) => event.kind === 'bridge-next') ?? null
+        // Same-system boundary: the cursor may bridge past the current measure's
+        // playableEndX (glideTargetX) toward the next measure's first onset (the
+        // bridge target), but never past the true system edge. Cross-system /
+        // last-of-system: hard-cap at the system edge so it cannot overshoot.
+        let visualMaxX
+        if (nextSameSystem) {
+          const sameSystemCap =
+            bridgeEvent && bridgeEvent.x > glideTargetX ? bridgeEvent.x : glideTargetX
+          visualMaxX =
+            systemEndX != null ? Math.min(sameSystemCap, systemEndX) : sameSystemCap
+        } else {
+          visualMaxX =
+            systemEndX != null ? Math.min(glideTargetX, systemEndX) : glideTargetX
+        }
         return {
           cursor: {
             visible: true,

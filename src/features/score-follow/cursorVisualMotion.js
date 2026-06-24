@@ -34,7 +34,22 @@ export function resolveVisualMaxX(target) {
   if (!target) {
     return null
   }
-  const candidates = [target.visualMaxX, target.playableEndX, target.meta?.systemEndX].filter(
+  const systemEndX =
+    typeof target.meta?.systemEndX === 'number' && Number.isFinite(target.meta.systemEndX)
+      ? target.meta.systemEndX
+      : null
+  // Same-system measure boundary: visualMaxX already encodes the bridge target
+  // (the next measure's first onset on this system) and is the authoritative
+  // cap. The current measure's playableEndX is NOT a hard edge here, so it must
+  // not clamp the bridge motion — only the true system edge stays a hard cap.
+  if (
+    target.nextSameSystem &&
+    typeof target.visualMaxX === 'number' &&
+    Number.isFinite(target.visualMaxX)
+  ) {
+    return systemEndX != null ? Math.min(target.visualMaxX, systemEndX) : target.visualMaxX
+  }
+  const candidates = [target.visualMaxX, target.playableEndX, systemEndX].filter(
     (value) => typeof value === 'number' && Number.isFinite(value),
   )
   if (!candidates.length) {
@@ -44,6 +59,12 @@ export function resolveVisualMaxX(target) {
 }
 
 export function isNearSystemEnd(target, epsilon = 0.003) {
+  // A same-system measure boundary is NOT a system end — the cursor bridges
+  // continuously into the next measure, so predictive motion stays enabled.
+  // The hard system-end behavior only applies at an actual system/page break.
+  if (target?.nextSameSystem) {
+    return false
+  }
   const maxX = resolveVisualMaxX(target)
   if (maxX == null || !Number.isFinite(target?.x)) {
     return false
