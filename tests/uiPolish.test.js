@@ -47,17 +47,25 @@ describe('library sidebar reopen toggle', () => {
 describe('PDF page navigation responsiveness', () => {
   const viewer = readSrc('components', 'PdfViewer.jsx')
   const css = readFileSync(join(root, 'src', 'App.css'), 'utf8')
+  const pageWindow = readSrc('components', 'pdf', 'PdfPageWindow.jsx')
 
-  it('preloads adjacent pages inside the Document', () => {
-    expect(viewer).toMatch(/PdfAdjacentPagePreloader/)
-    const preloader = readSrc('components', 'pdf', 'PdfAdjacentPagePreloader.jsx')
-    expect(preloader).toMatch(/pageNumber - 1/)
-    expect(preloader).toMatch(/pageNumber \+ 1/)
+  it('virtualizes previous, current, and next pages inside the Document', () => {
+    expect(viewer).toMatch(/PdfPageWindow/)
+    expect(pageWindow).toMatch(/pageNumber - 1/)
+    expect(pageWindow).toMatch(/pageNumber \+ 1/)
+    expect(pageWindow).toMatch(/pdf-slot-\$\{slotPage\}/)
   })
 
-  it('avoids remounting the page frame on every page change', () => {
-    expect(viewer).toMatch(/key=\{String\(file\)\}/)
+  it('keeps stable per-page slot keys instead of remounting on every page change', () => {
+    expect(pageWindow).toMatch(/key=\{`pdf-slot-\$\{slotPage\}`\}/)
     expect(viewer).not.toMatch(/key=\{`\$\{file\}-\$\{pageNumber\}`\}/)
+  })
+
+  it('instruments page switch and rasterization timing', () => {
+    expect(viewer).toMatch(/pdfPagePerf/)
+    const perf = readSrc('features', 'pdf', 'pdfPagePerf.js')
+    expect(perf).toMatch(/completePageSwitch/)
+    expect(perf).toMatch(/notePageRender/)
   })
 
   it('drops the page-turn animation that delayed perceived navigation', () => {

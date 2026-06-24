@@ -5,9 +5,8 @@ import '../../pdf/setupPdfWorker.js'
 import useElementSize from '../../hooks/useElementSize.js'
 import useInactivityHide from '../../hooks/useInactivityHide.js'
 import { getPageDimensions } from '../../utils/pdfFit.js'
-import PdfPageFrame from './PdfPageFrame.jsx'
+import PdfPageWindow from './PdfPageWindow.jsx'
 import PdfViewerToolbar from './PdfViewerToolbar.jsx'
-import PdfAdjacentPagePreloader from './PdfAdjacentPagePreloader.jsx'
 
 /** Idle delay before auto-hiding fullscreen chrome. */
 const CHROME_IDLE_MS = 3500
@@ -167,24 +166,23 @@ export default function PdfFullscreen({
           loading={<p className="pdf-fullscreen__status">Loading…</p>}
           error={<p className="pdf-fullscreen__status">Could not load PDF.</p>}
         >
-          <PdfAdjacentPagePreloader
+          <PdfPageWindow
+            key={String(file)}
             pageNumber={pageNumber}
             numPages={numPages}
             width={pageDimensions.width}
             height={pageDimensions.height}
-          />
-          <PdfPageFrame
-            pageNumber={pageNumber}
-            width={pageDimensions.width}
-            height={pageDimensions.height}
+            switchTrigger="fullscreen"
             onPageLoadSuccess={onPageLoadSuccess}
-            strokes={strokes}
-            activeTool={activeTool}
-            strokeStyle={strokeStyle}
-            onStrokeComplete={onStrokeComplete}
-            onErase={onErase}
-            onLiveErase={onLiveErase}
-            scoreFollow={scoreFollow}
+            activePageProps={{
+              strokes,
+              activeTool,
+              strokeStyle,
+              onStrokeComplete,
+              onErase,
+              onLiveErase,
+              scoreFollow,
+            }}
           />
         </Document>
 

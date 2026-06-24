@@ -9,8 +9,7 @@ import useAnnotationPersistence from '../hooks/useAnnotationPersistence.js'
 import { getPageDimensions } from '../utils/pdfFit.js'
 import { ANNOTATION_TOOLS } from './pdf/annotationConstants.js'
 import PdfFullscreen from './pdf/PdfFullscreen.jsx'
-import PdfAdjacentPagePreloader from './pdf/PdfAdjacentPagePreloader.jsx'
-import PdfPageFrame from './pdf/PdfPageFrame.jsx'
+import PdfPageWindow from './pdf/PdfPageWindow.jsx'
 import PdfViewerToolbar from './pdf/PdfViewerToolbar.jsx'
 import ScoreFollowControls from './pdf/ScoreFollowControls.jsx'
 import PracticeFullscreenHudTick from './practice/PracticeFullscreenHudTick.jsx'
@@ -18,6 +17,7 @@ import PracticePdfCursorLayer, {
   usePracticeScoreFollowOverlayProps,
 } from './pdf/PracticePdfCursorLayer.jsx'
 import { usePracticeSessionContextOptional } from '../context/PracticeSessionContext.jsx'
+import { clearWarmPages } from '../features/pdf/pdfPagePerf.js'
 
 export default function PdfViewer({
   file,
@@ -88,6 +88,7 @@ export default function PdfViewer({
 
   useEffect(() => {
     setPageSize(null)
+    clearWarmPages()
   }, [file])
 
   const handleStrokeComplete = useCallback(
@@ -158,21 +159,29 @@ export default function PdfViewer({
       />
     ) : null
 
-  function renderPdfPage(scoreFollowProps) {
+  const activePageProps = {
+    strokes: currentStrokes,
+    activeTool,
+    strokeStyle,
+    onStrokeComplete: handleStrokeComplete,
+    onErase: handleErase,
+    onLiveErase: handleErase,
+  }
+
+  function renderPageWindow(scoreFollowProps = null) {
     return (
-      <PdfPageFrame
+      <PdfPageWindow
         key={String(file)}
         pageNumber={pageNumber}
+        numPages={numPages}
         width={pageDimensions.width}
         height={pageDimensions.height}
+        switchTrigger={isPracticeEmbed ? 'score-follow' : 'navigation'}
         onPageLoadSuccess={handlePageLoadSuccess}
-        strokes={currentStrokes}
-        activeTool={activeTool}
-        strokeStyle={strokeStyle}
-        onStrokeComplete={handleStrokeComplete}
-        onErase={handleErase}
-        onLiveErase={handleErase}
-        scoreFollow={scoreFollowProps}
+        activePageProps={{
+          ...activePageProps,
+          scoreFollow: scoreFollowProps,
+        }}
       />
     )
   }
@@ -267,18 +276,12 @@ export default function PdfViewer({
                 </p>
               }
             >
-              <PdfAdjacentPagePreloader
-                pageNumber={pageNumber}
-                numPages={numPages}
-                width={pageDimensions.width}
-                height={pageDimensions.height}
-              />
               {isPracticeEmbed ? (
                 <PracticePdfCursorLayer pageNumber={pageNumber}>
-                  {(scoreFollowProps) => renderPdfPage(scoreFollowProps)}
+                  {(scoreFollowProps) => renderPageWindow(scoreFollowProps)}
                 </PracticePdfCursorLayer>
               ) : (
-                renderPdfPage(null)
+                renderPageWindow(null)
               )}
             </Document>
           )}

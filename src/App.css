@@ -1124,6 +1124,30 @@
   contain: layout style;
 }
 
+.pdf-page-window {
+  position: relative;
+  display: inline-flex;
+  line-height: 0;
+}
+
+.pdf-page-window__slot--active {
+  position: relative;
+}
+
+.pdf-page-window__slot--warm {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
 .pdf-page-preload {
   position: absolute;
   width: 1px;

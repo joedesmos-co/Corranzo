@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 const SCROLL_ALPHA = 0.11
 const LOOKAHEAD_RATIO = 0.36
-const PAGE_SWITCH_DEBOUNCE_MS = 280
+const PAGE_SWITCH_DEBOUNCE_MS = 16
 const USER_SCROLL_SUSPEND_MS = 2000
 
 /**
@@ -82,7 +82,9 @@ export default function usePracticePageFollow({
       const container = scrollContainerRef.current
       // Prefer the actual react-pdf page element so cursor.y (normalized to page
       // dimensions) maps correctly even if the pdf-page-frame wrapper has extra space.
-      const pdfPage = container?.querySelector('.react-pdf__Page')
+      const pdfPage = container?.querySelector(
+        '.pdf-page-window__slot--active .react-pdf__Page, .pdf-page-frame .react-pdf__Page',
+      )
       const pageFrame = pdfPage || container?.querySelector('.pdf-page-frame')
       if (!container || !pageFrame) {
         frameId = requestAnimationFrame(tick)

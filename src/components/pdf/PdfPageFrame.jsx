@@ -6,11 +6,14 @@ import AnnotationLayer from './AnnotationLayer.jsx'
 import ScoreFollowOverlay from './ScoreFollowOverlay.jsx'
 import { ANNOTATION_TOOLS } from './annotationConstants.js'
 
-export default function PdfPageFrame({
+function PdfPageFrame({
   pageNumber,
   width,
   height,
   onPageLoadSuccess,
+  onLoadStart,
+  onRenderStart,
+  onRenderSuccess,
   strokes,
   activeTool,
   strokeStyle,
@@ -114,6 +117,9 @@ export default function PdfPageFrame({
         pageNumber={pageNumber}
         width={width}
         height={height}
+        onLoadStart={onLoadStart}
+        onRenderStart={onRenderStart}
+        onRenderSuccess={onRenderSuccess}
         onPageLoadSuccess={handlePageLoadSuccess}
       />
       {overlayLayout?.width > 0 && (
@@ -169,3 +175,5 @@ export default function PdfPageFrame({
     </div>
   )
 }
+
+export default PdfPageFrame
