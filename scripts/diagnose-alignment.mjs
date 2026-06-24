@@ -11,6 +11,7 @@
  *   node scripts/diagnose-alignment.mjs --fixtures
  *   node scripts/diagnose-alignment.mjs --anchors
  *   node scripts/diagnose-alignment.mjs --compare
+ *   node scripts/diagnose-alignment.mjs --detect
  *   node scripts/diagnose-alignment.mjs <score.musicxml> --counts 5,5,6,5,5,6
  *   node scripts/diagnose-alignment.mjs <score.musicxml> --anchors anchors.json [--json report.json]
  */
@@ -238,8 +239,147 @@ async function runCompare() {
   }
 }
 
+/**
+ * PDF geometry detection proof: run the REAL pixel pipeline on synthetic pages
+ * whose printed geometry is known, and score the detected measure boundaries
+ * against ground truth. Reports detected systems/barlines/measures, weak systems,
+ * false-positive/negative barline hints, per-system geometry, and readiness.
+ *
+ * Geometry-only fields (measureStartX / playableEndX / systemEndX) isolate PDF
+ * GEOMETRY DETECTION quality from the beat-1 onset heuristic (playableStartX).
+ */
+async function runDetect() {
+  const synthetic = await import('../tests/helpers/syntheticScore.js')
+  const { analyzeSemiAutoScoreSetup } = await import(
+    '../src/features/score-follow/semiAutoScoreAlignment.js'
+  )
+  const { compareAnchorSets, assessPromotionReadiness, GEOMETRY_COMPARISON_FIELDS, PROMOTION_STATUS } =
+    await import('../src/features/score-follow/anchorComparison.js')
+  const F = await import('../tests/helpers/buildXml.js')
+
+  // Piano grand staff: declare 2 staves so detected treble+bass pair into one
+  // system (matches the synthetic pages, which are all grand staves).
+  const pianoAttributes =
+    '<attributes><divisions>1</divisions><staves>2</staves>' +
+    '<time><beats>4</beats><beat-type>4</beat-type></time></attributes>'
+  const timingMap = (measureCount, breakEvery) => {
+    let xml = ''
+    for (let m = 1; m <= measureCount; m += 1) {
+      xml += `<measure number="${m}">`
+      if (m === 1) xml += pianoAttributes + F.soundTempo(120)
+      if (breakEvery && m > 1 && (m - 1) % breakEvery === 0) xml += '<print new-system="yes"/>'
+      xml += F.fourQuarters() + '</measure>'
+    }
+    return parseMusicXml(F.scoreWrap(`<part id="P1">${xml}</part>`))
+  }
+
+  const cases = [
+    {
+      id: 'clean-1page',
+      pages: [synthetic.cleanPianoPage({ systems: 3, measuresPerSystem: 4 })],
+      measures: 12,
+      breakEvery: 4,
+      expectReady: true,
+    },
+    {
+      id: 'clean-multipage',
+      pages: synthetic.multiPageScore({ pages: 2, systemsPerPage: 3, measuresPerSystem: 4 }),
+      measures: 24,
+      breakEvery: 4,
+      expectReady: true,
+    },
+    {
+      id: 'light-classical',
+      pages: [synthetic.lightClassicalPage({ systems: 4, measuresPerSystem: 4 })],
+      measures: 16,
+      breakEvery: 4,
+      expectReady: true,
+    },
+    {
+      id: 'uneven-measures',
+      pages: [synthetic.unevenMeasurePage()],
+      measures: 8,
+      breakEvery: 4,
+      expectReady: true,
+    },
+    {
+      id: 'dense-notation',
+      pages: [synthetic.densePianoPage({ systems: 5, measuresPerSystem: 6 })],
+      measures: 30,
+      breakEvery: 6,
+      expectReady: false, // stem-stacks ≈ barlines: count unreliable, geometry still good
+    },
+  ]
+
+  let failures = 0
+  for (const testCase of cases) {
+    const res = await analyzeSemiAutoScoreSetup({
+      pdfSource: 'synthetic',
+      numPages: testCase.pages.length,
+      timingMap: timingMap(testCase.measures, testCase.breakEvery),
+      renderPage: synthetic.renderPagesFromArray(testCase.pages),
+    })
+    const truth = synthetic.groundTruthAnchors(testCase.pages)
+    const expectedSystems = testCase.pages.reduce(
+      (sum, page) => sum + (page.systemBarlineFracs?.length ?? 0),
+      0,
+    )
+    const det = res.preview?.supplementalMeasureAnchors ?? []
+    const cmp = compareAnchorSets(det, truth, { fields: GEOMETRY_COMPARISON_FIELDS })
+    const readiness = assessPromotionReadiness(cmp)
+    const entries = res.preview?.systemEntries ?? []
+    const weak = entries.filter((entry) => entry.system?.barlineConfident === false)
+
+    console.log('='.repeat(60))
+    console.log(`${testCase.id}  (stage=${res.preview?.stage}, alloc=${res.preview?.allocationMode})`)
+    console.log(
+      `  systems: detected ${entries.length} / expected ${expectedSystems}  |  ` +
+        `confidence ${res.preview?.confidence}`,
+    )
+    entries.forEach((entry, i) => {
+      const s = entry.system
+      console.log(
+        `    sys${i} p${entry.page}: barlines=${s?.barlineCount ?? '—'} ` +
+          `measEst=${s?.measureEstimate ?? 'null'} ` +
+          `barlineConfident=${s?.barlineConfident ?? '—'}` +
+          (s?.barlineReliabilityReason && s.barlineReliabilityReason !== 'ok'
+            ? ` (${s.barlineReliabilityReason})`
+            : ''),
+      )
+    })
+    const expectedMeasures = truth.length
+    console.log(
+      `  measures: detected anchors ${det.length} / expected ${expectedMeasures}  |  ` +
+        `weak systems ${weak.length}`,
+    )
+    if (cmp.comparable) {
+      console.log(
+        `  GEOMETRY (boundary + system-end): max err ${cmp.maxError.toFixed(4)} | ` +
+          `avg err ${cmp.avgError.toFixed(4)} → ${readiness.status.toUpperCase()}`,
+      )
+    } else {
+      console.log('  GEOMETRY: not comparable.')
+    }
+
+    if (testCase.expectReady && readiness.status !== PROMOTION_STATUS.READY) {
+      console.error(`  ✗ expected READY geometry but got ${readiness.status}`)
+      failures += 1
+    }
+    console.log('')
+  }
+
+  console.log('='.repeat(60))
+  if (failures > 0) {
+    console.error(`diagnose-alignment --detect: ${failures} case(s) regressed below READY geometry.`)
+    process.exit(1)
+  }
+  console.log('PDF geometry detection: all expected-READY cases pass against ground truth.')
+}
+
 const args = process.argv.slice(2)
-if (args.includes('--compare')) {
+if (args.includes('--detect')) {
+  await runDetect()
+} else if (args.includes('--compare')) {
   await runCompare()
 } else if (args.includes('--anchors')) {
   await runAnchors()

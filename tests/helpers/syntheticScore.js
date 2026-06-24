@@ -133,6 +133,7 @@ export function cleanPianoPage({
 
   const top = Math.floor(pageHeight * topFrac)
   const systemBands = []
+  const systemBarlineFracs = []
 
   for (let s = 0; s < systemCount; s += 1) {
     const sysTop = top + s * (staffHeight + gap)
@@ -140,17 +141,23 @@ export function cleanPianoPage({
     systemBands.push(band)
     if (barlines) {
       const measures = measuresFor(s)
+      const fracs = []
       for (let m = 0; m <= measures; m += 1) {
         const bx = Math.floor(x0 + ((x1 - x0) * m) / measures)
         // 2px wide: the column peak survives ±2 smoothing in barline detection
         // without flooding the inter-line gaps (which would look "dense").
         vLine(img, bx, band.top, band.bottom)
         vLine(img, bx + 1, band.top, band.bottom)
+        fracs.push(bx / width)
       }
+      systemBarlineFracs.push(fracs)
     }
   }
 
   img.systemBands = systemBands
+  if (barlines) {
+    img.systemBarlineFracs = systemBarlineFracs
+  }
   return img
 }
 
@@ -277,6 +284,7 @@ export function lightClassicalPage({
   }
 
   const systemBands = []
+  const systemBarlineFracs = []
   for (let s = 0; s < systems; s += 1) {
     const sysTop = top + s * (grandHeight + systemGap)
     drawLightStaff(sysTop)
@@ -286,10 +294,13 @@ export function lightClassicalPage({
     systemBands.push({ top: sysTop, bottom: bandBottom })
 
     // Light barlines spanning the grand staff (treble top → bass bottom).
+    const fracs = []
     for (let m = 0; m <= measuresPerSystem; m += 1) {
       const bx = Math.floor(x0 + ((x1 - x0) * m) / measuresPerSystem)
       vLine(img, bx, sysTop, bandBottom, lineValue)
+      fracs.push(bx / width)
     }
+    systemBarlineFracs.push(fracs)
     // A couple of sparse noteheads.
     for (let n = 0; n < measuresPerSystem * 2; n += 1) {
       const cx = x0 + Math.floor(((x1 - x0) * n) / (measuresPerSystem * 2)) + 6
@@ -307,7 +318,90 @@ export function lightClassicalPage({
     }
   }
   img.systemBands = systemBands
+  img.systemBarlineFracs = systemBarlineFracs
   return img
+}
+
+/**
+ * A clean page whose measures are UNEVENLY spaced within each system (e.g. a
+ * wide clef/key-bearing first measure, then narrower ones). Even distribution
+ * mis-places the inner measure boundaries; detected barlines place them exactly.
+ *
+ * `systemBarlineFracs` is an array (one per system) of normalized barline x
+ * fractions (within [0,1] of page width), length = measuresPerSystem + 1, that
+ * are drawn AND returned as ground truth.
+ */
+export function unevenMeasurePage({
+  width = 460,
+  height = 640,
+  systemBarlineFracs = [
+    [0.08, 0.34, 0.5, 0.66, 0.92],
+    [0.08, 0.3, 0.52, 0.74, 0.92],
+  ],
+} = {}) {
+  const lineGap = 5
+  const innerGap = 10
+  const staffHeight = 4 * lineGap + innerGap + 4 * lineGap
+  const gap = 30
+  const topFrac = 0.18
+  const systemCount = systemBarlineFracs.length
+  const pageHeight = Math.max(
+    height,
+    Math.ceil(Math.floor(640 * topFrac) + systemCount * (staffHeight + gap) + 40),
+  )
+  const img = createPage(width, pageHeight)
+  const x0 = Math.floor(width * (systemBarlineFracs[0][0] - 0.0))
+  const x1 = Math.floor(width * systemBarlineFracs[0][systemBarlineFracs[0].length - 1])
+  drawHeader(img)
+  const top = Math.floor(pageHeight * topFrac)
+  const systemBands = []
+  systemBarlineFracs.forEach((fracs, s) => {
+    const sysTop = top + s * (staffHeight + gap)
+    const band = drawGrandStaff(img, sysTop, x0, x1, { lineGap, innerGap })
+    systemBands.push(band)
+    for (const frac of fracs) {
+      const bx = Math.floor(width * frac)
+      vLine(img, bx, band.top, band.bottom)
+      vLine(img, bx + 1, band.top, band.bottom)
+    }
+  })
+  img.systemBands = systemBands
+  img.systemBarlineFracs = systemBarlineFracs
+  return img
+}
+
+/**
+ * Build ground-truth reference anchors from synthetic pages that expose
+ * `systemBarlineFracs` (clean / light / uneven pages). Measure numbers run
+ * sequentially in reading order; geometry fields mirror the drawn barlines, so
+ * detected anchors can be scored against the true printed measure boundaries.
+ */
+export function groundTruthAnchors(pages) {
+  const anchors = []
+  let measureNumber = 1
+  let systemIndex = 0
+  pages.forEach((page, pageIndex) => {
+    for (const fracs of page.systemBarlineFracs ?? []) {
+      const n = fracs.length - 1
+      const systemEndX = fracs[n]
+      for (let i = 0; i < n; i += 1) {
+        anchors.push({
+          page: pageIndex + 1,
+          measureNumber,
+          meta: {
+            systemIndex,
+            measureStartX: fracs[i],
+            playableStartX: fracs[i],
+            playableEndX: fracs[i + 1],
+            systemEndX,
+          },
+        })
+        measureNumber += 1
+      }
+      systemIndex += 1
+    }
+  })
+  return anchors
 }
 
 /** Blank page (no ink) — used to assert the concise no-systems failure. */

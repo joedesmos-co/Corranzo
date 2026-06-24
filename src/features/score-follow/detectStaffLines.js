@@ -271,6 +271,44 @@ export function countSystemBarlines(imageData, contentBounds, system, options = 
   return positions.length
 }
 
+/** A real measure is at least this fraction of the system's content width. */
+const MIN_MEASURE_WIDTH_FRAC = 0.045
+/** More detected "measures" than this in one system means the count is unreliable. */
+const MAX_MEASURES_PER_SYSTEM = 16
+
+/**
+ * Decide whether a detected barline set is a TRUSTWORTHY measure-count signal.
+ *
+ * Dense piano/anime notation stacks noteheads + stems into full-grand-staff
+ * vertical runs that are pixel-identical to barlines, producing a tight, regular
+ * grid of false positives (e.g. 28 "measures" where there are 6). Such a grid is
+ * unreliable: its implied measure width is far too small to be a real measure,
+ * or the count is implausibly high. In those cases we must NOT emit a confident
+ * measure count (better to fall back to MusicXML breaks than to map measures to
+ * the wrong systems with false confidence).
+ */
+export function assessBarlineReliability(positions, contentBounds) {
+  const x0 = contentBounds?.x0 ?? 0
+  const x1 = contentBounds?.x1 ?? 1
+  const contentWidth = Math.max(1e-6, x1 - x0)
+  if (!positions || positions.length < 2) {
+    return { confident: false, reason: 'too-few-barlines', measureWidthFrac: null }
+  }
+  const measures = positions.length - 1
+  const gaps = []
+  for (let i = 1; i < positions.length; i += 1) {
+    gaps.push(positions[i] - positions[i - 1])
+  }
+  const measureWidthFrac = median(gaps) / contentWidth
+  if (measures > MAX_MEASURES_PER_SYSTEM) {
+    return { confident: false, reason: 'too-many-barlines', measureWidthFrac }
+  }
+  if (measureWidthFrac < MIN_MEASURE_WIDTH_FRAC) {
+    return { confident: false, reason: 'barline-grid-too-dense', measureWidthFrac }
+  }
+  return { confident: true, reason: 'ok', measureWidthFrac }
+}
+
 /** Normalized x positions of detected barlines within a system band. */
 export function detectSystemBarlinePositions(imageData, contentBounds, system, options = {}) {
   const { darkThreshold = 150, heightFraction = 0.7 } = options
@@ -334,12 +372,27 @@ export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
   // never below the staff-line threshold.
   const barlineThreshold = Math.min(inkThreshold, Math.max(150, inkThreshold - 20))
   const systems = grouped.map((system) => {
-    const barlineCount = countBarlines
-      ? countSystemBarlines(imageData, contentBounds, system, { darkThreshold: barlineThreshold })
-      : 0
-    // N barlines (start + internal + end) bound N-1 measures.
-    const measureEstimate = barlineCount >= 2 ? barlineCount - 1 : null
-    return { ...system, barlineCount, measureEstimate, contentBounds }
+    const positions = countBarlines
+      ? detectSystemBarlinePositions(imageData, contentBounds, system, {
+          darkThreshold: barlineThreshold,
+        })
+      : []
+    const barlineCount = positions.length
+    const reliability = assessBarlineReliability(positions, contentBounds)
+    // N barlines (start + internal + end) bound N-1 measures — but only emit a
+    // count when the barlines are a trustworthy measure signal. A confident-but-
+    // wrong count would map measures to the wrong systems, so an unreliable
+    // (e.g. dense-notation) result yields null and falls back to MusicXML breaks.
+    const measureEstimate =
+      barlineCount >= 2 && reliability.confident ? barlineCount - 1 : null
+    return {
+      ...system,
+      barlineCount,
+      measureEstimate,
+      barlineConfident: reliability.confident,
+      barlineReliabilityReason: reliability.reason,
+      contentBounds,
+    }
   })
 
   return { staves, systems, inkThreshold: Math.round(inkThreshold), trace }

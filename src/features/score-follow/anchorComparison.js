@@ -20,6 +20,15 @@ export const ANCHOR_COMPARISON_FIELDS = [
   'systemEndX',
 ]
 
+/**
+ * Pure PDF-geometry fields: where the measure boundaries and system ends were
+ * detected on the page. Excludes `playableStartX`, which is a beat-1 ONSET
+ * heuristic (beat 1 legitimately sits a little right of the measure boundary,
+ * further on a clef/key-bearing first measure). Use this subset to measure
+ * detection quality independent of the beat-placement heuristic.
+ */
+export const GEOMETRY_COMPARISON_FIELDS = ['measureStartX', 'playableEndX', 'systemEndX']
+
 export const PROMOTION_STATUS = {
   READY: 'ready',
   NEEDS_REVIEW: 'needs-review',
@@ -109,9 +118,9 @@ export function summarizeConfidenceDistribution(anchors = []) {
   }
 }
 
-function emptyFieldStats() {
+function emptyFieldStats(fields = ANCHOR_COMPARISON_FIELDS) {
   const perField = {}
-  for (const field of ANCHOR_COMPARISON_FIELDS) {
+  for (const field of fields) {
     perField[field] = { maxError: 0, avgError: 0, count: 0 }
   }
   return perField
@@ -126,7 +135,11 @@ function emptyFieldStats() {
  *   supplied, `comparable` is false and only the confidence distribution +
  *   counts are populated.
  */
-export function compareAnchorSets(generatedAnchors = [], referenceAnchors = null) {
+export function compareAnchorSets(
+  generatedAnchors = [],
+  referenceAnchors = null,
+  { fields = ANCHOR_COMPARISON_FIELDS } = {},
+) {
   const generated = generatedAnchors.map(readAnchorGeometry)
   const confidenceDistribution = summarizeConfidenceDistribution(generatedAnchors)
 
@@ -142,11 +155,12 @@ export function compareAnchorSets(generatedAnchors = [], referenceAnchors = null
         .filter((n) => n != null),
       pageMismatchCount: 0,
       systemMismatchCount: 0,
-      perField: emptyFieldStats(),
+      perField: emptyFieldStats(fields),
       maxError: 0,
       avgError: 0,
       perMeasure: [],
       confidenceDistribution,
+      fields,
     }
   }
 
@@ -169,7 +183,7 @@ export function compareAnchorSets(generatedAnchors = [], referenceAnchors = null
     .filter((m) => generatedByMeasure.has(m))
     .sort((a, b) => a - b)
 
-  const perField = emptyFieldStats()
+  const perField = emptyFieldStats(fields)
   const perMeasure = []
   let pageMismatchCount = 0
   let systemMismatchCount = 0
@@ -192,7 +206,7 @@ export function compareAnchorSets(generatedAnchors = [], referenceAnchors = null
     }
 
     const errors = {}
-    for (const field of ANCHOR_COMPARISON_FIELDS) {
+    for (const field of fields) {
       if (Number.isFinite(gen[field]) && Number.isFinite(ref[field])) {
         const error = Math.abs(gen[field] - ref[field])
         errors[field] = error
@@ -211,7 +225,7 @@ export function compareAnchorSets(generatedAnchors = [], referenceAnchors = null
     perMeasure.push({ measureNumber, pageMismatch, systemMismatch, errors })
   }
 
-  for (const field of ANCHOR_COMPARISON_FIELDS) {
+  for (const field of fields) {
     const stats = perField[field]
     stats.avgError = stats.count > 0 ? stats.avgError / stats.count : 0
   }
@@ -230,6 +244,7 @@ export function compareAnchorSets(generatedAnchors = [], referenceAnchors = null
     avgError: errorCount > 0 ? errorSum / errorCount : 0,
     perMeasure,
     confidenceDistribution,
+    fields,
   }
 }
 
@@ -341,7 +356,7 @@ export function formatAnchorComparisonText(comparison, readiness = null) {
     `  missing(gen/ref): ${comparison.missingFromGenerated.length}/${comparison.missingFromReference.length} | ` +
       `page mismatch: ${comparison.pageMismatchCount} | system mismatch: ${comparison.systemMismatchCount}`,
   )
-  for (const field of ANCHOR_COMPARISON_FIELDS) {
+  for (const field of comparison.fields ?? ANCHOR_COMPARISON_FIELDS) {
     const stats = comparison.perField[field]
     lines.push(`  ${field.padEnd(15)} max ${fmt(stats.maxError)} | avg ${fmt(stats.avgError)} | n=${stats.count}`)
   }

@@ -452,6 +452,8 @@ export function buildPerMeasureSystemAnchors(systemEntries, spans, timingMap = n
       anchorKind = 'barline'
     }
 
+    const count = measureNumbers.length
+
     // Cumulative engraved widths give each measure's left edge; equal widths if
     // the MusicXML has no <measure width>.
     const widths = measureNumbers.map((m) => {
@@ -467,14 +469,32 @@ export function buildPerMeasureSystemAnchors(systemEntries, spans, timingMap = n
       acc += w
     }
     const tenthsToX = (t) => sysLeftX + (t / totalWidth) * (sysRightX - sysLeftX)
-    const count = measureNumbers.length
+
+    // Measure boundaries on the page. When the detected barlines cleanly match
+    // the measure count (count internal+edge barlines = count + 1, strictly
+    // increasing), use them as the EXACT per-measure boundaries — this captures
+    // real uneven measure widths (wider first measures, ritard spacing, etc.)
+    // that even distribution mis-places. Otherwise fall back to the cumulative-
+    // width / even distribution, which is identical to the previous behaviour
+    // (so evenly engraved scores are unchanged). `boundaries` has count+1 edges.
+    const barlinesMatchMeasures =
+      anchorKind === 'barline' &&
+      barlines.length === count + 1 &&
+      barlines.every((x, i) => i === 0 || x > barlines[i - 1])
+    const boundaries = barlinesMatchMeasures
+      ? barlines
+      : measureNumbers.map((_, i) => tenthsToX(leftTenths[i])).concat(tenthsToX(totalWidth))
+    const boundaryKind = barlinesMatchMeasures ? 'barline-boundaries' : anchorKind
 
     measureNumbers.forEach((measureNumber, i) => {
-      const measureStartX = tenthsToX(leftTenths[i])
-      const measureEndX = tenthsToX(leftTenths[i] + widths[i])
+      const measureStartX = boundaries[i]
+      const measureEndX = boundaries[i + 1]
       const measureSpan = Math.max(0, measureEndX - measureStartX)
 
-      // measurePlayableStartX: where beat 1 sits inside THIS measure.
+      // measurePlayableStartX: where beat 1 sits inside THIS measure. The lead is
+      // expressed as a FRACTION of the measure, then applied to the measure's true
+      // span — so on evenly engraved scores it is identical to before, but on
+      // detected uneven measures beat 1 tracks the real (wider/narrower) measure.
       const dx = defaultXByMeasure.get(measureNumber)
       let playableStartX
       let xSource
@@ -483,8 +503,9 @@ export function buildPerMeasureSystemAnchors(systemEntries, spans, timingMap = n
         // clef/key/time. Clamp so a mis-encoded value can't push beat 1 past the
         // bulk of the measure (guard: never far right of the first note).
         const offset = Math.min(Math.max(dx, 0), 0.85 * widths[i])
-        playableStartX = tenthsToX(leftTenths[i] + offset)
-        xSource = anchorKind === 'barline' ? 'default-x+barline' : 'default-x'
+        const offsetFrac = widths[i] > 0 ? offset / widths[i] : 0
+        playableStartX = measureStartX + offsetFrac * measureSpan
+        xSource = boundaryKind === 'barline-boundaries' ? 'default-x+barline' : 'default-x'
       } else if (i === 0 && haveWidths && count > 1) {
         // SYSTEM-START FALLBACK (no default-x): a system's first measure is
         // engraved wider to hold the clef/key/(time). Estimate that lead as how
@@ -492,18 +513,19 @@ export function buildPerMeasureSystemAnchors(systemEntries, spans, timingMap = n
         // clef/key area instead of sitting at the far-left margin. Clamped so it
         // never collapses to the margin nor overshoots the first note.
         const otherWidths = widths.filter((_, j) => j !== i)
-        const clefKeyLead = Math.min(
+        const clefKeyLeadTenths = Math.min(
           Math.max(widths[i] - medianOf(otherWidths), 0.12 * widths[i]),
           0.6 * widths[i],
         )
-        playableStartX = tenthsToX(leftTenths[i] + clefKeyLead)
+        const leadFrac = widths[i] > 0 ? clefKeyLeadTenths / widths[i] : 0.3
+        playableStartX = measureStartX + leadFrac * measureSpan
         xSource = 'system-start-width'
       } else {
         // Conservative local lead: a larger inset on a system's first measure to
         // clear the clef/key area, a small margin past the barline on the rest.
         const lead = i === 0 ? 0.3 : 0.05
         playableStartX = measureStartX + lead * measureSpan
-        xSource = anchorKind
+        xSource = boundaryKind
       }
 
       anchors.push({
