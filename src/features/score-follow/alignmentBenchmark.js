@@ -111,7 +111,30 @@ export function categorizeBlockers({
   }
 
   const rejectionHints = aggregateRejectionHints(systems.perSystem)
-  if ((rejectionHints['too-dense'] ?? 0) > 0 || (rejectionHints['stem-like'] ?? 0) > 2) {
+  const perSystem = systems.perSystem ?? []
+  const hasDenseThinning = (rejectionHints['too-dense'] ?? 0) > 0
+  const hasAmbiguousDensity =
+    perSystem.some((s) => s.barlineDensityAmbiguous === true) ||
+    perSystem.some((s) =>
+      ['ambiguous-density', 'barline-grid-too-dense', 'too-many-barlines'].includes(
+        s.barlineReliabilityReason,
+      ),
+    )
+  const hasRetainedLowConfidence = perSystem.some(
+    (s) =>
+      (s.barlineRetainedLowConfidence ?? 0) > 0 &&
+      s.barlineConfident === false &&
+      (s.barlineReliabilityReason === 'low-confidence-candidates' ||
+        s.barlineDensityAmbiguous === true),
+  )
+  const hasInconsistentSpacing = (rejectionHints['inconsistent-spacing'] ?? 0) > 0
+
+  if (
+    hasDenseThinning ||
+    hasAmbiguousDensity ||
+    hasRetainedLowConfidence ||
+    hasInconsistentSpacing
+  ) {
     blockers.push(BLOCKER_CATEGORIES.DENSE_FALSE_BARLINES)
   }
   if ((systems.missingBarlineEstimate ?? 0) > 0) {
@@ -184,6 +207,11 @@ export function buildPieceBenchmarkRecord({
     weakGapSpan: rejectionHints['weak-gap-span'] ?? 0,
     weakRun: rejectionHints['weak-run'] ?? 0,
     margin: rejectionHints.margin ?? 0,
+    retainedLowConfidence: perSystem.reduce(
+      (sum, s) => sum + (s.barlineRetainedLowConfidence ?? 0),
+      0,
+    ),
+    densityAmbiguousSystems: perSystem.filter((s) => s.barlineDensityAmbiguous === true).length,
   }
 
   const missingEstimateCount = perSystem.filter(

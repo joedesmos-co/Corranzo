@@ -11,6 +11,11 @@ export const BARLINE_REJECT_REASON = {
   MARGIN: 'margin',
 }
 
+/** Minimum normalized gap between barlines for a sparse/simple layout (no thinning). */
+const SPARSE_LAYOUT_MAX_CANDIDATES = 8
+/** Below this implied measure width (fraction of content), spacing is ambiguous. */
+const AMBIGUOUS_MEASURE_WIDTH_FRAC = 0.048
+
 function pixelLuminance(data, index) {
   const alpha = data[index + 3] / 255
   const lum = 0.299 * data[index] + 0.587 * data[index + 1] + 0.114 * data[index + 2]
@@ -99,6 +104,8 @@ function emptyBarlineDiagnostics() {
   return {
     candidatesRaw: 0,
     accepted: 0,
+    retainedLowConfidence: 0,
+    densityAmbiguous: false,
     rejected: {
       [BARLINE_REJECT_REASON.STEM_LIKE]: 0,
       [BARLINE_REJECT_REASON.SINGLE_STAFF]: 0,
@@ -109,6 +116,82 @@ function emptyBarlineDiagnostics() {
       [BARLINE_REJECT_REASON.INCONSISTENT]: 0,
     },
   }
+}
+
+/**
+ * Count independent stem-like signals for a column. Reject only when multiple
+ * agree — a single weak signal keeps the candidate (downgraded later).
+ */
+function countStemLikeSignals({
+  trebleStats,
+  bassStats,
+  gapStats,
+  fullStats,
+  trebleStrong,
+  bassStrong,
+  gapStrong,
+  fullStrong,
+  trebleRunMin,
+  bassRunMin,
+  stemLikeMax,
+}) {
+  let signals = 0
+
+  if (fullStats.transitions > 10 && !fullStrong) {
+    signals += 1
+  } else if (fullStats.transitions > 8 && !fullStrong && !gapStrong) {
+    signals += 1
+  }
+
+  if (
+    (trebleStrong && bassStats.maxRunFrac < stemLikeMax) ||
+    (bassStrong && trebleStats.maxRunFrac < stemLikeMax)
+  ) {
+    signals += 1
+  }
+
+  if (
+    !fullStrong &&
+    trebleStats.maxRunFrac < trebleRunMin * 0.85 &&
+    bassStats.maxRunFrac < bassRunMin * 0.85
+  ) {
+    signals += 1
+  }
+
+  if (!fullStrong && !gapStrong && !(trebleStrong && bassStrong)) {
+    signals += 1
+  }
+
+  if (
+    !fullStrong &&
+    !(trebleStrong && bassStrong) &&
+    Math.abs(trebleStats.maxRunFrac - bassStats.maxRunFrac) > 0.28
+  ) {
+    signals += 1
+  }
+
+  return signals
+}
+
+function gapSpacingStats(positions, contentBounds) {
+  if (positions.length < 2) {
+    return { medGap: 0, measureWidthFrac: null, coefficientOfVariation: null, tightGrid: false }
+  }
+  const contentWidth = Math.max(1e-6, (contentBounds.x1 ?? 1) - (contentBounds.x0 ?? 0))
+  const gaps = []
+  for (let i = 1; i < positions.length; i += 1) {
+    gaps.push(positions[i] - positions[i - 1])
+  }
+  const medGap = median(gaps)
+  const meanGap = gaps.reduce((a, b) => a + b, 0) / gaps.length
+  const variance =
+    gaps.reduce((sum, g) => sum + (g - meanGap) ** 2, 0) / Math.max(1, gaps.length)
+  const coefficientOfVariation = meanGap > 0 ? Math.sqrt(variance) / meanGap : null
+  const measureWidthFrac = medGap / contentWidth
+  const tightGrid =
+    positions.length > SPARSE_LAYOUT_MAX_CANDIDATES &&
+    measureWidthFrac < AMBIGUOUS_MEASURE_WIDTH_FRAC
+  return { medGap, measureWidthFrac, coefficientOfVariation, tightGrid }
 }
 
 /**
@@ -163,51 +246,76 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
       continue
     }
 
-    // Note columns flicker dark/light; barlines are one long vertical stroke.
-    if (fullStats.transitions > 8 && !fullStrong) {
-      diagnostics.rejected[BARLINE_REJECT_REASON.STEM_LIKE] += 1
-      continue
-    }
-
-    // Stems/note clusters: strong ink in one staff only, weak in the other.
-    if (
-      (trebleStrong && bassStats.maxRunFrac < stemLikeMax) ||
-      (bassStrong && trebleStats.maxRunFrac < stemLikeMax)
-    ) {
-      diagnostics.rejected[BARLINE_REJECT_REASON.SINGLE_STAFF] += 1
-      continue
-    }
-
-    // Short vertical runs confined to note regions (stem-like), not full barlines.
-    if (
-      !fullStrong &&
-      (trebleStats.maxRunFrac < trebleRunMin * 0.85 || bassStats.maxRunFrac < bassRunMin * 0.85)
-    ) {
-      diagnostics.rejected[BARLINE_REJECT_REASON.WEAK_RUN] += 1
-      continue
-    }
-
-    // Both staves must show a barline-like run, OR one very strong full-grand run.
-    if (!fullStrong && !(trebleStrong && bassStrong)) {
-      diagnostics.rejected[BARLINE_REJECT_REASON.STEM_LIKE] += 1
-      continue
-    }
-
-    // Real barlines continue through the treble↔bass gap; isolated stems do not.
-    if (!fullStrong && !gapStrong) {
-      diagnostics.rejected[BARLINE_REJECT_REASON.WEAK_GAP] += 1
-      continue
-    }
-
-    rawCandidates.push({
-      x: xNorm,
-      score:
-        trebleStats.maxRunFrac +
-        bassStats.maxRunFrac +
-        gapStats.maxRunFrac +
-        fullStats.maxRunFrac * 0.5 -
-        fullStats.transitions * 0.015,
+    const stemSignals = countStemLikeSignals({
+      trebleStats,
+      bassStats,
+      gapStats,
+      fullStats,
+      trebleStrong,
+      bassStrong,
+      gapStrong,
+      fullStrong,
+      trebleRunMin,
+      bassRunMin,
+      stemLikeMax,
     })
+
+    const hasBarlineShape = fullStrong || (trebleStrong && bassStrong)
+
+    // Clear barline with no stem signals — accept at full confidence.
+    if (hasBarlineShape && stemSignals === 0) {
+      rawCandidates.push({
+        x: xNorm,
+        confidence: 'high',
+        score:
+          trebleStats.maxRunFrac +
+          bassStats.maxRunFrac +
+          gapStats.maxRunFrac +
+          fullStats.maxRunFrac * 0.5 -
+          fullStats.transitions * 0.015,
+      })
+      continue
+    }
+
+    // Multiple stem signals — hard reject (note column / stem grid).
+    if (stemSignals >= 2 || (!hasBarlineShape && stemSignals >= 1)) {
+      if (
+        (trebleStrong && bassStats.maxRunFrac < stemLikeMax) ||
+        (bassStrong && trebleStats.maxRunFrac < stemLikeMax)
+      ) {
+        diagnostics.rejected[BARLINE_REJECT_REASON.SINGLE_STAFF] += 1
+      } else if (
+        !fullStrong &&
+        trebleStats.maxRunFrac < trebleRunMin * 0.85 &&
+        bassStats.maxRunFrac < bassRunMin * 0.85
+      ) {
+        diagnostics.rejected[BARLINE_REJECT_REASON.WEAK_RUN] += 1
+      } else if (!fullStrong && !gapStrong && !(trebleStrong && bassStrong)) {
+        diagnostics.rejected[BARLINE_REJECT_REASON.WEAK_GAP] += 1
+      } else {
+        diagnostics.rejected[BARLINE_REJECT_REASON.STEM_LIKE] += 1
+      }
+      continue
+    }
+
+    // Single borderline signal but barline-shaped — retain, downgrade confidence.
+    if (hasBarlineShape && stemSignals === 1) {
+      rawCandidates.push({
+        x: xNorm,
+        confidence: 'low',
+        score:
+          trebleStats.maxRunFrac +
+          bassStats.maxRunFrac +
+          gapStats.maxRunFrac +
+          fullStats.maxRunFrac * 0.4 -
+          fullStats.transitions * 0.02 -
+          0.15,
+      })
+      diagnostics.retainedLowConfidence += 1
+      continue
+    }
+
+    diagnostics.rejected[BARLINE_REJECT_REASON.STEM_LIKE] += 1
   }
 
   const mergeGapPx = Math.max(2, Math.floor(width * 0.012))
@@ -219,6 +327,8 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
       if (candidate.score > last.score) {
         last.x = candidate.x
         last.score = candidate.score
+        last.confidence =
+          last.confidence === 'low' || candidate.confidence === 'low' ? 'low' : 'high'
       }
     } else {
       merged.push({ ...candidate })
@@ -227,31 +337,50 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
 
   let positions = merged.map((m) => m.x)
   diagnostics.accepted = positions.length
+  diagnostics.retainedLowConfidence = merged.filter((c) => c.confidence === 'low').length
 
-  if (positions.length > 3) {
-    const thinned = thinBarlineGrid(merged, contentBounds)
-    if (thinned.length < positions.length) {
-      diagnostics.rejected[BARLINE_REJECT_REASON.TOO_DENSE] += positions.length - thinned.length
+  const spacing = gapSpacingStats(positions, contentBounds)
+  if (spacing.tightGrid) {
+    diagnostics.densityAmbiguous = true
+  }
+
+  // Sparse/simple layouts: never thin — real barlines are preserved as-is.
+  if (positions.length > SPARSE_LAYOUT_MAX_CANDIDATES && spacing.tightGrid) {
+    const thinned = thinBarlineGrid(merged, contentBounds, { conservative: true })
+    if (thinned.positions.length < positions.length) {
+      diagnostics.rejected[BARLINE_REJECT_REASON.TOO_DENSE] += positions.length - thinned.positions.length
+      if (thinned.ambiguous) {
+        diagnostics.densityAmbiguous = true
+      }
     }
-    positions = thinned
+    positions = thinned.positions
     diagnostics.accepted = positions.length
+    diagnostics.retainedLowConfidence = thinned.retainedLowConfidence
+  } else if (positions.length > 3 && spacing.measureWidthFrac != null) {
+    const cv = spacing.coefficientOfVariation
+    if (cv != null && cv < 0.12 && spacing.tightGrid) {
+      diagnostics.densityAmbiguous = true
+      diagnostics.rejected[BARLINE_REJECT_REASON.INCONSISTENT] += 0
+    }
   }
 
   return { positions, diagnostics }
 }
 
-/** Keep the widest-spaced barlines when a stem grid produced too many candidates. */
-function thinBarlineGrid(candidates, contentBounds) {
-  if (candidates.length <= 3) {
-    return candidates.map((c) => c.x).sort((a, b) => a - b)
+/**
+ * When a stem grid produced too many candidates, prefer spacing-based thinning
+ * only on clearly dense grids. Returns positions plus ambiguity flags.
+ */
+function thinBarlineGrid(candidates, contentBounds, { conservative = false } = {}) {
+  if (candidates.length <= SPARSE_LAYOUT_MAX_CANDIDATES) {
+    return {
+      positions: candidates.map((c) => c.x).sort((a, b) => a - b),
+      retainedLowConfidence: candidates.filter((c) => c.confidence === 'low').length,
+      ambiguous: false,
+    }
   }
   const sorted = [...candidates].sort((a, b) => a.x - b.x)
   const sortedX = sorted.map((c) => c.x)
-
-  // A handful of survivors are almost always real barlines — keep them all.
-  if (candidates.length <= 8) {
-    return sortedX
-  }
   const contentWidth = Math.max(1e-6, (contentBounds.x1 ?? 1) - (contentBounds.x0 ?? 0))
   const gaps = []
   for (let i = 1; i < sortedX.length; i += 1) {
@@ -265,42 +394,64 @@ function thinBarlineGrid(candidates, contentBounds) {
       ? wideGaps
       : gapsDesc.slice(0, Math.max(1, Math.ceil(gapsDesc.length * 0.12)))
   let estMeasureFrac = Math.max(0.045, median(wideSample) / contentWidth)
-  let minGap = estMeasureFrac * contentWidth * 0.72
+  let minGap = estMeasureFrac * contentWidth * (conservative ? 0.82 : 0.72)
 
-  // Few candidates are usually real barlines — do not over-thin using one wide gap.
   if (candidates.length <= 10) {
     minGap = Math.max(contentWidth * 0.028, medGap * 0.82)
   } else if (candidates.length > 12) {
-    minGap = Math.max(minGap, contentWidth * 0.085)
+    minGap = Math.max(minGap, contentWidth * (conservative ? 0.095 : 0.085))
   }
 
   const pickWithMinGap = (gapPx) => {
     const byScore = [...candidates].sort((a, b) => b.score - a.score)
     const picked = []
+    const pickedMeta = []
     for (const candidate of byScore) {
       if (picked.every((k) => Math.abs(candidate.x - k) >= gapPx)) {
         picked.push(candidate.x)
+        pickedMeta.push(candidate)
       }
     }
     picked.sort((a, b) => a - b)
-    return picked
+    return { picked, pickedMeta }
   }
 
-  let kept = pickWithMinGap(minGap)
-  while (kept.length > 14 && minGap < contentWidth * 0.22) {
+  let { picked: kept, pickedMeta } = pickWithMinGap(minGap)
+  const maxKept = conservative ? 12 : 14
+  while (kept.length > maxKept && minGap < contentWidth * 0.22) {
     minGap *= 1.12
-    kept = pickWithMinGap(minGap)
+    ;({ picked: kept, pickedMeta } = pickWithMinGap(minGap))
   }
   if (kept.length === 0) {
-    return sortedX
+    return {
+      positions: sortedX,
+      retainedLowConfidence: sorted.filter((c) => c.confidence === 'low').length,
+      ambiguous: true,
+    }
   }
   const last = sortedX[sortedX.length - 1]
   if (last - kept[kept.length - 1] >= minGap * 0.55) {
     kept.push(last)
+    const lastMeta = sorted[sorted.length - 1]
+    pickedMeta.push(lastMeta)
   } else if (Math.abs(last - kept[kept.length - 1]) > minGap * 0.2) {
     kept[kept.length - 1] = last
+    pickedMeta[pickedMeta.length - 1] = sorted[sorted.length - 1]
   }
-  return kept
+
+  const ambiguous =
+    kept.length >= 8 &&
+    median(
+      kept.slice(1).map((x, i) => x - kept[i]),
+    ) /
+      contentWidth <
+      AMBIGUOUS_MEASURE_WIDTH_FRAC
+
+  return {
+    positions: kept,
+    retainedLowConfidence: pickedMeta.filter((c) => c.confidence === 'low').length,
+    ambiguous,
+  }
 }
 
 function median(values) {

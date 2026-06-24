@@ -277,6 +277,8 @@ export function countSystemBarlines(imageData, contentBounds, system, options = 
 
 /** A real measure is at least this fraction of the system's content width. */
 const MIN_MEASURE_WIDTH_FRAC = 0.045
+/** Borderline measure width — keep barlines but downgrade confidence. */
+const LOW_CONFIDENCE_MEASURE_WIDTH_FRAC = 0.055
 /** More detected "measures" than this in one system means the count is unreliable. */
 const MAX_MEASURES_PER_SYSTEM = 16
 
@@ -290,19 +292,28 @@ const MAX_MEASURES_PER_SYSTEM = 16
  * or the count is implausibly high. In those cases we must NOT emit a confident
  * measure count (better to fall back to MusicXML breaks than to map measures to
  * the wrong systems with false confidence).
+ *
+ * When spacing is ambiguous but barlines are retained, returns confident:false
+ * with confidenceLevel 'low' rather than deleting borderline candidates.
  */
 export function assessBarlineReliability(positions, contentBounds, diagnostics = null) {
   const x0 = contentBounds?.x0 ?? 0
   const x1 = contentBounds?.x1 ?? 1
   const contentWidth = Math.max(1e-6, x1 - x0)
+  const retainedLowConfidence = diagnostics?.retainedLowConfidence ?? 0
+  const densityAmbiguous = diagnostics?.densityAmbiguous === true
+
   if (!positions || positions.length < 2) {
     const rejectedDense =
       (diagnostics?.rejected?.[BARLINE_REJECT_REASON.TOO_DENSE] ?? 0) > 0 ||
       (diagnostics?.rejected?.[BARLINE_REJECT_REASON.INCONSISTENT] ?? 0) > 0
     return {
       confident: false,
+      confidenceLevel: 'none',
       reason: rejectedDense ? 'barline-grid-too-dense' : 'too-few-barlines',
       measureWidthFrac: null,
+      retainedLowConfidence,
+      densityAmbiguous,
     }
   }
   const measures = positions.length - 1
@@ -311,13 +322,58 @@ export function assessBarlineReliability(positions, contentBounds, diagnostics =
     gaps.push(positions[i] - positions[i - 1])
   }
   const measureWidthFrac = median(gaps) / contentWidth
+
   if (measures > MAX_MEASURES_PER_SYSTEM) {
-    return { confident: false, reason: 'too-many-barlines', measureWidthFrac }
+    return {
+      confident: false,
+      confidenceLevel: 'none',
+      reason: 'too-many-barlines',
+      measureWidthFrac,
+      retainedLowConfidence,
+      densityAmbiguous: true,
+    }
   }
   if (measureWidthFrac < MIN_MEASURE_WIDTH_FRAC) {
-    return { confident: false, reason: 'barline-grid-too-dense', measureWidthFrac }
+    return {
+      confident: false,
+      confidenceLevel: densityAmbiguous || retainedLowConfidence > 0 ? 'low' : 'none',
+      reason: 'barline-grid-too-dense',
+      measureWidthFrac,
+      retainedLowConfidence,
+      densityAmbiguous: true,
+    }
   }
-  return { confident: true, reason: 'ok', measureWidthFrac }
+  if (densityAmbiguous) {
+    return {
+      confident: false,
+      confidenceLevel: 'low',
+      reason: 'ambiguous-density',
+      measureWidthFrac,
+      retainedLowConfidence,
+      densityAmbiguous: true,
+    }
+  }
+  if (
+    retainedLowConfidence > 0 &&
+    measureWidthFrac < LOW_CONFIDENCE_MEASURE_WIDTH_FRAC
+  ) {
+    return {
+      confident: false,
+      confidenceLevel: 'low',
+      reason: 'low-confidence-candidates',
+      measureWidthFrac,
+      retainedLowConfidence,
+      densityAmbiguous: false,
+    }
+  }
+  return {
+    confident: true,
+    confidenceLevel: retainedLowConfidence > 0 ? 'medium' : 'high',
+    reason: retainedLowConfidence > 0 ? 'ok-with-borderline-candidates' : 'ok',
+    measureWidthFrac,
+    retainedLowConfidence,
+    densityAmbiguous: false,
+  }
 }
 
 /** Normalized x positions of detected barlines within a system band. */
@@ -382,8 +438,11 @@ export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
       barlineCandidatesRaw: detection.diagnostics?.candidatesRaw ?? null,
       barlineRejected: detection.diagnostics?.rejected ?? null,
       barlineAccepted: detection.diagnostics?.accepted ?? barlineCount,
+      barlineRetainedLowConfidence: detection.diagnostics?.retainedLowConfidence ?? 0,
+      barlineDensityAmbiguous: detection.diagnostics?.densityAmbiguous ?? false,
       measureEstimate,
       barlineConfident: reliability.confident,
+      barlineConfidenceLevel: reliability.confidenceLevel,
       barlineReliabilityReason: reliability.reason,
       contentBounds,
     }

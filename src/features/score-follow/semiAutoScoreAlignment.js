@@ -137,6 +137,9 @@ function buildAutoSetupDebugReport({
       barlineCandidatesRaw: entry?.system?.barlineCandidatesRaw ?? null,
       barlineAccepted: entry?.system?.barlineAccepted ?? null,
       barlineRejected: entry?.system?.barlineRejected ?? null,
+      barlineRetainedLowConfidence: entry?.system?.barlineRetainedLowConfidence ?? null,
+      barlineDensityAmbiguous: entry?.system?.barlineDensityAmbiguous ?? null,
+      barlineConfidenceLevel: entry?.system?.barlineConfidenceLevel ?? null,
       firstAnchorX: startAnchor ? round3(startAnchor.x) : null,
       lastAnchorX: endAnchor ? round3(endAnchor.x) : null,
     }

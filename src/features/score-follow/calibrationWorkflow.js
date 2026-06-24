@@ -11,7 +11,7 @@ import {
   pageCountFromMusicXml,
   systemStartsFromMusicXml,
 } from './layoutAssessment.js'
-import { summarizeBarlineRejections } from './pdfPageAnalysis.js'
+import { summarizeBarlineRejections, summarizeBarlineDiagnostics } from './pdfPageAnalysis.js'
 import {
   buildBundledAnchorsFromAutoAnchors,
   calibrateAnchorsFromDetection,
@@ -301,7 +301,14 @@ export function analyzeSystemMeasureCounts({
       barlineAccepted: sys.barlineAccepted,
       barlineConfident: sys.barlineConfident,
       barlineReliabilityReason: sys.barlineReliabilityReason,
-      rejectedSummary: summarizeBarlineRejections(sys.barlineRejected),
+      barlineConfidenceLevel: sys.barlineConfidenceLevel ?? null,
+      barlineRetainedLowConfidence: sys.barlineRetainedLowConfidence ?? 0,
+      barlineDensityAmbiguous: sys.barlineDensityAmbiguous ?? false,
+      rejectedSummary: summarizeBarlineDiagnostics({
+        rejected: sys.barlineRejected,
+        retainedLowConfidence: sys.barlineRetainedLowConfidence,
+        densityAmbiguous: sys.barlineDensityAmbiguous,
+      }),
       status,
       notes,
       needsReview: status !== 'ok' && !hasManualBarlines && !hasManualCount,

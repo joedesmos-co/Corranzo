@@ -137,12 +137,34 @@ describe('alignmentBenchmark reporting', () => {
   it('categorizes blockers from diagnostics fields', () => {
     const blockers = categorizeBlockers({
       source: { indicators: ['page-count-mismatch'], editionConflictLikely: false },
-      systems: { weak: 1, perSystem: [{ rejectedSummary: 'too-dense=3' }] },
+      systems: {
+        weak: 1,
+        perSystem: [
+          {
+            rejectedSummary: 'too-dense=3',
+            barlineDensityAmbiguous: true,
+            barlineReliabilityReason: 'ambiguous-density',
+          },
+        ],
+      },
       calibrationOk: false,
       setupOk: true,
     })
     expect(blockers).toContain(BLOCKER_CATEGORIES.PAGE_MISMATCH)
     expect(blockers).toContain(BLOCKER_CATEGORIES.DENSE_FALSE_BARLINES)
     expect(blockers).toContain(BLOCKER_CATEGORIES.CALIBRATION_INCOMPLETE)
+    expect(blockers).not.toContain(BLOCKER_CATEGORIES.MISSING_BARLINES)
+  })
+
+  it('does not flag dense-false-barlines from routine stem-like scan rejections alone', () => {
+    const blockers = categorizeBlockers({
+      source: { indicators: [], editionConflictLikely: false },
+      systems: {
+        perSystem: [{ rejectedSummary: 'stem-like=300, margin=19' }],
+      },
+      calibrationOk: true,
+      setupOk: true,
+    })
+    expect(blockers).not.toContain(BLOCKER_CATEGORIES.DENSE_FALSE_BARLINES)
   })
 })

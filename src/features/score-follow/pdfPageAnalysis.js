@@ -159,3 +159,22 @@ export function summarizeBarlineRejections(rejected) {
     .map(([reason, count]) => `${reason}=${count}`)
     .join(', ')
 }
+
+/** Rejection summary plus retained low-confidence counts for benchmark diagnostics. */
+export function summarizeBarlineDiagnostics(diagnostics) {
+  if (!diagnostics) {
+    return ''
+  }
+  const parts = []
+  const rejected = summarizeBarlineRejections(diagnostics.rejected ?? diagnostics)
+  if (rejected) {
+    parts.push(rejected)
+  }
+  if (Number(diagnostics.retainedLowConfidence) > 0) {
+    parts.push(`retained-low-confidence=${diagnostics.retainedLowConfidence}`)
+  }
+  if (diagnostics.densityAmbiguous) {
+    parts.push('density-ambiguous')
+  }
+  return parts.join(', ')
+}
