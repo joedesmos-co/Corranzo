@@ -5,11 +5,13 @@ import { describe, expect, it, vi } from 'vitest'
 import {
   alignChordScoreTime,
   createVoiceMixState,
+  MAX_SIMULTANEOUS_VOICES,
   planNoteTrigger,
   pruneVoices,
   resetVoiceMix,
 } from '../src/features/playback/pianoVoiceMix.js'
 import { ScorePlaybackEngine } from '../src/features/playback/scorePlaybackEngine.js'
+import { MidiPlaybackEngine } from '../src/features/playback/midiPlaybackEngine.js'
 
 describe('piano voice mix', () => {
   it('reduces velocity when many notes overlap at the same instant', () => {
@@ -17,7 +19,9 @@ describe('piano voice mix', () => {
     const t = 1.0
     const results = []
     for (let i = 0; i < 6; i += 1) {
-      results.push(planNoteTrigger(state, { time: t, velocity: 0.85, duration: 0.5 }))
+      results.push(
+        planNoteTrigger(state, { time: t, velocity: 0.85, duration: 0.5, note: `N${i}` }),
+      )
     }
     expect(state.maxSimultaneous).toBe(6)
     expect(results[0].velocity).toBeCloseTo(0.85, 2)
@@ -27,8 +31,8 @@ describe('piano voice mix', () => {
 
   it('does not duck sparse single-note triggers', () => {
     const state = createVoiceMixState()
-    const a = planNoteTrigger(state, { time: 0, velocity: 0.8, duration: 0.4 })
-    const b = planNoteTrigger(state, { time: 0.5, velocity: 0.8, duration: 0.4 })
+    const a = planNoteTrigger(state, { time: 0, velocity: 0.8, duration: 0.4, note: 'C4' })
+    const b = planNoteTrigger(state, { time: 0.5, velocity: 0.8, duration: 0.4, note: 'E4' })
     expect(a.velocity).toBeCloseTo(0.8, 2)
     expect(b.velocity).toBeCloseTo(0.8, 2)
     expect(state.densityReduced).toBe(0)
@@ -36,12 +40,42 @@ describe('piano voice mix', () => {
 
   it('resetVoiceMix clears active voices after releaseAll path', () => {
     const state = createVoiceMixState()
-    planNoteTrigger(state, { time: 1, velocity: 0.7, duration: 0.5 })
+    planNoteTrigger(state, { time: 1, velocity: 0.7, duration: 0.5, note: 'C4' })
     expect(state.active).toHaveLength(1)
     resetVoiceMix(state)
     expect(state.active).toHaveLength(0)
     pruneVoices(state, 10)
     expect(state.active).toHaveLength(0)
+  })
+
+  it('skips duplicate identical notes at the same chord instant', () => {
+    const state = createVoiceMixState()
+    planNoteTrigger(state, { time: 1, velocity: 0.8, duration: 0.5, note: 'C4' })
+    const duplicate = planNoteTrigger(state, { time: 1, velocity: 0.8, duration: 0.5, note: 'C4' })
+    expect(duplicate.skipped).toBe(true)
+    expect(state.duplicatesSkipped).toBe(1)
+    expect(state.active).toHaveLength(1)
+  })
+
+  it('gracefully steals voices when the polyphony budget is exceeded', () => {
+    const state = createVoiceMixState()
+    for (let index = 0; index < MAX_SIMULTANEOUS_VOICES; index += 1) {
+      planNoteTrigger(state, {
+        time: 0,
+        velocity: 0.45,
+        duration: 2,
+        note: `N${index}`,
+      })
+    }
+    const plan = planNoteTrigger(state, {
+      time: 0.01,
+      velocity: 0.85,
+      duration: 0.4,
+      note: 'NEW',
+    })
+    expect(plan.release.length).toBeGreaterThan(0)
+    expect(state.voicesStolen).toBeGreaterThan(0)
+    expect(state.active.length).toBeLessThanOrEqual(MAX_SIMULTANEOUS_VOICES)
   })
 
   it('alignChordScoreTime snaps nearby onsets to the same grid', () => {
@@ -107,5 +141,29 @@ describe('score engine dense scheduling', () => {
     const { engine, calls } = makeEngine(events)
     engine.scheduleWindow(0, 1)
     expect(calls[0][2]).toBe(calls[1][2])
+  })
+})
+
+describe('midi engine dense scheduling', () => {
+  it('pause releases voices without rebuilding track instruments', () => {
+    const disposed = []
+    const instrument = {
+      triggerAttackRelease: vi.fn(),
+      releaseAll: vi.fn(),
+      dispose: () => disposed.push(1),
+    }
+    const engine = new MidiPlaybackEngine()
+    engine.trackStates = [{
+      id: 0,
+      notes: [],
+      instrument,
+      output: { gain: { value: 1 } },
+      muted: false,
+    }]
+    engine.createPianoInstrument = vi.fn()
+    engine.playing = true
+    engine.pause()
+    expect(disposed).toHaveLength(0)
+    expect(instrument.releaseAll).toHaveBeenCalled()
   })
 })

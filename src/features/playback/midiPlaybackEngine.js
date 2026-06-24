@@ -2,6 +2,7 @@ import * as Tone from 'tone'
 import { awaitToneStarted } from '../audio/toneAudioUnlock.js'
 import { parseMidiFile } from './parseMidiFile.js'
 import { INSTRUMENT_STATUS } from './pianoInstrumentStatus.js'
+import { alignChordScoreTime } from './pianoVoiceMix.js'
 
 const loadPianoInstrumentModule = () => import('./pianoInstrument.js')
 
@@ -21,8 +22,8 @@ function resolvePlaybackDuration(midi, parsedDuration) {
 
 function softenVelocity(velocity) {
   const value = typeof velocity === 'number' ? velocity : 0.82
-  const shaped = value ** 1.15
-  return Math.min(0.92, Math.max(0.22, shaped * 0.78 + 0.14))
+  const shaped = value ** 1.1
+  return Math.min(0.9, Math.max(0.28, shaped * 0.8 + 0.16))
 }
 
 function normalizeNoteEvents(trackNotes) {
@@ -123,17 +124,25 @@ export class MidiPlaybackEngine {
 
   scheduleNotesFrom(fromSeconds) {
     const now = Tone.now()
+    const scheduled = new Set()
 
     for (const track of this.trackStates) {
       for (const note of track.notes) {
-        const noteEnd = note.time + note.duration
+        const alignedStart = alignChordScoreTime(note.time)
+        const noteEnd = alignedStart + note.duration
         if (noteEnd <= fromSeconds) {
           continue
         }
 
-        const noteOn = Math.max(note.time, fromSeconds)
+        const noteOn = Math.max(alignedStart, fromSeconds)
+        const dedupeKey = `${track.id}::${note.name}::${alignChordScoreTime(noteOn)}`
+        if (scheduled.has(dedupeKey)) {
+          continue
+        }
+        scheduled.add(dedupeKey)
+
         const delay = noteOn - fromSeconds
-        const duration = note.duration - (noteOn - note.time)
+        const duration = note.duration - (noteOn - alignedStart)
 
         if (duration <= 0) {
           continue
@@ -211,7 +220,7 @@ export class MidiPlaybackEngine {
     this.recomputeInstrumentStatus()
   }
 
-  clearScheduledPlayback({ rebuildInstruments = true } = {}) {
+  clearScheduledPlayback({ rebuildInstruments = false } = {}) {
     this.playing = false
     this.stopProgressLoop()
     this.releaseAllVoices()

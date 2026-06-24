@@ -319,7 +319,7 @@ describe('piano instrument — release, dispose, labels', () => {
     await inst.whenReady()
 
     for (let i = 0; i < 5; i += 1) {
-      inst.triggerAttackRelease('C4', 0.5, 0, 0.85)
+      inst.triggerAttackRelease(`C${i + 3}`, 0.5, 0, 0.85)
     }
     expect(inst.getVoiceDiagnostics().maxSimultaneous).toBeGreaterThanOrEqual(5)
 
