@@ -197,7 +197,7 @@ export default function PdfViewer({
       {showSidebarToggle && (
         <button
           type="button"
-          className="sidebar-toggle"
+          className={`sidebar-toggle${sidebarOpen ? '' : ' sidebar-toggle--expand'}`}
           onClick={onToggleSidebar}
           aria-label={sidebarOpen ? 'Hide library sidebar' : 'Show library sidebar'}
           title={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}

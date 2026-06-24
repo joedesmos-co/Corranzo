@@ -15,6 +15,7 @@ export default function PdfViewerToolbar({
   visible = true,
   chromePinned = false,
   onToggleChromePinned,
+  onChromeActivity,
   file,
   fileName,
   pageNumber,
@@ -62,6 +63,8 @@ export default function PdfViewerToolbar({
       className={`viewer-float-toolbar viewer-float-toolbar--${variant}${visible ? ' viewer-float-toolbar--visible' : ''}${variant === 'embedded' ? ' viewer-float-toolbar--embedded' : ''}`}
       role="toolbar"
       aria-label="PDF controls"
+      onPointerEnter={onChromeActivity}
+      onFocusCapture={onChromeActivity}
     >
       <div className="viewer-float-toolbar__bar">
         <ToolbarIconButton

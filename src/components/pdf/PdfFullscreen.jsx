@@ -8,6 +8,9 @@ import { getPageDimensions } from '../../utils/pdfFit.js'
 import PdfPageFrame from './PdfPageFrame.jsx'
 import PdfViewerToolbar from './PdfViewerToolbar.jsx'
 
+/** Idle delay before auto-hiding fullscreen chrome. */
+const CHROME_IDLE_MS = 4000
+
 export default function PdfFullscreen({
   file,
   pageNumber,
@@ -41,9 +44,10 @@ export default function PdfFullscreen({
 }) {
   const containerRef = useRef(null)
   const containerSize = useElementSize(containerRef)
-  const { visible: autoVisible, notifyActivity } = useInactivityHide(2800, true)
+  const { visible: autoVisible, notifyActivity } = useInactivityHide(CHROME_IDLE_MS, true)
   const [chromePinned, setChromePinned] = useState(false)
   const chromeVisible = chromePinned || autoVisible
+  const hasPracticeHud = Boolean(practiceHud)
 
   const pageDimensions = getPageDimensions(fitMode ?? 'page', pageSize, containerSize)
   const canGoPrev = pageNumber > 1
@@ -66,7 +70,7 @@ export default function PdfFullscreen({
         onClose()
         return
       }
-      notifyActivity()
+      // Keyboard shortcuts (arrows, space, etc.) keep working without revealing chrome.
       if (!allowNavigationZones) {
         return
       }
@@ -89,7 +93,6 @@ export default function PdfFullscreen({
     canGoPrev,
     canGoNext,
     allowNavigationZones,
-    notifyActivity,
     setAlignmentMode,
   ])
 
@@ -105,7 +108,6 @@ export default function PdfFullscreen({
     if (!allowNavigationZones) {
       return
     }
-    notifyActivity()
     event.stopPropagation()
     if (direction === 'prev' && canGoPrev) {
       onPrevPage()
@@ -115,23 +117,18 @@ export default function PdfFullscreen({
     }
   }
 
-  function handleActivity() {
-    notifyActivity()
-  }
-
   return (
     <div
       className="pdf-fullscreen"
       role="dialog"
       aria-modal="true"
       aria-label="Fullscreen PDF reader"
-      onPointerMove={handleActivity}
-      onPointerDown={handleActivity}
     >
       <PdfViewerToolbar
         variant="fullscreen"
         visible={chromeVisible}
         chromePinned={chromePinned}
+        onChromeActivity={notifyActivity}
         onToggleChromePinned={() => {
           setChromePinned((previous) => !previous)
           notifyActivity()
@@ -210,20 +207,33 @@ export default function PdfFullscreen({
         : practiceHud}
 
       {!chromeVisible && (
-        <button
-          type="button"
-          className="pdf-fullscreen__chrome-reveal"
-          aria-label="Show controls"
-          onClick={() => {
-            setChromePinned(true)
-            notifyActivity()
-          }}
-        >
-          <span className="pdf-fullscreen__chrome-reveal-icon" aria-hidden>
-            ⌃
-          </span>
-          Controls
-        </button>
+        <>
+          <div
+            className="pdf-fullscreen__chrome-zone pdf-fullscreen__chrome-zone--top"
+            aria-hidden="true"
+            onPointerEnter={notifyActivity}
+            onPointerDown={notifyActivity}
+          />
+          {hasPracticeHud && (
+            <div
+              className="pdf-fullscreen__chrome-zone pdf-fullscreen__chrome-zone--bottom"
+              aria-hidden="true"
+              onPointerEnter={notifyActivity}
+              onPointerDown={notifyActivity}
+            />
+          )}
+          <button
+            type="button"
+            className="pdf-fullscreen__chrome-reveal"
+            aria-label="Show controls"
+            onClick={notifyActivity}
+          >
+            <span className="pdf-fullscreen__chrome-reveal-icon" aria-hidden>
+              ⌃
+            </span>
+            Controls
+          </button>
+        </>
       )}
 
       <p
@@ -232,8 +242,8 @@ export default function PdfFullscreen({
         {alignmentMode
           ? 'Marking measures · Esc when finished · Esc again leaves fullscreen'
           : isTabletLikeDevice()
-            ? 'Tap screen edges to turn pages · Esc to exit · Pinch to zoom if needed'
-            : 'Move pointer for controls · F fullscreen · Esc to exit'}
+            ? 'Tap top edge for controls · Esc to exit'
+            : 'Move pointer to top edge for controls · Esc to exit'}
       </p>
     </div>
   )
