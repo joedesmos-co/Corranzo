@@ -2,6 +2,7 @@ import { WFY_MATCH_DEFAULTS } from '../practice/waitForYouMatchSettings.js'
 
 const PREFS_KEY = 'scoreflow-practice-prefs-v1'
 const ONBOARDING_KEY = 'scoreflow-onboarding-v1'
+const DEMO_CARD_KEY = 'scoreflow-demo-card-v1'
 
 export function loadPracticePrefs() {
   try {
@@ -40,6 +41,23 @@ export function isOnboardingDismissed() {
 export function dismissOnboarding() {
   try {
     localStorage.setItem(ONBOARDING_KEY, 'dismissed')
+  } catch {
+    // ignore
+  }
+}
+
+/** True after the user tried the demo or uploaded their own files. */
+export function isDemoCardHidden() {
+  try {
+    return localStorage.getItem(DEMO_CARD_KEY) === 'hidden'
+  } catch {
+    return false
+  }
+}
+
+export function hideDemoCard() {
+  try {
+    localStorage.setItem(DEMO_CARD_KEY, 'hidden')
   } catch {
     // ignore
   }

@@ -15,6 +15,8 @@ import useWorkspacePreferences from './hooks/useWorkspacePreferences.js'
 import useSessionPersistence from './hooks/useSessionPersistence.js'
 import {
   dismissOnboarding,
+  hideDemoCard,
+  isDemoCardHidden,
   isOnboardingDismissed,
   loadPracticePrefs,
   savePracticePrefs,
@@ -44,6 +46,7 @@ export default function App() {
   const [pdfMeta, setPdfMeta] = useState(null)
   const [initialPracticePrefs, setInitialPracticePrefs] = useState(null)
   const [showWelcome, setShowWelcome] = useState(() => !isOnboardingDismissed())
+  const [demoCardHidden, setDemoCardHidden] = useState(() => isDemoCardHidden())
   const practicePrefsRef = useRef(null)
   const [fileName, setFileName] = useState('')
   const [pageNumber, setPageNumber] = useState(1)
@@ -75,8 +78,14 @@ export default function App() {
     setDemoPieceActive(false)
   }, [])
 
+  const markDemoCardHidden = useCallback(() => {
+    hideDemoCard()
+    setDemoCardHidden(true)
+  }, [])
+
   const handleFileSelect = useCallback(async (file) => {
     clearDemoPiece()
+    markDemoCardHidden()
     const validation = validateFileForImport(file, 'pdf')
     if (!validation.ok) {
       setLibraryFeedback({ type: 'error', message: validation.message })
@@ -130,10 +139,11 @@ export default function App() {
         message: formatPdfImportError(error),
       })
     }
-  }, [midiSource, musicXmlSource, clearDemoPiece])
+  }, [midiSource, musicXmlSource, clearDemoPiece, markDemoCardHidden])
 
   const handleMidiSelect = useCallback(async (file) => {
     clearDemoPiece()
+    markDemoCardHidden()
     try {
       const data = await readFileArrayBuffer(file, 'midi')
       setMidiSource({
@@ -156,10 +166,11 @@ export default function App() {
         message: formatMidiImportError(error),
       })
     }
-  }, [pdfFile, musicXmlSource, clearDemoPiece])
+  }, [pdfFile, musicXmlSource, clearDemoPiece, markDemoCardHidden])
 
   const handleMusicXmlSelect = useCallback(async (file) => {
     clearDemoPiece()
+    markDemoCardHidden()
     if (isMuseScoreSourceFile(file)) {
       setLibraryFeedback({ type: 'info', message: MUSESCORE_PLANNED_MESSAGE })
       return
@@ -187,7 +198,7 @@ export default function App() {
         message: formatMusicXmlImportError(error),
       })
     }
-  }, [pdfFile, midiSource, clearDemoPiece])
+  }, [pdfFile, midiSource, clearDemoPiece, markDemoCardHidden])
 
   const handleLoadSampleFixtures = useCallback(async () => {
     if (!isDemoSampleEnabled()) {
@@ -232,6 +243,7 @@ export default function App() {
       setPdfSoftWarning(null)
       setShowWelcome(false)
       dismissOnboarding()
+      markDemoCardHidden()
       setDemoPieceActive(true)
       // Demo is loaded — the upload/demo sidebar is no longer useful, so collapse
       // it. The PDF viewer's sidebar toggle still reopens it on demand.
@@ -257,7 +269,7 @@ export default function App() {
             : 'Could not load the sample score. Check your connection and try again.',
       })
     }
-  }, [setSidebarOpen])
+  }, [setSidebarOpen, markDemoCardHidden])
 
   function handleDocumentLoadSuccess({ numPages: total }) {
     setNumPages(total)
@@ -299,7 +311,8 @@ export default function App() {
     setShowWelcome(false)
     setPdfSoftWarning(null)
     setDemoPieceActive(false)
-  }, [])
+    markDemoCardHidden()
+  }, [markDemoCardHidden])
 
   const sessionPersistence = useSessionPersistence({
     pdfBuffer,
@@ -404,7 +417,7 @@ export default function App() {
             sampleLoadLoading={sampleLoadState.loading}
             sampleLoadError={sampleLoadState.error}
             importFeedback={libraryFeedback}
-            showDemo={!showWelcome}
+            showDemo={!demoCardHidden && isDemoSampleEnabled() && restoreGateOpen}
           />
           <div className="main-layout__score">
             <PdfViewer

@@ -66,3 +66,22 @@ describe('PDF page navigation responsiveness', () => {
     expect(css).not.toMatch(/pdf-canvas--page-turn/)
   })
 })
+
+describe('demo card persistence', () => {
+  const app = readSrc('App.jsx')
+  const storage = readSrc('features', 'session', 'practicePrefsStorage.js')
+
+  it('persists demo-card hide in localStorage', () => {
+    expect(storage).toMatch(/isDemoCardHidden/)
+    expect(storage).toMatch(/hideDemoCard/)
+    expect(storage).toMatch(/DEMO_CARD_KEY/)
+  })
+
+  it('hides the library demo card after Try demo or user uploads', () => {
+    expect(app).toMatch(/markDemoCardHidden/)
+    expect(app).toMatch(/showDemo=\{!demoCardHidden/)
+    expect(app).not.toMatch(/showDemo=\{!showWelcome\}/)
+    expect(app).toMatch(/handleLoadSampleFixtures[\s\S]*markDemoCardHidden\(\)/)
+    expect(app).toMatch(/handleFileSelect[\s\S]*markDemoCardHidden\(\)/)
+  })
+})
