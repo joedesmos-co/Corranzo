@@ -69,6 +69,8 @@ export class ScorePlaybackEngine {
     this.output = null
     this.metronomeEnabled = false
     this.metronomeLevel = 0.6
+    /** Bumped on seek/pause/stop so stale interval callbacks never reschedule. */
+    this.scheduleGeneration = 0
     this.onInstrumentStatus = null
     this.instrumentStatus = null
     this.loadPianoInstrument = loadPianoInstrument
@@ -323,8 +325,9 @@ export class ScorePlaybackEngine {
 
   startScheduleLoop() {
     this.stopScheduleLoop()
+    const generation = this.scheduleGeneration
     this.scheduleTimerId = window.setInterval(() => {
-      if (!this.playing) {
+      if (!this.playing || this.scheduleGeneration !== generation) {
         return
       }
       const scoreTime = this.getCurrentScoreTime()
@@ -341,10 +344,44 @@ export class ScorePlaybackEngine {
     }
   }
 
-  releaseAll() {
-    if (this.voice) {
-      this.voice.releaseAll(Tone.now())
+  /**
+   * Stop sounding notes and discard queued future triggerAttackRelease calls.
+   * Tone.js cannot cancel already-scheduled absolute-time events; recreating the
+   * synth voices is the reliable flush path (samples stay in shared memory).
+   */
+  flushPendingAudio() {
+    this.scheduleGeneration += 1
+    const now = Tone.now()
+
+    if (this.metronome) {
+      this.metronome.releaseAll?.(now)
+      this.metronome.dispose()
+      this.metronome = createMetronomeVoice()
+      this.metronome.toDestination()
+      this.metronome.volume.value = Tone.gainToDb(0.15 + this.metronomeLevel * 0.55)
     }
+
+    if (this.voice) {
+      this.voice.releaseAll(now)
+      this.rebuildPlaybackVoice()
+    }
+  }
+
+  rebuildPlaybackVoice() {
+    if (!this.voice || !this.createPianoInstrument || !this.output) {
+      return
+    }
+    this.voice.dispose()
+    this.voice = this.createPianoInstrument({
+      tone: Tone,
+      onStatus: (status) => this.handleInstrumentStatus(status),
+    })
+    this.voice.output.connect(this.output)
+    this.syncOutputMute()
+  }
+
+  releaseAll() {
+    this.flushPendingAudio()
   }
 
   async playFromUserGesture(audioContextStart) {
@@ -483,7 +520,11 @@ export class ScorePlaybackEngine {
 
   startProgressLoop() {
     this.stopProgressLoop()
+    const generation = this.scheduleGeneration
     const tick = () => {
+      if (this.scheduleGeneration !== generation) {
+        return
+      }
       let time = this.getCurrentScoreTime()
       if (this.duration > 0 && time >= this.duration) {
         time = this.duration

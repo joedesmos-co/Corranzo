@@ -259,7 +259,7 @@ export class MidiPlaybackEngine {
     if (this.playing) {
       this.offsetSeconds = this.getCurrentTime()
     }
-    this.clearScheduledPlayback()
+    this.clearScheduledPlayback({ rebuildInstruments: true })
     this.emitTimeUpdate(this.offsetSeconds)
   }
 
@@ -278,7 +278,7 @@ export class MidiPlaybackEngine {
     const clamped = Math.max(0, Math.min(seconds, duration))
     const wasPlaying = this.playing
 
-    this.clearScheduledPlayback()
+    this.clearScheduledPlayback({ rebuildInstruments: true })
     this.offsetSeconds = clamped
 
     if (wasPlaying) {

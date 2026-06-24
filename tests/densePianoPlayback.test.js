@@ -2,6 +2,18 @@
  * Dense piano playback: chord alignment, voice-mix ducking, stop/pause cleanup.
  */
 import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('tone', () => ({
+  now: vi.fn(() => 100),
+  gainToDb: vi.fn((value) => value),
+  MembraneSynth: vi.fn(function MembraneSynth() {
+    this.volume = { value: 0 }
+    this.toDestination = () => this
+    this.triggerAttackRelease = vi.fn()
+    this.releaseAll = vi.fn()
+    this.dispose = vi.fn()
+  }),
+}))
 import {
   alignChordScoreTime,
   createVoiceMixState,
@@ -90,9 +102,24 @@ function makeEngine(noteEvents, tracks = []) {
   engine.voice = {
     triggerAttackRelease: (...args) => calls.push(args),
     releaseAll: vi.fn(),
+    dispose: vi.fn(),
     getVoiceDiagnostics: () => ({ maxSimultaneous: 0 }),
+    output: { connect: vi.fn() },
   }
-  engine.metronome = { volume: { value: 0 }, triggerAttackRelease: vi.fn() }
+  engine.createPianoInstrument = vi.fn(() => ({
+    triggerAttackRelease: vi.fn(),
+    releaseAll: vi.fn(),
+    dispose: vi.fn(),
+    output: { connect: vi.fn() },
+  }))
+  engine.output = { gain: { value: 1 } }
+  engine.metronome = {
+    volume: { value: 0 },
+    triggerAttackRelease: vi.fn(),
+    releaseAll: vi.fn(),
+    dispose: vi.fn(),
+    toDestination: vi.fn().mockReturnThis(),
+  }
   engine.playbackRate = 1
   engine.playStartedAt = 100
   engine.offsetScoreSeconds = 0
@@ -128,9 +155,12 @@ describe('score engine dense scheduling', () => {
 
   it('releaseAll on pause/stop clears sounding notes', () => {
     const { engine } = makeEngine(denseChord)
+    const metronomeDispose = engine.metronome.dispose
+    const voiceReleaseAll = engine.voice.releaseAll
     engine.playing = true
     engine.pause()
-    expect(engine.voice.releaseAll).toHaveBeenCalled()
+    expect(metronomeDispose).toHaveBeenCalled()
+    expect(voiceReleaseAll).toHaveBeenCalled()
   })
 
   it('aligns chord score times before computing wall clock', () => {
@@ -145,7 +175,7 @@ describe('score engine dense scheduling', () => {
 })
 
 describe('midi engine dense scheduling', () => {
-  it('pause releases voices without rebuilding track instruments', () => {
+  it('pause releases voices and rebuilds track instruments to cancel queued notes', () => {
     const disposed = []
     const instrument = {
       triggerAttackRelease: vi.fn(),
@@ -160,10 +190,16 @@ describe('midi engine dense scheduling', () => {
       output: { gain: { value: 1 } },
       muted: false,
     }]
-    engine.createPianoInstrument = vi.fn()
+    engine.createPianoInstrument = vi.fn(() => ({
+      triggerAttackRelease: vi.fn(),
+      releaseAll: vi.fn(),
+      dispose: vi.fn(),
+      output: { connect: vi.fn() },
+      status: 'synth',
+    }))
     engine.playing = true
     engine.pause()
-    expect(disposed).toHaveLength(0)
+    expect(disposed).toHaveLength(1)
     expect(instrument.releaseAll).toHaveBeenCalled()
   })
 })
