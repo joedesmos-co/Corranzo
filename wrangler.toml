@@ -1,8 +1,9 @@
 name = "corranzo"
 compatibility_date = "2026-06-24"
+main = "worker/index.js"
 
-# Static SPA: serve index.html for /privacy, /terms, /contact while keeping
-# ads.txt, robots.txt, sitemap.xml, and other dist/ files as real assets.
+# Worker runs first, serves real dist/ files via ASSETS, then index.html for SPA routes.
 [assets]
 directory = "./dist"
-not_found_handling = "single-page-application"
+binding = "ASSETS"
+run_worker_first = true

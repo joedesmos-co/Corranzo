@@ -43,11 +43,13 @@ describe('AdSense site preparation', () => {
     expect(CONTACT_EMAIL).toBe('joedesmos.co@gmail.com')
   })
 
-  it('uses Wrangler SPA fallback instead of Netlify _redirects', () => {
+  it('uses a Wrangler worker for SPA fallback instead of Netlify _redirects', () => {
     expect(() => readFileSync(join(root, 'public', '_redirects'), 'utf8')).toThrow()
     const wrangler = readFileSync(join(root, 'wrangler.toml'), 'utf8')
-    expect(wrangler).toContain('not_found_handling = "single-page-application"')
+    expect(wrangler).toContain('main = "worker/index.js"')
+    expect(wrangler).toContain('run_worker_first = true')
     expect(wrangler).toContain('directory = "./dist"')
+    expect(readFileSync(join(root, 'worker', 'index.js'), 'utf8')).toContain('handleSpaAssetRequest')
   })
 
   it('keeps static SEO files in public/', () => {
