@@ -307,7 +307,7 @@ async function runDetect() {
       pages: [synthetic.densePianoPage({ systems: 5, measuresPerSystem: 6 })],
       measures: 30,
       breakEvery: 6,
-      expectReady: false, // stem-stacks ≈ barlines: count unreliable, geometry still good
+      expectReady: true, // geometry stays READY; barline COUNT is gated (see per-system lines)
     },
   ]
 
@@ -328,7 +328,9 @@ async function runDetect() {
     const cmp = compareAnchorSets(det, truth, { fields: GEOMETRY_COMPARISON_FIELDS })
     const readiness = assessPromotionReadiness(cmp)
     const entries = res.preview?.systemEntries ?? []
-    const weak = entries.filter((entry) => entry.system?.barlineConfident === false)
+    const unreliableBarlineCount = entries.filter(
+      (entry) => entry.system?.barlineConfident === false,
+    )
 
     console.log('='.repeat(60))
     console.log(`${testCase.id}  (stage=${res.preview?.stage}, alloc=${res.preview?.allocationMode})`)
@@ -350,7 +352,7 @@ async function runDetect() {
     const expectedMeasures = truth.length
     console.log(
       `  measures: detected anchors ${det.length} / expected ${expectedMeasures}  |  ` +
-        `weak systems ${weak.length}`,
+        `unreliable barline count ${unreliableBarlineCount.length}`,
     )
     if (cmp.comparable) {
       console.log(
