@@ -203,6 +203,16 @@
     .zoom-toolbar button { padding: 6px 12px; font-weight: 600; font-size: 0.82rem; }
     .zoom-toolbar button.active { border-color: var(--accent); background: var(--accent-dim); }
 
+    .view-toolbar { display: flex; gap: 6px; }
+    .view-toolbar button { padding: 6px 12px; font-weight: 600; font-size: 0.82rem; }
+    .view-toolbar button.active { border-color: var(--accent); background: var(--accent-dim); }
+
+    .crop-stage--raw {
+      border: none;
+      background: #0a0e14;
+    }
+    body.view-raw .debug-only { display: none !important; }
+
     .crop-stage-wrap { position: relative; }
     .crop-stage {
       position: relative;
@@ -527,6 +537,10 @@
         <span class="nav-position" id="navPosition">—</span>
         <button type="button" class="nav-btn" id="nextBtn" disabled>Next →</button>
         <button type="button" id="undoBtn" disabled>↩ Undo (Z)</button>
+        <div class="view-toolbar" id="viewToolbar">
+          <button type="button" data-view="raw" class="active">Raw</button>
+          <button type="button" data-view="debug">Debug</button>
+        </div>
         <div class="zoom-toolbar" id="zoomToolbar">
           <button type="button" data-zoom="8">8×</button>
           <button type="button" data-zoom="10" class="active">10×</button>
@@ -541,7 +555,7 @@
           </div>
         </div>
         <p class="crop-dims" id="cropDims">—</p>
-        <div class="crop-legend">
+        <div class="crop-legend debug-only">
           <span class="leg-run">Detected vertical ink runs</span>
           <span class="leg-center">Candidate center column</span>
           <span class="leg-treble">Treble band</span>
@@ -549,7 +563,7 @@
         </div>
       </div>
 
-      <div class="badges" id="badges"></div>
+      <div class="badges debug-only" id="badges"></div>
       <div class="meta-grid" id="meta"></div>
       <div class="labels" id="labelButtons"></div>
 
@@ -637,6 +651,7 @@
       sourceSampleId: null,
       verticalRuns: [],
       keyboardOnly: false,
+      viewMode: 'raw',
     }
 
     const els = {
@@ -660,6 +675,7 @@
       prevBtn: document.getElementById('prevBtn'),
       nextBtn: document.getElementById('nextBtn'),
       undoBtn: document.getElementById('undoBtn'),
+      viewToolbar: document.getElementById('viewToolbar'),
       navPosition: document.getElementById('navPosition'),
       zoomToolbar: document.getElementById('zoomToolbar'),
       cropStage: document.getElementById('cropStage'),
@@ -697,6 +713,21 @@
     }
 
     els.acceptSuggestionBtn.addEventListener('click', acceptSuggestion)
+
+    els.viewToolbar.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-view]')
+      if (!btn) return
+      state.viewMode = btn.dataset.view
+      document.body.classList.toggle('view-raw', state.viewMode === 'raw')
+      document.body.classList.toggle('view-debug', state.viewMode === 'debug')
+      els.cropStage.classList.toggle('crop-stage--raw', state.viewMode === 'raw')
+      redrawCrop()
+      render()
+      scheduleAutosave()
+    })
+
+    document.body.classList.add('view-raw')
+    els.cropStage.classList.add('crop-stage--raw')
 
     els.zoomToolbar.addEventListener('click', (e) => {
       const btn = e.target.closest('button[data-zoom]')
@@ -913,6 +944,7 @@
             pieceFilter: state.pieceFilter,
             lowConfidenceOnly: state.lowConfidenceOnly,
             assistedMode: state.assistedMode,
+            viewMode: state.viewMode,
             zoom: state.zoom,
             keyboardOnly: state.keyboardOnly,
             savedAt: new Date().toISOString(),
@@ -933,11 +965,18 @@
         state.pieceFilter = saved.pieceFilter ?? 'all'
         state.lowConfidenceOnly = Boolean(saved.lowConfidenceOnly)
         state.assistedMode = saved.assistedMode !== false
+        state.viewMode = saved.viewMode === 'debug' ? 'debug' : 'raw'
         state.zoom = saved.zoom ?? DEFAULT_ZOOM
         state.keyboardOnly = Boolean(saved.keyboardOnly)
         els.assistedModeToggle.checked = state.assistedMode
         els.lowConfidenceToggle.checked = state.lowConfidenceOnly
         els.keyboardOnlyToggle.checked = state.keyboardOnly
+        document.body.classList.toggle('view-raw', state.viewMode === 'raw')
+        document.body.classList.toggle('view-debug', state.viewMode === 'debug')
+        els.cropStage.classList.toggle('crop-stage--raw', state.viewMode === 'raw')
+        for (const btn of els.viewToolbar.querySelectorAll('button')) {
+          btn.classList.toggle('active', btn.dataset.view === state.viewMode)
+        }
         document.body.classList.toggle('keyboard-only', state.keyboardOnly)
         const list = visibleSamples()
         state.index = Math.min(saved.index ?? 0, Math.max(0, list.length - 1))
@@ -1052,38 +1091,46 @@
       els.cropCanvas.width = w
       els.cropCanvas.height = h
 
-      drawCheckerboard(displayCtx, w, h, 12 * z)
       displayCtx.imageSmoothingEnabled = false
-      displayCtx.drawImage(src.img, 0, 0, w, h)
 
-      const bands = bandRectsForSample(sample, src.h)
-      if (bands) {
-        displayCtx.fillStyle = 'rgba(94, 179, 255, 0.1)'
-        displayCtx.fillRect(0, bands.treble.y0 * z, w, (bands.treble.y1 - bands.treble.y0) * z)
-        displayCtx.fillStyle = 'rgba(157, 140, 255, 0.1)'
-        displayCtx.fillRect(0, bands.bass.y0 * z, w, (bands.bass.y1 - bands.bass.y0) * z)
-        displayCtx.fillStyle = 'rgba(255,255,255,0.03)'
-        displayCtx.fillRect(0, bands.gap.y0 * z, w, Math.max(1, (bands.gap.y1 - bands.gap.y0) * z))
-      }
+      if (state.viewMode === 'debug') {
+        drawCheckerboard(displayCtx, w, h, 12 * z)
+        displayCtx.drawImage(src.img, 0, 0, w, h)
 
-      for (const run of state.verticalRuns) {
-        displayCtx.fillStyle = 'rgba(255, 90, 220, 0.45)'
-        displayCtx.fillRect(run.x * z, run.start * z, Math.max(z, 2), (run.end - run.start) * z)
-      }
+        const bands = bandRectsForSample(sample, src.h)
+        if (bands) {
+          displayCtx.fillStyle = 'rgba(94, 179, 255, 0.1)'
+          displayCtx.fillRect(0, bands.treble.y0 * z, w, (bands.treble.y1 - bands.treble.y0) * z)
+          displayCtx.fillStyle = 'rgba(157, 140, 255, 0.1)'
+          displayCtx.fillRect(0, bands.bass.y0 * z, w, (bands.bass.y1 - bands.bass.y0) * z)
+          displayCtx.fillStyle = 'rgba(255,255,255,0.03)'
+          displayCtx.fillRect(0, bands.gap.y0 * z, w, Math.max(1, (bands.gap.y1 - bands.gap.y0) * z))
+        }
 
-      const centerX = Math.floor(src.w / 2)
-      const centerRun = state.verticalRuns.find((r) => r.x === centerX || r.x === centerX - 1 || r.x === centerX + 1)
-      if (centerRun) {
-        displayCtx.fillStyle = 'rgba(80, 220, 255, 0.55)'
-        displayCtx.fillRect(centerRun.x * z, centerRun.start * z, Math.max(z, 2), (centerRun.end - centerRun.start) * z)
+        for (const run of state.verticalRuns) {
+          displayCtx.fillStyle = 'rgba(255, 90, 220, 0.45)'
+          displayCtx.fillRect(run.x * z, run.start * z, Math.max(z, 2), (run.end - run.start) * z)
+        }
+
+        const centerX = Math.floor(src.w / 2)
+        const centerRun = state.verticalRuns.find((r) => r.x === centerX || r.x === centerX - 1 || r.x === centerX + 1)
+        if (centerRun) {
+          displayCtx.fillStyle = 'rgba(80, 220, 255, 0.55)'
+          displayCtx.fillRect(centerRun.x * z, centerRun.start * z, Math.max(z, 2), (centerRun.end - centerRun.start) * z)
+        } else {
+          displayCtx.fillStyle = 'rgba(80, 220, 255, 0.35)'
+          displayCtx.fillRect(centerX * z, 0, Math.max(z, 2), h)
+        }
       } else {
-        displayCtx.fillStyle = 'rgba(80, 220, 255, 0.35)'
-        displayCtx.fillRect(centerX * z, 0, Math.max(z, 2), h)
+        displayCtx.fillStyle = '#0a0e14'
+        displayCtx.fillRect(0, 0, w, h)
+        displayCtx.drawImage(src.img, 0, 0, w, h)
       }
 
       const candidatePx = sample.xPx ?? '—'
-      els.cropDims.textContent =
-        `Crop ${src.w}×${src.h} px · displayed ${w}×${h} px @ ${z}× · candidate column x=${candidatePx}px (center ≈ col ${centerX}) · export half-width ${CROP_HALF_WIDTH}px`
+      els.cropDims.textContent = state.viewMode === 'debug'
+        ? `Crop ${src.w}×${src.h} px · displayed ${w}×${h} px @ ${z}× · candidate column x=${candidatePx}px · export half-width ${CROP_HALF_WIDTH}px`
+        : `Crop ${src.w}×${src.h} px · ${w}×${h} px @ ${z}×`
     }
 
     function onCropHover(event) {
@@ -1141,15 +1188,22 @@
       const label = state.labels[sample.id]
       const meta = state.labelMeta[sample.id]
       const f = sample.features ?? {}
+      const det = sample.detector ?? {}
+      const suggestion = suggestLabelForSample(sample)
       const sourceCard = meta
         ? `<div class="meta-card meta-card--${meta.source === 'accepted' ? 'accepted' : 'corrected'}"><div class="meta-card__label">Label source</div><div class="meta-card__value meta-card__value--strong">${meta.source === 'accepted' ? 'Accepted suggestion' : 'Manual correction'}</div></div>`
+        : ''
+      const debugCards = state.viewMode === 'debug'
+        ? `<div class="meta-card debug-only"><div class="meta-card__label">Run frac (T/B/full)</div><div class="meta-card__value">${fmtFrac(f.treble)} / ${fmtFrac(f.bass)} / ${fmtFrac(f.full)}</div></div>
+        <div class="meta-card debug-only"><div class="meta-card__label">Stems / score</div><div class="meta-card__value">${f.stemSignals ?? 0} · ${f.score ?? '—'}</div></div>
+        <div class="meta-card debug-only"><div class="meta-card__label">Detector</div><div class="meta-card__value">${escapeHtml(det.decision ?? '—')} · ${escapeHtml(String(det.rejectReason ?? '—'))}</div></div>
+        <div class="meta-card debug-only"><div class="meta-card__label">Suggestion</div><div class="meta-card__value">${escapeHtml(formatLabelHuman(suggestion.label))} · ${Math.round(suggestion.confidence * 100)}%</div></div>`
         : ''
       els.meta.innerHTML = `
         <div class="meta-card"><div class="meta-card__label">Piece</div><div class="meta-card__value meta-card__value--strong">${escapeHtml(sample.pieceId)}</div></div>
         <div class="meta-card"><div class="meta-card__label">Page / system</div><div class="meta-card__value">p${sample.page} · sys ${sample.systemIndex}</div></div>
         <div class="meta-card"><div class="meta-card__label">X (norm / px)</div><div class="meta-card__value">${sample.x?.toFixed?.(4) ?? sample.x} · ${sample.xPx}px</div></div>
-        <div class="meta-card"><div class="meta-card__label">Run frac (T/B/full)</div><div class="meta-card__value">${fmtFrac(f.treble)} / ${fmtFrac(f.bass)} / ${fmtFrac(f.full)}</div></div>
-        <div class="meta-card"><div class="meta-card__label">Stems / score</div><div class="meta-card__value">${f.stemSignals ?? 0} · ${f.score ?? '—'}</div></div>
+        ${debugCards}
         <div class="meta-card ${label ? 'meta-card--label-set' : ''}"><div class="meta-card__label">Your label</div><div class="meta-card__value meta-card__value--strong">${label ? escapeHtml(formatLabelHuman(label)) : '—'}</div></div>
         ${sourceCard}
         <div class="meta-card"><div class="meta-card__label">Sample id</div><div class="meta-card__value">${escapeHtml(sample.id)}</div></div>
@@ -1218,6 +1272,9 @@
 
       for (const z of els.zoomToolbar.querySelectorAll('button')) {
         z.classList.toggle('active', Number(z.dataset.zoom) === state.zoom)
+      }
+      for (const btn of els.viewToolbar.querySelectorAll('button')) {
+        btn.classList.toggle('active', btn.dataset.view === state.viewMode)
       }
 
       els.queue.innerHTML = ''

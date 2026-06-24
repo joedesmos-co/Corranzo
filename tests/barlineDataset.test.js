@@ -151,33 +151,129 @@ describe('barline labeler static UX', () => {
     expect(html).toMatch(/barlineLabelSuggestion\.js/)
     expect(html).toMatch(/event\.key === 'Enter'/)
     expect(html).toMatch(/Backspace/)
+    expect(html).toMatch(/viewToolbar/)
+    expect(html).toMatch(/data-view="raw"/)
+    expect(html).toMatch(/viewMode/)
+    expect(html).toMatch(/crop-stage--raw/)
   })
 })
 
 describe('barline label suggestion', () => {
-  it('maps accepted detector decisions to real barline', () => {
+  const strongRealBarlineFeatures = {
+    hasBarlineShape: true,
+    trebleStrong: true,
+    bassStrong: true,
+    fullStrong: true,
+    stemSignals: 0,
+    treble: { maxRunFrac: 0.86, inkFrac: 0.2, transitions: 2 },
+    bass: { maxRunFrac: 0.84, inkFrac: 0.18, transitions: 2 },
+    full: { maxRunFrac: 0.91, inkFrac: 0.24, transitions: 3 },
+  }
+
+  it('maps accepted-high with strong shape evidence to real barline', () => {
     const suggestion = suggestLabelForSample({
       detector: { decision: 'accepted-high', confidence: 'high', finalAccepted: true },
-      features: { stemSignals: 0 },
+      features: strongRealBarlineFeatures,
     })
     expect(suggestion.label).toBe(BARLINE_LABEL.REAL_BARLINE)
-    expect(suggestion.confidence).toBeGreaterThan(0.8)
+    expect(suggestion.confidence).toBeGreaterThanOrEqual(0.8)
+    expect(suggestion.confidenceLabel).toBe('high')
     expect(isLowConfidenceSuggestion(suggestion)).toBe(false)
   })
 
-  it('maps stem-like rejects to fake labels', () => {
-    const stem = suggestLabelForSample({
-      detector: { decision: 'rejected', rejectReason: 'stem-like' },
-      features: { stemSignals: 2 },
+  it('suggests unsure for weak-run rejects that could still be real barlines', () => {
+    const suggestion = suggestLabelForSample({
+      detector: { decision: 'rejected', rejectReason: 'weak-run' },
+      features: {
+        hasBarlineShape: true,
+        trebleStrong: true,
+        bassStrong: false,
+        fullStrong: false,
+        stemSignals: 1,
+        treble: { maxRunFrac: 0.55, transitions: 3 },
+        bass: { maxRunFrac: 0.32, transitions: 4 },
+        full: { maxRunFrac: 0.58, transitions: 5 },
+      },
     })
-    expect(stem.label).toBe(BARLINE_LABEL.FAKE_NOTEHEAD_CLUSTER)
-    expect(isLowConfidenceSuggestion(stem)).toBe(true)
+    expect(suggestion.label).toBe(BARLINE_LABEL.UNSURE)
+    expect(suggestion.label).not.toBe(BARLINE_LABEL.FAKE_NOTEHEAD_CLUSTER)
+    expect(suggestion.label).not.toBe(BARLINE_LABEL.MISSING_BARLINE)
+    expect(isLowConfidenceSuggestion(suggestion)).toBe(true)
+  })
 
-    const single = suggestLabelForSample({
+  it('maps stem-like single-staff evidence to fake stem', () => {
+    const suggestion = suggestLabelForSample({
       detector: { decision: 'rejected', rejectReason: 'single-staff' },
-      features: { stemSignals: 1, trebleStrong: true, bassStrong: false },
+      features: {
+        stemSignals: 1,
+        trebleStrong: true,
+        bassStrong: false,
+        treble: { maxRunFrac: 0.7, transitions: 4 },
+        bass: { maxRunFrac: 0.18, transitions: 2 },
+        full: { maxRunFrac: 0.45, transitions: 6 },
+      },
     })
-    expect(single.label).toBe(BARLINE_LABEL.FAKE_STEM)
+    expect(suggestion.label).toBe(BARLINE_LABEL.FAKE_STEM)
+  })
+
+  it('requires blob evidence for fake notehead cluster', () => {
+    const withEvidence = suggestLabelForSample({
+      detector: { decision: 'rejected', rejectReason: 'stem-like' },
+      features: {
+        stemSignals: 3,
+        treble: { maxRunFrac: 0.35, transitions: 10, inkFrac: 0.14 },
+        bass: { maxRunFrac: 0.28, transitions: 7 },
+        full: { maxRunFrac: 0.4, transitions: 12 },
+      },
+    })
+    expect(withEvidence.label).toBe(BARLINE_LABEL.FAKE_NOTEHEAD_CLUSTER)
+
+    const weakRejectOnly = suggestLabelForSample({
+      detector: { decision: 'rejected', rejectReason: 'weak-run' },
+      features: {
+        stemSignals: 2,
+        treble: { maxRunFrac: 0.5, transitions: 3 },
+        bass: { maxRunFrac: 0.48, transitions: 2 },
+        full: { maxRunFrac: 0.52, transitions: 4 },
+      },
+    })
+    expect(weakRejectOnly.label).toBe(BARLINE_LABEL.UNSURE)
+    expect(weakRejectOnly.label).not.toBe(BARLINE_LABEL.FAKE_NOTEHEAD_CLUSTER)
+  })
+
+  it('returns unsure for ambiguous low-confidence cases', () => {
+    const suggestion = suggestLabelForSample({
+      detector: { decision: 'rejected', rejectReason: 'weak-gap-span' },
+      features: {
+        stemSignals: 1,
+        hasBarlineShape: false,
+        gapStrong: false,
+        treble: { maxRunFrac: 0.4 },
+        bass: { maxRunFrac: 0.38 },
+        full: { maxRunFrac: 0.42, transitions: 4 },
+      },
+    })
+    expect(suggestion.label).toBe(BARLINE_LABEL.UNSURE)
+    expect(isLowConfidenceSuggestion(suggestion)).toBe(true)
+  })
+
+  it('does not overstate confidence on accepted-low barlines', () => {
+    const suggestion = suggestLabelForSample({
+      detector: { decision: 'accepted-low', confidence: 'low' },
+      features: {
+        hasBarlineShape: true,
+        trebleStrong: true,
+        bassStrong: true,
+        fullStrong: false,
+        stemSignals: 1,
+        treble: { maxRunFrac: 0.58 },
+        bass: { maxRunFrac: 0.56 },
+        full: { maxRunFrac: 0.62, transitions: 4 },
+      },
+    })
+    expect(suggestion.label).toBe(BARLINE_LABEL.REAL_BARLINE)
+    expect(suggestion.confidence).toBeLessThan(0.65)
+    expect(suggestion.confidenceLabel).toBe('low')
   })
 
   it('summarizes assist stats from labelMeta', () => {

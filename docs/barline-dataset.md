@@ -96,9 +96,9 @@ Detector decisions: `accepted-high`, `accepted-low`, `rejected`, `thinned`, `ign
 5. Optionally **load existing labels.json** to resume (or rely on browser autosave for the same manifest).
 6. Label with buttons or keys **1–6**; **Enter** accepts the detector suggestion (assisted mode); **←/→** navigate; **Z** or **Backspace** undo; **S** downloads `labels.json`.
 
-The labeler shows crops at **8–12×** on a dark checkerboard (no crop border), highlights detected vertical ink runs, and includes a hover magnifier plus reference examples for each label class.
+The labeler shows crops at **8–12×** on a neutral background (**Raw** mode, default) so you can judge ink without overlays. Switch to **Debug** to see detector bands, vertical-run highlights, center column, and extra metadata.
 
-**Assisted labeling** pre-fills each sample with a heuristic suggestion from manifest `detector` + `features` fields. Press **Enter** to accept; **1–6** overrides manually. Exports include optional `labelMeta` (`source`: `accepted` | `corrected`, plus suggestion snapshot). Use **Low-confidence only** to focus on uncertain cases.
+**Assisted labeling** pre-fills each sample with a conservative heuristic from manifest `detector` + `features` fields. Press **Enter** to accept; **1–6** overrides manually. Suggestions prefer **unsure** when evidence is weak or conflicting. Exports include optional `labelMeta` (`source`: `accepted` | `corrected`, plus suggestion snapshot). Use **Low-confidence only** to focus on uncertain cases.
 
 ### Labeler shortcuts
 
