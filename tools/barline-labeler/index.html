@@ -7,21 +7,24 @@
   <style>
     :root {
       color-scheme: dark;
-      --bg: #0c0f14;
-      --panel: #151b24;
-      --panel-raised: #1c2430;
+      --bg: #080a0e;
+      --panel: #121820;
+      --panel-raised: #1a2230;
       --text: #eef2f7;
       --muted: #8fa0b3;
       --accent: #5eb3ff;
-      --accent-dim: #2a4a66;
+      --accent-dim: #243a52;
       --border: #2a3544;
       --success: #3dd68c;
       --warn: #f0b429;
       --danger: #f07178;
-      --label-real: #3dd68c;
-      --label-fake: #f07178;
-      --label-unsure: #f0b429;
-      --label-missing: #9b8cff;
+      --run-color: rgba(255, 90, 220, 0.55);
+      --center-color: rgba(80, 220, 255, 0.7);
+      --checker-a: #1a1f28;
+      --checker-b: #141922;
+      --treble-tint: rgba(94, 179, 255, 0.12);
+      --bass-tint: rgba(157, 140, 255, 0.12);
+      --gap-tint: rgba(255, 255, 255, 0.04);
     }
     * { box-sizing: border-box; }
     body {
@@ -37,40 +40,31 @@
       flex-wrap: wrap;
       align-items: baseline;
       gap: 8px 16px;
-      padding: 14px 18px;
+      padding: 12px 18px;
       background: var(--panel);
       border-bottom: 1px solid var(--border);
     }
-    header h1 {
-      margin: 0;
-      font-size: 1.05rem;
-      font-weight: 650;
-    }
-    header .tagline {
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
+    header h1 { margin: 0; font-size: 1.05rem; font-weight: 650; }
+    header .tagline { color: var(--muted); font-size: 0.85rem; }
     main {
       display: grid;
-      grid-template-columns: minmax(260px, 300px) 1fr;
-      min-height: calc(100vh - 52px);
+      grid-template-columns: minmax(280px, 320px) 1fr;
+      min-height: calc(100vh - 48px);
     }
     aside {
       border-right: 1px solid var(--border);
-      padding: 14px;
+      padding: 12px;
       overflow: auto;
       background: var(--panel);
     }
     .content {
-      padding: 16px 20px 24px;
+      padding: 14px 18px 22px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       min-width: 0;
     }
-    button,
-    label.file-btn,
-    select {
+    button, label.file-btn, select {
       background: var(--panel-raised);
       color: var(--text);
       border: 1px solid var(--border);
@@ -78,53 +72,17 @@
       padding: 9px 12px;
       cursor: pointer;
       font: inherit;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
-    button:hover,
-    label.file-btn:hover,
-    select:hover {
-      border-color: var(--accent);
-    }
-    button:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-    button.primary {
-      background: var(--accent-dim);
-      border-color: var(--accent);
-      font-weight: 600;
-    }
-    .file-row {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .file-row label.file-btn {
-      display: block;
-      text-align: center;
-    }
+    button:hover, label.file-btn:hover, select:hover { border-color: var(--accent); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.primary { background: var(--accent-dim); border-color: var(--accent); font-weight: 600; }
     input[type="file"] { display: none; }
-
-    .filter-block {
-      margin: 12px 0;
-      padding: 10px;
-      border-radius: 10px;
-      background: var(--panel-raised);
-      border: 1px solid var(--border);
-    }
-    .filter-block label {
-      display: block;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-    .filter-block select { width: 100%; }
+    .file-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+    .file-row label.file-btn { display: block; text-align: center; }
 
     .progress-block {
-      margin: 12px 0;
+      margin: 10px 0;
       padding: 12px;
       border-radius: 10px;
       background: var(--panel-raised);
@@ -133,43 +91,87 @@
     .progress-block__counts {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
-      gap: 8px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       margin-bottom: 8px;
     }
     .progress-block__counts strong {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-variant-numeric: tabular-nums;
     }
     .progress-bar {
-      height: 8px;
+      height: 10px;
       border-radius: 99px;
       background: #0a0e14;
       overflow: hidden;
     }
     .progress-bar__fill {
       height: 100%;
-      border-radius: inherit;
       background: linear-gradient(90deg, #3a7ab8, var(--accent));
       transition: width 0.2s ease;
     }
-    .progress-meta {
-      margin-top: 8px;
-      font-size: 0.8rem;
+    .progress-meta, .autosave-status { font-size: 0.78rem; color: var(--muted); margin-top: 8px; }
+    .autosave-status { color: var(--success); }
+
+    .filter-block label {
+      display: block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .filter-block select { width: 100%; margin-bottom: 10px; }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      margin: 8px 0;
+    }
+    .toggle-row input { width: 16px; height: 16px; }
+
+    .gallery {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0a0e14;
+    }
+    .gallery h2 {
+      margin: 0 0 8px;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: var(--muted);
     }
-    .autosave-status {
-      font-size: 0.78rem;
-      color: var(--success);
-      min-height: 1.2em;
-      margin-top: 6px;
+    .gallery__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
     }
-    .autosave-status--warn { color: var(--warn); }
+    .gallery__item {
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--panel-raised);
+      text-align: center;
+    }
+    .gallery__item svg {
+      display: block;
+      margin: 0 auto 4px;
+      background: var(--checker-a);
+      border-radius: 4px;
+    }
+    .gallery__item span {
+      font-size: 0.68rem;
+      color: var(--muted);
+      line-height: 1.2;
+    }
 
     .queue {
       margin-top: 10px;
-      max-height: 240px;
+      max-height: 180px;
       overflow: auto;
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -181,107 +183,119 @@
       width: 100%;
       text-align: left;
       margin-bottom: 4px;
-      padding: 6px 8px;
-      font-size: 0.72rem;
+      padding: 5px 7px;
+      font-size: 0.7rem;
       font-family: ui-monospace, monospace;
       border-radius: 6px;
     }
-    .queue button.labeled { opacity: 0.55; }
-    .queue button.active {
-      border-color: var(--accent);
-      background: var(--accent-dim);
-    }
+    .queue button.labeled { opacity: 0.5; }
+    .queue button.active { border-color: var(--accent); background: var(--accent-dim); }
 
-    .nav-row {
+    .toolbar {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       gap: 10px;
     }
-    .nav-row button.nav-btn {
-      min-width: 108px;
-      font-weight: 600;
-      padding: 10px 16px;
-    }
-    .nav-position {
-      font-size: 0.95rem;
-      color: var(--muted);
-      font-variant-numeric: tabular-nums;
-    }
+    .toolbar .nav-btn { min-width: 100px; font-weight: 600; }
+    .nav-position { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.9rem; }
+    .zoom-toolbar { display: flex; gap: 6px; margin-left: auto; }
+    .zoom-toolbar button { padding: 6px 12px; font-weight: 600; font-size: 0.82rem; }
+    .zoom-toolbar button.active { border-color: var(--accent); background: var(--accent-dim); }
 
-    .preview-grid {
-      display: grid;
-      grid-template-columns: minmax(140px, 200px) 1fr;
-      gap: 14px;
-      align-items: start;
-    }
-    @media (max-width: 900px) {
-      main { grid-template-columns: 1fr; }
-      .preview-grid { grid-template-columns: 1fr; }
-    }
-    .preview-panel {
-      background: #fff;
+    .crop-stage-wrap { position: relative; }
+    .crop-stage {
+      position: relative;
+      min-height: min(72vh, 720px);
       border-radius: 12px;
       border: 1px solid var(--border);
-      padding: 12px;
-      min-height: 200px;
-    }
-    .preview-panel--zoom {
-      min-height: 420px;
-      display: flex;
-      flex-direction: column;
-    }
-    .preview-panel__title {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #555;
-      margin: 0 0 8px;
-      font-weight: 700;
-    }
-    .preview-viewport {
-      flex: 1;
+      background: var(--checker-a);
       overflow: auto;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
-      background: repeating-conic-gradient(#e8e8e8 0% 25%, #f4f4f4 0% 50%) 50% / 16px 16px;
-      border-radius: 8px;
-      padding: 12px;
-      min-height: 360px;
+      padding: 32px;
+      cursor: crosshair;
     }
-    .preview-viewport--small {
-      min-height: 120px;
-      padding: 8px;
+    .crop-stage__inner {
+      position: relative;
+      flex-shrink: 0;
     }
-    .preview-viewport img {
+    .crop-stage canvas {
+      display: block;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
-      border: 1px solid #bbb;
-      background: #fff;
-      display: block;
     }
-    .zoom-toolbar {
+    .crop-dims {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-family: ui-monospace, monospace;
+      text-align: center;
+    }
+    .crop-legend {
       display: flex;
       flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .crop-legend span::before {
+      content: '';
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin-right: 5px;
+      vertical-align: -2px;
+      border-radius: 2px;
+    }
+    .crop-legend .leg-run::before { background: var(--run-color); }
+    .crop-legend .leg-center::before { background: var(--center-color); }
+    .crop-legend .leg-treble::before { background: var(--treble-tint); border: 1px solid #5eb3ff; }
+    .crop-legend .leg-bass::before { background: var(--bass-tint); border: 1px solid #9d8cff; }
+
+    .magnifier {
+      position: fixed;
+      z-index: 100;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 3px solid var(--accent);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65);
+      overflow: hidden;
+      pointer-events: none;
+      display: none;
+      background: #000;
+    }
+    .magnifier canvas {
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+    }
+
+    .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
       gap: 6px;
-      margin-bottom: 10px;
-    }
-    .zoom-toolbar button {
-      padding: 6px 12px;
-      font-size: 0.82rem;
+      padding: 5px 10px;
+      border-radius: 99px;
+      font-size: 0.78rem;
       font-weight: 600;
+      border: 1px solid var(--border);
     }
-    .zoom-toolbar button.active {
-      border-color: var(--accent);
-      background: var(--accent-dim);
-      color: #fff;
-    }
+    .badge--high { background: rgba(61, 214, 140, 0.15); border-color: var(--success); color: #9ef0c8; }
+    .badge--low { background: rgba(240, 180, 41, 0.15); border-color: var(--warn); color: #ffe08a; }
+    .badge--none { background: rgba(143, 160, 179, 0.12); color: var(--muted); }
+    .badge--rejected { background: rgba(240, 113, 120, 0.15); border-color: var(--danger); color: #ffb4b8; }
+    .badge--accepted { background: rgba(61, 214, 140, 0.15); border-color: var(--success); color: #9ef0c8; }
 
     .meta-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 8px;
     }
     .meta-card {
       padding: 10px 12px;
@@ -289,34 +303,25 @@
       background: var(--panel);
       border: 1px solid var(--border);
     }
-    .meta-card--highlight {
-      border-color: var(--accent);
-      background: var(--accent-dim);
-    }
-    .meta-card--detector-accepted { border-color: var(--success); }
-    .meta-card--detector-rejected { border-color: var(--danger); }
-    .meta-card--label-set { border-color: var(--label-real); }
+    .meta-card--label-set { border-color: var(--success); }
     .meta-card__label {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--muted);
       margin-bottom: 4px;
     }
     .meta-card__value {
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 0.88rem;
+      font-family: ui-monospace, monospace;
+      font-size: 0.86rem;
       word-break: break-word;
     }
-    .meta-card__value--strong {
-      font-size: 1rem;
-      font-weight: 700;
-    }
+    .meta-card__value--strong { font-size: 0.95rem; font-weight: 700; }
 
     .labels {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 8px;
     }
     .label-btn {
       display: flex;
@@ -324,36 +329,23 @@
       gap: 10px;
       padding: 12px 14px;
       text-align: left;
-      min-height: 64px;
+      min-height: 68px;
       border-width: 2px;
     }
     .label-btn__key {
-      flex: 0 0 36px;
+      flex: 0 0 40px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       font-weight: 800;
       border-radius: 8px;
       background: #0a0e14;
       color: var(--accent);
       border: 1px solid var(--border);
     }
-    .label-btn__text {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 2px;
-    }
-    .label-btn__title {
-      font-weight: 650;
-      font-size: 0.95rem;
-    }
-    .label-btn__hint {
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-family: ui-monospace, monospace;
-    }
+    .label-btn__title { font-weight: 650; font-size: 0.95rem; }
+    .label-btn__hint { font-size: 0.72rem; color: var(--muted); }
     .label-btn.selected {
       border-color: var(--accent);
       background: var(--accent-dim);
@@ -362,7 +354,10 @@
     .label-btn.selected .label-btn__key {
       background: var(--accent);
       color: #0a0e14;
-      border-color: var(--accent);
+    }
+    .label-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
 
     .help-panel {
@@ -370,25 +365,16 @@
       border-radius: 10px;
       background: var(--panel);
       border: 1px solid var(--border);
-      font-size: 0.85rem;
+      font-size: 0.84rem;
     }
     .help-panel h2 {
       margin: 0 0 8px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--muted);
     }
-    .help-panel ul {
-      margin: 0;
-      padding-left: 1.1rem;
-      columns: 2;
-      column-gap: 24px;
-    }
-    @media (max-width: 700px) {
-      .help-panel ul { columns: 1; }
-    }
-    .help-panel li { margin-bottom: 4px; }
+    .help-panel ul { margin: 0; padding-left: 1.1rem; columns: 2; column-gap: 20px; }
     .help-panel kbd {
       display: inline-block;
       min-width: 1.4em;
@@ -397,44 +383,49 @@
       border-radius: 4px;
       background: #0a0e14;
       border: 1px solid var(--border);
-      font-family: inherit;
-      font-size: 0.85em;
     }
-    .actions-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
+    .keyboard-only-banner {
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      font-size: 0.88rem;
+      display: none;
     }
-    .hint {
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
-    .empty-state {
-      color: var(--muted);
-      text-align: center;
-      padding: 48px 16px;
+    body.keyboard-only .keyboard-only-banner { display: block; }
+    body.keyboard-only .label-btn { pointer-events: none; opacity: 0.85; }
+    body.keyboard-only .label-btn:focus-visible { pointer-events: auto; opacity: 1; }
+
+    .hint { color: var(--muted); font-size: 0.8rem; }
+    .empty-state { color: var(--muted); text-align: center; padding: 40px 16px; }
+    .actions-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+      .help-panel ul { columns: 1; }
     }
   </style>
 </head>
 <body>
   <header>
     <h1>Corranzo barline labeler</h1>
-    <span class="tagline">Local-only · file:// · no server</span>
+    <span class="tagline">Accuracy-first · file:// · no crop border · 8–12× zoom</span>
   </header>
   <main>
     <aside>
       <div class="file-row">
         <label class="file-btn">Load manifest.json<input id="manifestInput" type="file" accept=".json,application/json" /></label>
-        <label class="file-btn">Load crop images (multi-select)<input id="cropsInput" type="file" accept="image/png" multiple /></label>
-        <label class="file-btn">Load existing labels.json<input id="labelsInput" type="file" accept=".json,application/json" /></label>
+        <label class="file-btn">Load crop PNGs (multi-select)<input id="cropsInput" type="file" accept="image/png" multiple /></label>
+        <label class="file-btn">Load labels.json<input id="labelsInput" type="file" accept=".json,application/json" /></label>
       </div>
 
       <div class="filter-block">
         <label for="pieceFilter">Piece filter</label>
-        <select id="pieceFilter" disabled>
-          <option value="all">All pieces</option>
-        </select>
+        <select id="pieceFilter" disabled><option value="all">All pieces</option></select>
+        <label class="toggle-row">
+          <input type="checkbox" id="keyboardOnlyToggle" />
+          Keyboard-only mode (1–6 labels, ← → nav, Z undo)
+        </label>
       </div>
 
       <div class="progress-block">
@@ -442,73 +433,87 @@
           <span>Labeled</span>
           <strong id="progressCounts">0 / 0</strong>
         </div>
-        <div class="progress-bar" aria-hidden="true">
-          <div class="progress-bar__fill" id="progressFill" style="width: 0%"></div>
-        </div>
-        <div class="progress-meta" id="progressMeta">Load a manifest to begin.</div>
+        <div class="progress-bar"><div class="progress-bar__fill" id="progressFill" style="width:0%"></div></div>
+        <div class="progress-meta" id="progressMeta">Load manifest + crops to begin.</div>
         <div class="autosave-status" id="autosaveStatus"></div>
+      </div>
+
+      <div class="gallery">
+        <h2>Reference examples</h2>
+        <div class="gallery__grid" id="exampleGallery"></div>
       </div>
 
       <div class="queue" id="queue"></div>
     </aside>
 
     <section class="content">
-      <div class="nav-row">
-        <button type="button" class="nav-btn" id="prevBtn" disabled>← Previous</button>
+      <div class="keyboard-only-banner" id="keyboardBanner">
+        Keyboard-only: press <kbd>1</kbd>–<kbd>6</kbd> to label, <kbd>←</kbd><kbd>→</kbd> navigate, <kbd>Z</kbd> undo, <kbd>S</kbd> save.
+      </div>
+
+      <div class="toolbar">
+        <button type="button" class="nav-btn" id="prevBtn" disabled>← Prev</button>
         <span class="nav-position" id="navPosition">—</span>
         <button type="button" class="nav-btn" id="nextBtn" disabled>Next →</button>
-      </div>
-
-      <div class="preview-grid" id="previewGrid">
-        <div class="preview-panel">
-          <p class="preview-panel__title">Original crop</p>
-          <div class="preview-viewport preview-viewport--small">
-            <img id="cropImgSmall" alt="barline crop at 1×" />
-          </div>
-        </div>
-        <div class="preview-panel preview-panel--zoom">
-          <p class="preview-panel__title">Zoomed preview</p>
-          <div class="zoom-toolbar" id="zoomToolbar">
-            <button type="button" data-zoom="2">2×</button>
-            <button type="button" data-zoom="4" class="active">4×</button>
-            <button type="button" data-zoom="6">6×</button>
-            <button type="button" data-zoom="8">8×</button>
-          </div>
-          <div class="preview-viewport">
-            <img id="cropImgZoom" alt="barline crop zoomed" />
-          </div>
+        <button type="button" id="undoBtn" disabled>↩ Undo (Z)</button>
+        <div class="zoom-toolbar" id="zoomToolbar">
+          <button type="button" data-zoom="8">8×</button>
+          <button type="button" data-zoom="10" class="active">10×</button>
+          <button type="button" data-zoom="12">12×</button>
         </div>
       </div>
 
+      <div class="crop-stage-wrap">
+        <div class="crop-stage" id="cropStage" tabindex="0" aria-label="Crop preview — hover to magnify">
+          <div class="crop-stage__inner" id="cropStageInner">
+            <canvas id="cropCanvas" aria-label="Zoomed barline crop"></canvas>
+          </div>
+        </div>
+        <p class="crop-dims" id="cropDims">—</p>
+        <div class="crop-legend">
+          <span class="leg-run">Detected vertical ink runs</span>
+          <span class="leg-center">Candidate center column</span>
+          <span class="leg-treble">Treble band</span>
+          <span class="leg-bass">Bass band</span>
+        </div>
+      </div>
+
+      <div class="badges" id="badges"></div>
       <div class="meta-grid" id="meta"></div>
-
       <div class="labels" id="labelButtons"></div>
 
       <div class="help-panel">
-        <h2>Keyboard shortcuts</h2>
+        <h2>Label keys</h2>
         <ul>
-          <li><kbd>1</kbd> real barline</li>
-          <li><kbd>2</kbd> fake stem</li>
+          <li><kbd>1</kbd> real barline — spans grand staff</li>
+          <li><kbd>2</kbd> fake stem — note stem, not a measure line</li>
           <li><kbd>3</kbd> fake notehead cluster</li>
           <li><kbd>4</kbd> fake beam</li>
           <li><kbd>5</kbd> unsure</li>
           <li><kbd>6</kbd> missing barline slot</li>
           <li><kbd>←</kbd> <kbd>→</kbd> previous / next</li>
+          <li><kbd>Z</kbd> undo last label</li>
           <li><kbd>S</kbd> download labels.json</li>
         </ul>
       </div>
 
       <div class="actions-row">
         <button class="primary" id="saveBtn" type="button">Download labels.json</button>
-        <button id="skipBtn" type="button" disabled>Skip (no label)</button>
-        <span class="hint">Labels autosave to this browser when you label. Re-open the same manifest to resume.</span>
+        <span class="hint">No border on crop · pink = ink runs · cyan = detector column · autosaves locally</span>
       </div>
     </section>
   </main>
 
+  <div class="magnifier" id="magnifier" aria-hidden="true">
+    <canvas id="magnifierCanvas" width="140" height="140"></canvas>
+  </div>
+
   <script type="module">
-    const STORAGE_KEY = 'corranzo-barline-labeler-v1'
-    const DEFAULT_ZOOM = 4
+    const STORAGE_KEY = 'corranzo-barline-labeler-v2'
+    const DEFAULT_ZOOM = 10
+    const MAGNIFIER_ZOOM = 22
+    const INK_THRESHOLD = 185
+    const CROP_HALF_WIDTH = 14
 
     const BARLINE_LABEL = {
       REAL_BARLINE: 'real-barline',
@@ -521,11 +526,19 @@
 
     const LABEL_OPTIONS = [
       { key: '1', label: BARLINE_LABEL.REAL_BARLINE, title: 'Real barline', hint: 'true measure boundary' },
-      { key: '2', label: BARLINE_LABEL.FAKE_STEM, title: 'Fake stem', hint: 'stem-like vertical ink' },
+      { key: '2', label: BARLINE_LABEL.FAKE_STEM, title: 'Fake stem', hint: 'stem-like vertical' },
       { key: '3', label: BARLINE_LABEL.FAKE_NOTEHEAD_CLUSTER, title: 'Fake notehead cluster', hint: 'dense note column' },
-      { key: '4', label: BARLINE_LABEL.FAKE_BEAM, title: 'Fake beam', hint: 'beam fragment' },
+      { key: '4', label: BARLINE_LABEL.FAKE_BEAM, title: 'Fake beam', hint: 'horizontal beam ink' },
       { key: '5', label: BARLINE_LABEL.UNSURE, title: 'Unsure', hint: 'review later' },
-      { key: '6', label: BARLINE_LABEL.MISSING_BARLINE, title: 'Missing barline slot', hint: 'no clear line' },
+      { key: '6', label: BARLINE_LABEL.MISSING_BARLINE, title: 'Missing barline slot', hint: 'expected slot, no line' },
+    ]
+
+    const GALLERY_EXAMPLES = [
+      { title: 'Real barline', svg: '<svg width="56" height="72" viewBox="0 0 56 72"><rect width="56" height="72" fill="#1a1f28"/><line x1="28" y1="8" x2="28" y2="64" stroke="#3dd68c" stroke-width="3"/><line x1="6" y1="20" x2="50" y2="20" stroke="#666" stroke-width="1"/><line x1="6" y1="52" x2="50" y2="52" stroke="#666" stroke-width="1"/></svg>' },
+      { title: 'Fake stem', svg: '<svg width="56" height="72" viewBox="0 0 56 72"><rect width="56" height="72" fill="#1a1f28"/><line x1="6" y1="20" x2="50" y2="20" stroke="#666"/><line x1="6" y1="52" x2="50" y2="52" stroke="#666"/><line x1="34" y1="24" x2="34" y2="48" stroke="#f07178" stroke-width="2"/></svg>' },
+      { title: 'Notehead cluster', svg: '<svg width="56" height="72" viewBox="0 0 56 72"><rect width="56" height="72" fill="#1a1f28"/><ellipse cx="30" cy="28" rx="4" ry="3" fill="#f07178"/><ellipse cx="30" cy="36" rx="4" ry="3" fill="#f07178"/><ellipse cx="30" cy="44" rx="4" ry="3" fill="#f07178"/><line x1="34" y1="26" x2="34" y2="46" stroke="#f07178" stroke-width="1.5"/></svg>' },
+      { title: 'Fake beam', svg: '<svg width="56" height="72" viewBox="0 0 56 72"><rect width="56" height="72" fill="#1a1f28"/><rect x="14" y="30" width="28" height="5" fill="#f0b429"/><line x1="6" y1="20" x2="50" y2="20" stroke="#666"/><line x1="6" y1="52" x2="50" y2="52" stroke="#666"/></svg>' },
+      { title: 'Missing slot', svg: '<svg width="56" height="72" viewBox="0 0 56 72"><rect width="56" height="72" fill="#1a1f28"/><line x1="6" y1="20" x2="50" y2="20" stroke="#666"/><line x1="6" y1="52" x2="50" y2="52" stroke="#666"/><line x1="28" y1="10" x2="28" y2="62" stroke="#9b8cff" stroke-width="2" stroke-dasharray="4 4"/></svg>' },
     ]
 
     const state = {
@@ -537,63 +550,86 @@
       index: 0,
       pieceFilter: 'all',
       zoom: DEFAULT_ZOOM,
+      undoStack: [],
+      sourceImage: null,
+      sourceSampleId: null,
+      verticalRuns: [],
+      keyboardOnly: false,
     }
 
-    const manifestInput = document.getElementById('manifestInput')
-    const cropsInput = document.getElementById('cropsInput')
-    const labelsInput = document.getElementById('labelsInput')
-    const pieceFilterEl = document.getElementById('pieceFilter')
-    const progressCountsEl = document.getElementById('progressCounts')
-    const progressFillEl = document.getElementById('progressFill')
-    const progressMetaEl = document.getElementById('progressMeta')
-    const autosaveStatusEl = document.getElementById('autosaveStatus')
-    const queueEl = document.getElementById('queue')
-    const cropImgSmall = document.getElementById('cropImgSmall')
-    const cropImgZoom = document.getElementById('cropImgZoom')
-    const zoomToolbar = document.getElementById('zoomToolbar')
-    const metaEl = document.getElementById('meta')
-    const labelButtons = document.getElementById('labelButtons')
-    const saveBtn = document.getElementById('saveBtn')
-    const skipBtn = document.getElementById('skipBtn')
-    const prevBtn = document.getElementById('prevBtn')
-    const nextBtn = document.getElementById('nextBtn')
-    const navPositionEl = document.getElementById('navPosition')
+    const els = {
+      manifestInput: document.getElementById('manifestInput'),
+      cropsInput: document.getElementById('cropsInput'),
+      labelsInput: document.getElementById('labelsInput'),
+      pieceFilter: document.getElementById('pieceFilter'),
+      keyboardOnlyToggle: document.getElementById('keyboardOnlyToggle'),
+      progressCounts: document.getElementById('progressCounts'),
+      progressFill: document.getElementById('progressFill'),
+      progressMeta: document.getElementById('progressMeta'),
+      autosaveStatus: document.getElementById('autosaveStatus'),
+      queue: document.getElementById('queue'),
+      prevBtn: document.getElementById('prevBtn'),
+      nextBtn: document.getElementById('nextBtn'),
+      undoBtn: document.getElementById('undoBtn'),
+      navPosition: document.getElementById('navPosition'),
+      zoomToolbar: document.getElementById('zoomToolbar'),
+      cropStage: document.getElementById('cropStage'),
+      cropCanvas: document.getElementById('cropCanvas'),
+      cropDims: document.getElementById('cropDims'),
+      badges: document.getElementById('badges'),
+      meta: document.getElementById('meta'),
+      labelButtons: document.getElementById('labelButtons'),
+      saveBtn: document.getElementById('saveBtn'),
+      exampleGallery: document.getElementById('exampleGallery'),
+      magnifier: document.getElementById('magnifier'),
+      magnifierCanvas: document.getElementById('magnifierCanvas'),
+    }
+
+    const offscreen = document.createElement('canvas')
+    const offCtx = offscreen.getContext('2d', { willReadFrequently: true })
+    const magnifierCtx = els.magnifierCanvas.getContext('2d')
+    const displayCtx = els.cropCanvas.getContext('2d')
+
+    for (const ex of GALLERY_EXAMPLES) {
+      const div = document.createElement('div')
+      div.className = 'gallery__item'
+      div.innerHTML = `${ex.svg}<span>${ex.title}</span>`
+      els.exampleGallery.appendChild(div)
+    }
 
     for (const opt of LABEL_OPTIONS) {
       const btn = document.createElement('button')
       btn.type = 'button'
       btn.className = 'label-btn'
       btn.dataset.label = opt.label
-      btn.innerHTML = `
-        <span class="label-btn__key">${opt.key}</span>
-        <span class="label-btn__text">
-          <span class="label-btn__title">${opt.title}</span>
-          <span class="label-btn__hint">${opt.hint}</span>
-        </span>`
+      btn.innerHTML = `<span class="label-btn__key">${opt.key}</span><span><span class="label-btn__title">${opt.title}</span><br><span class="label-btn__hint">${opt.hint}</span></span>`
       btn.addEventListener('click', () => applyLabel(opt.label))
-      labelButtons.appendChild(btn)
+      els.labelButtons.appendChild(btn)
     }
 
-    zoomToolbar.addEventListener('click', (event) => {
-      const btn = event.target.closest('button[data-zoom]')
+    els.zoomToolbar.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-zoom]')
       if (!btn) return
       state.zoom = Number(btn.dataset.zoom)
-      for (const z of zoomToolbar.querySelectorAll('button')) {
-        z.classList.toggle('active', z === btn)
-      }
-      updatePreviewImages()
+      redrawCrop()
       scheduleAutosave()
     })
 
-    pieceFilterEl.addEventListener('change', () => {
-      state.pieceFilter = pieceFilterEl.value
+    els.pieceFilter.addEventListener('change', () => {
+      state.pieceFilter = els.pieceFilter.value
       state.index = 0
       render()
       scheduleAutosave()
     })
 
-    manifestInput.addEventListener('change', async (event) => {
-      const file = event.target.files?.[0]
+    els.keyboardOnlyToggle.addEventListener('change', () => {
+      state.keyboardOnly = els.keyboardOnlyToggle.checked
+      document.body.classList.toggle('keyboard-only', state.keyboardOnly)
+      scheduleAutosave()
+    })
+
+    els.manifestInput.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0]
       if (!file) return
       const manifest = JSON.parse(await file.text())
       state.manifest = manifest
@@ -601,50 +637,54 @@
       state.manifestKey = buildManifestKey(manifest)
       state.index = 0
       state.pieceFilter = 'all'
+      state.undoStack = []
       hydrateFromAutosave()
       populatePieceFilter()
       render()
     })
 
-    cropsInput.addEventListener('change', (event) => {
+    els.cropsInput.addEventListener('change', (e) => {
       for (const url of state.cropUrls.values()) URL.revokeObjectURL(url)
       state.cropUrls.clear()
-      for (const file of event.target.files ?? []) {
-        const id = file.name.replace(/\.png$/i, '')
-        state.cropUrls.set(id, URL.createObjectURL(file))
+      state.sourceImage = null
+      state.sourceSampleId = null
+      for (const file of e.target.files ?? []) {
+        state.cropUrls.set(file.name.replace(/\.png$/i, ''), URL.createObjectURL(file))
       }
       render()
     })
 
-    labelsInput.addEventListener('change', async (event) => {
-      const file = event.target.files?.[0]
+    els.labelsInput.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0]
       if (!file) return
       const data = JSON.parse(await file.text())
       state.labels = { ...(data.labels ?? data) }
+      state.undoStack = []
       scheduleAutosave()
       render()
     })
 
-    saveBtn.addEventListener('click', downloadLabels)
-    skipBtn.addEventListener('click', goNext)
-    prevBtn.addEventListener('click', goPrev)
-    nextBtn.addEventListener('click', goNext)
+    els.saveBtn.addEventListener('click', downloadLabels)
+    els.prevBtn.addEventListener('click', goPrev)
+    els.nextBtn.addEventListener('click', goNext)
+    els.undoBtn.addEventListener('click', undoLabel)
+
+    els.cropStage.addEventListener('mousemove', onCropHover)
+    els.cropStage.addEventListener('mouseleave', () => { els.magnifier.style.display = 'none' })
 
     document.addEventListener('keydown', (event) => {
-      if (event.target.matches('input, textarea, select')) return
+      if (event.target.matches('input[type="text"], textarea')) return
       const opt = LABEL_OPTIONS.find((o) => o.key === event.key)
       if (opt) {
         event.preventDefault()
         applyLabel(opt.label)
         return
       }
-      if (event.key === 'ArrowRight') {
+      if (event.key === 'ArrowRight') { event.preventDefault(); goNext() }
+      if (event.key === 'ArrowLeft') { event.preventDefault(); goPrev() }
+      if (event.key.toLowerCase() === 'z' && !event.metaKey && !event.ctrlKey) {
         event.preventDefault()
-        goNext()
-      }
-      if (event.key === 'ArrowLeft') {
-        event.preventDefault()
-        goPrev()
+        undoLabel()
       }
       if (event.key.toLowerCase() === 's' && !event.metaKey && !event.ctrlKey) {
         event.preventDefault()
@@ -654,19 +694,17 @@
 
     function buildManifestKey(manifest) {
       const samples = manifest.samples ?? []
-      const first = samples[0]?.id ?? ''
-      const last = samples[samples.length - 1]?.id ?? ''
-      return `${manifest.generatedAt ?? 'unknown'}|${samples.length}|${first}|${last}`
+      return `${manifest.generatedAt ?? 'unknown'}|${samples.length}|${samples[0]?.id ?? ''}|${samples.at(-1)?.id ?? ''}`
     }
 
     function visibleSamples() {
-      if (state.pieceFilter === 'all') return state.samples
-      return state.samples.filter((s) => s.pieceId === state.pieceFilter)
+      return state.pieceFilter === 'all'
+        ? state.samples
+        : state.samples.filter((s) => s.pieceId === state.pieceFilter)
     }
 
     function currentSample() {
-      const list = visibleSamples()
-      return list[state.index] ?? null
+      return visibleSamples()[state.index] ?? null
     }
 
     function labeledCountForVisible() {
@@ -675,17 +713,17 @@
 
     function populatePieceFilter() {
       const pieces = [...new Set(state.samples.map((s) => s.pieceId))].sort()
-      pieceFilterEl.innerHTML = '<option value="all">All pieces</option>'
+      els.pieceFilter.innerHTML = '<option value="all">All pieces</option>'
       for (const pieceId of pieces) {
         const count = state.samples.filter((s) => s.pieceId === pieceId).length
         const labeled = state.samples.filter((s) => s.pieceId === pieceId && state.labels[s.id]).length
         const opt = document.createElement('option')
         opt.value = pieceId
         opt.textContent = `${pieceId} (${labeled}/${count})`
-        pieceFilterEl.appendChild(opt)
+        els.pieceFilter.appendChild(opt)
       }
-      pieceFilterEl.value = state.pieceFilter
-      pieceFilterEl.disabled = state.samples.length === 0
+      els.pieceFilter.value = state.pieceFilter
+      els.pieceFilter.disabled = state.samples.length === 0
     }
 
     function goPrev() {
@@ -704,9 +742,23 @@
     function applyLabel(label) {
       const sample = currentSample()
       if (!sample) return
+      state.undoStack.push({ sampleId: sample.id, previous: state.labels[sample.id] ?? null })
+      if (state.undoStack.length > 80) state.undoStack.shift()
       state.labels[sample.id] = label
       const list = visibleSamples()
       if (state.index < list.length - 1) state.index += 1
+      scheduleAutosave()
+      render()
+    }
+
+    function undoLabel() {
+      const entry = state.undoStack.pop()
+      if (!entry) return
+      if (entry.previous == null) delete state.labels[entry.sampleId]
+      else state.labels[entry.sampleId] = entry.previous
+      const list = visibleSamples()
+      const idx = list.findIndex((s) => s.id === entry.sampleId)
+      if (idx >= 0) state.index = idx
       scheduleAutosave()
       render()
     }
@@ -717,53 +769,47 @@
       clearTimeout(autosaveTimer)
       autosaveTimer = setTimeout(() => {
         try {
-          const payload = {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({
             manifestKey: state.manifestKey,
             labels: state.labels,
             index: state.index,
             pieceFilter: state.pieceFilter,
             zoom: state.zoom,
+            keyboardOnly: state.keyboardOnly,
             savedAt: new Date().toISOString(),
-          }
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
-          autosaveStatusEl.textContent = `Autosaved ${new Date().toLocaleTimeString()}`
-          autosaveStatusEl.classList.remove('autosave-status--warn')
+          }))
+          els.autosaveStatus.textContent = `Autosaved ${new Date().toLocaleTimeString()}`
         } catch {
-          autosaveStatusEl.textContent = 'Autosave unavailable (storage full or blocked)'
-          autosaveStatusEl.classList.add('autosave-status--warn')
+          els.autosaveStatus.textContent = 'Autosave blocked'
         }
       }, 120)
     }
 
     function hydrateFromAutosave() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY)
-        if (!raw) return
-        const saved = JSON.parse(raw)
-        if (saved.manifestKey !== state.manifestKey) return
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null')
+        if (!saved || saved.manifestKey !== state.manifestKey) return
         state.labels = { ...(saved.labels ?? {}) }
         state.pieceFilter = saved.pieceFilter ?? 'all'
         state.zoom = saved.zoom ?? DEFAULT_ZOOM
-        const list =
-          state.pieceFilter === 'all'
-            ? state.samples
-            : state.samples.filter((s) => s.pieceId === state.pieceFilter)
-        const maxIndex = Math.max(0, list.length - 1)
-        state.index = Math.min(saved.index ?? 0, maxIndex)
-        autosaveStatusEl.textContent = `Restored autosave from ${saved.savedAt ? new Date(saved.savedAt).toLocaleString() : 'browser'}`
-      } catch {
-        // ignore corrupt autosave
-      }
+        state.keyboardOnly = Boolean(saved.keyboardOnly)
+        els.keyboardOnlyToggle.checked = state.keyboardOnly
+        document.body.classList.toggle('keyboard-only', state.keyboardOnly)
+        const list = visibleSamples()
+        state.index = Math.min(saved.index ?? 0, Math.max(0, list.length - 1))
+        els.autosaveStatus.textContent = saved.savedAt
+          ? `Restored autosave ${new Date(saved.savedAt).toLocaleString()}`
+          : 'Restored autosave'
+      } catch { /* ignore */ }
     }
 
     function downloadLabels() {
-      const payload = {
+      const blob = new Blob([JSON.stringify({
         version: 1,
         updatedAt: new Date().toISOString(),
         manifestGeneratedAt: state.manifest?.generatedAt ?? null,
         labels: state.labels,
-      }
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })
+      }, null, 2)], { type: 'application/json' })
       const a = document.createElement('a')
       a.href = URL.createObjectURL(blob)
       a.download = 'labels.json'
@@ -771,178 +817,273 @@
       URL.revokeObjectURL(a.href)
     }
 
-    function detectorCardClass(decision) {
-      if (!decision) return ''
-      if (String(decision).includes('accepted')) return 'meta-card--detector-accepted'
-      if (String(decision).includes('rejected') || String(decision).includes('thinned')) {
-        return 'meta-card--detector-rejected'
+    function analyzeVerticalRuns(imageData) {
+      const { width, height, data } = imageData
+      const runs = []
+      const minFrac = 0.22
+      for (let x = 0; x < width; x += 1) {
+        let best = { start: 0, len: 0 }
+        let cur = { start: 0, len: 0 }
+        for (let y = 0; y < height; y += 1) {
+          const i = (y * width + x) * 4
+          const lum = (data[i] + data[i + 1] + data[i + 2]) / 3
+          const ink = lum < INK_THRESHOLD && data[i + 3] > 20
+          if (ink) {
+            if (cur.len === 0) cur.start = y
+            cur.len += 1
+          } else if (cur.len > 0) {
+            if (cur.len > best.len) best = { ...cur }
+            cur = { start: 0, len: 0 }
+          }
+        }
+        if (cur.len > best.len) best = cur
+        const frac = best.len / height
+        if (frac >= minFrac) runs.push({ x, start: best.start, end: best.start + best.len, frac })
       }
-      return 'meta-card--highlight'
+      return runs
     }
 
-    function formatLabelHuman(label) {
-      const opt = LABEL_OPTIONS.find((o) => o.label === label)
-      return opt ? opt.title : label
+    function drawCheckerboard(ctx, w, h, cell = 12) {
+      for (let y = 0; y < h; y += cell) {
+        for (let x = 0; x < w; x += cell) {
+          ctx.fillStyle = ((x / cell + y / cell) % 2 === 0) ? '#1a1f28' : '#141922'
+          ctx.fillRect(x, y, cell, cell)
+        }
+      }
     }
 
-    function sizePreviewImage(img, zoom) {
-      if (!img.naturalWidth) return
-      img.style.width = `${img.naturalWidth * zoom}px`
-      img.style.height = `${img.naturalHeight * zoom}px`
+    function bandRectsForSample(sample, cropH) {
+      const bands = sample?.bands
+      if (!bands || !cropH) return null
+      const sysH = bands.y1 - bands.y0
+      if (sysH <= 0) return null
+      const mapY = (pageY) => Math.round(((pageY - bands.y0) / sysH) * cropH)
+      return {
+        treble: { y0: mapY(bands.trebleY0), y1: mapY(bands.trebleY1) },
+        bass: { y0: mapY(bands.bassY0), y1: mapY(bands.bassY1) },
+        gap: {
+          y0: mapY(bands.trebleY1),
+          y1: mapY(bands.bassY0),
+        },
+      }
     }
 
-    function updatePreviewImages() {
+    function loadSourceImage(sample, url) {
+      return new Promise((resolve) => {
+        if (state.sourceSampleId === sample.id && state.sourceImage) {
+          resolve(state.sourceImage)
+          return
+        }
+        const img = new Image()
+        img.onload = () => {
+          offscreen.width = img.naturalWidth
+          offscreen.height = img.naturalHeight
+          offCtx.clearRect(0, 0, offscreen.width, offscreen.height)
+          offCtx.drawImage(img, 0, 0)
+          const imageData = offCtx.getImageData(0, 0, offscreen.width, offscreen.height)
+          state.sourceImage = { img, imageData, w: img.naturalWidth, h: img.naturalHeight }
+          state.sourceSampleId = sample.id
+          state.verticalRuns = analyzeVerticalRuns(imageData)
+          resolve(state.sourceImage)
+        }
+        img.onerror = () => resolve(null)
+        img.src = url
+      })
+    }
+
+    function redrawCrop() {
       const sample = currentSample()
-      const cropUrl = sample ? state.cropUrls.get(sample.id) : null
-
-      function applySrc(img, zoom) {
-        if (!cropUrl) {
-          img.removeAttribute('src')
-          img.style.display = 'none'
-          delete img.dataset.loadedUrl
-          return
-        }
-        img.style.display = 'block'
-        const onReady = () => sizePreviewImage(img, zoom)
-        if (img.dataset.loadedUrl === cropUrl && img.complete) {
-          onReady()
-          return
-        }
-        img.dataset.loadedUrl = cropUrl
-        img.onload = onReady
-        img.src = cropUrl
+      const src = state.sourceImage
+      if (!sample || !src) {
+        els.cropCanvas.width = 0
+        els.cropCanvas.height = 0
+        els.cropDims.textContent = sample ? 'Crop image not loaded — select PNGs' : '—'
+        return
       }
 
-      applySrc(cropImgSmall, 1)
-      applySrc(cropImgZoom, state.zoom)
+      const z = state.zoom
+      const w = src.w * z
+      const h = src.h * z
+      els.cropCanvas.width = w
+      els.cropCanvas.height = h
+
+      drawCheckerboard(displayCtx, w, h, 12 * z)
+      displayCtx.imageSmoothingEnabled = false
+      displayCtx.drawImage(src.img, 0, 0, w, h)
+
+      const bands = bandRectsForSample(sample, src.h)
+      if (bands) {
+        displayCtx.fillStyle = 'rgba(94, 179, 255, 0.1)'
+        displayCtx.fillRect(0, bands.treble.y0 * z, w, (bands.treble.y1 - bands.treble.y0) * z)
+        displayCtx.fillStyle = 'rgba(157, 140, 255, 0.1)'
+        displayCtx.fillRect(0, bands.bass.y0 * z, w, (bands.bass.y1 - bands.bass.y0) * z)
+        displayCtx.fillStyle = 'rgba(255,255,255,0.03)'
+        displayCtx.fillRect(0, bands.gap.y0 * z, w, Math.max(1, (bands.gap.y1 - bands.gap.y0) * z))
+      }
+
+      for (const run of state.verticalRuns) {
+        displayCtx.fillStyle = 'rgba(255, 90, 220, 0.45)'
+        displayCtx.fillRect(run.x * z, run.start * z, Math.max(z, 2), (run.end - run.start) * z)
+      }
+
+      const centerX = Math.floor(src.w / 2)
+      const centerRun = state.verticalRuns.find((r) => r.x === centerX || r.x === centerX - 1 || r.x === centerX + 1)
+      if (centerRun) {
+        displayCtx.fillStyle = 'rgba(80, 220, 255, 0.55)'
+        displayCtx.fillRect(centerRun.x * z, centerRun.start * z, Math.max(z, 2), (centerRun.end - centerRun.start) * z)
+      } else {
+        displayCtx.fillStyle = 'rgba(80, 220, 255, 0.35)'
+        displayCtx.fillRect(centerX * z, 0, Math.max(z, 2), h)
+      }
+
+      const candidatePx = sample.xPx ?? '—'
+      els.cropDims.textContent =
+        `Crop ${src.w}×${src.h} px · displayed ${w}×${h} px @ ${z}× · candidate column x=${candidatePx}px (center ≈ col ${centerX}) · export half-width ${CROP_HALF_WIDTH}px`
     }
 
-    function renderMeta(sample) {
-      const currentLabel = state.labels[sample.id]
-      const detector = sample.detector ?? {}
-      const confidence = detector.confidence ?? '—'
-      const reject = detector.rejectReason ? ` · ${detector.rejectReason}` : ''
+    function onCropHover(event) {
+      const src = state.sourceImage
+      if (!src) return
+      const rect = els.cropCanvas.getBoundingClientRect()
+      if (!rect.width || !rect.height) return
+      const relX = (event.clientX - rect.left) / rect.width
+      const relY = (event.clientY - rect.top) / rect.height
+      if (relX < 0 || relY < 0 || relX > 1 || relY > 1) {
+        els.magnifier.style.display = 'none'
+        return
+      }
+      const px = Math.floor(relX * src.w)
+      const py = Math.floor(relY * src.h)
+      const lens = 7
+      const mag = MAGNIFIER_ZOOM
+      magnifierCtx.imageSmoothingEnabled = false
+      magnifierCtx.fillStyle = '#0a0e14'
+      magnifierCtx.fillRect(0, 0, 140, 140)
+      magnifierCtx.drawImage(
+        src.img,
+        px - lens, py - lens, lens * 2 + 1, lens * 2 + 1,
+        0, 0, 140, 140,
+      )
+      els.magnifier.style.display = 'block'
+      els.magnifier.style.left = `${event.clientX + 18}px`
+      els.magnifier.style.top = `${event.clientY + 18}px`
+    }
 
-      metaEl.innerHTML = `
-        <div class="meta-card meta-card--highlight">
-          <div class="meta-card__label">Piece</div>
-          <div class="meta-card__value meta-card__value--strong">${escapeHtml(sample.pieceId)}</div>
-        </div>
-        <div class="meta-card">
-          <div class="meta-card__label">Page / system</div>
-          <div class="meta-card__value">p${sample.page} · system ${sample.systemIndex}</div>
-        </div>
-        <div class="meta-card">
-          <div class="meta-card__label">X position</div>
-          <div class="meta-card__value">${sample.x?.toFixed?.(4) ?? sample.x} <span class="hint">(${sample.xPx}px)</span></div>
-        </div>
-        <div class="meta-card ${detectorCardClass(detector.decision)}">
-          <div class="meta-card__label">Detector decision</div>
-          <div class="meta-card__value meta-card__value--strong">${escapeHtml(detector.decision ?? '—')}${escapeHtml(reject)}</div>
-        </div>
-        <div class="meta-card">
-          <div class="meta-card__label">Confidence</div>
-          <div class="meta-card__value">${escapeHtml(String(confidence))}</div>
-        </div>
-        <div class="meta-card">
-          <div class="meta-card__label">Expected measures / system</div>
-          <div class="meta-card__value">${sample.expectedMeasuresPerSystem ?? '—'}</div>
-        </div>
-        <div class="meta-card ${currentLabel ? 'meta-card--label-set' : ''}">
-          <div class="meta-card__label">Your label</div>
-          <div class="meta-card__value meta-card__value--strong">${currentLabel ? escapeHtml(formatLabelHuman(currentLabel)) : '— not labeled —'}</div>
-        </div>
-        <div class="meta-card">
-          <div class="meta-card__label">Sample id</div>
-          <div class="meta-card__value">${escapeHtml(sample.id)}</div>
-        </div>
+    function confidenceBadgeClass(confidence) {
+      if (confidence === 'high') return 'badge--high'
+      if (confidence === 'low') return 'badge--low'
+      return 'badge--none'
+    }
+
+    function decisionBadgeClass(decision) {
+      if (!decision) return 'badge--none'
+      if (String(decision).includes('accepted')) return 'badge--accepted'
+      if (String(decision).includes('rejected') || String(decision).includes('thinned')) return 'badge--rejected'
+      return 'badge--none'
+    }
+
+    function renderBadges(sample) {
+      const det = sample.detector ?? {}
+      els.badges.innerHTML = `
+        <span class="badge ${decisionBadgeClass(det.decision)}">Detector: ${escapeHtml(det.decision ?? '—')}</span>
+        <span class="badge ${confidenceBadgeClass(det.confidence)}">Confidence: ${escapeHtml(String(det.confidence ?? '—'))}</span>
+        ${det.rejectReason ? `<span class="badge badge--rejected">${escapeHtml(det.rejectReason)}</span>` : ''}
+        ${det.finalAccepted ? '<span class="badge badge--accepted">Final accepted</span>' : ''}
       `
     }
 
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
+    function renderMeta(sample) {
+      const label = state.labels[sample.id]
+      const f = sample.features ?? {}
+      els.meta.innerHTML = `
+        <div class="meta-card"><div class="meta-card__label">Piece</div><div class="meta-card__value meta-card__value--strong">${escapeHtml(sample.pieceId)}</div></div>
+        <div class="meta-card"><div class="meta-card__label">Page / system</div><div class="meta-card__value">p${sample.page} · sys ${sample.systemIndex}</div></div>
+        <div class="meta-card"><div class="meta-card__label">X (norm / px)</div><div class="meta-card__value">${sample.x?.toFixed?.(4) ?? sample.x} · ${sample.xPx}px</div></div>
+        <div class="meta-card"><div class="meta-card__label">Run frac (T/B/full)</div><div class="meta-card__value">${fmtFrac(f.treble)} / ${fmtFrac(f.bass)} / ${fmtFrac(f.full)}</div></div>
+        <div class="meta-card"><div class="meta-card__label">Stems / score</div><div class="meta-card__value">${f.stemSignals ?? 0} · ${f.score ?? '—'}</div></div>
+        <div class="meta-card ${label ? 'meta-card--label-set' : ''}"><div class="meta-card__label">Your label</div><div class="meta-card__value meta-card__value--strong">${label ? escapeHtml(formatLabelHuman(label)) : '—'}</div></div>
+        <div class="meta-card"><div class="meta-card__label">Sample id</div><div class="meta-card__value">${escapeHtml(sample.id)}</div></div>
+      `
     }
 
-    function render() {
-      const allTotal = state.samples.length
+    function fmtFrac(band) {
+      return band?.maxRunFrac?.toFixed?.(2) ?? '—'
+    }
+
+    function formatLabelHuman(label) {
+      return LABEL_OPTIONS.find((o) => o.label === label)?.title ?? label
+    }
+
+    function escapeHtml(v) {
+      return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    }
+
+    async function render() {
       const list = visibleSamples()
       const total = list.length
       const labeledVisible = labeledCountForVisible()
       const labeledAll = Object.keys(state.labels).length
       const pct = total ? Math.round((labeledVisible / total) * 100) : 0
 
-      progressCountsEl.textContent = `${labeledVisible} / ${total}`
-      progressFillEl.style.width = `${pct}%`
-      progressMetaEl.textContent = allTotal
-        ? `${pct}% of filtered queue · ${labeledAll} total labeled · crop ${state.cropUrls.size} loaded`
-        : 'Load manifest.json and crop PNGs to begin.'
+      els.progressCounts.textContent = `${labeledVisible} / ${total}`
+      els.progressFill.style.width = `${pct}%`
+      els.progressMeta.textContent = state.samples.length
+        ? `${pct}% in filter · ${labeledAll} total labeled · ${state.cropUrls.size} crops loaded`
+        : 'Load manifest.json and crop PNGs.'
 
       populatePieceFilter()
-      pieceFilterEl.value = state.pieceFilter
-
       const hasWork = total > 0
-      prevBtn.disabled = !hasWork || state.index <= 0
-      nextBtn.disabled = !hasWork || state.index >= total - 1
-      skipBtn.disabled = !hasWork
-      saveBtn.disabled = allTotal === 0
-
-      navPositionEl.textContent = hasWork
-        ? `Item ${state.index + 1} of ${total}${state.pieceFilter !== 'all' ? ` · ${state.pieceFilter}` : ''}`
+      els.prevBtn.disabled = !hasWork || state.index <= 0
+      els.nextBtn.disabled = !hasWork || state.index >= total - 1
+      els.undoBtn.disabled = state.undoStack.length === 0
+      els.saveBtn.disabled = state.samples.length === 0
+      els.navPosition.textContent = hasWork
+        ? `${state.index + 1} / ${total}${state.pieceFilter !== 'all' ? ` · ${state.pieceFilter}` : ''}`
         : '—'
 
-      for (const z of zoomToolbar.querySelectorAll('button')) {
+      for (const z of els.zoomToolbar.querySelectorAll('button')) {
         z.classList.toggle('active', Number(z.dataset.zoom) === state.zoom)
       }
 
-      queueEl.innerHTML = ''
-      const queueSlice = list.slice(Math.max(0, state.index - 8), state.index + 24)
-      queueSlice.forEach((sample, offset) => {
-        const i = Math.max(0, state.index - 8) + offset
+      els.queue.innerHTML = ''
+      list.slice(Math.max(0, state.index - 6), state.index + 20).forEach((sample, offset) => {
+        const i = Math.max(0, state.index - 6) + offset
         const btn = document.createElement('button')
         btn.type = 'button'
         btn.textContent = sample.id
         if (state.labels[sample.id]) btn.classList.add('labeled')
         if (i === state.index) btn.classList.add('active')
-        btn.addEventListener('click', () => {
-          state.index = i
-          render()
-          scheduleAutosave()
-        })
-        queueEl.appendChild(btn)
+        btn.addEventListener('click', () => { state.index = i; render() })
+        els.queue.appendChild(btn)
       })
-      if (total > queueSlice.length) {
-        const more = document.createElement('div')
-        more.className = 'hint'
-        more.style.padding = '6px'
-        more.textContent = `Showing window around current · ${total} in filter`
-        queueEl.appendChild(more)
-      }
 
       const sample = currentSample()
       if (!sample) {
-        cropImgSmall.removeAttribute('src')
-        cropImgZoom.removeAttribute('src')
-        metaEl.innerHTML = allTotal
-          ? '<p class="empty-state">No samples in this piece filter.</p>'
-          : '<p class="empty-state">Load manifest.json, then multi-select crop PNGs.</p>'
-        for (const btn of labelButtons.querySelectorAll('button')) {
-          btn.classList.remove('selected')
+        els.meta.innerHTML = '<p class="empty-state">Load manifest + crops, or change piece filter.</p>'
+        els.badges.innerHTML = ''
+        els.cropDims.textContent = '—'
+        for (const btn of els.labelButtons.querySelectorAll('button')) {
           btn.disabled = true
+          btn.classList.remove('selected')
         }
         return
       }
 
-      for (const btn of labelButtons.querySelectorAll('button')) {
+      for (const btn of els.labelButtons.querySelectorAll('button')) {
         btn.disabled = false
         btn.classList.toggle('selected', btn.dataset.label === state.labels[sample.id])
       }
 
-      updatePreviewImages()
+      renderBadges(sample)
       renderMeta(sample)
+
+      const url = state.cropUrls.get(sample.id)
+      if (url) await loadSourceImage(sample, url)
+      else {
+        state.sourceImage = null
+        state.sourceSampleId = null
+      }
+      redrawCrop()
     }
 
     render()

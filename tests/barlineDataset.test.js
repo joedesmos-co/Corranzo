@@ -125,14 +125,18 @@ describe('barline labeler static UX', () => {
     'utf8',
   )
 
-  it('includes zoom preview, navigation, and autosave for long sessions', () => {
-    expect(html).toMatch(/cropImgZoom/)
+  it('includes accuracy-focused labeling UX', () => {
+    expect(html).toMatch(/cropCanvas/)
     expect(html).toMatch(/image-rendering:\s*pixelated/)
     expect(html).toMatch(/id="prevBtn"/)
     expect(html).toMatch(/id="nextBtn"/)
     expect(html).toMatch(/progressFill/)
     expect(html).toMatch(/pieceFilter/)
     expect(html).toMatch(/localStorage/)
+    expect(html).toMatch(/undoBtn/)
+    expect(html).toMatch(/analyzeVerticalRuns/)
+    expect(html).toMatch(/magnifier/)
+    expect(html).toMatch(/exampleGallery/)
     expect(html).toMatch(/<kbd>1<\/kbd>\s*real barline/)
   })
 })
