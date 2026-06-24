@@ -249,6 +249,9 @@ async function runCompare() {
  * GEOMETRY DETECTION quality from the beat-1 onset heuristic (playableStartX).
  */
 async function runDetect() {
+  const { summarizeBarlineRejections } = await import(
+    '../src/features/score-follow/pdfPageAnalysis.js'
+  )
   const synthetic = await import('../tests/helpers/syntheticScore.js')
   const { analyzeSemiAutoScoreSetup } = await import(
     '../src/features/score-follow/semiAutoScoreAlignment.js'
@@ -340,14 +343,19 @@ async function runDetect() {
     )
     entries.forEach((entry, i) => {
       const s = entry.system
+      const rejectedSummary = summarizeBarlineRejections(s?.barlineRejected)
       console.log(
         `    sys${i} p${entry.page}: barlines=${s?.barlineCount ?? '—'} ` +
+          `accepted=${s?.barlineAccepted ?? '—'} raw=${s?.barlineCandidatesRaw ?? '—'} ` +
           `measEst=${s?.measureEstimate ?? 'null'} ` +
           `barlineConfident=${s?.barlineConfident ?? '—'}` +
           (s?.barlineReliabilityReason && s.barlineReliabilityReason !== 'ok'
             ? ` (${s.barlineReliabilityReason})`
             : ''),
       )
+      if (rejectedSummary) {
+        console.log(`      rejected: ${rejectedSummary}`)
+      }
     })
     const expectedMeasures = truth.length
     console.log(

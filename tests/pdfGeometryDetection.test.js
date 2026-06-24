@@ -148,18 +148,20 @@ describe('PDF geometry detection — uneven measures: detected barlines beat eve
 })
 
 describe('Barline reliability — dense stem grids never yield a confident-but-wrong count', () => {
-  it('flags a dense stem-grid as unreliable (no confident measure count)', () => {
+  it('filters stem grids down to a plausible barline count (not 28 false measures)', () => {
     const dense = densePianoPage({ systems: 5, measuresPerSystem: 6 })
     const bounds = detectContentBounds(dense)
     const { systems } = detectStaffLineSystems(dense, bounds, { stavesPerSystem: 2 })
     expect(systems.length).toBe(5)
     for (const system of systems) {
-      // Many false-positive "barlines" from stacked stems/noteheads…
-      expect(system.barlineCount).toBeGreaterThan(16)
-      // …but the count is correctly marked unreliable, so measureEstimate is null
-      // (the pipeline then falls back to MusicXML breaks instead of a wrong count).
-      expect(system.barlineConfident).toBe(false)
-      expect(system.measureEstimate).toBeNull()
+      // Prior detector reported ~29 barlines/system; improved classifier thins to ~7.
+      expect(system.barlineCount).toBeLessThanOrEqual(12)
+      expect(system.barlineCount).toBeGreaterThanOrEqual(5)
+      expect(system.barlineCandidatesRaw).toBeGreaterThan(system.barlineCount)
+      expect(
+        (system.barlineRejected?.['stem-like'] ?? 0) +
+          (system.barlineRejected?.['too-dense'] ?? 0),
+      ).toBeGreaterThan(0)
     }
   })
 
@@ -193,6 +195,20 @@ describe('Barline reliability — dense stem grids never yield a confident-but-w
     )
     expect(comparison.systemMismatchCount).toBe(0)
     expect(readiness.status).toBe(PROMOTION_STATUS.READY)
+  })
+
+  it('exposes barline rejection diagnostics on dense systems', () => {
+    const dense = densePianoPage({ systems: 5, measuresPerSystem: 6 })
+    const bounds = detectContentBounds(dense)
+    const { systems } = detectStaffLineSystems(dense, bounds, { stavesPerSystem: 2 })
+    const system = systems[0]
+    expect(system.barlineCandidatesRaw).toBeGreaterThan(system.barlineCount)
+    expect(system.barlineRejected).toBeTruthy()
+    expect(
+      (system.barlineRejected['weak-run'] ?? 0) +
+        (system.barlineRejected['stem-like'] ?? 0) +
+        (system.barlineRejected['too-dense'] ?? 0),
+    ).toBeGreaterThan(0)
   })
 })
 

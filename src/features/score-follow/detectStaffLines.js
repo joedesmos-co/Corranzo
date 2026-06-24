@@ -1,3 +1,8 @@
+import {
+  detectBarlineCandidates,
+  BARLINE_REJECT_REASON,
+} from './detectBarlinesInSystem.js'
+
 /**
  * Staff-line-based staff-system detection — the primary, dense-music-robust
  * detector for auto score-follow.
@@ -267,8 +272,7 @@ function mergeStaveGroup(group) {
  * a thick barline counts once.
  */
 export function countSystemBarlines(imageData, contentBounds, system, options = {}) {
-  const positions = detectSystemBarlinePositions(imageData, contentBounds, system, options)
-  return positions.length
+  return detectSystemBarlinePositions(imageData, contentBounds, system, options).length
 }
 
 /** A real measure is at least this fraction of the system's content width. */
@@ -287,12 +291,19 @@ const MAX_MEASURES_PER_SYSTEM = 16
  * measure count (better to fall back to MusicXML breaks than to map measures to
  * the wrong systems with false confidence).
  */
-export function assessBarlineReliability(positions, contentBounds) {
+export function assessBarlineReliability(positions, contentBounds, diagnostics = null) {
   const x0 = contentBounds?.x0 ?? 0
   const x1 = contentBounds?.x1 ?? 1
   const contentWidth = Math.max(1e-6, x1 - x0)
   if (!positions || positions.length < 2) {
-    return { confident: false, reason: 'too-few-barlines', measureWidthFrac: null }
+    const rejectedDense =
+      (diagnostics?.rejected?.[BARLINE_REJECT_REASON.TOO_DENSE] ?? 0) > 0 ||
+      (diagnostics?.rejected?.[BARLINE_REJECT_REASON.INCONSISTENT] ?? 0) > 0
+    return {
+      confident: false,
+      reason: rejectedDense ? 'barline-grid-too-dense' : 'too-few-barlines',
+      measureWidthFrac: null,
+    }
   }
   const measures = positions.length - 1
   const gaps = []
@@ -311,42 +322,21 @@ export function assessBarlineReliability(positions, contentBounds) {
 
 /** Normalized x positions of detected barlines within a system band. */
 export function detectSystemBarlinePositions(imageData, contentBounds, system, options = {}) {
-  const { darkThreshold = 150, heightFraction = 0.7 } = options
-  const { width, height, data } = imageData
-  const { left, right } = contentColumns(imageData, contentBounds)
-  const y0 = Math.max(0, Math.floor(system.y0 * height))
-  const y1 = Math.min(height - 1, Math.ceil(system.y1 * height))
-  const bandHeight = Math.max(1, y1 - y0)
+  const { darkThreshold = 150 } = options
+  return detectBarlineCandidates(imageData, contentBounds, system, { darkThreshold }).positions
+}
 
-  const cols = []
-  for (let x = left; x <= right; x += 1) {
-    let run = 0
-    let best = 0
-    for (let y = y0; y <= y1; y += 1) {
-      const index = (y * width + x) * 4
-      if (compositeLuminance(data, index) < darkThreshold) {
-        run += 1
-        if (run > best) best = run
-      } else {
-        run = 0
-      }
-    }
-    if (best / bandHeight > heightFraction) {
-      cols.push(x)
-    }
-  }
-
-  const mergeGap = Math.max(2, Math.floor(width * 0.01))
-  const merged = []
-  for (const x of cols) {
-    const last = merged[merged.length - 1]
-    if (last && x - last.x1 <= mergeGap) {
-      last.x1 = x
-    } else {
-      merged.push({ x0: x, x1: x })
-    }
-  }
-  return merged.map((m) => (m.x0 + m.x1) / 2 / width)
+/**
+ * Barline detection with per-system rejection diagnostics (for debug reports).
+ */
+export function detectSystemBarlinesWithDiagnostics(
+  imageData,
+  contentBounds,
+  system,
+  options = {},
+) {
+  const { darkThreshold = 150 } = options
+  return detectBarlineCandidates(imageData, contentBounds, system, { darkThreshold })
 }
 
 /**
@@ -372,13 +362,14 @@ export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
   // never below the staff-line threshold.
   const barlineThreshold = Math.min(inkThreshold, Math.max(150, inkThreshold - 20))
   const systems = grouped.map((system) => {
-    const positions = countBarlines
-      ? detectSystemBarlinePositions(imageData, contentBounds, system, {
+    const detection = countBarlines
+      ? detectSystemBarlinesWithDiagnostics(imageData, contentBounds, system, {
           darkThreshold: barlineThreshold,
         })
-      : []
+      : { positions: [], diagnostics: null }
+    const positions = detection.positions
     const barlineCount = positions.length
-    const reliability = assessBarlineReliability(positions, contentBounds)
+    const reliability = assessBarlineReliability(positions, contentBounds, detection.diagnostics)
     // N barlines (start + internal + end) bound N-1 measures — but only emit a
     // count when the barlines are a trustworthy measure signal. A confident-but-
     // wrong count would map measures to the wrong systems, so an unreliable
@@ -388,6 +379,9 @@ export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
     return {
       ...system,
       barlineCount,
+      barlineCandidatesRaw: detection.diagnostics?.candidatesRaw ?? null,
+      barlineRejected: detection.diagnostics?.rejected ?? null,
+      barlineAccepted: detection.diagnostics?.accepted ?? barlineCount,
       measureEstimate,
       barlineConfident: reliability.confident,
       barlineReliabilityReason: reliability.reason,

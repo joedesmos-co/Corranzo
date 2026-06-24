@@ -132,6 +132,11 @@ function buildAutoSetupDebugReport({
       measureEnd: span.measureEnd,
       measureCount: span.measuresInSpan,
       barlineCount: entry?.system?.barlineCount ?? null,
+      barlineConfident: entry?.system?.barlineConfident ?? null,
+      barlineReliabilityReason: entry?.system?.barlineReliabilityReason ?? null,
+      barlineCandidatesRaw: entry?.system?.barlineCandidatesRaw ?? null,
+      barlineAccepted: entry?.system?.barlineAccepted ?? null,
+      barlineRejected: entry?.system?.barlineRejected ?? null,
       firstAnchorX: startAnchor ? round3(startAnchor.x) : null,
       lastAnchorX: endAnchor ? round3(endAnchor.x) : null,
     }

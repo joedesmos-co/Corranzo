@@ -148,3 +148,14 @@ function detectInkBoundsQuick(imageData) {
 
   return { left, right, top, bottom }
 }
+
+/** Compact summary of barline-candidate rejections for diagnostic scripts. */
+export function summarizeBarlineRejections(rejected) {
+  if (!rejected || typeof rejected !== 'object') {
+    return ''
+  }
+  return Object.entries(rejected)
+    .filter(([, count]) => Number(count) > 0)
+    .map(([reason, count]) => `${reason}=${count}`)
+    .join(', ')
+}
