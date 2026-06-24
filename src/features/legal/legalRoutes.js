@@ -25,3 +25,8 @@ export function pathForLegalView(view) {
 export function isLegalPathname(pathname) {
   return getViewFromPathname(pathname) != null
 }
+
+/** Browser path for a top-level view (legal pages have dedicated paths; app views use /). */
+export function pathnameForView(view) {
+  return isLegalView(view) ? pathForLegalView(view) : '/'
+}

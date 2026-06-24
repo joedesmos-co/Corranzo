@@ -39,7 +39,7 @@ import {
   getViewFromPathname,
   isLegalPathname,
   isLegalView,
-  pathForLegalView,
+  pathnameForView,
 } from './features/legal/legalRoutes.js'
 import { resolveRestoredActiveView } from './features/session/sessionRestoreRouting.js'
 import './App.css'
@@ -90,23 +90,13 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
-  const syncUrlForView = useCallback((view) => {
-    const nextPath = isLegalView(view) ? pathForLegalView(view) : '/'
+  const navigateToView = useCallback((view) => {
+    setActiveView(view)
+    const nextPath = pathnameForView(view)
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath)
     }
   }, [])
-
-  useEffect(() => {
-    const pathView = getViewFromPathname(window.location.pathname)
-    if (pathView) {
-      if (activeView !== pathView) {
-        setActiveView(pathView)
-      }
-      return
-    }
-    syncUrlForView(activeView)
-  }, [activeView, syncUrlForView])
 
   useEffect(() => {
     return () => {
@@ -362,7 +352,7 @@ export default function App() {
     markDemoCardHidden()
   }, [markDemoCardHidden])
 
-  const onLegalRoute = isLegalView(activeView) || isLegalPathname(window.location.pathname)
+  const onLegalRoute = isLegalPathname(window.location.pathname)
 
   const sessionPersistence = useSessionPersistence({
     pdfBuffer,
@@ -402,10 +392,10 @@ export default function App() {
         type: 'info',
         message: 'Add a PDF and MusicXML/MXL first — then Practice will open.',
       })
-      setActiveView('library')
+      navigateToView('library')
       return
     }
-    setActiveView(view)
+    navigateToView(view)
   }
 
   const showLibraryIntro = activeView === 'library' && showWelcome && restoreGateOpen
@@ -511,7 +501,7 @@ export default function App() {
       {activeView === 'contact' && <ContactPage />}
 
       {(activeView === 'library' || activeView === 'profile' || isLegalView(activeView)) && (
-        <AppFooter onLegalNavigate={setActiveView} />
+        <AppFooter onLegalNavigate={navigateToView} />
       )}
     </div>
   )
