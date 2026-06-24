@@ -17,7 +17,13 @@ function formatNoteRef(note) {
  * Rendered ONLY when `nextGen` is supplied (the score-follow hook supplies it
  * only when the feature flag is enabled), so default behavior is unchanged.
  */
-function NextGenAlignmentBlock({ nextGen, showCandidates, onToggleCandidates }) {
+function NextGenAlignmentBlock({
+  nextGen,
+  showCandidates,
+  onToggleCandidates,
+  anchorSource,
+  promotion,
+}) {
   if (!nextGen?.available) {
     return null
   }
@@ -60,6 +66,18 @@ function NextGenAlignmentBlock({ nextGen, showCandidates, onToggleCandidates }) 
           <dt>Page/system</dt>
           <dd>{pageSystem?.label ?? '—'}</dd>
         </div>
+        {anchorSource && (
+          <div>
+            <dt>Active anchor source</dt>
+            <dd>{promotion?.activeSourceLabel ?? anchorSource}</dd>
+          </div>
+        )}
+        {promotion && (
+          <div>
+            <dt>Promotion</dt>
+            <dd>{promotion.useGenerated ? 'generated (validated)' : `fallback (${promotion.reason})`}</dd>
+          </div>
+        )}
       </dl>
 
       {(decision?.reasons ?? []).length > 0 && (
@@ -99,12 +117,16 @@ export default function AlignmentDiagnosticsSection({
   nextGen = null,
   showCandidates = false,
   onToggleCandidates = null,
+  anchorSource = null,
+  promotion = null,
 }) {
   const nextGenBlock = (
     <NextGenAlignmentBlock
       nextGen={nextGen}
       showCandidates={showCandidates}
       onToggleCandidates={onToggleCandidates}
+      anchorSource={anchorSource}
+      promotion={promotion}
     />
   )
   if (isLoading) {

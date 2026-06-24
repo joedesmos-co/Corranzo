@@ -29,6 +29,8 @@ import useScoreFollowAnchors from './useScoreFollowAnchors.js'
 import useScoreFollowDisplayCursor from './useScoreFollowDisplayCursor.js'
 import { isNextGenAlignmentDiagnosticsEnabled } from './nextGenAlignmentFlag.js'
 import { deriveNextGenAlignmentDiagnostics } from './nextGenAlignmentDiagnostics.js'
+import { compareAnchorSets, assessPromotionReadiness } from './anchorComparison.js'
+import { buildPromotionDecision, resolveActiveAnchorSource } from './anchorPromotion.js'
 import {
   areBundledDemoAnchorsDisabled,
   fetchDemoBundledAnchors,
@@ -967,6 +969,49 @@ export default function useScoreFollow({
     return nextGenDiagnostics?.candidateAnchors ?? null
   }, [nextGenEnabled, showNextGenCandidates, nextGenDiagnostics])
 
+  // ---------------------------------------------------------------------------
+  // Phase 5b — runtime promotion layer (FLAG-GATED, SAFE FALLBACK).
+  //
+  // Decides whether validated generated anchors may drive runtime score-follow,
+  // reusing the Phase 5a readiness framework. The decision path is:
+  //   READY → generated allowed | NEEDS_REVIEW / NOT_SAFE → existing behavior.
+  //
+  // Safety: promotion never replaces bundled demo anchors (isDemoSession is
+  // excluded), never fires unless the flag is on, and falls back automatically
+  // whenever readiness is not READY. At runtime, generated candidate geometry is
+  // estimated (not pixel-accurate), so it does not match the calibrated bundled
+  // anchors → readiness is NOT_SAFE → the existing path is preserved. This
+  // surfaces the decision + active source for diagnostics WITHOUT changing how
+  // anchors are applied or how the cursor resolves.
+  // ---------------------------------------------------------------------------
+  const anchorPromotion = useMemo(() => {
+    if (!nextGenEnabled) {
+      return {
+        enabled: false,
+        useGenerated: false,
+        reason: 'flag-disabled',
+        status: null,
+        statusReasons: [],
+        comparable: false,
+        activeSource: resolveActiveAnchorSource({ useGenerated: false, anchorCounts }),
+        activeSourceLabel: null,
+      }
+    }
+    const generated = nextGenDiagnostics?.candidateAnchors ?? []
+    // The only trusted runtime reference is the bundled demo anchor set.
+    const referenceAnchors = anchors.filter((anchor) => anchor.source === ANCHOR_SOURCE.DEMO)
+    const comparison = compareAnchorSets(generated, referenceAnchors)
+    const readiness = assessPromotionReadiness(comparison)
+    return buildPromotionDecision({
+      enabled: true,
+      isDemoSession,
+      comparison,
+      readiness,
+      anchorCounts,
+      generatedAnchors: generated,
+    })
+  }, [nextGenEnabled, nextGenDiagnostics, anchors, anchorCounts, isDemoSession])
+
   const debug = useMemo(
     () => ({
       currentMeasureNumber: currentMeasure?.number ?? null,
@@ -1004,6 +1049,9 @@ export default function useScoreFollow({
       timingSourceId: timingSourceId ?? null,
       // Dev-only auto-setup analysis report (null until auto setup runs).
       autoSetup: autoSetupReport,
+      // Phase 5b: which anchor source is active + the promotion decision.
+      anchorSource: anchorPromotion.activeSource,
+      anchorPromotion,
     }),
     [
       currentMeasure,
@@ -1013,6 +1061,7 @@ export default function useScoreFollow({
       anchorCounts,
       anchorTrust,
       autoSetupReport,
+      anchorPromotion,
       cursor,
       practiceTime,
       timingSourceId,
@@ -1084,5 +1133,9 @@ export default function useScoreFollow({
     nextGenCandidateAnchors,
     showNextGenCandidates,
     setShowNextGenCandidates,
+    // Phase 5b (flag-gated): runtime promotion decision + active anchor source.
+    // Diagnostics only — falls back to existing behavior unless readiness=READY.
+    anchorPromotion,
+    anchorSource: anchorPromotion.activeSource,
   }
 }

@@ -93,6 +93,8 @@ export default function PracticeDiagnosticsPanel({ session, scoreFollow }) {
                 nextGen={scoreFollow.nextGenDiagnostics}
                 showCandidates={scoreFollow.showNextGenCandidates}
                 onToggleCandidates={scoreFollow.setShowNextGenCandidates}
+                anchorSource={scoreFollow.anchorSource}
+                promotion={scoreFollow.anchorPromotion}
               />
             )}
           </div>

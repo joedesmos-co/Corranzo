@@ -179,6 +179,9 @@ async function runCompare() {
     formatAnchorComparisonText,
     PROMOTION_STATUS,
   } = await import('../src/features/score-follow/anchorComparison.js')
+  const { buildPromotionDecision } = await import(
+    '../src/features/score-follow/anchorPromotion.js'
+  )
 
   const comparableStatuses = []
 
@@ -189,9 +192,23 @@ async function runCompare() {
     const comparison = compareAnchorSets(generated.anchors, reference)
     const readiness = comparison.comparable ? assessPromotionReadiness(comparison) : null
 
+    // Phase 5b: how the promotion gate would decide for a (non-demo) session.
+    const promotion = buildPromotionDecision({
+      enabled: true,
+      isDemoSession: false,
+      comparison,
+      readiness,
+      anchorCounts: { auto: generated.anchors.length },
+      generatedAnchors: generated.anchors,
+    })
+
     console.log('='.repeat(60))
     console.log(`${fixture.title}  [${fixture.license}]`)
     console.log(formatAnchorComparisonText(comparison, readiness))
+    console.log(
+      `  Promotion gate: ${promotion.useGenerated ? 'USE GENERATED' : 'fall back'} ` +
+        `(${promotion.reason})`,
+    )
     console.log('')
 
     if (readiness) {
