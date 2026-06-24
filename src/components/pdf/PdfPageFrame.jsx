@@ -94,7 +94,22 @@ export default function PdfPageFrame({
     : null
 
   return (
-    <div className="pdf-page-frame" ref={frameRef}>
+    <div
+      className="pdf-page-frame"
+      ref={frameRef}
+      style={
+        width
+          ? {
+              minWidth: width,
+              minHeight:
+                height ??
+                (overlayLayout?.height > 0 ? overlayLayout.height : undefined),
+            }
+          : height
+            ? { minHeight: height }
+            : undefined
+      }
+    >
       <PdfPage
         pageNumber={pageNumber}
         width={width}

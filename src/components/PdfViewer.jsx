@@ -9,6 +9,7 @@ import useAnnotationPersistence from '../hooks/useAnnotationPersistence.js'
 import { getPageDimensions } from '../utils/pdfFit.js'
 import { ANNOTATION_TOOLS } from './pdf/annotationConstants.js'
 import PdfFullscreen from './pdf/PdfFullscreen.jsx'
+import PdfAdjacentPagePreloader from './pdf/PdfAdjacentPagePreloader.jsx'
 import PdfPageFrame from './pdf/PdfPageFrame.jsx'
 import PdfViewerToolbar from './pdf/PdfViewerToolbar.jsx'
 import ScoreFollowControls from './pdf/ScoreFollowControls.jsx'
@@ -46,8 +47,6 @@ export default function PdfViewer({
   const [fitMode, setFitMode] = useState('page')
   const [pageSize, setPageSize] = useState(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const [pageTurnActive, setPageTurnActive] = useState(false)
-  const skipPageTurnOnMountRef = useRef(true)
 
   const {
     activeTool,
@@ -89,7 +88,6 @@ export default function PdfViewer({
 
   useEffect(() => {
     setPageSize(null)
-    skipPageTurnOnMountRef.current = true
   }, [file])
 
   const handleStrokeComplete = useCallback(
@@ -138,16 +136,6 @@ export default function PdfViewer({
     }
   }, [actionsRef])
 
-  useEffect(() => {
-    if (skipPageTurnOnMountRef.current) {
-      skipPageTurnOnMountRef.current = false
-      return undefined
-    }
-    setPageTurnActive(true)
-    const timer = window.setTimeout(() => setPageTurnActive(false), 220)
-    return () => window.clearTimeout(timer)
-  }, [pageNumber])
-
   const practiceContext = usePracticeSessionContextOptional()
   const practiceSession = practiceContext?.session ?? null
   const scoreFollow = practiceContext?.scoreFollow ?? null
@@ -173,7 +161,7 @@ export default function PdfViewer({
   function renderPdfPage(scoreFollowProps) {
     return (
       <PdfPageFrame
-        key={`${file}-${pageNumber}`}
+        key={String(file)}
         pageNumber={pageNumber}
         width={pageDimensions.width}
         height={pageDimensions.height}
@@ -262,7 +250,7 @@ export default function PdfViewer({
 
           <div
             ref={canvasRef}
-            className={`pdf-canvas pdf-canvas--fit-${fitMode} pdf-canvas--paper-${paperTheme}${pageTurnActive ? ' pdf-canvas--page-turn' : ''}`}
+            className={`pdf-canvas pdf-canvas--fit-${fitMode} pdf-canvas--paper-${paperTheme}`}
           >
           {!file ? (
             <p className="pdf-canvas__placeholder">
@@ -279,6 +267,12 @@ export default function PdfViewer({
                 </p>
               }
             >
+              <PdfAdjacentPagePreloader
+                pageNumber={pageNumber}
+                numPages={numPages}
+                width={pageDimensions.width}
+                height={pageDimensions.height}
+              />
               {isPracticeEmbed ? (
                 <PracticePdfCursorLayer pageNumber={pageNumber}>
                   {(scoreFollowProps) => renderPdfPage(scoreFollowProps)}

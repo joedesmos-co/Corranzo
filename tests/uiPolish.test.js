@@ -1,5 +1,5 @@
 /**
- * UI polish regressions — fullscreen chrome + library sidebar toggle.
+ * UI polish regressions — fullscreen chrome, sidebar toggle, PDF navigation.
  * CSS/structure only; no score-follow, playback, or practice logic.
  */
 import { describe, expect, it } from 'vitest'
@@ -22,7 +22,7 @@ describe('fullscreen chrome auto-hide', () => {
     expect(fullscreen).not.toMatch(/onPointerDown=\{handleActivity\}/)
   })
 
-  it('reveals chrome only from top/bottom edge zones when hidden', () => {
+  it('reveals chrome only from targeted edge zones when hidden', () => {
     expect(fullscreen).toMatch(/pdf-fullscreen__chrome-zone--top/)
     expect(fullscreen).toMatch(/pdf-fullscreen__chrome-zone--bottom/)
     expect(fullscreen).toMatch(/!chromeVisible/)
@@ -41,5 +41,28 @@ describe('library sidebar reopen toggle', () => {
   it('adds a stronger expand state when the sidebar is collapsed', () => {
     expect(viewer).toMatch(/sidebar-toggle--expand/)
     expect(css).toMatch(/\.sidebar-toggle--expand\s*\{/)
+  })
+})
+
+describe('PDF page navigation responsiveness', () => {
+  const viewer = readSrc('components', 'PdfViewer.jsx')
+  const css = readFileSync(join(root, 'src', 'App.css'), 'utf8')
+
+  it('preloads adjacent pages inside the Document', () => {
+    expect(viewer).toMatch(/PdfAdjacentPagePreloader/)
+    const preloader = readSrc('components', 'pdf', 'PdfAdjacentPagePreloader.jsx')
+    expect(preloader).toMatch(/pageNumber - 1/)
+    expect(preloader).toMatch(/pageNumber \+ 1/)
+  })
+
+  it('avoids remounting the page frame on every page change', () => {
+    expect(viewer).toMatch(/key=\{String\(file\)\}/)
+    expect(viewer).not.toMatch(/key=\{`\$\{file\}-\$\{pageNumber\}`\}/)
+  })
+
+  it('drops the page-turn animation that delayed perceived navigation', () => {
+    expect(viewer).not.toMatch(/pageTurnActive/)
+    expect(css).not.toMatch(/pdf-page-turn-in/)
+    expect(css).not.toMatch(/pdf-canvas--page-turn/)
   })
 })

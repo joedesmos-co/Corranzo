@@ -12,6 +12,7 @@ export default function PdfPage({ pageNumber, width, height, onPageLoadSuccess }
       pageNumber={pageNumber}
       {...sizeProps}
       onLoadSuccess={onPageLoadSuccess}
+      loading={null}
       renderTextLayer={false}
       renderAnnotationLayer={false}
     />
