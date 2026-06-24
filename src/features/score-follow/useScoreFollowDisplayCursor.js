@@ -67,6 +67,23 @@ export default function useScoreFollowCursorDriver({
       return undefined
     }
 
+    const publishNow = () => {
+      const rtResolve = resolveRealtimeCursorRef.current
+      const rtGetTime = getScoreTimeRef.current
+      const target =
+        rtResolve && rtGetTime ? rtResolve(rtGetTime()) : targetRef.current
+      if (target?.visible) {
+        stateRef.current.x = target.x
+        stateRef.current.y = target.y
+        stateRef.current.page = target.page
+        stateRef.current.measureNumber = target.measureNumber ?? null
+        stateRef.current.initialized = true
+        publishScoreFollowCursor({ ...target, smoothed: false })
+      }
+    }
+
+    publishNow()
+
     let frameId = 0
 
     const tick = () => {

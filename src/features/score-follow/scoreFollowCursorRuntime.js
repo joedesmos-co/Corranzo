@@ -21,6 +21,7 @@ export function getScoreFollowCursorSnapshot() {
 
 export function subscribeScoreFollowCursor(listener) {
   listeners.add(listener)
+  listener()
   return () => listeners.delete(listener)
 }
 

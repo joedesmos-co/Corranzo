@@ -32,7 +32,10 @@ import {
 } from './scoreFollowVisibility.js'
 import useScoreFollowAnchors from './useScoreFollowAnchors.js'
 import useScoreFollowCursorDriver from './useScoreFollowDisplayCursor.js'
-import { getScoreFollowCursorSnapshot } from './scoreFollowCursorRuntime.js'
+import {
+  getScoreFollowCursorSnapshot,
+  publishScoreFollowCursor,
+} from './scoreFollowCursorRuntime.js'
 import { buildMeasureBoundaryDiagnostic } from './measureBoundaryDiagnostics.js'
 import { buildHeldNoteDiagnostic } from './heldNoteDiagnostics.js'
 import { buildScoreFollowPrecisionReport } from './scoreFollowPrecisionDiagnostics.js'
@@ -317,7 +320,12 @@ export default function useScoreFollow({
       !lockExactCursor,
   )
 
-  const resetSnapKey = `${timingSourceId ?? ''}`
+  const resetSnapKey = [
+    timingSourceId ?? '',
+    followNeedsSetup ? 'setup' : 'ready',
+    trustedAnchors.length,
+    anchorTrust.showCursor ? 1 : 0,
+  ].join(':')
 
   // Real-time cursor resolver: called every animation frame by the display
   // cursor hook so the cursor position advances continuously (not just at the
@@ -346,6 +354,24 @@ export default function useScoreFollow({
     getScoreTime: realtimeCursorActive ? getScoreTime : null,
     resolveRealtimeCursor: realtimeCursorActive ? resolveRealtimeCursor : null,
   })
+
+  useEffect(() => {
+    if (realtimeCursorActive || followNeedsSetup || !enabled || !cursor?.visible) {
+      return
+    }
+    publishScoreFollowCursor({ ...cursor, smoothed: false })
+  }, [
+    realtimeCursorActive,
+    followNeedsSetup,
+    enabled,
+    cursor?.visible,
+    cursor?.x,
+    cursor?.y,
+    cursor?.page,
+    cursor?.measureNumber,
+    cursor?.lockExact,
+    cursor?.progressMode,
+  ])
 
   const displayCursor = realtimeCursorActive
     ? getScoreFollowCursorSnapshot()

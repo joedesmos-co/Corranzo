@@ -44,15 +44,17 @@ describe('scoreFollowCursorRuntime', () => {
   it('publishes cursor snapshots to subscribers without duplicate writes', () => {
     const listener = vi.fn()
     const unsub = subscribeScoreFollowCursor(listener)
-    publishScoreFollowCursor({ visible: true, page: 1, x: 0.2, y: 0.3 })
     expect(listener).toHaveBeenCalledTimes(1)
+
+    publishScoreFollowCursor({ visible: true, page: 1, x: 0.2, y: 0.3 })
+    expect(listener).toHaveBeenCalledTimes(2)
     expect(getScoreFollowCursorSnapshot().x).toBe(0.2)
 
     publishScoreFollowCursor({ visible: true, page: 1, x: 0.2, y: 0.3 })
-    expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener).toHaveBeenCalledTimes(2)
 
     publishScoreFollowCursor({ visible: true, page: 1, x: 0.21, y: 0.3 })
-    expect(listener).toHaveBeenCalledTimes(2)
+    expect(listener).toHaveBeenCalledTimes(3)
     unsub()
   })
 })
