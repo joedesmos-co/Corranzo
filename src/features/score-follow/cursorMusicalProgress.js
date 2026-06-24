@@ -5,6 +5,7 @@ import {
   getPerformedBeats,
   usesPerformedTimeline,
 } from '../musicxml/performedTimeline.js'
+import { getTempoAtTime } from '../musicxml/timingMath.js'
 import { clamp, lerp } from './scoreFollowEasing.js'
 
 /** Continuous interpolation — cursor reaches note x exactly at onset time (no early snap). */
@@ -12,11 +13,83 @@ export const ONSET_SNAP_SECONDS = 0
 
 const CHORD_GROUP_SECONDS = 0.012
 
-/** Notes longer than this keep the cursor parked at the notehead until release. */
+/** Notes longer than this may use a hold plateau before gliding to the next onset. */
 export const HELD_NOTE_THRESHOLD_SECONDS = 0.55
 
-/** Fraction of written duration spent gliding toward the next onset after a hold plateau. */
-const HELD_GLIDE_TAIL_FRACTION = 0.22
+/** Fast-tempo held notes park at the notehead for this fraction before gliding. */
+export const FAST_TEMPO_GLIDE_FRACTION = 0.22
+
+/** Tempos at or above this keep the fast-tempo plateau profile. */
+export const FAST_TEMPO_BPM = 100
+
+/** Tempos at or below this use the slow-tempo glide profile. */
+export const SLOW_TEMPO_BPM = 72
+
+/** Slow tempos cap how long the cursor can stay frozen at a notehead. */
+export const SLOW_MAX_PLATEAU_SECONDS = 0.28
+
+/** Brief onset lock so the cursor is on the notehead when the note sounds. */
+export const HELD_ONSET_LOCK_SECONDS = 0.04
+
+/** When glide dominates, skip the hold-end knot and use bounded linear motion. */
+export const CONTINUOUS_GLIDE_FRACTION = 0.65
+
+/**
+ * Tempo-aware hold profile for a sustained note through the next onset.
+ */
+export function resolveHeldNoteGlideProfile(
+  timingMap,
+  onsetTimeSeconds,
+  durationSeconds,
+  nextTimeSeconds,
+) {
+  const tempoBpm = getTempoAtTime(timingMap, onsetTimeSeconds)
+  const gapSeconds = Math.max(nextTimeSeconds - onsetTimeSeconds, 0.001)
+  const writtenSpan = Math.min(durationSeconds, gapSeconds)
+
+  if (tempoBpm < FAST_TEMPO_BPM && writtenSpan > HELD_NOTE_THRESHOLD_SECONDS) {
+    const plateauSeconds = Math.min(HELD_ONSET_LOCK_SECONDS, writtenSpan - 0.03)
+    const glideSeconds = Math.max(writtenSpan - plateauSeconds, 0.001)
+    return {
+      tempoBpm,
+      plateauSeconds,
+      glideSeconds,
+      plateauFraction: plateauSeconds / writtenSpan,
+      glideFraction: glideSeconds / writtenSpan,
+      writtenSpan,
+      useContinuousGlide: true,
+    }
+  }
+
+  const slowFactor = clamp(
+    (FAST_TEMPO_BPM - tempoBpm) / (FAST_TEMPO_BPM - SLOW_TEMPO_BPM),
+    0,
+    1,
+  )
+
+  const fastPlateauSeconds = writtenSpan * (1 - FAST_TEMPO_GLIDE_FRACTION)
+  const slowPlateauCap = Math.min(
+    SLOW_MAX_PLATEAU_SECONDS,
+    writtenSpan * 0.14,
+  )
+  let plateauSeconds = lerp(fastPlateauSeconds, slowPlateauCap, slowFactor)
+  plateauSeconds = Math.max(plateauSeconds, HELD_ONSET_LOCK_SECONDS)
+  plateauSeconds = Math.min(plateauSeconds, writtenSpan - 0.03)
+
+  const glideSeconds = Math.max(writtenSpan - plateauSeconds, 0.001)
+  const plateauFraction = plateauSeconds / writtenSpan
+  const glideFraction = glideSeconds / writtenSpan
+
+  return {
+    tempoBpm,
+    plateauSeconds,
+    glideSeconds,
+    plateauFraction,
+    glideFraction,
+    writtenSpan,
+    useContinuousGlide: glideFraction >= CONTINUOUS_GLIDE_FRACTION,
+  }
+}
 
 function beatWeightedProgress(timingMap, practiceTime, t0, t1) {
   if (t1 <= t0) {
@@ -156,10 +229,10 @@ export function buildMeasureMusicalEvents(
     }
   }
 
-  return insertHoldPlateaus(deduped, window)
+  return insertHoldPlateaus(deduped, window, timingMap)
 }
 
-function insertHoldPlateaus(events, window) {
+function insertHoldPlateaus(events, window, timingMap) {
   const withHolds = []
   for (let index = 0; index < events.length; index += 1) {
     const event = events[index]
@@ -173,8 +246,17 @@ function insertHoldPlateaus(events, window) {
     }
     const next = events[index + 1]
     const nextTime = next?.timeSeconds ?? window.endTimeSeconds
+    const profile = resolveHeldNoteGlideProfile(
+      timingMap,
+      event.timeSeconds,
+      duration,
+      nextTime,
+    )
+    if (profile.useContinuousGlide) {
+      continue
+    }
     const holdEnd = Math.min(
-      event.timeSeconds + duration * (1 - HELD_GLIDE_TAIL_FRACTION),
+      event.timeSeconds + profile.plateauSeconds,
       nextTime - 0.001,
     )
     if (holdEnd > event.timeSeconds + 0.02) {
@@ -182,6 +264,7 @@ function insertHoldPlateaus(events, window) {
         timeSeconds: holdEnd,
         x: event.x,
         kind: 'hold-end',
+        holdProfile: profile,
       })
     }
   }

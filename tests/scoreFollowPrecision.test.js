@@ -14,6 +14,8 @@ import {
 import {
   buildMeasureMusicalEvents,
   resolveMusicalXInMeasure,
+  resolveHeldNoteGlideProfile,
+  FAST_TEMPO_BPM,
 } from '../src/features/score-follow/cursorMusicalProgress.js'
 import { buildMeasureBoundaryDiagnostic } from '../src/features/score-follow/measureBoundaryDiagnostics.js'
 import { buildHeldNoteDiagnostic } from '../src/features/score-follow/heldNoteDiagnostics.js'
@@ -194,6 +196,80 @@ describe('cursorMusicalProgress', () => {
       maxOvershoot = Math.max(maxOvershoot, musical.x - nextQuarter.x)
     }
     expect(maxOvershoot).toBeLessThan(0.001)
+  })
+
+  it('uses continuous glide at slow tempo instead of a long plateau', () => {
+    const timingMap = parseMusicXml(
+      F.scoreWrap(
+        `<part id="P1">
+          <measure number="1">
+            ${F.attributes({ divisions: 4 })}
+            ${F.soundTempo(60)}
+            <note default-x="40"><pitch><step>C</step><octave>4</octave></pitch><duration>8</duration><type>half</type></note>
+            <note default-x="120"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+            <note default-x="160"><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+          </measure>
+        </part>`,
+      ),
+    )
+    const events = buildMeasureMusicalEvents(
+      timingMap,
+      1,
+      { startTimeSeconds: 0, endTimeSeconds: 4 },
+      0.1,
+      0.35,
+    )
+    expect(events.some((event) => event.kind === 'hold-end')).toBe(false)
+
+    const profile = resolveHeldNoteGlideProfile(timingMap, 0, 2, 2)
+    expect(profile.tempoBpm).toBe(60)
+    expect(profile.useContinuousGlide).toBe(true)
+    expect(profile.plateauSeconds).toBeLessThan(0.1)
+
+    const atOnset = resolveMusicalXInMeasure({
+      timingMap,
+      practiceTime: 0,
+      measureNumber: 1,
+      xStart: 0.1,
+      xEnd: 0.35,
+    })
+    const midHold = resolveMusicalXInMeasure({
+      timingMap,
+      practiceTime: 0.75,
+      measureNumber: 1,
+      xStart: 0.1,
+      xEnd: 0.35,
+    })
+    expect(midHold.x).toBeGreaterThan(atOnset.x + 0.002)
+    expect(midHold.mode).toBe('note-interpolate')
+  })
+
+  it('keeps fast-tempo held-note plateau behavior at 120bpm', () => {
+    const timingMap = parseMusicXml(
+      F.scoreWrap(
+        `<part id="P1">
+          <measure number="1">
+            ${F.attributes({ divisions: 4 })}
+            ${F.soundTempo(120)}
+            <note default-x="40"><pitch><step>C</step><octave>4</octave></pitch><duration>8</duration><type>half</type></note>
+            <note default-x="120"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+          </measure>
+        </part>`,
+      ),
+    )
+    const profile = resolveHeldNoteGlideProfile(timingMap, 0, 1, 1)
+    expect(profile.tempoBpm).toBeGreaterThanOrEqual(FAST_TEMPO_BPM)
+    expect(profile.useContinuousGlide).toBe(false)
+    expect(profile.plateauSeconds).toBeGreaterThan(0.5)
+
+    const events = buildMeasureMusicalEvents(
+      timingMap,
+      1,
+      { startTimeSeconds: 0, endTimeSeconds: 2 },
+      0.1,
+      0.35,
+    )
+    expect(events.some((event) => event.kind === 'hold-end')).toBe(true)
   })
 })
 
@@ -440,6 +516,51 @@ describe('resolveScoreFollowCursor precision', () => {
     expect(diag.active).toBe(true)
     expect(diag.maxOvershoot).toBeLessThan(0.001)
     expect(diag.maxBacktrack).toBeLessThan(0.001)
+  })
+
+  it('slow half-note measure glides steadily without a long stall', () => {
+    const slow = parseMusicXml(
+      F.scoreWrap(
+        `<part id="P1">
+          <measure number="1">
+            ${F.attributes({ divisions: 4 })}
+            ${F.soundTempo(60)}
+            <note default-x="40"><pitch><step>C</step><octave>4</octave></pitch><duration>8</duration><type>half</type></note>
+            <note default-x="120"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+            <note default-x="160"><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+          </measure>
+        </part>`,
+      ),
+    )
+    const slowAnchors = anchorsForMeasures(1, { playableSpan: 0.2 })
+    const xs = []
+    for (let t = 0.08; t < 2; t += 0.08) {
+      const { cursor } = resolveScoreFollowCursor({
+        timingMap: slow,
+        practiceTime: t,
+        trustedAnchors: slowAnchors,
+        trust: { showCursor: true, needsSetup: false },
+      })
+      xs.push(cursor.x)
+    }
+    for (let index = 1; index < xs.length; index += 1) {
+      expect(xs[index]).toBeGreaterThanOrEqual(xs[index - 1] - 0.0001)
+    }
+    const midIndex = Math.floor(xs.length / 3)
+    expect(xs[midIndex]).toBeGreaterThan(xs[0] + 0.003)
+
+    const diag = buildHeldNoteDiagnostic({
+      timingMap: slow,
+      trustedAnchors: slowAnchors,
+      measureNumber: 1,
+      sampleStepSeconds: 0.08,
+    })
+    expect(diag.active).toBe(true)
+    expect(diag.isSlowMeasure).toBe(true)
+    expect(diag.holdProfiles[0]?.useContinuousGlide).toBe(true)
+    expect(diag.maxOvershoot).toBeLessThan(0.001)
+    expect(diag.maxBacktrack).toBeLessThan(0.001)
+    expect(diag.maxPlateauStallSeconds).toBeLessThan(0.12)
   })
 })
 

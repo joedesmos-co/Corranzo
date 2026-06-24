@@ -1,8 +1,11 @@
 import { getMeasurePlaybackWindow } from '../musicxml/performedTimeline.js'
+import { getTempoAtTime } from '../musicxml/timingMath.js'
 import {
   buildMeasureMusicalEvents,
   HELD_NOTE_THRESHOLD_SECONDS,
+  resolveHeldNoteGlideProfile,
   resolveMusicalXInMeasure,
+  SLOW_TEMPO_BPM,
 } from './cursorMusicalProgress.js'
 import { resolveTrustedAnchorForMeasure } from './trustedAnchors.js'
 
@@ -26,8 +29,59 @@ function anchorExtents(anchor) {
   return { xStart, xEnd }
 }
 
+function segmentVelocity(before, after) {
+  const dt = after.timeSeconds - before.timeSeconds
+  if (dt <= 0) {
+    return 0
+  }
+  return (after.x - before.x) / dt
+}
+
+function buildHoldProfiles(events, timingMap, window) {
+  const profiles = []
+  for (let index = 0; index < events.length; index += 1) {
+    const event = events[index]
+    if (event.kind !== 'note' && event.kind !== 'chord') {
+      continue
+    }
+    const duration = event.durationSeconds ?? 0
+    if (duration <= HELD_NOTE_THRESHOLD_SECONDS) {
+      continue
+    }
+    const next = events.find(
+      (candidate, candidateIndex) =>
+        candidateIndex > index &&
+        (candidate.kind === 'note' ||
+          candidate.kind === 'chord' ||
+          candidate.kind === 'measure-end' ||
+          candidate.kind === 'bridge-next'),
+    )
+    const nextTime = next?.timeSeconds ?? window.endTimeSeconds
+    const profile = resolveHeldNoteGlideProfile(
+      timingMap,
+      event.timeSeconds,
+      duration,
+      nextTime,
+    )
+    profiles.push({
+      onsetTimeSeconds: event.timeSeconds,
+      onsetX: event.x,
+      durationSeconds: duration,
+      nextOnsetTimeSeconds: nextTime,
+      nextOnsetX: next?.x ?? null,
+      tempoBpm: profile.tempoBpm,
+      plateauSeconds: profile.plateauSeconds,
+      glideSeconds: profile.glideSeconds,
+      plateauFraction: profile.plateauFraction,
+      glideFraction: profile.glideFraction,
+      useContinuousGlide: profile.useContinuousGlide,
+    })
+  }
+  return profiles
+}
+
 /**
- * Dev diagnostic for held-note cursor behavior inside one measure.
+ * Dev diagnostic for held-note / slow-tempo cursor behavior inside one measure.
  */
 export function buildHeldNoteDiagnostic({
   timingMap,
@@ -47,20 +101,21 @@ export function buildHeldNoteDiagnostic({
 
   const { xStart, xEnd } = anchorExtents(anchor)
   const events = buildMeasureMusicalEvents(timingMap, measureNumber, window, xStart, xEnd)
-  const heldEvents = events.filter(
-    (event) =>
-      (event.kind === 'note' || event.kind === 'chord') &&
-      (event.durationSeconds ?? 0) > HELD_NOTE_THRESHOLD_SECONDS,
-  )
+  const holdProfiles = buildHoldProfiles(events, timingMap, window)
+  const measureTempoBpm = getTempoAtTime(timingMap, windowMidTime(timingMap, measureNumber))
+  const isSlowMeasure = measureTempoBpm <= SLOW_TEMPO_BPM
 
-  if (!heldEvents.length) {
-    return { active: false, reason: 'no-held-notes', measureNumber, events }
+  if (!holdProfiles.length && !isSlowMeasure) {
+    return { active: false, reason: 'no-held-notes', measureNumber, events, measureTempoBpm }
   }
 
   const samples = []
   let maxOvershoot = 0
   let maxBacktrack = 0
+  let maxPlateauStallSeconds = 0
   let prevX = null
+  let prevTime = null
+  let stallStart = null
 
   for (
     let t = window.startTimeSeconds + 0.02;
@@ -89,11 +144,31 @@ export function buildHeldNoteDiagnostic({
       backtrack = prevX - musical.x
       maxBacktrack = Math.max(maxBacktrack, backtrack)
     }
+
+    const velocity =
+      prevX != null && prevTime != null && t > prevTime
+        ? (musical.x - prevX) / (t - prevTime)
+        : 0
+    const isPlateau =
+      segment?.before?.kind === 'note' ||
+      segment?.before?.kind === 'chord' ||
+      segment?.before?.kind === 'hold-end'
+        ? segment.before.x === musical.x && segment.after.x > segment.before.x
+        : false
+    if (isPlateau && Math.abs(velocity) < 1e-5) {
+      stallStart = stallStart ?? t
+    } else if (stallStart != null) {
+      maxPlateauStallSeconds = Math.max(maxPlateauStallSeconds, t - stallStart)
+      stallStart = null
+    }
+
     prevX = musical.x
+    prevTime = t
 
     samples.push({
       practiceTime: t,
       x: musical.x,
+      velocity,
       mode: musical.mode,
       overshoot,
       backtrack,
@@ -103,6 +178,7 @@ export function buildHeldNoteDiagnostic({
             afterKind: segment.after.kind,
             beforeX: segment.before.x,
             afterX: segment.after.x,
+            segmentVelocity: segmentVelocity(segment.before, segment.after),
           }
         : null,
     })
@@ -111,14 +187,13 @@ export function buildHeldNoteDiagnostic({
   return {
     active: true,
     measureNumber,
-    heldEvents: heldEvents.map((event) => ({
-      timeSeconds: event.timeSeconds,
-      x: event.x,
-      durationSeconds: event.durationSeconds,
-    })),
+    measureTempoBpm,
+    isSlowMeasure,
+    holdProfiles,
     events,
     maxOvershoot,
     maxBacktrack,
+    maxPlateauStallSeconds,
     samples,
   }
 }
