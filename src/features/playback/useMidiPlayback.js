@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import * as Tone from 'tone'
+import { startToneFromUserGesture } from '../audio/toneAudioUnlock.js'
 import { formatMidiImportError } from '../import/formatImportError.js'
 import { MidiPlaybackEngine } from './midiPlaybackEngine.js'
 
@@ -109,7 +109,7 @@ export default function useMidiPlayback(midiSource) {
     }
 
     setIsPlaying(true)
-    const audioStart = Tone.start()
+    const audioStart = startToneFromUserGesture()
 
     engine
       .playFromUserGesture(audioStart)
@@ -141,7 +141,7 @@ export default function useMidiPlayback(midiSource) {
       return
     }
 
-    const audioStart = Tone.start()
+    const audioStart = startToneFromUserGesture()
     engine.playTestTone(audioStart).catch((playError) => {
       setError(formatMidiImportError(playError))
     })

@@ -128,7 +128,7 @@ export function PracticeSessionProvider({
   }, [])
 
   useEffect(() => {
-    return setupAudioVisibilityResume(() => [Tone.getContext()])
+    return setupAudioVisibilityResume(() => [Tone.getContext()], { onlyAfterUserUnlock: true })
   }, [])
 
   useEffect(() => {

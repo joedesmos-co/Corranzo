@@ -160,6 +160,31 @@ export async function defaultLoadSampler({ tone, baseUrl, urls, volume, release,
 }
 
 /**
+ * Fetch/decode piano samples without creating synth nodes or connecting audio output.
+ * Safe before user gesture — buffers decode while the context is suspended.
+ */
+export async function preloadPianoSampleBuffers({
+  tone,
+  sampleBaseUrl,
+  sampleUrls = PIANO_SAMPLE_URLS,
+  timeoutMs,
+} = {}) {
+  if (!tone) {
+    return
+  }
+  try {
+    await loadSharedBuffers({
+      tone,
+      baseUrl: resolveSampleBaseUrl(sampleBaseUrl),
+      urls: sampleUrls,
+      timeoutMs,
+    })
+  } catch {
+    // Non-fatal — playback falls back to the synth voice.
+  }
+}
+
+/**
  * Synchronous fast path: if the samples for this base URL are already decoded
  * (a previous instrument loaded them), build a Sampler immediately so playback
  * is sampled from the very first scheduled note — no synth-first window and no
@@ -181,7 +206,13 @@ export function createCachedSamplerSync({ tone, baseUrl, urls, volume, release }
 function createSynthVoice(tone, { volume = SYNTH_VOLUME_DB } = {}) {
   const filter = new tone.Filter({ type: 'lowpass', frequency: 3800, rolloff: -12 })
   const chorus = new tone.Chorus({ frequency: 0.5, delayTime: 3.5, depth: 0.12, wet: 0.08 })
-  chorus.start?.()
+  let chorusStarted = false
+  const ensureChorusRunning = () => {
+    if (!chorusStarted) {
+      chorus.start?.()
+      chorusStarted = true
+    }
+  }
 
   // High polyphony so dense two-hand chords + sustained/overlapping notes are
   // never voice-stolen on the synth fallback. (The sampler is not voice-capped.)
@@ -196,8 +227,10 @@ function createSynthVoice(tone, { volume = SYNTH_VOLUME_DB } = {}) {
   filter.connect(chorus)
 
   return {
-    triggerAttackRelease: (note, duration, time, velocity) =>
-      synth.triggerAttackRelease(note, duration, time, velocity),
+    triggerAttackRelease: (note, duration, time, velocity) => {
+      ensureChorusRunning()
+      synth.triggerAttackRelease(note, duration, time, velocity)
+    },
     releaseAll: (time) => synth.releaseAll?.(time),
     connect: (destination) => chorus.connect(destination),
     dispose: () => {

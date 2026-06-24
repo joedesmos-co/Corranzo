@@ -2,7 +2,7 @@ import { isSafariBrowser } from '../playback/audioEnvironment.js'
 
 let audioCapabilityCache = null
 
-/** Probe Web Audio unlock (user-gesture Tone.start). Result is cached for the session. */
+/** Probe Web Audio support without starting the context (no user gesture here). */
 export async function probeAudioPlaybackCapability() {
   if (audioCapabilityCache != null) {
     return audioCapabilityCache
@@ -13,8 +13,9 @@ export async function probeAudioPlaybackCapability() {
   }
   try {
     const tone = await import('tone')
-    await tone.start()
-    audioCapabilityCache = tone.getContext().state === 'running'
+    const state = tone.getContext().state
+    // running or suspended both mean playback can unlock on the next tap.
+    audioCapabilityCache = state === 'running' || state === 'suspended'
   } catch {
     audioCapabilityCache = false
   }

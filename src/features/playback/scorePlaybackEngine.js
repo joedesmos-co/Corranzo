@@ -1,4 +1,5 @@
 import * as Tone from 'tone'
+import { awaitToneStarted } from '../audio/toneAudioUnlock.js'
 import { getTimeline } from '../musicxml/timeline.js'
 import {
   buildCombinedPlaybackSchedule,
@@ -17,13 +18,12 @@ const loadPianoInstrumentModule = () => import('./pianoInstrument.js')
 function createMetronomeVoice() {
   // Slightly longer attack (3 ms) and shorter decay soften the click while
   // keeping the metronome distinct from the musical notes.
-  const synth = new Tone.MembraneSynth({
+  return new Tone.MembraneSynth({
     pitchDecay: 0.006,
     octaves: 2,
     envelope: { attack: 0.003, decay: 0.06, sustain: 0, release: 0.04 },
     volume: -20,
-  }).toDestination()
-  return synth
+  })
 }
 
 const MIDI_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -99,6 +99,8 @@ export class ScorePlaybackEngine {
           }
           if (!this.metronome) {
             this.metronome = createMetronomeVoice()
+            this.metronome.toDestination()
+            this.metronome.volume.value = Tone.gainToDb(0.15 + this.metronomeLevel * 0.55)
           }
         })
         .finally(() => {
@@ -109,13 +111,16 @@ export class ScorePlaybackEngine {
   }
 
   /**
-   * Create the instrument and begin fetching/decoding samples ahead of Play, so
-   * the first note plays on the sampled piano (no synth/beep intro). Safe before
-   * audio unlock — the suspended context still fetches + decodes buffers.
+   * Fetch/decode piano samples ahead of Play without wiring the audio graph.
+   * Safe before user gesture — suspended contexts still fetch + decode buffers.
    */
   async preload() {
     try {
-      await this.ensureVoices()
+      const module = await this.loadPianoInstrument()
+      if (!this.createPianoInstrument) {
+        this.createPianoInstrument = module.createPianoInstrument
+      }
+      await module.preloadPianoSampleBuffers({ tone: Tone })
     } catch {
       // Non-fatal — playFromUserGesture will retry instrument creation.
     }
@@ -342,11 +347,7 @@ export class ScorePlaybackEngine {
       return
     }
 
-    if (audioContextStart) {
-      await audioContextStart
-    } else if (Tone.getContext().state !== 'running') {
-      await Tone.start()
-    }
+    await awaitToneStarted(audioContextStart)
 
     await this.ensureVoices()
     // Wait briefly for the sampled piano so the first note is real piano, not
@@ -452,11 +453,7 @@ export class ScorePlaybackEngine {
   }
 
   async playTestTone(audioContextStart) {
-    if (audioContextStart) {
-      await audioContextStart
-    } else if (Tone.getContext().state !== 'running') {
-      await Tone.start()
-    }
+    await awaitToneStarted(audioContextStart)
 
     // Reuse the real instrument so the test tone also benefits from the sampled
     // piano (and starts loading it). It plays on the synth immediately if the

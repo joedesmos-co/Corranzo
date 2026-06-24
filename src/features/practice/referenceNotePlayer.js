@@ -1,14 +1,23 @@
 import * as Tone from 'tone'
+import { startToneFromUserGesture } from '../audio/toneAudioUnlock.js'
 
 let synth = null
+let synthConnected = false
 
 function getSynth() {
   if (!synth) {
     synth = new Tone.PolySynth(Tone.Synth, {
       envelope: { attack: 0.02, release: 0.4 },
-    }).toDestination()
+    })
   }
   return synth
+}
+
+function connectSynthToDestination() {
+  if (!synthConnected && synth) {
+    synth.toDestination()
+    synthConnected = true
+  }
 }
 
 function midiToNoteName(midi) {
@@ -23,7 +32,8 @@ export async function playReferenceMidis(midis, durationSeconds = 0.55) {
     return
   }
 
-  await Tone.start()
+  await startToneFromUserGesture()
+  connectSynthToDestination()
   const names = midis.map((midi) => midiToNoteName(midi))
   getSynth().triggerAttackRelease(names, durationSeconds)
 }
@@ -32,5 +42,6 @@ export function disposeReferencePlayer() {
   if (synth) {
     synth.dispose()
     synth = null
+    synthConnected = false
   }
 }

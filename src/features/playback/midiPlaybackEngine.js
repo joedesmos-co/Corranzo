@@ -1,4 +1,5 @@
 import * as Tone from 'tone'
+import { awaitToneStarted } from '../audio/toneAudioUnlock.js'
 import { parseMidiFile } from './parseMidiFile.js'
 import { INSTRUMENT_STATUS } from './pianoInstrumentStatus.js'
 
@@ -95,7 +96,6 @@ export class MidiPlaybackEngine {
 
     this.trackStates = midi.tracks.map((track, index) => {
       const output = new Tone.Gain(1)
-      output.toDestination()
 
       return {
         id: index,
@@ -105,6 +105,7 @@ export class MidiPlaybackEngine {
         notes: normalizeNoteEvents(track.notes),
         instrument: null,
         output,
+        outputToDestination: false,
       }
     })
     this.recomputeInstrumentStatus()
@@ -219,17 +220,23 @@ export class MidiPlaybackEngine {
     }
   }
 
+  connectTrackOutputsToDestination() {
+    for (const track of this.trackStates) {
+      if (!track.outputToDestination) {
+        track.output.toDestination()
+        track.outputToDestination = true
+      }
+    }
+  }
+
   async playFromUserGesture(audioContextStart) {
     if (!this.midi) {
       return
     }
 
-    if (audioContextStart) {
-      await audioContextStart
-    } else if (Tone.getContext().state !== 'running') {
-      await Tone.start()
-    }
+    await awaitToneStarted(audioContextStart)
 
+    this.connectTrackOutputsToDestination()
     this.clearScheduledPlayback()
     await this.ensureTrackInstruments()
 
@@ -285,11 +292,7 @@ export class MidiPlaybackEngine {
   }
 
   async playTestTone(audioContextStart) {
-    if (audioContextStart) {
-      await audioContextStart
-    } else if (Tone.getContext().state !== 'running') {
-      await Tone.start()
-    }
+    await awaitToneStarted(audioContextStart)
 
     if (!this.createPianoInstrument) {
       const module = await this.loadPianoInstrument()

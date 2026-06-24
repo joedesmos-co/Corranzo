@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import * as Tone from 'tone'
+import { startToneFromUserGesture } from '../audio/toneAudioUnlock.js'
 import { formatMidiImportError } from '../import/formatImportError.js'
 import { displayTempoAtTime } from './scorePlaybackSchedule.js'
 import { ScorePlaybackEngine } from './scorePlaybackEngine.js'
@@ -156,7 +156,7 @@ export default function useScorePlayback({
     }
 
     setIsPlaying(true)
-    const audioStart = Tone.start()
+    const audioStart = startToneFromUserGesture()
 
     engine.playFromUserGesture(audioStart).catch((playError) => {
       setError(formatMidiImportError(playError))
@@ -201,7 +201,7 @@ export default function useScorePlayback({
       return
     }
 
-    const audioStart = Tone.start()
+    const audioStart = startToneFromUserGesture()
     engine.playTestTone(audioStart).catch((playError) => {
       setError(formatMidiImportError(playError))
     })
