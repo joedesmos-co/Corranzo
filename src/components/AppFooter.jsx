@@ -3,10 +3,30 @@ import {
   FEEDBACK_EMAIL,
   FEEDBACK_MAILTO,
 } from '../features/beta/betaInfo.js'
+import { LEGAL_PATHS } from '../features/legal/legalRoutes.js'
 
-export default function AppFooter() {
+export default function AppFooter({ onLegalNavigate }) {
+  function handleLegalClick(event, view) {
+    if (!onLegalNavigate) {
+      return
+    }
+    event.preventDefault()
+    onLegalNavigate(view)
+  }
+
   return (
     <footer className="app-footer">
+      <nav className="app-footer__legal" aria-label="Legal">
+        <a href={LEGAL_PATHS.privacy} onClick={(event) => handleLegalClick(event, 'privacy')}>
+          Privacy Policy
+        </a>
+        <a href={LEGAL_PATHS.terms} onClick={(event) => handleLegalClick(event, 'terms')}>
+          Terms of Service
+        </a>
+        <a href={LEGAL_PATHS.contact} onClick={(event) => handleLegalClick(event, 'contact')}>
+          Contact
+        </a>
+      </nav>
       <span>Corranzo Beta v{BETA_VERSION}</span>
       <span>
         Feedback:{' '}

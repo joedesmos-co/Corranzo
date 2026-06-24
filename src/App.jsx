@@ -11,6 +11,9 @@ import PracticeView from './components/practice/PracticeView.jsx'
 import { PracticeSessionProvider } from './context/PracticeSessionContext.jsx'
 import { ProfileStatsProvider } from './context/ProfileStatsContext.jsx'
 import ProfileView from './components/profile/ProfileView.jsx'
+import PrivacyPolicyPage from './components/legal/PrivacyPolicyPage.jsx'
+import TermsOfServicePage from './components/legal/TermsOfServicePage.jsx'
+import ContactPage from './components/legal/ContactPage.jsx'
 import useWorkspacePreferences from './hooks/useWorkspacePreferences.js'
 import useSessionPersistence from './hooks/useSessionPersistence.js'
 import {
@@ -32,15 +35,25 @@ import {
   formatPdfImportError,
 } from './features/import/formatImportError.js'
 import { isDemoSampleEnabled } from './features/demo/demoSampleAccess.js'
+import {
+  getViewFromPathname,
+  isLegalView,
+  pathForLegalView,
+} from './features/legal/legalRoutes.js'
 import './App.css'
 import './styles/profile.css'
+import './styles/legal.css'
+
+function resolveInitialView() {
+  return getViewFromPathname(window.location.pathname) ?? 'library'
+}
 
 function isFullPracticeSet(pdfLoaded, midiSource, musicXmlSource) {
   return Boolean(pdfLoaded && midiSource?.data && musicXmlSource?.data)
 }
 
 export default function App() {
-  const [activeView, setActiveView] = useState('library')
+  const [activeView, setActiveView] = useState(resolveInitialView)
   const [pdfFile, setPdfFile] = useState(null)
   const [pdfBuffer, setPdfBuffer] = useState(null)
   const [pdfMeta, setPdfMeta] = useState(null)
@@ -65,6 +78,26 @@ export default function App() {
     toggleSidebar,
     togglePaperTheme,
   } = useWorkspacePreferences()
+
+  useEffect(() => {
+    function handlePopState() {
+      setActiveView(getViewFromPathname(window.location.pathname) ?? 'library')
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  const syncUrlForView = useCallback((view) => {
+    const nextPath = isLegalView(view) ? pathForLegalView(view) : '/'
+    if (window.location.pathname !== nextPath) {
+      window.history.pushState({}, '', nextPath)
+    }
+  }, [])
+
+  useEffect(() => {
+    syncUrlForView(activeView)
+  }, [activeView, syncUrlForView])
 
   useEffect(() => {
     return () => {
@@ -438,8 +471,6 @@ export default function App() {
         </main>
       )}
 
-      {activeView === 'library' && <AppFooter />}
-
       {activeView === 'practice' && restoreGateOpen && (
         <PracticeView
           pdfFile={pdfFile}
@@ -456,6 +487,14 @@ export default function App() {
         />
       )}
       {activeView === 'profile' && <ProfileView />}
+
+      {activeView === 'privacy' && <PrivacyPolicyPage />}
+      {activeView === 'terms' && <TermsOfServicePage />}
+      {activeView === 'contact' && <ContactPage />}
+
+      {(activeView === 'library' || activeView === 'profile' || isLegalView(activeView)) && (
+        <AppFooter onLegalNavigate={setActiveView} />
+      )}
     </div>
   )
 
