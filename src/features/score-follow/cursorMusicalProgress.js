@@ -12,6 +12,12 @@ export const ONSET_SNAP_SECONDS = 0
 
 const CHORD_GROUP_SECONDS = 0.012
 
+/** Notes longer than this keep the cursor parked at the notehead until release. */
+export const HELD_NOTE_THRESHOLD_SECONDS = 0.55
+
+/** Fraction of written duration spent gliding toward the next onset after a hold plateau. */
+const HELD_GLIDE_TAIL_FRACTION = 0.22
+
 function beatWeightedProgress(timingMap, practiceTime, t0, t1) {
   if (t1 <= t0) {
     return { progress: 0, xRatio: 0 }
@@ -118,6 +124,10 @@ export function buildMeasureMusicalEvents(
         timeSeconds: group.timeSeconds,
         x: clamp(x, xStart, xEnd),
         kind: group.notes.length > 1 ? 'chord' : 'note',
+        durationSeconds: Math.max(
+          ...group.notes.map((note) => note.durationSeconds ?? 0),
+          0,
+        ),
       })
     }
   }
@@ -146,7 +156,57 @@ export function buildMeasureMusicalEvents(
     }
   }
 
-  return deduped
+  return insertHoldPlateaus(deduped, window)
+}
+
+function insertHoldPlateaus(events, window) {
+  const withHolds = []
+  for (let index = 0; index < events.length; index += 1) {
+    const event = events[index]
+    withHolds.push(event)
+    if (event.kind !== 'note' && event.kind !== 'chord') {
+      continue
+    }
+    const duration = event.durationSeconds ?? 0
+    if (duration <= HELD_NOTE_THRESHOLD_SECONDS) {
+      continue
+    }
+    const next = events[index + 1]
+    const nextTime = next?.timeSeconds ?? window.endTimeSeconds
+    const holdEnd = Math.min(
+      event.timeSeconds + duration * (1 - HELD_GLIDE_TAIL_FRACTION),
+      nextTime - 0.001,
+    )
+    if (holdEnd > event.timeSeconds + 0.02) {
+      withHolds.push({
+        timeSeconds: holdEnd,
+        x: event.x,
+        kind: 'hold-end',
+      })
+    }
+  }
+
+  withHolds.sort((a, b) => a.timeSeconds - b.timeSeconds || a.x - b.x)
+
+  const merged = []
+  for (const event of withHolds) {
+    const prev = merged[merged.length - 1]
+    if (prev && Math.abs(prev.timeSeconds - event.timeSeconds) < 0.004) {
+      if (event.kind === 'hold-end' || event.kind === 'note' || event.kind === 'chord') {
+        merged[merged.length - 1] = event
+      }
+      continue
+    }
+    merged.push(event)
+  }
+
+  for (let index = 1; index < merged.length; index += 1) {
+    if (merged[index].x < merged[index - 1].x) {
+      merged[index] = { ...merged[index], x: merged[index - 1].x }
+    }
+  }
+
+  return merged
 }
 
 function firstMusicalEventInMeasure(timingMap, measureNumber, window, xStart, xEnd) {
@@ -158,6 +218,96 @@ function firstMusicalEventInMeasure(timingMap, measureNumber, window, xStart, xE
     events.find((event) => event.kind === 'measure-start') ??
     null
   )
+}
+
+function segmentVelocity(before, after) {
+  const dt = after.timeSeconds - before.timeSeconds
+  if (dt <= 0) {
+    return 0
+  }
+  return (after.x - before.x) / dt
+}
+
+/** Tail segments slower than this fraction of the prior note velocity feel like a stall. */
+const TAIL_STALL_RATIO = 0.45
+
+/**
+ * Bounded segment interpolation: onset-locked linear glide that cannot pass the
+ * next target early or move backward within a forward span.
+ */
+function interpolateSegment(before, after, prior, practiceTime) {
+  const span = after.timeSeconds - before.timeSeconds
+  if (span <= 0) {
+    return after.x
+  }
+  const local = clamp((practiceTime - before.timeSeconds) / span, 0, 1)
+  const linearX = lerp(before.x, after.x, local)
+
+  const isTail = after.kind === 'bridge-next' || after.kind === 'measure-end'
+  let x =
+    isTail && prior
+      ? interpolateWithVelocityContinuity(before, after, prior, practiceTime)
+      : linearX
+
+  const flatTail = isTail && Math.abs(after.x - before.x) < 0.001
+  if (after.x >= before.x) {
+    if (flatTail) {
+      const creepCap = after.x + Math.min(Math.abs(segmentVelocity(prior ?? before, before)) * span * 0.5, 0.04)
+      x = Math.max(before.x, Math.min(x, creepCap))
+    } else {
+      x = Math.max(before.x, Math.min(x, linearX))
+    }
+  } else {
+    x = linearX
+  }
+
+  return x
+}
+
+/**
+ * Velocity-continuous tail: keep moving through the barline when default-x / anchor
+ * geometry leaves almost no horizontal delta in the linear segment.
+ * Still lands exactly on `after.x` at `after.timeSeconds` for onset lock.
+ */
+function interpolateWithVelocityContinuity(before, after, prior, practiceTime) {
+  const span = after.timeSeconds - before.timeSeconds
+  if (span <= 0) {
+    return after.x
+  }
+  const local = clamp((practiceTime - before.timeSeconds) / span, 0, 1)
+  const linearX = lerp(before.x, after.x, local)
+
+  const isTail = after.kind === 'bridge-next' || after.kind === 'measure-end'
+  if (!isTail || !prior) {
+    return linearX
+  }
+
+  const priorSpan = before.timeSeconds - prior.timeSeconds
+  if (priorSpan <= 0) {
+    return linearX
+  }
+
+  const priorVel = segmentVelocity(prior, before)
+  const tailVel = segmentVelocity(before, after)
+  const stallRatio =
+    Math.abs(priorVel) > 1e-6 ? Math.abs(tailVel / priorVel) : 1
+  const flatTail = Math.abs(after.x - before.x) < 0.001
+
+  if (flatTail && Math.abs(priorVel) > 1e-6) {
+    if (practiceTime >= after.timeSeconds - 0.001) {
+      return after.x
+    }
+    const creepMax = Math.min(Math.abs(priorVel) * span * 0.45, 0.035)
+    return before.x + creepMax * local
+  }
+
+  if (stallRatio >= TAIL_STALL_RATIO) {
+    return linearX
+  }
+
+  const extrapX = before.x + priorVel * (practiceTime - before.timeSeconds)
+  const blend = local * local * (3 - 2 * local)
+  return lerp(extrapX, linearX, blend)
 }
 
 function appendMeasureBridge(events, bridgeTarget) {
@@ -203,10 +353,14 @@ export function resolveMusicalXInMeasure({
   })
 
   if (measureBridge) {
+    const bridgeLookupTime = Math.max(
+      practiceTime,
+      window.endTimeSeconds - 0.001,
+    )
     const nextWindow = getMeasurePlaybackWindow(
       timingMap,
       measureBridge.measureNumber,
-      practiceTime,
+      bridgeLookupTime,
     )
     if (nextWindow) {
       const firstNext = firstMusicalEventInMeasure(
@@ -264,20 +418,23 @@ export function resolveMusicalXInMeasure({
 
   let before = events[0]
   let after = events[events.length - 1]
+  let beforeIndex = 0
   for (let index = 0; index < events.length - 1; index += 1) {
     if (
       practiceTime >= events[index].timeSeconds &&
       practiceTime < events[index + 1].timeSeconds
     ) {
+      beforeIndex = index
       before = events[index]
       after = events[index + 1]
       break
     }
   }
+  const prior = beforeIndex > 0 ? events[beforeIndex - 1] : null
 
   const span = after.timeSeconds - before.timeSeconds
   const local = span > 0 ? clamp((practiceTime - before.timeSeconds) / span, 0, 1) : 0
-  const x = lerp(before.x, after.x, local)
+  const x = interpolateSegment(before, after, prior, practiceTime)
   const progress = clamp((x - xStart) / Math.max(0.001, xEnd - xStart), 0, 1)
   const atNoteOnset =
     (before.kind === 'note' || before.kind === 'chord') &&
@@ -289,13 +446,30 @@ export function resolveMusicalXInMeasure({
   return {
     x,
     progress,
-    mode: events.some((event) => event.kind === 'note' || event.kind === 'chord')
-      ? 'note-interpolate'
-      : events.some((event) => event.kind === 'bridge-next')
-        ? 'measure-bridge'
-        : 'beat-interpolate',
+    mode: resolveSegmentMode(events, before, after, prior),
     atOnset: atNoteOnset || atNextOnset,
     events,
     nearestEvent: local < 0.5 ? before : after,
   }
+}
+
+function resolveSegmentMode(events, before, after, prior) {
+  if (before.kind === 'hold-end' || after.kind === 'hold-end') {
+    return 'held-note'
+  }
+  if (
+    prior != null &&
+    (after.kind === 'bridge-next' || after.kind === 'measure-end') &&
+    (Math.abs(after.x - before.x) < 0.001 ||
+      segmentVelocity(before, after) < segmentVelocity(prior, before) * TAIL_STALL_RATIO)
+  ) {
+    return 'velocity-bridge'
+  }
+  if (events.some((event) => event.kind === 'note' || event.kind === 'chord')) {
+    return 'note-interpolate'
+  }
+  if (events.some((event) => event.kind === 'bridge-next')) {
+    return 'measure-bridge'
+  }
+  return 'beat-interpolate'
 }

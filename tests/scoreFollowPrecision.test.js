@@ -15,6 +15,8 @@ import {
   buildMeasureMusicalEvents,
   resolveMusicalXInMeasure,
 } from '../src/features/score-follow/cursorMusicalProgress.js'
+import { buildMeasureBoundaryDiagnostic } from '../src/features/score-follow/measureBoundaryDiagnostics.js'
+import { buildHeldNoteDiagnostic } from '../src/features/score-follow/heldNoteDiagnostics.js'
 import { measureCursorOnsetAlignment } from '../src/features/score-follow/scoreFollowPrecisionDiagnostics.js'
 import { filterTrustedAnchors } from '../src/features/score-follow/trustedAnchors.js'
 import { FIXTURE_PATHS } from '../src/dev/fixturePaths.js'
@@ -99,6 +101,100 @@ describe('cursorMusicalProgress', () => {
     })
     expect(justBefore.x).toBeLessThan(musical.x)
   })
+
+  it('inserts hold-end knots for half notes and longer', () => {
+    const timingMap = parseMusicXml(
+      F.scoreWrap(
+        `<part id="P1">
+          <measure number="1">
+            ${F.attributes({ divisions: 4 })}
+            ${F.soundTempo(120)}
+            <note default-x="40"><pitch><step>C</step><octave>4</octave></pitch><duration>8</duration><type>half</type></note>
+            <note default-x="120"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+            <note default-x="160"><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+          </measure>
+        </part>`,
+      ),
+    )
+    const events = buildMeasureMusicalEvents(
+      timingMap,
+      1,
+      { startTimeSeconds: 0, endTimeSeconds: 2 },
+      0.1,
+      0.35,
+    )
+    expect(events.some((event) => event.kind === 'hold-end')).toBe(true)
+  })
+
+  it('keeps cursor at the notehead during a held-note plateau', () => {
+    const timingMap = parseMusicXml(
+      F.scoreWrap(
+        `<part id="P1">
+          <measure number="1">
+            ${F.attributes({ divisions: 4 })}
+            ${F.soundTempo(120)}
+            <note default-x="40"><pitch><step>C</step><octave>4</octave></pitch><duration>8</duration><type>half</type></note>
+            <note default-x="120"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+            <note default-x="160"><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+          </measure>
+        </part>`,
+      ),
+    )
+    const atOnset = resolveMusicalXInMeasure({
+      timingMap,
+      practiceTime: 0,
+      measureNumber: 1,
+      xStart: 0.1,
+      xEnd: 0.35,
+    })
+    const midHold = resolveMusicalXInMeasure({
+      timingMap,
+      practiceTime: 0.35,
+      measureNumber: 1,
+      xStart: 0.1,
+      xEnd: 0.35,
+    })
+    expect(midHold.mode).toBe('held-note')
+    expect(midHold.x).toBeCloseTo(atOnset.x, 4)
+  })
+
+  it('does not overshoot the next onset x before the next note begins', () => {
+    const timingMap = parseMusicXml(
+      F.scoreWrap(
+        `<part id="P1">
+          <measure number="1">
+            ${F.attributes({ divisions: 4 })}
+            ${F.soundTempo(120)}
+            <note default-x="40"><pitch><step>C</step><octave>4</octave></pitch><duration>8</duration><type>half</type></note>
+            <note default-x="120"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+            <note default-x="160"><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+          </measure>
+        </part>`,
+      ),
+    )
+    const events = buildMeasureMusicalEvents(
+      timingMap,
+      1,
+      { startTimeSeconds: 0, endTimeSeconds: 2 },
+      0.1,
+      0.35,
+    )
+    const nextQuarter = events.find(
+      (event, index) => event.kind === 'note' && index > 0,
+    )
+    let maxOvershoot = 0
+    for (let t = 0.05; t < nextQuarter.timeSeconds - 0.01; t += 0.03) {
+      const musical = resolveMusicalXInMeasure({
+        timingMap,
+        practiceTime: t,
+        measureNumber: 1,
+        xStart: 0.1,
+        xEnd: 0.35,
+      })
+      maxOvershoot = Math.max(maxOvershoot, musical.x - nextQuarter.x)
+    }
+    expect(maxOvershoot).toBeLessThan(0.001)
+  })
 })
 
 describe('resolveScoreFollowCursor precision', () => {
@@ -180,6 +276,67 @@ describe('resolveScoreFollowCursor precision', () => {
     expect(atDownbeat2.x).toBeCloseTo(anchors[1].x, 3)
   })
 
+  it('uses velocity-continuous tail when last onset x is near playableEndX', () => {
+    const timingMap = parseMusicXml(
+      F.scoreWrap(
+        `<part id="P1">
+          <measure number="1">
+            ${F.attributes({ divisions: 4 })}
+            ${F.soundTempo(120)}
+            <note default-x="40"><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+            <note default-x="80"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+            <note default-x="120"><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+            <note default-x="200"><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type></note>
+          </measure>
+          <measure number="2">${F.fourQuarters()}</measure>
+        </part>`,
+      ),
+    )
+    const tightAnchors = [
+      {
+        id: 'm1',
+        page: 1,
+        x: 0.1,
+        y: 0.3,
+        measureNumber: 1,
+        source: 'manual',
+        meta: { playableStartX: 0.1, playableEndX: 0.22, systemEndX: 0.95 },
+      },
+      {
+        id: 'm2',
+        page: 1,
+        x: 0.22,
+        y: 0.3,
+        measureNumber: 2,
+        source: 'manual',
+        meta: { playableStartX: 0.22, playableEndX: 0.34, systemEndX: 0.95 },
+      },
+    ]
+    const atLast = resolveScoreFollowCursor({
+      timingMap,
+      practiceTime: 1.5,
+      trustedAnchors: tightAnchors,
+      trust: { showCursor: true, needsSetup: false },
+    }).cursor
+    const lateTail = resolveScoreFollowCursor({
+      timingMap,
+      practiceTime: 1.88,
+      trustedAnchors: tightAnchors,
+      trust: { showCursor: true, needsSetup: false },
+    }).cursor
+    expect(lateTail.x).toBeGreaterThan(atLast.x + 0.003)
+    expect(lateTail.progressMode).toBe('velocity-bridge')
+
+    const diag = buildMeasureBoundaryDiagnostic({
+      timingMap,
+      trustedAnchors: tightAnchors,
+      measureNumber: 1,
+    })
+    expect(diag.active).toBe(true)
+    expect(diag.velocities.stallRatio).toBeLessThan(0.45)
+    expect(diag.lastOnset.distanceToPlayableEndX).toBeLessThan(0.02)
+  })
+
   it('defers page flip until late in the gap (no early cross-page jump)', () => {
     const crossPage = [
       {
@@ -243,7 +400,46 @@ describe('resolveScoreFollowCursor precision', () => {
     })
     const linearWouldBe = 0.1 + 0.2 * 0.5
     expect(atHalfNoteEnd.cursor.x).toBeLessThan(linearWouldBe + 0.02)
-    expect(atHalfNoteEnd.cursor.progressMode).toMatch(/note|chord|beat/)
+    expect(atHalfNoteEnd.cursor.progressMode).toMatch(/note|chord|beat|held/)
+  })
+
+  it('held-note measures stay monotonic with no early overshoot', () => {
+    const uneven = parseMusicXml(
+      F.scoreWrap(
+        `<part id="P1">
+          <measure number="1">
+            ${F.attributes({ divisions: 4 })}
+            ${F.soundTempo(120)}
+            <note default-x="40"><pitch><step>C</step><octave>4</octave></pitch><duration>8</duration><type>half</type></note>
+            <note default-x="120"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+            <note default-x="160"><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+          </measure>
+        </part>`,
+      ),
+    )
+    const unevenAnchors = anchorsForMeasures(1, { playableSpan: 0.2 })
+    const xs = []
+    for (let t = 0.04; t < 2; t += 0.04) {
+      const { cursor } = resolveScoreFollowCursor({
+        timingMap: uneven,
+        practiceTime: t,
+        trustedAnchors: unevenAnchors,
+        trust: { showCursor: true, needsSetup: false },
+      })
+      xs.push(cursor.x)
+    }
+    for (let index = 1; index < xs.length; index += 1) {
+      expect(xs[index]).toBeGreaterThanOrEqual(xs[index - 1] - 0.0001)
+    }
+
+    const diag = buildHeldNoteDiagnostic({
+      timingMap: uneven,
+      trustedAnchors: unevenAnchors,
+      measureNumber: 1,
+    })
+    expect(diag.active).toBe(true)
+    expect(diag.maxOvershoot).toBeLessThan(0.001)
+    expect(diag.maxBacktrack).toBeLessThan(0.001)
   })
 })
 
@@ -285,5 +481,19 @@ describe('Hungarian Dance note-onset alignment', () => {
     expect(report.sampleCount).toBeGreaterThan(10)
     expect(report.averageErrorX).toBeLessThan(0.04)
     expect(report.maxErrorX).toBeLessThan(0.12)
+
+    const heldMeasures = [5, 9, 13, 17, 21, 25, 29, 33]
+    for (const measureNumber of heldMeasures) {
+      const held = buildHeldNoteDiagnostic({
+        timingMap,
+        trustedAnchors: trusted,
+        measureNumber,
+      })
+      if (!held.active) {
+        continue
+      }
+      expect(held.maxOvershoot).toBeLessThan(0.02)
+      expect(held.maxBacktrack).toBeLessThan(0.02)
+    }
   })
 })

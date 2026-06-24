@@ -33,6 +33,8 @@ import {
 import useScoreFollowAnchors from './useScoreFollowAnchors.js'
 import useScoreFollowCursorDriver from './useScoreFollowDisplayCursor.js'
 import { getScoreFollowCursorSnapshot } from './scoreFollowCursorRuntime.js'
+import { buildMeasureBoundaryDiagnostic } from './measureBoundaryDiagnostics.js'
+import { buildHeldNoteDiagnostic } from './heldNoteDiagnostics.js'
 import { buildScoreFollowPrecisionReport } from './scoreFollowPrecisionDiagnostics.js'
 import { isNextGenAlignmentDiagnosticsEnabled } from './nextGenAlignmentFlag.js'
 import { deriveNextGenAlignmentDiagnostics } from './nextGenAlignmentDiagnostics.js'
@@ -1105,6 +1107,30 @@ export default function useScoreFollow({
     anchorTrust.showCursor,
   ])
 
+  const measureBoundary = useMemo(
+    () =>
+      currentMeasure?.number != null && hasTiming && trustedAnchors.length > 0
+        ? buildMeasureBoundaryDiagnostic({
+            timingMap,
+            trustedAnchors,
+            measureNumber: currentMeasure.number,
+          })
+        : null,
+    [timingMap, trustedAnchors, currentMeasure?.number, hasTiming],
+  )
+
+  const heldNote = useMemo(
+    () =>
+      currentMeasure?.number != null && hasTiming && trustedAnchors.length > 0
+        ? buildHeldNoteDiagnostic({
+            timingMap,
+            trustedAnchors,
+            measureNumber: currentMeasure.number,
+          })
+        : null,
+    [timingMap, trustedAnchors, currentMeasure?.number, hasTiming],
+  )
+
   const precisionReport = useMemo(
     () =>
       buildScoreFollowPrecisionReport({
@@ -1158,6 +1184,8 @@ export default function useScoreFollow({
       cursorProgressMode: cursor?.progressMode ?? null,
       cursorAtOnset: Boolean(cursor?.atOnset),
       precision: precisionReport,
+      measureBoundary,
+      heldNote,
       // The cursor's single timing source of truth is the MusicXML timeline.
       timingSource: 'musicxml',
       timingSourceId: timingSourceId ?? null,
@@ -1183,6 +1211,8 @@ export default function useScoreFollow({
       displayCursor,
       practiceTime,
       precisionReport,
+      measureBoundary,
+      heldNote,
       timingSourceId,
       pdfFileName,
       pdfFingerprint,
