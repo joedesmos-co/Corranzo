@@ -18,6 +18,11 @@ import {
 } from '../src/features/score-follow/barlineDataset.js'
 import { exportBarlineSamplesFromPage } from '../scripts/lib/barlineDatasetExport.mjs'
 import { cleanPianoPage } from './helpers/syntheticScore.js'
+import {
+  suggestLabelForSample,
+  isLowConfidenceSuggestion,
+  summarizeAssistStats,
+} from '../tools/barline-labeler/barlineLabelSuggestion.js'
 
 describe('barlineDataset schema', () => {
   it('defines six human label categories', () => {
@@ -138,5 +143,49 @@ describe('barline labeler static UX', () => {
     expect(html).toMatch(/magnifier/)
     expect(html).toMatch(/exampleGallery/)
     expect(html).toMatch(/<kbd>1<\/kbd>\s*real barline/)
+    expect(html).toMatch(/assistedModeToggle/)
+    expect(html).toMatch(/lowConfidenceToggle/)
+    expect(html).toMatch(/suggestionBanner/)
+    expect(html).toMatch(/acceptSuggestionBtn/)
+    expect(html).toMatch(/labelMeta/)
+    expect(html).toMatch(/barlineLabelSuggestion\.js/)
+    expect(html).toMatch(/event\.key === 'Enter'/)
+    expect(html).toMatch(/Backspace/)
+  })
+})
+
+describe('barline label suggestion', () => {
+  it('maps accepted detector decisions to real barline', () => {
+    const suggestion = suggestLabelForSample({
+      detector: { decision: 'accepted-high', confidence: 'high', finalAccepted: true },
+      features: { stemSignals: 0 },
+    })
+    expect(suggestion.label).toBe(BARLINE_LABEL.REAL_BARLINE)
+    expect(suggestion.confidence).toBeGreaterThan(0.8)
+    expect(isLowConfidenceSuggestion(suggestion)).toBe(false)
+  })
+
+  it('maps stem-like rejects to fake labels', () => {
+    const stem = suggestLabelForSample({
+      detector: { decision: 'rejected', rejectReason: 'stem-like' },
+      features: { stemSignals: 2 },
+    })
+    expect(stem.label).toBe(BARLINE_LABEL.FAKE_NOTEHEAD_CLUSTER)
+    expect(isLowConfidenceSuggestion(stem)).toBe(true)
+
+    const single = suggestLabelForSample({
+      detector: { decision: 'rejected', rejectReason: 'single-staff' },
+      features: { stemSignals: 1, trebleStrong: true, bassStrong: false },
+    })
+    expect(single.label).toBe(BARLINE_LABEL.FAKE_STEM)
+  })
+
+  it('summarizes assist stats from labelMeta', () => {
+    const stats = summarizeAssistStats({
+      a: { source: 'accepted' },
+      b: { source: 'corrected' },
+      c: { source: 'accepted' },
+    })
+    expect(stats).toEqual({ accepted: 2, corrected: 1, total: 3 })
   })
 })

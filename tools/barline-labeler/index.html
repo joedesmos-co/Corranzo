@@ -400,6 +400,57 @@
     .empty-state { color: var(--muted); text-align: center; padding: 40px 16px; }
     .actions-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 
+    .assist-stats {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .assist-stats strong { color: var(--text); font-variant-numeric: tabular-nums; }
+
+    .suggestion-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 2px solid var(--warn);
+      background: rgba(240, 180, 41, 0.08);
+    }
+    .suggestion-banner.visible { display: flex; }
+    .suggestion-banner__eyebrow {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .suggestion-banner__label {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+    .suggestion-banner__confidence {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-left: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+    .suggestion-banner__confidence strong { color: var(--warn); }
+    .meta-card--accepted { border-color: var(--success); }
+    .meta-card--corrected { border-color: var(--warn); }
+
+    .label-btn.suggested {
+      border-color: var(--warn);
+      box-shadow: 0 0 0 1px rgba(240, 180, 41, 0.35);
+    }
+    .label-btn.suggested .label-btn__key {
+      border-color: var(--warn);
+      color: var(--warn);
+    }
+
     @media (max-width: 900px) {
       main { grid-template-columns: 1fr; }
       .help-panel ul { columns: 1; }
@@ -423,8 +474,16 @@
         <label for="pieceFilter">Piece filter</label>
         <select id="pieceFilter" disabled><option value="all">All pieces</option></select>
         <label class="toggle-row">
+          <input type="checkbox" id="assistedModeToggle" checked />
+          Assisted labeling (suggestions + Enter to accept)
+        </label>
+        <label class="toggle-row">
+          <input type="checkbox" id="lowConfidenceToggle" />
+          Low-confidence only
+        </label>
+        <label class="toggle-row">
           <input type="checkbox" id="keyboardOnlyToggle" />
-          Keyboard-only mode (1–6 labels, ← → nav, Z undo)
+          Keyboard-only mode (1–6 labels, ← → nav, Z / ⌫ undo)
         </label>
       </div>
 
@@ -435,6 +494,7 @@
         </div>
         <div class="progress-bar"><div class="progress-bar__fill" id="progressFill" style="width:0%"></div></div>
         <div class="progress-meta" id="progressMeta">Load manifest + crops to begin.</div>
+        <div class="assist-stats" id="assistStats"></div>
         <div class="autosave-status" id="autosaveStatus"></div>
       </div>
 
@@ -448,7 +508,18 @@
 
     <section class="content">
       <div class="keyboard-only-banner" id="keyboardBanner">
-        Keyboard-only: press <kbd>1</kbd>–<kbd>6</kbd> to label, <kbd>←</kbd><kbd>→</kbd> navigate, <kbd>Z</kbd> undo, <kbd>S</kbd> save.
+        Keyboard-only: <kbd>Enter</kbd> accept suggestion, <kbd>1</kbd>–<kbd>6</kbd> override, <kbd>←</kbd><kbd>→</kbd> navigate, <kbd>Z</kbd> / <kbd>⌫</kbd> undo, <kbd>S</kbd> save.
+      </div>
+
+      <div class="suggestion-banner" id="suggestionBanner">
+        <div>
+          <div class="suggestion-banner__eyebrow">Detector suggestion</div>
+          <div>
+            <span class="suggestion-banner__label" id="suggestedLabelText">—</span>
+            <span class="suggestion-banner__confidence" id="suggestedConfidence">—</span>
+          </div>
+        </div>
+        <button type="button" class="primary" id="acceptSuggestionBtn">Accept suggestion (Enter)</button>
       </div>
 
       <div class="toolbar">
@@ -491,8 +562,10 @@
           <li><kbd>4</kbd> fake beam</li>
           <li><kbd>5</kbd> unsure</li>
           <li><kbd>6</kbd> missing barline slot</li>
+          <li><kbd>Enter</kbd> accept detector suggestion (assisted mode)</li>
+          <li><kbd>1</kbd>–<kbd>6</kbd> override suggestion manually</li>
           <li><kbd>←</kbd> <kbd>→</kbd> previous / next</li>
-          <li><kbd>Z</kbd> undo last label</li>
+          <li><kbd>Z</kbd> <kbd>⌫</kbd> undo last label</li>
           <li><kbd>S</kbd> download labels.json</li>
         </ul>
       </div>
@@ -509,7 +582,13 @@
   </div>
 
   <script type="module">
-    const STORAGE_KEY = 'corranzo-barline-labeler-v2'
+    import {
+      suggestLabelForSample,
+      isLowConfidenceSuggestion,
+      summarizeAssistStats,
+    } from './barlineLabelSuggestion.js'
+
+    const STORAGE_KEY = 'corranzo-barline-labeler-v3'
     const DEFAULT_ZOOM = 10
     const MAGNIFIER_ZOOM = 22
     const INK_THRESHOLD = 185
@@ -547,8 +626,11 @@
       samples: [],
       cropUrls: new Map(),
       labels: {},
+      labelMeta: {},
       index: 0,
       pieceFilter: 'all',
+      lowConfidenceOnly: false,
+      assistedMode: true,
       zoom: DEFAULT_ZOOM,
       undoStack: [],
       sourceImage: null,
@@ -562,7 +644,14 @@
       cropsInput: document.getElementById('cropsInput'),
       labelsInput: document.getElementById('labelsInput'),
       pieceFilter: document.getElementById('pieceFilter'),
+      assistedModeToggle: document.getElementById('assistedModeToggle'),
+      lowConfidenceToggle: document.getElementById('lowConfidenceToggle'),
       keyboardOnlyToggle: document.getElementById('keyboardOnlyToggle'),
+      assistStats: document.getElementById('assistStats'),
+      suggestionBanner: document.getElementById('suggestionBanner'),
+      suggestedLabelText: document.getElementById('suggestedLabelText'),
+      suggestedConfidence: document.getElementById('suggestedConfidence'),
+      acceptSuggestionBtn: document.getElementById('acceptSuggestionBtn'),
       progressCounts: document.getElementById('progressCounts'),
       progressFill: document.getElementById('progressFill'),
       progressMeta: document.getElementById('progressMeta'),
@@ -603,9 +692,11 @@
       btn.className = 'label-btn'
       btn.dataset.label = opt.label
       btn.innerHTML = `<span class="label-btn__key">${opt.key}</span><span><span class="label-btn__title">${opt.title}</span><br><span class="label-btn__hint">${opt.hint}</span></span>`
-      btn.addEventListener('click', () => applyLabel(opt.label))
+      btn.addEventListener('click', () => applyLabel(opt.label, { source: 'corrected' }))
       els.labelButtons.appendChild(btn)
     }
+
+    els.acceptSuggestionBtn.addEventListener('click', acceptSuggestion)
 
     els.zoomToolbar.addEventListener('click', (e) => {
       const btn = e.target.closest('button[data-zoom]')
@@ -617,6 +708,19 @@
 
     els.pieceFilter.addEventListener('change', () => {
       state.pieceFilter = els.pieceFilter.value
+      state.index = 0
+      render()
+      scheduleAutosave()
+    })
+
+    els.assistedModeToggle.addEventListener('change', () => {
+      state.assistedMode = els.assistedModeToggle.checked
+      render()
+      scheduleAutosave()
+    })
+
+    els.lowConfidenceToggle.addEventListener('change', () => {
+      state.lowConfidenceOnly = els.lowConfidenceToggle.checked
       state.index = 0
       render()
       scheduleAutosave()
@@ -659,6 +763,7 @@
       if (!file) return
       const data = JSON.parse(await file.text())
       state.labels = { ...(data.labels ?? data) }
+      state.labelMeta = { ...(data.labelMeta ?? {}) }
       state.undoStack = []
       scheduleAutosave()
       render()
@@ -674,15 +779,22 @@
 
     document.addEventListener('keydown', (event) => {
       if (event.target.matches('input[type="text"], textarea')) return
+      if (event.key === 'Enter' && state.assistedMode) {
+        event.preventDefault()
+        acceptSuggestion()
+        return
+      }
       const opt = LABEL_OPTIONS.find((o) => o.key === event.key)
       if (opt) {
         event.preventDefault()
-        applyLabel(opt.label)
+        applyLabel(opt.label, { source: 'corrected' })
         return
       }
       if (event.key === 'ArrowRight') { event.preventDefault(); goNext() }
       if (event.key === 'ArrowLeft') { event.preventDefault(); goPrev() }
-      if (event.key.toLowerCase() === 'z' && !event.metaKey && !event.ctrlKey) {
+      if (
+        (event.key === 'Backspace' || (event.key.toLowerCase() === 'z' && !event.metaKey && !event.ctrlKey))
+      ) {
         event.preventDefault()
         undoLabel()
       }
@@ -698,9 +810,13 @@
     }
 
     function visibleSamples() {
-      return state.pieceFilter === 'all'
+      let list = state.pieceFilter === 'all'
         ? state.samples
         : state.samples.filter((s) => s.pieceId === state.pieceFilter)
+      if (state.lowConfidenceOnly) {
+        list = list.filter((s) => isLowConfidenceSuggestion(suggestLabelForSample(s)))
+      }
+      return list
     }
 
     function currentSample() {
@@ -739,12 +855,30 @@
       scheduleAutosave()
     }
 
-    function applyLabel(label) {
+    function acceptSuggestion() {
+      if (!state.assistedMode) return
       const sample = currentSample()
       if (!sample) return
-      state.undoStack.push({ sampleId: sample.id, previous: state.labels[sample.id] ?? null })
+      const suggestion = suggestLabelForSample(sample)
+      applyLabel(suggestion.label, { source: 'accepted' })
+    }
+
+    function applyLabel(label, { source = 'corrected' } = {}) {
+      const sample = currentSample()
+      if (!sample) return
+      const suggestion = suggestLabelForSample(sample)
+      state.undoStack.push({
+        sampleId: sample.id,
+        previous: state.labels[sample.id] ?? null,
+        previousMeta: state.labelMeta[sample.id] ?? null,
+      })
       if (state.undoStack.length > 80) state.undoStack.shift()
       state.labels[sample.id] = label
+      state.labelMeta[sample.id] = {
+        source,
+        suggestedLabel: suggestion.label,
+        suggestionConfidence: suggestion.confidence,
+      }
       const list = visibleSamples()
       if (state.index < list.length - 1) state.index += 1
       scheduleAutosave()
@@ -756,6 +890,8 @@
       if (!entry) return
       if (entry.previous == null) delete state.labels[entry.sampleId]
       else state.labels[entry.sampleId] = entry.previous
+      if (entry.previousMeta == null) delete state.labelMeta[entry.sampleId]
+      else state.labelMeta[entry.sampleId] = entry.previousMeta
       const list = visibleSamples()
       const idx = list.findIndex((s) => s.id === entry.sampleId)
       if (idx >= 0) state.index = idx
@@ -772,8 +908,11 @@
           localStorage.setItem(STORAGE_KEY, JSON.stringify({
             manifestKey: state.manifestKey,
             labels: state.labels,
+            labelMeta: state.labelMeta,
             index: state.index,
             pieceFilter: state.pieceFilter,
+            lowConfidenceOnly: state.lowConfidenceOnly,
+            assistedMode: state.assistedMode,
             zoom: state.zoom,
             keyboardOnly: state.keyboardOnly,
             savedAt: new Date().toISOString(),
@@ -790,9 +929,14 @@
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null')
         if (!saved || saved.manifestKey !== state.manifestKey) return
         state.labels = { ...(saved.labels ?? {}) }
+        state.labelMeta = { ...(saved.labelMeta ?? {}) }
         state.pieceFilter = saved.pieceFilter ?? 'all'
+        state.lowConfidenceOnly = Boolean(saved.lowConfidenceOnly)
+        state.assistedMode = saved.assistedMode !== false
         state.zoom = saved.zoom ?? DEFAULT_ZOOM
         state.keyboardOnly = Boolean(saved.keyboardOnly)
+        els.assistedModeToggle.checked = state.assistedMode
+        els.lowConfidenceToggle.checked = state.lowConfidenceOnly
         els.keyboardOnlyToggle.checked = state.keyboardOnly
         document.body.classList.toggle('keyboard-only', state.keyboardOnly)
         const list = visibleSamples()
@@ -809,6 +953,7 @@
         updatedAt: new Date().toISOString(),
         manifestGeneratedAt: state.manifest?.generatedAt ?? null,
         labels: state.labels,
+        labelMeta: state.labelMeta,
       }, null, 2)], { type: 'application/json' })
       const a = document.createElement('a')
       a.href = URL.createObjectURL(blob)
@@ -994,7 +1139,11 @@
 
     function renderMeta(sample) {
       const label = state.labels[sample.id]
+      const meta = state.labelMeta[sample.id]
       const f = sample.features ?? {}
+      const sourceCard = meta
+        ? `<div class="meta-card meta-card--${meta.source === 'accepted' ? 'accepted' : 'corrected'}"><div class="meta-card__label">Label source</div><div class="meta-card__value meta-card__value--strong">${meta.source === 'accepted' ? 'Accepted suggestion' : 'Manual correction'}</div></div>`
+        : ''
       els.meta.innerHTML = `
         <div class="meta-card"><div class="meta-card__label">Piece</div><div class="meta-card__value meta-card__value--strong">${escapeHtml(sample.pieceId)}</div></div>
         <div class="meta-card"><div class="meta-card__label">Page / system</div><div class="meta-card__value">p${sample.page} · sys ${sample.systemIndex}</div></div>
@@ -1002,8 +1151,33 @@
         <div class="meta-card"><div class="meta-card__label">Run frac (T/B/full)</div><div class="meta-card__value">${fmtFrac(f.treble)} / ${fmtFrac(f.bass)} / ${fmtFrac(f.full)}</div></div>
         <div class="meta-card"><div class="meta-card__label">Stems / score</div><div class="meta-card__value">${f.stemSignals ?? 0} · ${f.score ?? '—'}</div></div>
         <div class="meta-card ${label ? 'meta-card--label-set' : ''}"><div class="meta-card__label">Your label</div><div class="meta-card__value meta-card__value--strong">${label ? escapeHtml(formatLabelHuman(label)) : '—'}</div></div>
+        ${sourceCard}
         <div class="meta-card"><div class="meta-card__label">Sample id</div><div class="meta-card__value">${escapeHtml(sample.id)}</div></div>
       `
+    }
+
+    function renderSuggestion(sample) {
+      if (!state.assistedMode || !sample) {
+        els.suggestionBanner.classList.remove('visible')
+        return
+      }
+      const suggestion = suggestLabelForSample(sample)
+      const pct = Math.round(suggestion.confidence * 100)
+      els.suggestedLabelText.textContent = formatLabelHuman(suggestion.label)
+      els.suggestedConfidence.innerHTML =
+        `<strong>${pct}%</strong> confidence (${escapeHtml(suggestion.confidenceLabel)})`
+      els.suggestionBanner.classList.add('visible')
+      els.acceptSuggestionBtn.disabled = false
+    }
+
+    function renderAssistStats() {
+      const { accepted, corrected } = summarizeAssistStats(state.labelMeta)
+      if (accepted + corrected === 0) {
+        els.assistStats.textContent = ''
+        return
+      }
+      els.assistStats.innerHTML =
+        `<span>Accepted: <strong>${accepted}</strong></span><span>Corrected: <strong>${corrected}</strong></span>`
     }
 
     function fmtFrac(band) {
@@ -1028,8 +1202,9 @@
       els.progressCounts.textContent = `${labeledVisible} / ${total}`
       els.progressFill.style.width = `${pct}%`
       els.progressMeta.textContent = state.samples.length
-        ? `${pct}% in filter · ${labeledAll} total labeled · ${state.cropUrls.size} crops loaded`
+        ? `${pct}% in filter · ${labeledAll} total labeled · ${state.cropUrls.size} crops loaded${state.lowConfidenceOnly ? ' · low-confidence filter' : ''}`
         : 'Load manifest.json and crop PNGs.'
+      renderAssistStats()
 
       populatePieceFilter()
       const hasWork = total > 0
@@ -1062,20 +1237,27 @@
         els.meta.innerHTML = '<p class="empty-state">Load manifest + crops, or change piece filter.</p>'
         els.badges.innerHTML = ''
         els.cropDims.textContent = '—'
+        els.suggestionBanner.classList.remove('visible')
         for (const btn of els.labelButtons.querySelectorAll('button')) {
           btn.disabled = true
-          btn.classList.remove('selected')
+          btn.classList.remove('selected', 'suggested')
         }
         return
       }
 
+      const suggestion = suggestLabelForSample(sample)
       for (const btn of els.labelButtons.querySelectorAll('button')) {
         btn.disabled = false
         btn.classList.toggle('selected', btn.dataset.label === state.labels[sample.id])
+        btn.classList.toggle(
+          'suggested',
+          state.assistedMode && !state.labels[sample.id] && btn.dataset.label === suggestion.label,
+        )
       }
 
       renderBadges(sample)
       renderMeta(sample)
+      renderSuggestion(sample)
 
       const url = state.cropUrls.get(sample.id)
       if (url) await loadSourceImage(sample, url)
