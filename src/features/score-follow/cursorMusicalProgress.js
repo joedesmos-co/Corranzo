@@ -229,67 +229,20 @@ export function buildMeasureMusicalEvents(
     }
   }
 
-  return insertHoldPlateaus(deduped, window, timingMap)
+  return deduped
 }
 
-function insertHoldPlateaus(events, window, timingMap) {
-  const withHolds = []
-  for (let index = 0; index < events.length; index += 1) {
-    const event = events[index]
-    withHolds.push(event)
-    if (event.kind !== 'note' && event.kind !== 'chord') {
-      continue
-    }
-    const duration = event.durationSeconds ?? 0
-    if (duration <= HELD_NOTE_THRESHOLD_SECONDS) {
-      continue
-    }
-    const next = events[index + 1]
-    const nextTime = next?.timeSeconds ?? window.endTimeSeconds
-    const profile = resolveHeldNoteGlideProfile(
-      timingMap,
-      event.timeSeconds,
-      duration,
-      nextTime,
-    )
-    if (profile.useContinuousGlide) {
-      continue
-    }
-    const holdEnd = Math.min(
-      event.timeSeconds + profile.plateauSeconds,
-      nextTime - 0.001,
-    )
-    if (holdEnd > event.timeSeconds + 0.02) {
-      withHolds.push({
-        timeSeconds: holdEnd,
-        x: event.x,
-        kind: 'hold-end',
-        holdProfile: profile,
-      })
+function findNextForwardEvent(events, fromIndex, minX) {
+  for (let index = fromIndex + 1; index < events.length; index += 1) {
+    if (events[index].x > minX + 1e-5) {
+      return events[index]
     }
   }
+  return null
+}
 
-  withHolds.sort((a, b) => a.timeSeconds - b.timeSeconds || a.x - b.x)
-
-  const merged = []
-  for (const event of withHolds) {
-    const prev = merged[merged.length - 1]
-    if (prev && Math.abs(prev.timeSeconds - event.timeSeconds) < 0.004) {
-      if (event.kind === 'hold-end' || event.kind === 'note' || event.kind === 'chord') {
-        merged[merged.length - 1] = event
-      }
-      continue
-    }
-    merged.push(event)
-  }
-
-  for (let index = 1; index < merged.length; index += 1) {
-    if (merged[index].x < merged[index - 1].x) {
-      merged[index] = { ...merged[index], x: merged[index - 1].x }
-    }
-  }
-
-  return merged
+function isFlatForwardSpan(before, after) {
+  return after.x <= before.x + 1e-5 && after.timeSeconds - before.timeSeconds > 0.02
 }
 
 function firstMusicalEventInMeasure(timingMap, measureNumber, window, xStart, xEnd) {
@@ -314,28 +267,58 @@ function segmentVelocity(before, after) {
 /** Tail segments slower than this fraction of the prior note velocity feel like a stall. */
 const TAIL_STALL_RATIO = 0.45
 
+/** Minimum tail velocity as a fraction of the prior note segment. */
+const TAIL_VELOCITY_FLOOR_RATIO = 0.72
+
 /**
- * Bounded segment interpolation: onset-locked linear glide that cannot pass the
- * next target early or move backward within a forward span.
+ * Bounded segment interpolation: onset-locked glide that cannot pass the next
+ * target early, with look-ahead creep through flat same-x spans.
  */
-function interpolateSegment(before, after, prior, practiceTime) {
+function interpolateSegment(before, after, prior, practiceTime, events, beforeIndex, segmentMaxX) {
   const span = after.timeSeconds - before.timeSeconds
   if (span <= 0) {
     return after.x
   }
   const local = clamp((practiceTime - before.timeSeconds) / span, 0, 1)
   const linearX = lerp(before.x, after.x, local)
+  const flatSpan = isFlatForwardSpan(before, after)
+  const ahead = flatSpan ? findNextForwardEvent(events, beforeIndex, before.x) : null
+
+  if (flatSpan && ahead) {
+    const creepSpan = ahead.timeSeconds - before.timeSeconds
+    const creepLocal = clamp((practiceTime - before.timeSeconds) / creepSpan, 0, 1)
+    const x = lerp(before.x, ahead.x, creepLocal)
+    return capSegmentX(x, segmentMaxX, before.x)
+  }
 
   const isTail = after.kind === 'bridge-next' || after.kind === 'measure-end'
   let x =
     isTail && prior
-      ? interpolateWithVelocityContinuity(before, after, prior, practiceTime)
+      ? interpolateWithVelocityContinuity(before, after, prior, practiceTime, segmentMaxX)
       : linearX
+
+  if (prior && after.x >= before.x && !isTail) {
+    const priorVel = segmentVelocity(prior, before)
+    const tailVel = segmentVelocity(before, after)
+    if (
+      Math.abs(priorVel) > 1e-6 &&
+      Math.abs(tailVel) < Math.abs(priorVel) * TAIL_STALL_RATIO
+    ) {
+      const floorX =
+        before.x +
+        Math.abs(priorVel) * TAIL_VELOCITY_FLOOR_RATIO * (practiceTime - before.timeSeconds)
+      x = Math.max(x, Math.min(floorX, linearX))
+    }
+  }
 
   const flatTail = isTail && Math.abs(after.x - before.x) < 0.001
   if (after.x >= before.x) {
     if (flatTail) {
-      const creepCap = after.x + Math.min(Math.abs(segmentVelocity(prior ?? before, before)) * span * 0.5, 0.04)
+      const priorVel = prior ? segmentVelocity(prior, before) : segmentVelocity(before, after)
+      const creepCap = Math.min(
+        after.x > before.x ? lerp(before.x, after.x, local) : after.x,
+        segmentMaxX ?? after.x,
+      )
       x = Math.max(before.x, Math.min(x, creepCap))
     } else {
       x = Math.max(before.x, Math.min(x, linearX))
@@ -344,7 +327,18 @@ function interpolateSegment(before, after, prior, practiceTime) {
     x = linearX
   }
 
-  return x
+  return capSegmentX(x, segmentMaxX, before.x)
+}
+
+function capSegmentX(x, segmentMaxX, minX) {
+  let capped = x
+  if (segmentMaxX != null) {
+    capped = Math.min(capped, segmentMaxX)
+  }
+  if (minX != null) {
+    capped = Math.max(minX, capped)
+  }
+  return capped
 }
 
 /**
@@ -352,7 +346,7 @@ function interpolateSegment(before, after, prior, practiceTime) {
  * geometry leaves almost no horizontal delta in the linear segment.
  * Still lands exactly on `after.x` at `after.timeSeconds` for onset lock.
  */
-function interpolateWithVelocityContinuity(before, after, prior, practiceTime) {
+function interpolateWithVelocityContinuity(before, after, prior, practiceTime, segmentMaxX) {
   const span = after.timeSeconds - before.timeSeconds
   if (span <= 0) {
     return after.x
@@ -380,17 +374,24 @@ function interpolateWithVelocityContinuity(before, after, prior, practiceTime) {
     if (practiceTime >= after.timeSeconds - 0.001) {
       return after.x
     }
-    const creepMax = Math.min(Math.abs(priorVel) * span * 0.45, 0.035)
-    return before.x + creepMax * local
+    const smooth = local * local * (3 - 2 * local)
+    const smoothX = lerp(before.x, after.x, smooth)
+    const floorX =
+      before.x + Math.abs(priorVel) * TAIL_VELOCITY_FLOOR_RATIO * (practiceTime - before.timeSeconds)
+    const creepCap = Math.min(
+      after.x > before.x ? lerp(before.x, after.x, local) : after.x,
+      segmentMaxX ?? after.x,
+    )
+    return capSegmentX(Math.max(smoothX, Math.min(floorX, creepCap)), segmentMaxX, before.x)
   }
 
   if (stallRatio >= TAIL_STALL_RATIO) {
-    return linearX
+    return capSegmentX(linearX, segmentMaxX, before.x)
   }
 
   const extrapX = before.x + priorVel * (practiceTime - before.timeSeconds)
   const blend = local * local * (3 - 2 * local)
-  return lerp(extrapX, linearX, blend)
+  return capSegmentX(lerp(extrapX, linearX, blend), segmentMaxX, before.x)
 }
 
 function appendMeasureBridge(events, bridgeTarget) {
@@ -517,7 +518,12 @@ export function resolveMusicalXInMeasure({
 
   const span = after.timeSeconds - before.timeSeconds
   const local = span > 0 ? clamp((practiceTime - before.timeSeconds) / span, 0, 1) : 0
-  const x = interpolateSegment(before, after, prior, practiceTime)
+  const segmentMaxX =
+    after.kind === 'bridge-next' || after.kind === 'measure-end'
+      ? Math.min(after.x, xEnd)
+      : xEnd
+  let x = interpolateSegment(before, after, prior, practiceTime, events, beforeIndex, segmentMaxX)
+  x = Math.min(x, xEnd)
   const progress = clamp((x - xStart) / Math.max(0.001, xEnd - xStart), 0, 1)
   const atNoteOnset =
     (before.kind === 'note' || before.kind === 'chord') &&
@@ -537,8 +543,9 @@ export function resolveMusicalXInMeasure({
 }
 
 function resolveSegmentMode(events, before, after, prior) {
-  if (before.kind === 'hold-end' || after.kind === 'hold-end') {
-    return 'held-note'
+  const isTail = after.kind === 'bridge-next' || after.kind === 'measure-end'
+  if (isFlatForwardSpan(before, after) && !isTail) {
+    return 'lookahead-glide'
   }
   if (
     prior != null &&

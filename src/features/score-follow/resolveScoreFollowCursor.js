@@ -170,10 +170,11 @@ export function resolveScoreFollowCursor({
       trustedAnchors,
       currentMeasure.number + 1,
     )
-    const nextSameSystem =
+    const nextSameSystem = Boolean(
       nextAnchor &&
-      nextAnchor.page === exact.page &&
-      Math.abs(nextAnchor.y - exact.y) < 0.02
+        nextAnchor.page === exact.page &&
+        Math.abs(nextAnchor.y - exact.y) < 0.02,
+    )
     // Glide within the CURRENT measure's own visual span (playableStartX →
     // playableEndX). This keeps beat 1 at the measure's first-note x and sweeps
     // only across that measure — later measures don't inherit measure 1's clef
@@ -209,6 +210,12 @@ export function resolveScoreFollowCursor({
         measureBridge,
       })
       if (musical) {
+        const systemEndX =
+          typeof exact.meta?.systemEndX === 'number' ? exact.meta.systemEndX : null
+        const visualMaxX =
+          systemEndX != null && !nextSameSystem
+            ? Math.min(glideTargetX, systemEndX)
+            : glideTargetX
         return {
           cursor: {
             visible: true,
@@ -224,6 +231,8 @@ export function resolveScoreFollowCursor({
             meta: exact.meta,
             anchorBeat1X: exact.x,
             playableEndX: glideTargetX,
+            visualMaxX,
+            nextSameSystem,
             confidence: 'exact',
           },
           needsSetup: trust?.needsSetup ?? false,

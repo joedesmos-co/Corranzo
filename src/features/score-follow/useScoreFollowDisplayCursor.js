@@ -3,6 +3,15 @@ import {
   publishScoreFollowCursor,
   resetScoreFollowCursorRuntime,
 } from './scoreFollowCursorRuntime.js'
+import {
+  applyVisualCursorX,
+  isNearSystemEnd,
+  isSameSystemCursor,
+  resolveVisualMaxX,
+  shouldUseVisualCursorMotion,
+  systemKeyForCursor,
+  VISUAL_LOOKAHEAD_SECONDS,
+} from './cursorVisualMotion.js'
 
 const PAGE_CHANGE_ALPHA = 0.55
 const SNAP_THRESHOLD = 0.0005
@@ -34,6 +43,7 @@ export default function useScoreFollowCursorDriver({
     y: 0,
     page: 1,
     measureNumber: null,
+    systemKey: '',
     initialized: false,
   })
 
@@ -99,11 +109,17 @@ export default function useScoreFollowCursorDriver({
       }
 
       const state = stateRef.current
-      if (!state.initialized || state.page !== target.page) {
+      const targetSystemKey = systemKeyForCursor(target)
+      if (
+        !state.initialized ||
+        state.page !== target.page ||
+        state.systemKey !== targetSystemKey
+      ) {
         state.x = target.x
         state.y = target.y
         state.page = target.page
         state.measureNumber = target.measureNumber ?? null
+        state.systemKey = targetSystemKey
         state.initialized = true
         publishScoreFollowCursor({ ...target, smoothed: false })
         frameId = requestAnimationFrame(tick)
@@ -111,11 +127,33 @@ export default function useScoreFollowCursorDriver({
       }
 
       if (rtResolve && rtGetTime) {
-        state.x = target.x
+        const now = rtGetTime()
+        const ahead = rtResolve(now + VISUAL_LOOKAHEAD_SECONDS)
+        const sameSystemAhead = isSameSystemCursor(target, ahead)
+        const visualMaxX = resolveVisualMaxX(target)
+        const useVisual = shouldUseVisualCursorMotion(target)
+        const displayX = useVisual
+          ? applyVisualCursorX({
+              displayX: state.x,
+              musicalX: target.x,
+              musicalAheadX:
+                sameSystemAhead && ahead?.visible ? ahead.x : target.x,
+              atOnset: Boolean(target.atOnset),
+              sameSystem: true,
+              visualMaxX,
+              allowPredictiveLead: sameSystemAhead && !isNearSystemEnd(target),
+            })
+          : target.x
+        state.x = displayX
         state.y = target.y
         state.page = target.page
+        state.systemKey = targetSystemKey
         state.measureNumber = target.measureNumber ?? null
-        publishScoreFollowCursor({ ...target, smoothed: false })
+        publishScoreFollowCursor({
+          ...target,
+          x: displayX,
+          smoothed: useVisual && Math.abs(displayX - target.x) > 0.0001,
+        })
         frameId = requestAnimationFrame(tick)
         return
       }

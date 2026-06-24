@@ -15,10 +15,10 @@ import {
   buildMeasureMusicalEvents,
   resolveMusicalXInMeasure,
   resolveHeldNoteGlideProfile,
-  FAST_TEMPO_BPM,
 } from '../src/features/score-follow/cursorMusicalProgress.js'
 import { buildMeasureBoundaryDiagnostic } from '../src/features/score-follow/measureBoundaryDiagnostics.js'
 import { buildHeldNoteDiagnostic } from '../src/features/score-follow/heldNoteDiagnostics.js'
+import { measureMaxCursorStall } from '../src/features/score-follow/cursorMotionDiagnostics.js'
 import { measureCursorOnsetAlignment } from '../src/features/score-follow/scoreFollowPrecisionDiagnostics.js'
 import { filterTrustedAnchors } from '../src/features/score-follow/trustedAnchors.js'
 import { FIXTURE_PATHS } from '../src/dev/fixturePaths.js'
@@ -104,7 +104,7 @@ describe('cursorMusicalProgress', () => {
     expect(justBefore.x).toBeLessThan(musical.x)
   })
 
-  it('inserts hold-end knots for half notes and longer', () => {
+  it('does not insert hold plateaus that freeze motion between onsets', () => {
     const timingMap = parseMusicXml(
       F.scoreWrap(
         `<part id="P1">
@@ -125,10 +125,10 @@ describe('cursorMusicalProgress', () => {
       0.1,
       0.35,
     )
-    expect(events.some((event) => event.kind === 'hold-end')).toBe(true)
+    expect(events.some((event) => event.kind === 'hold-end')).toBe(false)
   })
 
-  it('keeps cursor at the notehead during a held-note plateau', () => {
+  it('glides continuously through a held note at 120bpm', () => {
     const timingMap = parseMusicXml(
       F.scoreWrap(
         `<part id="P1">
@@ -156,8 +156,8 @@ describe('cursorMusicalProgress', () => {
       xStart: 0.1,
       xEnd: 0.35,
     })
-    expect(midHold.mode).toBe('held-note')
-    expect(midHold.x).toBeCloseTo(atOnset.x, 4)
+    expect(midHold.x).toBeGreaterThan(atOnset.x + 0.002)
+    expect(midHold.mode).toBe('note-interpolate')
   })
 
   it('does not overshoot the next onset x before the next note begins', () => {
@@ -244,7 +244,7 @@ describe('cursorMusicalProgress', () => {
     expect(midHold.mode).toBe('note-interpolate')
   })
 
-  it('keeps fast-tempo held-note plateau behavior at 120bpm', () => {
+  it('keeps continuous motion for held notes at 120bpm without long stalls', () => {
     const timingMap = parseMusicXml(
       F.scoreWrap(
         `<part id="P1">
@@ -257,10 +257,13 @@ describe('cursorMusicalProgress', () => {
         </part>`,
       ),
     )
-    const profile = resolveHeldNoteGlideProfile(timingMap, 0, 1, 1)
-    expect(profile.tempoBpm).toBeGreaterThanOrEqual(FAST_TEMPO_BPM)
-    expect(profile.useContinuousGlide).toBe(false)
-    expect(profile.plateauSeconds).toBeGreaterThan(0.5)
+    const anchors = anchorsForMeasures(1, { playableSpan: 0.2 })
+    const maxStall = measureMaxCursorStall({
+      timingMap,
+      trustedAnchors: anchors,
+      measureNumber: 1,
+    })
+    expect(maxStall).toBeLessThan(0.1)
 
     const events = buildMeasureMusicalEvents(
       timingMap,
@@ -269,7 +272,7 @@ describe('cursorMusicalProgress', () => {
       0.1,
       0.35,
     )
-    expect(events.some((event) => event.kind === 'hold-end')).toBe(true)
+    expect(events.some((event) => event.kind === 'hold-end')).toBe(false)
   })
 })
 
@@ -400,7 +403,8 @@ describe('resolveScoreFollowCursor precision', () => {
       trustedAnchors: tightAnchors,
       trust: { showCursor: true, needsSetup: false },
     }).cursor
-    expect(lateTail.x).toBeGreaterThan(atLast.x + 0.003)
+    expect(lateTail.x).toBeGreaterThanOrEqual(atLast.x)
+    expect(lateTail.x).toBeLessThanOrEqual(0.22 + 0.001)
     expect(lateTail.progressMode).toBe('velocity-bridge')
 
     const diag = buildMeasureBoundaryDiagnostic({

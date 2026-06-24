@@ -38,6 +38,7 @@ import {
 } from './scoreFollowCursorRuntime.js'
 import { buildMeasureBoundaryDiagnostic } from './measureBoundaryDiagnostics.js'
 import { buildHeldNoteDiagnostic } from './heldNoteDiagnostics.js'
+import { buildCursorMotionDiagnostic } from './cursorMotionDiagnostics.js'
 import { buildScoreFollowPrecisionReport } from './scoreFollowPrecisionDiagnostics.js'
 import { isNextGenAlignmentDiagnosticsEnabled } from './nextGenAlignmentFlag.js'
 import { deriveNextGenAlignmentDiagnostics } from './nextGenAlignmentDiagnostics.js'
@@ -1157,6 +1158,18 @@ export default function useScoreFollow({
     [timingMap, trustedAnchors, currentMeasure?.number, hasTiming],
   )
 
+  const cursorMotion = useMemo(
+    () =>
+      currentMeasure?.number != null && hasTiming && trustedAnchors.length > 0
+        ? buildCursorMotionDiagnostic({
+            timingMap,
+            trustedAnchors,
+            measureNumber: currentMeasure.number,
+          })
+        : null,
+    [timingMap, trustedAnchors, currentMeasure?.number, hasTiming],
+  )
+
   const precisionReport = useMemo(
     () =>
       buildScoreFollowPrecisionReport({
@@ -1200,7 +1213,7 @@ export default function useScoreFollow({
       cursorY: cursor?.y ?? null,
       cursorConfidence: cursor?.confidence ?? null,
       cursorInterpolated: Boolean(cursor?.interpolated),
-      cursorMotion: cursor?.lockExact
+      cursorMotionLabel: cursor?.lockExact
         ? 'locked'
         : cursor?.atOnset
           ? 'onset-snap'
@@ -1212,6 +1225,7 @@ export default function useScoreFollow({
       precision: precisionReport,
       measureBoundary,
       heldNote,
+      cursorMotionDiagnostic: cursorMotion,
       // The cursor's single timing source of truth is the MusicXML timeline.
       timingSource: 'musicxml',
       timingSourceId: timingSourceId ?? null,
@@ -1239,6 +1253,7 @@ export default function useScoreFollow({
       precisionReport,
       measureBoundary,
       heldNote,
+      cursorMotion,
       timingSourceId,
       pdfFileName,
       pdfFingerprint,
