@@ -2,17 +2,24 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ANNOTATION_TOOLS, resolveAnnotationStrokeStyle } from './annotationConstants.js'
 import { findStrokesToErase, pointsToSvgPath } from '../../utils/annotationGeometry.js'
 import {
+  clientToNormalized,
+  clientToPageLocal,
+  findScrollableAncestor,
+  isPointInsidePage,
+} from '../../utils/annotationPointer.js'
+import {
   getPointerPressure,
   scaleWidth,
   smoothPoints,
 } from '../../utils/strokeSmoothing.js'
 import BrushCursor from './BrushCursor.jsx'
 
-function clientToNormalized(clientX, clientY, rect) {
-  return {
-    x: Math.min(1, Math.max(0, (clientX - rect.left) / rect.width)),
-    y: Math.min(1, Math.max(0, (clientY - rect.top) / rect.height)),
+function readPageRect(layerRef) {
+  const rect = layerRef.current?.getBoundingClientRect()
+  if (!rect || rect.width <= 0 || rect.height <= 0) {
+    return null
   }
+  return rect
 }
 
 export default function AnnotationLayer({
@@ -35,16 +42,25 @@ export default function AnnotationLayer({
   const erasedLiveRef = useRef(new Set())
 
   const syncPageRect = useCallback(() => {
-    const rect = layerRef.current?.getBoundingClientRect()
-    if (rect?.width > 0 && rect?.height > 0) {
+    const rect = readPageRect(layerRef)
+    if (rect) {
       setPageRect(rect)
     }
   }, [])
 
   useEffect(() => {
     syncPageRect()
+    const layer = layerRef.current
+    const scrollParent = layer ? findScrollableAncestor(layer) : null
+    const scrollTarget = scrollParent ?? window
+
     window.addEventListener('resize', syncPageRect)
-    return () => window.removeEventListener('resize', syncPageRect)
+    scrollTarget.addEventListener('scroll', syncPageRect, { passive: true })
+
+    return () => {
+      window.removeEventListener('resize', syncPageRect)
+      scrollTarget.removeEventListener('scroll', syncPageRect)
+    }
   }, [layout, syncPageRect])
 
   const flushPendingPoints = useCallback(() => {
@@ -138,15 +154,19 @@ export default function AnnotationLayer({
     drawingRef.current = false
   }, [onErase, onStrokeComplete, resolvedStrokeStyle.width, strokes])
 
-  function addPoint(event) {
-    const point = clientToNormalized(event.clientX, event.clientY, pageRect)
+  function addPoint(event, rect) {
+    const point = clientToNormalized(event.clientX, event.clientY, rect)
+    if (!point) {
+      return null
+    }
     const pressure = getPointerPressure(event)
     point.pressure = pressure
     return { point, pressure }
   }
 
   function handlePointerDown(event) {
-    if (!pageRect || event.button !== 0) {
+    const rect = readPageRect(layerRef)
+    if (!rect || event.button !== 0) {
       return
     }
 
@@ -154,7 +174,11 @@ export default function AnnotationLayer({
     event.stopPropagation()
     event.currentTarget.setPointerCapture(event.pointerId)
 
-    const { point, pressure } = addPoint(event)
+    const added = addPoint(event, rect)
+    if (!added) {
+      return
+    }
+    const { point, pressure } = added
     const width =
       activeTool === ANNOTATION_TOOLS.ERASER
         ? resolvedStrokeStyle.width
@@ -175,17 +199,23 @@ export default function AnnotationLayer({
   }
 
   function handlePointerMove(event) {
-    if (!pageRect) {
+    const rect = readPageRect(layerRef)
+    if (!rect) {
       return
     }
 
-    const { point, pressure } = addPoint(event)
+    const added = addPoint(event, rect)
+    if (!added) {
+      return
+    }
+    const { point, pressure } = added
 
     if (!drawingRef.current) {
+      const local = clientToPageLocal(event.clientX, event.clientY, rect)
       setCursor({
-        x: event.clientX,
-        y: event.clientY,
-        visible: true,
+        x: local?.x ?? 0,
+        y: local?.y ?? 0,
+        visible: isPointInsidePage(event.clientX, event.clientY, rect),
       })
       return
     }
@@ -249,26 +279,26 @@ export default function AnnotationLayer({
     : 0
 
   return (
-    <>
+    <div
+      ref={layerRef}
+      className={`annotation-layer-root${isEraser ? ' annotation-layer-root--eraser' : ''}`}
+      style={{
+        left: layout.left,
+        top: layout.top,
+        width: layout.width,
+        height: layout.height,
+        pointerEvents: isPointer ? 'none' : undefined,
+      }}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
+      onPointerLeave={handlePointerLeave}
+    >
       <svg
-        ref={layerRef}
         className={`annotation-layer${isEraser ? ' annotation-layer--eraser' : ''}`}
         viewBox="0 0 1 1"
         preserveAspectRatio="none"
-        style={{
-          left: layout.left,
-          top: layout.top,
-          width: layout.width,
-          height: layout.height,
-          // In pointer mode the layer is transparent to all pointer events so
-          // the user can scroll, tap playback controls, and interact normally.
-          pointerEvents: isPointer ? 'none' : undefined,
-        }}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerCancel}
-        onPointerLeave={handlePointerLeave}
       >
         {allStrokes.map((stroke, index) => {
           const key = stroke.id ?? `draft-${index}`
@@ -309,6 +339,6 @@ export default function AnnotationLayer({
         radiusPx={brushRadiusPx}
         tool={activeTool}
       />
-    </>
+    </div>
   )
 }

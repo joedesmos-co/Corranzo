@@ -1211,11 +1211,24 @@
   visibility: hidden;
 }
 
-.annotation-layer {
+.annotation-layer-root {
   position: absolute;
   z-index: 2;
   touch-action: none;
   cursor: crosshair;
+  overflow: visible;
+}
+
+.annotation-layer-root--eraser {
+  cursor: cell;
+}
+
+.annotation-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 .annotation-layer--eraser {
@@ -1223,9 +1236,9 @@
 }
 
 .brush-cursor {
-  position: fixed;
+  position: absolute;
   pointer-events: none;
-  z-index: 2000;
+  z-index: 3;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   border: 2px solid rgba(255, 255, 255, 0.65);
