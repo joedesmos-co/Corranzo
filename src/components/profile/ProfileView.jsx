@@ -1,6 +1,6 @@
 import { useProfileStats } from '../../context/ProfileStatsContext.jsx'
 import { exerciseTypeLabel } from '../../features/profile/exerciseTypes.js'
-import { isAutoSession, isManualSession } from '../../features/profile/manualPracticeLog.js'
+import { isManualSession } from '../../features/profile/manualPracticeLog.js'
 import ManualPracticeLog from './ManualPracticeLog.jsx'
 
 function formatDuration(seconds) {
@@ -44,9 +44,7 @@ function StatCard({ label, value }) {
 export default function ProfileView() {
   const { stats, resetAllStats } = useProfileStats()
   const manualSessions = stats.recentSessions.filter(isManualSession).slice(0, 5)
-  const legacyAutoSessions = stats.recentSessions.filter(isAutoSession).slice(0, 5)
   const hasManualHistory = (stats.manualSessionsCompleted ?? 0) > 0
-  const hasLegacyAutoHistory = (stats.legacyAutoSessionsCompleted ?? 0) > 0
 
   return (
     <main className="profile-view" aria-labelledby="profile-heading">
@@ -62,7 +60,7 @@ export default function ProfileView() {
 
       <ManualPracticeLog />
 
-      <div className="profile-stats-grid">
+      <div className="profile-stats-grid profile-stats-grid--two">
         <StatCard
           label="Logged practice time"
           value={formatDuration(stats.totalPracticeSeconds)}
@@ -71,14 +69,6 @@ export default function ProfileView() {
           label="Logged sessions"
           value={stats.manualSessionsCompleted ?? 0}
         />
-        {hasLegacyAutoHistory ? (
-          <StatCard
-            label="Older automatic sessions"
-            value={stats.legacyAutoSessionsCompleted ?? 0}
-          />
-        ) : (
-          <StatCard label="Older automatic sessions" value="—" />
-        )}
       </div>
 
       {!hasManualHistory ? (
@@ -116,36 +106,6 @@ export default function ProfileView() {
           </ul>
         </section>
       )}
-
-      {hasLegacyAutoHistory ? (
-        <section
-          className="profile-panel profile-panel--legacy"
-          aria-labelledby="legacy-auto-sessions-heading"
-        >
-          <h3 id="legacy-auto-sessions-heading" className="profile-panel__title">
-            Older automatic sessions
-          </h3>
-          <p className="profile-panel__lede">
-            These were recorded automatically in an earlier version. New practice
-            time is only added through the manual log above.
-          </p>
-          <ul className="profile-list profile-list--compact">
-            {legacyAutoSessions.map((session) => (
-              <li key={session.id} className="profile-list__item">
-                <span>
-                  <strong>{session.pieceTitle}</strong>
-                  <small>{formatDate(session.endedAt)}</small>
-                </span>
-                <span>{formatDuration(session.durationSeconds)}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="profile-panel__footnote">
-            Legacy automatic total:{' '}
-            {formatDuration(stats.legacyAutoPracticeSeconds ?? 0)}
-          </p>
-        </section>
-      ) : null}
 
       <footer className="profile-footer">
         <p>Clearing browser data also removes these stats.</p>

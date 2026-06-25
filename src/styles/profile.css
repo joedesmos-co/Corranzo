@@ -33,6 +33,10 @@
   margin-bottom: var(--sf-space-3xl);
 }
 
+.profile-stats-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .profile-stat,
 .profile-panel,
 .profile-empty {
@@ -311,23 +315,6 @@
 
 .profile-panel__subtitle:first-of-type {
   margin-top: 0;
-}
-
-.profile-panel--legacy {
-  margin-top: var(--sf-space-lg);
-}
-
-.profile-panel__lede,
-.profile-panel__footnote {
-  margin: 0 0 var(--sf-space-md);
-  color: var(--sf-text-muted);
-  font-size: var(--sf-font-small);
-  line-height: 1.5;
-}
-
-.profile-panel__footnote {
-  margin-bottom: 0;
-  color: var(--sf-text-faint);
 }
 
 .profile-list--compact .profile-list__item {
