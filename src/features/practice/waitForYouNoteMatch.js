@@ -106,6 +106,21 @@ export function evaluateNoteInput(checkpoint, playedMidi, chordState, settings) 
 
   if (matchIndex == null) {
     const couldMatch = matchesAnyExpected(playedMidi, expected, settings)
+    // A note that IS one of the chord's pitches but is already matched (a doubled
+    // or extra-quiet chord tone) should be tolerated, not flagged red. Only a note
+    // that is not in the chord at all counts as a wrong note.
+    if (couldMatch) {
+      return {
+        outcome: MATCH_OUTCOME.CHORD_PROGRESS,
+        expected,
+        matchedIndices: new Set(chordState.matchedIndices),
+        isChord: true,
+        playedMidi,
+        matchedCount: chordState.matchedIndices.size,
+        totalExpected: expected.length,
+        duplicate: true,
+      }
+    }
     return {
       outcome: MATCH_OUTCOME.WRONG,
       expected,

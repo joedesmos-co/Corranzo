@@ -106,7 +106,10 @@ export default function PracticeControlPanel({
         microphoneAvailable={isMicrophoneSupported()}
         inputMatchingActive={session.waitForYouInput.matchingEnabled}
         inputFeedback={session.waitForYouInput.inputFeedback}
+        guidance={session.waitForYou.guidance}
         onMarkCorrect={session.waitForYou.markCorrectAndContinue}
+        onSkip={session.waitForYou.skipCheckpoint}
+        onShowHint={session.waitForYou.showHint}
         onRestart={session.waitForYou.restart}
         onPlayReference={session.referencePlayback.playCheckpointReference}
         referencePlaying={session.referencePlayback.isPlaying}

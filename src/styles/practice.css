@@ -1259,6 +1259,70 @@
   border: 1px solid rgba(80, 100, 140, 0.3);
 }
 
+/* Wait For You 2.0 guidance banner (correct / wrong / waiting / hint). */
+.wait-for-you__guidance {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.wait-for-you__guidance-primary {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.wait-for-you__guidance-detail {
+  margin: 0;
+  font-size: 0.82rem;
+  opacity: 0.92;
+}
+
+.wait-for-you__guidance-hint {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.wait-for-you__guidance--success {
+  color: #b8e6c8;
+  background: rgba(72, 160, 100, 0.18);
+  border: 1px solid rgba(72, 160, 100, 0.4);
+}
+
+.wait-for-you__guidance--error {
+  color: #f0b8b8;
+  background: rgba(200, 80, 80, 0.14);
+  border: 1px solid rgba(200, 80, 80, 0.4);
+}
+
+.wait-for-you__guidance--partial {
+  color: #e8d4a8;
+  background: rgba(200, 160, 60, 0.14);
+  border: 1px solid rgba(200, 160, 60, 0.4);
+}
+
+/* Hint = yellow/blue accent so it stands out from waiting. */
+.wait-for-you__guidance--hint {
+  color: #ffe9a8;
+  background: rgba(210, 170, 40, 0.16);
+  border: 1px solid rgba(210, 170, 40, 0.45);
+}
+
+.wait-for-you__guidance--hint .wait-for-you__guidance-hint {
+  color: #bfe0ff;
+}
+
+.wait-for-you__guidance--neutral,
+.wait-for-you__guidance--waiting {
+  color: #d8c8f0;
+  background: rgba(120, 90, 180, 0.16);
+  border: 1px solid rgba(120, 90, 180, 0.38);
+}
+
 .wait-for-you__settings {
   margin-bottom: 12px;
   padding: 10px 12px;

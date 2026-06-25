@@ -22,6 +22,7 @@ import { PRACTICE_MODE } from './practiceMode.js'
 import { WFY_CHECKPOINT_MODE } from './waitForYouCheckpointMode.js'
 import useWaitForYouMatchSettings from './useWaitForYouMatchSettings.js'
 import useWaitForYouReferencePlayback from './useWaitForYouReferencePlayback.js'
+import useWaitForYouGuidance from './useWaitForYouGuidance.js'
 import useImportReadiness from '../import/useImportReadiness.js'
 import { savePracticePrefs, loadPracticePrefs } from '../session/practicePrefsStorage.js'
 
@@ -260,6 +261,14 @@ export default function usePracticeSession({
     waitForYou.currentCheckpoint,
   ])
 
+  const waitForYouGuidance = useWaitForYouGuidance({
+    active: isWaitForYou,
+    currentCheckpoint: waitForYou.currentCheckpoint,
+    inputFeedback: waitForYouInput.inputFeedback,
+    matchingActive: Boolean(waitForYouInput.matchingEnabled),
+    complete: waitForYou.isComplete,
+  })
+
   const waitForYouRef = useRef(waitForYou)
   waitForYouRef.current = waitForYou
 
@@ -387,8 +396,13 @@ export default function usePracticeSession({
     return {
       ...waitForYou,
       markCorrectAndContinue: markCorrectFromUser,
+      // Skip the current target (counts as a manual advance, not a played note).
+      skipCheckpoint: waitForYou.markCorrectAndContinue,
+      guidance: waitForYouGuidance.guidance,
+      wrongAttempts: waitForYouGuidance.wrongAttempts,
+      showHint: waitForYouGuidance.requestHint,
     }
-  }, [waitForYou, onRecordManualContinue])
+  }, [waitForYou, onRecordManualContinue, waitForYouGuidance])
 
   return {
     practicePrefsSnapshot,

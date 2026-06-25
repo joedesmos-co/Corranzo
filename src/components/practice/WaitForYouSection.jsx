@@ -55,6 +55,7 @@ export default function WaitForYouSection({
   microphoneAvailable,
   inputMatchingActive,
   inputFeedback,
+  guidance = null,
   matchSettings,
   rawMatchSettings,
   onMatchSettingChange,
@@ -62,6 +63,8 @@ export default function WaitForYouSection({
   onPlayReference,
   referencePlaying,
   onMarkCorrect,
+  onSkip,
+  onShowHint,
   onRestart,
   noteTarget = null,
   noteTargetWrongPage = false,
@@ -83,6 +86,11 @@ export default function WaitForYouSection({
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     inputMatchingActive &&
     inputFeedback?.message
+
+  const showGuidance =
+    checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
+    status === WFY_STATUS.WAITING &&
+    guidance?.primary != null
 
   const showMicChordHint =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
@@ -193,7 +201,30 @@ export default function WaitForYouSection({
         </p>
       )}
 
-      {showNoteFeedback && (
+      {showGuidance && (
+        <div
+          className={`wait-for-you__guidance wait-for-you__guidance--${guidance.tone}`}
+          role="status"
+          aria-live="polite"
+        >
+          <p className="wait-for-you__guidance-primary">{guidance.primary}</p>
+          {guidance.state === 'wrong' && guidance.playedLabel && (
+            <p className="wait-for-you__guidance-detail">
+              Expected: <strong>{guidance.expectedLabel}</strong>
+              {' · '}You played: <strong>{guidance.playedLabel}</strong>
+            </p>
+          )}
+          {guidance.state === 'partial' && guidance.missingLabels?.length > 0 && (
+            <p className="wait-for-you__guidance-detail">
+              Missing: <strong>{guidance.missingLabels.join(', ')}</strong>
+            </p>
+          )}
+          {guidance.hint && <p className="wait-for-you__guidance-hint">{guidance.hint}</p>}
+        </div>
+      )}
+
+      {/* Live "hearing X" confirmation (mic) while still waiting. */}
+      {showNoteFeedback && !showGuidance && (
         <p
           className={`wait-for-you__feedback ${feedbackClassName(inputFeedback.outcome)}`}
           role="status"
@@ -243,6 +274,16 @@ export default function WaitForYouSection({
             {referencePlaying ? 'Playing…' : 'Hear it'}
           </button>
         )}
+        {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && onShowHint && (
+          <button
+            type="button"
+            className="wait-for-you__btn"
+            disabled={status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS}
+            onClick={onShowHint}
+          >
+            Show hint
+          </button>
+        )}
         <button
           type="button"
           className="wait-for-you__btn wait-for-you__btn--primary"
@@ -251,6 +292,17 @@ export default function WaitForYouSection({
         >
           Continue
         </button>
+        {onSkip && (
+          <button
+            type="button"
+            className="wait-for-you__btn"
+            disabled={status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS}
+            onClick={onSkip}
+            title="Skip this note/chord"
+          >
+            Skip
+          </button>
+        )}
         <button
           type="button"
           className="wait-for-you__btn"
