@@ -10,7 +10,7 @@ import {
   resolveVisualMaxX,
   shouldUseVisualCursorMotion,
   systemKeyForCursor,
-  VISUAL_LOOKAHEAD_SECONDS,
+  VISUAL_LEAD_SECONDS,
 } from './cursorVisualMotion.js'
 
 const PAGE_CHANGE_ALPHA = 0.55
@@ -128,8 +128,11 @@ export default function useScoreFollowCursorDriver({
 
       if (rtResolve && rtGetTime) {
         const now = rtGetTime()
-        const ahead = rtResolve(now + VISUAL_LOOKAHEAD_SECONDS)
-        const sameSystemAhead = isSameSystemCursor(target, ahead)
+        const ahead = rtResolve(now + VISUAL_LEAD_SECONDS)
+        // Only lead within the same system and not right at a line end, so the
+        // lead never blends an old-system x with a new-system x.
+        const sameSystemAhead =
+          isSameSystemCursor(target, ahead) && !isNearSystemEnd(target)
         const visualMaxX = resolveVisualMaxX(target)
         const useVisual = shouldUseVisualCursorMotion(target)
         const displayX = useVisual
@@ -138,10 +141,8 @@ export default function useScoreFollowCursorDriver({
               musicalX: target.x,
               musicalAheadX:
                 sameSystemAhead && ahead?.visible ? ahead.x : target.x,
-              atOnset: Boolean(target.atOnset),
               sameSystem: true,
               visualMaxX,
-              allowPredictiveLead: sameSystemAhead && !isNearSystemEnd(target),
             })
           : target.x
         state.x = displayX

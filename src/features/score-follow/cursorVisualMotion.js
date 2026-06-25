@@ -1,13 +1,23 @@
 import { clamp } from './scoreFollowEasing.js'
 
-/** Lookahead for predictive visual creep (no trailing lag behind current musical x). */
-export const VISUAL_LOOKAHEAD_SECONDS = 0.055
+/**
+ * Predictive lead, expressed in TIME (not a fixed x distance). The display eases
+ * toward the musical target sampled this far in the future, so the cursor is at
+ * most ~this-many-ms ahead of the note regardless of tempo/spacing — slow/sparse
+ * passages can no longer drift 0.1–1s early the way a fixed-x lead did.
+ */
+export const VISUAL_LEAD_SECONDS = 0.02
 
-/** Max display lead ahead of current musical x (normalized page coords). */
-export const VISUAL_MAX_LEAD_X = 0.0045
+/** Per-frame follow factor for the bounded correction layer (eases velocity changes). */
+export const VISUAL_SMOOTH_ALPHA = 0.45
 
-/** Onset correction — snap display to exact notehead within this window. */
-export const VISUAL_ONSET_LOCK_SECONDS = 0.002
+/**
+ * Sub-pixel snap: once the follower is within this of the target, jump exactly to
+ * it. Kills the exponential's slow asymptotic tail so the cursor lands crisply on
+ * noteheads (otherwise fast passages read as ~1px / tens-of-ms behind). ~1px on a
+ * ~1000px-wide page.
+ */
+export const VISUAL_SNAP_X = 0.0012
 
 /** Same-system Y tolerance (matches resolveScoreFollowCursor). */
 export const SAME_SYSTEM_Y_TOLERANCE = 0.02
@@ -73,68 +83,56 @@ export function isNearSystemEnd(target, epsilon = 0.003) {
 }
 
 /**
- * Forward-only visual layer: preserves musical onset timing but eases velocity
- * dips using a tiny predictive lead, then corrects exactly at onsets.
+ * Bounded visual follower (the "correction layer"). The musical x is the exact,
+ * onset-locked target. The display eases toward a SMALL time-lead of that target
+ * (`musicalAheadX` = musical x at now + VISUAL_LEAD_SECONDS), which keeps motion
+ * smooth and natural while guaranteeing the cursor is never more than ~that-lead
+ * ahead of the note — a TIME cap, not a fixed-x cap, so slow/sparse passages no
+ * longer drift seconds early. The exponential follow eases the velocity changes
+ * at onsets (so held → fast transitions don't snap). Forward-only within a system;
+ * across systems it tracks the new-system musical x directly (no old/new x blend).
  */
 export function applyVisualCursorX({
   displayX,
   musicalX,
   musicalAheadX,
-  atOnset = false,
   sameSystem = true,
   visualMaxX = null,
-  allowPredictiveLead = true,
 }) {
   if (!Number.isFinite(musicalX)) {
     return displayX
   }
+  const cap = (value) => (visualMaxX != null ? Math.min(value, visualMaxX) : value)
 
   if (!sameSystem) {
-    return musicalX
+    // New system / line break — never blend the old-system x with the new one.
+    return cap(musicalX)
   }
 
-  let cappedMusicalX = musicalX
-  if (visualMaxX != null) {
-    cappedMusicalX = Math.min(cappedMusicalX, visualMaxX)
+  const nowX = cap(musicalX)
+  // Time-capped lead target: musical x a few ms ahead. Falls back to the current
+  // x when there is no valid forward same-system lookahead (e.g. near a line end).
+  const leadTarget =
+    Number.isFinite(musicalAheadX) && musicalAheadX > nowX ? cap(musicalAheadX) : nowX
+
+  if (!Number.isFinite(displayX)) {
+    return leadTarget
   }
+  const prev = cap(displayX)
+  const leadActive = leadTarget - nowX > 1e-6
 
-  if (atOnset) {
-    return cappedMusicalX
+  // Ease toward the lead target (bounded correction layer). Net position lands
+  // ≈ on the exact musical x with smoothed velocity; it can never exceed the
+  // time-capped lead target, and never steps backward within a system.
+  let x = prev + (leadTarget - prev) * VISUAL_SMOOTH_ALPHA
+  x = Math.min(x, leadTarget)
+  x = Math.max(x, prev)
+  // When motion flattens (held note / measure end → no active lead), close the
+  // exponential's slow asymptotic tail to the EXACT note x so the cursor lands
+  // crisply instead of crawling the last pixel behind. Never snaps ahead.
+  if (!leadActive && nowX - x > 0 && nowX - x <= VISUAL_SNAP_X) {
+    x = nowX
   }
-
-  let x = Number.isFinite(displayX) ? displayX : cappedMusicalX
-
-  if (cappedMusicalX > x) {
-    x = cappedMusicalX
-  }
-
-  if (!allowPredictiveLead) {
-    if (visualMaxX != null) {
-      x = Math.min(x, visualMaxX)
-    }
-    return Math.max(Number.isFinite(displayX) ? Math.min(displayX, visualMaxX ?? displayX) : x, x)
-  }
-
-  const aheadX = Number.isFinite(musicalAheadX) ? musicalAheadX : cappedMusicalX
-  const cappedAheadX =
-    visualMaxX != null ? Math.min(aheadX, visualMaxX) : aheadX
-  const leadRoom = cappedAheadX - cappedMusicalX
-
-  if (leadRoom > 1e-6 && cappedAheadX > x) {
-    const creep = Math.min(leadRoom * 0.42, VISUAL_MAX_LEAD_X)
-    x = Math.max(x, Math.min(cappedMusicalX + creep, cappedAheadX))
-  }
-
-  if (visualMaxX != null) {
-    x = Math.min(x, visualMaxX)
-  } else {
-    x = Math.min(x, cappedMusicalX + VISUAL_MAX_LEAD_X)
-  }
-
-  if (Number.isFinite(displayX)) {
-    x = Math.max(Math.min(displayX, visualMaxX ?? displayX), x)
-  }
-
   return x
 }
 

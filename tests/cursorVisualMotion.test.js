@@ -7,7 +7,6 @@ import {
   isSameSystemCursor,
   resolveVisualMaxX,
   shouldUseVisualCursorMotion,
-  VISUAL_MAX_LEAD_X,
 } from '../src/features/score-follow/cursorVisualMotion.js'
 import * as F from './helpers/buildXml.js'
 
@@ -32,30 +31,33 @@ function anchorsForMeasures(count, { playableSpan = 0.12 } = {}) {
 }
 
 describe('cursorVisualMotion', () => {
-  it('snaps to musical x at onsets', () => {
-    expect(
-      applyVisualCursorX({
-        displayX: 0.19,
-        musicalX: 0.22,
-        musicalAheadX: 0.22,
-        atOnset: true,
-        visualMaxX: 0.22,
-      }),
-    ).toBe(0.22)
+  it('eases forward toward the musical x without ever leading past it', () => {
+    // displayX is behind; with no lead room the follower advances toward musicalX
+    // but never overshoots it (forward-only, bounded).
+    const x = applyVisualCursorX({
+      displayX: 0.19,
+      musicalX: 0.22,
+      musicalAheadX: 0.22,
+      sameSystem: true,
+      visualMaxX: 0.22,
+    })
+    expect(x).toBeGreaterThan(0.19)
+    expect(x).toBeLessThanOrEqual(0.22)
   })
 
-  it('allows tiny predictive lead without trailing lag on the same system', () => {
+  it('leads only up to the TIME-capped target, never beyond it (no fixed-x runaway)', () => {
+    // musicalAheadX is the musical x a few ms ahead. The display may approach it
+    // but must never exceed it, so the lead is bounded in TIME regardless of how
+    // much horizontal room exists to the next note.
     const x = applyVisualCursorX({
       displayX: 0.2,
       musicalX: 0.2,
-      musicalAheadX: 0.206,
-      atOnset: false,
+      musicalAheadX: 0.205,
       sameSystem: true,
-      visualMaxX: 0.22,
-      allowPredictiveLead: true,
+      visualMaxX: 0.3, // lots of room ahead
     })
-    expect(x).toBeGreaterThan(0.2)
-    expect(x).toBeLessThanOrEqual(0.2 + VISUAL_MAX_LEAD_X + 0.0001)
+    expect(x).toBeGreaterThanOrEqual(0.2)
+    expect(x).toBeLessThanOrEqual(0.205 + 1e-9)
   })
 
   it('never exceeds visualMaxX / playableEndX', () => {
