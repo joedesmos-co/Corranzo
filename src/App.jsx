@@ -42,6 +42,7 @@ import {
   pathnameForView,
 } from './features/legal/legalRoutes.js'
 import { resolveRestoredActiveView } from './features/session/sessionRestoreRouting.js'
+import { getHomeNavigationTarget } from './features/navigation/goHome.js'
 import './App.css'
 import './styles/profile.css'
 import './styles/legal.css'
@@ -99,10 +100,10 @@ export default function App() {
   }, [])
 
   const goHome = useCallback(() => {
-    navigateToView('library')
-    if (!isOnboardingDismissed()) {
-      setShowWelcome(true)
-    }
+    const home = getHomeNavigationTarget()
+    setShowWelcome(home.showWelcome)
+    navigateToView(home.view)
+    window.scrollTo(0, 0)
   }, [navigateToView])
 
   useEffect(() => {

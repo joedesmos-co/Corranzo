@@ -38,11 +38,12 @@ describe('beta onboarding', () => {
   it('logo/title navigates home from app and legal pages', () => {
     const topbar = readSrc('components', 'TopBar.jsx')
     const app = readSrc('App.jsx')
+    expect(topbar).toMatch(/href="\/"/)
     expect(topbar).toMatch(/onGoHome/)
     expect(topbar).toMatch(/topbar__brand-btn/)
     expect(topbar).toMatch(/aria-label="Corranzo home"/)
     expect(app).toMatch(/onGoHome=\{goHome\}/)
-    expect(app).toMatch(/navigateToView\('library'\)/)
+    expect(app).toContain('getHomeNavigationTarget')
   })
 
   it('goHome clears legal pathname back to library home', () => {

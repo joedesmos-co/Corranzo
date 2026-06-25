@@ -19,19 +19,24 @@ export default function TopBar({ activeView, onNavigate, onGoHome, practiceReady
     onNavigate(id)
   }
 
+  function handleGoHome(event) {
+    event.preventDefault()
+    onGoHome?.()
+  }
+
   return (
     <header className="topbar">
-      <button
-        type="button"
+      <a
+        href="/"
         className="topbar__brand topbar__brand-btn"
-        onClick={onGoHome}
+        onClick={handleGoHome}
         aria-label="Corranzo home"
       >
-        <h1 className="topbar__title">Corranzo</h1>
+        <span className="topbar__title">Corranzo</span>
         <span className="topbar__beta">
           {BETA_LABEL} <span aria-hidden="true">·</span> v{BETA_VERSION}
         </span>
-      </button>
+      </a>
       <div className="topbar__actions">
         <nav className="topbar__nav" aria-label="Main">
           {VIEWS.map(({ id, label }) => (
