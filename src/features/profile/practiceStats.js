@@ -54,6 +54,9 @@ export function endSession(durationSeconds) {
   const endedAt = Date.now()
   const session = {
     ...sessionDraft,
+    source: 'auto',
+    exerciseType: null,
+    notes: '',
     endedAt,
     durationSeconds: normalizedDuration,
   }

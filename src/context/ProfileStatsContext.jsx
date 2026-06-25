@@ -8,6 +8,7 @@ import {
   beginSession,
   endSession,
 } from '../features/profile/practiceStats.js'
+import { saveManualSession } from '../features/profile/manualPracticeLog.js'
 
 const ProfileStatsContext = createContext(null)
 
@@ -29,6 +30,12 @@ export function ProfileStatsProvider({ children }) {
     return emptyStats
   }, [])
 
+  const saveManualPracticeSession = useCallback((sessionDetails) => {
+    const nextStats = saveManualSession(sessionDetails)
+    setStats(nextStats)
+    return nextStats
+  }, [])
+
   const recordWfyManualContinue = useCallback(() => {}, [])
 
   const value = useMemo(
@@ -36,6 +43,7 @@ export function ProfileStatsProvider({ children }) {
       stats,
       beginPracticeSession,
       endPracticeSession,
+      saveManualPracticeSession,
       resetAllStats,
       recordWfyManualContinue,
     }),
@@ -43,6 +51,7 @@ export function ProfileStatsProvider({ children }) {
       stats,
       beginPracticeSession,
       endPracticeSession,
+      saveManualPracticeSession,
       resetAllStats,
       recordWfyManualContinue,
     ],

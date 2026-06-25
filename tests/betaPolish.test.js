@@ -12,7 +12,7 @@ import {
 describe('public beta polish', () => {
   it('builds a prefilled email feedback link', () => {
     expect(BETA_LABEL).toBe('Public beta')
-    expect(BETA_VERSION).toBe('0.1')
+    expect(BETA_VERSION).toBe('0.1.1')
     expect(FEEDBACK_EMAIL).toBe('joedesmos.co@gmail.com')
     expect(FEEDBACK_SUBJECT).toBe('Corranzo beta feedback')
     expect(FEEDBACK_BODY).toContain('Device/browser:')

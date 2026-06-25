@@ -1,4 +1,7 @@
 import { useProfileStats } from '../../context/ProfileStatsContext.jsx'
+import { exerciseTypeLabel } from '../../features/profile/exerciseTypes.js'
+import { isAutoSession, isManualSession } from '../../features/profile/manualPracticeLog.js'
+import ManualPracticeLog from './ManualPracticeLog.jsx'
 
 function formatDuration(seconds) {
   const totalSeconds = Math.max(0, Math.floor(Number(seconds) || 0))
@@ -44,19 +47,26 @@ export default function ProfileView() {
     (left, right) =>
       (right.lastPracticedAt ?? 0) - (left.lastPracticedAt ?? 0),
   )
-  const recentPieces = pieces.slice(0, 5)
-  const hasStats = stats.totalSessions > 0 || stats.recentSessions.length > 0
+  const manualSessions = stats.recentSessions.filter(isManualSession).slice(0, 5)
+  const autoSessions = stats.recentSessions.filter(isAutoSession).slice(0, 5)
+  const autoPieceIds = new Set(autoSessions.map((session) => session.pieceId))
+  const autoPieces = pieces.filter((piece) => autoPieceIds.has(piece.id)).slice(0, 5)
+  const hasAutoStats = autoSessions.length > 0 || autoPieces.length > 0
+  const hasAnyHistory = stats.totalSessions > 0
 
   return (
     <main className="profile-view" aria-labelledby="profile-heading">
       <header className="profile-header">
         <h2 id="profile-heading" className="profile-header__title">
-          Practice stats
+          Practice log
         </h2>
         <p className="profile-header__lede">
-          A simple history stored only in this browser.
+          Log practice manually or let score-follow sessions add up automatically.
+          Everything stays in this browser.
         </p>
       </header>
+
+      <ManualPracticeLog />
 
       <div className="profile-stats-grid">
         <StatCard
@@ -64,55 +74,104 @@ export default function ProfileView() {
           value={formatDuration(stats.totalPracticeSeconds)}
         />
         <StatCard label="Total sessions" value={stats.totalSessions} />
-        <StatCard label="Pieces practiced" value={pieces.length} />
+        <StatCard
+          label="Manual sessions"
+          value={stats.manualSessionsCompleted ?? 0}
+        />
       </div>
 
-      {!hasStats ? (
+      {!hasAnyHistory ? (
         <div className="profile-empty">
           <h3>Your practice history starts here</h3>
-          <p>Finish a Practice session and it will appear here on this device.</p>
+          <p>
+            Use the timer above to log what you practiced, or finish a score-follow
+            session and it will appear below.
+          </p>
         </div>
       ) : (
         <div className="profile-panels">
-          <section className="profile-panel" aria-labelledby="recent-pieces-heading">
-            <h3 id="recent-pieces-heading" className="profile-panel__title">
-              Recent pieces
+          <section
+            className="profile-panel"
+            aria-labelledby="manual-sessions-heading"
+          >
+            <h3 id="manual-sessions-heading" className="profile-panel__title">
+              Recent manual sessions
             </h3>
-            {recentPieces.length === 0 ? (
-              <p className="profile-panel__empty">No pieces recorded yet.</p>
+            {manualSessions.length === 0 ? (
+              <p className="profile-panel__empty">
+                No manual sessions saved yet. Start the timer above when you practice.
+              </p>
             ) : (
               <ul className="profile-list">
-                {recentPieces.map((piece) => (
-                  <li key={piece.id} className="profile-list__item">
+                {manualSessions.map((session) => (
+                  <li key={session.id} className="profile-list__item">
                     <span>
-                      <strong>{piece.title}</strong>
-                      <small>{formatDate(piece.lastPracticedAt)}</small>
+                      <strong>{session.pieceTitle}</strong>
+                      <small>
+                        {exerciseTypeLabel(session.exerciseType)} ·{' '}
+                        {formatDate(session.endedAt)}
+                      </small>
+                      {session.notes ? (
+                        <small className="profile-list__notes">{session.notes}</small>
+                      ) : null}
                     </span>
-                    <span>{formatDuration(piece.totalPracticeSeconds)}</span>
+                    <span>{formatDuration(session.durationSeconds)}</span>
                   </li>
                 ))}
               </ul>
             )}
           </section>
 
-          <section className="profile-panel" aria-labelledby="recent-sessions-heading">
-            <h3 id="recent-sessions-heading" className="profile-panel__title">
-              Recent sessions
+          <section
+            className="profile-panel"
+            aria-labelledby="score-follow-sessions-heading"
+          >
+            <h3
+              id="score-follow-sessions-heading"
+              className="profile-panel__title"
+            >
+              Score-follow sessions
             </h3>
-            {stats.recentSessions.length === 0 ? (
-              <p className="profile-panel__empty">No sessions recorded yet.</p>
+            {!hasAutoStats ? (
+              <p className="profile-panel__empty">
+                Open a piece in Practice and time there is tracked automatically.
+              </p>
             ) : (
-              <ul className="profile-list">
-                {stats.recentSessions.map((session) => (
-                  <li key={session.id} className="profile-list__item">
-                    <span>
-                      <strong>{session.pieceTitle}</strong>
-                      <small>{formatDate(session.endedAt)}</small>
-                    </span>
-                    <span>{formatDuration(session.durationSeconds)}</span>
-                  </li>
-                ))}
-              </ul>
+              <>
+                <h4 className="profile-panel__subtitle">Recent pieces</h4>
+                {autoPieces.length === 0 ? (
+                  <p className="profile-panel__empty">No pieces recorded yet.</p>
+                ) : (
+                  <ul className="profile-list profile-list--compact">
+                    {autoPieces.map((piece) => (
+                      <li key={piece.id} className="profile-list__item">
+                        <span>
+                          <strong>{piece.title}</strong>
+                          <small>{formatDate(piece.lastPracticedAt)}</small>
+                        </span>
+                        <span>{formatDuration(piece.totalPracticeSeconds)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <h4 className="profile-panel__subtitle">Recent sessions</h4>
+                {autoSessions.length === 0 ? (
+                  <p className="profile-panel__empty">No score-follow sessions yet.</p>
+                ) : (
+                  <ul className="profile-list profile-list--compact">
+                    {autoSessions.map((session) => (
+                      <li key={session.id} className="profile-list__item">
+                        <span>
+                          <strong>{session.pieceTitle}</strong>
+                          <small>{formatDate(session.endedAt)}</small>
+                        </span>
+                        <span>{formatDuration(session.durationSeconds)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
             )}
           </section>
         </div>

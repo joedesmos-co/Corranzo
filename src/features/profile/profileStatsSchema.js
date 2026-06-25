@@ -1,3 +1,5 @@
+import { normalizeExerciseType } from './exerciseTypes.js'
+
 export const PROFILE_STATS_VERSION = 1
 export const MAX_RECENT_SESSIONS = 20
 
@@ -20,6 +22,7 @@ export function createEmptyStats() {
     version: PROFILE_STATS_VERSION,
     totalPracticeSeconds: 0,
     totalSessions: 0,
+    manualSessionsCompleted: 0,
     lastPracticedAt: null,
     pieces: {},
     recentSessions: [],
@@ -39,16 +42,25 @@ function normalizeSession(session) {
   const endedAt = normalizeTimestamp(session.endedAt)
   const startedAt = normalizeTimestamp(session.startedAt) ?? endedAt
 
+  const source = session.source === 'manual' ? 'manual' : 'auto'
+
   return {
     id:
       typeof session.id === 'string' && session.id
         ? session.id
         : `session-${endedAt ?? startedAt ?? 0}-${pieceId}`,
+    source,
     pieceId,
     pieceTitle:
       typeof session.pieceTitle === 'string' && session.pieceTitle.trim()
         ? session.pieceTitle.trim().slice(0, 120)
         : 'Untitled piece',
+    exerciseType:
+      source === 'manual' ? normalizeExerciseType(session.exerciseType) : null,
+    notes:
+      source === 'manual' && typeof session.notes === 'string'
+        ? session.notes.trim().slice(0, 500)
+        : '',
     startedAt,
     endedAt,
     durationSeconds: nonNegativeNumber(
@@ -115,11 +127,16 @@ export function normalizeStats(raw) {
     ),
     recentSessions.length,
   )
+  const manualSessionsCompleted = Math.max(
+    nonNegativeNumber(raw.manualSessionsCompleted),
+    recentSessions.filter((session) => session.source === 'manual').length,
+  )
 
   return {
     version: PROFILE_STATS_VERSION,
     totalPracticeSeconds,
     totalSessions,
+    manualSessionsCompleted,
     lastPracticedAt:
       normalizeTimestamp(raw.lastPracticedAt) ??
       recentSessions[0]?.endedAt ??
