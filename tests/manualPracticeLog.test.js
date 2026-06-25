@@ -14,10 +14,6 @@ import {
   stopManualTimer,
 } from '../src/features/profile/manualPracticeTimer.js'
 import { createEmptyStats } from '../src/features/profile/profileStatsSchema.js'
-import {
-  beginSession,
-  endSession,
-} from '../src/features/profile/practiceStats.js'
 
 function createMemoryStorage() {
   const values = new Map()
@@ -88,13 +84,26 @@ describe('manual practice log storage', () => {
     })
   })
 
-  it('updates totals when manual sessions are added after auto sessions', () => {
+  it('updates manual totals without mixing in legacy automatic sessions', () => {
     vi.spyOn(Date, 'now')
       .mockReturnValueOnce(1_000)
       .mockReturnValueOnce(61_000)
 
-    beginSession({ id: 'piece-a', title: 'Piece A' })
-    endSession(60)
+    localStorage.setItem(
+      STATS_STORAGE_KEY,
+      JSON.stringify({
+        recentSessions: [
+          {
+            id: 'legacy-1',
+            pieceId: 'piece-a',
+            pieceTitle: 'Piece A',
+            endedAt: 61_000,
+            durationSeconds: 60,
+            source: 'auto',
+          },
+        ],
+      }),
+    )
 
     const stats = saveManualSession({
       pieceTitle: 'Chord drills',
@@ -104,9 +113,11 @@ describe('manual practice log storage', () => {
       endedAt: 115_000,
     })
 
-    expect(stats.totalPracticeSeconds).toBe(105)
-    expect(stats.totalSessions).toBe(2)
+    expect(stats.totalPracticeSeconds).toBe(45)
+    expect(stats.totalSessions).toBe(1)
     expect(stats.manualSessionsCompleted).toBe(1)
+    expect(stats.legacyAutoPracticeSeconds).toBe(60)
+    expect(stats.legacyAutoSessionsCompleted).toBe(1)
     expect(stats.recentSessions[0].source).toBe('manual')
     expect(stats.recentSessions[1].source).toBe('auto')
   })
@@ -192,9 +203,11 @@ describe('profile empty state compatibility', () => {
     )
 
     expect(loadStats()).toMatchObject({
-      totalPracticeSeconds: 60,
-      totalSessions: 1,
+      totalPracticeSeconds: 0,
+      totalSessions: 0,
       manualSessionsCompleted: 0,
+      legacyAutoPracticeSeconds: 60,
+      legacyAutoSessionsCompleted: 1,
       recentSessions: [
         expect.objectContaining({
           source: 'auto',

@@ -9,7 +9,6 @@ import useWaitForYouNoteTarget from '../features/practice/useWaitForYouNoteTarge
 import useScoreFollow from '../features/score-follow/useScoreFollow.js'
 import { WFY_CHECKPOINT_MODE } from '../features/practice/waitForYouCheckpointMode.js'
 import { WFY_STATUS } from '../features/practice/waitForYouEngine.js'
-import usePracticeStatsTracker from '../features/profile/usePracticeStatsTracker.js'
 import { useProfileStats } from './ProfileStatsContext.jsx'
 import { PracticeTickContext, ScoreFollowCursorContext } from './PracticeTickContext.jsx'
 
@@ -64,21 +63,6 @@ export function PracticeSessionProvider({
       !session.timing.isLoading &&
       Boolean(session.timing.timingMap),
   )
-
-  usePracticeStatsTracker({
-    enabled: activeView === 'practice',
-    sessionReady,
-    pdfMeta,
-    musicXmlSource,
-    timingMap: session.timing.timingMap,
-    isDemoPiece: resolvedDemoPiece,
-    practiceMode: session.practiceMode,
-    isWaitForYou: session.isWaitForYou,
-    wfyInputSource: session.wfyInputSource,
-    waitForYouInput: session.waitForYouInput,
-    playback: session.playback,
-    loop: session.loop,
-  })
 
   const scoreFollow = useScoreFollow({
     timingMap: session.timing.timingMap,

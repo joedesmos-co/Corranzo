@@ -1,5 +1,4 @@
-import { loadStats, saveStats } from './profileStorage.js'
-import { MAX_RECENT_SESSIONS } from './profileStatsSchema.js'
+import { loadStats } from './profileStorage.js'
 
 let activeSession = null
 
@@ -18,7 +17,15 @@ function normalizePiece(piece) {
   }
 }
 
+/** Automatic practice tracking is disabled — manual log is the source of truth. */
+export const AUTOMATIC_PRACTICE_TRACKING_ENABLED = false
+
 export function beginSession(piece) {
+  if (!AUTOMATIC_PRACTICE_TRACKING_ENABLED) {
+    activeSession = null
+    return null
+  }
+
   const normalizedPiece = normalizePiece(piece)
   if (!normalizedPiece) {
     activeSession = null
@@ -36,54 +43,7 @@ export function beginSession(piece) {
   return { ...activeSession }
 }
 
-export function endSession(durationSeconds) {
-  const sessionDraft = activeSession
+export function endSession(_durationSeconds) {
   activeSession = null
-
-  const stats = loadStats()
-  const duration = Number(durationSeconds)
-  const normalizedDuration = Math.floor(duration)
-  if (
-    !sessionDraft ||
-    !Number.isFinite(duration) ||
-    normalizedDuration < 1
-  ) {
-    return stats
-  }
-
-  const endedAt = Date.now()
-  const session = {
-    ...sessionDraft,
-    source: 'auto',
-    exerciseType: null,
-    notes: '',
-    endedAt,
-    durationSeconds: normalizedDuration,
-  }
-  const existingPiece = stats.pieces[session.pieceId]
-  const piece = {
-    id: session.pieceId,
-    title: session.pieceTitle,
-    totalPracticeSeconds:
-      (existingPiece?.totalPracticeSeconds ?? 0) + normalizedDuration,
-    totalSessions: (existingPiece?.totalSessions ?? 0) + 1,
-    lastPracticedAt: endedAt,
-  }
-  const nextStats = {
-    ...stats,
-    totalPracticeSeconds: stats.totalPracticeSeconds + normalizedDuration,
-    totalSessions: stats.totalSessions + 1,
-    lastPracticedAt: endedAt,
-    pieces: {
-      ...stats.pieces,
-      [piece.id]: piece,
-    },
-    recentSessions: [session, ...stats.recentSessions].slice(
-      0,
-      MAX_RECENT_SESSIONS,
-    ),
-  }
-
-  saveStats(nextStats)
-  return nextStats
+  return loadStats()
 }

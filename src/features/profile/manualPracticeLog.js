@@ -1,6 +1,6 @@
 import { normalizeExerciseType } from './exerciseTypes.js'
 import { loadStats, saveStats } from './profileStorage.js'
-import { MAX_RECENT_SESSIONS } from './profileStatsSchema.js'
+import { MAX_RECENT_SESSIONS, reconcileProfileStats } from './profileStatsSchema.js'
 
 function normalizePieceTitle(value) {
   if (typeof value === 'string' && value.trim()) {
@@ -77,12 +77,8 @@ export function saveManualSession({
     lastPracticedAt: safeEndedAt,
   }
 
-  const nextStats = {
+  const nextStats = reconcileProfileStats({
     ...stats,
-    totalPracticeSeconds: stats.totalPracticeSeconds + normalizedDuration,
-    totalSessions: stats.totalSessions + 1,
-    manualSessionsCompleted: (stats.manualSessionsCompleted ?? 0) + 1,
-    lastPracticedAt: safeEndedAt,
     pieces: {
       ...stats.pieces,
       [piece.id]: piece,
@@ -91,7 +87,7 @@ export function saveManualSession({
       0,
       MAX_RECENT_SESSIONS,
     ),
-  }
+  })
 
   saveStats(nextStats)
   return nextStats

@@ -23,9 +23,50 @@ export function createEmptyStats() {
     totalPracticeSeconds: 0,
     totalSessions: 0,
     manualSessionsCompleted: 0,
+    legacyAutoPracticeSeconds: 0,
+    legacyAutoSessionsCompleted: 0,
     lastPracticedAt: null,
     pieces: {},
     recentSessions: [],
+  }
+}
+
+function sumSessionDurations(sessions) {
+  return sessions.reduce(
+    (sum, session) => sum + nonNegativeNumber(session.durationSeconds),
+    0,
+  )
+}
+
+export function isManualSessionRecord(session) {
+  return session?.source === 'manual'
+}
+
+export function isLegacyAutoSessionRecord(session) {
+  return session?.source !== 'manual'
+}
+
+/**
+ * Recompute headline totals from stored sessions. Manual sessions drive the
+ * primary totals; older automatic sessions are kept separately for display.
+ */
+export function reconcileProfileStats(stats) {
+  const recentSessions = Array.isArray(stats.recentSessions)
+    ? stats.recentSessions.map(normalizeSession).filter(Boolean)
+    : []
+  const manualSessions = recentSessions.filter(isManualSessionRecord)
+  const legacyAutoSessions = recentSessions.filter(isLegacyAutoSessionRecord)
+
+  return {
+    ...stats,
+    version: PROFILE_STATS_VERSION,
+    recentSessions,
+    totalPracticeSeconds: sumSessionDurations(manualSessions),
+    totalSessions: manualSessions.length,
+    manualSessionsCompleted: manualSessions.length,
+    legacyAutoPracticeSeconds: sumSessionDurations(legacyAutoSessions),
+    legacyAutoSessionsCompleted: legacyAutoSessions.length,
+    lastPracticedAt: manualSessions[0]?.endedAt ?? null,
   }
 }
 
@@ -118,30 +159,21 @@ export function normalizeStats(raw) {
     .sort((left, right) => (right.endedAt ?? 0) - (left.endedAt ?? 0))
     .slice(0, MAX_RECENT_SESSIONS)
 
-  const totalPracticeSeconds = nonNegativeNumber(
-    raw.totalPracticeSeconds ?? raw.totals?.practiceSecondsActive,
-  )
-  const totalSessions = Math.max(
-    nonNegativeNumber(
-      raw.totalSessions ?? raw.totals?.sessionsCompleted,
-    ),
-    recentSessions.length,
-  )
-  const manualSessionsCompleted = Math.max(
-    nonNegativeNumber(raw.manualSessionsCompleted),
-    recentSessions.filter((session) => session.source === 'manual').length,
-  )
+  const manualSessions = recentSessions.filter(isManualSessionRecord)
+  const legacyAutoSessions = recentSessions.filter(isLegacyAutoSessionRecord)
+  const manualPracticeSeconds = sumSessionDurations(manualSessions)
+  const legacyAutoPracticeSeconds = sumSessionDurations(legacyAutoSessions)
 
-  return {
+  return reconcileProfileStats({
     version: PROFILE_STATS_VERSION,
-    totalPracticeSeconds,
-    totalSessions,
-    manualSessionsCompleted,
+    totalPracticeSeconds: manualPracticeSeconds,
+    totalSessions: manualSessions.length,
+    manualSessionsCompleted: manualSessions.length,
+    legacyAutoPracticeSeconds,
+    legacyAutoSessionsCompleted: legacyAutoSessions.length,
     lastPracticedAt:
-      normalizeTimestamp(raw.lastPracticedAt) ??
-      recentSessions[0]?.endedAt ??
-      null,
+      manualSessions[0]?.endedAt ?? normalizeTimestamp(raw.lastPracticedAt),
     pieces: normalizePieces(raw.pieces),
     recentSessions,
-  }
+  })
 }
