@@ -1458,6 +1458,67 @@
   gap: 8px;
 }
 
+.midi-input-status__device-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+.midi-input-status__device-label {
+  font-size: 0.62rem;
+  color: #6b82a8;
+  text-transform: uppercase;
+}
+
+.midi-input-status__device-picker select {
+  flex: 1;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(20, 28, 44, 0.6);
+  color: #f4f7fc;
+  border: 1px solid rgba(80, 100, 140, 0.4);
+  padding: 0 8px;
+}
+
+.midi-diagnostics__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin: 0;
+}
+
+.midi-diagnostics__grid dt {
+  margin: 0 0 2px;
+  font-size: 0.62rem;
+  color: #6b82a8;
+  text-transform: uppercase;
+}
+
+.midi-diagnostics__grid dd {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #f4f7fc;
+}
+
+.midi-diagnostics__active {
+  grid-column: 1 / -1;
+}
+
+.midi-diagnostics__chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.midi-diagnostics__chip {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(80, 120, 180, 0.25);
+  border: 1px solid rgba(120, 160, 220, 0.4);
+  font-size: 0.78rem;
+}
+
 .midi-input-status__btn {
   height: 36px;
   padding: 0 14px;

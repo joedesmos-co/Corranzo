@@ -10,6 +10,7 @@ import { isWebMidiSupported } from '../../features/midi-input/parseMidiMessage.j
 import { isMicrophoneSupported } from '../../features/microphone-input/micEnvironment.js'
 import { WFY_INPUT_SOURCE } from '../../features/microphone-input/micInputConstants.js'
 import MidiInputStatusPanel from './MidiInputStatusPanel.jsx'
+import MidiDiagnosticsPanel from './MidiDiagnosticsPanel.jsx'
 import MicrophoneInputStatusPanel from './MicrophoneInputStatusPanel.jsx'
 import WaitForYouSection from './WaitForYouSection.jsx'
 import PracticeCollapsibleSection from './PracticeCollapsibleSection.jsx'
@@ -120,22 +121,37 @@ export default function PracticeControlPanel({
       {session.isWaitForYou &&
         session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
         session.wfyInputSource === WFY_INPUT_SOURCE.MIDI && (
-          <MidiInputStatusPanel
-            support={session.webMidi.support}
-            permission={session.webMidi.permission}
-            devices={session.webMidi.devices}
-            lastNote={session.webMidi.lastNote}
-            errorMessage={session.webMidi.errorMessage}
-            isGranted={session.webMidi.isGranted}
-            onRequestAccess={session.webMidi.requestAccess}
-            onRefreshDevices={session.webMidi.refreshDevices}
-            listenHint={
-              session.waitForYouInput.matchingEnabled
-                ? 'Listening'
-                : 'Enable MIDI to continue automatically.'
-            }
-            compact
-          />
+          <>
+            <MidiInputStatusPanel
+              support={session.webMidi.support}
+              permission={session.webMidi.permission}
+              devices={session.webMidi.devices}
+              lastNote={session.webMidi.lastNote}
+              errorMessage={session.webMidi.errorMessage}
+              isGranted={session.webMidi.isGranted}
+              deviceStatusLabel={session.webMidi.statusLabel}
+              activeDeviceId={session.webMidi.activeDeviceId}
+              onSelectDevice={session.webMidi.selectDevice}
+              onRequestAccess={session.webMidi.requestAccess}
+              onRefreshDevices={session.webMidi.refreshDevices}
+              listenHint={
+                session.waitForYouInput.matchingEnabled
+                  ? 'Listening'
+                  : 'Enable MIDI to continue automatically.'
+              }
+              compact
+            />
+            {session.webMidi.isGranted && (
+              <MidiDiagnosticsPanel
+                statusLabel={session.webMidi.statusLabel}
+                latencyMs={session.webMidi.latencyMs}
+                noteCount={session.webMidi.noteCount}
+                sustain={session.webMidi.sustain}
+                activeNotes={session.webMidi.activeNotes}
+                lastNote={session.webMidi.lastNote}
+              />
+            )}
+          </>
         )}
 
       {session.isWaitForYou &&

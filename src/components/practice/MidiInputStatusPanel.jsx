@@ -14,17 +14,23 @@ export default function MidiInputStatusPanel({
   onRequestAccess,
   onRefreshDevices,
   listenHint,
+  deviceStatusLabel = null,
+  activeDeviceId = null,
+  onSelectDevice = null,
   compact = false,
 }) {
   const supported = support === WEB_MIDI_SUPPORT.SUPPORTED
   const isSafari = isSafariFamilyBrowser()
-  const statusLabel = isGranted
-    ? devices.length > 0
-      ? 'MIDI ready'
-      : 'MIDI disconnected'
-    : supported
-      ? 'MIDI off'
-      : 'MIDI unavailable'
+  const statusLabel =
+    deviceStatusLabel ??
+    (isGranted
+      ? devices.length > 0
+        ? 'MIDI ready'
+        : 'MIDI disconnected'
+      : supported
+        ? 'MIDI off'
+        : 'MIDI unavailable')
+  const showDevicePicker = isGranted && devices.length > 1 && onSelectDevice
 
   return (
     <section
@@ -64,6 +70,22 @@ export default function MidiInputStatusPanel({
       )}
 
       {errorMessage && <p className="practice-section__error">{errorMessage}</p>}
+
+      {showDevicePicker && (
+        <label className="midi-input-status__device-picker">
+          <span className="midi-input-status__device-label">Keyboard</span>
+          <select
+            value={activeDeviceId ?? ''}
+            onChange={(event) => onSelectDevice(event.target.value)}
+          >
+            {devices.map((device) => (
+              <option key={device.id} value={device.id}>
+                {device.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
 
       <div className="midi-input-status__actions">
         {supported && !isGranted && (
