@@ -4,81 +4,156 @@ import {
   getPlaybackDurationSeconds,
   usesPerformedTimeline,
 } from '../musicxml/performedTimeline.js'
-import { buildMeasureMusicalEvents } from './cursorMusicalProgress.js'
+import { getTimeline } from '../musicxml/timeline.js'
 
 /**
- * Score-follow Motion Engine v2 — precomputed cursor motion timeline.
+ * Score-follow Motion Engine v3 — precomputed, PLAYBACK-ORDERED motion timeline.
  *
- * Instead of per-frame predictive smoothing hacks, the cursor's path is built
- * once as a set of motion curves (one per system) that pass exactly through each
- * note/chord onset at its score time. Position at audio time T is then a pure
- * lookup + interpolation — no accumulated state, so seek/pause/loop are exact.
+ * The playback timeline is the single source of truth. The cursor path is built
+ * once as a sequence of PHRASES, in the order playback actually visits measures
+ * (so repeats / D.C. / D.S. / Coda jumps are followed, never engraving order).
  *
- * Within a system the curve is a MONOTONE cubic Hermite spline through the onset
- * knots. This guarantees, by construction:
- *   - onset lock: the curve passes through (onsetTime, onsetX) exactly, so when
- *     the cursor reaches a notehead the note is sounding;
- *   - smoothness: C1-continuous velocity (no kinks/stalls at onsets or barlines);
- *   - no early / no backward: between two knots the value stays within their x
- *     range, so the cursor never reaches the next note early nor steps back.
+ * A phrase = a run of consecutive performed measures that stay on one system and
+ * flow forward in written order. Within a phrase the cursor is a single monotone
+ * cubic through the note onsets, so:
+ *   - onset lock: the curve passes through (onsetTime, noteheadX) exactly;
+ *   - smoothness: C1 velocity, and ordinary barlines are NOT knots/breaks — a
+ *     measure boundary inside a phrase contributes no artificial velocity change;
+ *   - no early / no backward: monotone between knots.
  *
- * Systems are independent curves (a page/line break is a hard reset): the engine
- * never blends an old-system x with a new-system x, and never predicts across a
- * boundary. Each system finishes at its systemEndX (settle) and the next system
- * starts fresh.
+ * Note x is derived by mapping each note's engraved default-x across the measure's
+ * ESTIMATED FULL width (start-of-measure → barline, the barline extrapolated from
+ * the last note's spacing and remaining duration). This is the key v3 fix: it
+ * stops the old engine from cramming the last note onto playableEndX, which made
+ * the barline gap tiny and the cursor visibly brake every measure. If default-x
+ * is missing/non-monotonic the measure falls back to time-proportional spacing.
+ *
+ * A phrase ends for one of three reasons, each a distinct segment:
+ *   - true system/page break (next measure is the natural continuation on a new
+ *     line) → settle to systemEndX, then the next phrase starts the new line;
+ *   - playback jump (repeat / D.C. / D.S. / Coda — next played measure is not the
+ *     written successor) → settle to THIS measure's own barline (playableEndX) and
+ *     the next phrase begins immediately at the jump target (cursor jumps, never
+ *     continues into music that will not be played);
+ *   - end of piece → hold.
+ *
+ * resolveCursorMotion(timeline, T) is a pure lookup, so seek/pause/loop are exact.
  */
 
-/** Two measures share a system when same page and y within this tolerance. */
 const SYSTEM_Y_TOLERANCE = 0.02
-
-/** A note/chord whose glide to the next onset lasts longer than this is "held". */
+const CHORD_GROUP_SECONDS = 0.012
+/** A note whose glide to the next onset lasts longer than this reads as "held". */
 const HELD_GLIDE_SECONDS = 0.6
 
 function anchorPlayableEndX(anchor) {
   const pe = anchor?.meta?.playableEndX
   return typeof pe === 'number' && pe > anchor.x ? pe : anchor.x + 0.08
 }
-
 function anchorSystemEndX(anchor) {
   const se = anchor?.meta?.systemEndX
-  if (typeof se === 'number' && Number.isFinite(se)) {
-    return se
-  }
-  return anchorPlayableEndX(anchor)
+  return typeof se === 'number' && Number.isFinite(se) ? se : anchorPlayableEndX(anchor)
 }
 
 function enumeratePerformedMeasures(timingMap) {
   if (usesPerformedTimeline(timingMap)) {
     const entries = timingMap?.performedMeasureTimeline?.entries ?? []
-    return entries.map((entry) => ({
-      measureNumber: entry.writtenMeasureNumber,
-      startTime: entry.startTimeSeconds,
-      endTime: entry.endTimeSeconds,
+    return entries.map((e) => ({
+      measureNumber: e.writtenMeasureNumber,
+      startTime: e.startTimeSeconds,
+      endTime: e.endTimeSeconds,
     }))
   }
-  const measures = timingMap?.measures ?? []
-  return measures.map((measure) => ({
-    measureNumber: measure.number,
-    startTime: measure.startTimeSeconds,
-    endTime: measure.endTimeSeconds,
+  return (timingMap?.measures ?? []).map((m) => ({
+    measureNumber: m.number,
+    startTime: m.startTimeSeconds,
+    endTime: m.endTimeSeconds,
   }))
 }
 
-/** Strictly-increasing time, monotonic non-decreasing x. Keeps note kinds on ties. */
+/** Chord-grouped note onsets for a performed measure window: {time, defaultX}. */
+function getMeasureOnsets(timingMap, measureNumber, window) {
+  const notes = getTimeline(timingMap)
+    .performedNotes()
+    .filter(
+      (n) =>
+        n.measureNumber === measureNumber &&
+        !n.isRest &&
+        n.performedSeconds >= window.startTimeSeconds - 0.001 &&
+        n.performedSeconds <= window.endTimeSeconds + 0.001,
+    )
+  const groups = new Map()
+  for (const n of notes) {
+    const bucket = Math.round(n.performedSeconds / CHORD_GROUP_SECONDS)
+    const existing = groups.get(bucket)
+    if (!existing) {
+      groups.set(bucket, { time: n.performedSeconds, defaultX: n.defaultX ?? null })
+    } else if (n.defaultX != null && (existing.defaultX == null || n.defaultX < existing.defaultX)) {
+      existing.defaultX = n.defaultX
+    }
+  }
+  return [...groups.values()].sort((a, b) => a.time - b.time)
+}
+
+/**
+ * Knots (time → x) for one measure, mapped into [startX, endX]. Uses engraved
+ * default-x across the measure's estimated full width (barline extrapolated) so
+ * the last note is NOT crammed to the edge; falls back to time spacing for
+ * missing/non-monotonic geometry.
+ */
+function buildMeasureKnots(onsets, mStart, mEnd, startX, endX, measureNumber) {
+  const span = Math.max(endX - startX, 0)
+  if (onsets.length === 0) {
+    return [{ t: mStart, x: startX, measureNumber, kind: 'measure-start' }]
+  }
+
+  let monotonic = onsets.every((o) => o.defaultX != null)
+  for (let i = 1; monotonic && i < onsets.length; i += 1) {
+    if (onsets[i].defaultX < onsets[i - 1].defaultX - 1e-6) monotonic = false
+  }
+
+  let xs
+  if (monotonic) {
+    const d0 = onsets[0].defaultX
+    const dLast = onsets[onsets.length - 1].defaultX
+    let width
+    if (onsets.length >= 2 && onsets[onsets.length - 1].time - onsets[0].time > 1e-6) {
+      // Extrapolate the barline's default-x from the engraved velocity and the
+      // last note's remaining duration, so the measure's full width is used.
+      const vel = (dLast - d0) / (onsets[onsets.length - 1].time - onsets[0].time)
+      const barlineDX = dLast + Math.max(vel, 0) * Math.max(mEnd - onsets[onsets.length - 1].time, 0)
+      width = barlineDX - d0
+    } else {
+      width = Math.max(dLast - d0, 1)
+    }
+    if (!(width > 1e-6)) width = 1
+    xs = onsets.map((o) => startX + ((o.defaultX - d0) / width) * span)
+  } else {
+    const dur = Math.max(mEnd - mStart, 1e-6)
+    xs = onsets.map((o) => startX + clamp((o.time - mStart) / dur, 0, 1) * span)
+  }
+
+  const knots = []
+  if (onsets[0].time > mStart + 0.02) {
+    knots.push({ t: mStart, x: startX, measureNumber, kind: 'measure-start' })
+  }
+  for (let i = 0; i < onsets.length; i += 1) {
+    knots.push({
+      t: onsets[i].time,
+      x: clamp(xs[i], startX, Math.max(startX, endX)),
+      measureNumber,
+      kind: onsets[i].chord ? 'chord' : 'note',
+    })
+  }
+  return knots
+}
+
 function sanitizeKnots(knots) {
   const sorted = [...knots].sort((a, b) => a.t - b.t)
   const out = []
   for (const knot of sorted) {
     const prev = out[out.length - 1]
     if (prev && knot.t - prev.t < 0.004) {
-      // Same instant (chord / measure-start coincident with first note): keep the
-      // rightmost x and prefer an actual note/chord knot for onset lock.
-      const keepNote = knot.kind === 'note' || knot.kind === 'chord'
-      out[out.length - 1] = {
-        ...(keepNote ? knot : prev),
-        t: prev.t,
-        x: Math.max(prev.x, knot.x),
-      }
+      out[out.length - 1] = { ...knot, t: prev.t, x: Math.max(prev.x, knot.x) }
       continue
     }
     out.push({ ...knot, x: prev ? Math.max(prev.x, knot.x) : knot.x })
@@ -86,12 +161,10 @@ function sanitizeKnots(knots) {
   return out
 }
 
-/** Fritsch–Carlson monotone cubic Hermite: smooth AND never overshoots a knot. */
+/** Fritsch–Carlson monotone cubic Hermite: smooth and never overshoots a knot. */
 function buildMonotoneSpline(ts, xs) {
   const n = ts.length
-  if (n <= 1) {
-    return { ts, xs, ms: n === 1 ? [0] : [] }
-  }
+  if (n <= 1) return { ts, xs, ms: n === 1 ? [0] : [] }
   const slope = new Array(n - 1)
   const dt = new Array(n - 1)
   for (let i = 0; i < n - 1; i += 1) {
@@ -122,41 +195,37 @@ function buildMonotoneSpline(ts, xs) {
   return { ts, xs, ms: m }
 }
 
-function evalSplineIndex(spline, t) {
-  const { ts } = spline
-  let lo = 0
-  let hi = ts.length - 1
-  while (hi - lo > 1) {
-    const mid = (lo + hi) >> 1
-    if (ts[mid] <= t) lo = mid
-    else hi = mid
-  }
-  return lo
-}
-
 function evalSpline(spline, t) {
   const { ts, xs, ms } = spline
   const n = ts.length
   if (n === 0) return 0
   if (n === 1 || t <= ts[0]) return xs[0]
   if (t >= ts[n - 1]) return xs[n - 1]
-  const i = evalSplineIndex(spline, t)
-  const h = ts[i + 1] - ts[i]
-  if (h <= 0) return xs[i]
-  const s = (t - ts[i]) / h
+  let lo = 0
+  let hi = n - 1
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1
+    if (ts[mid] <= t) lo = mid
+    else hi = mid
+  }
+  const h = ts[lo + 1] - ts[lo]
+  if (h <= 0) return xs[lo]
+  const s = (t - ts[lo]) / h
   const s2 = s * s
   const s3 = s2 * s
-  const h00 = 2 * s3 - 3 * s2 + 1
-  const h10 = s3 - 2 * s2 + s
-  const h01 = -2 * s3 + 3 * s2
-  const h11 = s3 - s2
-  return h00 * xs[i] + h10 * h * ms[i] + h01 * xs[i + 1] + h11 * h * ms[i + 1]
+  return (
+    (2 * s3 - 3 * s2 + 1) * xs[lo] +
+    (s3 - 2 * s2 + s) * h * ms[lo] +
+    (-2 * s3 + 3 * s2) * xs[lo + 1] +
+    (s3 - s2) * h * ms[lo + 1]
+  )
 }
 
 function classifySegment(a, b) {
   if (b.kind === 'system-end') return 'system-end-settle'
+  if (b.kind === 'phrase-end') return 'phrase-end-settle'
   if (a.measureNumber != null && b.measureNumber != null && a.measureNumber !== b.measureNumber) {
-    return 'measure-boundary-bridge'
+    return 'measure-bridge'
   }
   if ((a.kind === 'note' || a.kind === 'chord') && b.t - a.t >= HELD_GLIDE_SECONDS) {
     return 'held-note-glide'
@@ -164,33 +233,21 @@ function classifySegment(a, b) {
   return 'note-to-note-glide'
 }
 
-function finalizeSystem(system) {
-  // Settle to the true right edge of the line so the system finishes at systemEndX.
-  const lastKnot = system.knots[system.knots.length - 1]
-  if (lastKnot && system.systemEndX > lastKnot.x + 1e-4 && system.endTime > lastKnot.t + 1e-4) {
-    system.knots.push({
-      t: system.endTime,
-      x: system.systemEndX,
-      measureNumber: lastKnot.measureNumber,
-      kind: 'system-end',
-    })
-  }
-  const knots = sanitizeKnots(system.knots)
-  system.knots = knots
-  system.spline = buildMonotoneSpline(
-    knots.map((k) => k.t),
-    knots.map((k) => k.x),
-  )
-  system.startTime = knots[0]?.t ?? system.startTime
-  system.startX = knots[0]?.x ?? 0
-  system.endX = knots[knots.length - 1]?.x ?? system.startX
-  // Diagnostic motion segments.
-  system.segments = []
+function finalizePhrase(phrase) {
+  const knots = sanitizeKnots(phrase.knots)
+  phrase.knots = knots
+  phrase.spline = buildMonotoneSpline(knots.map((k) => k.t), knots.map((k) => k.x))
+  phrase.startTime = knots[0]?.t ?? phrase.startTime
+  phrase.startX = knots[0]?.x ?? 0
+  phrase.endX = knots[knots.length - 1]?.x ?? phrase.startX
+  phrase.minX = phrase.startX
+  phrase.maxX = phrase.endX
+  phrase.segments = []
   for (let i = 0; i < knots.length - 1; i += 1) {
     const a = knots[i]
     const b = knots[i + 1]
-    const span = b.t - a.t
-    system.segments.push({
+    const dt = b.t - a.t
+    phrase.segments.push({
       type: classifySegment(a, b),
       startTime: a.t,
       endTime: b.t,
@@ -198,94 +255,119 @@ function finalizeSystem(system) {
       endX: b.x,
       measureNumber: a.measureNumber,
       onsetLock: b.kind === 'note' || b.kind === 'chord',
-      velocity: span > 0 ? (b.x - a.x) / span : 0,
+      velocity: dt > 0 ? (b.x - a.x) / dt : 0,
     })
   }
-  return system
+  return phrase
 }
 
-/**
- * Build the precomputed cursor motion timeline from the score timing + anchors.
- */
+/** Build the playback-ordered cursor motion timeline. */
 export function buildCursorMotionTimeline({ timingMap, trustedAnchors }) {
   const deduped = dedupeTrustedAnchorsByMeasure(trustedAnchors ?? [])
   if (!timingMap?.measures?.length || deduped.length === 0) {
-    return { systems: [], duration: getPlaybackDurationSeconds(timingMap) || 0, empty: true }
+    return { phrases: [], duration: getPlaybackDurationSeconds(timingMap) || 0, empty: true }
   }
   const anchorByMeasure = new Map(deduped.map((a) => [a.measureNumber, a]))
   const performed = enumeratePerformedMeasures(timingMap)
-
-  const systems = []
+  const phrases = []
   let current = null
 
-  const closeCurrent = () => {
+  const close = (breakType) => {
     if (current && current.knots.length > 0) {
-      systems.push(finalizeSystem(current))
+      current.breakType = breakType
+      phrases.push(finalizePhrase(current))
     }
     current = null
   }
 
-  for (const pm of performed) {
+  for (let i = 0; i < performed.length; i += 1) {
+    const pm = performed[i]
     const anchor = anchorByMeasure.get(pm.measureNumber)
     if (!anchor) {
-      // No geometry for this measure — end the current system rather than guess
-      // a position across the gap (resolver falls back outside the timeline).
-      closeCurrent()
+      close('gap')
       continue
     }
-    const key = `${anchor.page ?? 1}:${Math.round((anchor.y ?? 0) / SYSTEM_Y_TOLERANCE)}`
-    if (!current || current.key !== key) {
-      closeCurrent()
+    if (!current) {
       current = {
-        key,
-        index: systems.length,
+        index: phrases.length,
         page: anchor.page ?? 1,
         y: anchor.y ?? 0,
-        systemEndX: anchorSystemEndX(anchor),
         startTime: pm.startTime,
         endTime: pm.endTime,
         knots: [],
       }
     }
+
+    const next = performed[i + 1]
+    const nextAnchor = next ? anchorByMeasure.get(next.measureNumber) : null
+    const sameLineNext =
+      nextAnchor &&
+      nextAnchor.page === anchor.page &&
+      Math.abs((nextAnchor.y ?? 0) - (anchor.y ?? 0)) < SYSTEM_Y_TOLERANCE
+    const contiguousNext = next && next.measureNumber === pm.measureNumber + 1
+
+    // Where this measure's motion ends:
+    //   continuing in-phrase → the NEXT measure's beat-1 x (so the barline is just
+    //   a point the cursor flows through — no artificial slowdown);
+    //   line break → systemEndX (finish the visual line);
+    //   jump / end → this measure's own barline (playableEndX).
+    let endX
+    let phraseEnds
+    let breakType = null
+    if (sameLineNext && contiguousNext) {
+      endX = nextAnchor.x
+      phraseEnds = false
+    } else if (contiguousNext && !sameLineNext) {
+      endX = anchorSystemEndX(anchor)
+      phraseEnds = true
+      breakType = 'line'
+    } else if (next) {
+      endX = anchorPlayableEndX(anchor)
+      phraseEnds = true
+      breakType = 'jump'
+    } else {
+      endX = anchorPlayableEndX(anchor)
+      phraseEnds = true
+      breakType = 'end'
+    }
+
     const window = { startTimeSeconds: pm.startTime, endTimeSeconds: pm.endTime }
-    const events = buildMeasureMusicalEvents(
-      timingMap,
-      pm.measureNumber,
-      window,
-      anchor.x,
-      anchorPlayableEndX(anchor),
-      { includeMeasureEnd: false },
-    )
-    for (const ev of events) {
-      if (ev.kind === 'measure-start' || ev.kind === 'note' || ev.kind === 'chord') {
+    const onsets = getMeasureOnsets(timingMap, pm.measureNumber, window)
+    const knots = buildMeasureKnots(onsets, pm.startTime, pm.endTime, anchor.x, endX, pm.measureNumber)
+    current.knots.push(...knots)
+    current.endTime = pm.endTime
+
+    if (phraseEnds) {
+      // Settle knot to the phrase's terminal x (line edge or this barline).
+      const last = current.knots[current.knots.length - 1]
+      if (endX > last.x + 1e-4 && pm.endTime > last.t + 1e-4) {
         current.knots.push({
-          t: ev.timeSeconds,
-          x: ev.x,
+          t: pm.endTime,
+          x: endX,
           measureNumber: pm.measureNumber,
-          kind: ev.kind,
+          kind: breakType === 'line' ? 'system-end' : 'phrase-end',
         })
       }
+      close(breakType)
     }
-    current.endTime = pm.endTime
-    current.systemEndX = anchorSystemEndX(anchor)
   }
-  closeCurrent()
+  close('end')
 
   return {
-    systems,
-    duration: getPlaybackDurationSeconds(timingMap) || (systems.at(-1)?.endTime ?? 0),
-    empty: systems.length === 0,
+    phrases,
+    duration: getPlaybackDurationSeconds(timingMap) || (phrases.at(-1)?.endTime ?? 0),
+    empty: phrases.length === 0,
   }
 }
 
-function findSystemIndex(systems, scoreTime) {
-  if (scoreTime <= systems[0].startTime) return 0
+function findPhraseIndex(phrases, t) {
+  if (t <= phrases[0].startTime) return 0
   let idx = 0
   let lo = 0
-  let hi = systems.length - 1
+  let hi = phrases.length - 1
   while (lo <= hi) {
     const mid = (lo + hi) >> 1
-    if (systems[mid].startTime <= scoreTime) {
+    if (phrases[mid].startTime <= t) {
       idx = mid
       lo = mid + 1
     } else {
@@ -295,92 +377,80 @@ function findSystemIndex(systems, scoreTime) {
   return idx
 }
 
-function measureNumberAt(system, scoreTime) {
-  let measure = system.knots[0]?.measureNumber ?? null
-  for (const knot of system.knots) {
-    if (knot.t <= scoreTime + 1e-9 && knot.kind !== 'system-end') measure = knot.measureNumber
-    else if (knot.t > scoreTime) break
+function measureNumberAt(phrase, t) {
+  let measure = phrase.knots[0]?.measureNumber ?? null
+  for (const k of phrase.knots) {
+    if (k.t <= t + 1e-9 && k.kind !== 'system-end' && k.kind !== 'phrase-end') measure = k.measureNumber
+    else if (k.t > t) break
   }
   return measure
 }
 
-function segmentTypeAt(system, scoreTime) {
-  for (const seg of system.segments) {
-    if (scoreTime >= seg.startTime && scoreTime < seg.endTime) return seg.type
+function segmentTypeAt(phrase, t) {
+  for (const s of phrase.segments) {
+    if (t >= s.startTime && t < s.endTime) return s.type
   }
-  return system.segments.at(-1)?.type ?? 'note-to-note-glide'
+  return phrase.segments.at(-1)?.type ?? 'note-to-note-glide'
 }
 
 /**
- * Resolve the cursor position at an audio score time. Pure function of T:
- * stateless, so seek/pause/loop are exact. Returns null when the time is not
- * covered by the timeline (caller may fall back to the legacy resolver).
+ * Resolve cursor position at an audio score time. Pure function of T (stateless):
+ * seek/pause/loop are exact. A phrase boundary is a hard reset — at a repeat/jump
+ * or line break the next phrase simply takes over, so the cursor jumps with
+ * playback and never blends one phrase's x with another's.
  */
 export function resolveCursorMotion(timeline, scoreTime) {
-  if (!timeline?.systems?.length) {
-    return null
-  }
-  const systems = timeline.systems
-  const index = findSystemIndex(systems, scoreTime)
-  const system = systems[index]
-  // Before the very first system begins there is nothing to show yet.
-  if (scoreTime < systems[0].startTime - 1e-6) {
-    return null
-  }
-  // A page/line break is a hard reset: clamp to THIS system's own bounds only,
-  // never comparing against another system's x.
-  const x = clamp(evalSpline(system.spline, scoreTime), system.startX, system.endX)
+  const phrases = timeline?.phrases
+  if (!phrases?.length) return null
+  if (scoreTime < phrases[0].startTime - 1e-6) return null
+  const phrase = phrases[findPhraseIndex(phrases, scoreTime)]
+  const x = clamp(evalSpline(phrase.spline, scoreTime), phrase.minX, phrase.maxX)
   return {
     visible: true,
     x,
-    y: system.y,
-    page: system.page,
-    measureNumber: measureNumberAt(system, scoreTime),
-    systemIndex: system.index,
-    segmentType: segmentTypeAt(system, scoreTime),
+    y: phrase.y,
+    page: phrase.page,
+    measureNumber: measureNumberAt(phrase, scoreTime),
+    systemIndex: phrase.index,
+    segmentType: segmentTypeAt(phrase, scoreTime),
     confidence: 'exact',
   }
 }
 
-/** Dev diagnostics: per-system segments, velocities, onset error, clamp usage. */
+/** Dev diagnostics: phrase segments, velocities, onset error, barline velocity. */
 export function buildCursorMotionDiagnostics(timeline) {
-  if (!timeline?.systems?.length) {
-    return { active: false, reason: 'empty-timeline' }
-  }
+  const phrases = timeline?.phrases
+  if (!phrases?.length) return { active: false, reason: 'empty-timeline' }
   let maxOnsetErrorX = 0
   let maxOnsetErrorAtT = null
-  let clampHits = 0
-  const systems = timeline.systems.map((system) => {
-    for (const knot of system.knots) {
-      if (knot.kind === 'note' || knot.kind === 'chord') {
-        const got = clamp(evalSpline(system.spline, knot.t), system.startX, system.endX)
-        const err = Math.abs(got - knot.x)
+  for (const phrase of phrases) {
+    for (const k of phrase.knots) {
+      if (k.kind === 'note' || k.kind === 'chord') {
+        const got = clamp(evalSpline(phrase.spline, k.t), phrase.minX, phrase.maxX)
+        const err = Math.abs(got - k.x)
         if (err > maxOnsetErrorX) {
           maxOnsetErrorX = err
-          maxOnsetErrorAtT = knot.t
+          maxOnsetErrorAtT = k.t
         }
-        if (got !== evalSpline(system.spline, knot.t)) clampHits += 1
       }
     }
-    return {
-      index: system.index,
-      page: system.page,
-      y: system.y,
-      startTime: system.startTime,
-      endTime: system.endTime,
-      startX: system.startX,
-      endX: system.endX,
-      systemEndX: system.systemEndX,
-      knotCount: system.knots.length,
-      segments: system.segments,
-    }
-  })
+  }
   return {
     active: true,
-    systemCount: systems.length,
+    phraseCount: phrases.length,
     maxOnsetErrorX,
     maxOnsetErrorAtT,
-    clampHits,
-    systems,
+    phrases: phrases.map((p) => ({
+      index: p.index,
+      page: p.page,
+      y: p.y,
+      startTime: p.startTime,
+      endTime: p.endTime,
+      startX: p.startX,
+      endX: p.endX,
+      breakType: p.breakType,
+      knotCount: p.knots.length,
+      segments: p.segments,
+    })),
   }
 }

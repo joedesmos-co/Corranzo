@@ -4,8 +4,6 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import JSZip from 'jszip'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
-import { buildMeasureMusicalEvents } from '../src/features/score-follow/cursorMusicalProgress.js'
-import { getMeasurePlaybackWindow } from '../src/features/musicxml/performedTimeline.js'
 import {
   buildCursorMotionTimeline,
   resolveCursorMotion,
@@ -26,17 +24,17 @@ const ATTR = (b) =>
   `<attributes><divisions>4</divisions><time><beats>${b}</beats><beat-type>4</beat-type></time>` +
   `<clef><sign>G</sign><line>2</line></clef></attributes>`
 
+// The engine's own note knots (v3 positions) — onset lock means the resolved
+// cursor passes through these exactly at their onset times.
 function onsets(tm, anchors, measures) {
+  const tl = buildCursorMotionTimeline({ timingMap: tm, trustedAnchors: anchors })
+  const wanted = new Set(measures)
   const all = []
-  for (const m of measures) {
-    const meas = tm.measures?.find((x) => x.number === m)
-    const probe = meas ? meas.startTimeSeconds + 0.01 : 0
-    const w = getMeasurePlaybackWindow(tm, m, probe)
-    if (!w) continue
-    const a = anchors.find((x) => x.measureNumber === m)
-    if (!a) continue
-    for (const e of buildMeasureMusicalEvents(tm, m, w, a.x, a.meta.playableEndX)) {
-      if (e.kind === 'note' || e.kind === 'chord') all.push({ m, time: e.timeSeconds, x: e.x })
+  for (const phrase of tl.phrases) {
+    for (const k of phrase.knots) {
+      if ((k.kind === 'note' || k.kind === 'chord') && wanted.has(k.measureNumber)) {
+        all.push({ m: k.measureNumber, time: k.t, x: k.x })
+      }
     }
   }
   return all.sort((p, q) => p.time - q.time)
@@ -61,10 +59,10 @@ describe('cursorMotionTimeline — core invariants', () => {
   ]
   const tl = buildCursorMotionTimeline({ timingMap: tm, trustedAnchors: anchors })
 
-  it('builds one motion curve per system', () => {
-    expect(tl.systems.length).toBe(2)
-    expect(tl.systems[0].y).toBeCloseTo(0.3, 3)
-    expect(tl.systems[1].y).toBeCloseTo(0.55, 3)
+  it('builds one phrase per system', () => {
+    expect(tl.phrases.length).toBe(2)
+    expect(tl.phrases[0].y).toBeCloseTo(0.3, 3)
+    expect(tl.phrases[1].y).toBeCloseTo(0.55, 3)
   })
 
   it('onset lock: cursor x equals the notehead x exactly at each onset time', () => {
@@ -180,7 +178,7 @@ describe('cursorMotionTimeline — bad/non-monotonic default-x falls back to tim
   const tl = buildCursorMotionTimeline({ timingMap: tm, trustedAnchors: anchors })
 
   it('produces strictly increasing knots (no collapsed flat span) and never freezes/jumps back', () => {
-    const knots = tl.systems[0].knots.filter((k) => k.kind !== 'system-end')
+    const knots = tl.phrases[0].knots.filter((k) => k.kind !== 'system-end' && k.kind !== 'phrase-end')
     for (let i = 1; i < knots.length; i += 1) {
       expect(knots[i].x).toBeGreaterThanOrEqual(knots[i - 1].x - 1e-9)
     }
@@ -250,6 +248,46 @@ describe('cursorMotionTimeline — Hungarian Dance & dense regressions', () => {
     const tl = buildCursorMotionTimeline({ timingMap: tmd, trustedAnchors: denseAnchors })
     for (const on of onsets(tmd, denseAnchors, [1, 2])) {
       expect(resolveCursorMotion(tl, on.time).x).toBeCloseTo(on.x, 3)
+    }
+  })
+
+  it('Hungarian Dance: an ordinary barline causes no velocity dip/brake', () => {
+    const tl = buildCursorMotionTimeline({ timingMap: hd, trustedAnchors: hdAnchors })
+    const vel = (t) =>
+      (resolveCursorMotion(tl, t + 0.02).x - resolveCursorMotion(tl, t - 0.02).x) / 0.04
+    const vels = []
+    for (let t = 0.6; t <= 1.2; t += 0.05) vels.push(vel(t)) // across the m1->m2 barline
+    const vmin = Math.min(...vels)
+    const vmax = Math.max(...vels)
+    expect(vmin).toBeGreaterThan(0) // always moving — never stalls at the barline
+    // v2 dipped ~7x crossing the barline; v3 must stay near-constant.
+    expect(vmax / vmin).toBeLessThan(2)
+  })
+})
+
+describe('cursorMotionTimeline — repeats follow playback order', () => {
+  // oneRepeat plays measures 1,2,1,2,3,4 — a backward repeat barline at end of m2.
+  const tm = parseMusicXml(F.oneRepeat())
+  const anchors = [A(1, 0.1, 0.3), A(2, 0.3, 0.5), A(3, 0.5, 0.7), A(4, 0.7, 0.9)]
+  const tl = buildCursorMotionTimeline({ timingMap: tm, trustedAnchors: anchors })
+
+  it('breaks into a first-pass phrase ending at the repeat barline, then a continuation', () => {
+    expect(tl.phrases.length).toBeGreaterThanOrEqual(2)
+    expect(tl.phrases[0].breakType).toBe('jump')
+  })
+
+  it('jumps the cursor back to the repeated section immediately (no continue-past, no freeze)', () => {
+    const before = resolveCursorMotion(tl, 3.9) // end of m2, first pass
+    const after = resolveCursorMotion(tl, 4.05) // jumped back to m1
+    expect(before.measureNumber).toBe(2)
+    expect(after.measureNumber).toBe(1)
+    expect(after.x).toBeLessThan(before.x - 0.2) // jumped backward
+    expect(after.x).toBeCloseTo(0.1, 1) // to m1's start region
+  })
+
+  it('never travels past the repeat into music not yet played (first pass)', () => {
+    for (let t = 0.1; t < 3.95; t += 0.05) {
+      expect(resolveCursorMotion(tl, t).x).toBeLessThanOrEqual(0.5 + 1e-6)
     }
   })
 })
