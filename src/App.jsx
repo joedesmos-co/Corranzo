@@ -43,6 +43,7 @@ import {
 } from './features/legal/legalRoutes.js'
 import { resolveRestoredActiveView } from './features/session/sessionRestoreRouting.js'
 import { getHomeNavigationTarget } from './features/navigation/goHome.js'
+import { warmupPianoSamplesOnIdle } from './features/playback/pianoSampleWarmup.js'
 import './App.css'
 import './styles/profile.css'
 import './styles/legal.css'
@@ -89,6 +90,10 @@ export default function App() {
 
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  useEffect(() => {
+    warmupPianoSamplesOnIdle()
   }, [])
 
   const navigateToView = useCallback((view) => {

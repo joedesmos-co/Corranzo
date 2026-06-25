@@ -44,36 +44,47 @@ export {
 export const DEFAULT_PIANO_SAMPLE_BASE_URL = 'https://tonejs.github.io/audio/salamander/'
 
 /**
- * A balanced subset of the Salamander grand piano: two samples per octave
- * (C and F#, a tritone apart) plus the extreme A0/C8. Tone.Sampler pitch-shifts
- * between samples, so every played note is at most ~3 semitones (a minor third)
- * from a real recording — the fidelity sweet spot — while fetching roughly half
- * the files of the full set. Samples are lazy, so this never affects the JS
- * bundle, only a one-time fetch on first playback.
+ * Salamander "lite" map: minor-third spacing (A, C, C#, F# per octave).
+ * Every played note is at most ~2 semitones from a real recording — better
+ * fidelity than a sparser map, while still lazy-loaded (not in the JS bundle).
  */
 export const PIANO_SAMPLE_URLS = {
   A0: 'A0.mp3',
   C1: 'C1.mp3',
+  'C#1': 'Ds1.mp3',
   'F#1': 'Fs1.mp3',
+  A1: 'A1.mp3',
   C2: 'C2.mp3',
+  'C#2': 'Ds2.mp3',
   'F#2': 'Fs2.mp3',
+  A2: 'A2.mp3',
   C3: 'C3.mp3',
+  'C#3': 'Ds3.mp3',
   'F#3': 'Fs3.mp3',
+  A3: 'A3.mp3',
   C4: 'C4.mp3',
+  'C#4': 'Ds4.mp3',
   'F#4': 'Fs4.mp3',
+  A4: 'A4.mp3',
   C5: 'C5.mp3',
+  'C#5': 'Ds5.mp3',
   'F#5': 'Fs5.mp3',
+  A5: 'A5.mp3',
   C6: 'C6.mp3',
+  'C#6': 'Ds6.mp3',
   'F#6': 'Fs6.mp3',
+  A6: 'A6.mp3',
   C7: 'C7.mp3',
+  'C#7': 'Ds7.mp3',
   'F#7': 'Fs7.mp3',
+  A7: 'A7.mp3',
   C8: 'C8.mp3',
 }
 
-const DEFAULT_SAMPLE_LOAD_TIMEOUT_MS = 12000
-const SAMPLED_VOLUME_DB = -12
+const DEFAULT_SAMPLE_LOAD_TIMEOUT_MS = 15000
+const SAMPLED_VOLUME_DB = -11
 const SYNTH_VOLUME_DB = -14
-const SAMPLED_RELEASE = 0.95
+const SAMPLED_RELEASE = 1.15
 
 /**
  * Optional self-hosting override. Set VITE_PIANO_SAMPLE_BASE_URL to serve the
@@ -154,7 +165,8 @@ function buildSamplerFromBuffers({ tone, buffers, urls, volume, release }) {
   return new tone.Sampler({
     urls: bufferUrls,
     release: release ?? SAMPLED_RELEASE,
-    attack: 0.001,
+    attack: 0.002,
+    curve: 'exponential',
     volume: volume ?? SAMPLED_VOLUME_DB,
   })
 }

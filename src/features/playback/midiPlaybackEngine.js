@@ -5,6 +5,7 @@ import { INSTRUMENT_STATUS } from './pianoInstrumentStatus.js'
 import { alignChordScoreTime } from './pianoVoiceMix.js'
 
 const loadPianoInstrumentModule = () => import('./pianoInstrument.js')
+const PLAY_READY_TIMEOUT_MS = 5000
 
 function resolvePlaybackDuration(midi, parsedDuration) {
   if (parsedDuration > 0) {
@@ -120,6 +121,41 @@ export class MidiPlaybackEngine {
         muted,
       })),
     }
+  }
+
+  /**
+   * Fetch/decode piano samples ahead of Play without wiring per-track instruments.
+   */
+  async preload() {
+    try {
+      const module = await this.loadPianoInstrument()
+      if (!this.createPianoInstrument) {
+        this.createPianoInstrument = module.createPianoInstrument
+      }
+      await module.preloadPianoSampleBuffers({ tone: Tone })
+    } catch {
+      // Non-fatal — playFromUserGesture will retry instrument creation.
+    }
+  }
+
+  /** Resolve once track instruments are sampled (or fell back), capped by timeout. */
+  whenInstrumentReady(timeoutMs = PLAY_READY_TIMEOUT_MS) {
+    const readyPromises = this.trackStates
+      .map((track) => track.instrument?.whenReady?.())
+      .filter(Boolean)
+    if (!readyPromises.length) {
+      return Promise.resolve(null)
+    }
+    const ready = Promise.all(readyPromises)
+    if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) {
+      return ready
+    }
+    return Promise.race([
+      ready,
+      new Promise((resolve) => {
+        setTimeout(() => resolve('timeout'), timeoutMs)
+      }),
+    ])
   }
 
   scheduleNotesFrom(fromSeconds) {
@@ -248,6 +284,7 @@ export class MidiPlaybackEngine {
     this.connectTrackOutputsToDestination()
     this.clearScheduledPlayback()
     await this.ensureTrackInstruments()
+    await this.whenInstrumentReady()
 
     this.playing = true
     this.playStartedAt = Tone.now()

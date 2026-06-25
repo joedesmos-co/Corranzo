@@ -388,12 +388,27 @@ describe('piano instrument — release, dispose, labels', () => {
 
   it('ships a sensible default sample set (Salamander grand piano)', () => {
     expect(DEFAULT_PIANO_SAMPLE_BASE_URL).toMatch(/salamander/)
-    // Covers the full piano range, lightly: extremes present, ~2 per octave.
     expect(PIANO_SAMPLE_URLS.A0).toBeTruthy()
     expect(PIANO_SAMPLE_URLS.C8).toBeTruthy()
     expect(PIANO_SAMPLE_URLS.C4).toBe('C4.mp3')
+    expect(PIANO_SAMPLE_URLS['C#4']).toBe('Ds4.mp3')
     expect(PIANO_SAMPLE_URLS['F#4']).toBe('Fs4.mp3')
-    expect(Object.keys(PIANO_SAMPLE_URLS).length).toBeLessThanOrEqual(20)
+    expect(Object.keys(PIANO_SAMPLE_URLS).length).toBeGreaterThanOrEqual(28)
+    expect(Object.keys(PIANO_SAMPLE_URLS).length).toBeLessThanOrEqual(35)
+  })
+
+  it('sample map keeps every chromatic note within two semitones of a recording', () => {
+    const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+    function noteToMidi(name) {
+      const match = name.match(/^([A-G]#?)(-?\d+)$/)
+      const index = NOTE_NAMES.indexOf(match[1])
+      return (parseInt(match[2], 10) + 1) * 12 + index
+    }
+    const sampleMidis = Object.keys(PIANO_SAMPLE_URLS).map(noteToMidi).sort((a, b) => a - b)
+    for (let midi = sampleMidis[0]; midi <= sampleMidis.at(-1); midi += 1) {
+      const nearest = Math.min(...sampleMidis.map((sample) => Math.abs(sample - midi)))
+      expect(nearest).toBeLessThanOrEqual(2)
+    }
   })
 })
 
@@ -481,6 +496,19 @@ describe('sampled piano — playback engine integration', () => {
 
     engine.setTrackMuted(7, false)
     expect(output.gain.value).toBe(1)
+  })
+
+  it('MidiPlaybackEngine preloads samples without creating instruments', async () => {
+    const preloadBuffers = vi.fn().mockResolvedValue(undefined)
+    const engine = new MidiPlaybackEngine({
+      loadPianoInstrument: () =>
+        Promise.resolve({
+          createPianoInstrument: vi.fn(),
+          preloadPianoSampleBuffers: preloadBuffers,
+        }),
+    })
+    await engine.preload()
+    expect(preloadBuffers).toHaveBeenCalled()
   })
 
   it('MIDI playback preserves note timing and trims a note when seeking into it', () => {

@@ -80,6 +80,7 @@ export default function useMidiPlayback(midiSource) {
         setDuration(result.duration)
         setCurrentTime(0)
         setIsPlaying(false)
+        engine.preload?.()
       } catch (loadError) {
         if (loadGenerationRef.current === loadGeneration) {
           setError(formatMidiImportError(loadError))
