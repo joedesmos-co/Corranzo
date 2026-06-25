@@ -3,15 +3,7 @@ import {
   publishScoreFollowCursor,
   resetScoreFollowCursorRuntime,
 } from './scoreFollowCursorRuntime.js'
-import {
-  applyVisualCursorX,
-  isNearSystemEnd,
-  isSameSystemCursor,
-  resolveVisualMaxX,
-  shouldUseVisualCursorMotion,
-  systemKeyForCursor,
-  VISUAL_LEAD_SECONDS,
-} from './cursorVisualMotion.js'
+import { systemKeyForCursor } from './cursorVisualMotion.js'
 
 const PAGE_CHANGE_ALPHA = 0.55
 const SNAP_THRESHOLD = 0.0005
@@ -127,34 +119,16 @@ export default function useScoreFollowCursorDriver({
       }
 
       if (rtResolve && rtGetTime) {
-        const now = rtGetTime()
-        const ahead = rtResolve(now + VISUAL_LEAD_SECONDS)
-        // Only lead within the same system and not right at a line end, so the
-        // lead never blends an old-system x with a new-system x.
-        const sameSystemAhead =
-          isSameSystemCursor(target, ahead) && !isNearSystemEnd(target)
-        const visualMaxX = resolveVisualMaxX(target)
-        const useVisual = shouldUseVisualCursorMotion(target)
-        const displayX = useVisual
-          ? applyVisualCursorX({
-              displayX: state.x,
-              musicalX: target.x,
-              musicalAheadX:
-                sameSystemAhead && ahead?.visible ? ahead.x : target.x,
-              sameSystem: true,
-              visualMaxX,
-            })
-          : target.x
-        state.x = displayX
+        // Motion Engine v2: `target` is already a smooth, onset-locked curve
+        // sampled at the audio clock (the motion timeline). Publish it directly —
+        // no predictive follower / ad-hoc smoothing layer. The timeline itself
+        // produces the smoothness and the exact onset alignment.
+        state.x = target.x
         state.y = target.y
         state.page = target.page
         state.systemKey = targetSystemKey
         state.measureNumber = target.measureNumber ?? null
-        publishScoreFollowCursor({
-          ...target,
-          x: displayX,
-          smoothed: useVisual && Math.abs(displayX - target.x) > 0.0001,
-        })
+        publishScoreFollowCursor({ ...target, smoothed: false })
         frameId = requestAnimationFrame(tick)
         return
       }

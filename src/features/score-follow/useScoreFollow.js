@@ -39,6 +39,7 @@ import {
 import { buildMeasureBoundaryDiagnostic } from './measureBoundaryDiagnostics.js'
 import { buildHeldNoteDiagnostic } from './heldNoteDiagnostics.js'
 import { buildCursorMotionDiagnostic } from './cursorMotionDiagnostics.js'
+import { buildCursorMotionTimeline, resolveCursorMotion } from './cursorMotionTimeline.js'
 import { buildScoreFollowPrecisionReport } from './scoreFollowPrecisionDiagnostics.js'
 import { isNextGenAlignmentDiagnosticsEnabled } from './nextGenAlignmentFlag.js'
 import { deriveNextGenAlignmentDiagnostics } from './nextGenAlignmentDiagnostics.js'
@@ -295,6 +296,18 @@ export default function useScoreFollow({
     }
   }, [alignmentMode, currentMeasure?.number])
 
+  // Motion Engine v2: a precomputed cursor motion timeline (one smooth, onset-
+  // locked monotone curve per system). Rebuilt only when the score timing or the
+  // trusted anchors change — never per frame. The cursor position at any score
+  // time is then a pure lookup into this timeline.
+  const motionTimeline = useMemo(
+    () =>
+      hasTiming && trustedAnchors.length > 0
+        ? buildCursorMotionTimeline({ timingMap, trustedAnchors })
+        : null,
+    [hasTiming, timingMap, trustedAnchors],
+  )
+
   const resolved = useMemo(
     () =>
       hasTiming && trustedAnchors.length > 0 && anchorTrust.showCursor
@@ -308,7 +321,28 @@ export default function useScoreFollow({
     [hasTiming, trustedAnchors, anchorTrust, timingMap, practiceTime],
   )
 
-  const cursor = resolved.cursor
+  // Position comes from the motion timeline (exact, smooth); resolveScoreFollowCursor
+  // still owns visibility/trust gating and the no-timeline fallback. Using one
+  // source for both the static (paused) and realtime (playing) cursor keeps them
+  // consistent — no jump when playback pauses.
+  const cursor = useMemo(() => {
+    const base = resolved.cursor
+    if (!base?.visible || !motionTimeline) {
+      return base
+    }
+    const motion = resolveCursorMotion(motionTimeline, practiceTime)
+    if (!motion) {
+      return base
+    }
+    return {
+      ...base,
+      x: motion.x,
+      y: motion.y,
+      page: motion.page,
+      measureNumber: motion.measureNumber ?? base.measureNumber,
+      progressMode: motion.segmentType ?? base.progressMode,
+    }
+  }, [resolved, motionTimeline, practiceTime])
   const followNeedsSetup = anchorTrust.needsSetup
 
   const lockExactCursor = Boolean(cursor?.lockExact || cursor?.forcedStart)
@@ -337,6 +371,14 @@ export default function useScoreFollow({
       if (!hasTiming || trustedAnchors.length === 0 || !anchorTrust.showCursor) {
         return { visible: false }
       }
+      // Primary path: the precomputed motion timeline (already smooth + onset
+      // locked, so the driver publishes it directly with no predictive follower).
+      const motion = motionTimeline ? resolveCursorMotion(motionTimeline, t) : null
+      if (motion) {
+        return { ...motion, lockExact: false, interpolated: true }
+      }
+      // Fallback for times/measures the timeline does not cover (e.g. gaps with
+      // no anchor): the legacy resolver.
       return resolveScoreFollowCursor({
         timingMap,
         practiceTime: t,
@@ -344,7 +386,7 @@ export default function useScoreFollow({
         trust: anchorTrust,
       }).cursor
     },
-    [hasTiming, trustedAnchors, anchorTrust, timingMap],
+    [hasTiming, trustedAnchors, anchorTrust, timingMap, motionTimeline],
   )
 
   useScoreFollowCursorDriver({
