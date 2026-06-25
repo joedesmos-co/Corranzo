@@ -25,10 +25,15 @@ function PracticeTransportTick() {
       effectiveTempo={stable.playback.effectiveTempo}
       metronomeEnabled={stable.playback.metronomeEnabled}
       metronomeLevel={stable.playback.metronomeLevel}
+      metronomeSubdivision={stable.playback.metronomeSubdivision}
+      metronomeCountIn={stable.playback.metronomeCountIn}
+      metronomeDisplay={stable.playback.metronomeDisplay}
       mappingWarning={stable.playback.mappingWarning}
       onPlaybackRateChange={stable.playback.setPlaybackRate}
       onMetronomeEnabledChange={stable.playback.setMetronomeEnabled}
       onMetronomeLevelChange={stable.playback.setMetronomeLevel}
+      onMetronomeSubdivisionChange={stable.playback.setMetronomeSubdivision}
+      onMetronomeCountInChange={stable.playback.setMetronomeCountIn}
       onPlay={stable.handlePlay}
       onPause={stable.playback.pause}
       onStop={stable.handleMidiStop}

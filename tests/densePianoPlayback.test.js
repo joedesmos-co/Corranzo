@@ -6,6 +6,26 @@ import { describe, expect, it, vi } from 'vitest'
 vi.mock('tone', () => ({
   now: vi.fn(() => 100),
   gainToDb: vi.fn((value) => value),
+  Gain: vi.fn(function Gain() {
+    this.connect = () => this
+    this.dispose = vi.fn()
+  }),
+  Volume: vi.fn(function Volume() {
+    this.volume = { value: 0 }
+    this.connect = () => this
+    this.toDestination = () => this
+    this.dispose = vi.fn()
+  }),
+  Filter: vi.fn(function Filter() {
+    this.connect = () => this
+    this.dispose = vi.fn()
+  }),
+  MetalSynth: vi.fn(function MetalSynth() {
+    this.connect = () => this
+    this.triggerAttackRelease = vi.fn()
+    this.triggerRelease = vi.fn()
+    this.dispose = vi.fn()
+  }),
   MembraneSynth: vi.fn(function MembraneSynth() {
     this.volume = { value: 0 }
     this.toDestination = () => this
@@ -114,11 +134,11 @@ function makeEngine(noteEvents, tracks = []) {
   }))
   engine.output = { gain: { value: 1 } }
   engine.metronome = {
-    volume: { value: 0 },
-    triggerAttackRelease: vi.fn(),
+    volume: { volume: { value: 0 } },
+    triggerClick: vi.fn(),
     releaseAll: vi.fn(),
     dispose: vi.fn(),
-    toDestination: vi.fn().mockReturnThis(),
+    toDestination: vi.fn(),
   }
   engine.playbackRate = 1
   engine.playStartedAt = 100

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { startToneFromUserGesture } from '../audio/toneAudioUnlock.js'
 import { formatMidiImportError } from '../import/formatImportError.js'
 import { displayTempoAtTime } from './scorePlaybackSchedule.js'
+import { METRONOME_COUNT_IN, METRONOME_SUBDIVISION } from './metronomeConstants.js'
 import { ScorePlaybackEngine } from './scorePlaybackEngine.js'
 
 /**
@@ -24,6 +25,11 @@ export default function useScorePlayback({
   const [playbackRate, setPlaybackRateState] = useState(1)
   const [metronomeEnabled, setMetronomeEnabledState] = useState(false)
   const [metronomeLevel, setMetronomeLevelState] = useState(0.6)
+  const [metronomeSubdivision, setMetronomeSubdivisionState] = useState(
+    METRONOME_SUBDIVISION.QUARTER,
+  )
+  const [metronomeCountIn, setMetronomeCountInState] = useState(METRONOME_COUNT_IN.OFF)
+  const [metronomeDisplay, setMetronomeDisplay] = useState(null)
   const [mappingWarning, setMappingWarning] = useState(null)
   const [audioSource, setAudioSource] = useState('musicxml')
   const [instrumentStatus, setInstrumentStatus] = useState(null)
@@ -37,6 +43,9 @@ export default function useScorePlayback({
     }
     engine.onInstrumentStatus = (status) => {
       setInstrumentStatus(status)
+    }
+    engine.onMetronomeDisplay = (state) => {
+      setMetronomeDisplay(state)
     }
     engineRef.current = engine
 
@@ -195,6 +204,16 @@ export default function useScorePlayback({
     setMetronomeLevelState(level)
   }, [])
 
+  const setMetronomeSubdivision = useCallback((subdivision) => {
+    engineRef.current?.setMetronomeSubdivision(subdivision)
+    setMetronomeSubdivisionState(subdivision)
+  }, [])
+
+  const setMetronomeCountIn = useCallback((measureCount) => {
+    engineRef.current?.setMetronomeCountIn(measureCount)
+    setMetronomeCountInState(measureCount)
+  }, [])
+
   const testSound = useCallback(() => {
     const engine = engineRef.current
     if (!engine) {
@@ -232,6 +251,9 @@ export default function useScorePlayback({
     playbackRate,
     metronomeEnabled,
     metronomeLevel,
+    metronomeSubdivision,
+    metronomeCountIn,
+    metronomeDisplay,
     effectiveTempo,
     mappingWarning,
     audioSource,
@@ -243,6 +265,8 @@ export default function useScorePlayback({
     setPlaybackRate,
     setMetronomeEnabled,
     setMetronomeLevel,
+    setMetronomeSubdivision,
+    setMetronomeCountIn,
     testSound,
     setTrackMuted,
     getScoreTime,

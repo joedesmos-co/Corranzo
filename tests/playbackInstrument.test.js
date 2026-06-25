@@ -433,8 +433,8 @@ describe('sampled piano — playback engine integration', () => {
       triggerAttackRelease: (...args) => calls.push(args),
     }
     engine.metronome = {
-      volume: { value: 0 },
-      triggerAttackRelease: vi.fn(),
+      volume: { volume: { value: 0 } },
+      triggerClick: vi.fn(),
     }
     engine.playbackRate = 0.5
     engine.playStartedAt = 0

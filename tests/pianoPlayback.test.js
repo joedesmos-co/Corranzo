@@ -116,7 +116,7 @@ function makeEngine(noteEvents, tracks = []) {
   const calls = []
   const engine = new ScorePlaybackEngine()
   engine.voice = { triggerAttackRelease: (...args) => calls.push(args) }
-  engine.metronome = { volume: { value: 0 }, triggerAttackRelease: () => {} }
+  engine.metronome = { volume: { volume: { value: 0 } }, triggerClick: () => {} }
   engine.playbackRate = 1
   engine.playStartedAt = 0
   engine.noteEvents = noteEvents

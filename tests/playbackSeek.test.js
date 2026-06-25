@@ -13,13 +13,23 @@ vi.mock('tone', () => ({
   Gain: vi.fn(function Gain() {
     this.gain = { value: 1 }
     this.toDestination = () => this
+    this.connect = () => this
     this.dispose = vi.fn()
   }),
-  MembraneSynth: vi.fn(function MembraneSynth() {
+  Volume: vi.fn(function Volume() {
     this.volume = { value: 0 }
     this.toDestination = () => this
+    this.connect = () => this
+    this.dispose = vi.fn()
+  }),
+  Filter: vi.fn(function Filter() {
+    this.connect = () => this
+    this.dispose = vi.fn()
+  }),
+  MetalSynth: vi.fn(function MetalSynth() {
+    this.connect = () => this
     this.triggerAttackRelease = vi.fn()
-    this.releaseAll = vi.fn()
+    this.triggerRelease = vi.fn()
     this.dispose = vi.fn()
   }),
 }))
@@ -45,7 +55,8 @@ function makeScoreEngine() {
     output: { connect: vi.fn() },
   }
   engine.metronome = {
-    volume: { value: 0 },
+    volume: { volume: { value: 0 } },
+    triggerClick: vi.fn(),
     triggerAttackRelease: vi.fn(),
     releaseAll: vi.fn(),
     dispose: metronomeDispose,
@@ -122,13 +133,14 @@ describe('ScorePlaybackEngine seek flush', () => {
 
   it('metronome is recreated on seek so old clicks cannot fire', () => {
     const { engine, metronomeDispose } = makeScoreEngine()
+    const oldTrigger = engine.metronome.triggerClick
     engine.metronomeEnabled = true
     engine.playing = false
 
     engine.seek(50)
 
     expect(metronomeDispose).toHaveBeenCalled()
-    expect(engine.metronome.triggerAttackRelease).not.toHaveBeenCalled()
+    expect(oldTrigger).not.toHaveBeenCalled()
   })
 
   it('pause does not leave playback marked as playing', () => {

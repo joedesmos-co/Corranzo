@@ -1,10 +1,15 @@
 import * as Tone from 'tone'
 import { awaitToneStarted } from '../audio/toneAudioUnlock.js'
 import { getTimeline } from '../musicxml/timeline.js'
+import { buildCombinedPlaybackSchedule } from './scorePlaybackSchedule.js'
+import { buildMetronomeSchedule } from './metronomeSchedule.js'
 import {
-  buildCombinedPlaybackSchedule,
-  buildMetronomeSchedule,
-} from './scorePlaybackSchedule.js'
+  buildCountInSchedule,
+  getCountInDurationSeconds,
+  getMetronomeDisplayState,
+} from './metronomeSchedule.js'
+import { METRONOME_COUNT_IN, METRONOME_SUBDIVISION } from './metronomeConstants.js'
+import { createMetronomeVoice, metronomeLevelToDb } from './metronomeVoice.js'
 import { alignChordScoreTime } from './pianoVoiceMix.js'
 
 const LOOKAHEAD_SECONDS = 2.5
@@ -15,17 +20,6 @@ const SCHEDULE_TICK_MS = 200
 // on the synth rather than blocking playback.
 const PLAY_READY_TIMEOUT_MS = 5000
 const loadPianoInstrumentModule = () => import('./pianoInstrument.js')
-
-function createMetronomeVoice() {
-  // Slightly longer attack (3 ms) and shorter decay soften the click while
-  // keeping the metronome distinct from the musical notes.
-  return new Tone.MembraneSynth({
-    pitchDecay: 0.006,
-    octaves: 2,
-    envelope: { attack: 0.003, decay: 0.06, sustain: 0, release: 0.04 },
-    volume: -20,
-  })
-}
 
 const MIDI_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
@@ -69,6 +63,15 @@ export class ScorePlaybackEngine {
     this.output = null
     this.metronomeEnabled = false
     this.metronomeLevel = 0.6
+    this.metronomeSubdivision = METRONOME_SUBDIVISION.QUARTER
+    this.metronomeCountIn = METRONOME_COUNT_IN.OFF
+    this.countInActive = false
+    this.countInDurationSeconds = 0
+    this.countInWallStartedAt = 0
+    this.countInTimerId = null
+    this.countInEvents = []
+    this.onMetronomeDisplay = null
+    this.metronomeDisplayState = null
     /** Bumped on seek/pause/stop so stale interval callbacks never reschedule. */
     this.scheduleGeneration = 0
     this.onInstrumentStatus = null
@@ -101,9 +104,9 @@ export class ScorePlaybackEngine {
             this.syncOutputMute()
           }
           if (!this.metronome) {
-            this.metronome = createMetronomeVoice()
+            this.metronome = createMetronomeVoice(Tone)
             this.metronome.toDestination()
-            this.metronome.volume.value = Tone.gainToDb(0.15 + this.metronomeLevel * 0.55)
+            this.applyMetronomeLevel()
           }
         })
         .finally(() => {
@@ -190,7 +193,7 @@ export class ScorePlaybackEngine {
 
     this.timingMap = timingMap
     this.noteEvents = schedule.noteEvents ?? schedule.events ?? []
-    this.metronomeEvents = schedule.metronomeEvents ?? []
+    this.rebuildMetronomeEvents()
     this.mappingWarning = schedule.mappingWarning ?? null
     this.duration = getTimeline(timingMap).performedDurationSeconds
     this.tracks = schedule.tracks ?? []
@@ -207,17 +210,160 @@ export class ScorePlaybackEngine {
     }
   }
 
+  applyMetronomeLevel() {
+    if (!this.metronome?.volume) {
+      return
+    }
+    const db = metronomeLevelToDb(this.metronomeLevel)
+    if (this.metronome.volume.volume) {
+      this.metronome.volume.volume.value = db
+    } else {
+      this.metronome.volume.value = db
+    }
+  }
+
+  rebuildMetronomeEvents() {
+    if (!this.timingMap) {
+      this.metronomeEvents = []
+      return
+    }
+    this.metronomeEvents = buildMetronomeSchedule(this.timingMap, {
+      subdivision: this.metronomeSubdivision,
+    })
+  }
+
+  emitMetronomeDisplay() {
+    if (!this.onMetronomeDisplay) {
+      return
+    }
+    const virtualTime = this.countInActive
+      ? this.getCountInVirtualTime()
+      : this.getCurrentScoreTime()
+    const measure = this.timingMap?.measures?.[0]
+    const beatsPerMeasure = measure?.beats ?? 4
+    const next = getMetronomeDisplayState(this.timingMap, virtualTime, {
+      countInActive: this.countInActive,
+      countInDurationSeconds: this.countInDurationSeconds,
+      playbackStartScoreTime: this.offsetScoreSeconds,
+      beatsPerMeasure,
+    })
+    this.metronomeDisplayState = next
+    this.onMetronomeDisplay(next)
+  }
+
+  getCountInVirtualTime() {
+    if (!this.countInActive) {
+      return this.getCurrentScoreTime()
+    }
+    const elapsed = Math.max(0, Tone.now() - this.countInWallStartedAt) * this.playbackRate
+    return -this.countInDurationSeconds + elapsed
+  }
+
+  cancelCountIn() {
+    if (this.countInTimerId != null) {
+      window.clearTimeout(this.countInTimerId)
+      this.countInTimerId = null
+    }
+    this.countInActive = false
+    this.countInDurationSeconds = 0
+    this.countInEvents = []
+  }
+
+  scheduleCountInClicks() {
+    if (!this.metronome || !this.countInEvents.length) {
+      return
+    }
+    const now = Tone.now()
+    const startVirtual = -this.countInDurationSeconds
+    for (const event of this.countInEvents) {
+      const offset = event.scoreTimeSeconds - startVirtual
+      const wallAt = now + offset / this.playbackRate
+      if (wallAt >= now - 0.05) {
+        this.metronome.triggerClick(event.accent, wallAt)
+      }
+    }
+  }
+
+  beginScorePlayback() {
+    this.cancelCountIn()
+    this.scheduledEvents.clear()
+    this.playing = true
+    this.playStartedAt = Tone.now()
+    this.scheduledUntilScore = this.offsetScoreSeconds
+    this.scheduleWindow(this.offsetScoreSeconds, this.offsetScoreSeconds + LOOKAHEAD_SECONDS)
+    this.startScheduleLoop()
+    this.startProgressLoop()
+    this.emitMetronomeDisplay()
+  }
+
+  startCountInThenPlayback() {
+    this.countInDurationSeconds = getCountInDurationSeconds(
+      this.timingMap,
+      this.offsetScoreSeconds,
+      this.metronomeCountIn,
+    )
+    this.countInEvents = buildCountInSchedule(
+      this.timingMap,
+      this.offsetScoreSeconds,
+      this.metronomeCountIn,
+      { subdivision: this.metronomeSubdivision },
+    )
+
+    if (this.countInDurationSeconds <= 0 || this.countInEvents.length === 0) {
+      this.beginScorePlayback()
+      return
+    }
+
+    this.countInActive = true
+    this.countInWallStartedAt = Tone.now()
+    this.playing = true
+    this.scheduleCountInClicks()
+    this.startProgressLoop()
+    this.emitMetronomeDisplay()
+
+    const wallDurationMs = (this.countInDurationSeconds / this.playbackRate) * 1000
+    const generation = this.scheduleGeneration
+    this.countInTimerId = window.setTimeout(() => {
+      if (this.scheduleGeneration !== generation || !this.countInActive) {
+        return
+      }
+      this.beginScorePlayback()
+    }, wallDurationMs)
+  }
+
   setMetronomeEnabled(enabled) {
     this.metronomeEnabled = Boolean(enabled)
-    if (this.playing) {
+    if (this.playing && !this.countInActive) {
       this.rescheduleFrom(this.getCurrentScoreTime())
     }
   }
 
   setMetronomeLevel(level) {
     this.metronomeLevel = Math.max(0, Math.min(1, level))
-    if (this.metronome) {
-      this.metronome.volume.value = Tone.gainToDb(0.15 + this.metronomeLevel * 0.55)
+    this.applyMetronomeLevel()
+  }
+
+  setMetronomeSubdivision(subdivision) {
+    if (this.metronomeSubdivision === subdivision) {
+      return
+    }
+    this.metronomeSubdivision = subdivision
+    this.rebuildMetronomeEvents()
+    if (this.playing && !this.countInActive) {
+      this.rescheduleFrom(this.getCurrentScoreTime())
+    }
+  }
+
+  setMetronomeCountIn(measureCount) {
+    this.metronomeCountIn = measureCount
+  }
+
+  getMetronomeSettings() {
+    return {
+      enabled: this.metronomeEnabled,
+      level: this.metronomeLevel,
+      subdivision: this.metronomeSubdivision,
+      countIn: this.metronomeCountIn,
     }
   }
 
@@ -228,9 +374,7 @@ export class ScorePlaybackEngine {
     }
     const scoreTime = this.getCurrentScoreTime()
     this.playbackRate = next
-    if (this.timingMap) {
-      this.metronomeEvents = buildMetronomeSchedule(this.timingMap, { rate: this.playbackRate })
-    }
+    this.rebuildMetronomeEvents()
     this.rescheduleFrom(scoreTime)
   }
 
@@ -239,6 +383,9 @@ export class ScorePlaybackEngine {
   }
 
   getCurrentScoreTime() {
+    if (this.countInActive) {
+      return this.offsetScoreSeconds
+    }
     if (this.playing) {
       const wallElapsed = Math.max(0, Tone.now() - this.playStartedAt)
       return this.offsetScoreSeconds + wallElapsed * this.playbackRate
@@ -255,9 +402,9 @@ export class ScorePlaybackEngine {
       return
     }
     const now = Tone.now()
-    this.metronome.volume.value = Tone.gainToDb(0.15 + this.metronomeLevel * 0.55)
+    this.applyMetronomeLevel()
 
-    const events = this.metronomeEnabled
+    const events = this.metronomeEnabled && !this.countInActive
       ? [...this.noteEvents, ...this.metronomeEvents]
       : this.noteEvents
 
@@ -292,8 +439,7 @@ export class ScorePlaybackEngine {
       const at = Math.max(now, wallAt)
 
       if (event.type === 'metronome') {
-        const pitch = event.accent ? 'C5' : 'G4'
-        this.metronome.triggerAttackRelease(pitch, 0.04, at)
+        this.metronome.triggerClick(event.accent, at)
       } else {
         const name = event.name ?? midiNumberToName(event.midi)
         const velocity = softenVelocity(event.velocity ?? 0.75)
@@ -356,9 +502,9 @@ export class ScorePlaybackEngine {
     if (this.metronome) {
       this.metronome.releaseAll?.(now)
       this.metronome.dispose()
-      this.metronome = createMetronomeVoice()
+      this.metronome = createMetronomeVoice(Tone)
       this.metronome.toDestination()
-      this.metronome.volume.value = Tone.gainToDb(0.15 + this.metronomeLevel * 0.55)
+      this.applyMetronomeLevel()
     }
 
     if (this.voice) {
@@ -398,12 +544,15 @@ export class ScorePlaybackEngine {
     await this.whenInstrumentReady()
     this.releaseAll()
     this.scheduledEvents.clear()
-    this.playing = true
-    this.playStartedAt = Tone.now()
-    this.scheduledUntilScore = this.offsetScoreSeconds
-    this.scheduleWindow(this.offsetScoreSeconds, this.offsetScoreSeconds + LOOKAHEAD_SECONDS)
-    this.startScheduleLoop()
-    this.startProgressLoop()
+
+    if (
+      this.metronomeCountIn > METRONOME_COUNT_IN.OFF
+    ) {
+      this.startCountInThenPlayback()
+      return
+    }
+
+    this.beginScorePlayback()
   }
 
   pause() {
@@ -440,6 +589,7 @@ export class ScorePlaybackEngine {
 
   stopInternal(resetOffset = false) {
     this.playing = false
+    this.cancelCountIn()
     this.stopProgressLoop()
     this.stopScheduleLoop()
     this.releaseAll()
@@ -448,6 +598,7 @@ export class ScorePlaybackEngine {
       this.offsetScoreSeconds = 0
       this.scheduledUntilScore = 0
     }
+    this.emitMetronomeDisplay()
   }
 
   getDuration() {
@@ -531,9 +682,11 @@ export class ScorePlaybackEngine {
         this.offsetScoreSeconds = this.duration
         this.stopInternal(false)
         this.emitTimeUpdate(time)
+        this.emitMetronomeDisplay()
         return
       }
       this.emitTimeUpdate(time)
+      this.emitMetronomeDisplay()
       this.progressFrameId = requestAnimationFrame(tick)
     }
     this.progressFrameId = requestAnimationFrame(tick)

@@ -17,10 +17,15 @@ export default function PracticeTransportSection({
   effectiveTempo,
   metronomeEnabled,
   metronomeLevel,
+  metronomeSubdivision,
+  metronomeCountIn,
+  metronomeDisplay,
   mappingWarning,
   onPlaybackRateChange,
   onMetronomeEnabledChange,
   onMetronomeLevelChange,
+  onMetronomeSubdivisionChange,
+  onMetronomeCountInChange,
   onPlay,
   onPause,
   onStop,
@@ -69,6 +74,11 @@ export default function PracticeTransportSection({
             onMetronomeEnabledChange={onMetronomeEnabledChange}
             metronomeLevel={metronomeLevel ?? 0.6}
             onMetronomeLevelChange={onMetronomeLevelChange}
+            metronomeSubdivision={metronomeSubdivision}
+            onMetronomeSubdivisionChange={onMetronomeSubdivisionChange}
+            metronomeCountIn={metronomeCountIn}
+            onMetronomeCountInChange={onMetronomeCountInChange}
+            metronomeDisplay={metronomeDisplay}
             mappingWarning={mappingWarning}
             disabled={disabled || isLoading}
           />

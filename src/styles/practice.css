@@ -3304,6 +3304,86 @@
   font-size: var(--sf-font-caption);
 }
 
+.practice-playback-settings__row--grid {
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.practice-playback-settings__label--inline {
+  display: grid;
+  gap: 4px;
+}
+
+.practice-playback-settings__label select {
+  width: 100%;
+  min-width: 0;
+  border-radius: var(--sf-radius-sm);
+  border: 1px solid var(--sf-border);
+  background: var(--sf-surface-2);
+  color: var(--sf-text);
+  padding: 4px 8px;
+  font-size: var(--sf-font-caption);
+}
+
+.metronome-beat-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--sf-radius-md);
+  background: rgba(109, 74, 255, 0.08);
+  border: 1px solid rgba(109, 74, 255, 0.18);
+}
+
+.metronome-beat-indicator--count-in {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.28);
+}
+
+.metronome-beat-indicator__status {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #f59e0b;
+}
+
+.metronome-beat-indicator__beats {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+
+.metronome-beat-indicator__beat {
+  width: 1.6rem;
+  height: 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--sf-text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+  transition: background 0.12s ease, color 0.12s ease, transform 0.12s ease;
+}
+
+.metronome-beat-indicator__beat--downbeat {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.metronome-beat-indicator__beat--active {
+  color: #f4f7fc;
+  background: rgba(109, 74, 255, 0.35);
+  transform: scale(1.06);
+}
+
+.metronome-beat-indicator__beat--accent.metronome-beat-indicator__beat--active {
+  background: rgba(245, 158, 11, 0.42);
+  color: #fff7ed;
+}
+
 .midi-transport {
   gap: 9px;
 }

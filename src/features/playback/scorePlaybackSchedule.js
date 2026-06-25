@@ -10,6 +10,7 @@ import {
   collectSustainEvents,
   extractSustainSpans,
 } from './sustainPedal.js'
+import { buildMetronomeSchedule } from './metronomeSchedule.js'
 
 /**
  * Pure performed-timeline note schedule for tests and the playback engine.
@@ -36,18 +37,7 @@ export function buildScoreNoteSchedule(timingMap, { rate = 1 } = {}) {
 }
 
 /** Metronome click times on performed beats. */
-export function buildMetronomeSchedule(timingMap, { rate = 1, beatsPerClick = 1 } = {}) {
-  const beats = getTimeline(timingMap).performedBeats
-  return beats
-    .filter((_, index) => index % beatsPerClick === 0)
-    .map((beat) => ({
-      type: 'metronome',
-      scoreTimeSeconds: beat.timeSeconds,
-      measureNumber: beat.measureNumber,
-      beat: beat.beat,
-      accent: beat.beat === 1,
-    }))
-}
+export { buildMetronomeSchedule } from './metronomeSchedule.js'
 
 export function applyPlaybackRate(events, rate) {
   if (rate <= 0) {
@@ -147,7 +137,7 @@ export async function buildCombinedPlaybackSchedule(
   return {
     events: noteEvents.length > 0 ? noteEvents : scoreEvents,
     noteEvents: noteEvents.length > 0 ? noteEvents : scoreEvents,
-    metronomeEvents: buildMetronomeSchedule(timingMap, { rate }),
+    metronomeEvents: buildMetronomeSchedule(timingMap),
     duration: performedDuration,
     tracks: tracks.map(({ id, name, noteCount, muted }) => ({ id, name, noteCount, muted })),
     usesMidi: noteEvents.length > 0,
