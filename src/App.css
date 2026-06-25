@@ -1342,6 +1342,13 @@
   align-items: flex-start;
 }
 
+.pdf-viewer-section--library .pdf-canvas--fit-page,
+.pdf-viewer-section--practice .pdf-canvas--fit-page {
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+
 .pdf-viewer-stage {
   position: relative;
   flex: 1;

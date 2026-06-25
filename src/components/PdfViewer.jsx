@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Document } from 'react-pdf'
 import 'react-pdf/dist/Page/TextLayer.css'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
@@ -7,6 +7,7 @@ import useElementSize from '../hooks/useElementSize.js'
 import useAnnotations from '../hooks/useAnnotations.js'
 import useAnnotationPersistence from '../hooks/useAnnotationPersistence.js'
 import { getPageDimensions } from '../utils/pdfFit.js'
+import { resetPdfCanvasScroll } from '../utils/pdfViewerScroll.js'
 import { ANNOTATION_TOOLS } from './pdf/annotationConstants.js'
 import PdfFullscreen from './pdf/PdfFullscreen.jsx'
 import PdfPageWindow from './pdf/PdfPageWindow.jsx'
@@ -115,7 +116,17 @@ export default function PdfViewer({
 
   function handleFitModeChange(mode) {
     setFitMode(mode)
+    if (mode === 'page') {
+      resetPdfCanvasScroll(canvasRef.current)
+      requestAnimationFrame(() => resetPdfCanvasScroll(canvasRef.current))
+    }
   }
+
+  useLayoutEffect(() => {
+    if (fitMode === 'page') {
+      resetPdfCanvasScroll(canvasRef.current)
+    }
+  }, [fitMode, pageNumber, file])
 
   function handleToggleFullscreen() {
     setIsFullscreen((open) => !open)

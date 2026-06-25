@@ -57,7 +57,11 @@ export function getPageDimensions(fitMode, pageSize, containerSize) {
       containerWidth,
       containerHeight,
     )
-    return width ? { width } : {}
+    if (!width) {
+      return {}
+    }
+    const scale = width / pageWidth
+    return { width, height: pageHeight * scale }
   }
 
   // Bootstrap render before onLoadSuccess provides page aspect ratio
