@@ -98,6 +98,13 @@ export default function App() {
     }
   }, [])
 
+  const goHome = useCallback(() => {
+    navigateToView('library')
+    if (!isOnboardingDismissed()) {
+      setShowWelcome(true)
+    }
+  }, [navigateToView])
+
   useEffect(() => {
     return () => {
       if (pdfFile) {
@@ -406,6 +413,7 @@ export default function App() {
       <TopBar
         activeView={activeView}
         onNavigate={handleNavigate}
+        onGoHome={goHome}
         practiceReady={practiceReady}
       />
 

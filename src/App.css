@@ -35,6 +35,27 @@
   gap: var(--sf-space-md);
 }
 
+.topbar__brand-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+
+.topbar__brand-btn:hover .topbar__title {
+  color: var(--sf-text-primary);
+}
+
+.topbar__brand-btn:focus-visible {
+  outline: 2px solid var(--sf-accent);
+  outline-offset: 3px;
+  border-radius: var(--sf-radius-sm);
+}
+
 .topbar__beta {
   padding: 4px 9px;
   border: 1px solid rgba(116, 200, 160, 0.3);
@@ -2851,6 +2872,14 @@
   line-height: 1.18;
   letter-spacing: -0.025em;
   color: #f4f7fc;
+}
+
+.library-welcome__summary {
+  max-width: 36rem;
+  margin: 0 0 var(--sf-space-sm);
+  font-size: var(--sf-font-body);
+  line-height: 1.55;
+  color: #d4dff5;
 }
 
 .library-welcome__lead {

@@ -22,10 +22,15 @@ export default function LibraryWelcomeCard({
       <div className="library-welcome__intro">
         <p className="library-welcome__eyebrow">{BETA_LABEL}</p>
         <h2 id="welcome-heading" className="library-welcome__title">
-          Practice music with a score that follows you.
+          Practice sheet music with a score that follows you
         </h2>
+        <p className="library-welcome__summary">
+          Corranzo is a sheet music practice app. Upload PDF sheet music with MIDI and MusicXML
+          files, then practice with synchronized playback and a moving score-follow cursor — so you
+          can learn pieces more effectively.
+        </p>
         <p className="library-welcome__lead">
-          Try the demo, or add your own PDF + MusicXML when you are ready.
+          Try the built-in demo, or add your own files when you are ready.
         </p>
         <div className="library-welcome__actions">
           <button type="button" className="library-welcome__btn" onClick={handleDismiss}>

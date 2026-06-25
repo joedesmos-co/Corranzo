@@ -10,7 +10,7 @@ const VIEWS = [
   { id: 'profile', label: 'Profile' },
 ]
 
-export default function TopBar({ activeView, onNavigate, practiceReady = true }) {
+export default function TopBar({ activeView, onNavigate, onGoHome, practiceReady = true }) {
   function handleNavigate(id) {
     if (id === 'practice' && !practiceReady) {
       onNavigate(id, { blocked: true })
@@ -21,12 +21,17 @@ export default function TopBar({ activeView, onNavigate, practiceReady = true })
 
   return (
     <header className="topbar">
-      <div className="topbar__brand">
+      <button
+        type="button"
+        className="topbar__brand topbar__brand-btn"
+        onClick={onGoHome}
+        aria-label="Corranzo home"
+      >
         <h1 className="topbar__title">Corranzo</h1>
         <span className="topbar__beta">
           {BETA_LABEL} <span aria-hidden="true">·</span> v{BETA_VERSION}
         </span>
-      </div>
+      </button>
       <div className="topbar__actions">
         <nav className="topbar__nav" aria-label="Main">
           {VIEWS.map(({ id, label }) => (
