@@ -173,17 +173,7 @@ export function buildMeasureMusicalEvents(
       groups.get(key).notes.push(note)
     }
 
-    const ordered = [...groups.values()].sort((a, b) => a.timeSeconds - b.timeSeconds)
-
-    // For each onset group resolve both an engraved (default-x) position and a
-    // time-proportional fallback. Sparse/slow piano exports (e.g. Gymnopédie,
-    // grand-staff voices) often have non-increasing or missing default-x, which
-    // — once clamped monotonic — collapses onsets onto the same x and makes the
-    // cursor freeze or jump backward. When the engraved positions are not
-    // strictly forward we use the time-proportional positions for the whole
-    // measure: they are monotonic and still land on each onset at its sounding
-    // time (so the cursor stays smooth and never early).
-    const built = ordered.map((group) => {
+    for (const group of [...groups.values()].sort((a, b) => a.timeSeconds - b.timeSeconds)) {
       const representative = group.notes.reduce((best, note) => {
         if (note.defaultX == null) {
           return best
@@ -193,34 +183,22 @@ export function buildMeasureMusicalEvents(
         }
         return best
       }, group.notes[0])
-      const geomX = noteXInMeasureSpan(representative, layoutExtents, xStart, xEnd)
-      const local =
-        window.endTimeSeconds > window.startTimeSeconds
-          ? (group.timeSeconds - window.startTimeSeconds) /
-            (window.endTimeSeconds - window.startTimeSeconds)
-          : 0
-      const timeX = lerp(xStart, xEnd, clamp(local, 0, 1))
-      return { group, geomX, timeX }
-    })
 
-    let geometryIsForward = true
-    let lastGeomX = -Infinity
-    for (const entry of built) {
-      if (entry.geomX == null || entry.geomX < lastGeomX - 1e-4) {
-        geometryIsForward = false
-        break
+      let x = noteXInMeasureSpan(representative, layoutExtents, xStart, xEnd)
+      if (x == null) {
+        const local =
+          window.endTimeSeconds > window.startTimeSeconds
+            ? (group.timeSeconds - window.startTimeSeconds) /
+              (window.endTimeSeconds - window.startTimeSeconds)
+            : 0
+        x = lerp(xStart, xEnd, clamp(local, 0, 1))
       }
-      lastGeomX = entry.geomX
-    }
-
-    for (const entry of built) {
-      const x = geometryIsForward && entry.geomX != null ? entry.geomX : entry.timeX
       events.push({
-        timeSeconds: entry.group.timeSeconds,
+        timeSeconds: group.timeSeconds,
         x: clamp(x, xStart, xEnd),
-        kind: entry.group.notes.length > 1 ? 'chord' : 'note',
+        kind: group.notes.length > 1 ? 'chord' : 'note',
         durationSeconds: Math.max(
-          ...entry.group.notes.map((note) => note.durationSeconds ?? 0),
+          ...group.notes.map((note) => note.durationSeconds ?? 0),
           0,
         ),
       })
@@ -254,6 +232,15 @@ export function buildMeasureMusicalEvents(
   return deduped
 }
 
+function findNextForwardEvent(events, fromIndex, minX) {
+  for (let index = fromIndex + 1; index < events.length; index += 1) {
+    if (events[index].x > minX + 1e-5) {
+      return events[index]
+    }
+  }
+  return null
+}
+
 function isFlatForwardSpan(before, after) {
   return after.x <= before.x + 1e-5 && after.timeSeconds - before.timeSeconds > 0.02
 }
@@ -280,21 +267,66 @@ function segmentVelocity(before, after) {
 /** Tail segments slower than this fraction of the prior note velocity feel like a stall. */
 const TAIL_STALL_RATIO = 0.45
 
+/** Minimum tail velocity as a fraction of the prior note segment. */
+const TAIL_VELOCITY_FLOOR_RATIO = 0.72
+
 /**
- * Strict onset-locked interpolation: a linear glide that reaches the next onset's
- * x exactly at its onset time and never moves ahead of it. No predictive creep,
- * velocity extrapolation, or look-ahead through flat spans — those made the cursor
- * arrive at noteheads before the note actually sounded. Forward-only within the
- * segment; capped at the system/bridge edge.
+ * Bounded segment interpolation: onset-locked glide that cannot pass the next
+ * target early, with look-ahead creep through flat same-x spans.
  */
-function interpolateSegment(before, after, practiceTime, segmentMaxX) {
+function interpolateSegment(before, after, prior, practiceTime, events, beforeIndex, segmentMaxX) {
   const span = after.timeSeconds - before.timeSeconds
   if (span <= 0) {
-    return capSegmentX(after.x, segmentMaxX, before.x)
+    return after.x
   }
   const local = clamp((practiceTime - before.timeSeconds) / span, 0, 1)
-  const target = Math.max(before.x, after.x)
-  const x = clamp(lerp(before.x, after.x, local), before.x, target)
+  const linearX = lerp(before.x, after.x, local)
+  const flatSpan = isFlatForwardSpan(before, after)
+  const ahead = flatSpan ? findNextForwardEvent(events, beforeIndex, before.x) : null
+
+  if (flatSpan && ahead) {
+    const creepSpan = ahead.timeSeconds - before.timeSeconds
+    const creepLocal = clamp((practiceTime - before.timeSeconds) / creepSpan, 0, 1)
+    const x = lerp(before.x, ahead.x, creepLocal)
+    return capSegmentX(x, segmentMaxX, before.x)
+  }
+
+  const isTail = after.kind === 'bridge-next' || after.kind === 'measure-end'
+  let x =
+    isTail && prior
+      ? interpolateWithVelocityContinuity(before, after, prior, practiceTime, segmentMaxX)
+      : linearX
+
+  if (prior && after.x >= before.x && !isTail) {
+    const priorVel = segmentVelocity(prior, before)
+    const tailVel = segmentVelocity(before, after)
+    if (
+      Math.abs(priorVel) > 1e-6 &&
+      Math.abs(tailVel) < Math.abs(priorVel) * TAIL_STALL_RATIO
+    ) {
+      const floorX =
+        before.x +
+        Math.abs(priorVel) * TAIL_VELOCITY_FLOOR_RATIO * (practiceTime - before.timeSeconds)
+      x = Math.max(x, Math.min(floorX, linearX))
+    }
+  }
+
+  const flatTail = isTail && Math.abs(after.x - before.x) < 0.001
+  if (after.x >= before.x) {
+    if (flatTail) {
+      const priorVel = prior ? segmentVelocity(prior, before) : segmentVelocity(before, after)
+      const creepCap = Math.min(
+        after.x > before.x ? lerp(before.x, after.x, local) : after.x,
+        segmentMaxX ?? after.x,
+      )
+      x = Math.max(before.x, Math.min(x, creepCap))
+    } else {
+      x = Math.max(before.x, Math.min(x, linearX))
+    }
+  } else {
+    x = linearX
+  }
+
   return capSegmentX(x, segmentMaxX, before.x)
 }
 
@@ -307,6 +339,59 @@ function capSegmentX(x, segmentMaxX, minX) {
     capped = Math.max(minX, capped)
   }
   return capped
+}
+
+/**
+ * Velocity-continuous tail: keep moving through the barline when default-x / anchor
+ * geometry leaves almost no horizontal delta in the linear segment.
+ * Still lands exactly on `after.x` at `after.timeSeconds` for onset lock.
+ */
+function interpolateWithVelocityContinuity(before, after, prior, practiceTime, segmentMaxX) {
+  const span = after.timeSeconds - before.timeSeconds
+  if (span <= 0) {
+    return after.x
+  }
+  const local = clamp((practiceTime - before.timeSeconds) / span, 0, 1)
+  const linearX = lerp(before.x, after.x, local)
+
+  const isTail = after.kind === 'bridge-next' || after.kind === 'measure-end'
+  if (!isTail || !prior) {
+    return linearX
+  }
+
+  const priorSpan = before.timeSeconds - prior.timeSeconds
+  if (priorSpan <= 0) {
+    return linearX
+  }
+
+  const priorVel = segmentVelocity(prior, before)
+  const tailVel = segmentVelocity(before, after)
+  const stallRatio =
+    Math.abs(priorVel) > 1e-6 ? Math.abs(tailVel / priorVel) : 1
+  const flatTail = Math.abs(after.x - before.x) < 0.001
+
+  if (flatTail && Math.abs(priorVel) > 1e-6) {
+    if (practiceTime >= after.timeSeconds - 0.001) {
+      return after.x
+    }
+    const smooth = local * local * (3 - 2 * local)
+    const smoothX = lerp(before.x, after.x, smooth)
+    const floorX =
+      before.x + Math.abs(priorVel) * TAIL_VELOCITY_FLOOR_RATIO * (practiceTime - before.timeSeconds)
+    const creepCap = Math.min(
+      after.x > before.x ? lerp(before.x, after.x, local) : after.x,
+      segmentMaxX ?? after.x,
+    )
+    return capSegmentX(Math.max(smoothX, Math.min(floorX, creepCap)), segmentMaxX, before.x)
+  }
+
+  if (stallRatio >= TAIL_STALL_RATIO) {
+    return capSegmentX(linearX, segmentMaxX, before.x)
+  }
+
+  const extrapX = before.x + priorVel * (practiceTime - before.timeSeconds)
+  const blend = local * local * (3 - 2 * local)
+  return capSegmentX(lerp(extrapX, linearX, blend), segmentMaxX, before.x)
 }
 
 function appendMeasureBridge(events, bridgeTarget) {
@@ -453,7 +538,7 @@ export function resolveMusicalXInMeasure({
       : after.kind === 'measure-end'
         ? Math.min(after.x, xEnd)
         : xEnd
-  let x = interpolateSegment(before, after, practiceTime, segmentMaxX)
+  let x = interpolateSegment(before, after, prior, practiceTime, events, beforeIndex, segmentMaxX)
   x = Math.min(x, motionMaxX)
   const progress = clamp((x - xStart) / Math.max(0.001, xEnd - xStart), 0, 1)
   const atNoteOnset =
