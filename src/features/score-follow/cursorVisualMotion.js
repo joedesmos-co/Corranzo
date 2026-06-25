@@ -1,14 +1,5 @@
 import { clamp } from './scoreFollowEasing.js'
 
-/** Lookahead for predictive visual creep (no trailing lag behind current musical x). */
-export const VISUAL_LOOKAHEAD_SECONDS = 0.055
-
-/** Max display lead ahead of current musical x (normalized page coords). */
-export const VISUAL_MAX_LEAD_X = 0.0045
-
-/** Onset correction — snap display to exact notehead within this window. */
-export const VISUAL_ONSET_LOCK_SECONDS = 0.002
-
 /** Same-system Y tolerance (matches resolveScoreFollowCursor). */
 export const SAME_SYSTEM_Y_TOLERANCE = 0.02
 
@@ -73,69 +64,20 @@ export function isNearSystemEnd(target, epsilon = 0.003) {
 }
 
 /**
- * Forward-only visual layer: preserves musical onset timing but eases velocity
- * dips using a tiny predictive lead, then corrects exactly at onsets.
+ * Visual cursor position. The musical x is already onset-locked — it reaches each
+ * notehead exactly when the note sounds — so the display tracks it with NO
+ * predictive lead. A lead made the cursor reach noteheads before they played
+ * (a fixed x-lead becomes a large TIME lead in slow/sparse passages). The display
+ * is simply the musical x, capped at the system edge.
  */
-export function applyVisualCursorX({
-  displayX,
-  musicalX,
-  musicalAheadX,
-  atOnset = false,
-  sameSystem = true,
-  visualMaxX = null,
-  allowPredictiveLead = true,
-}) {
+export function applyVisualCursorX({ displayX, musicalX, sameSystem = true, visualMaxX = null }) {
   if (!Number.isFinite(musicalX)) {
     return displayX
   }
-
   if (!sameSystem) {
     return musicalX
   }
-
-  let cappedMusicalX = musicalX
-  if (visualMaxX != null) {
-    cappedMusicalX = Math.min(cappedMusicalX, visualMaxX)
-  }
-
-  if (atOnset) {
-    return cappedMusicalX
-  }
-
-  let x = Number.isFinite(displayX) ? displayX : cappedMusicalX
-
-  if (cappedMusicalX > x) {
-    x = cappedMusicalX
-  }
-
-  if (!allowPredictiveLead) {
-    if (visualMaxX != null) {
-      x = Math.min(x, visualMaxX)
-    }
-    return Math.max(Number.isFinite(displayX) ? Math.min(displayX, visualMaxX ?? displayX) : x, x)
-  }
-
-  const aheadX = Number.isFinite(musicalAheadX) ? musicalAheadX : cappedMusicalX
-  const cappedAheadX =
-    visualMaxX != null ? Math.min(aheadX, visualMaxX) : aheadX
-  const leadRoom = cappedAheadX - cappedMusicalX
-
-  if (leadRoom > 1e-6 && cappedAheadX > x) {
-    const creep = Math.min(leadRoom * 0.42, VISUAL_MAX_LEAD_X)
-    x = Math.max(x, Math.min(cappedMusicalX + creep, cappedAheadX))
-  }
-
-  if (visualMaxX != null) {
-    x = Math.min(x, visualMaxX)
-  } else {
-    x = Math.min(x, cappedMusicalX + VISUAL_MAX_LEAD_X)
-  }
-
-  if (Number.isFinite(displayX)) {
-    x = Math.max(Math.min(displayX, visualMaxX ?? displayX), x)
-  }
-
-  return x
+  return visualMaxX != null ? Math.min(musicalX, visualMaxX) : musicalX
 }
 
 export function shouldUseVisualCursorMotion(target) {

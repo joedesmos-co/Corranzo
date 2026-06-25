@@ -7,7 +7,6 @@ import {
   isSameSystemCursor,
   resolveVisualMaxX,
   shouldUseVisualCursorMotion,
-  VISUAL_MAX_LEAD_X,
 } from '../src/features/score-follow/cursorVisualMotion.js'
 import * as F from './helpers/buildXml.js'
 
@@ -44,18 +43,25 @@ describe('cursorVisualMotion', () => {
     ).toBe(0.22)
   })
 
-  it('allows tiny predictive lead without trailing lag on the same system', () => {
-    const x = applyVisualCursorX({
-      displayX: 0.2,
-      musicalX: 0.2,
-      musicalAheadX: 0.206,
-      atOnset: false,
-      sameSystem: true,
-      visualMaxX: 0.22,
-      allowPredictiveLead: true,
-    })
-    expect(x).toBeGreaterThan(0.2)
-    expect(x).toBeLessThanOrEqual(0.2 + VISUAL_MAX_LEAD_X + 0.0001)
+  it('tracks musical x with NO predictive lead (never ahead of the onset)', () => {
+    // The musical x is onset-locked; the display must equal it, not lead it.
+    expect(
+      applyVisualCursorX({
+        displayX: 0.2,
+        musicalX: 0.2,
+        sameSystem: true,
+        visualMaxX: 0.22,
+      }),
+    ).toBe(0.2)
+    // Even with plenty of room to the next onset, the cursor does not creep ahead.
+    expect(
+      applyVisualCursorX({
+        displayX: 0.2,
+        musicalX: 0.205,
+        sameSystem: true,
+        visualMaxX: 0.3,
+      }),
+    ).toBe(0.205)
   })
 
   it('never exceeds visualMaxX / playableEndX', () => {

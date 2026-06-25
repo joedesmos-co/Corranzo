@@ -5,12 +5,9 @@ import {
 } from './scoreFollowCursorRuntime.js'
 import {
   applyVisualCursorX,
-  isNearSystemEnd,
-  isSameSystemCursor,
   resolveVisualMaxX,
   shouldUseVisualCursorMotion,
   systemKeyForCursor,
-  VISUAL_LOOKAHEAD_SECONDS,
 } from './cursorVisualMotion.js'
 
 const PAGE_CHANGE_ALPHA = 0.55
@@ -127,21 +124,14 @@ export default function useScoreFollowCursorDriver({
       }
 
       if (rtResolve && rtGetTime) {
-        const now = rtGetTime()
-        const ahead = rtResolve(now + VISUAL_LOOKAHEAD_SECONDS)
-        const sameSystemAhead = isSameSystemCursor(target, ahead)
         const visualMaxX = resolveVisualMaxX(target)
         const useVisual = shouldUseVisualCursorMotion(target)
         const displayX = useVisual
           ? applyVisualCursorX({
               displayX: state.x,
               musicalX: target.x,
-              musicalAheadX:
-                sameSystemAhead && ahead?.visible ? ahead.x : target.x,
-              atOnset: Boolean(target.atOnset),
               sameSystem: true,
               visualMaxX,
-              allowPredictiveLead: sameSystemAhead && !isNearSystemEnd(target),
             })
           : target.x
         state.x = displayX
