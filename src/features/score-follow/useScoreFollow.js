@@ -63,6 +63,13 @@ import {
   SCORE_FOLLOW_SETUP_RUNNING,
 } from './scoreFollowUserMessages.js'
 import { LAYOUT_MISMATCH_MESSAGE } from './layoutAssessment.js'
+import {
+  AUTO_SETUP_SCAN_TIMEOUT_MS,
+  hasUsableScoreFollowAnchors,
+  idleSemiAutoSetupState,
+  shouldClearStaleScanningUi,
+  shouldSkipAutoSetupScan,
+} from './scoreFollowSetupState.js'
 
 function isEditableTarget(target) {
   if (!target || !(target instanceof HTMLElement)) {
@@ -127,6 +134,7 @@ export default function useScoreFollow({
   const autoSetupInFlightRef = useRef(false)
   const autoSetupTriggerKeyRef = useRef(null)
   const demoBundledLoadRef = useRef(null)
+  const demoBundledInFlightRef = useRef(false)
   const layoutSupplementKeyRef = useRef(null)
   const [demoBundledStatus, setDemoBundledStatus] = useState({
     loading: false,
@@ -577,23 +585,20 @@ export default function useScoreFollow({
         return
       }
 
-      if (!force && anchorCounts.manual > 0) {
+      if (
+        shouldSkipAutoSetupScan({
+          force,
+          anchorCounts,
+          anchorTrust,
+          autoSetupAttempted: hasAutoSetupBeenAttempted(autoSetupKey),
+        })
+      ) {
         setSetupStatus({
           phase: 'ready',
           message: setupReadyMessage,
         })
-        return
-      }
-
-      if (!force && (anchorCounts.demo > 0 || anchorTrust.showCursor)) {
-        setSetupStatus({
-          phase: 'ready',
-          message: setupReadyMessage,
-        })
-        return
-      }
-
-      if (!force && hasAutoSetupBeenAttempted(autoSetupKey) && anchorCounts.auto >= 2) {
+        setSemiAutoSetup(idleSemiAutoSetupState())
+        autoSetupInFlightRef.current = false
         return
       }
 
@@ -617,20 +622,30 @@ export default function useScoreFollow({
         clearAutoAnchors()
       }
 
+      let scanTimeoutId
       try {
-        const result = await analyzeSemiAutoScoreSetup({
-          pdfSource,
-          numPages,
-          timingMap,
-          onProgress: (progress, message) => {
-            setSemiAutoSetup((previous) => ({
-              ...previous,
-              status: 'analyzing',
-              progress,
-              message,
-            }))
-          },
-        })
+        const result = await Promise.race([
+          analyzeSemiAutoScoreSetup({
+            pdfSource,
+            numPages,
+            timingMap,
+            onProgress: (progress, message) => {
+              setSemiAutoSetup((previous) => ({
+                ...previous,
+                status: 'analyzing',
+                progress,
+                message,
+              }))
+            },
+          }),
+          new Promise((_, reject) => {
+            scanTimeoutId = window.setTimeout(() => {
+              reject(
+                new Error('PDF scan timed out. Use Re-run auto setup to try again.'),
+              )
+            }, AUTO_SETUP_SCAN_TIMEOUT_MS)
+          }),
+        ])
 
         const recordAutoSetupRuntime = (partial) => {
           setAutoSetupRuntimeDiagnostics(
@@ -760,6 +775,9 @@ export default function useScoreFollow({
           message: setupFailedMessage,
         })
       } finally {
+        if (scanTimeoutId) {
+          window.clearTimeout(scanTimeoutId)
+        }
         autoSetupInFlightRef.current = false
       }
     },
@@ -777,6 +795,7 @@ export default function useScoreFollow({
       setSupplementalAnchors,
       isDemoSession,
       setupFailedMessage,
+      setupReadyMessage,
     ],
   )
 
@@ -789,11 +808,55 @@ export default function useScoreFollow({
   useEffect(() => {
     autoSetupTriggerKeyRef.current = null
     demoBundledLoadRef.current = null
+    demoBundledInFlightRef.current = false
     layoutSupplementKeyRef.current = null
     setAutoSetupReport(null)
     setAutoSetupRuntimeDiagnostics(null)
     setDemoBundledStatus({ loading: false, applied: false, error: null })
   }, [autoSetupKey])
+
+  useEffect(() => {
+    if (!sessionReady || !isHydrated || timingLoading || !hasTiming) {
+      return
+    }
+
+    const autoSetupAttempted = hasAutoSetupBeenAttempted(autoSetupKey)
+    const usable = hasUsableScoreFollowAnchors({
+      anchorCounts,
+      anchorTrust,
+      autoSetupAttempted,
+    })
+    if (!usable) {
+      return
+    }
+
+    if (
+      shouldClearStaleScanningUi({
+        setupPhase: setupStatus.phase,
+        semiAutoStatus: semiAutoSetup.status,
+        hasUsableAnchors: true,
+      })
+    ) {
+      autoSetupInFlightRef.current = false
+      setSemiAutoSetup(idleSemiAutoSetupState())
+    }
+
+    if (setupStatus.phase === 'running' || setupStatus.phase === 'idle') {
+      setEnabled(true)
+      setSetupStatus({ phase: 'ready', message: setupReadyMessage })
+    }
+  }, [
+    sessionReady,
+    isHydrated,
+    timingLoading,
+    hasTiming,
+    anchorCounts,
+    anchorTrust,
+    autoSetupKey,
+    setupStatus.phase,
+    semiAutoSetup.status,
+    setupReadyMessage,
+  ])
 
   useEffect(() => {
     if (isDemoSession || !sessionReady || !isHydrated || timingLoading || !hasTiming || !timingMap) {
@@ -848,19 +911,28 @@ export default function useScoreFollow({
     }
 
     const loadKey = `${autoSetupKey}::demo-bundled`
-    if (demoBundledLoadRef.current === loadKey) {
+    if (demoBundledLoadRef.current === loadKey || demoBundledInFlightRef.current) {
       return
     }
-    demoBundledLoadRef.current = loadKey
 
     let cancelled = false
+    let timeoutId
+    demoBundledInFlightRef.current = true
     setDemoBundledStatus({ loading: true, applied: false, error: null })
 
-    fetchDemoBundledAnchors()
+    Promise.race([
+      fetchDemoBundledAnchors(),
+      new Promise((_, reject) => {
+        timeoutId = window.setTimeout(() => {
+          reject(new Error('Demo anchors timed out loading. Try Re-run auto setup.'))
+        }, 30_000)
+      }),
+    ])
       .then(({ anchors: bundled }) => {
         if (cancelled) {
           return
         }
+        demoBundledLoadRef.current = loadKey
         setBundledDemoAnchors(bundled)
         clearAutoSetupAttempted(autoSetupKey)
         markAutoSetupAttempted(autoSetupKey)
@@ -872,16 +944,34 @@ export default function useScoreFollow({
         if (cancelled) {
           return
         }
-        demoBundledLoadRef.current = null
         setDemoBundledStatus({
           loading: false,
           applied: false,
           error: error instanceof Error ? error.message : 'Could not load demo anchors',
         })
+        setSetupStatus({
+          phase: 'failed',
+          message: setupFailedMessage,
+        })
+      })
+      .finally(() => {
+        demoBundledInFlightRef.current = false
+        if (timeoutId) {
+          window.clearTimeout(timeoutId)
+        }
       })
 
     return () => {
       cancelled = true
+      demoBundledInFlightRef.current = false
+      if (timeoutId) {
+        window.clearTimeout(timeoutId)
+      }
+      setDemoBundledStatus((previous) =>
+        previous.loading
+          ? { loading: false, applied: false, error: null }
+          : previous,
+      )
     }
   }, [
     useBundledDemoAnchors,
@@ -894,6 +984,7 @@ export default function useScoreFollow({
     anchorCounts.demo,
     setBundledDemoAnchors,
     setupReadyMessage,
+    setupFailedMessage,
   ])
 
   useEffect(() => {
@@ -910,8 +1001,14 @@ export default function useScoreFollow({
       return
     }
 
-    if (anchorCounts.manual > 0 || anchorCounts.demo > 0 || anchorTrust.showCursor) {
-      setSetupStatus({ phase: 'ready', message: setupReadyMessage })
+    const autoSetupAttempted = hasAutoSetupBeenAttempted(autoSetupKey)
+    if (
+      hasUsableScoreFollowAnchors({
+        anchorCounts,
+        anchorTrust,
+        autoSetupAttempted,
+      })
+    ) {
       return
     }
 
@@ -933,7 +1030,7 @@ export default function useScoreFollow({
     }
     if (
       shouldClearStaleAutoSetupFlag({
-        attempted: hasAutoSetupBeenAttempted(autoSetupKey),
+        attempted: autoSetupAttempted,
         autoAnchorCount: anchorCounts.auto,
       })
     ) {
@@ -962,6 +1059,7 @@ export default function useScoreFollow({
     demoBundledStatus.error,
     demoBundledStatus.applied,
     setupReadyMessage,
+    setupFailedMessage,
   ])
 
   const confirmSemiAutoSetup = useCallback(() => {
