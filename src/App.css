@@ -978,6 +978,16 @@
   display: none;
 }
 
+.tb-popover__panel--brush-settings {
+  left: auto;
+  right: 0;
+  transform: none;
+  width: 212px;
+  max-width: calc(100vw - 16px);
+  padding: 8px;
+  overflow: hidden;
+}
+
 .tb-menu {
   display: flex;
   flex-direction: column;
@@ -1012,14 +1022,19 @@
 }
 
 .ann-settings--compact {
+  flex: none;
   flex-direction: column;
   align-items: stretch;
   gap: 8px;
-  min-width: 200px;
+  width: 100%;
+  min-width: 0;
 }
 
 .ann-settings--compact .ann-settings__slider {
+  flex: none;
+  width: 100%;
   max-width: none;
+  min-width: 0;
 }
 
 .annotation-toolbar {
@@ -1054,14 +1069,19 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  flex: 1;
   min-width: 0;
 }
 
 .ann-settings__colors {
   display: flex;
-  gap: 5px;
+  flex-wrap: wrap;
+  gap: 6px;
   align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 100%;
+  padding: 2px;
+  box-sizing: border-box;
 }
 
 .ann-settings__swatch {
@@ -1071,17 +1091,18 @@
   border: 2px solid #2e4268;
   border-radius: 50%;
   cursor: pointer;
-  flex-shrink: 0;
-  transition: transform 0.12s, border-color 0.12s;
+  flex: 0 0 22px;
+  transition: border-color 0.12s;
 }
 
 .ann-settings__swatch:hover:not(:disabled) {
-  transform: scale(1.08);
+  border-color: #6d4aff;
 }
 
 .ann-settings__swatch--active {
-  border-color: #8fa3c7;
-  box-shadow: 0 0 0 2px #6d4aff;
+  border-color: #f4f7fc;
+  outline: 2px solid #6d4aff;
+  outline-offset: 1px;
 }
 
 .ann-settings__slider {

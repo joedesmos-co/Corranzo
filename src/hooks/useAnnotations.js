@@ -2,12 +2,13 @@ import { useCallback, useState } from 'react'
 import {
   ANNOTATION_TOOLS,
   DEFAULT_TOOL_SETTINGS,
+  normalizeToolSettings,
 } from '../components/pdf/annotationConstants.js'
 
 export default function useAnnotations() {
   const [strokesByPage, setStrokesByPage] = useState({})
   const [activeTool, setActiveTool] = useState(ANNOTATION_TOOLS.POINTER)
-  const [toolSettings, setToolSettings] = useState(DEFAULT_TOOL_SETTINGS)
+  const [toolSettings, setToolSettings] = useState(() => normalizeToolSettings(null))
 
   const getStrokes = useCallback(
     (pageNumber) => strokesByPage[pageNumber] ?? [],
@@ -23,18 +24,20 @@ export default function useAnnotations() {
     }
     setStrokesByPage(normalized)
     if (nextToolSettings) {
-      setToolSettings(nextToolSettings)
+      setToolSettings(normalizeToolSettings(nextToolSettings))
     }
   }, [])
 
   const updateToolSettings = useCallback((tool, patch) => {
-    setToolSettings((previous) => ({
-      ...previous,
-      [tool]: {
-        ...previous[tool],
-        ...patch,
-      },
-    }))
+    setToolSettings((previous) =>
+      normalizeToolSettings({
+        ...previous,
+        [tool]: {
+          ...previous[tool],
+          ...patch,
+        },
+      }),
+    )
   }, [])
 
   const getStrokeStyle = useCallback(
@@ -108,7 +111,7 @@ export default function useAnnotations() {
 
   const reset = useCallback(() => {
     setStrokesByPage({})
-    setToolSettings(DEFAULT_TOOL_SETTINGS)
+    setToolSettings(normalizeToolSettings(null))
     setActiveTool(ANNOTATION_TOOLS.POINTER)
   }, [])
 

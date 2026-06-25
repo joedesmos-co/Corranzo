@@ -28,6 +28,7 @@ export default function ToolbarPopover({
   label,
   active = false,
   disabled = false,
+  panelClassName = '',
   children,
 }) {
   const [open, setOpen] = useState(false)
@@ -74,7 +75,7 @@ export default function ToolbarPopover({
       <div
         id={panelId}
         role="menu"
-        className="tb-popover__panel"
+        className={`tb-popover__panel${panelClassName ? ` ${panelClassName}` : ''}`}
         hidden={!open}
       >
         {children}

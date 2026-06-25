@@ -18,7 +18,7 @@ describe('resolveAnnotationStrokeStyle', () => {
   it('returns pen defaults when strokeStyle is null', () => {
     const style = resolveAnnotationStrokeStyle(null, ANNOTATION_TOOLS.PEN)
     expect(style.width).toBeGreaterThan(0)
-    expect(style.color).toBeTruthy()
+    expect(style.color).toBe('#a855f7')
     expect(style.opacity).toBeGreaterThan(0)
   })
 

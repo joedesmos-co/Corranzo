@@ -13,6 +13,8 @@ import {
 } from './annotationConstants.js'
 
 function ColorSwatches({ colors, value, onChange, disabled }) {
+  const selectedColor = colors.includes(value) ? value : colors[0]
+
   return (
     <div className="ann-settings__colors" role="listbox" aria-label="Color">
       {colors.map((color) => (
@@ -20,8 +22,8 @@ function ColorSwatches({ colors, value, onChange, disabled }) {
           key={color}
           type="button"
           role="option"
-          aria-selected={value === color}
-          className={`ann-settings__swatch${value === color ? ' ann-settings__swatch--active' : ''}`}
+          aria-selected={selectedColor === color}
+          className={`ann-settings__swatch${selectedColor === color ? ' ann-settings__swatch--active' : ''}`}
           style={{ backgroundColor: color }}
           disabled={disabled}
           title={color}

@@ -119,7 +119,12 @@ export default function PdfViewerToolbar({
           />
         ))}
 
-        <ToolbarPopover icon="⚙" label="Brush settings" disabled={disabled}>
+        <ToolbarPopover
+          icon="⚙"
+          label="Brush settings"
+          disabled={disabled}
+          panelClassName="tb-popover__panel--brush-settings"
+        >
           <AnnotationToolSettings
             disabled={disabled}
             activeTool={activeTool}

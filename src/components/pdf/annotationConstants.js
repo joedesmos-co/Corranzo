@@ -5,9 +5,13 @@ export const ANNOTATION_TOOLS = {
   ERASER: 'eraser',
 }
 
+export const DEFAULT_PEN_COLOR = '#a855f7'
+
+const DEPRECATED_PEN_COLORS = new Set(['#e8eef8'])
+
 export const DEFAULT_TOOL_SETTINGS = {
   [ANNOTATION_TOOLS.PEN]: {
-    color: '#e8eef8',
+    color: DEFAULT_PEN_COLOR,
     opacity: 1,
     width: 0.004,
   },
@@ -40,7 +44,7 @@ export function resolveAnnotationStrokeStyle(
       return { color: 'transparent', opacity: 1, width, eraserRadius: width }
     }
     return {
-      color: defaults.color ?? '#e8eef8',
+      color: normalizePenColor(defaults.color),
       opacity: defaults.opacity ?? 1,
       width: defaults.width ?? 0.004,
     }
@@ -61,7 +65,7 @@ export function resolveAnnotationStrokeStyle(
   }
 
   return {
-    color: strokeStyle.color ?? defaults.color ?? '#e8eef8',
+    color: normalizePenColor(strokeStyle.color ?? defaults.color),
     opacity: strokeStyle.opacity ?? defaults.opacity ?? 1,
     width,
     eraserRadius: strokeStyle.eraserRadius ?? width,
@@ -69,13 +73,52 @@ export function resolveAnnotationStrokeStyle(
 }
 
 export const PEN_COLORS = [
-  '#e8eef8',
-  '#ffffff',
+  DEFAULT_PEN_COLOR,
   '#f87171',
   '#60a5fa',
-  '#c084fc',
   '#1e293b',
+  '#ffffff',
 ]
+
+export function normalizePenColor(color) {
+  const normalized = String(color ?? '').trim().toLowerCase()
+  if (DEPRECATED_PEN_COLORS.has(normalized)) {
+    return DEFAULT_PEN_COLOR
+  }
+  const match = PEN_COLORS.find((entry) => entry.toLowerCase() === normalized)
+  return match ?? DEFAULT_PEN_COLOR
+}
+
+export function normalizeToolSettings(toolSettings) {
+  if (!toolSettings || typeof toolSettings !== 'object') {
+    return {
+      ...DEFAULT_TOOL_SETTINGS,
+      [ANNOTATION_TOOLS.PEN]: { ...DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.PEN] },
+      [ANNOTATION_TOOLS.HIGHLIGHTER]: {
+        ...DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.HIGHLIGHTER],
+      },
+      [ANNOTATION_TOOLS.ERASER]: { ...DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.ERASER] },
+    }
+  }
+
+  return {
+    ...DEFAULT_TOOL_SETTINGS,
+    ...toolSettings,
+    [ANNOTATION_TOOLS.PEN]: {
+      ...DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.PEN],
+      ...toolSettings[ANNOTATION_TOOLS.PEN],
+      color: normalizePenColor(toolSettings[ANNOTATION_TOOLS.PEN]?.color),
+    },
+    [ANNOTATION_TOOLS.HIGHLIGHTER]: {
+      ...DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.HIGHLIGHTER],
+      ...toolSettings[ANNOTATION_TOOLS.HIGHLIGHTER],
+    },
+    [ANNOTATION_TOOLS.ERASER]: {
+      ...DEFAULT_TOOL_SETTINGS[ANNOTATION_TOOLS.ERASER],
+      ...toolSettings[ANNOTATION_TOOLS.ERASER],
+    },
+  }
+}
 
 export const HIGHLIGHTER_COLORS = [
   '#facc15',
