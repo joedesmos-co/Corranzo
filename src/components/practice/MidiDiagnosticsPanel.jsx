@@ -15,7 +15,7 @@ export default function MidiDiagnosticsPanel({
   return (
     <section className="practice-section midi-diagnostics practice-section--compact" aria-label="MIDI diagnostics">
       <div className="practice-input-status__header">
-        <h3 className="practice-section__title practice-section__title--static">MIDI diagnostics</h3>
+        <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">MIDI diagnostics</h3>
         <span
           className={`practice-status-chip${sustain ? ' practice-status-chip--ready' : ''}`}
           title="Sustain pedal (CC64)"

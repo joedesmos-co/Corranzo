@@ -10,7 +10,7 @@ export default function PracticeSetupPanel({ session, scoreFollow, isDemoPiece, 
   return (
     <div className="practice-setup">
       <section className="practice-section practice-section--setup" aria-label="Score follow setup">
-        <h3 className="practice-section__title practice-section__title--static">
+        <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">
           Score follow
         </h3>
         <ScoreFollowApproximateHint label={scoreFollow?.followApproximateLabel} />
@@ -71,7 +71,7 @@ export default function PracticeSetupPanel({ session, scoreFollow, isDemoPiece, 
 
       {session.isWaitForYou && session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE && (
         <section className="practice-section" aria-label="Note matching options">
-          <h3 className="practice-section__title practice-section__title--static">
+          <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">
             Note matching options
           </h3>
           <WaitForYouMatchSettingsPanel

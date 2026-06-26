@@ -1,64 +1,69 @@
 /**
- * Corranzo design tokens — shared surfaces, type, spacing, motion.
+ * Corranzo design tokens — monochromatic, sharp-edge minimal surfaces.
  */
 :root {
   /* Surfaces */
-  --sf-bg-app: #081120;
-  --sf-bg-raised: #0a1424;
-  --sf-bg-panel: #101c30;
-  --sf-bg-panel-inset: #0d1628;
-  --sf-bg-topbar: #0f1a2e;
-  --sf-bg-overlay: rgba(13, 22, 40, 0.92);
+  --sf-bg-app: #000000;
+  --sf-bg-raised: #000000;
+  --sf-bg-panel: #121212;
+  --sf-bg-panel-inset: #1e1e1e;
+  --sf-bg-topbar: #000000;
+  --sf-bg-overlay: rgba(0, 0, 0, 0.92);
 
-  /* Borders */
-  --sf-border: #243552;
-  --sf-border-muted: #1a2a44;
-  --sf-border-strong: #334a72;
-  --sf-border-focus: #4a6a9a;
+  /* Borders — flat 1px zinc */
+  --sf-border: #27272a;
+  --sf-border-muted: #1e1e1e;
+  --sf-border-strong: #3f3f46;
+  --sf-border-focus: #ffffff;
 
   /* Text */
-  --sf-text-primary: #f4f7fc;
-  --sf-text-secondary: #e8eef8;
-  --sf-text-body: #c8d6ef;
-  --sf-text-muted: #9fb3d9;
-  --sf-text-subtle: #8fa3c7;
-  --sf-text-faint: #7a92b8;
-  --sf-text-disabled: #6b82a8;
+  --sf-text-primary: #ffffff;
+  --sf-text-secondary: #ffffff;
+  --sf-text-body: #e4e4e7;
+  --sf-text-muted: #a1a1aa;
+  --sf-text-subtle: #71717a;
+  --sf-text-faint: #52525b;
+  --sf-text-disabled: #3f3f46;
 
-  /* Accent */
-  --sf-accent: #6d4aff;
-  --sf-accent-hover: #7d5fff;
-  --sf-accent-muted: rgba(109, 74, 255, 0.22);
-  --sf-accent-secondary: #3b82c4;
-  --sf-accent-green: #2d6a4f;
+  /* Accent — monochrome highlights only */
+  --sf-accent: #ffffff;
+  --sf-accent-hover: #e4e4e7;
+  --sf-accent-muted: rgba(255, 255, 255, 0.08);
+  --sf-accent-secondary: #a1a1aa;
+  --sf-accent-green: #d4d4d8;
 
-  /* Brand warmth — score-desk highlights (less generic purple-on-navy) */
-  --sf-brand-warm: #e8c17a;
-  --sf-brand-warm-soft: #f0d9a8;
-  --sf-brand-warm-muted: rgba(232, 193, 122, 0.16);
-  --sf-brand-ink: #c8d8f0;
-  --sf-font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  /* Editorial labels */
+  --sf-brand-ink: #52525b;
+  --sf-font-display: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --sf-font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Depth */
-  --sf-shadow-soft: 0 8px 24px rgba(4, 10, 22, 0.28);
-  --sf-shadow-lift: 0 12px 32px rgba(4, 10, 22, 0.36);
+  /* Depth — flat only */
+  --sf-shadow-soft: none;
+  --sf-shadow-lift: none;
 
-  /* Spacing */
-  --sf-space-xs: 4px;
-  --sf-space-sm: 8px;
-  --sf-space-md: 12px;
-  --sf-space-lg: 16px;
-  --sf-space-xl: 20px;
-  --sf-space-2xl: 24px;
-  --sf-space-3xl: 28px;
-  --sf-space-4xl: 32px;
+  /* Spacing — generous rhythm (luxury negative space) */
+  --sf-space-xs: 6px;
+  --sf-space-sm: 12px;
+  --sf-space-md: 20px;
+  --sf-space-lg: 32px;
+  --sf-space-xl: 48px;
+  --sf-space-2xl: 64px;
+  --sf-space-3xl: 80px;
+  --sf-space-4xl: 96px;
+  --sf-space-5xl: 128px;
 
-  /* Radius */
-  --sf-radius-sm: 8px;
-  --sf-radius-md: 10px;
-  --sf-radius-lg: 12px;
-  --sf-radius-xl: 16px;
-  --sf-radius-pill: 999px;
+  /* Panel rhythm */
+  --sf-panel-padding-y: var(--sf-space-2xl);
+  --sf-panel-padding-x: var(--sf-space-3xl);
+  --sf-panel-gap: var(--sf-space-xl);
+  --sf-section-gap: var(--sf-space-lg);
+
+  /* Radius — sharp 90° corners everywhere */
+  --sf-radius-sm: 0;
+  --sf-radius-md: 0;
+  --sf-radius-lg: 0;
+  --sf-radius-xl: 0;
+  --sf-radius-pill: 0;
 
   /* Typography */
   --sf-font-title: 1.5rem;
@@ -67,11 +72,14 @@
   --sf-font-body: 0.9rem;
   --sf-font-small: 0.8125rem;
   --sf-font-caption: 0.75rem;
+  --sf-font-micro: 0.625rem;
+  --sf-text-micro-opacity: 0.5;
 
   /* Layout */
   --sf-sidebar-width: 300px;
   --sf-topbar-height: 72px;
   --sf-content-max: 1100px;
+  --sf-copy-max: 60%;
 
   /* Motion */
   --sf-ease: ease;
@@ -79,6 +87,6 @@
   --sf-duration: 0.2s;
 
   /* Focus */
-  --sf-focus-ring: 0 0 0 2px var(--sf-bg-app), 0 0 0 4px rgba(109, 74, 255, 0.5);
-  --sf-focus-ring-subtle: 0 0 0 2px var(--sf-bg-panel), 0 0 0 4px rgba(90, 130, 190, 0.45);
+  --sf-focus-ring: 0 0 0 1px #000000, 0 0 0 2px #ffffff;
+  --sf-focus-ring-subtle: 0 0 0 1px #121212, 0 0 0 2px #a1a1aa;
 }

@@ -8,7 +8,7 @@ export default function PracticeTracksSection({
 }) {
   return (
     <section className="practice-section" aria-label="Tracks">
-      <h3 className="practice-section__title practice-section__title--static">
+      <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">
         Tracks / hands
       </h3>
 

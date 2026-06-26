@@ -51,7 +51,7 @@ export default function LibraryWelcomeCard({
       )}
 
       <div className="library-welcome__how" aria-label="How it works">
-        <h3 className="library-welcome__section-title">How it works</h3>
+        <h3 className="library-welcome__section-title practice-section__title--editorial">How it works</h3>
         <ol className="library-welcome__steps">
           <li>
             <span>1</span>

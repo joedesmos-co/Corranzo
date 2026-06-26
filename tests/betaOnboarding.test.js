@@ -36,15 +36,15 @@ describe('beta onboarding', () => {
     expect(welcome).toContain('library-welcome__score-watermark')
   })
 
-  it('uses distinctive brand polish hooks on home and demo surfaces', () => {
+  it('uses minimalist surface hooks on home and demo surfaces', () => {
     const css = readFileSync(join(root, 'src', 'App.css'), 'utf8')
     const tokens = readFileSync(join(root, 'src', 'styles', 'tokens.css'), 'utf8')
     expect(readSrc('components', 'TopBar.jsx')).toContain('topbar__mark')
     expect(readSrc('components', 'DemoPieceCard.jsx')).toContain('demo-piece__note')
-    expect(tokens).toContain('--sf-brand-warm')
-    expect(tokens).toContain('--sf-font-display')
+    expect(tokens).toContain('--sf-bg-app: #000000')
+    expect(tokens).toContain('--sf-font-mono')
     expect(css).toMatch(/\.library-welcome__score-watermark/)
-    expect(css).toMatch(/\.demo-piece:hover/)
+    expect(css).toMatch(/grid-template-columns: repeat\(12/)
   })
 
   it('logo/title navigates home from app and legal pages', () => {

@@ -1,0 +1,126 @@
+/**
+ * Editorial polish — luxury spacing, micro-labels, magazine copy measure.
+ * Styles only; no layout/HTML changes.
+ */
+
+/* —— Space to breathe —— */
+
+.library-welcome-wrap {
+  padding: var(--sf-space-3xl) var(--sf-space-4xl) 0;
+}
+
+.library-welcome {
+  gap: var(--sf-panel-gap);
+  padding: var(--sf-panel-padding-y) var(--sf-panel-padding-x);
+}
+
+.library-welcome__footer {
+  padding-top: var(--sf-space-xl);
+  margin-top: var(--sf-space-md);
+}
+
+.library-panel {
+  padding: var(--sf-panel-padding-y) var(--sf-space-xl) var(--sf-space-4xl);
+}
+
+.library-panel__hero {
+  margin-bottom: var(--sf-space-xl);
+  padding-bottom: var(--sf-space-lg);
+}
+
+.library-panel .panel,
+.library-panel__upload-card.panel {
+  padding: var(--sf-panel-padding-y) var(--sf-space-2xl);
+  margin-bottom: var(--sf-space-xl);
+}
+
+.midi-tracks {
+  gap: var(--sf-space-sm);
+}
+
+.midi-tracks__label {
+  padding: var(--sf-space-md) var(--sf-space-lg);
+}
+
+.midi-transport {
+  gap: var(--sf-space-xl);
+}
+
+.practice-playback-settings {
+  gap: var(--sf-space-xl);
+}
+
+/* —— Magazine copy measure —— */
+
+.library-welcome__title,
+.library-welcome__summary,
+.library-welcome__lead,
+.library-welcome__best,
+.library-welcome__privacy,
+.library-panel__hero-hint,
+.library-panel__browser-hint,
+.library-panel__workflow-lead,
+.library-panel__open-practice-text,
+.library-panel__workflow-next,
+.panel__hint,
+.practice-section__hint,
+.practice-section__hint--inline,
+.practice-workspace__empty-lead,
+.library-welcome__steps small {
+  max-width: var(--sf-copy-max);
+}
+
+.library-welcome__steps {
+  gap: var(--sf-space-md);
+}
+
+/* —— Micro-typography (data labels stay under editorial headers) —— */
+
+.midi-transport__time,
+.midi-tracks__meta,
+.midi-tracks__empty,
+.practice-progress__header,
+.practice-progress__label,
+.practice-progress__percent,
+.practice-playback-settings__label span,
+.practice-section__summary,
+.practice-status-chip,
+.practice-status__label,
+.practice-status__hint,
+.practice-files__label,
+.practice-files__hint,
+.practice-files__value,
+.practice-section__status,
+.practice-section__file,
+.wait-for-you__progress-header,
+.wait-for-you__now-label,
+.metronome-beat-indicator__label,
+.metronome-beat-indicator__count,
+.library-panel__hero-hint,
+.library-panel__browser-hint,
+.library-panel__empty,
+.library-panel__file,
+.library-welcome__privacy,
+.score-follow-setup-status,
+.practice-shortcuts-hint {
+  font-family: var(--sf-font-mono);
+  font-size: var(--sf-font-micro);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  opacity: var(--sf-text-micro-opacity);
+}
+
+.practice-status-chip--ready,
+.practice-status-chip--warning {
+  opacity: calc(var(--sf-text-micro-opacity) + 0.15);
+}
+
+.practice-progress__header {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.midi-transport__time {
+  letter-spacing: 0.04em;
+  text-transform: none;
+}

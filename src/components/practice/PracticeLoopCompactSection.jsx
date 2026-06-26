@@ -10,7 +10,7 @@ export default function PracticeLoopCompactSection({ session }) {
   return (
     <section className="practice-section practice-section--compact practice-loop-compact" aria-label="Loop">
       <div className="practice-section__header-row">
-        <h3 className="practice-section__title practice-section__title--static">Loop</h3>
+        <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">Loop</h3>
         <label className="practice-loop__toggle practice-loop__toggle--inline">
           <input
             type="checkbox"

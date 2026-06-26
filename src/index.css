@@ -1,5 +1,6 @@
 @import './styles/tokens.css';
 @import './styles/ui-shared.css';
+@import './styles/editorial-polish.css';
 
 *,
 *::before,
@@ -10,11 +11,9 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(109, 74, 255, 0.09), transparent 55%),
-    linear-gradient(180deg, #091222 0%, var(--sf-bg-app) 42%, #060e1a 100%);
+  background: var(--sf-bg-app);
   color: var(--sf-text-secondary);
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: var(--sf-font-body);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;

@@ -18,7 +18,7 @@ export default function PracticeModeSection({
       className={`practice-section practice-mode${compact ? ' practice-section--compact' : ''}`}
       aria-label="Practice mode"
     >
-      <h3 className="practice-section__title practice-section__title--static practice-section__title--with-tip">
+      <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
         Mode
         <PracticeHelpTip label="About practice modes">
           Playback moves normally. Wait For You pauses for your input.

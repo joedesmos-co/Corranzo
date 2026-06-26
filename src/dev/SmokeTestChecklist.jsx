@@ -10,7 +10,7 @@ const CHECKLIST_ITEMS = [
 export default function SmokeTestChecklist() {
   return (
     <section className="practice-section practice-section--dev" aria-label="Smoke test checklist">
-      <h3 className="practice-section__title practice-section__title--static">
+      <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">
         Smoke test checklist
       </h3>
       <p className="practice-section__hint">

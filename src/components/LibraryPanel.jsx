@@ -151,7 +151,7 @@ export default function LibraryPanel({
         <summary className="library-panel__advanced-summary">Advanced upload (one file at a time)</summary>
 
       <div className="panel library-panel__upload-card">
-        <h2 className="panel__title">
+        <h2 className="panel__title practice-section__title--editorial">
           <span className="panel__step-badge">1</span> Sheet music
         </h2>
         <p className="panel__hint">PDF — the score you read on screen.</p>
@@ -177,7 +177,7 @@ export default function LibraryPanel({
       </div>
 
       <div className="panel library-panel__upload-card library-panel__musicxml">
-        <h2 className="panel__title">
+        <h2 className="panel__title practice-section__title--editorial">
           <span className="panel__step-badge">2</span> Score timing
         </h2>
         <p className="panel__hint">
@@ -207,7 +207,7 @@ export default function LibraryPanel({
       </div>
 
       <div className="panel library-panel__upload-card library-panel__midi">
-        <h2 className="panel__title">
+        <h2 className="panel__title practice-section__title--editorial">
           <span className="panel__step-badge">3</span> Sound <span className="panel__optional">(optional)</span>
         </h2>
         <p className="panel__hint">MIDI — backing audio in Practice.</p>

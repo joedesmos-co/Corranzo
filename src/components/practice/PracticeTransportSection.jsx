@@ -40,7 +40,7 @@ export default function PracticeTransportSection({
       className={`practice-section practice-transport${compact ? ' practice-section--compact' : ''}`}
       aria-label="Playback"
     >
-      <h3 className="practice-section__title practice-section__title--static practice-section__title--with-tip">
+      <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
         Playback
         <PracticeHelpTip label="About playback">
           Plays the score with the built-in piano. MIDI backing is optional.

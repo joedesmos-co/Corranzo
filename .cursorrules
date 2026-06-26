@@ -1,0 +1,4 @@
+# UI Regression Guardrails
+- NEVER use border-radius or gradients in new CSS rules.
+- All new components must pull layout variables strictly from src/styles/tokens.css.
+- Keep typography strictly limited to Inter, utilizing tracked-out uppercase layouts for headers.

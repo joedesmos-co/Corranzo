@@ -106,7 +106,7 @@ export default function WaitForYouSection({
   return (
     <section className={sectionClass} aria-label="Wait For You">
       <div className="wait-for-you__header">
-        <h3 className="practice-section__title practice-section__title--static practice-section__title--with-tip">
+        <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
           Wait For You
           <PracticeHelpTip label="About Wait For You">
             Pauses at each checkpoint until you play or tap Continue.
