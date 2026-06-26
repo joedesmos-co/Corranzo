@@ -13,7 +13,10 @@ import { resolveScoreFollowCursor } from '../src/features/score-follow/resolveSc
 import { assessScoreFollowTrust } from '../src/features/score-follow/scoreFollowTrust.js'
 import { filterTrustedAnchors, dedupeTrustedAnchorsByMeasure } from '../src/features/score-follow/trustedAnchors.js'
 import { getMeasureAtTime } from '../src/features/musicxml/timingQuery.js'
-import { ANCHOR_SOURCE } from '../src/features/score-follow/anchorUtils.js'
+import {
+  ANCHOR_SOURCE,
+  AUTO_MEASURE_ANCHOR_SCHEMA_VERSION,
+} from '../src/features/score-follow/anchorUtils.js'
 
 /** Piano MusicXML (2 staves), N 4/4 measures @120. */
 function pianoTimingMap(measureCount) {
@@ -63,6 +66,11 @@ describe('per-measure anchors', () => {
     expect(Math.min(...measures)).toBe(1)
     expect(Math.max(...measures)).toBe(22)
     expect(perMeasure.every((a) => a.source === ANCHOR_SOURCE.AUTO_MEASURE)).toBe(true)
+    expect(
+      perMeasure.every(
+        (a) => a.meta?.autoMeasureSchemaVersion === AUTO_MEASURE_ANCHOR_SCHEMA_VERSION,
+      ),
+    ).toBe(true)
   })
 
   it('dedupes to exactly one anchor per measure (AUTO_MEASURE over AUTO_SYSTEM)', async () => {

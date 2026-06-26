@@ -1,5 +1,5 @@
 import { createAnchorId } from './scoreFollowStorage.js'
-import { ANCHOR_SOURCE } from './anchorUtils.js'
+import { ANCHOR_SOURCE, AUTO_MEASURE_ANCHOR_SCHEMA_VERSION } from './anchorUtils.js'
 import { collectMeasureDefaultXHints } from './musicxmlLayoutAnchors.js'
 import { detectSystemBarlinePositions } from './detectStaffLines.js'
 import {
@@ -271,6 +271,7 @@ function buildSystemAnchors(system, result, defaultXByMeasure) {
       source: ANCHOR_SOURCE.AUTO_MEASURE,
       meta: {
         role: 'measure',
+        autoMeasureSchemaVersion: AUTO_MEASURE_ANCHOR_SCHEMA_VERSION,
         systemIndex: index,
         measuresInSpan: count,
         indexInSystem: i,

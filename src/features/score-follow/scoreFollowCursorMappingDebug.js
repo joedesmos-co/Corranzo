@@ -122,6 +122,7 @@ export function buildCursorMappingDebug({
       (cursor?.interpolated ? 'legacy-anchor-gap' : anchor ? 'measure-anchor' : 'none'),
     fallbackTier: fallbackTierFor(anchor, cursor, autoSetupReport),
     anchorSource: anchor?.source ?? null,
+    anchorSchemaVersion: anchor?.meta?.autoMeasureSchemaVersion ?? null,
     allocationMode: autoSetupReport?.allocationMode ?? null,
   }
 }

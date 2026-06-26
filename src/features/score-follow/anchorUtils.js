@@ -10,6 +10,8 @@ export const ANCHOR_SOURCE = {
   MUSICXML_LAYOUT: 'musicxml-layout',
 }
 
+export const AUTO_MEASURE_ANCHOR_SCHEMA_VERSION = 2
+
 const AUTOMATIC_SOURCES = new Set([
   ANCHOR_SOURCE.AUTO,
   ANCHOR_SOURCE.AUTO_SYSTEM,
@@ -131,13 +133,15 @@ export function anchorPriority(anchor) {
 /**
  * A per-measure auto anchor is "fresh" only if it carries the current
  * measure-local x metadata (measureStartX / playableStartX / playableEndX) that
- * the resolver and overlay rely on. Anchors persisted before that schema lack
- * these fields.
+ * the resolver and overlay rely on, and was produced by the current auto-
+ * calibration schema. Anchors persisted before this version can carry valid-
+ * looking fields from a bad calibration run, so they must be regenerated.
  */
 function isFreshAutoMeasureAnchor(anchor) {
   const meta = anchor?.meta
   return (
     meta?.role === 'measure' &&
+    meta.autoMeasureSchemaVersion === AUTO_MEASURE_ANCHOR_SCHEMA_VERSION &&
     Number.isFinite(meta.measureStartX) &&
     Number.isFinite(meta.playableStartX) &&
     Number.isFinite(meta.playableEndX)

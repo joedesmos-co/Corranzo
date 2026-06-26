@@ -1,0 +1,124 @@
+Corranzo per-piece calibration comparison
+Generated: 2026-06-26T18:15:16.536Z
+Render policy: analysis width 1000, raw PDF pixels, rotation=0
+
+== A Cruel Angel's Thesis ==
+measures=125 systems=44 pages=8 systems/page={"1":5,"2":6,"3":6,"4":6,"5":6,"6":6,"7":6,"8":3} allocation=breaks-or-even strategy=A confidence=1
+pickupLikely=false repeatsLikely=false tempoChanges=2 midiAlign=likely-match midiDelta=-0.025 fallbackSources={"default-x":75,"default-x+barline":50}
+layoutMismatch=false
+suspect systems: 25
+  p1s1 m4-6 count=3 bars=7/4 y=0.3-0.387 box=0.065-0.4215 xsrc=default-x  !
+  p1s2 m7-9 count=3 bars=8/4 y=0.467-0.553 box=0.065-0.4142 xsrc=default-x  !
+  p1s3 m10-12 count=3 bars=5/4 y=0.633-0.724 box=0.065-0.4092 xsrc=default-x  !
+  p2s5 m16-18 count=3 bars=5/4 y=0.075-0.161 box=0.065-0.4204 xsrc=default-x  !
+  p2s6 m19-21 count=3 bars=5/4 y=0.219-0.305 box=0.065-0.4039 xsrc=default-x  !
+  p2s7 m22-24 count=3 bars=5/4 y=0.363-0.449 box=0.065-0.4145 xsrc=default-x  !
+  p2s8 m25-27 count=3 bars=5/4 y=0.507-0.594 box=0.065-0.3936 xsrc=default-x  !
+  p2s9 m28-30 count=3 bars=8/4 y=0.652-0.738 box=0.065-0.3957 xsrc=default-x  !
+  p2s10 m31-33 count=3 bars=5/4 y=0.796-0.89 box=0.065-0.4145 xsrc=default-x  !
+  p3s11 m34-36 count=3 bars=5/4 y=0.075-0.162 box=0.065-0.3945 xsrc=default-x  !
+  p3s12 m37-39 count=3 bars=7/4 y=0.221-0.307 box=0.065-0.4407 xsrc=default-x  !
+  p4s19 m54-56 count=3 bars=6/4 y=0.366-0.452 box=0.065-0.4061 xsrc=default-x  !
+  ... 13 more
+runtime samples:
+  t=1.1053 m=1 idx=0 p=1 sys=0 cursor=0.2493,0.1774 box=0.065-0.403@0.1343-0.2205 interp=motion-timeline:held-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=1@0.3158
+  t=10.5789 m=4 idx=3 p=1 sys=1 cursor=0.2522,0.3438 box=0.065-0.4215@0.3004-0.3873 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=4@-0.079
+  t=15.203 m=6 idx=5 p=1 sys=1 cursor=0.7693,0.3438 box=0.6627-0.952@0.3004-0.3873 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=6@-0.0476
+  t=17.1077 m=7 idx=6 p=1 sys=2 cursor=0.2414,0.5102 box=0.065-0.4142@0.4671-0.5534 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=7@-0.0477
+  t=20.9173 m=9 idx=8 p=1 sys=2 cursor=0.7714,0.5102 box=0.6632-0.952@0.4671-0.5534 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=9@-0.0476
+  t=22.822 m=10 idx=9 p=1 sys=3 cursor=0.2256,0.6788 box=0.065-0.4092@0.6332-0.7244 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=10@-0.0476
+  t=26.6315 m=12 idx=11 p=1 sys=3 cursor=0.7831,0.6788 box=0.6804-0.952@0.6332-0.7244 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=12@-0.0477
+  t=28.5363 m=13 idx=12 p=1 sys=4 cursor=0.2429,0.8473 box=0.065-0.414@0.8042-0.8905 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=13@-0.0476
+  t=34.2506 m=16 idx=15 p=2 sys=5 cursor=0.2458,0.118 box=0.065-0.4204@0.0749-0.1611 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=16@-0.0476
+  t=38.0601 m=18 idx=17 p=2 sys=5 cursor=0.7575,0.118 box=0.6707-0.952@0.0749-0.1611 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=18@-0.0476
+  t=39.9649 m=19 idx=18 p=2 sys=6 cursor=0.2412,0.2622 box=0.065-0.4039@0.2191-0.3053 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=19@-0.0476
+  t=43.7744 m=21 idx=20 p=2 sys=6 cursor=0.7728,0.2622 box=0.6703-0.952@0.2191-0.3053 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=21@-0.0476
+  t=45.6792 m=22 idx=21 p=2 sys=7 cursor=0.2431,0.4064 box=0.065-0.4145@0.3633-0.4495 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=22@-0.0476
+  t=49.4887 m=24 idx=23 p=2 sys=7 cursor=0.7738,0.4064 box=0.6754-0.952@0.3633-0.4495 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=24@-0.0476
+  t=51.3935 m=25 idx=24 p=2 sys=8 cursor=0.2427,0.5505 box=0.065-0.3936@0.5074-0.5936 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=25@-0.0476
+  t=55.203 m=27 idx=26 p=2 sys=8 cursor=0.7788,0.5505 box=0.6728-0.952@0.5074-0.5936 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=27@-0.0476
+  t=57.1077 m=28 idx=27 p=2 sys=9 cursor=0.2424,0.6947 box=0.065-0.3957@0.6516-0.7378 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=28@-0.0477
+  t=60.9173 m=30 idx=29 p=2 sys=9 cursor=0.7778,0.6947 box=0.6681-0.952@0.6516-0.7378 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=30@-0.0476
+  t=62.822 m=31 idx=30 p=2 sys=10 cursor=0.2497,0.8431 box=0.065-0.4145@0.7958-0.8905 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=31@-0.0476
+  t=66.6315 m=33 idx=32 p=2 sys=10 cursor=0.7727,0.8431 box=0.691-0.952@0.7958-0.8905 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=33@0.1904
+  t=68.5363 m=34 idx=33 p=3 sys=11 cursor=0.2379,0.1184 box=0.065-0.3945@0.0749-0.1618 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=34@-0.0476
+  t=72.3458 m=36 idx=35 p=3 sys=11 cursor=0.7909,0.1184 box=0.6954-0.952@0.0749-0.1618 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=36@-0.0477
+  t=74.2506 m=37 idx=36 p=3 sys=12 cursor=0.2461,0.2643 box=0.065-0.4407@0.2212-0.3074 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=37@-0.0476
+  t=78.0601 m=39 idx=38 p=3 sys=12 cursor=0.7783,0.2643 box=0.6808-0.952@0.2212-0.3074 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=39@-0.0476
+  ... 45 more
+
+== Winter ==
+measures=125 systems=46 pages=8 systems/page={"1":5,"2":6,"3":6,"4":6,"5":6,"6":6,"7":6,"8":5} allocation=breaks-or-even strategy=A confidence=1
+pickupLikely=false repeatsLikely=false tempoChanges=13 midiAlign=uncertain midiDelta=5.645 fallbackSources={"default-x":38,"default-x+barline":87}
+layoutMismatch=false
+suspect systems: 17
+  p2s7 m28-29 count=2 bars=4/3 y=0.37-0.457 box=0.048-0.5592 xsrc=default-x  !
+  p4s19 m56-57 count=2 bars=5/3 y=0.367-0.453 box=0.048-0.5575 xsrc=default-x  !
+  p4s20 m58-59 count=2 bars=6/3 y=0.512-0.599 box=0.048-0.5446 xsrc=default-x  !
+  p4s22 m62-63 count=2 bars=7/3 y=0.804-0.89 box=0.048-0.5438 xsrc=default-x  !
+  p5s23 m64-65 count=2 bars=7/3 y=0.075-0.161 box=0.048-0.5438 xsrc=default-x  !
+  p5s24 m66-67 count=2 bars=12/3 y=0.216-0.305 box=0.048-0.5446 xsrc=default-x  !
+  p5s25 m68-69 count=2 bars=11/3 y=0.36-0.456 box=0.048-0.5448 xsrc=default-x  !
+  p5s26 m70-71 count=2 bars=11/3 y=0.51-0.609 box=0.048-0.546 xsrc=default-x  !
+  p5s27 m72-73 count=2 bars=4/3 y=0.664-0.75 box=0.048-0.5446 xsrc=default-x  !
+  p6s29 m76-79 count=4 bars=6/5 y=0.075-0.161 box=0.048-0.3317 xsrc=default-x  !
+  p6s30 m80-84 count=5 bars=6/6 y=0.214-0.316 box=0.048-0.316 xsrc=default-x+barline  !
+  p6s31 m85-90 count=6 bars=12/7 y=0.368-0.473 box=0.048-0.2672 xsrc=default-x  !
+  ... 5 more
+runtime samples:
+  t=0.6176 m=1 idx=0 p=1 sys=0 cursor=0.2324,0.1774 box=0.048-0.353@0.1343-0.2205 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=1@0.1764
+  t=7.6765 m=5 idx=4 p=1 sys=1 cursor=0.204,0.3449 box=0.048-0.305@0.3018-0.388 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=5@0.1765
+  t=16.5 m=10 idx=9 p=1 sys=2 cursor=0.1937,0.5124 box=0.048-0.278@0.4693-0.5555 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=10@0.0662
+  t=25.3235 m=15 idx=14 p=1 sys=3 cursor=0.1988,0.6799 box=0.048-0.291@0.6367-0.723 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=15@0.0661
+  t=34.1471 m=20 idx=19 p=1 sys=4 cursor=0.2467,0.8473 box=0.048-0.408@0.8042-0.8905 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=20@0.0662
+  t=39.3989 m=23 idx=22 p=2 sys=5 cursor=0.2972,0.118 box=0.048-0.562@0.0749-0.1611 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=23@-0.0411
+  t=42.6865 m=25 idx=24 p=2 sys=6 cursor=0.2204,0.2657 box=0.048-0.356@0.2191-0.3124 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=25@-0.0411
+  t=47.7389 m=28 idx=27 p=2 sys=7 cursor=0.2984,0.4134 box=0.048-0.5592@0.3703-0.4565 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=28@-0.0411
+  t=49.3828 m=29 idx=28 p=2 sys=7 cursor=0.7155,0.4134 box=0.5592-0.952@0.3703-0.4565 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=29@-0.0411
+  t=51.0266 m=30 idx=29 p=2 sys=8 cursor=0.2408,0.5587 box=0.048-0.412@0.5152-0.6021 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=30@-0.0411
+  t=56.079 m=33 idx=32 p=2 sys=9 cursor=0.3022,0.7032 box=0.048-0.561@0.6601-0.7463 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=33@-0.0411
+  t=59.3666 m=35 idx=34 p=2 sys=10 cursor=0.2453,0.8473 box=0.048-0.425@0.8042-0.8905 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=35@-0.0411
+  t=64.5822 m=38 idx=37 p=3 sys=11 cursor=0.2367,0.1269 box=0.048-0.412@0.0749-0.1788 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=38@0.0662
+  t=69.8763 m=41 idx=40 p=3 sys=12 cursor=0.2398,0.2777 box=0.048-0.407@0.2346-0.3208 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=41@-0.0441
+  t=75.0813 m=44 idx=43 p=3 sys=13 cursor=0.3094,0.4208 box=0.048-0.57@0.3767-0.465 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=44@-0.041
+  t=78.3689 m=46 idx=45 p=3 sys=14 cursor=0.3053,0.564 box=0.048-0.567@0.5208-0.6071 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=46@-0.0411
+  t=81.6566 m=48 idx=47 p=3 sys=15 cursor=0.3053,0.7053 box=0.048-0.567@0.6622-0.7484 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=48@-0.0411
+  t=84.9443 m=50 idx=49 p=3 sys=16 cursor=0.3047,0.8473 box=0.048-0.563@0.8042-0.8905 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=50@-0.0411
+  t=88.2021 m=52 idx=51 p=4 sys=17 cursor=0.2879,0.118 box=0.048-0.544@0.0749-0.1611 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=52@-0.0389
+  t=91.3189 m=54 idx=53 p=4 sys=18 cursor=0.2668,0.2636 box=0.048-0.531@0.2205-0.3067 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x+barline midiMapped=54@-0.039
+  t=94.4358 m=56 idx=55 p=4 sys=19 cursor=0.2927,0.4099 box=0.048-0.5575@0.3668-0.453 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=56@-0.039
+  t=95.9943 m=57 idx=56 p=4 sys=19 cursor=0.6848,0.4099 box=0.5575-0.952@0.3668-0.453 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=57@-0.0389
+  t=97.5527 m=58 idx=57 p=4 sys=20 cursor=0.2882,0.5555 box=0.048-0.5446@0.5124-0.5986 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=58@-0.039
+  t=99.1111 m=59 idx=58 p=4 sys=20 cursor=0.6927,0.5555 box=0.5446-0.952@0.5124-0.5986 interp=motion-timeline:note-to-note-glide tier=motion-timeline schema=2 xsrc=default-x midiMapped=59@-0.039
+  ... 39 more
+
+== Difference ==
+{
+  "measureCountDelta": 0,
+  "systemCountDelta": 2,
+  "suspectSystemCountDelta": -8,
+  "allocationModes": {
+    "cruel-angel": "breaks-or-even",
+    "winter": "breaks-or-even"
+  },
+  "chosenStrategies": {
+    "cruel-angel": "A",
+    "winter": "A"
+  },
+  "repeatsLikely": {
+    "cruel-angel": false,
+    "winter": false
+  },
+  "pickupLikely": {
+    "cruel-angel": false,
+    "winter": false
+  },
+  "midiAlignment": {
+    "cruel-angel": "likely-match",
+    "winter": "uncertain"
+  },
+  "midiDurationDeltaSeconds": {
+    "cruel-angel": -0.025,
+    "winter": 5.645
+  }
+}

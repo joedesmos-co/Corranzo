@@ -13,7 +13,11 @@ import {
   allocateSpansByCounts,
   groupMeasuresBySystemBreaks,
 } from '../src/features/score-follow/allocateMeasuresToSystems.js'
-import { ANCHOR_SOURCE, dropStaleAutoAnchors } from '../src/features/score-follow/anchorUtils.js'
+import {
+  ANCHOR_SOURCE,
+  AUTO_MEASURE_ANCHOR_SCHEMA_VERSION,
+  dropStaleAutoAnchors,
+} from '../src/features/score-follow/anchorUtils.js'
 import { buildAnchorDebugTable } from '../src/features/score-follow/scoreFollowDebug.js'
 
 const PRINTED_STARTS = [1, 6, 11, 15, 19, 23, 27, 31, 35, 38, 41]
@@ -84,6 +88,7 @@ describe('stale restored auto anchors are discarded (and regenerated)', () => {
     y: 0.2,
     meta: {
       role: 'measure',
+      autoMeasureSchemaVersion: AUTO_MEASURE_ANCHOR_SCHEMA_VERSION,
       measureStartX: 0.1,
       playableStartX: 0.2,
       playableEndX: 0.3,
@@ -98,6 +103,14 @@ describe('stale restored auto anchors are discarded (and regenerated)', () => {
     x: 0.2,
     y: 0.2,
     meta: { role: 'measure' }, // missing measureStartX/playableStartX/playableEndX
+  })
+  const oldSchemaAuto = (n) => ({
+    ...freshAuto(n),
+    id: `old${n}`,
+    meta: {
+      ...freshAuto(n).meta,
+      autoMeasureSchemaVersion: AUTO_MEASURE_ANCHOR_SCHEMA_VERSION - 1,
+    },
   })
   const systemAuto = (n) => ({
     id: `sy${n}`,
@@ -115,6 +128,10 @@ describe('stale restored auto anchors are discarded (and regenerated)', () => {
 
   it('discards stale per-measure auto anchors, preserving manual', () => {
     expect(dropStaleAutoAnchors([manual, staleAuto(1), staleAuto(2)])).toEqual([manual])
+  })
+
+  it('discards old-schema per-measure auto anchors, preserving manual', () => {
+    expect(dropStaleAutoAnchors([manual, oldSchemaAuto(1), oldSchemaAuto(2)])).toEqual([manual])
   })
 
   it('discards a system-only auto set (no per-measure anchors → coarse)', () => {

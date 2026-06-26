@@ -1,5 +1,5 @@
 import { createAnchorId } from './scoreFollowStorage.js'
-import { ANCHOR_SOURCE } from './anchorUtils.js'
+import { ANCHOR_SOURCE, AUTO_MEASURE_ANCHOR_SCHEMA_VERSION } from './anchorUtils.js'
 import {
   allocateMeasureSpansToSystems,
   allocateSpansByPartialCounts,
@@ -583,6 +583,7 @@ export function buildPerMeasureSystemAnchors(systemEntries, spans, timingMap = n
         source: ANCHOR_SOURCE.AUTO_MEASURE,
         meta: {
           role: 'measure',
+          autoMeasureSchemaVersion: AUTO_MEASURE_ANCHOR_SCHEMA_VERSION,
           systemIndex: index,
           measuresInSpan: count,
           indexInSystem: i,
@@ -654,6 +655,7 @@ export function buildBarlineMeasureAnchorsIfConfident(systemEntries, spans) {
         source: ANCHOR_SOURCE.AUTO_MEASURE,
         meta: {
           role: 'measure',
+          autoMeasureSchemaVersion: AUTO_MEASURE_ANCHOR_SCHEMA_VERSION,
           systemIndex: index,
           barlineAnchored: true,
         },
