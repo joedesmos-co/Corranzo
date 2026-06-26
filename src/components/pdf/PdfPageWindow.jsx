@@ -147,6 +147,7 @@ function PdfPageWindow({
               height={layout.height}
               displayWidth={layout.displayWidth}
               displayHeight={layout.displayHeight}
+              viewerRotation={layout.viewerRotation ?? 0}
               onPageLoadSuccess={(page) => handlePageLoadSuccess(page, slotPage)}
               onLoadStart={() => markTiming(`load-${slotPage}`)}
               onRenderStart={() => markTiming(`raster-${slotPage}`)}

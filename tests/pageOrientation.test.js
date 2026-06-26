@@ -193,6 +193,30 @@ describe('document orientation reconciliation', () => {
     expect(values).toHaveLength(8)
     expect(new Set(values).size).toBe(1)
   })
+
+  it('last page with footer/title text inherits the previous page rotation when it disagrees', () => {
+    const pages = winterLikeMixedScanPages(8)
+    const preliminary = pages.map((imageData, index) => {
+      const page = index + 1
+      const oriented = normalizeImageDataOrientation(imageData)
+      const record = buildPageOrientationRecord(page, imageData, oriented)
+      if (page === 8) {
+        record.rotation = PAGE_ROTATION.CW270
+        record.uncertain = false
+        record.confidence = 0.92
+        record.correctionPath = 'auto-detect'
+      }
+      return record
+    })
+
+    expect(preliminary[6].rotation).toBe(preliminary[0].rotation)
+    expect(preliminary[7].rotation).toBe(PAGE_ROTATION.CW270)
+
+    const reconciled = reconcileDocumentPageOrientations(preliminary)
+    expect(reconciled[0].rotation).toBe(reconciled[6].rotation)
+    expect(reconciled[7].rotation).toBe(reconciled[6].rotation)
+    expect(reconciled[7].correctionPath).toBe('document-last-page-neighbor')
+  })
 })
 
 describe('end-to-end orientation handling', () => {

@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, useMemo } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Document } from 'react-pdf'
 import 'react-pdf/dist/Page/TextLayer.css'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import '../pdf/setupPdfWorker.js'
 import useElementSize from '../hooks/useElementSize.js'
+import usePdfViewerGeometry from '../hooks/usePdfViewerGeometry.js'
 import useAnnotations from '../hooks/useAnnotations.js'
 import useAnnotationPersistence from '../hooks/useAnnotationPersistence.js'
-import { resolvePdfPageLayout, PRACTICE_CANVAS_PADDING, computeDocumentDisplayReference } from '../utils/pdfFit.js'
+import { resolvePdfPageLayout, PRACTICE_CANVAS_PADDING } from '../utils/pdfFit.js'
 import { resetPdfCanvasScroll } from '../utils/pdfViewerScroll.js'
 import { ANNOTATION_TOOLS } from './pdf/annotationConstants.js'
 import PdfFullscreen from './pdf/PdfFullscreen.jsx'
@@ -159,14 +160,11 @@ export default function PdfViewer({
   const practiceContext = usePracticeSessionContextOptional()
   const practiceSession = practiceContext?.session ?? null
   const scoreFollow = practiceContext?.scoreFollow ?? null
-  const orientation = scoreFollow?.calibrationDebugSnapshot?.orientation ?? null
-  const pageViewRotations = scoreFollow?.pageViewRotations ?? {}
-
-  const referenceDisplaySize = useMemo(
-    () =>
-      computeDocumentDisplayReference(pageSizesRef.current, pageViewRotations, orientation),
-    [pageSize, pageSizesVersion, pageViewRotations, orientation],
-  )
+  const { referenceDisplaySize, getPageViewRotation, viewerRotationKey } = usePdfViewerGeometry({
+    pageSizesByPage: pageSizesRef.current,
+    pageSizesVersion,
+    currentPageSize: pageSize,
+  })
 
   const resolvePageLayout = useCallback(
     (slotPageNumber) =>
@@ -177,19 +175,19 @@ export default function PdfViewer({
         pageSize,
         pageSizesByPage: pageSizesRef.current,
         containerSize: canvasSize,
-        getPageViewRotation: scoreFollow?.getPageViewRotation,
+        getPageViewRotation,
         canvasPadding: isPracticeEmbed ? PRACTICE_CANVAS_PADDING : undefined,
         referenceDisplaySize,
       }),
     [
       canvasSize,
       fitMode,
+      getPageViewRotation,
       isPracticeEmbed,
       pageNumber,
       pageSize,
       pageSizesVersion,
       referenceDisplaySize,
-      scoreFollow,
     ],
   )
   const hasTiming = Boolean(practiceContext?.session?.timing?.timingMap)
@@ -223,7 +221,7 @@ export default function PdfViewer({
   function renderPageWindow(scoreFollowProps = null) {
     return (
       <PdfPageWindow
-        key={String(file)}
+        key={`${String(file)}::${pageSizesVersion}::${viewerRotationKey}`}
         pageNumber={pageNumber}
         numPages={numPages}
         resolvePageLayout={resolvePageLayout}

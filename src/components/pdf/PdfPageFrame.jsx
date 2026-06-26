@@ -14,6 +14,7 @@ function PdfPageFrame({
   height,
   displayWidth,
   displayHeight,
+  viewerRotation = 0,
   onPageLoadSuccess,
   onLoadStart,
   onRenderStart,
@@ -57,9 +58,9 @@ function PdfPageFrame({
       observer.disconnect()
       window.removeEventListener('resize', syncOverlayLayout)
     }
-  }, [syncOverlayLayout, pageNumber, width, height, scoreFollow?.pageViewRotations])
+  }, [syncOverlayLayout, pageNumber, width, height, viewerRotation, scoreFollow?.pageViewRotations])
 
-  const viewRotation = scoreFollow?.getPageViewRotation?.(pageNumber) ?? 0
+  const viewRotation = viewerRotation
   const pageRenderWidth = Number.isFinite(width) && width > 0 ? width : undefined
   const pageRenderHeight = Number.isFinite(height) && height > 0 ? height : undefined
   const frameDisplayWidth =

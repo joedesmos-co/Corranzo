@@ -1,11 +1,11 @@
-import { cloneElement, isValidElement, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { cloneElement, isValidElement, useCallback, useEffect, useRef, useState } from 'react'
 import { isTabletLikeDevice } from '../../features/platform/browserPracticeSupport.js'
 import { Document } from 'react-pdf'
 import '../../pdf/setupPdfWorker.js'
 import useElementSize from '../../hooks/useElementSize.js'
+import usePdfViewerGeometry from '../../hooks/usePdfViewerGeometry.js'
 import useInactivityHide from '../../hooks/useInactivityHide.js'
 import {
-  computeDocumentDisplayReference,
   DEFAULT_CANVAS_PADDING,
   resolvePdfPageLayout,
 } from '../../utils/pdfFit.js'
@@ -55,14 +55,11 @@ export default function PdfFullscreen({
   const chromeVisible = chromePinned || autoVisible
   const hasPracticeHud = Boolean(practiceHud)
 
-  const orientation = scoreFollow?.calibrationDebugSnapshot?.orientation ?? null
-  const pageViewRotations = scoreFollow?.pageViewRotations ?? {}
-
-  const referenceDisplaySize = useMemo(
-    () =>
-      computeDocumentDisplayReference(pageSizesRef?.current ?? {}, pageViewRotations, orientation),
-    [pageSizesRef, pageSizesVersion, pageViewRotations, orientation],
-  )
+  const { referenceDisplaySize, getPageViewRotation, viewerRotationKey } = usePdfViewerGeometry({
+    pageSizesByPage: pageSizesRef?.current ?? {},
+    pageSizesVersion,
+    currentPageSize: pageSize,
+  })
 
   const resolvePageLayout = useCallback(
     (slotPageNumber) =>
@@ -73,19 +70,19 @@ export default function PdfFullscreen({
         pageSize,
         pageSizesByPage: pageSizesRef?.current ?? {},
         containerSize,
-        getPageViewRotation: scoreFollow?.getPageViewRotation,
+        getPageViewRotation,
         canvasPadding: DEFAULT_CANVAS_PADDING,
         referenceDisplaySize,
       }),
     [
       containerSize,
       fitMode,
+      getPageViewRotation,
       pageNumber,
       pageSize,
       pageSizesRef,
       pageSizesVersion,
       referenceDisplaySize,
-      scoreFollow,
     ],
   )
 
@@ -206,7 +203,7 @@ export default function PdfFullscreen({
           error={<p className="pdf-fullscreen__status">Could not load PDF.</p>}
         >
           <PdfPageWindow
-            key={String(file)}
+            key={`${String(file)}::${pageSizesVersion}::${viewerRotationKey}`}
             pageNumber={pageNumber}
             numPages={numPages}
             resolvePageLayout={resolvePageLayout}

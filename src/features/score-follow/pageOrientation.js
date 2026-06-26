@@ -432,6 +432,16 @@ function reconcileAspectGroup(group) {
     const pageQuarter = normalizeViewRotationDegrees(page.rotation ?? 0)
     const lowConfidence = page.uncertain || (page.confidence ?? 0) < DOCUMENT_HIGH_CONFIDENCE
 
+    if (isLast && neighbor && sameSourceAspect(page, neighbor)) {
+      const neighborRotation = normalizeViewRotationDegrees(neighbor.rotation ?? 0)
+      if (neighborRotation !== PAGE_ROTATION.NONE && pageQuarter !== neighborRotation) {
+        page.rotation = neighborRotation
+        page.uncertain = false
+        page.correctionPath = 'document-last-page-neighbor'
+        continue
+      }
+    }
+
     if (neighborQuarter != null && sameSourceAspect(page, neighbor) && (isFirst || isLast) && lowConfidence) {
       if (pageQuarter !== neighborQuarter) {
         page.rotation = neighborQuarter
