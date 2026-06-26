@@ -33,17 +33,19 @@ describe('beta onboarding', () => {
     expect(welcome).toContain('synchronized playback')
     expect(welcome).toContain('score-follow cursor')
     expect(welcome).toContain('library-welcome__summary')
-    expect(welcome).toContain('library-welcome__score-watermark')
+    expect(welcome).toContain('CorranzoLogo')
+    expect(welcome).toContain('library-welcome__logo')
   })
 
   it('uses minimalist surface hooks on home and demo surfaces', () => {
     const css = readFileSync(join(root, 'src', 'App.css'), 'utf8')
     const tokens = readFileSync(join(root, 'src', 'styles', 'tokens.css'), 'utf8')
-    expect(readSrc('components', 'TopBar.jsx')).toContain('topbar__mark')
-    expect(readSrc('components', 'DemoPieceCard.jsx')).toContain('demo-piece__note')
+    expect(readSrc('components', 'TopBar.jsx')).toContain('CorranzoLogo')
+    expect(readSrc('components', 'DemoPieceCard.jsx')).toContain('demo-piece__logo')
+    expect(readSrc('features', 'brand', 'corranzoBrand.js')).toContain('corranzo-logo.png')
     expect(tokens).toContain('--sf-bg-app: #000000')
     expect(tokens).toContain('--sf-font-mono')
-    expect(css).toMatch(/\.library-welcome__score-watermark/)
+    expect(css).toMatch(/\.library-welcome__logo/)
     expect(css).toMatch(/grid-template-columns: repeat\(12/)
   })
 

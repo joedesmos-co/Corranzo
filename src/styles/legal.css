@@ -12,6 +12,15 @@
   margin-bottom: var(--sf-space-3xl);
 }
 
+.legal-page__logo {
+  display: block;
+  width: auto;
+  height: 52px;
+  max-width: min(180px, 60vw);
+  margin-bottom: var(--sf-space-lg);
+  object-fit: contain;
+}
+
 .legal-page__title {
   margin: 0;
   color: var(--sf-text-primary);

@@ -3,6 +3,7 @@ import {
   BETA_VERSION,
 } from '../features/beta/betaInfo.js'
 import FeedbackLink from './FeedbackLink.jsx'
+import CorranzoLogo from './CorranzoLogo.jsx'
 
 const VIEWS = [
   { id: 'library', label: 'Library' },
@@ -32,8 +33,7 @@ export default function TopBar({ activeView, onNavigate, onGoHome, practiceReady
         onClick={handleGoHome}
         aria-label="Corranzo home"
       >
-        <span className="topbar__mark" aria-hidden="true" />
-        <span className="topbar__title">Corranzo</span>
+        <CorranzoLogo className="topbar__logo" width={148} height={40} loading="eager" />
         <span className="topbar__beta">
           {BETA_LABEL} <span aria-hidden="true">·</span> v{BETA_VERSION}
         </span>

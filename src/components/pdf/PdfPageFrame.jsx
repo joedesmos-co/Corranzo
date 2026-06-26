@@ -168,6 +168,7 @@ function PdfPageFrame({
                 onPlaceSystemStart={scoreFollow.addSystemStartMark}
                 candidateAnchors={scoreFollow.candidateAnchors ?? null}
                 showCandidateAnchors={scoreFollow.showCandidateAnchors ?? false}
+                getPageViewRotation={scoreFollow.getPageViewRotation}
               />
             </PdfOverlayLayer>
           )}

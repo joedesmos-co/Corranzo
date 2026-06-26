@@ -760,6 +760,9 @@ export async function analyzeSemiAutoScoreSetup({
     })
   }
 
+  // Orientation pass: raster → upright analysis bitmap → document reconcile →
+  // staff detection / calibration (all normalized coords live in upright space).
+
   const preliminary = scannedPages.map(({ page, sourceImageData, forcedRotation }) => {
     const oriented = resolvePageOrientation(sourceImageData, { forcedRotation })
     return {
@@ -783,19 +786,21 @@ export async function analyzeSemiAutoScoreSetup({
   for (const entry of preliminary) {
     let { oriented, record } = entry
     const reconciled = reconciledByPage.get(entry.page)
-    if (!entry.forcedRotation && reconciled && reconciled.rotation !== record.rotation) {
-      oriented = applyDocumentPageRotation(entry.sourceImageData, reconciled.rotation)
-      record = {
-        ...buildPageOrientationRecord(entry.page, entry.sourceImageData, oriented),
-        correctionPath: reconciled.correctionPath ?? 'document-reconcile',
-        uncertain: reconciled.uncertain,
-      }
-    } else if (!entry.forcedRotation && reconciled) {
-      record = {
-        ...record,
-        rotation: reconciled.rotation,
-        uncertain: reconciled.uncertain,
-        correctionPath: reconciled.correctionPath ?? record.correctionPath,
+    if (!entry.forcedRotation && reconciled) {
+      if (reconciled.rotation !== record.rotation) {
+        oriented = applyDocumentPageRotation(entry.sourceImageData, reconciled.rotation)
+        record = {
+          ...buildPageOrientationRecord(entry.page, entry.sourceImageData, oriented),
+          correctionPath: reconciled.correctionPath ?? 'document-reconcile',
+          uncertain: reconciled.uncertain,
+        }
+      } else {
+        record = {
+          ...record,
+          rotation: reconciled.rotation,
+          uncertain: reconciled.uncertain,
+          correctionPath: reconciled.correctionPath ?? record.correctionPath,
+        }
       }
     }
 

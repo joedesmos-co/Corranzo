@@ -6,6 +6,7 @@ const STATIC_EXACT = new Set([
   '/robots.txt',
   '/sitemap.xml',
   '/favicon.svg',
+  '/corranzo-logo.png',
   '/icons.svg',
 ])
 

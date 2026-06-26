@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../../public/corranzo-logo.png" />
   <title>Corranzo barline labeler</title>
   <style>
     :root {
@@ -43,6 +44,18 @@
       padding: 12px 18px;
       background: var(--panel);
       border-bottom: 1px solid var(--border);
+    }
+    header .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    header .brand img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      flex-shrink: 0;
     }
     header h1 { margin: 0; font-size: 1.05rem; font-weight: 650; }
     header .tagline { color: var(--muted); font-size: 0.85rem; }
@@ -469,8 +482,13 @@
 </head>
 <body>
   <header>
-    <h1>Corranzo barline labeler</h1>
-    <span class="tagline">Accuracy-first · file:// · no crop border · 8–12× zoom</span>
+    <div class="brand">
+      <img src="../../public/corranzo-logo.png" width="36" height="36" alt="" aria-hidden="true" />
+      <div>
+        <h1>Corranzo barline labeler</h1>
+        <span class="tagline">Accuracy-first · file:// · no crop border · 8–12× zoom</span>
+      </div>
+    </div>
   </header>
   <main>
     <aside>

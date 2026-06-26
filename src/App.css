@@ -19,32 +19,13 @@
   border-bottom: 1px solid var(--sf-border);
 }
 
-.topbar__mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: 1px solid var(--sf-border);
-  background: var(--sf-bg-panel);
-  flex-shrink: 0;
-}
-
-.topbar__mark::before {
-  content: '𝄞';
-  font-size: 1.1rem;
-  line-height: 1;
-  color: var(--sf-text-muted);
-}
-
-.topbar__title {
-  margin: 0;
-  font-family: var(--sf-font-display);
-  font-size: 1.42rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--sf-text-primary);
+.topbar__logo {
   display: block;
+  height: 40px;
+  width: auto;
+  max-width: min(148px, 42vw);
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .topbar__brand,
@@ -72,8 +53,8 @@
   gap: var(--sf-space-md);
 }
 
-.topbar__brand-btn:hover .topbar__title {
-  color: var(--sf-text-primary);
+.topbar__brand-btn:hover .topbar__logo {
+  opacity: 0.9;
 }
 
 .topbar__brand-btn:focus-visible {
@@ -285,19 +266,16 @@
   border-color: var(--sf-border-strong);
 }
 
-.demo-piece__note {
+.demo-piece__logo {
   position: absolute;
   top: 10px;
   right: 12px;
-  font-size: 1.35rem;
-  line-height: 1;
-  color: rgba(232, 193, 122, 0.22);
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  opacity: 0.32;
   pointer-events: none;
   user-select: none;
-}
-
-.demo-piece__note::before {
-  content: '♫';
 }
 
 .demo-piece--compact {
@@ -2012,8 +1990,9 @@
     gap: 8px;
   }
 
-  .topbar__title {
-    font-size: 1.2rem;
+  .topbar__logo {
+    height: 34px;
+    max-width: min(132px, 38vw);
   }
 
   .topbar__actions {
@@ -3198,6 +3177,16 @@
   background: #152238;
   border: 1px solid #2d4268;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  text-align: center;
+}
+
+.session-restore-overlay__logo {
+  display: block;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 0.85rem;
+  object-fit: contain;
+  opacity: 0.92;
 }
 
 .session-restore-overlay__title {
@@ -3307,23 +3296,27 @@
   grid-row: 2;
 }
 
-.library-welcome__score-watermark {
+.library-welcome::after {
+  content: '';
   position: absolute;
-  top: 18px;
-  right: 24px;
-  width: 200px;
-  height: 88px;
-  opacity: 0.09;
+  top: 12px;
+  right: 20px;
+  width: 180px;
+  height: 180px;
+  opacity: 0.055;
   pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 15px,
-    var(--sf-brand-ink) 15px,
-    var(--sf-brand-ink) 16px
-  );
-  transform: rotate(-6deg);
-  mask-image: linear-gradient(135deg, black 20%, transparent 85%);
+  background: url('/corranzo-logo.png') center / contain no-repeat;
+  transform: rotate(-8deg);
+  mask-image: linear-gradient(135deg, black 15%, transparent 82%);
+}
+
+.library-welcome__logo {
+  display: block;
+  width: auto;
+  height: 52px;
+  max-width: min(220px, 72vw);
+  margin-bottom: var(--sf-space-md);
+  object-fit: contain;
 }
 
 .library-welcome__eyebrow {
@@ -3510,6 +3503,15 @@
   font-size: var(--sf-font-caption);
   line-height: 1.4;
   text-align: center;
+}
+
+.app-footer__logo {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  opacity: 0.75;
+  flex-basis: 100%;
 }
 
 .app-footer a {

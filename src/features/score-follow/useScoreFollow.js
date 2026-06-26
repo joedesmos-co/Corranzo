@@ -62,6 +62,12 @@ import {
   getPageViewRotation as resolvePageViewRotation,
   pageViewRotationsFromOrientation,
 } from '../../utils/pdfPageViewRotation.js'
+import {
+  mapAnchorForViewerOverlay,
+  mapCalibrationOverlayPageForViewer,
+  mapSystemBandForViewerOverlay,
+  mapViewerOverlayToAnalysisPoint,
+} from '../../utils/analysisViewerCoords.js'
 import { buildPromotionDecision, resolveActiveAnchorSource } from './anchorPromotion.js'
 import {
   areBundledDemoAnchorsDisabled,
@@ -506,11 +512,13 @@ export default function useScoreFollow({
 
   const placeAnchorAt = useCallback(
     (page, x, y) => {
+      const rotation = resolvePageViewRotation(pageViewRotations, page)
+      const analysisPoint = mapViewerOverlayToAnalysisPoint(x, y, rotation)
       const measureNumber = placementMeasureNumber
       const anchor = placeManualAnchor({
         page,
-        x,
-        y,
+        x: analysisPoint.x,
+        y: analysisPoint.y,
         measureNumber,
       })
       if (anchor?.id) {
@@ -532,6 +540,7 @@ export default function useScoreFollow({
       maxMeasureNumber,
       minMeasureNumber,
       anchors,
+      pageViewRotations,
     ],
   )
 
@@ -565,10 +574,12 @@ export default function useScoreFollow({
   }, [])
 
   const addSystemStartMark = useCallback((page, x, y) => {
-    const mark = { id: createAnchorId(), page, x, y }
+    const rotation = resolvePageViewRotation(pageViewRotations, page)
+    const analysisPoint = mapViewerOverlayToAnalysisPoint(x, y, rotation)
+    const mark = { id: createAnchorId(), page, x: analysisPoint.x, y: analysisPoint.y }
     setSystemStartMarks((prev) => [...prev, mark])
     systemStartStackRef.current.push(mark)
-  }, [])
+  }, [pageViewRotations])
 
   const undoLastSystemStartMark = useCallback(() => {
     const last = systemStartStackRef.current.pop()
@@ -624,7 +635,7 @@ export default function useScoreFollow({
   }, [systemStartMode, exitSystemStartMode, undoLastSystemStartMark])
 
   const runSemiAutoSetupInternal = useCallback(
-    async ({ force = false } = {}) => {
+    async ({ force = false, respectStoredViewRotations = false } = {}) => {
       if (!pdfSource || !numPages || !timingMap) {
         setSetupStatus({
           phase: 'failed',
@@ -677,7 +688,7 @@ export default function useScoreFollow({
             pdfSource,
             numPages,
             timingMap,
-            pageViewRotations: pageViewRotationsRef.current,
+            pageViewRotations: respectStoredViewRotations ? pageViewRotationsRef.current : null,
             onProgress: (progress, message) => {
               setSemiAutoSetup((previous) => ({
                 ...previous,
@@ -735,7 +746,9 @@ export default function useScoreFollow({
         setAutoSetupReport(preview.debugReport ?? null)
 
         const detectedRotations = pageViewRotationsFromOrientation(preview.orientation)
-        const mergedRotations = { ...pageViewRotationsRef.current, ...detectedRotations }
+        const mergedRotations = respectStoredViewRotations
+          ? { ...pageViewRotationsRef.current, ...detectedRotations }
+          : detectedRotations
         pageViewRotationsRef.current = mergedRotations
         setPageViewRotations(mergedRotations)
         savePageViewRotations(autoSetupKey, mergedRotations)
@@ -1208,7 +1221,7 @@ export default function useScoreFollow({
       pageViewRotationsRef.current = updated
       setPageViewRotations(updated)
       savePageViewRotations(autoSetupKey, updated)
-      runSemiAutoSetupInternal({ force: true })
+      runSemiAutoSetupInternal({ force: true, respectStoredViewRotations: true })
     },
     [autoSetupKey, visiblePageNumber, runSemiAutoSetupInternal],
   )
@@ -1223,7 +1236,7 @@ export default function useScoreFollow({
     pageViewRotationsRef.current = detected
     setPageViewRotations(detected)
     savePageViewRotations(autoSetupKey, detected)
-    runSemiAutoSetupInternal({ force: true })
+    runSemiAutoSetupInternal({ force: true, respectStoredViewRotations: true })
   }, [
     calibrationDebugSnapshot?.orientation,
     semiAutoSetup.preview?.orientation,
@@ -1273,25 +1286,39 @@ export default function useScoreFollow({
     if (!semiAutoPreview || !semiAutoSetup.preview?.systemsByPage) {
       return []
     }
-    return semiAutoSetup.preview.systemsByPage[visiblePageNumber] ?? []
-  }, [semiAutoPreview, semiAutoSetup.preview, visiblePageNumber])
+    const rotation = resolvePageViewRotation(pageViewRotations, visiblePageNumber)
+    return (semiAutoSetup.preview.systemsByPage[visiblePageNumber] ?? []).map((system) =>
+      mapSystemBandForViewerOverlay(system, rotation),
+    )
+  }, [semiAutoPreview, semiAutoSetup.preview, visiblePageNumber, pageViewRotations])
 
-  const calibrationOverlayPage = useMemo(
-    () =>
-      normalizeCalibrationOverlayPage(
-        calibrationDebugSnapshot,
-        visiblePageNumber,
-        anchors,
-      ),
-    [calibrationDebugSnapshot, visiblePageNumber, anchors],
-  )
+  const calibrationOverlayPage = useMemo(() => {
+    const page = normalizeCalibrationOverlayPage(
+      calibrationDebugSnapshot,
+      visiblePageNumber,
+      anchors,
+    )
+    const rotation = resolvePageViewRotation(pageViewRotations, visiblePageNumber)
+    return mapCalibrationOverlayPageForViewer(page, rotation)
+  }, [calibrationDebugSnapshot, visiblePageNumber, anchors, pageViewRotations])
 
   const displayAnchors = useMemo(() => {
-    if (semiAutoPreview && semiAutoSetup.preview?.proposedAnchors) {
-      return semiAutoSetup.preview.proposedAnchors
-    }
-    return anchors
-  }, [semiAutoPreview, semiAutoSetup.preview, anchors])
+    const source =
+      semiAutoPreview && semiAutoSetup.preview?.proposedAnchors
+        ? semiAutoSetup.preview.proposedAnchors
+        : anchors
+    return source.map((anchor) =>
+      mapAnchorForViewerOverlay(anchor, resolvePageViewRotation(pageViewRotations, anchor.page)),
+    )
+  }, [semiAutoPreview, semiAutoSetup.preview, anchors, pageViewRotations])
+
+  const displaySystemStartMarks = useMemo(
+    () =>
+      systemStartMarks.map((mark) =>
+        mapAnchorForViewerOverlay(mark, resolvePageViewRotation(pageViewRotations, mark.page)),
+      ),
+    [systemStartMarks, pageViewRotations],
+  )
 
   const canFollow = Boolean(
     hasTiming &&
@@ -1612,7 +1639,7 @@ export default function useScoreFollow({
     followApproximateLabel: anchorTrust.label,
     // System-start fallback mode
     systemStartMode,
-    systemStartMarks,
+    systemStartMarks: displaySystemStartMarks,
     enterSystemStartMode,
     exitSystemStartMode,
     addSystemStartMark,

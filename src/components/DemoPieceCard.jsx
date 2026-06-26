@@ -1,4 +1,5 @@
 import { DEMO_PIECE } from '../dev/fixturePaths.js'
+import CorranzoLogo from './CorranzoLogo.jsx'
 
 export default function DemoPieceCard({
   loading = false,
@@ -11,7 +12,7 @@ export default function DemoPieceCard({
 
   return (
     <article className={`demo-piece${compact ? ' demo-piece--compact' : ''}`}>
-      <span className="demo-piece__note" aria-hidden="true" />
+      <CorranzoLogo className="demo-piece__logo" width={72} height={72} aria-hidden />
       <div className="demo-piece__copy">
         <p className="demo-piece__badge">Built-in demo</p>
         <h3 className="demo-piece__title">{DEMO_PIECE.title}</h3>

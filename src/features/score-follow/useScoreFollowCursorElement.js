@@ -3,8 +3,9 @@ import {
   getScoreFollowCursorSnapshot,
   subscribeScoreFollowCursor,
 } from './scoreFollowCursorRuntime.js'
+import { mapAnalysisPointToViewerOverlay } from '../../utils/analysisViewerCoords.js'
 
-function paintCursorElement(element, pageNumber, showCursor) {
+function paintCursorElement(element, pageNumber, showCursor, getPageViewRotation) {
   const cursor = getScoreFollowCursorSnapshot()
   const visible =
     showCursor && cursor.visible && cursor.page === pageNumber && cursor.x != null
@@ -12,9 +13,11 @@ function paintCursorElement(element, pageNumber, showCursor) {
     element.style.display = 'none'
     return
   }
+  const rotation = getPageViewRotation?.(pageNumber) ?? 0
+  const mapped = mapAnalysisPointToViewerOverlay(cursor.x, cursor.y, rotation)
   element.style.display = ''
-  element.style.left = `${cursor.x * 100}%`
-  element.style.top = `${cursor.y * 100}%`
+  element.style.left = `${mapped.x * 100}%`
+  element.style.top = `${mapped.y * 100}%`
 }
 
 /**
@@ -24,7 +27,11 @@ export default function useScoreFollowCursorElement({
   elementRef,
   pageNumber,
   showCursor,
+  getPageViewRotation,
 }) {
+  const getPageViewRotationRef = useRef(getPageViewRotation)
+  getPageViewRotationRef.current = getPageViewRotation
+
   useEffect(() => {
     const element = elementRef.current
     if (!element) {
@@ -32,10 +39,10 @@ export default function useScoreFollowCursorElement({
     }
 
     const paint = () => {
-      paintCursorElement(element, pageNumber, showCursor)
+      paintCursorElement(element, pageNumber, showCursor, getPageViewRotationRef.current)
     }
 
     paint()
     return subscribeScoreFollowCursor(paint)
-  }, [elementRef, pageNumber, showCursor])
+  }, [elementRef, pageNumber, showCursor, getPageViewRotation])
 }

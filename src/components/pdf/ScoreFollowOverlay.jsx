@@ -1,4 +1,5 @@
 import { memo, useCallback, useRef } from 'react'
+import { mapAnalysisPointToViewerOverlay } from '../../utils/analysisViewerCoords.js'
 import useScoreFollowCursorElement from '../../features/score-follow/useScoreFollowCursorElement.js'
 import {
   ANCHOR_SOURCE,
@@ -60,6 +61,7 @@ function ScoreFollowOverlay({
   // drive the cursor — they are a diagnostic overlay shown only when opted in.
   candidateAnchors = null,
   showCandidateAnchors = false,
+  getPageViewRotation,
 }) {
   const layerRef = useRef(null)
   const cursorRef = useRef(null)
@@ -69,6 +71,7 @@ function ScoreFollowOverlay({
     elementRef: cursorRef,
     pageNumber,
     showCursor,
+    getPageViewRotation: getPageViewRotation,
   })
   const pageAnchors = anchors.filter((anchor) => anchor.page === pageNumber)
   const pageSystemStartMarks = systemStartMarks.filter((m) => m.page === pageNumber)
@@ -88,6 +91,15 @@ function ScoreFollowOverlay({
   const hasMarkers = showAnchorMarkers && markerAnchors.length > 0
   const hasSystemStartMarks = systemStartMode && pageSystemStartMarks.length > 0
   const cursorSmoothed = cursor?.smoothed ?? false
+
+  const noteTargetOverlay =
+    showNoteTarget && noteTarget
+      ? mapAnalysisPointToViewerOverlay(
+          noteTarget.x,
+          noteTarget.y,
+          getPageViewRotation?.(pageNumber) ?? 0,
+        )
+      : null
 
   const handlePointerDown = useCallback(
     (event) => {
@@ -206,7 +218,7 @@ function ScoreFollowOverlay({
         </div>
       )}
 
-      {showNoteTarget && noteTarget && (
+      {noteTargetOverlay && (
         <div
           className={`score-follow-overlay__note-target${
             noteTarget.isWideChord
@@ -216,8 +228,8 @@ function ScoreFollowOverlay({
                 : ''
           }`}
           style={{
-            left: `${noteTarget.x * 100}%`,
-            top: `${noteTarget.y * 100}%`,
+            left: `${noteTargetOverlay.x * 100}%`,
+            top: `${noteTargetOverlay.y * 100}%`,
           }}
           role="img"
           aria-label={`Your note${noteTarget.isChord ? ' chord' : ''} at measure ${noteTarget.measureNumber ?? ''}`}

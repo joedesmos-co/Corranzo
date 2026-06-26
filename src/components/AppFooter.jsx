@@ -4,6 +4,7 @@ import {
   FEEDBACK_MAILTO,
 } from '../features/beta/betaInfo.js'
 import { LEGAL_PATHS } from '../features/legal/legalRoutes.js'
+import CorranzoLogo from './CorranzoLogo.jsx'
 
 export default function AppFooter({ onLegalNavigate }) {
   function handleLegalClick(event, view) {
@@ -16,6 +17,7 @@ export default function AppFooter({ onLegalNavigate }) {
 
   return (
     <footer className="app-footer">
+      <CorranzoLogo className="app-footer__logo" width={96} height={96} alt="" aria-hidden />
       <nav className="app-footer__legal" aria-label="Legal">
         <a href={LEGAL_PATHS.privacy} onClick={(event) => handleLegalClick(event, 'privacy')}>
           Privacy Policy

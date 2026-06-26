@@ -5,6 +5,7 @@ import {
 } from '../features/beta/betaInfo.js'
 import DemoPieceCard from './DemoPieceCard.jsx'
 import FeedbackLink from './FeedbackLink.jsx'
+import CorranzoLogo from './CorranzoLogo.jsx'
 
 export default function LibraryWelcomeCard({
   onDismiss,
@@ -19,8 +20,8 @@ export default function LibraryWelcomeCard({
 
   return (
     <section className="library-welcome" aria-labelledby="welcome-heading">
-      <div className="library-welcome__score-watermark" aria-hidden="true" />
       <div className="library-welcome__intro">
+        <CorranzoLogo className="library-welcome__logo" width={220} height={60} loading="eager" />
         <p className="library-welcome__eyebrow">{BETA_LABEL}</p>
         <h2 id="welcome-heading" className="library-welcome__title">
           Practice sheet music with a score that follows you
