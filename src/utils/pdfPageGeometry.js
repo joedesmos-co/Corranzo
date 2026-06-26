@@ -72,13 +72,12 @@ export function computeDocumentDisplayReference(
   pageViewRotations = {},
   orientation = null,
 ) {
-  let correctedWidth = 0
-  let correctedHeight = 0
   const pageNumbers = new Set([
     ...Object.keys(pageSizesByPage).map(Number),
     ...(orientation?.pages ?? []).map((entry) => entry.page),
   ])
 
+  const correctedBoxes = []
   for (const pageNumber of pageNumbers) {
     const sourceSize = pageSizesByPage[pageNumber]
     if (!sourceSize?.width || !sourceSize?.height) {
@@ -93,16 +92,94 @@ export function computeDocumentDisplayReference(
     if (!corrected?.width || !corrected?.height) {
       continue
     }
-
-    correctedWidth = Math.max(correctedWidth, corrected.width)
-    correctedHeight = Math.max(correctedHeight, corrected.height)
+    correctedBoxes.push(corrected)
   }
+
+  if (correctedBoxes.length === 0) {
+    return null
+  }
+
+  // Size the reference from the DOMINANT corrected orientation only. After
+  // rotation, score pages share one upright paper shape; a stray page in the
+  // other orientation (a mis-detected or genuinely different page) must not
+  // inflate the reference and shrink everything else. Within the dominant pool
+  // the reference is the bounding box, so every page in it fits at one scale.
+  const portrait = correctedBoxes.filter((box) => box.height >= box.width)
+  const landscape = correctedBoxes.filter((box) => box.height < box.width)
+  const pool = portrait.length >= landscape.length ? portrait : landscape
+
+  const correctedWidth = Math.max(...pool.map((box) => box.width))
+  const correctedHeight = Math.max(...pool.map((box) => box.height))
 
   if (!correctedWidth || !correctedHeight) {
     return null
   }
 
   return { correctedWidth, correctedHeight }
+}
+
+/**
+ * Per-page geometry report for manual verification (dev/debug table + export).
+ * Returns, for every page, the exact values that drive rendering so a human can
+ * confirm rotation and shared scale are correct: source box, auto/manual/effective
+ * rotation, corrected upright box, react-pdf render size, and the display box.
+ */
+export function buildPageGeometryReport({
+  numPages = 0,
+  pageSizesByPage = {},
+  orientation = null,
+  pageViewRotations = {},
+  containerSize = { width: 0, height: 0 },
+  fitMode = 'page',
+  canvasPadding = 0,
+  referenceDisplaySize = null,
+} = {}) {
+  const rows = []
+  for (let page = 1; page <= numPages; page += 1) {
+    const source = pageSizesByPage[page] ?? null
+    const autoRotation = normalizeViewRotation(
+      orientation?.pages?.find((entry) => entry.page === page)?.rotation ?? 0,
+    )
+    const hasManual = pageViewRotations[page] != null
+    const effective = normalizeViewRotation(hasManual ? pageViewRotations[page] : autoRotation)
+    const manualRotation = hasManual && effective !== autoRotation ? effective : null
+
+    let corrected = null
+    let geometry = null
+    if (source?.width > 0 && source?.height > 0) {
+      corrected = getCorrectedPageSize(source, effective)
+      geometry = getCorrectedPageGeometry({
+        sourceSize: source,
+        viewRotation: effective,
+        fitMode,
+        containerSize,
+        canvasPadding,
+        referenceDisplaySize,
+      })
+    }
+
+    rows.push({
+      page,
+      sourceWidth: source?.width ?? null,
+      sourceHeight: source?.height ?? null,
+      autoRotation,
+      manualRotation,
+      viewerRotation: effective,
+      correctedWidth: corrected?.width ?? null,
+      correctedHeight: corrected?.height ?? null,
+      renderWidth: geometry?.renderWidth ?? null,
+      renderHeight: geometry?.renderHeight ?? null,
+      displayWidth: geometry?.displayWidth ?? null,
+      displayHeight: geometry?.displayHeight ?? null,
+      scale: geometry?.scale ?? null,
+    })
+  }
+  return {
+    rows,
+    referenceDisplaySize: referenceDisplaySize ?? null,
+    fitMode,
+    containerSize,
+  }
 }
 
 /**

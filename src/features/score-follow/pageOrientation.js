@@ -520,9 +520,112 @@ function reconcileAspectGroup(group) {
 }
 
 /**
+ * Corrected (post-rotation) upright box of a page record. Prefers the measured
+ * post-rotation analysis dims; falls back to the source dims with the rotation
+ * applied. This is the box the viewer actually displays after CSS rotation.
+ */
+export function correctedDimsForRecord(page) {
+  // Derive from the raw source dims + the CURRENT rotation so this stays correct
+  // even mid-reconcile, when the cached post-rotation analysis dims may not yet
+  // reflect a just-changed rotation. Fall back to analysis dims only if source
+  // dims are unavailable.
+  const sourceWidth = page?.sourceWidth
+  const sourceHeight = page?.sourceHeight
+  if (
+    Number.isFinite(sourceWidth) &&
+    Number.isFinite(sourceHeight) &&
+    sourceWidth > 0 &&
+    sourceHeight > 0
+  ) {
+    if (isQuarterTurnRotation(page?.rotation)) {
+      return { width: sourceHeight, height: sourceWidth }
+    }
+    return { width: sourceWidth, height: sourceHeight }
+  }
+  const analysisWidth = page?.analysisWidth
+  const analysisHeight = page?.analysisHeight
+  if (
+    Number.isFinite(analysisWidth) &&
+    Number.isFinite(analysisHeight) &&
+    analysisWidth > 0 &&
+    analysisHeight > 0
+  ) {
+    return { width: analysisWidth, height: analysisHeight }
+  }
+  return null
+}
+
+/** 'portrait' | 'landscape' | null for a page's corrected upright box. */
+export function correctedOrientationForRecord(page) {
+  const dims = correctedDimsForRecord(page)
+  if (!dims) {
+    return null
+  }
+  return dims.height >= dims.width ? 'portrait' : 'landscape'
+}
+
+/** The document's dominant corrected orientation, weighting confident pages. */
+function documentDominantCorrectedOrientation(pages) {
+  let portrait = 0
+  let landscape = 0
+  for (const page of pages) {
+    const orientation = correctedOrientationForRecord(page)
+    if (!orientation) {
+      continue
+    }
+    const confident = !page.uncertain && (page.confidence ?? 0) >= DOCUMENT_HIGH_CONFIDENCE
+    const weight = confident ? 2 : 1
+    if (orientation === 'portrait') {
+      portrait += weight
+    } else {
+      landscape += weight
+    }
+  }
+  if (portrait === 0 && landscape === 0) {
+    return null
+  }
+  return portrait >= landscape ? 'portrait' : 'landscape'
+}
+
+/**
+ * Final pass: every score page should end in the SAME corrected upright
+ * orientation. A page whose corrected box still disagrees with the document's
+ * dominant orientation (e.g. a landscape scan left un-turned, or a page from a
+ * different source family) gets one extra quarter turn so all pages share one
+ * upright paper shape — the prerequisite for a single shared display scale.
+ * No-op for a uniform document (every page already agrees).
+ */
+function reconcileDocumentCorrectedOrientation(pages) {
+  if (pages.length < 2) {
+    return
+  }
+  const dominant = documentDominantCorrectedOrientation(pages)
+  if (!dominant) {
+    return
+  }
+  for (const page of pages) {
+    const orientation = correctedOrientationForRecord(page)
+    if (!orientation || orientation === dominant) {
+      continue
+    }
+    // Flip the page's corrected orientation family with one more quarter turn.
+    page.rotation = normalizeViewRotationDegrees((page.rotation ?? 0) + 90)
+    if (Number.isFinite(page.analysisWidth) && Number.isFinite(page.analysisHeight)) {
+      const swap = page.analysisWidth
+      page.analysisWidth = page.analysisHeight
+      page.analysisHeight = swap
+    }
+    page.uncertain = false
+    page.correctionPath = 'document-dominant-orientation'
+  }
+}
+
+/**
  * Align per-page auto-detected rotations within a scanned document.
  * Prefers the dominant quarter-turn among confident pages and uses neighbors
  * as tie-breakers for uncertain first/last pages with matching source aspect.
+ * Finally, unifies every page to the document's dominant corrected upright
+ * orientation so the viewer can fit them all at one shared scale.
  */
 export function reconcileDocumentPageOrientations(pageRecords = []) {
   const pages = pageRecords.map((page) => ({ ...page }))
@@ -546,6 +649,9 @@ export function reconcileDocumentPageOrientations(pageRecords = []) {
   }
 
   reconcileDocumentFinalPage(pages)
+  // Unify corrected upright orientation across the whole document (handles mixed
+  // landscape-source / portrait-source scans that per-group passes can't join).
+  reconcileDocumentCorrectedOrientation(pages)
 
   return pages
 }

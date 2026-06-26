@@ -2162,6 +2162,59 @@
   pointer-events: none;
 }
 
+.pdf-geometry-debug {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 60;
+  max-height: 70%;
+  overflow: auto;
+  padding: 8px 10px;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.66rem;
+  line-height: 1.35;
+  pointer-events: auto;
+}
+
+.pdf-geometry-debug__head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.pdf-geometry-debug__copy {
+  margin-left: auto;
+  padding: 2px 8px;
+  background: rgba(56, 189, 248, 0.18);
+  border: 1px solid rgba(56, 189, 248, 0.6);
+  border-radius: 6px;
+  color: #e2e8f0;
+  cursor: pointer;
+}
+
+.pdf-geometry-debug__table {
+  border-collapse: collapse;
+}
+
+.pdf-geometry-debug__table th,
+.pdf-geometry-debug__table td {
+  padding: 2px 6px;
+  text-align: right;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  white-space: nowrap;
+}
+
+.pdf-geometry-debug__table th:first-child,
+.pdf-geometry-debug__table td:first-child {
+  text-align: left;
+}
+
 .calibration-debug-overlay-root {
   position: absolute;
   inset: 0;

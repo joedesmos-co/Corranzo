@@ -8,12 +8,14 @@ import useStableElementSize from '../hooks/useStableElementSize.js'
 import usePdfViewerGeometry from '../hooks/usePdfViewerGeometry.js'
 import useAnnotations from '../hooks/useAnnotations.js'
 import useAnnotationPersistence from '../hooks/useAnnotationPersistence.js'
-import { resolvePdfPageLayout, PRACTICE_CANVAS_PADDING } from '../utils/pdfFit.js'
+import { resolvePdfPageLayout, PRACTICE_CANVAS_PADDING, DEFAULT_CANVAS_PADDING } from '../utils/pdfFit.js'
+import { buildPageGeometryReport } from '../utils/pdfPageGeometry.js'
 import { upsertPdfPageSize, arePdfPageSizesEqual } from '../utils/pdfPageSizeCache.js'
 import { buildLibraryLayoutCacheKey, getCachedLibraryPageLayout } from '../utils/pdfViewerLayoutCache.js'
 import { resetPdfCanvasScroll } from '../utils/pdfViewerScroll.js'
 import { ANNOTATION_TOOLS } from './pdf/annotationConstants.js'
 import PdfFullscreen from './pdf/PdfFullscreen.jsx'
+import PdfGeometryDebugTable from './pdf/PdfGeometryDebugTable.jsx'
 import PdfPageWindow from './pdf/PdfPageWindow.jsx'
 import PdfViewerToolbar from './pdf/PdfViewerToolbar.jsx'
 import ScoreFollowControls from './pdf/ScoreFollowControls.jsx'
@@ -23,6 +25,15 @@ import PracticePdfCursorLayer, {
 } from './pdf/PracticePdfCursorLayer.jsx'
 import { usePracticeSessionContextOptional } from '../context/PracticeSessionContext.jsx'
 import { clearWarmPages } from '../features/pdf/pdfPagePerf.js'
+
+/** Dev-only page-geometry table, opt-in via ?debugGeometry=1 (no effect for users). */
+function isGeometryDebugEnabled() {
+  try {
+    return new URLSearchParams(window.location.search).has('debugGeometry')
+  } catch {
+    return false
+  }
+}
 
 export default function PdfViewer({
   file,
@@ -41,6 +52,7 @@ export default function PdfViewer({
   actionsRef,
 }) {
   const isPracticeEmbed = variant === 'practice'
+  const geometryDebugEnabled = isGeometryDebugEnabled()
   const hasPdf = Boolean(file)
   const isEmptyLibraryViewer = !isPracticeEmbed && !hasPdf
   const showSidebarToggle = !isPracticeEmbed && hasPdf && onToggleSidebar
@@ -55,6 +67,7 @@ export default function PdfViewer({
   const pageSizesRef = useRef({})
   const libraryLayoutCacheRef = useRef(new Map())
   const [pageSizesVersion, setPageSizesVersion] = useState(0)
+  const [pageSizesSnapshot, setPageSizesSnapshot] = useState({})
 
   const [fitMode, setFitMode] = useState('page')
   const [pageSize, setPageSize] = useState(null)
@@ -98,16 +111,22 @@ export default function PdfViewer({
     const changed = upsertPdfPageSize(pageSizesRef.current, page.pageNumber, size)
     if (changed) {
       setPageSizesVersion((version) => version + 1)
+      // State mirror of the page-size map (dev geometry report reads this instead
+      // of the ref, so the debug table never accesses a ref during render).
+      if (geometryDebugEnabled) {
+        setPageSizesSnapshot({ ...pageSizesRef.current })
+      }
     }
     if (page.pageNumber === pageNumber) {
       setPageSize((previous) => (arePdfPageSizesEqual(previous, size) ? previous : size))
     }
-  }, [pageNumber])
+  }, [pageNumber, geometryDebugEnabled])
 
   useEffect(() => {
     setPageSize(null)
     pageSizesRef.current = {}
     setPageSizesVersion(0)
+    setPageSizesSnapshot({})
     libraryLayoutCacheRef.current.clear()
     clearWarmPages()
   }, [file])
@@ -171,7 +190,13 @@ export default function PdfViewer({
   const practiceContext = usePracticeSessionContextOptional()
   const practiceSession = practiceContext?.session ?? null
   const scoreFollow = practiceContext?.scoreFollow ?? null
-  const { referenceDisplaySize, getPageViewRotation, viewerRotationKey } = usePdfViewerGeometry({
+  const {
+    orientation,
+    pageViewRotations,
+    referenceDisplaySize,
+    getPageViewRotation,
+    viewerRotationKey,
+  } = usePdfViewerGeometry({
     pageSizesByPage: pageSizesRef.current,
     pageSizesVersion,
     currentPageSize: pageSize,
@@ -244,6 +269,41 @@ export default function PdfViewer({
       viewerRotationKey,
     ],
   )
+  const geometryReport = useMemo(() => {
+    if (!geometryDebugEnabled || !file || !numPages) {
+      return null
+    }
+    return buildPageGeometryReport({
+      numPages,
+      pageSizesByPage: pageSizesSnapshot,
+      orientation,
+      pageViewRotations,
+      containerSize: canvasSize,
+      fitMode,
+      canvasPadding: isPracticeEmbed ? PRACTICE_CANVAS_PADDING : DEFAULT_CANVAS_PADDING,
+      referenceDisplaySize,
+    })
+  }, [
+    geometryDebugEnabled,
+    file,
+    numPages,
+    pageSizesSnapshot,
+    orientation,
+    pageViewRotations,
+    canvasSize,
+    fitMode,
+    isPracticeEmbed,
+    referenceDisplaySize,
+  ])
+
+  const handleCopyGeometryReport = useCallback((report) => {
+    try {
+      navigator.clipboard?.writeText(JSON.stringify(report, null, 2))
+    } catch {
+      // clipboard may be unavailable; the table is still visible.
+    }
+  }, [])
+
   const hasTiming = Boolean(practiceContext?.session?.timing?.timingMap)
   const measureBounds = practiceContext?.session?.measure?.bounds
   const practiceOverlayPropsRaw = usePracticeScoreFollowOverlayProps()
@@ -387,6 +447,9 @@ export default function PdfViewer({
                 renderPageWindow(null)
               )}
             </Document>
+          )}
+          {geometryReport && (
+            <PdfGeometryDebugTable report={geometryReport} onCopy={handleCopyGeometryReport} />
           )}
           </div>
         </div>

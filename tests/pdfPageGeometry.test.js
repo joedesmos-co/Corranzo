@@ -120,23 +120,27 @@ describe('pdfPageGeometry', () => {
     })
   })
 
-  it('uses a bounding-box reference so no page overflows the shared scale (mixed sizes)', () => {
-    // Neither page has both the max width and the max height, so a single
-    // largest-area reference would let the other page overflow. The bounding box
-    // bounds both, giving one shared scale at which every page fits (Rule 3).
-    const WIDE = { width: 1000, height: 800 }
-    const TALL = { width: 600, height: 1500 }
-    const reference = computeDocumentDisplayReference({ 1: WIDE, 2: TALL })
-    expect(reference).toEqual({ correctedWidth: 1000, correctedHeight: 1500 })
+  it('sizes the shared reference from the dominant orientation, ignoring an outlier (Rule 3)', () => {
+    // Three portrait pages + one landscape outlier (e.g. a page whose rotation
+    // is momentarily wrong). The reference must stay the portrait paper box so
+    // the outlier cannot shrink every portrait page to "tiny".
+    const PORTRAIT = { width: 700, height: 1000 }
+    const LANDSCAPE_OUTLIER = { width: 1000, height: 700 }
+    const reference = computeDocumentDisplayReference({
+      1: PORTRAIT,
+      2: PORTRAIT,
+      3: PORTRAIT,
+      4: LANDSCAPE_OUTLIER,
+    })
+    expect(reference).toEqual({ correctedWidth: 700, correctedHeight: 1000 })
 
-    const wideDims = getPageDimensions('page', WIDE, CONTAINER, 0, 32, reference)
-    const tallDims = getPageDimensions('page', TALL, CONTAINER, 0, 32, reference)
-    expect(wideDims.scale).toBeCloseTo(tallDims.scale, 6) // one shared scale
+    // All portrait pages share one scale and one visual height.
+    const dimsA = getPageDimensions('page', PORTRAIT, CONTAINER, 0, 32, reference)
+    const dimsB = getPageDimensions('page', PORTRAIT, CONTAINER, 0, 32, reference)
+    expect(dimsA.scale).toBeCloseTo(dimsB.scale, 6)
+    expect(dimsA.displayHeight).toBeCloseTo(dimsB.displayHeight, 6)
     const inner = { width: CONTAINER.width - 32, height: CONTAINER.height - 32 }
-    for (const dims of [wideDims, tallDims]) {
-      expect(dims.displayWidth).toBeLessThanOrEqual(inner.width + 0.01)
-      expect(dims.displayHeight).toBeLessThanOrEqual(inner.height + 0.01)
-    }
+    expect(dimsA.displayHeight).toBeLessThanOrEqual(inner.height + 0.01)
   })
 
   it('resolves bootstrap layout before cached source sizes exist', () => {
