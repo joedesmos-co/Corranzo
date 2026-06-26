@@ -31,6 +31,7 @@ import {
   rejectTinySystems,
   summarizePageOrientations,
   resolvePageOrientation,
+  buildPageOrientationRecord,
 } from './pageOrientation.js'
 import { calibrateScoreAnchors } from './smartScoreCalibration.js'
 import {
@@ -764,12 +765,9 @@ export async function analyzeSemiAutoScoreSetup({
     }
     inkPages += 1
     renderedPages.push({ page, imageData: oriented.imageData })
-    pageOrientations.push({
-      page,
-      rotation: oriented.rotation,
-      uncertain: oriented.uncertain,
-      confidence: oriented.confidence,
-    })
+    pageOrientations.push(
+      buildPageOrientationRecord(page, rendered.imageData, oriented, { forcedRotation }),
+    )
   }
 
   const orientation = summarizePageOrientations(pageOrientations)
@@ -793,10 +791,30 @@ export async function analyzeSemiAutoScoreSetup({
   // Truly last resort: not a single inked page yielded even one band. Only here
   // do we ask the user to mark system starts (concise fallback copy lives in UI).
   if (systemEntries.length < HARD_REFUSE_MIN_SYSTEMS) {
+    const orientation = summarizePageOrientations(pageOrientations)
     return {
       ok: false,
       message: 'Auto setup could not find systems. Mark system starts.',
       noSystems: true,
+      preview: {
+        orientation,
+        proposedAnchors: [],
+        supplementalMeasureAnchors: [],
+        smartCalibration: null,
+        debugReport: {
+          confidence: 0,
+          systems: [],
+          stage: overallStage,
+          allocationMode: null,
+          plausible: false,
+          pdfPageCount: numPages,
+        },
+        plausible: false,
+        approximate: false,
+        lowConfidence: true,
+        pdfPageCount: numPages,
+        inkPages,
+      },
     }
   }
 

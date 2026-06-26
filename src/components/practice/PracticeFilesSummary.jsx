@@ -13,7 +13,7 @@ export default function PracticeFilesSummary({
     <div className="practice-files" aria-label="Loaded files">
       <div className={`practice-files__item${pdfFileName ? ' practice-files__item--ok' : ''}`}>
         <span className="practice-files__label">Sheet music (PDF)</span>
-        <span className="practice-files__value" title={pdfFileName || undefined}>
+        <span className="practice-files__value practice-files__value--truncate" title={pdfFileName || undefined}>
           {pdfFileName || 'Not loaded — open from Library'}
         </span>
         {!pdfFileName && (
@@ -30,7 +30,7 @@ export default function PracticeFilesSummary({
           </PracticeHelpTip>
         </span>
         <span
-          className="practice-files__value"
+          className="practice-files__value practice-files__value--truncate"
           title={hasMusicXml ? timingFileName || undefined : undefined}
         >
           {timingLoading
@@ -40,12 +40,12 @@ export default function PracticeFilesSummary({
               : 'Missing — add MusicXML/MXL in Library'}
         </span>
         {timingError && (
-          <span className="practice-files__hint practice-files__hint--error" role="alert">
+          <span className="practice-files__hint practice-files__hint--error practice-files__hint--wrap" role="alert">
             {timingError}
           </span>
         )}
         {!hasMusicXml && !timingError && (
-          <span className="practice-files__hint practice-empty-state">
+          <span className="practice-files__hint practice-empty-state practice-files__hint--wrap">
             Score timing is required — export MusicXML or MXL from MuseScore or your notation app.
           </span>
         )}
@@ -59,13 +59,13 @@ export default function PracticeFilesSummary({
           </PracticeHelpTip>
         </span>
         <span
-          className="practice-files__value"
+          className="practice-files__value practice-files__value--truncate"
           title={hasMidi ? playbackFileName || undefined : undefined}
         >
           {hasMidi ? playbackFileName || 'Loaded' : 'Optional — add from Library'}
         </span>
         {!hasMidi && (
-          <span className="practice-files__hint">
+          <span className="practice-files__hint practice-files__hint--wrap">
             Optional — add a MIDI file in Library if you want backing audio while you practice.
           </span>
         )}

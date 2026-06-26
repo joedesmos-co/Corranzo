@@ -72,10 +72,23 @@ export function collectCalibrationWarnings({
         })
       : true)
 
+  const correctionPaths = orientation?.correctionPaths ?? []
+  const correctionSummary =
+    correctionPaths.length > 0
+      ? correctionPaths.join(', ')
+      : orientation?.anyAutoCorrected
+        ? 'auto-detect'
+        : 'none'
+
   if (orientation?.anyRotated && corrected) {
     warnings.push({
       code: 'page-rotated',
-      message: `Detected rotated page(s) (up to ${orientation.maxRotation}°); viewer correction applied.`,
+      message: `Detected rotated page(s) (up to ${orientation.maxRotation}°); viewer correction applied (${correctionSummary}).`,
+    })
+  } else if (orientation?.anyAutoCorrected && corrected) {
+    warnings.push({
+      code: 'page-auto-corrected',
+      message: `Analysis bitmap auto-rotated (${correctionSummary}); viewer correction applied.`,
     })
   } else if (orientation?.anyRotated && !corrected) {
     warnings.push({
@@ -154,7 +167,19 @@ export function buildCalibrationDebugSnapshot({
   pdfPageCount = null,
 } = {}) {
   if (!debugReport && !smartCalibration && proposedAnchors.length < 2) {
-    return null
+    const hasOrientationSignal =
+      orientation?.anyRotated ||
+      orientation?.anyAutoCorrected ||
+      (orientation?.pages?.length > 0 &&
+        orientation.pages.some(
+          (page) =>
+            page.detectedSideways ||
+            (Number.isFinite(page.verticalLineScore) &&
+              Number.isFinite(page.horizontalLineScore)),
+        ))
+    if (!hasOrientationSignal) {
+      return null
+    }
   }
 
   const enrichedSmartCalibration = smartCalibration
@@ -367,6 +392,9 @@ export function buildCalibrationExportReport({
     perSystemConfidence: smart?.perSystemConfidence ?? [],
     pageLayout: smart?.pageLayout ?? [],
     orientation: snapshot?.orientation ?? null,
+    orientationCorrectionSummary:
+      snapshot?.orientation?.correctionPaths?.join(', ') ??
+      (snapshot?.orientation?.anyAutoCorrected ? 'auto-detect' : 'none'),
     pageViewRotations: snapshot?.pageViewRotations ?? null,
     viewerCorrectionApplied: snapshot?.viewerCorrectionApplied ?? null,
     systemBounds: debug?.systems ?? [],

@@ -69,9 +69,14 @@ export default function CalibrationDebugPanel({
   const orientationValue = orientation
     ? `${orientation.maxRotation ?? 0}°${orientation.anyUncertain ? ' (uncertain)' : ''}`
     : '0°'
-  const correctionLabel = orientation?.anyRotated
+  const correctionSummary = orientation?.correctionPaths?.length
+    ? orientation.correctionPaths.join(', ')
+    : orientation?.anyAutoCorrected
+      ? 'auto-detect'
+      : 'none'
+  const correctionLabel = orientation?.anyRotated || orientation?.anyAutoCorrected
     ? viewerCorrected
-      ? 'Applied'
+      ? `Applied (${correctionSummary})`
       : 'Not applied'
     : 'Not needed'
 
@@ -113,6 +118,7 @@ export default function CalibrationDebugPanel({
         <Metric label="Allocation mode" value={debug.allocationMode} />
         <Metric label="Stage" value={debug.stage} />
         <Metric label="Detected rotation" value={orientationValue} />
+        <Metric label="Correction path" value={correctionSummary} />
         <Metric label="Viewer correction" value={correctionLabel} />
         {orientation?.anyRotated && (
           <Metric
@@ -132,6 +138,10 @@ export default function CalibrationDebugPanel({
               <li key={`orient-${page.page}`}>
                 Page {page.page}: {page.rotation ?? 0}°
                 {page.uncertain ? ' (uncertain)' : ''}
+                {page.correctionPath ? ` · ${page.correctionPath}` : ''}
+                {Number.isFinite(page.horizontalLineScore) && Number.isFinite(page.verticalLineScore)
+                  ? ` · H/V ${page.horizontalLineScore.toFixed(4)}/${page.verticalLineScore.toFixed(4)}`
+                  : ''}
                 {Number.isFinite(page.confidence) ? ` · ${formatConfidence(page.confidence)}` : ''}
               </li>
             ))}

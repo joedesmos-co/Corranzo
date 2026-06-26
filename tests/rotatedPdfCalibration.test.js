@@ -56,9 +56,11 @@ function makePreview(over = {}) {
     },
     orientation: {
       anyRotated: true,
+      anyAutoCorrected: true,
       anyUncertain: false,
       maxRotation: 90,
-      pages: [{ page: 1, rotation: 90, uncertain: false, confidence: 0.9 }],
+      correctionPaths: ['auto-detect'],
+      pages: [{ page: 1, rotation: 90, uncertain: false, confidence: 0.9, correctionPath: 'auto-detect' }],
     },
     plausible: true,
     approximate: true,
@@ -79,12 +81,17 @@ describe('rotated PDF calibration debug', () => {
 
     expect(result.ok).toBe(true)
     expect(result.preview.orientation.anyRotated).toBe(true)
+    expect(result.preview.orientation.anyAutoCorrected).toBe(true)
+    expect(result.preview.orientation.correctionPaths.some((path) => path.startsWith('auto-detect'))).toBe(
+      true,
+    )
 
     const snapshot = buildCalibrationDebugSnapshotFromPreview(result.preview, {
       pageViewRotations: pageViewRotationsFromOrientation(result.preview.orientation),
     })
     const report = buildCalibrationExportReport({ snapshot, pieceName: 'Rotated test' })
     expect(report.orientation?.anyRotated).toBe(true)
+    expect(report.orientationCorrectionSummary).toMatch(/auto-detect/)
     expect(report.overallConfidence).toBeTruthy()
     expect(report.systemBounds.length).toBeGreaterThan(0)
   })

@@ -16,7 +16,9 @@ export default function PracticeImportNotices({ warnings = [], guidance = [], ma
           <p className="practice-import-notices__heading">Notes</p>
           <ul className="practice-import-notices__list">
             {visibleGuidance.map((step) => (
-              <li key={step}>{step}</li>
+              <li key={step} className="practice-import-notices__guidance-item">
+                {step}
+              </li>
             ))}
           </ul>
         </div>
@@ -27,7 +29,7 @@ export default function PracticeImportNotices({ warnings = [], guidance = [], ma
           {visibleWarnings.map((warning) => (
             <li
               key={warning.id}
-              className={`practice-import-notices__warning${
+              className={`practice-import-notices__warning practice-import-notices__warning--wrap${
                 warning.strength === 'strong'
                   ? ' practice-import-notices__warning--strong'
                   : ''

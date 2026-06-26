@@ -52,6 +52,7 @@ describe('approximate cursor hint is temporary (issue 2)', () => {
 
 describe('sidebar filename overflow (issue 3)', () => {
   const summary = readSrc('components', 'practice', 'PracticeFilesSummary.jsx')
+  const notices = readSrc('components', 'practice', 'PracticeImportNotices.jsx')
   const css = readFileSync(join(root, 'src', 'styles', 'practice.css'), 'utf8')
 
   it('adds full-name tooltips to each file value', () => {
@@ -60,12 +61,28 @@ describe('sidebar filename overflow (issue 3)', () => {
     expect(summary).toMatch(/title=\{hasMidi \? playbackFileName \|\| undefined : undefined\}/)
   })
 
+  it('marks filename values with truncation class', () => {
+    expect(summary).toMatch(/practice-files__value--truncate/)
+    expect(summary.match(/practice-files__value--truncate/g)?.length).toBeGreaterThanOrEqual(3)
+  })
+
+  it('marks warning and notes text for wrapping', () => {
+    expect(summary).toMatch(/practice-files__hint--wrap/)
+    expect(notices).toMatch(/practice-import-notices__warning--wrap/)
+    expect(notices).toMatch(/practice-import-notices__guidance-item/)
+  })
+
   it('lets the files panel shrink so long names truncate instead of overflowing', () => {
     const block = css.slice(css.indexOf('.practice-files {'), css.indexOf('.practice-files__item--ok'))
     expect(block).toMatch(/\.practice-files\s*\{[^}]*min-width:\s*0/)
+    expect(block).toMatch(/max-width:\s*100%/)
+    expect(block).toMatch(/overflow:\s*hidden/)
     expect(block).toMatch(/\.practice-files__item\s*\{[^}]*min-width:\s*0/)
-    // ellipsis truncation already present on the value.
-    expect(css).toMatch(/\.practice-files__value\s*\{[^}]*text-overflow:\s*ellipsis/)
+    expect(css).toMatch(/\.practice-files__value--truncate\s*\{[^}]*text-overflow:\s*ellipsis/)
+    expect(css).toMatch(/\.practice-files__hint--wrap[^}]*overflow-wrap:\s*anywhere/)
+    expect(css).toMatch(/\.practice-import-notices__warning--wrap[^}]*word-break:\s*break-word/)
+    expect(css).toMatch(/\.practice-more\s*\{[^}]*min-width:\s*0/)
+    expect(css).toMatch(/\.practice-control-panel__footer[^}]*overflow:\s*hidden/)
   })
 })
 

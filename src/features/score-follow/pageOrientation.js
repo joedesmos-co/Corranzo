@@ -106,31 +106,48 @@ export function rotateImageData(imageData, degrees) {
  * Conservative: only flags sideways when vertical line energy clearly dominates,
  * so upright music (where this returns NONE, not uncertain) is never penalized.
  */
-export function detectPageOrientation(imageData, { ratio = 1.6, minScore = 0.0008 } = {}) {
+export function detectPageOrientation(
+  imageData,
+  { ratio = 1.45, minScore = 0.0005, landscapeRatio = 1.12 } = {},
+) {
   const horizontalScore = horizontalLineScore(imageData)
   const verticalScore = verticalLineScore(imageData)
-  const sideways = verticalScore > minScore && verticalScore > horizontalScore * ratio
+  const { width = 0, height = 0 } = imageData ?? {}
+  const landscape = width > height * landscapeRatio
+  const sidewaysByLines =
+    verticalScore > minScore && verticalScore > horizontalScore * ratio
+  const sidewaysByLandscape =
+    landscape &&
+    verticalScore > minScore &&
+    verticalScore >= horizontalScore * (ratio * 0.72)
+  const sideways = sidewaysByLines || sidewaysByLandscape
 
   if (sideways) {
     const dominance = verticalScore / (verticalScore + horizontalScore || 1)
     return {
       rotation: PAGE_ROTATION.CW90,
       sideways: true,
+      sidewaysByLines,
+      sidewaysByLandscape,
       // Borderline sideways (only just clears the ratio) → flag as uncertain so
       // the pipeline can lower its confidence rather than trust a risky rotation.
       uncertain: verticalScore < horizontalScore * ratio * 1.4,
       confidence: Math.max(0, Math.min(1, dominance)),
       horizontalScore,
       verticalScore,
+      landscape,
     }
   }
   return {
     rotation: PAGE_ROTATION.NONE,
     sideways: false,
+    sidewaysByLines: false,
+    sidewaysByLandscape: false,
     uncertain: false,
     confidence: horizontalScore > 0 ? Math.max(0, Math.min(1, horizontalScore / (horizontalScore + verticalScore || 1))) : 1,
     horizontalScore,
     verticalScore,
+    landscape,
   }
 }
 
@@ -150,6 +167,7 @@ export function normalizeImageDataOrientation(imageData, options = {}) {
       sideways: false,
       uncertain: false,
       confidence: detection.confidence,
+      correctionPath: 'none',
       detection,
     }
   }
@@ -169,6 +187,7 @@ export function normalizeImageDataOrientation(imageData, options = {}) {
     sideways: true,
     uncertain: detection.uncertain || tieUncertain,
     confidence: detection.confidence,
+    correctionPath: detection.uncertain || tieUncertain ? 'auto-detect-uncertain' : 'auto-detect',
     detection,
   }
 }
@@ -190,6 +209,7 @@ export function applyPageViewRotation(imageData, degrees) {
     sideways: rotation !== PAGE_ROTATION.NONE,
     uncertain: upright.uncertain,
     confidence: upright.confidence,
+    correctionPath: 'forced-viewer',
     detection: upright.detection,
     forced: true,
   }
@@ -239,21 +259,60 @@ export function rejectTinySystems(entries, { minHeightNorm = MIN_SYSTEM_HEIGHT_N
   })
 }
 
+/** Per-page orientation diagnostics for setup reports and calibration debug. */
+export function buildPageOrientationRecord(page, sourceImageData, oriented, { forcedRotation = null } = {}) {
+  const forced = normalizeViewRotationDegrees(forcedRotation)
+  let correctionPath = oriented.correctionPath ?? 'none'
+  if (forced !== PAGE_ROTATION.NONE) {
+    correctionPath = 'forced-viewer'
+  }
+  return {
+    page,
+    rotation: oriented.rotation ?? PAGE_ROTATION.NONE,
+    uncertain: Boolean(oriented.uncertain),
+    confidence: oriented.confidence ?? null,
+    correctionPath,
+    detectedSideways: oriented.detection?.sideways ?? false,
+    sidewaysByLines: oriented.detection?.sidewaysByLines ?? false,
+    sidewaysByLandscape: oriented.detection?.sidewaysByLandscape ?? false,
+    landscape: oriented.detection?.landscape ?? false,
+    horizontalLineScore: oriented.detection?.horizontalScore ?? null,
+    verticalLineScore: oriented.detection?.verticalScore ?? null,
+    sourceWidth: sourceImageData?.width ?? null,
+    sourceHeight: sourceImageData?.height ?? null,
+    analysisWidth: oriented.imageData?.width ?? sourceImageData?.width ?? null,
+    analysisHeight: oriented.imageData?.height ?? sourceImageData?.height ?? null,
+  }
+}
+
 /** Collapse per-page orientation results into a setup-level summary. */
 export function summarizePageOrientations(pages) {
   const list = pages ?? []
   const rotated = list.filter((p) => p.rotation && p.rotation !== PAGE_ROTATION.NONE)
   const uncertain = list.filter((p) => p.uncertain)
+  const autoCorrected = list.filter((p) =>
+    String(p.correctionPath ?? '').startsWith('auto-detect'),
+  )
   return {
     anyRotated: rotated.length > 0,
     anyUncertain: uncertain.length > 0,
+    anyAutoCorrected: autoCorrected.length > 0,
     rotatedPageCount: rotated.length,
     maxRotation: list.reduce((max, p) => Math.max(max, p.rotation ?? 0), 0),
+    correctionPaths: [...new Set(list.map((p) => p.correctionPath).filter(Boolean))],
     pages: list.map((p) => ({
       page: p.page,
       rotation: p.rotation ?? 0,
       uncertain: Boolean(p.uncertain),
       confidence: p.confidence,
+      correctionPath: p.correctionPath ?? 'none',
+      detectedSideways: p.detectedSideways ?? false,
+      horizontalLineScore: p.horizontalLineScore ?? null,
+      verticalLineScore: p.verticalLineScore ?? null,
+      sourceWidth: p.sourceWidth ?? null,
+      sourceHeight: p.sourceHeight ?? null,
+      analysisWidth: p.analysisWidth ?? null,
+      analysisHeight: p.analysisHeight ?? null,
     })),
   }
 }

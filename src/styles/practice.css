@@ -36,6 +36,7 @@
   align-self: flex-start;
   flex: 0 0 var(--sf-sidebar-width);
   width: var(--sf-sidebar-width);
+  min-width: 0;
   max-width: 36vw;
   max-height: calc(100vh - var(--sf-topbar-height));
   height: calc(100vh - var(--sf-topbar-height));
@@ -311,6 +312,9 @@
   /* In a constrained sidebar, allow this flex child to shrink so long, unbroken
      filenames truncate (ellipsis) instead of forcing the panel wider. */
   min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .practice-files__item {
@@ -318,6 +322,8 @@
   flex-direction: column;
   gap: 2px;
   min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .practice-files__item--ok .practice-files__value {
@@ -338,12 +344,24 @@
   line-height: 1.3;
 }
 
-.practice-files__value {
+.practice-files__value,
+.practice-files__value--truncate {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
   font-size: 0.8rem;
   color: #c8d4e8;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.practice-files__hint--wrap,
+.practice-import-notices__warning--wrap,
+.practice-import-notices__guidance-item {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
 }
 
 .practice-setup,
@@ -621,6 +639,8 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   padding: var(--sf-space-lg) var(--sf-space-xl);
   border: none;
   border-radius: var(--sf-radius-md);
@@ -638,7 +658,22 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
   min-width: 0;
+  overflow: hidden;
+}
+
+.practice-section__summary {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #6b82a8;
+  text-transform: none;
+  letter-spacing: normal;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .practice-section--collapsible .practice-section__title {
@@ -648,14 +683,6 @@
   color: #9fb3d9;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-}
-
-.practice-section__summary {
-  font-size: 0.75rem;
-  font-weight: 400;
-  color: #6b82a8;
-  text-transform: none;
-  letter-spacing: normal;
 }
 
 .practice-section__chevron {
@@ -2255,6 +2282,10 @@
   border-radius: 12px;
   background: rgba(21, 34, 56, 0.85);
   border: 1px solid #2e4268;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .practice-import-notices__heading {
@@ -2629,7 +2660,10 @@
   > .practice-section__collapse
   > .practice-section__collapse-inner {
   padding: 0 18px 16px;
-  overflow: visible;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* —— Compact loop (main panel) —— */
@@ -2779,6 +2813,9 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .practice-shortcuts-hint {
@@ -3238,8 +3275,10 @@
 
 .practice-control-panel {
   max-width: 32vw;
+  min-width: 0;
   padding: 10px;
   gap: 6px;
+  box-sizing: border-box;
 }
 
 .practice-control-panel__primary,
@@ -3248,6 +3287,13 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.practice-more {
+  box-sizing: border-box;
 }
 
 .practice-status-strip {
@@ -3329,6 +3375,10 @@
   > .practice-section__collapse
   > .practice-section__collapse-inner {
   padding: 0 12px 12px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .practice-transport .practice-section__title--static {
@@ -3769,6 +3819,8 @@
 .practice-more .practice-import-notices,
 .practice-more .practice-section {
   border-radius: var(--sf-radius-md);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .practice-shortcuts-hint {

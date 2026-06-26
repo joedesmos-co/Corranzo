@@ -88,6 +88,31 @@ describe('calibrationDebug — snapshot + warnings', () => {
     expect(snapshot.warnings.some((w) => w.code === 'low-system-confidence')).toBe(true)
   })
 
+  it('builds a snapshot from orientation diagnostics when anchors are sparse', () => {
+    const snapshot = buildCalibrationDebugSnapshot({
+      orientation: {
+        anyRotated: true,
+        anyAutoCorrected: true,
+        maxRotation: 90,
+        correctionPaths: ['auto-detect'],
+        pages: [
+          {
+            page: 1,
+            rotation: 90,
+            correctionPath: 'auto-detect',
+            detectedSideways: true,
+            horizontalLineScore: 0.0002,
+            verticalLineScore: 0.0018,
+          },
+        ],
+      },
+      proposedAnchors: [],
+      setupPhase: 'needs-setup',
+    })
+    expect(snapshot).not.toBeNull()
+    expect(snapshot.orientation.anyAutoCorrected).toBe(true)
+  })
+
   it('collects layout and fallback warnings', () => {
     const warnings = collectCalibrationWarnings({
       debugReport: { layoutMismatch: true, layoutConfidence: 'low', weakestSystemIndex: 1 },
