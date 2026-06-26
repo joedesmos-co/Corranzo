@@ -41,7 +41,7 @@ describe('beta onboarding', () => {
     const css = readFileSync(join(root, 'src', 'App.css'), 'utf8')
     const tokens = readFileSync(join(root, 'src', 'styles', 'tokens.css'), 'utf8')
     expect(readSrc('components', 'TopBar.jsx')).toContain('CorranzoLogo')
-    expect(readSrc('components', 'DemoPieceCard.jsx')).toContain('demo-piece__logo')
+    expect(readSrc('components', 'DemoPieceCard.jsx')).not.toContain('CorranzoLogo')
     expect(readSrc('features', 'brand', 'corranzoBrand.js')).toContain('corranzo-logo.png')
     expect(readSrc('features', 'brand', 'corranzoBrand.js')).toContain('site.webmanifest')
     expect(tokens).toContain('--sf-bg-app: #000000')

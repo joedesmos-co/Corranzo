@@ -3,7 +3,16 @@ import {
   arePdfPageSizesEqual,
   upsertPdfPageSize,
 } from '../src/utils/pdfPageSizeCache.js'
-import { getCachedLibraryPageLayout } from '../src/utils/pdfViewerLayoutCache.js'
+import {
+  buildLibraryLayoutCacheKey,
+  getCachedLibraryPageLayout,
+} from '../src/utils/pdfViewerLayoutCache.js'
+import { resolvePdfPageLayout } from '../src/utils/pdfFit.js'
+
+const PAGE_A = { width: 612, height: 792 }
+const PAGE_B = { width: 612, height: 792 }
+const CONTAINER = { width: 900, height: 700 }
+const REFERENCE = { correctedWidth: 792, correctedHeight: 612 }
 
 describe('pdfPageSizeCache', () => {
   it('treats sub-pixel drift as unchanged', () => {
@@ -21,24 +30,52 @@ describe('pdfPageSizeCache', () => {
 })
 
 describe('pdfViewerLayoutCache', () => {
-  it('locks the first resolved library layout per slot', () => {
+  it('keys cache entries by document reference and page rotation', () => {
     const cache = new Map()
-    const first = {
-      width: 500,
-      height: 700,
-      displayWidth: 500,
-      displayHeight: 700,
-      viewerRotation: 90,
+    const shared = {
+      fitMode: 'page',
+      containerSize: CONTAINER,
+      referenceDisplaySize: REFERENCE,
+      viewerRotationKey: '1:90|2:90',
+      slotPageNumber: 1,
+      viewRotation: 90,
     }
-    const second = {
-      width: 520,
-      height: 720,
-      displayWidth: 520,
-      displayHeight: 720,
-      viewerRotation: 90,
-    }
+    const first = { displayWidth: 500, displayHeight: 650, viewerRotation: 90 }
+    const second = { displayWidth: 520, displayHeight: 670, viewerRotation: 90 }
 
-    expect(getCachedLibraryPageLayout(cache, 1, first)).toEqual(first)
-    expect(getCachedLibraryPageLayout(cache, 1, second)).toEqual(first)
+    const key = buildLibraryLayoutCacheKey(shared)
+    expect(getCachedLibraryPageLayout(cache, key, first)).toEqual(first)
+    expect(getCachedLibraryPageLayout(cache, key, second)).toEqual(first)
+
+    const otherPageKey = buildLibraryLayoutCacheKey({ ...shared, slotPageNumber: 2 })
+    expect(otherPageKey).not.toBe(key)
+  })
+
+  it('library pages share display scale when document reference matches', () => {
+    const pageSizes = { 1: PAGE_A, 2: PAGE_B }
+    const getRotation = () => 90
+    const layout1 = resolvePdfPageLayout({
+      fitMode: 'page',
+      pageNumber: 1,
+      slotPageNumber: 1,
+      pageSize: PAGE_A,
+      pageSizesByPage: pageSizes,
+      containerSize: CONTAINER,
+      getPageViewRotation: getRotation,
+      referenceDisplaySize: REFERENCE,
+    })
+    const layout2 = resolvePdfPageLayout({
+      fitMode: 'page',
+      pageNumber: 2,
+      slotPageNumber: 2,
+      pageSize: PAGE_B,
+      pageSizesByPage: pageSizes,
+      containerSize: CONTAINER,
+      getPageViewRotation: getRotation,
+      referenceDisplaySize: REFERENCE,
+    })
+
+    expect(layout1.displayWidth).toBeCloseTo(layout2.displayWidth, 4)
+    expect(layout1.displayHeight).toBeCloseTo(layout2.displayHeight, 4)
   })
 })

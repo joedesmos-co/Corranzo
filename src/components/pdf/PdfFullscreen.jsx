@@ -10,7 +10,7 @@ import {
   DEFAULT_CANVAS_PADDING,
   resolvePdfPageLayout,
 } from '../../utils/pdfFit.js'
-import { getCachedLibraryPageLayout } from '../../utils/pdfViewerLayoutCache.js'
+import { buildLibraryLayoutCacheKey, getCachedLibraryPageLayout } from '../../utils/pdfViewerLayoutCache.js'
 import PdfPageWindow from './PdfPageWindow.jsx'
 import PdfViewerToolbar from './PdfViewerToolbar.jsx'
 
@@ -73,14 +73,6 @@ export default function PdfFullscreen({
     libraryLayoutCacheRef.current.clear()
   }, [file, fitMode, viewerRotationKey])
 
-  useEffect(() => {
-    libraryLayoutCacheRef.current.clear()
-  }, [
-    file,
-    referenceDisplaySize?.correctedWidth,
-    referenceDisplaySize?.correctedHeight,
-  ])
-
   const pageWindowKey = useMemo(() => {
     const rotationSuffix = viewerRotationKey ? `::${viewerRotationKey}` : ''
     return `${String(file)}${rotationSuffix}`
@@ -117,7 +109,20 @@ export default function PdfFullscreen({
         return layout
       }
 
-      return getCachedLibraryPageLayout(libraryLayoutCacheRef.current, slotPageNumber, layout)
+      if (!referenceDisplaySize?.correctedWidth || !referenceDisplaySize?.correctedHeight) {
+        return layout
+      }
+
+      const cacheKey = buildLibraryLayoutCacheKey({
+        fitMode: fitMode ?? 'page',
+        containerSize,
+        referenceDisplaySize,
+        viewerRotationKey,
+        slotPageNumber,
+        viewRotation: layout.viewerRotation ?? 0,
+      })
+
+      return getCachedLibraryPageLayout(libraryLayoutCacheRef.current, cacheKey, layout)
     },
     [
       containerSize,
@@ -129,6 +134,7 @@ export default function PdfFullscreen({
       pageSizesVersion,
       referenceDisplaySize,
       stabilizeLayout,
+      viewerRotationKey,
     ],
   )
 

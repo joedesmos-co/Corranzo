@@ -379,6 +379,20 @@ function sameSourceAspect(pageA, pageB) {
   return Math.abs(ratioA - ratioB) <= DOCUMENT_ASPECT_TOLERANCE * Math.max(ratioA, ratioB)
 }
 
+/** Same score page family: exact source size or matching aspect ratio. */
+function sameDocumentPageFamily(pageA, pageB) {
+  if (!pageA || !pageB) {
+    return false
+  }
+  if (
+    pageA.sourceWidth === pageB.sourceWidth &&
+    pageA.sourceHeight === pageB.sourceHeight
+  ) {
+    return true
+  }
+  return sameSourceAspect(pageA, pageB)
+}
+
 function isQuarterTurnRotation(rotation) {
   const deg = normalizeViewRotationDegrees(rotation)
   return deg === PAGE_ROTATION.CW90 || deg === PAGE_ROTATION.CW270
@@ -411,6 +425,34 @@ function dominantQuarterTurnRotation(pages) {
   return count90 > count270 ? PAGE_ROTATION.CW90 : PAGE_ROTATION.CW270
 }
 
+/**
+ * Final document pass: last page inherits previous page rotation when it belongs
+ * to the same score family. Runs after per-dimension groups so confident-but-wrong
+ * footer/title detections cannot skip reconciliation.
+ */
+function reconcileDocumentFinalPage(pages) {
+  const sorted = [...pages].sort((a, b) => a.page - b.page)
+  if (sorted.length < 2) {
+    return
+  }
+
+  const last = sorted[sorted.length - 1]
+  const previous = sorted[sorted.length - 2]
+  if (!sameDocumentPageFamily(last, previous)) {
+    return
+  }
+
+  const targetRotation = normalizeViewRotationDegrees(previous.rotation ?? 0)
+  const lastRotation = normalizeViewRotationDegrees(last.rotation ?? 0)
+  if (lastRotation === targetRotation) {
+    return
+  }
+
+  last.rotation = targetRotation
+  last.uncertain = false
+  last.correctionPath = 'document-last-page-neighbor'
+}
+
 function reconcileAspectGroup(group) {
   const sorted = [...group].sort((a, b) => a.page - b.page)
   const dominantQuarter = dominantQuarterTurnRotation(
@@ -419,12 +461,11 @@ function reconcileAspectGroup(group) {
 
   for (let index = 0; index < sorted.length; index += 1) {
     const page = sorted[index]
-    if (isConfidentUpright(page)) {
-      continue
-    }
-
     const isFirst = index === 0
     const isLast = index === sorted.length - 1
+    if (isConfidentUpright(page) && !isLast) {
+      continue
+    }
     const neighbor = isFirst ? sorted[1] : isLast ? sorted[sorted.length - 2] : null
     const neighborQuarter =
       neighbor && isQuarterTurnRotation(neighbor.rotation) ? normalizeViewRotationDegrees(neighbor.rotation) : null
@@ -432,9 +473,9 @@ function reconcileAspectGroup(group) {
     const pageQuarter = normalizeViewRotationDegrees(page.rotation ?? 0)
     const lowConfidence = page.uncertain || (page.confidence ?? 0) < DOCUMENT_HIGH_CONFIDENCE
 
-    if (isLast && neighbor && sameSourceAspect(page, neighbor)) {
+    if (isLast && neighbor && sameDocumentPageFamily(page, neighbor)) {
       const neighborRotation = normalizeViewRotationDegrees(neighbor.rotation ?? 0)
-      if (neighborRotation !== PAGE_ROTATION.NONE && pageQuarter !== neighborRotation) {
+      if (pageQuarter !== neighborRotation) {
         page.rotation = neighborRotation
         page.uncertain = false
         page.correctionPath = 'document-last-page-neighbor'
@@ -442,7 +483,7 @@ function reconcileAspectGroup(group) {
       }
     }
 
-    if (neighborQuarter != null && sameSourceAspect(page, neighbor) && (isFirst || isLast) && lowConfidence) {
+    if (neighborQuarter != null && sameDocumentPageFamily(page, neighbor) && (isFirst || isLast) && lowConfidence) {
       if (pageQuarter !== neighborQuarter) {
         page.rotation = neighborQuarter
         page.uncertain = false
@@ -503,6 +544,8 @@ export function reconcileDocumentPageOrientations(pageRecords = []) {
       reconcileAspectGroup(group)
     }
   }
+
+  reconcileDocumentFinalPage(pages)
 
   return pages
 }

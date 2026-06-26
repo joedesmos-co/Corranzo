@@ -266,18 +266,6 @@
   border-color: var(--sf-border-strong);
 }
 
-.demo-piece__logo {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-  opacity: 0.32;
-  pointer-events: none;
-  user-select: none;
-}
-
 .demo-piece--compact {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

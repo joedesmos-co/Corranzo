@@ -58,7 +58,7 @@ describe('library and practice PDF viewer geometry', () => {
     expect(viewer).not.toContain('pageSizesVersion}::${viewerRotationKey')
     expect(viewer).toContain('upsertPdfPageSize')
     expect(viewer).toContain('useStableElementSize')
-    expect(viewer).toContain('getCachedLibraryPageLayout')
+    expect(viewer).toContain('buildLibraryLayoutCacheKey')
   })
 
   it('upright pages keep zero viewer rotation', () => {

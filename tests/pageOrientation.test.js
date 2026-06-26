@@ -217,6 +217,31 @@ describe('document orientation reconciliation', () => {
     expect(reconciled[7].rotation).toBe(reconciled[6].rotation)
     expect(reconciled[7].correctionPath).toBe('document-last-page-neighbor')
   })
+
+  it('Winter-like final page inherits previous rotation even when locally confident upright', () => {
+    const pages = winterLikeMixedScanPages(8)
+    const preliminary = pages.map((imageData, index) => {
+      const page = index + 1
+      const oriented = normalizeImageDataOrientation(imageData)
+      const record = buildPageOrientationRecord(page, imageData, oriented)
+      if (page === 8) {
+        record.rotation = PAGE_ROTATION.NONE
+        record.uncertain = false
+        record.confidence = 0.97
+        record.detectedSideways = false
+        record.correctionPath = 'none'
+      }
+      return record
+    })
+
+    expect(preliminary[6].rotation).not.toBe(PAGE_ROTATION.NONE)
+    expect(preliminary[7].rotation).toBe(PAGE_ROTATION.NONE)
+
+    const reconciled = reconcileDocumentPageOrientations(preliminary)
+    expect(reconciled[0].rotation).toBe(reconciled[6].rotation)
+    expect(reconciled[7].rotation).toBe(reconciled[6].rotation)
+    expect(reconciled[7].correctionPath).toBe('document-last-page-neighbor')
+  })
 })
 
 describe('end-to-end orientation handling', () => {

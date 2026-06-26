@@ -10,7 +10,7 @@ import useAnnotations from '../hooks/useAnnotations.js'
 import useAnnotationPersistence from '../hooks/useAnnotationPersistence.js'
 import { resolvePdfPageLayout, PRACTICE_CANVAS_PADDING } from '../utils/pdfFit.js'
 import { upsertPdfPageSize, arePdfPageSizesEqual } from '../utils/pdfPageSizeCache.js'
-import { getCachedLibraryPageLayout } from '../utils/pdfViewerLayoutCache.js'
+import { buildLibraryLayoutCacheKey, getCachedLibraryPageLayout } from '../utils/pdfViewerLayoutCache.js'
 import { resetPdfCanvasScroll } from '../utils/pdfViewerScroll.js'
 import { ANNOTATION_TOOLS } from './pdf/annotationConstants.js'
 import PdfFullscreen from './pdf/PdfFullscreen.jsx'
@@ -181,14 +181,6 @@ export default function PdfViewer({
     libraryLayoutCacheRef.current.clear()
   }, [file, fitMode, viewerRotationKey])
 
-  useEffect(() => {
-    libraryLayoutCacheRef.current.clear()
-  }, [
-    file,
-    referenceDisplaySize?.correctedWidth,
-    referenceDisplaySize?.correctedHeight,
-  ])
-
   const pageWindowKey = useMemo(() => {
     const rotationSuffix = viewerRotationKey ? `::${viewerRotationKey}` : ''
     return `${String(file)}${rotationSuffix}`
@@ -225,7 +217,20 @@ export default function PdfViewer({
         return layout
       }
 
-      return getCachedLibraryPageLayout(libraryLayoutCacheRef.current, slotPageNumber, layout)
+      if (!referenceDisplaySize?.correctedWidth || !referenceDisplaySize?.correctedHeight) {
+        return layout
+      }
+
+      const cacheKey = buildLibraryLayoutCacheKey({
+        fitMode,
+        containerSize: canvasSize,
+        referenceDisplaySize,
+        viewerRotationKey,
+        slotPageNumber,
+        viewRotation: layout.viewerRotation ?? 0,
+      })
+
+      return getCachedLibraryPageLayout(libraryLayoutCacheRef.current, cacheKey, layout)
     },
     [
       canvasSize,
@@ -236,6 +241,7 @@ export default function PdfViewer({
       pageSize,
       pageSizesVersion,
       referenceDisplaySize,
+      viewerRotationKey,
     ],
   )
   const hasTiming = Boolean(practiceContext?.session?.timing?.timingMap)
