@@ -4,10 +4,13 @@ import 'react-pdf/dist/Page/TextLayer.css'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import '../pdf/setupPdfWorker.js'
 import useElementSize from '../hooks/useElementSize.js'
+import useStableElementSize from '../hooks/useStableElementSize.js'
 import usePdfViewerGeometry from '../hooks/usePdfViewerGeometry.js'
 import useAnnotations from '../hooks/useAnnotations.js'
 import useAnnotationPersistence from '../hooks/useAnnotationPersistence.js'
 import { resolvePdfPageLayout, PRACTICE_CANVAS_PADDING } from '../utils/pdfFit.js'
+import { upsertPdfPageSize, arePdfPageSizesEqual } from '../utils/pdfPageSizeCache.js'
+import { getCachedLibraryPageLayout } from '../utils/pdfViewerLayoutCache.js'
 import { resetPdfCanvasScroll } from '../utils/pdfViewerScroll.js'
 import { ANNOTATION_TOOLS } from './pdf/annotationConstants.js'
 import PdfFullscreen from './pdf/PdfFullscreen.jsx'
@@ -44,8 +47,13 @@ export default function PdfViewer({
   // Score-follow setup lives in Practice; keep PDF column layout identical to Practice embed.
   const showScoreFollowPanel = false
   const canvasRef = useRef(null)
-  const canvasSize = useElementSize(canvasRef)
+  const rawCanvasSize = useElementSize(canvasRef)
+  const canvasSize = useStableElementSize(rawCanvasSize, {
+    enabled: !isPracticeEmbed,
+    resetKey: file,
+  })
   const pageSizesRef = useRef({})
+  const libraryLayoutCacheRef = useRef(new Map())
   const [pageSizesVersion, setPageSizesVersion] = useState(0)
 
   const [fitMode, setFitMode] = useState('page')
@@ -87,10 +95,12 @@ export default function PdfViewer({
       width: page.originalWidth,
       height: page.originalHeight,
     }
-    pageSizesRef.current[page.pageNumber] = size
-    setPageSizesVersion((version) => version + 1)
+    const changed = upsertPdfPageSize(pageSizesRef.current, page.pageNumber, size)
+    if (changed) {
+      setPageSizesVersion((version) => version + 1)
+    }
     if (page.pageNumber === pageNumber) {
-      setPageSize(size)
+      setPageSize((previous) => (arePdfPageSizesEqual(previous, size) ? previous : size))
     }
   }, [pageNumber])
 
@@ -98,6 +108,7 @@ export default function PdfViewer({
     setPageSize(null)
     pageSizesRef.current = {}
     setPageSizesVersion(0)
+    libraryLayoutCacheRef.current.clear()
     clearWarmPages()
   }, [file])
 
@@ -166,9 +177,26 @@ export default function PdfViewer({
     currentPageSize: pageSize,
   })
 
+  useEffect(() => {
+    libraryLayoutCacheRef.current.clear()
+  }, [file, fitMode, viewerRotationKey])
+
+  useEffect(() => {
+    libraryLayoutCacheRef.current.clear()
+  }, [
+    file,
+    referenceDisplaySize?.correctedWidth,
+    referenceDisplaySize?.correctedHeight,
+  ])
+
+  const pageWindowKey = useMemo(() => {
+    const rotationSuffix = viewerRotationKey ? `::${viewerRotationKey}` : ''
+    return `${String(file)}${rotationSuffix}`
+  }, [file, viewerRotationKey])
+
   const resolvePageLayout = useCallback(
-    (slotPageNumber) =>
-      resolvePdfPageLayout({
+    (slotPageNumber) => {
+      const layout = resolvePdfPageLayout({
         fitMode,
         pageNumber,
         slotPageNumber,
@@ -178,7 +206,27 @@ export default function PdfViewer({
         getPageViewRotation,
         canvasPadding: isPracticeEmbed ? PRACTICE_CANVAS_PADDING : undefined,
         referenceDisplaySize,
-      }),
+      })
+
+      if (isPracticeEmbed) {
+        return layout
+      }
+
+      const sourceSize =
+        pageSizesRef.current[slotPageNumber] ??
+        (slotPageNumber === pageNumber ? pageSize : null)
+      const hasSourceSize =
+        Number.isFinite(sourceSize?.width) &&
+        sourceSize.width > 0 &&
+        Number.isFinite(sourceSize?.height) &&
+        sourceSize.height > 0
+
+      if (!hasSourceSize) {
+        return layout
+      }
+
+      return getCachedLibraryPageLayout(libraryLayoutCacheRef.current, slotPageNumber, layout)
+    },
     [
       canvasSize,
       fitMode,
@@ -221,7 +269,7 @@ export default function PdfViewer({
   function renderPageWindow(scoreFollowProps = null) {
     return (
       <PdfPageWindow
-        key={`${String(file)}::${pageSizesVersion}::${viewerRotationKey}`}
+        key={pageWindowKey}
         pageNumber={pageNumber}
         numPages={numPages}
         resolvePageLayout={resolvePageLayout}
@@ -371,6 +419,7 @@ export default function PdfViewer({
           onExportAnnotations={exportAnnotations}
           onImportAnnotations={importAnnotations}
           practiceHud={practiceHud}
+          stabilizeLayout={!isPracticeEmbed}
         />
       )}
     </section>

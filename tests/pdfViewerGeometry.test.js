@@ -52,9 +52,13 @@ describe('library and practice PDF viewer geometry', () => {
     expect(hook).toContain('viewerRotationKey')
   })
 
-  it('Library preview remounts page window when viewer rotations change', () => {
+  it('Library preview remounts page window only when rotations change', () => {
     const viewer = readSrc('components', 'PdfViewer.jsx')
-    expect(viewer).toContain('viewerRotationKey')
+    expect(viewer).toContain('pageWindowKey')
+    expect(viewer).not.toContain('pageSizesVersion}::${viewerRotationKey')
+    expect(viewer).toContain('upsertPdfPageSize')
+    expect(viewer).toContain('useStableElementSize')
+    expect(viewer).toContain('getCachedLibraryPageLayout')
   })
 
   it('upright pages keep zero viewer rotation', () => {

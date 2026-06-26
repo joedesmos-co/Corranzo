@@ -43,6 +43,7 @@ describe('beta onboarding', () => {
     expect(readSrc('components', 'TopBar.jsx')).toContain('CorranzoLogo')
     expect(readSrc('components', 'DemoPieceCard.jsx')).toContain('demo-piece__logo')
     expect(readSrc('features', 'brand', 'corranzoBrand.js')).toContain('corranzo-logo.png')
+    expect(readSrc('features', 'brand', 'corranzoBrand.js')).toContain('site.webmanifest')
     expect(tokens).toContain('--sf-bg-app: #000000')
     expect(tokens).toContain('--sf-font-mono')
     expect(css).toMatch(/\.library-welcome__logo/)

@@ -1,14 +1,16 @@
-import { cloneElement, isValidElement, useCallback, useEffect, useRef, useState } from 'react'
+import { cloneElement, isValidElement, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { isTabletLikeDevice } from '../../features/platform/browserPracticeSupport.js'
 import { Document } from 'react-pdf'
 import '../../pdf/setupPdfWorker.js'
 import useElementSize from '../../hooks/useElementSize.js'
+import useStableElementSize from '../../hooks/useStableElementSize.js'
 import usePdfViewerGeometry from '../../hooks/usePdfViewerGeometry.js'
 import useInactivityHide from '../../hooks/useInactivityHide.js'
 import {
   DEFAULT_CANVAS_PADDING,
   resolvePdfPageLayout,
 } from '../../utils/pdfFit.js'
+import { getCachedLibraryPageLayout } from '../../utils/pdfViewerLayoutCache.js'
 import PdfPageWindow from './PdfPageWindow.jsx'
 import PdfViewerToolbar from './PdfViewerToolbar.jsx'
 
@@ -47,9 +49,15 @@ export default function PdfFullscreen({
   onImportAnnotations,
   scoreFollow,
   practiceHud = null,
+  stabilizeLayout = false,
 }) {
   const containerRef = useRef(null)
-  const containerSize = useElementSize(containerRef)
+  const rawContainerSize = useElementSize(containerRef)
+  const containerSize = useStableElementSize(rawContainerSize, {
+    enabled: stabilizeLayout,
+    resetKey: file,
+  })
+  const libraryLayoutCacheRef = useRef(new Map())
   const { visible: autoVisible, notifyActivity } = useInactivityHide(CHROME_IDLE_MS, true)
   const [chromePinned, setChromePinned] = useState(false)
   const chromeVisible = chromePinned || autoVisible
@@ -61,9 +69,26 @@ export default function PdfFullscreen({
     currentPageSize: pageSize,
   })
 
+  useEffect(() => {
+    libraryLayoutCacheRef.current.clear()
+  }, [file, fitMode, viewerRotationKey])
+
+  useEffect(() => {
+    libraryLayoutCacheRef.current.clear()
+  }, [
+    file,
+    referenceDisplaySize?.correctedWidth,
+    referenceDisplaySize?.correctedHeight,
+  ])
+
+  const pageWindowKey = useMemo(() => {
+    const rotationSuffix = viewerRotationKey ? `::${viewerRotationKey}` : ''
+    return `${String(file)}${rotationSuffix}`
+  }, [file, viewerRotationKey])
+
   const resolvePageLayout = useCallback(
-    (slotPageNumber) =>
-      resolvePdfPageLayout({
+    (slotPageNumber) => {
+      const layout = resolvePdfPageLayout({
         fitMode: fitMode ?? 'page',
         pageNumber,
         slotPageNumber,
@@ -73,7 +98,27 @@ export default function PdfFullscreen({
         getPageViewRotation,
         canvasPadding: DEFAULT_CANVAS_PADDING,
         referenceDisplaySize,
-      }),
+      })
+
+      if (!stabilizeLayout) {
+        return layout
+      }
+
+      const sourceSize =
+        pageSizesRef?.current?.[slotPageNumber] ??
+        (slotPageNumber === pageNumber ? pageSize : null)
+      const hasSourceSize =
+        Number.isFinite(sourceSize?.width) &&
+        sourceSize.width > 0 &&
+        Number.isFinite(sourceSize?.height) &&
+        sourceSize.height > 0
+
+      if (!hasSourceSize) {
+        return layout
+      }
+
+      return getCachedLibraryPageLayout(libraryLayoutCacheRef.current, slotPageNumber, layout)
+    },
     [
       containerSize,
       fitMode,
@@ -83,6 +128,7 @@ export default function PdfFullscreen({
       pageSizesRef,
       pageSizesVersion,
       referenceDisplaySize,
+      stabilizeLayout,
     ],
   )
 
@@ -203,7 +249,7 @@ export default function PdfFullscreen({
           error={<p className="pdf-fullscreen__status">Could not load PDF.</p>}
         >
           <PdfPageWindow
-            key={`${String(file)}::${pageSizesVersion}::${viewerRotationKey}`}
+            key={pageWindowKey}
             pageNumber={pageNumber}
             numPages={numPages}
             resolvePageLayout={resolvePageLayout}

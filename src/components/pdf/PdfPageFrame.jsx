@@ -104,22 +104,24 @@ function PdfPageFrame({
       }
     : null
 
+  const frameBoxStyle =
+    frameDisplayWidth && frameDisplayHeight
+      ? {
+          width: frameDisplayWidth,
+          height: frameDisplayHeight,
+          flexShrink: 0,
+        }
+      : frameDisplayWidth
+        ? { width: frameDisplayWidth, flexShrink: 0 }
+        : frameDisplayHeight
+          ? { height: frameDisplayHeight, flexShrink: 0 }
+          : undefined
+
   return (
     <div
       className={`pdf-page-frame${viewRotation ? ` pdf-page-frame--rot-${viewRotation}` : ''}`}
       ref={frameRef}
-      style={
-        frameDisplayWidth
-          ? {
-              minWidth: frameDisplayWidth,
-              minHeight:
-                frameDisplayHeight ??
-                (overlayLayout?.height > 0 ? overlayLayout.height : undefined),
-            }
-          : frameDisplayHeight
-            ? { minHeight: frameDisplayHeight }
-            : undefined
-      }
+      style={frameBoxStyle}
     >
       <div
         className="pdf-page-rotator__inner"

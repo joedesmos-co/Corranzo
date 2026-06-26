@@ -5,9 +5,8 @@ const STATIC_EXACT = new Set([
   '/ads.txt',
   '/robots.txt',
   '/sitemap.xml',
-  '/favicon.svg',
   '/corranzo-logo.png',
-  '/icons.svg',
+  '/site.webmanifest',
 ])
 
 const STATIC_PREFIXES = ['/assets/', '/fixtures/']

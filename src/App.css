@@ -1557,11 +1557,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .pdf-page-rotator__inner {
   position: relative;
   transform-origin: center center;
+  flex-shrink: 0;
 }
 
 .pdf-viewer-section--library .pdf-canvas--fit-width,
