@@ -391,10 +391,32 @@ describe('piano instrument — release, dispose, labels', () => {
     expect(PIANO_SAMPLE_URLS.A0).toBeTruthy()
     expect(PIANO_SAMPLE_URLS.C8).toBeTruthy()
     expect(PIANO_SAMPLE_URLS.C4).toBe('C4.mp3')
-    expect(PIANO_SAMPLE_URLS['C#4']).toBe('Ds4.mp3')
+    // The Salamander recordings are at A, C, D# and F#. The key MUST be the
+    // sample's true pitch (D#4 → Ds4.mp3), or Tone.Sampler resamples notes off
+    // pitch and the piano sounds detuned.
+    expect(PIANO_SAMPLE_URLS['D#4']).toBe('Ds4.mp3')
     expect(PIANO_SAMPLE_URLS['F#4']).toBe('Fs4.mp3')
+    expect(PIANO_SAMPLE_URLS['C#4']).toBeUndefined() // never mislabel D# as C#
     expect(Object.keys(PIANO_SAMPLE_URLS).length).toBeGreaterThanOrEqual(28)
     expect(Object.keys(PIANO_SAMPLE_URLS).length).toBeLessThanOrEqual(35)
+  })
+
+  it('every sample key pitch matches its filename pitch (no detuning)', () => {
+    // Filenames encode the recorded pitch: A0.mp3, Ds4.mp3 (=D#4), Fs1.mp3 (=F#1).
+    // The map key must equal that pitch exactly so playback is in tune.
+    const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+    const noteToMidi = (name) => {
+      const [, letter, octave] = name.match(/^([A-G]#?)(-?\d+)$/)
+      return (parseInt(octave, 10) + 1) * 12 + NOTE_NAMES.indexOf(letter)
+    }
+    const fileToMidi = (file) => {
+      // "Ds4.mp3" → "D#4", "Fs1.mp3" → "F#1", "A0.mp3" → "A0".
+      const base = file.replace(/\.mp3$/, '').replace('s', '#')
+      return noteToMidi(base)
+    }
+    for (const [key, file] of Object.entries(PIANO_SAMPLE_URLS)) {
+      expect(noteToMidi(key)).toBe(fileToMidi(file))
+    }
   })
 
   it('sample map keeps every chromatic note within two semitones of a recording', () => {

@@ -2,6 +2,7 @@ import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpoin
 import WaitForYouMatchSettingsPanel from './WaitForYouMatchSettingsPanel.jsx'
 import ScoreFollowControls from '../pdf/ScoreFollowControls.jsx'
 import CalibrationDebugPanel from './CalibrationDebugPanel.jsx'
+import ScoreFollowApproximateHint from './ScoreFollowApproximateHint.jsx'
 
 export default function PracticeSetupPanel({ session, scoreFollow, isDemoPiece }) {
   const measureBounds = session.measure?.bounds
@@ -12,11 +13,7 @@ export default function PracticeSetupPanel({ session, scoreFollow, isDemoPiece }
         <h3 className="practice-section__title practice-section__title--static">
           Score follow
         </h3>
-        {scoreFollow?.followApproximateLabel ? (
-          <p className="score-follow-setup-status score-follow-setup-status--hint" role="status">
-            {scoreFollow.followApproximateLabel}
-          </p>
-        ) : null}
+        <ScoreFollowApproximateHint label={scoreFollow?.followApproximateLabel} />
         {scoreFollow && (
           <ScoreFollowControls
             hasPdf

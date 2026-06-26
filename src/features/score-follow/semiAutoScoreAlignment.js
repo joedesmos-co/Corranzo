@@ -26,6 +26,12 @@ import { detectStaffLineSystems, detectSystemBarlinePositions, buildStaffDetecti
 import { validateAutoAlignResult } from './autoAlignValidation.js'
 import { collectMeasureDefaultXHints } from './musicxmlLayoutAnchors.js'
 import { clearPdfAnalysisCache, getPageInkRatio, renderPdfPageImageData } from './pdfPageAnalysis.js'
+import {
+  applyOrientationConfidencePenalty,
+  normalizeImageDataOrientation,
+  rejectTinySystems,
+  summarizePageOrientations,
+} from './pageOrientation.js'
 import { calibrateScoreAnchors } from './smartScoreCalibration.js'
 import {
   assessLayoutConfidence,
@@ -740,30 +746,47 @@ export async function analyzeSemiAutoScoreSetup({
   }
 
   const renderedPages = []
+  const pageOrientations = []
   let inkPages = 0
 
   for (let page = 1; page <= numPages; page += 1) {
     onProgress?.(((page - 1) / numPages) * 0.82, `Scanning page ${page} of ${numPages}…`)
     const rendered = await renderPage(pdfSource, page)
-    const ink = getPageInkRatio(rendered.imageData)
+    // Correct page orientation BEFORE any staff detection: a sideways-scanned
+    // page has vertical staff lines that would otherwise yield tiny fake systems.
+    // Upright pages return the same bitmap, so clean scores are unchanged.
+    const oriented = normalizeImageDataOrientation(rendered.imageData)
+    const ink = getPageInkRatio(oriented.imageData)
     if (ink < 0.006) {
       continue
     }
     inkPages += 1
-    renderedPages.push({ page, imageData: rendered.imageData })
+    renderedPages.push({ page, imageData: oriented.imageData })
+    pageOrientations.push({
+      page,
+      rotation: oriented.rotation,
+      uncertain: oriented.uncertain,
+      confidence: oriented.confidence,
+    })
   }
+
+  const orientation = summarizePageOrientations(pageOrientations)
 
   onProgress?.(0.9, 'Finding staff systems…')
 
   const systemCountHint = systemCountHintFromMusicXml(measureNumbers, timingMap)
   const stavesPerSystem = getStavesPerSystem(timingMap)
   const {
-    entries: systemEntries,
+    entries: detectedSystemEntries,
     pageStages,
     overallStage,
     reconciled,
     expectedSystemCount,
   } = collectSystemEntriesForPages(renderedPages, { systemCountHint, stavesPerSystem })
+
+  // Reject impossible systems with an extremely tiny y-height (row-noise slivers,
+  // e.g. residue from an imperfectly de-rotated page) so they never become anchors.
+  const systemEntries = rejectTinySystems(detectedSystemEntries)
 
   // Truly last resort: not a single inked page yielded even one band. Only here
   // do we ask the user to mark system starts (concise fallback copy lives in UI).
@@ -822,7 +845,7 @@ export async function analyzeSemiAutoScoreSetup({
   })
 
   const systemsPerPage = inkPages > 0 ? systemEntries.length / inkPages : systemEntries.length
-  const confidence = scoreSemiAutoConfidence({
+  const baseConfidence = scoreSemiAutoConfidence({
     measureCount: measureNumbers.length,
     anchorCount: proposedAnchors.length,
     systemCount: systemEntries.length,
@@ -832,6 +855,9 @@ export async function analyzeSemiAutoScoreSetup({
     stage: overallStage,
     systemCountHint,
   })
+  // A rotated or orientation-uncertain page leaves some residual risk; reflect it.
+  // No-op for upright pages, so clean scores keep their confidence exactly.
+  const confidence = applyOrientationConfidencePenalty(baseConfidence, orientation)
 
   // A failed strict validation no longer blocks the cursor — geometric/tolerant
   // results are intentionally approximate. Confidence alone gates auto-apply.
@@ -922,6 +948,7 @@ export async function analyzeSemiAutoScoreSetup({
       proposedAnchors,
       supplementalMeasureAnchors,
       smartCalibration: calibration.report,
+      orientation,
       confidence,
       lowConfidence,
       approximate,

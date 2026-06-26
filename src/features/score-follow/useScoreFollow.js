@@ -825,6 +825,12 @@ export default function useScoreFollow({
     setCalibrationDebugSnapshot(null)
     setShowCalibrationOverlay(CALIBRATION_OVERLAY_DEFAULT_VISIBLE)
     setDemoBundledStatus({ loading: false, applied: false, error: null })
+    // Clear any stale setup status/warning from the previous score or PDF. Without
+    // this, a "does not match the PDF" warning (or a failed/needs-setup banner)
+    // from an earlier piece lingers on a freshly loaded, valid one until its own
+    // auto-setup finishes. Reset to idle; the auto-setup effect re-derives status.
+    setSemiAutoSetup(idleSemiAutoSetupState())
+    setSetupStatus({ phase: 'idle', message: '' })
   }, [autoSetupKey])
 
   useEffect(() => {

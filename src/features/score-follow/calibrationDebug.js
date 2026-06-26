@@ -30,9 +30,21 @@ function summarizeAnchors(anchors = []) {
 }
 
 /** Collect human-readable warnings and fallback notes from calibration artifacts. */
-export function collectCalibrationWarnings({ debugReport, smartCalibration } = {}) {
+export function collectCalibrationWarnings({ debugReport, smartCalibration, orientation } = {}) {
   const warnings = []
 
+  if (orientation?.anyRotated) {
+    warnings.push({
+      code: 'page-rotated',
+      message: `Detected a rotated page (≈${orientation.maxRotation}°); corrected before detection.`,
+    })
+  }
+  if (orientation?.anyUncertain) {
+    warnings.push({
+      code: 'orientation-uncertain',
+      message: 'Page orientation was uncertain; confidence lowered.',
+    })
+  }
   if (debugReport?.layoutMismatch) {
     warnings.push({
       code: 'layout-mismatch',
@@ -89,6 +101,7 @@ export function collectCalibrationWarnings({ debugReport, smartCalibration } = {
 export function buildCalibrationDebugSnapshot({
   debugReport = null,
   smartCalibration = null,
+  orientation = null,
   proposedAnchors = [],
   supplementalMeasureAnchors = [],
   warnings = null,
@@ -98,12 +111,13 @@ export function buildCalibrationDebugSnapshot({
   }
 
   const mergedWarnings =
-    warnings ?? collectCalibrationWarnings({ debugReport, smartCalibration })
+    warnings ?? collectCalibrationWarnings({ debugReport, smartCalibration, orientation })
 
   return {
     capturedAt: new Date().toISOString(),
     debugReport,
     smartCalibration,
+    orientation,
     anchorSummary: summarizeAnchors([...proposedAnchors, ...supplementalMeasureAnchors]),
     warnings: mergedWarnings,
     fallbacks: {
@@ -125,6 +139,7 @@ export function buildCalibrationDebugSnapshotFromPreview(preview) {
   return buildCalibrationDebugSnapshot({
     debugReport: preview.debugReport ?? null,
     smartCalibration: preview.smartCalibration ?? null,
+    orientation: preview.orientation ?? null,
     proposedAnchors: preview.proposedAnchors ?? [],
     supplementalMeasureAnchors: preview.supplementalMeasureAnchors ?? [],
   })
@@ -243,6 +258,7 @@ export function buildCalibrationExportReport({
     perPageConfidence: smart?.perPageConfidence ?? debug?.perPage ?? [],
     perSystemConfidence: smart?.perSystemConfidence ?? [],
     pageLayout: smart?.pageLayout ?? [],
+    orientation: snapshot?.orientation ?? null,
     systemBounds: debug?.systems ?? [],
     inkBounds: (debug?.systems ?? []).map((system) => ({
       index: system.index,

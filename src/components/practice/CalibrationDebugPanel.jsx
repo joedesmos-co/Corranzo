@@ -38,6 +38,10 @@ export default function CalibrationDebugPanel({
   const smart = snapshot.smartCalibration ?? {}
   const debug = snapshot.debugReport ?? {}
   const warnings = snapshot.warnings ?? []
+  const orientation = snapshot.orientation ?? null
+  const orientationValue = orientation
+    ? `${orientation.maxRotation ?? 0}°${orientation.anyUncertain ? ' (uncertain)' : ''}`
+    : null
 
   function handleExport() {
     const report = buildCalibrationExportReport({
@@ -59,6 +63,7 @@ export default function CalibrationDebugPanel({
         <Metric label="Calibration time" value={smart.calibrationMs != null ? `${smart.calibrationMs} ms` : null} />
         <Metric label="Allocation mode" value={debug.allocationMode} />
         <Metric label="Stage" value={debug.stage} />
+        <Metric label="Page rotation" value={orientationValue} />
       </dl>
 
       {smart.perPageConfidence?.length > 0 && (

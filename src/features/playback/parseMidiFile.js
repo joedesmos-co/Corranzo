@@ -18,8 +18,37 @@ function averageMidiPitch(track) {
   return sum / track.notes.length
 }
 
+/** Piano in common English / non-English / technical spellings. */
+const PIANO_NAME_PATTERN = /piano|keyboard|grand|acoustic|klavier|clavier|pianoforte|fl(ü|ue?)gel/i
+
 function looksLikePianoTrackName(name) {
-  return /piano|keyboard|grand|acoustic/i.test(name ?? '')
+  return PIANO_NAME_PATTERN.test(name ?? '')
+}
+
+const HAND_NAMES = new Set(['Left hand', 'Right hand'])
+
+/**
+ * Replace technical / non-English piano instrument names (e.g. "Klavier 1",
+ * "Pianoforte", "Flügel") with friendly "Piano N" labels — the fallback when a
+ * hand could not be inferred. Tracks already resolved to a specific hand are
+ * left untouched, and non-piano instruments are never renamed.
+ */
+export function friendlyPianoLabels(tracks) {
+  const pianoTracks = tracks.filter(
+    (track) => !HAND_NAMES.has(track.name) && looksLikePianoTrackName(track.name),
+  )
+  if (pianoTracks.length === 0) {
+    return tracks
+  }
+  const numbered = pianoTracks.length > 1
+  let counter = 0
+  return tracks.map((track) => {
+    if (HAND_NAMES.has(track.name) || !looksLikePianoTrackName(track.name)) {
+      return track
+    }
+    counter += 1
+    return { ...track, name: numbered ? `Piano ${counter}` : 'Piano' }
+  })
 }
 
 /** Names that carry no hand info (Mutopia MIDI, music21 exports, DAW defaults). */
@@ -86,7 +115,10 @@ export async function parseMidiFile(arrayBuffer) {
     muted: false,
   }))
 
-  const tracks = labelHandTracks(midi.tracks, summaryTracks)
+  // Infer Left/Right hand for a 2-track piano score; otherwise normalize any
+  // remaining technical piano names (e.g. "Klavier 1") to friendly "Piano N".
+  const handed = labelHandTracks(midi.tracks, summaryTracks)
+  const tracks = friendlyPianoLabels(handed)
 
   return {
     midi,

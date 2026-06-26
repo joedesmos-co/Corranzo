@@ -13,7 +13,7 @@ export default function PracticeFilesSummary({
     <div className="practice-files" aria-label="Loaded files">
       <div className={`practice-files__item${pdfFileName ? ' practice-files__item--ok' : ''}`}>
         <span className="practice-files__label">Sheet music (PDF)</span>
-        <span className="practice-files__value">
+        <span className="practice-files__value" title={pdfFileName || undefined}>
           {pdfFileName || 'Not loaded — open from Library'}
         </span>
         {!pdfFileName && (
@@ -29,7 +29,10 @@ export default function PracticeFilesSummary({
             provide this; MIDI is playback only.
           </PracticeHelpTip>
         </span>
-        <span className="practice-files__value">
+        <span
+          className="practice-files__value"
+          title={hasMusicXml ? timingFileName || undefined : undefined}
+        >
           {timingLoading
             ? 'Loading…'
             : hasMusicXml
@@ -55,7 +58,10 @@ export default function PracticeFilesSummary({
             or Wait For You.
           </PracticeHelpTip>
         </span>
-        <span className="practice-files__value">
+        <span
+          className="practice-files__value"
+          title={hasMidi ? playbackFileName || undefined : undefined}
+        >
           {hasMidi ? playbackFileName || 'Loaded' : 'Optional — add from Library'}
         </span>
         {!hasMidi && (

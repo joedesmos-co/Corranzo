@@ -44,38 +44,45 @@ export {
 export const DEFAULT_PIANO_SAMPLE_BASE_URL = 'https://tonejs.github.io/audio/salamander/'
 
 /**
- * Salamander "lite" map: minor-third spacing (A, C, C#, F# per octave).
- * Every played note is at most ~2 semitones from a real recording — better
- * fidelity than a sparser map, while still lazy-loaded (not in the JS bundle).
+ * Salamander "lite" map: minor-third spacing (A, C, D#, F# per octave).
+ *
+ * The recorded sample pitches in the Salamander set are A, C, D# (`Ds`) and F#
+ * (`Fs`). The KEY of each entry must be the sample's TRUE pitch, because
+ * Tone.Sampler pitch-shifts every played note from its nearest key. A previous
+ * map mislabeled the D# recordings (`Ds*.mp3`) as `C#`, so a quarter of the
+ * keyboard was resampled up to ~2 semitones off-pitch — the piano sounded
+ * detuned. Keys now match the filenames (`D#n` → `Dsn.mp3`), so playback is in
+ * tune again. Every played note is still within ~1.5 semitones of a recording,
+ * and the set stays lazy-loaded (not in the JS bundle).
  */
 export const PIANO_SAMPLE_URLS = {
   A0: 'A0.mp3',
   C1: 'C1.mp3',
-  'C#1': 'Ds1.mp3',
+  'D#1': 'Ds1.mp3',
   'F#1': 'Fs1.mp3',
   A1: 'A1.mp3',
   C2: 'C2.mp3',
-  'C#2': 'Ds2.mp3',
+  'D#2': 'Ds2.mp3',
   'F#2': 'Fs2.mp3',
   A2: 'A2.mp3',
   C3: 'C3.mp3',
-  'C#3': 'Ds3.mp3',
+  'D#3': 'Ds3.mp3',
   'F#3': 'Fs3.mp3',
   A3: 'A3.mp3',
   C4: 'C4.mp3',
-  'C#4': 'Ds4.mp3',
+  'D#4': 'Ds4.mp3',
   'F#4': 'Fs4.mp3',
   A4: 'A4.mp3',
   C5: 'C5.mp3',
-  'C#5': 'Ds5.mp3',
+  'D#5': 'Ds5.mp3',
   'F#5': 'Fs5.mp3',
   A5: 'A5.mp3',
   C6: 'C6.mp3',
-  'C#6': 'Ds6.mp3',
+  'D#6': 'Ds6.mp3',
   'F#6': 'Fs6.mp3',
   A6: 'A6.mp3',
   C7: 'C7.mp3',
-  'C#7': 'Ds7.mp3',
+  'D#7': 'Ds7.mp3',
   'F#7': 'Fs7.mp3',
   A7: 'A7.mp3',
   C8: 'C8.mp3',

@@ -219,6 +219,18 @@
   font-size: 0.9rem;
 }
 
+/* Approximate-cursor hint: shown briefly, then quietly fades out (the timing is
+   driven by ScoreFollowApproximateHint; this only animates the fade). */
+.score-follow-approximate-hint {
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.score-follow-approximate-hint--dismissed {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .score-follow-setup-status--failed {
   border-color: rgba(250, 204, 21, 0.35);
   color: #fde68a;
@@ -296,12 +308,16 @@
   background: #152238;
   border: 1px solid #243552;
   border-radius: 12px;
+  /* In a constrained sidebar, allow this flex child to shrink so long, unbroken
+     filenames truncate (ellipsis) instead of forcing the panel wider. */
+  min-width: 0;
 }
 
 .practice-files__item {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
 }
 
 .practice-files__item--ok .practice-files__value {
