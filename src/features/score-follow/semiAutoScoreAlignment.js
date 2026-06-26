@@ -25,6 +25,7 @@ import { detectStaffLineSystems, detectSystemBarlinePositions, buildStaffDetecti
 import { validateAutoAlignResult } from './autoAlignValidation.js'
 import { collectMeasureDefaultXHints } from './musicxmlLayoutAnchors.js'
 import { clearPdfAnalysisCache, getPageInkRatio, renderPdfPageImageData } from './pdfPageAnalysis.js'
+import { calibrateScoreAnchors } from './smartScoreCalibration.js'
 import {
   assessLayoutConfidence,
   detectLayoutMismatch,
@@ -777,7 +778,20 @@ export async function analyzeSemiAutoScoreSetup({
   // One canonical anchor per written measure drives the cursor (AUTO_MEASURE
   // outranks the AUTO_SYSTEM start/end spans during dedupe), so playback glides
   // measure-by-measure instead of stalling then jumping across a whole system.
-  const supplementalMeasureAnchors = buildPerMeasureSystemAnchors(systemEntries, spans, timingMap)
+  //
+  // Smart Calibration 2.0: the original per-measure builder is Strategy A; the
+  // calibrator also runs margin-normalized / offset-compensated / adaptive /
+  // publisher-independent strategies, scores each against detected geometry, and
+  // keeps the most confident — falling back to A on a tie (so clean scores are
+  // unchanged) and whenever nothing beats it.
+  const baselineMeasureAnchors = buildPerMeasureSystemAnchors(systemEntries, spans, timingMap)
+  const calibration = calibrateScoreAnchors({
+    systemEntries,
+    spans,
+    timingMap,
+    baselineAnchors: baselineMeasureAnchors,
+  })
+  const supplementalMeasureAnchors = calibration.anchors
   const systemsByPage = buildSystemsByPage(systemEntries, spans)
 
   const validation = validateAutoAlignResult({
@@ -887,6 +901,7 @@ export async function analyzeSemiAutoScoreSetup({
       spans,
       proposedAnchors,
       supplementalMeasureAnchors,
+      smartCalibration: calibration.report,
       confidence,
       lowConfidence,
       approximate,

@@ -593,6 +593,50 @@ export function systemStartAnchorPosition(system, contentBounds) {
   }
 }
 
+/**
+ * Per-system horizontal ink extent (normalized x). Unlike detectContentBounds
+ * (one bound for the whole page), this scans only the system's own band, so an
+ * offset, narrow, or wide system is measured by ITS real ink — not the page's.
+ * This is what makes Smart Calibration robust to shifted pages, title blocks,
+ * and uneven per-system margins.
+ */
+export function detectSystemInkBounds(imageData, contentBounds, system, options = {}) {
+  const { width, height, data } = imageData
+  const colThreshold = options.columnThreshold ?? 0.04
+  const darkThreshold = options.darkThreshold ?? 200
+  const left0 = Math.max(0, contentBounds?.left ?? 0)
+  const right0 = Math.min(width - 1, contentBounds?.right ?? width - 1)
+  const y0 = Math.max(0, Math.floor((system?.y0 ?? 0) * height))
+  const y1 = Math.min(height - 1, Math.ceil((system?.y1 ?? 1) * height))
+  const bandRows = Math.max(1, y1 - y0 + 1)
+
+  let left = right0
+  let right = left0
+  let found = false
+  for (let x = left0; x <= right0; x += 1) {
+    let dark = 0
+    for (let y = y0; y <= y1; y += 1) {
+      if (isDark(data, (y * width + x) * 4, darkThreshold)) {
+        dark += 1
+      }
+    }
+    if (dark / bandRows > colThreshold) {
+      if (!found) left = x
+      right = x
+      found = true
+    }
+  }
+
+  if (!found || right < left) {
+    return {
+      inkLeft: contentBounds?.x0 ?? 0,
+      inkRight: contentBounds?.x1 ?? 1,
+      found: false,
+    }
+  }
+  return { inkLeft: left / width, inkRight: (right + 1) / width, found: true }
+}
+
 /** Right edge of the system band — pairs with system-start for horizontal cursor sweep. */
 export function systemEndAnchorPosition(system, contentBounds) {
   const inset = 0.05
