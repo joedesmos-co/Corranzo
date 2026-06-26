@@ -59,6 +59,24 @@ describe('pdfFit', () => {
   it('returns empty dimensions when container size is unknown', () => {
     expect(getPageDimensions('page', PAGE, { width: 0, height: 0 })).toEqual({})
   })
+
+  it('bootstraps page layout before source page dimensions are known', () => {
+    const container = { width: 900, height: 700 }
+    const dims = getPageDimensions('page', null, container)
+    expect(dims.height).toBe(700 - 32)
+    expect(dims.displayHeight).toBe(700 - 32)
+    expect(dims.width).toBeUndefined()
+  })
+
+  it('rejects invalid geometry values and falls back safely', () => {
+    const container = { width: 900, height: 700 }
+    const dims = getPageDimensions('page', PAGE, container)
+    expect(Number.isFinite(dims.width)).toBe(true)
+    expect(dims.width).toBeGreaterThan(0)
+    expect(Number.isFinite(dims.displayWidth)).toBe(true)
+    expect(Number.isFinite(dims.displayHeight)).toBe(true)
+    expect(Number.isFinite(dims.scale)).toBe(true)
+  })
 })
 
 describe('pdfViewerScroll', () => {

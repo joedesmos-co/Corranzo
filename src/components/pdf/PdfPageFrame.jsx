@@ -60,8 +60,12 @@ function PdfPageFrame({
   }, [syncOverlayLayout, pageNumber, width, height, scoreFollow?.pageViewRotations])
 
   const viewRotation = scoreFollow?.getPageViewRotation?.(pageNumber) ?? 0
-  const frameDisplayWidth = displayWidth ?? width
-  const frameDisplayHeight = displayHeight ?? height
+  const pageRenderWidth = Number.isFinite(width) && width > 0 ? width : undefined
+  const pageRenderHeight = Number.isFinite(height) && height > 0 ? height : undefined
+  const frameDisplayWidth =
+    Number.isFinite(displayWidth) && displayWidth > 0 ? displayWidth : pageRenderWidth
+  const frameDisplayHeight =
+    Number.isFinite(displayHeight) && displayHeight > 0 ? displayHeight : pageRenderHeight
 
   const handlePageLoadSuccess = useCallback(
     (page) => {
@@ -122,8 +126,8 @@ function PdfPageFrame({
       >
       <PdfPage
         pageNumber={pageNumber}
-        width={width}
-        height={height}
+        width={pageRenderWidth}
+        height={pageRenderHeight}
         onLoadStart={onLoadStart}
         onRenderStart={onRenderStart}
         onRenderSuccess={onRenderSuccess}

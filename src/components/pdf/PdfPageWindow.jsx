@@ -1,4 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import { isRenderablePageLayout } from '../../utils/pdfFit.js'
 import PdfPageFrame from './PdfPageFrame.jsx'
 import { ANNOTATION_TOOLS, resolveAnnotationStrokeStyle } from './annotationConstants.js'
 import {
@@ -120,7 +121,7 @@ function PdfPageWindow({
   )
 
   const activeLayout = resolvePageLayout?.(pageNumber)
-  if (!activeLayout?.width && !activeLayout?.height) {
+  if (!isRenderablePageLayout(activeLayout)) {
     return null
   }
 
@@ -130,7 +131,7 @@ function PdfPageWindow({
         const isActive = slotPage === pageNumber
         const frameProps = isActive ? activePageProps : INACTIVE_FRAME_PROPS
         const layout = resolvePageLayout?.(slotPage)
-        if (!layout?.width && !layout?.height) {
+        if (!isRenderablePageLayout(layout)) {
           return null
         }
         return (

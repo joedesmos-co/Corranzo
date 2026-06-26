@@ -7,7 +7,7 @@ import useInactivityHide from '../../hooks/useInactivityHide.js'
 import {
   computeDocumentDisplayReference,
   DEFAULT_CANVAS_PADDING,
-  getPageDimensions,
+  resolvePdfPageLayout,
 } from '../../utils/pdfFit.js'
 import PdfPageWindow from './PdfPageWindow.jsx'
 import PdfViewerToolbar from './PdfViewerToolbar.jsx'
@@ -65,30 +65,25 @@ export default function PdfFullscreen({
   )
 
   const resolvePageLayout = useCallback(
-    (slotPageNumber) => {
-      const sourceSize =
-        pageSizesRef?.current?.[slotPageNumber] ??
-        (slotPageNumber === pageNumber ? pageSize : null)
-      if (!sourceSize?.width || !sourceSize?.height) {
-        return null
-      }
-
-      const viewRotation = scoreFollow?.getPageViewRotation?.(slotPageNumber) ?? 0
-      return getPageDimensions(
-        fitMode ?? 'page',
-        sourceSize,
+    (slotPageNumber) =>
+      resolvePdfPageLayout({
+        fitMode: fitMode ?? 'page',
+        pageNumber,
+        slotPageNumber,
+        pageSize,
+        pageSizesByPage: pageSizesRef?.current ?? {},
         containerSize,
-        viewRotation,
-        DEFAULT_CANVAS_PADDING,
+        getPageViewRotation: scoreFollow?.getPageViewRotation,
+        canvasPadding: DEFAULT_CANVAS_PADDING,
         referenceDisplaySize,
-      )
-    },
+      }),
     [
       containerSize,
       fitMode,
       pageNumber,
       pageSize,
       pageSizesRef,
+      pageSizesVersion,
       referenceDisplaySize,
       scoreFollow,
     ],

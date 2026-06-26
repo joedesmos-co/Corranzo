@@ -6,7 +6,7 @@ import '../pdf/setupPdfWorker.js'
 import useElementSize from '../hooks/useElementSize.js'
 import useAnnotations from '../hooks/useAnnotations.js'
 import useAnnotationPersistence from '../hooks/useAnnotationPersistence.js'
-import { getPageDimensions, PRACTICE_CANVAS_PADDING, computeDocumentDisplayReference } from '../utils/pdfFit.js'
+import { resolvePdfPageLayout, PRACTICE_CANVAS_PADDING, computeDocumentDisplayReference } from '../utils/pdfFit.js'
 import { resetPdfCanvasScroll } from '../utils/pdfViewerScroll.js'
 import { ANNOTATION_TOOLS } from './pdf/annotationConstants.js'
 import PdfFullscreen from './pdf/PdfFullscreen.jsx'
@@ -87,10 +87,9 @@ export default function PdfViewer({
       height: page.originalHeight,
     }
     pageSizesRef.current[page.pageNumber] = size
+    setPageSizesVersion((version) => version + 1)
     if (page.pageNumber === pageNumber) {
       setPageSize(size)
-    } else {
-      setPageSizesVersion((version) => version + 1)
     }
   }, [pageNumber])
 
@@ -170,30 +169,25 @@ export default function PdfViewer({
   )
 
   const resolvePageLayout = useCallback(
-    (slotPageNumber) => {
-      const sourceSize =
-        pageSizesRef.current[slotPageNumber] ??
-        (slotPageNumber === pageNumber ? pageSize : null)
-      if (!sourceSize?.width || !sourceSize?.height) {
-        return null
-      }
-
-      const viewRotation = scoreFollow?.getPageViewRotation?.(slotPageNumber) ?? 0
-      return getPageDimensions(
+    (slotPageNumber) =>
+      resolvePdfPageLayout({
         fitMode,
-        sourceSize,
-        canvasSize,
-        viewRotation,
-        isPracticeEmbed ? PRACTICE_CANVAS_PADDING : undefined,
+        pageNumber,
+        slotPageNumber,
+        pageSize,
+        pageSizesByPage: pageSizesRef.current,
+        containerSize: canvasSize,
+        getPageViewRotation: scoreFollow?.getPageViewRotation,
+        canvasPadding: isPracticeEmbed ? PRACTICE_CANVAS_PADDING : undefined,
         referenceDisplaySize,
-      )
-    },
+      }),
     [
       canvasSize,
       fitMode,
       isPracticeEmbed,
       pageNumber,
       pageSize,
+      pageSizesVersion,
       referenceDisplaySize,
       scoreFollow,
     ],

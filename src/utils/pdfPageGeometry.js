@@ -132,7 +132,7 @@ export function getCorrectedPageGeometry({
       containerHeight,
       fitMode,
       canvasPadding,
-    }) ?? 1
+    }) ?? null
 
   if (referenceDisplaySize?.correctedWidth && referenceDisplaySize?.correctedHeight) {
     const referenceScale = computeFitScale({
@@ -148,8 +148,14 @@ export function getCorrectedPageGeometry({
     }
   }
 
-  const renderWidth = sourceWidth ? sourceWidth * scale : 0
-  const renderHeight = sourceHeight ? sourceHeight * scale : 0
+  if (!Number.isFinite(scale) || scale <= 0) {
+    scale = null
+  }
+
+  const renderWidth =
+    sourceWidth && scale != null ? sourceWidth * scale : 0
+  const renderHeight =
+    sourceHeight && scale != null ? sourceHeight * scale : 0
   const quarterTurn = isQuarterTurn(viewerRotation)
   const displayWidth = quarterTurn ? renderHeight : renderWidth
   const displayHeight = quarterTurn ? renderWidth : renderHeight

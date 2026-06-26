@@ -5,7 +5,7 @@ import {
   getCorrectedPageSize,
   viewerRotationFromAnalysisRotation,
 } from '../src/utils/pdfPageGeometry.js'
-import { getPageDimensions } from '../src/utils/pdfFit.js'
+import { getPageDimensions, isRenderablePageLayout, resolvePdfPageLayout } from '../src/utils/pdfFit.js'
 import { pageViewRotationsFromOrientation } from '../src/utils/pdfPageViewRotation.js'
 
 const PORTRAIT = { width: 1000, height: 1415 }
@@ -88,5 +88,18 @@ describe('pdfPageGeometry', () => {
         ],
       }),
     ).toEqual({ 1: 90, 2: 270 })
+  })
+
+  it('resolves bootstrap layout before cached source sizes exist', () => {
+    const bootstrap = resolvePdfPageLayout({
+      fitMode: 'page',
+      pageNumber: 1,
+      slotPageNumber: 1,
+      pageSize: null,
+      pageSizesByPage: {},
+      containerSize: CONTAINER,
+    })
+    expect(isRenderablePageLayout(bootstrap)).toBe(true)
+    expect(bootstrap.height).toBe(CONTAINER.height - 32)
   })
 })
