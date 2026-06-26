@@ -65,9 +65,13 @@ export default function PdfViewer({
     resetKey: file,
   })
   const pageSizesRef = useRef({})
+  const nativeRotationsRef = useRef({})
+  const originalSizesRef = useRef({})
   const libraryLayoutCacheRef = useRef(new Map())
   const [pageSizesVersion, setPageSizesVersion] = useState(0)
-  const [pageSizesSnapshot, setPageSizesSnapshot] = useState({})
+  // State mirror (dev geometry report only) so the report reads state, never refs,
+  // during render. Holds raw sizes, native /Rotate, and react-pdf original sizes.
+  const [debugSnapshot, setDebugSnapshot] = useState({ sizes: {}, native: {}, original: {} })
 
   const [fitMode, setFitMode] = useState('page')
   const [pageSize, setPageSize] = useState(null)
@@ -104,18 +108,35 @@ export default function PdfViewer({
   const strokeStyle = getStrokeStyle(activeTool)
 
   const handlePageLoadSuccess = useCallback((page) => {
-    const size = {
+    // We render the RAW page (rotate={0}), so the frame must use the RAW MediaBox
+    // size. page.originalWidth/Height reflect the native /Rotate (which we ignore),
+    // so derive the rotation:0 viewport instead. Capture native /Rotate for debug.
+    let size = { width: page.originalWidth, height: page.originalHeight }
+    let nativeRotation = 0
+    try {
+      nativeRotation = (((page.rotate ?? 0) % 360) + 360) % 360
+      const raw = page.getViewport?.({ scale: 1, rotation: 0 })
+      if (raw?.width > 0 && raw?.height > 0) {
+        size = { width: raw.width, height: raw.height }
+      }
+    } catch {
+      // Fall back to originalWidth/Height if getViewport is unavailable.
+    }
+    nativeRotationsRef.current[page.pageNumber] = nativeRotation
+    originalSizesRef.current[page.pageNumber] = {
       width: page.originalWidth,
       height: page.originalHeight,
     }
     const changed = upsertPdfPageSize(pageSizesRef.current, page.pageNumber, size)
     if (changed) {
       setPageSizesVersion((version) => version + 1)
-      // State mirror of the page-size map (dev geometry report reads this instead
-      // of the ref, so the debug table never accesses a ref during render).
-      if (geometryDebugEnabled) {
-        setPageSizesSnapshot({ ...pageSizesRef.current })
-      }
+    }
+    if (geometryDebugEnabled && (changed || nativeRotation !== 0)) {
+      setDebugSnapshot({
+        sizes: { ...pageSizesRef.current },
+        native: { ...nativeRotationsRef.current },
+        original: { ...originalSizesRef.current },
+      })
     }
     if (page.pageNumber === pageNumber) {
       setPageSize((previous) => (arePdfPageSizesEqual(previous, size) ? previous : size))
@@ -125,8 +146,10 @@ export default function PdfViewer({
   useEffect(() => {
     setPageSize(null)
     pageSizesRef.current = {}
+    nativeRotationsRef.current = {}
+    originalSizesRef.current = {}
     setPageSizesVersion(0)
-    setPageSizesSnapshot({})
+    setDebugSnapshot({ sizes: {}, native: {}, original: {} })
     libraryLayoutCacheRef.current.clear()
     clearWarmPages()
   }, [file])
@@ -275,19 +298,22 @@ export default function PdfViewer({
     }
     return buildPageGeometryReport({
       numPages,
-      pageSizesByPage: pageSizesSnapshot,
+      pageSizesByPage: debugSnapshot.sizes,
       orientation,
       pageViewRotations,
+      nativeRotationsByPage: debugSnapshot.native,
+      originalSizesByPage: debugSnapshot.original,
       containerSize: canvasSize,
       fitMode,
       canvasPadding: isPracticeEmbed ? PRACTICE_CANVAS_PADDING : DEFAULT_CANVAS_PADDING,
       referenceDisplaySize,
+      variant: isPracticeEmbed ? 'practice' : 'library',
     })
   }, [
     geometryDebugEnabled,
     file,
     numPages,
-    pageSizesSnapshot,
+    debugSnapshot,
     orientation,
     pageViewRotations,
     canvasSize,
@@ -297,8 +323,37 @@ export default function PdfViewer({
   ])
 
   const handleCopyGeometryReport = useCallback((report) => {
+    // Augment the computed model with the ACTUAL rendered DOM for every mounted
+    // page slot (frame/canvas client size + the CSS transform actually applied),
+    // so the export reflects what's really on screen, not just theory.
+    const dom = {}
     try {
-      navigator.clipboard?.writeText(JSON.stringify(report, null, 2))
+      canvasRef.current?.querySelectorAll('[data-page]')?.forEach((slot) => {
+        const page = Number(slot.getAttribute('data-page'))
+        if (!page) {
+          return
+        }
+        const frame = slot.querySelector('.pdf-page-frame')
+        const rotator = slot.querySelector('.pdf-page-rotator__inner')
+        const canvas = slot.querySelector('.react-pdf__Page__canvas')
+        dom[page] = {
+          frameClientWidth: frame?.clientWidth ?? null,
+          frameClientHeight: frame?.clientHeight ?? null,
+          canvasClientWidth: canvas?.clientWidth ?? null,
+          canvasClientHeight: canvas?.clientHeight ?? null,
+          cssTransform: rotator ? window.getComputedStyle(rotator).transform : null,
+        }
+      })
+    } catch {
+      // DOM may be unavailable; computed values are still exported.
+    }
+    const enriched = {
+      ...report,
+      capturedAt: new Date().toISOString(),
+      rows: report.rows.map((row) => ({ ...row, dom: dom[row.page] ?? null })),
+    }
+    try {
+      navigator.clipboard?.writeText(JSON.stringify(enriched, null, 2))
     } catch {
       // clipboard may be unavailable; the table is still visible.
     }

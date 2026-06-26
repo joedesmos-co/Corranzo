@@ -5,6 +5,9 @@
  * landscape / tiny portrait" regression. Pure model math — no DOM.
  */
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import {
   correctedOrientationForRecord,
   reconcileDocumentPageOrientations,
@@ -14,6 +17,9 @@ import {
   computeDocumentDisplayReference,
 } from '../src/utils/pdfPageGeometry.js'
 import { getPageDimensions } from '../src/utils/pdfFit.js'
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..')
+const readSrc = (...p) => readFileSync(join(root, 'src', ...p), 'utf8')
 
 function record(page, over = {}) {
   return {
@@ -127,5 +133,52 @@ describe('buildPageGeometryReport (verifiable per-page values)', () => {
     expect(report.rows[0].autoRotation).toBe(90)
     expect(report.rows[0].manualRotation).toBe(180)
     expect(report.rows[0].viewerRotation).toBe(180)
+  })
+
+  it('captures native /Rotate, react-pdf original size, raw source, variant, layout source', () => {
+    // A Preview-rotated page: native /Rotate 270, react-pdf reports the rotated
+    // size (842×595), but Corranzo works from the RAW upright MediaBox (595×842).
+    const report = buildPageGeometryReport({
+      numPages: 1,
+      pageSizesByPage: { 1: { width: 595, height: 842 } },
+      originalSizesByPage: { 1: { width: 842, height: 595 } },
+      nativeRotationsByPage: { 1: 270 },
+      orientation: { pages: [{ page: 1, rotation: 0 }] },
+      pageViewRotations: {},
+      containerSize: { width: 900, height: 700 },
+      fitMode: 'page',
+      canvasPadding: 32,
+      referenceDisplaySize: { correctedWidth: 595, correctedHeight: 842 },
+      variant: 'library',
+    })
+    const row = report.rows[0]
+    expect(row.nativeRotation).toBe(270)
+    expect(row.originalWidth).toBe(842) // react-pdf's native-rotated size
+    expect(row.sourceWidth).toBe(595) // raw upright MediaBox Corranzo uses
+    expect(row.viewerRotation).toBe(0)
+    expect(row.correctedWidth).toBe(595)
+    expect(row.correctedHeight).toBe(842)
+    expect(row.layoutSource).toBe('resolved')
+    expect(report.variant).toBe('library')
+    expect(report.documentReferenceWidth).toBe(595)
+  })
+})
+
+describe('raw-render fix: ignore native /Rotate in analysis and viewer', () => {
+  it('analysis renders the raw page (rotation:0)', () => {
+    const src = readSrc('features', 'score-follow', 'pdfPageAnalysis.js')
+    expect(src).toMatch(/getViewport\(\{ scale: 1, rotation: 0 \}\)/)
+    expect(src).toMatch(/getViewport\(\{ scale, rotation: 0 \}\)/)
+  })
+
+  it('react-pdf Page renders raw via rotate={0}', () => {
+    const src = readSrc('components', 'pdf', 'PdfPage.jsx')
+    expect(src).toMatch(/rotate=\{0\}/)
+  })
+
+  it('viewer uses the raw MediaBox size and captures native rotation', () => {
+    const src = readSrc('components', 'PdfViewer.jsx')
+    expect(src).toMatch(/getViewport\?\.\(\{ scale: 1, rotation: 0 \}\)/)
+    expect(src).toMatch(/nativeRotationsRef/)
   })
 })

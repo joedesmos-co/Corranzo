@@ -28,7 +28,7 @@ export default function PdfGeometryDebugTable({ report, onCopy }) {
       <div className="pdf-geometry-debug__head">
         <strong>Page geometry</strong>
         <span>
-          ref {fmt(reference?.correctedWidth)}×{fmt(reference?.correctedHeight)} ·{' '}
+          {report.variant} · ref {fmt(reference?.correctedWidth)}×{fmt(reference?.correctedHeight)} ·{' '}
           {report.fitMode} · container {fmt(report.containerSize?.width)}×
           {fmt(report.containerSize?.height)}
         </span>
@@ -40,20 +40,27 @@ export default function PdfGeometryDebugTable({ report, onCopy }) {
         <thead>
           <tr>
             <th>pg</th>
+            <th>nativeRot</th>
+            <th>original</th>
             <th>source</th>
             <th>auto</th>
             <th>man</th>
             <th>view</th>
             <th>corrected</th>
-            <th>render</th>
             <th>display</th>
             <th>scale</th>
+            <th>src</th>
           </tr>
         </thead>
         <tbody>
           {report.rows.map((row) => (
             <tr key={row.page}>
               <td>{row.page}</td>
+              <td>{row.nativeRotation}°</td>
+              <td>
+                {fmt(row.originalWidth)}×{fmt(row.originalHeight)}{' '}
+                {orientationLabel(row.originalWidth, row.originalHeight)}
+              </td>
               <td>
                 {fmt(row.sourceWidth)}×{fmt(row.sourceHeight)} {orientationLabel(row.sourceWidth, row.sourceHeight)}
               </td>
@@ -65,13 +72,11 @@ export default function PdfGeometryDebugTable({ report, onCopy }) {
                 {orientationLabel(row.correctedWidth, row.correctedHeight)}
               </td>
               <td>
-                {fmt(row.renderWidth)}×{fmt(row.renderHeight)}
-              </td>
-              <td>
                 {fmt(row.displayWidth)}×{fmt(row.displayHeight)}{' '}
                 {orientationLabel(row.displayWidth, row.displayHeight)}
               </td>
               <td>{row.scale == null ? '—' : row.scale.toFixed(3)}</td>
+              <td>{row.layoutSource === 'resolved' ? '✓' : 'boot'}</td>
             </tr>
           ))}
         </tbody>

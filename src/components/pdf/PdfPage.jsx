@@ -25,6 +25,10 @@ function PdfPage({
     <Page
       pageNumber={pageNumber}
       {...sizeProps}
+      // rotate={0} ignores the PDF's native /Rotate so we always paint the raw
+      // upright pixels. Corranzo's own corrected rotation (from pixel detection)
+      // is applied as a CSS transform on the frame, so we never double-rotate.
+      rotate={0}
       onLoadSuccess={onPageLoadSuccess}
       onRenderSuccess={onRenderSuccess}
       loading={null}

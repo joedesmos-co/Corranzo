@@ -129,14 +129,18 @@ export function buildPageGeometryReport({
   pageSizesByPage = {},
   orientation = null,
   pageViewRotations = {},
+  nativeRotationsByPage = {},
+  originalSizesByPage = {},
   containerSize = { width: 0, height: 0 },
   fitMode = 'page',
   canvasPadding = 0,
   referenceDisplaySize = null,
+  variant = 'unknown',
 } = {}) {
   const rows = []
   for (let page = 1; page <= numPages; page += 1) {
     const source = pageSizesByPage[page] ?? null
+    const original = originalSizesByPage[page] ?? null
     const autoRotation = normalizeViewRotation(
       orientation?.pages?.find((entry) => entry.page === page)?.rotation ?? 0,
     )
@@ -160,6 +164,9 @@ export function buildPageGeometryReport({
 
     rows.push({
       page,
+      nativeRotation: normalizeViewRotation(nativeRotationsByPage[page] ?? 0),
+      originalWidth: original?.width ?? null,
+      originalHeight: original?.height ?? null,
       sourceWidth: source?.width ?? null,
       sourceHeight: source?.height ?? null,
       autoRotation,
@@ -172,13 +179,20 @@ export function buildPageGeometryReport({
       displayWidth: geometry?.displayWidth ?? null,
       displayHeight: geometry?.displayHeight ?? null,
       scale: geometry?.scale ?? null,
+      // 'resolved' once react-pdf has reported the page's real size; otherwise the
+      // frame is still using a container-fit bootstrap layout.
+      layoutSource: source?.width > 0 && source?.height > 0 ? 'resolved' : 'bootstrap',
+      variant,
     })
   }
   return {
     rows,
     referenceDisplaySize: referenceDisplaySize ?? null,
+    documentReferenceWidth: referenceDisplaySize?.correctedWidth ?? null,
+    documentReferenceHeight: referenceDisplaySize?.correctedHeight ?? null,
     fitMode,
     containerSize,
+    variant,
   }
 }
 

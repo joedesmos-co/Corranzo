@@ -63,9 +63,15 @@ export function clearPdfAnalysisCache() {
 export async function renderPdfPageImageData(pdfSource, pageNumber, targetWidth = ANALYSIS_WIDTH) {
   const pdf = await loadPdfDocument(pdfSource)
   const page = await pdf.getPage(pageNumber)
-  const baseViewport = page.getViewport({ scale: 1 })
+  // Render the RAW page (rotation: 0), ignoring the PDF's native /Rotate metadata.
+  // A page rotated only in Preview/Finder stores /Rotate metadata over unchanged
+  // (upright) pixels; honoring it would show the page sideways/upside-down and
+  // line-energy detection can't see a 180° flip. Working from raw pixels keeps
+  // analysis consistent with the viewer (which also renders raw) and lets pixel
+  // detection handle genuinely sideways scans. For a /Rotate 0 PDF this is a no-op.
+  const baseViewport = page.getViewport({ scale: 1, rotation: 0 })
   const scale = targetWidth / baseViewport.width
-  const viewport = page.getViewport({ scale })
+  const viewport = page.getViewport({ scale, rotation: 0 })
 
   const canvas = createAnalysisCanvas(Math.floor(viewport.width), Math.floor(viewport.height))
   const context = canvas.getContext('2d', { willReadFrequently: true })
