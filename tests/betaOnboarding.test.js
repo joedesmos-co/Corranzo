@@ -33,6 +33,18 @@ describe('beta onboarding', () => {
     expect(welcome).toContain('synchronized playback')
     expect(welcome).toContain('score-follow cursor')
     expect(welcome).toContain('library-welcome__summary')
+    expect(welcome).toContain('library-welcome__score-watermark')
+  })
+
+  it('uses distinctive brand polish hooks on home and demo surfaces', () => {
+    const css = readFileSync(join(root, 'src', 'App.css'), 'utf8')
+    const tokens = readFileSync(join(root, 'src', 'styles', 'tokens.css'), 'utf8')
+    expect(readSrc('components', 'TopBar.jsx')).toContain('topbar__mark')
+    expect(readSrc('components', 'DemoPieceCard.jsx')).toContain('demo-piece__note')
+    expect(tokens).toContain('--sf-brand-warm')
+    expect(tokens).toContain('--sf-font-display')
+    expect(css).toMatch(/\.library-welcome__score-watermark/)
+    expect(css).toMatch(/\.demo-piece:hover/)
   })
 
   it('logo/title navigates home from app and legal pages', () => {

@@ -11,6 +11,7 @@ export default function DemoPieceCard({
 
   return (
     <article className={`demo-piece${compact ? ' demo-piece--compact' : ''}`}>
+      <span className="demo-piece__note" aria-hidden="true" />
       <div className="demo-piece__copy">
         <p className="demo-piece__badge">Built-in demo</p>
         <h3 className="demo-piece__title">{DEMO_PIECE.title}</h3>

@@ -32,6 +32,7 @@ export default function TopBar({ activeView, onNavigate, onGoHome, practiceReady
         onClick={handleGoHome}
         aria-label="Corranzo home"
       >
+        <span className="topbar__mark" aria-hidden="true" />
         <span className="topbar__title">Corranzo</span>
         <span className="topbar__beta">
           {BETA_LABEL} <span aria-hidden="true">·</span> v{BETA_VERSION}

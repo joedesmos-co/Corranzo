@@ -62,7 +62,8 @@ button:focus:not(:focus-visible),
     color var(--sf-duration-fast) var(--sf-ease),
     filter var(--sf-duration-fast) var(--sf-ease),
     box-shadow var(--sf-duration-fast) var(--sf-ease),
-    opacity var(--sf-duration-fast) var(--sf-ease);
+    opacity var(--sf-duration-fast) var(--sf-ease),
+    transform var(--sf-duration-fast) var(--sf-ease);
 }
 
 .topbar__nav-btn:focus-visible,

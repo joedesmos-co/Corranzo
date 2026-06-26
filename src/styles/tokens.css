@@ -32,6 +32,17 @@
   --sf-accent-secondary: #3b82c4;
   --sf-accent-green: #2d6a4f;
 
+  /* Brand warmth — score-desk highlights (less generic purple-on-navy) */
+  --sf-brand-warm: #e8c17a;
+  --sf-brand-warm-soft: #f0d9a8;
+  --sf-brand-warm-muted: rgba(232, 193, 122, 0.16);
+  --sf-brand-ink: #c8d8f0;
+  --sf-font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+
+  /* Depth */
+  --sf-shadow-soft: 0 8px 24px rgba(4, 10, 22, 0.28);
+  --sf-shadow-lift: 0 12px 32px rgba(4, 10, 22, 0.36);
+
   /* Spacing */
   --sf-space-xs: 4px;
   --sf-space-sm: 8px;

@@ -19,6 +19,7 @@ export default function LibraryWelcomeCard({
 
   return (
     <section className="library-welcome" aria-labelledby="welcome-heading">
+      <div className="library-welcome__score-watermark" aria-hidden="true" />
       <div className="library-welcome__intro">
         <p className="library-welcome__eyebrow">{BETA_LABEL}</p>
         <h2 id="welcome-heading" className="library-welcome__title">
