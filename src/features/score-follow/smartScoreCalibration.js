@@ -7,6 +7,7 @@ import {
   systemStartAnchorPosition,
   systemEndAnchorPosition,
 } from './detectStaffSystems.js'
+import { enrichSmartCalibrationReport } from './calibrationConfidenceDiagnostics.js'
 
 /**
  * Smart Score Calibration 2.0 — multi-strategy measure alignment.
@@ -472,7 +473,14 @@ export function selectCalibration(geometry, baselineAnchors) {
  * `baselineAnchors` is Strategy A (the existing buildPerMeasureSystemAnchors
  * output), passed in to avoid a circular import and to guarantee A is byte-exact.
  */
-export function calibrateScoreAnchors({ systemEntries, spans, timingMap, baselineAnchors }) {
+export function calibrateScoreAnchors({
+  systemEntries,
+  spans,
+  timingMap,
+  baselineAnchors,
+  pdfPageCount = null,
+  orientation = null,
+}) {
   const startTime = typeof performance !== 'undefined' ? performance.now() : Date.now()
   const geometry = buildCalibrationGeometry(systemEntries, spans, timingMap)
 
@@ -489,23 +497,26 @@ export function calibrateScoreAnchors({ systemEntries, spans, timingMap, baselin
 
   return {
     anchors: best.anchors,
-    report: {
-      active: true,
-      chosenStrategy: best.strategy,
-      chosenStrategyLabel: CALIBRATION_STRATEGY_LABEL[best.strategy],
-      overallConfidence: best.score.overall,
-      perPageConfidence: best.score.perPage,
-      perSystemConfidence: best.score.perSystem,
-      baselineConfidence: baseline.score.overall,
-      improvedOverBaseline: best.strategy !== CALIBRATION_STRATEGY.A,
-      strategyScores: scored.map((s) => ({
-        strategy: s.strategy,
-        label: CALIBRATION_STRATEGY_LABEL[s.strategy],
-        overall: s.score.overall,
-      })),
-      pageLayout,
-      systemCount: geometry.systems.length,
-      calibrationMs: Math.round(elapsedMs * 10) / 10,
-    },
+    report: enrichSmartCalibrationReport(
+      {
+        active: true,
+        chosenStrategy: best.strategy,
+        chosenStrategyLabel: CALIBRATION_STRATEGY_LABEL[best.strategy],
+        overallConfidence: best.score.overall,
+        perPageConfidence: best.score.perPage,
+        perSystemConfidence: best.score.perSystem,
+        baselineConfidence: baseline.score.overall,
+        improvedOverBaseline: best.strategy !== CALIBRATION_STRATEGY.A,
+        strategyScores: scored.map((s) => ({
+          strategy: s.strategy,
+          label: CALIBRATION_STRATEGY_LABEL[s.strategy],
+          overall: s.score.overall,
+        })),
+        pageLayout,
+        systemCount: geometry.systems.length,
+        calibrationMs: Math.round(elapsedMs * 10) / 10,
+      },
+      { pdfPageCount, orientation },
+    ),
   }
 }

@@ -3914,6 +3914,15 @@
   color: #c97a2e;
 }
 
+.calibration-debug-panel__list-item--weak {
+  color: #b45309;
+}
+
+.calibration-debug-panel__list-item--low {
+  color: #c2410c;
+  font-weight: 600;
+}
+
 .calibration-debug-panel__actions {
   display: flex;
   flex-direction: column;

@@ -835,6 +835,8 @@ export async function analyzeSemiAutoScoreSetup({
     spans,
     timingMap,
     baselineAnchors: baselineMeasureAnchors,
+    pdfPageCount: numPages,
+    orientation,
   })
   const supplementalMeasureAnchors = calibration.anchors
   const systemsByPage = buildSystemsByPage(systemEntries, spans)
@@ -967,6 +969,7 @@ export async function analyzeSemiAutoScoreSetup({
       systemCount: systemEntries.length,
       anchorCount: proposedAnchors.length,
       inkPages,
+      pdfPageCount: numPages,
       autoApplyRecommended,
       debugReport,
     },

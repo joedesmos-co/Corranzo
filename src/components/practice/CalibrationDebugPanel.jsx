@@ -59,7 +59,11 @@ export default function CalibrationDebugPanel({
 
   const smart = snapshot.smartCalibration ?? {}
   const debug = snapshot.debugReport ?? {}
+  const coverage = smart.coverage ?? null
   const warnings = snapshot.warnings ?? []
+  const displayOverall =
+    smart.adjustedOverallConfidence ?? smart.overallConfidence ?? debug.confidence
+  const rawOverall = smart.rawOverallConfidence ?? smart.overallConfidence ?? debug.confidence
   const orientation = snapshot.orientation ?? null
   const viewerCorrected = snapshot.viewerCorrectionApplied !== false
   const orientationValue = orientation
@@ -91,8 +95,19 @@ export default function CalibrationDebugPanel({
       <dl className="calibration-debug-panel__grid">
         <Metric
           label="Overall confidence"
-          value={formatConfidence(smart.overallConfidence ?? debug.confidence)}
+          value={formatConfidence(displayOverall)}
         />
+        {Number.isFinite(rawOverall) &&
+          Number.isFinite(displayOverall) &&
+          Math.abs(rawOverall - displayOverall) > 0.02 && (
+            <Metric label="Raw measure-weighted" value={formatConfidence(rawOverall)} />
+          )}
+        {coverage?.pdfPageCount != null && (
+          <Metric
+            label="Pages calibrated"
+            value={`${coverage.calibratedPageCount}/${coverage.pdfPageCount}`}
+          />
+        )}
         <Metric label="Chosen strategy" value={smart.chosenStrategyLabel ?? smart.chosenStrategy} />
         <Metric label="Calibration time" value={smart.calibrationMs != null ? `${smart.calibrationMs} ms` : null} />
         <Metric label="Allocation mode" value={debug.allocationMode} />
@@ -124,12 +139,28 @@ export default function CalibrationDebugPanel({
         </div>
       )}
 
+      {coverage?.missingPages?.length > 0 && (
+        <div className="calibration-debug-panel__section">
+          <h4 className="calibration-debug-panel__subtitle">Missing page calibration</h4>
+          <ul className="calibration-debug-panel__warnings">
+            {coverage.missingPages.map((page) => (
+              <li key={`missing-${page}`}>Page {page} has no system/layout calibration data.</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {smart.perPageConfidence?.length > 0 && (
         <div className="calibration-debug-panel__section">
           <h4 className="calibration-debug-panel__subtitle">Page confidence</h4>
           <ul className="calibration-debug-panel__list">
             {smart.perPageConfidence.map((page) => (
-              <li key={`page-${page.page}`}>
+              <li
+                key={`page-${page.page}`}
+                className={
+                  page.confidence < 0.85 ? 'calibration-debug-panel__list-item--weak' : undefined
+                }
+              >
                 Page {page.page}: {formatConfidence(page.confidence)}
               </li>
             ))}
@@ -142,8 +173,17 @@ export default function CalibrationDebugPanel({
           <h4 className="calibration-debug-panel__subtitle">System confidence</h4>
           <ul className="calibration-debug-panel__list">
             {smart.perSystemConfidence.map((system) => (
-              <li key={`system-${system.index}`}>
-                System {system.index + 1}: {formatConfidence(system.confidence)}
+              <li
+                key={`system-${system.index}`}
+                className={
+                  system.confidence < 0.55
+                    ? 'calibration-debug-panel__list-item--low'
+                    : system.confidence < 0.75
+                      ? 'calibration-debug-panel__list-item--weak'
+                      : undefined
+                }
+              >
+                System {system.index + 1} (p{system.page}): {formatConfidence(system.confidence)}
               </li>
             ))}
           </ul>

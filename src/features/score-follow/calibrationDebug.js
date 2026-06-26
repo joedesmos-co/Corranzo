@@ -1,5 +1,23 @@
 import { BETA_VERSION } from '../beta/betaInfo.js'
 import { CALIBRATION_STRATEGY } from './smartScoreCalibration.js'
+import {
+  analyzeCalibrationCoverage,
+  buildCalibrationCoverageWarnings,
+  CALIBRATION_WEAK_PAGE_THRESHOLD,
+  CALIBRATION_WEAK_SYSTEM_THRESHOLD,
+  enrichSmartCalibrationReport,
+  isWeakConfidencePage,
+  isWeakConfidenceSystem,
+} from './calibrationConfidenceDiagnostics.js'
+
+export {
+  CALIBRATION_WEAK_PAGE_THRESHOLD,
+  CALIBRATION_WEAK_SYSTEM_THRESHOLD,
+  analyzeCalibrationCoverage,
+  enrichSmartCalibrationReport,
+  isWeakConfidencePage,
+  isWeakConfidenceSystem,
+}
 
 /** Systems below this smart-calibration score are highlighted as low-confidence. */
 export const CALIBRATION_LOW_CONFIDENCE_THRESHOLD = 0.55
@@ -111,14 +129,13 @@ export function collectCalibrationWarnings({
       })
     }
   }
-  for (const system of smartCalibration?.perSystemConfidence ?? []) {
-    if (isLowConfidenceSystem(system.confidence)) {
-      warnings.push({
-        code: 'low-system-confidence',
-        message: `System ${system.index} confidence ${round3(system.confidence)}.`,
-      })
-    }
-  }
+
+  const coverage = analyzeCalibrationCoverage({
+    smartCalibration,
+    orientation,
+    pdfPageCount: smartCalibration?.coverage?.pdfPageCount ?? orientation?.pages?.length ?? null,
+  })
+  warnings.push(...buildCalibrationCoverageWarnings(coverage))
 
   return warnings
 }
@@ -134,16 +151,24 @@ export function buildCalibrationDebugSnapshot({
   supplementalMeasureAnchors = [],
   warnings = null,
   setupPhase = null,
+  pdfPageCount = null,
 } = {}) {
   if (!debugReport && !smartCalibration && proposedAnchors.length < 2) {
     return null
   }
 
+  const enrichedSmartCalibration = smartCalibration
+    ? enrichSmartCalibrationReport(smartCalibration, {
+        orientation,
+        pdfPageCount: pdfPageCount ?? debugReport?.pdfPageCount ?? null,
+      })
+    : null
+
   const mergedWarnings =
     warnings ??
     collectCalibrationWarnings({
       debugReport,
-      smartCalibration,
+      smartCalibration: enrichedSmartCalibration,
       orientation,
       pageViewRotations,
       viewerCorrectionApplied,
@@ -152,7 +177,7 @@ export function buildCalibrationDebugSnapshot({
   return {
     capturedAt: new Date().toISOString(),
     debugReport,
-    smartCalibration,
+    smartCalibration: enrichedSmartCalibration,
     orientation,
     pageViewRotations,
     viewerCorrectionApplied:
@@ -199,6 +224,7 @@ export function buildCalibrationDebugSnapshotFromPreview(preview, { pageViewRota
     proposedAnchors: preview.proposedAnchors ?? [],
     supplementalMeasureAnchors: preview.supplementalMeasureAnchors ?? [],
     setupPhase: preview.plausible ? (preview.approximate ? 'approximate' : 'ready') : 'needs-setup',
+    pdfPageCount: preview.pdfPageCount ?? preview.numPages ?? null,
   })
 }
 
@@ -265,6 +291,7 @@ export function normalizeCalibrationOverlayPage(snapshot, pageNumber, anchors = 
         centerY: system.center,
         confidence,
         lowConfidence: isLowConfidenceSystem(confidence),
+        weakConfidence: isWeakConfidenceSystem(confidence),
         measureStart: system.measureStart,
         measureEnd: system.measureEnd,
       }
@@ -317,6 +344,9 @@ export function buildCalibrationExportReport({
 } = {}) {
   const smart = snapshot?.smartCalibration ?? null
   const debug = snapshot?.debugReport ?? null
+  const coverage = smart?.coverage ?? null
+  const displayOverall =
+    smart?.adjustedOverallConfidence ?? smart?.overallConfidence ?? debug?.confidence ?? null
 
   return {
     schema: 'corranzo-calibration-report-v1',
@@ -326,9 +356,13 @@ export function buildCalibrationExportReport({
     pieceName,
     chosenStrategy: smart?.chosenStrategy ?? CALIBRATION_STRATEGY.A,
     chosenStrategyLabel: smart?.chosenStrategyLabel ?? null,
-    overallConfidence: smart?.overallConfidence ?? debug?.confidence ?? null,
+    overallConfidence: displayOverall,
+    rawOverallConfidence:
+      smart?.rawOverallConfidence ?? smart?.overallConfidence ?? debug?.confidence ?? null,
+    adjustedOverallConfidence: smart?.adjustedOverallConfidence ?? null,
     baselineConfidence: smart?.baselineConfidence ?? null,
     calibrationMs: smart?.calibrationMs ?? null,
+    coverage,
     perPageConfidence: smart?.perPageConfidence ?? debug?.perPage ?? [],
     perSystemConfidence: smart?.perSystemConfidence ?? [],
     pageLayout: smart?.pageLayout ?? [],
