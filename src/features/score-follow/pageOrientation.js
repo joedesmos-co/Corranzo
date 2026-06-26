@@ -27,6 +27,94 @@ function isDark(data, index, threshold = 190) {
 /** A bin (row/column) counts as a "line" when it is dark across ≥ this fraction. */
 const LINE_COVERAGE = 0.5
 
+const DEFAULT_TOP_MARGIN_FRAC = 0.14
+const DEFAULT_BOTTOM_MARGIN_FRAC = 0.12
+const DEFAULT_SIDE_MARGIN_FRAC = 0.06
+
+function marginBounds(
+  imageData,
+  {
+    topFrac = DEFAULT_TOP_MARGIN_FRAC,
+    bottomFrac = DEFAULT_BOTTOM_MARGIN_FRAC,
+    leftFrac = DEFAULT_SIDE_MARGIN_FRAC,
+    rightFrac = DEFAULT_SIDE_MARGIN_FRAC,
+  } = {},
+) {
+  const { width = 0, height = 0 } = imageData ?? {}
+  const y0 = Math.floor(height * topFrac)
+  const y1 = Math.max(y0 + 1, Math.floor(height * (1 - bottomFrac)))
+  const x0 = Math.floor(width * leftFrac)
+  const x1 = Math.max(x0 + 1, Math.floor(width * (1 - rightFrac)))
+  return { width, height, x0, x1, y0, y1 }
+}
+
+/** Staff-line energy in the central band, ignoring title/footer margins. */
+export function horizontalLineScoreInBand(imageData, options = {}) {
+  const { width, height, x0, x1, y0, y1 } = marginBounds(imageData, options)
+  const { coverage = LINE_COVERAGE, darkThreshold = 190 } = options
+  if (!width || !height || y1 <= y0) {
+    return horizontalLineScore(imageData, options)
+  }
+
+  const { data } = imageData
+  let score = 0
+  for (let y = y0; y < y1; y += 1) {
+    let dark = 0
+    const span = x1 - x0
+    const rowBase = y * width
+    for (let x = x0; x < x1; x += 1) {
+      if (isDark(data, (rowBase + x) * 4, darkThreshold)) {
+        dark += 1
+      }
+    }
+    const frac = dark / span
+    if (frac >= coverage) {
+      score += frac - coverage
+    }
+  }
+  return score / (y1 - y0)
+}
+
+/** Vertical line energy in the central band (sideways pages). */
+export function verticalLineScoreInBand(imageData, options = {}) {
+  const { width, height, x0, x1, y0, y1 } = marginBounds(imageData, options)
+  const { coverage = LINE_COVERAGE, darkThreshold = 190 } = options
+  if (!width || !height || x1 <= x0) {
+    return verticalLineScore(imageData, options)
+  }
+
+  const { data } = imageData
+  let score = 0
+  const span = y1 - y0
+  for (let x = x0; x < x1; x += 1) {
+    let dark = 0
+    for (let y = y0; y < y1; y += 1) {
+      if (isDark(data, (y * width + x) * 4, darkThreshold)) {
+        dark += 1
+      }
+    }
+    const frac = dark / span
+    if (frac >= coverage) {
+      score += frac - coverage
+    }
+  }
+  return score / (x1 - x0)
+}
+
+function lineScores(imageData, options = {}) {
+  const useBand = options.useMarginMask !== false
+  if (useBand) {
+    return {
+      horizontalScore: horizontalLineScoreInBand(imageData, options),
+      verticalScore: verticalLineScoreInBand(imageData, options),
+    }
+  }
+  return {
+    horizontalScore: horizontalLineScore(imageData, options),
+    verticalScore: verticalLineScore(imageData, options),
+  }
+}
+
 export const PAGE_ROTATION = { NONE: 0, CW90: 90, HALF: 180, CW270: 270 }
 
 /** Energy of long horizontal dark lines (staff lines on an upright page). */
@@ -108,10 +196,10 @@ export function rotateImageData(imageData, degrees) {
  */
 export function detectPageOrientation(
   imageData,
-  { ratio = 1.45, minScore = 0.0005, landscapeRatio = 1.12 } = {},
+  { ratio = 1.45, minScore = 0.0005, landscapeRatio = 1.12, useMarginMask = true, ...rest } = {},
 ) {
-  const horizontalScore = horizontalLineScore(imageData)
-  const verticalScore = verticalLineScore(imageData)
+  const scoreOptions = { useMarginMask, ...rest }
+  const { horizontalScore, verticalScore } = lineScores(imageData, scoreOptions)
   const { width = 0, height = 0 } = imageData ?? {}
   const landscape = width > height * landscapeRatio
   const sidewaysByLines =
@@ -161,6 +249,26 @@ export function detectPageOrientation(
 export function normalizeImageDataOrientation(imageData, options = {}) {
   const detection = detectPageOrientation(imageData, options)
   if (!detection.sideways) {
+    const bandOpts = { useMarginMask: options.useMarginMask !== false, ...options }
+    const uprightScore = horizontalLineScoreInBand(imageData, bandOpts)
+    const flippedScore = horizontalLineScoreInBand(rotateImageData(imageData, 180), bandOpts)
+    const flipMargin = Math.abs(flippedScore - uprightScore)
+    const flipUncertain = flipMargin < 0.1 * Math.max(uprightScore, flippedScore, 1e-9)
+    const needsFlip = !flipUncertain && flippedScore > uprightScore * 1.06
+
+    if (needsFlip) {
+      return {
+        imageData: rotateImageData(imageData, 180),
+        rotation: PAGE_ROTATION.HALF,
+        sideways: false,
+        uncertain: flipUncertain,
+        confidence: detection.confidence,
+        correctionPath: flipUncertain ? 'auto-detect-upright-uncertain' : 'auto-detect-upright-flip',
+        detection,
+        quarterTurnScores: null,
+      }
+    }
+
     return {
       imageData,
       rotation: PAGE_ROTATION.NONE,
@@ -169,13 +277,15 @@ export function normalizeImageDataOrientation(imageData, options = {}) {
       confidence: detection.confidence,
       correctionPath: 'none',
       detection,
+      quarterTurnScores: null,
     }
   }
 
+  const bandOpts = { useMarginMask: options.useMarginMask !== false, ...options }
   const cw = rotateImageData(imageData, 90)
   const ccw = rotateImageData(imageData, 270)
-  const cwScore = horizontalLineScore(cw)
-  const ccwScore = horizontalLineScore(ccw)
+  const cwScore = horizontalLineScoreInBand(cw, bandOpts)
+  const ccwScore = horizontalLineScoreInBand(ccw, bandOpts)
   const useCw = cwScore >= ccwScore
   const best = useCw ? cw : ccw
   const margin = Math.abs(cwScore - ccwScore)
@@ -189,6 +299,7 @@ export function normalizeImageDataOrientation(imageData, options = {}) {
     confidence: detection.confidence,
     correctionPath: detection.uncertain || tieUncertain ? 'auto-detect-uncertain' : 'auto-detect',
     detection,
+    quarterTurnScores: { cw: cwScore, ccw: ccwScore },
   }
 }
 
@@ -238,6 +349,152 @@ export function resolvePageOrientation(imageData, { forcedRotation = null, optio
     return applyPageViewRotation(imageData, forced)
   }
   return normalizeImageDataOrientation(imageData, options)
+}
+
+/** Apply a reconciled viewer rotation from the original source bitmap. */
+export function applyDocumentPageRotation(imageData, rotation) {
+  const normalized = normalizeViewRotationDegrees(rotation)
+  if (normalized === PAGE_ROTATION.NONE) {
+    return normalizeImageDataOrientation(imageData)
+  }
+  return applyPageViewRotation(imageData, normalized)
+}
+
+const DOCUMENT_HIGH_CONFIDENCE = 0.55
+const DOCUMENT_ASPECT_TOLERANCE = 0.03
+
+function aspectRatio(width, height) {
+  if (!width || !height) {
+    return null
+  }
+  return width / height
+}
+
+function sameSourceAspect(pageA, pageB) {
+  const ratioA = aspectRatio(pageA.sourceWidth, pageA.sourceHeight)
+  const ratioB = aspectRatio(pageB.sourceWidth, pageB.sourceHeight)
+  if (ratioA == null || ratioB == null) {
+    return false
+  }
+  return Math.abs(ratioA - ratioB) <= DOCUMENT_ASPECT_TOLERANCE * Math.max(ratioA, ratioB)
+}
+
+function isQuarterTurnRotation(rotation) {
+  const deg = normalizeViewRotationDegrees(rotation)
+  return deg === PAGE_ROTATION.CW90 || deg === PAGE_ROTATION.CW270
+}
+
+function isConfidentUpright(page) {
+  return (
+    normalizeViewRotationDegrees(page.rotation ?? 0) === PAGE_ROTATION.NONE &&
+    !page.uncertain &&
+    !page.detectedSideways &&
+    (page.confidence ?? 1) >= DOCUMENT_HIGH_CONFIDENCE
+  )
+}
+
+function dominantQuarterTurnRotation(pages) {
+  const votes = pages.filter((page) => isQuarterTurnRotation(page.rotation))
+  if (votes.length === 0) {
+    return null
+  }
+
+  const count90 = votes.filter((page) => normalizeViewRotationDegrees(page.rotation) === PAGE_ROTATION.CW90).length
+  const count270 = votes.filter((page) => normalizeViewRotationDegrees(page.rotation) === PAGE_ROTATION.CW270).length
+  if (count90 === count270) {
+    return null
+  }
+  if (count90 + count270 < 2) {
+    return null
+  }
+
+  return count90 > count270 ? PAGE_ROTATION.CW90 : PAGE_ROTATION.CW270
+}
+
+function reconcileAspectGroup(group) {
+  const sorted = [...group].sort((a, b) => a.page - b.page)
+  const dominantQuarter = dominantQuarterTurnRotation(
+    sorted.filter((page) => !page.uncertain && isQuarterTurnRotation(page.rotation)),
+  ) ?? dominantQuarterTurnRotation(sorted.filter((page) => isQuarterTurnRotation(page.rotation)))
+
+  for (let index = 0; index < sorted.length; index += 1) {
+    const page = sorted[index]
+    if (isConfidentUpright(page)) {
+      continue
+    }
+
+    const isFirst = index === 0
+    const isLast = index === sorted.length - 1
+    const neighbor = isFirst ? sorted[1] : isLast ? sorted[sorted.length - 2] : null
+    const neighborQuarter =
+      neighbor && isQuarterTurnRotation(neighbor.rotation) ? normalizeViewRotationDegrees(neighbor.rotation) : null
+
+    const pageQuarter = normalizeViewRotationDegrees(page.rotation ?? 0)
+    const lowConfidence = page.uncertain || (page.confidence ?? 0) < DOCUMENT_HIGH_CONFIDENCE
+
+    if (neighborQuarter != null && sameSourceAspect(page, neighbor) && (isFirst || isLast) && lowConfidence) {
+      if (pageQuarter !== neighborQuarter) {
+        page.rotation = neighborQuarter
+        page.uncertain = false
+        page.correctionPath = 'document-edge-neighbor'
+      }
+      continue
+    }
+
+    if (
+      dominantQuarter != null &&
+      isQuarterTurnRotation(page.rotation) &&
+      pageQuarter !== dominantQuarter &&
+      lowConfidence
+    ) {
+      page.rotation = dominantQuarter
+      page.uncertain = false
+      page.correctionPath = 'document-dominant'
+      continue
+    }
+
+    if (
+      dominantQuarter != null &&
+      neighborQuarter === dominantQuarter &&
+      sameSourceAspect(page, neighbor) &&
+      page.rotation === PAGE_ROTATION.NONE &&
+      (page.uncertain || page.detectedSideways || page.landscape) &&
+      (isFirst || isLast)
+    ) {
+      page.rotation = dominantQuarter
+      page.uncertain = false
+      page.correctionPath = 'document-edge-neighbor'
+    }
+  }
+}
+
+/**
+ * Align per-page auto-detected rotations within a scanned document.
+ * Prefers the dominant quarter-turn among confident pages and uses neighbors
+ * as tie-breakers for uncertain first/last pages with matching source aspect.
+ */
+export function reconcileDocumentPageOrientations(pageRecords = []) {
+  const pages = pageRecords.map((page) => ({ ...page }))
+  if (pages.length < 2) {
+    return pages
+  }
+
+  const groups = new Map()
+  for (const page of pages) {
+    const key = `${page.sourceWidth ?? 0}x${page.sourceHeight ?? 0}`
+    if (!groups.has(key)) {
+      groups.set(key, [])
+    }
+    groups.get(key).push(page)
+  }
+
+  for (const group of groups.values()) {
+    if (group.length >= 2) {
+      reconcileAspectGroup(group)
+    }
+  }
+
+  return pages
 }
 
 /** Minimum normalized band height; anything thinner is an impossible "system". */

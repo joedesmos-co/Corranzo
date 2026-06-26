@@ -27,11 +27,13 @@ import { validateAutoAlignResult } from './autoAlignValidation.js'
 import { collectMeasureDefaultXHints } from './musicxmlLayoutAnchors.js'
 import { clearPdfAnalysisCache, getPageInkRatio, renderPdfPageImageData } from './pdfPageAnalysis.js'
 import {
+  applyDocumentPageRotation,
   applyOrientationConfidencePenalty,
   rejectTinySystems,
   summarizePageOrientations,
   resolvePageOrientation,
   buildPageOrientationRecord,
+  reconcileDocumentPageOrientations,
 } from './pageOrientation.js'
 import { calibrateScoreAnchors } from './smartScoreCalibration.js'
 import {
@@ -747,27 +749,63 @@ export async function analyzeSemiAutoScoreSetup({
     clearPdfAnalysisCache()
   }
 
+  const scannedPages = []
+  for (let page = 1; page <= numPages; page += 1) {
+    onProgress?.(((page - 1) / numPages) * 0.82, `Scanning page ${page} of ${numPages}…`)
+    const rendered = await renderPage(pdfSource, page)
+    scannedPages.push({
+      page,
+      sourceImageData: rendered.imageData,
+      forcedRotation: pageViewRotations?.[page] ?? null,
+    })
+  }
+
+  const preliminary = scannedPages.map(({ page, sourceImageData, forcedRotation }) => {
+    const oriented = resolvePageOrientation(sourceImageData, { forcedRotation })
+    return {
+      page,
+      sourceImageData,
+      forcedRotation,
+      oriented,
+      record: buildPageOrientationRecord(page, sourceImageData, oriented, { forcedRotation }),
+    }
+  })
+
+  const reconciledRecords = reconcileDocumentPageOrientations(
+    preliminary.filter((entry) => !entry.forcedRotation).map((entry) => entry.record),
+  )
+  const reconciledByPage = new Map(reconciledRecords.map((record) => [record.page, record]))
+
   const renderedPages = []
   const pageOrientations = []
   let inkPages = 0
 
-  for (let page = 1; page <= numPages; page += 1) {
-    onProgress?.(((page - 1) / numPages) * 0.82, `Scanning page ${page} of ${numPages}…`)
-    const rendered = await renderPage(pdfSource, page)
-    // Correct page orientation BEFORE any staff detection: a sideways-scanned
-    // page has vertical staff lines that would otherwise yield tiny fake systems.
-    // Upright pages return the same bitmap, so clean scores are unchanged.
-    const forcedRotation = pageViewRotations?.[page] ?? null
-    const oriented = resolvePageOrientation(rendered.imageData, { forcedRotation })
+  for (const entry of preliminary) {
+    let { oriented, record } = entry
+    const reconciled = reconciledByPage.get(entry.page)
+    if (!entry.forcedRotation && reconciled && reconciled.rotation !== record.rotation) {
+      oriented = applyDocumentPageRotation(entry.sourceImageData, reconciled.rotation)
+      record = {
+        ...buildPageOrientationRecord(entry.page, entry.sourceImageData, oriented),
+        correctionPath: reconciled.correctionPath ?? 'document-reconcile',
+        uncertain: reconciled.uncertain,
+      }
+    } else if (!entry.forcedRotation && reconciled) {
+      record = {
+        ...record,
+        rotation: reconciled.rotation,
+        uncertain: reconciled.uncertain,
+        correctionPath: reconciled.correctionPath ?? record.correctionPath,
+      }
+    }
+
     const ink = getPageInkRatio(oriented.imageData)
     if (ink < 0.006) {
       continue
     }
     inkPages += 1
-    renderedPages.push({ page, imageData: oriented.imageData })
-    pageOrientations.push(
-      buildPageOrientationRecord(page, rendered.imageData, oriented, { forcedRotation }),
-    )
+    renderedPages.push({ page: entry.page, imageData: oriented.imageData })
+    pageOrientations.push(record)
   }
 
   const orientation = summarizePageOrientations(pageOrientations)

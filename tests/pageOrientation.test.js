@@ -7,18 +7,23 @@
 import { describe, expect, it } from 'vitest'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import * as F from './helpers/buildXml.js'
-import { cleanPianoPage, renderPagesFromArray } from './helpers/syntheticScore.js'
+import { cleanPianoPage, renderPagesFromArray, winterLikeMixedScanPages } from './helpers/syntheticScore.js'
 import { analyzeSemiAutoScoreSetup } from '../src/features/score-follow/semiAutoScoreAlignment.js'
+import { pageViewRotationsFromOrientation } from '../src/utils/pdfPageViewRotation.js'
 import {
   PAGE_ROTATION,
   applyOrientationConfidencePenalty,
+  buildPageOrientationRecord,
   detectPageOrientation,
   horizontalLineScore,
+  horizontalLineScoreInBand,
   normalizeImageDataOrientation,
+  reconcileDocumentPageOrientations,
   rejectTinySystems,
   rotateImageData,
   summarizePageOrientations,
   verticalLineScore,
+  verticalLineScoreInBand,
 } from '../src/features/score-follow/pageOrientation.js'
 
 function buildTimingMap(measureCount, { breakEvery = null } = {}) {
@@ -74,6 +79,18 @@ describe('line-energy scores', () => {
 
     const sideways = rotateImageData(page, 90)
     expect(verticalLineScore(sideways)).toBeGreaterThan(horizontalLineScore(sideways))
+  })
+
+  it('ignores title/footer bands when scoring staff-line direction', () => {
+    const page = cleanPianoPage({ systems: 3, measuresPerSystem: 4, header: false })
+    const withEdgeText = winterLikeMixedScanPages(1)[0]
+    const sideways = rotateImageData(page, 90)
+    const sidewaysWithText = withEdgeText
+
+    expect(horizontalLineScoreInBand(sideways)).toBeLessThan(verticalLineScoreInBand(sideways))
+    expect(horizontalLineScoreInBand(sidewaysWithText)).toBeLessThan(
+      verticalLineScoreInBand(sidewaysWithText),
+    )
   })
 })
 
@@ -145,6 +162,39 @@ describe('orientation summary + confidence penalty', () => {
   })
 })
 
+describe('document orientation reconciliation', () => {
+  it('aligns uncertain first/last pages to the dominant quarter-turn', () => {
+    const pages = winterLikeMixedScanPages(8)
+    const preliminary = pages.map((imageData, index) => {
+      const page = index + 1
+      const oriented = normalizeImageDataOrientation(imageData)
+      return buildPageOrientationRecord(page, imageData, oriented)
+    })
+
+    const dominantBefore = preliminary[1].rotation
+    const reconciled = reconcileDocumentPageOrientations(preliminary)
+    const dominant = reconciled[1].rotation
+    expect(dominant === PAGE_ROTATION.CW90 || dominant === PAGE_ROTATION.CW270).toBe(true)
+    expect(reconciled.every((page) => page.rotation === dominant)).toBe(true)
+    expect(reconciled[0].rotation).toBe(dominantBefore)
+    expect(reconciled[7].rotation).toBe(dominantBefore)
+  })
+
+  it('exports a consistent viewer rotation map for mixed edge pages', () => {
+    const pages = winterLikeMixedScanPages(8)
+    const reconciled = reconcileDocumentPageOrientations(
+      pages.map((imageData, index) =>
+        buildPageOrientationRecord(index + 1, imageData, normalizeImageDataOrientation(imageData)),
+      ),
+    )
+    const summary = summarizePageOrientations(reconciled)
+    const rotations = pageViewRotationsFromOrientation(summary)
+    const values = Object.values(rotations)
+    expect(values).toHaveLength(8)
+    expect(new Set(values).size).toBe(1)
+  })
+})
+
 describe('end-to-end orientation handling', () => {
   const timingMap = buildTimingMap(12, { breakEvery: 4 })
 
@@ -174,5 +224,24 @@ describe('end-to-end orientation handling', () => {
       // of slivers.
       expect(result.preview.systemCount).toBeLessThanOrEqual(6)
     }
+  })
+
+  it('mixed edge-page scans reconcile to one upright orientation across the document', async () => {
+    const pages = winterLikeMixedScanPages(8)
+    const result = await analyzeSemiAutoScoreSetup({
+      pdfSource: 'synthetic',
+      numPages: 8,
+      timingMap: buildTimingMap(24, { breakEvery: 4 }),
+      renderPage: renderPagesFromArray(pages),
+    })
+
+    expect(result.ok).toBe(true)
+    const rotations = (result.preview.orientation.pages ?? []).map((page) => page.rotation)
+    expect(rotations).toHaveLength(8)
+    expect(new Set(rotations).size).toBe(1)
+    expect(rotations[0]).toBe(rotations[1])
+    expect(rotations[7]).toBe(rotations[1])
+    const viewerRotations = pageViewRotationsFromOrientation(result.preview.orientation)
+    expect(new Set(Object.values(viewerRotations)).size).toBe(1)
   })
 })

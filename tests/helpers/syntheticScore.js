@@ -9,6 +9,8 @@
  * so the detector merges them into one band, as real engraving does).
  */
 
+import { rotateImageData } from '../../src/features/score-follow/pageOrientation.js'
+
 const INK = 24
 const PAGE_BG = 255
 
@@ -74,6 +76,47 @@ function drawHeader(img) {
   for (let line = 0; line < 3; line += 1) {
     hLine(img, Math.floor(img.height * 0.03) + line * 4, cx0, cx1, 60)
   }
+}
+
+/** Footer/page-number text near the bottom margin. */
+function drawFooter(img) {
+  const y = Math.floor(img.height * 0.93)
+  for (let line = 0; line < 2; line += 1) {
+    hLine(img, y + line * 4, Math.floor(img.width * 0.38), Math.floor(img.width * 0.62), 60)
+  }
+}
+
+/** Strong title/footer bands that can bias naive page-level orientation. */
+export function cleanPianoPageWithEdgeText(options = {}) {
+  const img = cleanPianoPage({ ...options, header: false })
+  for (let line = 0; line < 5; line += 1) {
+    hLine(
+      img,
+      Math.floor(img.height * 0.02) + line * 5,
+      Math.floor(img.width * 0.12),
+      Math.floor(img.width * 0.88),
+      40,
+    )
+  }
+  drawFooter(img)
+  return img
+}
+
+/**
+ * Mixed scan orientations like Winter: middle pages scanned one quarter-turn,
+ * first/last scanned the opposite way with extra title/footer text.
+ */
+export function winterLikeMixedScanPages(pageCount = 8) {
+  const middleScan = (page) => rotateImageData(page, 90)
+  const edgeScan = (page) => rotateImageData(page, 270)
+
+  return Array.from({ length: pageCount }, (_, index) => {
+    const edge = index === 0 || index === pageCount - 1
+    const upright = edge
+      ? cleanPianoPageWithEdgeText({ systems: 3, measuresPerSystem: 4 })
+      : cleanPianoPage({ systems: 3, measuresPerSystem: 4, header: false })
+    return edge ? edgeScan(upright) : middleScan(upright)
+  })
 }
 
 /** Scatter noteheads + stems across a system band to mimic dense notation. */
