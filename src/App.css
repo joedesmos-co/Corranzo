@@ -1945,6 +1945,54 @@
   pointer-events: none;
 }
 
+.calibration-debug-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.calibration-debug-overlay__system-bounds {
+  fill: rgba(56, 189, 248, 0.08);
+  stroke: rgba(56, 189, 248, 0.75);
+  stroke-width: 0.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.calibration-debug-overlay__system-bounds--low {
+  fill: rgba(251, 146, 60, 0.18);
+  stroke: rgba(251, 146, 60, 0.95);
+  stroke-dasharray: 1.2 0.8;
+}
+
+.calibration-debug-overlay__ink-bounds {
+  fill: rgba(167, 139, 250, 0.12);
+  stroke: rgba(167, 139, 250, 0.9);
+  stroke-width: 0.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.calibration-debug-overlay__center-line {
+  stroke: rgba(148, 163, 184, 0.55);
+  stroke-width: 0.15;
+  stroke-dasharray: 1.5 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.calibration-debug-overlay__anchor-dot {
+  fill: rgba(52, 211, 153, 0.95);
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 0.15;
+  vector-effect: non-scaling-stroke;
+}
+
+.calibration-debug-overlay__anchor-label {
+  fill: rgba(236, 253, 245, 0.95);
+  font-size: 2.2px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
 .score-follow-overlay__system-band {
   position: absolute;
   box-sizing: border-box;

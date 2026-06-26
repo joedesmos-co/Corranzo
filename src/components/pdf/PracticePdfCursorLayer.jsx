@@ -41,6 +41,8 @@ export function usePracticeScoreFollowOverlayProps() {
     // unless the flag is on AND the user opted into the debug overlay.
     candidateAnchors: scoreFollow.nextGenCandidateAnchors ?? null,
     showCandidateAnchors: Boolean(scoreFollow.showNextGenCandidates),
+    showCalibrationOverlay: scoreFollow.showCalibrationOverlay,
+    calibrationOverlayPage: scoreFollow.calibrationOverlayPage,
   }
 }
 

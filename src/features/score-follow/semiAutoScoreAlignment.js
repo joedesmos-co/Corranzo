@@ -13,6 +13,7 @@ import {
 import {
   detectConservativeStaffSystems,
   detectContentBounds,
+  detectSystemInkBounds,
   detectTolerantStaffSystems,
   estimateSystemBandsFromContent,
   MAX_SYSTEMS_PER_PAGE,
@@ -122,6 +123,10 @@ function buildAutoSetupDebugReport({
       (a) => a.meta?.systemIndex === index && a.meta?.role === 'system-start',
     )
     const endAnchor = lastAnchorByMeasure.get(span.measureEnd)
+    const ink =
+      entry?.imageData && entry?.contentBounds && entry?.system
+        ? detectSystemInkBounds(entry.imageData, entry.contentBounds, entry.system)
+        : null
     return {
       index,
       page: entry?.page ?? null,
@@ -129,6 +134,21 @@ function buildAutoSetupDebugReport({
       y0: entry ? round3(entry.system.y0) : null,
       y1: entry ? round3(entry.system.y1) : null,
       center: entry ? round3(entry.system.center) : null,
+      contentBounds: entry?.contentBounds
+        ? {
+            x0: round3(entry.contentBounds.x0),
+            y0: round3(entry.contentBounds.y0),
+            x1: round3(entry.contentBounds.x1),
+            y1: round3(entry.contentBounds.y1),
+          }
+        : null,
+      inkBounds: ink
+        ? {
+            left: round3(ink.inkLeft),
+            right: round3(ink.inkRight),
+            found: ink.found,
+          }
+        : null,
       measureStart: span.measureStart,
       measureEnd: span.measureEnd,
       measureCount: span.measuresInSpan,

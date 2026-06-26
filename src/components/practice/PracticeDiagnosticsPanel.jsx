@@ -1,12 +1,13 @@
 import { lazy, Suspense } from 'react'
 import PracticeStatusBar from './PracticeStatusBar.jsx'
 import AlignmentDiagnosticsSection from './AlignmentDiagnosticsSection.jsx'
+import CalibrationDebugPanel from './CalibrationDebugPanel.jsx'
 
 const SmokeTestChecklist = import.meta.env.DEV
   ? lazy(() => import('../../dev/SmokeTestChecklist.jsx'))
   : null
 
-export default function PracticeDiagnosticsPanel({ session, scoreFollow }) {
+export default function PracticeDiagnosticsPanel({ session, scoreFollow, pieceName = null }) {
   const { hasMidi, hasMusicXml } = session
   const alignment = session.alignment.diagnostics
 
@@ -100,6 +101,19 @@ export default function PracticeDiagnosticsPanel({ session, scoreFollow }) {
           </div>
         </details>
       )}
+
+      <details className="practice-diagnostics__group">
+        <summary>Calibration debug (beta)</summary>
+        <div className="practice-diagnostics__group-body">
+          <CalibrationDebugPanel
+            snapshot={scoreFollow?.calibrationDebugSnapshot ?? null}
+            pieceName={pieceName ?? session.sources?.playbackFileName ?? null}
+            anchors={scoreFollow?.anchors ?? []}
+            showOverlay={scoreFollow?.showCalibrationOverlay}
+            onShowOverlayChange={scoreFollow?.setShowCalibrationOverlay}
+          />
+        </div>
+      </details>
 
       {import.meta.env.DEV && SmokeTestChecklist && (
         <Suspense fallback={null}>

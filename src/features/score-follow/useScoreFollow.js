@@ -44,6 +44,11 @@ import { buildScoreFollowPrecisionReport } from './scoreFollowPrecisionDiagnosti
 import { isNextGenAlignmentDiagnosticsEnabled } from './nextGenAlignmentFlag.js'
 import { deriveNextGenAlignmentDiagnostics } from './nextGenAlignmentDiagnostics.js'
 import { compareAnchorSets, assessPromotionReadiness } from './anchorComparison.js'
+import {
+  buildCalibrationDebugSnapshotFromPreview,
+  CALIBRATION_OVERLAY_DEFAULT_VISIBLE,
+  normalizeCalibrationOverlayPage,
+} from './calibrationDebug.js'
 import { buildPromotionDecision, resolveActiveAnchorSource } from './anchorPromotion.js'
 import {
   areBundledDemoAnchorsDisabled,
@@ -159,6 +164,10 @@ export default function useScoreFollow({
   // ranges, hints used, stage/confidence). Surfaced via `debug`, not normal UI.
   const [autoSetupReport, setAutoSetupReport] = useState(null)
   const [autoSetupRuntimeDiagnostics, setAutoSetupRuntimeDiagnostics] = useState(null)
+  const [calibrationDebugSnapshot, setCalibrationDebugSnapshot] = useState(null)
+  const [showCalibrationOverlay, setShowCalibrationOverlay] = useState(
+    CALIBRATION_OVERLAY_DEFAULT_VISIBLE,
+  )
 
   // System-start fallback mode: user taps the start of each staff system
   // instead of marking every measure. Used when auto PDF analysis fails.
@@ -681,6 +690,7 @@ export default function useScoreFollow({
 
         const { preview } = result
         setAutoSetupReport(preview.debugReport ?? null)
+        setCalibrationDebugSnapshot(buildCalibrationDebugSnapshotFromPreview(preview))
 
         // Apply only when the page→system mapping is plausible AND we have at
         // least a system-start + system-end pair. A plausible high-confidence
@@ -812,6 +822,8 @@ export default function useScoreFollow({
     layoutSupplementKeyRef.current = null
     setAutoSetupReport(null)
     setAutoSetupRuntimeDiagnostics(null)
+    setCalibrationDebugSnapshot(null)
+    setShowCalibrationOverlay(CALIBRATION_OVERLAY_DEFAULT_VISIBLE)
     setDemoBundledStatus({ loading: false, applied: false, error: null })
   }, [autoSetupKey])
 
@@ -1076,6 +1088,7 @@ export default function useScoreFollow({
     if (hasSupplemental) {
       setSupplementalAnchors(preview.supplementalMeasureAnchors)
     }
+    setCalibrationDebugSnapshot(buildCalibrationDebugSnapshotFromPreview(preview))
     setEnabled(true)
     setSemiAutoSetup({
       status: 'confirmed',
@@ -1123,6 +1136,16 @@ export default function useScoreFollow({
     }
     return semiAutoSetup.preview.systemsByPage[visiblePageNumber] ?? []
   }, [semiAutoPreview, semiAutoSetup.preview, visiblePageNumber])
+
+  const calibrationOverlayPage = useMemo(
+    () =>
+      normalizeCalibrationOverlayPage(
+        calibrationDebugSnapshot,
+        visiblePageNumber,
+        anchors,
+      ),
+    [calibrationDebugSnapshot, visiblePageNumber, anchors],
+  )
 
   const displayAnchors = useMemo(() => {
     if (semiAutoPreview && semiAutoSetup.preview?.proposedAnchors) {
@@ -1467,5 +1490,9 @@ export default function useScoreFollow({
     // Diagnostics only — falls back to existing behavior unless readiness=READY.
     anchorPromotion,
     anchorSource: anchorPromotion.activeSource,
+    calibrationDebugSnapshot,
+    showCalibrationOverlay,
+    setShowCalibrationOverlay,
+    calibrationOverlayPage,
   }
 }

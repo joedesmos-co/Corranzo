@@ -199,7 +199,11 @@ export default function PracticeControlPanel({
               summary={diagnosticsSummary}
               defaultOpen={false}
             >
-              <PracticeDiagnosticsPanel session={session} scoreFollow={scoreFollow} />
+              <PracticeDiagnosticsPanel
+                session={session}
+                scoreFollow={scoreFollow}
+                pieceName={pdfFileName}
+              />
             </PracticeCollapsibleSection>
           </div>
         </PracticeCollapsibleSection>

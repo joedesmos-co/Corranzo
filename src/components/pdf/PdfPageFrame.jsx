@@ -4,6 +4,7 @@ import PdfPageOverlayStack from './PdfPageOverlayStack.jsx'
 import PdfOverlayLayer from './PdfOverlayLayer.jsx'
 import AnnotationLayer from './AnnotationLayer.jsx'
 import ScoreFollowOverlay from './ScoreFollowOverlay.jsx'
+import CalibrationDebugOverlay from './CalibrationDebugOverlay.jsx'
 import { ANNOTATION_TOOLS } from './annotationConstants.js'
 
 function PdfPageFrame({
@@ -87,6 +88,9 @@ function PdfPageFrame({
       scoreFollow.showNoteTarget ||
       scoreFollow.showCandidateAnchors)
 
+  const showCalibrationDebugLayer =
+    scoreFollow?.showCalibrationOverlay && scoreFollow?.calibrationOverlayPage
+
   const innerLayout = overlayLayout
     ? {
         left: 0,
@@ -124,6 +128,14 @@ function PdfPageFrame({
       />
       {overlayLayout?.width > 0 && (
         <PdfPageOverlayStack layout={overlayLayout}>
+          {showCalibrationDebugLayer && (
+            <PdfOverlayLayer id="calibration-debug" zIndex={12} pointerEvents="none">
+              <CalibrationDebugOverlay
+                layout={scoreFollow.calibrationOverlayPage}
+                visible={scoreFollow.showCalibrationOverlay}
+              />
+            </PdfOverlayLayer>
+          )}
           {showScoreFollowLayer && (
             <PdfOverlayLayer
               id="score-follow"

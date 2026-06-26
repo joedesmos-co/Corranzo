@@ -1,8 +1,9 @@
 import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
 import WaitForYouMatchSettingsPanel from './WaitForYouMatchSettingsPanel.jsx'
 import ScoreFollowControls from '../pdf/ScoreFollowControls.jsx'
+import CalibrationDebugPanel from './CalibrationDebugPanel.jsx'
 
-export default function PracticeSetupPanel({ session, scoreFollow }) {
+export default function PracticeSetupPanel({ session, scoreFollow, isDemoPiece }) {
   const measureBounds = session.measure?.bounds
 
   return (
@@ -53,6 +54,21 @@ export default function PracticeSetupPanel({ session, scoreFollow }) {
           />
         )}
       </section>
+
+      {scoreFollow?.calibrationDebugSnapshot && (
+        <details className="practice-diagnostics__group">
+          <summary>Calibration debug (beta)</summary>
+          <div className="practice-diagnostics__group-body">
+            <CalibrationDebugPanel
+              snapshot={scoreFollow.calibrationDebugSnapshot}
+              pieceName={session.sources?.playbackFileName ?? null}
+              anchors={scoreFollow.anchors ?? []}
+              showOverlay={scoreFollow.showCalibrationOverlay}
+              onShowOverlayChange={scoreFollow.setShowCalibrationOverlay}
+            />
+          </div>
+        </details>
+      )}
 
       {session.isWaitForYou && session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE && (
         <section className="practice-section" aria-label="Note matching options">
