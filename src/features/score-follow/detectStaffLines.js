@@ -537,7 +537,7 @@ export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
 
   // Barlines are darker than staff lines, so bias the threshold toward ink but
   // never below the staff-line threshold.
-  const barlineThreshold = Math.min(inkThreshold, Math.max(150, inkThreshold - 20))
+  const barlineThreshold = Math.min(inkThreshold, Math.max(145, inkThreshold - 22))
   const systems = grouped.map((system) => {
     const detection = countBarlines
       ? detectSystemBarlinesWithDiagnostics(imageData, contentBounds, system, {

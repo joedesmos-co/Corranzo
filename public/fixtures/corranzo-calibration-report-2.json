@@ -1,0 +1,2122 @@
+{
+  "schema": "corranzo-calibration-report-v1",
+  "appVersion": "0.2.0",
+  "exportedAt": "2026-06-26T03:33:54.408Z",
+  "capturedAt": "2026-06-26T03:32:47.961Z",
+  "pieceName": "spider-dance-undertale.mid",
+  "chosenStrategy": "C",
+  "chosenStrategyLabel": "Offset-compensated",
+  "overallConfidence": 0.6263847832540281,
+  "baselineConfidence": 0.6187513814119027,
+  "calibrationMs": 123.9,
+  "perPageConfidence": [
+    {
+      "page": 1,
+      "confidence": 0.6575214777609564
+    },
+    {
+      "page": 2,
+      "confidence": 0.616317981756781
+    },
+    {
+      "page": 3,
+      "confidence": 0.5321279473380561
+    },
+    {
+      "page": 4,
+      "confidence": 0.7198228974257895
+    }
+  ],
+  "perSystemConfidence": [
+    {
+      "index": 0,
+      "page": 1,
+      "confidence": 0.9677217808027264
+    },
+    {
+      "index": 1,
+      "page": 1,
+      "confidence": 0.8172595543842882
+    },
+    {
+      "index": 2,
+      "page": 1,
+      "confidence": 0.8157798415682078
+    },
+    {
+      "index": 3,
+      "page": 1,
+      "confidence": 0.036846212049559846
+    },
+    {
+      "index": 4,
+      "page": 1,
+      "confidence": 0.65
+    },
+    {
+      "index": 5,
+      "page": 2,
+      "confidence": 0.20000000000000007
+    },
+    {
+      "index": 6,
+      "page": 2,
+      "confidence": 0.65
+    },
+    {
+      "index": 7,
+      "page": 2,
+      "confidence": 0.65
+    },
+    {
+      "index": 8,
+      "page": 2,
+      "confidence": 0.9315899087839052
+    },
+    {
+      "index": 9,
+      "page": 2,
+      "confidence": 0.65
+    },
+    {
+      "index": 10,
+      "page": 3,
+      "confidence": 0.060639736690280444
+    },
+    {
+      "index": 11,
+      "page": 3,
+      "confidence": 0.65
+    },
+    {
+      "index": 12,
+      "page": 3,
+      "confidence": 0.65
+    },
+    {
+      "index": 13,
+      "page": 3,
+      "confidence": 0.65
+    },
+    {
+      "index": 14,
+      "page": 3,
+      "confidence": 0.65
+    },
+    {
+      "index": 15,
+      "page": 4,
+      "confidence": 0.65
+    },
+    {
+      "index": 16,
+      "page": 4,
+      "confidence": 0.6491144871289478
+    },
+    {
+      "index": 17,
+      "page": 4,
+      "confidence": 1
+    },
+    {
+      "index": 18,
+      "page": 4,
+      "confidence": 0.65
+    },
+    {
+      "index": 19,
+      "page": 4,
+      "confidence": 0.65
+    }
+  ],
+  "pageLayout": [
+    {
+      "page": 1,
+      "leftMargin": 0.048,
+      "rightMargin": 0.04600000000000004,
+      "topMargin": 0.15919629057187018,
+      "bottomMargin": 0.115919629057187,
+      "whitespaceRatio": 0.09400000000000008,
+      "offsetNormalized": 0.0010000000000000009,
+      "offsetPx": 1,
+      "contentScale": 0.9059999999999999,
+      "rotationDeg": 0,
+      "cropped": false,
+      "systemCount": 5
+    },
+    {
+      "page": 2,
+      "leftMargin": 0.048,
+      "rightMargin": 0.04600000000000004,
+      "topMargin": 0.07959814528593509,
+      "bottomMargin": 0.115919629057187,
+      "whitespaceRatio": 0.09400000000000008,
+      "offsetNormalized": 0.0010000000000000009,
+      "offsetPx": 1,
+      "contentScale": 0.9059999999999999,
+      "rotationDeg": 0,
+      "cropped": false,
+      "systemCount": 5
+    },
+    {
+      "page": 3,
+      "leftMargin": 0.048,
+      "rightMargin": 0.04600000000000004,
+      "topMargin": 0.07959814528593509,
+      "bottomMargin": 0.115919629057187,
+      "whitespaceRatio": 0.09400000000000008,
+      "offsetNormalized": 0.0010000000000000009,
+      "offsetPx": 1,
+      "contentScale": 0.9059999999999999,
+      "rotationDeg": 0,
+      "cropped": false,
+      "systemCount": 5
+    },
+    {
+      "page": 4,
+      "leftMargin": 0.048,
+      "rightMargin": 0.04600000000000004,
+      "topMargin": 0.07959814528593509,
+      "bottomMargin": 0.115919629057187,
+      "whitespaceRatio": 0.09400000000000008,
+      "offsetNormalized": 0.0010000000000000009,
+      "offsetPx": 1,
+      "contentScale": 0.9059999999999999,
+      "rotationDeg": 0,
+      "cropped": false,
+      "systemCount": 5
+    }
+  ],
+  "orientation": {
+    "anyRotated": false,
+    "anyUncertain": false,
+    "rotatedPageCount": 0,
+    "maxRotation": 0,
+    "pages": [
+      {
+        "page": 1,
+        "rotation": 0,
+        "uncertain": false,
+        "confidence": 1
+      },
+      {
+        "page": 2,
+        "rotation": 0,
+        "uncertain": false,
+        "confidence": 1
+      },
+      {
+        "page": 3,
+        "rotation": 0,
+        "uncertain": false,
+        "confidence": 1
+      },
+      {
+        "page": 4,
+        "rotation": 0,
+        "uncertain": false,
+        "confidence": 1
+      }
+    ]
+  },
+  "pageViewRotations": {},
+  "viewerCorrectionApplied": true,
+  "systemBounds": [
+    {
+      "index": 0,
+      "page": 1,
+      "stage": "staff-lines",
+      "y0": 0.159,
+      "y1": 0.251,
+      "center": 0.205,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 1,
+      "measureEnd": 4,
+      "measureCount": 4,
+      "barlineCount": 9,
+      "barlineConfident": true,
+      "barlineReliabilityReason": "ok-with-borderline-candidates",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 9,
+      "barlineRejected": {
+        "stem-like": 1,
+        "single-staff": 25,
+        "weak-gap-span": 19,
+        "weak-run": 825,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 1,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "medium",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 1,
+      "page": 1,
+      "stage": "staff-lines",
+      "y0": 0.318,
+      "y1": 0.41,
+      "center": 0.364,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 5,
+      "measureEnd": 9,
+      "measureCount": 5,
+      "barlineCount": 5,
+      "barlineConfident": true,
+      "barlineReliabilityReason": "ok",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 5,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 29,
+        "weak-gap-span": 6,
+        "weak-run": 841,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "high",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 2,
+      "page": 1,
+      "stage": "staff-lines",
+      "y0": 0.476,
+      "y1": 0.567,
+      "center": 0.522,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 10,
+      "measureEnd": 12,
+      "measureCount": 3,
+      "barlineCount": 7,
+      "barlineConfident": true,
+      "barlineReliabilityReason": "ok",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 7,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 16,
+        "weak-gap-span": 15,
+        "weak-run": 844,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "high",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 3,
+      "page": 1,
+      "stage": "staff-lines",
+      "y0": 0.634,
+      "y1": 0.726,
+      "center": 0.68,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 13,
+      "measureEnd": 17,
+      "measureCount": 5,
+      "barlineCount": 2,
+      "barlineConfident": true,
+      "barlineReliabilityReason": "ok",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 2,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 26,
+        "weak-gap-span": 22,
+        "weak-run": 834,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "high",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 4,
+      "page": 1,
+      "stage": "staff-lines",
+      "y0": 0.792,
+      "y1": 0.884,
+      "center": 0.838,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 18,
+      "measureEnd": 21,
+      "measureCount": 4,
+      "barlineCount": 1,
+      "barlineConfident": false,
+      "barlineReliabilityReason": "too-few-barlines",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 1,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 13,
+        "weak-gap-span": 24,
+        "weak-run": 847,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "none",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 5,
+      "page": 2,
+      "stage": "staff-lines",
+      "y0": 0.08,
+      "y1": 0.172,
+      "center": 0.126,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 22,
+      "measureEnd": 25,
+      "measureCount": 4,
+      "barlineCount": 2,
+      "barlineConfident": true,
+      "barlineReliabilityReason": "ok",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 2,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 12,
+        "weak-gap-span": 20,
+        "weak-run": 851,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "high",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 6,
+      "page": 2,
+      "stage": "staff-lines",
+      "y0": 0.257,
+      "y1": 0.349,
+      "center": 0.303,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 26,
+      "measureEnd": 29,
+      "measureCount": 4,
+      "barlineCount": 1,
+      "barlineConfident": false,
+      "barlineReliabilityReason": "too-few-barlines",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 1,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 14,
+        "weak-gap-span": 16,
+        "weak-run": 854,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "none",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 7,
+      "page": 2,
+      "stage": "staff-lines",
+      "y0": 0.436,
+      "y1": 0.528,
+      "center": 0.482,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 30,
+      "measureEnd": 33,
+      "measureCount": 4,
+      "barlineCount": 1,
+      "barlineConfident": false,
+      "barlineReliabilityReason": "too-few-barlines",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 1,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 9,
+        "weak-gap-span": 33,
+        "weak-run": 842,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "none",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 8,
+      "page": 2,
+      "stage": "staff-lines",
+      "y0": 0.614,
+      "y1": 0.706,
+      "center": 0.66,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 34,
+      "measureEnd": 38,
+      "measureCount": 5,
+      "barlineCount": 9,
+      "barlineConfident": true,
+      "barlineReliabilityReason": "ok",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 9,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 20,
+        "weak-gap-span": 25,
+        "weak-run": 826,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "high",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 9,
+      "page": 2,
+      "stage": "staff-lines",
+      "y0": 0.792,
+      "y1": 0.884,
+      "center": 0.838,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 39,
+      "measureEnd": 42,
+      "measureCount": 4,
+      "barlineCount": 1,
+      "barlineConfident": false,
+      "barlineReliabilityReason": "too-few-barlines",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 1,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 17,
+        "weak-gap-span": 34,
+        "weak-run": 833,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "none",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 10,
+      "page": 3,
+      "stage": "staff-lines",
+      "y0": 0.08,
+      "y1": 0.172,
+      "center": 0.126,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 43,
+      "measureEnd": 47,
+      "measureCount": 5,
+      "barlineCount": 2,
+      "barlineConfident": true,
+      "barlineReliabilityReason": "ok",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 2,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 15,
+        "weak-gap-span": 21,
+        "weak-run": 847,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "high",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 11,
+      "page": 3,
+      "stage": "staff-lines",
+      "y0": 0.257,
+      "y1": 0.349,
+      "center": 0.303,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 48,
+      "measureEnd": 51,
+      "measureCount": 4,
+      "barlineCount": 1,
+      "barlineConfident": false,
+      "barlineReliabilityReason": "too-few-barlines",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 1,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 11,
+        "weak-gap-span": 35,
+        "weak-run": 838,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "none",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 12,
+      "page": 3,
+      "stage": "staff-lines",
+      "y0": 0.436,
+      "y1": 0.528,
+      "center": 0.482,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 52,
+      "measureEnd": 55,
+      "measureCount": 4,
+      "barlineCount": 1,
+      "barlineConfident": false,
+      "barlineReliabilityReason": "too-few-barlines",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 1,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 19,
+        "weak-gap-span": 35,
+        "weak-run": 830,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "none",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 13,
+      "page": 3,
+      "stage": "staff-lines",
+      "y0": 0.614,
+      "y1": 0.706,
+      "center": 0.66,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 56,
+      "measureEnd": 59,
+      "measureCount": 4,
+      "barlineCount": 1,
+      "barlineConfident": false,
+      "barlineReliabilityReason": "too-few-barlines",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 1,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 15,
+        "weak-gap-span": 40,
+        "weak-run": 829,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "none",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 14,
+      "page": 3,
+      "stage": "staff-lines",
+      "y0": 0.792,
+      "y1": 0.884,
+      "center": 0.838,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 60,
+      "measureEnd": 63,
+      "measureCount": 4,
+      "barlineCount": 1,
+      "barlineConfident": false,
+      "barlineReliabilityReason": "too-few-barlines",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 1,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 19,
+        "weak-gap-span": 34,
+        "weak-run": 831,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "none",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 15,
+      "page": 4,
+      "stage": "staff-lines",
+      "y0": 0.08,
+      "y1": 0.172,
+      "center": 0.126,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 64,
+      "measureEnd": 67,
+      "measureCount": 4,
+      "barlineCount": 1,
+      "barlineConfident": false,
+      "barlineReliabilityReason": "too-few-barlines",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 1,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 15,
+        "weak-gap-span": 36,
+        "weak-run": 833,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "none",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 16,
+      "page": 4,
+      "stage": "staff-lines",
+      "y0": 0.257,
+      "y1": 0.349,
+      "center": 0.303,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 68,
+      "measureEnd": 72,
+      "measureCount": 5,
+      "barlineCount": 4,
+      "barlineConfident": true,
+      "barlineReliabilityReason": "ok",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 4,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 9,
+        "weak-gap-span": 38,
+        "weak-run": 834,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "high",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 17,
+      "page": 4,
+      "stage": "staff-lines",
+      "y0": 0.436,
+      "y1": 0.528,
+      "center": 0.482,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 73,
+      "measureEnd": 77,
+      "measureCount": 5,
+      "barlineCount": 6,
+      "barlineConfident": true,
+      "barlineReliabilityReason": "ok",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 6,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 48,
+        "weak-gap-span": 8,
+        "weak-run": 821,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "high",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 18,
+      "page": 4,
+      "stage": "staff-lines",
+      "y0": 0.614,
+      "y1": 0.706,
+      "center": 0.66,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 78,
+      "measureEnd": 82,
+      "measureCount": 5,
+      "barlineCount": 1,
+      "barlineConfident": false,
+      "barlineReliabilityReason": "too-few-barlines",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 1,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 27,
+        "weak-gap-span": 14,
+        "weak-run": 843,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "none",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    },
+    {
+      "index": 19,
+      "page": 4,
+      "stage": "staff-lines",
+      "y0": 0.792,
+      "y1": 0.884,
+      "center": 0.838,
+      "contentBounds": {
+        "x0": 0.033,
+        "y0": null,
+        "x1": 0.967,
+        "y1": null
+      },
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      },
+      "measureStart": 83,
+      "measureEnd": 87,
+      "measureCount": 5,
+      "barlineCount": 1,
+      "barlineConfident": false,
+      "barlineReliabilityReason": "too-few-barlines",
+      "barlineCandidatesRaw": 934,
+      "barlineAccepted": 1,
+      "barlineRejected": {
+        "stem-like": 0,
+        "single-staff": 6,
+        "weak-gap-span": 26,
+        "weak-run": 852,
+        "margin": 49,
+        "too-dense": 0,
+        "inconsistent-spacing": 0
+      },
+      "barlineRetainedLowConfidence": 0,
+      "barlineThinningRemoved": 0,
+      "barlineDensityAmbiguous": false,
+      "barlineConfidenceLevel": "none",
+      "firstAnchorX": 0.08,
+      "lastAnchorX": 0.92
+    }
+  ],
+  "inkBounds": [
+    {
+      "index": 0,
+      "page": 1,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 1,
+      "page": 1,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 2,
+      "page": 1,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 3,
+      "page": 1,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 4,
+      "page": 1,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 5,
+      "page": 2,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 6,
+      "page": 2,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 7,
+      "page": 2,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 8,
+      "page": 2,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 9,
+      "page": 2,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 10,
+      "page": 3,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 11,
+      "page": 3,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 12,
+      "page": 3,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 13,
+      "page": 3,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 14,
+      "page": 3,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 15,
+      "page": 4,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 16,
+      "page": 4,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 17,
+      "page": 4,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 18,
+      "page": 4,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    },
+    {
+      "index": 19,
+      "page": 4,
+      "inkBounds": {
+        "left": 0.048,
+        "right": 0.954,
+        "found": true
+      }
+    }
+  ],
+  "anchorsSummary": [
+    {
+      "id": "anchor-1782444767954-qhetmyk",
+      "page": 1,
+      "measureNumber": 1,
+      "x": 0.192,
+      "y": 0.205,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-y5usfa2",
+      "page": 1,
+      "measureNumber": 2,
+      "x": 0.357,
+      "y": 0.205,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-t4brh5c",
+      "page": 1,
+      "measureNumber": 3,
+      "x": 0.572,
+      "y": 0.205,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-ldo383x",
+      "page": 1,
+      "measureNumber": 4,
+      "x": 0.749,
+      "y": 0.205,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-0ai0owk",
+      "page": 1,
+      "measureNumber": 5,
+      "x": 0.162,
+      "y": 0.364,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-oijtsnw",
+      "page": 1,
+      "measureNumber": 6,
+      "x": 0.289,
+      "y": 0.364,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-6beiwgj",
+      "page": 1,
+      "measureNumber": 7,
+      "x": 0.414,
+      "y": 0.364,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-eqlve9w",
+      "page": 1,
+      "measureNumber": 8,
+      "x": 0.514,
+      "y": 0.364,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-1zmspwh",
+      "page": 1,
+      "measureNumber": 9,
+      "x": 0.639,
+      "y": 0.364,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-sgajgqu",
+      "page": 1,
+      "measureNumber": 10,
+      "x": 0.145,
+      "y": 0.522,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-y84byum",
+      "page": 1,
+      "measureNumber": 11,
+      "x": 0.338,
+      "y": 0.522,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-g74pwpn",
+      "page": 1,
+      "measureNumber": 12,
+      "x": 0.512,
+      "y": 0.522,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-650yqnh",
+      "page": 1,
+      "measureNumber": 13,
+      "x": 0.121,
+      "y": 0.68,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-dhl4otj",
+      "page": 1,
+      "measureNumber": 14,
+      "x": 0.192,
+      "y": 0.68,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-zef9974",
+      "page": 1,
+      "measureNumber": 15,
+      "x": 0.271,
+      "y": 0.68,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-7gydm24",
+      "page": 1,
+      "measureNumber": 16,
+      "x": 0.32,
+      "y": 0.68,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-3bdo0n4",
+      "page": 1,
+      "measureNumber": 17,
+      "x": 0.385,
+      "y": 0.68,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-b2ngf82",
+      "page": 1,
+      "measureNumber": 18,
+      "x": 0.141,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-rxauzma",
+      "page": 1,
+      "measureNumber": 19,
+      "x": 0.346,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-vt517ab",
+      "page": 1,
+      "measureNumber": 20,
+      "x": 0.552,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-wmmta9t",
+      "page": 1,
+      "measureNumber": 21,
+      "x": 0.758,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-thlumu0",
+      "page": 2,
+      "measureNumber": 22,
+      "x": 0.155,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-6sm4869",
+      "page": 2,
+      "measureNumber": 23,
+      "x": 0.325,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-t8r3b80",
+      "page": 2,
+      "measureNumber": 24,
+      "x": 0.49,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-yz1w5w3",
+      "page": 2,
+      "measureNumber": 25,
+      "x": 0.656,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-nmamlno",
+      "page": 2,
+      "measureNumber": 26,
+      "x": 0.13,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-bnrr0k9",
+      "page": 2,
+      "measureNumber": 27,
+      "x": 0.347,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-aao9aqb",
+      "page": 2,
+      "measureNumber": 28,
+      "x": 0.553,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-6i67qme",
+      "page": 2,
+      "measureNumber": 29,
+      "x": 0.759,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-fsobcdg",
+      "page": 2,
+      "measureNumber": 30,
+      "x": 0.13,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-8knqyeh",
+      "page": 2,
+      "measureNumber": 31,
+      "x": 0.326,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-0n3gehp",
+      "page": 2,
+      "measureNumber": 32,
+      "x": 0.521,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-lhs33ch",
+      "page": 2,
+      "measureNumber": 33,
+      "x": 0.744,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-qhrb2f7",
+      "page": 2,
+      "measureNumber": 34,
+      "x": 0.164,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-oxrweds",
+      "page": 2,
+      "measureNumber": 35,
+      "x": 0.28,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-nso5dnn",
+      "page": 2,
+      "measureNumber": 36,
+      "x": 0.442,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-xchvsp9",
+      "page": 2,
+      "measureNumber": 37,
+      "x": 0.603,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-hip99pu",
+      "page": 2,
+      "measureNumber": 38,
+      "x": 0.765,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-14m42l7",
+      "page": 2,
+      "measureNumber": 39,
+      "x": 0.13,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-vvohrl5",
+      "page": 2,
+      "measureNumber": 40,
+      "x": 0.318,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-vwmtmux",
+      "page": 2,
+      "measureNumber": 41,
+      "x": 0.522,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-an2u1yh",
+      "page": 2,
+      "measureNumber": 42,
+      "x": 0.747,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-vlj01tg",
+      "page": 3,
+      "measureNumber": 43,
+      "x": 0.114,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-zdkzr09",
+      "page": 3,
+      "measureNumber": 44,
+      "x": 0.16,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-vi06nqs",
+      "page": 3,
+      "measureNumber": 45,
+      "x": 0.208,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-dru6vsu",
+      "page": 3,
+      "measureNumber": 46,
+      "x": 0.257,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-xcu77sm",
+      "page": 3,
+      "measureNumber": 47,
+      "x": 0.309,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-c46vmy2",
+      "page": 3,
+      "measureNumber": 48,
+      "x": 0.141,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-70m27hy",
+      "page": 3,
+      "measureNumber": 49,
+      "x": 0.362,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-vxuw6a0",
+      "page": 3,
+      "measureNumber": 50,
+      "x": 0.587,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-y4kl6qn",
+      "page": 3,
+      "measureNumber": 51,
+      "x": 0.757,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-7n15js0",
+      "page": 3,
+      "measureNumber": 52,
+      "x": 0.129,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-rhdybe9",
+      "page": 3,
+      "measureNumber": 53,
+      "x": 0.332,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-bwd4aod",
+      "page": 3,
+      "measureNumber": 54,
+      "x": 0.556,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-hxdsyhg",
+      "page": 3,
+      "measureNumber": 55,
+      "x": 0.754,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-p5swqcb",
+      "page": 3,
+      "measureNumber": 56,
+      "x": 0.129,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-4qk7usb",
+      "page": 3,
+      "measureNumber": 57,
+      "x": 0.341,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-67izsq2",
+      "page": 3,
+      "measureNumber": 58,
+      "x": 0.548,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-gpf3f60",
+      "page": 3,
+      "measureNumber": 59,
+      "x": 0.75,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-gpzq4eu",
+      "page": 3,
+      "measureNumber": 60,
+      "x": 0.129,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-ei0nz9q",
+      "page": 3,
+      "measureNumber": 61,
+      "x": 0.332,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-om7j5pt",
+      "page": 3,
+      "measureNumber": 62,
+      "x": 0.556,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-9cjlqe1",
+      "page": 3,
+      "measureNumber": 63,
+      "x": 0.754,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-zclq83o",
+      "page": 4,
+      "measureNumber": 64,
+      "x": 0.129,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-l0dpu98",
+      "page": 4,
+      "measureNumber": 65,
+      "x": 0.34,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-m3o8noh",
+      "page": 4,
+      "measureNumber": 66,
+      "x": 0.546,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-6168h06",
+      "page": 4,
+      "measureNumber": 67,
+      "x": 0.764,
+      "y": 0.126,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-ho84djx",
+      "page": 4,
+      "measureNumber": 68,
+      "x": 0.127,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-fzf7anw",
+      "page": 4,
+      "measureNumber": 69,
+      "x": 0.198,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-vgycwtt",
+      "page": 4,
+      "measureNumber": 70,
+      "x": 0.279,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-n9k755p",
+      "page": 4,
+      "measureNumber": 71,
+      "x": 0.354,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-5c9aeka",
+      "page": 4,
+      "measureNumber": 72,
+      "x": 0.429,
+      "y": 0.303,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-vzgtx1q",
+      "page": 4,
+      "measureNumber": 73,
+      "x": 0.167,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-w8lsire",
+      "page": 4,
+      "measureNumber": 74,
+      "x": 0.327,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-zermcx0",
+      "page": 4,
+      "measureNumber": 75,
+      "x": 0.357,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-f8lqfp9",
+      "page": 4,
+      "measureNumber": 76,
+      "x": 0.495,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-fbiod6y",
+      "page": 4,
+      "measureNumber": 77,
+      "x": 0.653,
+      "y": 0.482,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-leroj96",
+      "page": 4,
+      "measureNumber": 78,
+      "x": 0.13,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-83xq65u",
+      "page": 4,
+      "measureNumber": 79,
+      "x": 0.437,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-odcmqm7",
+      "page": 4,
+      "measureNumber": 80,
+      "x": 0.559,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-r6j30nc",
+      "page": 4,
+      "measureNumber": 81,
+      "x": 0.685,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-1uzs4td",
+      "page": 4,
+      "measureNumber": 82,
+      "x": 0.802,
+      "y": 0.66,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-klu1ikl",
+      "page": 4,
+      "measureNumber": 83,
+      "x": 0.13,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-azp2gta",
+      "page": 4,
+      "measureNumber": 84,
+      "x": 0.298,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-8iz77rp",
+      "page": 4,
+      "measureNumber": 85,
+      "x": 0.493,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-mfw1s3b",
+      "page": 4,
+      "measureNumber": 86,
+      "x": 0.69,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    },
+    {
+      "id": "anchor-1782444767954-vaunnjb",
+      "page": 4,
+      "measureNumber": 87,
+      "x": 0.841,
+      "y": 0.838,
+      "role": "measure",
+      "source": "auto-measure"
+    }
+  ],
+  "warnings": [
+    {
+      "code": "weak-system",
+      "message": "Weakest detected system: index 0."
+    },
+    {
+      "code": "strategy-fallback",
+      "message": "Smart calibration chose strategy C over baseline A."
+    },
+    {
+      "code": "low-system-confidence",
+      "message": "System 3 confidence 0.037."
+    },
+    {
+      "code": "low-system-confidence",
+      "message": "System 5 confidence 0.2."
+    },
+    {
+      "code": "low-system-confidence",
+      "message": "System 10 confidence 0.061."
+    }
+  ],
+  "fallbacks": {
+    "chosenStrategy": "C",
+    "chosenStrategyLabel": "Offset-compensated",
+    "improvedOverBaseline": true,
+    "allocationMode": "breaks-or-even",
+    "stage": "staff-lines",
+    "reconciled": false,
+    "strategyScores": [
+      {
+        "strategy": "A",
+        "label": "Baseline (content + barlines)",
+        "overall": 0.6187513814119027
+      },
+      {
+        "strategy": "B",
+        "label": "Margin-normalized",
+        "overall": 0.5710506941985748
+      },
+      {
+        "strategy": "C",
+        "label": "Offset-compensated",
+        "overall": 0.6263847832540281
+      },
+      {
+        "strategy": "D",
+        "label": "Adaptive scaling",
+        "overall": 0.6010567629896463
+      },
+      {
+        "strategy": "E",
+        "label": "Publisher-independent spacing",
+        "overall": 0.6308415632376834
+      }
+    ]
+  },
+  "strategyScores": [
+    {
+      "strategy": "A",
+      "label": "Baseline (content + barlines)",
+      "overall": 0.6187513814119027
+    },
+    {
+      "strategy": "B",
+      "label": "Margin-normalized",
+      "overall": 0.5710506941985748
+    },
+    {
+      "strategy": "C",
+      "label": "Offset-compensated",
+      "overall": 0.6263847832540281
+    },
+    {
+      "strategy": "D",
+      "label": "Adaptive scaling",
+      "overall": 0.6010567629896463
+    },
+    {
+      "strategy": "E",
+      "label": "Publisher-independent spacing",
+      "overall": 0.6308415632376834
+    }
+  ],
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",
+    "platform": "Win32",
+    "language": "en-US"
+  }
+}

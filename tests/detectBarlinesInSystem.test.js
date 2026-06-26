@@ -15,6 +15,7 @@ import {
 } from '../src/features/score-follow/pdfPageAnalysis.js'
 import {
   cleanPianoPage,
+  denseBeamedPianoPage,
   densePianoPage,
   lightClassicalPage,
   multiPageScore,
@@ -150,5 +151,24 @@ describe('detectBarlineCandidates — grand-staff barline vs stem classification
     })
     expect(reliability.confident).toBe(true)
     expect(reliability.confidenceLevel).toBe('medium')
+  })
+
+  it('finds real barlines on dense beamed piano texture (Spider-Dance-style regression)', () => {
+    const page = denseBeamedPianoPage({ systems: 3, measuresPerSystem: 5 })
+    const bounds = detectContentBounds(page)
+    const { systems } = detectStaffLineSystems(page, bounds, { stavesPerSystem: 2 })
+    expect(systems.length).toBe(3)
+    for (const system of systems) {
+      expect(system.barlineCount).toBeGreaterThanOrEqual(4)
+      expect(system.barlineReliabilityReason).not.toBe('too-few-barlines')
+    }
+    const groundTruth = page.systemBarlineFracs[0]
+    const systemBand = {
+      y0: page.systemBands[0].top / page.height,
+      y1: page.systemBands[0].bottom / page.height,
+    }
+    const { positions, diagnostics } = detectBarlineCandidates(page, bounds, systemBand)
+    expect(positions.length).toBeGreaterThanOrEqual(groundTruth.length - 1)
+    expect(diagnostics.candidatesRaw).toBeGreaterThan(positions.length)
   })
 })

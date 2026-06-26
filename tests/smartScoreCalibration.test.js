@@ -56,6 +56,23 @@ describe('smartScoreCalibration — scoring', () => {
     // span 0.1..0.9 spills far left of the ink at 0.5
     expect(scoreSystemBoundaries([0.1, 0.3, 0.5, 0.7, 0.9], sys)).toBeLessThan(0.2)
   })
+
+  it('heavily penalizes too-few-barlines when measures expect internal barlines', () => {
+    const aligned = makeSystem({
+      barlines: [0.1, 0.3, 0.5, 0.7, 0.9],
+      barlineReliabilityReason: null,
+    })
+    const sparse = makeSystem({
+      barlines: [0.1],
+      barlineReliabilityReason: 'too-few-barlines',
+      barlineConfident: false,
+    })
+    const boundaries = [0.1, 0.3, 0.5, 0.7, 0.9]
+    const good = scoreSystemBoundaries(boundaries, aligned)
+    const bad = scoreSystemBoundaries(boundaries, sparse)
+    expect(good).toBeGreaterThan(0.9)
+    expect(bad).toBeLessThan(0.15)
+  })
 })
 
 describe('smartScoreCalibration — strategy selection', () => {
@@ -96,6 +113,22 @@ describe('smartScoreCalibration — strategy selection', () => {
     const baseline = buildStrategyAnchors(g, CALIBRATION_STRATEGY.A)
     const { best, baseline: b } = selectCalibration(g, baseline)
     expect(best.score.overall).toBeGreaterThanOrEqual(b.score.overall)
+  })
+
+  it('picks the highest-scoring strategy when margin is below the old tie threshold', () => {
+    const g = geom([
+      makeSystem({
+        barlines: [0.12, 0.28],
+        barlineReliabilityReason: 'too-few-barlines',
+        inkLeft: 0.1,
+        inkRight: 0.9,
+      }),
+    ])
+    const baseline = buildStrategyAnchors(g, CALIBRATION_STRATEGY.A)
+    const { best, scored, top } = selectCalibration(g, baseline)
+    const maxScore = Math.max(...scored.map((entry) => entry.score.overall))
+    expect(best.score.overall).toBeCloseTo(maxScore, 6)
+    expect(top.strategy).toBe(best.strategy)
   })
 })
 

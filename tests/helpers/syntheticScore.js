@@ -96,6 +96,39 @@ function addDenseNotation(img, top, bottom, x0, x1, { columns = 26 } = {}) {
   }
 }
 
+/** Dense beamed eighth-note texture — stems + horizontal beams between groups. */
+function addBeamedNotation(img, top, bottom, x0, x1, { columns = 40, beamGroup = 4 } = {}) {
+  const step = (x1 - x0) / columns
+  const trebleMid = Math.floor(top + (bottom - top) * 0.28)
+  const bassMid = Math.floor(top + (bottom - top) * 0.72)
+  for (let c = 0; c < columns; c += 1) {
+    const cx = Math.floor(x0 + c * step + step * 0.15)
+    for (const ny of [trebleMid - 6, trebleMid, trebleMid + 6, bassMid - 4, bassMid + 4]) {
+      fillRect(img, cx, ny - 1, cx + 3, ny + 2)
+      vLine(img, cx + 3, ny - 8, ny + 2)
+    }
+    if (c % beamGroup !== beamGroup - 1) {
+      const beamY = trebleMid - 14
+      hLine(img, beamY, cx, cx + Math.floor(step * 0.95))
+      hLine(img, beamY + 1, cx, cx + Math.floor(step * 0.95))
+      const bassBeamY = bassMid + 12
+      hLine(img, bassBeamY, cx, cx + Math.floor(step * 0.95))
+    }
+  }
+}
+
+function drawSystemBarlines(img, band, x0, x1, measures, width) {
+  const fracs = []
+  for (let m = 0; m <= measures; m += 1) {
+    const bx = Math.floor(x0 + ((x1 - x0) * m) / measures)
+    for (let dx = 0; dx < 3; dx += 1) {
+      vLine(img, bx + dx, band.top, band.bottom, INK)
+    }
+    fracs.push(bx / width)
+  }
+  return fracs
+}
+
 /**
  * Clean one-page piano score: evenly spaced grand-staff systems with barlines.
  * Also returns system metadata for assertions.
@@ -234,6 +267,49 @@ export function densePianoPage({
   for (const band of img.systemBands) {
     addDenseNotation(img, band.top, band.bottom, x0, x1)
   }
+  return img
+}
+
+/**
+ * Dense beamed piano (game/anime style): thick barlines plus beamed eighth-note
+ * grids. Real barlines must survive stem/beam clutter — regression for scores
+ * like Spider Dance where too-few-barlines used to collapse calibration.
+ */
+export function denseBeamedPianoPage({
+  width = 480,
+  height = 660,
+  systems = 4,
+  measuresPerSystem = 5,
+} = {}) {
+  const lineGap = 5
+  const innerGap = 10
+  const staffHeight = 4 * lineGap + innerGap + 4 * lineGap
+  const gap = 30
+  const topFrac = 0.18
+  const pageHeight = Math.max(
+    height,
+    Math.ceil(Math.floor(640 * topFrac) + systems * (staffHeight + gap) + 40),
+  )
+  const img = createPage(width, pageHeight)
+  const x0 = Math.floor(width * 0.08)
+  const x1 = Math.floor(width * 0.92)
+  drawHeader(img)
+
+  const top = Math.floor(pageHeight * topFrac)
+  const systemBands = []
+  const systemBarlineFracs = []
+  for (let s = 0; s < systems; s += 1) {
+    const sysTop = top + s * (staffHeight + gap)
+    const band = drawGrandStaff(img, sysTop, x0, x1, { lineGap, innerGap })
+    systemBands.push(band)
+    systemBarlineFracs.push(drawSystemBarlines(img, band, x0, x1, measuresPerSystem, width))
+    addBeamedNotation(img, band.top, band.bottom, x0, x1, { columns: 44 })
+    addDenseNotation(img, band.top, band.bottom, x0, x1, { columns: 30 })
+  }
+
+  img.systemBands = systemBands
+  img.systemBarlineFracs = systemBarlineFracs
+  img.measuresPerSystem = measuresPerSystem
   return img
 }
 

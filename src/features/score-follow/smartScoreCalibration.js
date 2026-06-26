@@ -113,6 +113,8 @@ export function buildCalibrationGeometry(systemEntries, spans, timingMap) {
       inkRight: ink.inkRight,
       inkFound: ink.found,
       barlines: [...barlines].sort((a, b) => a - b),
+      barlineConfident: entry.system?.barlineConfident ?? null,
+      barlineReliabilityReason: entry.system?.barlineReliabilityReason ?? null,
       measureNumbers,
       widths,
       haveWidths,
@@ -337,6 +339,29 @@ export function scoreSystemBoundaries(boundaries, system) {
   }
 
   if (outOfBounds) confidence *= 0.4
+
+  const detectedBarlines = system.barlines?.length ?? 0
+  if (system.barlineReliabilityReason === 'too-few-barlines' && count >= 2 && detectedBarlines < 2) {
+    confidence *= 0.1
+  } else if (
+    system.barlineReliabilityReason === 'too-few-barlines' &&
+    count >= 3 &&
+    detectedBarlines < count - 1
+  ) {
+    const coverage = detectedBarlines / Math.max(1, count - 1)
+    confidence *= 0.12 + 0.28 * coverage
+  } else if (
+    count >= 3 &&
+    detectedBarlines > 0 &&
+    detectedBarlines < count - 1 &&
+    system.barlineConfident === false
+  ) {
+    const coverage = detectedBarlines / Math.max(1, count - 1)
+    if (coverage < 0.55) {
+      confidence *= 0.35 + 0.4 * coverage
+    }
+  }
+
   return confidence
 }
 
@@ -435,10 +460,11 @@ export function analyzePageLayout(geometry) {
   return pages
 }
 
+const STRATEGY_TIE_BAND = 0.001
+
 /**
- * Score every strategy and pick the best. A (the baseline) wins on a (near-)tie,
- * so clean scores never regress and we only adopt a different strategy when it is
- * meaningfully more confident. Pure — operates on geometry + baseline anchors.
+ * Score every strategy and pick the best. Strategy A wins only when it is within
+ * STRATEGY_TIE_BAND of the top score (true ties); otherwise the highest scorer wins.
  */
 export function selectCalibration(geometry, baselineAnchors) {
   const candidates = [
@@ -457,15 +483,33 @@ export function selectCalibration(geometry, baselineAnchors) {
   }
 
   const scored = candidates.map((c) => ({ ...c, score: scoreAnchorSet(c.anchors, geometry) }))
-  const TIE = 0.005
   const baseline = scored.find((s) => s.strategy === CALIBRATION_STRATEGY.A)
-  let best = baseline
-  for (const candidate of scored) {
-    if (candidate.score.overall > best.score.overall + TIE) {
-      best = candidate
+  const top = scored.reduce((winner, candidate) =>
+    candidate.score.overall > winner.score.overall ? candidate : winner,
+  )
+  const withinTie = scored.filter(
+    (candidate) => top.score.overall - candidate.score.overall <= STRATEGY_TIE_BAND,
+  )
+  const best = withinTie.find((candidate) => candidate.strategy === CALIBRATION_STRATEGY.A) ?? top
+
+  let strategySelectionNote = null
+  if (best.strategy !== top.strategy) {
+    strategySelectionNote = `Strategy ${top.strategy} scored ${roundConfidence(top.score.overall)} but ${best.strategy} chosen (within ${STRATEGY_TIE_BAND} of baseline ${roundConfidence(baseline.score.overall)}).`
+  } else {
+    const runnersUp = scored
+      .filter((candidate) => candidate.strategy !== top.strategy)
+      .sort((a, b) => b.score.overall - a.score.overall)
+    const runnerUp = runnersUp[0]
+    if (runnerUp && top.score.overall - runnerUp.score.overall < 0.01) {
+      strategySelectionNote = `Close scores: ${top.strategy}=${roundConfidence(top.score.overall)}, ${runnerUp.strategy}=${roundConfidence(runnerUp.score.overall)}.`
     }
   }
-  return { best, baseline, scored }
+
+  return { best, baseline, scored, top, strategySelectionNote }
+}
+
+function roundConfidence(value) {
+  return Math.round(value * 10000) / 10000
 }
 
 /**
@@ -491,7 +535,7 @@ export function calibrateScoreAnchors({
     }
   }
 
-  const { best, baseline, scored } = selectCalibration(geometry, baselineAnchors)
+  const { best, baseline, scored, strategySelectionNote } = selectCalibration(geometry, baselineAnchors)
   const elapsedMs = (typeof performance !== 'undefined' ? performance.now() : Date.now()) - startTime
   const pageLayout = analyzePageLayout(geometry)
 
@@ -512,6 +556,7 @@ export function calibrateScoreAnchors({
           label: CALIBRATION_STRATEGY_LABEL[s.strategy],
           overall: s.score.overall,
         })),
+        strategySelectionNote,
         pageLayout,
         systemCount: geometry.systems.length,
         calibrationMs: Math.round(elapsedMs * 10) / 10,

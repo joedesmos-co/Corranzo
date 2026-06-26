@@ -100,6 +100,18 @@ function columnBandStats(imageData, x, band, darkThreshold) {
   }
 }
 
+/** Best full-height run across neighboring columns — reconnects barlines thinned by beams. */
+function columnBandStatsSmoothed(imageData, x, band, darkThreshold, radius = 1) {
+  let best = null
+  for (let dx = -radius; dx <= radius; dx += 1) {
+    const stats = columnBandStats(imageData, x + dx, band, darkThreshold)
+    if (!best || stats.maxRunFrac > best.maxRunFrac) {
+      best = stats
+    }
+  }
+  return best
+}
+
 function emptyBarlineDiagnostics() {
   return {
     candidatesRaw: 0,
@@ -289,13 +301,14 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
     const trebleStats = columnBandStats(imageData, x, treble, darkThreshold)
     const bassStats = columnBandStats(imageData, x, bass, darkThreshold)
     const gapStats = columnBandStats(imageData, x, gap, darkThreshold)
-    const fullStats = columnBandStats(imageData, x, fullBand, darkThreshold)
+    const fullStats = columnBandStatsSmoothed(imageData, x, fullBand, darkThreshold)
 
     const trebleStrong = trebleStats.maxRunFrac >= trebleRunMin
     const bassStrong = bassStats.maxRunFrac >= bassRunMin
     const gapStrong = gapStats.maxRunFrac >= gapRunMin
     const fullStrong = fullStats.maxRunFrac >= fullBandRunMin
     const edgeBarline = fullStrong && trebleStrong && bassStrong
+    const grandStaffBarline = fullStrong && gapStrong && trebleStrong && bassStrong
 
     if ((xNorm < margin || xNorm > maxX) && !edgeBarline) {
       diagnostics.rejected[BARLINE_REJECT_REASON.MARGIN] += 1
@@ -316,6 +329,28 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
     })
 
     const hasBarlineShape = fullStrong || (trebleStrong && bassStrong)
+
+    // Full grand-staff continuity — accept even when dense beams add transition noise.
+    if (grandStaffBarline) {
+      rawCandidates.push({
+        x: xNorm,
+        confidence: stemSignals === 0 ? 'high' : 'low',
+        score:
+          candidateScore({
+            trebleStats,
+            bassStats,
+            gapStats,
+            fullStats,
+            gapStrong,
+            trebleStrong,
+            bassStrong,
+          }) + 0.2,
+      })
+      if (stemSignals > 0) {
+        diagnostics.retainedLowConfidence += 1
+      }
+      continue
+    }
 
     // Clear barline with no stem signals — accept at full confidence.
     if (hasBarlineShape && stemSignals === 0) {
@@ -424,7 +459,218 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
     preThinCount,
   })
 
+  if (positions.length < 5) {
+    const recovered = detectBarlinesFromVerticalProjection(imageData, contentBounds, system, {
+      darkThreshold: Math.min(darkThreshold, 135),
+      trebleRunMin: trebleRunMin * 0.92,
+      bassRunMin: bassRunMin * 0.92,
+      gapRunMin: gapRunMin * 0.9,
+      fullBandRunMin: Math.min(fullBandRunMin, 0.68),
+    })
+    if (recovered.positions.length > positions.length) {
+      diagnostics.recoveredFromProjection = true
+      diagnostics.recoveryBefore = positions.length
+      positions = mergeBarlinePositions(positions, recovered.positions, contentBounds, width)
+      diagnostics.accepted = positions.length
+      diagnostics.densityAmbiguous = assessDensityAmbiguity(positions, contentBounds, {
+        thinningAmbiguous,
+        rejected: diagnostics.rejected,
+        preThinCount: Math.max(preThinCount, recovered.positions.length),
+      })
+    }
+  }
+
+  if (positions.length < 3) {
+    const relaxed = detectBarlinesRelaxedFullBand(imageData, contentBounds, system, {
+      darkThreshold: Math.min(darkThreshold, 130),
+    })
+    if (relaxed.positions.length > positions.length) {
+      diagnostics.recoveredRelaxedFullBand = true
+      positions = mergeBarlinePositions(positions, relaxed.positions, contentBounds, width)
+      diagnostics.accepted = positions.length
+      diagnostics.densityAmbiguous = assessDensityAmbiguity(positions, contentBounds, {
+        thinningAmbiguous,
+        rejected: diagnostics.rejected,
+        preThinCount: Math.max(preThinCount, relaxed.positions.length),
+      })
+    }
+  }
+
   return { positions, diagnostics }
+}
+
+function columnBarlineProjectionScore(trebleStats, bassStats, gapStats, fullStats) {
+  const bothStaves = Math.min(trebleStats.maxRunFrac, bassStats.maxRunFrac)
+  if (fullStats.maxRunFrac < 0.62 || bothStaves < 0.42) {
+    return -1
+  }
+  return (
+    fullStats.maxRunFrac * 1.5 +
+    bothStaves * 0.55 +
+    gapStats.maxRunFrac * 0.45 +
+    fullStats.inkFrac * 0.25 -
+    fullStats.transitions * 0.018
+  )
+}
+
+/**
+ * When shape-based detection collapses to too few barlines (common under dense
+ * beamed piano), recover peaks from a vertical ink projection across the band.
+ */
+function detectBarlinesFromVerticalProjection(imageData, contentBounds, system, options = {}) {
+  const {
+    darkThreshold = 140,
+    trebleRunMin = 0.52,
+    bassRunMin = 0.52,
+    gapRunMin = 0.28,
+    fullBandRunMin = 0.72,
+  } = options
+
+  const { width, height } = imageData
+  const { treble, gap, bass, left, right } = splitGrandStaffVerticalBands(
+    imageData,
+    contentBounds,
+    system,
+  )
+  const y0 = Math.max(0, Math.floor(system.y0 * height))
+  const y1 = Math.min(height - 1, Math.ceil(system.y1 * height))
+  const fullBand = { y0, y1 }
+  const contentWidth = Math.max(1e-6, (contentBounds.x1 ?? 1) - (contentBounds.x0 ?? 0))
+  const minGap = contentWidth * 0.035
+
+  const profile = []
+  for (let x = left; x <= right; x += 1) {
+    const trebleStats = columnBandStats(imageData, x, treble, darkThreshold)
+    const bassStats = columnBandStats(imageData, x, bass, darkThreshold)
+    const gapStats = columnBandStats(imageData, x, gap, darkThreshold)
+    const fullStats = columnBandStatsSmoothed(imageData, x, fullBand, darkThreshold)
+    const score = columnBarlineProjectionScore(trebleStats, bassStats, gapStats, fullStats)
+    if (score < 0) {
+      continue
+    }
+    const trebleStrong = trebleStats.maxRunFrac >= trebleRunMin
+    const bassStrong = bassStats.maxRunFrac >= bassRunMin
+    const gapStrong = gapStats.maxRunFrac >= gapRunMin
+    const fullStrong = fullStats.maxRunFrac >= fullBandRunMin
+    if (!(fullStrong || (trebleStrong && bassStrong && gapStrong))) {
+      continue
+    }
+    profile.push({ x: x / width, score })
+  }
+
+  if (profile.length < 3) {
+    return { positions: [] }
+  }
+
+  const peaks = []
+  const scoreFloor = Math.max(0.95, ...profile.map((entry) => entry.score)) * 0.72
+  for (let i = 1; i < profile.length - 1; i += 1) {
+    const prev = profile[i - 1]
+    const cur = profile[i]
+    const next = profile[i + 1]
+    if (cur.score >= prev.score && cur.score >= next.score && cur.score >= scoreFloor) {
+      peaks.push(cur)
+    }
+  }
+
+  peaks.sort((a, b) => b.score - a.score)
+  const picked = []
+  for (const peak of peaks) {
+    if (picked.every((x) => Math.abs(peak.x - x) >= minGap)) {
+      picked.push(peak.x)
+    }
+  }
+  picked.sort((a, b) => a - b)
+  return { positions: picked }
+}
+
+/**
+ * Last-resort sweep for dense textures: accept tall full-band columns even when
+ * treble/bass continuity is broken by beams (Spider-Dance-style layouts).
+ */
+function detectBarlinesRelaxedFullBand(imageData, contentBounds, system, options = {}) {
+  const { darkThreshold = 130 } = options
+  const { width, height } = imageData
+  const { treble, bass, left, right } = splitGrandStaffVerticalBands(
+    imageData,
+    contentBounds,
+    system,
+  )
+  const y0 = Math.max(0, Math.floor(system.y0 * height))
+  const y1 = Math.min(height - 1, Math.ceil(system.y1 * height))
+  const fullBand = { y0, y1 }
+  const contentWidth = Math.max(1e-6, (contentBounds.x1 ?? 1) - (contentBounds.x0 ?? 0))
+  const minGap = contentWidth * 0.03
+  const x0Bound = contentBounds.x0 ?? 0
+  const x1Bound = contentBounds.x1 ?? 1
+  const margin = x0Bound + 0.02
+  const maxX = x1Bound - 0.02
+
+  const profile = []
+  for (let x = left; x <= right; x += 1) {
+    const xNorm = x / width
+    if (xNorm < margin || xNorm > maxX) {
+      continue
+    }
+    const fullStats = columnBandStatsSmoothed(imageData, x, fullBand, darkThreshold, 2)
+    const trebleStats = columnBandStats(imageData, x, treble, darkThreshold)
+    const bassStats = columnBandStats(imageData, x, bass, darkThreshold)
+    if (fullStats.maxRunFrac < 0.8) {
+      continue
+    }
+    if (trebleStats.maxRunFrac < 0.35 && bassStats.maxRunFrac < 0.35) {
+      continue
+    }
+    if (fullStats.transitions > 14 && fullStats.maxRunFrac < 0.9) {
+      continue
+    }
+    profile.push({
+      x: xNorm,
+      score: fullStats.maxRunFrac + Math.max(trebleStats.maxRunFrac, bassStats.maxRunFrac) * 0.25,
+    })
+  }
+
+  if (profile.length < 2) {
+    return { positions: [] }
+  }
+
+  const scoreFloor = Math.max(0.9, ...profile.map((entry) => entry.score)) * 0.78
+  const peaks = []
+  for (let i = 1; i < profile.length - 1; i += 1) {
+    const cur = profile[i]
+    if (
+      cur.score >= profile[i - 1].score &&
+      cur.score >= profile[i + 1].score &&
+      cur.score >= scoreFloor
+    ) {
+      peaks.push(cur)
+    }
+  }
+
+  peaks.sort((a, b) => b.score - a.score)
+  const picked = []
+  for (const peak of peaks) {
+    if (picked.every((x) => Math.abs(peak.x - x) >= minGap)) {
+      picked.push(peak.x)
+    }
+  }
+  picked.sort((a, b) => a - b)
+  return { positions: picked }
+}
+
+function mergeBarlinePositions(existing, recovered, contentBounds, width) {
+  const contentWidth = Math.max(1e-6, (contentBounds.x1 ?? 1) - (contentBounds.x0 ?? 0))
+  const mergeGapPx = Math.max(2, Math.floor(contentWidth * width * 0.01))
+  const merged = []
+  for (const x of [...existing, ...recovered].sort((a, b) => a - b)) {
+    const last = merged[merged.length - 1]
+    if (last != null && (x - last) * width <= mergeGapPx) {
+      merged[merged.length - 1] = (x + last) / 2
+    } else {
+      merged.push(x)
+    }
+  }
+  return merged
 }
 
 /**
