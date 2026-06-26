@@ -49,7 +49,8 @@ export default function PdfFullscreen({
   const chromeVisible = chromePinned || autoVisible
   const hasPracticeHud = Boolean(practiceHud)
 
-  const pageDimensions = getPageDimensions(fitMode ?? 'page', pageSize, containerSize)
+  const pageViewRotation = scoreFollow?.getPageViewRotation?.(pageNumber) ?? 0
+  const pageDimensions = getPageDimensions(fitMode ?? 'page', pageSize, containerSize, pageViewRotation)
   const canGoPrev = pageNumber > 1
   const canGoNext = numPages != null && pageNumber < numPages
   const alignmentMode = scoreFollow?.alignmentMode ?? false

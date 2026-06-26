@@ -173,6 +173,53 @@ export function normalizeImageDataOrientation(imageData, options = {}) {
   }
 }
 
+/**
+ * Apply a viewer-selected rotation (0/90/180/270) to analysis bitmap.
+ * Used when the user clicks Rotate page or when restoring saved view rotations.
+ */
+export function applyPageViewRotation(imageData, degrees) {
+  const rotation = normalizeViewRotationDegrees(degrees)
+  if (rotation === PAGE_ROTATION.NONE) {
+    return normalizeImageDataOrientation(imageData)
+  }
+  const rotated = rotateImageData(imageData, rotation)
+  const upright = normalizeImageDataOrientation(rotated)
+  return {
+    imageData: upright.imageData,
+    rotation,
+    sideways: rotation !== PAGE_ROTATION.NONE,
+    uncertain: upright.uncertain,
+    confidence: upright.confidence,
+    detection: upright.detection,
+    forced: true,
+  }
+}
+
+function normalizeViewRotationDegrees(degrees) {
+  const deg = ((Math.round((degrees ?? 0) / 90) * 90) % 360 + 360) % 360
+  if (deg === 90) {
+    return PAGE_ROTATION.CW90
+  }
+  if (deg === 180) {
+    return PAGE_ROTATION.HALF
+  }
+  if (deg === 270) {
+    return PAGE_ROTATION.CW270
+  }
+  return PAGE_ROTATION.NONE
+}
+
+/**
+ * Resolve analysis orientation for one page: forced viewer rotation wins over auto-detect.
+ */
+export function resolvePageOrientation(imageData, { forcedRotation = null, options = {} } = {}) {
+  const forced = normalizeViewRotationDegrees(forcedRotation)
+  if (forced !== PAGE_ROTATION.NONE) {
+    return applyPageViewRotation(imageData, forced)
+  }
+  return normalizeImageDataOrientation(imageData, options)
+}
+
 /** Minimum normalized band height; anything thinner is an impossible "system". */
 export const MIN_SYSTEM_HEIGHT_NORM = 0.02
 

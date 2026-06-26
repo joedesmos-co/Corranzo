@@ -28,9 +28,9 @@ import { collectMeasureDefaultXHints } from './musicxmlLayoutAnchors.js'
 import { clearPdfAnalysisCache, getPageInkRatio, renderPdfPageImageData } from './pdfPageAnalysis.js'
 import {
   applyOrientationConfidencePenalty,
-  normalizeImageDataOrientation,
   rejectTinySystems,
   summarizePageOrientations,
+  resolvePageOrientation,
 } from './pageOrientation.js'
 import { calibrateScoreAnchors } from './smartScoreCalibration.js'
 import {
@@ -730,6 +730,7 @@ export async function analyzeSemiAutoScoreSetup({
   numPages,
   timingMap,
   onProgress,
+  pageViewRotations = null,
   // Injectable for tests / fixture scripts: (pdfSource, page) => { imageData }.
   renderPage = renderPdfPageImageData,
 }) {
@@ -755,7 +756,8 @@ export async function analyzeSemiAutoScoreSetup({
     // Correct page orientation BEFORE any staff detection: a sideways-scanned
     // page has vertical staff lines that would otherwise yield tiny fake systems.
     // Upright pages return the same bitmap, so clean scores are unchanged.
-    const oriented = normalizeImageDataOrientation(rendered.imageData)
+    const forcedRotation = pageViewRotations?.[page] ?? null
+    const oriented = resolvePageOrientation(rendered.imageData, { forcedRotation })
     const ink = getPageInkRatio(oriented.imageData)
     if (ink < 0.006) {
       continue

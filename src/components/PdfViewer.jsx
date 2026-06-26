@@ -75,7 +75,6 @@ export default function PdfViewer({
 
   const canGoPrev = pageNumber > 1
   const canGoNext = numPages != null && pageNumber < numPages
-  const pageDimensions = getPageDimensions(fitMode, pageSize, canvasSize)
   const currentStrokes = getStrokes(pageNumber)
   const canUndoAnnotations = currentStrokes.length > 0
   const strokeStyle = getStrokeStyle(activeTool)
@@ -151,6 +150,8 @@ export default function PdfViewer({
   const practiceContext = usePracticeSessionContextOptional()
   const practiceSession = practiceContext?.session ?? null
   const scoreFollow = practiceContext?.scoreFollow ?? null
+  const pageViewRotation = scoreFollow?.getPageViewRotation?.(pageNumber) ?? 0
+  const pageDimensions = getPageDimensions(fitMode, pageSize, canvasSize, pageViewRotation)
   const hasTiming = Boolean(practiceContext?.session?.timing?.timingMap)
   const measureBounds = practiceContext?.session?.measure?.bounds
   const practiceOverlayPropsRaw = usePracticeScoreFollowOverlayProps()

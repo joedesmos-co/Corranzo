@@ -30,13 +30,39 @@ function summarizeAnchors(anchors = []) {
 }
 
 /** Collect human-readable warnings and fallback notes from calibration artifacts. */
-export function collectCalibrationWarnings({ debugReport, smartCalibration, orientation } = {}) {
+export function collectCalibrationWarnings({
+  debugReport,
+  smartCalibration,
+  orientation,
+  pageViewRotations = null,
+  viewerCorrectionApplied = null,
+} = {}) {
   const warnings = []
+  const corrected =
+    viewerCorrectionApplied ??
+    (orientation
+      ? !orientation.anyRotated ||
+        (orientation.pages ?? []).every((page) => {
+          const detected = page.rotation ?? 0
+          if (detected === 0) {
+            return true
+          }
+          if (!pageViewRotations || pageViewRotations[page.page] == null) {
+            return false
+          }
+          return pageViewRotations[page.page] === detected
+        })
+      : true)
 
-  if (orientation?.anyRotated) {
+  if (orientation?.anyRotated && corrected) {
     warnings.push({
       code: 'page-rotated',
-      message: `Detected a rotated page (≈${orientation.maxRotation}°); corrected before detection.`,
+      message: `Detected rotated page(s) (up to ${orientation.maxRotation}°); viewer correction applied.`,
+    })
+  } else if (orientation?.anyRotated && !corrected) {
+    warnings.push({
+      code: 'rotation-viewer-mismatch',
+      message: 'Page appears rotated; use Rotate page or re-upload an upright PDF.',
     })
   }
   if (orientation?.anyUncertain) {
@@ -102,22 +128,49 @@ export function buildCalibrationDebugSnapshot({
   debugReport = null,
   smartCalibration = null,
   orientation = null,
+  pageViewRotations = null,
+  viewerCorrectionApplied = null,
   proposedAnchors = [],
   supplementalMeasureAnchors = [],
   warnings = null,
+  setupPhase = null,
 } = {}) {
-  if (!debugReport && !smartCalibration) {
+  if (!debugReport && !smartCalibration && proposedAnchors.length < 2) {
     return null
   }
 
   const mergedWarnings =
-    warnings ?? collectCalibrationWarnings({ debugReport, smartCalibration, orientation })
+    warnings ??
+    collectCalibrationWarnings({
+      debugReport,
+      smartCalibration,
+      orientation,
+      pageViewRotations,
+      viewerCorrectionApplied,
+    })
 
   return {
     capturedAt: new Date().toISOString(),
     debugReport,
     smartCalibration,
     orientation,
+    pageViewRotations,
+    viewerCorrectionApplied:
+      viewerCorrectionApplied ??
+      (orientation
+        ? !orientation.anyRotated ||
+          (orientation.pages ?? []).every((page) => {
+            const detected = page.rotation ?? 0
+            if (detected === 0) {
+              return true
+            }
+            if (!pageViewRotations || pageViewRotations[page.page] == null) {
+              return false
+            }
+            return pageViewRotations[page.page] === detected
+          })
+        : true),
+    setupPhase,
     anchorSummary: summarizeAnchors([...proposedAnchors, ...supplementalMeasureAnchors]),
     warnings: mergedWarnings,
     fallbacks: {
@@ -132,16 +185,37 @@ export function buildCalibrationDebugSnapshot({
   }
 }
 
-export function buildCalibrationDebugSnapshotFromPreview(preview) {
+export function buildCalibrationDebugSnapshotFromPreview(preview, { pageViewRotations = null } = {}) {
   if (!preview) {
     return null
   }
+  const rotations =
+    pageViewRotations ?? preview.pageViewRotations ?? null
   return buildCalibrationDebugSnapshot({
     debugReport: preview.debugReport ?? null,
     smartCalibration: preview.smartCalibration ?? null,
     orientation: preview.orientation ?? null,
+    pageViewRotations: rotations,
     proposedAnchors: preview.proposedAnchors ?? [],
     supplementalMeasureAnchors: preview.supplementalMeasureAnchors ?? [],
+    setupPhase: preview.plausible ? (preview.approximate ? 'approximate' : 'ready') : 'needs-setup',
+  })
+}
+
+/** Minimal snapshot when only the debug report or anchors survived a session reload. */
+export function buildCalibrationDebugSnapshotFromReport(
+  debugReport,
+  { anchors = [], orientation = null, pageViewRotations = null, setupPhase = null } = {},
+) {
+  if (!debugReport) {
+    return null
+  }
+  return buildCalibrationDebugSnapshot({
+    debugReport,
+    proposedAnchors: anchors,
+    orientation,
+    pageViewRotations,
+    setupPhase,
   })
 }
 
@@ -259,6 +333,8 @@ export function buildCalibrationExportReport({
     perSystemConfidence: smart?.perSystemConfidence ?? [],
     pageLayout: smart?.pageLayout ?? [],
     orientation: snapshot?.orientation ?? null,
+    pageViewRotations: snapshot?.pageViewRotations ?? null,
+    viewerCorrectionApplied: snapshot?.viewerCorrectionApplied ?? null,
     systemBounds: debug?.systems ?? [],
     inkBounds: (debug?.systems ?? []).map((system) => ({
       index: system.index,

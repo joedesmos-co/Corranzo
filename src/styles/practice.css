@@ -3920,3 +3920,21 @@
   gap: 0.65rem;
   margin-top: 0.5rem;
 }
+
+.pdf-page-frame--rot-90,
+.pdf-page-frame--rot-270 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pdf-page-rotator__inner {
+  position: relative;
+  transform-origin: center center;
+}
+
+.calibration-debug-panel__status {
+  margin: 0 0 0.65rem;
+  font-size: 0.78rem;
+  color: var(--practice-muted, #8a96a8);
+}

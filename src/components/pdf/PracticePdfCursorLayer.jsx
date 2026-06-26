@@ -43,6 +43,7 @@ export function usePracticeScoreFollowOverlayProps() {
     showCandidateAnchors: Boolean(scoreFollow.showNextGenCandidates),
     showCalibrationOverlay: scoreFollow.showCalibrationOverlay,
     calibrationOverlayPage: scoreFollow.calibrationOverlayPage,
+    getPageViewRotation: scoreFollow.getPageViewRotation,
   }
 }
 

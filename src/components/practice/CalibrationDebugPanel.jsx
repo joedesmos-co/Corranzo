@@ -25,13 +25,35 @@ export default function CalibrationDebugPanel({
   anchors = [],
   showOverlay,
   onShowOverlayChange,
+  onRotatePage,
+  onApplyAutoRotations,
+  visiblePageNumber = 1,
   disabled = false,
+  setupPhase = null,
 }) {
+  const hasAnchors = anchors.length >= 2
+
   if (!snapshot) {
     return (
-      <p className="practice-section__hint">
-        Run score-follow setup to capture calibration diagnostics.
-      </p>
+      <div className="calibration-debug-panel">
+        <p className="practice-section__hint">
+          {hasAnchors
+            ? 'Calibration snapshot is not loaded yet. Re-run auto setup to refresh diagnostics, or wait for setup to finish.'
+            : 'Run score-follow setup to capture calibration diagnostics.'}
+        </p>
+        {hasAnchors && onRotatePage && (
+          <div className="calibration-debug-panel__actions">
+            <button
+              type="button"
+              className="practice-loop__btn practice-loop__btn--ghost"
+              disabled={disabled}
+              onClick={() => onRotatePage(visiblePageNumber)}
+            >
+              Rotate page
+            </button>
+          </div>
+        )}
+      </div>
     )
   }
 
@@ -39,9 +61,15 @@ export default function CalibrationDebugPanel({
   const debug = snapshot.debugReport ?? {}
   const warnings = snapshot.warnings ?? []
   const orientation = snapshot.orientation ?? null
+  const viewerCorrected = snapshot.viewerCorrectionApplied !== false
   const orientationValue = orientation
     ? `${orientation.maxRotation ?? 0}°${orientation.anyUncertain ? ' (uncertain)' : ''}`
-    : null
+    : '0°'
+  const correctionLabel = orientation?.anyRotated
+    ? viewerCorrected
+      ? 'Applied'
+      : 'Not applied'
+    : 'Not needed'
 
   function handleExport() {
     const report = buildCalibrationExportReport({
@@ -54,6 +82,12 @@ export default function CalibrationDebugPanel({
 
   return (
     <div className="calibration-debug-panel">
+      {setupPhase && setupPhase !== 'idle' && (
+        <p className="calibration-debug-panel__status" role="status">
+          Setup state: {setupPhase}
+        </p>
+      )}
+
       <dl className="calibration-debug-panel__grid">
         <Metric
           label="Overall confidence"
@@ -63,8 +97,32 @@ export default function CalibrationDebugPanel({
         <Metric label="Calibration time" value={smart.calibrationMs != null ? `${smart.calibrationMs} ms` : null} />
         <Metric label="Allocation mode" value={debug.allocationMode} />
         <Metric label="Stage" value={debug.stage} />
-        <Metric label="Page rotation" value={orientationValue} />
+        <Metric label="Detected rotation" value={orientationValue} />
+        <Metric label="Viewer correction" value={correctionLabel} />
+        {orientation?.anyRotated && (
+          <Metric
+            label="Orientation confidence"
+            value={formatConfidence(
+              (orientation.pages ?? []).find((page) => page.rotation)?.confidence,
+            )}
+          />
+        )}
       </dl>
+
+      {orientation?.pages?.length > 0 && (
+        <div className="calibration-debug-panel__section">
+          <h4 className="calibration-debug-panel__subtitle">Per-page orientation</h4>
+          <ul className="calibration-debug-panel__list">
+            {orientation.pages.map((page) => (
+              <li key={`orient-${page.page}`}>
+                Page {page.page}: {page.rotation ?? 0}°
+                {page.uncertain ? ' (uncertain)' : ''}
+                {Number.isFinite(page.confidence) ? ` · ${formatConfidence(page.confidence)}` : ''}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {smart.perPageConfidence?.length > 0 && (
         <div className="calibration-debug-panel__section">
@@ -141,6 +199,26 @@ export default function CalibrationDebugPanel({
           />
           Show calibration overlay
         </label>
+        {onRotatePage && (
+          <button
+            type="button"
+            className="practice-loop__btn practice-loop__btn--ghost"
+            disabled={disabled}
+            onClick={() => onRotatePage(visiblePageNumber)}
+          >
+            Rotate page
+          </button>
+        )}
+        {onApplyAutoRotations && orientation?.anyRotated && !viewerCorrected && (
+          <button
+            type="button"
+            className="practice-loop__btn practice-loop__btn--ghost"
+            disabled={disabled}
+            onClick={onApplyAutoRotations}
+          >
+            Auto-rotate PDF
+          </button>
+        )}
         <button
           type="button"
           className="practice-loop__btn practice-loop__btn--ghost"

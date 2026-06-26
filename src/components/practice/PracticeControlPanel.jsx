@@ -22,6 +22,7 @@ import { buildDiagnosticsSummary, buildSetupSummary } from './practicePanelSumma
 
 export default function PracticeControlPanel({
   pdfFileName,
+  pdfPageNumber = 1,
   session,
   scoreFollow,
   waitForYouNoteTarget = null,
@@ -203,6 +204,7 @@ export default function PracticeControlPanel({
                 session={session}
                 scoreFollow={scoreFollow}
                 pieceName={pdfFileName}
+                pdfPageNumber={pdfPageNumber}
               />
             </PracticeCollapsibleSection>
           </div>
@@ -220,6 +222,7 @@ export default function PracticeControlPanel({
             session={session}
             scoreFollow={scoreFollow}
             isDemoPiece={session.isDemoPiece}
+            pdfPageNumber={pdfPageNumber}
           />
         </PracticeCollapsibleSection>
 

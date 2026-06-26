@@ -4,7 +4,7 @@ import ScoreFollowControls from '../pdf/ScoreFollowControls.jsx'
 import CalibrationDebugPanel from './CalibrationDebugPanel.jsx'
 import ScoreFollowApproximateHint from './ScoreFollowApproximateHint.jsx'
 
-export default function PracticeSetupPanel({ session, scoreFollow, isDemoPiece }) {
+export default function PracticeSetupPanel({ session, scoreFollow, isDemoPiece, pdfPageNumber = 1 }) {
   const measureBounds = session.measure?.bounds
 
   return (
@@ -52,20 +52,22 @@ export default function PracticeSetupPanel({ session, scoreFollow, isDemoPiece }
         )}
       </section>
 
-      {scoreFollow?.calibrationDebugSnapshot && (
-        <details className="practice-diagnostics__group">
-          <summary>Calibration debug (beta)</summary>
-          <div className="practice-diagnostics__group-body">
-            <CalibrationDebugPanel
-              snapshot={scoreFollow.calibrationDebugSnapshot}
-              pieceName={session.sources?.playbackFileName ?? null}
-              anchors={scoreFollow.anchors ?? []}
-              showOverlay={scoreFollow.showCalibrationOverlay}
-              onShowOverlayChange={scoreFollow.setShowCalibrationOverlay}
-            />
-          </div>
-        </details>
-      )}
+      <details className="practice-diagnostics__group" open={Boolean(scoreFollow?.calibrationDebugSnapshot)}>
+        <summary>Calibration debug (beta)</summary>
+        <div className="practice-diagnostics__group-body">
+          <CalibrationDebugPanel
+            snapshot={scoreFollow?.calibrationDebugSnapshot ?? null}
+            pieceName={session.sources?.playbackFileName ?? null}
+            anchors={scoreFollow?.anchors ?? []}
+            showOverlay={scoreFollow?.showCalibrationOverlay}
+            onShowOverlayChange={scoreFollow?.setShowCalibrationOverlay}
+            onRotatePage={scoreFollow?.rotatePageView}
+            onApplyAutoRotations={scoreFollow?.applyAutoPageRotations}
+            visiblePageNumber={pdfPageNumber}
+            setupPhase={scoreFollow?.setupStatus?.phase ?? null}
+          />
+        </div>
+      </details>
 
       {session.isWaitForYou && session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE && (
         <section className="practice-section" aria-label="Note matching options">

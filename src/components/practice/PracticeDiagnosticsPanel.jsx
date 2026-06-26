@@ -7,7 +7,12 @@ const SmokeTestChecklist = import.meta.env.DEV
   ? lazy(() => import('../../dev/SmokeTestChecklist.jsx'))
   : null
 
-export default function PracticeDiagnosticsPanel({ session, scoreFollow, pieceName = null }) {
+export default function PracticeDiagnosticsPanel({
+  session,
+  scoreFollow,
+  pieceName = null,
+  pdfPageNumber = 1,
+}) {
   const { hasMidi, hasMusicXml } = session
   const alignment = session.alignment.diagnostics
 
@@ -111,6 +116,10 @@ export default function PracticeDiagnosticsPanel({ session, scoreFollow, pieceNa
             anchors={scoreFollow?.anchors ?? []}
             showOverlay={scoreFollow?.showCalibrationOverlay}
             onShowOverlayChange={scoreFollow?.setShowCalibrationOverlay}
+            onRotatePage={scoreFollow?.rotatePageView}
+            onApplyAutoRotations={scoreFollow?.applyAutoPageRotations}
+            visiblePageNumber={pdfPageNumber}
+            setupPhase={scoreFollow?.setupStatus?.phase ?? null}
           />
         </div>
       </details>

@@ -46,9 +46,22 @@ import { deriveNextGenAlignmentDiagnostics } from './nextGenAlignmentDiagnostics
 import { compareAnchorSets, assessPromotionReadiness } from './anchorComparison.js'
 import {
   buildCalibrationDebugSnapshotFromPreview,
+  buildCalibrationDebugSnapshotFromReport,
   CALIBRATION_OVERLAY_DEFAULT_VISIBLE,
   normalizeCalibrationOverlayPage,
 } from './calibrationDebug.js'
+import {
+  clearCalibrationDebugStorage,
+  loadCalibrationDebugSnapshot,
+  loadPageViewRotations,
+  saveCalibrationDebugSnapshot,
+  savePageViewRotations,
+} from './calibrationDebugStorage.js'
+import {
+  cycleViewRotation,
+  getPageViewRotation as resolvePageViewRotation,
+  pageViewRotationsFromOrientation,
+} from '../../utils/pdfPageViewRotation.js'
 import { buildPromotionDecision, resolveActiveAnchorSource } from './anchorPromotion.js'
 import {
   areBundledDemoAnchorsDisabled,
@@ -168,6 +181,8 @@ export default function useScoreFollow({
   const [showCalibrationOverlay, setShowCalibrationOverlay] = useState(
     CALIBRATION_OVERLAY_DEFAULT_VISIBLE,
   )
+  const [pageViewRotations, setPageViewRotations] = useState({})
+  const pageViewRotationsRef = useRef({})
 
   // System-start fallback mode: user taps the start of each staff system
   // instead of marking every measure. Used when auto PDF analysis fails.
@@ -178,6 +193,30 @@ export default function useScoreFollow({
   const autoSetupKey = useMemo(
     () => buildAutoSetupKey(pdfFingerprint, timingSourceId),
     [pdfFingerprint, timingSourceId],
+  )
+
+  useEffect(() => {
+    pageViewRotationsRef.current = pageViewRotations
+  }, [pageViewRotations])
+
+  const captureCalibrationSnapshot = useCallback(
+    (preview, { rotations = pageViewRotationsRef.current, phase = null } = {}) => {
+      if (!preview) {
+        return
+      }
+      const snapshot = buildCalibrationDebugSnapshotFromPreview(preview, {
+        pageViewRotations: rotations,
+      })
+      if (!snapshot) {
+        return
+      }
+      if (phase) {
+        snapshot.setupPhase = phase
+      }
+      setCalibrationDebugSnapshot(snapshot)
+      saveCalibrationDebugSnapshot(autoSetupKey, snapshot)
+    },
+    [autoSetupKey],
   )
 
   const hasTiming = Boolean(timingMap?.measures?.length)
@@ -638,6 +677,7 @@ export default function useScoreFollow({
             pdfSource,
             numPages,
             timingMap,
+            pageViewRotations: pageViewRotationsRef.current,
             onProgress: (progress, message) => {
               setSemiAutoSetup((previous) => ({
                 ...previous,
@@ -668,6 +708,9 @@ export default function useScoreFollow({
         }
 
         if (!result.ok) {
+          if (result.preview) {
+            captureCalibrationSnapshot(result.preview, { phase: 'failed' })
+          }
           recordAutoSetupRuntime({
             result,
             preview: null,
@@ -690,7 +733,22 @@ export default function useScoreFollow({
 
         const { preview } = result
         setAutoSetupReport(preview.debugReport ?? null)
-        setCalibrationDebugSnapshot(buildCalibrationDebugSnapshotFromPreview(preview))
+
+        const detectedRotations = pageViewRotationsFromOrientation(preview.orientation)
+        const mergedRotations = { ...pageViewRotationsRef.current, ...detectedRotations }
+        pageViewRotationsRef.current = mergedRotations
+        setPageViewRotations(mergedRotations)
+        savePageViewRotations(autoSetupKey, mergedRotations)
+
+        const setupPhase = preview.plausible
+          ? preview.approximate
+            ? 'approximate'
+            : 'ready'
+          : 'needs-setup'
+        captureCalibrationSnapshot(preview, {
+          rotations: mergedRotations,
+          phase: setupPhase,
+        })
 
         // Apply only when the page→system mapping is plausible AND we have at
         // least a system-start + system-end pair. A plausible high-confidence
@@ -806,6 +864,7 @@ export default function useScoreFollow({
       isDemoSession,
       setupFailedMessage,
       setupReadyMessage,
+      captureCalibrationSnapshot,
     ],
   )
 
@@ -820,10 +879,13 @@ export default function useScoreFollow({
     demoBundledLoadRef.current = null
     demoBundledInFlightRef.current = false
     layoutSupplementKeyRef.current = null
+    const storedRotations = loadPageViewRotations(autoSetupKey)
+    pageViewRotationsRef.current = storedRotations
+    setPageViewRotations(storedRotations)
+    setCalibrationDebugSnapshot(loadCalibrationDebugSnapshot(autoSetupKey))
+    setShowCalibrationOverlay(CALIBRATION_OVERLAY_DEFAULT_VISIBLE)
     setAutoSetupReport(null)
     setAutoSetupRuntimeDiagnostics(null)
-    setCalibrationDebugSnapshot(null)
-    setShowCalibrationOverlay(CALIBRATION_OVERLAY_DEFAULT_VISIBLE)
     setDemoBundledStatus({ loading: false, applied: false, error: null })
     // Clear any stale setup status/warning from the previous score or PDF. Without
     // this, a "does not match the PDF" warning (or a failed/needs-setup banner)
@@ -832,6 +894,35 @@ export default function useScoreFollow({
     setSemiAutoSetup(idleSemiAutoSetupState())
     setSetupStatus({ phase: 'idle', message: '' })
   }, [autoSetupKey])
+
+  useEffect(() => {
+    if (!autoSetupKey || calibrationDebugSnapshot) {
+      return
+    }
+    const stored = loadCalibrationDebugSnapshot(autoSetupKey)
+    if (stored) {
+      setCalibrationDebugSnapshot(stored)
+      return
+    }
+    if (autoSetupReport && anchors.length >= 2) {
+      const fallback = buildCalibrationDebugSnapshotFromReport(autoSetupReport, {
+        anchors,
+        pageViewRotations,
+        setupPhase: setupStatus.phase,
+      })
+      if (fallback) {
+        setCalibrationDebugSnapshot(fallback)
+        saveCalibrationDebugSnapshot(autoSetupKey, fallback)
+      }
+    }
+  }, [
+    autoSetupKey,
+    calibrationDebugSnapshot,
+    autoSetupReport,
+    anchors,
+    pageViewRotations,
+    setupStatus.phase,
+  ])
 
   useEffect(() => {
     if (!sessionReady || !isHydrated || timingLoading || !hasTiming) {
@@ -1094,7 +1185,7 @@ export default function useScoreFollow({
     if (hasSupplemental) {
       setSupplementalAnchors(preview.supplementalMeasureAnchors)
     }
-    setCalibrationDebugSnapshot(buildCalibrationDebugSnapshotFromPreview(preview))
+    captureCalibrationSnapshot(preview, { phase: 'confirmed' })
     setEnabled(true)
     setSemiAutoSetup({
       status: 'confirmed',
@@ -1105,7 +1196,45 @@ export default function useScoreFollow({
       error: null,
       preview: null,
     })
-  }, [semiAutoSetup.preview, setAutoAnchors, setSupplementalAnchors])
+  }, [semiAutoSetup.preview, setAutoAnchors, setSupplementalAnchors, captureCalibrationSnapshot])
+
+  const rotatePageView = useCallback(
+    (pageNumber = visiblePageNumber) => {
+      const page = pageNumber ?? visiblePageNumber
+      const updated = {
+        ...pageViewRotationsRef.current,
+        [page]: cycleViewRotation(pageViewRotationsRef.current[page] ?? 0),
+      }
+      pageViewRotationsRef.current = updated
+      setPageViewRotations(updated)
+      savePageViewRotations(autoSetupKey, updated)
+      runSemiAutoSetupInternal({ force: true })
+    },
+    [autoSetupKey, visiblePageNumber, runSemiAutoSetupInternal],
+  )
+
+  const applyAutoPageRotations = useCallback(() => {
+    const orientation =
+      calibrationDebugSnapshot?.orientation ?? semiAutoSetup.preview?.orientation ?? null
+    if (!orientation?.anyRotated) {
+      return
+    }
+    const detected = pageViewRotationsFromOrientation(orientation)
+    pageViewRotationsRef.current = detected
+    setPageViewRotations(detected)
+    savePageViewRotations(autoSetupKey, detected)
+    runSemiAutoSetupInternal({ force: true })
+  }, [
+    calibrationDebugSnapshot?.orientation,
+    semiAutoSetup.preview?.orientation,
+    autoSetupKey,
+    runSemiAutoSetupInternal,
+  ])
+
+  const getPageViewRotation = useCallback(
+    (pageNumber) => resolvePageViewRotation(pageViewRotations, pageNumber),
+    [pageViewRotations],
+  )
 
   const cancelSemiAutoPreview = useCallback(() => {
     setSemiAutoSetup({
@@ -1125,7 +1254,11 @@ export default function useScoreFollow({
   const resetSemiAutoSetup = useCallback(() => {
     clearAutoAnchors()
     clearAutoSetupAttempted(autoSetupKey)
+    clearCalibrationDebugStorage(autoSetupKey)
     autoSetupTriggerKeyRef.current = null
+    pageViewRotationsRef.current = {}
+    setPageViewRotations({})
+    setCalibrationDebugSnapshot(null)
     setSemiAutoSetup({
       status: 'idle',
       progress: 0,
@@ -1500,5 +1633,9 @@ export default function useScoreFollow({
     showCalibrationOverlay,
     setShowCalibrationOverlay,
     calibrationOverlayPage,
+    pageViewRotations,
+    getPageViewRotation,
+    rotatePageView,
+    applyAutoPageRotations,
   }
 }

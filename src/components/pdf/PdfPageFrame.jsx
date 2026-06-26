@@ -6,6 +6,7 @@ import AnnotationLayer from './AnnotationLayer.jsx'
 import ScoreFollowOverlay from './ScoreFollowOverlay.jsx'
 import CalibrationDebugOverlay from './CalibrationDebugOverlay.jsx'
 import { ANNOTATION_TOOLS } from './annotationConstants.js'
+import { isQuarterTurn } from '../../utils/pdfPageViewRotation.js'
 
 function PdfPageFrame({
   pageNumber,
@@ -62,7 +63,10 @@ function PdfPageFrame({
       observer.disconnect()
       window.removeEventListener('resize', syncOverlayLayout)
     }
-  }, [syncOverlayLayout, pageNumber, width, height])
+  }, [syncOverlayLayout, pageNumber, width, height, scoreFollow?.pageViewRotations])
+
+  const viewRotation = scoreFollow?.getPageViewRotation?.(pageNumber) ?? 0
+  const quarterTurn = isQuarterTurn(viewRotation)
 
   const handlePageLoadSuccess = useCallback(
     (page) => {
@@ -102,21 +106,27 @@ function PdfPageFrame({
 
   return (
     <div
-      className="pdf-page-frame"
+      className={`pdf-page-frame${viewRotation ? ` pdf-page-frame--rot-${viewRotation}` : ''}`}
       ref={frameRef}
       style={
         width
           ? {
-              minWidth: width,
+              minWidth: quarterTurn && height ? height : width,
               minHeight:
-                height ??
-                (overlayLayout?.height > 0 ? overlayLayout.height : undefined),
+                quarterTurn && width
+                  ? width
+                  : height ??
+                    (overlayLayout?.height > 0 ? overlayLayout.height : undefined),
             }
           : height
-            ? { minHeight: height }
+            ? { minHeight: quarterTurn && width ? width : height }
             : undefined
       }
     >
+      <div
+        className="pdf-page-rotator__inner"
+        style={viewRotation ? { transform: `rotate(${viewRotation}deg)` } : undefined}
+      >
       <PdfPage
         pageNumber={pageNumber}
         width={width}
@@ -184,6 +194,7 @@ function PdfPageFrame({
           </PdfOverlayLayer>
         </PdfPageOverlayStack>
       )}
+      </div>
     </div>
   )
 }

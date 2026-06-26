@@ -92,9 +92,17 @@ describe('calibrationDebug — snapshot + warnings', () => {
     const warnings = collectCalibrationWarnings({
       debugReport: { layoutMismatch: true, layoutConfidence: 'low', weakestSystemIndex: 1 },
       smartCalibration: { improvedOverBaseline: true, chosenStrategy: 'C' },
+      orientation: { anyRotated: true, pages: [{ page: 1, rotation: 90 }] },
+      pageViewRotations: { 1: 90 },
     })
     expect(warnings.map((w) => w.code)).toEqual(
-      expect.arrayContaining(['layout-mismatch', 'low-layout-confidence', 'weak-system', 'strategy-fallback']),
+      expect.arrayContaining([
+        'page-rotated',
+        'layout-mismatch',
+        'low-layout-confidence',
+        'weak-system',
+        'strategy-fallback',
+      ]),
     )
   })
 })

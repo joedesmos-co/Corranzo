@@ -1,3 +1,5 @@
+import { getEffectivePageSize } from './pdfPageViewRotation.js'
+
 const CANVAS_PADDING = 32
 
 function innerSize(containerWidth, containerHeight) {
@@ -34,8 +36,9 @@ export function getFitWidth(pageWidth, containerWidth) {
  * Returns width and/or height props for react-pdf Page.
  * Uses container-only fallbacks until page dimensions are known.
  */
-export function getPageDimensions(fitMode, pageSize, containerSize) {
+export function getPageDimensions(fitMode, pageSize, containerSize, viewRotation = 0) {
   const { width: containerWidth, height: containerHeight } = containerSize
+  const effectivePageSize = getEffectivePageSize(pageSize, viewRotation) ?? pageSize
 
   if (!hasContainerSize(containerWidth, containerHeight)) {
     return {}
@@ -43,8 +46,8 @@ export function getPageDimensions(fitMode, pageSize, containerSize) {
 
   const inner = innerSize(containerWidth, containerHeight)
 
-  if (pageSize) {
-    const { width: pageWidth, height: pageHeight } = pageSize
+  if (effectivePageSize) {
+    const { width: pageWidth, height: pageHeight } = effectivePageSize
 
     if (fitMode === 'width') {
       const width = getFitWidth(pageWidth, containerWidth)
