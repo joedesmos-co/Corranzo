@@ -1,6 +1,14 @@
 import { DEMO_PIECE } from '../dev/fixturePaths.js'
 
-export default function DemoPieceCard({ loading = false, error = null, onLoad, compact = false }) {
+export default function DemoPieceCard({
+  loading = false,
+  error = null,
+  onLoad,
+  onRetry,
+  compact = false,
+}) {
+  const retry = onRetry ?? onLoad
+
   return (
     <article className={`demo-piece${compact ? ' demo-piece--compact' : ''}`}>
       <div className="demo-piece__copy">
@@ -25,9 +33,19 @@ export default function DemoPieceCard({ loading = false, error = null, onLoad, c
         <p className="demo-piece__credit">{DEMO_PIECE.attribution}</p>
       </div>
       {error && (
-        <p className="demo-piece__error" role="alert">
-          {error}
-        </p>
+        <div className="demo-piece__error-block" role="alert">
+          <p className="demo-piece__error">{error}</p>
+          {retry && (
+            <button
+              type="button"
+              className="demo-piece__retry"
+              disabled={loading}
+              onClick={retry}
+            >
+              Retry
+            </button>
+          )}
+        </div>
       )}
     </article>
   )

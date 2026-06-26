@@ -35,6 +35,8 @@ import {
   formatPdfImportError,
 } from './features/import/formatImportError.js'
 import { isDemoSampleEnabled } from './features/demo/demoSampleAccess.js'
+import { formatDemoLoadError } from './features/demo/formatDemoLoadError.js'
+import { fetchSampleFixtureFiles } from './dev/loadSampleFixtures.js'
 import {
   getViewFromPathname,
   isLegalPathname,
@@ -253,7 +255,6 @@ export default function App() {
     setSampleLoadState({ loading: true, error: null })
 
     try {
-      const { fetchSampleFixtureFiles } = await import('./dev/loadSampleFixtures.js')
       const { pdfFile, midiFile, musicXmlFile, meta } = await fetchSampleFixtureFiles()
 
       const pdfData = await pdfFile.arrayBuffer()
@@ -308,10 +309,7 @@ export default function App() {
     } catch (loadError) {
       setSampleLoadState({
         loading: false,
-        error:
-          loadError instanceof Error
-            ? loadError.message
-            : 'Could not load the sample score. Check your connection and try again.',
+        error: formatDemoLoadError(loadError),
       })
     }
   }, [setSidebarOpen, markDemoCardHidden])

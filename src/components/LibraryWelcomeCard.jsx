@@ -45,6 +45,7 @@ export default function LibraryWelcomeCard({
           loading={sampleLoading}
           error={sampleError}
           onLoad={onTrySample}
+          onRetry={onTrySample}
         />
       )}
 

@@ -39,18 +39,39 @@ export function shouldFallbackToSpa(pathname) {
 
 /**
  * Cloudflare Workers static-assets handler: serve real files first, then index.html for SPA routes.
+ * Applies cache headers so index.html is always revalidated while hashed /assets/* stay immutable.
  */
+export function applyDeployCacheHeaders(response, pathname) {
+  if (!response || response.status < 200 || response.status >= 400) {
+    return response
+  }
+
+  const headers = new Headers(response.headers)
+  if (pathname === '/' || pathname === '/index.html') {
+    headers.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+    headers.set('Pragma', 'no-cache')
+  } else if (pathname.startsWith('/assets/')) {
+    headers.set('Cache-Control', 'public, max-age=31536000, immutable')
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  })
+}
+
 export async function handleSpaAssetRequest(request, assets) {
+  const { pathname } = new URL(request.url)
   const assetResponse = await assets.fetch(request)
   if (assetResponse.status !== 404) {
-    return assetResponse
+    return applyDeployCacheHeaders(assetResponse, pathname)
   }
 
   if (request.method !== 'GET' && request.method !== 'HEAD') {
     return assetResponse
   }
 
-  const { pathname } = new URL(request.url)
   if (!shouldFallbackToSpa(pathname)) {
     return assetResponse
   }
@@ -65,9 +86,10 @@ export async function handleSpaAssetRequest(request, assets) {
     return assetResponse
   }
 
-  return new Response(indexResponse.body, {
+  const spaShell = new Response(indexResponse.body, {
     status: 200,
     statusText: indexResponse.statusText,
     headers: indexResponse.headers,
   })
+  return applyDeployCacheHeaders(spaShell, '/index.html')
 }

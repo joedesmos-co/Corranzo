@@ -107,6 +107,7 @@ export default function LibraryPanel({
           loading={sampleLoadLoading}
           error={sampleLoadError}
           onLoad={onLoadSampleFixtures}
+          onRetry={onLoadSampleFixtures}
         />
       )}
 
