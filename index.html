@@ -12,9 +12,12 @@
       gtag('js', new Date());
       gtag('config', 'G-PRT6SWTWK1');
     </script>
-    <link rel="icon" type="image/png" sizes="512x512" href="/corranzo-logo.png" />
-    <link rel="shortcut icon" type="image/png" href="/corranzo-logo.png" />
-    <link rel="apple-touch-icon" sizes="512x512" href="/corranzo-logo.png" />
+    <!-- Tab/favicon: Corranzo logo. The ?v= query is a cache-buster — browsers
+         cache favicons aggressively, so bump it whenever the logo changes to
+         force a fresh fetch (otherwise an old icon can linger after deploy). -->
+    <link rel="icon" type="image/png" sizes="any" href="/corranzo-logo.png?v=2" />
+    <link rel="shortcut icon" type="image/png" href="/corranzo-logo.png?v=2" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/corranzo-logo.png?v=2" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#9a9a9a" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
