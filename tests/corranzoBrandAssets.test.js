@@ -25,7 +25,9 @@ describe('Corranzo brand assets', () => {
 
   it('wires index.html icons and social metadata to the logo', () => {
     const html = readFileSync(join(root, 'index.html'), 'utf8')
-    expect(html).toContain(`href="${CORRANZO_LOGO_SRC}"`)
+    // Favicon may carry a cache-busting ?v= query, so match the logo href
+    // without requiring the closing quote immediately after.
+    expect(html).toContain(`href="${CORRANZO_LOGO_SRC}`)
     expect(html).toContain(`href="${CORRANZO_MANIFEST_SRC}"`)
     expect(html).toContain(`content="${CORRANZO_OG_IMAGE}"`)
     expect(html).toContain(`content="${CORRANZO_THEME_COLOR}"`)
