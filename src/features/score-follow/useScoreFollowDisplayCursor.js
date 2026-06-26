@@ -51,15 +51,15 @@ export default function useScoreFollowCursorDriver({
   useEffect(() => {
     if (lockExact || !active) {
       const next = targetCursor ?? { visible: false }
+      stateRef.current.initialized = false
       publishScoreFollowCursor({ ...next, smoothed: false })
       if (next.visible) {
         stateRef.current.x = next.x
         stateRef.current.y = next.y
         stateRef.current.page = next.page
         stateRef.current.measureNumber = next.measureNumber ?? null
+        stateRef.current.systemKey = systemKeyForCursor(next)
         stateRef.current.initialized = true
-      } else {
-        stateRef.current.initialized = false
       }
     }
   }, [lockExact, active, targetCursor])

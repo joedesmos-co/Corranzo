@@ -3357,20 +3357,6 @@
   grid-row: 2;
 }
 
-.library-welcome::after {
-  content: '';
-  position: absolute;
-  top: 12px;
-  right: 20px;
-  width: 180px;
-  height: 180px;
-  opacity: 0.055;
-  pointer-events: none;
-  background: url('/corranzo-logo.png') center / contain no-repeat;
-  transform: rotate(-8deg);
-  mask-image: linear-gradient(135deg, black 15%, transparent 82%);
-}
-
 .library-welcome__logo {
   display: block;
   width: auto;

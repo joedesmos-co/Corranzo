@@ -290,6 +290,7 @@ export function buildCursorMotionTimeline({ timingMap, trustedAnchors }) {
     if (!current) {
       current = {
         index: phrases.length,
+        systemIndex: anchor.meta?.systemIndex ?? phrases.length,
         page: anchor.page ?? 1,
         y: anchor.y ?? 0,
         startTime: pm.startTime,
@@ -403,7 +404,16 @@ export function resolveCursorMotion(timeline, scoreTime) {
   const phrases = timeline?.phrases
   if (!phrases?.length) return null
   if (scoreTime < phrases[0].startTime - 1e-6) return null
-  const phrase = phrases[findPhraseIndex(phrases, scoreTime)]
+  const phraseIndex = findPhraseIndex(phrases, scoreTime)
+  const phrase = phrases[phraseIndex]
+  const nextPhrase = phrases[phraseIndex + 1] ?? null
+  if (
+    nextPhrase &&
+    scoreTime > phrase.endTime + 1e-6 &&
+    scoreTime < nextPhrase.startTime - 1e-6
+  ) {
+    return null
+  }
   const x = clamp(evalSpline(phrase.spline, scoreTime), phrase.minX, phrase.maxX)
   return {
     visible: true,
@@ -411,7 +421,7 @@ export function resolveCursorMotion(timeline, scoreTime) {
     y: phrase.y,
     page: phrase.page,
     measureNumber: measureNumberAt(phrase, scoreTime),
-    systemIndex: phrase.index,
+    systemIndex: phrase.systemIndex ?? phrase.index,
     segmentType: segmentTypeAt(phrase, scoreTime),
     confidence: 'exact',
   }
@@ -442,6 +452,7 @@ export function buildCursorMotionDiagnostics(timeline) {
     maxOnsetErrorAtT,
     phrases: phrases.map((p) => ({
       index: p.index,
+      systemIndex: p.systemIndex ?? p.index,
       page: p.page,
       y: p.y,
       startTime: p.startTime,

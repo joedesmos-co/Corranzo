@@ -160,7 +160,7 @@ export default function useScorePlayback({
 
   const play = useCallback(() => {
     const engine = engineRef.current
-    if (!engine) {
+    if (!engine || engine.isPlaying()) {
       return
     }
 
@@ -190,7 +190,7 @@ export default function useScorePlayback({
       return
     }
     engine.seek(seconds)
-    setCurrentTime(seconds)
+    setCurrentTime(engine.getCurrentScoreTime())
     setIsPlaying(engine.isPlaying())
   }, [])
 

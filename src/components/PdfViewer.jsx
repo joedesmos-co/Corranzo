@@ -227,6 +227,7 @@ export default function PdfViewer({
 
   useEffect(() => {
     libraryLayoutCacheRef.current.clear()
+    clearWarmPages()
   }, [file, fitMode, viewerRotationKey])
 
   const pageWindowKey = useMemo(() => {

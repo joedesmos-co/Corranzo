@@ -27,6 +27,7 @@ export default function LibraryPanel({
   onFileSelect,
   onMidiSelect,
   onMusicXmlSelect,
+  onClassifiedUpload = null,
   onImportFeedback,
   onLoadSampleFixtures,
   onOpenPractice,
@@ -118,6 +119,7 @@ export default function LibraryPanel({
         onFileSelect={onFileSelect}
         onMusicXmlSelect={onMusicXmlSelect}
         onMidiSelect={onMidiSelect}
+        onClassifiedUpload={onClassifiedUpload}
         disabled={uploadsDisabled}
       />
 

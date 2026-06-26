@@ -279,6 +279,12 @@ function buildSystemAnchors(system, result, defaultXByMeasure) {
         playableStartX,
         playableEndX: measureEndX,
         systemEndX: rightX,
+        measureBox: {
+          x0: measureStartX,
+          y0: system.y0,
+          x1: measureEndX,
+          y1: system.y1,
+        },
         xSource,
         calibrationStrategy: 'smart',
       },

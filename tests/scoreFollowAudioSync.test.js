@@ -132,7 +132,7 @@ describe('audio clock cursor resolution', () => {
     expect(nextDownbeat.x).toBeGreaterThanOrEqual(lateTail.x - 0.0001)
   })
 
-  it('page transition does not add extra delay at boundary', () => {
+  it('page transition happens at the next measure anchor, not inside the gap', () => {
     const crossPage = [
       { id: 'a1', page: 1, x: 0.1, y: 0.3, measureNumber: 1, source: 'manual', meta: { playableEndX: 0.22 } },
       { id: 'a3', page: 2, x: 0.1, y: 0.3, measureNumber: 3, source: 'manual', meta: { playableEndX: 0.22 } },
@@ -150,7 +150,15 @@ describe('audio clock cursor resolution', () => {
       trust,
     }).cursor
     expect(beforeFlip.page).toBe(1)
-    expect(afterFlip.page).toBe(2)
+    expect(afterFlip.page).toBe(1)
     expect(afterFlip.x).toBeGreaterThanOrEqual(beforeFlip.x - 0.01)
+    const atNextMeasure = resolveScoreFollowCursor({
+      timingMap,
+      practiceTime: 4.05,
+      trustedAnchors: crossPage,
+      trust,
+    }).cursor
+    expect(atNextMeasure.measureNumber).toBe(3)
+    expect(atNextMeasure.page).toBe(2)
   })
 })

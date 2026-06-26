@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import useWebMidiInput from '../midi-input/useWebMidiInput.js'
 import { isWebMidiSupported } from '../midi-input/parseMidiMessage.js'
 import { WEB_MIDI_PERMISSION, WEB_MIDI_SUPPORT } from '../midi-input/webMidiConstants.js'
@@ -146,14 +147,17 @@ export default function usePracticeSession({
 
   const seekToPracticeTime = useCallback(
     (seconds) => {
-      if (hasMusicXml) {
-        playback.seek(seconds)
-        // Keep manual clock aligned so cursor/progress stay correct if React
-        // isPlaying briefly desyncs from the engine during a playing seek.
-        clock.syncManualTimeToPlayback(seconds)
+      if (!hasMusicXml) {
+        return
       }
+      // Paused scrub uses manualTime for practiceTime; flush so the score-follow
+      // cursor and page follow see the new position in the same frame as the bar.
+      flushSync(() => {
+        clock.setManualTime(seconds)
+      })
+      playback.seek(seconds)
     },
-    [hasMusicXml, playback, clock.syncManualTimeToPlayback],
+    [hasMusicXml, playback, clock.setManualTime],
   )
 
   const referencePlayback = useWaitForYouReferencePlayback({
@@ -307,12 +311,16 @@ export default function usePracticeSession({
     isPlaying: playback.isPlaying,
     hasPlayback: hasMusicXml,
     currentTime: playback.currentTime,
+    duration: playback.duration,
     onLoopRestart: handleLoopRestart,
   })
 
   const handlePlay = useCallback(() => {
     if (isWaitForYou) {
       ensurePaused()
+      return
+    }
+    if (playback.isPlaying) {
       return
     }
     playback.play()

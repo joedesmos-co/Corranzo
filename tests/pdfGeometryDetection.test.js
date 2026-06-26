@@ -16,6 +16,7 @@ import {
   groundTruthAnchors,
   lightClassicalPage,
   multiPageScore,
+  multiPageScoreWithCounts,
   renderPagesFromArray,
   unevenMeasurePage,
 } from './helpers/syntheticScore.js'
@@ -25,6 +26,7 @@ import {
 } from '../src/features/score-follow/detectStaffLines.js'
 import { detectContentBounds } from '../src/features/score-follow/detectStaffSystems.js'
 import { analyzeSemiAutoScoreSetup } from '../src/features/score-follow/semiAutoScoreAlignment.js'
+import { allocateSpansByPartialCounts } from '../src/features/score-follow/allocateMeasuresToSystems.js'
 import {
   assessPromotionReadiness,
   compareAnchorSets,
@@ -97,6 +99,50 @@ describe('PDF geometry detection — boundaries/system-ends match ground truth (
     expect(res.preview.systemCount).toBe(4)
     expect(comparison.systemMismatchCount).toBe(0)
     expect(readiness.status).toBe(PROMOTION_STATUS.READY)
+  })
+
+  it('varied pages with 3/4/5/6/7 systems follow detected measure geometry', async () => {
+    const pageSpecs = [
+      [4, 4, 4],
+      [5, 4, 4, 3],
+      [3, 3, 3, 3, 3],
+      [2, 3, 2, 3, 2, 3],
+      [2, 2, 2, 2, 2, 2, 2],
+    ]
+    const pages = multiPageScoreWithCounts(pageSpecs)
+    const measureCount = pageSpecs.flat().reduce((sum, count) => sum + count, 0)
+    const { res, detected, comparison, readiness } = await detectGeometry(
+      pages,
+      measureCount,
+      null,
+    )
+
+    expect(res.preview.allocationMode).toBe('barline-counts')
+    expect(res.preview.pageStages.map((page) => page.count)).toEqual([3, 4, 5, 6, 7])
+    expect(comparison.pageMismatchCount).toBe(0)
+    expect(comparison.systemMismatchCount).toBe(0)
+    expect(readiness.status).toBe(PROMOTION_STATUS.READY)
+    expect(detected.every((anchor) => anchor.meta.measureBox)).toBe(true)
+  })
+})
+
+describe('Measure allocation — partial barline counts preserve detected systems', () => {
+  it('keeps known per-system counts and only distributes the unknown remainder', () => {
+    const systems = Array.from({ length: 5 }, (_, index) => ({
+      page: index < 2 ? 1 : 2,
+      inkWidth: 1,
+    }))
+    const measures = Array.from({ length: 19 }, (_, index) => index + 1)
+    const spans = allocateSpansByPartialCounts(systems, measures, [4, null, 5, 3, 4])
+
+    expect(spans.map((span) => span.measuresInSpan)).toEqual([4, 3, 5, 3, 4])
+    expect(spans.map((span) => [span.measureStart, span.measureEnd])).toEqual([
+      [1, 4],
+      [5, 7],
+      [8, 12],
+      [13, 15],
+      [16, 19],
+    ])
   })
 })
 

@@ -1,6 +1,17 @@
 import { useState } from 'react'
 import { CURSOR_HIDE_REASON, getCursorFollowHint } from '../../features/score-follow/scoreFollowVisibility.js'
 
+function formatDebugNumber(value) {
+  return Number.isFinite(value) ? value.toFixed(4) : '—'
+}
+
+function formatMeasureBox(box) {
+  if (!box) {
+    return '—'
+  }
+  return `x ${formatDebugNumber(box.x0)}-${formatDebugNumber(box.x1)} · y ${formatDebugNumber(box.y0)}-${formatDebugNumber(box.y1)}${box.source ? ` · ${box.source}` : ''}`
+}
+
 function getSetupStatus({
   alignmentMode,
   anchors,
@@ -550,16 +561,44 @@ export default function ScoreFollowControls({
             <dd>{debug?.currentMeasureNumber ?? '—'}</dd>
           </div>
           <div>
+            <dt>Measure index</dt>
+            <dd>{debug?.cursorMapping?.measureIndex ?? '—'}</dd>
+          </div>
+          <div>
             <dt>Cursor page</dt>
             <dd>{debug?.cursorPage ?? '—'}</dd>
+          </div>
+          <div>
+            <dt>Mapped page</dt>
+            <dd>{debug?.cursorMapping?.pageNumber ?? '—'}</dd>
+          </div>
+          <div>
+            <dt>System</dt>
+            <dd>{debug?.cursorMapping?.systemIndex ?? '—'}</dd>
           </div>
           <div>
             <dt>Visible page</dt>
             <dd>{debug?.visiblePageNumber ?? '—'}</dd>
           </div>
           <div>
+            <dt>Playback time</dt>
+            <dd>{formatDebugNumber(debug?.cursorMapping?.playbackTime)}</dd>
+          </div>
+          <div>
             <dt>Markers</dt>
             <dd>{debug?.anchorCount ?? 0}</dd>
+          </div>
+          <div className="score-follow-controls__debug-wide">
+            <dt>Measure box</dt>
+            <dd>{formatMeasureBox(debug?.cursorMapping?.measureBoundingBox)}</dd>
+          </div>
+          <div className="score-follow-controls__debug-wide">
+            <dt>Interpolation source</dt>
+            <dd>{debug?.cursorMapping?.interpolationSource ?? '—'}</dd>
+          </div>
+          <div className="score-follow-controls__debug-wide">
+            <dt>Fallback tier</dt>
+            <dd>{debug?.cursorMapping?.fallbackTier ?? '—'}</dd>
           </div>
           <div className="score-follow-controls__debug-wide">
             <dt>Cursor on this page</dt>

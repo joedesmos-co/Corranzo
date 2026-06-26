@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   canManualScrubMusicXml,
   getPracticeSyncStatus,
@@ -42,14 +42,18 @@ export default function usePracticeClock({
     wasPlayingRef.current = isPlaying
   }, [isPlaying, playbackCurrentTime, hasMusicXml])
 
-  function syncManualTimeToPlayback(seconds) {
+  const setManualTimeStable = useCallback((seconds) => {
     setManualTime(seconds)
-  }
+  }, [])
+
+  const syncManualTimeToPlayback = useCallback((seconds) => {
+    setManualTime(seconds)
+  }, [])
 
   return {
     practiceTime,
     manualTime,
-    setManualTime,
+    setManualTime: setManualTimeStable,
     syncManualTimeToMidi: syncManualTimeToPlayback,
     syncManualTimeToPlayback,
     syncStatus,

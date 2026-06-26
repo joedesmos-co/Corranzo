@@ -2,6 +2,7 @@ import { createAnchorId } from './scoreFollowStorage.js'
 import { ANCHOR_SOURCE } from './anchorUtils.js'
 import {
   allocateMeasureSpansToSystems,
+  allocateSpansByPartialCounts,
   allocateSpansByCounts,
   buildSystemsByPage,
   groupMeasuresBySystemBreaks,
@@ -591,6 +592,12 @@ export function buildPerMeasureSystemAnchors(systemEntries, spans, timingMap = n
           playableStartX,
           playableEndX: measureEndX,
           systemEndX: sysRightX,
+          measureBox: {
+            x0: measureStartX,
+            y0: entry.system.y0,
+            x1: measureEndX,
+            y1: entry.system.y1,
+          },
           xSource,
         },
       })
@@ -869,17 +876,31 @@ export async function analyzeSemiAutoScoreSetup({
   // system has an estimate and the total is within tolerance of the written
   // measure count; otherwise fall back to MusicXML breaks / even distribution.
   const measureCounts = systemEntries.map((entry) => entry.measureEstimate)
-  const haveAllCounts = measureCounts.every((c) => Number.isFinite(c) && c >= 1)
-  const countsTotal = haveAllCounts ? measureCounts.reduce((a, b) => a + b, 0) : 0
-  const countsUsable =
+  const detectedMeasureCounts = measureCounts.filter((c) => Number.isFinite(c) && c >= 1)
+  const haveAllCounts = detectedMeasureCounts.length === measureCounts.length
+  const havePartialCounts = detectedMeasureCounts.length > 0
+  const countsTotal = detectedMeasureCounts.reduce((a, b) => a + b, 0)
+  const countTolerance = Math.max(2, measureNumbers.length * 0.25)
+  const fullCountsUsable =
     haveAllCounts &&
     measureNumbers.length > 0 &&
-    Math.abs(countsTotal - measureNumbers.length) <= Math.max(2, measureNumbers.length * 0.25)
+    Math.abs(countsTotal - measureNumbers.length) <= countTolerance
+  const partialCountsUsable =
+    !fullCountsUsable &&
+    havePartialCounts &&
+    measureNumbers.length > 0 &&
+    countsTotal <= measureNumbers.length + countTolerance
 
-  const allocationMode = countsUsable ? 'barline-counts' : 'breaks-or-even'
-  const spans = countsUsable
+  const allocationMode = fullCountsUsable
+    ? 'barline-counts'
+    : partialCountsUsable
+      ? 'partial-barline-counts'
+      : 'breaks-or-even'
+  const spans = fullCountsUsable
     ? allocateSpansByCounts(systemEntries, measureNumbers, measureCounts)
-    : allocateMeasureSpansToSystems(systemEntries, measureNumbers, timingMap)
+    : partialCountsUsable
+      ? allocateSpansByPartialCounts(systemEntries, measureNumbers, measureCounts)
+      : allocateMeasureSpansToSystems(systemEntries, measureNumbers, timingMap)
   const proposedAnchors = buildSystemSpanAnchors(systemEntries, spans)
   // One canonical anchor per written measure drives the cursor (AUTO_MEASURE
   // outranks the AUTO_SYSTEM start/end spans during dedupe), so playback glides

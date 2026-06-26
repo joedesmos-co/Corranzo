@@ -43,6 +43,9 @@ import {
   isLegalView,
   pathnameForView,
 } from './features/legal/legalRoutes.js'
+import {
+  buildUploadNotices,
+} from './features/import/classifyUploadFiles.js'
 import { resolveRestoredActiveView } from './features/session/sessionRestoreRouting.js'
 import { getHomeNavigationTarget } from './features/navigation/goHome.js'
 import { warmupPianoSamplesOnIdle } from './features/playback/pianoSampleWarmup.js'
@@ -67,6 +70,7 @@ export default function App() {
   const [showWelcome, setShowWelcome] = useState(() => !isOnboardingDismissed())
   const [demoCardHidden, setDemoCardHidden] = useState(() => isDemoCardHidden())
   const practicePrefsRef = useRef(null)
+  const pendingClassifiedUploadRef = useRef(null)
   const [fileName, setFileName] = useState('')
   const [pageNumber, setPageNumber] = useState(1)
   const [numPages, setNumPages] = useState(null)
@@ -176,9 +180,9 @@ export default function App() {
       }
 
       if (isFullPracticeSet(true, midiSource, musicXmlSource)) {
-        setActiveView('practice')
+        navigateToView('practice')
       } else {
-        setActiveView('library')
+        navigateToView('library')
       }
     } catch (error) {
       setLibraryFeedback({
@@ -186,7 +190,7 @@ export default function App() {
         message: formatPdfImportError(error),
       })
     }
-  }, [midiSource, musicXmlSource, clearDemoPiece, markDemoCardHidden])
+  }, [midiSource, musicXmlSource, clearDemoPiece, markDemoCardHidden, navigateToView])
 
   const handleMidiSelect = useCallback(async (file) => {
     clearDemoPiece()
@@ -205,7 +209,7 @@ export default function App() {
           : `Loaded ${file.name}. Add a PDF + timing to open Practice.`,
       })
       if (fullSet) {
-        setActiveView('practice')
+        navigateToView('practice')
       }
     } catch (error) {
       setLibraryFeedback({
@@ -213,7 +217,7 @@ export default function App() {
         message: formatMidiImportError(error),
       })
     }
-  }, [pdfFile, musicXmlSource, clearDemoPiece, markDemoCardHidden])
+  }, [pdfFile, musicXmlSource, clearDemoPiece, markDemoCardHidden, navigateToView])
 
   const handleMusicXmlSelect = useCallback(async (file) => {
     clearDemoPiece()
@@ -237,7 +241,7 @@ export default function App() {
           : `Loaded ${file.name}. Add a PDF to open Practice.`,
       })
       if (fullSet) {
-        setActiveView('practice')
+        navigateToView('practice')
       }
     } catch (error) {
       setLibraryFeedback({
@@ -245,7 +249,7 @@ export default function App() {
         message: formatMusicXmlImportError(error),
       })
     }
-  }, [pdfFile, midiSource, clearDemoPiece, markDemoCardHidden])
+  }, [pdfFile, midiSource, clearDemoPiece, markDemoCardHidden, navigateToView])
 
   const handleLoadSampleFixtures = useCallback(async () => {
     if (!isDemoSampleEnabled()) {
@@ -304,7 +308,7 @@ export default function App() {
         type: 'success',
         message: `${meta.title} loaded — opening Practice. Press Play, then try Wait For You.`,
       })
-      setActiveView('practice')
+      navigateToView('practice')
       setSampleLoadState({ loading: false, error: null })
     } catch (loadError) {
       setSampleLoadState({
@@ -312,11 +316,126 @@ export default function App() {
         error: formatDemoLoadError(loadError),
       })
     }
-  }, [setSidebarOpen, markDemoCardHidden])
+  }, [setSidebarOpen, markDemoCardHidden, navigateToView])
+
+  const handleClassifiedUpload = useCallback(
+    async (classified) => {
+      clearDemoPiece()
+      markDemoCardHidden()
+      const notices = buildUploadNotices(classified)
+
+      let loadedPdf = Boolean(pdfFile)
+      let loadedMidi = midiSource
+      let loadedXml = musicXmlSource
+      let loadedSoftWarning = pdfSoftWarning
+
+      try {
+        if (classified.pdf[0]) {
+          const file = classified.pdf[0]
+          const validation = validateFileForImport(file, 'pdf')
+          if (!validation.ok) {
+            setLibraryFeedback({ type: 'error', message: validation.message })
+            return notices
+          }
+          const buffer = await file.arrayBuffer()
+          setPdfBuffer(buffer.slice(0))
+          setPdfFile((previous) => {
+            if (previous) {
+              URL.revokeObjectURL(previous)
+            }
+            return URL.createObjectURL(file)
+          })
+          setFileName(file.name)
+          setPdfMeta({
+            fileName: file.name,
+            size: file.size,
+            lastModified: file.lastModified,
+          })
+          setPageNumber(1)
+          setNumPages(null)
+          loadedSoftWarning = validation.softWarning ?? null
+          setPdfSoftWarning(loadedSoftWarning)
+          loadedPdf = true
+        }
+
+        if (classified.musicXml[0]) {
+          const file = classified.musicXml[0]
+          if (isMuseScoreSourceFile(file)) {
+            setLibraryFeedback({ type: 'info', message: MUSESCORE_PLANNED_MESSAGE })
+            return notices
+          }
+          const data = await readFileArrayBuffer(file, 'musicXml')
+          const nextXml = { fileName: file.name, data }
+          setMusicXmlSource(nextXml)
+          loadedXml = nextXml
+        }
+
+        if (classified.midi[0]) {
+          const file = classified.midi[0]
+          const data = await readFileArrayBuffer(file, 'midi')
+          const nextMidi = { fileName: file.name, data }
+          setMidiSource(nextMidi)
+          loadedMidi = nextMidi
+        }
+
+        if (classified.pdf[0]) {
+          if (loadedMidi || loadedXml) {
+            setLibraryFeedback({
+              type: 'info',
+              message: loadedSoftWarning
+                ? `${loadedSoftWarning} PDF updated — check timing/sound still match.`
+                : 'PDF updated. Check your timing & sound files still match.',
+            })
+          } else {
+            setLibraryFeedback(
+              loadedSoftWarning
+                ? { type: 'info', message: loadedSoftWarning }
+                : {
+                    type: 'success',
+                    message: `Loaded ${classified.pdf[0].name}. Add score timing, then open Practice.`,
+                  },
+            )
+          }
+        } else if (classified.musicXml[0] || classified.midi[0]) {
+          const fullSet = isFullPracticeSet(loadedPdf, loadedMidi, loadedXml)
+          setLibraryFeedback({
+            type: 'success',
+            message: fullSet
+              ? 'All files ready — opening Practice.'
+              : classified.musicXml[0]
+                ? `Loaded ${classified.musicXml[0].name}. Add a PDF to open Practice.`
+                : `Loaded ${classified.midi[0].name}. Add a PDF + timing to open Practice.`,
+          })
+        }
+
+        if (isFullPracticeSet(loadedPdf, loadedMidi, loadedXml)) {
+          navigateToView('practice')
+        } else if (!classified.pdf[0]) {
+          navigateToView('library')
+        }
+      } catch (error) {
+        setLibraryFeedback({
+          type: 'error',
+          message: formatPdfImportError(error),
+        })
+      }
+
+      return notices
+    },
+    [
+      pdfFile,
+      midiSource,
+      musicXmlSource,
+      pdfSoftWarning,
+      clearDemoPiece,
+      markDemoCardHidden,
+      navigateToView,
+    ],
+  )
 
   function handleDocumentLoadSuccess({ numPages: total }) {
     setNumPages(total)
-    setPageNumber(1)
+    setPageNumber((page) => Math.min(Math.max(1, page), total))
   }
 
   function handlePrevPage() {
@@ -383,6 +502,31 @@ export default function App() {
     restoreGateOpen,
     onBlocked: (message) => setLibraryFeedback({ type: 'info', message }),
   })
+
+  const gatedClassifiedUpload = useCallback(
+    async (classified) => {
+      if (!restoreGateOpen) {
+        pendingClassifiedUploadRef.current = classified
+        setLibraryFeedback({
+          type: 'info',
+          message:
+            'Restoring your last session — your files will load as soon as that finishes.',
+        })
+        return buildUploadNotices(classified)
+      }
+      return handleClassifiedUpload(classified)
+    },
+    [restoreGateOpen, handleClassifiedUpload],
+  )
+
+  useEffect(() => {
+    if (!restoreGateOpen || !pendingClassifiedUploadRef.current) {
+      return
+    }
+    const pending = pendingClassifiedUploadRef.current
+    pendingClassifiedUploadRef.current = null
+    handleClassifiedUpload(pending)
+  }, [restoreGateOpen, handleClassifiedUpload])
 
   const practiceReady =
     restoreGateOpen && Boolean(pdfFile && musicXmlSource?.data)
@@ -454,12 +598,13 @@ export default function App() {
             musicXmlFileName={musicXmlSource?.fileName}
             uploadsDisabled={isRestoring}
             onOpenPractice={() => {
-              setActiveView('practice')
+              navigateToView('practice')
               setLibraryFeedback({
                 type: 'info',
                 message: 'Opened Practice. Add a sound file anytime for backing audio.',
               })
             }}
+            onClassifiedUpload={gatedClassifiedUpload}
             onFileSelect={wrapUpload('pdf', handleFileSelect)}
             onMidiSelect={wrapUpload('midi', handleMidiSelect)}
             onMusicXmlSelect={wrapUpload('musicXml', handleMusicXmlSelect)}

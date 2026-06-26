@@ -40,6 +40,7 @@ import { buildMeasureBoundaryDiagnostic } from './measureBoundaryDiagnostics.js'
 import { buildHeldNoteDiagnostic } from './heldNoteDiagnostics.js'
 import { buildCursorMotionDiagnostic } from './cursorMotionDiagnostics.js'
 import { buildCursorMotionTimeline, resolveCursorMotion } from './cursorMotionTimeline.js'
+import { buildCursorMappingDebug } from './scoreFollowCursorMappingDebug.js'
 import { buildScoreFollowPrecisionReport } from './scoreFollowPrecisionDiagnostics.js'
 import { isNextGenAlignmentDiagnosticsEnabled } from './nextGenAlignmentFlag.js'
 import { deriveNextGenAlignmentDiagnostics } from './nextGenAlignmentDiagnostics.js'
@@ -422,7 +423,10 @@ export default function useScoreFollow({
       y: motion.y,
       page: motion.page,
       measureNumber: motion.measureNumber ?? base.measureNumber,
+      systemIndex: motion.systemIndex ?? base.systemIndex,
       progressMode: motion.segmentType ?? base.progressMode,
+      interpolationSource: `motion-timeline:${motion.segmentType ?? 'phrase'}`,
+      fallbackTier: 'motion-timeline',
     }
   }, [resolved, motionTimeline, practiceTime])
   const followNeedsSetup = anchorTrust.needsSetup
@@ -457,7 +461,13 @@ export default function useScoreFollow({
       // locked, so the driver publishes it directly with no predictive follower).
       const motion = motionTimeline ? resolveCursorMotion(motionTimeline, t) : null
       if (motion) {
-        return { ...motion, lockExact: false, interpolated: true }
+        return {
+          ...motion,
+          lockExact: false,
+          interpolated: true,
+          interpolationSource: `motion-timeline:${motion.segmentType ?? 'phrase'}`,
+          fallbackTier: 'motion-timeline',
+        }
       }
       // Fallback for times/measures the timeline does not cover (e.g. gaps with
       // no anchor): the legacy resolver.
@@ -489,6 +499,7 @@ export default function useScoreFollow({
     realtimeCursorActive,
     followNeedsSetup,
     enabled,
+    practiceTime,
     cursor?.visible,
     cursor?.x,
     cursor?.y,
@@ -1528,6 +1539,18 @@ export default function useScoreFollow({
     [timingMap, practiceTime, getScoreTime, cursor, displayCursor],
   )
 
+  const cursorMapping = useMemo(
+    () =>
+      buildCursorMappingDebug({
+        timingMap,
+        practiceTime,
+        trustedAnchors,
+        cursor: displayCursor?.visible ? displayCursor : cursor,
+        autoSetupReport,
+      }),
+    [timingMap, practiceTime, trustedAnchors, displayCursor, cursor, autoSetupReport],
+  )
+
   const debug = useMemo(
     () => ({
       currentMeasureNumber: currentMeasure?.number ?? null,
@@ -1568,6 +1591,7 @@ export default function useScoreFollow({
             : 'hold',
       cursorProgressMode: cursor?.progressMode ?? null,
       cursorAtOnset: Boolean(cursor?.atOnset),
+      cursorMapping,
       precision: precisionReport,
       measureBoundary,
       heldNote,
@@ -1595,6 +1619,7 @@ export default function useScoreFollow({
       anchorPromotion,
       cursor,
       displayCursor,
+      cursorMapping,
       practiceTime,
       precisionReport,
       measureBoundary,

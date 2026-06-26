@@ -11,6 +11,7 @@ import {
   resolvePdfPageLayout,
 } from '../../utils/pdfFit.js'
 import { buildLibraryLayoutCacheKey, getCachedLibraryPageLayout } from '../../utils/pdfViewerLayoutCache.js'
+import { clearWarmPages } from '../../features/pdf/pdfPagePerf.js'
 import PdfPageWindow from './PdfPageWindow.jsx'
 import PdfViewerToolbar from './PdfViewerToolbar.jsx'
 
@@ -71,6 +72,7 @@ export default function PdfFullscreen({
 
   useEffect(() => {
     libraryLayoutCacheRef.current.clear()
+    clearWarmPages()
   }, [file, fitMode, viewerRotationKey])
 
   const pageWindowKey = useMemo(() => {
@@ -247,7 +249,7 @@ export default function PdfFullscreen({
 
       <div
         ref={containerRef}
-        className={`pdf-fullscreen__stage pdf-canvas--paper-${paperTheme}`}
+        className={`pdf-fullscreen__stage pdf-canvas--paper-${paperTheme} pdf-canvas--fit-${fitMode}`}
       >
         <Document
           file={file}

@@ -23,23 +23,26 @@ export default function MultiFileUpload({
   onFileSelect,
   onMusicXmlSelect,
   onMidiSelect,
+  onClassifiedUpload = null,
   disabled = false,
 }) {
   const inputRef = useRef(null)
   const [dragOver, setDragOver] = useState(false)
   const [notices, setNotices] = useState([])
 
-  function handleFiles(fileList) {
+  async function handleFiles(fileList) {
     const files = Array.from(fileList ?? [])
     if (files.length === 0) {
       return
     }
     const classified = classifyUploadFiles(files)
-    const messages = applyClassifiedUploads(classified, {
-      onPdf: onFileSelect,
-      onMusicXml: onMusicXmlSelect,
-      onMidi: onMidiSelect,
-    })
+    const messages = onClassifiedUpload
+      ? await onClassifiedUpload(classified)
+      : applyClassifiedUploads(classified, {
+          onPdf: onFileSelect,
+          onMusicXml: onMusicXmlSelect,
+          onMidi: onMidiSelect,
+        })
     setNotices(messages)
   }
 

@@ -10,10 +10,15 @@ export default function DemoPieceCard({
   const retry = onRetry ?? onLoad
 
   return (
-    <article className={`demo-piece${compact ? ' demo-piece--compact' : ''}`}>
+    <article
+      className={`demo-piece${compact ? ' demo-piece--compact' : ''}`}
+      aria-labelledby="demo-piece-title"
+    >
       <div className="demo-piece__copy">
         <p className="demo-piece__badge">Built-in demo</p>
-        <h3 className="demo-piece__title">{DEMO_PIECE.title}</h3>
+        <h3 id="demo-piece-title" className="demo-piece__title">
+          {DEMO_PIECE.title}
+        </h3>
         <p className="demo-piece__subtitle">
           {DEMO_PIECE.subtitle}
           {DEMO_PIECE.measureCount != null && DEMO_PIECE.pageCount != null
@@ -27,6 +32,7 @@ export default function DemoPieceCard({
           className="demo-piece__button"
           disabled={loading}
           onClick={onLoad}
+          aria-label={`Try demo: ${DEMO_PIECE.title}`}
         >
           {loading ? 'Opening…' : 'Try demo'}
         </button>
@@ -41,6 +47,7 @@ export default function DemoPieceCard({
               className="demo-piece__retry"
               disabled={loading}
               onClick={retry}
+              aria-label={`Retry loading demo: ${DEMO_PIECE.title}`}
             >
               Retry
             </button>

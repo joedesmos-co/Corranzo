@@ -4063,7 +4063,7 @@
 @media (max-width: 1100px) {
   .practice-workspace__layout {
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: auto;
     min-height: 0;
   }
 

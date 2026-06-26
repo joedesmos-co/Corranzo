@@ -243,6 +243,51 @@ export function reconcileCountsToTotal(counts, total) {
 }
 
 /**
+ * Reconcile partially detected per-system measure counts to the score total.
+ * Confident barline counts stay fixed when possible; systems without a detected
+ * count receive only the remaining measures. This avoids throwing away good PDF
+ * geometry just because one page/system had weak barlines.
+ */
+export function reconcilePartialCountsToTotal(counts, total, weights = []) {
+  const n = counts.length
+  if (n === 0 || total <= 0) {
+    return new Array(n).fill(0)
+  }
+
+  const normalized = counts.map((count) => {
+    const value = Number(count)
+    return Number.isFinite(value) && value > 0 ? Math.round(value) : null
+  })
+  const knownTotal = normalized.reduce((sum, value) => sum + (value ?? 0), 0)
+  const unknownIndices = normalized
+    .map((value, index) => (value == null ? index : null))
+    .filter((index) => index != null)
+
+  if (unknownIndices.length === 0 || knownTotal > total) {
+    return reconcileCountsToTotal(
+      normalized.map((value) => value ?? 0),
+      total,
+    )
+  }
+
+  const remaining = total - knownTotal
+  if (remaining <= 0) {
+    return normalized.map((value) => value ?? 0)
+  }
+
+  const unknownWeights = unknownIndices.map((index) => {
+    const weight = Number(weights[index])
+    return Number.isFinite(weight) && weight > 0 ? weight : 1
+  })
+  const distributed = computeWeightedMeasureCounts(unknownWeights, remaining)
+  const output = normalized.map((value) => value ?? 0)
+  unknownIndices.forEach((index, i) => {
+    output[index] = distributed[i] ?? 0
+  })
+  return output
+}
+
+/**
  * Build spans by assigning each system a fixed number of consecutive measures.
  * Used by the staff-line + barline detection path, where per-system measure
  * counts come from the PDF itself (not from MusicXML break hints).
@@ -271,6 +316,17 @@ export function allocateSpansByCounts(systemEntries, measureNumbers, perSystemCo
     })
   }
   return spans
+}
+
+/**
+ * Build spans from a mixture of detected barline counts and unknown systems.
+ * Known counts are kept in reading order; unknown systems are filled from the
+ * remaining score measures rather than forcing a page/system-average split.
+ */
+export function allocateSpansByPartialCounts(systemEntries, measureNumbers, perSystemCounts) {
+  const weights = systemEntries.map((entry) => entry?.inkWidth)
+  const counts = reconcilePartialCountsToTotal(perSystemCounts, measureNumbers.length, weights)
+  return allocateSpansByCounts(systemEntries, measureNumbers, counts)
 }
 
 /**

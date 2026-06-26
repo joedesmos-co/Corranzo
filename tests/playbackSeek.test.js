@@ -167,6 +167,52 @@ describe('ScorePlaybackEngine seek flush', () => {
     expect(scheduleSpy).toHaveBeenCalledWith(25, 27.5)
   })
 
+  it('seek into a sustained note schedules a trimmed attack at now', () => {
+    const { engine } = makeScoreEngine()
+    engine.noteEvents = [
+      {
+        type: 'note',
+        scoreTimeSeconds: 1,
+        name: 'C4',
+        baseDurationSeconds: 4,
+        velocity: 0.8,
+        trackId: 0,
+      },
+    ]
+    engine.playing = true
+    engine.playStartedAt = 100
+    engine.offsetScoreSeconds = 0
+    globalThis.__TEST_TONE_NOW__ = 100
+
+    engine.seek(2.5)
+
+    expect(engine.voice.triggerAttackRelease).toHaveBeenCalled()
+    const [, duration, at] = engine.voice.triggerAttackRelease.mock.calls.at(-1)
+    expect(at).toBe(100)
+    expect(duration).toBeCloseTo(2.5, 2)
+  })
+
+  it('play from end of piece restarts from the beginning', async () => {
+    const { engine } = makeScoreEngine()
+    engine.duration = 60
+    engine.offsetScoreSeconds = 60
+    engine.noteEvents = [
+      {
+        type: 'note',
+        scoreTimeSeconds: 0.5,
+        name: 'C4',
+        baseDurationSeconds: 0.5,
+        velocity: 0.8,
+        trackId: 0,
+      },
+    ]
+
+    await engine.playFromUserGesture(Promise.resolve())
+
+    expect(engine.offsetScoreSeconds).toBe(0)
+    expect(engine.playing).toBe(true)
+  })
+
   it('rapid seeks bump schedule generation so stale interval callbacks noop', () => {
     const { engine } = makeScoreEngine()
     engine.playing = true

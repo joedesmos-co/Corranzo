@@ -49,6 +49,7 @@ export default function PracticeView({
     enabled: Boolean(pdfFile),
     isPlaying: session.playback.isPlaying,
     hasMidi: session.hasMidi,
+    hasMusicXml: session.hasMusicXml,
     isWaitForYou: session.isWaitForYou,
     waitForYouStatus: session.waitForYou.status,
     alignmentMode: scoreFollow.alignmentMode || scoreFollow.semiAutoPreview,

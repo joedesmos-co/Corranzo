@@ -417,7 +417,7 @@ describe('resolveScoreFollowCursor precision', () => {
     expect(diag.lastOnset.distanceToPlayableEndX).toBeLessThan(0.02)
   })
 
-  it('defers page flip until late in the gap (no early cross-page jump)', () => {
+  it('does not flip pages inside a cross-page anchor gap', () => {
     const crossPage = [
       {
         id: 'p1m1',
@@ -453,7 +453,17 @@ describe('resolveScoreFollowCursor precision', () => {
       trustedAnchors: crossPage,
       trust: { showCursor: true, needsSetup: false },
     })
-    expect(lateGap.cursor.page).toBe(2)
+    expect(lateGap.cursor.page).toBe(1)
+    expect(lateGap.cursor.y).toBeCloseTo(crossPage[0].y, 5)
+
+    const nextMeasure = resolveScoreFollowCursor({
+      timingMap,
+      practiceTime: 4.05,
+      trustedAnchors: crossPage,
+      trust: { showCursor: true, needsSetup: false },
+    })
+    expect(nextMeasure.cursor.measureNumber).toBe(3)
+    expect(nextMeasure.cursor.page).toBe(2)
   })
 
   it('uses note-weighted progress for uneven beats (not linear measure sweep)', () => {

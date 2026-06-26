@@ -409,27 +409,50 @@ export class ScorePlaybackEngine {
       : this.noteEvents
 
     for (const event of events) {
+      if (event.type === 'note') {
+        const alignedStart = alignChordScoreTime(event.scoreTimeSeconds)
+        const baseDuration = event.baseDurationSeconds ?? 0.03
+        const noteEnd = alignedStart + baseDuration
+        if (noteEnd <= fromScoreSeconds || alignedStart >= toScoreSeconds) {
+          continue
+        }
+
+        if (this.scheduledEvents.has(event)) {
+          continue
+        }
+
+        if (this.isTrackMuted(event.trackId)) {
+          continue
+        }
+
+        const wallAt = this.wallTimeForScoreTime(alignedStart)
+        const delay = wallAt - now
+        let at = Math.max(now, wallAt)
+        let duration = baseDuration / this.playbackRate
+
+        if (alignedStart < fromScoreSeconds - 1e-6) {
+          at = now
+          duration = Math.max(0.03, (noteEnd - fromScoreSeconds) / this.playbackRate)
+        } else if (delay < -0.05) {
+          continue
+        }
+
+        const name = event.name ?? midiNumberToName(event.midi)
+        const velocity = softenVelocity(event.velocity ?? 0.75)
+        this.voice.triggerAttackRelease(name, duration, at, velocity)
+        this.scheduledEvents.add(event)
+        continue
+      }
+
       if (event.scoreTimeSeconds < fromScoreSeconds || event.scoreTimeSeconds >= toScoreSeconds) {
         continue
       }
 
-      // De-dupe by event IDENTITY (not by time) so every note of a chord — and
-      // both hands sounding at the same instant — is scheduled. A time+type key
-      // collapsed simultaneous notes into one, dropping bass/inner voices.
       if (this.scheduledEvents.has(event)) {
         continue
       }
 
-      // Per-track (hand) muting: don't schedule notes from a muted track. Left
-      // un-added so it re-evaluates if the track is later unmuted.
-      if (event.type === 'note' && this.isTrackMuted(event.trackId)) {
-        continue
-      }
-
-      const scoreTime =
-        event.type === 'note'
-          ? alignChordScoreTime(event.scoreTimeSeconds)
-          : event.scoreTimeSeconds
+      const scoreTime = event.scoreTimeSeconds
       const wallAt = this.wallTimeForScoreTime(scoreTime)
       const delay = wallAt - now
       if (delay < -0.05) {
@@ -440,11 +463,6 @@ export class ScorePlaybackEngine {
 
       if (event.type === 'metronome') {
         this.metronome.triggerClick(event.accent, at)
-      } else {
-        const name = event.name ?? midiNumberToName(event.midi)
-        const velocity = softenVelocity(event.velocity ?? 0.75)
-        const duration = (event.baseDurationSeconds ?? 0.03) / this.playbackRate
-        this.voice.triggerAttackRelease(name, duration, at, velocity)
       }
 
       this.scheduledEvents.add(event)
@@ -539,6 +557,11 @@ export class ScorePlaybackEngine {
     await this.whenInstrumentReady()
     this.releaseAll()
     this.scheduledEvents.clear()
+
+    if (this.duration > 0 && this.offsetScoreSeconds >= this.duration - 1e-3) {
+      this.offsetScoreSeconds = 0
+      this.scheduledUntilScore = 0
+    }
 
     if (
       this.metronomeCountIn > METRONOME_COUNT_IN.OFF

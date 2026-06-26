@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
-import { usePracticeTick, useScoreFollowCursor } from '../../context/PracticeTickContext.jsx'
+import { useScoreFollowCursor } from '../../context/PracticeTickContext.jsx'
 import usePracticePageFollow from '../../features/practice/usePracticePageFollow.js'
 
 export default function PracticePageFollowController({
@@ -12,7 +12,6 @@ export default function PracticePageFollowController({
   onNextPage,
 }) {
   const { scoreFollow } = usePracticeSessionContext()
-  const tick = usePracticeTick()
   const { displayCursor } = useScoreFollowCursor()
 
   const handleGoToPage = useCallback(
@@ -31,10 +30,7 @@ export default function PracticePageFollowController({
   )
 
   const pageFollowActive = Boolean(
-    tick.playbackIsPlaying &&
-      scoreFollow.enabled &&
-      scoreFollow.canFollow &&
-      !scoreFollow.alignmentMode,
+    scoreFollow.enabled && scoreFollow.canFollow && !scoreFollow.alignmentMode,
   )
 
   usePracticePageFollow({

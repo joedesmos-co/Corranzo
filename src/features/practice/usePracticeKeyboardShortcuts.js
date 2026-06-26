@@ -25,6 +25,7 @@ export default function usePracticeKeyboardShortcuts({
   enabled,
   isPlaying,
   hasMidi,
+  hasMusicXml = false,
   isWaitForYou,
   waitForYouStatus = WFY_STATUS.INACTIVE,
   alignmentMode = false,
@@ -91,7 +92,7 @@ export default function usePracticeKeyboardShortcuts({
       }
 
       if (key === ' ' || key === 'Spacebar') {
-        if (hasMidi && !isWaitForYou && !playbackLoading) {
+        if ((hasMusicXml || hasMidi) && !isWaitForYou && !playbackLoading) {
           event.preventDefault()
           handlers.onTogglePlayPause?.()
         }
@@ -136,6 +137,7 @@ export default function usePracticeKeyboardShortcuts({
     enabled,
     isPlaying,
     hasMidi,
+    hasMusicXml,
     isWaitForYou,
     waitForYouStatus,
     alignmentMode,

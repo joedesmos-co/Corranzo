@@ -18,8 +18,6 @@ import { resolveMusicalXInMeasure } from './cursorMusicalProgress.js'
 /** Brief start lock — only until the first audible beat, not a full quarter note. */
 export const START_LOCK_THRESHOLD_SECONDS = 0.05
 
-const PAGE_TRANSITION_PROGRESS = 0.88
-
 function findAnchorBracket(sorted, timingMap, practiceTime) {
   let beforeIndex = -1
   let afterIndex = -1
@@ -80,24 +78,43 @@ function interpolateBetweenAnchors(timingMap, practiceTime, before, after, curre
   }
 
   const progress = beatWeightedProgress(timingMap, practiceTime, t0, t1)
+  const sameSystem =
+    before.page === after.page && Math.abs((before.y ?? 0) - (after.y ?? 0)) < 0.02
+  const fallbackEndX =
+    typeof before.meta?.systemEndX === 'number' && before.meta.systemEndX > before.x
+      ? before.meta.systemEndX
+      : typeof before.meta?.playableEndX === 'number' && before.meta.playableEndX > before.x
+        ? before.meta.playableEndX
+        : before.x
 
   return {
     visible: true,
-    page:
-      before.page === after.page
-        ? before.page
-        : progress >= PAGE_TRANSITION_PROGRESS
-          ? after.page
-          : before.page,
-    x: lerp(before.x, after.x, progress),
-    y: lerp(before.y, after.y, progress),
+    page: before.page,
+    x: sameSystem ? lerp(before.x, after.x, progress) : lerp(before.x, fallbackEndX, progress),
+    y:
+      before.page !== after.page
+        ? before.y
+        : lerp(before.y ?? 0, after.y ?? 0, progress),
     measureNumber: currentMeasure.number,
     progress,
     lockExact: false,
     interpolated: true,
     progressMode: 'beat-gap',
+    interpolationSource:
+      before.page !== after.page
+        ? 'held-system-anchor-gap'
+        : sameSystem
+          ? 'same-system-anchor-gap'
+          : 'same-page-system-gap',
+    fallbackTier:
+      before.page !== after.page
+        ? 'gap-hold-system-y'
+        : sameSystem
+          ? 'gap-same-system-x'
+          : 'gap-same-page-system-y',
     confidence: 'interpolated',
     transitionPage: after.page,
+    meta: before.meta,
   }
 }
 
@@ -145,6 +162,9 @@ export function resolveScoreFollowCursor({
         lockExact: true,
         forcedStart: true,
         interpolated: false,
+        interpolationSource: 'start-anchor',
+        fallbackTier: 'exact-anchor',
+        meta: startAnchor.meta,
         confidence: 'exact',
       },
       needsSetup: trust?.needsSetup ?? false,
@@ -246,6 +266,8 @@ export function resolveScoreFollowCursor({
             visualMaxX,
             nextSameSystem,
             confidence: 'exact',
+            interpolationSource: musical.mode ?? 'measure-box',
+            fallbackTier: 'exact-measure-box',
           },
           needsSetup: trust?.needsSetup ?? false,
           confidence: 'exact',
@@ -263,6 +285,9 @@ export function resolveScoreFollowCursor({
         progress: 0,
         lockExact: false,
         interpolated: false,
+        interpolationSource: 'measure-anchor',
+        fallbackTier: 'exact-measure-box',
+        meta: exact.meta,
         confidence: 'exact',
       },
       needsSetup: trust?.needsSetup ?? false,
@@ -294,6 +319,9 @@ export function resolveScoreFollowCursor({
         progress: 0,
         lockExact: false,
         interpolated: true,
+        interpolationSource: 'previous-anchor-hold',
+        fallbackTier: 'hold-previous-anchor',
+        meta: before.meta,
         confidence: 'hold',
       },
       needsSetup: trust?.needsSetup ?? false,

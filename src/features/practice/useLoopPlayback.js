@@ -10,17 +10,30 @@ export default function useLoopPlayback({
   isPlaying,
   hasPlayback,
   currentTime,
+  duration = 0,
   onLoopRestart,
 }) {
   const isWrappingRef = useRef(false)
 
   useEffect(() => {
-    if (!enabled || !region?.isValid || !isPlaying || !hasPlayback) {
+    if (!enabled || !region?.isValid || !hasPlayback) {
       isWrappingRef.current = false
       return
     }
 
-    if (shouldRestartLoop(currentTime, region)) {
+    const loopEndNearPieceEnd =
+      duration > 0 && region.endTimeSeconds >= duration - 0.05
+    const atPieceEnd = duration > 0 && currentTime >= duration - 0.001
+    const shouldWrap =
+      shouldRestartLoop(currentTime, region) || (atPieceEnd && loopEndNearPieceEnd)
+    const activePlayback = isPlaying || (atPieceEnd && loopEndNearPieceEnd)
+
+    if (!activePlayback) {
+      isWrappingRef.current = false
+      return
+    }
+
+    if (shouldWrap) {
       if (!isWrappingRef.current) {
         isWrappingRef.current = true
         onLoopRestart(region.startTimeSeconds)
@@ -31,5 +44,5 @@ export default function useLoopPlayback({
     if (currentTime <= region.startTimeSeconds + 0.1) {
       isWrappingRef.current = false
     }
-  }, [enabled, region, isPlaying, hasPlayback, currentTime, onLoopRestart])
+  }, [enabled, region, isPlaying, hasPlayback, currentTime, duration, onLoopRestart])
 }
