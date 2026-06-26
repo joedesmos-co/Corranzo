@@ -38,8 +38,7 @@ const INACTIVE_FRAME_PROPS = {
 function PdfPageWindow({
   pageNumber,
   numPages,
-  width,
-  height,
+  resolvePageLayout,
   switchTrigger = 'navigation',
   onPageLoadSuccess,
   activePageProps,
@@ -94,7 +93,7 @@ function PdfPageWindow({
   )
 
   const handleRenderSuccess = useCallback(
-    (slotPageNumber) => {
+    (slotPageNumber, layout) => {
       const rasterKey = `raster-${slotPageNumber}`
       const started = timingRef.current.get(rasterKey)
       if (started == null) {
@@ -106,7 +105,7 @@ function PdfPageWindow({
         pageNumber: slotPageNumber,
         phase: 'raster',
         durationMs,
-        width,
+        width: layout?.width,
       })
       if (slotPageNumber === pageNumber && pendingRasterRef.current) {
         pendingRasterRef.current = false
@@ -117,10 +116,11 @@ function PdfPageWindow({
         })
       }
     },
-    [pageNumber, width],
+    [pageNumber],
   )
 
-  if (!width && !height) {
+  const activeLayout = resolvePageLayout?.(pageNumber)
+  if (!activeLayout?.width && !activeLayout?.height) {
     return null
   }
 
@@ -129,6 +129,10 @@ function PdfPageWindow({
       {pages.map((slotPage) => {
         const isActive = slotPage === pageNumber
         const frameProps = isActive ? activePageProps : INACTIVE_FRAME_PROPS
+        const layout = resolvePageLayout?.(slotPage)
+        if (!layout?.width && !layout?.height) {
+          return null
+        }
         return (
           <div
             key={`pdf-slot-${slotPage}`}
@@ -138,12 +142,14 @@ function PdfPageWindow({
           >
             <PdfPageFrame
               pageNumber={slotPage}
-              width={width}
-              height={height}
+              width={layout.width}
+              height={layout.height}
+              displayWidth={layout.displayWidth}
+              displayHeight={layout.displayHeight}
               onPageLoadSuccess={(page) => handlePageLoadSuccess(page, slotPage)}
               onLoadStart={() => markTiming(`load-${slotPage}`)}
               onRenderStart={() => markTiming(`raster-${slotPage}`)}
-              onRenderSuccess={() => handleRenderSuccess(slotPage)}
+              onRenderSuccess={() => handleRenderSuccess(slotPage, layout)}
               {...frameProps}
             />
           </div>

@@ -1,10 +1,14 @@
-import { cloneElement, isValidElement, useEffect, useRef, useState } from 'react'
+import { cloneElement, isValidElement, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { isTabletLikeDevice } from '../../features/platform/browserPracticeSupport.js'
 import { Document } from 'react-pdf'
 import '../../pdf/setupPdfWorker.js'
 import useElementSize from '../../hooks/useElementSize.js'
 import useInactivityHide from '../../hooks/useInactivityHide.js'
-import { getPageDimensions } from '../../utils/pdfFit.js'
+import {
+  computeDocumentDisplayReference,
+  DEFAULT_CANVAS_PADDING,
+  getPageDimensions,
+} from '../../utils/pdfFit.js'
 import PdfPageWindow from './PdfPageWindow.jsx'
 import PdfViewerToolbar from './PdfViewerToolbar.jsx'
 
@@ -16,6 +20,8 @@ export default function PdfFullscreen({
   pageNumber,
   numPages,
   pageSize,
+  pageSizesRef,
+  pageSizesVersion = 0,
   fitMode,
   paperTheme,
   strokes,
@@ -49,8 +55,45 @@ export default function PdfFullscreen({
   const chromeVisible = chromePinned || autoVisible
   const hasPracticeHud = Boolean(practiceHud)
 
-  const pageViewRotation = scoreFollow?.getPageViewRotation?.(pageNumber) ?? 0
-  const pageDimensions = getPageDimensions(fitMode ?? 'page', pageSize, containerSize, pageViewRotation)
+  const orientation = scoreFollow?.calibrationDebugSnapshot?.orientation ?? null
+  const pageViewRotations = scoreFollow?.pageViewRotations ?? {}
+
+  const referenceDisplaySize = useMemo(
+    () =>
+      computeDocumentDisplayReference(pageSizesRef?.current ?? {}, pageViewRotations, orientation),
+    [pageSizesRef, pageSizesVersion, pageViewRotations, orientation],
+  )
+
+  const resolvePageLayout = useCallback(
+    (slotPageNumber) => {
+      const sourceSize =
+        pageSizesRef?.current?.[slotPageNumber] ??
+        (slotPageNumber === pageNumber ? pageSize : null)
+      if (!sourceSize?.width || !sourceSize?.height) {
+        return null
+      }
+
+      const viewRotation = scoreFollow?.getPageViewRotation?.(slotPageNumber) ?? 0
+      return getPageDimensions(
+        fitMode ?? 'page',
+        sourceSize,
+        containerSize,
+        viewRotation,
+        DEFAULT_CANVAS_PADDING,
+        referenceDisplaySize,
+      )
+    },
+    [
+      containerSize,
+      fitMode,
+      pageNumber,
+      pageSize,
+      pageSizesRef,
+      referenceDisplaySize,
+      scoreFollow,
+    ],
+  )
+
   const canGoPrev = pageNumber > 1
   const canGoNext = numPages != null && pageNumber < numPages
   const alignmentMode = scoreFollow?.alignmentMode ?? false
@@ -171,8 +214,7 @@ export default function PdfFullscreen({
             key={String(file)}
             pageNumber={pageNumber}
             numPages={numPages}
-            width={pageDimensions.width}
-            height={pageDimensions.height}
+            resolvePageLayout={resolvePageLayout}
             switchTrigger="fullscreen"
             onPageLoadSuccess={onPageLoadSuccess}
             activePageProps={{

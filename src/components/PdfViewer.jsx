@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, useMemo } from 'react'
 import { Document } from 'react-pdf'
 import 'react-pdf/dist/Page/TextLayer.css'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
@@ -6,7 +6,7 @@ import '../pdf/setupPdfWorker.js'
 import useElementSize from '../hooks/useElementSize.js'
 import useAnnotations from '../hooks/useAnnotations.js'
 import useAnnotationPersistence from '../hooks/useAnnotationPersistence.js'
-import { getPageDimensions, PRACTICE_CANVAS_PADDING } from '../utils/pdfFit.js'
+import { getPageDimensions, PRACTICE_CANVAS_PADDING, computeDocumentDisplayReference } from '../utils/pdfFit.js'
 import { resetPdfCanvasScroll } from '../utils/pdfViewerScroll.js'
 import { ANNOTATION_TOOLS } from './pdf/annotationConstants.js'
 import PdfFullscreen from './pdf/PdfFullscreen.jsx'
@@ -44,6 +44,8 @@ export default function PdfViewer({
   const showScoreFollowPanel = false
   const canvasRef = useRef(null)
   const canvasSize = useElementSize(canvasRef)
+  const pageSizesRef = useRef({})
+  const [pageSizesVersion, setPageSizesVersion] = useState(0)
 
   const [fitMode, setFitMode] = useState('page')
   const [pageSize, setPageSize] = useState(null)
@@ -80,14 +82,22 @@ export default function PdfViewer({
   const strokeStyle = getStrokeStyle(activeTool)
 
   const handlePageLoadSuccess = useCallback((page) => {
-    setPageSize({
+    const size = {
       width: page.originalWidth,
       height: page.originalHeight,
-    })
-  }, [])
+    }
+    pageSizesRef.current[page.pageNumber] = size
+    if (page.pageNumber === pageNumber) {
+      setPageSize(size)
+    } else {
+      setPageSizesVersion((version) => version + 1)
+    }
+  }, [pageNumber])
 
   useEffect(() => {
     setPageSize(null)
+    pageSizesRef.current = {}
+    setPageSizesVersion(0)
     clearWarmPages()
   }, [file])
 
@@ -150,13 +160,43 @@ export default function PdfViewer({
   const practiceContext = usePracticeSessionContextOptional()
   const practiceSession = practiceContext?.session ?? null
   const scoreFollow = practiceContext?.scoreFollow ?? null
-  const pageViewRotation = scoreFollow?.getPageViewRotation?.(pageNumber) ?? 0
-  const pageDimensions = getPageDimensions(
-    fitMode,
-    pageSize,
-    canvasSize,
-    pageViewRotation,
-    isPracticeEmbed ? PRACTICE_CANVAS_PADDING : undefined,
+  const orientation = scoreFollow?.calibrationDebugSnapshot?.orientation ?? null
+  const pageViewRotations = scoreFollow?.pageViewRotations ?? {}
+
+  const referenceDisplaySize = useMemo(
+    () =>
+      computeDocumentDisplayReference(pageSizesRef.current, pageViewRotations, orientation),
+    [pageSize, pageSizesVersion, pageViewRotations, orientation],
+  )
+
+  const resolvePageLayout = useCallback(
+    (slotPageNumber) => {
+      const sourceSize =
+        pageSizesRef.current[slotPageNumber] ??
+        (slotPageNumber === pageNumber ? pageSize : null)
+      if (!sourceSize?.width || !sourceSize?.height) {
+        return null
+      }
+
+      const viewRotation = scoreFollow?.getPageViewRotation?.(slotPageNumber) ?? 0
+      return getPageDimensions(
+        fitMode,
+        sourceSize,
+        canvasSize,
+        viewRotation,
+        isPracticeEmbed ? PRACTICE_CANVAS_PADDING : undefined,
+        referenceDisplaySize,
+      )
+    },
+    [
+      canvasSize,
+      fitMode,
+      isPracticeEmbed,
+      pageNumber,
+      pageSize,
+      referenceDisplaySize,
+      scoreFollow,
+    ],
   )
   const hasTiming = Boolean(practiceContext?.session?.timing?.timingMap)
   const measureBounds = practiceContext?.session?.measure?.bounds
@@ -192,8 +232,7 @@ export default function PdfViewer({
         key={String(file)}
         pageNumber={pageNumber}
         numPages={numPages}
-        width={pageDimensions.width}
-        height={pageDimensions.height}
+        resolvePageLayout={resolvePageLayout}
         switchTrigger={isPracticeEmbed ? 'score-follow' : 'navigation'}
         onPageLoadSuccess={handlePageLoadSuccess}
         activePageProps={{
@@ -313,6 +352,8 @@ export default function PdfViewer({
           pageNumber={pageNumber}
           numPages={numPages}
           pageSize={pageSize}
+          pageSizesRef={pageSizesRef}
+          pageSizesVersion={pageSizesVersion}
           fitMode={fitMode}
           paperTheme={paperTheme}
           strokes={currentStrokes}

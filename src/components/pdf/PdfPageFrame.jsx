@@ -6,13 +6,14 @@ import AnnotationLayer from './AnnotationLayer.jsx'
 import ScoreFollowOverlay from './ScoreFollowOverlay.jsx'
 import CalibrationDebugOverlay from './CalibrationDebugOverlay.jsx'
 import { ANNOTATION_TOOLS } from './annotationConstants.js'
-import { isQuarterTurn } from '../../utils/pdfPageViewRotation.js'
 import { measurePdfOverlayLayout } from '../../utils/pdfOverlayLayout.js'
 
 function PdfPageFrame({
   pageNumber,
   width,
   height,
+  displayWidth,
+  displayHeight,
   onPageLoadSuccess,
   onLoadStart,
   onRenderStart,
@@ -59,7 +60,8 @@ function PdfPageFrame({
   }, [syncOverlayLayout, pageNumber, width, height, scoreFollow?.pageViewRotations])
 
   const viewRotation = scoreFollow?.getPageViewRotation?.(pageNumber) ?? 0
-  const quarterTurn = isQuarterTurn(viewRotation)
+  const frameDisplayWidth = displayWidth ?? width
+  const frameDisplayHeight = displayHeight ?? height
 
   const handlePageLoadSuccess = useCallback(
     (page) => {
@@ -102,17 +104,15 @@ function PdfPageFrame({
       className={`pdf-page-frame${viewRotation ? ` pdf-page-frame--rot-${viewRotation}` : ''}`}
       ref={frameRef}
       style={
-        width
+        frameDisplayWidth
           ? {
-              minWidth: quarterTurn && height ? height : width,
+              minWidth: frameDisplayWidth,
               minHeight:
-                quarterTurn && width
-                  ? width
-                  : height ??
-                    (overlayLayout?.height > 0 ? overlayLayout.height : undefined),
+                frameDisplayHeight ??
+                (overlayLayout?.height > 0 ? overlayLayout.height : undefined),
             }
-          : height
-            ? { minHeight: quarterTurn && width ? width : height }
+          : frameDisplayHeight
+            ? { minHeight: frameDisplayHeight }
             : undefined
       }
     >

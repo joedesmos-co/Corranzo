@@ -1,4 +1,5 @@
 import { BETA_VERSION } from '../beta/betaInfo.js'
+import { getPageViewRotation } from '../../utils/pdfPageViewRotation.js'
 import { CALIBRATION_STRATEGY } from './smartScoreCalibration.js'
 import {
   analyzeCalibrationCoverage,
@@ -33,6 +34,28 @@ export function isLowConfidenceSystem(confidence) {
 
 function round3(value) {
   return Number.isFinite(value) ? Math.round(value * 1000) / 1000 : null
+}
+
+/** Attach viewer page orientation (distinct from layout skew in rotationDeg). */
+export function enrichPageLayoutWithViewerRotation(
+  pageLayout = [],
+  { orientation = null, pageViewRotations = null } = {},
+) {
+  const orientationByPage = new Map(
+    (orientation?.pages ?? []).map((entry) => [entry.page, entry.rotation ?? 0]),
+  )
+
+  return pageLayout.map((entry) => {
+    const detected = orientationByPage.get(entry.page) ?? 0
+    const viewerRotation =
+      pageViewRotations?.[entry.page] != null
+        ? getPageViewRotation(pageViewRotations, entry.page)
+        : detected
+    return {
+      ...entry,
+      viewerRotationDeg: viewerRotation,
+    }
+  })
 }
 
 function summarizeAnchors(anchors = []) {
@@ -183,10 +206,19 @@ export function buildCalibrationDebugSnapshot({
   }
 
   const enrichedSmartCalibration = smartCalibration
-    ? enrichSmartCalibrationReport(smartCalibration, {
-        orientation,
-        pdfPageCount: pdfPageCount ?? debugReport?.pdfPageCount ?? null,
-      })
+    ? enrichSmartCalibrationReport(
+        {
+          ...smartCalibration,
+          pageLayout: enrichPageLayoutWithViewerRotation(smartCalibration.pageLayout, {
+            orientation,
+            pageViewRotations,
+          }),
+        },
+        {
+          orientation,
+          pdfPageCount: pdfPageCount ?? debugReport?.pdfPageCount ?? null,
+        },
+      )
     : null
 
   const mergedWarnings =
@@ -390,7 +422,10 @@ export function buildCalibrationExportReport({
     coverage,
     perPageConfidence: smart?.perPageConfidence ?? debug?.perPage ?? [],
     perSystemConfidence: smart?.perSystemConfidence ?? [],
-    pageLayout: smart?.pageLayout ?? [],
+    pageLayout: enrichPageLayoutWithViewerRotation(smart?.pageLayout ?? [], {
+      orientation: snapshot?.orientation ?? null,
+      pageViewRotations: snapshot?.pageViewRotations ?? null,
+    }),
     orientation: snapshot?.orientation ?? null,
     orientationCorrectionSummary:
       snapshot?.orientation?.correctionPaths?.join(', ') ??

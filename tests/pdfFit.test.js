@@ -23,10 +23,11 @@ describe('pdfFit', () => {
     const container = { width: 400, height: 300 }
     const dims = getPageDimensions('page', PAGE, container)
     expect(dims.width).toBeGreaterThan(0)
-    expect(dims.height).toBeGreaterThan(0)
-    expect(dims.width).toBeLessThanOrEqual(container.width - 32)
-    expect(dims.height).toBeLessThanOrEqual(container.height - 32)
-    expect(dims.height / dims.width).toBeCloseTo(PAGE.height / PAGE.width, 4)
+    expect(dims.displayWidth).toBeGreaterThan(0)
+    expect(dims.displayHeight).toBeGreaterThan(0)
+    expect(dims.displayWidth).toBeLessThanOrEqual(container.width - 32)
+    expect(dims.displayHeight).toBeLessThanOrEqual(container.height - 32)
+    expect(dims.displayHeight / dims.displayWidth).toBeCloseTo(PAGE.height / PAGE.width, 4)
   })
 
   it('fit width still uses full inner container width', () => {
@@ -43,16 +44,16 @@ describe('pdfFit', () => {
 
     expect(widthDims.width).toBeGreaterThan(pageDims.width)
     expect(pageDims.width).toBeGreaterThan(0)
-    expect(pageDims.height).toBeGreaterThan(0)
-    expect(pageDims.height).toBeLessThanOrEqual(container.height - 32)
+    expect(pageDims.displayHeight).toBeGreaterThan(0)
+    expect(pageDims.displayHeight).toBeLessThanOrEqual(container.height - 32)
   })
 
   it('practice mode uses a smaller fit margin for a larger default page', () => {
     const container = { width: 900, height: 700 }
     const libraryDims = getPageDimensions('page', PAGE, container)
     const practiceDims = getPageDimensions('page', PAGE, container, 0, PRACTICE_CANVAS_PADDING)
-    expect(practiceDims.height).toBeGreaterThan(libraryDims.height)
-    expect(practiceDims.width).toBeGreaterThan(libraryDims.width)
+    expect(practiceDims.displayHeight).toBeGreaterThan(libraryDims.displayHeight)
+    expect(practiceDims.displayWidth).toBeGreaterThan(libraryDims.displayWidth)
   })
 
   it('returns empty dimensions when container size is unknown', () => {
