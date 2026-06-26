@@ -82,7 +82,7 @@ describe('sidebar filename overflow (issue 3)', () => {
     expect(css).toMatch(/\.practice-files__hint--wrap[^}]*overflow-wrap:\s*anywhere/)
     expect(css).toMatch(/\.practice-import-notices__warning--wrap[^}]*word-break:\s*break-word/)
     expect(css).toMatch(/\.practice-more\s*\{[^}]*min-width:\s*0/)
-    expect(css).toMatch(/\.practice-control-panel__footer[^}]*overflow:\s*hidden/)
+    expect(css).toMatch(/\.practice-control-panel__footer[^}]*overflow-x:\s*hidden/)
   })
 })
 

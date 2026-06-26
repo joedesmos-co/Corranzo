@@ -1,12 +1,18 @@
 /* —— Practice workspace —— */
 
 .practice-workspace {
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   min-height: 0;
   min-width: 0;
+  max-height: calc(100vh - var(--sf-topbar-height));
+  overflow: hidden;
   background: var(--sf-bg-raised);
+}
+
+.session-restore-banner ~ .practice-workspace {
+  max-height: calc(100vh - var(--sf-topbar-height) - 52px);
 }
 
 .practice-workspace__layout {
@@ -33,15 +39,15 @@
 .practice-control-panel {
   position: sticky;
   top: 0;
-  align-self: flex-start;
+  align-self: stretch;
   flex: 0 0 var(--sf-sidebar-width);
   width: var(--sf-sidebar-width);
   min-width: 0;
+  min-height: 0;
   max-width: 36vw;
-  max-height: calc(100vh - var(--sf-topbar-height));
-  height: calc(100vh - var(--sf-topbar-height));
   overflow-y: auto;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   padding: var(--sf-space-lg);
   display: flex;
   flex-direction: column;
@@ -49,6 +55,10 @@
   border-left: 1px solid var(--sf-border);
   background: var(--sf-bg-panel);
   z-index: 2;
+}
+
+.practice-control-panel > * {
+  flex-shrink: 0;
 }
 
 .practice-workspace__layout--playing .practice-control-panel__footer {
@@ -3289,7 +3299,8 @@
   gap: 8px;
   min-width: 0;
   max-width: 100%;
-  overflow: hidden;
+  flex-shrink: 0;
+  overflow-x: hidden;
 }
 
 .practice-more {
@@ -3841,6 +3852,7 @@
   .practice-workspace__layout {
     flex-direction: column;
     overflow: hidden;
+    min-height: 0;
   }
 
   .practice-workspace__score {
@@ -3852,11 +3864,13 @@
   .practice-control-panel {
     position: relative;
     top: auto;
+    align-self: stretch;
     flex: 0 0 auto;
     width: 100%;
     max-width: none;
-    height: auto;
+    min-height: 0;
     max-height: 46vh;
+    overflow-y: auto;
     border-top: 1px solid var(--sf-border);
     border-left: 0;
   }
