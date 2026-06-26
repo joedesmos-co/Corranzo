@@ -21,6 +21,11 @@ function makePreview() {
     debugReport: {
       confidence: 0.82,
       allocationMode: 'barline',
+      allocationDiagnostics: {
+        measureCount: 8,
+        detectedCountsTotal: 8,
+        countsOverTotal: false,
+      },
       stage: 'conservative',
       systems: [
         {
@@ -83,6 +88,10 @@ describe('calibrationDebug — snapshot + warnings', () => {
       debugReport: expect.objectContaining({ stage: 'conservative' }),
       smartCalibration: expect.objectContaining({ chosenStrategy: 'B' }),
       fallbacks: expect.objectContaining({ chosenStrategy: 'B', improvedOverBaseline: true }),
+    })
+    expect(snapshot.fallbacks.allocationDiagnostics).toMatchObject({
+      measureCount: 8,
+      detectedCountsTotal: 8,
     })
     expect(snapshot.anchorSummary).toHaveLength(2)
     expect(snapshot.warnings.some((w) => w.code === 'low-system-confidence')).toBe(true)
@@ -189,8 +198,12 @@ describe('calibrationDebug — export report', () => {
       systemBounds: expect.any(Array),
       inkBounds: expect.any(Array),
       anchorsSummary: expect.any(Array),
+      allocationDiagnostics: expect.objectContaining({ measureCount: 8 }),
       warnings: expect.any(Array),
-      fallbacks: expect.objectContaining({ chosenStrategy: 'B' }),
+      fallbacks: expect.objectContaining({
+        chosenStrategy: 'B',
+        allocationDiagnostics: expect.objectContaining({ detectedCountsTotal: 8 }),
+      }),
       strategyScores: expect.any(Array),
     })
     expect(JSON.stringify(report)).not.toMatch(/imageData|pdfBytes|uploadedFile/i)

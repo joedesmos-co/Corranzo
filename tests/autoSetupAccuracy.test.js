@@ -17,6 +17,7 @@ import {
 import {
   analyzeSemiAutoScoreSetup,
   DETECTION_STAGE,
+  selectMeasureAllocationForSystems,
 } from '../src/features/score-follow/semiAutoScoreAlignment.js'
 import { allocateMeasureSpansToSystems } from '../src/features/score-follow/allocateMeasuresToSystems.js'
 import { detectTolerantStaffSystems, detectContentBounds } from '../src/features/score-follow/detectStaffSystems.js'
@@ -84,6 +85,42 @@ describe('measure allocation accuracy', () => {
       [22, 26],
       [27, 32],
     ])
+  })
+
+  it('rejects over-total partial barline counts when matching MusicXML breaks are available', () => {
+    // Winter regression: dense systems produced extra accepted barlines. The
+    // partial detected counts summed to 148 for a 125-measure score, and the old
+    // reconciliation squeezed early systems down, shifting the whole piece.
+    const winterSystemStarts = [
+      1, 5, 10, 15, 20, 23, 25, 28, 30, 33, 35, 38, 41, 44, 46, 48, 50, 52,
+      54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 80, 85, 91, 94, 96, 99,
+      102, 105, 108, 111, 113, 115, 117, 119, 121, 123,
+    ]
+    const winterDetectedCounts = [
+      4, 5, 5, 5, 3, 2, 3, 3, 3, 2, 3, 3, 3, 2, 2, 2, 2, 2, 2, 4, 5, 2, 6,
+      7, null, null, 10, 3, 2, 5, null, 11, 4, 2, 3, 3, 3, 3, 3, 3, 2, 2, 7,
+      2, null, null,
+    ]
+    const timingMap = timingWithBreaks(125, winterSystemStarts.slice(1))
+    const systemEntries = winterDetectedCounts.map((measureEstimate, index) => ({
+      page: Math.floor(index / 6) + 1,
+      measureEstimate,
+      inkWidth: 1,
+    }))
+
+    const result = selectMeasureAllocationForSystems({
+      systemEntries,
+      measureNumbers: timingMap.measures.map((m) => m.number),
+      timingMap,
+      systemCountHint: winterSystemStarts.length,
+    })
+
+    expect(result.allocationMode).toBe('breaks-or-even')
+    expect(result.diagnostics.detectedCountsTotal).toBe(148)
+    expect(result.diagnostics.rejectedBarlineCountReason).toBe(
+      'barline-counts-over-measure-total-with-matching-musicxml-system-breaks',
+    )
+    expect(result.spans.map((s) => s.measureStart)).toEqual(winterSystemStarts)
   })
 
   it('unit: breaks beat even distribution when system count matches', () => {

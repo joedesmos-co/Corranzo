@@ -125,6 +125,7 @@ function buildAutoSetupDebugReport({
   timingMap,
   layoutMismatch = null,
   layoutConfidence = null,
+  allocationDiagnostics = null,
 }) {
   const lastAnchorByMeasure = new Map(proposedAnchors.map((a) => [a.measureNumber, a]))
   const systems = spans.map((span, index) => {
@@ -205,6 +206,7 @@ function buildAutoSetupDebugReport({
     detectedSystemCount: systemEntries.length,
     expectedSystemCount: expectedSystemCount ?? null,
     systemCountHint: systemCountHint ?? null,
+    allocationDiagnostics,
     hintsUsed: {
       systemBreaks: hasSystemBreaks,
       pageBreaks: hasPageBreaks,
@@ -219,6 +221,84 @@ function buildAutoSetupDebugReport({
     })),
     systems,
     anchorSourceCounts: sourceCounts,
+  }
+}
+
+function isUsableMeasureCount(count) {
+  return Number.isFinite(count) && count >= 1
+}
+
+/**
+ * Decide which measure-to-system allocation source is safe enough to use.
+ *
+ * Barline counts are preferred when they fit the score because they represent
+ * the printed PDF layout. The unsafe case is an over-total partial count set:
+ * reconciling those counts down globally squeezes early systems and creates a
+ * piece-wide measure offset while still producing plausible-looking boxes.
+ */
+export function selectMeasureAllocationForSystems({
+  systemEntries,
+  measureNumbers,
+  timingMap,
+  systemCountHint = null,
+}) {
+  const measureCounts = systemEntries.map((entry) => entry.measureEstimate)
+  const detectedMeasureCounts = measureCounts.filter(isUsableMeasureCount)
+  const haveAllCounts = detectedMeasureCounts.length === measureCounts.length
+  const havePartialCounts = detectedMeasureCounts.length > 0
+  const measureTotal = measureNumbers.length
+  const countsTotal = detectedMeasureCounts.reduce((a, b) => a + b, 0)
+  const countTolerance = Math.max(2, measureTotal * 0.25)
+  const musicXmlSystemBreaksMatchDetected =
+    Number.isFinite(systemCountHint) &&
+    systemCountHint >= 1 &&
+    systemCountHint === systemEntries.length
+  const countsOverTotal = measureTotal > 0 && countsTotal > measureTotal
+  const overTotalWithMatchingMusicXmlBreaks =
+    countsOverTotal && musicXmlSystemBreaksMatchDetected
+
+  const fullCountsUsable =
+    haveAllCounts &&
+    measureTotal > 0 &&
+    Math.abs(countsTotal - measureTotal) <= countTolerance &&
+    !overTotalWithMatchingMusicXmlBreaks
+  const partialCountsUsable =
+    !fullCountsUsable &&
+    havePartialCounts &&
+    measureTotal > 0 &&
+    countsTotal <= measureTotal
+
+  const allocationMode = fullCountsUsable
+    ? 'barline-counts'
+    : partialCountsUsable
+      ? 'partial-barline-counts'
+      : 'breaks-or-even'
+  const spans = fullCountsUsable
+    ? allocateSpansByCounts(systemEntries, measureNumbers, measureCounts)
+    : partialCountsUsable
+      ? allocateSpansByPartialCounts(systemEntries, measureNumbers, measureCounts)
+      : allocateMeasureSpansToSystems(systemEntries, measureNumbers, timingMap)
+
+  let rejectedBarlineCountReason = null
+  if (!fullCountsUsable && !partialCountsUsable && countsOverTotal) {
+    rejectedBarlineCountReason = musicXmlSystemBreaksMatchDetected
+      ? 'barline-counts-over-measure-total-with-matching-musicxml-system-breaks'
+      : 'partial-barline-counts-over-measure-total'
+  }
+
+  return {
+    allocationMode,
+    spans,
+    diagnostics: {
+      measureCount: measureTotal,
+      detectedCountSystems: detectedMeasureCounts.length,
+      totalSystems: measureCounts.length,
+      detectedCountsTotal: countsTotal,
+      countTolerance,
+      countsOverTotal,
+      musicXmlSystemBreaksMatchDetected,
+      rejectedBarlineCountReason,
+    },
   }
 }
 
@@ -872,37 +952,16 @@ export async function analyzeSemiAutoScoreSetup({
 
   onProgress?.(0.96, 'Estimating measures per system…')
 
-  // Prefer barline-derived per-system measure counts (staff-line path). They map
-  // measures to the correct visual system even when MusicXML's embedded page/
-  // system breaks disagree with the actual PDF engraving. Only used when every
-  // system has an estimate and the total is within tolerance of the written
-  // measure count; otherwise fall back to MusicXML breaks / even distribution.
-  const measureCounts = systemEntries.map((entry) => entry.measureEstimate)
-  const detectedMeasureCounts = measureCounts.filter((c) => Number.isFinite(c) && c >= 1)
-  const haveAllCounts = detectedMeasureCounts.length === measureCounts.length
-  const havePartialCounts = detectedMeasureCounts.length > 0
-  const countsTotal = detectedMeasureCounts.reduce((a, b) => a + b, 0)
-  const countTolerance = Math.max(2, measureNumbers.length * 0.25)
-  const fullCountsUsable =
-    haveAllCounts &&
-    measureNumbers.length > 0 &&
-    Math.abs(countsTotal - measureNumbers.length) <= countTolerance
-  const partialCountsUsable =
-    !fullCountsUsable &&
-    havePartialCounts &&
-    measureNumbers.length > 0 &&
-    countsTotal <= measureNumbers.length + countTolerance
-
-  const allocationMode = fullCountsUsable
-    ? 'barline-counts'
-    : partialCountsUsable
-      ? 'partial-barline-counts'
-      : 'breaks-or-even'
-  const spans = fullCountsUsable
-    ? allocateSpansByCounts(systemEntries, measureNumbers, measureCounts)
-    : partialCountsUsable
-      ? allocateSpansByPartialCounts(systemEntries, measureNumbers, measureCounts)
-      : allocateMeasureSpansToSystems(systemEntries, measureNumbers, timingMap)
+  const {
+    allocationMode,
+    spans,
+    diagnostics: allocationDiagnostics,
+  } = selectMeasureAllocationForSystems({
+    systemEntries,
+    measureNumbers,
+    timingMap,
+    systemCountHint,
+  })
   const proposedAnchors = buildSystemSpanAnchors(systemEntries, spans)
   // One canonical anchor per written measure drives the cursor (AUTO_MEASURE
   // outranks the AUTO_SYSTEM start/end spans during dedupe), so playback glides
@@ -1023,6 +1082,7 @@ export async function analyzeSemiAutoScoreSetup({
     timingMap,
     layoutMismatch,
     layoutConfidence,
+    allocationDiagnostics,
   })
 
   return {
@@ -1044,6 +1104,7 @@ export async function analyzeSemiAutoScoreSetup({
       precise,
       reconciled,
       allocationMode,
+      allocationDiagnostics,
       stage: overallStage,
       pageStages,
       systemCountHint,

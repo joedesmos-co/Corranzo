@@ -260,6 +260,7 @@ export function buildCalibrationDebugSnapshot({
       chosenStrategyLabel: smartCalibration?.chosenStrategyLabel ?? null,
       improvedOverBaseline: smartCalibration?.improvedOverBaseline ?? false,
       allocationMode: debugReport?.allocationMode ?? null,
+      allocationDiagnostics: debugReport?.allocationDiagnostics ?? null,
       stage: debugReport?.stage ?? null,
       reconciled: debugReport?.reconciled ?? null,
       strategyScores: smartCalibration?.strategyScores ?? [],
@@ -439,6 +440,8 @@ export function buildCalibrationExportReport({
       inkBounds: system.inkBounds ?? null,
     })),
     anchorsSummary: summarizeAnchors(anchors.length ? anchors : snapshot?.anchorSummary ?? []),
+    allocationDiagnostics:
+      debug?.allocationDiagnostics ?? snapshot?.fallbacks?.allocationDiagnostics ?? null,
     warnings: snapshot?.warnings ?? [],
     fallbacks: snapshot?.fallbacks ?? null,
     strategyScores: smart?.strategyScores ?? [],
