@@ -15,11 +15,12 @@ describe('minimal audio transport styling', () => {
   it('uses monochromatic design tokens', () => {
     expect(tokens).toContain('--sf-bg-app: #000000')
     expect(tokens).toContain('--sf-bg-panel: #121212')
-    expect(tokens).toContain('--sf-radius-sm: 0')
+    expect(tokens).toContain('--sf-radius-sm: 4px')
     expect(tokens).toContain('--sf-shadow-soft: none')
     expect(tokens).toContain('--sf-font-micro')
-    expect(tokens).toContain('--sf-copy-max: 60%')
+    expect(tokens).toContain('--sf-copy-max: min(36rem, 100%)')
     expect(tokens).toContain('--sf-panel-padding-y')
+    expect(tokens).toContain('--sf-canvas-inset: var(--sf-space-sm)')
   })
 
   it('playback section uses editorial heading class', () => {
@@ -69,7 +70,7 @@ describe('minimal audio transport styling', () => {
     expect(uploadBlock).not.toMatch(/gradient/)
     expect(practiceBlock).not.toMatch(/gradient/)
     expect(ctaBlock).not.toMatch(/gradient/)
-    expect(practiceBlock).toMatch(/border-radius:\s*0/)
+    expect(practiceBlock).toMatch(/border-radius:\s*var\(--sf-radius-md\)/)
     expect(ctaBlock).toMatch(/background:\s*var\(--sf-text-primary\)/)
   })
 
@@ -81,21 +82,23 @@ describe('minimal audio transport styling', () => {
     )
     const canvas = appCss.slice(appCss.indexOf('.pdf-canvas {'), appCss.indexOf('.pdf-canvas--paper-light'))
     expect(guide).toMatch(/background:\s*var\(--sf-bg-panel\)/)
-    expect(guide).toMatch(/border-radius:\s*0/)
+    expect(guide).toMatch(/border-radius:\s*var\(--sf-radius-md\)/)
     expect(canvas).toMatch(/background:\s*var\(--sf-bg-app\)/)
-    expect(canvas).toMatch(/border-radius:\s*0/)
+    expect(canvas).toMatch(/padding:\s*var\(--sf-space-sm\)/)
     expect(appCss).toMatch(/\.main-layout__score\s*\{[^}]*background:\s*var\(--sf-bg-app\)/)
   })
 
   it('library rail and pdf workstation surfaces are flat and aligned', () => {
     const appCss = readFileSync(join(root, 'src', 'App.css'), 'utf8')
     expect(appCss).toMatch(/\.library-panel\s*\{[^}]*flex-direction:\s*column/)
-    expect(appCss).toMatch(/\.multi-upload__status\s*\{[^}]*grid-template-columns:\s*repeat\(3/)
+    expect(appCss).toMatch(/\.multi-upload__status\s*\{[^}]*display:\s*flex/)
+    expect(appCss).toMatch(/\.multi-upload__status\s*\{[^}]*flex-wrap:\s*wrap/)
     expect(appCss).toMatch(/\.multi-upload__cta\s*\{[^}]*width:\s*100%/)
     expect(appCss).toMatch(/\.viewer-float-toolbar__bar\s*\{[^}]*rgba\(18,\s*18,\s*18,\s*0\.8\)/)
-    expect(appCss).toMatch(/\.viewer-float-toolbar__bar\s*\{[^}]*border-radius:\s*0/)
+    expect(appCss).toMatch(/\.viewer-float-toolbar__bar\s*\{[^}]*border-radius:\s*var\(--sf-radius-md\)/)
     expect(appCss).toMatch(/\.pdf-canvas\s*\{[^}]*border:\s*none/)
     expect(appCss).toMatch(/\.pdf-canvas \.react-pdf__Page\s*\{[^}]*box-shadow:\s*none/)
+    expect(appCss).toMatch(/\.library-welcome \.demo-piece\s*\{[^}]*grid-column:\s*6\s*\/\s*-1/)
   })
 
   it('tracklist hover uses subtle flat feedback', () => {

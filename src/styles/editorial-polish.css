@@ -1,37 +1,38 @@
 /**
- * Editorial polish — luxury spacing, micro-labels, magazine copy measure.
+ * Editorial polish — comfortable spacing, micro-labels on data rows only.
  * Styles only; no layout/HTML changes.
  */
 
-/* —— Space to breathe —— */
+/* —— Space to breathe (without shrinking the canvas) —— */
 
 .library-welcome-wrap {
-  padding: var(--sf-space-3xl) var(--sf-space-4xl) 0;
+  padding: var(--sf-space-2xl) var(--sf-space-2xl) 0;
 }
 
 .library-welcome {
   gap: var(--sf-panel-gap);
-  padding: var(--sf-panel-padding-y) var(--sf-panel-padding-x);
+  padding: var(--sf-space-xl) var(--sf-space-2xl);
 }
 
 .library-welcome__footer {
-  padding-top: var(--sf-space-xl);
-  margin-top: var(--sf-space-md);
+  padding-top: var(--sf-space-lg);
+  margin-top: var(--sf-space-sm);
 }
 
 .library-panel {
-  padding: var(--sf-panel-padding-y) var(--sf-space-lg) var(--sf-space-4xl);
+  padding: var(--sf-space-xl) var(--sf-space-lg) var(--sf-space-3xl);
 }
 
 .library-panel__hero {
-  margin-bottom: var(--sf-space-xl);
-  padding-bottom: var(--sf-space-lg);
+  margin-bottom: var(--sf-space-lg);
+  padding-bottom: var(--sf-space-md);
 }
 
 .library-panel .panel,
 .library-panel__upload-card.panel {
-  padding: var(--sf-panel-padding-y) var(--sf-space-2xl);
-  margin-bottom: var(--sf-space-xl);
+  padding: var(--sf-space-lg) var(--sf-space-md);
+  margin-bottom: var(--sf-space-md);
+  border-radius: var(--sf-radius-md);
 }
 
 .midi-tracks {
@@ -50,31 +51,25 @@
   gap: var(--sf-space-xl);
 }
 
-/* —— Magazine copy measure —— */
+/* —— Copy measure — long prose only, not rail hints —— */
 
-.library-welcome__title,
 .library-welcome__summary,
 .library-welcome__lead,
 .library-welcome__best,
 .library-welcome__privacy,
-.library-panel__hero-hint,
-.library-panel__browser-hint,
-.library-panel__workflow-lead,
-.library-panel__open-practice-text,
-.library-panel__workflow-next,
-.panel__hint,
-.practice-section__hint,
-.practice-section__hint--inline,
-.practice-workspace__empty-lead,
-.library-welcome__steps small {
+.practice-workspace__empty-lead {
   max-width: var(--sf-copy-max);
+}
+
+.library-welcome__title {
+  max-width: 22em;
 }
 
 .library-welcome__steps {
   gap: var(--sf-space-md);
 }
 
-/* —— Micro-typography (data labels stay under editorial headers) —— */
+/* —— Micro-typography — transport / practice data labels only —— */
 
 .midi-transport__time,
 .midi-tracks__meta,
@@ -96,11 +91,6 @@
 .wait-for-you__now-label,
 .metronome-beat-indicator__label,
 .metronome-beat-indicator__count,
-.library-panel__hero-hint,
-.library-panel__browser-hint,
-.library-panel__empty,
-.library-panel__file,
-.library-welcome__privacy,
 .score-follow-setup-status,
 .practice-shortcuts-hint {
   font-family: var(--sf-font-mono);
