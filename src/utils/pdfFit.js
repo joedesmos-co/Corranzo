@@ -1,11 +1,12 @@
 import { getEffectivePageSize } from './pdfPageViewRotation.js'
 
-const CANVAS_PADDING = 32
+export const DEFAULT_CANVAS_PADDING = 32
+export const PRACTICE_CANVAS_PADDING = 18
 
-function innerSize(containerWidth, containerHeight) {
+function innerSize(containerWidth, containerHeight, canvasPadding) {
   return {
-    width: Math.max(0, containerWidth - CANVAS_PADDING),
-    height: Math.max(0, containerHeight - CANVAS_PADDING),
+    width: Math.max(0, containerWidth - canvasPadding),
+    height: Math.max(0, containerHeight - canvasPadding),
   }
 }
 
@@ -13,30 +14,30 @@ function hasContainerSize(containerWidth, containerHeight) {
   return containerWidth > 0 && containerHeight > 0
 }
 
-export function getFitPageWidth(pageWidth, pageHeight, containerWidth, containerHeight) {
+export function getFitPageWidth(pageWidth, pageHeight, containerWidth, containerHeight, canvasPadding = DEFAULT_CANVAS_PADDING) {
   if (!pageWidth || !pageHeight || !hasContainerSize(containerWidth, containerHeight)) {
     return null
   }
 
-  const inner = innerSize(containerWidth, containerHeight)
+  const inner = innerSize(containerWidth, containerHeight, canvasPadding)
   const scale = Math.min(inner.width / pageWidth, inner.height / pageHeight)
 
   return pageWidth * scale
 }
 
-export function getFitWidth(pageWidth, containerWidth) {
+export function getFitWidth(pageWidth, containerWidth, canvasPadding = DEFAULT_CANVAS_PADDING) {
   if (!pageWidth || containerWidth <= 0) {
     return null
   }
 
-  return containerWidth - CANVAS_PADDING
+  return containerWidth - canvasPadding
 }
 
 /**
  * Returns width and/or height props for react-pdf Page.
  * Uses container-only fallbacks until page dimensions are known.
  */
-export function getPageDimensions(fitMode, pageSize, containerSize, viewRotation = 0) {
+export function getPageDimensions(fitMode, pageSize, containerSize, viewRotation = 0, canvasPadding = DEFAULT_CANVAS_PADDING) {
   const { width: containerWidth, height: containerHeight } = containerSize
   const effectivePageSize = getEffectivePageSize(pageSize, viewRotation) ?? pageSize
 
@@ -44,13 +45,13 @@ export function getPageDimensions(fitMode, pageSize, containerSize, viewRotation
     return {}
   }
 
-  const inner = innerSize(containerWidth, containerHeight)
+  const inner = innerSize(containerWidth, containerHeight, canvasPadding)
 
   if (effectivePageSize) {
     const { width: pageWidth, height: pageHeight } = effectivePageSize
 
     if (fitMode === 'width') {
-      const width = getFitWidth(pageWidth, containerWidth)
+      const width = getFitWidth(pageWidth, containerWidth, canvasPadding)
       return width ? { width } : {}
     }
 
@@ -59,6 +60,7 @@ export function getPageDimensions(fitMode, pageSize, containerSize, viewRotation
       pageHeight,
       containerWidth,
       containerHeight,
+      canvasPadding,
     )
     if (!width) {
       return {}

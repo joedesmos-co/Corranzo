@@ -6,7 +6,7 @@ import '../pdf/setupPdfWorker.js'
 import useElementSize from '../hooks/useElementSize.js'
 import useAnnotations from '../hooks/useAnnotations.js'
 import useAnnotationPersistence from '../hooks/useAnnotationPersistence.js'
-import { getPageDimensions } from '../utils/pdfFit.js'
+import { getPageDimensions, PRACTICE_CANVAS_PADDING } from '../utils/pdfFit.js'
 import { resetPdfCanvasScroll } from '../utils/pdfViewerScroll.js'
 import { ANNOTATION_TOOLS } from './pdf/annotationConstants.js'
 import PdfFullscreen from './pdf/PdfFullscreen.jsx'
@@ -151,7 +151,13 @@ export default function PdfViewer({
   const practiceSession = practiceContext?.session ?? null
   const scoreFollow = practiceContext?.scoreFollow ?? null
   const pageViewRotation = scoreFollow?.getPageViewRotation?.(pageNumber) ?? 0
-  const pageDimensions = getPageDimensions(fitMode, pageSize, canvasSize, pageViewRotation)
+  const pageDimensions = getPageDimensions(
+    fitMode,
+    pageSize,
+    canvasSize,
+    pageViewRotation,
+    isPracticeEmbed ? PRACTICE_CANVAS_PADDING : undefined,
+  )
   const hasTiming = Boolean(practiceContext?.session?.timing?.timingMap)
   const measureBounds = practiceContext?.session?.measure?.bounds
   const practiceOverlayPropsRaw = usePracticeScoreFollowOverlayProps()

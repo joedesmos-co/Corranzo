@@ -81,7 +81,7 @@ describe('minimal audio transport styling', () => {
       appCss.indexOf('.library-accuracy-guide {'),
       appCss.indexOf('.library-accuracy-guide__status'),
     )
-    const canvas = appCss.slice(appCss.indexOf('.pdf-canvas {'), appCss.indexOf('.pdf-canvas--paper-light'))
+    const canvas = appCss.match(/^\.pdf-canvas\s*\{([^}]*)\}/m)?.[1] ?? ''
     expect(guide).toMatch(/background:\s*var\(--sf-bg-panel\)/)
     expect(guide).toMatch(/border-radius:\s*var\(--sf-radius-md\)/)
     expect(canvas).toMatch(/background:\s*var\(--sf-bg-app\)/)

@@ -6,6 +6,7 @@ import {
   getFitPageWidth,
   getFitWidth,
   getPageDimensions,
+  PRACTICE_CANVAS_PADDING,
 } from '../src/utils/pdfFit.js'
 import { resetPdfCanvasScroll } from '../src/utils/pdfViewerScroll.js'
 
@@ -44,6 +45,14 @@ describe('pdfFit', () => {
     expect(pageDims.width).toBeGreaterThan(0)
     expect(pageDims.height).toBeGreaterThan(0)
     expect(pageDims.height).toBeLessThanOrEqual(container.height - 32)
+  })
+
+  it('practice mode uses a smaller fit margin for a larger default page', () => {
+    const container = { width: 900, height: 700 }
+    const libraryDims = getPageDimensions('page', PAGE, container)
+    const practiceDims = getPageDimensions('page', PAGE, container, 0, PRACTICE_CANVAS_PADDING)
+    expect(practiceDims.height).toBeGreaterThan(libraryDims.height)
+    expect(practiceDims.width).toBeGreaterThan(libraryDims.width)
   })
 
   it('returns empty dimensions when container size is unknown', () => {

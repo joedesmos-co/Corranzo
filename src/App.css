@@ -1438,6 +1438,10 @@
   background: var(--sf-bg-app);
 }
 
+.pdf-viewer-section--practice {
+  padding: 4px 6px;
+}
+
 .pdf-viewer-section--library {
   height: 100%;
   max-height: 100%;
@@ -1468,7 +1472,77 @@
 /* In practice mode the floating toolbar (position:absolute; top:10px; ~40px tall)
    sits above the PDF body. Reserve space so the first system is never hidden. */
 .pdf-viewer-section--practice .pdf-viewer-stage {
-  padding-top: 52px;
+  padding-top: 44px;
+}
+
+.pdf-viewer-section--practice .pdf-canvas {
+  position: relative;
+  padding: 2px;
+}
+
+.pdf-viewer-section--practice .pdf-canvas__placeholder,
+.pdf-viewer-section--practice .pdf-canvas__status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  left: auto;
+  margin: 0;
+  z-index: 28;
+  max-width: min(45%, 16rem);
+  padding: 5px 10px;
+  border-radius: var(--sf-radius-pill);
+  font-size: var(--sf-font-sidebar-min);
+  line-height: 1.35;
+  text-align: right;
+  color: var(--sf-text-body);
+  background: rgba(18, 18, 18, 0.88);
+  border: 1px solid var(--sf-border-strong);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.pdf-viewer-section--practice .pdf-canvas--paper-light .pdf-canvas__status {
+  color: var(--sf-text-body);
+}
+
+/* Practice toolbar spans the stage; status chrome sits top-right, clear of the bar. */
+.pdf-viewer-section--practice .viewer-float-toolbar {
+  left: 0;
+  right: 0;
+  width: 100%;
+  transform: none;
+  align-items: center;
+}
+
+.pdf-viewer-section--practice .viewer-float-toolbar__bar {
+  margin-top: 10px;
+}
+
+.pdf-viewer-section--practice .viewer-float-toolbar__hint {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  left: auto;
+  z-index: 30;
+  margin: 0;
+  padding: 4px 10px;
+  border-radius: var(--sf-radius-pill);
+  font-size: var(--sf-font-sidebar-min);
+  line-height: 1.35;
+  color: var(--sf-text-muted);
+  background: rgba(18, 18, 18, 0.88);
+  border: 1px solid var(--sf-border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 1;
+  pointer-events: none;
+}
+
+.practice-workspace__score:has(> .score-follow-setup-status)
+  .pdf-viewer-section--practice
+  .viewer-float-toolbar__hint {
+  display: none;
 }
 
 .pdf-viewer-section--library .pdf-viewer-body,

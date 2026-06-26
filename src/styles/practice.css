@@ -186,40 +186,61 @@
 }
 
 .score-follow-setup-status {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 25;
-  margin: 0;
+  position: static;
+  margin: 0 0 10px;
   padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  line-height: 1.3;
-  color: #e8eef8;
-  background: rgba(12, 22, 40, 0.88);
-  border: 1px solid #3a5078;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  border-radius: var(--sf-radius-pill);
+  font-size: var(--sf-font-sidebar-min);
+  line-height: 1.35;
+  color: var(--sf-text-body);
+  background: rgba(18, 18, 18, 0.88);
+  border: 1px solid var(--sf-border-strong);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: none;
   pointer-events: none;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  max-width: min(92%, 420px);
-  text-align: center;
+  max-width: 100%;
+  text-align: left;
+}
+
+.practice-workspace__score > .score-follow-setup-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  left: auto;
+  z-index: 30;
+  margin: 0;
+  max-width: min(45%, 18rem);
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.practice-control-panel .score-follow-setup-status,
+.practice-setup .score-follow-setup-status {
+  position: static;
+  display: flex;
+  margin: 0 0 10px;
+  max-width: 100%;
+  text-align: left;
+  justify-content: flex-start;
 }
 
 .score-follow-setup-status--running {
-  border-color: rgba(56, 189, 248, 0.45);
+  border-color: var(--sf-border-strong);
+  color: var(--sf-text-secondary);
 }
 
 .score-follow-setup-status--ready {
-  border-color: rgba(109, 74, 255, 0.45);
+  border-color: var(--sf-border-strong);
 }
 
 .score-follow-setup-status--warning {
   color: #e8d4a8;
-  background: rgba(180, 120, 40, 0.12);
-  border: 1px solid rgba(220, 160, 60, 0.35);
+  background: rgba(24, 20, 12, 0.92);
+  border: 1px solid rgba(220, 160, 60, 0.45);
 }
 
 .score-follow-setup-status--needs-setup {
@@ -244,8 +265,8 @@
 }
 
 .score-follow-setup-status--failed {
-  border-color: rgba(250, 204, 21, 0.35);
-  color: #fde68a;
+  border-color: rgba(240, 160, 168, 0.45);
+  color: #f0c8cc;
 }
 
 .practice-env-notices {
@@ -4029,10 +4050,14 @@
 }
 
 .score-follow-setup-status {
-  min-height: 26px;
+  min-height: 24px;
   max-width: min(86%, 280px);
   padding: 4px 10px;
-  font-size: 0.6875rem;
+  font-size: var(--sf-font-sidebar-min);
+}
+
+.practice-workspace__score > .score-follow-setup-status {
+  max-width: min(45%, 18rem);
 }
 
 @media (max-width: 1100px) {
@@ -4213,7 +4238,6 @@
 .wait-for-you__progress-header,
 .metronome-beat-indicator__label,
 .metronome-beat-indicator__count,
-.score-follow-setup-status,
 .practice-shortcuts-hint {
   font-family: var(--sf-font-mono);
   font-size: var(--sf-font-micro);
