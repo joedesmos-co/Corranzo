@@ -77,6 +77,13 @@
   --sf-font-micro: 0.625rem;
   --sf-text-micro-opacity: 0.5;
 
+  /* Sidebar readability */
+  --sf-font-sidebar-min: 0.6875rem;
+  --sf-sidebar-gap: 10px;
+  --sf-sidebar-section-padding: 12px;
+  --sf-interactive-surface: rgba(255, 255, 255, 0.05);
+  --sf-interactive-surface-active: rgba(255, 255, 255, 0.1);
+
   /* Layout */
   --sf-sidebar-width: 300px;
   --sf-topbar-height: 72px;

@@ -36,19 +36,15 @@
 }
 
 .midi-tracks {
-  gap: var(--sf-space-sm);
-}
-
-.midi-tracks__label {
-  padding: var(--sf-space-md) var(--sf-space-lg);
+  gap: 4px;
 }
 
 .midi-transport {
-  gap: var(--sf-space-xl);
+  gap: var(--sf-space-md);
 }
 
 .practice-playback-settings {
-  gap: var(--sf-space-xl);
+  gap: var(--sf-space-md);
 }
 
 /* —— Copy measure — long prose only, not rail hints —— */
@@ -72,21 +68,12 @@
 /* —— Micro-typography — transport / practice data labels only —— */
 
 .midi-transport__time,
-.midi-tracks__meta,
 .midi-tracks__empty,
 .practice-progress__header,
 .practice-progress__label,
 .practice-progress__percent,
-.practice-playback-settings__label span,
-.practice-section__summary,
-.practice-status-chip,
-.practice-status__label,
-.practice-status__hint,
 .practice-files__label,
-.practice-files__hint,
 .practice-files__value,
-.practice-section__status,
-.practice-section__file,
 .wait-for-you__progress-header,
 .wait-for-you__now-label,
 .metronome-beat-indicator__label,
@@ -102,7 +89,7 @@
 
 .practice-status-chip--ready,
 .practice-status-chip--warning {
-  opacity: calc(var(--sf-text-micro-opacity) + 0.15);
+  opacity: 1;
 }
 
 .practice-progress__header {

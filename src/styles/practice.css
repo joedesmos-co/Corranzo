@@ -71,7 +71,7 @@
 }
 
 .practice-workspace__layout--playing .practice-section--position-focus {
-  box-shadow: 0 0 0 1px rgba(109, 74, 255, 0.22);
+  box-shadow: 0 0 0 1px var(--sf-border-strong);
 }
 
 .practice-workspace__score {
@@ -177,8 +177,8 @@
 }
 
 .practice-control-panel__primary .practice-section--compact:first-child {
-  border-color: #3a5080;
-  box-shadow: 0 0 0 1px rgba(109, 74, 255, 0.12);
+  border-color: var(--sf-border-strong);
+  box-shadow: none;
 }
 
 .practice-workspace__score {
@@ -2268,7 +2268,7 @@
   cursor: not-allowed;
 }
 
-/* Tracks */
+/* Tracks — compact hand rows */
 
 .midi-tracks {
   list-style: none;
@@ -2276,8 +2276,8 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  max-height: 280px;
+  gap: 4px;
+  max-height: 240px;
   overflow-y: auto;
 }
 
@@ -2286,27 +2286,56 @@
 }
 
 .midi-tracks__label {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--sf-space-md);
-  padding: var(--sf-space-md) var(--sf-space-lg);
-  border-radius: 0;
-  background: var(--sf-bg-panel-inset);
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--sf-radius-sm);
+  background: transparent;
   border: 1px solid var(--sf-border);
   cursor: pointer;
+  transition:
+    background var(--sf-duration-fast) var(--sf-ease),
+    border-color var(--sf-duration-fast) var(--sf-ease),
+    opacity var(--sf-duration-fast) var(--sf-ease);
+}
+
+.midi-tracks__label:has(input:checked) {
+  background: var(--sf-bg-panel-inset);
+  border-color: var(--sf-border-strong);
+}
+
+.midi-tracks__label:has(input:not(:checked)) {
+  opacity: 0.78;
+  border-color: var(--sf-border-muted);
 }
 
 .midi-tracks__label:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--sf-interactive-surface);
+  border-color: var(--sf-border-strong);
 }
 
 .midi-tracks__label:hover .midi-tracks__name {
+  color: var(--sf-text-secondary);
+}
+
+.midi-tracks__label:hover:has(input:checked) .midi-tracks__name {
   color: var(--sf-text-primary);
 }
 
+.midi-tracks__label input[type='checkbox'] {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--sf-text-primary);
+  cursor: pointer;
+}
+
 .midi-tracks__name {
-  flex: 1;
-  font-size: 0.9rem;
+  min-width: 0;
+  font-size: var(--sf-font-small);
+  font-weight: 500;
   color: var(--sf-text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2314,15 +2343,32 @@
   transition: color var(--sf-duration-fast) var(--sf-ease);
 }
 
+.midi-tracks__label:has(input:checked) .midi-tracks__name {
+  color: var(--sf-text-primary);
+}
+
+.midi-tracks__label:has(input:not(:checked)) .midi-tracks__name {
+  font-weight: 400;
+  color: var(--sf-text-subtle);
+}
+
 .midi-tracks__meta {
-  font-size: 0.75rem;
-  color: var(--sf-text-faint);
+  flex-shrink: 0;
+  font-size: var(--sf-font-sidebar-min);
+  font-variant-numeric: tabular-nums;
+  color: var(--sf-text-muted);
+  white-space: nowrap;
+}
+
+.midi-tracks__label:has(input:not(:checked)) .midi-tracks__meta {
+  color: var(--sf-text-subtle);
 }
 
 .midi-tracks__empty {
   margin: 0;
-  color: #6b82a8;
-  font-size: 0.875rem;
+  color: var(--sf-text-muted);
+  font-size: var(--sf-font-small);
+  line-height: 1.45;
 }
 
 /* Library MIDI block */
@@ -3351,8 +3397,8 @@
 .practice-control-panel {
   max-width: 32vw;
   min-width: 0;
-  padding: 10px;
-  gap: 6px;
+  padding: var(--sf-space-sm) 10px var(--sf-space-md);
+  gap: var(--sf-sidebar-gap);
   box-sizing: border-box;
 }
 
@@ -3361,7 +3407,7 @@
 .practice-more {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--sf-sidebar-gap);
   min-width: 0;
   max-width: 100%;
   flex-shrink: 0;
@@ -3383,16 +3429,18 @@
   display: inline-flex;
   align-items: center;
   width: fit-content;
-  min-height: 24px;
+  min-height: 22px;
   padding: 3px 9px;
   border: 1px solid var(--sf-border);
   border-radius: var(--sf-radius-pill);
   background: var(--sf-bg-panel-inset);
   color: var(--sf-text-muted);
-  font-size: 0.6875rem;
+  font-family: var(--sf-font-mono);
+  font-size: var(--sf-font-sidebar-min);
   font-weight: 500;
   line-height: 1.2;
-  white-space: nowrap;
+  white-space: normal;
+  opacity: 1;
 }
 
 .practice-status-chip--ready {
@@ -3408,12 +3456,12 @@
 }
 
 .practice-control-panel .practice-section--compact {
-  padding: var(--sf-space-lg) var(--sf-space-xl);
+  padding: var(--sf-sidebar-section-padding) 14px;
 }
 
 .practice-control-panel .practice-section--compact .practice-section__title--static,
 .practice-control-panel .practice-section--compact .practice-section__title--editorial {
-  margin-bottom: var(--sf-space-md);
+  margin-bottom: 8px;
 }
 
 .practice-section {
@@ -3435,9 +3483,10 @@
 
 .practice-section__summary {
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: visible;
+  text-overflow: unset;
+  white-space: normal;
+  line-height: 1.35;
 }
 
 .practice-section__toggle-label {
@@ -3684,15 +3733,18 @@
   justify-content: center;
   min-height: 34px;
   padding: 6px 8px;
-  border-radius: 7px;
+  border: 1px solid transparent;
+  border-radius: var(--sf-radius-sm);
   color: var(--sf-text-muted);
-  font-size: var(--sf-font-caption);
+  font-size: var(--sf-font-sidebar-min);
   text-align: center;
 }
 
 .practice-mode__option--selected {
-  background: #263a5e;
+  background: var(--sf-bg-panel);
+  border: 1px solid var(--sf-border-strong);
   color: var(--sf-text-primary);
+  font-weight: 600;
 }
 
 .practice-mode__option input {
@@ -3751,7 +3803,16 @@
   min-width: 0;
   height: 32px;
   padding: 0 6px;
-  font-size: 0.72rem;
+  font-size: var(--sf-font-sidebar-min);
+  border-color: var(--sf-border-strong);
+  background: var(--sf-bg-panel-inset);
+  border-radius: var(--sf-radius-sm);
+  color: var(--sf-text-secondary);
+}
+
+.practice-loop--compact .practice-loop__btn:hover:not(:disabled) {
+  border-color: var(--sf-text-muted);
+  background: var(--sf-interactive-surface);
 }
 
 .practice-loop__range {
@@ -3829,17 +3890,19 @@
   justify-content: center;
   align-items: center;
   min-height: 32px;
-  padding: 5px;
-  border: 1px solid transparent;
-  border-radius: 7px;
+  padding: 5px 6px;
+  border: 1px solid var(--sf-border);
+  border-radius: var(--sf-radius-sm);
   background: var(--sf-bg-panel-inset);
-  font-size: 0.7rem;
+  font-size: var(--sf-font-sidebar-min);
   text-align: center;
 }
 
 .wfy-input-source__option--selected {
-  border-color: var(--sf-border-focus);
-  background: #263a5e;
+  border-color: var(--sf-border-strong);
+  background: var(--sf-bg-panel);
+  color: var(--sf-text-primary);
+  font-weight: 600;
 }
 
 .wfy-input-source__option input {
@@ -4140,19 +4203,13 @@
   color: var(--sf-text-muted);
 }
 
-/* Editorial polish — practice cascade (wins over section-specific sizes above) */
+/* Editorial polish — compact data labels only (not sidebar body copy) */
 .midi-transport__time,
-.midi-tracks__meta,
 .practice-progress__header,
 .practice-progress__label,
 .practice-progress__percent,
-.practice-playback-settings__label span,
-.practice-section__summary,
-.practice-status-chip,
-.practice-status__label,
-.practice-status__hint,
 .practice-files__label,
-.practice-files__hint,
+.practice-files__value,
 .wait-for-you__progress-header,
 .metronome-beat-indicator__label,
 .metronome-beat-indicator__count,
@@ -4163,7 +4220,122 @@
   opacity: var(--sf-text-micro-opacity);
 }
 
-.practice-section__hint,
-.practice-section__hint--inline {
-  max-width: var(--sf-copy-max);
+/* —— Practice sidebar readability —— */
+
+.practice-control-panel .practice-section {
+  padding: var(--sf-sidebar-section-padding) 14px;
+}
+
+.practice-control-panel .practice-section--collapsible {
+  padding: 0;
+}
+
+.practice-control-panel .practice-section__title--static,
+.practice-control-panel .practice-section__title--editorial {
+  margin-bottom: 8px;
+  font-size: var(--sf-font-caption);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--sf-text-secondary);
+  opacity: 1;
+}
+
+.practice-control-panel .practice-section__hint,
+.practice-control-panel .practice-section__hint--inline,
+.practice-control-panel .practice-loop-compact__hint,
+.practice-control-panel .practice-loop__hint,
+.practice-control-panel .wfy-input-source__accuracy-note {
+  max-width: 100%;
+  font-size: var(--sf-font-sidebar-min);
+  line-height: 1.45;
+  color: var(--sf-text-muted);
+  opacity: 1;
+  overflow-wrap: anywhere;
+}
+
+.practice-control-panel .practice-section__hint--inline {
+  margin-bottom: 8px;
+}
+
+.practice-control-panel .practice-section__summary {
+  font-size: var(--sf-font-sidebar-min);
+  color: var(--sf-text-muted);
+  opacity: 1;
+}
+
+.practice-control-panel .practice-section__status,
+.practice-control-panel .practice-section__error {
+  font-size: var(--sf-font-small);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  opacity: 1;
+}
+
+.practice-control-panel .practice-section__error {
+  color: #f0a0a8;
+}
+
+.practice-control-panel .practice-section__toggle {
+  min-height: 40px;
+  padding: 10px 14px;
+}
+
+.practice-control-panel .practice-section__toggle:hover {
+  background: var(--sf-interactive-surface);
+}
+
+.practice-control-panel .practice-section--collapsible-open > .practice-section__toggle {
+  background: var(--sf-interactive-surface-active);
+  border-bottom: 1px solid var(--sf-border);
+}
+
+.practice-control-panel .practice-section--collapsible .practice-section__title {
+  font-size: var(--sf-font-caption);
+  font-weight: 600;
+  color: var(--sf-text-secondary);
+  letter-spacing: 0.08em;
+}
+
+.practice-control-panel .practice-playback-settings__label {
+  font-size: var(--sf-font-sidebar-min);
+  color: var(--sf-text-secondary);
+  opacity: 1;
+}
+
+.practice-control-panel .practice-playback-settings__label span {
+  font-size: var(--sf-font-sidebar-min);
+  color: var(--sf-text-muted);
+  opacity: 1;
+  letter-spacing: normal;
+}
+
+.practice-control-panel .practice-playback-settings__check {
+  font-size: var(--sf-font-sidebar-min);
+  color: var(--sf-text-body);
+}
+
+.practice-control-panel .practice-files__hint,
+.practice-control-panel .practice-status__hint,
+.practice-control-panel .practice-status__label {
+  font-size: var(--sf-font-sidebar-min);
+  line-height: 1.45;
+  color: var(--sf-text-muted);
+  opacity: 1;
+  overflow-wrap: anywhere;
+}
+
+.practice-control-panel .practice-import-notices__warning,
+.practice-control-panel .practice-import-notices__guidance-item,
+.practice-control-panel .practice-env-notices__item {
+  font-size: var(--sf-font-small);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.practice-tracks-compact .practice-section__hint--inline {
+  margin-bottom: 8px;
+}
+
+.practice-tracks-compact .midi-tracks {
+  margin-top: 2px;
 }

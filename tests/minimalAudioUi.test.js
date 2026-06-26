@@ -10,6 +10,7 @@ const __dir = dirname(fileURLToPath(import.meta.url))
 const root = join(__dir, '..')
 const practiceCss = readFileSync(join(root, 'src', 'styles', 'practice.css'), 'utf8')
 const tokens = readFileSync(join(root, 'src', 'styles', 'tokens.css'), 'utf8')
+const editorial = readFileSync(join(root, 'src', 'styles', 'editorial-polish.css'), 'utf8')
 
 describe('minimal audio transport styling', () => {
   it('uses monochromatic design tokens', () => {
@@ -20,7 +21,7 @@ describe('minimal audio transport styling', () => {
     expect(tokens).toContain('--sf-font-micro')
     expect(tokens).toContain('--sf-copy-max: min(36rem, 100%)')
     expect(tokens).toContain('--sf-panel-padding-y')
-    expect(tokens).toContain('--sf-canvas-inset: var(--sf-space-sm)')
+    expect(tokens).toContain('--sf-font-sidebar-min: 0.6875rem')
   })
 
   it('playback section uses editorial heading class', () => {
@@ -101,14 +102,22 @@ describe('minimal audio transport styling', () => {
     expect(appCss).toMatch(/\.library-welcome \.demo-piece\s*\{[^}]*grid-column:\s*6\s*\/\s*-1/)
   })
 
+  it('track list uses compact hand rows with readable note counts', () => {
+    expect(practiceCss).toMatch(
+      /\.midi-tracks__label\s*\{[^}]*grid-template-columns:\s*auto\s+minmax\(0,\s*1fr\)\s+auto/,
+    )
+    expect(practiceCss).toMatch(/\.midi-tracks__meta\s*\{[^}]*font-size:\s*var\(--sf-font-sidebar-min\)/)
+    expect(practiceCss).not.toMatch(/\.midi-tracks__meta,\s*\n/)
+    expect(editorial).not.toContain('.midi-tracks__meta,')
+  })
+
   it('tracklist hover uses subtle flat feedback', () => {
-    expect(practiceCss).toMatch(/\.midi-tracks__label:hover\s*\{[^}]*rgba\(255,\s*255,\s*255,\s*0\.03\)/)
-    expect(practiceCss).toMatch(/\.midi-tracks__label:hover \.midi-tracks__name\s*\{[^}]*color:\s*var\(--sf-text-primary\)/)
+    expect(practiceCss).toMatch(/\.midi-tracks__label:hover\s*\{[^}]*var\(--sf-interactive-surface\)/)
+    expect(practiceCss).toMatch(/\.midi-tracks__label:hover \.midi-tracks__name\s*\{[^}]*color:\s*var\(--sf-text-secondary\)/)
   })
 
   it('cursorrules guardrails protect the minimalist UI', () => {
     const rules = readFileSync(join(root, '.cursorrules'), 'utf8')
-    const editorial = readFileSync(join(root, 'src', 'styles', 'editorial-polish.css'), 'utf8')
     expect(rules).toContain('NEVER use border-radius or gradients in new CSS rules')
     expect(rules).toContain('src/styles/tokens.css')
     expect(rules).toContain('tracked-out uppercase layouts for headers')
