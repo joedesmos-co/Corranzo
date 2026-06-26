@@ -53,14 +53,14 @@ import {
 import {
   clearCalibrationDebugStorage,
   loadCalibrationDebugSnapshot,
-  loadPageViewRotations,
+  loadManualPageRotations,
   saveCalibrationDebugSnapshot,
-  savePageViewRotations,
+  saveManualPageRotations,
 } from './calibrationDebugStorage.js'
 import {
   cycleViewRotation,
   getPageViewRotation as resolvePageViewRotation,
-  pageViewRotationsFromOrientation,
+  resolveEffectivePageRotations,
 } from '../../utils/pdfPageViewRotation.js'
 import {
   mapAnchorForViewerOverlay,
@@ -187,8 +187,14 @@ export default function useScoreFollow({
   const [showCalibrationOverlay, setShowCalibrationOverlay] = useState(
     CALIBRATION_OVERLAY_DEFAULT_VISIBLE,
   )
-  const [pageViewRotations, setPageViewRotations] = useState({})
-  const pageViewRotationsRef = useRef({})
+  // Two explicit rotation layers (Rules 4 & 6):
+  //  - AUTO: derived live from the reconciled analysis orientation. Never
+  //    persisted, never forced into analysis — so a stale turn from a previous
+  //    run can't override a fresh auto-setup (the page-8 regression).
+  //  - MANUAL: the user's "Rotate page" overrides. The only persisted layer, and
+  //    it always wins over auto.
+  const [manualPageRotations, setManualPageRotations] = useState({})
+  const manualPageRotationsRef = useRef({})
 
   // System-start fallback mode: user taps the start of each staff system
   // instead of marking every measure. Used when auto PDF analysis fails.
@@ -201,6 +207,20 @@ export default function useScoreFollow({
     [pdfFingerprint, timingSourceId],
   )
 
+  useEffect(() => {
+    manualPageRotationsRef.current = manualPageRotations
+  }, [manualPageRotations])
+
+  // The authoritative per-page viewer rotation = manual override, else the
+  // reconciled auto-detected turn, else none. Everything downstream (viewer,
+  // Library, Fullscreen, overlays, cursor) reads this one resolved map.
+  const activeOrientation =
+    calibrationDebugSnapshot?.orientation ?? semiAutoSetup.preview?.orientation ?? null
+  const pageViewRotations = useMemo(
+    () => resolveEffectivePageRotations(activeOrientation, manualPageRotations),
+    [activeOrientation, manualPageRotations],
+  )
+  const pageViewRotationsRef = useRef(pageViewRotations)
   useEffect(() => {
     pageViewRotationsRef.current = pageViewRotations
   }, [pageViewRotations])
@@ -635,7 +655,7 @@ export default function useScoreFollow({
   }, [systemStartMode, exitSystemStartMode, undoLastSystemStartMark])
 
   const runSemiAutoSetupInternal = useCallback(
-    async ({ force = false, respectStoredViewRotations = false } = {}) => {
+    async ({ force = false } = {}) => {
       if (!pdfSource || !numPages || !timingMap) {
         setSetupStatus({
           phase: 'failed',
@@ -688,7 +708,9 @@ export default function useScoreFollow({
             pdfSource,
             numPages,
             timingMap,
-            pageViewRotations: respectStoredViewRotations ? pageViewRotationsRef.current : null,
+            // Only the user's explicit manual turns are forced; every other page
+            // is auto-detected fresh so document reconciliation can run on it.
+            pageViewRotations: manualPageRotationsRef.current,
             onProgress: (progress, message) => {
               setSemiAutoSetup((previous) => ({
                 ...previous,
@@ -745,13 +767,13 @@ export default function useScoreFollow({
         const { preview } = result
         setAutoSetupReport(preview.debugReport ?? null)
 
-        const detectedRotations = pageViewRotationsFromOrientation(preview.orientation)
-        const mergedRotations = respectStoredViewRotations
-          ? { ...pageViewRotationsRef.current, ...detectedRotations }
-          : detectedRotations
-        pageViewRotationsRef.current = mergedRotations
-        setPageViewRotations(mergedRotations)
-        savePageViewRotations(autoSetupKey, mergedRotations)
+        // Auto rotations are NOT stored — they derive live from preview.orientation
+        // (captured in the snapshot below). Manual overrides are the only persisted
+        // layer. The effective map for diagnostics merges them with manual winning.
+        const effectiveRotations = resolveEffectivePageRotations(
+          preview.orientation,
+          manualPageRotationsRef.current,
+        )
 
         const setupPhase = preview.plausible
           ? preview.approximate
@@ -759,7 +781,7 @@ export default function useScoreFollow({
             : 'ready'
           : 'needs-setup'
         captureCalibrationSnapshot(preview, {
-          rotations: mergedRotations,
+          rotations: effectiveRotations,
           phase: setupPhase,
         })
 
@@ -892,9 +914,11 @@ export default function useScoreFollow({
     demoBundledLoadRef.current = null
     demoBundledInFlightRef.current = false
     layoutSupplementKeyRef.current = null
-    const storedRotations = loadPageViewRotations(autoSetupKey)
-    pageViewRotationsRef.current = storedRotations
-    setPageViewRotations(storedRotations)
+    // Only restore explicit manual overrides. Auto rotations re-derive from the
+    // fresh analysis, so a previous run's detected turns never carry over stale.
+    const storedManualRotations = loadManualPageRotations(autoSetupKey)
+    manualPageRotationsRef.current = storedManualRotations
+    setManualPageRotations(storedManualRotations)
     setCalibrationDebugSnapshot(loadCalibrationDebugSnapshot(autoSetupKey))
     setShowCalibrationOverlay(CALIBRATION_OVERLAY_DEFAULT_VISIBLE)
     setAutoSetupReport(null)
@@ -1214,35 +1238,28 @@ export default function useScoreFollow({
   const rotatePageView = useCallback(
     (pageNumber = visiblePageNumber) => {
       const page = pageNumber ?? visiblePageNumber
+      // Cycle from whatever is currently shown (manual override or auto turn) and
+      // record it as a manual override — the only layer that forces analysis.
+      const current = resolvePageViewRotation(pageViewRotationsRef.current, page)
       const updated = {
-        ...pageViewRotationsRef.current,
-        [page]: cycleViewRotation(pageViewRotationsRef.current[page] ?? 0),
+        ...manualPageRotationsRef.current,
+        [page]: cycleViewRotation(current),
       }
-      pageViewRotationsRef.current = updated
-      setPageViewRotations(updated)
-      savePageViewRotations(autoSetupKey, updated)
-      runSemiAutoSetupInternal({ force: true, respectStoredViewRotations: true })
+      manualPageRotationsRef.current = updated
+      setManualPageRotations(updated)
+      saveManualPageRotations(autoSetupKey, updated)
+      runSemiAutoSetupInternal({ force: true })
     },
     [autoSetupKey, visiblePageNumber, runSemiAutoSetupInternal],
   )
 
+  // Drop manual overrides so auto-detection / document reconciliation takes over.
   const applyAutoPageRotations = useCallback(() => {
-    const orientation =
-      calibrationDebugSnapshot?.orientation ?? semiAutoSetup.preview?.orientation ?? null
-    if (!orientation?.anyRotated) {
-      return
-    }
-    const detected = pageViewRotationsFromOrientation(orientation)
-    pageViewRotationsRef.current = detected
-    setPageViewRotations(detected)
-    savePageViewRotations(autoSetupKey, detected)
-    runSemiAutoSetupInternal({ force: true, respectStoredViewRotations: true })
-  }, [
-    calibrationDebugSnapshot?.orientation,
-    semiAutoSetup.preview?.orientation,
-    autoSetupKey,
-    runSemiAutoSetupInternal,
-  ])
+    manualPageRotationsRef.current = {}
+    setManualPageRotations({})
+    saveManualPageRotations(autoSetupKey, {})
+    runSemiAutoSetupInternal({ force: true })
+  }, [autoSetupKey, runSemiAutoSetupInternal])
 
   const getPageViewRotation = useCallback(
     (pageNumber) => resolvePageViewRotation(pageViewRotations, pageNumber),
@@ -1269,8 +1286,8 @@ export default function useScoreFollow({
     clearAutoSetupAttempted(autoSetupKey)
     clearCalibrationDebugStorage(autoSetupKey)
     autoSetupTriggerKeyRef.current = null
-    pageViewRotationsRef.current = {}
-    setPageViewRotations({})
+    manualPageRotationsRef.current = {}
+    setManualPageRotations({})
     setCalibrationDebugSnapshot(null)
     setSemiAutoSetup({
       status: 'idle',

@@ -58,7 +58,14 @@ export function computeFitScale({
 }
 
 /**
- * Pick a document-wide corrected size so every page shares the same visual scale.
+ * Document-wide corrected reference box so every page shares ONE visual scale.
+ *
+ * Uses the max corrected width AND max corrected height across the document (a
+ * bounding box), not a single largest-area page: the resulting fit scale is the
+ * one at which every page — portrait or landscape, rotated or not — fits the
+ * container, so pages never jump scale as you navigate or as rotation arrives.
+ * For a uniform document the box equals the page size, so normal PDFs render
+ * exactly as before.
  */
 export function computeDocumentDisplayReference(
   pageSizesByPage = {},
@@ -87,12 +94,8 @@ export function computeDocumentDisplayReference(
       continue
     }
 
-    const area = corrected.width * corrected.height
-    const refArea = correctedWidth * correctedHeight
-    if (area > refArea) {
-      correctedWidth = corrected.width
-      correctedHeight = corrected.height
-    }
+    correctedWidth = Math.max(correctedWidth, corrected.width)
+    correctedHeight = Math.max(correctedHeight, corrected.height)
   }
 
   if (!correctedWidth || !correctedHeight) {

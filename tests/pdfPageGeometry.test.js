@@ -6,7 +6,10 @@ import {
   viewerRotationFromAnalysisRotation,
 } from '../src/utils/pdfPageGeometry.js'
 import { getPageDimensions, isRenderablePageLayout, resolvePdfPageLayout } from '../src/utils/pdfFit.js'
-import { pageViewRotationsFromOrientation } from '../src/utils/pdfPageViewRotation.js'
+import {
+  pageViewRotationsFromOrientation,
+  resolveEffectivePageRotations,
+} from '../src/utils/pdfPageViewRotation.js'
 
 const PORTRAIT = { width: 1000, height: 1415 }
 const LANDSCAPE = { width: 1000, height: 706 }
@@ -88,6 +91,52 @@ describe('pdfPageGeometry', () => {
         ],
       }),
     ).toEqual({ 1: 90, 2: 270 })
+  })
+
+  describe('resolveEffectivePageRotations (auto + manual layering)', () => {
+    const orientation = {
+      anyRotated: true,
+      pages: [
+        { page: 1, rotation: 90 },
+        { page: 2, rotation: 90 },
+        { page: 3, rotation: 0 },
+      ],
+    }
+
+    it('derives auto rotations from the reconciled orientation', () => {
+      expect(resolveEffectivePageRotations(orientation, {})).toEqual({ 1: 90, 2: 90 })
+    })
+
+    it('lets a manual override win over the auto-detected turn', () => {
+      expect(resolveEffectivePageRotations(orientation, { 2: 180 })).toEqual({ 1: 90, 2: 180 })
+    })
+
+    it('lets a manual upright (0) override an auto turn', () => {
+      expect(resolveEffectivePageRotations(orientation, { 1: 0 })).toEqual({ 1: 0, 2: 90 })
+    })
+
+    it('is empty for an upright document — no stale carryover', () => {
+      expect(resolveEffectivePageRotations(null, {})).toEqual({})
+    })
+  })
+
+  it('uses a bounding-box reference so no page overflows the shared scale (mixed sizes)', () => {
+    // Neither page has both the max width and the max height, so a single
+    // largest-area reference would let the other page overflow. The bounding box
+    // bounds both, giving one shared scale at which every page fits (Rule 3).
+    const WIDE = { width: 1000, height: 800 }
+    const TALL = { width: 600, height: 1500 }
+    const reference = computeDocumentDisplayReference({ 1: WIDE, 2: TALL })
+    expect(reference).toEqual({ correctedWidth: 1000, correctedHeight: 1500 })
+
+    const wideDims = getPageDimensions('page', WIDE, CONTAINER, 0, 32, reference)
+    const tallDims = getPageDimensions('page', TALL, CONTAINER, 0, 32, reference)
+    expect(wideDims.scale).toBeCloseTo(tallDims.scale, 6) // one shared scale
+    const inner = { width: CONTAINER.width - 32, height: CONTAINER.height - 32 }
+    for (const dims of [wideDims, tallDims]) {
+      expect(dims.displayWidth).toBeLessThanOrEqual(inner.width + 0.01)
+      expect(dims.displayHeight).toBeLessThanOrEqual(inner.height + 0.01)
+    }
   })
 
   it('resolves bootstrap layout before cached source sizes exist', () => {

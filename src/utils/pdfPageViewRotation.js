@@ -43,6 +43,22 @@ export function getPageViewRotation(pageViewRotations, pageNumber) {
   return normalizeViewRotation(pageViewRotations?.[pageNumber] ?? 0)
 }
 
+/**
+ * Authoritative per-page viewer rotations.
+ *
+ * The auto layer comes from the reconciled analysis orientation (recomputed
+ * fresh, never persisted); the manual layer is the user's explicit "Rotate page"
+ * overrides and always wins. This single resolver is what makes a stale turn
+ * unable to override a fresh auto-setup, and keeps every page consistent.
+ */
+export function resolveEffectivePageRotations(orientation, manualRotations = {}) {
+  const merged = { ...pageViewRotationsFromOrientation(orientation) }
+  for (const [page, rotation] of Object.entries(manualRotations ?? {})) {
+    merged[page] = normalizeViewRotation(rotation)
+  }
+  return merged
+}
+
 /** Whether viewer rotations match detected correction for every rotated page. */
 export function isViewerRotationCorrected(orientation, pageViewRotations = {}) {
   if (!orientation?.anyRotated) {
