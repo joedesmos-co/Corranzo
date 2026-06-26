@@ -33,6 +33,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  background: var(--sf-bg-app);
 }
 
 /* Side panel stays in view while the score column scrolls. */
@@ -2399,7 +2400,10 @@
 }
 
 .upload-btn--musicxml {
-  background: linear-gradient(135deg, #2a4a6e 0%, #1e3550 100%);
+  background: var(--sf-bg-panel);
+  color: var(--sf-text-primary);
+  border: 1px solid var(--sf-border-strong);
+  border-radius: 0;
 }
 
 /* MusicXML debug */

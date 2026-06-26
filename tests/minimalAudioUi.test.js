@@ -58,6 +58,46 @@ describe('minimal audio transport styling', () => {
     expect(practiceCss).toContain('opacity: 1')
   })
 
+  it('upload and practice CTAs are flat without purple gradients', () => {
+    const appCss = readFileSync(join(root, 'src', 'App.css'), 'utf8')
+    const uploadBlock = appCss.slice(appCss.indexOf('.upload-btn {'), appCss.indexOf('.upload-btn--midi'))
+    const practiceBlock = appCss.slice(
+      appCss.indexOf('.upload-btn--practice {'),
+      appCss.indexOf('.library-panel__workflow-next'),
+    )
+    const ctaBlock = appCss.slice(appCss.indexOf('.multi-upload__cta {'), appCss.indexOf('.multi-upload__status'))
+    expect(uploadBlock).not.toMatch(/gradient/)
+    expect(practiceBlock).not.toMatch(/gradient/)
+    expect(ctaBlock).not.toMatch(/gradient/)
+    expect(practiceBlock).toMatch(/border-radius:\s*0/)
+    expect(ctaBlock).toMatch(/background:\s*var\(--sf-text-primary\)/)
+  })
+
+  it('accuracy guide and pdf canvas use flat monochrome surfaces', () => {
+    const appCss = readFileSync(join(root, 'src', 'App.css'), 'utf8')
+    const guide = appCss.slice(
+      appCss.indexOf('.library-accuracy-guide {'),
+      appCss.indexOf('.library-accuracy-guide__status'),
+    )
+    const canvas = appCss.slice(appCss.indexOf('.pdf-canvas {'), appCss.indexOf('.pdf-canvas--paper-light'))
+    expect(guide).toMatch(/background:\s*var\(--sf-bg-panel\)/)
+    expect(guide).toMatch(/border-radius:\s*0/)
+    expect(canvas).toMatch(/background:\s*var\(--sf-bg-app\)/)
+    expect(canvas).toMatch(/border-radius:\s*0/)
+    expect(appCss).toMatch(/\.main-layout__score\s*\{[^}]*background:\s*var\(--sf-bg-app\)/)
+  })
+
+  it('library rail and pdf workstation surfaces are flat and aligned', () => {
+    const appCss = readFileSync(join(root, 'src', 'App.css'), 'utf8')
+    expect(appCss).toMatch(/\.library-panel\s*\{[^}]*flex-direction:\s*column/)
+    expect(appCss).toMatch(/\.multi-upload__status\s*\{[^}]*grid-template-columns:\s*repeat\(3/)
+    expect(appCss).toMatch(/\.multi-upload__cta\s*\{[^}]*width:\s*100%/)
+    expect(appCss).toMatch(/\.viewer-float-toolbar__bar\s*\{[^}]*rgba\(18,\s*18,\s*18,\s*0\.8\)/)
+    expect(appCss).toMatch(/\.viewer-float-toolbar__bar\s*\{[^}]*border-radius:\s*0/)
+    expect(appCss).toMatch(/\.pdf-canvas\s*\{[^}]*border:\s*none/)
+    expect(appCss).toMatch(/\.pdf-canvas \.react-pdf__Page\s*\{[^}]*box-shadow:\s*none/)
+  })
+
   it('tracklist hover uses subtle flat feedback', () => {
     expect(practiceCss).toMatch(/\.midi-tracks__label:hover\s*\{[^}]*rgba\(255,\s*255,\s*255,\s*0\.03\)/)
     expect(practiceCss).toMatch(/\.midi-tracks__label:hover \.midi-tracks__name\s*\{[^}]*color:\s*var\(--sf-text-primary\)/)
