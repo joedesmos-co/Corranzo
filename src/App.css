@@ -2528,6 +2528,20 @@
   transition: opacity 0.12s ease;
 }
 
+/* Quarter-turn viewer rotation: span staff along overlay width (vertical on screen). */
+.pdf-page-frame--rot-90 .score-follow-cursor,
+.pdf-page-frame--rot-270 .score-follow-cursor {
+  width: 9%;
+  height: 0;
+}
+
+.pdf-page-frame--rot-90 .score-follow-cursor__line,
+.pdf-page-frame--rot-270 .score-follow-cursor__line {
+  width: 100%;
+  height: 2px;
+  margin: -1px 0 0 0;
+}
+
 .score-follow-cursor--active .score-follow-cursor__line {
   transition: none;
 }

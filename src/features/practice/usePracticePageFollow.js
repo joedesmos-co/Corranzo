@@ -80,13 +80,7 @@ export default function usePracticePageFollow({
 
     const tick = () => {
       const container = scrollContainerRef.current
-      // Prefer the actual react-pdf page element so cursor.y (normalized to page
-      // dimensions) maps correctly even if the pdf-page-frame wrapper has extra space.
-      const pdfPage = container?.querySelector(
-        '.pdf-page-window__slot--active .react-pdf__Page, .pdf-page-frame .react-pdf__Page',
-      )
-      const pageFrame = pdfPage || container?.querySelector('.pdf-page-frame')
-      if (!container || !pageFrame) {
+      if (!container) {
         frameId = requestAnimationFrame(tick)
         return
       }
@@ -99,9 +93,27 @@ export default function usePracticePageFollow({
       const userSuspended = Date.now() < userScrollUntilRef.current
       if (!userSuspended) {
         const containerRect = container.getBoundingClientRect()
-        const frameRect = pageFrame.getBoundingClientRect()
-        const cursorPixelY =
-          frameRect.top - containerRect.top + cursor.y * frameRect.height + container.scrollTop
+        const cursorElement = container.querySelector(
+          '.pdf-page-window__slot--active .score-follow-cursor, .pdf-page-frame .score-follow-cursor',
+        )
+        let cursorPixelY
+        if (cursorElement && cursorElement.style.display !== 'none') {
+          const cursorRect = cursorElement.getBoundingClientRect()
+          cursorPixelY =
+            cursorRect.top - containerRect.top + cursorRect.height / 2 + container.scrollTop
+        } else {
+          const pdfPage = container.querySelector(
+            '.pdf-page-window__slot--active .react-pdf__Page, .pdf-page-frame .react-pdf__Page',
+          )
+          const pageFrame = pdfPage || container.querySelector('.pdf-page-frame')
+          if (!pageFrame) {
+            frameId = requestAnimationFrame(tick)
+            return
+          }
+          const frameRect = pageFrame.getBoundingClientRect()
+          cursorPixelY =
+            frameRect.top - containerRect.top + cursor.y * frameRect.height + container.scrollTop
+        }
         const targetScrollTop = cursorPixelY - container.clientHeight * LOOKAHEAD_RATIO
         const maxScroll = Math.max(0, container.scrollHeight - container.clientHeight)
         const clampedTarget = Math.min(maxScroll, Math.max(0, targetScrollTop))

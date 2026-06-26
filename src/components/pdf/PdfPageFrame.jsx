@@ -7,6 +7,7 @@ import ScoreFollowOverlay from './ScoreFollowOverlay.jsx'
 import CalibrationDebugOverlay from './CalibrationDebugOverlay.jsx'
 import { ANNOTATION_TOOLS } from './annotationConstants.js'
 import { isQuarterTurn } from '../../utils/pdfPageViewRotation.js'
+import { measurePdfOverlayLayout } from '../../utils/pdfOverlayLayout.js'
 
 function PdfPageFrame({
   pageNumber,
@@ -35,15 +36,7 @@ function PdfPageFrame({
       return
     }
 
-    const frameRect = frame.getBoundingClientRect()
-    const pageRect = pageElement.getBoundingClientRect()
-
-    setOverlayLayout({
-      left: pageRect.left - frameRect.left,
-      top: pageRect.top - frameRect.top,
-      width: pageRect.width,
-      height: pageRect.height,
-    })
+    setOverlayLayout(measurePdfOverlayLayout(pageElement))
   }, [])
 
   useEffect(() => {
