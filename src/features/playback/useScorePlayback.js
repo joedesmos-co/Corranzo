@@ -185,8 +185,13 @@ export default function useScorePlayback({
   }, [])
 
   const seek = useCallback((seconds) => {
-    engineRef.current?.seek(seconds)
+    const engine = engineRef.current
+    if (!engine) {
+      return
+    }
+    engine.seek(seconds)
     setCurrentTime(seconds)
+    setIsPlaying(engine.isPlaying())
   }, [])
 
   const setPlaybackRate = useCallback((rate) => {

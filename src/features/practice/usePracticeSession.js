@@ -148,12 +148,12 @@ export default function usePracticeSession({
     (seconds) => {
       if (hasMusicXml) {
         playback.seek(seconds)
-        if (clock.canManualScrub) {
-          clock.syncManualTimeToPlayback(seconds)
-        }
+        // Keep manual clock aligned so cursor/progress stay correct if React
+        // isPlaying briefly desyncs from the engine during a playing seek.
+        clock.syncManualTimeToPlayback(seconds)
       }
     },
-    [hasMusicXml, playback, clock.canManualScrub, clock.syncManualTimeToPlayback],
+    [hasMusicXml, playback, clock.syncManualTimeToPlayback],
   )
 
   const referencePlayback = useWaitForYouReferencePlayback({

@@ -104,6 +104,55 @@ describe('ScorePlaybackEngine seek flush', () => {
     expect(scheduleSpy).not.toHaveBeenCalled()
   })
 
+  it('seek while playing advances score time at normal playback rate', () => {
+    const { engine } = makeScoreEngine()
+    engine.playing = true
+    engine.playStartedAt = 100
+    engine.offsetScoreSeconds = 10
+    globalThis.__TEST_TONE_NOW__ = 100
+
+    engine.seek(40)
+
+    expect(engine.playing).toBe(true)
+    expect(engine.offsetScoreSeconds).toBe(40)
+    expect(engine.getCurrentScoreTime()).toBeCloseTo(40, 5)
+
+    globalThis.__TEST_TONE_NOW__ = 101
+    expect(engine.getCurrentScoreTime()).toBeCloseTo(41, 5)
+
+    globalThis.__TEST_TONE_NOW__ = 103
+    expect(engine.getCurrentScoreTime()).toBeCloseTo(43, 5)
+  })
+
+  it('seek while paused freezes score time until play resumes', () => {
+    const { engine } = makeScoreEngine()
+    engine.playing = false
+    engine.offsetScoreSeconds = 5
+    globalThis.__TEST_TONE_NOW__ = 100
+
+    engine.seek(40)
+
+    expect(engine.playing).toBe(false)
+    expect(engine.getCurrentScoreTime()).toBe(40)
+
+    globalThis.__TEST_TONE_NOW__ = 200
+    expect(engine.getCurrentScoreTime()).toBe(40)
+  })
+
+  it('seek while playing restarts the progress loop generation', () => {
+    const { engine } = makeScoreEngine()
+    const startSpy = vi.spyOn(engine, 'startProgressLoop')
+    engine.playing = true
+    engine.playStartedAt = 100
+    engine.offsetScoreSeconds = 0
+    const genBefore = engine.scheduleGeneration
+
+    engine.seek(15)
+
+    expect(engine.scheduleGeneration).toBeGreaterThan(genBefore)
+    expect(startSpy).toHaveBeenCalled()
+  })
+
   it('seek while playing flushes and reschedules from the new score time', () => {
     const { engine } = makeScoreEngine()
     const scheduleSpy = vi.spyOn(engine, 'scheduleWindow')

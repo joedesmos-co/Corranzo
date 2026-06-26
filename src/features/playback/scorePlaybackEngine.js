@@ -460,12 +460,7 @@ export class ScorePlaybackEngine {
     this.scheduledEvents.clear()
     this.scheduledUntilScore = this.offsetScoreSeconds
     if (wasPlaying) {
-      this.playStartedAt = Tone.now()
-      this.scheduleWindow(
-        this.offsetScoreSeconds,
-        this.offsetScoreSeconds + LOOKAHEAD_SECONDS,
-      )
-      this.startScheduleLoop()
+      this.beginScorePlayback()
     }
   }
 
@@ -571,20 +566,24 @@ export class ScorePlaybackEngine {
   seek(scoreSeconds) {
     const clamped = Math.max(0, Math.min(scoreSeconds, this.duration))
     const wasPlaying = this.playing
-    this.stopInternal(false)
-    this.offsetScoreSeconds = clamped
-    this.scheduledUntilScore = clamped
+
+    this.cancelCountIn()
+    this.stopProgressLoop()
+    this.stopScheduleLoop()
+    this.flushPendingAudio()
     this.scheduledEvents.clear()
 
+    this.offsetScoreSeconds = clamped
+    this.scheduledUntilScore = clamped
+
     if (wasPlaying) {
-      this.playing = true
-      this.playStartedAt = Tone.now()
-      this.scheduleWindow(clamped, clamped + LOOKAHEAD_SECONDS)
-      this.startScheduleLoop()
-      this.startProgressLoop()
+      this.beginScorePlayback()
+    } else {
+      this.playing = false
+      this.emitMetronomeDisplay()
     }
 
-    this.emitTimeUpdate(this.offsetScoreSeconds)
+    this.emitTimeUpdate(this.getCurrentScoreTime())
   }
 
   stopInternal(resetOffset = false) {

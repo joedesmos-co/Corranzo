@@ -73,6 +73,7 @@ describe('playback engine scheduling invariants', () => {
     engine.releaseAll = vi.fn()
     engine.scheduleWindow = vi.fn()
     engine.startScheduleLoop = vi.fn()
+    engine.startProgressLoop = vi.fn()
 
     expect(engine.getCurrentScoreTime()).toBeCloseTo(14, 6)
 
