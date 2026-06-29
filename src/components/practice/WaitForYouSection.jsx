@@ -211,7 +211,7 @@ export default function WaitForYouSection({
 
       {showMicChordHint && (
         <p className="wait-for-you__mic-chord-hint" role="status">
-          Mic hears one note at a time. Switch to MIDI to play chords together.
+          Mic chord mode: play notes one at a time, or use MIDI for chords together.
         </p>
       )}
 
@@ -245,9 +245,14 @@ export default function WaitForYouSection({
               {' · '}You played: <strong>{guidance.playedLabel}</strong>
             </p>
           )}
+          {guidance.state === 'partial' && guidance.heardLabels?.length > 0 && (
+            <p className="wait-for-you__guidance-detail">
+              Heard: <strong>{guidance.heardLabels.join(' + ')}</strong>
+            </p>
+          )}
           {guidance.state === 'partial' && guidance.missingLabels?.length > 0 && (
             <p className="wait-for-you__guidance-detail">
-              Missing: <strong>{guidance.missingLabels.join(', ')}</strong>
+              Still need: <strong>{guidance.missingLabels.join(', ')}</strong>
             </p>
           )}
           {guidance.hint && <p className="wait-for-you__guidance-hint">{guidance.hint}</p>}

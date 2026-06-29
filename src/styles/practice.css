@@ -1239,6 +1239,13 @@
   color: #8fcf9f;
 }
 
+.mic-input-status__chord-progress {
+  margin: 4px 0 0;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: #c9d8ef;
+}
+
 .mic-input-status__btn--retry {
   margin-top: 6px;
 }

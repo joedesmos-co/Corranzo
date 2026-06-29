@@ -13,7 +13,13 @@ export const WFY_MATCH_DEFAULTS = {
   /** Collect hand-separated notes within this window when matching polyphonic checkpoints (MIDI). */
   musicalEventWindowMs: 180,
   /** Mic collects one pitch at a time — allow longer gaps between chord tones. */
-  micChordSequenceWindowMs: 2400,
+  micChordCollectionWindowMs: 3500,
+  /** @deprecated alias — use micChordCollectionWindowMs */
+  micChordSequenceWindowMs: 3500,
+  /** Stable mic detections required before a chord tone counts as heard. */
+  micChordStableHitsRequired: 2,
+  /** Consecutive wrong pitches before a chord attempt fails. */
+  micChordWrongStreakLimit: 2,
   micChordMode: MIC_CHORD_MODES.ANY_TONE,
   // Cents tolerance for accepting a microphone pitch as the expected note. A
   // little slack absorbs real-world tuning/intonation. MIDI input is exact and
@@ -25,8 +31,16 @@ export const CHORD_WINDOW_MS_MIN = 200
 export const CHORD_WINDOW_MS_MAX = 2000
 export const MUSICAL_EVENT_WINDOW_MS_MIN = 120
 export const MUSICAL_EVENT_WINDOW_MS_MAX = 180
-export const MIC_CHORD_SEQUENCE_WINDOW_MS_MIN = 1500
-export const MIC_CHORD_SEQUENCE_WINDOW_MS_MAX = 4000
+export const MIC_CHORD_COLLECTION_WINDOW_MS = 3500
+export const MIC_CHORD_STABLE_HITS_REQUIRED = 2
+export const MIC_CHORD_WRONG_STREAK_LIMIT = 2
+export const MIC_CHORD_COLLECTION_WINDOW_MS_MIN = 2500
+export const MIC_CHORD_COLLECTION_WINDOW_MS_MAX = 4000
+export const MIC_CHORD_STABLE_HITS_MIN = 1
+export const MIC_CHORD_STABLE_HITS_MAX = 5
+/** @deprecated — use MIC_CHORD_COLLECTION_WINDOW_MS_* */
+export const MIC_CHORD_SEQUENCE_WINDOW_MS_MIN = MIC_CHORD_COLLECTION_WINDOW_MS_MIN
+export const MIC_CHORD_SEQUENCE_WINDOW_MS_MAX = MIC_CHORD_COLLECTION_WINDOW_MS_MAX
 export const TRANSPOSITION_MIN = -24
 export const TRANSPOSITION_MAX = 24
 export const MIC_CENTS_TOLERANCE_MIN = 15
@@ -61,11 +75,27 @@ export function normalizeMatchSettings(settings) {
     ),
   )
 
-  const micChordSequenceWindowMs = Math.min(
-    MIC_CHORD_SEQUENCE_WINDOW_MS_MAX,
+  const micChordCollectionWindowMs = Math.min(
+    MIC_CHORD_COLLECTION_WINDOW_MS_MAX,
     Math.max(
-      MIC_CHORD_SEQUENCE_WINDOW_MS_MIN,
-      Number(base.micChordSequenceWindowMs) || WFY_MATCH_DEFAULTS.micChordSequenceWindowMs,
+      MIC_CHORD_COLLECTION_WINDOW_MS_MIN,
+      Number(base.micChordCollectionWindowMs ?? base.micChordSequenceWindowMs) ||
+        WFY_MATCH_DEFAULTS.micChordCollectionWindowMs,
+    ),
+  )
+
+  const micChordStableHitsRequired = Math.min(
+    MIC_CHORD_STABLE_HITS_MAX,
+    Math.max(
+      MIC_CHORD_STABLE_HITS_MIN,
+      Number(base.micChordStableHitsRequired) || WFY_MATCH_DEFAULTS.micChordStableHitsRequired,
+    ),
+  )
+
+  const micChordWrongStreakLimit = Math.max(
+    1,
+    Math.round(
+      Number(base.micChordWrongStreakLimit) || WFY_MATCH_DEFAULTS.micChordWrongStreakLimit,
     ),
   )
 
@@ -94,7 +124,10 @@ export function normalizeMatchSettings(settings) {
     transpositionOffset,
     chordWindowMs,
     musicalEventWindowMs,
-    micChordSequenceWindowMs,
+    micChordCollectionWindowMs,
+    micChordSequenceWindowMs: micChordCollectionWindowMs,
+    micChordStableHitsRequired,
+    micChordWrongStreakLimit,
     micChordMode,
     micCentsTolerance,
   }

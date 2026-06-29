@@ -1,10 +1,17 @@
 import { findMatchingExpectedIndex, matchesAnyExpected } from './midiPitchMatch.js'
 import {
-  MIC_CHORD_SEQUENCE_WINDOW_MS_MAX,
-  MIC_CHORD_SEQUENCE_WINDOW_MS_MIN,
+  MIC_CHORD_COLLECTION_WINDOW_MS_MAX,
+  MIC_CHORD_COLLECTION_WINDOW_MS_MIN,
   MUSICAL_EVENT_WINDOW_MS_MAX,
   MUSICAL_EVENT_WINDOW_MS_MIN,
 } from './waitForYouMatchSettings.js'
+import {
+  evaluateMicChordCollection,
+  MIC_CHORD_MATCH_COMPLETE,
+  MIC_CHORD_MATCH_PROGRESS,
+  MIC_CHORD_MATCH_WRONG,
+  resolveMicChordCollectionWindowMs,
+} from './waitForYouMicChordCollection.js'
 
 export const MATCH_OUTCOME = {
   NO_EXPECTED: 'no-expected',
@@ -71,13 +78,7 @@ export function resolveMusicalEventWindowMs(settings = {}) {
 }
 
 export function resolveMicChordSequenceWindowMs(settings = {}) {
-  return Math.min(
-    MIC_CHORD_SEQUENCE_WINDOW_MS_MAX,
-    Math.max(
-      MIC_CHORD_SEQUENCE_WINDOW_MS_MIN,
-      Number(settings.micChordSequenceWindowMs) || 2400,
-    ),
-  )
+  return resolveMicChordCollectionWindowMs(settings)
 }
 
 function ensureMusicalEventWindow(state, windowMs, now = Date.now()) {
@@ -307,7 +308,7 @@ export function evaluateMicNoteInput(checkpoint, playedMidi, settings) {
 }
 
 /**
- * Mic polyphony: collect stable pitches within the musical-event window.
+ * Mic polyphony: collect stable pitches sequentially within the mic chord window.
  */
 export function evaluateMicNoteInputWithBuffer(checkpoint, playedMidi, bufferState, settings) {
   const fullExpected = getExpectedMidis(checkpoint)
@@ -320,65 +321,21 @@ export function evaluateMicNoteInputWithBuffer(checkpoint, playedMidi, bufferSta
     return evaluateMicNoteInput(checkpoint, playedMidi, settings)
   }
 
-  const windowMs = resolveMicChordSequenceWindowMs(settings)
-  const now = Date.now()
-  ensureMusicalEventWindow(bufferState, windowMs, now)
-
-  const couldMatch = matchesAnyExpected(playedMidi, fullExpected, settings)
-  const matchIndex = findMatchingExpectedIndex(
-    playedMidi,
-    fullExpected,
-    bufferState.matchedIndices,
-    settings,
-  )
-
-  if (matchIndex == null) {
-    if (couldMatch) {
-      return {
-        outcome: MATCH_OUTCOME.CHORD_PROGRESS,
-        expected: fullExpected,
-        matchedIndices: new Set(bufferState.matchedIndices),
-        isChord: true,
-        playedMidi,
-        micChordMode: targets.mode,
-        duplicate: true,
-      }
-    }
-    return {
-      outcome: MATCH_OUTCOME.WRONG,
-      expected: fullExpected,
-      matchedIndices: new Set(bufferState.matchedIndices),
-      isChord: true,
-      playedMidi,
-      micChordMode: targets.mode,
-    }
-  }
-
-  bufferState.matchedIndices.add(matchIndex)
-  scheduleMusicalEventReset(bufferState, windowMs)
-
-  if (bufferState.matchedIndices.size >= fullExpected.length) {
-    resetMusicalEventBufferState(bufferState)
-    return {
-      outcome: MATCH_OUTCOME.COMPLETE,
-      expected: fullExpected,
-      matchedIndices: new Set(fullExpected.map((_, index) => index)),
-      isChord: true,
-      playedMidi,
-      micChordMode: targets.mode,
-    }
-  }
-
-  return {
-    outcome: MATCH_OUTCOME.CHORD_PROGRESS,
+  const result = evaluateMicChordCollection({
     expected: fullExpected,
-    matchedIndices: new Set(bufferState.matchedIndices),
-    isChord: true,
     playedMidi,
+    state: bufferState,
+    settings,
     micChordMode: targets.mode,
-    matchedCount: bufferState.matchedIndices.size,
-    totalExpected: fullExpected.length,
+  })
+
+  if (result.outcome === MIC_CHORD_MATCH_COMPLETE) {
+    return { ...result, outcome: MATCH_OUTCOME.COMPLETE }
   }
+  if (result.outcome === MIC_CHORD_MATCH_WRONG) {
+    return { ...result, outcome: MATCH_OUTCOME.WRONG }
+  }
+  return { ...result, outcome: MATCH_OUTCOME.CHORD_PROGRESS }
 }
 
 /**

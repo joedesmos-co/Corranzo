@@ -133,13 +133,23 @@ export function buildGuidance({
   }
 
   if (outcome === WFY_INPUT_OUTCOME.CHORD_PARTIAL) {
-    const missing = inputFeedback?.remainingLabels ?? missingLabels(expectedMidis, inputFeedback?.matchedIndices)
+    const heard = inputFeedback?.heardLabels ?? []
+    const missing =
+      inputFeedback?.remainingLabels ??
+      missingLabels(expectedMidis, inputFeedback?.matchedIndices)
+    let primary = missing.length ? `Still need ${missing.join(', ')}` : 'Almost — hold the chord'
+    if (heard.length && missing.length) {
+      primary = `Heard ${heard.join(' + ')} — still need ${missing.join(', ')}`
+    } else if (heard.length && !missing.length) {
+      primary = `Heard ${heard.join(' + ')}`
+    }
     return {
       ...base,
       state: WFY_GUIDANCE.PARTIAL,
       tone: 'partial',
-      primary: missing.length ? `Missing ${missing.join(', ')}` : 'Almost — hold the chord',
+      primary,
       missingLabels: missing,
+      heardLabels: heard,
     }
   }
 

@@ -135,6 +135,15 @@ export default function MicrophoneInputStatusPanel({
         </p>
       )}
 
+      {isChordCheckpoint && inputFeedback?.heardLabels?.length > 0 && (
+        <p className="mic-input-status__chord-progress" role="status">
+          Heard: {inputFeedback.heardLabels.join(' + ')}
+          {inputFeedback.remainingLabels?.length
+            ? `. Still need: ${inputFeedback.remainingLabels.join(', ')}`
+            : ''}
+        </p>
+      )}
+
       {!compact && supported && (
         <dl className="mic-input-status__grid">
           <div>
