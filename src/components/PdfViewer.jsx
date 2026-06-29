@@ -24,6 +24,7 @@ import PracticePdfCursorLayer, {
   usePracticeScoreFollowOverlayProps,
 } from './pdf/PracticePdfCursorLayer.jsx'
 import { usePracticeSessionContextOptional } from '../context/PracticeSessionContext.jsx'
+import { logAppViewDebug } from '../features/navigation/appViewDebug.js'
 import { clearWarmPages } from '../features/pdf/pdfPagePerf.js'
 
 /** Dev-only page-geometry table, opt-in via ?debugGeometry=1 (no effect for users). */
@@ -76,6 +77,7 @@ export default function PdfViewer({
   const [fitMode, setFitMode] = useState('page')
   const [pageSize, setPageSize] = useState(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [documentError, setDocumentError] = useState(null)
 
   const {
     activeTool,
@@ -150,6 +152,7 @@ export default function PdfViewer({
     originalSizesRef.current = {}
     setPageSizesVersion(0)
     setDebugSnapshot({ sizes: {}, native: {}, original: {} })
+    setDocumentError(null)
     libraryLayoutCacheRef.current.clear()
     clearWarmPages()
   }, [file])
@@ -234,6 +237,10 @@ export default function PdfViewer({
     const rotationSuffix = viewerRotationKey ? `::${viewerRotationKey}` : ''
     return `${String(file)}${rotationSuffix}`
   }, [file, viewerRotationKey])
+  const documentKey = useMemo(
+    () => `${variant}:${fileName ?? 'score.pdf'}:${String(file)}`,
+    [variant, fileName, file],
+  )
 
   const resolvePageLayout = useCallback(
     (slotPageNumber) => {
@@ -379,6 +386,33 @@ export default function PdfViewer({
       />
     ) : null
 
+  const handleDocumentLoadSuccess = useCallback(
+    (documentLoadInfo) => {
+      setDocumentError(null)
+      logAppViewDebug('pdf-document-load-success', {
+        variant,
+        fileName: fileName ?? null,
+        numPages: documentLoadInfo?.numPages ?? null,
+      })
+      onDocumentLoadSuccess?.(documentLoadInfo)
+    },
+    [variant, fileName, onDocumentLoadSuccess],
+  )
+
+  const handleDocumentLoadError = useCallback(
+    (loadError) => {
+      const message = loadError?.message ?? String(loadError ?? 'unknown PDF load error')
+      setDocumentError(`Could not load PDF: ${message}`)
+      logAppViewDebug('pdf-document-load-error', {
+        variant,
+        fileName: fileName ?? null,
+        file,
+        message,
+      })
+    },
+    [variant, fileName, file],
+  )
+
   const activePageProps = {
     strokes: currentStrokes,
     activeTool,
@@ -484,13 +518,19 @@ export default function PdfViewer({
             <p className="pdf-canvas__placeholder">
               Add a PDF to preview your score.
             </p>
+          ) : documentError ? (
+            <p className="pdf-canvas__status pdf-canvas__status--error" role="alert">
+              {documentError}
+            </p>
           ) : isFullscreen ? null : (
             <Document
+              key={documentKey}
               file={file}
-              onLoadSuccess={onDocumentLoadSuccess}
+              onLoadSuccess={handleDocumentLoadSuccess}
+              onLoadError={handleDocumentLoadError}
               loading={<p className="pdf-canvas__status">Loading PDF…</p>}
               error={
-                <p className="pdf-canvas__status pdf-canvas__status--error">
+                <p className="pdf-canvas__status pdf-canvas__status--error" role="alert">
                   Could not load PDF.
                 </p>
               }

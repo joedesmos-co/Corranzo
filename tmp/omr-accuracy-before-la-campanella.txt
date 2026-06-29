@@ -1,0 +1,36 @@
+OMR accuracy report
+Generated: la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt
+Ground truth: La Campanella
+Likely main issue: Mixed errors (mixed)
+Evidence: pitch=1% | duration=2% | onset=20% | time=1% | noteDetectionF1=63% | measureCountAccuracy=86% | firstBreak=m1 (missing/extra=13, wrongPitch=10, timing=14, chord=21) | noteCountDifference=-1717 | measureCountDifference=25
+
+Pitch accuracy: 1%
+Duration accuracy: 2%
+Onset accuracy: 20%
+Onset time accuracy: 1%
+Measure count accuracy: 86%
+Note detection F1: 63%
+Chord grouping accuracy: 20%
+Note count: generated 2658, truth 4375, diff -1717
+Measure count: generated 175, truth 150, diff 25
+First likely alignment break: measure 1 (missing/extra=13, wrongPitch=10, timing=14, chord=21)
+
+Worst measures:
+  m145: error 100%; truth 54, generated 29, missing 25, extra 0, pitch 27, duration 29, onset 23, time 29, chord 39
+  m111: error 100%; truth 40, generated 32, missing 8, extra 0, pitch 31, duration 32, onset 15, time 32, chord 52
+  m132: error 100%; truth 46, generated 27, missing 19, extra 0, pitch 26, duration 27, onset 21, time 27, chord 49
+  m136: error 100%; truth 46, generated 29, missing 17, extra 0, pitch 24, duration 29, onset 19, time 29, chord 49
+  m139: error 100%; truth 52, generated 25, missing 27, extra 0, pitch 23, duration 25, onset 20, time 25, chord 47
+  m113: error 100%; truth 44, generated 30, missing 14, extra 0, pitch 29, duration 30, onset 19, time 30, chord 44
+  m133: error 100%; truth 46, generated 30, missing 17, extra 1, pitch 28, duration 26, onset 18, time 29, chord 46
+  m144: error 100%; truth 49, generated 30, missing 22, extra 3, pitch 27, duration 21, onset 22, time 27, chord 41
+  m67: error 100%; truth 41, generated 22, missing 19, extra 0, pitch 22, duration 22, onset 19, time 22, chord 57
+  m107: error 100%; truth 40, generated 29, missing 12, extra 1, pitch 24, duration 28, onset 18, time 28, chord 49
+
+Missing notes: m5@1 D#6; m5@1.25 D#7; m5@1.5 C#6; m5@1.5 C#6; m5@1.75 D#7
+Extra notes: m1@0 E2; m1@0 F#2; m1@0 G2; m1@0 G2; m1@0 G#3
+Wrong pitches: m1@0.5 B3 vs D#4; m1@0.5 D2 vs D#5; m1@1 A3 vs D#4; m1@1 E2 vs D#5; m1@1.5 G#3 vs D#4
+Wrong durations: m1@0.5 1q vs 0.5q; m1@0.5 1q vs 0.5q; m1@1 1q vs 0.5q; m1@1 1q vs 0.5q; m1@1.5 1q vs 0.5q
+Wrong onsets: m1 0q vs 0.5q; m1 0q vs 0.5q; m1 1q vs 1.5q; m1 1q vs 1.5q; m2 0q vs 0.5q
+Wrong onset times: m1 delta 0.309s; m1 delta 0.309s; m1 delta 0.428s; m1 delta 0.428s; m1 delta 0.421s
+Chord grouping mismatches: m1@0.5 truth 2, generated 8; m1@1 truth 2, generated 6; m1@1.5 truth 2, generated 5; m1@2 truth 2, generated 0; m1@2.5 truth 2, generated 0

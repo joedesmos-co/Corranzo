@@ -57,6 +57,11 @@ export function clearPdfAnalysisCache() {
   cachedDocumentKey = null
 }
 
+export async function getPdfPageCount(pdfSource) {
+  const pdf = await loadPdfDocument(pdfSource)
+  return pdf.numPages
+}
+
 /**
  * Render one PDF page to ImageData for lightweight client-side analysis.
  */
@@ -92,6 +97,29 @@ export async function renderPdfPageImageData(pdfSource, pageNumber, targetWidth 
     height: canvas.height,
     imageData: context.getImageData(0, 0, canvas.width, canvas.height),
   }
+}
+
+/**
+ * Extract text items from a PDF page (local pdf.js — no cloud OCR).
+ * Returns [] when the page has no text layer.
+ */
+export async function extractPdfPageText(pdfSource, pageNumber) {
+  const pdf = await loadPdfDocument(pdfSource)
+  const page = await pdf.getPage(pageNumber)
+  const viewport = page.getViewport({ scale: 1, rotation: 0 })
+  const content = await page.getTextContent()
+  return (content.items ?? [])
+    .map((item) => ({
+      text: item.str ?? '',
+      x: item.transform?.[4] ?? 0,
+      y: item.transform?.[5] ?? 0,
+      width: item.width ?? 0,
+      height: item.height ?? 0,
+      fontName: item.fontName ?? '',
+      pageWidth: viewport.width,
+      pageHeight: viewport.height,
+    }))
+    .filter((item) => item.text.trim().length > 0)
 }
 
 export function getPageInkRatio(imageData) {
@@ -181,6 +209,9 @@ export function summarizeBarlineDiagnostics(diagnostics) {
   }
   if (Number(diagnostics.thinningRemoved) > 0) {
     parts.push(`thinning-removed=${diagnostics.thinningRemoved}`)
+  }
+  if (Number(diagnostics.refinementRemoved) > 0) {
+    parts.push(`refinement-removed=${diagnostics.refinementRemoved}`)
   }
   if (diagnostics.densityAmbiguous) {
     parts.push('density-ambiguous')

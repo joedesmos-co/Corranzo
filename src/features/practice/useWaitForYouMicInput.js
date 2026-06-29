@@ -6,10 +6,13 @@ import {
   WFY_INPUT_OUTCOME,
 } from './waitForYouInputFeedback.js'
 import {
+  createMusicalEventBufferState,
   evaluateMicNoteInput,
+  evaluateMicNoteInputWithBuffer,
   getExpectedMidis,
   getMicChordMatchTargets,
   MATCH_OUTCOME,
+  resetMusicalEventBufferState,
   toFeedbackOutcome,
 } from './waitForYouNoteMatch.js'
 import { MIC_CHORD_MODES } from './waitForYouMatchSettings.js'
@@ -26,6 +29,7 @@ export default function useWaitForYouMicInput({
   currentCheckpoint,
   matchSettings,
   onPlayerInputMatched,
+  onWrongNote = null,
   microphone,
 }) {
   const [inputFeedback, setInputFeedback] = useState(() =>
@@ -35,6 +39,7 @@ export default function useWaitForYouMicInput({
   const [liveFrame, setLiveFrame] = useState(null)
   const [calibration, setCalibration] = useState(null)
   const feedbackOutcomeRef = useRef(inputFeedback.outcome)
+  const bufferStateRef = useRef(createMusicalEventBufferState())
 
   const detectEnabled = Boolean(active && microphone?.isListening)
   const micCentsTolerance = matchSettings?.micCentsTolerance ?? 30
@@ -48,6 +53,7 @@ export default function useWaitForYouMicInput({
     setInputFeedback(idleFeedbackForCheckpoint(currentCheckpoint))
     setLastHeardMidi(null)
     setLiveFrame(null)
+    resetMusicalEventBufferState(bufferStateRef.current)
   }, [currentCheckpoint])
 
   useEffect(() => {
@@ -124,7 +130,12 @@ export default function useWaitForYouMicInput({
 
       setLastHeardMidi(midi)
 
-      const result = evaluateMicNoteInput(currentCheckpoint, midi, matchSettings)
+      const result = evaluateMicNoteInputWithBuffer(
+        currentCheckpoint,
+        midi,
+        bufferStateRef.current,
+        matchSettings,
+      )
       const feedbackOutcome = toFeedbackOutcome(
         result.outcome,
         result.matchedIndices?.size ?? 0,
@@ -154,11 +165,15 @@ export default function useWaitForYouMicInput({
 
       setInputFeedback(feedback)
 
+      if (result.outcome === MATCH_OUTCOME.WRONG) {
+        onWrongNote?.()
+      }
+
       if (result.outcome === MATCH_OUTCOME.COMPLETE) {
         onPlayerInputMatched()
       }
     },
-    [currentCheckpoint, matchSettings, onPlayerInputMatched],
+    [currentCheckpoint, matchSettings, onPlayerInputMatched, onWrongNote],
   )
 
   usePitchDetector({

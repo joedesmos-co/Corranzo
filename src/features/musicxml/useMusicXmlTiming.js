@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { formatMusicXmlImportError } from '../import/formatImportError.js'
+import { musicXmlSourceKey } from '../import/musicXmlSource.js'
 import { loadMusicXmlFile } from './loadMusicXmlFile.js'
 import { parseMusicXml } from './parseMusicXml.js'
 import { getDebugState } from './timingQuery.js'
@@ -12,9 +13,10 @@ export default function useMusicXmlTiming(musicXmlSource, queryTime = 0) {
 
   const xmlData = musicXmlSource?.data
   const xmlFileName = musicXmlSource?.fileName
+  const xmlSourceKey = musicXmlSourceKey(musicXmlSource)
 
   useEffect(() => {
-    if (!xmlData) {
+    if (!xmlData || !xmlSourceKey) {
       setTimingMap(null)
       setError(null)
       setIsLoading(false)
@@ -55,7 +57,7 @@ export default function useMusicXmlTiming(musicXmlSource, queryTime = 0) {
     return () => {
       loadGenerationRef.current += 1
     }
-  }, [xmlData, xmlFileName, xmlData?.byteLength])
+  }, [xmlData, xmlFileName, xmlSourceKey])
 
   const debugState = useMemo(
     () => (timingMap ? getDebugState(timingMap, queryTime) : null),

@@ -1,0 +1,36 @@
+OMR accuracy report
+Generated: gymnopedie-no-1-satie
+Ground truth: Gymnopédie No. 1
+Likely main issue: Rhythm inference (rhythm-inference)
+Evidence: pitch=96% | duration=29% | onset=68% | time=10% | noteDetectionF1=98% | measureCountAccuracy=100% | firstBreak=m1 (timing=8) | noteCountDifference=-15
+
+Pitch accuracy: 96%
+Duration accuracy: 29%
+Onset accuracy: 68%
+Onset time accuracy: 10%
+Measure count accuracy: 100%
+Note detection F1: 98%
+Chord grouping accuracy: 97%
+Note count: generated 454, truth 469, diff -15
+Measure count: generated 78, truth 78, diff 0
+First likely alignment break: measure 1 (timing=8)
+
+Worst measures:
+  m39: error 100%; truth 7, generated 7, missing 0, extra 0, pitch 0, duration 7, onset 7, time 7, chord 0
+  m38: error 100%; truth 6, generated 6, missing 0, extra 0, pitch 0, duration 6, onset 6, time 6, chord 0
+  m64: error 100%; truth 6, generated 6, missing 0, extra 0, pitch 0, duration 6, onset 6, time 6, chord 0
+  m69: error 100%; truth 6, generated 6, missing 0, extra 0, pitch 0, duration 6, onset 6, time 6, chord 0
+  m72: error 100%; truth 6, generated 6, missing 0, extra 0, pitch 0, duration 6, onset 6, time 6, chord 0
+  m70: error 100%; truth 7, generated 7, missing 0, extra 0, pitch 1, duration 6, onset 2, time 7, chord 0
+  m12: error 100%; truth 5, generated 5, missing 0, extra 0, pitch 0, duration 5, onset 5, time 5, chord 0
+  m29: error 100%; truth 8, generated 8, missing 0, extra 0, pitch 0, duration 5, onset 2, time 8, chord 0
+  m32: error 100%; truth 5, generated 5, missing 0, extra 0, pitch 0, duration 5, onset 5, time 5, chord 0
+  m47: error 100%; truth 5, generated 5, missing 0, extra 0, pitch 0, duration 5, onset 5, time 5, chord 0
+
+Missing notes: m74@0 E2; m74@0 E5; m77@0 A2; m77@0 G3; m77@0 C4
+Extra notes: none
+Wrong pitches: m26@1 F3 vs F#3; m31@1 F3 vs F#3; m65@1 F3 vs F#3; m70@1 F3 vs F#3
+Wrong durations: m1@0 1q vs 3q; m1@1 1.5q vs 2q; m1@1 1.5q vs 2q; m1@1 1.5q vs 2q; m2@0 1q vs 3q
+Wrong onsets: m1 0.5q vs 0q; m1 1.5q vs 1q; m1 1.5q vs 1q; m1 1.5q vs 1q; m2 0.5q vs 0q
+Wrong onset times: m1 delta 0.556s; m1 delta 0.556s; m1 delta 0.556s; m1 delta 0.556s; m2 delta 0.556s
+Chord grouping mismatches: m74@0 truth 2, generated 0; m77@0 truth 6, generated 0; m78@0 truth 7, generated 0

@@ -11,6 +11,13 @@ import {
   getWaitForYouStatus,
   WFY_STATUS,
 } from './waitForYouEngine.js'
+import {
+  resolveWfyDisplayStatus,
+  labelForWfyDisplayStatus,
+} from './waitForYouDisplayStatus.js'
+
+const CORRECT_FLASH_MS = 380
+const CONTINUING_FLASH_MS = 420
 
 export default function useWaitForYou({
   practiceMode,
@@ -20,6 +27,7 @@ export default function useWaitForYou({
   seekToPracticeTime,
   onEnsurePaused,
   practiceTime,
+  onCheckpointCompleted = null,
 }) {
   const active = practiceMode === PRACTICE_MODE.WAIT_FOR_YOU
   const wasActiveRef = useRef(false)
@@ -37,6 +45,17 @@ export default function useWaitForYou({
   )
 
   const [checkpointIndex, setCheckpointIndex] = useState(0)
+  const [displayPhase, setDisplayPhase] = useState(null)
+  const advanceTimerRef = useRef(null)
+
+  const clearAdvanceTimer = useCallback(() => {
+    if (advanceTimerRef.current != null) {
+      clearTimeout(advanceTimerRef.current)
+      advanceTimerRef.current = null
+    }
+  }, [])
+
+  useEffect(() => () => clearAdvanceTimer(), [clearAdvanceTimer])
 
   const status = getWaitForYouStatus({
     active,
@@ -85,49 +104,95 @@ export default function useWaitForYou({
     checkpointsKeyRef.current = checkpointsKey
   }, [active, checkpointsKey, checkpoints, loopRegion, goToCheckpoint])
 
-  const syncToNearestCheckpoint = useCallback(
-    (timeSeconds) => {
+  const markCorrectAndContinue = useCallback(
+    ({ immediate = false } = {}) => {
       if (!active || !checkpoints.length) {
         return
       }
-      const index = findCheckpointIndexAtTime(checkpoints, timeSeconds)
-      setCheckpointIndex(index)
+
+      const runAdvance = () => {
+        clearAdvanceTimer()
+        setDisplayPhase(null)
+        const nextIndex = getNextCheckpointIndex(checkpointIndex, checkpoints.length)
+        if (nextIndex >= checkpoints.length) {
+          setCheckpointIndex(checkpoints.length)
+          onEnsurePaused()
+          onCheckpointCompleted?.({ completed: true, loopCompleted: true })
+          return
+        }
+        onCheckpointCompleted?.({ completed: false, loopCompleted: false })
+        goToCheckpoint(nextIndex)
+      }
+
+      if (immediate) {
+        runAdvance()
+        return
+      }
+
+      clearAdvanceTimer()
+      setDisplayPhase('correct')
+      advanceTimerRef.current = setTimeout(() => {
+        setDisplayPhase('continuing')
+        advanceTimerRef.current = setTimeout(() => {
+          advanceTimerRef.current = null
+          runAdvance()
+        }, CONTINUING_FLASH_MS)
+      }, CORRECT_FLASH_MS)
     },
-    [active, checkpoints],
+    [
+      active,
+      checkpoints,
+      checkpointIndex,
+      goToCheckpoint,
+      onEnsurePaused,
+      onCheckpointCompleted,
+      clearAdvanceTimer,
+    ],
   )
-
-  const markCorrectAndContinue = useCallback(() => {
-    if (!active || !checkpoints.length) {
-      return
-    }
-
-    const nextIndex = getNextCheckpointIndex(checkpointIndex, checkpoints.length)
-    if (nextIndex >= checkpoints.length) {
-      setCheckpointIndex(checkpoints.length)
-      onEnsurePaused()
-      return
-    }
-
-    goToCheckpoint(nextIndex)
-  }, [active, checkpoints, checkpointIndex, goToCheckpoint, onEnsurePaused])
 
   const onPlayerInputMatched = useCallback(() => {
     markCorrectAndContinue()
   }, [markCorrectAndContinue])
 
   const restart = useCallback(() => {
+    clearAdvanceTimer()
+    setDisplayPhase(null)
     if (!checkpoints.length) {
       setCheckpointIndex(0)
       onEnsurePaused()
       return
     }
     goToCheckpoint(0)
-  }, [checkpoints, goToCheckpoint, onEnsurePaused])
+  }, [checkpoints, goToCheckpoint, onEnsurePaused, clearAdvanceTimer])
+
+  const syncToNearestCheckpoint = useCallback(
+    (timeSeconds) => {
+      if (!active || !checkpoints.length) {
+        return
+      }
+      clearAdvanceTimer()
+      setDisplayPhase(null)
+      const index = findCheckpointIndexAtTime(checkpoints, timeSeconds)
+      setCheckpointIndex(index)
+    },
+    [active, checkpoints, clearAdvanceTimer],
+  )
+
+  const displayStatus = resolveWfyDisplayStatus({
+    active,
+    engineStatus: status,
+    displayPhase,
+  })
+
+  const displayLabel = labelForWfyDisplayStatus(displayStatus)
 
   return {
     active,
     checkpointMode,
     status,
+    displayStatus,
+    displayLabel,
+    displayPhase,
     checkpoints,
     checkpointIndex,
     currentCheckpoint,

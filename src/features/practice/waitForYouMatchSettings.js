@@ -10,6 +10,8 @@ export const WFY_MATCH_DEFAULTS = {
   transpositionEnabled: false,
   transpositionOffset: 0,
   chordWindowMs: 450,
+  /** Collect hand-separated notes within this window when matching polyphonic checkpoints. */
+  musicalEventWindowMs: 150,
   micChordMode: MIC_CHORD_MODES.ANY_TONE,
   // Cents tolerance for accepting a microphone pitch as the expected note. A
   // little slack absorbs real-world tuning/intonation. MIDI input is exact and
@@ -19,6 +21,8 @@ export const WFY_MATCH_DEFAULTS = {
 
 export const CHORD_WINDOW_MS_MIN = 200
 export const CHORD_WINDOW_MS_MAX = 2000
+export const MUSICAL_EVENT_WINDOW_MS_MIN = 120
+export const MUSICAL_EVENT_WINDOW_MS_MAX = 180
 export const TRANSPOSITION_MIN = -24
 export const TRANSPOSITION_MAX = 24
 export const MIC_CENTS_TOLERANCE_MIN = 15
@@ -45,6 +49,14 @@ export function normalizeMatchSettings(settings) {
     Math.max(CHORD_WINDOW_MS_MIN, Number(base.chordWindowMs) || WFY_MATCH_DEFAULTS.chordWindowMs),
   )
 
+  const musicalEventWindowMs = Math.min(
+    MUSICAL_EVENT_WINDOW_MS_MAX,
+    Math.max(
+      MUSICAL_EVENT_WINDOW_MS_MIN,
+      Number(base.musicalEventWindowMs) || WFY_MATCH_DEFAULTS.musicalEventWindowMs,
+    ),
+  )
+
   let exactPitch = Boolean(base.exactPitch)
   let allowOctaveMistakes = Boolean(base.allowOctaveMistakes)
   if (!exactPitch && !allowOctaveMistakes) {
@@ -69,6 +81,7 @@ export function normalizeMatchSettings(settings) {
     transpositionEnabled: Boolean(base.transpositionEnabled),
     transpositionOffset,
     chordWindowMs,
+    musicalEventWindowMs,
     micChordMode,
     micCentsTolerance,
   }

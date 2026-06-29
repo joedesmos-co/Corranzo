@@ -347,7 +347,18 @@ function median(values) {
 function mergeStaveGroup(group) {
   const y0 = group[0].y0
   const y1 = group[group.length - 1].y1
-  return { y0, y1, center: (y0 + y1) / 2, staveCount: group.length }
+  return {
+    y0,
+    y1,
+    center: (y0 + y1) / 2,
+    staveCount: group.length,
+    staves: group.map((stave) => ({
+      y0: stave.y0,
+      y1: stave.y1,
+      center: stave.center,
+      lineCount: stave.lineCount,
+    })),
+  }
 }
 
 /**
@@ -561,6 +572,7 @@ export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
       barlineAccepted: detection.diagnostics?.accepted ?? barlineCount,
       barlineRetainedLowConfidence: detection.diagnostics?.retainedLowConfidence ?? 0,
       barlineThinningRemoved: detection.diagnostics?.thinningRemoved ?? 0,
+      barlineRefinementRemoved: detection.diagnostics?.refinementRemoved ?? 0,
       barlineDensityAmbiguous: detection.diagnostics?.densityAmbiguous ?? false,
       measureEstimate,
       barlineConfident: reliability.confident,

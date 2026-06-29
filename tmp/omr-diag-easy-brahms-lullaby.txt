@@ -1,0 +1,36 @@
+OMR accuracy report
+Generated: score
+Ground truth: Music21 Fragment
+Likely main issue: Notehead detection (notehead-detection)
+Evidence: pitch=3% | duration=16% | onset=18% | time=2% | noteDetectionF1=40% | measureCountAccuracy=88% | firstBreak=m1 (missing/extra=4, wrongPitch=5, timing=8, chord=6) | noteCountDifference=-106 | measureCountDifference=-2
+
+Pitch accuracy: 3%
+Duration accuracy: 16%
+Onset accuracy: 18%
+Onset time accuracy: 2%
+Measure count accuracy: 88%
+Note detection F1: 40%
+Chord grouping accuracy: 22%
+Note count: generated 73, truth 179, diff -106
+Measure count: generated 14, truth 16, diff -2
+First likely alignment break: measure 1 (missing/extra=4, wrongPitch=5, timing=8, chord=6)
+
+Worst measures:
+  m6: error 100%; truth 13, generated 6, missing 9, extra 2, pitch 3, duration 1, onset 1, time 4, chord 13
+  m7: error 100%; truth 13, generated 6, missing 9, extra 2, pitch 3, duration 2, onset 2, time 4, chord 11
+  m3: error 100%; truth 13, generated 6, missing 8, extra 1, pitch 4, duration 2, onset 1, time 5, chord 11
+  m4: error 100%; truth 13, generated 5, missing 10, extra 2, pitch 3, duration 1, onset 1, time 3, chord 12
+  m5: error 100%; truth 13, generated 5, missing 10, extra 2, pitch 3, duration 1, onset 1, time 3, chord 12
+  m9: error 100%; truth 10, generated 6, missing 7, extra 3, pitch 3, duration 3, onset 1, time 3, chord 12
+  m13: error 100%; truth 10, generated 6, missing 6, extra 2, pitch 4, duration 3, onset 1, time 4, chord 10
+  m15: error 100%; truth 15, generated 0, missing 15, extra 0, pitch 0, duration 0, onset 0, time 0, chord 15
+  m11: error 100%; truth 13, generated 3, missing 10, extra 0, pitch 3, duration 0, onset 2, time 3, chord 10
+  m12: error 100%; truth 9, generated 6, missing 5, extra 2, pitch 4, duration 3, onset 1, time 4, chord 7
+
+Missing notes: m1@1 G4; m1@2 G4; m1@2 B4; m1@2.5 E4; m2@0 E4
+Extra notes: m2@3 F2; m3@3.5 E3; m4@3 F2; m4@3 G4; m5@3 F2
+Wrong pitches: m1@0.5 C3 vs E4; m1@1 E4 vs C4; m1@1 C5 vs E4; m1@1 E3 vs G4; m1@2 F2 vs E4
+Wrong durations: m1@0 1q vs 0.5q; m1@0.5 1q vs 0.5q; m1@1 1q vs 1.5q; m3@0 1q vs 0.5q; m3@0.5 1q vs 0.5q
+Wrong onsets: m1 0q vs 0.5q; m1 1.5q vs 1q; m1 1.5q vs 1q; m1 1.5q vs 1q; m1 2.5q vs 2q
+Wrong onset times: m1 delta 0.375s; m1 delta 0.25s; m2 delta 0.25s; m2 delta 0.5s; m2 delta 0.75s
+Chord grouping mismatches: m1@0 truth 1, generated 2; m1@0.5 truth 1, generated 0; m1@1 truth 4, generated 3; m1@2 truth 3, generated 1; m1@2.5 truth 1, generated 0

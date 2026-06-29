@@ -4,7 +4,7 @@ import ScoreFollowControls from '../pdf/ScoreFollowControls.jsx'
 import CalibrationDebugPanel from './CalibrationDebugPanel.jsx'
 import ScoreFollowApproximateHint from './ScoreFollowApproximateHint.jsx'
 
-export default function PracticeSetupPanel({ session, scoreFollow, isDemoPiece, pdfPageNumber = 1 }) {
+export default function PracticeSetupPanel({ session, scoreFollow, pdfPageNumber = 1 }) {
   const measureBounds = session.measure?.bounds
 
   return (
@@ -35,12 +35,14 @@ export default function PracticeSetupPanel({ session, scoreFollow, isDemoPiece, 
             canFollow={scoreFollow.canFollow}
             debug={scoreFollow.debug}
             onRetryAutoSetup={scoreFollow.retryAutoSetup}
+            onCancelAutoSetup={scoreFollow.cancelSemiAutoSetup}
             onResetSemiAutoSetup={scoreFollow.resetSemiAutoSetup}
             setupStatus={scoreFollow.setupStatus}
             semiAutoSetup={scoreFollow.semiAutoSetup}
             isSemiAutoAnalyzing={scoreFollow.isSemiAutoAnalyzing}
             anchorCounts={scoreFollow.anchorCounts}
             followNeedsSetup={scoreFollow.followNeedsSetup}
+            experimentalOmrPlayback={scoreFollow.experimentalOmrPlayback}
             embedded
             systemStartMode={scoreFollow.systemStartMode}
             systemStartMarkCount={scoreFollow.systemStartMarks?.length ?? 0}

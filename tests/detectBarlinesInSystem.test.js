@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   BARLINE_REJECT_REASON,
   detectBarlineCandidates,
+  measureSpansFromBarlines,
+  pruneInteriorNarrowBarlines,
   splitGrandStaffVerticalBands,
 } from '../src/features/score-follow/detectBarlinesInSystem.js'
 import { detectContentBounds } from '../src/features/score-follow/detectStaffSystems.js'
@@ -170,5 +172,61 @@ describe('detectBarlineCandidates — grand-staff barline vs stem classification
     const { positions, diagnostics } = detectBarlineCandidates(page, bounds, systemBand)
     expect(positions.length).toBeGreaterThanOrEqual(groundTruth.length - 1)
     expect(diagnostics.candidatesRaw).toBeGreaterThan(positions.length)
+  })
+})
+
+describe('barline candidate refinement', () => {
+  const bounds = { x0: 0.08, x1: 0.92 }
+
+  it('prunes interior barlines that create narrow measure slivers', () => {
+    const positions = [0.28, 0.35, 0.41, 0.55, 0.61, 0.84]
+    const { positions: pruned, removed } = pruneInteriorNarrowBarlines(positions, bounds)
+    expect(removed).toBeGreaterThan(0)
+    expect(pruned.length).toBeLessThan(positions.length)
+    const { spans } = measureSpansFromBarlines(pruned, bounds)
+    expect(spans.every((span) => span >= 0.08 || span > 0.2)).toBe(true)
+  })
+
+  it('reports interior-narrow rejections in diagnostics', () => {
+    const page = densePianoPage({ systems: 1, measuresPerSystem: 6 })
+    const contentBounds = detectContentBounds(page)
+    const system = {
+      y0: page.systemBands[0].top / page.height,
+      y1: page.systemBands[0].bottom / page.height,
+    }
+    const { diagnostics } = detectBarlineCandidates(page, contentBounds, system)
+    expect(diagnostics.acceptedBeforeRefine).toBeGreaterThanOrEqual(diagnostics.accepted)
+    expect(
+      (diagnostics.rejected[BARLINE_REJECT_REASON.INTERIOR_NARROW] ?? 0) +
+        (diagnostics.rejected[BARLINE_REJECT_REASON.TOO_DENSE] ?? 0) +
+        diagnostics.refinementRemoved,
+    ).toBeGreaterThanOrEqual(0)
+  })
+
+  it('preserves edge barlines on evenly spaced six-measure systems', () => {
+    const page = cleanPianoPage({ systems: 1, measuresPerSystem: 6 })
+    const bounds = detectContentBounds(page)
+    const system = {
+      y0: page.systemBands[0].top / page.height,
+      y1: page.systemBands[0].bottom / page.height,
+    }
+    const truth = page.systemBarlineFracs[0]
+    const { positions } = detectBarlineCandidates(page, bounds, system)
+    expect(positions.length).toBe(truth.length)
+    expect(positions[0]).toBeCloseTo(truth[0], 2)
+    expect(positions[positions.length - 1]).toBeCloseTo(truth[truth.length - 1], 2)
+  })
+
+  it('thins dense stem grids instead of collapsing to a handful of columns', () => {
+    const page = densePianoPage({ systems: 1, measuresPerSystem: 6 })
+    const bounds = detectContentBounds(page)
+    const system = {
+      y0: page.systemBands[0].top / page.height,
+      y1: page.systemBands[0].bottom / page.height,
+    }
+    const { positions, diagnostics } = detectBarlineCandidates(page, bounds, system)
+    expect(positions.length).toBeGreaterThanOrEqual(5)
+    expect(positions.length).toBeLessThanOrEqual(12)
+    expect(diagnostics.thinningRemoved).toBeGreaterThan(0)
   })
 })

@@ -30,6 +30,7 @@ export function assessScoreFollowTrust({ anchors, timingMap, isDemoSession = fal
   const layoutCount = trusted.filter(
     (anchor) => anchor.source === ANCHOR_SOURCE.MUSICXML_LAYOUT,
   ).length
+  const omrCount = trusted.filter((anchor) => anchor.source === ANCHOR_SOURCE.OMR).length
   const autoSystemCount = trusted.filter(
     (anchor) =>
       anchor.source === ANCHOR_SOURCE.AUTO_SYSTEM || anchor.source === ANCHOR_SOURCE.AUTO,
@@ -67,6 +68,16 @@ export function assessScoreFollowTrust({ anchors, timingMap, isDemoSession = fal
       needsSetup: false,
       approximate: true,
       label: 'Approximate — MusicXML layout',
+    }
+  }
+
+  if (omrCount >= 1) {
+    return {
+      level: FOLLOW_TRUST_LEVEL.AUTO,
+      showCursor: true,
+      needsSetup: false,
+      approximate: true,
+      label: 'Approximate — OMR measure boxes',
     }
   }
 

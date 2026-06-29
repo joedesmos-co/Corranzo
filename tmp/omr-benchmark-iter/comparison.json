@@ -1,0 +1,62 @@
+{
+  "medium": {
+    "before": {
+      "pitchAccuracy": 0.9851,
+      "durationAccuracy": 0.9851,
+      "onsetAccuracy": 0.9915,
+      "noteDetectionF1": 0.9936,
+      "chordGroupingAccuracy": 0.9873,
+      "measureCountAccuracy": 1,
+      "measures": 0
+    },
+    "after": {
+      "pitchAccuracy": 0.9851,
+      "durationAccuracy": 0.9851,
+      "onsetAccuracy": 0.9915,
+      "noteDetectionF1": 0.9936,
+      "chordGroupingAccuracy": 0.9873,
+      "measureCountAccuracy": 1,
+      "measures": 0
+    },
+    "wrong": {
+      "onset": [
+        0,
+        0
+      ],
+      "duration": [
+        3,
+        3
+      ]
+    }
+  },
+  "dense": {
+    "before": {
+      "pitchAccuracy": 0.2288,
+      "durationAccuracy": 0.6537,
+      "onsetAccuracy": 0.4655,
+      "noteDetectionF1": 0.8823,
+      "chordGroupingAccuracy": 0.4769,
+      "measureCountAccuracy": 0.9843,
+      "measures": 2
+    },
+    "after": {
+      "pitchAccuracy": 0.2295,
+      "durationAccuracy": 0.6463,
+      "onsetAccuracy": 0.5712,
+      "noteDetectionF1": 0.8808,
+      "chordGroupingAccuracy": 0.4769,
+      "measureCountAccuracy": 0.9843,
+      "measures": 2
+    },
+    "wrong": {
+      "onset": [
+        1117,
+        816
+      ],
+      "duration": [
+        588,
+        605
+      ]
+    }
+  }
+}

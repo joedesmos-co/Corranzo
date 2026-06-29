@@ -1,0 +1,41 @@
+OMR accuracy report
+Generated: gymnopedie-no-1-satie
+Ground truth: Gymnopédie No. 1
+Likely main issue: Measure allocation (measure-allocation)
+Evidence: pitch=96% | duration=96% | onset=96% | time=96% | noteDetectionF1=98% | measureCountAccuracy=100% | firstBreak=m74 (missing/extra=6, wrongPitch=3, timing=2, chord=6) | noteCountDifference=-15
+
+Pitch accuracy: 96%
+Duration accuracy: 96%
+Onset accuracy: 96%
+Onset time accuracy: 96%
+Measure count accuracy: 100%
+Note detection F1: 98%
+Chord grouping accuracy: 96%
+Note count: generated 454, truth 469, diff -15
+Measure count: generated 78, truth 78, diff 0
+First likely alignment break: measure 74 (missing/extra=6, wrongPitch=3, timing=2, chord=6)
+
+Worst measures:
+  m74: error 100%; truth 7, generated 5, missing 4, extra 2, pitch 3, duration 2, onset 0, time 0, chord 6
+  m78: error 100%; truth 7, generated 0, missing 7, extra 0, pitch 0, duration 0, onset 0, time 0, chord 7
+  m77: error 100%; truth 6, generated 0, missing 6, extra 0, pitch 0, duration 0, onset 0, time 0, chord 6
+  m34: error 14%; truth 7, generated 7, missing 0, extra 0, pitch 0, duration 1, onset 0, time 0, chord 0
+  m1: error 0%; truth 4, generated 4, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+  m2: error 0%; truth 4, generated 4, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+  m3: error 0%; truth 4, generated 4, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+  m4: error 0%; truth 4, generated 4, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+  m5: error 0%; truth 6, generated 6, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+  m6: error 0%; truth 7, generated 7, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+
+Missing notes: m74@1 E4; m74@1 A4; m74@1 D5; m74@2 C5; m77@0 A2
+Extra notes: m74@0 E4; m74@0 A4
+Wrong pitches: m74@0 C4 vs E2; m74@0 D5 vs E5; m74@1 C5 vs C4
+Wrong durations: m34@0 2q vs 1q; m74@0 2q vs 3q; m74@1 1q vs 2q
+Wrong onsets: none
+Wrong onset times: none
+Chord grouping mismatches: m74@0 truth 2, generated 4; m74@1 truth 4, generated 1; m74@2 truth 1, generated 0; m77@0 truth 6, generated 0; m78@0 truth 7, generated 0
+
+Ties: detected 2, applied 2, uncertain slurs 172
+Applied tie pairs: m68->m69 midi 38 (ink-arc); m69->m70 midi 38 (ink-arc)
+
+Rests: detected 8 glyph(s), applied 0 vector rest event(s)

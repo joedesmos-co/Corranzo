@@ -14,24 +14,30 @@ export function getExpectedMidis(checkpoint) {
   if (!checkpoint) {
     return []
   }
+  let midis = []
   if (Array.isArray(checkpoint.expectedMidis) && checkpoint.expectedMidis.length > 0) {
-    return [...checkpoint.expectedMidis]
+    midis = [...checkpoint.expectedMidis]
+  } else if (checkpoint.expectedMidi != null) {
+    midis = [checkpoint.expectedMidi]
   }
-  if (checkpoint.expectedMidi != null) {
-    return [checkpoint.expectedMidi]
-  }
-  return []
+  return [...new Set(midis)]
 }
 
-export function createChordMatchState() {
+export function createMusicalEventBufferState() {
   return {
     matchedIndices: new Set(),
     timeoutId: null,
     lastPlayedMidi: null,
+    windowStartMs: null,
   }
 }
 
-export function resetChordMatchState(state) {
+/** @deprecated alias — same buffer state used for polyphonic matching */
+export function createChordMatchState() {
+  return createMusicalEventBufferState()
+}
+
+export function resetMusicalEventBufferState(state) {
   if (!state) {
     return
   }
@@ -41,38 +47,119 @@ export function resetChordMatchState(state) {
   }
   state.matchedIndices.clear()
   state.lastPlayedMidi = null
+  state.windowStartMs = null
 }
 
-function scheduleChordReset(state, windowMs) {
+export function resetChordMatchState(state) {
+  resetMusicalEventBufferState(state)
+}
+
+export function resolveMusicalEventWindowMs(settings = {}) {
+  return Math.min(
+    settings.chordWindowMs ?? 450,
+    Math.max(120, settings.musicalEventWindowMs ?? 150),
+  )
+}
+
+function ensureMusicalEventWindow(state, windowMs, now = Date.now()) {
+  if (state.windowStartMs == null || now - state.windowStartMs > windowMs) {
+    resetMusicalEventBufferState(state)
+    state.windowStartMs = now
+  }
+}
+
+function scheduleMusicalEventReset(state, windowMs) {
   if (state.timeoutId != null) {
     clearTimeout(state.timeoutId)
   }
+  const elapsed = Date.now() - (state.windowStartMs ?? Date.now())
+  const remaining = Math.max(0, windowMs - elapsed)
   state.timeoutId = setTimeout(() => {
-    resetChordMatchState(state)
-  }, windowMs)
+    resetMusicalEventBufferState(state)
+  }, remaining)
+}
+
+function evaluatePolyphonicInput(checkpoint, playedMidi, bufferState, settings) {
+  const expected = getExpectedMidis(checkpoint)
+  const windowMs = resolveMusicalEventWindowMs(settings)
+  const now = Date.now()
+
+  ensureMusicalEventWindow(bufferState, windowMs, now)
+  bufferState.lastPlayedMidi = playedMidi
+
+  const couldMatch = matchesAnyExpected(playedMidi, expected, settings)
+  const matchIndex = findMatchingExpectedIndex(
+    playedMidi,
+    expected,
+    bufferState.matchedIndices,
+    settings,
+  )
+
+  if (matchIndex == null) {
+    if (couldMatch) {
+      return {
+        outcome: MATCH_OUTCOME.CHORD_PROGRESS,
+        expected,
+        matchedIndices: new Set(bufferState.matchedIndices),
+        isChord: true,
+        playedMidi,
+        matchedCount: bufferState.matchedIndices.size,
+        totalExpected: expected.length,
+        duplicate: true,
+      }
+    }
+    return {
+      outcome: MATCH_OUTCOME.WRONG,
+      expected,
+      matchedIndices: new Set(bufferState.matchedIndices),
+      isChord: true,
+      playedMidi,
+      couldMatch,
+    }
+  }
+
+  bufferState.matchedIndices.add(matchIndex)
+  scheduleMusicalEventReset(bufferState, windowMs)
+
+  if (bufferState.matchedIndices.size >= expected.length) {
+    resetMusicalEventBufferState(bufferState)
+    return {
+      outcome: MATCH_OUTCOME.COMPLETE,
+      expected,
+      matchedIndices: new Set(expected.map((_, index) => index)),
+      isChord: true,
+      playedMidi,
+    }
+  }
+
+  return {
+    outcome: MATCH_OUTCOME.CHORD_PROGRESS,
+    expected,
+    matchedIndices: new Set(bufferState.matchedIndices),
+    isChord: true,
+    playedMidi,
+    matchedCount: bufferState.matchedIndices.size,
+    totalExpected: expected.length,
+  }
 }
 
 /**
  * Evaluate a MIDI note-on against the current checkpoint.
  * Pure function — does not call onMatch; caller handles COMPLETE.
  */
-export function evaluateNoteInput(checkpoint, playedMidi, chordState, settings) {
+export function evaluateNoteInput(checkpoint, playedMidi, bufferState, settings) {
   const expected = getExpectedMidis(checkpoint)
   if (expected.length === 0) {
     return {
       outcome: MATCH_OUTCOME.NO_EXPECTED,
       expected,
-      matchedIndices: chordState.matchedIndices,
+      matchedIndices: bufferState.matchedIndices,
       isChord: false,
     }
   }
 
-  const isChord = expected.length > 1
-  const windowMs = settings.chordWindowMs
-
-  chordState.lastPlayedMidi = playedMidi
-
-  if (!isChord) {
+  if (expected.length === 1) {
+    bufferState.lastPlayedMidi = playedMidi
     const index = findMatchingExpectedIndex(
       playedMidi,
       expected,
@@ -83,7 +170,7 @@ export function evaluateNoteInput(checkpoint, playedMidi, chordState, settings) 
       return {
         outcome: MATCH_OUTCOME.WRONG,
         expected,
-        matchedIndices: chordState.matchedIndices,
+        matchedIndices: bufferState.matchedIndices,
         isChord: false,
         playedMidi,
       }
@@ -97,63 +184,7 @@ export function evaluateNoteInput(checkpoint, playedMidi, chordState, settings) 
     }
   }
 
-  const matchIndex = findMatchingExpectedIndex(
-    playedMidi,
-    expected,
-    chordState.matchedIndices,
-    settings,
-  )
-
-  if (matchIndex == null) {
-    const couldMatch = matchesAnyExpected(playedMidi, expected, settings)
-    // A note that IS one of the chord's pitches but is already matched (a doubled
-    // or extra-quiet chord tone) should be tolerated, not flagged red. Only a note
-    // that is not in the chord at all counts as a wrong note.
-    if (couldMatch) {
-      return {
-        outcome: MATCH_OUTCOME.CHORD_PROGRESS,
-        expected,
-        matchedIndices: new Set(chordState.matchedIndices),
-        isChord: true,
-        playedMidi,
-        matchedCount: chordState.matchedIndices.size,
-        totalExpected: expected.length,
-        duplicate: true,
-      }
-    }
-    return {
-      outcome: MATCH_OUTCOME.WRONG,
-      expected,
-      matchedIndices: chordState.matchedIndices,
-      isChord: true,
-      playedMidi,
-      couldMatch,
-    }
-  }
-
-  chordState.matchedIndices.add(matchIndex)
-  scheduleChordReset(chordState, windowMs)
-
-  if (chordState.matchedIndices.size >= expected.length) {
-    resetChordMatchState(chordState)
-    return {
-      outcome: MATCH_OUTCOME.COMPLETE,
-      expected,
-      matchedIndices: new Set(expected.map((_, i) => i)),
-      isChord: true,
-      playedMidi,
-    }
-  }
-
-  return {
-    outcome: MATCH_OUTCOME.CHORD_PROGRESS,
-    expected,
-    matchedIndices: new Set(chordState.matchedIndices),
-    isChord: true,
-    playedMidi,
-    matchedCount: chordState.matchedIndices.size,
-    totalExpected: expected.length,
-  }
+  return evaluatePolyphonicInput(checkpoint, playedMidi, bufferState, settings)
 }
 
 /**
@@ -244,6 +275,81 @@ export function evaluateMicNoteInput(checkpoint, playedMidi, settings) {
 }
 
 /**
+ * Mic polyphony: collect stable pitches within the musical-event window.
+ */
+export function evaluateMicNoteInputWithBuffer(checkpoint, playedMidi, bufferState, settings) {
+  const fullExpected = getExpectedMidis(checkpoint)
+  if (fullExpected.length <= 1) {
+    return evaluateMicNoteInput(checkpoint, playedMidi, settings)
+  }
+
+  const targets = getMicChordMatchTargets(checkpoint, settings)
+  if (targets.mode !== 'any-tone') {
+    return evaluateMicNoteInput(checkpoint, playedMidi, settings)
+  }
+
+  const windowMs = resolveMusicalEventWindowMs(settings)
+  const now = Date.now()
+  ensureMusicalEventWindow(bufferState, windowMs, now)
+
+  const couldMatch = matchesAnyExpected(playedMidi, fullExpected, settings)
+  const matchIndex = findMatchingExpectedIndex(
+    playedMidi,
+    fullExpected,
+    bufferState.matchedIndices,
+    settings,
+  )
+
+  if (matchIndex == null) {
+    if (couldMatch) {
+      return {
+        outcome: MATCH_OUTCOME.CHORD_PROGRESS,
+        expected: fullExpected,
+        matchedIndices: new Set(bufferState.matchedIndices),
+        isChord: true,
+        playedMidi,
+        micChordMode: targets.mode,
+        duplicate: true,
+      }
+    }
+    return {
+      outcome: MATCH_OUTCOME.WRONG,
+      expected: fullExpected,
+      matchedIndices: new Set(bufferState.matchedIndices),
+      isChord: true,
+      playedMidi,
+      micChordMode: targets.mode,
+    }
+  }
+
+  bufferState.matchedIndices.add(matchIndex)
+  scheduleMusicalEventReset(bufferState, windowMs)
+
+  if (bufferState.matchedIndices.size >= fullExpected.length) {
+    resetMusicalEventBufferState(bufferState)
+    return {
+      outcome: MATCH_OUTCOME.COMPLETE,
+      expected: fullExpected,
+      matchedIndices: new Set(fullExpected.map((_, index) => index)),
+      isChord: true,
+      playedMidi,
+      micChordMode: targets.mode,
+    }
+  }
+
+  return {
+    outcome: MATCH_OUTCOME.CHORD_PROGRESS,
+    expected: fullExpected,
+    matchedIndices: new Set(bufferState.matchedIndices),
+    isChord: true,
+    playedMidi,
+    micChordMode: targets.mode,
+    matchedCount: bufferState.matchedIndices.size,
+    totalExpected: fullExpected.length,
+  }
+}
+
+/**
  * @deprecated Use evaluateNoteInput — kept for tests importing tryMatchCheckpoint
  */
 export function tryMatchCheckpoint(checkpoint, playedMidi, chordState, onMatch, settings) {
@@ -251,6 +357,7 @@ export function tryMatchCheckpoint(checkpoint, playedMidi, chordState, onMatch, 
     transpositionOffset: 0,
     allowOctaveMistakes: false,
     chordWindowMs: 450,
+    musicalEventWindowMs: 150,
   })
   if (result.outcome === MATCH_OUTCOME.COMPLETE) {
     onMatch()

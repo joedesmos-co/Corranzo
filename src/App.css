@@ -967,6 +967,82 @@
   border: 1px solid rgba(180, 70, 70, 0.35);
 }
 
+.library-omr-panel {
+  position: relative;
+  margin: 0;
+  padding: var(--sf-space-lg);
+  border: 1px solid rgba(120, 160, 200, 0.35);
+  border-radius: var(--sf-radius-sm);
+  background: rgba(60, 90, 130, 0.12);
+}
+
+.library-omr-panel__header {
+  display: flex;
+  align-items: center;
+  gap: var(--sf-space-sm);
+  margin-bottom: var(--sf-space-sm);
+}
+
+.library-omr-panel__title {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.library-omr-panel__badge {
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #c8daf0;
+  background: rgba(100, 140, 200, 0.25);
+  border: 1px solid rgba(120, 160, 200, 0.4);
+}
+
+.library-omr-panel__lede {
+  margin: 0 0 var(--sf-space-md);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--sf-text-muted);
+}
+
+.library-omr-panel__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sf-space-sm);
+}
+
+.library-omr-panel__btn {
+  width: 100%;
+}
+
+.library-omr-panel__btn--cancel {
+  background: transparent;
+  border-color: rgba(200, 120, 120, 0.45);
+  color: #f0c8c8;
+}
+
+.library-omr-panel__status {
+  margin: var(--sf-space-sm) 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--sf-text-muted);
+}
+
+.library-omr-panel__status--ready {
+  color: #c8e6d4;
+}
+
+.library-omr-panel__status--error {
+  color: #f5c8c8;
+}
+
+.library-omr-panel__disclaimer {
+  font-style: italic;
+  opacity: 0.9;
+}
+
 /* —— PDF viewer —— */
 
 /* —— Floating compact toolbar —— */
@@ -1033,6 +1109,8 @@
 .tb-icon {
   width: 30px;
   height: 30px;
+  min-width: 30px;
+  min-height: 30px;
   padding: 0;
   display: inline-flex;
   align-items: center;
@@ -1045,6 +1123,19 @@
   transition:
     color var(--sf-duration-fast) var(--sf-ease),
     background var(--sf-duration-fast) var(--sf-ease);
+}
+
+@media (max-width: 1100px) {
+  .tb-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .viewer-float-toolbar__bar {
+    gap: 4px;
+  }
 }
 
 .tb-icon:hover:not(:disabled) {
@@ -1438,7 +1529,7 @@
 /* In practice mode the floating toolbar (position:absolute; top:10px; ~40px tall)
    sits above the PDF body. Reserve space so the first system is never hidden. */
 .pdf-viewer-section--practice .pdf-viewer-stage {
-  padding-top: 44px;
+  padding-top: 52px;
 }
 
 .pdf-viewer-section--practice .pdf-canvas {
@@ -1752,6 +1843,10 @@
 
 .pdf-canvas__status--error {
   color: #f0a0a8;
+}
+
+.pdf-canvas--paper-light .pdf-canvas__status--error {
+  color: #8c2632;
 }
 
 .pdf-canvas .react-pdf__Document {
@@ -2591,7 +2686,10 @@
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 3;
-  animation: wfy-note-target-pulse 1.6s ease-in-out infinite;
+}
+
+.score-follow-overlay__note-target--compact {
+  animation: wfy-note-target-pulse 2s ease-in-out infinite;
 }
 
 .score-follow-overlay__note-target-glow {
@@ -2609,6 +2707,10 @@
   );
 }
 
+.score-follow-overlay__note-target--compact .score-follow-overlay__note-target-glow {
+  display: none;
+}
+
 .score-follow-overlay__note-target-ring {
   position: absolute;
   left: -22px;
@@ -2620,6 +2722,15 @@
   box-shadow: 0 0 14px rgba(255, 160, 60, 0.5);
 }
 
+.score-follow-overlay__note-target--compact .score-follow-overlay__note-target-ring {
+  left: -10px;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  border-width: 1.5px;
+  box-shadow: 0 0 6px rgba(255, 160, 60, 0.45);
+}
+
 .score-follow-overlay__note-target-dot {
   position: absolute;
   left: -7px;
@@ -2629,6 +2740,14 @@
   border-radius: 50%;
   background: #ffb347;
   box-shadow: 0 0 10px rgba(255, 180, 80, 0.9);
+}
+
+.score-follow-overlay__note-target--compact .score-follow-overlay__note-target-dot {
+  left: -3px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  box-shadow: 0 0 4px rgba(255, 180, 80, 0.75);
 }
 
 .score-follow-overlay__note-target-label {
@@ -2648,11 +2767,23 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
+.score-follow-overlay__note-target--compact .score-follow-overlay__note-target-label {
+  display: none;
+}
+
 .score-follow-overlay__note-target--chord .score-follow-overlay__note-target-ring {
   width: 48px;
   height: 48px;
   left: -24px;
   top: -24px;
+}
+
+.score-follow-overlay__note-target--compact.score-follow-overlay__note-target--chord
+  .score-follow-overlay__note-target-ring {
+  width: 24px;
+  height: 24px;
+  left: -12px;
+  top: -12px;
 }
 
 .score-follow-overlay__note-target--wide-chord .score-follow-overlay__note-target-ring {
@@ -2669,6 +2800,14 @@
   top: -32px;
 }
 
+.score-follow-overlay__note-target--compact.score-follow-overlay__note-target--wide-chord
+  .score-follow-overlay__note-target-ring {
+  width: 28px;
+  height: 28px;
+  left: -14px;
+  top: -14px;
+}
+
 @keyframes wfy-note-target-pulse {
   0%,
   100% {
@@ -2676,8 +2815,8 @@
     transform: translate(-50%, -50%) scale(1);
   }
   50% {
-    opacity: 0.92;
-    transform: translate(-50%, -50%) scale(1.06);
+    opacity: 0.88;
+    transform: translate(-50%, -50%) scale(1.04);
   }
 }
 
@@ -3275,6 +3414,37 @@
   cursor: not-allowed;
 }
 
+.app-view-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sf-space-md);
+  min-height: min(420px, calc(100vh - var(--sf-topbar-height) - 120px));
+  padding: var(--sf-space-3xl);
+  text-align: center;
+  background: var(--sf-bg-raised);
+}
+
+.app-view-placeholder__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--sf-text-primary);
+}
+
+.app-view-placeholder__message {
+  margin: 0;
+  max-width: 32rem;
+  line-height: 1.5;
+  color: var(--sf-text-muted);
+}
+
+.app-view-placeholder__action {
+  margin-top: var(--sf-space-sm);
+}
+
 .session-restore-banner {
   margin: 0;
   padding: 10px 20px;
@@ -3550,15 +3720,6 @@
   font-size: var(--sf-font-caption);
   line-height: 1.4;
   text-align: center;
-}
-
-.app-footer__logo {
-  display: block;
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  opacity: 0.75;
-  flex-basis: 100%;
 }
 
 .app-footer a {

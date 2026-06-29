@@ -1,0 +1,1076 @@
+import { measureConfidenceFromRhythm, systemConfidenceFromMeasures } from './buildOmrDiagnostics.js'
+import { restsForMeasure, summarizeVectorRestDiagnostics, insertMixedMeasureRests, buildEmptyMeasureRestEvents } from './detectVectorRests.js'
+import { assignVectorStaccato, summarizeVectorStaccatoDiagnostics } from './detectVectorStaccato.js'
+import { assignVectorAccent, summarizeVectorAccentDiagnostics } from './detectVectorAccent.js'
+import { applyVectorPageTies } from './detectVectorTies.js'
+import {
+  OMR_CHORD_MERGE_X,
+  OMR_DIVISIONS_PER_QUARTER,
+  OMR_DURATION_DIVISIONS,
+} from './omrRhythmConstants.js'
+import {
+  detectStaffClefsFromGlyphs,
+  midiToWrittenPitch,
+  resolvePitchFromGrandStaff,
+} from './pitchFromStaffPosition.js'
+import {
+  accidentalStateKey,
+  assignLocalAccidentals,
+  resolveNotePitchWithMeasureState,
+} from './omrPitchAlteration.js'
+
+const NOTEHEAD_GLYPHS = new Set(['\ue0a3', '\ue0a4'])
+const SHARP_GLYPH = '\ue262'
+const NATURAL_GLYPH = '\ue261'
+const FLAT_GLYPH = '\ue260'
+const ACCIDENTAL_GLYPHS = new Map([
+  [SHARP_GLYPH, { alter: 1, type: 'sharp' }],
+  [NATURAL_GLYPH, { alter: 0, type: 'natural' }],
+  [FLAT_GLYPH, { alter: -1, type: 'flat' }],
+])
+const TIME_DIGIT_GLYPHS = {
+  '\ue083': 3,
+  '\ue084': 4,
+}
+const VECTOR_MIN_NOTEHEADS = 12
+
+function average(values) {
+  if (!values.length) {
+    return 0
+  }
+  return values.reduce((sum, value) => sum + value, 0) / values.length
+}
+
+export function textGlyphsToImage(pageText, imageData) {
+  const glyphs = []
+  for (const item of pageText ?? []) {
+    const text = item.text ?? ''
+    if (!text.length || !Number.isFinite(item.pageWidth) || !Number.isFinite(item.pageHeight)) {
+      continue
+    }
+    const scaleX = imageData.width / item.pageWidth
+    const scaleY = imageData.height / item.pageHeight
+    const charWidth = (item.width ?? 0) / Math.max(1, text.length)
+    for (let index = 0; index < text.length; index += 1) {
+      const textX = item.x + charWidth * (index + 0.5)
+      glyphs.push({
+        text: text[index],
+        x: textX * scaleX,
+        y: imageData.height - item.y * scaleY,
+        width: charWidth * scaleX,
+        height: (item.height ?? 0) * scaleY,
+        fontName: item.fontName ?? '',
+      })
+    }
+  }
+  return glyphs
+}
+
+export function hasVectorOmrNoteheads(pageText = []) {
+  let noteheads = 0
+  for (const item of pageText) {
+    for (const char of item.text ?? '') {
+      if (NOTEHEAD_GLYPHS.has(char)) {
+        noteheads += 1
+      }
+    }
+  }
+  return noteheads >= VECTOR_MIN_NOTEHEADS
+}
+
+function glyphInBox(glyph, box, imageData, { usePlayableStart = true, yPad = 0 } = {}) {
+  const xNorm = glyph.x / imageData.width
+  const yNorm = glyph.y / imageData.height
+  return (
+    xNorm >= (usePlayableStart ? (box.playableX0 ?? box.x0) : box.x0) &&
+    xNorm <= box.x1 &&
+    yNorm >= box.y0 - yPad &&
+    yNorm <= box.y1 + yPad
+  )
+}
+
+function detectVectorKeySignature(glyphs, imageData, firstSystemBoxes = []) {
+  const firstBox = firstSystemBoxes[0]
+  if (!firstBox) {
+    return { fifths: 0, mode: 'major', confidence: 0 }
+  }
+  let sharps = 0
+  let flats = 0
+  for (const glyph of glyphs) {
+    if (!glyphInBox(glyph, firstBox, imageData, { usePlayableStart: false, yPad: 0.02 })) {
+      continue
+    }
+    const xNorm = glyph.x / imageData.width
+    if (xNorm >= (firstBox.playableX0 ?? firstBox.x0)) {
+      continue
+    }
+    if (glyph.text === SHARP_GLYPH) {
+      sharps += 1
+    } else if (glyph.text === FLAT_GLYPH) {
+      flats += 1
+    }
+  }
+
+  if (sharps >= 2) {
+    return {
+      fifths: Math.max(1, Math.min(7, Math.round(sharps / 2))),
+      mode: 'major',
+      confidence: 0.9,
+      source: 'vector-glyphs',
+    }
+  }
+  if (flats >= 2) {
+    return {
+      fifths: -Math.max(1, Math.min(7, Math.round(flats / 2))),
+      mode: 'major',
+      confidence: 0.9,
+      source: 'vector-glyphs',
+    }
+  }
+  return { fifths: 0, mode: 'major', confidence: 0 }
+}
+
+function detectVectorTimeSignature(glyphs, imageData, firstSystemBoxes = []) {
+  const firstBox = firstSystemBoxes[0]
+  if (!firstBox) {
+    return { beats: 4, beatType: 4, confidence: 0 }
+  }
+  const digits = []
+  for (const glyph of glyphs) {
+    if (!glyphInBox(glyph, firstBox, imageData, { usePlayableStart: false, yPad: 0.02 })) {
+      continue
+    }
+    const xNorm = glyph.x / imageData.width
+    if (xNorm >= (firstBox.playableX0 ?? firstBox.x0)) {
+      continue
+    }
+    const digit = TIME_DIGIT_GLYPHS[glyph.text]
+    if (digit != null) {
+      digits.push(digit)
+    }
+  }
+
+  if (digits.includes(3) && digits.includes(4)) {
+    return { beats: 3, beatType: 4, confidence: 0.92, source: 'vector-glyphs' }
+  }
+  return { beats: 4, beatType: 4, confidence: 0 }
+}
+
+function noteheadsForMeasure(glyphs, imageData, measureBox, keySignature) {
+  const notes = []
+  for (const glyph of glyphs) {
+    if (!NOTEHEAD_GLYPHS.has(glyph.text)) {
+      continue
+    }
+    if (!glyphInBox(glyph, measureBox, imageData, { yPad: 0.025 })) {
+      continue
+    }
+
+    const yNorm = glyph.y / imageData.height
+    const xNorm = glyph.x / imageData.width
+    const pitchMapping = resolvePitchFromGrandStaff(
+      yNorm,
+      measureBox.staffLines,
+      measureBox.staffClefs,
+    )
+    const clef = pitchMapping.clef
+    const naturalMidi = pitchMapping.midi
+    if (naturalMidi == null) {
+      continue
+    }
+    const left = (measureBox.playableX0 ?? measureBox.x0) * imageData.width
+    const right = measureBox.x1 * imageData.width
+    notes.push({
+      naturalMidi,
+      clef,
+      cx: glyph.x,
+      cy: glyph.y,
+      xNorm,
+      yNorm,
+      pitchMapping,
+      positionInMeasure: (glyph.x - left) / Math.max(1, right - left),
+      measureNumber: measureBox.measureNumber,
+      page: measureBox.page,
+      confidence: 0.94,
+      pitchConfidence: 0.92,
+      source: 'vector-glyph',
+    })
+  }
+
+  const accidentalState = new Map()
+  const sortedNotes = notes.sort((left, right) => left.cx - right.cx || left.cy - right.cy)
+  const measureAccidentalGlyphs = glyphs.filter(
+    (glyph) =>
+      ACCIDENTAL_GLYPHS.has(glyph.text) &&
+      glyphInBox(glyph, measureBox, imageData, { usePlayableStart: false, yPad: 0.03 }),
+  )
+  const localAccidentals = assignLocalAccidentals(
+    measureAccidentalGlyphs,
+    imageData,
+    measureBox,
+    sortedNotes,
+    ACCIDENTAL_GLYPHS,
+  )
+  const staccatoResult = assignVectorStaccato(glyphs, sortedNotes, measureBox, imageData)
+  const accentResult = assignVectorAccent(glyphs, sortedNotes, measureBox, imageData)
+  const mappedNotes = sortedNotes.map((note, index) => {
+      const localAccidental = localAccidentals.get(index) ?? null
+      const stateKey = accidentalStateKey(note)
+      const resolved = resolveNotePitchWithMeasureState({
+        naturalMidi: note.naturalMidi,
+        keySignature,
+        localAccidental,
+        carriedAlter: accidentalState.has(stateKey) ? accidentalState.get(stateKey) : null,
+      })
+      if (resolved.measureAccidentalState != null) {
+        accidentalState.set(stateKey, resolved.measureAccidentalState)
+      }
+
+      return {
+        ...note,
+        midi: resolved.midi,
+        alter: resolved.alter,
+        pitchAlteration: resolved.pitchAlteration,
+        accidental: localAccidental
+          ? {
+              type: localAccidental.type,
+              alter: localAccidental.alter,
+              confidence: localAccidental.confidence,
+            }
+          : null,
+        articulation: staccatoResult.assignments.get(index) ?? null,
+        accentArticulation: accentResult.assignments.get(index) ?? null,
+      }
+    })
+  return {
+    notes: mappedNotes,
+    vectorStaccatoDiagnostics: {
+      detectedStaccatoCount: staccatoResult.detectedStaccatoCount,
+      appliedStaccatoCount: staccatoResult.appliedStaccatoCount,
+    },
+    vectorAccentDiagnostics: {
+      detectedAccentCount: accentResult.detectedAccentCount,
+      appliedAccentCount: accentResult.appliedAccentCount,
+    },
+  }
+}
+
+function beatSlotForPosition(positionInMeasure, slotsPerMeasure) {
+  if (!Number.isFinite(positionInMeasure)) {
+    return null
+  }
+  return Math.round(positionInMeasure * slotsPerMeasure)
+}
+
+function groupAnchorPosition(group) {
+  return group.notes?.[0]?.positionInMeasure ?? group.positionInMeasure
+}
+
+function sortedGroupPositions(groups) {
+  return groups
+    .map((group) => groupAnchorPosition(group))
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right)
+}
+
+/**
+ * Use horizontal positions for rhythm when group count alone would force quarter
+ * indexing but noteheads sit closer than quarter spacing (eighth/sixteenth grids)
+ * or when sparse group counts still land off the sequential quarter grid.
+ */
+export function shouldInferRhythmFromPositions(groups, beats) {
+  if (!groups.length) {
+    return false
+  }
+  if (groups.length > beats) {
+    return true
+  }
+  const positions = sortedGroupPositions(groups)
+  if (positions.length !== groups.length || positions.length < 2) {
+    return false
+  }
+  const quarterSpacing = 1 / Math.max(1, beats)
+  let minGap = Infinity
+  for (let index = 1; index < positions.length; index += 1) {
+    minGap = Math.min(minGap, positions[index] - positions[index - 1])
+  }
+  if (Number.isFinite(minGap) && minGap < quarterSpacing * 0.55) {
+    return true
+  }
+  return false
+}
+
+function vectorChordMergeXPx(notes, beats) {
+  if (!notes?.length) {
+    return OMR_CHORD_MERGE_X
+  }
+  const cxValues = notes.map((note) => note.cx).filter(Number.isFinite)
+  if (!cxValues.length) {
+    return OMR_CHORD_MERGE_X
+  }
+  const span = Math.max(...cxValues) - Math.min(...cxValues)
+  if (span <= 0) {
+    return OMR_CHORD_MERGE_X
+  }
+  const slotsPerMeasure = Math.max(4, beats * 4)
+  const slotWidthPx = span / slotsPerMeasure
+  return Math.max(OMR_CHORD_MERGE_X, Math.min(28, slotWidthPx * 2.2))
+}
+
+function groupsShareBeatSlot(left, right, slotsPerMeasure, chordMergeX = OMR_CHORD_MERGE_X) {
+  const leftSlot = beatSlotForPosition(left.notes[0]?.positionInMeasure, slotsPerMeasure)
+  const rightSlot = beatSlotForPosition(right.notes[0]?.positionInMeasure, slotsPerMeasure)
+  if (leftSlot != null && rightSlot != null && leftSlot === rightSlot) {
+    return true
+  }
+  return Math.abs(left.cx - right.cx) <= chordMergeX
+}
+
+function groupVectorNoteheads(notes, { beats = 4 } = {}) {
+  const slotsPerMeasure = Math.max(4, beats * 4)
+  const chordMergeX = vectorChordMergeXPx(notes, beats)
+  const groups = []
+  for (const note of notes) {
+    let group = groups.find((entry) =>
+      groupsShareBeatSlot(entry, { cx: note.cx, notes: [note] }, slotsPerMeasure, chordMergeX),
+    )
+    if (!group) {
+      group = { cx: note.cx, notes: [] }
+      groups.push(group)
+    }
+    group.notes.push(note)
+    group.cx = average(group.notes.map((entry) => entry.cx))
+  }
+  return groups
+    .map((group) => ({
+      ...group,
+      notes: group.notes
+        .sort((left, right) => right.midi - left.midi)
+        .filter(
+          (note, index, entries) =>
+            entries.findIndex((entry) => entry.midi === note.midi) === index,
+        ),
+    }))
+    .sort((left, right) => left.cx - right.cx)
+}
+
+function sortVectorRhythmEvents(events) {
+  return [...events].sort(
+    (left, right) =>
+      left.startDivision - right.startDivision ||
+      (left.notes?.[0]?.clef === 'bass' ? -1 : 1) -
+        (right.notes?.[0]?.clef === 'bass' ? -1 : 1),
+  )
+}
+
+function writtenStep(midi) {
+  return midiToWrittenPitch(midi).step
+}
+
+function noteSustainsIntoLaterHarmony(note, laterEvents, fromStart) {
+  const step = writtenStep(note.midi)
+  for (const event of laterEvents) {
+    if (event.type !== 'note') {
+      continue
+    }
+    if ((event.startDivision ?? 0) <= fromStart) {
+      continue
+    }
+    if ((event.notes ?? []).some((entry) => writtenStep(entry.midi) === step)) {
+      return true
+    }
+  }
+  return false
+}
+
+function notesAtNextOnset(laterEvents, fromStart) {
+  const nextOnset = laterEvents
+    .filter((event) => event.type === 'note' && (event.startDivision ?? 0) > fromStart)
+    .reduce((min, event) => Math.min(min, event.startDivision ?? 0), Infinity)
+  if (!Number.isFinite(nextOnset)) {
+    return []
+  }
+  return laterEvents
+    .filter((event) => event.type === 'note' && event.startDivision === nextOnset)
+    .flatMap((event) => event.notes ?? [])
+}
+
+function hasPenultimateClosingFigure(events) {
+  if (events.length < 3) {
+    return false
+  }
+  const last = events[events.length - 1]
+  if (last.type !== 'note' || (last.notes?.length ?? 0) !== 1) {
+    return false
+  }
+  const lastStart = last.startDivision ?? 0
+  const sharedBeat = lastStart - OMR_DIVISIONS_PER_QUARTER
+  if (sharedBeat < 0) {
+    return false
+  }
+  const sharedEvents = events.filter(
+    (event) => event.type === 'note' && event.startDivision === sharedBeat,
+  )
+  return sharedEvents.length > 1 || (sharedEvents[0]?.notes?.length ?? 0) > 1
+}
+
+function closesOnFinalBeat(events, totalDivisions) {
+  const last = events[events.length - 1]
+  if (last?.type !== 'note') {
+    return false
+  }
+  const lastStart = last.startDivision ?? 0
+  return lastStart + OMR_DIVISIONS_PER_QUARTER >= totalDivisions
+}
+
+function followsWithUpperStaffContent(followerNotes, bassNote) {
+  if (!followerNotes?.length || !bassNote) {
+    return false
+  }
+  if (followerNotes.some((note) => note.clef === 'treble')) {
+    return true
+  }
+  const bassMidi = bassNote.midi ?? 0
+  return followerNotes.some((note) => note.midi >= bassMidi + 12)
+}
+
+function sameStartTrebleDuration(trebleNote, bassNote, events, extended, totalDivisions) {
+  if (hasPenultimateClosingFigure(events)) {
+    const closingNote = events[events.length - 1]?.notes?.[0]
+    if (
+      closesOnFinalBeat(events, totalDivisions) &&
+      closingNote &&
+      writtenStep(closingNote.midi) === writtenStep(trebleNote.midi)
+    ) {
+      return OMR_DURATION_DIVISIONS.half
+    }
+    return OMR_DIVISIONS_PER_QUARTER
+  }
+  if (writtenStep(trebleNote.midi) === writtenStep(bassNote.midi)) {
+    return extended
+  }
+  const laterEvents = events.slice(2)
+  if (noteSustainsIntoLaterHarmony(trebleNote, laterEvents, 0)) {
+    return extended
+  }
+  const innerNotes = notesAtNextOnset(laterEvents, 0)
+  if (innerNotes.length) {
+    return extended
+  }
+  return OMR_DIVISIONS_PER_QUARTER
+}
+
+function isAuxiliaryUpperVoice(note, peers) {
+  if (note.clef === 'bass') {
+    return false
+  }
+  const maxMidi = Math.max(...peers.map((peer) => peer.midi))
+  const corePeers = peers.filter((peer) => peer.midi <= maxMidi - 5)
+  if (corePeers.length >= 2) {
+    const coreMax = Math.max(...corePeers.map((peer) => peer.midi))
+    return note.midi >= coreMax + 4
+  }
+  const others = peers.filter((peer) => peer.midi !== note.midi)
+  if (!others.length) {
+    return false
+  }
+  const highestPeer = Math.max(...others.map((peer) => peer.midi))
+  return note.midi >= highestPeer + 7
+}
+
+/**
+ * Merge notehead groups that sit on the same beat slot so chord tones do not
+ * inflate the group count and force proportional spacing.
+ */
+function mergeGroupsSharingBeat(groups, beats) {
+  if (!groups.length || !groups.every((group) => Number.isFinite(group.notes[0]?.positionInMeasure))) {
+    return groups
+  }
+  const slotsPerMeasure = Math.max(4, beats * 4)
+  const sorted = [...groups].sort((left, right) => left.cx - right.cx)
+  const clusters = []
+  for (const group of sorted) {
+    const slot = beatSlotForPosition(group.notes[0].positionInMeasure, slotsPerMeasure)
+    const cluster =
+      slot == null
+        ? null
+        : clusters.find((entry) => entry.slot === slot)
+    if (!cluster) {
+      clusters.push({ anchor: group.notes[0].positionInMeasure, slot, groups: [group] })
+      continue
+    }
+    cluster.groups.push(group)
+    cluster.anchor = average(cluster.groups.map((entry) => entry.notes[0].positionInMeasure))
+    if (slot != null) {
+      cluster.slot = slot
+    }
+  }
+  return clusters
+    .map((cluster) => {
+      if (cluster.groups.length === 1) {
+        return cluster.groups[0]
+      }
+      const notes = cluster.groups
+        .flatMap((entry) => entry.notes)
+        .sort((left, right) => right.midi - left.midi)
+        .filter(
+          (note, index, entries) =>
+            entries.findIndex((entry) => entry.midi === note.midi) === index,
+        )
+      return {
+        cx: average(notes.map((note) => note.cx)),
+        notes,
+      }
+    })
+    .sort((left, right) => left.cx - right.cx)
+}
+
+/**
+ * Grand-staff groups can contain both staves at one horizontal slot. Split them
+ * into separate rhythm events at the same start so overlap rules can apply.
+ */
+export function splitMixedClefEvents(events) {
+  const expanded = []
+  for (const event of events) {
+    if (event.type !== 'note') {
+      expanded.push(event)
+      continue
+    }
+    const bassNotes = (event.notes ?? []).filter((note) => note.clef === 'bass')
+    const trebleNotes = (event.notes ?? []).filter((note) => note.clef === 'treble')
+    if (bassNotes.length && trebleNotes.length) {
+      expanded.push({ ...event, notes: bassNotes })
+      expanded.push({ ...event, notes: trebleNotes })
+      continue
+    }
+    expanded.push(event)
+  }
+  return sortVectorRhythmEvents(expanded)
+}
+
+const VECTOR_DURATION_LADDER = [
+  { divisions: OMR_DIVISIONS_PER_QUARTER * 4, durationType: 'whole', dotted: false },
+  { divisions: OMR_DIVISIONS_PER_QUARTER * 3, durationType: 'half', dotted: true },
+  { divisions: OMR_DIVISIONS_PER_QUARTER * 2, durationType: 'half', dotted: false },
+  { divisions: Math.round(OMR_DIVISIONS_PER_QUARTER * 1.5), durationType: 'quarter', dotted: true },
+  { divisions: OMR_DIVISIONS_PER_QUARTER, durationType: 'quarter', dotted: false },
+  { divisions: Math.round(OMR_DIVISIONS_PER_QUARTER * 0.75), durationType: 'eighth', dotted: true },
+  { divisions: Math.round(OMR_DIVISIONS_PER_QUARTER / 2), durationType: 'eighth', dotted: false },
+  { divisions: Math.max(1, Math.round(OMR_DIVISIONS_PER_QUARTER / 4)), durationType: 'sixteenth', dotted: false },
+]
+
+/**
+ * Snap a raw division span to the nearest standard note value. Vector glyphs
+ * carry no stem/flag information, so duration is inferred from the horizontal
+ * gap to the next onset (see buildVectorEvents) and then quantised here.
+ */
+export function durationMeta(durationDivisions) {
+  let best = VECTOR_DURATION_LADDER[VECTOR_DURATION_LADDER.length - 1]
+  let bestDiff = Infinity
+  for (const candidate of VECTOR_DURATION_LADDER) {
+    const diff = Math.abs(candidate.divisions - durationDivisions)
+    if (diff < bestDiff || (diff === bestDiff && candidate.divisions < best.divisions)) {
+      bestDiff = diff
+      best = candidate
+    }
+  }
+  return { durationType: best.durationType, dotted: best.dotted }
+}
+
+/**
+ * Grand-staff piano scores often hold a lone bass note across the first half of
+ * the bar while treble chords enter later. A single sequential timeline assigns
+ * the bass only the gap until the next combined onset; extend it through the
+ * treble entry so MusicXML backup/forward can represent the overlap.
+ */
+export function extendCombinedGrandStaffOpening(events, totalDivisions) {
+  if (events.length < 2) {
+    return events
+  }
+  const first = events[0]
+  const second = events[1]
+  if (first.type !== 'note' || second.type !== 'note') {
+    return events
+  }
+  const openingBass =
+    first.notes?.length === 1 &&
+    first.notes[0]?.clef === 'bass' &&
+    (first.startDivision ?? 0) <= 1
+  const trebleFollows = followsWithUpperStaffContent(second.notes, first.notes[0])
+  if (!openingBass || !trebleFollows) {
+    return events
+  }
+  if (
+    (second.notes?.length ?? 0) > 2 &&
+    (second.startDivision ?? 0) >= OMR_DIVISIONS_PER_QUARTER &&
+    (second.notes ?? []).some((note) => note.clef === 'treble')
+  ) {
+    return events
+  }
+  const sameStart = (second.startDivision ?? 0) <= (first.startDivision ?? 0)
+  const peerStart = sameStart
+    ? OMR_DIVISIONS_PER_QUARTER
+    : (second.startDivision ?? OMR_DIVISIONS_PER_QUARTER)
+  const extended = Math.min(
+    totalDivisions,
+    sameStart
+      ? OMR_DURATION_DIVISIONS.half + OMR_DIVISIONS_PER_QUARTER
+      : peerStart + OMR_DURATION_DIVISIONS.half,
+  )
+  if (extended <= first.durationDivisions) {
+    return events
+  }
+  const updated = [
+    { ...first, durationDivisions: extended, ...durationMeta(extended) },
+  ]
+  if (sameStart) {
+    const trebleDuration = sameStartTrebleDuration(
+      second.notes[0],
+      first.notes[0],
+      events,
+      extended,
+      totalDivisions,
+    )
+    updated.push({
+      ...second,
+      durationDivisions: trebleDuration,
+      ...durationMeta(trebleDuration),
+    })
+    updated.push(...events.slice(2))
+  } else {
+    updated.push(...events.slice(1))
+  }
+  return updated
+}
+
+/**
+ * When several voices share a beat one quarter before a lone closing note on the
+ * penultimate beat, hold that beat for a half note and keep the closing figure
+ * a quarter.
+ */
+export function extendPenultimateHalfBeforeFinalQuarter(events, timeSignature, totalDivisions) {
+  if (events.length < 3) {
+    return events
+  }
+  const last = events[events.length - 1]
+  if (last.type !== 'note' || (last.notes?.length ?? 0) !== 1) {
+    return events
+  }
+  const lastStart = last.startDivision ?? 0
+  const sharedBeat = lastStart - OMR_DIVISIONS_PER_QUARTER
+  if (sharedBeat < 0) {
+    return events
+  }
+  const sharedEvents = events.filter(
+    (event) => event.type === 'note' && event.startDivision === sharedBeat,
+  )
+  const denseSharedBeat =
+    sharedEvents.length > 1 || (sharedEvents[0]?.notes?.length ?? 0) > 1
+  if (!denseSharedBeat) {
+    return events
+  }
+  const halfDivisions = OMR_DURATION_DIVISIONS.half
+  if (
+    sharedBeat + halfDivisions > totalDivisions ||
+    lastStart + OMR_DIVISIONS_PER_QUARTER > totalDivisions
+  ) {
+    return events
+  }
+  const hasSharedBeatQuarter = sharedEvents.some(
+    (event) => event.durationDivisions === OMR_DIVISIONS_PER_QUARTER,
+  )
+  if (!hasSharedBeatQuarter) {
+    return events
+  }
+
+  let adjusted = events
+  const peersAtBeat = sharedEvents.flatMap((event) => event.notes ?? [])
+  const isolated = []
+  for (const event of adjusted) {
+    if (
+      event.type !== 'note' ||
+      event.startDivision !== sharedBeat ||
+      (event.notes?.length ?? 0) <= 1
+    ) {
+      isolated.push(event)
+      continue
+    }
+    const auxiliary = event.notes.filter((note) =>
+      isAuxiliaryUpperVoice(note, peersAtBeat),
+    )
+    const core = event.notes.filter((note) => !auxiliary.includes(note))
+    if (auxiliary.length && core.length) {
+      isolated.push({ ...event, notes: core })
+      for (const note of auxiliary) {
+        isolated.push({ ...event, notes: [note] })
+      }
+      continue
+    }
+    isolated.push(event)
+  }
+  adjusted = sortVectorRhythmEvents(isolated)
+
+  return adjusted.map((event, index) => {
+    if (
+      event.type === 'note' &&
+      event.startDivision === sharedBeat &&
+      event.durationDivisions === OMR_DIVISIONS_PER_QUARTER &&
+      !(
+        (event.notes?.length ?? 0) === 1 &&
+        isAuxiliaryUpperVoice(event.notes[0], peersAtBeat)
+      )
+    ) {
+      return {
+        ...event,
+        durationDivisions: halfDivisions,
+        ...durationMeta(halfDivisions),
+      }
+    }
+    if (index === adjusted.length - 1) {
+      return {
+        ...event,
+        durationDivisions: OMR_DIVISIONS_PER_QUARTER,
+        ...durationMeta(OMR_DIVISIONS_PER_QUARTER),
+      }
+    }
+    return event
+  })
+}
+
+function snapStartDivision(rawStart, totalDivisions) {
+  const grid = Math.max(1, OMR_DIVISIONS_PER_QUARTER / 2)
+  const clamped = Math.max(0, Math.min(totalDivisions - 1, rawStart))
+  return Math.min(totalDivisions - 1, Math.round(clamped / grid) * grid)
+}
+
+function alignOpeningGroupStart(starts, groups, beats, usePositionStarts) {
+  if (!usePositionStarts || !starts.length || !groups.length) {
+    return starts
+  }
+  const grid = Math.max(1, OMR_DIVISIONS_PER_QUARTER / 2)
+  const openingFraction = 1 / Math.max(1, beats)
+  const firstPosition =
+    groups[0]?.positionInMeasure ?? groups[0]?.notes?.[0]?.positionInMeasure ?? null
+  if (
+    starts[0] > 0 &&
+    starts[0] <= grid &&
+    Number.isFinite(firstPosition) &&
+    firstPosition < openingFraction * 0.55
+  ) {
+    return [0, ...starts.slice(1)]
+  }
+  return starts
+}
+
+function dedupeNotesByMidi(notes = []) {
+  return notes.filter(
+    (note, index, entries) => entries.findIndex((entry) => entry.midi === note.midi) === index,
+  )
+}
+
+/**
+ * Merge same-onset, same-clef fragments that share duration into one chord event.
+ */
+export function coalesceSameOnsetChordEvents(events) {
+  const rests = events.filter((event) => event.type === 'rest')
+  const buckets = new Map()
+  for (const event of events) {
+    if (event.type !== 'note') {
+      continue
+    }
+    const start = event.startDivision ?? 0
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    const duration = event.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+    const key = `${start}:${clef}:${duration}`
+    if (!buckets.has(key)) {
+      buckets.set(key, {
+        ...event,
+        notes: dedupeNotesByMidi(event.notes ?? []),
+      })
+      continue
+    }
+    const bucket = buckets.get(key)
+    bucket.notes = dedupeNotesByMidi([...(bucket.notes ?? []), ...(event.notes ?? [])])
+    bucket.cx = average(bucket.notes.map((note) => note.cx))
+  }
+  return sortVectorRhythmEvents([...rests, ...buckets.values()])
+}
+
+export function clampMeasureEventDurations(events, totalDivisions) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const denseMeasure = noteEvents.length > 5
+  const denseMaxDuration = Math.min(totalDivisions, OMR_DURATION_DIVISIONS.half)
+
+  return events.map((event) => {
+    const start = event.startDivision ?? 0
+    const maxDuration = Math.max(1, totalDivisions - start)
+    let duration = event.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+    if (denseMeasure && event.type === 'note' && duration > denseMaxDuration) {
+      duration = denseMaxDuration
+    }
+    if (duration <= maxDuration) {
+      return event
+    }
+    const clamped = maxDuration
+    return {
+      ...event,
+      durationDivisions: clamped,
+      ...durationMeta(clamped),
+      durationClamped: true,
+    }
+  })
+}
+
+function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivisions, beats) {
+  const usePositionStarts = shouldInferRhythmFromPositions(groups, beats)
+
+  if (usePositionStarts) {
+    const snappedGroups = new Map()
+    for (const group of groups) {
+      const positionInMeasure = group.notes[0]?.positionInMeasure
+      const startDivision = Number.isFinite(positionInMeasure)
+        ? snapStartDivision(Math.round(positionInMeasure * totalDivisions), totalDivisions)
+        : null
+      if (startDivision == null) {
+        continue
+      }
+      if (!snappedGroups.has(startDivision)) {
+        snappedGroups.set(startDivision, {
+          startDivision,
+          notes: dedupeNotesByMidi(group.notes),
+          cx: group.cx,
+          positionInMeasure,
+        })
+        continue
+      }
+      const merged = snappedGroups.get(startDivision)
+      merged.notes = dedupeNotesByMidi([...merged.notes, ...group.notes])
+      merged.cx = average(merged.notes.map((note) => note.cx))
+    }
+    groups = [...snappedGroups.values()].sort((left, right) => left.startDivision - right.startDivision)
+  }
+
+  const rhythmStarts = groups.map((group, index) => {
+    if (usePositionStarts && Number.isFinite(group.startDivision)) {
+      return group.startDivision
+    }
+    if (groups.length <= beats) {
+      return Math.min(totalDivisions - OMR_DIVISIONS_PER_QUARTER, index * OMR_DIVISIONS_PER_QUARTER)
+    }
+    return Math.min(
+      totalDivisions - 1,
+      Math.round((index / Math.max(1, groups.length)) * totalDivisions),
+    )
+  })
+  const starts = alignOpeningGroupStart(rhythmStarts, groups, beats, usePositionStarts)
+
+  let events = splitMixedClefEvents(
+    groups.map((group, index) => {
+      const startDivision = starts[index]
+      const rhythmStart = rhythmStarts[index]
+      const nextRhythmStart =
+        index + 1 < rhythmStarts.length ? rhythmStarts[index + 1] : totalDivisions
+      let durationDivisions = Math.max(1, nextRhythmStart - rhythmStart)
+      if (!usePositionStarts && groups.length <= beats) {
+        if (groups.length < beats) {
+          if (groups.length === 1) {
+            durationDivisions = totalDivisions
+          } else if (
+            index === groups.length - 1 &&
+            beats - groups.length <= 1
+          ) {
+            durationDivisions = Math.max(OMR_DIVISIONS_PER_QUARTER, totalDivisions - startDivision)
+          } else {
+            durationDivisions = OMR_DIVISIONS_PER_QUARTER
+          }
+        } else if (index + 1 < groups.length) {
+          durationDivisions = OMR_DIVISIONS_PER_QUARTER
+        } else {
+          durationDivisions = Math.max(OMR_DIVISIONS_PER_QUARTER, totalDivisions - startDivision)
+        }
+      }
+      const meta = durationMeta(durationDivisions)
+      const positionInMeasure =
+        group.positionInMeasure ?? group.notes[0]?.positionInMeasure ?? startDivision / totalDivisions
+      return {
+        type: 'note',
+        startDivision,
+        durationDivisions,
+        ...meta,
+        notes: group.notes,
+        confidence: 0.9,
+        measureNumber: measureBox.measureNumber,
+        page: measureBox.page,
+        positionInMeasure,
+        cx: group.cx,
+        vector: true,
+      }
+    }),
+  )
+  events = coalesceSameOnsetChordEvents(events)
+  events = extendCombinedGrandStaffOpening(events, totalDivisions)
+  events = extendPenultimateHalfBeforeFinalQuarter(events, timeSignature, totalDivisions)
+  return clampMeasureEventDurations(events, totalDivisions)
+}
+
+export function buildVectorEvents(notes, measureBox, timeSignature, { rests = [] } = {}) {
+  const beats = timeSignature?.beats ?? 4
+  const groups = mergeGroupsSharingBeat(groupVectorNoteheads(notes, { beats }), beats)
+  const totalDivisions = Math.round(beats * OMR_DIVISIONS_PER_QUARTER * (4 / (timeSignature?.beatType ?? 4)))
+  if (!groups.length && !rests.length) {
+    return [
+      {
+        type: 'rest',
+        startDivision: 0,
+        durationDivisions: totalDivisions,
+        durationType: beats === 3 ? 'half' : 'whole',
+        dotted: beats === 3,
+        confidence: 0.5,
+        uncertain: true,
+        measureNumber: measureBox.measureNumber,
+        page: measureBox.page,
+      },
+    ]
+  }
+
+  if (!groups.length && rests.length) {
+    return buildEmptyMeasureRestEvents(rests, measureBox, totalDivisions)
+  }
+
+  const noteEvents = buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivisions, beats)
+  if (!rests.length) {
+    return noteEvents
+  }
+
+  return insertMixedMeasureRests(noteEvents, rests, { measureBox, totalDivisions }).events
+}
+
+export function buildVectorMeasureRecord({
+  glyphs,
+  imageData,
+  measureBox,
+  keySignature,
+  timeSignature,
+}) {
+  const { notes, vectorStaccatoDiagnostics, vectorAccentDiagnostics } = noteheadsForMeasure(
+    glyphs,
+    imageData,
+    measureBox,
+    keySignature,
+  )
+  const detectedRests = restsForMeasure(glyphs, imageData, measureBox, notes)
+  const beats = timeSignature?.beats ?? 4
+  const totalDivisions = Math.round(
+    beats * OMR_DIVISIONS_PER_QUARTER * (4 / (timeSignature?.beatType ?? 4)),
+  )
+
+  let events
+  let restApplyResult = { appliedCount: 0, skipped: [] }
+  if (notes.length === 0) {
+    events = buildVectorEvents(notes, measureBox, timeSignature, { rests: detectedRests })
+  } else if (!detectedRests.length) {
+    events = buildVectorEvents(notes, measureBox, timeSignature)
+  } else {
+    const noteEvents = buildVectorEvents(notes, measureBox, timeSignature, { rests: [] })
+    restApplyResult = insertMixedMeasureRests(noteEvents, detectedRests, {
+      measureBox,
+      totalDivisions,
+    })
+    events = restApplyResult.events
+  }
+
+  const noteCount = notes.length
+  const restCount = detectedRests.length
+  const uncertain = noteCount === 0 && restCount === 0
+  const confidence =
+    noteCount > 0 || restCount > 0
+      ? measureConfidenceFromRhythm({ uncertain: false }, notes)
+      : 0.45
+  return {
+    measureNumber: measureBox.measureNumber,
+    page: measureBox.page,
+    systemIndex: measureBox.systemIndex,
+    events,
+    uncertain,
+    confidence,
+    vectorNoteCount: noteCount,
+    vectorRestGlyphCount: restCount,
+    vectorRestDiagnostics: {
+      appliedCount:
+        notes.length === 0
+          ? events.filter((event) => event.type === 'rest' && event.source === 'vector-glyph').length
+          : restApplyResult.appliedCount,
+      skipped: restApplyResult.skipped,
+    },
+    vectorStaccatoDiagnostics,
+    vectorAccentDiagnostics,
+  }
+}
+
+export function processVectorPageSystems({
+  imageData,
+  pageText,
+  systems,
+  systemMeasureBoxes,
+  inheritedKeySignature = null,
+  inheritedTimeSignature = null,
+  inkThreshold = 170,
+}) {
+  const glyphs = textGlyphsToImage(pageText, imageData)
+  const firstSystemBoxes = systemMeasureBoxes[0] ?? []
+  const detectedKeySignature = detectVectorKeySignature(glyphs, imageData, firstSystemBoxes)
+  const detectedTimeSignature = detectVectorTimeSignature(glyphs, imageData, firstSystemBoxes)
+  const keySignature =
+    (detectedKeySignature.confidence ?? 0) > 0
+      ? detectedKeySignature
+      : inheritedKeySignature ?? detectedKeySignature
+  const timeSignature =
+    (detectedTimeSignature.confidence ?? 0) > 0
+      ? detectedTimeSignature
+      : inheritedTimeSignature ?? detectedTimeSignature
+  const measureRecordsBySystem = []
+  let noteCount = 0
+
+  for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
+    const boxes = systemMeasureBoxes[systemIndex] ?? []
+    const staffClefs = detectStaffClefsFromGlyphs(glyphs, imageData, boxes[0]?.staffLines)
+    const measures = boxes.map((measureBox) => {
+      const record = buildVectorMeasureRecord({
+        glyphs,
+        imageData,
+        measureBox: { ...measureBox, staffClefs },
+        keySignature,
+        timeSignature,
+      })
+      noteCount += record.vectorNoteCount ?? 0
+      return record
+    })
+    measureRecordsBySystem.push(measures)
+  }
+
+  const flatRecords = measureRecordsBySystem.flat()
+  const measureBoxByNumber = new Map(
+    systemMeasureBoxes.flat().map((measureBox) => [measureBox.measureNumber, measureBox]),
+  )
+  const tieResult = applyVectorPageTies({
+    measureRecords: flatRecords,
+    measureBoxByNumber,
+    glyphs,
+    imageData,
+    inkThreshold,
+  })
+
+  return {
+    measureRecordsBySystem,
+    keySignature,
+    timeSignature,
+    noteCount,
+    source: 'vector-glyphs',
+    tieDiagnostics: tieResult.diagnostics,
+    restDiagnostics: summarizeVectorRestDiagnostics(flatRecords),
+    staccatoDiagnostics: summarizeVectorStaccatoDiagnostics(flatRecords),
+    accentDiagnostics: summarizeVectorAccentDiagnostics(flatRecords),
+  }
+}
+
+export { systemConfidenceFromMeasures }

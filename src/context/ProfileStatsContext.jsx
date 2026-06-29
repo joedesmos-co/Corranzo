@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import {
   clearStats,
@@ -9,6 +8,7 @@ import {
   endSession,
 } from '../features/profile/practiceStats.js'
 import { saveManualSession } from '../features/profile/manualPracticeLog.js'
+import { recordWfyPracticeEvent } from '../features/profile/autoPracticeTracker.js'
 
 const ProfileStatsContext = createContext(null)
 
@@ -36,7 +36,15 @@ export function ProfileStatsProvider({ children }) {
     return nextStats
   }, [])
 
-  const recordWfyManualContinue = useCallback(() => {}, [])
+  const refreshStats = useCallback(() => {
+    const nextStats = loadStats()
+    setStats(nextStats)
+    return nextStats
+  }, [])
+
+  const recordWfyEvent = useCallback((type) => {
+    recordWfyPracticeEvent(type)
+  }, [])
 
   const value = useMemo(
     () => ({
@@ -45,7 +53,8 @@ export function ProfileStatsProvider({ children }) {
       endPracticeSession,
       saveManualPracticeSession,
       resetAllStats,
-      recordWfyManualContinue,
+      refreshStats,
+      recordWfyEvent,
     }),
     [
       stats,
@@ -53,7 +62,8 @@ export function ProfileStatsProvider({ children }) {
       endPracticeSession,
       saveManualPracticeSession,
       resetAllStats,
-      recordWfyManualContinue,
+      refreshStats,
+      recordWfyEvent,
     ],
   )
 

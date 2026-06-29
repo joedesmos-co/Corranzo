@@ -77,6 +77,23 @@ function systemEntriesFromBands(bands, page = 1, inkWidth = 0.8) {
 // ─── Stage 2: staff-system detection ────────────────────────────────────────
 
 describe('staff-system detection cascade', () => {
+  it('honors cancellation before PDF analysis starts', async () => {
+    const controller = new AbortController()
+    controller.abort()
+
+    await expect(
+      analyzeSemiAutoScoreSetup({
+        pdfSource: 'synthetic',
+        numPages: 1,
+        timingMap: buildTimingMap(1),
+        signal: controller.signal,
+        renderPage: () => {
+          throw new Error('render should not run after cancellation')
+        },
+      }),
+    ).rejects.toMatchObject({ name: 'AbortError' })
+  })
+
   it('conservative detection finds clean grand-staff systems', () => {
     const img = cleanPianoPage({ systems: 6, measuresPerSystem: 5 })
     const systems = detectConservativeStaffSystems(img)

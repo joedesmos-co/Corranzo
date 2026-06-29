@@ -1,0 +1,51 @@
+{
+  "dense": {
+    "before": {
+      "pitchAccuracy": 0.2391,
+      "wrongPitchCount": 1748,
+      "correctPitchCount": 672,
+      "onsetAccuracy": 0.569,
+      "measureCountDifference": 2
+    },
+    "after": {
+      "pitchAccuracy": 0.2395,
+      "wrongPitchCount": 1748,
+      "correctPitchCount": 673,
+      "onsetAccuracy": 0.5694,
+      "measureCountDifference": 2
+    },
+    "delta": {
+      "pitchAccuracy": 0.0004,
+      "wrongPitchCount": 0,
+      "correctPitchCount": 1
+    }
+  },
+  "medium": {
+    "before": {
+      "pitchAccuracy": 0.9851,
+      "wrongPitchCount": 3
+    },
+    "after": {
+      "pitchAccuracy": 0.9851,
+      "wrongPitchCount": 3
+    },
+    "delta": {
+      "pitchAccuracy": 0,
+      "wrongPitchCount": 0
+    }
+  },
+  "pitchErrorCategories": {
+    "before": {
+      "±1-accidental": 155,
+      "±2-diatonic": 338,
+      "±octave": 85,
+      "other": 1168
+    },
+    "after": {
+      "±1-accidental": 156,
+      "±2-diatonic": 335,
+      "±octave": 87,
+      "other": 1170
+    }
+  }
+}

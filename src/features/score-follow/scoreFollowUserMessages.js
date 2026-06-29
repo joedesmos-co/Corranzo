@@ -24,3 +24,13 @@ export const SCORE_FOLLOW_SETUP_FILE_MISMATCH =
 
 /** Concise last-resort copy shown only when no systems could be detected. */
 export const SCORE_FOLLOW_NO_SYSTEMS = 'Auto setup could not find systems. Mark system starts.'
+
+/** Experimental OMR-generated playback — score-follow setup in progress. */
+export const SCORE_FOLLOW_OMR_SETUP_RUNNING = 'Setting up score-follow…'
+
+/** Experimental OMR playback is ready before score-follow auto-setup runs. */
+export const SCORE_FOLLOW_OMR_PLAYBACK_READY = 'Experimental playback ready'
+
+/** Experimental OMR playback remains usable when automatic score-follow fails. */
+export const SCORE_FOLLOW_OMR_SETUP_FAILED =
+  'Experimental playback ready — score-follow unavailable for this generated score.'

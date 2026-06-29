@@ -11,6 +11,8 @@ export default function PracticeModeSection({
   onPracticeModeChange,
   disabled,
   hasMusicXml,
+  waitForYouDisabled = false,
+  waitForYouDisabledReason = '',
   compact = false,
 }) {
   return (
@@ -43,13 +45,21 @@ export default function PracticeModeSection({
                 name="practice-mode"
                 value={mode}
                 checked={practiceMode === mode}
-                disabled={disabled}
+                disabled={
+                  disabled ||
+                  (mode === PRACTICE_MODE.WAIT_FOR_YOU && waitForYouDisabled)
+                }
                 onChange={() => onPracticeModeChange(mode)}
               />
               <span>{MODE_LABELS[mode]}</span>
             </label>
           ))}
         </div>
+      )}
+      {hasMusicXml && waitForYouDisabled && waitForYouDisabledReason && (
+        <p className="practice-section__hint practice-empty-state">
+          {waitForYouDisabledReason}
+        </p>
       )}
     </section>
   )

@@ -1,3 +1,5 @@
+import { memo } from 'react'
+import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
 import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
 import PracticeFilesSummary from './PracticeFilesSummary.jsx'
 import PracticeImportNotices from './PracticeImportNotices.jsx'
@@ -18,15 +20,15 @@ import PracticeSetupPanel from './PracticeSetupPanel.jsx'
 import PracticeDiagnosticsPanel from './PracticeDiagnosticsPanel.jsx'
 import PracticeEnvironmentNotices from './PracticeEnvironmentNotices.jsx'
 import PracticeStatusStrip from './PracticeStatusStrip.jsx'
+import PracticeStatsCard from './PracticeStatsCard.jsx'
 import { buildDiagnosticsSummary, buildSetupSummary } from './practicePanelSummaries.js'
 
-export default function PracticeControlPanel({
+export default memo(function PracticeControlPanel({
   pdfFileName,
   pdfPageNumber = 1,
-  session,
-  scoreFollow,
   waitForYouNoteTarget = null,
 }) {
+  const { session, scoreFollow, practicePiece, practiceStats } = usePracticeSessionContext()
   const setupSummary = buildSetupSummary(session, scoreFollow)
   const diagnosticsSummary = buildDiagnosticsSummary(session)
 
@@ -39,6 +41,8 @@ export default function PracticeControlPanel({
   const openSetupByDefault = needsScoreFollowSetup && !session.isDemoPiece
 
   const filesReady = Boolean(pdfFileName && session.hasMusicXml)
+  const omrWaitForYouDisabled =
+    Boolean(scoreFollow?.experimentalOmrPlayback) && !scoreFollow?.canFollow
 
   const importWarnings = [...(session.importReadiness?.warnings ?? [])]
   if (scoreFollow?.anchorStorageWarning) {
@@ -71,6 +75,14 @@ export default function PracticeControlPanel({
     <aside className="practice-control-panel" aria-label="Practice controls">
       <PracticeStatusStrip session={session} scoreFollow={scoreFollow} />
 
+      {practicePiece?.id && (
+        <PracticeStatsCard
+          pieceId={practicePiece.id}
+          liveSession={practiceStats?.liveSession ?? null}
+          compact
+        />
+      )}
+
       <PracticeImportNotices
         warnings={visibleWarnings}
         guidance={[]}
@@ -84,6 +96,12 @@ export default function PracticeControlPanel({
           onPracticeModeChange={session.setPracticeMode}
           disabled={session.timingDisabled}
           hasMusicXml={session.hasMusicXml}
+          waitForYouDisabled={omrWaitForYouDisabled}
+          waitForYouDisabledReason={
+            omrWaitForYouDisabled
+              ? 'Wait For You is disabled for generated PDF playback until score-follow setup succeeds.'
+              : ''
+          }
           compact
         />
 
@@ -95,6 +113,8 @@ export default function PracticeControlPanel({
       <WaitForYouSection
         active={session.waitForYou.active}
         status={session.waitForYou.status}
+        displayStatus={session.waitForYou.displayStatus}
+        displayLabel={session.waitForYou.displayLabel}
         checkpointMode={session.checkpointMode}
         noteTarget={waitForYouNoteTarget?.target ?? null}
         noteTargetWrongPage={waitForYouNoteTarget?.wrongPage ?? false}
@@ -221,7 +241,6 @@ export default function PracticeControlPanel({
           <PracticeSetupPanel
             session={session}
             scoreFollow={scoreFollow}
-            isDemoPiece={session.isDemoPiece}
             pdfPageNumber={pdfPageNumber}
           />
         </PracticeCollapsibleSection>
@@ -229,4 +248,4 @@ export default function PracticeControlPanel({
       </div>
     </aside>
   )
-}
+})

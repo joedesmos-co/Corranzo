@@ -18,10 +18,7 @@ import { buildAutoSetupRuntimeDiagnostics, describeAutoSetupRejection } from './
 import { analyzeSemiAutoScoreSetup } from './semiAutoScoreAlignment.js'
 import { buildAnchorsFromSystemStarts } from './buildAnchorsFromSystemStarts.js'
 import { createAnchorId } from './scoreFollowStorage.js'
-import {
-  resolveScoreFollowCursor,
-  START_LOCK_THRESHOLD_SECONDS,
-} from './resolveScoreFollowCursor.js'
+import { resolveScoreFollowCursor } from './resolveScoreFollowCursor.js'
 import {
   findNextUnmarkedMeasureNumber,
   getScoreFollowMarkingProgress,
@@ -42,6 +39,7 @@ import { buildCursorMotionDiagnostic } from './cursorMotionDiagnostics.js'
 import { buildCursorMotionTimeline, resolveCursorMotion } from './cursorMotionTimeline.js'
 import { buildCursorMappingDebug } from './scoreFollowCursorMappingDebug.js'
 import { buildScoreFollowPrecisionReport } from './scoreFollowPrecisionDiagnostics.js'
+import { buildOmrMeasureGridAnchors } from './omrMeasureGridAnchors.js'
 import { isNextGenAlignmentDiagnosticsEnabled } from './nextGenAlignmentFlag.js'
 import { deriveNextGenAlignmentDiagnostics } from './nextGenAlignmentDiagnostics.js'
 import { compareAnchorSets, assessPromotionReadiness } from './anchorComparison.js'
@@ -86,10 +84,14 @@ import {
   SCORE_FOLLOW_SETUP_READY_DEMO,
   SCORE_FOLLOW_SETUP_READY_USER,
   SCORE_FOLLOW_SETUP_RUNNING,
+  SCORE_FOLLOW_OMR_SETUP_RUNNING,
+  SCORE_FOLLOW_OMR_PLAYBACK_READY,
+  SCORE_FOLLOW_OMR_SETUP_FAILED,
 } from './scoreFollowUserMessages.js'
 import { LAYOUT_MISMATCH_MESSAGE } from './layoutAssessment.js'
 import {
   AUTO_SETUP_SCAN_TIMEOUT_MS,
+  OMR_AUTO_SETUP_TIMEOUT_MS,
   hasUsableScoreFollowAnchors,
   idleSemiAutoSetupState,
   shouldClearStaleScanningUi,
@@ -109,6 +111,12 @@ function isEditableTarget(target) {
   )
 }
 
+function createSetupAbortError(message = 'Score-follow setup cancelled.') {
+  const error = new Error(message)
+  error.name = 'AbortError'
+  return error
+}
+
 export default function useScoreFollow({
   timingMap,
   timingLoading = false,
@@ -124,6 +132,9 @@ export default function useScoreFollow({
   isPlaying = false,
   sessionReady = false,
   isDemoPiece = false,
+  autoSetupGateOpen = true,
+  experimentalOmrPlayback = false,
+  omrMeasureGrid = null,
 }) {
   const isDemoSession =
     isDemoPiece || isDemoFixtureFileSet(pdfFileName, timingSourceId ?? null)
@@ -131,9 +142,11 @@ export default function useScoreFollow({
   // piece runs the SAME automatic setup pipeline as a user upload.
   const useBundledDemoAnchors = isDemoSession && !areBundledDemoAnchorsDisabled()
 
-  const setupFailedMessage = isDemoSession
-    ? SCORE_FOLLOW_SETUP_FAILED_DEMO
-    : SCORE_FOLLOW_NEEDS_QUICK_SETUP
+  const setupFailedMessage = experimentalOmrPlayback
+    ? SCORE_FOLLOW_OMR_SETUP_FAILED
+    : isDemoSession
+      ? SCORE_FOLLOW_SETUP_FAILED_DEMO
+      : SCORE_FOLLOW_NEEDS_QUICK_SETUP
   const setupReadyMessage = isDemoSession
     ? SCORE_FOLLOW_SETUP_READY_DEMO
     : SCORE_FOLLOW_SETUP_READY_USER
@@ -157,10 +170,12 @@ export default function useScoreFollow({
   } = anchorsHook
 
   const autoSetupInFlightRef = useRef(false)
+  const autoSetupAbortRef = useRef(null)
   const autoSetupTriggerKeyRef = useRef(null)
   const demoBundledLoadRef = useRef(null)
   const demoBundledInFlightRef = useRef(false)
   const layoutSupplementKeyRef = useRef(null)
+  const omrMeasureGridApplyKeyRef = useRef(null)
   const [demoBundledStatus, setDemoBundledStatus] = useState({
     loading: false,
     applied: false,
@@ -212,6 +227,14 @@ export default function useScoreFollow({
     manualPageRotationsRef.current = manualPageRotations
   }, [manualPageRotations])
 
+  useEffect(() => {
+    return () => {
+      autoSetupAbortRef.current?.abort(createSetupAbortError())
+      autoSetupAbortRef.current = null
+      autoSetupInFlightRef.current = false
+    }
+  }, [])
+
   // The authoritative per-page viewer rotation = manual override, else the
   // reconciled auto-detected turn, else none. Everything downstream (viewer,
   // Library, Fullscreen, overlays, cursor) reads this one resolved map.
@@ -249,6 +272,17 @@ export default function useScoreFollow({
   const hasTiming = Boolean(timingMap?.measures?.length)
   const hasAnchors = anchors.length > 0
   const anchorCounts = useMemo(() => countAnchorsBySource(anchors), [anchors])
+
+  const omrMeasureGridAnchors = useMemo(
+    () =>
+      experimentalOmrPlayback
+        ? buildOmrMeasureGridAnchors({
+            measureGrid: omrMeasureGrid,
+            timingMap,
+          })
+        : [],
+    [experimentalOmrPlayback, omrMeasureGrid, timingMap],
+  )
 
   const anchorTrust = useMemo(
     () =>
@@ -667,6 +701,9 @@ export default function useScoreFollow({
 
   const runSemiAutoSetupInternal = useCallback(
     async ({ force = false } = {}) => {
+      if (!autoSetupGateOpen) {
+        return
+      }
       if (!pdfSource || !numPages || !timingMap) {
         setSetupStatus({
           phase: 'failed',
@@ -698,11 +735,14 @@ export default function useScoreFollow({
 
       autoSetupInFlightRef.current = true
       setAlignmentModeState(false)
-      setSetupStatus({ phase: 'running', message: SCORE_FOLLOW_SETUP_RUNNING })
+      const runningMessage = experimentalOmrPlayback
+        ? SCORE_FOLLOW_OMR_SETUP_RUNNING
+        : SCORE_FOLLOW_SETUP_RUNNING
+      setSetupStatus({ phase: 'running', message: runningMessage })
       setSemiAutoSetup({
         status: 'analyzing',
         progress: 0,
-        message: SCORE_FOLLOW_SETUP_RUNNING,
+        message: runningMessage,
         error: null,
         preview: null,
       })
@@ -712,33 +752,54 @@ export default function useScoreFollow({
         clearAutoAnchors()
       }
 
+      const previousController = autoSetupAbortRef.current
+      if (previousController && !previousController.signal.aborted) {
+        previousController.abort(createSetupAbortError())
+      }
+      const setupTimeoutMs = experimentalOmrPlayback
+        ? OMR_AUTO_SETUP_TIMEOUT_MS
+        : AUTO_SETUP_SCAN_TIMEOUT_MS
+      const controller = new AbortController()
+      autoSetupAbortRef.current = controller
       let scanTimeoutId
+      let scanTimedOut = false
       try {
-        const result = await Promise.race([
-          analyzeSemiAutoScoreSetup({
-            pdfSource,
-            numPages,
-            timingMap,
-            // Only the user's explicit manual turns are forced; every other page
-            // is auto-detected fresh so document reconciliation can run on it.
-            pageViewRotations: manualPageRotationsRef.current,
-            onProgress: (progress, message) => {
-              setSemiAutoSetup((previous) => ({
-                ...previous,
-                status: 'analyzing',
-                progress,
-                message,
-              }))
-            },
-          }),
-          new Promise((_, reject) => {
+        const analysisPromise = analyzeSemiAutoScoreSetup({
+          pdfSource,
+          numPages,
+          timingMap,
+          // Only the user's explicit manual turns are forced; every other page
+          // is auto-detected fresh so document reconciliation can run on it.
+          pageViewRotations: manualPageRotationsRef.current,
+          signal: controller.signal,
+          maxDurationMs: setupTimeoutMs,
+          onProgress: (progress, message) => {
+            if (controller.signal.aborted) {
+              return
+            }
+            setSemiAutoSetup((previous) => ({
+              ...previous,
+              status: 'analyzing',
+              progress,
+              message,
+            }))
+          },
+        })
+        let result
+        if (experimentalOmrPlayback) {
+          const timeoutPromise = new Promise((_, reject) => {
             scanTimeoutId = window.setTimeout(() => {
-              reject(
-                new Error('PDF scan timed out. Use Re-run auto setup to try again.'),
+              scanTimedOut = true
+              controller.abort(
+                createSetupAbortError('PDF scan timed out. Use Re-run auto setup to try again.'),
               )
-            }, AUTO_SETUP_SCAN_TIMEOUT_MS)
-          }),
-        ])
+              reject(createSetupAbortError('PDF scan timed out. Use Re-run auto setup to try again.'))
+            }, setupTimeoutMs)
+          })
+          result = await Promise.race([analysisPromise, timeoutPromise])
+        } else {
+          result = await analysisPromise
+        }
 
         const recordAutoSetupRuntime = (partial) => {
           setAutoSetupRuntimeDiagnostics(
@@ -755,17 +816,20 @@ export default function useScoreFollow({
           if (result.preview) {
             captureCalibrationSnapshot(result.preview, { phase: 'failed' })
           }
+          const visibleError = experimentalOmrPlayback
+            ? SCORE_FOLLOW_OMR_SETUP_FAILED
+            : result.message
           recordAutoSetupRuntime({
             result,
             preview: null,
             setupStatus: { phase: 'failed', message: setupFailedMessage },
-            semiAutoSetup: { status: 'failed', error: result.message },
+            semiAutoSetup: { status: 'failed', error: visibleError },
           })
           setSemiAutoSetup({
             status: 'failed',
             progress: 0,
             message: '',
-            error: result.message,
+            error: visibleError,
             preview: null,
           })
           setSetupStatus({
@@ -844,12 +908,21 @@ export default function useScoreFollow({
         const needsSetupError = result.noSystems
           ? SCORE_FOLLOW_NO_SYSTEMS
           : rejection?.code === 'implausible-mapping' || rejection?.code === 'too-few-anchors'
-            ? SCORE_FOLLOW_SETUP_FILE_MISMATCH
-            : SCORE_FOLLOW_NEEDS_QUICK_SETUP
+            ? experimentalOmrPlayback
+              ? SCORE_FOLLOW_OMR_SETUP_FAILED
+              : SCORE_FOLLOW_SETUP_FILE_MISMATCH
+            : experimentalOmrPlayback
+              ? SCORE_FOLLOW_OMR_SETUP_FAILED
+              : SCORE_FOLLOW_NEEDS_QUICK_SETUP
         recordAutoSetupRuntime({
           result,
           preview,
-          setupStatus: { phase: 'needs-setup', message: SCORE_FOLLOW_NEEDS_QUICK_SETUP },
+          setupStatus: {
+            phase: experimentalOmrPlayback ? 'failed' : 'needs-setup',
+            message: experimentalOmrPlayback
+              ? SCORE_FOLLOW_OMR_SETUP_FAILED
+              : SCORE_FOLLOW_NEEDS_QUICK_SETUP,
+          },
           semiAutoSetup: { status: 'failed', error: needsSetupError },
         })
         setSemiAutoSetup({
@@ -860,12 +933,26 @@ export default function useScoreFollow({
           preview,
         })
         setSetupStatus({
-          phase: 'needs-setup',
-          message: SCORE_FOLLOW_NEEDS_QUICK_SETUP,
+          phase: experimentalOmrPlayback ? 'failed' : 'needs-setup',
+          message: experimentalOmrPlayback
+            ? SCORE_FOLLOW_OMR_SETUP_FAILED
+            : SCORE_FOLLOW_NEEDS_QUICK_SETUP,
         })
       } catch (error) {
+        if (controller.signal.aborted && !scanTimedOut) {
+          setSemiAutoSetup(idleSemiAutoSetupState())
+          setSetupStatus(
+            experimentalOmrPlayback
+              ? { phase: 'ready', message: SCORE_FOLLOW_OMR_PLAYBACK_READY }
+              : { phase: 'idle', message: '' },
+          )
+          return
+        }
         const setupError =
           error instanceof Error ? error.message : 'Automatic setup failed.'
+        const visibleSetupError = experimentalOmrPlayback
+          ? SCORE_FOLLOW_OMR_SETUP_FAILED
+          : setupError
         setAutoSetupRuntimeDiagnostics(
           buildAutoSetupRuntimeDiagnostics({
             result: { ok: false },
@@ -873,7 +960,7 @@ export default function useScoreFollow({
             timingMap,
             numPages,
             setupStatus: { phase: 'failed', message: setupFailedMessage },
-            semiAutoSetup: { status: 'failed', error: setupError },
+            semiAutoSetup: { status: 'failed', error: visibleSetupError },
             autoSetupAttempted: hasAutoSetupBeenAttempted(autoSetupKey),
           }),
         )
@@ -881,7 +968,7 @@ export default function useScoreFollow({
           status: 'failed',
           progress: 0,
           message: '',
-          error: setupError,
+          error: visibleSetupError,
           preview: null,
         })
         setSetupStatus({
@@ -891,6 +978,9 @@ export default function useScoreFollow({
       } finally {
         if (scanTimeoutId) {
           window.clearTimeout(scanTimeoutId)
+        }
+        if (autoSetupAbortRef.current === controller) {
+          autoSetupAbortRef.current = null
         }
         autoSetupInFlightRef.current = false
       }
@@ -911,6 +1001,8 @@ export default function useScoreFollow({
       setupFailedMessage,
       setupReadyMessage,
       captureCalibrationSnapshot,
+      autoSetupGateOpen,
+      experimentalOmrPlayback,
     ],
   )
 
@@ -920,11 +1012,24 @@ export default function useScoreFollow({
 
   const retryAutoSetup = runSemiAutoSetup
 
+  const cancelSemiAutoSetup = useCallback(() => {
+    autoSetupAbortRef.current?.abort(createSetupAbortError())
+    autoSetupAbortRef.current = null
+    autoSetupInFlightRef.current = false
+    setSemiAutoSetup(idleSemiAutoSetupState())
+    setSetupStatus(
+      experimentalOmrPlayback
+        ? { phase: 'ready', message: SCORE_FOLLOW_OMR_PLAYBACK_READY }
+        : { phase: 'idle', message: '' },
+    )
+  }, [experimentalOmrPlayback])
+
   useEffect(() => {
     autoSetupTriggerKeyRef.current = null
     demoBundledLoadRef.current = null
     demoBundledInFlightRef.current = false
     layoutSupplementKeyRef.current = null
+    omrMeasureGridApplyKeyRef.current = null
     // Only restore explicit manual overrides. Auto rotations re-derive from the
     // fresh analysis, so a previous run's detected turns never carry over stale.
     const storedManualRotations = loadManualPageRotations(autoSetupKey)
@@ -942,6 +1047,60 @@ export default function useScoreFollow({
     setSemiAutoSetup(idleSemiAutoSetupState())
     setSetupStatus({ phase: 'idle', message: '' })
   }, [autoSetupKey])
+
+  useEffect(() => {
+    if (
+      !experimentalOmrPlayback ||
+      !sessionReady ||
+      !isHydrated ||
+      timingLoading ||
+      !hasTiming ||
+      omrMeasureGridAnchors.length === 0
+    ) {
+      return
+    }
+
+    const first = omrMeasureGridAnchors[0]
+    const last = omrMeasureGridAnchors[omrMeasureGridAnchors.length - 1]
+    const applyKey = [
+      autoSetupKey,
+      'omr-grid',
+      omrMeasureGridAnchors.length,
+      first?.measureNumber ?? '',
+      last?.measureNumber ?? '',
+    ].join(':')
+    if (omrMeasureGridApplyKeyRef.current === applyKey && anchorCounts.omr > 0) {
+      return
+    }
+
+    omrMeasureGridApplyKeyRef.current = applyKey
+    markAutoSetupAttempted(autoSetupKey)
+    setAutoAnchors(omrMeasureGridAnchors)
+    setEnabled(true)
+    setSemiAutoSetup({
+      status: 'confirmed',
+      progress: 1,
+      message: '',
+      error: null,
+      preview: null,
+    })
+    setSetupStatus({ phase: 'ready', message: SCORE_FOLLOW_SETUP_COMPLETE })
+    setAutoSetupReport({
+      allocationMode: 'omr-measure-grid',
+      anchorCount: omrMeasureGridAnchors.length,
+      source: 'omr',
+    })
+  }, [
+    experimentalOmrPlayback,
+    sessionReady,
+    isHydrated,
+    timingLoading,
+    hasTiming,
+    autoSetupKey,
+    omrMeasureGridAnchors,
+    anchorCounts.omr,
+    setAutoAnchors,
+  ])
 
   useEffect(() => {
     if (!autoSetupKey || calibrationDebugSnapshot) {
@@ -1146,6 +1305,48 @@ export default function useScoreFollow({
 
   useEffect(() => {
     if (
+      !experimentalOmrPlayback ||
+      !sessionReady ||
+      !autoSetupGateOpen ||
+      timingLoading ||
+      !hasTiming
+    ) {
+      return
+    }
+    if (setupStatus.phase === 'running' || semiAutoSetup.status === 'analyzing') {
+      return
+    }
+    const autoSetupAttempted = hasAutoSetupBeenAttempted(autoSetupKey)
+    if (
+      hasUsableScoreFollowAnchors({
+        anchorCounts,
+        anchorTrust,
+        autoSetupAttempted,
+      })
+    ) {
+      return
+    }
+    if (setupStatus.phase === 'idle' && !autoSetupInFlightRef.current) {
+      setSetupStatus({ phase: 'ready', message: SCORE_FOLLOW_OMR_PLAYBACK_READY })
+    }
+  }, [
+    experimentalOmrPlayback,
+    sessionReady,
+    autoSetupGateOpen,
+    timingLoading,
+    hasTiming,
+    setupStatus.phase,
+    semiAutoSetup.status,
+    anchorCounts,
+    anchorTrust,
+    autoSetupKey,
+  ])
+
+  useEffect(() => {
+    if (!autoSetupGateOpen || experimentalOmrPlayback) {
+      return
+    }
+    if (
       !sessionReady ||
       !isHydrated ||
       timingLoading ||
@@ -1195,7 +1396,17 @@ export default function useScoreFollow({
     }
 
     autoSetupTriggerKeyRef.current = triggerKey
-    runSemiAutoSetupInternal({ force: false })
+    let cancelled = false
+    const timeoutId = window.setTimeout(() => {
+      if (!cancelled) {
+        runSemiAutoSetupInternal({ force: false })
+      }
+    }, 0)
+
+    return () => {
+      cancelled = true
+      window.clearTimeout(timeoutId)
+    }
   }, [
     isHydrated,
     timingLoading,
@@ -1217,6 +1428,8 @@ export default function useScoreFollow({
     demoBundledStatus.applied,
     setupReadyMessage,
     setupFailedMessage,
+    autoSetupGateOpen,
+    experimentalOmrPlayback,
   ])
 
   const confirmSemiAutoSetup = useCallback(() => {
@@ -1656,6 +1869,7 @@ export default function useScoreFollow({
     retryAutoSetup,
     setupStatus,
     confirmSemiAutoSetup,
+    cancelSemiAutoSetup,
     cancelSemiAutoPreview,
     fixSemiAutoManually,
     resetSemiAutoSetup,
@@ -1679,6 +1893,8 @@ export default function useScoreFollow({
     anchorTrust,
     followNeedsSetup,
     followApproximateLabel: anchorTrust.label,
+    experimentalOmrPlayback,
+    autoSetupGateOpen,
     // System-start fallback mode
     systemStartMode,
     systemStartMarks: displaySystemStartMarks,

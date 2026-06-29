@@ -26,12 +26,34 @@ export function note(step = 'C', octave = 4, duration = 1, extra = '') {
   return `<note>${extra.includes('<chord/>') ? '<chord/>' : ''}<pitch><step>${step}</step><octave>${octave}</octave></pitch><duration>${duration}</duration><voice>1</voice><type>quarter</type>${extra.replace('<chord/>', '')}</note>`
 }
 
+export function staccatoNote(step = 'C', octave = 4, duration = 1, extra = '') {
+  return note(
+    step,
+    octave,
+    duration,
+    `<notations><articulations><staccato/></articulations></notations>${extra}`,
+  )
+}
+
+export function accentNote(step = 'C', octave = 4, duration = 1, extra = '') {
+  return note(
+    step,
+    octave,
+    duration,
+    `<notations><articulations><accent/></articulations></notations>${extra}`,
+  )
+}
+
 export function rest(duration = 1) {
   return `<note><rest/><duration>${duration}</duration><voice>1</voice></note>`
 }
 
 export function soundTempo(bpm) {
   return `<direction><sound tempo="${bpm}"/></direction>`
+}
+
+export function dynamicsDirection(mark) {
+  return `<direction><direction-type><dynamics><${mark}/></dynamics></direction-type></direction>`
 }
 
 export function metronomeDirection(beatUnit, perMinute, { dot = false } = {}) {

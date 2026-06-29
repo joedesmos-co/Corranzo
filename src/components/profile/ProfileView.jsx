@@ -62,6 +62,44 @@ export default function ProfileView() {
 
       <div className="profile-stats-grid profile-stats-grid--two">
         <StatCard
+          label="Auto-tracked practice"
+          value={formatDuration(stats.autoPracticeSeconds ?? 0)}
+        />
+        <StatCard
+          label="Last auto session"
+          value={formatDate(stats.lastAutoPracticedAt)}
+        />
+      </div>
+
+      {Object.values(stats.pieces ?? {}).some((piece) => (piece.autoPracticeSeconds ?? 0) > 0) && (
+        <section className="profile-panel" aria-labelledby="auto-piece-stats-heading">
+          <h3 id="auto-piece-stats-heading" className="profile-panel__title">
+            Per-piece activity
+          </h3>
+          <ul className="profile-list">
+            {Object.values(stats.pieces)
+              .filter((piece) => (piece.autoPracticeSeconds ?? 0) > 0)
+              .sort((a, b) => (b.lastPracticedAt ?? 0) - (a.lastPracticedAt ?? 0))
+              .slice(0, 8)
+              .map((piece) => (
+                <li key={piece.id} className="profile-list__item">
+                  <span>
+                    <strong>{piece.title}</strong>
+                    <small>
+                      {formatDate(piece.lastPracticedAt)}
+                      {piece.lastTempoBpm ? ` · ${piece.lastTempoBpm} BPM` : ''}
+                      {(piece.wfyMissed ?? 0) > 0 ? ` · ${piece.wfyMissed} missed` : ''}
+                    </small>
+                  </span>
+                  <span>{formatDuration(piece.autoPracticeSeconds)}</span>
+                </li>
+              ))}
+          </ul>
+        </section>
+      )}
+
+      <div className="profile-stats-grid profile-stats-grid--two">
+        <StatCard
           label="Logged practice time"
           value={formatDuration(stats.totalPracticeSeconds)}
         />

@@ -1,0 +1,44 @@
+OMR accuracy report
+Generated: gymnopedie-no-1-satie
+Ground truth: Gymnopédie No. 1
+Likely main issue: Measure allocation (measure-allocation)
+Evidence: pitch=63% | duration=63% | onset=63% | time=63% | noteDetectionF1=77% | measureCountAccuracy=65% | firstBreak=m52 (missing/extra=6, chord=6) | noteCountDifference=-174 | measureCountDifference=-27
+
+Pitch accuracy: 63%
+Duration accuracy: 63%
+Onset accuracy: 63%
+Onset time accuracy: 63%
+Measure count accuracy: 65%
+Note detection F1: 77%
+Chord grouping accuracy: 63%
+Note count: generated 295, truth 469, diff -174
+Measure count: generated 51, truth 78, diff -27
+First likely alignment break: measure 52 (missing/extra=6, chord=6)
+
+Worst measures:
+  m76: error 100%; truth 9, generated 0, missing 9, extra 0, pitch 0, duration 0, onset 0, time 0, chord 9
+  m63: error 100%; truth 8, generated 0, missing 8, extra 0, pitch 0, duration 0, onset 0, time 0, chord 8
+  m68: error 100%; truth 8, generated 0, missing 8, extra 0, pitch 0, duration 0, onset 0, time 0, chord 8
+  m75: error 100%; truth 8, generated 0, missing 8, extra 0, pitch 0, duration 0, onset 0, time 0, chord 8
+  m53: error 100%; truth 7, generated 0, missing 7, extra 0, pitch 0, duration 0, onset 0, time 0, chord 7
+  m54: error 100%; truth 7, generated 0, missing 7, extra 0, pitch 0, duration 0, onset 0, time 0, chord 7
+  m61: error 100%; truth 7, generated 0, missing 7, extra 0, pitch 0, duration 0, onset 0, time 0, chord 7
+  m62: error 100%; truth 7, generated 0, missing 7, extra 0, pitch 0, duration 0, onset 0, time 0, chord 7
+  m65: error 100%; truth 7, generated 0, missing 7, extra 0, pitch 0, duration 0, onset 0, time 0, chord 7
+  m66: error 100%; truth 7, generated 0, missing 7, extra 0, pitch 0, duration 0, onset 0, time 0, chord 7
+
+Missing notes: m52@0 G2; m52@1 B3; m52@1 D4; m52@1 F#4; m52@1 F#5
+Extra notes: none
+Wrong pitches: none
+Wrong durations: m34@0 2q vs 1q
+Wrong onsets: none
+Wrong onset times: none
+Chord grouping mismatches: m52@0 truth 1, generated 0; m52@1 truth 4, generated 0; m52@2 truth 1, generated 0; m53@0 truth 2, generated 0; m53@1 truth 4, generated 0
+
+Ties: detected 0, applied 0, uncertain slurs 111
+
+Rests: detected 8 glyph(s), applied 8 vector rest event(s), skipped 0
+
+Staccato: detected 42, applied 40
+
+Accent: detected 0, applied 0

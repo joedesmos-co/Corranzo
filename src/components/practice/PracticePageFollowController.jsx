@@ -1,6 +1,8 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
 import { useScoreFollowCursor } from '../../context/PracticeTickContext.jsx'
+import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
+import { WFY_STATUS } from '../../features/practice/waitForYouEngine.js'
 import usePracticePageFollow from '../../features/practice/usePracticePageFollow.js'
 
 export default function PracticePageFollowController({
@@ -11,7 +13,7 @@ export default function PracticePageFollowController({
   onPrevPage,
   onNextPage,
 }) {
-  const { scoreFollow } = usePracticeSessionContext()
+  const { scoreFollow, session, waitForYouNoteTarget } = usePracticeSessionContext()
   const { displayCursor } = useScoreFollowCursor()
 
   const handleGoToPage = useCallback(
@@ -33,10 +35,32 @@ export default function PracticePageFollowController({
     scoreFollow.enabled && scoreFollow.canFollow && !scoreFollow.alignmentMode,
   )
 
+  const noteFollowTarget = useMemo(() => {
+    if (
+      !session.isWaitForYou ||
+      session.checkpointMode !== WFY_CHECKPOINT_MODE.NOTE ||
+      session.waitForYou.status !== WFY_STATUS.WAITING ||
+      !waitForYouNoteTarget?.target?.visible
+    ) {
+      return null
+    }
+    return {
+      active: true,
+      page: waitForYouNoteTarget.target.page,
+    }
+  }, [
+    session.isWaitForYou,
+    session.checkpointMode,
+    session.waitForYou.status,
+    waitForYouNoteTarget?.target?.visible,
+    waitForYouNoteTarget?.target?.page,
+  ])
+
   usePracticePageFollow({
     active: pageFollowActive,
     scrollContainerRef,
     cursor: displayCursor,
+    noteFollowTarget,
     pageNumber,
     numPages,
     onGoToPage: handleGoToPage,

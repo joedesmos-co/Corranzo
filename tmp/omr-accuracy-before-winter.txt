@@ -1,0 +1,36 @@
+OMR accuracy report
+Generated: vivaldi-winter-rousseau-version-original
+Ground truth: Winter
+Likely main issue: Mixed errors (mixed)
+Evidence: pitch=0% | duration=2% | onset=12% | time=0% | noteDetectionF1=31% | measureCountAccuracy=82% | firstBreak=m1 (missing/extra=4, chord=4) | noteCountDifference=-1451 | measureCountDifference=-23
+
+Pitch accuracy: 0%
+Duration accuracy: 2%
+Onset accuracy: 12%
+Onset time accuracy: 0%
+Measure count accuracy: 82%
+Note detection F1: 31%
+Chord grouping accuracy: 9%
+Note count: generated 1452, truth 2903, diff -1451
+Measure count: generated 102, truth 125, diff -23
+First likely alignment break: measure 1 (missing/extra=4, chord=4)
+
+Worst measures:
+  m70: error 100%; truth 40, generated 22, missing 18, extra 0, pitch 22, duration 22, onset 12, time 22, chord 44
+  m64: error 100%; truth 20, generated 43, missing 0, extra 23, pitch 20, duration 15, onset 6, time 20, chord 53
+  m124: error 100%; truth 46, generated 19, missing 27, extra 0, pitch 18, duration 19, onset 15, time 19, chord 37
+  m115: error 100%; truth 33, generated 28, missing 5, extra 0, pitch 28, duration 28, onset 12, time 28, chord 33
+  m106: error 100%; truth 28, generated 27, missing 2, extra 1, pitch 25, duration 26, onset 10, time 26, chord 43
+  m68: error 100%; truth 40, generated 17, missing 23, extra 0, pitch 17, duration 17, onset 15, time 17, chord 43
+  m72: error 100%; truth 39, generated 22, missing 19, extra 2, pitch 20, duration 20, onset 8, time 20, chord 43
+  m61: error 100%; truth 24, generated 32, missing 2, extra 10, pitch 21, duration 16, onset 8, time 22, chord 44
+  m122: error 100%; truth 46, generated 16, missing 30, extra 0, pitch 16, duration 16, onset 9, time 16, chord 34
+  m62: error 100%; truth 24, generated 31, missing 3, extra 10, pitch 19, duration 16, onset 8, time 21, chord 43
+
+Missing notes: m1@0 F4; m1@1 F4; m1@2 F4; m1@3 F4; m2@0 F4
+Extra notes: m60@0 D2; m60@0 E2; m60@0 E2; m60@0 G2; m60@0 G2
+Wrong pitches: m45@1 G2 vs F2; m47@3 C2 vs D#2; m49@0 C2 vs C#2; m49@0 C2 vs C#5; m49@0 A3 vs F5
+Wrong durations: m45@1 2q vs 0.5q; m49@0 1q vs 0.5q; m49@0 1q vs 0.5q; m49@0 1q vs 0.5q; m49@1.5 1q vs 0.5q
+Wrong onsets: m45 1.5q vs 1q; m47 3.5q vs 3q; m49 2q vs 1.5q; m50 2q vs 1.25q; m50 2q vs 1.5q
+Wrong onset times: m45 delta 75.811s; m47 delta 76.92s; m49 delta 78.725s; m49 delta 78.725s; m49 delta 78.725s
+Chord grouping mismatches: m1@0 truth 1, generated 0; m1@1 truth 1, generated 0; m1@2 truth 1, generated 0; m1@3 truth 1, generated 0; m2@0 truth 1, generated 0

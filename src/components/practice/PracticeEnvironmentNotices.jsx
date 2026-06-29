@@ -17,7 +17,7 @@ export default function PracticeEnvironmentNotices() {
       {showSafari && <SafariAudioCompatibilityNotice />}
       {showTablet && (
         <p className="practice-env-notices__item" role="note">
-          Tablet: use fullscreen (<kbd>F</kbd>) for a larger score.
+          Tablet: tap the fullscreen button in the toolbar for a larger score.
         </p>
       )}
     </div>

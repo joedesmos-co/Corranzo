@@ -6,12 +6,28 @@ const PAGE_SWITCH_DEBOUNCE_MS = 16
 const USER_SCROLL_SUSPEND_MS = 2000
 
 /**
+ * Resolve which PDF page page-follow should keep in view.
+ * Wait For You note mode uses the checkpoint note target when the playback
+ * cursor is hidden.
+ */
+export function resolvePageFollowTarget({ cursor, noteFollowTarget } = {}) {
+  if (noteFollowTarget?.active && Number.isFinite(noteFollowTarget.page)) {
+    return noteFollowTarget.page
+  }
+  if (cursor?.visible && Number.isFinite(cursor.page)) {
+    return cursor.page
+  }
+  return null
+}
+
+/**
  * Gentle PDF scroll + page advance to keep the score-follow cursor in view.
  */
 export default function usePracticePageFollow({
   active,
   scrollContainerRef,
   cursor,
+  noteFollowTarget = null,
   pageNumber,
   numPages,
   onGoToPage,
@@ -22,18 +38,19 @@ export default function usePracticePageFollow({
   const userScrollUntilRef = useRef(0)
 
   useEffect(() => {
-    if (!active || !scrollContainerRef?.current || !cursor?.visible) {
+    const followPage = resolvePageFollowTarget({ cursor, noteFollowTarget })
+    if (!active || !scrollContainerRef?.current || followPage == null) {
       return undefined
     }
 
-    if (cursor.page !== pageNumber && cursor.page >= 1 && cursor.page <= (numPages ?? cursor.page)) {
+    if (followPage !== pageNumber && followPage >= 1 && followPage <= (numPages ?? followPage)) {
       if (pageSwitchTimerRef.current) {
         clearTimeout(pageSwitchTimerRef.current)
       }
       pageSwitchTimerRef.current = window.setTimeout(() => {
-        if (lastRequestedPageRef.current !== cursor.page) {
-          lastRequestedPageRef.current = cursor.page
-          onGoToPage?.(cursor.page)
+        if (lastRequestedPageRef.current !== followPage) {
+          lastRequestedPageRef.current = followPage
+          onGoToPage?.(followPage)
         }
       }, PAGE_SWITCH_DEBOUNCE_MS)
     }
@@ -44,7 +61,17 @@ export default function usePracticePageFollow({
         pageSwitchTimerRef.current = null
       }
     }
-  }, [active, cursor?.page, cursor?.visible, pageNumber, numPages, onGoToPage, scrollContainerRef])
+  }, [
+    active,
+    cursor?.page,
+    cursor?.visible,
+    noteFollowTarget?.active,
+    noteFollowTarget?.page,
+    pageNumber,
+    numPages,
+    onGoToPage,
+    scrollContainerRef,
+  ])
 
   useEffect(() => {
     lastRequestedPageRef.current = pageNumber
@@ -71,7 +98,13 @@ export default function usePracticePageFollow({
   }, [active, scrollContainerRef])
 
   useEffect(() => {
-    if (!active || !scrollContainerRef?.current || !cursor?.visible || cursor.page !== pageNumber) {
+    const followPage = resolvePageFollowTarget({ cursor, noteFollowTarget })
+    if (
+      !active ||
+      !scrollContainerRef?.current ||
+      followPage == null ||
+      followPage !== pageNumber
+    ) {
       scrollStateRef.current.seeded = false
       return undefined
     }
@@ -134,5 +167,15 @@ export default function usePracticePageFollow({
 
     frameId = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frameId)
-  }, [active, cursor?.x, cursor?.y, cursor?.visible, cursor?.page, pageNumber, scrollContainerRef])
+  }, [
+    active,
+    cursor?.x,
+    cursor?.y,
+    cursor?.visible,
+    cursor?.page,
+    noteFollowTarget?.active,
+    noteFollowTarget?.page,
+    pageNumber,
+    scrollContainerRef,
+  ])
 }

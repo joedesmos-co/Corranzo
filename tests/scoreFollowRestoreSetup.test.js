@@ -1,11 +1,17 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { assessScoreFollowTrust } from '../src/features/score-follow/scoreFollowTrust.js'
 import { ANCHOR_SOURCE } from '../src/features/score-follow/anchorUtils.js'
 import {
   hasUsableScoreFollowAnchors,
+  OMR_AUTO_SETUP_TIMEOUT_MS,
   shouldClearStaleScanningUi,
   shouldSkipAutoSetupScan,
 } from '../src/features/score-follow/scoreFollowSetupState.js'
+
+const __dir = dirname(fileURLToPath(import.meta.url))
 
 const timingMap = {
   measures: Array.from({ length: 32 }, (_, index) => ({
@@ -186,5 +192,47 @@ describe('score follow restore setup state', () => {
         hasUsableAnchors: false,
       }),
     ).toBe(false)
+  })
+
+  it('does not auto-run generic score-follow setup for experimental OMR on Practice mount', () => {
+    const src = readFileSync(
+      join(__dir, '..', 'src', 'features', 'score-follow', 'useScoreFollow.js'),
+      'utf8',
+    )
+    expect(src).toMatch(/!autoSetupGateOpen\s*\|\|\s*experimentalOmrPlayback/)
+    expect(src).toMatch(/cancelSemiAutoSetup/)
+  })
+
+  it('keeps experimental OMR score-follow setup bounded and retryable', () => {
+    expect(OMR_AUTO_SETUP_TIMEOUT_MS).toBeGreaterThanOrEqual(10_000)
+    expect(OMR_AUTO_SETUP_TIMEOUT_MS).toBeLessThanOrEqual(15_000)
+
+    const src = readFileSync(
+      join(__dir, '..', 'src', 'features', 'score-follow', 'useScoreFollow.js'),
+      'utf8',
+    )
+    expect(src).toMatch(/experimentalOmrPlayback\s*\?\s*OMR_AUTO_SETUP_TIMEOUT_MS/)
+    expect(src).toMatch(/Promise\.race\(\[analysisPromise, timeoutPromise\]\)/)
+    expect(src).toMatch(/SCORE_FOLLOW_OMR_SETUP_FAILED/)
+  })
+
+  it('disables Wait For You for generated OMR until score-follow can follow', () => {
+    const provider = readFileSync(
+      join(__dir, '..', 'src', 'context', 'PracticeSessionContext.jsx'),
+      'utf8',
+    )
+    const controls = readFileSync(
+      join(__dir, '..', 'src', 'components', 'practice', 'PracticeControlPanel.jsx'),
+      'utf8',
+    )
+    const modeSection = readFileSync(
+      join(__dir, '..', 'src', 'components', 'practice', 'PracticeModeSection.jsx'),
+      'utf8',
+    )
+
+    expect(provider).toMatch(/experimentalOmrPlayback[\s\S]*session\.isWaitForYou[\s\S]*!scoreFollow\.canFollow/)
+    expect(provider).toMatch(/session\.setPracticeMode\(PRACTICE_MODE\.NORMAL\)/)
+    expect(controls).toMatch(/scoreFollow\?\.experimentalOmrPlayback[\s\S]*!scoreFollow\?\.canFollow/)
+    expect(modeSection).toMatch(/mode === PRACTICE_MODE\.WAIT_FOR_YOU && waitForYouDisabled/)
   })
 })

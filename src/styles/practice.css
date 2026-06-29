@@ -188,15 +188,13 @@
 .score-follow-setup-status {
   position: static;
   margin: 0 0 10px;
-  padding: 6px 12px;
+  padding: 5px 10px;
   border-radius: var(--sf-radius-pill);
   font-size: var(--sf-font-sidebar-min);
   line-height: 1.35;
-  color: var(--sf-text-body);
-  background: rgba(18, 18, 18, 0.88);
-  border: 1px solid var(--sf-border-strong);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  color: var(--sf-text-secondary);
+  background: rgba(18, 18, 18, 0.72);
+  border: 1px solid var(--sf-border);
   box-shadow: none;
   pointer-events: none;
   display: inline-flex;
@@ -279,12 +277,12 @@
 .practice-env-notices__item {
   margin: 0;
   padding: 10px 12px;
-  border-radius: 8px;
-  font-size: 0.78rem;
+  border-radius: var(--sf-radius-md);
+  font-size: var(--sf-font-small);
   line-height: 1.45;
-  color: #b8c8e6;
-  background: rgba(20, 32, 56, 0.55);
-  border: 1px solid #2d4268;
+  color: var(--sf-text-secondary);
+  background: var(--sf-bg-panel-inset);
+  border: 1px solid var(--sf-border);
 }
 
 .practice-env-notices__item kbd {
@@ -302,10 +300,10 @@
 }
 
 .score-follow-setup-status__spinner {
-  width: 12px;
-  height: 12px;
-  border: 2px solid rgba(56, 189, 248, 0.35);
-  border-top-color: #38bdf8;
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--sf-border-strong);
+  border-top-color: var(--sf-text-muted);
   border-radius: 50%;
   animation: score-follow-setup-spin 0.8s linear infinite;
   flex-shrink: 0;
@@ -338,11 +336,9 @@
   flex-direction: column;
   gap: 8px;
   padding: 12px 14px;
-  background: #152238;
-  border: 1px solid #243552;
-  border-radius: 12px;
-  /* In a constrained sidebar, allow this flex child to shrink so long, unbroken
-     filenames truncate (ellipsis) instead of forcing the panel wider. */
+  background: var(--sf-bg-panel-inset);
+  border: 1px solid var(--sf-border);
+  border-radius: var(--sf-radius-md);
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
@@ -433,66 +429,12 @@
 
 .practice-status__hint {
   display: block;
-  font-size: 0.65rem;
-  color: #6b82a8;
+  font-size: var(--sf-font-sidebar-min);
+  color: var(--sf-text-muted);
   margin-bottom: 2px;
 }
 
-@media (max-width: 960px) {
-  .practice-workspace__layout {
-    flex-direction: column;
-    overflow-y: auto;
-  }
-
-  .practice-workspace__score {
-    flex: 1 1 auto;
-    min-height: min(58vh, 640px);
-    overflow-y: auto;
-  }
-
-  .practice-control-panel {
-    position: sticky;
-    top: 0;
-    flex: 0 0 auto;
-    width: 100%;
-    max-width: none;
-    height: auto;
-    max-height: min(52vh, 520px);
-    border-left: none;
-    border-top: 1px solid #243552;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .practice-control-panel__footer {
-    position: sticky;
-    bottom: 0;
-    z-index: 2;
-    margin-top: auto;
-    padding-top: 8px;
-    background: linear-gradient(
-      to bottom,
-      transparent 0,
-      #101c30 10px,
-      #101c30 100%
-    );
-  }
-
-  .practice-control-panel__footer .practice-section__toggle {
-    position: relative;
-    z-index: 1;
-  }
-
-  .practice-loop__actions {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .practice-loop__btn {
-    width: 100%;
-    min-width: 0;
-    padding: 0 8px;
-  }
-}
+/* Legacy practice layout only — workspace tablet rules live at max-width: 1100px below. */
 
 /* —— Legacy practice view (library-only diagnostics layout) —— */
 
@@ -635,7 +577,7 @@
 }
 
 .practice-section__status--loading {
-  color: #9fb3d9;
+  color: var(--sf-text-muted);
   animation: practice-status-pulse 1.4s ease-in-out infinite;
 }
 
@@ -885,6 +827,83 @@
 
 .wait-for-you__status--no-checkpoints {
   color: #f0b8b8;
+}
+
+.wait-for-you__status--missed {
+  color: #f0b0b0;
+}
+
+.wait-for-you__status--correct {
+  color: #b8e6c8;
+}
+
+.wait-for-you__status--continuing {
+  color: #c8d8f0;
+}
+
+.wait-for-you__badge--continuing {
+  color: #d8e4ff;
+  background: rgba(120, 150, 200, 0.18);
+  border-color: rgba(120, 150, 200, 0.4);
+  animation: none;
+}
+
+.practice-stats-card {
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.practice-stats-card--compact {
+  margin-bottom: 0.65rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.practice-stats-card__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+}
+
+.practice-stats-card__title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #9aa8bc;
+}
+
+.practice-stats-card__hint {
+  font-size: 0.68rem;
+  color: #6b7a90;
+}
+
+.practice-stats-card__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 0.75rem;
+}
+
+.practice-stats-card__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.practice-stats-card__label {
+  font-size: 0.72rem;
+  color: #7d8da3;
+}
+
+.practice-stats-card__value {
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: #e4eaf2;
 }
 
 .wait-for-you__progress {
@@ -3346,49 +3365,12 @@
 }
 
 @media (max-width: 960px) {
-  .practice-shortcuts-hint__keys {
-    display: none;
-  }
-
-  .practice-shortcuts-hint__touch {
-    display: block;
-  }
-
-  .practice-control-panel {
-    padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
-  }
-
-  .practice-fullscreen-hud {
-    bottom: max(48px, env(safe-area-inset-bottom, 0px) + 40px);
-    padding: var(--sf-space-md) var(--sf-space-lg);
-    padding-left: max(var(--sf-space-lg), env(safe-area-inset-left, 0px));
-    padding-right: max(var(--sf-space-lg), env(safe-area-inset-right, 0px));
-    gap: var(--sf-space-md);
-  }
-
-  .practice-fullscreen-hud__hint {
-    font-size: 0.6875rem;
-  }
-
-  .practice-section__toggle {
-    min-height: 48px;
-  }
-
-  .practice-mode__option {
-    min-height: 44px;
-    padding: 8px 0;
-  }
-
-  .score-follow-controls__row input[type='checkbox'] {
-    width: 18px;
-    height: 18px;
-  }
-
-  .score-follow-controls__delete {
-    width: 36px;
-    height: 36px;
+  .practice-layout {
+    grid-template-columns: 1fr;
   }
 }
+
+/* Touch + safe-area helpers merged into max-width: 1100px workspace block above. */
 
 /* —— Dev-only smoke test UI —— */
 
@@ -3959,6 +3941,19 @@
   line-height: 1.3;
 }
 
+.wait-for-you__note-target-chip {
+  display: inline-block;
+  margin-right: 4px;
+  padding: 1px 6px;
+  border-radius: var(--sf-radius-pill);
+  background: rgba(255, 180, 80, 0.18);
+  color: #c98a2e;
+  font-weight: 600;
+  font-size: 0.625rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
 .wait-for-you__progress-block {
   gap: 4px;
   margin: 0;
@@ -4081,8 +4076,10 @@
     width: 100%;
     max-width: none;
     min-height: 0;
-    max-height: 46vh;
+    max-height: min(50vh, 520px);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
     border-top: 1px solid var(--sf-border);
     border-left: 0;
   }
@@ -4098,10 +4095,72 @@
   }
 
   .practice-control-panel__footer {
-    position: static;
-    margin: 0;
-    padding: 0;
-    background: none;
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    margin-top: auto;
+    padding-top: 8px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0,
+      var(--sf-bg-app) 12px,
+      var(--sf-bg-app) 100%
+    );
+  }
+
+  .practice-control-panel__footer .practice-section__toggle {
+    position: relative;
+    z-index: 1;
+  }
+
+  .practice-loop__actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .practice-loop__btn {
+    width: 100%;
+    min-width: 0;
+    padding: 0 8px;
+  }
+
+  .practice-shortcuts-hint__keys {
+    display: none;
+  }
+
+  .practice-shortcuts-hint__touch {
+    display: block;
+  }
+
+  .practice-fullscreen-hud {
+    bottom: max(48px, env(safe-area-inset-bottom, 0px) + 40px);
+    padding: var(--sf-space-md) var(--sf-space-lg);
+    padding-left: max(var(--sf-space-lg), env(safe-area-inset-left, 0px));
+    padding-right: max(var(--sf-space-lg), env(safe-area-inset-right, 0px));
+    gap: var(--sf-space-md);
+  }
+
+  .practice-fullscreen-hud__hint {
+    font-size: 0.6875rem;
+  }
+
+  .practice-section__toggle {
+    min-height: 48px;
+  }
+
+  .practice-mode__option {
+    min-height: 44px;
+    padding: 8px 0;
+  }
+
+  .score-follow-controls__row input[type='checkbox'] {
+    width: 18px;
+    height: 18px;
+  }
+
+  .score-follow-controls__delete {
+    width: 36px;
+    height: 36px;
   }
 }
 
@@ -4125,8 +4184,8 @@
   }
 
   .practice-mode__option {
-    min-height: 38px;
-    padding: 7px 5px;
+    min-height: 44px;
+    padding: 8px 5px;
   }
 
   .wait-for-you__actions {
@@ -4314,10 +4373,21 @@
 }
 
 .practice-control-panel .practice-section--collapsible .practice-section__title {
-  font-size: var(--sf-font-caption);
-  font-weight: 600;
-  color: var(--sf-text-secondary);
-  letter-spacing: 0.08em;
+  font-family: var(--sf-font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--sf-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.practice-control-panel .practice-section--collapsible .practice-section__summary {
+  font-family: var(--sf-font-mono);
+  font-size: var(--sf-font-micro);
+  font-weight: 400;
+  color: var(--sf-text-muted);
+  letter-spacing: 0.06em;
+  opacity: var(--sf-text-micro-opacity);
 }
 
 .practice-control-panel .practice-playback-settings__label {

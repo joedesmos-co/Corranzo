@@ -25,6 +25,8 @@ export function createEmptyStats() {
     manualSessionsCompleted: 0,
     legacyAutoPracticeSeconds: 0,
     legacyAutoSessionsCompleted: 0,
+    autoPracticeSeconds: 0,
+    lastAutoPracticedAt: null,
     lastPracticedAt: null,
     pieces: {},
     recentSessions: [],
@@ -136,6 +138,16 @@ function normalizePieces(rawPieces) {
         value.totalPracticeSeconds ?? value.totalSeconds,
       ),
       totalSessions: nonNegativeNumber(value.totalSessions ?? value.sessionCount),
+      autoPracticeSeconds: nonNegativeNumber(value.autoPracticeSeconds),
+      measuresPlayed: nonNegativeNumber(value.measuresPlayed),
+      loopsCompleted: nonNegativeNumber(value.loopsCompleted),
+      lastTempoBpm:
+        Number.isFinite(Number(value.lastTempoBpm)) && Number(value.lastTempoBpm) > 0
+          ? Math.round(Number(value.lastTempoBpm))
+          : null,
+      wfyCorrect: nonNegativeNumber(value.wfyCorrect),
+      wfyMissed: nonNegativeNumber(value.wfyMissed),
+      wfySkipped: nonNegativeNumber(value.wfySkipped),
       lastPracticedAt: normalizeTimestamp(value.lastPracticedAt),
     }
   }
@@ -171,6 +183,8 @@ export function normalizeStats(raw) {
     manualSessionsCompleted: manualSessions.length,
     legacyAutoPracticeSeconds,
     legacyAutoSessionsCompleted: legacyAutoSessions.length,
+    autoPracticeSeconds: nonNegativeNumber(raw.autoPracticeSeconds),
+    lastAutoPracticedAt: normalizeTimestamp(raw.lastAutoPracticedAt),
     lastPracticedAt:
       manualSessions[0]?.endedAt ?? normalizeTimestamp(raw.lastPracticedAt),
     pieces: normalizePieces(raw.pieces),

@@ -75,6 +75,54 @@ describe('PDF page navigation responsiveness', () => {
   })
 })
 
+describe('phase 3 mobile and build polish', () => {
+  const appCss = readFileSync(join(root, 'src', 'App.css'), 'utf8')
+  const practiceCss = readFileSync(join(root, 'src', 'styles', 'practice.css'), 'utf8')
+  const viteConfig = readFileSync(join(root, 'vite.config.js'), 'utf8')
+  const collapsible = readSrc('components', 'practice', 'PracticeCollapsibleSection.jsx')
+  const tabletNotice = readSrc('components', 'practice', 'PracticeEnvironmentNotices.jsx')
+  const controlPanel = readSrc('components', 'practice', 'PracticeControlPanel.jsx')
+
+  it('uses larger toolbar touch targets on tablet widths', () => {
+    expect(appCss).toMatch(/@media \(max-width: 1100px\)[\s\S]*\.tb-icon[\s\S]*40px/)
+  })
+
+  it('reserves enough stage padding for the practice toolbar', () => {
+    expect(appCss).toMatch(/pdf-viewer-section--practice \.pdf-viewer-stage[\s\S]*padding-top: 52px/)
+  })
+
+  it('consolidates tablet workspace rules at 1100px with sticky footer', () => {
+    expect(practiceCss).toMatch(/@media \(max-width: 1100px\)[\s\S]*practice-control-panel__footer[\s\S]*sticky/)
+    expect(practiceCss).not.toMatch(
+      /practice-control-panel[\s\S]{0,120}border-top: 1px solid #243552/,
+    )
+  })
+
+  it('uses editorial labels on collapsible sidebar sections', () => {
+    expect(collapsible).toMatch(/practice-section__title--editorial/)
+  })
+
+  it('uses touch-friendly tablet fullscreen copy', () => {
+    expect(tabletNotice).toMatch(/fullscreen button in the toolbar/)
+    expect(tabletNotice).not.toMatch(/<kbd>F<\/kbd>/)
+  })
+
+  it('reads practice session from context in the control panel', () => {
+    expect(controlPanel).toMatch(/usePracticeSessionContext/)
+    expect(controlPanel).not.toMatch(/session,\s*\n\s*scoreFollow/)
+  })
+
+  it('splits heavy vendors in vite build config', () => {
+    expect(viteConfig).toMatch(/manualChunks/)
+    expect(viteConfig).toMatch(/pdf-vendor/)
+    expect(viteConfig).toMatch(/audio-vendor/)
+  })
+
+  it('lazy-loads the profile view', () => {
+    expect(readSrc('App.jsx')).toMatch(/lazy\(\(\) => import\('\.\/components\/profile\/ProfileView\.jsx'\)\)/)
+  })
+})
+
 describe('demo card persistence', () => {
   const app = readSrc('App.jsx')
   const storage = readSrc('features', 'session', 'practicePrefsStorage.js')

@@ -24,6 +24,10 @@ import { WFY_CHECKPOINT_MODE } from './waitForYouCheckpointMode.js'
 import useWaitForYouMatchSettings from './useWaitForYouMatchSettings.js'
 import useWaitForYouReferencePlayback from './useWaitForYouReferencePlayback.js'
 import useWaitForYouGuidance from './useWaitForYouGuidance.js'
+import {
+  resolveWfyDisplayStatus,
+  labelForWfyDisplayStatus,
+} from './waitForYouDisplayStatus.js'
 import useImportReadiness from '../import/useImportReadiness.js'
 import { savePracticePrefs, loadPracticePrefs } from '../session/practicePrefsStorage.js'
 
@@ -38,7 +42,8 @@ export default function usePracticeSession({
   practiceActive = true,
   initialPracticePrefs = null,
   isDemoPiece = false,
-  onRecordManualContinue = null,
+  onRecordWfyEvent = null,
+  onWfyCheckpointCompleted = null,
 }) {
   const prefs = initialPracticePrefs ?? loadPracticePrefs() ?? {}
 
@@ -179,6 +184,7 @@ export default function usePracticeSession({
     seekToPracticeTime,
     onEnsurePaused: ensurePaused,
     practiceTime: clock.practiceTime,
+    onCheckpointCompleted: onWfyCheckpointCompleted,
   })
 
   const micCaptureActive =
@@ -194,20 +200,34 @@ export default function usePracticeSession({
   })
 
   const waitForYouMidi = useWaitForYouMidiInput({
-    active: isWaitForYou && wfyInputSource === WFY_INPUT_SOURCE.MIDI,
+    active:
+      isWaitForYou &&
+      wfyInputSource === WFY_INPUT_SOURCE.MIDI &&
+      !waitForYou.displayPhase,
     checkpointMode,
     currentCheckpoint: waitForYou.currentCheckpoint,
     matchSettings: matchSettingsState.settings,
-    onPlayerInputMatched: waitForYou.onPlayerInputMatched,
+    onPlayerInputMatched: () => {
+      onRecordWfyEvent?.('correct')
+      waitForYou.onPlayerInputMatched()
+    },
+    onWrongNote: () => onRecordWfyEvent?.('missed'),
     webMidi,
   })
 
   const waitForYouMic = useWaitForYouMicInput({
-    active: practiceActive && wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE,
+    active:
+      practiceActive &&
+      wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+      !waitForYou.displayPhase,
     checkpointMode,
     currentCheckpoint: waitForYou.currentCheckpoint,
     matchSettings: matchSettingsState.settings,
-    onPlayerInputMatched: waitForYou.onPlayerInputMatched,
+    onPlayerInputMatched: () => {
+      onRecordWfyEvent?.('correct')
+      waitForYou.onPlayerInputMatched()
+    },
+    onWrongNote: () => onRecordWfyEvent?.('missed'),
     microphone,
   })
 
@@ -398,19 +418,36 @@ export default function usePracticeSession({
 
   const waitForYouForUi = useMemo(() => {
     const markCorrectFromUser = () => {
-      onRecordManualContinue?.()
+      onRecordWfyEvent?.('manual-continue')
       waitForYou.markCorrectAndContinue()
     }
+    const skipCheckpoint = () => {
+      onRecordWfyEvent?.('skipped')
+      waitForYou.markCorrectAndContinue()
+    }
+    const displayStatus = resolveWfyDisplayStatus({
+      active: waitForYou.active,
+      engineStatus: waitForYou.status,
+      displayPhase: waitForYou.displayPhase,
+      inputFeedback: waitForYouInput.inputFeedback,
+      guidance: waitForYouGuidance.guidance,
+    })
     return {
       ...waitForYou,
+      displayStatus,
+      displayLabel: labelForWfyDisplayStatus(displayStatus),
       markCorrectAndContinue: markCorrectFromUser,
-      // Skip the current target (counts as a manual advance, not a played note).
-      skipCheckpoint: waitForYou.markCorrectAndContinue,
+      skipCheckpoint,
       guidance: waitForYouGuidance.guidance,
       wrongAttempts: waitForYouGuidance.wrongAttempts,
       showHint: waitForYouGuidance.requestHint,
     }
-  }, [waitForYou, onRecordManualContinue, waitForYouGuidance])
+  }, [
+    waitForYou,
+    waitForYouInput.inputFeedback,
+    waitForYouGuidance,
+    onRecordWfyEvent,
+  ])
 
   return {
     practicePrefsSnapshot,
@@ -429,7 +466,7 @@ export default function usePracticeSession({
       playDisabled: !hasMusicXml || playback.isLoading || isWaitForYou,
       seekDisabled: !hasMusicXml || isWaitForYou,
       transportHint: isWaitForYou
-        ? 'Paused in Wait For You — press Enter or tap “I’m ready” to continue.'
+        ? 'Paused in Wait For You — play the target note or press Enter to continue.'
         : null,
     },
     clock,

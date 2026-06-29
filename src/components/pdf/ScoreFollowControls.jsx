@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CURSOR_HIDE_REASON, getCursorFollowHint } from '../../features/score-follow/scoreFollowVisibility.js'
+import { isAutomaticAnchorSource } from '../../features/score-follow/anchorUtils.js'
 
 function formatDebugNumber(value) {
   return Number.isFinite(value) ? value.toFixed(4) : '—'
@@ -12,6 +13,17 @@ function formatMeasureBox(box) {
   return `x ${formatDebugNumber(box.x0)}-${formatDebugNumber(box.x1)} · y ${formatDebugNumber(box.y0)}-${formatDebugNumber(box.y1)}${box.source ? ` · ${box.source}` : ''}`
 }
 
+function anchorSourceLabel(anchor) {
+  return isAutomaticAnchorSource(anchor?.source) ? 'auto' : 'manual'
+}
+
+function formatOmrMeasureBox(box) {
+  if (!box) {
+    return '—'
+  }
+  return `M${box.measureNumber ?? '—'} · p${box.pageNumber ?? '—'} · s${box.systemIndex ?? '—'} · x ${formatDebugNumber(box.xStart)}-${formatDebugNumber(box.xEnd)} · cursor ${formatDebugNumber(box.cursorX)} (${formatDebugNumber(box.cursorXWithinBox)})`
+}
+
 function getSetupStatus({
   alignmentMode,
   anchors,
@@ -22,15 +34,30 @@ function getSetupStatus({
   followNeedsSetup,
   hasPdf,
   hasTiming,
+  experimentalOmrPlayback = false,
+  setupMessage = '',
 }) {
   if (setupPhase === 'running') {
-    return { tone: 'active', title: 'Scanning PDF…', detail: null }
+    return {
+      tone: 'active',
+      title: experimentalOmrPlayback
+        ? setupMessage || 'Setting up score-follow…'
+        : 'Scanning PDF…',
+      detail: null,
+    }
   }
   if (alignmentMode) {
     return {
       tone: 'active',
       title: `Mark measure ${markingProgress?.nextMeasure ?? '—'}`,
       detail: 'Tap where it begins on the score.',
+    }
+  }
+  if (experimentalOmrPlayback && (setupPhase === 'failed' || !canFollow)) {
+    return {
+      tone: setupPhase === 'failed' ? 'setup' : 'ready',
+      title: setupMessage || 'Experimental playback ready',
+      detail: 'Experimental PDF playback may be inaccurate. For accurate playback, upload MusicXML/MXL.',
     }
   }
   if (setupPhase === 'needs-setup' || setupPhase === 'failed') {
@@ -84,12 +111,14 @@ export default function ScoreFollowControls({
   canFollow,
   debug,
   onRetryAutoSetup,
+  onCancelAutoSetup,
   onResetSemiAutoSetup,
   setupStatus,
   semiAutoSetup,
   isSemiAutoAnalyzing,
   anchorCounts,
   followNeedsSetup = false,
+  experimentalOmrPlayback = false,
   embedded = false,
   // System-start fallback mode
   systemStartMode = false,
@@ -143,6 +172,8 @@ export default function ScoreFollowControls({
     followNeedsSetup,
     hasPdf,
     hasTiming,
+    experimentalOmrPlayback,
+    setupMessage: setupStatus?.message,
   })
 
   const hasAutoAnchors = (anchorCounts?.auto ?? 0) > 0
@@ -150,6 +181,11 @@ export default function ScoreFollowControls({
   // time the manual "Mark system starts" rescue path is surfaced up front.
   const autoFailed =
     semiAutoSetup?.status === 'failed' || setupStatus?.phase === 'failed'
+  const omrScoreFollowUnavailable =
+    experimentalOmrPlayback &&
+    !alignmentMode &&
+    !isSemiAutoAnalyzing &&
+    !canFollow
 
   function handleStartMarking() {
     onAlignmentModeChange(true)
@@ -299,6 +335,37 @@ export default function ScoreFollowControls({
             />
           </label>
         </div>
+      ) : isSemiAutoAnalyzing ? (
+        <div className="score-follow-controls__auto-failed" role="status">
+          <p className="score-follow-controls__auto-error">
+            {semiAutoSetup?.message || setupStatus?.message || 'Scanning PDF…'}
+          </p>
+          <button
+            type="button"
+            className="score-follow-controls__auto-btn score-follow-controls__auto-btn--secondary"
+            onClick={onCancelAutoSetup}
+            disabled={!onCancelAutoSetup}
+          >
+            Cancel setup
+          </button>
+        </div>
+      ) : omrScoreFollowUnavailable ? (
+        <div className="score-follow-controls__auto-failed" role="group">
+          <p className="score-follow-controls__auto-error">
+            {setupStatus?.message || 'Experimental playback ready'}
+          </p>
+          <p className="score-follow-controls__status score-follow-controls__status--hint">
+            Experimental PDF playback may be inaccurate. For accurate playback, upload MusicXML/MXL.
+          </p>
+          <button
+            type="button"
+            className="score-follow-controls__auto-btn score-follow-controls__auto-btn--secondary"
+            onClick={onRetryAutoSetup}
+            disabled={!onRetryAutoSetup || isSemiAutoAnalyzing}
+          >
+            {autoFailed ? 'Retry score-follow setup' : 'Try score-follow setup'}
+          </button>
+        </div>
       ) : autoFailed ? (
         /* Last-resort fallback — only shown when auto setup genuinely failed. */
         <div className="score-follow-controls__auto-failed" role="group">
@@ -419,17 +486,17 @@ export default function ScoreFollowControls({
             )
           </summary>
           <ul className="score-follow-controls__list">
-            {anchors.map((anchor) => (
-              <li key={anchor.id} className="score-follow-controls__item">
+            {anchors.map((anchor) => {
+              const sourceLabel = anchorSourceLabel(anchor)
+              return (
+                <li key={anchor.id} className="score-follow-controls__item">
                 <span>
                   Measure {anchor.measureNumber}
                   <span className="score-follow-controls__item-meta"> · page {anchor.page}</span>
                   <span
-                    className={`score-follow-controls__source-badge score-follow-controls__source-badge--${
-                      anchor.source === 'auto' ? 'auto' : 'manual'
-                    }`}
+                    className={`score-follow-controls__source-badge score-follow-controls__source-badge--${sourceLabel}`}
                   >
-                    {anchor.source === 'auto' ? 'auto' : 'manual'}
+                    {sourceLabel}
                   </span>
                 </span>
                 <button
@@ -441,7 +508,8 @@ export default function ScoreFollowControls({
                   ×
                 </button>
               </li>
-            ))}
+              )
+            })}
           </ul>
         </details>
       )}
@@ -592,6 +660,12 @@ export default function ScoreFollowControls({
             <dt>Measure box</dt>
             <dd>{formatMeasureBox(debug?.cursorMapping?.measureBoundingBox)}</dd>
           </div>
+          {debug?.cursorMapping?.matchedOmrMeasureBox && (
+            <div className="score-follow-controls__debug-wide">
+              <dt>OMR box</dt>
+              <dd>{formatOmrMeasureBox(debug.cursorMapping.matchedOmrMeasureBox)}</dd>
+            </div>
+          )}
           <div className="score-follow-controls__debug-wide">
             <dt>Interpolation source</dt>
             <dd>{debug?.cursorMapping?.interpolationSource ?? '—'}</dd>

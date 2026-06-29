@@ -1,0 +1,320 @@
+
+> scoreflow-v2@0.0.0 omr:evaluate
+> node scripts/evaluate-omr-accuracy.mjs --pdf public/fixtures/hungarian-dance-no5/hungarian-dance-no5.pdf --truth public/fixtures/hungarian-dance-no5/hungarian-dance-no5.mxl --json tmp/omr-engine-after-hungarian-dance.json --text tmp/omr-engine-after-hungarian-dance.txt --save-generated tmp/omr-engine-after-hungarian-dance.musicxml
+
+Running experimental OMR: public/fixtures/hungarian-dance-no5/hungarian-dance-no5.pdf
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url' }
+[omr-trace] pipeline:pdf-load-success { totalPages: 4 }
+[omr-trace] pipeline:page-1:loop-start
+[omr] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-1:owned-render-copy {
+  label: 'pipeline:page-1:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:skipped-owned-copy {
+  label: 'preprocess:skipped-owned-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+[omr] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 1 }
+[omr] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { notes: 765, systems: 5 }
+[omr] pipeline:page-1:after-analyze { notes: 765, systems: 5 }
+[omr-trace] pipeline:page-2:loop-start
+[omr] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-2:owned-render-copy {
+  label: 'pipeline:page-2:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { page: 2 }
+[omr] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { notes: 780, systems: 5 }
+[omr] pipeline:page-2:after-analyze { notes: 780, systems: 5 }
+[omr-trace] pipeline:page-3:loop-start
+[omr] pipeline:page-3:after-pdf-render {
+  label: 'pipeline:page-3:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-3:owned-render-copy {
+  label: 'pipeline:page-3:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-3:after-preprocess {
+  label: 'pipeline:page-3:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-3:before-analyze {
+  label: 'pipeline:page-3:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { page: 3 }
+[omr] processOmrPage:done:page-3 {
+  label: 'processOmrPage:done:page-3',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { notes: 916, systems: 5 }
+[omr] pipeline:page-3:after-analyze { notes: 916, systems: 5 }
+[omr-trace] pipeline:page-4:loop-start
+[omr] pipeline:page-4:after-pdf-render {
+  label: 'pipeline:page-4:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-4:owned-render-copy {
+  label: 'pipeline:page-4:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:skipped-owned-copy {
+  label: 'preprocess:skipped-owned-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-4:after-preprocess {
+  label: 'pipeline:page-4:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+[omr] pipeline:page-4:before-analyze {
+  label: 'pipeline:page-4:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 4 }
+[omr] processOmrPage:done:page-4 {
+  label: 'processOmrPage:done:page-4',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { notes: 286, systems: 6 }
+[omr] pipeline:page-4:after-analyze { notes: 286, systems: 6 }
+PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.
+
+OMR accuracy evaluator
+
+Required:
+  --truth <score.musicxml|score.xml|score.mxl>
+  one of:
+    --pdf <score.pdf>          Run OMR first, then compare.
+    --generated <omr.musicxml> Compare an existing generated file.
+
+Optional:
+  --json <report.json>         Write machine-readable report.
+  --text <report.txt>          Write text summary.
+  --save-generated <out.xml>   Save generated OMR MusicXML when --pdf is used.
+  --max-pages <n>              Limit PDF pages for OMR, default 24.
+  --no-preprocess             Disable OMR preprocessing for A/B debugging.

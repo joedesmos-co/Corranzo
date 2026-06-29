@@ -1,4 +1,5 @@
 export const AUTO_SETUP_SCAN_TIMEOUT_MS = 120_000
+export const OMR_AUTO_SETUP_TIMEOUT_MS = 12_000
 
 /**
  * True when restored or applied anchors are enough to follow without scanning.

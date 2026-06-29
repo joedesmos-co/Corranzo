@@ -91,7 +91,8 @@ export const PIANO_SAMPLE_URLS = {
 const DEFAULT_SAMPLE_LOAD_TIMEOUT_MS = 15000
 const SAMPLED_VOLUME_DB = -11
 const SYNTH_VOLUME_DB = -14
-const SAMPLED_RELEASE = 1.15
+const SAMPLED_RELEASE = 1.65
+const RELEASE_FADE_SECONDS = 0.04
 
 /**
  * Optional self-hosting override. Set VITE_PIANO_SAMPLE_BASE_URL to serve the
@@ -172,7 +173,7 @@ function buildSamplerFromBuffers({ tone, buffers, urls, volume, release }) {
   return new tone.Sampler({
     urls: bufferUrls,
     release: release ?? SAMPLED_RELEASE,
-    attack: 0.002,
+    attack: 0.006,
     curve: 'exponential',
     volume: volume ?? SAMPLED_VOLUME_DB,
   })
@@ -233,8 +234,8 @@ export function createCachedSamplerSync({ tone, baseUrl, urls, volume, release }
  * playback — no regression when samples are unavailable.
  */
 function createSynthVoice(tone, { volume = SYNTH_VOLUME_DB } = {}) {
-  const filter = new tone.Filter({ type: 'lowpass', frequency: 3800, rolloff: -12 })
-  const chorus = new tone.Chorus({ frequency: 0.5, delayTime: 3.5, depth: 0.12, wet: 0.08 })
+  const filter = new tone.Filter({ type: 'lowpass', frequency: 2900, rolloff: -24 })
+  const chorus = new tone.Chorus({ frequency: 0.45, delayTime: 3.2, depth: 0.1, wet: 0.06 })
   let chorusStarted = false
   const ensureChorusRunning = () => {
     if (!chorusStarted) {
@@ -243,13 +244,18 @@ function createSynthVoice(tone, { volume = SYNTH_VOLUME_DB } = {}) {
     }
   }
 
-  // High polyphony so dense two-hand chords + sustained/overlapping notes are
-  // never voice-stolen on the synth fallback.
-  const synth = new tone.PolySynth({ voice: tone.Synth, maxPolyphony: 72 })
+  // AMSynth-style envelope: warmer than a bare triangle oscillator, less beep-like.
+  const SynthVoice = tone.AMSynth ?? tone.Synth
+  const synth = new tone.PolySynth({ voice: SynthVoice, maxPolyphony: 72 })
   synth.set?.({
     volume,
-    oscillator: { type: 'triangle8' },
-    envelope: { attack: 0.006, decay: 2.2, sustain: 0.0, release: 0.55 },
+    harmonicity: tone.AMSynth ? 2.4 : undefined,
+    oscillator: { type: tone.AMSynth ? 'sine' : 'triangle8' },
+    envelope: { attack: 0.01, decay: 1.6, sustain: 0.12, release: 0.85 },
+    modulation: tone.AMSynth ? { type: 'triangle' } : undefined,
+    modulationEnvelope: tone.AMSynth
+      ? { attack: 0.002, decay: 0.18, sustain: 0, release: 0.06 }
+      : undefined,
   })
 
   synth.connect(filter)
@@ -474,8 +480,17 @@ export function createPianoInstrument(options = {}) {
     },
     releaseAll(time) {
       resetVoiceMix(voiceMix)
-      synthVoice.releaseAll(time)
-      sampler?.releaseAll?.(time)
+      const now = typeof time === 'number' ? time : tone.now()
+      try {
+        masterTrim.gain.cancelScheduledValues(now)
+        masterTrim.gain.setValueAtTime(masterTrim.gain.value, now)
+        masterTrim.gain.linearRampToValueAtTime(0.001, now + RELEASE_FADE_SECONDS)
+        masterTrim.gain.linearRampToValueAtTime(0.88, now + RELEASE_FADE_SECONDS + 0.06)
+      } catch {
+        // Non-fatal — release the voices even if the fade cannot be scheduled.
+      }
+      synthVoice.releaseAll(now)
+      sampler?.releaseAll?.(now)
     },
     getVoiceDiagnostics() {
       return getVoiceMixDiagnostics(voiceMix)

@@ -104,12 +104,15 @@ export default function useSessionPersistence({
         activeView: loaded.meta.activeView ?? 'library',
         pageNumber: loaded.meta.pageNumber ?? 1,
         practicePrefs: loaded.meta.practicePrefs ?? null,
+        issues: result.issues ?? [],
       })
 
       if (result.partial) {
         setRestoreStatus(RESTORE_STATUS.PARTIAL)
         setRestoreMessage(
-          'Restored your score with some files missing — re-upload anything that looks wrong.',
+          result.issues?.includes('stale-omr-session')
+            ? 'Restored your PDF, but experimental playback was invalid — regenerate from PDF in Library.'
+            : 'Restored your score with some files missing — re-upload anything that looks wrong.',
         )
       } else {
         setRestoreStatus(RESTORE_STATUS.RESTORED)
@@ -173,9 +176,9 @@ export default function useSessionPersistence({
 
       try {
         await saveSessionFiles({
-          pdf: { data: pdfBuffer },
-          midi: midiSource,
-          musicXml: musicXmlSource,
+          pdf: { data: pdfBuffer.slice(0) },
+          midi: midiSource?.data ? { data: midiSource.data.slice(0) } : null,
+          musicXml: musicXmlSource?.data ? { data: musicXmlSource.data.slice(0) } : null,
         })
       } catch {
         // Private browsing / quota — metadata still helps user know what they had

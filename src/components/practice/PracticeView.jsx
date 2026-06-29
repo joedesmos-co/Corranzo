@@ -114,8 +114,6 @@ export default function PracticeView({
           <PracticeControlPanel
             pdfFileName={fileName || null}
             pdfPageNumber={pageNumber}
-            session={session}
-            scoreFollow={scoreFollow}
             waitForYouNoteTarget={waitForYouNoteTarget}
           />
         </PracticeWorkspaceLayout>

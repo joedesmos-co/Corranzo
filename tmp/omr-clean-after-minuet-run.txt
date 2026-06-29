@@ -1,0 +1,98 @@
+
+> scoreflow-v2@0.0.0 omr:evaluate
+> node scripts/evaluate-omr-accuracy.mjs --pdf public/fixtures/demo-minuet-in-g.pdf --truth public/fixtures/demo-minuet-in-g.musicxml --json tmp/omr-clean-after-minuet.json --text tmp/omr-clean-after-minuet.txt --save-generated tmp/omr-clean-after-minuet.musicxml
+
+Running experimental OMR: public/fixtures/demo-minuet-in-g.pdf
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url' }
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+[omr-trace] pipeline:page-1:loop-start
+[omr] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-1:owned-render-copy {
+  label: 'pipeline:page-1:owned-render-copy',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:skipped-owned-copy {
+  label: 'preprocess:skipped-owned-copy',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+[omr] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { page: 1 }
+[omr] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 656, systems: 6 }
+[omr] pipeline:page-1:after-analyze { notes: 656, systems: 6 }
+PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.
+
+OMR accuracy evaluator
+
+Required:
+  --truth <score.musicxml|score.xml|score.mxl>
+  one of:
+    --pdf <score.pdf>          Run OMR first, then compare.
+    --generated <omr.musicxml> Compare an existing generated file.
+
+Optional:
+  --json <report.json>         Write machine-readable report.
+  --text <report.txt>          Write text summary.
+  --save-generated <out.xml>   Save generated OMR MusicXML when --pdf is used.
+  --max-pages <n>              Limit PDF pages for OMR, default 24.
+  --no-preprocess             Disable OMR preprocessing for A/B debugging.

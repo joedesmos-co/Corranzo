@@ -1,4 +1,5 @@
 import { getViewFromPathname, isLegalPathname } from '../legal/legalRoutes.js'
+import { normalizeAppView } from '../navigation/appViewDebug.js'
 
 /** Session restore must not run while the user is on a legal/compliance page. */
 export function shouldDeferSessionRestore(pathname) {
@@ -16,5 +17,5 @@ export function resolveRestoredActiveView({ pathname, savedActiveView, hasMusicX
   if (!hasMusicXml) {
     return 'library'
   }
-  return savedActiveView ?? 'library'
+  return normalizeAppView(savedActiveView ?? 'library')
 }

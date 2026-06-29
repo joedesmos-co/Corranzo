@@ -1,0 +1,7452 @@
+{
+  "version": 1,
+  "summary": {
+    "generatedTitle": "gymnopedie-no-1-satie",
+    "groundTruthTitle": "Gymnopédie No. 1",
+    "primaryErrorSource": {
+      "source": "mixed",
+      "label": "Mixed errors",
+      "confidence": 0.898,
+      "scores": {
+        "staff-detection": 0,
+        "measure-allocation": 0.4328,
+        "notehead-detection": 0.7482,
+        "pitch-mapping": 0.848,
+        "rhythm-inference": 0.8976,
+        "chord-grouping": 0.553
+      },
+      "evidence": [
+        "pitch=5%",
+        "duration=9%",
+        "onset=36%",
+        "time=0%",
+        "noteDetectionF1=56%",
+        "measureCountAccuracy=99%",
+        "firstBreak=m1 (missing/extra=5, wrongPitch=1, timing=1, chord=5)",
+        "noteCountDifference=424",
+        "measureCountDifference=1"
+      ]
+    },
+    "firstAlignmentBreak": {
+      "measureNumber": 1,
+      "reason": "missing/extra=5, wrongPitch=1, timing=1, chord=5",
+      "errorRate": 1
+    }
+  },
+  "metrics": {
+    "pitchAccuracy": 0.0459,
+    "matchedPitchAccuracy": 0.1073,
+    "durationAccuracy": 0.0941,
+    "matchedDurationAccuracy": 0.2199,
+    "onsetAccuracy": 0.3561,
+    "matchedOnsetAccuracy": 0.8325,
+    "timeAccuracy": 0.0011,
+    "matchedTimeAccuracy": 0.0026,
+    "measureCountAccuracy": 0.9873,
+    "noteDetectionPrecision": 0.4278,
+    "noteDetectionRecall": 0.8145,
+    "noteDetectionF1": 0.5609,
+    "chordGroupingAccuracy": 0.3856
+  },
+  "totals": {
+    "truthMeasureCount": 78,
+    "generatedMeasureCount": 79,
+    "measureCountDifference": 1,
+    "truthNoteCount": 469,
+    "generatedNoteCount": 893,
+    "noteCountDifference": 424,
+    "matchedNoteCount": 382,
+    "correctPitchCount": 41,
+    "correctDurationCount": 84,
+    "correctOnsetCount": 318,
+    "correctTimeCount": 1,
+    "missingNoteCount": 87,
+    "extraNoteCount": 511,
+    "wrongPitchCount": 341,
+    "wrongDurationCount": 298,
+    "wrongOnsetCount": 64,
+    "wrongTimeCount": 381,
+    "chordMismatchCount": 604,
+    "chordComparableCount": 983
+  },
+  "worstMeasures": [
+    {
+      "measureNumber": 64,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 32,
+      "matchedNoteCount": 6,
+      "missingNoteCount": 0,
+      "extraNoteCount": 26,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 6,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 6,
+      "chordMismatchCount": 26,
+      "errorCount": 68,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 17,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 21,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 16,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 16,
+      "errorCount": 46,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 38,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 20,
+      "matchedNoteCount": 6,
+      "missingNoteCount": 0,
+      "extraNoteCount": 14,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 6,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 6,
+      "chordMismatchCount": 14,
+      "errorCount": 45,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 7,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 19,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 12,
+      "wrongPitchCount": 7,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 12,
+      "errorCount": 42,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 32,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 19,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 14,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 14,
+      "errorCount": 42,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 69,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 19,
+      "matchedNoteCount": 6,
+      "missingNoteCount": 0,
+      "extraNoteCount": 13,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 6,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 6,
+      "chordMismatchCount": 13,
+      "errorCount": 42,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 2,
+      "truthNoteCount": 4,
+      "generatedNoteCount": 18,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 0,
+      "extraNoteCount": 14,
+      "wrongPitchCount": 2,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 3,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 14,
+      "errorCount": 41,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 58,
+      "truthNoteCount": 4,
+      "generatedNoteCount": 17,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 0,
+      "extraNoteCount": 13,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 13,
+      "errorCount": 38,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 76,
+      "truthNoteCount": 9,
+      "generatedNoteCount": 14,
+      "matchedNoteCount": 9,
+      "missingNoteCount": 0,
+      "extraNoteCount": 5,
+      "wrongPitchCount": 8,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 3,
+      "wrongTimeCount": 9,
+      "chordMismatchCount": 11,
+      "errorCount": 38,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 22,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 17,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 10,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 10,
+      "errorCount": 37,
+      "errorRate": 1
+    }
+  ],
+  "perMeasure": [
+    {
+      "measureNumber": 1,
+      "truthNoteCount": 4,
+      "generatedNoteCount": 3,
+      "matchedNoteCount": 1,
+      "missingNoteCount": 3,
+      "extraNoteCount": 2,
+      "wrongPitchCount": 1,
+      "wrongDurationCount": 1,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 0,
+      "chordMismatchCount": 5,
+      "errorCount": 12,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 2,
+      "truthNoteCount": 4,
+      "generatedNoteCount": 18,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 0,
+      "extraNoteCount": 14,
+      "wrongPitchCount": 2,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 3,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 14,
+      "errorCount": 41,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 3,
+      "truthNoteCount": 4,
+      "generatedNoteCount": 5,
+      "matchedNoteCount": 1,
+      "missingNoteCount": 3,
+      "extraNoteCount": 4,
+      "wrongPitchCount": 1,
+      "wrongDurationCount": 1,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 1,
+      "chordMismatchCount": 7,
+      "errorCount": 17,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 4,
+      "truthNoteCount": 4,
+      "generatedNoteCount": 6,
+      "matchedNoteCount": 1,
+      "missingNoteCount": 3,
+      "extraNoteCount": 5,
+      "wrongPitchCount": 1,
+      "wrongDurationCount": 1,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 1,
+      "chordMismatchCount": 8,
+      "errorCount": 19,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 5,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 5,
+      "matchedNoteCount": 2,
+      "missingNoteCount": 4,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 2,
+      "wrongDurationCount": 1,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 2,
+      "chordMismatchCount": 7,
+      "errorCount": 19,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 6,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 9,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 3,
+      "extraNoteCount": 5,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 2,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 8,
+      "errorCount": 28,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 7,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 19,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 12,
+      "wrongPitchCount": 7,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 12,
+      "errorCount": 42,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 8,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 10,
+      "matchedNoteCount": 3,
+      "missingNoteCount": 2,
+      "extraNoteCount": 7,
+      "wrongPitchCount": 2,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 3,
+      "chordMismatchCount": 9,
+      "errorCount": 26,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 9,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 10,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 5,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 3,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 5,
+      "errorCount": 28,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 10,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 14,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 1,
+      "extraNoteCount": 10,
+      "wrongPitchCount": 3,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 11,
+      "errorCount": 33,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 11,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 8,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 3,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 3,
+      "errorCount": 24,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 12,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 16,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 11,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 11,
+      "errorCount": 36,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 13,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 7,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 1,
+      "extraNoteCount": 2,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 4,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 3,
+      "errorCount": 24,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 14,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 9,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 3,
+      "extraNoteCount": 5,
+      "wrongPitchCount": 3,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 1,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 8,
+      "errorCount": 26,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 15,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 11,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 3,
+      "extraNoteCount": 7,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 10,
+      "errorCount": 30,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 16,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 12,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 1,
+      "extraNoteCount": 8,
+      "wrongPitchCount": 3,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 9,
+      "errorCount": 29,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 17,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 21,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 16,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 16,
+      "errorCount": 46,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 18,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 11,
+      "matchedNoteCount": 3,
+      "missingNoteCount": 2,
+      "extraNoteCount": 8,
+      "wrongPitchCount": 3,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 3,
+      "chordMismatchCount": 10,
+      "errorCount": 29,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 19,
+      "truthNoteCount": 4,
+      "generatedNoteCount": 6,
+      "matchedNoteCount": 3,
+      "missingNoteCount": 1,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 3,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 3,
+      "chordMismatchCount": 4,
+      "errorCount": 17,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 20,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 8,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 1,
+      "extraNoteCount": 4,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 2,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 5,
+      "errorCount": 24,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 21,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 8,
+      "matchedNoteCount": 3,
+      "missingNoteCount": 2,
+      "extraNoteCount": 5,
+      "wrongPitchCount": 3,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 1,
+      "wrongTimeCount": 3,
+      "chordMismatchCount": 7,
+      "errorCount": 24,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 22,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 17,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 10,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 10,
+      "errorCount": 37,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 23,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 12,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 2,
+      "extraNoteCount": 7,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 9,
+      "errorCount": 30,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 24,
+      "truthNoteCount": 8,
+      "generatedNoteCount": 5,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 4,
+      "extraNoteCount": 1,
+      "wrongPitchCount": 3,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 1,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 5,
+      "errorCount": 20,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 25,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 11,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 2,
+      "extraNoteCount": 7,
+      "wrongPitchCount": 3,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 9,
+      "errorCount": 29,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 26,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 10,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 6,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 3,
+      "errorCount": 25,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 27,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 15,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 8,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 1,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 8,
+      "errorCount": 33,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 28,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 15,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 8,
+      "wrongPitchCount": 7,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 8,
+      "errorCount": 34,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 29,
+      "truthNoteCount": 8,
+      "generatedNoteCount": 7,
+      "matchedNoteCount": 6,
+      "missingNoteCount": 2,
+      "extraNoteCount": 1,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 1,
+      "wrongTimeCount": 6,
+      "chordMismatchCount": 3,
+      "errorCount": 23,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 30,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 13,
+      "matchedNoteCount": 6,
+      "missingNoteCount": 0,
+      "extraNoteCount": 7,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 6,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 6,
+      "chordMismatchCount": 7,
+      "errorCount": 32,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 31,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 8,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 3,
+      "extraNoteCount": 4,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 7,
+      "errorCount": 25,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 32,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 19,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 14,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 14,
+      "errorCount": 42,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 33,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 9,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 4,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 4,
+      "errorCount": 23,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 34,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 9,
+      "matchedNoteCount": 6,
+      "missingNoteCount": 1,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 6,
+      "chordMismatchCount": 4,
+      "errorCount": 24,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 35,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 5,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 2,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 3,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 2,
+      "errorCount": 20,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 36,
+      "truthNoteCount": 8,
+      "generatedNoteCount": 4,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 4,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 1,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 4,
+      "errorCount": 19,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 37,
+      "truthNoteCount": 9,
+      "generatedNoteCount": 13,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 4,
+      "extraNoteCount": 8,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 12,
+      "errorCount": 35,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 38,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 20,
+      "matchedNoteCount": 6,
+      "missingNoteCount": 0,
+      "extraNoteCount": 14,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 6,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 6,
+      "chordMismatchCount": 14,
+      "errorCount": 45,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 39,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 14,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 7,
+      "wrongPitchCount": 7,
+      "wrongDurationCount": 7,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 7,
+      "errorCount": 35,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 40,
+      "truthNoteCount": 4,
+      "generatedNoteCount": 14,
+      "matchedNoteCount": 2,
+      "missingNoteCount": 2,
+      "extraNoteCount": 12,
+      "wrongPitchCount": 1,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 2,
+      "chordMismatchCount": 14,
+      "errorCount": 33,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 41,
+      "truthNoteCount": 4,
+      "generatedNoteCount": 5,
+      "matchedNoteCount": 2,
+      "missingNoteCount": 2,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 2,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 1,
+      "wrongTimeCount": 2,
+      "chordMismatchCount": 5,
+      "errorCount": 17,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 42,
+      "truthNoteCount": 4,
+      "generatedNoteCount": 11,
+      "matchedNoteCount": 2,
+      "missingNoteCount": 2,
+      "extraNoteCount": 9,
+      "wrongPitchCount": 2,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 2,
+      "chordMismatchCount": 11,
+      "errorCount": 28,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 43,
+      "truthNoteCount": 4,
+      "generatedNoteCount": 8,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 0,
+      "extraNoteCount": 4,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 4,
+      "errorCount": 20,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 44,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 7,
+      "matchedNoteCount": 6,
+      "missingNoteCount": 0,
+      "extraNoteCount": 1,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 6,
+      "chordMismatchCount": 1,
+      "errorCount": 18,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 45,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 6,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 3,
+      "extraNoteCount": 2,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 2,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 5,
+      "errorCount": 22,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 46,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 11,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 4,
+      "wrongPitchCount": 7,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 4,
+      "errorCount": 26,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 47,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 13,
+      "matchedNoteCount": 3,
+      "missingNoteCount": 2,
+      "extraNoteCount": 10,
+      "wrongPitchCount": 2,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 3,
+      "chordMismatchCount": 12,
+      "errorCount": 32,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 48,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 7,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 1,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 3,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 4,
+      "errorCount": 23,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 49,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 14,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 1,
+      "extraNoteCount": 10,
+      "wrongPitchCount": 3,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 11,
+      "errorCount": 33,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 50,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 15,
+      "matchedNoteCount": 3,
+      "missingNoteCount": 2,
+      "extraNoteCount": 12,
+      "wrongPitchCount": 3,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 3,
+      "chordMismatchCount": 14,
+      "errorCount": 37,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 51,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 14,
+      "matchedNoteCount": 3,
+      "missingNoteCount": 2,
+      "extraNoteCount": 11,
+      "wrongPitchCount": 1,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 3,
+      "chordMismatchCount": 13,
+      "errorCount": 33,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 52,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 11,
+      "matchedNoteCount": 6,
+      "missingNoteCount": 0,
+      "extraNoteCount": 5,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 5,
+      "wrongTimeCount": 6,
+      "chordMismatchCount": 5,
+      "errorCount": 31,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 53,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 15,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 8,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 1,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 8,
+      "errorCount": 34,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 54,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 8,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 2,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 3,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 5,
+      "errorCount": 26,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 55,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 8,
+      "matchedNoteCount": 3,
+      "missingNoteCount": 2,
+      "extraNoteCount": 5,
+      "wrongPitchCount": 2,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 3,
+      "chordMismatchCount": 7,
+      "errorCount": 22,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 56,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 15,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 10,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 10,
+      "errorCount": 35,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 57,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 7,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 2,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 3,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 2,
+      "errorCount": 22,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 58,
+      "truthNoteCount": 4,
+      "generatedNoteCount": 17,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 0,
+      "extraNoteCount": 13,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 13,
+      "errorCount": 38,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 59,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 12,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 7,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 7,
+      "errorCount": 28,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 60,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 13,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 8,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 8,
+      "errorCount": 30,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 61,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 11,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 4,
+      "wrongPitchCount": 7,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 5,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 4,
+      "errorCount": 31,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 62,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 14,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 7,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 7,
+      "errorCount": 30,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 63,
+      "truthNoteCount": 8,
+      "generatedNoteCount": 16,
+      "matchedNoteCount": 8,
+      "missingNoteCount": 0,
+      "extraNoteCount": 8,
+      "wrongPitchCount": 7,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 8,
+      "chordMismatchCount": 8,
+      "errorCount": 36,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 64,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 32,
+      "matchedNoteCount": 6,
+      "missingNoteCount": 0,
+      "extraNoteCount": 26,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 6,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 6,
+      "chordMismatchCount": 26,
+      "errorCount": 68,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 65,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 10,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 6,
+      "wrongOnsetCount": 5,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 3,
+      "errorCount": 30,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 66,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 12,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 5,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 1,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 5,
+      "errorCount": 28,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 67,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 10,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 2,
+      "extraNoteCount": 5,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 7,
+      "errorCount": 26,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 68,
+      "truthNoteCount": 8,
+      "generatedNoteCount": 11,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 1,
+      "extraNoteCount": 4,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 1,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 5,
+      "errorCount": 29,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 69,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 19,
+      "matchedNoteCount": 6,
+      "missingNoteCount": 0,
+      "extraNoteCount": 13,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 6,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 6,
+      "chordMismatchCount": 13,
+      "errorCount": 42,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 70,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 9,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 2,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 6,
+      "wrongOnsetCount": 5,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 2,
+      "errorCount": 28,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 71,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 13,
+      "matchedNoteCount": 4,
+      "missingNoteCount": 1,
+      "extraNoteCount": 9,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 4,
+      "chordMismatchCount": 10,
+      "errorCount": 32,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 72,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 12,
+      "matchedNoteCount": 6,
+      "missingNoteCount": 0,
+      "extraNoteCount": 6,
+      "wrongPitchCount": 6,
+      "wrongDurationCount": 6,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 6,
+      "chordMismatchCount": 6,
+      "errorCount": 30,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 73,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 8,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 2,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 3,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 5,
+      "errorCount": 23,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 74,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 11,
+      "matchedNoteCount": 7,
+      "missingNoteCount": 0,
+      "extraNoteCount": 4,
+      "wrongPitchCount": 7,
+      "wrongDurationCount": 4,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 4,
+      "errorCount": 26,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 75,
+      "truthNoteCount": 8,
+      "generatedNoteCount": 15,
+      "matchedNoteCount": 8,
+      "missingNoteCount": 0,
+      "extraNoteCount": 7,
+      "wrongPitchCount": 7,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 8,
+      "chordMismatchCount": 7,
+      "errorCount": 34,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 76,
+      "truthNoteCount": 9,
+      "generatedNoteCount": 14,
+      "matchedNoteCount": 9,
+      "missingNoteCount": 0,
+      "extraNoteCount": 5,
+      "wrongPitchCount": 8,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 3,
+      "wrongTimeCount": 9,
+      "chordMismatchCount": 11,
+      "errorCount": 38,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 77,
+      "truthNoteCount": 6,
+      "generatedNoteCount": 8,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 1,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 4,
+      "errorCount": 23,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 78,
+      "truthNoteCount": 7,
+      "generatedNoteCount": 7,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 2,
+      "extraNoteCount": 2,
+      "wrongPitchCount": 5,
+      "wrongDurationCount": 5,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 5,
+      "chordMismatchCount": 4,
+      "errorCount": 23,
+      "errorRate": 1
+    },
+    {
+      "measureNumber": 79,
+      "truthNoteCount": 0,
+      "generatedNoteCount": 8,
+      "matchedNoteCount": 0,
+      "missingNoteCount": 0,
+      "extraNoteCount": 8,
+      "wrongPitchCount": 0,
+      "wrongDurationCount": 0,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 0,
+      "chordMismatchCount": 8,
+      "errorCount": 16,
+      "errorRate": 1
+    }
+  ],
+  "debug": {
+    "missingNotes": [
+      {
+        "id": "P1-m1-n2",
+        "measureNumber": 1,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 59,
+        "label": "B3",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m1-n3",
+        "measureNumber": 1,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 62,
+        "label": "D4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m1-n4",
+        "measureNumber": 1,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 66,
+        "label": "F#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m3-n14",
+        "measureNumber": 3,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 59,
+        "label": "B3",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m3-n15",
+        "measureNumber": 3,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 62,
+        "label": "D4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m3-n16",
+        "measureNumber": 3,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 66,
+        "label": "F#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m4-n20",
+        "measureNumber": 4,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 57,
+        "label": "A3",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m4-n21",
+        "measureNumber": 4,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 61,
+        "label": "C#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m4-n22",
+        "measureNumber": 4,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 66,
+        "label": "F#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m5-n28",
+        "measureNumber": 5,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 59,
+        "label": "B3",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m5-n29",
+        "measureNumber": 5,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 62,
+        "label": "D4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m5-n30",
+        "measureNumber": 5,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 66,
+        "label": "F#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m5-n25",
+        "measureNumber": 5,
+        "onsetQuarters": 1,
+        "durationQuarters": 1,
+        "midi": 78,
+        "label": "F#5",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m6-n37",
+        "measureNumber": 6,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 61,
+        "label": "C#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m6-n38",
+        "measureNumber": 6,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 66,
+        "label": "F#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m6-n33",
+        "measureNumber": 6,
+        "onsetQuarters": 1,
+        "durationQuarters": 1,
+        "midi": 78,
+        "label": "F#5",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m8-n51",
+        "measureNumber": 8,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 61,
+        "label": "C#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m8-n52",
+        "measureNumber": 8,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 66,
+        "label": "F#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m10-n64",
+        "measureNumber": 10,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 66,
+        "label": "F#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m13-n79",
+        "measureNumber": 13,
+        "onsetQuarters": 1,
+        "durationQuarters": 1,
+        "midi": 78,
+        "label": "F#5",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m14-n91",
+        "measureNumber": 14,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 61,
+        "label": "C#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m14-n92",
+        "measureNumber": 14,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 66,
+        "label": "F#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m14-n87",
+        "measureNumber": 14,
+        "onsetQuarters": 1,
+        "durationQuarters": 1,
+        "midi": 78,
+        "label": "F#5",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m15-n99",
+        "measureNumber": 15,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 62,
+        "label": "D4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m15-n100",
+        "measureNumber": 15,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 66,
+        "label": "F#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m15-n95",
+        "measureNumber": 15,
+        "onsetQuarters": 1,
+        "durationQuarters": 1,
+        "midi": 73,
+        "label": "C#5",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m16-n106",
+        "measureNumber": 16,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 66,
+        "label": "F#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m18-n117",
+        "measureNumber": 18,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 62,
+        "label": "D4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m18-n118",
+        "measureNumber": 18,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 66,
+        "label": "F#4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m19-n120",
+        "measureNumber": 19,
+        "onsetQuarters": 0,
+        "durationQuarters": 3,
+        "midi": 64,
+        "label": "E4",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m20-n129",
+        "measureNumber": 20,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 67,
+        "label": "G4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m21-n134",
+        "measureNumber": 21,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 57,
+        "label": "A3",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m21-n135",
+        "measureNumber": 21,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 62,
+        "label": "D4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m23-n151",
+        "measureNumber": 23,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 64,
+        "label": "E4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m23-n146",
+        "measureNumber": 23,
+        "onsetQuarters": 1,
+        "durationQuarters": 1,
+        "midi": 74,
+        "label": "D5",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m24-n158",
+        "measureNumber": 24,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 55,
+        "label": "G3",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m24-n159",
+        "measureNumber": 24,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 59,
+        "label": "B3",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m24-n160",
+        "measureNumber": 24,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 64,
+        "label": "E4",
+        "partId": "P1",
+        "voice": 5
+      },
+      {
+        "id": "P1-m24-n154",
+        "measureNumber": 24,
+        "onsetQuarters": 1,
+        "durationQuarters": 1,
+        "midi": 72,
+        "label": "C5",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m25-n166",
+        "measureNumber": 25,
+        "onsetQuarters": 1,
+        "durationQuarters": 2,
+        "midi": 57,
+        "label": "A3",
+        "partId": "P1",
+        "voice": 5
+      }
+    ],
+    "extraNotes": [
+      {
+        "id": "P1-m1-n3",
+        "measureNumber": 1,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 42,
+        "label": "F#2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m1-n2",
+        "measureNumber": 1,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 64,
+        "label": "E4",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n12",
+        "measureNumber": 2,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 35,
+        "label": "B1",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n10",
+        "measureNumber": 2,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 36,
+        "label": "C2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n6",
+        "measureNumber": 2,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 40,
+        "label": "E2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n8",
+        "measureNumber": 2,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 52,
+        "label": "E3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n5",
+        "measureNumber": 2,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 57,
+        "label": "A3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n9",
+        "measureNumber": 2,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 57,
+        "label": "A3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n7",
+        "measureNumber": 2,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 63,
+        "label": "D#4",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n20",
+        "measureNumber": 2,
+        "onsetQuarters": 1.5,
+        "durationQuarters": 1,
+        "midi": 36,
+        "label": "C2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n15",
+        "measureNumber": 2,
+        "onsetQuarters": 1.5,
+        "durationQuarters": 1,
+        "midi": 38,
+        "label": "D2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n17",
+        "measureNumber": 2,
+        "onsetQuarters": 1.5,
+        "durationQuarters": 1,
+        "midi": 38,
+        "label": "D2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n16",
+        "measureNumber": 2,
+        "onsetQuarters": 1.5,
+        "durationQuarters": 1,
+        "midi": 40,
+        "label": "E2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n21",
+        "measureNumber": 2,
+        "onsetQuarters": 1.5,
+        "durationQuarters": 1,
+        "midi": 43,
+        "label": "G2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n22",
+        "measureNumber": 2,
+        "onsetQuarters": 2.5,
+        "durationQuarters": 1,
+        "midi": 36,
+        "label": "C2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m2-n23",
+        "measureNumber": 2,
+        "onsetQuarters": 2.5,
+        "durationQuarters": 1,
+        "midi": 43,
+        "label": "G2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m3-n27",
+        "measureNumber": 3,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 31,
+        "label": "G1",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m3-n28",
+        "measureNumber": 3,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 35,
+        "label": "B1",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m3-n29",
+        "measureNumber": 3,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 36,
+        "label": "C2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m3-n30",
+        "measureNumber": 3,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 54,
+        "label": "F#3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m4-n33",
+        "measureNumber": 4,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 43,
+        "label": "G2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m4-n35",
+        "measureNumber": 4,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 33,
+        "label": "A1",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m4-n36",
+        "measureNumber": 4,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 35,
+        "label": "B1",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m4-n37",
+        "measureNumber": 4,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 35,
+        "label": "B1",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m4-n38",
+        "measureNumber": 4,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 54,
+        "label": "F#3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m5-n43",
+        "measureNumber": 5,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 35,
+        "label": "B1",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m5-n44",
+        "measureNumber": 5,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 35,
+        "label": "B1",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m5-n45",
+        "measureNumber": 5,
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "midi": 54,
+        "label": "F#3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m6-n47",
+        "measureNumber": 6,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 52,
+        "label": "E3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m6-n48",
+        "measureNumber": 6,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 57,
+        "label": "A3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m6-n54",
+        "measureNumber": 6,
+        "onsetQuarters": 2.5,
+        "durationQuarters": 1,
+        "midi": 52,
+        "label": "E3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m6-n55",
+        "measureNumber": 6,
+        "onsetQuarters": 2.5,
+        "durationQuarters": 1,
+        "midi": 54,
+        "label": "F#3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m6-n53",
+        "measureNumber": 6,
+        "onsetQuarters": 2.5,
+        "durationQuarters": 1,
+        "midi": 63,
+        "label": "D#4",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m7-n64",
+        "measureNumber": 7,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 36,
+        "label": "C2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m7-n58",
+        "measureNumber": 7,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 38,
+        "label": "D2",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m7-n61",
+        "measureNumber": 7,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 52,
+        "label": "E3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m7-n62",
+        "measureNumber": 7,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 57,
+        "label": "A3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m7-n63",
+        "measureNumber": 7,
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "midi": 59,
+        "label": "B3",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m7-n72",
+        "measureNumber": 7,
+        "onsetQuarters": 2.25,
+        "durationQuarters": 1,
+        "midi": 35,
+        "label": "B1",
+        "partId": "P1",
+        "voice": 1
+      },
+      {
+        "id": "P1-m7-n74",
+        "measureNumber": 7,
+        "onsetQuarters": 2.25,
+        "durationQuarters": 1,
+        "midi": 36,
+        "label": "C2",
+        "partId": "P1",
+        "voice": 1
+      }
+    ],
+    "wrongPitches": [
+      {
+        "measureNumber": 1,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 0,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": 23,
+        "truth": {
+          "id": "P1-m1-n5",
+          "measureNumber": 1,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m1-n0",
+          "measureNumber": 1,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 1.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m2-n9",
+          "measureNumber": 2,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m2-n14",
+          "measureNumber": 2,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 54,
+          "label": "F#3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 1.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -14,
+        "truth": {
+          "id": "P1-m2-n10",
+          "measureNumber": 2,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m2-n18",
+          "measureNumber": 2,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 52,
+          "label": "E3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 3,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 2.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m3-n17",
+          "measureNumber": 3,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m3-n25",
+          "measureNumber": 3,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 4,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 4,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m4-n23",
+          "measureNumber": 4,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m4-n32",
+          "measureNumber": 4,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 5,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 5.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m5-n31",
+          "measureNumber": 5,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m5-n40",
+          "measureNumber": 5,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 5,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 6.556,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -48,
+        "truth": {
+          "id": "P1-m5-n26",
+          "measureNumber": 5,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 81,
+          "label": "A5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m5-n42",
+          "measureNumber": 5,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 6,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 6.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m6-n39",
+          "measureNumber": 6,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m6-n49",
+          "measureNumber": 6,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 6,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 6.667,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -36,
+        "truth": {
+          "id": "P1-m6-n32",
+          "measureNumber": 6,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 79,
+          "label": "G5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m6-n50",
+          "measureNumber": 6,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 6,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 7.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 7,
+        "truth": {
+          "id": "P1-m6-n36",
+          "measureNumber": 6,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m6-n52",
+          "measureNumber": 6,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 6,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 7.639,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -9,
+        "truth": {
+          "id": "P1-m6-n34",
+          "measureNumber": 6,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 73,
+          "label": "C#5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m6-n56",
+          "measureNumber": 6,
+          "onsetQuarters": 2.5,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 8,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -1,
+        "truth": {
+          "id": "P1-m7-n47",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m7-n59",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 42,
+          "label": "F#2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 8,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -12,
+        "truth": {
+          "id": "P1-m7-n40",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m7-n60",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 8.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m7-n44",
+          "measureNumber": 7,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m7-n67",
+          "measureNumber": 7,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 54,
+          "label": "F#3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 8.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -10,
+        "truth": {
+          "id": "P1-m7-n45",
+          "measureNumber": 7,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m7-n66",
+          "measureNumber": 7,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 52,
+          "label": "E3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 8.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m7-n46",
+          "measureNumber": 7,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m7-n69",
+          "measureNumber": 7,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 8.486,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -35,
+        "truth": {
+          "id": "P1-m7-n41",
+          "measureNumber": 7,
+          "onsetQuarters": 1,
+          "durationQuarters": 1,
+          "midi": 73,
+          "label": "C#5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m7-n68",
+          "measureNumber": 7,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 9.097,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -41,
+        "truth": {
+          "id": "P1-m7-n42",
+          "measureNumber": 7,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 74,
+          "label": "D5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m7-n71",
+          "measureNumber": 7,
+          "onsetQuarters": 2.25,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 9.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -33,
+        "truth": {
+          "id": "P1-m8-n48",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 69,
+          "label": "A4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m8-n80",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 9.819,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 7,
+        "truth": {
+          "id": "P1-m8-n50",
+          "measureNumber": 8,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m8-n83",
+          "measureNumber": 8,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 10.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m9-n59",
+          "measureNumber": 9,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m9-n94",
+          "measureNumber": 9,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 10.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m9-n54",
+          "measureNumber": 9,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m9-n93",
+          "measureNumber": 9,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 11.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m9-n56",
+          "measureNumber": 9,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m9-n96",
+          "measureNumber": 9,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 11.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -27,
+        "truth": {
+          "id": "P1-m9-n57",
+          "measureNumber": 9,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m9-n97",
+          "measureNumber": 9,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 11.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m9-n58",
+          "measureNumber": 9,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m9-n98",
+          "measureNumber": 9,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 10,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 12,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -9,
+        "truth": {
+          "id": "P1-m10-n60",
+          "measureNumber": 10,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m10-n106",
+          "measureNumber": 10,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 10,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 12.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -22,
+        "truth": {
+          "id": "P1-m10-n62",
+          "measureNumber": 10,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m10-n110",
+          "measureNumber": 10,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 10,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 12.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -25,
+        "truth": {
+          "id": "P1-m10-n63",
+          "measureNumber": 10,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m10-n111",
+          "measureNumber": 10,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 13.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m11-n71",
+          "measureNumber": 11,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m11-n123",
+          "measureNumber": 11,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 13.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m11-n66",
+          "measureNumber": 11,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m11-n120",
+          "measureNumber": 11,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 13.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -24,
+        "truth": {
+          "id": "P1-m11-n68",
+          "measureNumber": 11,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m11-n125",
+          "measureNumber": 11,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 13.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m11-n69",
+          "measureNumber": 11,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m11-n126",
+          "measureNumber": 11,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 13.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m11-n70",
+          "measureNumber": 11,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m11-n127",
+          "measureNumber": 11,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 14.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m12-n72",
+          "measureNumber": 12,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m12-n131",
+          "measureNumber": 12,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 15.153,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 2,
+        "truth": {
+          "id": "P1-m12-n74",
+          "measureNumber": 12,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m12-n140",
+          "measureNumber": 12,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 15.153,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m12-n75",
+          "measureNumber": 12,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m12-n141",
+          "measureNumber": 12,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 15.153,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -28,
+        "truth": {
+          "id": "P1-m12-n76",
+          "measureNumber": 12,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m12-n142",
+          "measureNumber": 12,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 13,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 16,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m13-n85",
+          "measureNumber": 13,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m13-n149",
+          "measureNumber": 13,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 13,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 16.361,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m13-n82",
+          "measureNumber": 13,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m13-n154",
+          "measureNumber": 13,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 13,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 16.361,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -27,
+        "truth": {
+          "id": "P1-m13-n83",
+          "measureNumber": 13,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m13-n152",
+          "measureNumber": 13,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      }
+    ],
+    "wrongDurations": [
+      {
+        "measureNumber": 1,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 0,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": 23,
+        "truth": {
+          "id": "P1-m1-n5",
+          "measureNumber": 1,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m1-n0",
+          "measureNumber": 1,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 1.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m2-n11",
+          "measureNumber": 2,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m2-n11",
+          "measureNumber": 2,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 1.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m2-n8",
+          "measureNumber": 2,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m2-n19",
+          "measureNumber": 2,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 1.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m2-n9",
+          "measureNumber": 2,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m2-n14",
+          "measureNumber": 2,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 54,
+          "label": "F#3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 1.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -14,
+        "truth": {
+          "id": "P1-m2-n10",
+          "measureNumber": 2,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m2-n18",
+          "measureNumber": 2,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 52,
+          "label": "E3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 3,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 2.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m3-n17",
+          "measureNumber": 3,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m3-n25",
+          "measureNumber": 3,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 4,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 4,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m4-n23",
+          "measureNumber": 4,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m4-n32",
+          "measureNumber": 4,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 5,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 5.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m5-n31",
+          "measureNumber": 5,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m5-n40",
+          "measureNumber": 5,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 6,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 6.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m6-n39",
+          "measureNumber": 6,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m6-n49",
+          "measureNumber": 6,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 6,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 7.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 7,
+        "truth": {
+          "id": "P1-m6-n36",
+          "measureNumber": 6,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m6-n52",
+          "measureNumber": 6,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 8,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -1,
+        "truth": {
+          "id": "P1-m7-n47",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m7-n59",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 42,
+          "label": "F#2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 8.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m7-n44",
+          "measureNumber": 7,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m7-n67",
+          "measureNumber": 7,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 54,
+          "label": "F#3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 8.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -10,
+        "truth": {
+          "id": "P1-m7-n45",
+          "measureNumber": 7,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m7-n66",
+          "measureNumber": 7,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 52,
+          "label": "E3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 8.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m7-n46",
+          "measureNumber": 7,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m7-n69",
+          "measureNumber": 7,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 9.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m8-n53",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m8-n79",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 9.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -33,
+        "truth": {
+          "id": "P1-m8-n48",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 69,
+          "label": "A4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m8-n80",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 9.819,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 7,
+        "truth": {
+          "id": "P1-m8-n50",
+          "measureNumber": 8,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m8-n83",
+          "measureNumber": 8,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 10.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m9-n59",
+          "measureNumber": 9,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m9-n94",
+          "measureNumber": 9,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 10.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m9-n54",
+          "measureNumber": 9,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m9-n93",
+          "measureNumber": 9,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 11.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m9-n56",
+          "measureNumber": 9,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m9-n96",
+          "measureNumber": 9,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 11.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -27,
+        "truth": {
+          "id": "P1-m9-n57",
+          "measureNumber": 9,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m9-n97",
+          "measureNumber": 9,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 11.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m9-n58",
+          "measureNumber": 9,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m9-n98",
+          "measureNumber": 9,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 10,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 12,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m10-n65",
+          "measureNumber": 10,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m10-n104",
+          "measureNumber": 10,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 10,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 12,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -9,
+        "truth": {
+          "id": "P1-m10-n60",
+          "measureNumber": 10,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m10-n106",
+          "measureNumber": 10,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 10,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 12.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -22,
+        "truth": {
+          "id": "P1-m10-n62",
+          "measureNumber": 10,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m10-n110",
+          "measureNumber": 10,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 10,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 12.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -25,
+        "truth": {
+          "id": "P1-m10-n63",
+          "measureNumber": 10,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m10-n111",
+          "measureNumber": 10,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 13.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m11-n71",
+          "measureNumber": 11,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m11-n123",
+          "measureNumber": 11,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 13.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m11-n66",
+          "measureNumber": 11,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m11-n120",
+          "measureNumber": 11,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 13.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -24,
+        "truth": {
+          "id": "P1-m11-n68",
+          "measureNumber": 11,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m11-n125",
+          "measureNumber": 11,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 13.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m11-n69",
+          "measureNumber": 11,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m11-n126",
+          "measureNumber": 11,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 13.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m11-n70",
+          "measureNumber": 11,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m11-n127",
+          "measureNumber": 11,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 14.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m12-n77",
+          "measureNumber": 12,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m12-n130",
+          "measureNumber": 12,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 14.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m12-n72",
+          "measureNumber": 12,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m12-n131",
+          "measureNumber": 12,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 15.153,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 2,
+        "truth": {
+          "id": "P1-m12-n74",
+          "measureNumber": 12,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m12-n140",
+          "measureNumber": 12,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 15.153,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m12-n75",
+          "measureNumber": 12,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m12-n141",
+          "measureNumber": 12,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 15.153,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -28,
+        "truth": {
+          "id": "P1-m12-n76",
+          "measureNumber": 12,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m12-n142",
+          "measureNumber": 12,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 13,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 16,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m13-n85",
+          "measureNumber": 13,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m13-n149",
+          "measureNumber": 13,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 13,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 16.361,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m13-n82",
+          "measureNumber": 13,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m13-n154",
+          "measureNumber": 13,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 13,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 16.361,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -27,
+        "truth": {
+          "id": "P1-m13-n83",
+          "measureNumber": 13,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m13-n152",
+          "measureNumber": 13,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 13,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 16.361,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m13-n84",
+          "measureNumber": 13,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m13-n153",
+          "measureNumber": 13,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      }
+    ],
+    "wrongOnsets": [
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 1.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m2-n8",
+          "measureNumber": 2,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m2-n19",
+          "measureNumber": 2,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 1.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m2-n9",
+          "measureNumber": 2,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m2-n14",
+          "measureNumber": 2,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 54,
+          "label": "F#3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 1.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -14,
+        "truth": {
+          "id": "P1-m2-n10",
+          "measureNumber": 2,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m2-n18",
+          "measureNumber": 2,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 52,
+          "label": "E3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 6,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 7.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 7,
+        "truth": {
+          "id": "P1-m6-n36",
+          "measureNumber": 6,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m6-n52",
+          "measureNumber": 6,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 6,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 7.639,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -9,
+        "truth": {
+          "id": "P1-m6-n34",
+          "measureNumber": 6,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 73,
+          "label": "C#5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m6-n56",
+          "measureNumber": 6,
+          "onsetQuarters": 2.5,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 11.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m9-n56",
+          "measureNumber": 9,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m9-n96",
+          "measureNumber": 9,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 11.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -27,
+        "truth": {
+          "id": "P1-m9-n57",
+          "measureNumber": 9,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m9-n97",
+          "measureNumber": 9,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 11.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m9-n58",
+          "measureNumber": 9,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m9-n98",
+          "measureNumber": 9,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 13.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -24,
+        "truth": {
+          "id": "P1-m11-n68",
+          "measureNumber": 11,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m11-n125",
+          "measureNumber": 11,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 13.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m11-n69",
+          "measureNumber": 11,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m11-n126",
+          "measureNumber": 11,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 13.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m11-n70",
+          "measureNumber": 11,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m11-n127",
+          "measureNumber": 11,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 13,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 16.361,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m13-n82",
+          "measureNumber": 13,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m13-n154",
+          "measureNumber": 13,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 13,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 16.361,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -27,
+        "truth": {
+          "id": "P1-m13-n83",
+          "measureNumber": 13,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m13-n152",
+          "measureNumber": 13,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 13,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 16.361,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m13-n84",
+          "measureNumber": 13,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m13-n153",
+          "measureNumber": 13,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 13,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 16.972,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -45,
+        "truth": {
+          "id": "P1-m13-n80",
+          "measureNumber": 13,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 81,
+          "label": "A5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m13-n155",
+          "measureNumber": 13,
+          "onsetQuarters": 2.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 14,
+        "onsetDiffQuarters": 0.75,
+        "timeDiffSeconds": 18.181,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -10,
+        "truth": {
+          "id": "P1-m14-n88",
+          "measureNumber": 14,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 73,
+          "label": "C#5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m14-n166",
+          "measureNumber": 14,
+          "onsetQuarters": 2.75,
+          "durationQuarters": 1,
+          "midi": 63,
+          "label": "D#4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 20,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 25.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -23,
+        "truth": {
+          "id": "P1-m20-n127",
+          "measureNumber": 20,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m20-n245",
+          "measureNumber": 20,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 20,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 25.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m20-n128",
+          "measureNumber": 20,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m20-n246",
+          "measureNumber": 20,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 21,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 27.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 8,
+        "truth": {
+          "id": "P1-m21-n133",
+          "measureNumber": 21,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 53,
+          "label": "F3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m21-n256",
+          "measureNumber": 21,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 24,
+        "onsetDiffQuarters": 0.75,
+        "timeDiffSeconds": 31.514,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -35,
+        "truth": {
+          "id": "P1-m24-n155",
+          "measureNumber": 24,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m24-n296",
+          "measureNumber": 24,
+          "onsetQuarters": 2.75,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 27,
+        "onsetDiffQuarters": 0.75,
+        "timeDiffSeconds": 35.514,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -37,
+        "truth": {
+          "id": "P1-m27-n179",
+          "measureNumber": 27,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 79,
+          "label": "G5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m27-n339",
+          "measureNumber": 27,
+          "onsetQuarters": 2.75,
+          "durationQuarters": 1,
+          "midi": 42,
+          "label": "F#2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 29,
+        "onsetDiffQuarters": 0.75,
+        "timeDiffSeconds": 38.181,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -29,
+        "truth": {
+          "id": "P1-m29-n195",
+          "measureNumber": 29,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m29-n366",
+          "measureNumber": 29,
+          "onsetQuarters": 2.75,
+          "durationQuarters": 1,
+          "midi": 42,
+          "label": "F#2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 35,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 45.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m35-n241",
+          "measureNumber": 35,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m35-n439",
+          "measureNumber": 35,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 56,
+          "label": "G#3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 35,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 45.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -10,
+        "truth": {
+          "id": "P1-m35-n242",
+          "measureNumber": 35,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m35-n438",
+          "measureNumber": 35,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 54,
+          "label": "F#3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 35,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 46.306,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -20,
+        "truth": {
+          "id": "P1-m35-n239",
+          "measureNumber": 35,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 76,
+          "label": "E5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m35-n440",
+          "measureNumber": 35,
+          "onsetQuarters": 2.5,
+          "durationQuarters": 1,
+          "midi": 56,
+          "label": "G#3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 36,
+        "onsetDiffQuarters": 0.75,
+        "timeDiffSeconds": 47.514,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -20,
+        "truth": {
+          "id": "P1-m36-n247",
+          "measureNumber": 36,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 76,
+          "label": "E5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m36-n447",
+          "measureNumber": 36,
+          "onsetQuarters": 2.75,
+          "durationQuarters": 1,
+          "midi": 56,
+          "label": "G#3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 41,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 53.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m41-n286",
+          "measureNumber": 41,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m41-n521",
+          "measureNumber": 41,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 52,
+          "label": "E3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 45,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 59.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 6,
+        "truth": {
+          "id": "P1-m45-n314",
+          "measureNumber": 45,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m45-n557",
+          "measureNumber": 45,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 63,
+          "label": "D#4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 45,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 59.639,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -10,
+        "truth": {
+          "id": "P1-m45-n312",
+          "measureNumber": 45,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 73,
+          "label": "C#5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m45-n559",
+          "measureNumber": 45,
+          "onsetQuarters": 2.5,
+          "durationQuarters": 1,
+          "midi": 63,
+          "label": "D#4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 48,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 63.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m48-n334",
+          "measureNumber": 48,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m48-n588",
+          "measureNumber": 48,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 48,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 63.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -27,
+        "truth": {
+          "id": "P1-m48-n335",
+          "measureNumber": 48,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m48-n589",
+          "measureNumber": 48,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 48,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 63.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m48-n336",
+          "measureNumber": 48,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m48-n590",
+          "measureNumber": 48,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 52,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 68.361,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m52-n360",
+          "measureNumber": 52,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m52-n647",
+          "measureNumber": 52,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 52,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 68.361,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -27,
+        "truth": {
+          "id": "P1-m52-n361",
+          "measureNumber": 52,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m52-n648",
+          "measureNumber": 52,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 52,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 68.361,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m52-n362",
+          "measureNumber": 52,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m52-n649",
+          "measureNumber": 52,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 52,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 68.361,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -42,
+        "truth": {
+          "id": "P1-m52-n357",
+          "measureNumber": 52,
+          "onsetQuarters": 1,
+          "durationQuarters": 1,
+          "midi": 78,
+          "label": "F#5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m52-n650",
+          "measureNumber": 52,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 52,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 68.972,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -39,
+        "truth": {
+          "id": "P1-m52-n358",
+          "measureNumber": 52,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 81,
+          "label": "A5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m52-n652",
+          "measureNumber": 52,
+          "onsetQuarters": 2.5,
+          "durationQuarters": 1,
+          "midi": 42,
+          "label": "F#2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 53,
+        "onsetDiffQuarters": 0.75,
+        "timeDiffSeconds": 70.931,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -35,
+        "truth": {
+          "id": "P1-m53-n366",
+          "measureNumber": 53,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 73,
+          "label": "C#5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m53-n664",
+          "measureNumber": 53,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 54,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 71.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m54-n376",
+          "measureNumber": 54,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m54-n676",
+          "measureNumber": 54,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 54,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 71.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -6,
+        "truth": {
+          "id": "P1-m54-n377",
+          "measureNumber": 54,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m54-n677",
+          "measureNumber": 54,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 56,
+          "label": "G#3",
+          "partId": "P1",
+          "voice": 1
+        }
+      }
+    ],
+    "wrongTimes": [
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 1.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m2-n11",
+          "measureNumber": 2,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m2-n11",
+          "measureNumber": 2,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 1.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m2-n8",
+          "measureNumber": 2,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m2-n19",
+          "measureNumber": 2,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 1.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m2-n9",
+          "measureNumber": 2,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m2-n14",
+          "measureNumber": 2,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 54,
+          "label": "F#3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 1.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -14,
+        "truth": {
+          "id": "P1-m2-n10",
+          "measureNumber": 2,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m2-n18",
+          "measureNumber": 2,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 52,
+          "label": "E3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 3,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 2.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m3-n17",
+          "measureNumber": 3,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m3-n25",
+          "measureNumber": 3,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 4,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 4,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m4-n23",
+          "measureNumber": 4,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m4-n32",
+          "measureNumber": 4,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 5,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 5.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m5-n31",
+          "measureNumber": 5,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m5-n40",
+          "measureNumber": 5,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 5,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 6.556,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -48,
+        "truth": {
+          "id": "P1-m5-n26",
+          "measureNumber": 5,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 81,
+          "label": "A5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m5-n42",
+          "measureNumber": 5,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 6,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 6.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m6-n39",
+          "measureNumber": 6,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m6-n49",
+          "measureNumber": 6,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 6,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 6.667,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -36,
+        "truth": {
+          "id": "P1-m6-n32",
+          "measureNumber": 6,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 79,
+          "label": "G5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m6-n50",
+          "measureNumber": 6,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 6,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 7.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 7,
+        "truth": {
+          "id": "P1-m6-n36",
+          "measureNumber": 6,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m6-n52",
+          "measureNumber": 6,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 6,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 7.639,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -9,
+        "truth": {
+          "id": "P1-m6-n34",
+          "measureNumber": 6,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 73,
+          "label": "C#5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m6-n56",
+          "measureNumber": 6,
+          "onsetQuarters": 2.5,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 8,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -1,
+        "truth": {
+          "id": "P1-m7-n47",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m7-n59",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 42,
+          "label": "F#2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 8,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -12,
+        "truth": {
+          "id": "P1-m7-n40",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m7-n60",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 8.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m7-n44",
+          "measureNumber": 7,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m7-n67",
+          "measureNumber": 7,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 54,
+          "label": "F#3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 8.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -10,
+        "truth": {
+          "id": "P1-m7-n45",
+          "measureNumber": 7,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m7-n66",
+          "measureNumber": 7,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 52,
+          "label": "E3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 8.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m7-n46",
+          "measureNumber": 7,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m7-n69",
+          "measureNumber": 7,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 8.486,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -35,
+        "truth": {
+          "id": "P1-m7-n41",
+          "measureNumber": 7,
+          "onsetQuarters": 1,
+          "durationQuarters": 1,
+          "midi": 73,
+          "label": "C#5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m7-n68",
+          "measureNumber": 7,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 9.097,
+        "durationDiffQuarters": 0,
+        "pitchDeltaSemitones": -41,
+        "truth": {
+          "id": "P1-m7-n42",
+          "measureNumber": 7,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 74,
+          "label": "D5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m7-n71",
+          "measureNumber": 7,
+          "onsetQuarters": 2.25,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 9.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m8-n53",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m8-n79",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 9.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -33,
+        "truth": {
+          "id": "P1-m8-n48",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 69,
+          "label": "A4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m8-n80",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 9.819,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 7,
+        "truth": {
+          "id": "P1-m8-n50",
+          "measureNumber": 8,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m8-n83",
+          "measureNumber": 8,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 10.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m9-n59",
+          "measureNumber": 9,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m9-n94",
+          "measureNumber": 9,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 10.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m9-n54",
+          "measureNumber": 9,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m9-n93",
+          "measureNumber": 9,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 11.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m9-n56",
+          "measureNumber": 9,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m9-n96",
+          "measureNumber": 9,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 33,
+          "label": "A1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 11.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -27,
+        "truth": {
+          "id": "P1-m9-n57",
+          "measureNumber": 9,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m9-n97",
+          "measureNumber": 9,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 9,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 11.028,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m9-n58",
+          "measureNumber": 9,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m9-n98",
+          "measureNumber": 9,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 10,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 12,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m10-n65",
+          "measureNumber": 10,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m10-n104",
+          "measureNumber": 10,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 10,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 12,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -9,
+        "truth": {
+          "id": "P1-m10-n60",
+          "measureNumber": 10,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m10-n106",
+          "measureNumber": 10,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 10,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 12.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -22,
+        "truth": {
+          "id": "P1-m10-n62",
+          "measureNumber": 10,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m10-n110",
+          "measureNumber": 10,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 10,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 12.486,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -25,
+        "truth": {
+          "id": "P1-m10-n63",
+          "measureNumber": 10,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m10-n111",
+          "measureNumber": 10,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 13.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m11-n71",
+          "measureNumber": 11,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m11-n123",
+          "measureNumber": 11,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 13.333,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -7,
+        "truth": {
+          "id": "P1-m11-n66",
+          "measureNumber": 11,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m11-n120",
+          "measureNumber": 11,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 13.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -24,
+        "truth": {
+          "id": "P1-m11-n68",
+          "measureNumber": 11,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m11-n125",
+          "measureNumber": 11,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 35,
+          "label": "B1",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 13.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -26,
+        "truth": {
+          "id": "P1-m11-n69",
+          "measureNumber": 11,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 62,
+          "label": "D4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m11-n126",
+          "measureNumber": 11,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 11,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 13.694,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -30,
+        "truth": {
+          "id": "P1-m11-n70",
+          "measureNumber": 11,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m11-n127",
+          "measureNumber": 11,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 1,
+          "midi": 36,
+          "label": "C2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 14.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m12-n77",
+          "measureNumber": 12,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 6
+        },
+        "generated": {
+          "id": "P1-m12-n130",
+          "measureNumber": 12,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 38,
+          "label": "D2",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 14.667,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": -5,
+        "truth": {
+          "id": "P1-m12-n72",
+          "measureNumber": 12,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 66,
+          "label": "F#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m12-n131",
+          "measureNumber": 12,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 15.153,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 2,
+        "truth": {
+          "id": "P1-m12-n74",
+          "measureNumber": 12,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 57,
+          "label": "A3",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m12-n140",
+          "measureNumber": 12,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 12,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 15.153,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m12-n75",
+          "measureNumber": 12,
+          "onsetQuarters": 1,
+          "durationQuarters": 2,
+          "midi": 61,
+          "label": "C#4",
+          "partId": "P1",
+          "voice": 5
+        },
+        "generated": {
+          "id": "P1-m12-n141",
+          "measureNumber": 12,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 59,
+          "label": "B3",
+          "partId": "P1",
+          "voice": 1
+        }
+      }
+    ],
+    "chordGroupMismatches": [
+      {
+        "measureNumber": 1,
+        "onsetQuarters": 1,
+        "truthCount": 3,
+        "generatedCount": 0
+      },
+      {
+        "measureNumber": 1,
+        "onsetQuarters": 2,
+        "truthCount": 0,
+        "generatedCount": 2
+      },
+      {
+        "measureNumber": 2,
+        "onsetQuarters": 0,
+        "truthCount": 1,
+        "generatedCount": 8,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "onsetQuarters": 1,
+        "truthCount": 3,
+        "generatedCount": 8,
+        "truthGroupIndex": 1
+      },
+      {
+        "measureNumber": 2,
+        "onsetQuarters": 2.5,
+        "truthCount": 0,
+        "generatedCount": 2
+      },
+      {
+        "measureNumber": 3,
+        "onsetQuarters": 1,
+        "truthCount": 3,
+        "generatedCount": 0
+      },
+      {
+        "measureNumber": 3,
+        "onsetQuarters": 2,
+        "truthCount": 0,
+        "generatedCount": 4
+      },
+      {
+        "measureNumber": 4,
+        "onsetQuarters": 0,
+        "truthCount": 1,
+        "generatedCount": 2,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "onsetQuarters": 1,
+        "truthCount": 3,
+        "generatedCount": 0
+      },
+      {
+        "measureNumber": 4,
+        "onsetQuarters": 2,
+        "truthCount": 0,
+        "generatedCount": 4
+      },
+      {
+        "measureNumber": 5,
+        "onsetQuarters": 1,
+        "truthCount": 4,
+        "generatedCount": 0
+      },
+      {
+        "measureNumber": 5,
+        "onsetQuarters": 2,
+        "truthCount": 1,
+        "generatedCount": 4,
+        "truthGroupIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "onsetQuarters": 0,
+        "truthCount": 2,
+        "generatedCount": 4,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 6,
+        "onsetQuarters": 1,
+        "truthCount": 4,
+        "generatedCount": 1,
+        "truthGroupIndex": 1
+      },
+      {
+        "measureNumber": 6,
+        "onsetQuarters": 2,
+        "truthCount": 1,
+        "generatedCount": 4,
+        "truthGroupIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "onsetQuarters": 0,
+        "truthCount": 2,
+        "generatedCount": 7,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 7,
+        "onsetQuarters": 2,
+        "truthCount": 1,
+        "generatedCount": 6,
+        "truthGroupIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "onsetQuarters": 3.5,
+        "truthCount": 0,
+        "generatedCount": 2
+      },
+      {
+        "measureNumber": 8,
+        "onsetQuarters": 0,
+        "truthCount": 2,
+        "generatedCount": 3,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 8,
+        "onsetQuarters": 1,
+        "truthCount": 3,
+        "generatedCount": 1,
+        "truthGroupIndex": 1
+      },
+      {
+        "measureNumber": 8,
+        "onsetQuarters": 2.25,
+        "truthCount": 0,
+        "generatedCount": 3
+      },
+      {
+        "measureNumber": 8,
+        "onsetQuarters": 3.5,
+        "truthCount": 0,
+        "generatedCount": 3
+      },
+      {
+        "measureNumber": 9,
+        "onsetQuarters": 0,
+        "truthCount": 2,
+        "generatedCount": 4,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 9,
+        "onsetQuarters": 1,
+        "truthCount": 3,
+        "generatedCount": 4,
+        "truthGroupIndex": 1
+      },
+      {
+        "measureNumber": 9,
+        "onsetQuarters": 2.5,
+        "truthCount": 0,
+        "generatedCount": 2
+      },
+      {
+        "measureNumber": 10,
+        "onsetQuarters": 0,
+        "truthCount": 2,
+        "generatedCount": 6,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 10,
+        "onsetQuarters": 1,
+        "truthCount": 3,
+        "generatedCount": 2,
+        "truthGroupIndex": 1
+      },
+      {
+        "measureNumber": 10,
+        "onsetQuarters": 2.75,
+        "truthCount": 0,
+        "generatedCount": 6
+      },
+      {
+        "measureNumber": 11,
+        "onsetQuarters": 0,
+        "truthCount": 2,
+        "generatedCount": 4,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 11,
+        "onsetQuarters": 2.5,
+        "truthCount": 0,
+        "generatedCount": 1
+      },
+      {
+        "measureNumber": 12,
+        "onsetQuarters": 0,
+        "truthCount": 2,
+        "generatedCount": 9,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 12,
+        "onsetQuarters": 1,
+        "truthCount": 3,
+        "generatedCount": 4,
+        "truthGroupIndex": 1
+      },
+      {
+        "measureNumber": 12,
+        "onsetQuarters": 2.25,
+        "truthCount": 0,
+        "generatedCount": 1
+      },
+      {
+        "measureNumber": 12,
+        "onsetQuarters": 3.5,
+        "truthCount": 0,
+        "generatedCount": 2
+      },
+      {
+        "measureNumber": 13,
+        "onsetQuarters": 0,
+        "truthCount": 1,
+        "generatedCount": 3,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 13,
+        "onsetQuarters": 1,
+        "truthCount": 4,
+        "generatedCount": 3,
+        "truthGroupIndex": 1
+      },
+      {
+        "measureNumber": 14,
+        "onsetQuarters": 0,
+        "truthCount": 2,
+        "generatedCount": 6,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 14,
+        "onsetQuarters": 1,
+        "truthCount": 4,
+        "generatedCount": 1,
+        "truthGroupIndex": 1
+      },
+      {
+        "measureNumber": 14,
+        "onsetQuarters": 2,
+        "truthCount": 1,
+        "generatedCount": 2,
+        "truthGroupIndex": 2
+      },
+      {
+        "measureNumber": 15,
+        "onsetQuarters": 0,
+        "truthCount": 2,
+        "generatedCount": 4,
+        "truthGroupIndex": 0
+      }
+    ],
+    "truncated": {
+      "missingNotes": 47,
+      "extraNotes": 471,
+      "wrongPitches": 301,
+      "wrongDurations": 258,
+      "wrongOnsets": 24,
+      "wrongTimes": 341,
+      "chordGroupMismatches": 197
+    }
+  },
+  "options": {
+    "onsetToleranceQuarters": 0.25,
+    "durationToleranceQuarters": 0.25,
+    "timeToleranceSeconds": 0.15,
+    "matchWindowQuarters": 0.75,
+    "chordOnsetToleranceQuarters": 0.08,
+    "worstMeasureCount": 10,
+    "exampleLimit": 40
+  },
+  "generatedOmrDiagnostics": {
+    "pages": [
+      {
+        "page": 1,
+        "confidence": 0.6301,
+        "systems": [
+          {
+            "systemIndex": 0,
+            "confidence": 0.6175,
+            "measureCount": 6,
+            "measures": [
+              {
+                "measureNumber": 1,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 2,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 3,
+                "confidence": 0.6175,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 4,
+                "confidence": 0.6175000000000002,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 5,
+                "confidence": 0.6175,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 6,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              }
+            ]
+          },
+          {
+            "systemIndex": 1,
+            "confidence": 0.6174999999999999,
+            "measureCount": 5,
+            "measures": [
+              {
+                "measureNumber": 7,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 8,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 9,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 10,
+                "confidence": 0.6175,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 11,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              }
+            ]
+          },
+          {
+            "systemIndex": 2,
+            "confidence": 0.649,
+            "measureCount": 5,
+            "measures": [
+              {
+                "measureNumber": 12,
+                "confidence": 0.6489999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 13,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 14,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 15,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 16,
+                "confidence": 0.649,
+                "uncertain": true
+              }
+            ]
+          },
+          {
+            "systemIndex": 3,
+            "confidence": 0.649,
+            "measureCount": 5,
+            "measures": [
+              {
+                "measureNumber": 17,
+                "confidence": 0.6489999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 18,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 19,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 20,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 21,
+                "confidence": 0.649,
+                "uncertain": true
+              }
+            ]
+          },
+          {
+            "systemIndex": 4,
+            "confidence": 0.6174999999999999,
+            "measureCount": 5,
+            "measures": [
+              {
+                "measureNumber": 22,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 23,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 24,
+                "confidence": 0.6175,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 25,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 26,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "page": 2,
+        "confidence": 0.6409,
+        "systems": [
+          {
+            "systemIndex": 0,
+            "confidence": 0.6174999999999999,
+            "measureCount": 5,
+            "measures": [
+              {
+                "measureNumber": 27,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 28,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 29,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 30,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 31,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              }
+            ]
+          },
+          {
+            "systemIndex": 1,
+            "confidence": 0.6715000000000002,
+            "measureCount": 5,
+            "measures": [
+              {
+                "measureNumber": 32,
+                "confidence": 0.6715000000000002,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 33,
+                "confidence": 0.6715000000000002,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 34,
+                "confidence": 0.6715000000000001,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 35,
+                "confidence": 0.6715000000000002,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 36,
+                "confidence": 0.6715000000000002,
+                "uncertain": true
+              }
+            ]
+          },
+          {
+            "systemIndex": 2,
+            "confidence": 0.6175,
+            "measureCount": 5,
+            "measures": [
+              {
+                "measureNumber": 37,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 38,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 39,
+                "confidence": 0.6175,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 40,
+                "confidence": 0.6175,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 41,
+                "confidence": 0.6175000000000002,
+                "uncertain": true
+              }
+            ]
+          },
+          {
+            "systemIndex": 3,
+            "confidence": 0.649,
+            "measureCount": 5,
+            "measures": [
+              {
+                "measureNumber": 42,
+                "confidence": 0.6489999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 43,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 44,
+                "confidence": 0.6490000000000001,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 45,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 46,
+                "confidence": 0.649,
+                "uncertain": true
+              }
+            ]
+          },
+          {
+            "systemIndex": 4,
+            "confidence": 0.649,
+            "measureCount": 6,
+            "measures": [
+              {
+                "measureNumber": 47,
+                "confidence": 0.6489999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 48,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 49,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 50,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 51,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 52,
+                "confidence": 0.649,
+                "uncertain": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "page": 3,
+        "confidence": 0.6409,
+        "systems": [
+          {
+            "systemIndex": 0,
+            "confidence": 0.6174999999999999,
+            "measureCount": 5,
+            "measures": [
+              {
+                "measureNumber": 53,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 54,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 55,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 56,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 57,
+                "confidence": 0.6175000000000002,
+                "uncertain": true
+              }
+            ]
+          },
+          {
+            "systemIndex": 1,
+            "confidence": 0.649,
+            "measureCount": 6,
+            "measures": [
+              {
+                "measureNumber": 58,
+                "confidence": 0.6489999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 59,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 60,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 61,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 62,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 63,
+                "confidence": 0.649,
+                "uncertain": true
+              }
+            ]
+          },
+          {
+            "systemIndex": 2,
+            "confidence": 0.649,
+            "measureCount": 5,
+            "measures": [
+              {
+                "measureNumber": 64,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 65,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 66,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 67,
+                "confidence": 0.649,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 68,
+                "confidence": 0.6489999999999999,
+                "uncertain": true
+              }
+            ]
+          },
+          {
+            "systemIndex": 3,
+            "confidence": 0.6175,
+            "measureCount": 6,
+            "measures": [
+              {
+                "measureNumber": 69,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 70,
+                "confidence": 0.6175000000000002,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 71,
+                "confidence": 0.6175,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 72,
+                "confidence": 0.6175000000000002,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 73,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 74,
+                "confidence": 0.6174999999999999,
+                "uncertain": true
+              }
+            ]
+          },
+          {
+            "systemIndex": 4,
+            "confidence": 0.6715000000000002,
+            "measureCount": 5,
+            "measures": [
+              {
+                "measureNumber": 75,
+                "confidence": 0.6715000000000002,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 76,
+                "confidence": 0.6715000000000002,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 77,
+                "confidence": 0.6715000000000002,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 78,
+                "confidence": 0.6715000000000001,
+                "uncertain": true
+              },
+              {
+                "measureNumber": 79,
+                "confidence": 0.6715000000000001,
+                "uncertain": true
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "systems": 15,
+    "measures": 79,
+    "notes": 1355,
+    "uncertainMeasures": 79,
+    "pagesWithSystems": 3,
+    "preprocessPages": true,
+    "overallConfidence": 0.6370949367088611,
+    "totalMeasures": 79,
+    "musical": {
+      "keySignature": {
+        "fifths": 4,
+        "mode": "major",
+        "confidence": 0.8200000000000001,
+        "count": 4,
+        "order": [
+          5,
+          0,
+          7,
+          2,
+          9,
+          4,
+          11
+        ]
+      },
+      "tempo": {
+        "bpm": 120,
+        "fromDefault": true,
+        "confidence": 0
+      }
+    },
+    "warnings": [
+      "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+      "79 measure(s) have uncertain rhythm.",
+      "Tempo defaulted to 120 BPM."
+    ],
+    "disclaimer": "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+    "layoutConsistency": {
+      "inconsistent": false,
+      "pagesCompared": 3,
+      "minSystems": 5,
+      "maxSystems": 5,
+      "spread": 0,
+      "avgConfidence": 0.6373,
+      "warning": null
+    },
+    "preprocessLog": [
+      {
+        "page": 1,
+        "applied": [],
+        "quality": {
+          "isLikelyScanned": false,
+          "contrastSpread": 255,
+          "noiseLevel": 18.8494802259887,
+          "confidence": 0.65
+        }
+      },
+      {
+        "page": 2,
+        "applied": [],
+        "quality": {
+          "isLikelyScanned": false,
+          "contrastSpread": 255,
+          "noiseLevel": 19.68890395480226,
+          "confidence": 0.65
+        }
+      },
+      {
+        "page": 3,
+        "applied": [],
+        "quality": {
+          "isLikelyScanned": false,
+          "contrastSpread": 255,
+          "noiseLevel": 18.859536723163842,
+          "confidence": 0.65
+        }
+      }
+    ],
+    "difficulty": {
+      "tooDifficult": false,
+      "reasons": [],
+      "notesPerMeasure": 17.151898734177216,
+      "systemCoverage": 1,
+      "message": null,
+      "confidence": 0.6370949367088611
+    },
+    "failureReasons": []
+  },
+  "run": {
+    "pdfPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+    "generatedPath": null,
+    "truthPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.mxl",
+    "maxPages": 24,
+    "preprocessPages": true,
+    "omrNoteCount": 893,
+    "omrMeasureCount": 79,
+    "omrWarnings": [
+      "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+      "79 measure(s) have uncertain rhythm.",
+      "Tempo defaulted to 120 BPM."
+    ],
+    "savedGeneratedPath": "tmp/omr-generated-before-gymnopedie.musicxml"
+  }
+}

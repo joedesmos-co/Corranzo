@@ -571,9 +571,312 @@ export function groundTruthAnchors(pages) {
   return anchors
 }
 
+function drawHollowNotehead(img, cx, cy, { w = 4, h = 3 } = {}) {
+  for (let y = cy - h; y <= cy + h; y += 1) {
+    for (let x = cx - w; x <= cx + w; x += 1) {
+      const onEdge = x <= cx - w + 1 || x >= cx + w - 1 || y <= cy - h + 1 || y >= cy + h - 1
+      if (onEdge) {
+        setPx(img, x, y, INK)
+      }
+    }
+  }
+}
+
+function drawFilledNotehead(img, cx, cy, { w = 4, h = 3 } = {}) {
+  fillRect(img, cx - w, cy - h, cx + w, cy + h)
+}
+
+function drawStem(img, cx, cy, { up = true, length = 22 } = {}) {
+  const stemX = cx + 4
+  if (up) {
+    vLine(img, stemX, cy - length, cy - 1)
+  } else {
+    vLine(img, stemX, cy + 1, cy + length)
+  }
+  return { stemX, tipY: up ? cy - length : cy + length }
+}
+
+function drawBeam(img, x0, x1, y) {
+  hLine(img, y, x0, x1)
+  hLine(img, y + 1, x0, x1)
+}
+
+function drawDot(img, cx, cy) {
+  fillRect(img, cx + 8, cy - 1, cx + 10, cy + 1)
+}
+
+function drawQuarterRest(img, cx, cy) {
+  for (let y = cy - 4; y <= cy + 4; y += 2) {
+    fillRect(img, cx - 2, y, cx + 2, y + 1)
+  }
+}
+
+function drawRhythmNote(img, cx, cy, spec = {}) {
+  const {
+    kind = 'quarter',
+    stemUp = true,
+    beamToX = null,
+    dotted = false,
+    tie = false,
+  } = spec
+
+  if (kind === 'whole') {
+    drawHollowNotehead(img, cx, cy)
+    return
+  }
+
+  const hollow = kind === 'half'
+  if (hollow) {
+    drawHollowNotehead(img, cx, cy)
+  } else {
+    drawFilledNotehead(img, cx, cy)
+  }
+
+  if (kind === 'half' || kind === 'quarter' || kind === 'eighth' || kind === 'sixteenth') {
+    const stem = drawStem(img, cx, cy, {
+      up: stemUp,
+      length: kind === 'half' ? 28 : 22,
+    })
+    if ((kind === 'eighth' || kind === 'sixteenth') && beamToX != null) {
+      const beamY = stemUp ? stem.tipY : stem.tipY
+      drawBeam(img, stem.stemX, beamToX, beamY)
+      if (kind === 'sixteenth') {
+        drawBeam(img, stem.stemX, beamToX, beamY + (stemUp ? 4 : -4))
+      }
+    }
+  }
+
+  if (dotted) {
+    drawDot(img, cx, cy)
+  }
+
+  if (tie) {
+    for (let x = cx + 5; x <= cx + 18; x += 1) {
+      const arcY = cy - 4 - Math.round(3 * Math.sin(((x - cx) / 18) * Math.PI))
+      setPx(img, x, arcY, INK)
+    }
+  }
+}
+
+/**
+ * One-system piano page with explicit rhythmic patterns per measure (for OMR v2 tests).
+ * `patterns` is an array (one per measure) of note specs: { kind, xFrac, stemUp?, beamToXFrac?, dotted?, tie? }
+ * or `{ kind: 'rest', xFrac }`.
+ */
+export function rhythmicPianoPage({
+  width = 460,
+  height = 640,
+  measuresPerSystem = 4,
+  patterns = null,
+} = {}) {
+  const img = cleanPianoPage({
+    width,
+    height,
+    systems: 1,
+    measuresPerSystem,
+    barlines: true,
+    header: false,
+  })
+  const x0 = Math.floor(width * 0.08)
+  const x1 = Math.floor(width * 0.92)
+  const band = img.systemBands[0]
+  const lineGap = 5
+  const trebleY = band.top + lineGap * 2 + 2
+  const defaultPatterns = [
+    [
+      { kind: 'quarter', xFrac: 0.12 },
+      { kind: 'quarter', xFrac: 0.32 },
+      { kind: 'quarter', xFrac: 0.52 },
+      { kind: 'quarter', xFrac: 0.72 },
+    ],
+    [
+      { kind: 'half', xFrac: 0.2, stemUp: true },
+      { kind: 'half', xFrac: 0.62, stemUp: true },
+    ],
+    (() => {
+      const notes = []
+      for (let i = 0; i < 4; i += 1) {
+        const xFrac = 0.1 + i * 0.2
+        notes.push({
+          kind: 'eighth',
+          xFrac,
+          stemUp: true,
+          beamToXFrac: 0.1 + (i + 1) * 0.2 - 0.04,
+        })
+      }
+      return notes
+    })(),
+    [
+      { kind: 'rest', xFrac: 0.14 },
+      { kind: 'quarter', xFrac: 0.38 },
+      { kind: 'quarter', xFrac: 0.58, dotted: true },
+      { kind: 'quarter', xFrac: 0.78, tie: true },
+    ],
+  ]
+
+  const measurePatterns = patterns ?? defaultPatterns
+
+  for (let measure = 0; measure < measuresPerSystem; measure += 1) {
+    const measureX0 = x0 + ((x1 - x0) * measure) / measuresPerSystem
+    const measureX1 = x0 + ((x1 - x0) * (measure + 1)) / measuresPerSystem
+    const measureWidth = measureX1 - measureX0
+    const specs = measurePatterns[measure] ?? []
+
+    for (const spec of specs) {
+      const cx = Math.floor(measureX0 + measureWidth * spec.xFrac)
+      if (spec.kind === 'rest') {
+        drawQuarterRest(img, cx, trebleY + 8)
+        continue
+      }
+      const beamToX =
+        spec.beamToXFrac != null
+          ? Math.floor(measureX0 + measureWidth * spec.beamToXFrac)
+          : null
+      drawRhythmNote(img, cx, trebleY, {
+        kind: spec.kind,
+        stemUp: spec.stemUp ?? true,
+        beamToX,
+        dotted: spec.dotted,
+        tie: spec.tie,
+      })
+    }
+  }
+
+  img.rhythmicPatterns = measurePatterns
+  return img
+}
+
+function drawSharpGlyph(img, cx, cy) {
+  vLine(img, cx, cy - 6, cy + 6)
+  hLine(img, cy - 3, cx - 3, cx + 1)
+  hLine(img, cy + 1, cx - 3, cx + 1)
+  hLine(img, cy - 2, cx + 1, cx + 4)
+  hLine(img, cy + 2, cx + 1, cx + 4)
+}
+
+function drawFlatGlyph(img, cx, cy) {
+  vLine(img, cx, cy - 5, cy + 5)
+  for (let y = cy; y <= cy + 4; y += 1) {
+    setPx(img, cx + 2, y, INK)
+    setPx(img, cx + 3, y, INK)
+  }
+}
+
+function drawRepeatDots(img, x, y0, y1) {
+  const mid = Math.floor((y0 + y1) / 2)
+  fillRect(img, x - 1, mid - 2, x + 1, mid + 2)
+  fillRect(img, x - 1, mid - 10, x + 1, mid - 6)
+}
+
+function drawRepeatBarline(img, x, y0, y1) {
+  vLine(img, x, y0, y1)
+  vLine(img, x + 3, y0, y1)
+  drawRepeatDots(img, x - 7, y0, y1)
+}
+
+function drawLedgerLines(img, cx, cy, staffTop, staffBottom, count, direction = 'above') {
+  const gap = 5
+  for (let i = 1; i <= count; i += 1) {
+    const y =
+      direction === 'above'
+        ? staffTop - i * gap
+        : staffBottom + i * gap
+    hLine(img, y, cx - 5, cx + 5)
+  }
+}
+
+/**
+ * Synthetic page for OMR v3 musical details: key signature, accidental, ledger line, repeat.
+ */
+export function musicalPianoPage({
+  width = 460,
+  height = 640,
+  measuresPerSystem = 3,
+} = {}) {
+  const img = cleanPianoPage({
+    width,
+    height,
+    systems: 1,
+    measuresPerSystem,
+    barlines: true,
+    header: false,
+  })
+  const x0 = Math.floor(width * 0.08)
+  const x1 = Math.floor(width * 0.92)
+  const band = img.systemBands[0]
+  const lineGap = 5
+  const trebleLines = [0, 1, 2, 3, 4].map((i) => band.top + i * lineGap)
+  const measureWidth = (x1 - x0) / measuresPerSystem
+
+  // G major key signature — one sharp on the top (F#) line.
+  drawSharpGlyph(img, x0 + 12, trebleLines[0])
+
+  // Measure 1: C quarter + F# with accidental + high C with ledger line.
+  const m1x = x0 + Math.floor(measureWidth * 0.25)
+  const m1x2 = x0 + Math.floor(measureWidth * 0.55)
+  const m1x3 = x0 + Math.floor(measureWidth * 0.8)
+  const fNaturalY = trebleLines[4] - 3
+  drawFilledNotehead(img, m1x, trebleLines[2])
+  drawStem(img, m1x, trebleLines[2], { up: true })
+  drawSharpGlyph(img, m1x2 - 10, fNaturalY)
+  drawFilledNotehead(img, m1x2, fNaturalY)
+  drawStem(img, m1x2, fNaturalY, { up: true })
+  const highY = trebleLines[0] - lineGap
+  drawLedgerLines(img, m1x3, highY, trebleLines[0], trebleLines[4], 1, 'above')
+  drawFilledNotehead(img, m1x3, highY)
+  drawStem(img, m1x3, highY, { up: true })
+
+  // Measure 2: half note + backward repeat barline.
+  const m2x = x0 + measureWidth + Math.floor(measureWidth * 0.35)
+  drawHollowNotehead(img, m2x, trebleLines[2])
+  drawStem(img, m2x, trebleLines[2], { up: true, length: 28 })
+  const barX = Math.floor(x0 + measureWidth * 2) - 2
+  drawRepeatBarline(img, barX, band.top, band.bottom)
+
+  // Measure 3: quarter with staccato dot above.
+  const m3x = x0 + measureWidth * 2 + Math.floor(measureWidth * 0.4)
+  drawFilledNotehead(img, m3x, trebleLines[3])
+  drawStem(img, m3x, trebleLines[3], { up: true })
+  fillRect(img, m3x - 1, trebleLines[3] - 10, m3x + 1, trebleLines[3] - 8)
+
+  img.musicalFixture = { keyFifths: 1, hasRepeat: true }
+  return img
+}
+
 /** Blank page (no ink) — used to assert the concise no-systems failure. */
 export function blankPage(width = 460, height = 620) {
   return createPage(width, height)
+}
+
+/**
+ * Degrade a clean rhythmic page to mimic a scanned PDF: gray wash, noise, low contrast.
+ */
+export function scannedPianoPage(options = {}) {
+  const base = rhythmicPianoPage({
+    measuresPerSystem: options.measuresPerSystem ?? 4,
+    width: options.width ?? 460,
+    height: options.height ?? 640,
+    patterns: options.patterns,
+  })
+  const { width, height, data } = base
+  for (let i = 0; i < data.length; i += 4) {
+    const lum = data[i]
+    const paper = 210 + ((i / 4) % 17)
+    const faded = Math.round(lum * 0.72 + paper * 0.28)
+    data[i] = faded
+    data[i + 1] = faded
+    data[i + 2] = faded
+  }
+  for (let n = 0; n < Math.floor(width * height * 0.018); n += 1) {
+    const x = (n * 37 + 11) % width
+    const y = (n * 53 + 7) % height
+    const index = (y * width + x) * 4
+    const speck = ((n * 19) % 2 === 0) ? 175 : 95
+    data[index] = speck
+    data[index + 1] = speck
+    data[index + 2] = speck
+  }
+  return base
 }
 
 /**

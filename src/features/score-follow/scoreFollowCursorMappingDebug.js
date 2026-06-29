@@ -74,6 +74,9 @@ function fallbackTierFor(anchor, cursor, autoSetupReport) {
   if (anchor.source === ANCHOR_SOURCE.MUSICXML_LAYOUT) {
     return 'musicxml-layout-anchor'
   }
+  if (anchor.source === ANCHOR_SOURCE.OMR) {
+    return 'omr-measure-grid'
+  }
   if (anchor.source === ANCHOR_SOURCE.AUTO_SYSTEM || anchor.source === ANCHOR_SOURCE.AUTO) {
     return 'auto-system-anchor'
   }
@@ -108,14 +111,44 @@ export function buildCursorMappingDebug({
       ? resolveTrustedAnchorForMeasure(trustedAnchors ?? [], measure.number)
       : null
   const box = deriveAnchorMeasureBox(anchor)
+  const cursorXWithinBox =
+    box && finite(cursor?.x) && finite(box.x0) && finite(box.x1) && box.x1 > box.x0
+      ? round4((cursor.x - box.x0) / (box.x1 - box.x0))
+      : null
+  const matchedOmrMeasureBox =
+    anchor?.source === ANCHOR_SOURCE.OMR && box
+      ? {
+          measureNumber: anchor.measureNumber ?? measure?.number ?? null,
+          pageNumber: anchor.page ?? cursor?.page ?? null,
+          systemIndex: anchor.meta?.systemIndex ?? cursor?.systemIndex ?? null,
+          xStart: box.x0,
+          xEnd: box.x1,
+          yTop: box.y0,
+          yBottom: box.y1,
+          rawMeasureXStart: round4(anchor.meta?.rawMeasureXStart ?? anchor.meta?.measureStartX),
+          visualMeasureXStart: round4(
+            anchor.meta?.visualMeasureStartX ?? anchor.meta?.playableStartX ?? anchor.x,
+          ),
+          firstNoteX: round4(anchor.meta?.firstNoteX),
+          lastNoteX: round4(anchor.meta?.lastNoteX),
+          cursorX: round4(cursor?.x),
+          cursorXWithinBox,
+          measureStartTimeSeconds: round4(anchor.meta?.measureStartTimeSeconds),
+          measureDurationSeconds: round4(anchor.meta?.measureDurationSeconds),
+          confidence: round4(anchor.meta?.confidence),
+        }
+      : null
 
   return {
     playbackTime: round4(practiceTime ?? null),
+    currentPlaybackMeasure: measure?.number ?? null,
     measureIndex: measureIndex >= 0 ? measureIndex : null,
     measureNumber: measure?.number ?? cursor?.measureNumber ?? null,
     pageNumber: anchor?.page ?? cursor?.page ?? null,
     systemIndex: anchor?.meta?.systemIndex ?? cursor?.systemIndex ?? null,
     measureBoundingBox: box,
+    matchedOmrMeasureBox,
+    cursorXWithinMeasureBox: cursorXWithinBox,
     interpolationSource:
       cursor?.interpolationSource ??
       (cursor?.progressMode ? `motion-timeline:${cursor.progressMode}` : null) ??

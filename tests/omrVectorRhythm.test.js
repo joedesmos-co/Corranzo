@@ -1,0 +1,404 @@
+import { describe, expect, it } from 'vitest'
+import {
+  buildVectorEvents,
+  durationMeta,
+  extendCombinedGrandStaffOpening,
+  extendPenultimateHalfBeforeFinalQuarter,
+  shouldInferRhythmFromPositions,
+} from '../src/features/omr/processVectorOmrPage.js'
+import { buildOmrMusicXml } from '../src/features/omr/buildOmrMusicXml.js'
+import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
+
+const measureBox = { measureNumber: 1, page: 1 }
+
+function onsets(positions) {
+  return positions.map(({ x, positionInMeasure, clef = 'treble', midi = 60 + x }) => ({
+    cx: x,
+    midi,
+    naturalMidi: midi,
+    clef,
+    positionInMeasure,
+  }))
+}
+
+function durations(events) {
+  return events.map((event) => event.durationDivisions)
+}
+
+describe('durationMeta snaps a division span to the nearest note value', () => {
+  it('maps exact standard spans', () => {
+    expect(durationMeta(12)).toMatchObject({ durationType: 'half', dotted: true })
+    expect(durationMeta(4)).toMatchObject({ durationType: 'quarter', dotted: false })
+  })
+})
+
+describe('shouldInferRhythmFromPositions', () => {
+  it('keeps quarter indexing when onsets sit on the beat grid', () => {
+    const groups = [
+      { notes: [{ positionInMeasure: 0 }] },
+      { notes: [{ positionInMeasure: 0.25 }] },
+      { notes: [{ positionInMeasure: 0.5 }] },
+      { notes: [{ positionInMeasure: 0.75 }] },
+    ]
+    expect(shouldInferRhythmFromPositions(groups, 4)).toBe(false)
+  })
+
+  it('switches to position rhythm when spacing is finer than quarters', () => {
+    const groups = [
+      { notes: [{ positionInMeasure: 0 }] },
+      { notes: [{ positionInMeasure: 0.125 }] },
+      { notes: [{ positionInMeasure: 0.25 }] },
+      { notes: [{ positionInMeasure: 0.375 }] },
+    ]
+    expect(shouldInferRhythmFromPositions(groups, 4)).toBe(true)
+  })
+})
+
+describe('buildVectorEvents infers duration from gap to next onset', () => {
+  it('keeps near-zero position columns on beat 0 instead of snapping to beat 2', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 0, positionInMeasure: 0.0625 },
+        { x: 30, positionInMeasure: 0.25 },
+        { x: 60, positionInMeasure: 0.5 },
+        { x: 90, positionInMeasure: 0.75 },
+      ]),
+      measureBox,
+      { beats: 4, beatType: 4 },
+    )
+    expect(events[0].startDivision).toBe(0)
+    expect(events[1].startDivision).toBe(4)
+  })
+
+  it('aligns the opening column to beat 0 when clef padding shifts position to 0.125', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 0, positionInMeasure: 0.125 },
+        { x: 30, positionInMeasure: 0.25 },
+        { x: 60, positionInMeasure: 0.5 },
+        { x: 90, positionInMeasure: 0.75 },
+      ]),
+      measureBox,
+      { beats: 4, beatType: 4 },
+    )
+    expect(events[0].startDivision).toBe(0)
+    expect(events[0].durationDivisions).toBe(2)
+  })
+
+  it('renders four spaced onsets in 4/4 as four quarters (not stretched)', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 0, positionInMeasure: 0 },
+        { x: 15, positionInMeasure: 0.25 },
+        { x: 30, positionInMeasure: 0.5 },
+        { x: 45, positionInMeasure: 0.75 },
+      ]),
+      measureBox,
+      { beats: 4, beatType: 4 },
+    )
+    expect(durations(events)).toEqual([4, 4, 4, 4])
+  })
+
+  it('renders eighth-note spacing when onsets are finer than quarter index slots', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 0, positionInMeasure: 0 },
+        { x: 15, positionInMeasure: 0.125 },
+        { x: 30, positionInMeasure: 0.25 },
+        { x: 45, positionInMeasure: 0.375 },
+        { x: 60, positionInMeasure: 0.5 },
+        { x: 75, positionInMeasure: 0.625 },
+        { x: 90, positionInMeasure: 0.75 },
+        { x: 105, positionInMeasure: 0.875 },
+      ]),
+      measureBox,
+      { beats: 4, beatType: 4 },
+    )
+    expect(durations(events)).toEqual([2, 2, 2, 2, 2, 2, 2, 2])
+  })
+
+  it('merges dense chord fragments that share a beat slot before rhythm inference', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 60, positionInMeasure: 0.25, midi: 60 },
+        { x: 68, positionInMeasure: 0.26, midi: 64 },
+        { x: 76, positionInMeasure: 0.27, midi: 67 },
+        { x: 120, positionInMeasure: 0.5, midi: 72 },
+      ]),
+      measureBox,
+      { beats: 4, beatType: 4 },
+    )
+    expect(events).toHaveLength(2)
+    const chord = events.find((event) => (event.notes?.length ?? 0) === 3)
+    expect(chord).toBeTruthy()
+    expect(chord.durationDivisions).toBe(4)
+  })
+
+  it('splits mixed-clef groups into overlapping bass and treble durations', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 10, positionInMeasure: 0.05, clef: 'bass', midi: 38 },
+        { x: 11, positionInMeasure: 0.05, clef: 'treble', midi: 74 },
+        { x: 70, positionInMeasure: 0.32, clef: 'bass', midi: 48 },
+        { x: 71, positionInMeasure: 0.32, clef: 'bass', midi: 53 },
+        { x: 72, positionInMeasure: 0.32, clef: 'bass', midi: 57 },
+        { x: 73, positionInMeasure: 0.32, clef: 'treble', midi: 62 },
+        { x: 110, positionInMeasure: 0.55, clef: 'treble', midi: 74 },
+      ]),
+      measureBox,
+      { beats: 4, beatType: 4 },
+    )
+
+    const bass = events.find((event) => event.notes?.[0]?.clef === 'bass' && event.startDivision === 0)
+    const openingTreble = events.find(
+      (event) => event.notes?.[0]?.clef === 'treble' && event.startDivision === 0,
+    )
+    const innerBass = events.find(
+      (event) => event.notes?.[0]?.clef === 'bass' && event.startDivision === 4,
+    )
+    const closingTreble = events.find(
+      (event) => event.notes?.length === 1 && event.startDivision === 8,
+    )
+
+    expect(bass?.durationDivisions).toBe(12)
+    expect(openingTreble?.durationDivisions).toBe(4)
+    expect(innerBass?.durationDivisions).toBe(8)
+    expect(closingTreble?.durationDivisions).toBe(4)
+  })
+
+  it('keeps a closing upper voice on its own beat when merging chord fragments', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 10, positionInMeasure: 0.05, clef: 'bass', midi: 43 },
+        { x: 70, positionInMeasure: 0.35, clef: 'treble', midi: 59 },
+        { x: 71, positionInMeasure: 0.36, clef: 'treble', midi: 62 },
+        { x: 72, positionInMeasure: 0.37, clef: 'treble', midi: 66 },
+        { x: 110, positionInMeasure: 0.62, clef: 'treble', midi: 81 },
+        { x: 73, positionInMeasure: 0.35, clef: 'treble', midi: 78 },
+      ]),
+      measureBox,
+      { beats: 3, beatType: 4 },
+    )
+    const closing = events.find((event) => event.notes?.[0]?.midi === 81)
+    const auxiliary = events.find((event) => event.notes?.[0]?.midi === 78)
+    expect(closing?.startDivision).toBe(8)
+    expect(closing?.durationDivisions).toBe(4)
+    expect(auxiliary?.durationDivisions).toBe(4)
+  })
+
+  it('extends a same-beat treble tone that reappears in the next harmony', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 10, positionInMeasure: 0.05, clef: 'bass', midi: 38 },
+        { x: 11, positionInMeasure: 0.05, clef: 'treble', midi: 69 },
+        { x: 70, positionInMeasure: 0.35, clef: 'bass', midi: 57 },
+        { x: 71, positionInMeasure: 0.35, clef: 'treble', midi: 61 },
+        { x: 72, positionInMeasure: 0.35, clef: 'treble', midi: 66 },
+      ]),
+      measureBox,
+      { beats: 3, beatType: 4 },
+    )
+    const treble = events.find((event) => event.notes?.[0]?.midi === 69)
+    expect(treble?.durationDivisions).toBe(12)
+  })
+
+  it('extends a high same-start treble when its pitch class returns in the inner chord', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 10, positionInMeasure: 0.05, clef: 'bass', midi: 42 },
+        { x: 11, positionInMeasure: 0.05, clef: 'treble', midi: 73 },
+        { x: 70, positionInMeasure: 0.35, clef: 'treble', midi: 57 },
+        { x: 71, positionInMeasure: 0.35, clef: 'treble', midi: 61 },
+        { x: 72, positionInMeasure: 0.35, clef: 'treble', midi: 66 },
+      ]),
+      measureBox,
+      { beats: 3, beatType: 4 },
+    )
+    const treble = events.find((event) => event.notes?.[0]?.midi === 73)
+    expect(treble?.durationDivisions).toBe(12)
+  })
+
+  it('extends a same-start melody when only bass and an inner chord fill the bar', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 10, positionInMeasure: 0.05, clef: 'bass', midi: 38 },
+        { x: 11, positionInMeasure: 0.05, clef: 'treble', midi: 64 },
+        { x: 70, positionInMeasure: 0.35, clef: 'treble', midi: 53 },
+        { x: 71, positionInMeasure: 0.35, clef: 'treble', midi: 57 },
+        { x: 72, positionInMeasure: 0.35, clef: 'treble', midi: 62 },
+      ]),
+      measureBox,
+      { beats: 3, beatType: 4 },
+    )
+    const treble = events.find((event) => event.notes?.[0]?.midi === 64)
+    expect(treble?.durationDivisions).toBe(12)
+  })
+
+  it('extends a same-start pickup to a half when the closing tone lands on the final beat', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 10, positionInMeasure: 0.05, clef: 'bass', midi: 38 },
+        { x: 11, positionInMeasure: 0.05, clef: 'treble', midi: 74 },
+        { x: 70, positionInMeasure: 0.35, clef: 'bass', midi: 48 },
+        { x: 71, positionInMeasure: 0.35, clef: 'bass', midi: 54 },
+        { x: 72, positionInMeasure: 0.35, clef: 'bass', midi: 57 },
+        { x: 73, positionInMeasure: 0.35, clef: 'bass', midi: 62 },
+        { x: 110, positionInMeasure: 0.62, clef: 'treble', midi: 74 },
+      ]),
+      measureBox,
+      { beats: 3, beatType: 4 },
+    )
+    const openingTreble = events.find(
+      (event) => event.notes?.[0]?.clef === 'treble' && event.startDivision === 0,
+    )
+    expect(openingTreble?.durationDivisions).toBe(8)
+  })
+
+  it('keeps a semitone pickup cluster short while the shared harmony becomes a half', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 10, positionInMeasure: 0.05, clef: 'bass', midi: 40 },
+        { x: 70, positionInMeasure: 0.35, clef: 'treble', midi: 61 },
+        { x: 71, positionInMeasure: 0.35, clef: 'treble', midi: 64 },
+        { x: 72, positionInMeasure: 0.35, clef: 'treble', midi: 69 },
+        { x: 73, positionInMeasure: 0.35, clef: 'treble', midi: 73 },
+        { x: 74, positionInMeasure: 0.36, clef: 'treble', midi: 74 },
+        { x: 75, positionInMeasure: 0.37, clef: 'treble', midi: 76 },
+        { x: 110, positionInMeasure: 0.62, clef: 'treble', midi: 73 },
+      ]),
+      measureBox,
+      { beats: 3, beatType: 4 },
+    )
+    const core = events.find((event) => event.notes?.some((note) => note.midi === 69))
+    const pickup = events.find((event) => event.notes?.[0]?.midi === 74)
+    expect(core?.durationDivisions).toBe(8)
+    expect(pickup?.durationDivisions).toBe(4)
+  })
+
+  it('keeps a same-beat upper neighbor short when it does not return in the next harmony', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 10, positionInMeasure: 0.05, clef: 'bass', midi: 38 },
+        { x: 11, positionInMeasure: 0.05, clef: 'treble', midi: 79 },
+        { x: 70, positionInMeasure: 0.35, clef: 'treble', midi: 57 },
+        { x: 71, positionInMeasure: 0.35, clef: 'treble', midi: 61 },
+        { x: 72, positionInMeasure: 0.35, clef: 'treble', midi: 66 },
+        { x: 110, positionInMeasure: 0.62, clef: 'treble', midi: 73 },
+      ]),
+      measureBox,
+      { beats: 3, beatType: 4 },
+    )
+    const neighbor = events.find((event) => event.notes?.[0]?.midi === 79)
+    expect(neighbor?.durationDivisions).toBe(4)
+  })
+
+  it('extends opening bass when the next group is upper-register content without treble clef tags', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 10, positionInMeasure: 0.08, clef: 'bass', midi: 43 },
+        { x: 80, positionInMeasure: 0.38, clef: 'bass', midi: 59 },
+        { x: 82, positionInMeasure: 0.39, clef: 'bass', midi: 62 },
+        { x: 84, positionInMeasure: 0.4, clef: 'bass', midi: 66 },
+      ]),
+      measureBox,
+      { beats: 3, beatType: 4 },
+    )
+    expect(events[0]?.durationDivisions).toBe(12)
+  })
+
+  it('extends a same-start pedal doubling that matches the opening bass pitch class', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 10, positionInMeasure: 0.05, clef: 'bass', midi: 40 },
+        { x: 11, positionInMeasure: 0.05, clef: 'treble', midi: 64 },
+        { x: 70, positionInMeasure: 0.35, clef: 'treble', midi: 55 },
+        { x: 71, positionInMeasure: 0.35, clef: 'treble', midi: 59 },
+      ]),
+      measureBox,
+      { beats: 3, beatType: 4 },
+    )
+    const treble = events.find((event) => event.notes?.[0]?.midi === 64)
+    expect(treble?.durationDivisions).toBe(12)
+  })
+})
+
+describe('extendPenultimateHalfBeforeFinalQuarter', () => {
+  it('extends a dense beat-1 chord to a half before a beat-2 closing note', () => {
+    const events = extendPenultimateHalfBeforeFinalQuarter(
+      [
+        { type: 'note', startDivision: 0, durationDivisions: 12, notes: [{ clef: 'bass' }] },
+        {
+          type: 'note',
+          startDivision: 4,
+          durationDivisions: 4,
+          notes: [{ clef: 'treble' }, { clef: 'bass' }],
+        },
+        { type: 'note', startDivision: 8, durationDivisions: 8, notes: [{ clef: 'treble' }] },
+      ],
+      { beats: 3, beatType: 4 },
+      12,
+    )
+    expect(events[1].durationDivisions).toBe(8)
+    expect(events[2].durationDivisions).toBe(4)
+  })
+
+  it('leaves evenly spaced single-note beats unchanged', () => {
+    const events = extendPenultimateHalfBeforeFinalQuarter(
+      [
+        { type: 'note', startDivision: 0, durationDivisions: 4, notes: [{ clef: 'treble' }] },
+        { type: 'note', startDivision: 4, durationDivisions: 4, notes: [{ clef: 'treble' }] },
+        { type: 'note', startDivision: 8, durationDivisions: 4, notes: [{ clef: 'treble' }] },
+        { type: 'note', startDivision: 12, durationDivisions: 4, notes: [{ clef: 'treble' }] },
+      ],
+      { beats: 4, beatType: 4 },
+      16,
+    )
+    expect(events.map((event) => event.durationDivisions)).toEqual([4, 4, 4, 4])
+  })
+})
+
+describe('extendCombinedGrandStaffOpening', () => {
+  it('extends a lone opening bass through a later treble entry', () => {
+    const events = [
+      {
+        type: 'note',
+        startDivision: 0,
+        durationDivisions: 4,
+        durationType: 'quarter',
+        notes: [{ clef: 'bass', midi: 43 }],
+      },
+      {
+        type: 'note',
+        startDivision: 4,
+        durationDivisions: 12,
+        durationType: 'half',
+        notes: [{ clef: 'treble', midi: 66 }],
+      },
+    ]
+    const extended = extendCombinedGrandStaffOpening(events, 16)
+    expect(extended[0].durationDivisions).toBe(12)
+    expect(extended[0].durationType).toBe('half')
+    expect(extended[0].dotted).toBe(true)
+  })
+})
+
+describe('buildOmrMusicXml overlapping grand-staff rhythm', () => {
+  it('writes extended bass and treble durations with backup/forward in one voice', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 4, positionInMeasure: 0.1, clef: 'bass', midi: 43 },
+        { x: 120, positionInMeasure: 0.45, clef: 'treble', midi: 66 },
+      ]),
+      measureBox,
+      { beats: 3, beatType: 4 },
+    )
+    const xml = buildOmrMusicXml({
+      measures: [{ measureNumber: 1, uncertain: false, events }],
+    })
+    const timing = parseMusicXml(xml, 'grand-staff.omr.musicxml')
+    const bass = timing.notes.find((note) => note.label === 'G2')
+    const treble = timing.notes.find((note) => note.label === 'F#4')
+    expect(bass?.durationQuarters).toBe(3)
+    expect(treble?.durationQuarters).toBe(2)
+  })
+})

@@ -21,6 +21,7 @@ describe('beta onboarding', () => {
     expect(CONTACT_EMAIL).toBe('joedesmos.co@gmail.com')
     expect(FEEDBACK_MAILTO).toContain('joedesmos.co@gmail.com')
     expect(readSrc('components', 'AppFooter.jsx')).toContain('FEEDBACK_MAILTO')
+    expect(readSrc('components', 'AppFooter.jsx')).not.toContain('CorranzoLogo')
     expect(readSrc('components', 'legal', 'ContactPage.jsx')).toContain('CONTACT_EMAIL')
     expect(readSrc('components', 'legal', 'PrivacyPolicyPage.jsx')).toContain('CONTACT_EMAIL')
   })

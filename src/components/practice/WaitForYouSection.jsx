@@ -1,4 +1,5 @@
 import { WFY_STATUS } from '../../features/practice/waitForYouEngine.js'
+import { WFY_DISPLAY_STATUS } from '../../features/practice/waitForYouDisplayStatus.js'
 import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
 import { getExpectedMidis } from '../../features/practice/waitForYouNoteMatch.js'
 import { WFY_INPUT_OUTCOME } from '../../features/practice/waitForYouInputFeedback.js'
@@ -13,7 +14,10 @@ const CHECKPOINT_LABELS = {
   [WFY_CHECKPOINT_MODE.NOTE]: 'Note',
 }
 
-function statusMessage(status, currentCheckpoint, checkpointMode) {
+function statusMessage(status, currentCheckpoint, checkpointMode, displayLabel) {
+  if (displayLabel) {
+    return displayLabel
+  }
   if (status === WFY_STATUS.NO_CHECKPOINTS) {
     return 'No checkpoints'
   }
@@ -21,9 +25,22 @@ function statusMessage(status, currentCheckpoint, checkpointMode) {
     return 'Section complete'
   }
   if (status === WFY_STATUS.WAITING && currentCheckpoint) {
-    return checkpointMode === WFY_CHECKPOINT_MODE.NOTE ? 'Play the note' : ''
+    return checkpointMode === WFY_CHECKPOINT_MODE.NOTE ? 'Waiting' : 'Waiting'
   }
   return 'Ready'
+}
+
+function statusClassName(displayStatus, engineStatus) {
+  if (displayStatus === WFY_DISPLAY_STATUS.MISSED) {
+    return 'missed'
+  }
+  if (displayStatus === WFY_DISPLAY_STATUS.CORRECT) {
+    return 'correct'
+  }
+  if (displayStatus === WFY_DISPLAY_STATUS.CONTINUING) {
+    return 'continuing'
+  }
+  return engineStatus
 }
 
 function feedbackClassName(outcome) {
@@ -44,6 +61,8 @@ function feedbackClassName(outcome) {
 export default function WaitForYouSection({
   active,
   status,
+  displayStatus = null,
+  displayLabel = '',
   checkpointMode,
   onCheckpointModeChange,
   currentCheckpoint,
@@ -101,7 +120,9 @@ export default function WaitForYouSection({
     status,
     currentCheckpoint,
     checkpointMode,
+    displayLabel,
   )
+  const statusModifier = statusClassName(displayStatus, status)
 
   return (
     <section className={sectionClass} aria-label="Wait For You">
@@ -112,9 +133,14 @@ export default function WaitForYouSection({
             Pauses at each checkpoint until you play or tap Continue.
           </PracticeHelpTip>
         </h3>
-        {status === WFY_STATUS.WAITING && (
+        {status === WFY_STATUS.WAITING && displayStatus !== WFY_DISPLAY_STATUS.CONTINUING && (
           <span className="wait-for-you__badge wait-for-you__badge--pulse" role="status">
-            Your turn
+            {displayStatus === WFY_DISPLAY_STATUS.MISSED ? 'Try again' : 'Your turn'}
+          </span>
+        )}
+        {displayStatus === WFY_DISPLAY_STATUS.CONTINUING && (
+          <span className="wait-for-you__badge wait-for-you__badge--continuing" role="status">
+            Continuing
           </span>
         )}
       </div>
@@ -155,7 +181,7 @@ export default function WaitForYouSection({
       )}
 
       {currentStatusMessage && (
-        <p className={`wait-for-you__status wait-for-you__status--${status}`}>
+        <p className={`wait-for-you__status wait-for-you__status--${statusModifier}`}>
           {currentStatusMessage}
         </p>
       )}
@@ -192,9 +218,14 @@ export default function WaitForYouSection({
       {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && status === WFY_STATUS.WAITING && (
         <p className="wait-for-you__note-target-status" role="status">
           {noteTargetWrongPage && noteTarget?.visible ? (
-            <>Note marker: page {noteTarget.page}</>
+            <>Target on page {noteTarget.page} — switching…</>
           ) : noteTarget?.visible ? (
-            <>Note marker ready{noteTarget.confidence != null && noteTarget.confidence < 0.7 ? ' · approximate' : ''}</>
+            <>
+              <span className="wait-for-you__note-target-chip">Your note</span>
+              {noteTarget.confidence != null && noteTarget.confidence < 0.7
+                ? ' · approximate position'
+                : ' · marked on score'}
+            </>
           ) : (
             <>Open Setup to show the note marker.</>
           )}
@@ -263,12 +294,13 @@ export default function WaitForYouSection({
           <button
             type="button"
             className="wait-for-you__btn"
-            disabled={
-              referencePlaying ||
-              status === WFY_STATUS.COMPLETE ||
-              status === WFY_STATUS.NO_CHECKPOINTS ||
-              getExpectedMidis(currentCheckpoint).length === 0
-            }
+          disabled={
+            referencePlaying ||
+            status === WFY_STATUS.COMPLETE ||
+            status === WFY_STATUS.NO_CHECKPOINTS ||
+            displayStatus === WFY_DISPLAY_STATUS.CONTINUING ||
+            getExpectedMidis(currentCheckpoint).length === 0
+          }
             onClick={() => onPlayReference(currentCheckpoint)}
           >
             {referencePlaying ? 'Playing…' : 'Hear it'}
@@ -287,7 +319,11 @@ export default function WaitForYouSection({
         <button
           type="button"
           className="wait-for-you__btn wait-for-you__btn--primary"
-          disabled={status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS}
+          disabled={
+            status === WFY_STATUS.COMPLETE ||
+            status === WFY_STATUS.NO_CHECKPOINTS ||
+            displayStatus === WFY_DISPLAY_STATUS.CONTINUING
+          }
           onClick={onMarkCorrect}
         >
           Continue
@@ -296,7 +332,11 @@ export default function WaitForYouSection({
           <button
             type="button"
             className="wait-for-you__btn"
-            disabled={status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS}
+            disabled={
+              status === WFY_STATUS.COMPLETE ||
+              status === WFY_STATUS.NO_CHECKPOINTS ||
+              displayStatus === WFY_DISPLAY_STATUS.CONTINUING
+            }
             onClick={onSkip}
             title="Skip this note/chord"
           >

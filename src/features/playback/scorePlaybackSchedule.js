@@ -11,6 +11,7 @@ import {
   extractSustainSpans,
 } from './sustainPedal.js'
 import { buildMetronomeSchedule } from './metronomeSchedule.js'
+import { playbackDurationSecondsForNote, playbackVelocityForNote } from './staccatoPlayback.js'
 
 /**
  * Pure performed-timeline note schedule for tests and the playback engine.
@@ -23,16 +24,23 @@ export function buildScoreNoteSchedule(timingMap, { rate = 1 } = {}) {
 
   return getTimeline(timingMap)
     .performedNotes()
-    .filter((note) => !note.isRest && note.midi != null)
-    .map((note) => ({
-      type: 'note',
-      scoreTimeSeconds: note.performedSeconds,
-      baseDurationSeconds: Math.max(note.durationSeconds, 0.03),
-      midi: note.midi,
-      label: note.label,
-      measureNumber: note.measureNumber,
-      repeatPass: note.repeatPass ?? 1,
-    }))
+    .filter((note) => !note.isRest && note.midi != null && !note.suppressPlaybackAttack)
+    .map((note) => {
+      const writtenDurationSeconds = Math.max(note.durationSeconds, 0.03)
+      return {
+        type: 'note',
+        scoreTimeSeconds: note.performedSeconds,
+        writtenDurationSeconds,
+        baseDurationSeconds: playbackDurationSecondsForNote(note),
+        staccato: Boolean(note.staccato),
+        accent: Boolean(note.accent),
+        midi: note.midi,
+        label: note.label,
+        measureNumber: note.measureNumber,
+        repeatPass: note.repeatPass ?? 1,
+        velocity: playbackVelocityForNote(note),
+      }
+    })
     .sort((a, b) => a.scoreTimeSeconds - b.scoreTimeSeconds)
 }
 

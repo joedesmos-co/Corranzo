@@ -1,6 +1,7 @@
 import LibraryAccuracyGuide from './LibraryAccuracyGuide.jsx'
 import MultiFileUpload from './MultiFileUpload.jsx'
 import DemoPieceCard from './DemoPieceCard.jsx'
+import PdfOmrPlaybackPanel from './library/PdfOmrPlaybackPanel.jsx'
 import {
   ACCEPT_ATTRIBUTES,
   isAcceptedScoreTimingFile,
@@ -8,6 +9,10 @@ import {
   MUSESCORE_PLANNED_MESSAGE,
 } from '../features/import/sourceNotationFiles.js'
 import { isAcceptedFileType } from '../features/import/fileImportLimits.js'
+import {
+  isLibraryScoreTimingReady,
+  shouldShowLibraryOmrPanel,
+} from '../features/import/musicXmlSource.js'
 
 function rejectMessage(kind) {
   if (kind === 'pdf') {
@@ -24,6 +29,7 @@ export default function LibraryPanel({
   fileName,
   midiFileName,
   musicXmlFileName,
+  musicXmlSource = null,
   onFileSelect,
   onMidiSelect,
   onMusicXmlSelect,
@@ -31,16 +37,20 @@ export default function LibraryPanel({
   onImportFeedback,
   onLoadSampleFixtures,
   onOpenPractice,
+  pdfSource = null,
+  pdfFileUrl = null,
+  onOmrGenerated = null,
   sampleLoadLoading = false,
   sampleLoadError = null,
   importFeedback = null,
   uploadsDisabled = false,
   showDemo = true,
 }) {
-  const hasPdf = Boolean(fileName)
-  const hasMusicXml = Boolean(musicXmlFileName)
+  const hasPdf = Boolean(pdfFileUrl || pdfSource || fileName)
+  const hasMusicXml = isLibraryScoreTimingReady(musicXmlSource)
   const hasMidi = Boolean(midiFileName)
   const canOpenPractice = hasPdf && hasMusicXml
+  const showOmrPanel = shouldShowLibraryOmrPanel({ hasPdf, musicXmlSource })
 
   function reportReject(kind) {
     onImportFeedback?.({ type: 'error', message: rejectMessage(kind) })
@@ -132,6 +142,18 @@ export default function LibraryPanel({
         </p>
       )}
 
+      {showOmrPanel && (
+        <PdfOmrPlaybackPanel
+          key={`omr-panel-${fileName ?? 'score'}-${pdfFileUrl ?? 'no-url'}`}
+          pdfSource={pdfSource}
+          pdfFileUrl={pdfFileUrl}
+          pdfFileName={fileName}
+          disabled={uploadsDisabled}
+          onGenerated={onOmrGenerated}
+          onFeedback={onImportFeedback}
+        />
+      )}
+
       <LibraryAccuracyGuide hasPdf={hasPdf} hasMusicXml={hasMusicXml} />
 
       {canOpenPractice && onOpenPractice ? (
@@ -143,9 +165,9 @@ export default function LibraryPanel({
             <p className="library-panel__open-practice-text">Sound (MIDI) is optional.</p>
           )}
         </div>
-      ) : hasPdf && !hasMusicXml ? (
+      ) : showOmrPanel ? (
         <p className="library-panel__workflow library-panel__workflow-next" role="status">
-          Next: add MusicXML/MXL timing to enable Practice.
+          Or upload MusicXML/MXL for accurate Practice timing.
         </p>
       ) : null}
 

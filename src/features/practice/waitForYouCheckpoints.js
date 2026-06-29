@@ -1,13 +1,18 @@
 import { getBeatAtTime } from '../musicxml/timingQuery.js'
 import { getTimeline } from '../musicxml/timeline.js'
 import { usesPerformedTimeline } from '../musicxml/performedTimeline.js'
+import { alignChordScoreTime } from '../playback/pianoVoiceMix.js'
 
 export const CHECKPOINT_KIND = {
   BEAT: 'beat',
   NOTE: 'note',
 }
 
-const TIME_GROUP_EPSILON = 0.001
+/** Notes within this window (seconds) form one checkpoint — hands may be slightly apart. */
+export const NOTE_TIME_GROUP_SECONDS = 0.15
+
+const LOOP_TIME_EPSILON = 0.001
+const TIME_GROUP_EPSILON = NOTE_TIME_GROUP_SECONDS
 
 function filterByLoopRegion(items, loopRegion, timeKey = 'timeSeconds') {
   if (!loopRegion?.isValid) {
@@ -15,7 +20,7 @@ function filterByLoopRegion(items, loopRegion, timeKey = 'timeSeconds') {
   }
   return items.filter(
     (item) =>
-      item[timeKey] >= loopRegion.startTimeSeconds - TIME_GROUP_EPSILON &&
+      item[timeKey] >= loopRegion.startTimeSeconds - LOOP_TIME_EPSILON &&
       item[timeKey] < loopRegion.endTimeSeconds,
   )
 }
@@ -24,18 +29,32 @@ function groupNotesByTime(notes) {
   const groups = []
 
   for (const note of notes) {
+    const alignedTime = alignChordScoreTime(note.timeSeconds)
     const last = groups[groups.length - 1]
     if (
       !last ||
-      Math.abs(note.timeSeconds - last.timeSeconds) > TIME_GROUP_EPSILON
+      Math.abs(alignedTime - last.timeSeconds) > TIME_GROUP_EPSILON
     ) {
-      groups.push({ timeSeconds: note.timeSeconds, notes: [note] })
+      groups.push({ timeSeconds: alignedTime, notes: [note] })
     } else {
       last.notes.push(note)
     }
   }
 
   return groups
+}
+
+function uniqueMidis(notes) {
+  const seen = new Set()
+  const midis = []
+  for (const note of notes) {
+    if (note.midi == null || seen.has(note.midi)) {
+      continue
+    }
+    seen.add(note.midi)
+    midis.push(note.midi)
+  }
+  return midis
 }
 
 /**
@@ -92,7 +111,7 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null) {
   const groups = groupNotesByTime(notes)
 
   return groups.map((group, index) => {
-    const midis = group.notes.map((note) => note.midi)
+    const midis = uniqueMidis(group.notes)
     const labels = group.notes.map((note) => note.label).join(' + ')
     const beatAtTime = timingMap ? getBeatAtTime(timingMap, group.timeSeconds) : null
     const measureNumber = group.notes[0].measureNumber

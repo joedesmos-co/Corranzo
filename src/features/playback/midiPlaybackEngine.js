@@ -3,6 +3,7 @@ import { awaitToneStarted } from '../audio/toneAudioUnlock.js'
 import { parseMidiFile } from './parseMidiFile.js'
 import { INSTRUMENT_STATUS } from './pianoInstrumentStatus.js'
 import { alignChordScoreTime } from './pianoVoiceMix.js'
+import { mapPlaybackVelocity } from './pianoVelocity.js'
 
 const loadPianoInstrumentModule = () => import('./pianoInstrument.js')
 const PLAY_READY_TIMEOUT_MS = 5000
@@ -22,9 +23,7 @@ function resolvePlaybackDuration(midi, parsedDuration) {
 }
 
 function softenVelocity(velocity) {
-  const value = typeof velocity === 'number' ? velocity : 0.82
-  const shaped = value ** 1.1
-  return Math.min(0.9, Math.max(0.28, shaped * 0.8 + 0.16))
+  return mapPlaybackVelocity(velocity)
 }
 
 function normalizeNoteEvents(trackNotes) {

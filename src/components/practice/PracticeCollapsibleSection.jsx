@@ -30,7 +30,7 @@ export default function PracticeCollapsibleSection({
         onClick={() => setOpen((value) => !value)}
       >
         <span className="practice-section__toggle-label">
-          <span className="practice-section__title">{title}</span>
+          <span className="practice-section__title practice-section__title--editorial">{title}</span>
           {!open && summary && (
             <span className="practice-section__summary">{summary}</span>
           )}

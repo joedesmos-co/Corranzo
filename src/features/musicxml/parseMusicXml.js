@@ -11,6 +11,8 @@ import {
 } from './xmlTree.js'
 import { quartersToSeconds } from './timingMath.js'
 import { buildPerformedMeasureTimeline } from './parseMeasureRepeats.js'
+import { applyTieSustainToNotes } from './mergeTiedNotesForPlayback.js'
+import { DEFAULT_MUSICXML_VELOCITY, dynamicsFromDirection } from './dynamicsMap.js'
 
 const DEFAULT_BPM = 120
 const DEFAULT_DIVISIONS = 1
@@ -211,6 +213,39 @@ function getWorkTitle(scoreNode) {
  * Primary part defines measure boundaries, tempo map, and time signatures.
  * Secondary parts contribute notes only, with their own divisions/attributes.
  */
+function readTieFlags(noteNode) {
+  const tieNodes = findChildren(noteNode, 'tie')
+  let tieStart = tieNodes.some((tie) => attr(tie, 'type') === 'start')
+  let tieStop = tieNodes.some((tie) => attr(tie, 'type') === 'stop')
+  const notations = findChild(noteNode, 'notations')
+  if (notations) {
+    for (const tied of findChildren(notations, 'tied')) {
+      if (attr(tied, 'type') === 'start') {
+        tieStart = true
+      }
+      if (attr(tied, 'type') === 'stop') {
+        tieStop = true
+      }
+    }
+  }
+  return { tieStart, tieStop }
+}
+
+function readArticulations(noteNode) {
+  const notations = findChild(noteNode, 'notations')
+  if (!notations) {
+    return { staccato: false, accent: false }
+  }
+  const articulations = findChild(notations, 'articulations')
+  if (!articulations) {
+    return { staccato: false, accent: false }
+  }
+  return {
+    staccato: findChild(articulations, 'staccato') != null,
+    accent: findChild(articulations, 'accent') != null,
+  }
+}
+
 function walkPart({
   partNode,
   partId,
@@ -245,6 +280,7 @@ function walkPart({
     let maxCursorDivisions = 0
     let measureBeats = beats
     let measureBeatType = beatType
+    let activeVelocity = DEFAULT_MUSICXML_VELOCITY
 
     for (const child of childNodes(measureNode)) {
       switch (child.tag) {
@@ -278,6 +314,14 @@ function walkPart({
         }
 
         case 'direction': {
+          const dynamicsVelocity = dynamicsFromDirection(child, {
+            findChildren,
+            childNodes,
+            childText,
+          })
+          if (dynamicsVelocity != null) {
+            activeVelocity = dynamicsVelocity
+          }
           if (!isPrimary) {
             break
           }
@@ -335,9 +379,8 @@ function walkPart({
           if (!isGrace) {
             const layout = readNoteLayoutOrdered(child)
             const midi = isRest ? null : pitchNodeToMidi(findChild(child, 'pitch'))
-            const tieNodes = findChildren(child, 'tie')
-            const tieStart = tieNodes.some((tie) => attr(tie, 'type') === 'start')
-            const tieStop = tieNodes.some((tie) => attr(tie, 'type') === 'stop')
+            const { tieStart, tieStop } = readTieFlags(child)
+            const { staccato, accent } = readArticulations(child)
             notes.push({
               id: `${partId}-m${measureNumber}-n${notes.length}`,
               partId,
@@ -352,7 +395,10 @@ function walkPart({
               isGrace,
               tieStart,
               tieStop,
+              staccato,
+              accent,
               voice: Number.isFinite(voice) && voice > 0 ? voice : 1,
+              velocity: activeVelocity,
               ...layout,
             })
 
@@ -363,6 +409,7 @@ function walkPart({
                 measureNumber,
                 midi,
                 label: midiToLabel(midi),
+                voice: Number.isFinite(voice) && voice > 0 ? voice : 1,
               })
             }
           }
@@ -479,6 +526,22 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       rawTimingEvents,
     })
   })
+
+  applyTieSustainToNotes(notes)
+  rawTimingEvents.length = 0
+  for (const note of notes) {
+    if (note.isRest || note.midi == null || note.suppressPlaybackAttack) {
+      continue
+    }
+    rawTimingEvents.push({
+      type: 'note-on',
+      quarterTime: note.quarterTime,
+      measureNumber: note.measureNumber,
+      midi: note.midi,
+      label: note.label,
+      voice: note.voice,
+    })
+  }
 
   // --- Tempo map (quarter-time first, seconds afterwards) ---
   tempoEvents.sort((a, b) => a.quarterTime - b.quarterTime)

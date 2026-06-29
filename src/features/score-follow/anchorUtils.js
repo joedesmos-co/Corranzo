@@ -6,6 +6,7 @@ export const ANCHOR_SOURCE = {
   AUTO: 'auto',
   AUTO_SYSTEM: 'auto-system',
   AUTO_MEASURE: 'auto-measure',
+  OMR: 'omr',
   DEMO: 'demo',
   MUSICXML_LAYOUT: 'musicxml-layout',
 }
@@ -16,6 +17,7 @@ const AUTOMATIC_SOURCES = new Set([
   ANCHOR_SOURCE.AUTO,
   ANCHOR_SOURCE.AUTO_SYSTEM,
   ANCHOR_SOURCE.AUTO_MEASURE,
+  ANCHOR_SOURCE.OMR,
   ANCHOR_SOURCE.DEMO,
   ANCHOR_SOURCE.MUSICXML_LAYOUT,
 ])
@@ -38,6 +40,9 @@ export function normalizeAnchorSource(anchor) {
   }
   if (source === ANCHOR_SOURCE.MUSICXML_LAYOUT) {
     return ANCHOR_SOURCE.MUSICXML_LAYOUT
+  }
+  if (source === ANCHOR_SOURCE.OMR) {
+    return ANCHOR_SOURCE.OMR
   }
   if (source === ANCHOR_SOURCE.AUTO_MEASURE) {
     return ANCHOR_SOURCE.AUTO_MEASURE
@@ -118,6 +123,8 @@ export function anchorPriority(anchor) {
       return 100
     case ANCHOR_SOURCE.DEMO:
       return 50
+    case ANCHOR_SOURCE.OMR:
+      return 45
     case ANCHOR_SOURCE.MUSICXML_LAYOUT:
       return 40
     case ANCHOR_SOURCE.AUTO_MEASURE:
@@ -188,6 +195,7 @@ export function countAnchorsBySource(anchors) {
   let manual = 0
   let autoSystem = 0
   let autoMeasure = 0
+  let omr = 0
   let demo = 0
   let musicxmlLayout = 0
 
@@ -199,6 +207,8 @@ export function countAnchorsBySource(anchors) {
       demo += 1
     } else if (source === ANCHOR_SOURCE.MUSICXML_LAYOUT) {
       musicxmlLayout += 1
+    } else if (source === ANCHOR_SOURCE.OMR) {
+      omr += 1
     } else if (source === ANCHOR_SOURCE.AUTO_MEASURE) {
       autoMeasure += 1
     } else if (source === ANCHOR_SOURCE.AUTO_SYSTEM || source === ANCHOR_SOURCE.AUTO) {
@@ -210,9 +220,10 @@ export function countAnchorsBySource(anchors) {
 
   return {
     manual,
-    auto: autoSystem + autoMeasure,
+    auto: autoSystem + autoMeasure + omr,
     autoSystem,
     autoMeasure,
+    omr,
     demo,
     musicxmlLayout,
   }

@@ -1,3 +1,8 @@
+import {
+  rebuildMusicXmlSourceFromSessionMeta,
+  validateOmrSourceMeta,
+} from '../import/musicXmlSource.js'
+
 const DB_NAME = 'scoreflow-session'
 const DB_VERSION = 1
 const STORE_NAME = 'files'
@@ -42,6 +47,15 @@ function getFile(db, key) {
     const request = transaction.objectStore(STORE_NAME).get(key)
     request.onerror = () => reject(request.error)
     request.onsuccess = () => resolve(request.result ?? null)
+  })
+}
+
+function deleteFile(db, key) {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readwrite')
+    transaction.onerror = () => reject(transaction.error)
+    transaction.oncomplete = () => resolve()
+    transaction.objectStore(STORE_NAME).delete(key)
   })
 }
 
@@ -102,12 +116,18 @@ export async function saveSessionFiles({ pdf, midi, musicXml }) {
   try {
     if (pdf?.data) {
       await putFile(db, 'pdf', pdf.data)
+    } else {
+      await deleteFile(db, 'pdf')
     }
     if (midi?.data) {
       await putFile(db, 'midi', midi.data)
+    } else {
+      await deleteFile(db, 'midi')
     }
     if (musicXml?.data) {
       await putFile(db, 'musicXml', musicXml.data)
+    } else {
+      await deleteFile(db, 'musicXml')
     }
   } finally {
     db.close()
@@ -185,7 +205,16 @@ export function validateRestoredSession(meta, files) {
     } else if (meta.musicXmlSize != null && files.musicXml.byteLength !== meta.musicXmlSize) {
       issues.push('timing-size-mismatch')
     } else {
-      musicXmlSource = { fileName: meta.musicXmlFileName, data: files.musicXml }
+      musicXmlSource = rebuildMusicXmlSourceFromSessionMeta(
+        meta.musicXmlFileName,
+        files.musicXml.slice(0),
+        meta,
+      )
+      const omrMetaValidation = validateOmrSourceMeta(musicXmlSource)
+      if (!omrMetaValidation.ok) {
+        issues.push('stale-omr-session')
+        musicXmlSource = null
+      }
     }
   }
 
@@ -195,7 +224,10 @@ export function validateRestoredSession(meta, files) {
   })
 
   return {
-    ok: issues.length === 0 || (pdfMeta && musicXmlSource),
+    ok:
+      issues.length === 0 ||
+      Boolean(pdfMeta && musicXmlSource) ||
+      Boolean(pdfMeta && issues.includes('stale-omr-session')),
     issues,
     pdfFile,
     pdfMeta,
@@ -219,6 +251,8 @@ export function buildSessionMeta({
     midiSize: midiSource?.data?.byteLength ?? null,
     musicXmlFileName: musicXmlSource?.fileName ?? null,
     musicXmlSize: musicXmlSource?.data?.byteLength ?? null,
+    musicXmlSourceKind: musicXmlSource?.source ?? null,
+    omrMeta: musicXmlSource?.omrMeta ?? null,
     activeView,
     pageNumber,
     practicePrefs,

@@ -4,9 +4,12 @@ import { disposeReferencePlayer } from '../features/practice/referenceNotePlayer
 import { setupAudioVisibilityResume } from '../features/audio/audioLifecycle.js'
 import { isDemoFixtureFileSet } from '../features/demo/demoBundledAnchors.js'
 import { buildPdfFingerprint } from '../features/score-follow/scoreFollowStorage.js'
+import { resolvePracticePieceId, recordAutoPracticeLoop } from '../features/profile/autoPracticeTracker.js'
+import usePracticeStatsTracker from '../features/profile/usePracticeStatsTracker.js'
 import usePracticeSession from '../features/practice/usePracticeSession.js'
 import useWaitForYouNoteTarget from '../features/practice/useWaitForYouNoteTarget.js'
 import useScoreFollow from '../features/score-follow/useScoreFollow.js'
+import { PRACTICE_MODE } from '../features/practice/practiceMode.js'
 import { WFY_CHECKPOINT_MODE } from '../features/practice/waitForYouCheckpointMode.js'
 import { WFY_STATUS } from '../features/practice/waitForYouEngine.js'
 import { useProfileStats } from './ProfileStatsContext.jsx'
@@ -31,8 +34,10 @@ export function PracticeSessionProvider({
   isDemoPiece = false,
   onPracticePrefsChange,
   children,
+  autoSetupGateOpen = true,
+  experimentalOmrPlayback = false,
 }) {
-  const { recordWfyManualContinue } = useProfileStats()
+  const { recordWfyEvent, refreshStats } = useProfileStats()
 
   const resolvedDemoPiece = useMemo(
     () =>
@@ -44,6 +49,21 @@ export function PracticeSessionProvider({
     [isDemoPiece, pdfFileName, pdfMeta?.fileName, musicXmlSource?.fileName],
   )
 
+  const practicePiece = useMemo(() => {
+    const id = resolvePracticePieceId({
+      pdfFingerprint: buildPdfFingerprint(pdfMeta),
+      pdfFileName: pdfFileName ?? pdfMeta?.fileName ?? null,
+      musicXmlFileName: musicXmlSource?.fileName ?? null,
+    })
+    if (!id) {
+      return null
+    }
+    const title =
+      (pdfFileName ?? pdfMeta?.fileName ?? musicXmlSource?.fileName ?? 'Practice piece')
+        .replace(/\.[^.]+$/, '')
+    return { id, title }
+  }, [pdfMeta, pdfFileName, musicXmlSource?.fileName])
+
   const session = usePracticeSession({
     midiSource,
     musicXmlSource,
@@ -52,10 +72,23 @@ export function PracticeSessionProvider({
     practiceActive: activeView === 'practice',
     initialPracticePrefs,
     isDemoPiece: resolvedDemoPiece,
-    onRecordManualContinue: recordWfyManualContinue,
+    onRecordWfyEvent: recordWfyEvent,
+    onWfyCheckpointCompleted: ({ loopCompleted }) => {
+      if (loopCompleted) {
+        recordAutoPracticeLoop()
+      }
+    },
   })
 
   const pdfFingerprint = useMemo(() => buildPdfFingerprint(pdfMeta), [pdfMeta])
+
+  const practiceStatsTracker = usePracticeStatsTracker({
+    active: activeView === 'practice' && Boolean(practicePiece?.id),
+    piece: practicePiece,
+    measureNumber: session.measure.currentMeasure?.number ?? null,
+    tempoBpm: session.playback.effectiveTempo ?? null,
+    onStatsFlush: refreshStats,
+  })
 
   const sessionReady = Boolean(
     sessionFilesReady &&
@@ -79,7 +112,27 @@ export function PracticeSessionProvider({
     isPlaying: session.playback.isPlaying,
     sessionReady,
     isDemoPiece: resolvedDemoPiece,
+    autoSetupGateOpen,
+    experimentalOmrPlayback,
+    omrMeasureGrid: experimentalOmrPlayback
+      ? musicXmlSource?.omrMeta?.measureGrid ?? null
+      : null,
   })
+
+  useEffect(() => {
+    if (
+      experimentalOmrPlayback &&
+      session.isWaitForYou &&
+      !scoreFollow.canFollow
+    ) {
+      session.setPracticeMode(PRACTICE_MODE.NORMAL)
+    }
+  }, [
+    experimentalOmrPlayback,
+    session.isWaitForYou,
+    session.setPracticeMode,
+    scoreFollow.canFollow,
+  ])
 
   const waitForYouNoteTarget = useWaitForYouNoteTarget({
     active: session.isWaitForYou,
@@ -91,13 +144,13 @@ export function PracticeSessionProvider({
     visiblePageNumber,
   })
 
-  const hidePlaybackScoreFollowCursor =
-    session.isWaitForYou &&
-    session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
-    session.waitForYou.status === WFY_STATUS.WAITING
-
   const wfyNoteMode =
     session.isWaitForYou && session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE
+
+  const wfyNoteTargetVisible =
+    wfyNoteMode && (waitForYouNoteTarget?.showOnPage ?? false)
+
+  const hidePlaybackScoreFollowCursor = wfyNoteTargetVisible
 
   const previousViewRef = useRef(activeView)
 
@@ -140,12 +193,9 @@ export function PracticeSessionProvider({
     ],
   )
 
-  const wfyNoteTargetVisible =
-    wfyNoteMode && (waitForYouNoteTarget?.showOnPage ?? false)
-
   const cursorValue = useMemo(
     () => ({
-      displayCursor: hidePlaybackScoreFollowCursor || wfyNoteTargetVisible
+      displayCursor: hidePlaybackScoreFollowCursor
         ? { visible: false }
         : {
             visible: Boolean(scoreFollow.displayCursor?.visible ?? scoreFollow.cursor?.visible),
@@ -154,18 +204,17 @@ export function PracticeSessionProvider({
               scoreFollow.displayCursor?.measureNumber ??
               scoreFollow.cursor?.measureNumber ??
               null,
+            x: scoreFollow.displayCursor?.x ?? scoreFollow.cursor?.x ?? null,
+            y: scoreFollow.displayCursor?.y ?? scoreFollow.cursor?.y ?? null,
             smoothed: Boolean(scoreFollow.displayCursor?.smoothed),
           },
-      cursorVisibility:
-        hidePlaybackScoreFollowCursor || wfyNoteTargetVisible
-          ? {
-              show: false,
-              reason: hidePlaybackScoreFollowCursor
-                ? 'wait-for-you-note'
-                : 'note-target',
-              cursorPage: scoreFollow.cursorVisibility?.cursorPage ?? null,
-            }
-          : scoreFollow.cursorVisibility,
+      cursorVisibility: hidePlaybackScoreFollowCursor
+        ? {
+            show: false,
+            reason: 'wait-for-you-note',
+            cursorPage: scoreFollow.cursorVisibility?.cursorPage ?? null,
+          }
+        : scoreFollow.cursorVisibility,
       noteTarget: waitForYouNoteTarget?.target ?? null,
       showNoteTarget: wfyNoteTargetVisible,
       hidePlaybackScoreFollowCursor,
@@ -193,8 +242,18 @@ export function PracticeSessionProvider({
       waitForYouNoteTarget,
       hidePlaybackScoreFollowCursor,
       sessionReady,
+      practicePiece,
+      practiceStats: practiceStatsTracker,
     }),
-    [session, scoreFollow, waitForYouNoteTarget, hidePlaybackScoreFollowCursor, sessionReady],
+    [
+      session,
+      scoreFollow,
+      waitForYouNoteTarget,
+      hidePlaybackScoreFollowCursor,
+      sessionReady,
+      practicePiece,
+      practiceStatsTracker,
+    ],
   )
 
   const stableValue = useMemo(

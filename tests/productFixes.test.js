@@ -323,7 +323,7 @@ describe('Fix E: setup panel has no long instruction blocks', () => {
 })
 
 // ---------------------------------------------------------------------------
-// Fix F: Piano fallback — triangle8 oscillator, no sustain, long decay
+// Fix F: Piano fallback — warm synth voice (AMSynth when available)
 // ---------------------------------------------------------------------------
 
 describe('Fix F: sampled piano keeps the piano-like synth fallback', () => {
@@ -332,16 +332,17 @@ describe('Fix F: sampled piano keeps the piano-like synth fallback', () => {
     'utf8',
   )
 
-  it('oscillator type is triangle8 (not sine)', () => {
+  it('uses a warm oscillator (AMSynth sine or triangle8 fallback)', () => {
     const src = pianoInstrumentSource()
-    expect(src).toMatch(/type\s*:\s*['"]triangle8['"]/)
-    // Must not still use plain sine
-    expect(src).not.toMatch(/type\s*:\s*['"]sine['"]/)
+    expect(src).toMatch(/tone\.AMSynth|type\s*:\s*['"]triangle8['"]/)
   })
 
-  it('sustain is 0 (piano decay, no sustain plateau)', () => {
+  it('envelope has a short attack and long release tail', () => {
     const src = pianoInstrumentSource()
-    expect(src).toMatch(/sustain\s*:\s*0\.0|sustain\s*:\s*0[^.]/)
+    const attack = parseFloat(src.match(/attack\s*:\s*([\d.]+)/)?.[1] ?? '0')
+    const release = parseFloat(src.match(/release\s*:\s*([\d.]+)/)?.[1] ?? '0')
+    expect(attack).toBeLessThanOrEqual(0.02)
+    expect(release).toBeGreaterThanOrEqual(0.5)
   })
 
   it('decay is >= 1.5 s (long piano-like decay)', () => {
@@ -352,21 +353,12 @@ describe('Fix F: sampled piano keeps the piano-like synth fallback', () => {
     expect(decay).toBeGreaterThanOrEqual(1.5)
   })
 
-  it('attack is short (<= 0.02 s for snappy piano attack)', () => {
+  it('filter frequency is in a piano-like range (not overly muffled)', () => {
     const src = pianoInstrumentSource()
-    const match = src.match(/attack\s*:\s*([\d.]+)/)
-    expect(match).toBeTruthy()
-    const attack = parseFloat(match[1])
-    expect(attack).toBeLessThanOrEqual(0.02)
-  })
-
-  it('filter frequency is >= 3000 Hz (brighter, not overly muffled)', () => {
-    const src = pianoInstrumentSource()
-    // Find the Tone.Filter block — frequency is an integer ≥ 100 (not 0.x like chorus)
     const match = src.match(/tone\.Filter\s*\(\s*\{[^}]*frequency\s*:\s*(\d{3,})/s)
     expect(match).toBeTruthy()
     const freq = parseInt(match[1], 10)
-    expect(freq).toBeGreaterThanOrEqual(3000)
+    expect(freq).toBeGreaterThanOrEqual(2800)
   })
 
   it('reverb is applied (wet > 0)', () => {

@@ -1,0 +1,36 @@
+OMR accuracy report
+Generated: gymnopedie-no-1-satie
+Ground truth: Gymnopédie No. 1
+Likely main issue: Rhythm inference (rhythm-inference)
+Evidence: pitch=6% | duration=10% | onset=36% | time=0% | noteDetectionF1=56% | measureCountAccuracy=99% | firstBreak=m1 (missing/extra=7, wrongPitch=2, timing=2, chord=7) | noteCountDifference=436 | measureCountDifference=1
+
+Pitch accuracy: 6%
+Duration accuracy: 10%
+Onset accuracy: 36%
+Onset time accuracy: 0%
+Measure count accuracy: 99%
+Note detection F1: 56%
+Chord grouping accuracy: 39%
+Note count: generated 905, truth 469, diff 436
+Measure count: generated 79, truth 78, diff 1
+First likely alignment break: measure 1 (missing/extra=7, wrongPitch=2, timing=2, chord=7)
+
+Worst measures:
+  m64: error 100%; truth 6, generated 32, missing 0, extra 26, pitch 6, duration 6, onset 0, time 6, chord 26
+  m17: error 100%; truth 5, generated 22, missing 0, extra 17, pitch 5, duration 5, onset 0, time 5, chord 17
+  m2: error 100%; truth 4, generated 20, missing 0, extra 16, pitch 4, duration 4, onset 3, time 4, chord 16
+  m32: error 100%; truth 5, generated 19, missing 0, extra 14, pitch 4, duration 5, onset 0, time 5, chord 14
+  m69: error 100%; truth 6, generated 19, missing 0, extra 13, pitch 4, duration 6, onset 0, time 6, chord 13
+  m7: error 100%; truth 7, generated 19, missing 0, extra 12, pitch 6, duration 4, onset 0, time 7, chord 12
+  m22: error 100%; truth 7, generated 17, missing 0, extra 10, pitch 7, duration 4, onset 0, time 7, chord 10
+  m12: error 100%; truth 5, generated 16, missing 0, extra 11, pitch 5, duration 5, onset 0, time 5, chord 11
+  m49: error 100%; truth 5, generated 15, missing 2, extra 12, pitch 3, duration 3, onset 0, time 3, chord 14
+  m50: error 100%; truth 5, generated 15, missing 2, extra 12, pitch 3, duration 3, onset 0, time 3, chord 14
+
+Missing notes: m1@1 D4; m1@1 F#4; m3@1 B3; m3@1 D4; m3@1 F#4
+Extra notes: m1@0 G4; m1@2 F3; m1@2 G4; m1@3 B2; m1@3 G3
+Wrong pitches: m1@0 F4 vs G2; m1@1 F4 vs B3; m2@0 C3 vs D2; m2@1 G3 vs A3; m2@1 F4 vs C#4
+Wrong durations: m1@0 1q vs 3q; m1@1 1q vs 2q; m2@0 1q vs 3q; m2@1 1q vs 2q; m2@1 1q vs 2q
+Wrong onsets: m2 1.5q vs 1q; m2 1.5q vs 1q; m2 1.5q vs 1q; m6 1.5q vs 1q; m6 2.5q vs 2q
+Wrong onset times: m1 delta 0.611s; m2 delta 1.333s; m2 delta 1.694s; m2 delta 1.694s; m2 delta 1.694s
+Chord grouping mismatches: m1@0 truth 1, generated 2; m1@1 truth 3, generated 1; m1@2 truth 0, generated 2; m1@3 truth 0, generated 2; m2@0 truth 1, generated 8

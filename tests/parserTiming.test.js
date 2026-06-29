@@ -49,6 +49,17 @@ describe('MusicXML parsing — timing correctness', () => {
     expect(t.tempoChanges.some((c) => Math.abs(c.bpm - 60) < 1e-9)).toBe(true)
   })
 
+  it('applies dynamics markings to subsequent notes in the measure', () => {
+    const xml = F.scoreWrap(
+      `<part id="P1">` +
+        `<measure number="1">${F.attributes()}${F.soundTempo(120)}${F.dynamicsDirection('ff')}${F.note('C')}${F.note('D')}</measure>` +
+        `</part>`,
+    )
+    const t = parseMusicXml(xml)
+    const velocities = t.notes.filter((note) => !note.isRest).map((note) => note.velocity)
+    expect(velocities).toEqual([0.91, 0.91])
+  })
+
   it('parses each part with its own divisions', () => {
     const t = parseMusicXml(F.twoPartsDifferentDivisions())
     const p1 = partNotes(t, 'P1')
@@ -83,6 +94,26 @@ describe('MusicXML parsing — timing correctness', () => {
     expect(atZero.map((n) => n.midi).sort((a, b) => a - b)).toEqual([60, 64, 67])
     const second = t.notes.filter((n) => !n.isRest && Math.abs(n.timeSeconds - 0.5) < 1e-9)
     expect(second).toHaveLength(1)
+  })
+
+  it('reads staccato articulation without changing written duration', () => {
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes()}${F.soundTempo(120)}${F.staccatoNote('E', 4, 1)}</measure></part>`,
+    )
+    const t = parseMusicXml(xml)
+    expect(t.notes[0].staccato).toBe(true)
+    expect(t.notes[0].durationSeconds).toBeCloseTo(0.5, 6)
+    expect(t.notes[0].durationQuarters).toBe(1)
+  })
+
+  it('reads accent articulation without changing written duration', () => {
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes()}${F.soundTempo(120)}${F.accentNote('G', 4, 1)}</measure></part>`,
+    )
+    const t = parseMusicXml(xml)
+    expect(t.notes[0].accent).toBe(true)
+    expect(t.notes[0].staccato).toBe(false)
+    expect(t.notes[0].durationQuarters).toBe(1)
   })
 
   it('rejects score-timewise with a clear error', () => {

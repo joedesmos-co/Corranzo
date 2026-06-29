@@ -34,8 +34,8 @@ export function buildInputFeedback({
     return {
       outcome,
       message: playedLabel
-        ? `Wrong note — ${playedLabel} (MIDI ${playedMidi})`
-        : 'Wrong note',
+        ? `Missed / late — ${playedLabel}`
+        : 'Missed / late',
       tone: 'error',
       playedMidi,
       playedLabel,

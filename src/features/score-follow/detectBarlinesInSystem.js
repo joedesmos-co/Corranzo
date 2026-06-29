@@ -9,7 +9,15 @@ export const BARLINE_REJECT_REASON = {
   TOO_DENSE: 'too-dense',
   INCONSISTENT: 'inconsistent-spacing',
   MARGIN: 'margin',
+  INTERIOR_NARROW: 'interior-narrow',
+  NOTE_COLUMN: 'note-column',
+  INSUFFICIENT_GRAND_STAFF: 'insufficient-grand-staff',
 }
+
+/** Interior measure slivers below this content fraction are likely stem columns. */
+const NARROW_MEASURE_FRAC = 0.08
+/** Adjacent span below this is not a full measure when paired with a narrow sliver. */
+const PARTIAL_MEASURE_FRAC = 0.2
 
 /** Minimum normalized gap between barlines for a sparse/simple layout (no thinning). */
 const SPARSE_LAYOUT_MAX_CANDIDATES = 8
@@ -127,8 +135,212 @@ function emptyBarlineDiagnostics() {
       [BARLINE_REJECT_REASON.MARGIN]: 0,
       [BARLINE_REJECT_REASON.TOO_DENSE]: 0,
       [BARLINE_REJECT_REASON.INCONSISTENT]: 0,
+      [BARLINE_REJECT_REASON.INTERIOR_NARROW]: 0,
+      [BARLINE_REJECT_REASON.NOTE_COLUMN]: 0,
+      [BARLINE_REJECT_REASON.INSUFFICIENT_GRAND_STAFF]: 0,
     },
+    acceptedBeforeRefine: 0,
+    refinementRemoved: 0,
   }
+}
+
+/**
+ * Measure span widths (fraction of content width) implied by barline positions.
+ */
+export function measureSpansFromBarlines(positions, contentBounds) {
+  const x0 = contentBounds.x0 ?? 0
+  const x1 = contentBounds.x1 ?? 1
+  const contentWidth = Math.max(1e-6, x1 - x0)
+  const clipped = positions
+    .filter((pos) => pos > x0 + 0.01 && pos < x1 - 0.01)
+    .sort((left, right) => left - right)
+  const boundaries = [x0, ...clipped, x1]
+  const spans = []
+  for (let index = 0; index < boundaries.length - 1; index += 1) {
+    spans.push((boundaries[index + 1] - boundaries[index]) / contentWidth)
+  }
+  return { spans, boundaries, clipped, contentWidth }
+}
+
+export function hasInteriorNarrowMeasureSpan(
+  positions,
+  contentBounds,
+  narrowFrac = NARROW_MEASURE_FRAC,
+) {
+  const { spans } = measureSpansFromBarlines(positions, contentBounds)
+  if (spans.length < 3) {
+    return false
+  }
+  return spans.slice(1, -1).some((span) => span < narrowFrac)
+}
+
+/**
+ * Drop interior barlines that split one measure into a narrow sliver plus a partial.
+ */
+export function pruneInteriorNarrowBarlines(positions, contentBounds, diagnostics = null) {
+  let removed = 0
+  let current = [...positions].sort((left, right) => left - right)
+  let changed = true
+  while (changed) {
+    changed = false
+    const { spans, clipped } = measureSpansFromBarlines(current, contentBounds)
+    if (!clipped.length) {
+      break
+    }
+    for (let index = 0; index < clipped.length; index += 1) {
+      const leftSpan = spans[index]
+      const rightSpan = spans[index + 1]
+      const narrowPair =
+        leftSpan < NARROW_MEASURE_FRAC && rightSpan < NARROW_MEASURE_FRAC
+      const narrowLeftPartial =
+        index < clipped.length - 1 &&
+        rightSpan < NARROW_MEASURE_FRAC &&
+        leftSpan < PARTIAL_MEASURE_FRAC
+      const narrowRightPartial =
+        index > 0 &&
+        leftSpan < NARROW_MEASURE_FRAC &&
+        rightSpan < PARTIAL_MEASURE_FRAC
+      if (narrowPair || narrowLeftPartial || narrowRightPartial) {
+        const x = clipped[index]
+        current = current.filter((pos) => Math.abs(pos - x) > 1e-6)
+        removed += 1
+        changed = true
+        break
+      }
+    }
+  }
+  if (diagnostics && removed > 0) {
+    diagnostics.rejected[BARLINE_REJECT_REASON.INTERIOR_NARROW] += removed
+  }
+  return { positions: current, removed }
+}
+
+function noteColumnLikelihood(imageData, xNorm, bands, fullBand, darkThreshold) {
+  const x = Math.round(xNorm * imageData.width)
+  const trebleStats = columnBandStats(imageData, x, bands.treble, darkThreshold)
+  const bassStats = columnBandStats(imageData, x, bands.bass, darkThreshold)
+  const gapStats = columnBandStats(imageData, x, bands.gap, darkThreshold)
+  const fullStats = columnBandStatsSmoothed(imageData, x, fullBand, darkThreshold)
+  let signals = 0
+  if (fullStats.transitions >= 12) {
+    signals += 1
+  }
+  if (gapStats.maxRunFrac < 0.4) {
+    signals += 1
+  }
+  if (Math.min(trebleStats.maxRunFrac, bassStats.maxRunFrac) < 0.55) {
+    signals += 1
+  }
+  if (
+    trebleStats.inkFrac > 0.18 &&
+    bassStats.inkFrac > 0.18 &&
+    fullStats.maxRunFrac < 0.86
+  ) {
+    signals += 1
+  }
+  if (Math.abs(trebleStats.maxRunFrac - bassStats.maxRunFrac) > 0.3) {
+    signals += 1
+  }
+  return signals
+}
+
+function filterNoteColumnBarlineCandidates(
+  candidates,
+  imageData,
+  contentBounds,
+  system,
+  darkThreshold,
+  diagnostics,
+) {
+  const { height } = imageData
+  const bands = splitGrandStaffVerticalBands(imageData, contentBounds, system)
+  const y0 = Math.max(0, Math.floor(system.y0 * height))
+  const y1 = Math.min(height - 1, Math.ceil(system.y1 * height))
+  const fullBand = { y0, y1 }
+  let removed = 0
+  const kept = candidates.filter((candidate) => {
+    const likelihood = noteColumnLikelihood(
+      imageData,
+      candidate.x,
+      bands,
+      fullBand,
+      darkThreshold,
+    )
+    if (likelihood >= 4) {
+      removed += 1
+      return false
+    }
+    if (likelihood >= 3 && candidate.confidence === 'low') {
+      removed += 1
+      return false
+    }
+    return true
+  })
+  if (removed > 0) {
+    diagnostics.rejected[BARLINE_REJECT_REASON.NOTE_COLUMN] += removed
+  }
+  return kept
+}
+
+function filterInsufficientGrandStaffSpan(
+  candidates,
+  imageData,
+  contentBounds,
+  system,
+  darkThreshold,
+  { trebleRunMin, bassRunMin },
+  diagnostics,
+) {
+  const { height, width } = imageData
+  const bands = splitGrandStaffVerticalBands(imageData, contentBounds, system)
+  const y0 = Math.max(0, Math.floor(system.y0 * height))
+  const y1 = Math.min(height - 1, Math.ceil(system.y1 * height))
+  const fullBand = { y0, y1 }
+  const x0Bound = contentBounds.x0 ?? 0
+  const x1Bound = contentBounds.x1 ?? 1
+  const margin = x0Bound + 0.025
+  const maxX = x1Bound - 0.025
+  let removed = 0
+  const kept = candidates.filter((candidate) => {
+    const x = Math.round(candidate.x * width)
+    const xNorm = candidate.x
+    const edgeBarline = xNorm <= margin + 0.01 || xNorm >= maxX - 0.01
+    if (edgeBarline) {
+      return true
+    }
+    const trebleStats = columnBandStats(imageData, x, bands.treble, darkThreshold)
+    const bassStats = columnBandStats(imageData, x, bands.bass, darkThreshold)
+    const gapStats = columnBandStats(imageData, x, bands.gap, darkThreshold)
+    const fullStats = columnBandStatsSmoothed(imageData, x, fullBand, darkThreshold)
+    const grandStaffSpan =
+      trebleStats.maxRunFrac >= trebleRunMin &&
+      bassStats.maxRunFrac >= bassRunMin &&
+      gapStats.maxRunFrac >= 0.28
+    if (grandStaffSpan || fullStats.maxRunFrac >= 0.78) {
+      return true
+    }
+    removed += 1
+    return false
+  })
+  if (removed > 0) {
+    diagnostics.rejected[BARLINE_REJECT_REASON.INSUFFICIENT_GRAND_STAFF] += removed
+  }
+  return kept
+}
+
+function candidatesForPositions(candidates, positions) {
+  return positions.map((x) => {
+    const exact = candidates.find((candidate) => Math.abs(candidate.x - x) < 1e-6)
+    if (exact) {
+      return exact
+    }
+    return candidates.reduce((best, candidate) => {
+      if (!best) {
+        return candidate
+      }
+      return Math.abs(candidate.x - x) < Math.abs(best.x - x) ? candidate : best
+    }, null)
+  })
 }
 
 /**
@@ -260,6 +472,123 @@ function candidateScore({ trebleStats, bassStats, gapStats, fullStats, gapStrong
     (gapStrong ? 0.22 : 0) +
     (trebleStrong && bassStrong ? 0.12 : 0)
   )
+}
+
+function recoveredCandidatesFromPositions(positions, sourceMerged) {
+  const known = new Set(sourceMerged.map((entry) => entry.x))
+  const extras = positions
+    .filter((x) => !known.has(x))
+    .map((x) => ({ x, confidence: 'low', score: 0.35 }))
+  return [...sourceMerged, ...extras]
+}
+
+function shouldPruneInteriorNarrowBarlines(positions, contentBounds) {
+  if (positions.length < 7) {
+    return false
+  }
+  if (!hasInteriorNarrowMeasureSpan(positions, contentBounds)) {
+    return false
+  }
+  const spacing = gapSpacingStats(positions, contentBounds)
+  const uniformStemGrid =
+    spacing.tightGrid &&
+    spacing.coefficientOfVariation != null &&
+    spacing.coefficientOfVariation < 0.14
+  return !uniformStemGrid
+}
+
+/**
+ * Post-merge barline filters, interior-narrow pruning, and optional density thinning.
+ */
+function refineBarlineCandidateSet({
+  merged,
+  imageData,
+  contentBounds,
+  system,
+  darkThreshold,
+  trebleRunMin,
+  bassRunMin,
+  diagnostics,
+  afterRecovery = false,
+}) {
+  let currentMerged = merged
+  if (!afterRecovery) {
+    currentMerged = filterNoteColumnBarlineCandidates(
+      currentMerged,
+      imageData,
+      contentBounds,
+      system,
+      darkThreshold,
+      diagnostics,
+    )
+    const preGrandStaffPositions = currentMerged
+      .map((entry) => entry.x)
+      .sort((left, right) => left - right)
+    const preGrandStaffSpacing = gapSpacingStats(preGrandStaffPositions, contentBounds)
+    const denseStemGrid =
+      currentMerged.length > SPARSE_LAYOUT_MAX_CANDIDATES && preGrandStaffSpacing.tightGrid
+    if (!denseStemGrid) {
+      const beforeGrandStaff = currentMerged
+      const insuffBefore = diagnostics.rejected[BARLINE_REJECT_REASON.INSUFFICIENT_GRAND_STAFF]
+      const filteredGrandStaff = filterInsufficientGrandStaffSpan(
+        currentMerged,
+        imageData,
+        contentBounds,
+        system,
+        darkThreshold,
+        { trebleRunMin, bassRunMin },
+        diagnostics,
+      )
+      const minKept = Math.max(4, Math.ceil(beforeGrandStaff.length * 0.45))
+      if (filteredGrandStaff.length >= minKept) {
+        currentMerged = filteredGrandStaff
+      } else {
+        diagnostics.rejected[BARLINE_REJECT_REASON.INSUFFICIENT_GRAND_STAFF] = insuffBefore
+      }
+    }
+  }
+
+  let positions = currentMerged.map((entry) => entry.x).sort((left, right) => left - right)
+  const preSpacing = gapSpacingStats(positions, contentBounds)
+  const denseStemGrid =
+    positions.length > SPARSE_LAYOUT_MAX_CANDIDATES && preSpacing.tightGrid
+  if (!denseStemGrid && shouldPruneInteriorNarrowBarlines(positions, contentBounds)) {
+    positions = pruneInteriorNarrowBarlines(positions, contentBounds, diagnostics).positions
+    currentMerged = candidatesForPositions(merged, positions)
+  }
+
+  const preThinCount = positions.length
+  const narrowInterior = hasInteriorNarrowMeasureSpan(positions, contentBounds)
+  let thinningAmbiguous = false
+  let thinningRemoved = 0
+
+  const shouldThinDenseGrid =
+    preThinCount > SPARSE_LAYOUT_MAX_CANDIDATES && preSpacing.tightGrid
+  const shouldThinNarrowInterior = preThinCount >= 7 && narrowInterior
+  if (shouldThinDenseGrid || shouldThinNarrowInterior) {
+    const thinned = thinBarlineGrid(currentMerged, contentBounds, { conservative: true })
+    const removed = preThinCount - thinned.positions.length
+    if (removed > 0) {
+      diagnostics.rejected[BARLINE_REJECT_REASON.TOO_DENSE] += removed
+      thinningRemoved = removed
+    }
+    thinningAmbiguous = thinned.ambiguous
+    positions = thinned.positions
+    currentMerged = candidatesForPositions(merged, positions)
+  }
+
+  if (!denseStemGrid && shouldPruneInteriorNarrowBarlines(positions, contentBounds)) {
+    positions = pruneInteriorNarrowBarlines(positions, contentBounds, diagnostics).positions
+    currentMerged = candidatesForPositions(merged, positions)
+  }
+
+  return {
+    merged: currentMerged,
+    positions,
+    thinningRemoved,
+    thinningAmbiguous,
+    preThinCount,
+  }
 }
 
 /**
@@ -415,8 +744,8 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
   }
 
   const mergeGapPx = Math.max(2, Math.floor(width * 0.012))
-  rawCandidates.sort((a, b) => a.x - b.x)
-  const merged = []
+  rawCandidates.sort((left, right) => left.x - right.x)
+  let merged = []
   for (const candidate of rawCandidates) {
     const last = merged[merged.length - 1]
     if (last && (candidate.x - last.x) * width <= mergeGapPx) {
@@ -431,27 +760,28 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
     }
   }
 
-  let positions = merged.map((m) => m.x)
-  diagnostics.accepted = positions.length
-  diagnostics.retainedLowConfidence = merged.filter((c) => c.confidence === 'low').length
-
-  const preThinCount = positions.length
-  const preSpacing = gapSpacingStats(positions, contentBounds)
-  let thinningAmbiguous = false
-
-  // Sparse/simple layouts: never thin — real barlines are preserved as-is.
-  if (preThinCount > SPARSE_LAYOUT_MAX_CANDIDATES && preSpacing.tightGrid) {
-    const thinned = thinBarlineGrid(merged, contentBounds, { conservative: true })
-    const removed = preThinCount - thinned.positions.length
-    if (removed > 0) {
-      diagnostics.rejected[BARLINE_REJECT_REASON.TOO_DENSE] += removed
-      diagnostics.thinningRemoved = removed
-    }
-    thinningAmbiguous = thinned.ambiguous
-    positions = thinned.positions
-    diagnostics.accepted = positions.length
-    diagnostics.retainedLowConfidence = thinned.retainedLowConfidence
+  diagnostics.acceptedBeforeRefine = merged.length
+  let refined = refineBarlineCandidateSet({
+    merged,
+    imageData,
+    contentBounds,
+    system,
+    darkThreshold,
+    trebleRunMin,
+    bassRunMin,
+    diagnostics,
+  })
+  let positions = refined.positions
+  merged = refined.merged
+  let preThinCount = refined.preThinCount
+  let thinningAmbiguous = refined.thinningAmbiguous
+  if (refined.thinningRemoved > 0) {
+    diagnostics.thinningRemoved = refined.thinningRemoved
   }
+
+  diagnostics.accepted = positions.length
+  diagnostics.retainedLowConfidence = merged.filter((entry) => entry.confidence === 'low').length
+  diagnostics.refinementRemoved = Math.max(0, diagnostics.acceptedBeforeRefine - positions.length)
 
   diagnostics.densityAmbiguous = assessDensityAmbiguity(positions, contentBounds, {
     thinningAmbiguous,
@@ -471,11 +801,32 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
       diagnostics.recoveredFromProjection = true
       diagnostics.recoveryBefore = positions.length
       positions = mergeBarlinePositions(positions, recovered.positions, contentBounds, width)
+      merged = recoveredCandidatesFromPositions(positions, merged)
+      refined = refineBarlineCandidateSet({
+        merged,
+        imageData,
+        contentBounds,
+        system,
+        darkThreshold,
+        trebleRunMin,
+        bassRunMin,
+        diagnostics,
+        afterRecovery: true,
+      })
+      positions = refined.positions
+      merged = refined.merged
+      preThinCount = Math.max(preThinCount, recovered.positions.length)
+      thinningAmbiguous = refined.thinningAmbiguous || thinningAmbiguous
+      if (refined.thinningRemoved > 0) {
+        diagnostics.thinningRemoved = (diagnostics.thinningRemoved ?? 0) + refined.thinningRemoved
+      }
       diagnostics.accepted = positions.length
+      diagnostics.retainedLowConfidence = merged.filter((entry) => entry.confidence === 'low').length
+      diagnostics.refinementRemoved = Math.max(0, diagnostics.acceptedBeforeRefine - positions.length)
       diagnostics.densityAmbiguous = assessDensityAmbiguity(positions, contentBounds, {
         thinningAmbiguous,
         rejected: diagnostics.rejected,
-        preThinCount: Math.max(preThinCount, recovered.positions.length),
+        preThinCount,
       })
     }
   }
@@ -487,11 +838,32 @@ export function detectBarlineCandidates(imageData, contentBounds, system, option
     if (relaxed.positions.length > positions.length) {
       diagnostics.recoveredRelaxedFullBand = true
       positions = mergeBarlinePositions(positions, relaxed.positions, contentBounds, width)
+      merged = recoveredCandidatesFromPositions(positions, merged)
+      refined = refineBarlineCandidateSet({
+        merged,
+        imageData,
+        contentBounds,
+        system,
+        darkThreshold,
+        trebleRunMin,
+        bassRunMin,
+        diagnostics,
+        afterRecovery: true,
+      })
+      positions = refined.positions
+      merged = refined.merged
+      preThinCount = Math.max(preThinCount, relaxed.positions.length)
+      thinningAmbiguous = refined.thinningAmbiguous || thinningAmbiguous
+      if (refined.thinningRemoved > 0) {
+        diagnostics.thinningRemoved = (diagnostics.thinningRemoved ?? 0) + refined.thinningRemoved
+      }
       diagnostics.accepted = positions.length
+      diagnostics.retainedLowConfidence = merged.filter((entry) => entry.confidence === 'low').length
+      diagnostics.refinementRemoved = Math.max(0, diagnostics.acceptedBeforeRefine - positions.length)
       diagnostics.densityAmbiguous = assessDensityAmbiguity(positions, contentBounds, {
         thinningAmbiguous,
         rejected: diagnostics.rejected,
-        preThinCount: Math.max(preThinCount, relaxed.positions.length),
+        preThinCount,
       })
     }
   }

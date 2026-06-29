@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react'
 import TopBar from './components/TopBar.jsx'
 import LibraryPanel from './components/LibraryPanel.jsx'
 import LibraryWelcomeCard from './components/LibraryWelcomeCard.jsx'
+import AppViewPlaceholder from './components/AppViewPlaceholder.jsx'
 import AppFooter from './components/AppFooter.jsx'
 import SessionRestoreBanner from './components/SessionRestoreBanner.jsx'
 import SessionRestoreOverlay from './components/SessionRestoreOverlay.jsx'
@@ -10,7 +11,8 @@ import PdfViewer from './components/PdfViewer.jsx'
 import PracticeView from './components/practice/PracticeView.jsx'
 import { PracticeSessionProvider } from './context/PracticeSessionContext.jsx'
 import { ProfileStatsProvider } from './context/ProfileStatsContext.jsx'
-import ProfileView from './components/profile/ProfileView.jsx'
+
+const ProfileView = lazy(() => import('./components/profile/ProfileView.jsx'))
 import PrivacyPolicyPage from './components/legal/PrivacyPolicyPage.jsx'
 import TermsOfServicePage from './components/legal/TermsOfServicePage.jsx'
 import ContactPage from './components/legal/ContactPage.jsx'
@@ -49,6 +51,20 @@ import {
 import { resolveRestoredActiveView } from './features/session/sessionRestoreRouting.js'
 import { getHomeNavigationTarget } from './features/navigation/goHome.js'
 import { warmupPianoSamplesOnIdle } from './features/playback/pianoSampleWarmup.js'
+import { createMusicXmlSource, cloneMusicXmlSource, clearOmrGeneratedPlaybackSource, describeMusicXmlSource, isMusicXmlSourceReady, isOmrGeneratedPlayback, isPracticePlaybackReady, validateRestoredOmrPlayback } from './features/import/musicXmlSource.js'
+import { describePdfPracticeSource, refreshOwnedPdfFromBlobUrl } from './features/import/pdfPracticeSource.js'
+import { validateOmrGeneratedPlayback } from './features/omr/validateOmrGeneratedPlayback.js'
+import { normalizeOmrMeasureGridMetadata } from './features/omr/omrMeasureGridMeta.js'
+import { isPdfBufferAttached } from './features/omr/omrPdfSource.js'
+import { logAppViewDebug, normalizeAppView } from './features/navigation/appViewDebug.js'
+import { releaseOmrUiLocks } from './features/omr/omrUiGuard.js'
+import { clearWarmPages } from './features/pdf/pdfPagePerf.js'
+import { buildPdfFingerprint } from './features/score-follow/scoreFollowStorage.js'
+import {
+  buildSessionMeta,
+  saveSessionFiles,
+  saveSessionMeta,
+} from './features/session/sessionPersistence.js'
 import './App.css'
 import './styles/profile.css'
 import './styles/legal.css'
@@ -80,6 +96,9 @@ export default function App() {
   const [demoPieceActive, setDemoPieceActive] = useState(false)
   const [libraryFeedback, setLibraryFeedback] = useState(null)
   const [pdfSoftWarning, setPdfSoftWarning] = useState(null)
+  const [practicePdfReady, setPracticePdfReady] = useState(false)
+  const [pdfViewerRevision, setPdfViewerRevision] = useState(0)
+  const activeViewRef = useRef(activeView)
 
   const {
     sidebarOpen,
@@ -91,7 +110,7 @@ export default function App() {
 
   useEffect(() => {
     function handlePopState() {
-      setActiveView(getViewFromPathname(window.location.pathname) ?? 'library')
+      setActiveView(normalizeAppView(getViewFromPathname(window.location.pathname) ?? 'library'))
     }
 
     window.addEventListener('popstate', handlePopState)
@@ -99,12 +118,30 @@ export default function App() {
   }, [])
 
   useEffect(() => {
+    activeViewRef.current = activeView
+  }, [activeView])
+
+  useEffect(() => {
+    if (activeView === 'practice') {
+      setPracticePdfReady(false)
+    }
+  }, [activeView, pdfFile])
+
+  useEffect(() => {
     warmupPianoSamplesOnIdle()
   }, [])
 
+  useEffect(() => {
+    if (musicXmlSource?.data) {
+      releaseOmrUiLocks()
+    }
+  }, [musicXmlSource?.data])
+
   const navigateToView = useCallback((view) => {
-    setActiveView(view)
-    const nextPath = pathnameForView(view)
+    releaseOmrUiLocks()
+    const nextView = normalizeAppView(view)
+    setActiveView(nextView)
+    const nextPath = pathnameForView(nextView)
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath)
     }
@@ -134,6 +171,18 @@ export default function App() {
     setDemoCardHidden(true)
   }, [])
 
+  const resetPdfViewerRuntime = useCallback(() => {
+    clearWarmPages()
+    setPracticePdfReady(false)
+    setPdfViewerRevision((revision) => revision + 1)
+  }, [])
+
+  const clearGeneratedPlaybackAfterOmrFailure = useCallback(() => {
+    releaseOmrUiLocks()
+    setMusicXmlSource((source) => clearOmrGeneratedPlaybackSource(source))
+    resetPdfViewerRuntime()
+  }, [resetPdfViewerRuntime])
+
   const handleFileSelect = useCallback(async (file) => {
     clearDemoPiece()
     markDemoCardHidden()
@@ -145,6 +194,11 @@ export default function App() {
 
     try {
       const buffer = await file.arrayBuffer()
+      const nextMusicXmlSource = clearOmrGeneratedPlaybackSource(musicXmlSource)
+      const clearedGeneratedPlayback = nextMusicXmlSource !== musicXmlSource
+      if (clearedGeneratedPlayback) {
+        setMusicXmlSource(null)
+      }
       setPdfBuffer(buffer.slice(0))
       setPdfFile((previous) => {
         if (previous) {
@@ -160,8 +214,16 @@ export default function App() {
       })
       setPageNumber(1)
       setNumPages(null)
+      resetPdfViewerRuntime()
       setPdfSoftWarning(validation.softWarning)
-      if (midiSource || musicXmlSource) {
+      if (clearedGeneratedPlayback) {
+        setLibraryFeedback({
+          type: validation.softWarning ? 'info' : 'success',
+          message: validation.softWarning
+            ? `${validation.softWarning} Loaded ${file.name}. Previous generated playback was cleared.`
+            : `Loaded ${file.name}. Previous generated playback was cleared; generate again or upload MusicXML/MXL.`,
+        })
+      } else if (midiSource || nextMusicXmlSource) {
         setLibraryFeedback({
           type: 'info',
           message: validation.softWarning
@@ -179,7 +241,7 @@ export default function App() {
         )
       }
 
-      if (isFullPracticeSet(true, midiSource, musicXmlSource)) {
+      if (isFullPracticeSet(true, midiSource, nextMusicXmlSource)) {
         navigateToView('practice')
       } else {
         navigateToView('library')
@@ -190,7 +252,7 @@ export default function App() {
         message: formatPdfImportError(error),
       })
     }
-  }, [midiSource, musicXmlSource, clearDemoPiece, markDemoCardHidden, navigateToView])
+  }, [midiSource, musicXmlSource, clearDemoPiece, markDemoCardHidden, navigateToView, resetPdfViewerRuntime])
 
   const handleMidiSelect = useCallback(async (file) => {
     clearDemoPiece()
@@ -251,6 +313,149 @@ export default function App() {
     }
   }, [pdfFile, midiSource, clearDemoPiece, markDemoCardHidden, navigateToView])
 
+  const handleOmrGenerated = useCallback(async ({
+    fileName: generatedFileName,
+    musicXml,
+    noteCount,
+    measureCount,
+    measureGrid,
+  }) => {
+    releaseOmrUiLocks()
+
+    const playbackValidation = validateOmrGeneratedPlayback(musicXml, generatedFileName)
+    if (!playbackValidation.ok) {
+      clearGeneratedPlaybackAfterOmrFailure()
+      setLibraryFeedback({
+        type: 'error',
+        message: playbackValidation.message,
+      })
+      return { ok: false, message: playbackValidation.message }
+    }
+
+    if (!pdfFile) {
+      const message = 'Generated playback failed — PDF preview is missing. Re-upload the PDF and try again.'
+      clearGeneratedPlaybackAfterOmrFailure()
+      setLibraryFeedback({
+        type: 'error',
+        message,
+      })
+      return { ok: false, message }
+    }
+
+    let nextPdfFile
+    let nextPdfBuffer
+    try {
+      const refreshed = await refreshOwnedPdfFromBlobUrl(pdfFile, { revokePrevious: false })
+      nextPdfFile = refreshed.pdfFile
+      nextPdfBuffer = refreshed.pdfBuffer
+      setPdfBuffer(refreshed.pdfBuffer)
+      setPdfFile((previous) => {
+        if (previous && previous !== refreshed.pdfFile) {
+          URL.revokeObjectURL(previous)
+        }
+        return refreshed.pdfFile
+      })
+      setNumPages(null)
+      resetPdfViewerRuntime()
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? `Generated playback failed — ${error.message}`
+          : 'Generated playback failed — PDF could not be reloaded.'
+      clearGeneratedPlaybackAfterOmrFailure()
+      setLibraryFeedback({
+        type: 'error',
+        message,
+      })
+      return { ok: false, message }
+    }
+
+    const stablePdfMeta = pdfMeta ?? {
+      fileName: generatedFileName?.replace(/\.omr\.musicxml$/i, '.pdf') || 'score.pdf',
+      size: nextPdfBuffer?.byteLength ?? null,
+      lastModified: Date.now(),
+    }
+    if (!pdfMeta) {
+      setPdfMeta(stablePdfMeta)
+      setFileName(stablePdfMeta.fileName)
+    }
+
+    const title = stablePdfMeta.fileName.replace(/\.pdf$/i, '') || 'Generated score'
+    const pdfFingerprint =
+      buildPdfFingerprint(stablePdfMeta) ??
+      `${stablePdfMeta.fileName}::${nextPdfBuffer?.byteLength ?? 0}`
+    const omrMeta = {
+      noteCount: playbackValidation.noteCount ?? noteCount ?? 0,
+      measureCount: playbackValidation.measureCount ?? measureCount ?? 0,
+      durationSeconds: playbackValidation.durationSeconds,
+      title,
+      pdfFingerprint,
+      pdfFileName: stablePdfMeta.fileName,
+      createdAt: new Date().toISOString(),
+    }
+    const normalizedMeasureGrid = normalizeOmrMeasureGridMetadata(measureGrid)
+    if (normalizedMeasureGrid) {
+      omrMeta.measureGrid = normalizedMeasureGrid
+    }
+    const nextMusicXmlSource = createMusicXmlSource(generatedFileName, musicXml, {
+      source: 'omr',
+      omrMeta,
+    })
+
+    clearDemoPiece()
+    markDemoCardHidden()
+    dismissOnboarding()
+    setShowWelcome(false)
+    setMusicXmlSource(nextMusicXmlSource)
+    setLibraryFeedback({
+      type: 'success',
+      message: `Experimental playback ready (${playbackValidation.noteCount} notes, ${Math.round(playbackValidation.durationSeconds)}s). Saved in Library — open Practice to try it.`,
+    })
+
+    const sessionMeta = buildSessionMeta({
+      pdfMeta: stablePdfMeta,
+      midiSource,
+      musicXmlSource: nextMusicXmlSource,
+      activeView: activeViewRef.current,
+      pageNumber,
+      practicePrefs: practicePrefsRef.current,
+    })
+    saveSessionMeta(sessionMeta)
+    try {
+      await saveSessionFiles({
+        pdf: nextPdfBuffer ? { data: nextPdfBuffer.slice(0) } : null,
+        midi: midiSource?.data ? { data: midiSource.data.slice(0) } : null,
+        musicXml: nextMusicXmlSource.data ? { data: nextMusicXmlSource.data.slice(0) } : null,
+      })
+    } catch (error) {
+      logAppViewDebug('omr-generated:save-files-error', {
+        message: error instanceof Error ? error.message : String(error),
+      })
+    }
+
+    logAppViewDebug('omr-generated', {
+      pdf: describePdfPracticeSource({ pdfFile: nextPdfFile, pdfBuffer: nextPdfBuffer }),
+      musicXml: describeMusicXmlSource(nextMusicXmlSource),
+      durationSeconds: playbackValidation.durationSeconds,
+    })
+
+    return {
+      ok: true,
+      noteCount: playbackValidation.noteCount,
+      measureCount: playbackValidation.measureCount,
+      durationSeconds: playbackValidation.durationSeconds,
+    }
+  }, [
+    pdfFile,
+    pdfMeta,
+    midiSource,
+    pageNumber,
+    clearDemoPiece,
+    markDemoCardHidden,
+    clearGeneratedPlaybackAfterOmrFailure,
+    resetPdfViewerRuntime,
+  ])
+
   const handleLoadSampleFixtures = useCallback(async () => {
     if (!isDemoSampleEnabled()) {
       return
@@ -277,6 +482,7 @@ export default function App() {
       })
       setPageNumber(1)
       setNumPages(null)
+      resetPdfViewerRuntime()
 
       const midiData = await midiFile.arrayBuffer()
       setMidiSource({
@@ -316,7 +522,7 @@ export default function App() {
         error: formatDemoLoadError(loadError),
       })
     }
-  }, [setSidebarOpen, markDemoCardHidden, navigateToView])
+  }, [setSidebarOpen, markDemoCardHidden, navigateToView, resetPdfViewerRuntime])
 
   const handleClassifiedUpload = useCallback(
     async (classified) => {
@@ -328,6 +534,7 @@ export default function App() {
       let loadedMidi = midiSource
       let loadedXml = musicXmlSource
       let loadedSoftWarning = pdfSoftWarning
+      let clearedGeneratedPlaybackForPdf = false
 
       try {
         if (classified.pdf[0]) {
@@ -353,9 +560,16 @@ export default function App() {
           })
           setPageNumber(1)
           setNumPages(null)
+          resetPdfViewerRuntime()
           loadedSoftWarning = validation.softWarning ?? null
           setPdfSoftWarning(loadedSoftWarning)
           loadedPdf = true
+          const nextXml = clearOmrGeneratedPlaybackSource(loadedXml)
+          clearedGeneratedPlaybackForPdf = nextXml !== loadedXml
+          if (clearedGeneratedPlaybackForPdf) {
+            setMusicXmlSource(null)
+            loadedXml = null
+          }
         }
 
         if (classified.musicXml[0]) {
@@ -379,7 +593,14 @@ export default function App() {
         }
 
         if (classified.pdf[0]) {
-          if (loadedMidi || loadedXml) {
+          if (clearedGeneratedPlaybackForPdf && !classified.musicXml[0]) {
+            setLibraryFeedback({
+              type: loadedSoftWarning ? 'info' : 'success',
+              message: loadedSoftWarning
+                ? `${loadedSoftWarning} Loaded ${classified.pdf[0].name}. Previous generated playback was cleared.`
+                : `Loaded ${classified.pdf[0].name}. Previous generated playback was cleared; generate again or upload MusicXML/MXL.`,
+            })
+          } else if (loadedMidi || loadedXml) {
             setLibraryFeedback({
               type: 'info',
               message: loadedSoftWarning
@@ -430,12 +651,16 @@ export default function App() {
       clearDemoPiece,
       markDemoCardHidden,
       navigateToView,
+      resetPdfViewerRuntime,
     ],
   )
 
   function handleDocumentLoadSuccess({ numPages: total }) {
     setNumPages(total)
     setPageNumber((page) => Math.min(Math.max(1, page), total))
+    if (activeViewRef.current === 'practice') {
+      setPracticePdfReady(true)
+    }
   }
 
   function handlePrevPage() {
@@ -465,22 +690,46 @@ export default function App() {
     })
     setFileName(payload.pdfMeta.fileName)
     setPdfMeta(payload.pdfMeta)
-    setMidiSource(payload.midiSource)
-    setMusicXmlSource(payload.musicXmlSource)
+    setMidiSource(
+      payload.midiSource?.data
+        ? {
+            fileName: payload.midiSource.fileName,
+            data: payload.midiSource.data.slice(0),
+          }
+        : null,
+    )
+
+    let nextMusicXml = payload.musicXmlSource
+      ? cloneMusicXmlSource(payload.musicXmlSource)
+      : null
+    if (nextMusicXml && isOmrGeneratedPlayback(nextMusicXml)) {
+      const validation = validateRestoredOmrPlayback(nextMusicXml)
+      if (!validation.ok) {
+        nextMusicXml = null
+        setLibraryFeedback({
+          type: 'info',
+          message: validation.message,
+        })
+      }
+    }
+    setMusicXmlSource(nextMusicXml)
     setPageNumber(payload.pageNumber ?? 1)
+    resetPdfViewerRuntime()
     setInitialPracticePrefs(payload.practicePrefs)
     setActiveView(
-      resolveRestoredActiveView({
-        pathname: window.location.pathname,
-        savedActiveView: payload.activeView,
-        hasMusicXml: Boolean(payload.musicXmlSource),
-      }),
+      normalizeAppView(
+        resolveRestoredActiveView({
+          pathname: window.location.pathname,
+          savedActiveView: payload.activeView,
+          hasMusicXml: Boolean(nextMusicXml),
+        }),
+      ),
     )
     setShowWelcome(false)
     setPdfSoftWarning(null)
     setDemoPieceActive(false)
     markDemoCardHidden()
-  }, [markDemoCardHidden])
+  }, [markDemoCardHidden, resetPdfViewerRuntime])
 
   const onLegalRoute = isLegalPathname(window.location.pathname)
 
@@ -528,11 +777,110 @@ export default function App() {
     handleClassifiedUpload(pending)
   }, [restoreGateOpen, handleClassifiedUpload])
 
-  const practiceReady =
-    restoreGateOpen && Boolean(pdfFile && musicXmlSource?.data)
+  const practiceReady = isPracticePlaybackReady({
+    restoreGateOpen,
+    pdfFile,
+    musicXmlSource,
+  })
   const sessionFilesReady = practiceReady
 
+  useEffect(() => {
+    if (activeView !== 'practice' || !pdfFile) {
+      return undefined
+    }
+
+    const pdfSummary = describePdfPracticeSource({ pdfFile, pdfBuffer })
+    if (pdfSummary.bufferAttached !== false) {
+      return undefined
+    }
+
+    let cancelled = false
+    refreshOwnedPdfFromBlobUrl(pdfFile, { revokePrevious: false })
+      .then((refreshed) => {
+        if (cancelled) {
+          URL.revokeObjectURL(refreshed.pdfFile)
+          return
+        }
+        setPdfBuffer(refreshed.pdfBuffer)
+        setPdfFile((previous) => {
+          if (previous && previous !== refreshed.pdfFile) {
+            URL.revokeObjectURL(previous)
+          }
+          return refreshed.pdfFile
+        })
+        setNumPages(null)
+        resetPdfViewerRuntime()
+        logAppViewDebug('practice-pdf-refresh', describePdfPracticeSource({
+          pdfFile: refreshed.pdfFile,
+          pdfBuffer: refreshed.pdfBuffer,
+        }))
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          logAppViewDebug('practice-pdf-refresh:error', {
+            message: error instanceof Error ? error.message : String(error),
+          })
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [activeView, pdfFile, pdfBuffer, resetPdfViewerRuntime])
+
+  const showLibraryIntro = activeView === 'library' && showWelcome && restoreGateOpen
+  const showLibraryWorkspace = activeView === 'library' && !showLibraryIntro
+
+  useEffect(() => {
+    logAppViewDebug('render-state', {
+      activeView,
+      restoreGateOpen,
+      isRestoring,
+      restoreStatus: sessionPersistence.restoreStatus,
+      hasPdf: Boolean(pdfFile),
+      pdf: describePdfPracticeSource({ pdfFile, pdfBuffer }),
+      pdfBufferAttached: pdfBuffer instanceof ArrayBuffer ? isPdfBufferAttached(pdfBuffer) : null,
+      hasMusicXml: isMusicXmlSourceReady(musicXmlSource),
+      musicXml: describeMusicXmlSource(musicXmlSource),
+      omrGenerated: isOmrGeneratedPlayback(musicXmlSource),
+      omrDurationSeconds: musicXmlSource?.omrMeta?.durationSeconds ?? null,
+      practiceFile: pdfMeta?.fileName ?? fileName ?? null,
+      practiceReady,
+      numPages,
+      showLibraryIntro,
+      showLibraryWorkspace,
+      rendering:
+        showLibraryIntro
+          ? 'LibraryWelcomeCard'
+          : showLibraryWorkspace
+            ? 'LibraryWorkspace'
+            : activeView === 'practice'
+              ? sessionFilesReady
+                ? 'PracticeView'
+                : 'PracticePlaceholder'
+              : activeView === 'profile'
+                ? 'ProfileView'
+                : activeView,
+    })
+  }, [
+    activeView,
+    restoreGateOpen,
+    isRestoring,
+    sessionPersistence.restoreStatus,
+    pdfFile,
+    pdfBuffer,
+    musicXmlSource,
+    pdfMeta?.fileName,
+    fileName,
+    showLibraryIntro,
+    showLibraryWorkspace,
+    sessionFilesReady,
+    practiceReady,
+    numPages,
+  ])
+
   function handleNavigate(view, meta) {
+    releaseOmrUiLocks()
     if (isRestoring) {
       setLibraryFeedback({
         type: 'info',
@@ -553,8 +901,71 @@ export default function App() {
     navigateToView(view)
   }
 
-  const showLibraryIntro = activeView === 'library' && showWelcome && restoreGateOpen
-  const showLibraryWorkspace = activeView === 'library' && !showLibraryIntro
+  function renderPracticeContent() {
+    if (isRestoring || !restoreGateOpen) {
+      return (
+        <AppViewPlaceholder
+          title="Restoring your last session"
+          message="Practice will be available as soon as restore finishes."
+        />
+      )
+    }
+
+    if (!sessionFilesReady) {
+      const omrInvalid =
+        isOmrGeneratedPlayback(musicXmlSource) &&
+        !((musicXmlSource?.omrMeta?.durationSeconds ?? 0) > 0)
+      return (
+        <AppViewPlaceholder
+          title={omrInvalid ? 'Generated playback is not ready' : 'Practice needs a score first'}
+          message={
+            omrInvalid
+              ? 'Experimental PDF playback could not be validated. Return to Library and regenerate, or upload MusicXML/MXL.'
+              : 'Upload a PDF and generate or upload MusicXML/MXL from Library, then open Practice again.'
+          }
+          actionLabel="Back to Library"
+          onAction={() => navigateToView('library')}
+        />
+      )
+    }
+
+    return (
+      <PracticeSessionProvider
+        activeView="practice"
+        midiSource={midiSource}
+        musicXmlSource={musicXmlSource}
+        pdfMeta={pdfMeta}
+        pdfFile={pdfFile}
+        pdfFileName={fileName || null}
+        hasPdf={Boolean(pdfFile)}
+        numPages={numPages}
+        visiblePageNumber={pageNumber}
+        pdfSoftWarning={pdfSoftWarning}
+        initialPracticePrefs={initialPracticePrefs}
+        sessionFilesReady={sessionFilesReady}
+        isDemoPiece={demoPieceActive}
+        autoSetupGateOpen={practicePdfReady}
+        experimentalOmrPlayback={isOmrGeneratedPlayback(musicXmlSource)}
+        onPracticePrefsChange={(snapshot) => {
+          practicePrefsRef.current = snapshot
+        }}
+      >
+        <PracticeView
+          pdfFile={pdfFile}
+          fileName={fileName}
+          pdfMeta={pdfMeta}
+          pageNumber={pageNumber}
+          numPages={numPages}
+          paperTheme={paperTheme}
+          onDocumentLoadSuccess={handleDocumentLoadSuccess}
+          onPrevPage={handlePrevPage}
+          onNextPage={handleNextPage}
+          onGoToPage={handleGoToPage}
+          onTogglePaper={togglePaperTheme}
+        />
+      </PracticeSessionProvider>
+    )
+  }
 
   const appBody = (
     <div className={`app${isRestoring ? ' app--restoring' : ''}`}>
@@ -596,6 +1007,7 @@ export default function App() {
             fileName={fileName}
             midiFileName={midiSource?.fileName}
             musicXmlFileName={musicXmlSource?.fileName}
+            musicXmlSource={musicXmlSource}
             uploadsDisabled={isRestoring}
             onOpenPractice={() => {
               navigateToView('practice')
@@ -608,7 +1020,10 @@ export default function App() {
             onFileSelect={wrapUpload('pdf', handleFileSelect)}
             onMidiSelect={wrapUpload('midi', handleMidiSelect)}
             onMusicXmlSelect={wrapUpload('musicXml', handleMusicXmlSelect)}
+            onOmrGenerated={handleOmrGenerated}
             onImportFeedback={setLibraryFeedback}
+            pdfSource={pdfBuffer}
+            pdfFileUrl={pdfFile}
             onLoadSampleFixtures={
               isDemoSampleEnabled() && restoreGateOpen ? handleLoadSampleFixtures : undefined
             }
@@ -619,6 +1034,7 @@ export default function App() {
           />
           <div className="main-layout__score">
             <PdfViewer
+              key={`library-pdf-${pdfViewerRevision}-${pdfFile ?? 'empty'}`}
               file={pdfFile}
               fileName={fileName}
               pdfMeta={pdfMeta}
@@ -636,22 +1052,17 @@ export default function App() {
         </main>
       )}
 
-      {activeView === 'practice' && restoreGateOpen && (
-        <PracticeView
-          pdfFile={pdfFile}
-          fileName={fileName}
-          pdfMeta={pdfMeta}
-          pageNumber={pageNumber}
-          numPages={numPages}
-          paperTheme={paperTheme}
-          onDocumentLoadSuccess={handleDocumentLoadSuccess}
-          onPrevPage={handlePrevPage}
-          onNextPage={handleNextPage}
-          onGoToPage={handleGoToPage}
-          onTogglePaper={togglePaperTheme}
-        />
+      {activeView === 'practice' && renderPracticeContent()}
+
+      {activeView === 'profile' && (
+        <Suspense
+          fallback={
+            <AppViewPlaceholder title="Loading profile" message="Opening your practice log…" />
+          }
+        >
+          <ProfileView />
+        </Suspense>
       )}
-      {activeView === 'profile' && <ProfileView />}
 
       {activeView === 'privacy' && <PrivacyPolicyPage />}
       {activeView === 'terms' && <TermsOfServicePage />}
@@ -665,30 +1076,7 @@ export default function App() {
 
   return (
     <ProfileStatsProvider>
-      {!restoreGateOpen ? (
-        appBody
-      ) : (
-        <PracticeSessionProvider
-          activeView={activeView}
-          midiSource={midiSource}
-          musicXmlSource={musicXmlSource}
-          pdfMeta={pdfMeta}
-          pdfFile={pdfFile}
-          pdfFileName={fileName || null}
-          hasPdf={Boolean(pdfFile)}
-          numPages={numPages}
-          visiblePageNumber={pageNumber}
-          pdfSoftWarning={pdfSoftWarning}
-          initialPracticePrefs={initialPracticePrefs}
-          sessionFilesReady={sessionFilesReady}
-          isDemoPiece={demoPieceActive}
-          onPracticePrefsChange={(snapshot) => {
-            practicePrefsRef.current = snapshot
-          }}
-        >
-          {appBody}
-        </PracticeSessionProvider>
-      )}
+      {appBody}
     </ProfileStatsProvider>
   )
 }

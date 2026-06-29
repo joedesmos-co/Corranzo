@@ -11,6 +11,7 @@ import {
 import { METRONOME_COUNT_IN, METRONOME_SUBDIVISION } from './metronomeConstants.js'
 import { createMetronomeVoice, metronomeLevelToDb } from './metronomeVoice.js'
 import { alignChordScoreTime } from './pianoVoiceMix.js'
+import { mapPlaybackVelocity } from './pianoVelocity.js'
 
 const LOOKAHEAD_SECONDS = 2.5
 const SCHEDULE_TICK_MS = 200
@@ -23,18 +24,32 @@ const loadPianoInstrumentModule = () => import('./pianoInstrument.js')
 
 const MIDI_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
+function duckOutputGain(gain, now) {
+  if (!gain?.cancelScheduledValues || !gain?.setValueAtTime || !gain?.linearRampToValueAtTime) {
+    return
+  }
+  gain.cancelScheduledValues(now)
+  gain.setValueAtTime(gain.value, now)
+  gain.linearRampToValueAtTime(0, now + 0.035)
+}
+
+function restoreOutputGain(gain, now, target) {
+  if (!gain?.setValueAtTime || !gain?.linearRampToValueAtTime) {
+    return
+  }
+  const restoreAt = now + 0.04
+  gain.setValueAtTime(0, restoreAt)
+  gain.linearRampToValueAtTime(target, restoreAt + 0.04)
+}
+
 function midiNumberToName(midi) {
   const octave = Math.floor(midi / 12) - 1
   return `${MIDI_NAMES[((midi % 12) + 12) % 12]}${octave}`
 }
 
-// Map a 0–1 MIDI/score velocity to an expressive-but-not-harsh gain. Wider
-// dynamic range than a flat value so chords and accents breathe, with a floor
-// so soft inner/bass voices stay audible and a ceiling that avoids clipping.
+// Map a 0–1 MIDI/score velocity to an expressive-but-not-harsh gain.
 function softenVelocity(velocity) {
-  const value = typeof velocity === 'number' ? velocity : 0.82
-  const clamped = Math.min(1, Math.max(0, value))
-  return Math.min(0.9, Math.max(0.28, clamped ** 1.25 * 0.82 + 0.14))
+  return mapPlaybackVelocity(velocity)
 }
 
 /**
@@ -522,7 +537,14 @@ export class ScorePlaybackEngine {
 
     if (this.voice) {
       this.voice.releaseAll(now)
+      if (this.output?.gain) {
+        duckOutputGain(this.output.gain, now)
+      }
       this.rebuildPlaybackVoice()
+      if (this.output?.gain) {
+        const target = this.tracks.some((item) => !item.muted) || this.tracks.length === 0 ? 1 : 0
+        restoreOutputGain(this.output.gain, now, target)
+      }
     }
   }
 

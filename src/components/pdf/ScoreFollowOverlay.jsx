@@ -220,7 +220,7 @@ function ScoreFollowOverlay({
 
       {noteTargetOverlay && (
         <div
-          className={`score-follow-overlay__note-target${
+          className={`score-follow-overlay__note-target score-follow-overlay__note-target--compact${
             noteTarget.isWideChord
               ? ' score-follow-overlay__note-target--wide-chord'
               : noteTarget.isChord
@@ -232,12 +232,10 @@ function ScoreFollowOverlay({
             top: `${noteTargetOverlay.y * 100}%`,
           }}
           role="img"
-          aria-label={`Your note${noteTarget.isChord ? ' chord' : ''} at measure ${noteTarget.measureNumber ?? ''}`}
+          aria-label={`Target note${noteTarget.isChord ? ' chord' : ''} at measure ${noteTarget.measureNumber ?? ''}`}
         >
-          <span className="score-follow-overlay__note-target-glow" />
           <span className="score-follow-overlay__note-target-ring" />
           <span className="score-follow-overlay__note-target-dot" />
-          <span className="score-follow-overlay__note-target-label">Your note</span>
         </div>
       )}
 

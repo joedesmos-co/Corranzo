@@ -16,7 +16,7 @@ export default function ScoreFollowSetupStatus({ setupStatus }) {
   }
 
   const message =
-    (phase === 'warning' || phase === 'failed'
+    (phase === 'running' || phase === 'warning' || phase === 'failed'
       ? setupStatus.message
       : STATUS_LABELS[phase]) ||
     STATUS_LABELS[phase] ||

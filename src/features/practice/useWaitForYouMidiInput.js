@@ -24,6 +24,7 @@ export default function useWaitForYouMidiInput({
   currentCheckpoint,
   matchSettings,
   onPlayerInputMatched,
+  onWrongNote = null,
   webMidi,
 }) {
   const chordStateRef = useRef(createChordMatchState())
@@ -74,11 +75,15 @@ export default function useWaitForYouMidiInput({
 
       setInputFeedback(feedback)
 
+      if (result.outcome === MATCH_OUTCOME.WRONG) {
+        onWrongNote?.()
+      }
+
       if (result.outcome === MATCH_OUTCOME.COMPLETE) {
         onPlayerInputMatched()
       }
     },
-    [currentCheckpoint, matchSettings, onPlayerInputMatched],
+    [currentCheckpoint, matchSettings, onPlayerInputMatched, onWrongNote],
   )
 
   useEffect(() => {

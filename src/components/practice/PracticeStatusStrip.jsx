@@ -1,3 +1,8 @@
+import {
+  SCORE_FOLLOW_OMR_PLAYBACK_READY,
+  SCORE_FOLLOW_OMR_SETUP_FAILED,
+  SCORE_FOLLOW_OMR_SETUP_RUNNING,
+} from '../../features/score-follow/scoreFollowUserMessages.js'
 import { INSTRUMENT_STATUS } from '../../features/playback/pianoInstrumentStatus.js'
 import { WFY_INPUT_SOURCE } from '../../features/microphone-input/micInputConstants.js'
 import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
@@ -27,6 +32,25 @@ function followStatus(session, scoreFollow) {
   if (!session.hasMusicXml) {
     return { label: 'Timing missing', tone: 'warning' }
   }
+
+  if (scoreFollow?.experimentalOmrPlayback) {
+    if (scoreFollow?.setupStatus?.phase === 'running') {
+      return { label: SCORE_FOLLOW_OMR_SETUP_RUNNING, tone: 'neutral' }
+    }
+    if (scoreFollow?.setupStatus?.phase === 'failed') {
+      return { label: SCORE_FOLLOW_OMR_SETUP_FAILED, tone: 'warning' }
+    }
+    if (scoreFollow?.canFollow && scoreFollow?.enabled) {
+      return { label: 'Following score', tone: 'ready' }
+    }
+    if (
+      scoreFollow?.setupStatus?.message === SCORE_FOLLOW_OMR_PLAYBACK_READY ||
+      (scoreFollow?.followNeedsSetup && !scoreFollow?.hasAnchors)
+    ) {
+      return { label: SCORE_FOLLOW_OMR_PLAYBACK_READY, tone: 'ready' }
+    }
+  }
+
   if (scoreFollow?.setupStatus?.phase === 'running') {
     return { label: 'Setting up score', tone: 'neutral' }
   }

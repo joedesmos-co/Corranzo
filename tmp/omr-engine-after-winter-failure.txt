@@ -1,0 +1,616 @@
+
+> scoreflow-v2@0.0.0 omr:evaluate
+> node scripts/evaluate-omr-accuracy.mjs --pdf /Users/ryland/Downloads/vivaldi-winter-rousseau-version-original.pdf --truth /Users/ryland/Downloads/vivaldi-winter-rousseau-version-original.mxl --json tmp/omr-engine-after-winter.json --text tmp/omr-engine-after-winter.txt --save-generated tmp/omr-engine-after-winter.musicxml
+
+Running experimental OMR: /Users/ryland/Downloads/vivaldi-winter-rousseau-version-original.pdf
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url' }
+[omr-trace] pipeline:pdf-load-success { totalPages: 8 }
+[omr-trace] pipeline:page-1:loop-start
+[omr] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-1:owned-render-copy {
+  label: 'pipeline:page-1:owned-render-copy',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { page: 1 }
+[omr] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { notes: 0, systems: 0, source: 'vector-glyphs' }
+[omr] pipeline:page-1:after-analyze { notes: 0, systems: 0 }
+[omr-trace] pipeline:page-2:loop-start
+[omr] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-2:owned-render-copy {
+  label: 'pipeline:page-2:owned-render-copy',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { page: 2 }
+[omr] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { notes: 36, systems: 7, source: 'vector-glyphs' }
+[omr] pipeline:page-2:after-analyze { notes: 36, systems: 7 }
+[omr-trace] pipeline:page-3:loop-start
+[omr] pipeline:page-3:after-pdf-render {
+  label: 'pipeline:page-3:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-3:owned-render-copy {
+  label: 'pipeline:page-3:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-3:after-preprocess {
+  label: 'pipeline:page-3:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-3:before-analyze {
+  label: 'pipeline:page-3:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { page: 3 }
+[omr] processOmrPage:done:page-3 {
+  label: 'processOmrPage:done:page-3',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { notes: 357, systems: 6, source: 'vector-glyphs' }
+[omr] pipeline:page-3:after-analyze { notes: 357, systems: 6 }
+[omr-trace] pipeline:page-4:loop-start
+[omr] pipeline:page-4:after-pdf-render {
+  label: 'pipeline:page-4:after-pdf-render',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-4:owned-render-copy {
+  label: 'pipeline:page-4:owned-render-copy',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-4:after-preprocess {
+  label: 'pipeline:page-4:after-preprocess',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-4:before-analyze {
+  label: 'pipeline:page-4:before-analyze',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { page: 4 }
+[omr] processOmrPage:done:page-4 {
+  label: 'processOmrPage:done:page-4',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { notes: 8, systems: 2, source: 'vector-glyphs' }
+[omr] pipeline:page-4:after-analyze { notes: 8, systems: 2 }
+[omr-trace] pipeline:page-5:loop-start
+[omr] pipeline:page-5:after-pdf-render {
+  label: 'pipeline:page-5:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-5:owned-render-copy {
+  label: 'pipeline:page-5:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:skipped-owned-copy {
+  label: 'preprocess:skipped-owned-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-5:after-preprocess {
+  label: 'pipeline:page-5:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+[omr] pipeline:page-5:before-analyze {
+  label: 'pipeline:page-5:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 5 }
+[omr] processOmrPage:done:page-5 {
+  label: 'processOmrPage:done:page-5',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { notes: 340, systems: 6, source: 'vector-glyphs' }
+[omr] pipeline:page-5:after-analyze { notes: 340, systems: 6 }
+[omr-trace] pipeline:page-6:loop-start
+[omr] pipeline:page-6:after-pdf-render {
+  label: 'pipeline:page-6:after-pdf-render',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-6:owned-render-copy {
+  label: 'pipeline:page-6:owned-render-copy',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-6:after-preprocess {
+  label: 'pipeline:page-6:after-preprocess',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-6:before-analyze {
+  label: 'pipeline:page-6:before-analyze',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { page: 6 }
+[omr] processOmrPage:done:page-6 {
+  label: 'processOmrPage:done:page-6',
+  width: 1000,
+  height: 706,
+  length: 2824000,
+  bufferByteLength: 2824000,
+  detached: false,
+  probe: 245
+} { notes: 55, systems: 13, source: 'vector-glyphs' }
+[omr] pipeline:page-6:after-analyze { notes: 55, systems: 13 }
+[omr-trace] pipeline:page-7:loop-start
+[omr] pipeline:page-7:after-pdf-render {
+  label: 'pipeline:page-7:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-7:owned-render-copy {
+  label: 'pipeline:page-7:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-7:after-preprocess {
+  label: 'pipeline:page-7:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-7:before-analyze {
+  label: 'pipeline:page-7:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { page: 7 }
+[omr] processOmrPage:done:page-7 {
+  label: 'processOmrPage:done:page-7',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { notes: 470, systems: 6, source: 'vector-glyphs' }
+[omr] pipeline:page-7:after-analyze { notes: 470, systems: 6 }
+[omr-trace] pipeline:page-8:loop-start
+[omr] pipeline:page-8:after-pdf-render {
+  label: 'pipeline:page-8:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-8:owned-render-copy {
+  label: 'pipeline:page-8:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:skipped-owned-copy {
+  label: 'preprocess:skipped-owned-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-8:after-preprocess {
+  label: 'pipeline:page-8:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+[omr] pipeline:page-8:before-analyze {
+  label: 'pipeline:page-8:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 8 }
+[omr] processOmrPage:done:page-8 {
+  label: 'processOmrPage:done:page-8',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { notes: 216, systems: 5, source: 'vector-glyphs' }
+[omr] pipeline:page-8:after-analyze { notes: 216, systems: 5 }
+PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.
+
+OMR accuracy evaluator
+
+Required:
+  --truth <score.musicxml|score.xml|score.mxl>
+  one of:
+    --pdf <score.pdf>          Run OMR first, then compare.
+    --generated <omr.musicxml> Compare an existing generated file.
+
+Optional:
+  --json <report.json>         Write machine-readable report.
+  --text <report.txt>          Write text summary.
+  --save-generated <out.xml>   Save generated OMR MusicXML when --pdf is used.
+  --max-pages <n>              Limit PDF pages for OMR, default 24.
+  --no-preprocess             Disable OMR preprocessing for A/B debugging.

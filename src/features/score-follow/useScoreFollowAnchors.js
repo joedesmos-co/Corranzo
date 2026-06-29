@@ -147,9 +147,11 @@ export default function useScoreFollowAnchors({ fingerprint, fileName }) {
           ...anchor,
           id: anchor.id ?? createAnchorId(),
           source:
-            anchor.source === ANCHOR_SOURCE.AUTO_MEASURE
-              ? ANCHOR_SOURCE.AUTO_MEASURE
-              : ANCHOR_SOURCE.AUTO_SYSTEM,
+            anchor.source === ANCHOR_SOURCE.OMR
+              ? ANCHOR_SOURCE.OMR
+              : anchor.source === ANCHOR_SOURCE.AUTO_MEASURE
+                ? ANCHOR_SOURCE.AUTO_MEASURE
+                : ANCHOR_SOURCE.AUTO_SYSTEM,
         }),
       )
       return sortAnchors(

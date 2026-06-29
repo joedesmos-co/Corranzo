@@ -57,6 +57,7 @@ function getStavesPerSystem(timingMap) {
 const LOW_CONFIDENCE_THRESHOLD = 0.3
 const AUTO_APPLY_CONFIDENCE_THRESHOLD = 0.42
 const HARD_REFUSE_MIN_SYSTEMS = 1
+const DEFAULT_ANALYSIS_TIMEOUT_MS = 120_000
 
 /** Detection stages, in order of decreasing precision. */
 export const DETECTION_STAGE = {
@@ -71,6 +72,35 @@ const STAGE_RANK = {
   [DETECTION_STAGE.CONSERVATIVE]: 3,
   [DETECTION_STAGE.TOLERANT]: 2,
   [DETECTION_STAGE.GEOMETRIC]: 1,
+}
+
+function nowMs() {
+  return typeof performance !== 'undefined' && typeof performance.now === 'function'
+    ? performance.now()
+    : Date.now()
+}
+
+function createAbortError(message = 'Score-follow setup cancelled.') {
+  const error = new Error(message)
+  error.name = 'AbortError'
+  return error
+}
+
+function checkAnalysisAbort(signal, deadlineAt) {
+  if (signal?.aborted) {
+    throw signal.reason instanceof Error ? signal.reason : createAbortError()
+  }
+  if (Number.isFinite(deadlineAt) && nowMs() > deadlineAt) {
+    throw createAbortError('PDF scan timed out. Use Re-run auto setup to try again.')
+  }
+}
+
+async function yieldAnalysisTurn(signal, deadlineAt) {
+  checkAnalysisAbort(signal, deadlineAt)
+  await new Promise((resolve) => {
+    setTimeout(resolve, 0)
+  })
+  checkAnalysisAbort(signal, deadlineAt)
 }
 
 function getWrittenMeasureNumbers(timingMap) {
@@ -314,15 +344,16 @@ export function selectMeasureAllocationForSystems({
  * Returns the collected entries plus the lowest (weakest) stage that ran, so the
  * caller can label confidence and status honestly.
  */
-function collectSystemEntriesForPages(
+async function collectSystemEntriesForPages(
   renderedPages,
-  { systemCountHint = null, stavesPerSystem = 1 } = {},
+  { systemCountHint = null, stavesPerSystem = 1, yieldForAnalysis = null } = {},
 ) {
   const systemEntries = []
   const pageStages = []
   const inkedPageCount = renderedPages.length
 
   for (const { page, imageData } of renderedPages) {
+    await yieldForAnalysis?.()
     const contentBounds = detectContentBounds(imageData)
     const staffLine = detectStaffLineSystems(imageData, contentBounds, { stavesPerSystem })
     const staffDetection = buildStaffDetectionDiagnostics(imageData, {
@@ -352,6 +383,8 @@ function collectSystemEntriesForPages(
       })
       continue
     }
+
+    await yieldForAnalysis?.()
 
     // ── FALLBACKS: row-density detection for low-res / faint scans ──────────
     const conservative = detectConservativeStaffSystems(imageData, contentBounds)
@@ -396,6 +429,7 @@ function collectSystemEntriesForPages(
       const inkWidth = systemInkWidthRatio(imageData, contentBounds, system)
       systemEntries.push({ page, system, imageData, contentBounds, stage, inkWidth })
     }
+    await yieldForAnalysis?.()
   }
 
   // ── Reconcile detected count with the MusicXML-implied system count ─────────
@@ -410,6 +444,7 @@ function collectSystemEntriesForPages(
     systemCountHint >= 1 &&
     Math.abs(systemEntries.length - systemCountHint) > 1
   ) {
+    await yieldForAnalysis?.()
     const { page, imageData } = renderedPages[0]
     const contentBounds = detectContentBounds(imageData)
     const geo = estimateSystemBandsFromContent(imageData, contentBounds, {
@@ -823,9 +858,18 @@ export async function analyzeSemiAutoScoreSetup({
   timingMap,
   onProgress,
   pageViewRotations = null,
+  signal = null,
+  maxDurationMs = DEFAULT_ANALYSIS_TIMEOUT_MS,
   // Injectable for tests / fixture scripts: (pdfSource, page) => { imageData }.
   renderPage = renderPdfPageImageData,
 }) {
+  const deadlineAt =
+    Number.isFinite(maxDurationMs) && maxDurationMs > 0
+      ? nowMs() + maxDurationMs
+      : Infinity
+  const yieldForAnalysis = () => yieldAnalysisTurn(signal, deadlineAt)
+  checkAnalysisAbort(signal, deadlineAt)
+
   const measureNumbers = getWrittenMeasureNumbers(timingMap)
   if (!pdfSource || !numPages || numPages < 1) {
     return { ok: false, message: 'Load a PDF before setting up score follow.' }
@@ -840,29 +884,35 @@ export async function analyzeSemiAutoScoreSetup({
 
   const scannedPages = []
   for (let page = 1; page <= numPages; page += 1) {
+    checkAnalysisAbort(signal, deadlineAt)
     onProgress?.(((page - 1) / numPages) * 0.82, `Scanning page ${page} of ${numPages}…`)
     const rendered = await renderPage(pdfSource, page)
+    checkAnalysisAbort(signal, deadlineAt)
     scannedPages.push({
       page,
       sourceImageData: rendered.imageData,
       forcedRotation: pageViewRotations?.[page] ?? null,
     })
+    await yieldForAnalysis()
   }
 
   // Orientation pass: raster → upright analysis bitmap → document reconcile →
   // staff detection / calibration (all normalized coords live in upright space).
 
-  const preliminary = scannedPages.map(({ page, sourceImageData, forcedRotation }) => {
+  const preliminary = []
+  for (const { page, sourceImageData, forcedRotation } of scannedPages) {
+    await yieldForAnalysis()
     const oriented = resolvePageOrientation(sourceImageData, { forcedRotation })
-    return {
+    preliminary.push({
       page,
       sourceImageData,
       forcedRotation,
       oriented,
       record: buildPageOrientationRecord(page, sourceImageData, oriented, { forcedRotation }),
-    }
-  })
+    })
+  }
 
+  await yieldForAnalysis()
   const reconciledRecords = reconcileDocumentPageOrientations(
     preliminary.filter((entry) => !entry.forcedRotation).map((entry) => entry.record),
   )
@@ -873,6 +923,7 @@ export async function analyzeSemiAutoScoreSetup({
   let inkPages = 0
 
   for (const entry of preliminary) {
+    await yieldForAnalysis()
     let { oriented, record } = entry
     const reconciled = reconciledByPage.get(entry.page)
     if (!entry.forcedRotation && reconciled) {
@@ -905,6 +956,7 @@ export async function analyzeSemiAutoScoreSetup({
   const orientation = summarizePageOrientations(pageOrientations)
 
   onProgress?.(0.9, 'Finding staff systems…')
+  await yieldForAnalysis()
 
   const systemCountHint = systemCountHintFromMusicXml(measureNumbers, timingMap)
   const stavesPerSystem = getStavesPerSystem(timingMap)
@@ -914,10 +966,15 @@ export async function analyzeSemiAutoScoreSetup({
     overallStage,
     reconciled,
     expectedSystemCount,
-  } = collectSystemEntriesForPages(renderedPages, { systemCountHint, stavesPerSystem })
+  } = await collectSystemEntriesForPages(renderedPages, {
+    systemCountHint,
+    stavesPerSystem,
+    yieldForAnalysis,
+  })
 
   // Reject impossible systems with an extremely tiny y-height (row-noise slivers,
   // e.g. residue from an imperfectly de-rotated page) so they never become anchors.
+  await yieldForAnalysis()
   const systemEntries = rejectTinySystems(detectedSystemEntries)
 
   // Truly last resort: not a single inked page yielded even one band. Only here
@@ -951,6 +1008,7 @@ export async function analyzeSemiAutoScoreSetup({
   }
 
   onProgress?.(0.96, 'Estimating measures per system…')
+  await yieldForAnalysis()
 
   const {
     allocationMode,
@@ -963,6 +1021,7 @@ export async function analyzeSemiAutoScoreSetup({
     systemCountHint,
   })
   const proposedAnchors = buildSystemSpanAnchors(systemEntries, spans)
+  await yieldForAnalysis()
   // One canonical anchor per written measure drives the cursor (AUTO_MEASURE
   // outranks the AUTO_SYSTEM start/end spans during dedupe), so playback glides
   // measure-by-measure instead of stalling then jumping across a whole system.
@@ -973,6 +1032,7 @@ export async function analyzeSemiAutoScoreSetup({
   // keeps the most confident — falling back to A on a tie (so clean scores are
   // unchanged) and whenever nothing beats it.
   const baselineMeasureAnchors = buildPerMeasureSystemAnchors(systemEntries, spans, timingMap)
+  await yieldForAnalysis()
   const calibration = calibrateScoreAnchors({
     systemEntries,
     spans,
@@ -981,6 +1041,7 @@ export async function analyzeSemiAutoScoreSetup({
     pdfPageCount: numPages,
     orientation,
   })
+  await yieldForAnalysis()
   const supplementalMeasureAnchors = calibration.anchors
   const systemsByPage = buildSystemsByPage(systemEntries, spans)
 

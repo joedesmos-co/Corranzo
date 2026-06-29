@@ -124,7 +124,7 @@ export function buildGuidance({
       ...base,
       state: WFY_GUIDANCE.WRONG,
       tone: 'error',
-      primary: 'Wrong note',
+      primary: 'Missed / late',
       playedLabel,
       hint: buildEscalatingHint({ expectedMidis, wrongAttempts, checkpoint }),
       // After enough wrong tries, surface the target on the score too.
