@@ -5,6 +5,7 @@ import {
   idleFeedbackForCheckpoint,
   WFY_INPUT_OUTCOME,
 } from './waitForYouInputFeedback.js'
+import { chordLabel, missingLabels } from './waitForYouGuidance.js'
 import {
   createMusicalEventBufferState,
   evaluateMicNoteInput,
@@ -19,6 +20,7 @@ import { MIC_CHORD_MODES } from './waitForYouMatchSettings.js'
 import { CHECKPOINT_KIND } from './waitForYouCheckpoints.js'
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 import usePitchDetector from '../microphone-input/usePitchDetector.js'
+import { MIC_CALIBRATION_STATUS } from '../microphone-input/micCalibration.js'
 
 /**
  * Bridges microphone pitch detection to Wait For You checkpoint matching.
@@ -38,6 +40,7 @@ export default function useWaitForYouMicInput({
   const [lastHeardMidi, setLastHeardMidi] = useState(null)
   const [liveFrame, setLiveFrame] = useState(null)
   const [calibration, setCalibration] = useState(null)
+  const [calibrationKey, setCalibrationKey] = useState(0)
   const feedbackOutcomeRef = useRef(inputFeedback.outcome)
   const bufferStateRef = useRef(createMusicalEventBufferState())
 
@@ -64,6 +67,11 @@ export default function useWaitForYouMicInput({
     feedbackOutcomeRef.current = inputFeedback.outcome
   }, [inputFeedback.outcome])
 
+  const retryCalibration = useCallback(() => {
+    setCalibration(null)
+    setCalibrationKey((value) => value + 1)
+  }, [])
+
   const handleFrame = useCallback(
     (frame) => {
       setLiveFrame(frame)
@@ -84,14 +92,23 @@ export default function useWaitForYouMicInput({
         return
       }
 
-      const preview = evaluateMicNoteInput(currentCheckpoint, frame.midi, matchSettings)
       const label = midiToNoteLabel(frame.midi)
+      const expected = getExpectedMidis(currentCheckpoint)
       const targets = getMicChordMatchTargets(currentCheckpoint, matchSettings)
+      const preview =
+        expected.length > 1 && targets.mode === MIC_CHORD_MODES.ANY_TONE
+          ? evaluateMicNoteInputWithBuffer(
+              currentCheckpoint,
+              frame.midi,
+              bufferStateRef.current,
+              matchSettings,
+            )
+          : evaluateMicNoteInput(currentCheckpoint, frame.midi, matchSettings)
 
       if (preview.outcome === MATCH_OUTCOME.WRONG) {
         setInputFeedback({
           outcome: WFY_INPUT_OUTCOME.IDLE,
-          message: `Hearing ${label}… (not the note we are waiting for)`,
+          message: `Hearing ${label} — not in ${chordLabel(expected)}`,
           tone: 'neutral',
           playedMidi: frame.midi,
           playedLabel: label,
@@ -99,20 +116,26 @@ export default function useWaitForYouMicInput({
         return
       }
 
+      if (preview.outcome === MATCH_OUTCOME.CHORD_PROGRESS) {
+        const missing = missingLabels(expected, preview.matchedIndices)
+        setInputFeedback({
+          outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
+          message: missing.length
+            ? `Hearing ${label} — still need ${missing.join(', ')}`
+            : `Hearing ${label}…`,
+          tone: 'partial',
+          playedMidi: frame.midi,
+          playedLabel: label,
+          matchedIndices: preview.matchedIndices,
+          remainingLabels: missing,
+        })
+        return
+      }
+
       if (preview.outcome === MATCH_OUTCOME.COMPLETE) {
-        let message = `Hearing ${label}… hold steady`
-        if (targets.isChord) {
-          if (targets.mode === MIC_CHORD_MODES.BASS) {
-            message = `Hearing ${label}… (listening for bass tone)`
-          } else if (targets.mode === MIC_CHORD_MODES.TOP) {
-            message = `Hearing ${label}… (listening for top tone)`
-          } else {
-            message = `Hearing ${label}… (any chord tone — experimental)`
-          }
-        }
         setInputFeedback({
           outcome: WFY_INPUT_OUTCOME.IDLE,
-          message,
+          message: `Hearing ${label} — hold steady`,
           tone: 'neutral',
           playedMidi: frame.midi,
           playedLabel: label,
@@ -151,16 +174,21 @@ export default function useWaitForYouMicInput({
 
       if (feedback.outcome === WFY_INPUT_OUTCOME.CORRECT && result.isChord) {
         if (result.micChordMode === MIC_CHORD_MODES.BASS) {
-          feedback.message = `Heard ${feedback.playedLabel ?? 'note'} — bass tone matched (mic chord — experimental)`
+          feedback.message = `Heard ${feedback.playedLabel ?? 'note'} — bass tone matched (experimental)`
         } else if (result.micChordMode === MIC_CHORD_MODES.TOP) {
-          feedback.message = `Heard ${feedback.playedLabel ?? 'note'} — top tone matched (mic chord — experimental)`
+          feedback.message = `Heard ${feedback.playedLabel ?? 'note'} — top tone matched (experimental)`
         } else {
-          feedback.message = `Heard ${feedback.playedLabel ?? 'note'} — chord tone matched (mic — one note at a time)`
+          feedback.message = `Heard ${chordLabel(result.expected)} — all tones matched`
         }
       } else if (feedback.outcome === WFY_INPUT_OUTCOME.CORRECT) {
         feedback.message = `Heard ${feedback.playedLabel ?? 'note'} — correct`
+      } else if (feedback.outcome === WFY_INPUT_OUTCOME.CHORD_PARTIAL && result.isChord) {
+        const missing = missingLabels(result.expected, result.matchedIndices)
+        feedback.message = missing.length
+          ? `Heard ${feedback.playedLabel ?? 'note'} — still need ${missing.join(', ')}`
+          : feedback.message
       } else if (feedback.outcome === WFY_INPUT_OUTCOME.WRONG) {
-        feedback.message = `Heard ${feedback.playedLabel ?? 'a note'} — not the expected pitch`
+        feedback.message = `Heard ${feedback.playedLabel ?? 'a note'} — expected ${chordLabel(result.expected)}`
       }
 
       setInputFeedback(feedback)
@@ -185,6 +213,7 @@ export default function useWaitForYouMicInput({
     onFrame: handleFrame,
     onStableMidi: matchingEnabled ? handleStableMidi : undefined,
     onCalibration: setCalibration,
+    calibrationKey,
   })
 
   const isChordCheckpoint = Boolean(currentCheckpoint?.isChord)
@@ -198,6 +227,8 @@ export default function useWaitForYouMicInput({
     lastHeardMidi,
     liveFrame,
     calibration: detectEnabled ? calibration : null,
+    calibrationStatus: liveFrame?.calibrationStatus ?? calibration?.status ?? null,
+    retryCalibration,
     isChordCheckpoint,
     expectedCount,
     chordMicMode: chordTargets.mode,

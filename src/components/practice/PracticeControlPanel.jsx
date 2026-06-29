@@ -192,6 +192,7 @@ export default memo(function PracticeControlPanel({
             chordMicMode={session.waitForYouMic.chordMicMode}
             onRequestAccess={session.microphone.requestAccess}
             onDisable={session.microphone.disable}
+            onRetryCalibration={session.waitForYouMic.retryCalibration}
             compact
           />
         )}

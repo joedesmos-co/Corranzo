@@ -5,6 +5,7 @@ import {
 } from '../../features/microphone-input/micInputConstants.js'
 import { isMicSafariOrIos } from '../../features/microphone-input/micEnvironment.js'
 import {
+  MIC_CALIBRATION_STATUS,
   MIC_CALIBRATION_STATUS_LABELS,
 } from '../../features/microphone-input/micCalibration.js'
 import { midiToNoteLabel } from '../../features/midi-input/midiNoteLabel.js'
@@ -12,9 +13,22 @@ import { MIC_CHORD_MODES } from '../../features/practice/waitForYouMatchSettings
 import MicTestPanel from './MicTestPanel.jsx'
 
 const MIC_CHORD_MODE_HINTS = {
-  [MIC_CHORD_MODES.ANY_TONE]: 'Experimental: play any correct chord tone (one note at a time).',
-  [MIC_CHORD_MODES.BASS]: 'Experimental: listen for the lowest chord tone only.',
-  [MIC_CHORD_MODES.TOP]: 'Experimental: listen for the highest chord tone only.',
+  [MIC_CHORD_MODES.ANY_TONE]:
+    'Mic hears one note at a time. Play each chord tone in turn, or switch to MIDI for chords together.',
+  [MIC_CHORD_MODES.BASS]:
+    'Experimental: mic listens for the lowest chord tone only. MIDI is best for full chords.',
+  [MIC_CHORD_MODES.TOP]:
+    'Experimental: mic listens for the highest chord tone only. MIDI is best for full chords.',
+}
+
+function calibrationLabel({ liveFrame, calibration }) {
+  if (liveFrame?.calibrating || calibration?.status === MIC_CALIBRATION_STATUS.MEASURING) {
+    return MIC_CALIBRATION_STATUS_LABELS[MIC_CALIBRATION_STATUS.MEASURING]
+  }
+  if (calibration?.status) {
+    return MIC_CALIBRATION_STATUS_LABELS[calibration.status] ?? ''
+  }
+  return MIC_CALIBRATION_STATUS_LABELS[MIC_CALIBRATION_STATUS.READY]
 }
 
 export default function MicrophoneInputStatusPanel({
@@ -31,10 +45,16 @@ export default function MicrophoneInputStatusPanel({
   chordMicMode = MIC_CHORD_MODES.ANY_TONE,
   onRequestAccess,
   onDisable,
+  onRetryCalibration,
   compact = false,
 }) {
   const supported = support === MIC_SUPPORT.SUPPORTED
   const showIosSafari = isMicSafariOrIos()
+  const calibrating = Boolean(isListening && (liveFrame?.calibrating || !calibration))
+  const calibrationFailed =
+    calibration?.status === MIC_CALIBRATION_STATUS.NO_INPUT ||
+    calibration?.status === MIC_CALIBRATION_STATUS.ROOM_NOISY
+  const calibrationReady = calibration?.status === MIC_CALIBRATION_STATUS.READY
 
   let statusLine = 'Mic off'
   if (!supported) {
@@ -43,18 +63,22 @@ export default function MicrophoneInputStatusPanel({
     statusLine = 'Mic blocked'
   } else if (permission === MIC_PERMISSION.ERROR) {
     statusLine = 'Mic error'
+  } else if (isListening && calibrating) {
+    statusLine = 'Calibrating…'
   } else if (isListening) {
-    statusLine = 'Mic listening'
+    statusLine = calibrationReady ? 'Mic ready' : 'Mic listening'
   } else if (isGranted) {
     statusLine = 'Mic ready'
   }
 
+  const detectedNote =
+    liveFrame?.noteLabel && liveFrame?.gateOpen ? liveFrame.noteLabel : null
   const heardLine =
     inputFeedback?.message ??
     (lastHeardMidi != null
-      ? `Last confirmed note: ${midiToNoteLabel(lastHeardMidi)}`
-      : liveFrame?.noteLabel
-        ? `Hearing ${liveFrame.noteLabel}…`
+      ? `Last confirmed: ${midiToNoteLabel(lastHeardMidi)}`
+      : detectedNote
+        ? `Detecting ${detectedNote}…`
         : null)
 
   return (
@@ -66,12 +90,34 @@ export default function MicrophoneInputStatusPanel({
         <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">Input</h3>
         <span
           className={`practice-status-chip${
-            isListening || isGranted ? ' practice-status-chip--ready' : ''
+            isListening && (calibrationReady || !calibrating) ? ' practice-status-chip--ready' : ''
           }`}
         >
           {statusLine}
         </span>
       </div>
+
+      {isListening && (
+        <p
+          className={`mic-input-status__calibration mic-input-status__calibration--${
+            calibrating ? 'measuring' : calibration?.status ?? 'ready'
+          }`}
+          role="status"
+          aria-live="polite"
+        >
+          {calibrationLabel({ liveFrame, calibration })}
+        </p>
+      )}
+
+      {isListening && calibrationFailed && onRetryCalibration && (
+        <button
+          type="button"
+          className="mic-input-status__btn mic-input-status__btn--retry"
+          onClick={onRetryCalibration}
+        >
+          Retry calibration
+        </button>
+      )}
 
       {heardLine && (
         <p
@@ -121,6 +167,12 @@ export default function MicrophoneInputStatusPanel({
         )}
       </div>
 
+      {isChordCheckpoint && (
+        <p className="mic-input-status__chord-note" role="note">
+          {MIC_CHORD_MODE_HINTS[chordMicMode] ?? MIC_CHORD_MODE_HINTS[MIC_CHORD_MODES.ANY_TONE]}
+        </p>
+      )}
+
       {compact && (
         <details className="practice-input-details">
           <summary>Test & details</summary>
@@ -129,28 +181,9 @@ export default function MicrophoneInputStatusPanel({
               Mic input may be less steady on iPhone and iPad. Manual always works.
             </p>
           )}
-          {isListening && (liveFrame?.calibrating || calibration) && (
-            <p
-              className={`mic-input-status__calibration mic-input-status__calibration--${
-                liveFrame?.calibrating ? 'measuring' : calibration?.status ?? 'ready'
-              }`}
-              role="status"
-              aria-live="polite"
-            >
-              {liveFrame?.calibrating
-                ? MIC_CALIBRATION_STATUS_LABELS.measuring
-                : MIC_CALIBRATION_STATUS_LABELS[calibration?.status] ?? ''}
-            </p>
-          )}
           <p className="mic-input-status__mvp-note">
-            Listens for one note at a time. Use Continue if a note is missed.
+            Best for single notes. Use MIDI for chords played together.
           </p>
-          {isChordCheckpoint && (
-            <p className="mic-input-status__chord-note" role="note">
-              {MIC_CHORD_MODE_HINTS[chordMicMode] ??
-                MIC_CHORD_MODE_HINTS[MIC_CHORD_MODES.ANY_TONE]}
-            </p>
-          )}
           <MicTestPanel
             liveFrame={liveFrame}
             lastStableMidi={lastHeardMidi}

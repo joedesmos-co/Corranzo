@@ -1,4 +1,10 @@
 import { findMatchingExpectedIndex, matchesAnyExpected } from './midiPitchMatch.js'
+import {
+  MIC_CHORD_SEQUENCE_WINDOW_MS_MAX,
+  MIC_CHORD_SEQUENCE_WINDOW_MS_MIN,
+  MUSICAL_EVENT_WINDOW_MS_MAX,
+  MUSICAL_EVENT_WINDOW_MS_MIN,
+} from './waitForYouMatchSettings.js'
 
 export const MATCH_OUTCOME = {
   NO_EXPECTED: 'no-expected',
@@ -56,8 +62,21 @@ export function resetChordMatchState(state) {
 
 export function resolveMusicalEventWindowMs(settings = {}) {
   return Math.min(
-    settings.chordWindowMs ?? 450,
-    Math.max(120, settings.musicalEventWindowMs ?? 150),
+    MUSICAL_EVENT_WINDOW_MS_MAX,
+    Math.max(
+      MUSICAL_EVENT_WINDOW_MS_MIN,
+      Number(settings.musicalEventWindowMs) || 180,
+    ),
+  )
+}
+
+export function resolveMicChordSequenceWindowMs(settings = {}) {
+  return Math.min(
+    MIC_CHORD_SEQUENCE_WINDOW_MS_MAX,
+    Math.max(
+      MIC_CHORD_SEQUENCE_WINDOW_MS_MIN,
+      Number(settings.micChordSequenceWindowMs) || 2400,
+    ),
   )
 }
 
@@ -264,6 +283,19 @@ export function evaluateMicNoteInput(checkpoint, playedMidi, settings) {
       ? targets.fullExpected.indexOf(matchedMidi)
       : index
 
+  if (targets.isChord && targets.mode === 'any-tone' && expected.length > 1) {
+    return {
+      outcome: MATCH_OUTCOME.CHORD_PROGRESS,
+      expected,
+      matchedIndices: new Set([fullIndex >= 0 ? fullIndex : index]),
+      isChord: true,
+      playedMidi,
+      micChordMode: targets.mode,
+      matchedCount: 1,
+      totalExpected: expected.length,
+    }
+  }
+
   return {
     outcome: MATCH_OUTCOME.COMPLETE,
     expected,
@@ -288,7 +320,7 @@ export function evaluateMicNoteInputWithBuffer(checkpoint, playedMidi, bufferSta
     return evaluateMicNoteInput(checkpoint, playedMidi, settings)
   }
 
-  const windowMs = resolveMusicalEventWindowMs(settings)
+  const windowMs = resolveMicChordSequenceWindowMs(settings)
   const now = Date.now()
   ensureMusicalEventWindow(bufferState, windowMs, now)
 

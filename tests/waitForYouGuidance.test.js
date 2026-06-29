@@ -110,10 +110,11 @@ describe('Wait For You — mic path', () => {
     expect(evaluateMicNoteInput(noteCheckpoint([E4]), F4, settings).outcome).toBe(MATCH_OUTCOME.WRONG)
   })
 
-  it('mic chord uses single-tone matching (any chord tone completes)', () => {
-    const r = evaluateMicNoteInput(noteCheckpoint([C4, E4, G4]), E4, settings)
-    expect(r.outcome).toBe(MATCH_OUTCOME.COMPLETE)
-    expect(r.isChord).toBe(true)
+  it('mic chord uses sequential tone matching in any-tone mode', () => {
+    const cp = noteCheckpoint([C4, E4, G4])
+    const first = evaluateMicNoteInput(cp, E4, settings)
+    expect(first.outcome).toBe(MATCH_OUTCOME.CHORD_PROGRESS)
+    expect(first.isChord).toBe(true)
   })
 })
 

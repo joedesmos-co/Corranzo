@@ -1,5 +1,9 @@
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 
+function formatExpectedChord(midis) {
+  return (midis ?? []).map((midi) => midiToNoteLabel(midi)).join(' + ')
+}
+
 export const WFY_INPUT_OUTCOME = {
   IDLE: 'idle',
   WRONG: 'wrong',
@@ -73,7 +77,7 @@ export function buildInputFeedback({
   if (outcome === WFY_INPUT_OUTCOME.CHORD_WAITING) {
     return {
       outcome,
-      message: `Waiting for chord — play all ${total} notes within the time window`,
+      message: `Waiting for chord — play ${formatExpectedChord(expectedMidis)} within the time window`,
       tone: 'waiting',
       matchedCount,
       total,
@@ -83,7 +87,7 @@ export function buildInputFeedback({
   return {
     outcome: WFY_INPUT_OUTCOME.IDLE,
     message: isChord
-      ? `Play the chord (${total} notes)`
+      ? `Play ${formatExpectedChord(expectedMidis)} together`
       : `Play ${midiToNoteLabel(expectedMidis[0])}`,
     tone: 'neutral',
   }

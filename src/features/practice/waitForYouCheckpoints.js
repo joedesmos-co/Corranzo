@@ -9,7 +9,7 @@ export const CHECKPOINT_KIND = {
 }
 
 /** Notes within this window (seconds) form one checkpoint — hands may be slightly apart. */
-export const NOTE_TIME_GROUP_SECONDS = 0.15
+export const NOTE_TIME_GROUP_SECONDS = 0.18
 
 const LOOP_TIME_EPSILON = 0.001
 const TIME_GROUP_EPSILON = NOTE_TIME_GROUP_SECONDS

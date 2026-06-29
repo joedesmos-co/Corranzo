@@ -8,6 +8,8 @@ import {
   getMeasureTimingWindow,
 } from './noteTargetContext.js'
 
+export const NOTE_TARGET_MARKER_OFFSET_Y = 0.036
+
 export const NOTE_TARGET_SOURCE = {
   MUSICXML_LAYOUT: 'musicxml-layout',
   MEASURE_BEAT: 'measure-beat',
@@ -231,11 +233,20 @@ export function resolveNoteTargetPosition({
     reason = `${reason} (layout data partial)`
   }
 
+  const noteAnchorY = clamp(y, 0.06, 0.94)
+  const markerY = clamp(
+    Math.min(noteAnchorY, geometry.yTop + 0.008) - NOTE_TARGET_MARKER_OFFSET_Y,
+    0.04,
+    0.9,
+  )
+
   return {
     visible: true,
     page: geometry.page,
     x: clamp(x, 0.03, 0.97),
-    y: clamp(y, 0.06, 0.94),
+    y: markerY,
+    noteAnchorY,
+    markerOffsetY: NOTE_TARGET_MARKER_OFFSET_Y,
     confidence,
     source,
     reason,

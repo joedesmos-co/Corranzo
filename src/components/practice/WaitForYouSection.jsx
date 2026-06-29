@@ -211,7 +211,7 @@ export default function WaitForYouSection({
 
       {showMicChordHint && (
         <p className="wait-for-you__mic-chord-hint" role="status">
-          Mic hears one chord tone at a time. Use Continue if needed.
+          Mic hears one note at a time. Switch to MIDI to play chords together.
         </p>
       )}
 
@@ -276,7 +276,9 @@ export default function WaitForYouSection({
           </p>
           {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && (
             <p className="wait-for-you__now-notes">
-              <span className="wait-for-you__now-notes-label">Play</span>
+              <span className="wait-for-you__now-notes-label">
+                {getExpectedMidis(currentCheckpoint).length > 1 ? 'Play together' : 'Play'}
+              </span>
               <span className="wait-for-you__note-chips">
                 {getExpectedMidis(currentCheckpoint).map((midi) => (
                   <span key={midi} className="wait-for-you__note-chip">
