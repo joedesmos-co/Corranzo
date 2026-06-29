@@ -131,6 +131,35 @@ export function computeHorizontalRunCoverage(imageData, contentBounds, darkThres
   return computeRowStaffScores(imageData, contentBounds, darkThreshold).run
 }
 
+function normalizedStaffLineYs(rows, height) {
+  if (!rows?.length) {
+    return null
+  }
+  if (rows.length === 5) {
+    return rows.map((row) => row / height)
+  }
+  if (rows.length < 5) {
+    return null
+  }
+  const ys = rows.map((row) => row / height)
+  let best = null
+  for (let start = 0; start <= ys.length - 5; start += 1) {
+    const slice = ys.slice(start, start + 5)
+    const gaps = slice.slice(1).map((y, index) => y - slice[index])
+    const minGap = Math.min(...gaps)
+    const maxGap = Math.max(...gaps)
+    if (maxGap <= 0 || minGap / maxGap < 0.75) {
+      continue
+    }
+    const mean = gaps.reduce((sum, gap) => sum + gap, 0) / gaps.length
+    const variance = gaps.reduce((sum, gap) => sum + (gap - mean) ** 2, 0) / gaps.length
+    if (!best || variance < best.variance) {
+      best = { lines: slice, variance }
+    }
+  }
+  return best?.lines ?? null
+}
+
 function clusterStaffLineRows(lineRows, height, minGapNorm) {
   if (lineRows.length === 0) {
     return []
@@ -150,7 +179,13 @@ function clusterStaffLineRows(lineRows, height, minGapNorm) {
     .map((rows) => {
       const y0 = rows[0] / height
       const y1 = rows[rows.length - 1] / height
-      return { y0, y1, center: (y0 + y1) / 2, lineCount: rows.length }
+      return {
+        y0,
+        y1,
+        center: (y0 + y1) / 2,
+        lineCount: rows.length,
+        lineYs: normalizedStaffLineYs(rows, height),
+      }
     })
     .filter((stave) => stave.lineCount >= 2)
 }
@@ -357,6 +392,7 @@ function mergeStaveGroup(group) {
       y1: stave.y1,
       center: stave.center,
       lineCount: stave.lineCount,
+      lineYs: stave.lineYs ?? null,
     })),
   }
 }
@@ -667,3 +703,5 @@ export function buildStaffDetectionDiagnostics(imageData, options = {}) {
     rejectionReason,
   }
 }
+
+export { normalizedStaffLineYs }

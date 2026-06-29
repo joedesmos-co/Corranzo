@@ -1,0 +1,640 @@
+{
+  "before": {
+    "title": "a-cruel-angels-thesis-neon-genesis-evangelion",
+    "metrics": {
+      "pitchAccuracy": 0.2512,
+      "matchedPitchAccuracy": 0.2835,
+      "durationAccuracy": 0.6665,
+      "matchedDurationAccuracy": 0.7522,
+      "onsetAccuracy": 0.6085,
+      "matchedOnsetAccuracy": 0.6867,
+      "timeAccuracy": 0.0117,
+      "matchedTimeAccuracy": 0.0133,
+      "measureCountAccuracy": 0.9843,
+      "noteDetectionPrecision": 0.8868,
+      "noteDetectionRecall": 0.8861,
+      "noteDetectionF1": 0.8864,
+      "chordGroupingAccuracy": 0.4715
+    },
+    "totals": {
+      "truthMeasureCount": 125,
+      "generatedMeasureCount": 127,
+      "measureCountDifference": 2,
+      "truthNoteCount": 2810,
+      "generatedNoteCount": 2808,
+      "noteCountDifference": -2,
+      "matchedNoteCount": 2490,
+      "correctPitchCount": 706,
+      "correctDurationCount": 1873,
+      "correctOnsetCount": 1710,
+      "correctTimeCount": 33,
+      "missingNoteCount": 320,
+      "extraNoteCount": 318,
+      "wrongPitchCount": 1784,
+      "wrongDurationCount": 617,
+      "wrongOnsetCount": 780,
+      "wrongTimeCount": 2457,
+      "chordMismatchCount": 2018,
+      "chordComparableCount": 3818
+    },
+    "pitchErrors": {
+      "total": 40,
+      "histogram": {
+        "±1-accidental": 2,
+        "±2-diatonic": 2,
+        "±octave": 1,
+        "±octave-other": 0,
+        "other": 35
+      },
+      "signed": {
+        "1": 1,
+        "2": 1,
+        "3": 3,
+        "5": 1,
+        "7": 1,
+        "8": 3,
+        "9": 3,
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "13": 2,
+        "15": 5,
+        "17": 2,
+        "19": 1,
+        "20": 5,
+        "21": 4,
+        "22": 1,
+        "-2": 1,
+        "-7": 1,
+        "-1": 1,
+        "-13": 1
+      },
+      "sample": [
+        {
+          "m": 3,
+          "d": -2,
+          "truth": "F4",
+          "gen": "D#4"
+        },
+        {
+          "m": 5,
+          "d": 15,
+          "truth": "G2",
+          "gen": "A#3"
+        },
+        {
+          "m": 5,
+          "d": 13,
+          "truth": "D2",
+          "gen": "D#3"
+        },
+        {
+          "m": 6,
+          "d": 20,
+          "truth": "C2",
+          "gen": "G#3"
+        },
+        {
+          "m": 6,
+          "d": 17,
+          "truth": "G2",
+          "gen": "C4"
+        },
+        {
+          "m": 6,
+          "d": 15,
+          "truth": "C3",
+          "gen": "D#4"
+        },
+        {
+          "m": 6,
+          "d": 8,
+          "truth": "C4",
+          "gen": "G#4"
+        },
+        {
+          "m": 6,
+          "d": 20,
+          "truth": "C2",
+          "gen": "G#3"
+        },
+        {
+          "m": 6,
+          "d": 20,
+          "truth": "G2",
+          "gen": "D#4"
+        },
+        {
+          "m": 6,
+          "d": 15,
+          "truth": "C3",
+          "gen": "D#4"
+        },
+        {
+          "m": 6,
+          "d": 5,
+          "truth": "D#4",
+          "gen": "G#4"
+        },
+        {
+          "m": 6,
+          "d": 21,
+          "truth": "D#2",
+          "gen": "C4"
+        },
+        {
+          "m": 6,
+          "d": 21,
+          "truth": "D#3",
+          "gen": "C5"
+        },
+        {
+          "m": 6,
+          "d": 15,
+          "truth": "F2",
+          "gen": "G#3"
+        },
+        {
+          "m": 6,
+          "d": 12,
+          "truth": "C3",
+          "gen": "C4"
+        },
+        {
+          "m": 6,
+          "d": 9,
+          "truth": "F3",
+          "gen": "D4"
+        },
+        {
+          "m": 6,
+          "d": 9,
+          "truth": "G#3",
+          "gen": "F4"
+        },
+        {
+          "m": 6,
+          "d": 8,
+          "truth": "C4",
+          "gen": "G#4"
+        },
+        {
+          "m": 6,
+          "d": 9,
+          "truth": "F4",
+          "gen": "D5"
+        },
+        {
+          "m": 6,
+          "d": 21,
+          "truth": "F2",
+          "gen": "D4"
+        },
+        {
+          "m": 6,
+          "d": 20,
+          "truth": "C3",
+          "gen": "G#4"
+        },
+        {
+          "m": 6,
+          "d": 21,
+          "truth": "F3",
+          "gen": "D5"
+        },
+        {
+          "m": 6,
+          "d": 20,
+          "truth": "C2",
+          "gen": "G#3"
+        },
+        {
+          "m": 6,
+          "d": 17,
+          "truth": "C3",
+          "gen": "F4"
+        },
+        {
+          "m": 6,
+          "d": 3,
+          "truth": "F4",
+          "gen": "G#4"
+        },
+        {
+          "m": 7,
+          "d": -7,
+          "truth": "F2",
+          "gen": "A#1"
+        },
+        {
+          "m": 7,
+          "d": 19,
+          "truth": "A#2",
+          "gen": "F4"
+        },
+        {
+          "m": 7,
+          "d": 2,
+          "truth": "D#2",
+          "gen": "F2"
+        },
+        {
+          "m": 7,
+          "d": 11,
+          "truth": "D#3",
+          "gen": "D4"
+        },
+        {
+          "m": 7,
+          "d": 7,
+          "truth": "D#4",
+          "gen": "A#4"
+        },
+        {
+          "m": 7,
+          "d": 3,
+          "truth": "F4",
+          "gen": "G#4"
+        },
+        {
+          "m": 7,
+          "d": -1,
+          "truth": "D#2",
+          "gen": "D2"
+        },
+        {
+          "m": 7,
+          "d": -13,
+          "truth": "D#4",
+          "gen": "D3"
+        },
+        {
+          "m": 7,
+          "d": 1,
+          "truth": "D2",
+          "gen": "D#2"
+        },
+        {
+          "m": 7,
+          "d": 13,
+          "truth": "D3",
+          "gen": "D#4"
+        },
+        {
+          "m": 8,
+          "d": 3,
+          "truth": "C2",
+          "gen": "D#2"
+        },
+        {
+          "m": 8,
+          "d": 22,
+          "truth": "G2",
+          "gen": "F4"
+        },
+        {
+          "m": 8,
+          "d": 10,
+          "truth": "C2",
+          "gen": "A#2"
+        },
+        {
+          "m": 8,
+          "d": 8,
+          "truth": "G2",
+          "gen": "D#3"
+        },
+        {
+          "m": 8,
+          "d": 15,
+          "truth": "C3",
+          "gen": "D#4"
+        }
+      ]
+    }
+  },
+  "after": {
+    "title": "a-cruel-angels-thesis-neon-genesis-evangelion",
+    "metrics": {
+      "pitchAccuracy": 0.3431,
+      "matchedPitchAccuracy": 0.3868,
+      "durationAccuracy": 0.7431,
+      "matchedDurationAccuracy": 0.8379,
+      "onsetAccuracy": 0.7068,
+      "matchedOnsetAccuracy": 0.797,
+      "timeAccuracy": 0.016,
+      "matchedTimeAccuracy": 0.0181,
+      "measureCountAccuracy": 0.9843,
+      "noteDetectionPrecision": 0.8875,
+      "noteDetectionRecall": 0.8868,
+      "noteDetectionF1": 0.8871,
+      "chordGroupingAccuracy": 0.6592,
+      "pitchAccuracyAtCorrectOnset": 0.4134,
+      "orderSensitivePitchRecovery": 0.1132
+    },
+    "totals": {
+      "truthMeasureCount": 125,
+      "generatedMeasureCount": 127,
+      "measureCountDifference": 2,
+      "truthNoteCount": 2810,
+      "generatedNoteCount": 2808,
+      "noteCountDifference": -2,
+      "matchedNoteCount": 2492,
+      "correctPitchCount": 964,
+      "correctDurationCount": 2088,
+      "correctOnsetCount": 1986,
+      "correctTimeCount": 45,
+      "missingNoteCount": 318,
+      "extraNoteCount": 316,
+      "wrongPitchCount": 1528,
+      "wrongDurationCount": 404,
+      "wrongOnsetCount": 506,
+      "wrongTimeCount": 2447,
+      "chordMismatchCount": 1154,
+      "chordComparableCount": 3386,
+      "greedyCorrectPitchCount": 646,
+      "pitchCorrectAtCorrectOnsetCount": 821,
+      "onsetCorrectMatchedCount": 1986
+    },
+    "pitchErrors": {
+      "total": 40,
+      "histogram": {
+        "±1-accidental": 7,
+        "±2-diatonic": 10,
+        "±octave": 2,
+        "±octave-other": 0,
+        "other": 21
+      },
+      "signed": {
+        "1": 2,
+        "2": 6,
+        "3": 2,
+        "5": 2,
+        "7": 2,
+        "8": 2,
+        "11": 1,
+        "13": 1,
+        "14": 1,
+        "15": 1,
+        "20": 4,
+        "27": 1,
+        "29": 1,
+        "32": 1,
+        "33": 1,
+        "36": 1,
+        "-2": 4,
+        "-1": 5,
+        "-3": 1,
+        "-12": 1
+      },
+      "sample": [
+        {
+          "m": 3,
+          "d": -2,
+          "truth": "F4",
+          "gen": "D#4"
+        },
+        {
+          "m": 5,
+          "d": 15,
+          "truth": "G2",
+          "gen": "A#3"
+        },
+        {
+          "m": 5,
+          "d": 13,
+          "truth": "D2",
+          "gen": "D#3"
+        },
+        {
+          "m": 6,
+          "d": 32,
+          "truth": "C2",
+          "gen": "G#4"
+        },
+        {
+          "m": 6,
+          "d": 20,
+          "truth": "G2",
+          "gen": "D#4"
+        },
+        {
+          "m": 6,
+          "d": 8,
+          "truth": "C3",
+          "gen": "G#3"
+        },
+        {
+          "m": 6,
+          "d": 36,
+          "truth": "C2",
+          "gen": "C5"
+        },
+        {
+          "m": 6,
+          "d": 20,
+          "truth": "G2",
+          "gen": "D#4"
+        },
+        {
+          "m": 6,
+          "d": 8,
+          "truth": "C3",
+          "gen": "G#3"
+        },
+        {
+          "m": 6,
+          "d": 29,
+          "truth": "D#2",
+          "gen": "G#4"
+        },
+        {
+          "m": 6,
+          "d": 11,
+          "truth": "D#3",
+          "gen": "D4"
+        },
+        {
+          "m": 6,
+          "d": 27,
+          "truth": "F2",
+          "gen": "G#4"
+        },
+        {
+          "m": 6,
+          "d": 14,
+          "truth": "C3",
+          "gen": "D4"
+        },
+        {
+          "m": 6,
+          "d": 7,
+          "truth": "F3",
+          "gen": "C4"
+        },
+        {
+          "m": 6,
+          "d": 33,
+          "truth": "F2",
+          "gen": "D5"
+        },
+        {
+          "m": 6,
+          "d": 20,
+          "truth": "C3",
+          "gen": "G#4"
+        },
+        {
+          "m": 6,
+          "d": 3,
+          "truth": "F3",
+          "gen": "G#3"
+        },
+        {
+          "m": 6,
+          "d": 20,
+          "truth": "C3",
+          "gen": "G#4"
+        },
+        {
+          "m": 7,
+          "d": 2,
+          "truth": "G#4",
+          "gen": "A#4"
+        },
+        {
+          "m": 7,
+          "d": 2,
+          "truth": "D#2",
+          "gen": "F2"
+        },
+        {
+          "m": 7,
+          "d": -1,
+          "truth": "D#4",
+          "gen": "D4"
+        },
+        {
+          "m": 7,
+          "d": 1,
+          "truth": "G4",
+          "gen": "G#4"
+        },
+        {
+          "m": 8,
+          "d": 5,
+          "truth": "C4",
+          "gen": "F4"
+        },
+        {
+          "m": 8,
+          "d": 3,
+          "truth": "C2",
+          "gen": "D#2"
+        },
+        {
+          "m": 8,
+          "d": -2,
+          "truth": "C3",
+          "gen": "A#2"
+        },
+        {
+          "m": 8,
+          "d": -1,
+          "truth": "D#2",
+          "gen": "D2"
+        },
+        {
+          "m": 8,
+          "d": 2,
+          "truth": "F2",
+          "gen": "G2"
+        },
+        {
+          "m": 8,
+          "d": -3,
+          "truth": "F3",
+          "gen": "D3"
+        },
+        {
+          "m": 8,
+          "d": -2,
+          "truth": "F4",
+          "gen": "D#4"
+        },
+        {
+          "m": 8,
+          "d": -1,
+          "truth": "G#4",
+          "gen": "G4"
+        },
+        {
+          "m": 8,
+          "d": -12,
+          "truth": "C5",
+          "gen": "C4"
+        },
+        {
+          "m": 8,
+          "d": 2,
+          "truth": "F2",
+          "gen": "G2"
+        },
+        {
+          "m": 8,
+          "d": 5,
+          "truth": "F4",
+          "gen": "A#4"
+        },
+        {
+          "m": 8,
+          "d": 2,
+          "truth": "D#4",
+          "gen": "F4"
+        },
+        {
+          "m": 9,
+          "d": 7,
+          "truth": "A#2",
+          "gen": "F3"
+        },
+        {
+          "m": 9,
+          "d": 2,
+          "truth": "A#2",
+          "gen": "C3"
+        },
+        {
+          "m": 9,
+          "d": 1,
+          "truth": "D4",
+          "gen": "D#4"
+        },
+        {
+          "m": 9,
+          "d": -2,
+          "truth": "G4",
+          "gen": "F4"
+        },
+        {
+          "m": 9,
+          "d": -1,
+          "truth": "B1",
+          "gen": "A#1"
+        },
+        {
+          "m": 9,
+          "d": -1,
+          "truth": "F#2",
+          "gen": "F2"
+        }
+      ]
+    }
+  },
+  "delta": {
+    "pitchAccuracy": 0.09190000000000004,
+    "wrongPitches": 0,
+    "onsetAccuracy": 0.09829999999999994,
+    "durationAccuracy": 0.0766
+  }
+}

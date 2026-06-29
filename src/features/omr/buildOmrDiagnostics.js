@@ -27,6 +27,9 @@ export function buildOmrDiagnostics({
         measureNumber: measure.measureNumber,
         confidence: measure.confidence,
         uncertain: Boolean(measure.uncertain),
+        detectedNoteheads: measure.vectorNoteCount ?? measure.vectorNoteMatching?.detectedNoteheads ?? 0,
+        emittedNoteheads: measure.vectorNoteMatching?.emittedNoteheads ?? 0,
+        dedupedDuringGrouping: measure.vectorNoteMatching?.dedupedDuringGrouping ?? 0,
       })),
     })),
   }))

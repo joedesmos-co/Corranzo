@@ -1,4 +1,8 @@
 import { parseMusicXml } from '../musicxml/parseMusicXml.js'
+import {
+  matchMeasureNotes,
+  matchMeasureNotesGreedy,
+} from './omrMeasureNoteMatching.js'
 
 export const OMR_ACCURACY_SOURCE = {
   STAFF_DETECTION: 'staff-detection',
@@ -140,70 +144,6 @@ function compactMismatch(match) {
     pitchDeltaSemitones: match.pitchDeltaSemitones,
     truth: compactNote(match.truth),
     generated: compactNote(match.generated),
-  }
-}
-
-function costMatch(truth, generated, options) {
-  const onsetDiff = Math.abs(truth.onsetQuarters - generated.onsetQuarters)
-  if (onsetDiff > options.matchWindowQuarters) {
-    return null
-  }
-  const durationDiff = Math.abs(truth.durationQuarters - generated.durationQuarters)
-  const pitchDelta = Math.abs(truth.midi - generated.midi)
-  return (
-    onsetDiff / Math.max(options.onsetToleranceQuarters, 0.001) +
-    Math.min(2.5, pitchDelta / 6) +
-    Math.min(2, durationDiff / Math.max(options.durationToleranceQuarters, 0.001)) * 0.6
-  )
-}
-
-function matchMeasureNotes(truthNotes, generatedNotes, options) {
-  const unmatchedGenerated = new Set(generatedNotes.map((_, index) => index))
-  const matches = []
-  const missing = []
-
-  for (const truth of truthNotes) {
-    let best = null
-    for (const generatedIndex of unmatchedGenerated) {
-      const generated = generatedNotes[generatedIndex]
-      const cost = costMatch(truth, generated, options)
-      if (cost == null) {
-        continue
-      }
-      if (!best || cost < best.cost) {
-        best = { generatedIndex, generated, cost }
-      }
-    }
-
-    if (!best) {
-      missing.push(truth)
-      continue
-    }
-
-    unmatchedGenerated.delete(best.generatedIndex)
-    const onsetDiffQuarters = Math.abs(truth.onsetQuarters - best.generated.onsetQuarters)
-    const timeDiffSeconds = Math.abs(truth.timeSeconds - best.generated.timeSeconds)
-    const durationDiffQuarters = Math.abs(
-      truth.durationQuarters - best.generated.durationQuarters,
-    )
-    matches.push({
-      truth,
-      generated: best.generated,
-      onsetDiffQuarters,
-      timeDiffSeconds,
-      durationDiffQuarters,
-      pitchDeltaSemitones: best.generated.midi - truth.midi,
-      pitchCorrect: truth.midi === best.generated.midi,
-      onsetCorrect: onsetDiffQuarters <= options.onsetToleranceQuarters,
-      timeCorrect: timeDiffSeconds <= options.timeToleranceSeconds,
-      durationCorrect: durationDiffQuarters <= options.durationToleranceQuarters,
-    })
-  }
-
-  return {
-    matches,
-    missing,
-    extra: [...unmatchedGenerated].map((index) => generatedNotes[index]),
   }
 }
 
@@ -498,6 +438,9 @@ export function evaluateOmrAccuracyFromTimingMaps({
     wrongTimeCount: 0,
     chordMismatchCount: 0,
     chordComparableCount: 0,
+    greedyCorrectPitchCount: 0,
+    pitchCorrectAtCorrectOnsetCount: 0,
+    onsetCorrectMatchedCount: 0,
   }
 
   const missingNotes = []
@@ -513,6 +456,11 @@ export function evaluateOmrAccuracyFromTimingMaps({
     const truthMeasureNotes = truthByMeasure.get(measureNumber) ?? []
     const generatedMeasureNotes = generatedByMeasure.get(measureNumber) ?? []
     const matched = matchMeasureNotes(truthMeasureNotes, generatedMeasureNotes, resolvedOptions)
+    const greedyMatched = matchMeasureNotesGreedy(
+      truthMeasureNotes,
+      generatedMeasureNotes,
+      resolvedOptions,
+    )
     const chordGroups = compareChordGroups(
       truthMeasureNotes,
       generatedMeasureNotes,
@@ -525,6 +473,16 @@ export function evaluateOmrAccuracyFromTimingMaps({
 
     totals.matchedNoteCount += matched.matches.length
     totals.correctPitchCount += matched.matches.filter((match) => match.pitchCorrect).length
+    totals.greedyCorrectPitchCount += greedyMatched.matches.filter((match) => match.pitchCorrect).length
+    for (const match of matched.matches) {
+      if (!match.onsetCorrect) {
+        continue
+      }
+      totals.onsetCorrectMatchedCount += 1
+      if (match.pitchCorrect) {
+        totals.pitchCorrectAtCorrectOnsetCount += 1
+      }
+    }
     totals.correctDurationCount += matched.matches.filter((match) => match.durationCorrect).length
     totals.correctOnsetCount += matched.matches.filter((match) => match.onsetCorrect).length
     totals.correctTimeCount += matched.matches.filter((match) => match.timeCorrect).length
@@ -594,6 +552,14 @@ export function evaluateOmrAccuracyFromTimingMaps({
     noteDetectionF1: round(noteDetectionF1, 4),
     chordGroupingAccuracy: round(
       1 - ratio(totals.chordMismatchCount, totals.chordComparableCount, 0),
+      4,
+    ),
+    pitchAccuracyAtCorrectOnset: round(
+      ratio(totals.pitchCorrectAtCorrectOnsetCount, totals.onsetCorrectMatchedCount, 0),
+      4,
+    ),
+    orderSensitivePitchRecovery: round(
+      (totals.correctPitchCount - totals.greedyCorrectPitchCount) / comparisonDenominator,
       4,
     ),
   }
@@ -675,6 +641,17 @@ export function formatOmrAccuracyReport(report) {
   lines.push(`Evidence: ${report.summary.primaryErrorSource.evidence.join(' | ')}`)
   lines.push('')
   lines.push(metricLine('Pitch accuracy', report.metrics.pitchAccuracy))
+  lines.push(metricLine('Matched pitch accuracy', report.metrics.matchedPitchAccuracy))
+  if (Number.isFinite(report.metrics.pitchAccuracyAtCorrectOnset)) {
+    lines.push(
+      metricLine('Pitch accuracy at correct onset', report.metrics.pitchAccuracyAtCorrectOnset),
+    )
+  }
+  if (Number.isFinite(report.metrics.orderSensitivePitchRecovery)) {
+    lines.push(
+      metricLine('Order-sensitive pitch recovery', report.metrics.orderSensitivePitchRecovery),
+    )
+  }
   lines.push(metricLine('Duration accuracy', report.metrics.durationAccuracy))
   lines.push(metricLine('Onset accuracy', report.metrics.onsetAccuracy))
   lines.push(metricLine('Onset time accuracy', report.metrics.timeAccuracy))

@@ -134,6 +134,26 @@ describe('buildVectorEvents infers duration from gap to next onset', () => {
     expect(chord.durationDivisions).toBe(4)
   })
 
+  it('snaps dense measures to sixteenth divisions instead of coarser eighth slots', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 0, positionInMeasure: 0.125, midi: 60 },
+        { x: 15, positionInMeasure: 0.1875, midi: 62 },
+        { x: 30, positionInMeasure: 0.25, midi: 64 },
+        { x: 45, positionInMeasure: 0.3125, midi: 65 },
+        { x: 60, positionInMeasure: 0.375, midi: 67 },
+        { x: 75, positionInMeasure: 0.4375, midi: 69 },
+      ]),
+      measureBox,
+      { beats: 4, beatType: 4 },
+    )
+    const starts = events
+      .filter((event) => event.type === 'note')
+      .map((event) => event.startDivision)
+    expect(starts).toEqual([0, 3, 4, 5, 6, 7])
+    expect(new Set(starts).size).toBe(6)
+  })
+
   it('splits mixed-clef groups into overlapping bass and treble durations', () => {
     const events = buildVectorEvents(
       onsets([

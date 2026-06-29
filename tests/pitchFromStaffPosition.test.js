@@ -42,6 +42,19 @@ describe('resolvePitchFromGrandStaff', () => {
     expect(mapping.midi).toBe(67)
   })
 
+  it('switches to bass clef on lower staff for deep bass-register noteheads', () => {
+    const mapping = resolvePitchFromGrandStaff(0.233, CRUEL_ANGEL_STAFF, DUAL_TREBLE_CLEFS)
+    expect(mapping.clef).toBe('bass')
+    expect(mapping.clefSign).toBe('bass')
+    expect(mapping.midi).toBe(36)
+  })
+
+  it('keeps treble clef on lower staff for mid-register noteheads', () => {
+    const mapping = resolvePitchFromGrandStaff(0.221, CRUEL_ANGEL_STAFF, DUAL_TREBLE_CLEFS)
+    expect(mapping.clefSign).toBe('bass')
+    expect(mapping.midi).toBe(43)
+  })
+
   it('keeps standard grand-staff mapping when lower staff uses bass clef', () => {
     const mapping = resolvePitchFromGrandStaff(0.34, GRAND_STAFF)
     expect(mapping.clefSign).toBe('bass')

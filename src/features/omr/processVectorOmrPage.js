@@ -11,6 +11,7 @@ import {
 import {
   detectStaffClefsFromGlyphs,
   midiToWrittenPitch,
+  resolveNoteheadYNorm,
   resolvePitchFromGrandStaff,
 } from './pitchFromStaffPosition.js'
 import {
@@ -18,6 +19,14 @@ import {
   assignLocalAccidentals,
   resolveNotePitchWithMeasureState,
 } from './omrPitchAlteration.js'
+import { dedupeNoteheads } from './omrNoteDedupe.js'
+import { summarizeMeasureNoteMatching } from './omrNoteMatchingDiagnostics.js'
+import { vectorGlyphInMeasure } from './vectorGlyphMeasureBounds.js'
+import {
+  assignVectorOrphanNoteheads,
+  noteheadGlyphKey,
+} from './vectorOrphanNoteheads.js'
+import { summarizeVectorChordGrouping } from './omrChordGroupingDiagnostics.js'
 
 const NOTEHEAD_GLYPHS = new Set(['\ue0a3', '\ue0a4'])
 const SHARP_GLYPH = '\ue262'
@@ -156,27 +165,48 @@ function detectVectorTimeSignature(glyphs, imageData, firstSystemBoxes = []) {
   return { beats: 4, beatType: 4, confidence: 0 }
 }
 
-function noteheadsForMeasure(glyphs, imageData, measureBox, keySignature) {
+function noteheadsForMeasure(
+  glyphs,
+  imageData,
+  measureBox,
+  keySignature,
+  placement = {},
+  orphanGlyphs = [],
+) {
   const notes = []
-  for (const glyph of glyphs) {
-    if (!NOTEHEAD_GLYPHS.has(glyph.text)) {
-      continue
-    }
-    if (!glyphInBox(glyph, measureBox, imageData, { yPad: 0.025 })) {
-      continue
-    }
+  const consumed = new Set()
 
-    const yNorm = glyph.y / imageData.height
-    const xNorm = glyph.x / imageData.width
+  const addNoteheadGlyph = (glyph, { skipBounds = false } = {}) => {
+    if (!NOTEHEAD_GLYPHS.has(glyph.text)) {
+      return
+    }
+    const key = noteheadGlyphKey(glyph)
+    if (consumed.has(key)) {
+      return
+    }
+    if (!skipBounds && !vectorGlyphInMeasure(glyph, measureBox, imageData, placement)) {
+      return
+    }
+    consumed.add(key)
+
+    const yRough = glyph.y / imageData.height
+    const roughMapping = resolvePitchFromGrandStaff(
+      yRough,
+      measureBox.staffLines,
+      measureBox.staffClefs,
+    )
+    const yNorm =
+      resolveNoteheadYNorm(glyph, imageData, roughMapping.lineYs) ?? yRough
     const pitchMapping = resolvePitchFromGrandStaff(
       yNorm,
       measureBox.staffLines,
       measureBox.staffClefs,
     )
+    const xNorm = glyph.x / imageData.width
     const clef = pitchMapping.clef
     const naturalMidi = pitchMapping.midi
     if (naturalMidi == null) {
-      continue
+      return
     }
     const left = (measureBox.playableX0 ?? measureBox.x0) * imageData.width
     const right = measureBox.x1 * imageData.width
@@ -191,10 +221,17 @@ function noteheadsForMeasure(glyphs, imageData, measureBox, keySignature) {
       positionInMeasure: (glyph.x - left) / Math.max(1, right - left),
       measureNumber: measureBox.measureNumber,
       page: measureBox.page,
-      confidence: 0.94,
-      pitchConfidence: 0.92,
-      source: 'vector-glyph',
+      confidence: skipBounds ? 0.9 : 0.94,
+      pitchConfidence: skipBounds ? 0.88 : 0.92,
+      source: skipBounds ? 'vector-glyph-orphan' : 'vector-glyph',
     })
+  }
+
+  for (const glyph of glyphs) {
+    addNoteheadGlyph(glyph)
+  }
+  for (const glyph of orphanGlyphs) {
+    addNoteheadGlyph(glyph, { skipBounds: true })
   }
 
   const accidentalState = new Map()
@@ -263,7 +300,13 @@ function beatSlotForPosition(positionInMeasure, slotsPerMeasure) {
 }
 
 function groupAnchorPosition(group) {
-  return group.notes?.[0]?.positionInMeasure ?? group.positionInMeasure
+  const positions = (group.notes ?? [])
+    .map((note) => note.positionInMeasure)
+    .filter(Number.isFinite)
+  if (!positions.length) {
+    return group.positionInMeasure
+  }
+  return Math.min(...positions)
 }
 
 function sortedGroupPositions(groups) {
@@ -318,12 +361,134 @@ function vectorChordMergeXPx(notes, beats) {
 }
 
 function groupsShareBeatSlot(left, right, slotsPerMeasure, chordMergeX = OMR_CHORD_MERGE_X) {
-  const leftSlot = beatSlotForPosition(left.notes[0]?.positionInMeasure, slotsPerMeasure)
-  const rightSlot = beatSlotForPosition(right.notes[0]?.positionInMeasure, slotsPerMeasure)
-  if (leftSlot != null && rightSlot != null && leftSlot === rightSlot) {
-    return true
+  const leftNotes = left.notes ?? (Number.isFinite(left.cx) ? [{ cx: left.cx }] : [])
+  const rightNotes = right.notes ?? (Number.isFinite(right.cx) ? [{ cx: right.cx }] : [])
+  if (slotsPerMeasure) {
+    const leftPosition = leftNotes[0]?.positionInMeasure ?? left.positionInMeasure
+    const rightPosition = rightNotes[0]?.positionInMeasure ?? right.positionInMeasure
+    if (Number.isFinite(leftPosition) && Number.isFinite(rightPosition)) {
+      const leftSlot = beatSlotForPosition(leftPosition, slotsPerMeasure)
+      const rightSlot = beatSlotForPosition(rightPosition, slotsPerMeasure)
+      if (leftSlot !== rightSlot) {
+        return false
+      }
+    }
   }
-  return Math.abs(left.cx - right.cx) <= chordMergeX
+  for (const leftNote of leftNotes) {
+    for (const rightNote of rightNotes) {
+      if (Math.abs(leftNote.cx - rightNote.cx) <= chordMergeX) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+function clusterHorizontalSpan(clusterGroups) {
+  const cxValues = clusterGroups
+    .flatMap((group) => (group.notes ?? []).map((note) => note.cx))
+    .filter(Number.isFinite)
+  if (!cxValues.length) {
+    return 0
+  }
+  return Math.max(...cxValues) - Math.min(...cxValues)
+}
+
+function clusterPositionSpan(clusterGroups) {
+  const positions = clusterGroups
+    .flatMap((group) => (group.notes ?? []).map((note) => note.positionInMeasure))
+    .filter(Number.isFinite)
+  if (positions.length < 2) {
+    return 0
+  }
+  return Math.max(...positions) - Math.min(...positions)
+}
+
+function chordSameSlotMaxSpan(chordMergeX) {
+  return Math.min(38, chordMergeX * 4)
+}
+
+function clusterMaxAdjacentGap(clusterGroups) {
+  const cxValues = clusterGroups
+    .flatMap((group) => (group.notes ?? []).map((note) => note.cx))
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right)
+  if (cxValues.length < 2) {
+    return 0
+  }
+  let maxGap = 0
+  for (let index = 1; index < cxValues.length; index += 1) {
+    maxGap = Math.max(maxGap, cxValues[index] - cxValues[index - 1])
+  }
+  return maxGap
+}
+
+function shouldSpanMergeSameSlotCluster(clusterGroups, chordMergeX) {
+  if (clusterGroups.length < 3) {
+    return false
+  }
+  const span = clusterHorizontalSpan(clusterGroups)
+  if (span > chordSameSlotMaxSpan(chordMergeX)) {
+    return false
+  }
+  if (clusterMaxAdjacentGap(clusterGroups) > chordMergeX + 3) {
+    return false
+  }
+  const positionSpan = clusterPositionSpan(clusterGroups)
+  if (clusterGroups.length >= 4) {
+    return positionSpan <= 0.035
+  }
+  return positionSpan <= 0.015
+}
+
+function mergeClusterGroups(clusterGroups, chordMergeX, slotsPerMeasure) {
+  if (clusterGroups.length === 1) {
+    return clusterGroups
+  }
+  if (shouldSpanMergeSameSlotCluster(clusterGroups, chordMergeX)) {
+    const notes = dedupeNoteheads(
+      clusterGroups
+        .flatMap((entry) => entry.notes ?? [])
+        .sort((left, right) => right.midi - left.midi),
+    )
+    return [
+      {
+        cx: average(notes.map((note) => note.cx)),
+        notes,
+        positionInMeasure: groupAnchorPosition({ notes }),
+      },
+    ]
+  }
+  return mergeGroupsByChordProximity(clusterGroups, chordMergeX, slotsPerMeasure)
+}
+
+function mergeGroupsByChordProximity(groups, chordMergeX, slotsPerMeasure = null) {
+  let merged = groups.map((group) => ({ ...group, notes: [...(group.notes ?? [])] }))
+  let changed = true
+  while (changed) {
+    changed = false
+    for (let index = 0; index < merged.length; index += 1) {
+      for (let other = index + 1; other < merged.length; other += 1) {
+        if (!groupsShareBeatSlot(merged[index], merged[other], slotsPerMeasure, chordMergeX)) {
+          continue
+        }
+        const notes = dedupeNoteheads([...merged[index].notes, ...merged[other].notes]).sort(
+          (left, right) => right.midi - left.midi,
+        )
+        merged[index] = {
+          cx: average(notes.map((note) => note.cx)),
+          notes,
+        }
+        merged.splice(other, 1)
+        changed = true
+        break
+      }
+      if (changed) {
+        break
+      }
+    }
+  }
+  return merged.sort((left, right) => left.cx - right.cx)
 }
 
 function groupVectorNoteheads(notes, { beats = 4 } = {}) {
@@ -344,12 +509,7 @@ function groupVectorNoteheads(notes, { beats = 4 } = {}) {
   return groups
     .map((group) => ({
       ...group,
-      notes: group.notes
-        .sort((left, right) => right.midi - left.midi)
-        .filter(
-          (note, index, entries) =>
-            entries.findIndex((entry) => entry.midi === note.midi) === index,
-        ),
+      notes: dedupeNoteheads(group.notes).sort((left, right) => right.midi - left.midi),
     }))
     .sort((left, right) => left.cx - right.cx)
 }
@@ -487,6 +647,10 @@ function mergeGroupsSharingBeat(groups, beats) {
     return groups
   }
   const slotsPerMeasure = Math.max(4, beats * 4)
+  const chordMergeX = vectorChordMergeXPx(
+    groups.flatMap((group) => group.notes ?? []),
+    beats,
+  )
   const sorted = [...groups].sort((left, right) => left.cx - right.cx)
   const clusters = []
   for (const group of sorted) {
@@ -496,33 +660,12 @@ function mergeGroupsSharingBeat(groups, beats) {
         ? null
         : clusters.find((entry) => entry.slot === slot)
     if (!cluster) {
-      clusters.push({ anchor: group.notes[0].positionInMeasure, slot, groups: [group] })
+      clusters.push({ slot, groups: [group] })
       continue
     }
     cluster.groups.push(group)
-    cluster.anchor = average(cluster.groups.map((entry) => entry.notes[0].positionInMeasure))
-    if (slot != null) {
-      cluster.slot = slot
-    }
   }
-  return clusters
-    .map((cluster) => {
-      if (cluster.groups.length === 1) {
-        return cluster.groups[0]
-      }
-      const notes = cluster.groups
-        .flatMap((entry) => entry.notes)
-        .sort((left, right) => right.midi - left.midi)
-        .filter(
-          (note, index, entries) =>
-            entries.findIndex((entry) => entry.midi === note.midi) === index,
-        )
-      return {
-        cx: average(notes.map((note) => note.cx)),
-        notes,
-      }
-    })
-    .sort((left, right) => left.cx - right.cx)
+  return clusters.flatMap((cluster) => mergeClusterGroups(cluster.groups, chordMergeX, slotsPerMeasure))
 }
 
 /**
@@ -743,6 +886,21 @@ function snapStartDivision(rawStart, totalDivisions) {
   return Math.min(totalDivisions - 1, Math.round(clamped / grid) * grid)
 }
 
+function startDivisionFromPosition(positionInMeasure, totalDivisions, denseMeasure = false) {
+  if (!Number.isFinite(positionInMeasure)) {
+    return 0
+  }
+  const raw = Math.round(positionInMeasure * totalDivisions)
+  if (!denseMeasure) {
+    return snapStartDivision(raw, totalDivisions)
+  }
+  // Dense chord-heavy measures need sixteenth snapping so split chord fragments
+  // keep distinct onsets instead of collapsing to the same eighth-grid slot.
+  const grid = Math.max(1, OMR_DIVISIONS_PER_QUARTER / 4)
+  const clamped = Math.max(0, Math.min(totalDivisions - 1, raw))
+  return Math.max(0, Math.min(totalDivisions - 1, Math.round(clamped / grid) * grid))
+}
+
 function alignOpeningGroupStart(starts, groups, beats, usePositionStarts) {
   if (!usePositionStarts || !starts.length || !groups.length) {
     return starts
@@ -763,9 +921,7 @@ function alignOpeningGroupStart(starts, groups, beats, usePositionStarts) {
 }
 
 function dedupeNotesByMidi(notes = []) {
-  return notes.filter(
-    (note, index, entries) => entries.findIndex((entry) => entry.midi === note.midi) === index,
-  )
+  return dedupeNoteheads(notes)
 }
 
 /**
@@ -781,7 +937,8 @@ export function coalesceSameOnsetChordEvents(events) {
     const start = event.startDivision ?? 0
     const clef = event.notes?.[0]?.clef ?? 'treble'
     const duration = event.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
-    const key = `${start}:${clef}:${duration}`
+    const cxBucket = Math.round(average((event.notes ?? []).map((note) => note.cx)) / 20)
+    const key = `${start}:${clef}:${duration}:${cxBucket}`
     if (!buckets.has(key)) {
       buckets.set(key, {
         ...event,
@@ -823,9 +980,13 @@ export function clampMeasureEventDurations(events, totalDivisions) {
 
 function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivisions, beats) {
   const usePositionStarts = shouldInferRhythmFromPositions(groups, beats)
+  const denseMeasure = groups.length > beats
 
   if (usePositionStarts) {
-    const snappedGroups = new Map()
+    const slotsPerMeasure = Math.max(4, beats * 4)
+    const allNotes = groups.flatMap((group) => group.notes ?? [])
+    const chordMergeX = vectorChordMergeXPx(allNotes, beats)
+    const snappedClusters = []
     for (const group of groups) {
       const positionInMeasure = group.notes[0]?.positionInMeasure
       const startDivision = Number.isFinite(positionInMeasure)
@@ -834,20 +995,32 @@ function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivis
       if (startDivision == null) {
         continue
       }
-      if (!snappedGroups.has(startDivision)) {
-        snappedGroups.set(startDivision, {
-          startDivision,
-          notes: dedupeNotesByMidi(group.notes),
-          cx: group.cx,
-          positionInMeasure,
-        })
+      const cluster = snappedClusters.find(
+        (entry) =>
+          entry.startDivision === startDivision &&
+          entry.groups.some((entryGroup) =>
+            groupsShareBeatSlot(entryGroup, group, slotsPerMeasure, chordMergeX),
+          ),
+      )
+      if (!cluster) {
+        snappedClusters.push({ startDivision, groups: [group] })
         continue
       }
-      const merged = snappedGroups.get(startDivision)
-      merged.notes = dedupeNotesByMidi([...merged.notes, ...group.notes])
-      merged.cx = average(merged.notes.map((note) => note.cx))
+      cluster.groups.push(group)
     }
-    groups = [...snappedGroups.values()].sort((left, right) => left.startDivision - right.startDivision)
+    groups = snappedClusters
+      .flatMap((cluster) => mergeClusterGroups(cluster.groups, chordMergeX, slotsPerMeasure))
+      .map((group) => {
+        const clusterNotes = group.notes ?? []
+        const positionInMeasure = groupAnchorPosition(group)
+        return {
+          startDivision: startDivisionFromPosition(positionInMeasure, totalDivisions, denseMeasure),
+          notes: clusterNotes,
+          cx: average(clusterNotes.map((note) => note.cx)),
+          positionInMeasure,
+        }
+      })
+      .sort((left, right) => left.startDivision - right.startDivision)
   }
 
   const rhythmStarts = groups.map((group, index) => {
@@ -891,7 +1064,7 @@ function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivis
       }
       const meta = durationMeta(durationDivisions)
       const positionInMeasure =
-        group.positionInMeasure ?? group.notes[0]?.positionInMeasure ?? startDivision / totalDivisions
+        groupAnchorPosition(group) ?? startDivision / totalDivisions
       return {
         type: 'note',
         startDivision,
@@ -951,12 +1124,16 @@ export function buildVectorMeasureRecord({
   measureBox,
   keySignature,
   timeSignature,
+  measurePlacement = {},
+  orphanGlyphs = [],
 }) {
   const { notes, vectorStaccatoDiagnostics, vectorAccentDiagnostics } = noteheadsForMeasure(
     glyphs,
     imageData,
     measureBox,
     keySignature,
+    measurePlacement,
+    orphanGlyphs,
   )
   const detectedRests = restsForMeasure(glyphs, imageData, measureBox, notes)
   const beats = timeSignature?.beats ?? 4
@@ -986,6 +1163,13 @@ export function buildVectorMeasureRecord({
     noteCount > 0 || restCount > 0
       ? measureConfidenceFromRhythm({ uncertain: false }, notes)
       : 0.45
+  const vectorNoteMatching = summarizeMeasureNoteMatching({
+    measureNumber: measureBox.measureNumber,
+    page: measureBox.page,
+    vectorNoteCount: noteCount,
+    events,
+  })
+  const vectorChordDiagnostics = summarizeVectorChordGrouping(events)
   return {
     measureNumber: measureBox.measureNumber,
     page: measureBox.page,
@@ -1004,6 +1188,8 @@ export function buildVectorMeasureRecord({
     },
     vectorStaccatoDiagnostics,
     vectorAccentDiagnostics,
+    vectorNoteMatching,
+    vectorChordDiagnostics,
   }
 }
 
@@ -1029,18 +1215,29 @@ export function processVectorPageSystems({
       ? detectedTimeSignature
       : inheritedTimeSignature ?? detectedTimeSignature
   const measureRecordsBySystem = []
+  const staffClefsBySystem = new Map()
+  const placementByMeasure = new Map()
+  const measureBoxByNumber = new Map()
   let noteCount = 0
 
   for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
     const boxes = systemMeasureBoxes[systemIndex] ?? []
     const staffClefs = detectStaffClefsFromGlyphs(glyphs, imageData, boxes[0]?.staffLines)
-    const measures = boxes.map((measureBox) => {
+    staffClefsBySystem.set(systemIndex, staffClefs)
+    const measures = boxes.map((measureBox, measureIndex) => {
+      const measurePlacement = {
+        isLastInSystem: measureIndex === boxes.length - 1,
+      }
+      const enrichedBox = { ...measureBox, staffClefs }
+      placementByMeasure.set(measureBox.measureNumber, measurePlacement)
+      measureBoxByNumber.set(measureBox.measureNumber, enrichedBox)
       const record = buildVectorMeasureRecord({
         glyphs,
         imageData,
-        measureBox: { ...measureBox, staffClefs },
+        measureBox: enrichedBox,
         keySignature,
         timeSignature,
+        measurePlacement,
       })
       noteCount += record.vectorNoteCount ?? 0
       return record
@@ -1048,13 +1245,51 @@ export function processVectorPageSystems({
     measureRecordsBySystem.push(measures)
   }
 
+  const orphanResult = assignVectorOrphanNoteheads({
+    glyphs,
+    imageData,
+    systemMeasureBoxes,
+    staffClefsBySystem,
+  })
+
+  for (const [measureNumber, orphanEntries] of orphanResult.assignments) {
+    const orphanGlyphs = orphanEntries.map((entry) => entry.glyph)
+    const measureBox = measureBoxByNumber.get(measureNumber)
+    const measurePlacement = placementByMeasure.get(measureNumber) ?? {}
+    if (!measureBox || !orphanGlyphs.length) {
+      continue
+    }
+    for (let systemIndex = 0; systemIndex < measureRecordsBySystem.length; systemIndex += 1) {
+      const measureIndex = measureRecordsBySystem[systemIndex].findIndex(
+        (record) => record.measureNumber === measureNumber,
+      )
+      if (measureIndex < 0) {
+        continue
+      }
+      const previous = measureRecordsBySystem[systemIndex][measureIndex]
+      const rebuilt = buildVectorMeasureRecord({
+        glyphs,
+        imageData,
+        measureBox,
+        keySignature,
+        timeSignature,
+        measurePlacement,
+        orphanGlyphs,
+      })
+      noteCount += (rebuilt.vectorNoteCount ?? 0) - (previous.vectorNoteCount ?? 0)
+      measureRecordsBySystem[systemIndex][measureIndex] = rebuilt
+      break
+    }
+  }
+
   const flatRecords = measureRecordsBySystem.flat()
-  const measureBoxByNumber = new Map(
+  const orphanDiagnostics = orphanResult.diagnostics
+  const measureBoxByNumberForTies = new Map(
     systemMeasureBoxes.flat().map((measureBox) => [measureBox.measureNumber, measureBox]),
   )
   const tieResult = applyVectorPageTies({
     measureRecords: flatRecords,
-    measureBoxByNumber,
+    measureBoxByNumber: measureBoxByNumberForTies,
     glyphs,
     imageData,
     inkThreshold,
@@ -1066,6 +1301,7 @@ export function processVectorPageSystems({
     timeSignature,
     noteCount,
     source: 'vector-glyphs',
+    orphanDiagnostics,
     tieDiagnostics: tieResult.diagnostics,
     restDiagnostics: summarizeVectorRestDiagnostics(flatRecords),
     staccatoDiagnostics: summarizeVectorStaccatoDiagnostics(flatRecords),

@@ -6,6 +6,8 @@ import {
 import { buildOmrMusicXml } from './buildOmrMusicXml.js'
 import { parseTempoFromTextItems } from './parseOmrTempoMarking.js'
 import { buildOmrDiagnostics } from './buildOmrDiagnostics.js'
+import { summarizeNoteMatchingReport } from './omrNoteMatchingDiagnostics.js'
+import { summarizeOrphanDiagnostics } from './vectorOrphanNoteheads.js'
 import { preprocessOmrPageImage } from './preprocessOmrPageImage.js'
 import { processOmrPageAnalysis } from './processOmrPage.js'
 import { assessOmrDifficulty, OMR_FAILURE_REASON } from './assessOmrDifficulty.js'
@@ -111,7 +113,13 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       detectedAccentCount: 0,
       appliedAccentCount: 0,
     },
+    orphans: {
+      orphanNoteheadCount: 0,
+      reassignedOrphanCount: 0,
+      rejectedOrphanReasons: {},
+    },
   }
+  const orphanDiagnosticsPages = []
 
   let measureCounter = 1
   const measureGridDiagnosticsEntries = []
@@ -244,6 +252,18 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       diagnostics.accent.appliedAccentCount += pageAccent.appliedAccentCount ?? 0
     }
 
+    const pageOrphans = pageResult.orphanDiagnostics
+    if (pageOrphans) {
+      orphanDiagnosticsPages.push(pageOrphans)
+      const merged = summarizeOrphanDiagnostics([pageOrphans])
+      diagnostics.orphans.orphanNoteheadCount += merged.orphanNoteheadCount
+      diagnostics.orphans.reassignedOrphanCount += merged.reassignedOrphanCount
+      for (const [reason, count] of Object.entries(merged.rejectedOrphanReasons)) {
+        diagnostics.orphans.rejectedOrphanReasons[reason] =
+          (diagnostics.orphans.rejectedOrphanReasons[reason] ?? 0) + count
+      }
+    }
+
     if ((pageResult.keySignature?.confidence ?? 0) > (keySignature.confidence ?? 0)) {
       keySignature = pageResult.keySignature
     }
@@ -358,11 +378,16 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     measureCount: diagnostics.measures,
   }, traceRunId)
 
+  const noteMatching = summarizeNoteMatchingReport(measureRhythms)
+  const orphanNoteheads = summarizeOrphanDiagnostics(orphanDiagnosticsPages)
+
   return {
     musicXml,
     diagnostics: {
       ...diagnostics,
       ...richDiagnostics,
+      noteMatching,
+      orphanNoteheads,
       layoutConsistency,
       preprocessLog,
       difficulty,

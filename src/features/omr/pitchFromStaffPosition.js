@@ -78,6 +78,58 @@ export function midiFromStaffPosition(yNorm, lineYs, clef = 'treble') {
   return midiFromDiatonicNumber(diatonicNumber(base) + diatonicOffset)
 }
 
+function resolveClefSignForStaffRole(yNorm, lineYs, detectedClef, staffRole) {
+  if (staffRole !== 'lower' || detectedClef !== 'treble' || !lineYs?.length) {
+    return detectedClef
+  }
+  const gap = staffLineGap(lineYs)
+  const sorted = [...lineYs].sort((a, b) => a - b)
+  const bottomLine = sorted[sorted.length - 1]
+  const deepBassThreshold = bottomLine + gap * 0.1
+  if (yNorm < deepBassThreshold) {
+    return detectedClef
+  }
+  const bassMidi = midiFromStaffPosition(yNorm, lineYs, 'bass')
+  return bassMidi == null ? detectedClef : 'bass'
+}
+
+function refineGrandStaffPitchMapping(pitchMapping, staffLines, staffClefs) {
+  const clefs = normalizeStaffClefs(staffClefs)
+  const staffRole = pitchMapping.staffRole
+  const linesKey = staffRoleToLinesKey(staffRole)
+  const lineYs = staffLines?.[linesKey] ?? pitchMapping.lineYs ?? []
+  const detectedClef = staffRole === 'upper' ? clefs.upper : clefs.lower
+  const clefSign = resolveClefSignForStaffRole(
+    pitchMapping.yNorm,
+    lineYs,
+    detectedClef,
+    staffRole,
+  )
+  if (clefSign === pitchMapping.clefSign) {
+    return pitchMapping
+  }
+  const midi = midiFromStaffPosition(pitchMapping.yNorm, lineYs, clefSign)
+  if (midi == null) {
+    return pitchMapping
+  }
+  const alternateStaffRole = staffRole === 'upper' ? 'lower' : 'upper'
+  const alternateLinesKey = staffRoleToLinesKey(alternateStaffRole)
+  const alternateClefSign =
+    alternateStaffRole === 'upper' ? clefs.upper : clefs.lower
+  return {
+    ...pitchMapping,
+    clefSign,
+    midi,
+    lineYs,
+    alternateClefSign,
+    alternateMidi: midiFromStaffPosition(
+      pitchMapping.yNorm,
+      staffLines?.[alternateLinesKey] ?? [],
+      alternateClefSign,
+    ),
+  }
+}
+
 export function estimateLedgerLineCount(yNorm, lineYs) {
   const sorted = [...lineYs].sort((a, b) => a - b)
   const top = sorted[0]
@@ -153,12 +205,23 @@ export function staffLineGap(lineYs) {
   return (sorted[sorted.length - 1] - sorted[0]) / 4
 }
 
-export function staffSpanWithLedger(lineYs, { aboveLedgers = 4, belowLedgers = 4 } = {}) {
+export function staffSpanWithLedger(
+  lineYs,
+  { aboveLedgers = 4, belowLedgers = 4, clipTop = null, clipBottom = null } = {},
+) {
   const sorted = [...lineYs].sort((a, b) => a - b)
   const gap = staffLineGap(lineYs)
+  let top = sorted[0] - gap * aboveLedgers
+  let bottom = sorted[sorted.length - 1] + gap * belowLedgers
+  if (Number.isFinite(clipTop)) {
+    top = Math.max(top, clipTop)
+  }
+  if (Number.isFinite(clipBottom)) {
+    bottom = Math.min(bottom, clipBottom)
+  }
   return {
-    top: sorted[0] - gap * aboveLedgers,
-    bottom: sorted[sorted.length - 1] + gap * belowLedgers,
+    top,
+    bottom,
     gap,
     lines: sorted,
   }
@@ -189,6 +252,30 @@ function staffRoleToLinesKey(staffRole) {
 }
 
 /**
+ * Shift glyph anchor toward notehead center for pitch mapping (bounded).
+ */
+export function resolveNoteheadYNorm(glyph, imageData, lineYs) {
+  if (!glyph || !imageData?.height) {
+    return null
+  }
+  const anchorYNorm = glyph.y / imageData.height
+  const heightNorm = (glyph.height ?? 0) / imageData.height
+  if (!Array.isArray(lineYs) || lineYs.length === 0 || heightNorm <= 0) {
+    return anchorYNorm
+  }
+  const gap = staffLineGap(lineYs)
+  if (gap <= 0) {
+    return anchorYNorm
+  }
+  const heightRatio = heightNorm / gap
+  if (heightRatio < 0.45 || heightRatio > 2.4) {
+    return anchorYNorm
+  }
+  const centerFactor = Math.min(0.2, 0.08 + heightRatio * 0.05)
+  return anchorYNorm - heightNorm * centerFactor
+}
+
+/**
  * Pick upper vs lower staff from geometry. Returns staff role names that match
  * existing note.clef routing: upper → 'treble', lower → 'bass'.
  */
@@ -208,8 +295,16 @@ export function resolveStaffRoleForY(yNorm, staffLines) {
     }
   }
 
-  const trebleSpan = staffSpanWithLedger(trebleLines)
-  const bassSpan = staffSpanWithLedger(bassLines)
+  const splitY = staffLines.splitY
+  const trebleGap = staffLineGap(trebleLines)
+  const bassGap = staffLineGap(bassLines)
+  const splitMargin = Math.min(trebleGap, bassGap) * 0.35
+  const trebleSpan = staffSpanWithLedger(trebleLines, {
+    clipBottom: Number.isFinite(splitY) ? splitY - splitMargin : null,
+  })
+  const bassSpan = staffSpanWithLedger(bassLines, {
+    clipTop: Number.isFinite(splitY) ? splitY + splitMargin : null,
+  })
   const trebleDist = distanceToNearestStaffLine(yNorm, trebleLines)
   const bassDist = distanceToNearestStaffLine(yNorm, bassLines)
 
@@ -288,20 +383,24 @@ export function resolvePitchFromGrandStaff(yNorm, staffLines, staffClefs = DEFAU
     alternateClefSign,
   )
 
-  return {
-    yNorm,
-    staffRole,
-    clef: staffResolution.clef,
-    clefSign,
-    midi,
-    alternateStaffRole,
-    alternateClef: staffResolution.alternateClef,
-    alternateClefSign,
-    alternateMidi,
-    lineYs,
-    staffClefs: clefs,
-    ...staffResolution,
-  }
+  return refineGrandStaffPitchMapping(
+    {
+      yNorm,
+      staffRole,
+      clef: staffResolution.clef,
+      clefSign,
+      midi,
+      alternateStaffRole,
+      alternateClef: staffResolution.alternateClef,
+      alternateClefSign,
+      alternateMidi,
+      lineYs,
+      staffClefs: clefs,
+      ...staffResolution,
+    },
+    staffLines,
+    staffClefs,
+  )
 }
 
 export function clefForY(yNorm, staffLines) {

@@ -184,6 +184,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       restDiagnostics: vector.restDiagnostics,
       staccatoDiagnostics: vector.staccatoDiagnostics,
       accentDiagnostics: vector.accentDiagnostics,
+      orphanDiagnostics: vector.orphanDiagnostics,
     }
     omrDebugStep(`processOmrPage:done:page-${page}`, imageData, {
       notes,
