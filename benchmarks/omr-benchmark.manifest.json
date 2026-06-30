@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "description": "Developer OMR accuracy fixtures. PDF + MXL live outside the repo (typically ~/Downloads). Thresholds are regression floors, not product targets.",
+  "fixtures": [
+    {
+      "id": "clean",
+      "label": "Gymnopédie No. 1 (clean)",
+      "tier": "clean",
+      "pdf": "~/Downloads/gymnopedie-no-1-satie.pdf",
+      "truth": "~/Downloads/gymnopedie-no-1-satie.mxl",
+      "maxPages": 24,
+      "thresholds": {
+        "pitchAccuracy": 0.95,
+        "durationAccuracy": 0.95,
+        "onsetAccuracy": 0.95,
+        "chordGroupingAccuracy": 0.95,
+        "noteDetectionF1": 0.95,
+        "maxMeasureCountDiff": 0,
+        "maxNoteCountDiff": 5
+      }
+    },
+    {
+      "id": "dense",
+      "label": "A Cruel Angel's Thesis (dense)",
+      "tier": "dense",
+      "pdf": "~/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+      "truth": "~/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl",
+      "maxPages": 24,
+      "thresholds": {
+        "pitchAccuracy": 0.3,
+        "durationAccuracy": 0.75,
+        "onsetAccuracy": 0.65,
+        "chordGroupingAccuracy": 0.55,
+        "noteDetectionF1": 0.85,
+        "maxMeasureCountDiff": 4,
+        "maxNoteCountDiff": 20
+      }
+    }
+  ]
+}

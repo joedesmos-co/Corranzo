@@ -14,6 +14,7 @@
     "test:scripts": "node scripts/test-pitch-detection.mjs && node scripts/test-auto-align-heuristics.mjs && node scripts/test-note-target-position.mjs && node scripts/test-auto-setup-pipeline.mjs && node scripts/diagnose-alignment.mjs --check && node scripts/diagnose-alignment.mjs --compare && node scripts/diagnose-alignment.mjs --detect && node scripts/calibrate-demo-anchors.mjs --validate-minuet && node scripts/benchmark-alignment-corpus.mjs --ci-only --json /tmp/alignment-benchmark-ci.json",
     "test:all": "npm run test && npm run test:scripts",
     "omr:evaluate": "node scripts/evaluate-omr-accuracy.mjs",
+    "omr:benchmark-dashboard": "node scripts/omr-benchmark-dashboard.mjs",
     "omr:analyze-pitch": "node scripts/analyze-omr-pitch-errors.mjs",
     "omr:analyze-notes": "node scripts/analyze-omr-note-matching.mjs",
     "omr:probe-noteheads": "node scripts/probe-omr-notehead-detection.mjs",

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { summarizeVectorChordGrouping } from '../src/features/omr/omrChordGroupingDiagnostics.js'
+import { reconstructMusicalEvents } from '../src/features/omr/reconstructMusicalEvents.js'
 import {
   buildVectorEvents,
   coalesceSameOnsetChordEvents,
@@ -142,5 +143,148 @@ describe('vector chord grouping regressions', () => {
       },
     ])
     expect(events.filter((event) => event.type === 'note')).toHaveLength(2)
+  })
+})
+
+describe('reconstructMusicalEvents', () => {
+  it('reattaches a tightly offset split chord tone without changing note count', () => {
+    const events = reconstructMusicalEvents(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 1,
+          notes: [
+            { midi: 74, clef: 'bass', cx: 100, beams: 0 },
+            { midi: 70, clef: 'bass', cx: 100, beams: 0 },
+            { midi: 65, clef: 'bass', cx: 100, beams: 0 },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 1,
+          durationDivisions: 8,
+          notes: [{ midi: 67, clef: 'bass', cx: 109, beams: 0 }],
+        },
+      ],
+      { totalDivisions: 16 },
+    )
+    const noteEvents = events.filter((event) => event.type === 'note')
+    expect(noteEvents).toHaveLength(1)
+    expect(noteEvents[0].notes).toHaveLength(4)
+    expect(noteEvents[0].durationDivisions).toBe(16)
+    expect(noteEvents[0].musicalEventReconstructionReasons).toContain('split-chord-tone')
+  })
+
+  it('does not merge beamed or wider neighboring subdivision notes', () => {
+    const beamed = reconstructMusicalEvents([
+      {
+        type: 'note',
+        startDivision: 0,
+        durationDivisions: 1,
+        notes: [
+          { midi: 74, clef: 'treble', cx: 100, beams: 0 },
+          { midi: 70, clef: 'treble', cx: 100, beams: 0 },
+          { midi: 65, clef: 'treble', cx: 100, beams: 0 },
+        ],
+      },
+      {
+        type: 'note',
+        startDivision: 1,
+        durationDivisions: 2,
+        notes: [{ midi: 67, clef: 'treble', cx: 109, beams: 1 }],
+      },
+    ])
+    expect(beamed.filter((event) => event.type === 'note')).toHaveLength(2)
+
+    const wide = reconstructMusicalEvents([
+      {
+        type: 'note',
+        startDivision: 0,
+        durationDivisions: 1,
+        notes: [
+          { midi: 74, clef: 'treble', cx: 100, beams: 0 },
+          { midi: 70, clef: 'treble', cx: 100, beams: 0 },
+          { midi: 65, clef: 'treble', cx: 100, beams: 0 },
+        ],
+      },
+      {
+        type: 'note',
+        startDivision: 1,
+        durationDivisions: 2,
+        notes: [{ midi: 67, clef: 'treble', cx: 118, beams: 0 }],
+      },
+    ])
+    expect(wide.filter((event) => event.type === 'note')).toHaveLength(2)
+  })
+
+  it('splits a same-staff inner bass subdivision without changing note count', () => {
+    const events = reconstructMusicalEvents(
+      [
+        {
+          type: 'note',
+          startDivision: 4,
+          durationDivisions: 2,
+          notes: [
+            { midi: 58, clef: 'bass', cx: 120, beams: 0, durationDivisions: 4 },
+            {
+              midi: 53,
+              clef: 'bass',
+              cx: 120,
+              beams: 0,
+              stem: { direction: 'down' },
+              dotted: true,
+              durationDivisions: 2,
+            },
+            { midi: 46, clef: 'bass', cx: 120, beams: 0, durationDivisions: 2 },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 6,
+          durationDivisions: 2,
+          notes: [{ midi: 46, clef: 'bass', cx: 148, beams: 0 }],
+        },
+      ],
+      { totalDivisions: 16 },
+    )
+    const noteEvents = events.filter((event) => event.type === 'note')
+    expect(noteEvents.flatMap((event) => event.notes)).toHaveLength(4)
+    const source = noteEvents.find((event) => event.startDivision === 4)
+    const split = noteEvents.find(
+      (event) => event.startDivision === 6 && event.notes?.[0]?.midi === 53,
+    )
+    expect(source.notes.map((note) => note.midi)).toEqual([58, 46])
+    expect(split).toBeTruthy()
+    expect(split.musicalEventReconstructionReasons).toContain('same-staff-inner-voice-split')
+  })
+
+  it('does not split a beamed inner bass subdivision tone', () => {
+    const events = reconstructMusicalEvents(
+      [
+        {
+          type: 'note',
+          startDivision: 4,
+          durationDivisions: 2,
+          notes: [
+            { midi: 58, clef: 'bass', cx: 120, beams: 0, durationDivisions: 4 },
+            {
+              midi: 53,
+              clef: 'bass',
+              cx: 120,
+              beams: 1,
+              stem: { direction: 'down' },
+              dotted: true,
+              durationDivisions: 2,
+            },
+            { midi: 46, clef: 'bass', cx: 120, beams: 0, durationDivisions: 2 },
+          ],
+        },
+      ],
+      { totalDivisions: 16 },
+    )
+    const noteEvents = events.filter((event) => event.type === 'note')
+    expect(noteEvents).toHaveLength(1)
+    expect(noteEvents[0].notes.map((note) => note.midi)).toEqual([58, 53, 46])
   })
 })

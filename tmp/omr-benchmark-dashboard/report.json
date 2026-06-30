@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "generatedAt": "2026-06-30T17:57:51.443Z",
+  "fixtureCount": 2,
+  "statusCounts": {
+    "pass": 2,
+    "fail": 0,
+    "rejected": 0,
+    "skipped": 0,
+    "error": 0
+  },
+  "overallPass": true,
+  "topErrorCategories": [
+    {
+      "category": "measure-allocation",
+      "count": 1
+    },
+    {
+      "category": "rhythm-inference",
+      "count": 1
+    }
+  ],
+  "topDurationErrorCategories": [
+    {
+      "category": "too-long",
+      "count": 1
+    },
+    {
+      "category": "too-short",
+      "count": 1
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "clean",
+      "label": "Gymnopédie No. 1 (clean)",
+      "tier": "clean",
+      "pdfPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+      "truthPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.mxl",
+      "status": "pass",
+      "failureReasons": [],
+      "thresholdFailures": [],
+      "metrics": {
+        "pitchAccuracy": 1,
+        "durationAccuracy": 0.9979,
+        "onsetAccuracy": 1,
+        "chordGroupingAccuracy": 1,
+        "noteDetectionF1": 1,
+        "measureCountDiff": 0,
+        "noteCountDiff": 0,
+        "wrongPitch": 0,
+        "wrongDuration": 1,
+        "wrongOnset": 0,
+        "chordMismatch": 0,
+        "topErrorCategory": {
+          "source": "measure-allocation",
+          "label": "Measure allocation",
+          "confidence": 0.22
+        },
+        "topDurationErrorCategory": {
+          "category": "too-long",
+          "count": 1
+        },
+        "durationErrorHistogram": {
+          "too-short": 0,
+          "too-long": 1,
+          "beamed-subdivision": 0,
+          "bass-sustain": 0,
+          "melody-accompaniment": 0,
+          "rest-gap": 0,
+          "tie-sustain": 0,
+          "onset-coupled": 0,
+          "other": 0
+        },
+        "truncatedWrongDurations": 0
+      },
+      "run": {
+        "pdfPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+        "truthPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.mxl",
+        "maxPages": 24,
+        "preprocessPages": true,
+        "omrNoteCount": 469,
+        "omrMeasureCount": 78
+      },
+      "error": null,
+      "generatedTitle": "gymnopedie-no-1-satie",
+      "groundTruthTitle": "Gymnopédie No. 1",
+      "omrConfidence": 0.8650000000000003,
+      "omrFailureReasons": [],
+      "rejectedOrphanCount": 0
+    },
+    {
+      "id": "dense",
+      "label": "A Cruel Angel's Thesis (dense)",
+      "tier": "dense",
+      "pdfPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+      "truthPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl",
+      "status": "pass",
+      "failureReasons": [],
+      "thresholdFailures": [],
+      "metrics": {
+        "pitchAccuracy": 0.3434,
+        "durationAccuracy": 0.8096,
+        "onsetAccuracy": 0.7181,
+        "chordGroupingAccuracy": 0.6641,
+        "noteDetectionF1": 0.8893,
+        "measureCountDiff": 2,
+        "noteCountDiff": -2,
+        "wrongPitch": 1533,
+        "wrongDuration": 223,
+        "wrongOnset": 480,
+        "chordMismatch": 1134,
+        "topErrorCategory": {
+          "source": "rhythm-inference",
+          "label": "Rhythm inference",
+          "confidence": 0.884
+        },
+        "topDurationErrorCategory": {
+          "category": "too-short",
+          "count": 97
+        },
+        "durationErrorHistogram": {
+          "too-short": 97,
+          "too-long": 30,
+          "beamed-subdivision": 57,
+          "bass-sustain": 0,
+          "melody-accompaniment": 0,
+          "rest-gap": 0,
+          "tie-sustain": 0,
+          "onset-coupled": 39,
+          "other": 0
+        },
+        "truncatedWrongDurations": 0
+      },
+      "run": {
+        "pdfPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+        "truthPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl",
+        "maxPages": 24,
+        "preprocessPages": true,
+        "omrNoteCount": 2808,
+        "omrMeasureCount": 127
+      },
+      "error": null,
+      "generatedTitle": "a-cruel-angels-thesis-neon-genesis-evangelion",
+      "groundTruthTitle": "A Cruel Angel's Thesis",
+      "omrConfidence": 0.8649048128494793,
+      "omrFailureReasons": [],
+      "rejectedOrphanCount": 0
+    }
+  ],
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "mode": "live"
+}

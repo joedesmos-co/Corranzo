@@ -1,0 +1,1985 @@
+{
+  "generatedAt": "2026-06-30T00:51:40.576Z",
+  "sourceReports": {
+    "dense": "tmp/omr-benchmark-iter/rhythm-voice6/after-dense-full.json",
+    "clean": "tmp/omr-benchmark-iter/rhythm-voice6/after-clean.json"
+  },
+  "dense": {
+    "metrics": {
+      "pitchAccuracy": 0.3434,
+      "matchedPitchAccuracy": 0.3863,
+      "durationAccuracy": 0.8082,
+      "matchedDurationAccuracy": 0.9091,
+      "onsetAccuracy": 0.7181,
+      "matchedOnsetAccuracy": 0.8078,
+      "timeAccuracy": 0.0157,
+      "matchedTimeAccuracy": 0.0176,
+      "measureCountAccuracy": 0.9843,
+      "noteDetectionPrecision": 0.8896,
+      "noteDetectionRecall": 0.889,
+      "noteDetectionF1": 0.8893,
+      "chordGroupingAccuracy": 0.6592,
+      "pitchAccuracyAtCorrectOnset": 0.4098,
+      "orderSensitivePitchRecovery": 0.111
+    },
+    "totals": {
+      "truthMeasureCount": 125,
+      "generatedMeasureCount": 127,
+      "measureCountDifference": 2,
+      "truthNoteCount": 2810,
+      "generatedNoteCount": 2808,
+      "noteCountDifference": -2,
+      "matchedNoteCount": 2498,
+      "correctPitchCount": 965,
+      "correctDurationCount": 2271,
+      "correctOnsetCount": 2018,
+      "correctTimeCount": 44,
+      "missingNoteCount": 312,
+      "extraNoteCount": 310,
+      "wrongPitchCount": 1533,
+      "wrongDurationCount": 227,
+      "wrongOnsetCount": 480,
+      "wrongTimeCount": 2454,
+      "chordMismatchCount": 1154,
+      "chordComparableCount": 3386,
+      "greedyCorrectPitchCount": 653,
+      "pitchCorrectAtCorrectOnsetCount": 827,
+      "onsetCorrectMatchedCount": 2018
+    }
+  },
+  "clean": {
+    "metrics": {
+      "pitchAccuracy": 1,
+      "matchedPitchAccuracy": 1,
+      "durationAccuracy": 0.9979,
+      "matchedDurationAccuracy": 0.9979,
+      "onsetAccuracy": 1,
+      "matchedOnsetAccuracy": 1,
+      "timeAccuracy": 0.9851,
+      "matchedTimeAccuracy": 0.9851,
+      "measureCountAccuracy": 1,
+      "noteDetectionPrecision": 1,
+      "noteDetectionRecall": 1,
+      "noteDetectionF1": 1,
+      "chordGroupingAccuracy": 1,
+      "pitchAccuracyAtCorrectOnset": 1,
+      "orderSensitivePitchRecovery": 0
+    },
+    "totals": {
+      "truthMeasureCount": 78,
+      "generatedMeasureCount": 78,
+      "measureCountDifference": 0,
+      "truthNoteCount": 469,
+      "generatedNoteCount": 469,
+      "noteCountDifference": 0,
+      "matchedNoteCount": 469,
+      "correctPitchCount": 469,
+      "correctDurationCount": 468,
+      "correctOnsetCount": 469,
+      "correctTimeCount": 462,
+      "missingNoteCount": 0,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 0,
+      "wrongDurationCount": 1,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 0,
+      "chordComparableCount": 469,
+      "greedyCorrectPitchCount": 469,
+      "pitchCorrectAtCorrectOnsetCount": 469,
+      "onsetCorrectMatchedCount": 469
+    }
+  },
+  "categoryRank": [
+    {
+      "category": "pitch",
+      "rawErrors": 1533,
+      "metric": "pitchAccuracy",
+      "value": 0.3434,
+      "assessment": "largest raw pool, but top contexts split across opposite deltas and mixed onset/duration states; no safe one-way correction found"
+    },
+    {
+      "category": "chord grouping",
+      "rawErrors": 1154,
+      "groupExamples": 632,
+      "metric": "chordGroupingAccuracy",
+      "value": 0.6592,
+      "assessment": "second largest note-level pool; exact contexts are fragmented, with top repeated shapes around 6 groups"
+    },
+    {
+      "category": "onset",
+      "rawErrors": 480,
+      "metric": "onsetAccuracy",
+      "value": 0.7181,
+      "assessment": "mid-sized pool; top contexts show neighboring dense chord swaps mixed with pitch errors, unsafe as a broad onset shift"
+    },
+    {
+      "category": "duration",
+      "rawErrors": 227,
+      "metric": "durationAccuracy",
+      "value": 0.8082,
+      "assessment": "much smaller after previous fixes; not the best broad lever now"
+    },
+    {
+      "category": "measure count",
+      "rawErrors": 2,
+      "metric": "measureCountAccuracy",
+      "value": 0.9843,
+      "assessment": "only +2 measures; grid diagnostics show no low-confidence or sliver-like false measures"
+    }
+  ],
+  "histograms": {
+    "pitchSigned": [
+      {
+        "key": "2",
+        "count": 189
+      },
+      {
+        "key": "-2",
+        "count": 174
+      },
+      {
+        "key": "-3",
+        "count": 125
+      },
+      {
+        "key": "-1",
+        "count": 97
+      },
+      {
+        "key": "3",
+        "count": 96
+      },
+      {
+        "key": "5",
+        "count": 94
+      },
+      {
+        "key": "1",
+        "count": 82
+      },
+      {
+        "key": "-4",
+        "count": 72
+      },
+      {
+        "key": "-5",
+        "count": 70
+      },
+      {
+        "key": "4",
+        "count": 56
+      },
+      {
+        "key": "-6",
+        "count": 39
+      },
+      {
+        "key": "-7",
+        "count": 38
+      },
+      {
+        "key": "-12",
+        "count": 37
+      },
+      {
+        "key": "7",
+        "count": 26
+      },
+      {
+        "key": "-9",
+        "count": 25
+      },
+      {
+        "key": "-8",
+        "count": 24
+      },
+      {
+        "key": "12",
+        "count": 21
+      },
+      {
+        "key": "16",
+        "count": 20
+      },
+      {
+        "key": "8",
+        "count": 18
+      },
+      {
+        "key": "15",
+        "count": 17
+      }
+    ],
+    "pitchAbs": [
+      {
+        "key": "2",
+        "count": 363
+      },
+      {
+        "key": "3",
+        "count": 221
+      },
+      {
+        "key": "1",
+        "count": 179
+      },
+      {
+        "key": "5",
+        "count": 164
+      },
+      {
+        "key": "4",
+        "count": 128
+      },
+      {
+        "key": "7",
+        "count": 64
+      },
+      {
+        "key": "12",
+        "count": 58
+      },
+      {
+        "key": "6",
+        "count": 53
+      },
+      {
+        "key": "8",
+        "count": 42
+      },
+      {
+        "key": "9",
+        "count": 39
+      },
+      {
+        "key": "16",
+        "count": 30
+      },
+      {
+        "key": "15",
+        "count": 27
+      },
+      {
+        "key": "14",
+        "count": 22
+      },
+      {
+        "key": "17",
+        "count": 21
+      },
+      {
+        "key": "20",
+        "count": 16
+      },
+      {
+        "key": "21",
+        "count": 16
+      },
+      {
+        "key": "19",
+        "count": 14
+      },
+      {
+        "key": "24",
+        "count": 11
+      },
+      {
+        "key": "10",
+        "count": 7
+      },
+      {
+        "key": "13",
+        "count": 7
+      }
+    ],
+    "pitchOnsetDiff": [
+      {
+        "key": "0",
+        "count": 780
+      },
+      {
+        "key": "0.25",
+        "count": 411
+      },
+      {
+        "key": "0.5",
+        "count": 229
+      },
+      {
+        "key": "0.75",
+        "count": 113
+      }
+    ],
+    "chordTruthToGenerated": [
+      {
+        "key": "1->2",
+        "count": 76
+      },
+      {
+        "key": "2->1",
+        "count": 56
+      },
+      {
+        "key": "0->1",
+        "count": 51
+      },
+      {
+        "key": "5->4",
+        "count": 34
+      },
+      {
+        "key": "1->0",
+        "count": 32
+      },
+      {
+        "key": "4->5",
+        "count": 24
+      },
+      {
+        "key": "2->3",
+        "count": 21
+      },
+      {
+        "key": "3->1",
+        "count": 21
+      },
+      {
+        "key": "1->3",
+        "count": 20
+      },
+      {
+        "key": "2->0",
+        "count": 19
+      },
+      {
+        "key": "4->1",
+        "count": 19
+      },
+      {
+        "key": "4->3",
+        "count": 19
+      },
+      {
+        "key": "3->2",
+        "count": 18
+      },
+      {
+        "key": "1->5",
+        "count": 17
+      },
+      {
+        "key": "2->4",
+        "count": 17
+      },
+      {
+        "key": "3->0",
+        "count": 15
+      },
+      {
+        "key": "5->2",
+        "count": 14
+      },
+      {
+        "key": "3->4",
+        "count": 13
+      },
+      {
+        "key": "5->1",
+        "count": 11
+      },
+      {
+        "key": "0->5",
+        "count": 10
+      }
+    ],
+    "chordOnsets": [
+      {
+        "key": "3.5",
+        "count": 94
+      },
+      {
+        "key": "1",
+        "count": 69
+      },
+      {
+        "key": "3",
+        "count": 65
+      },
+      {
+        "key": "0",
+        "count": 64
+      },
+      {
+        "key": "2.75",
+        "count": 60
+      },
+      {
+        "key": "2",
+        "count": 53
+      },
+      {
+        "key": "1.5",
+        "count": 46
+      },
+      {
+        "key": "2.5",
+        "count": 34
+      },
+      {
+        "key": "0.5",
+        "count": 30
+      },
+      {
+        "key": "0.75",
+        "count": 27
+      },
+      {
+        "key": "3.75",
+        "count": 26
+      },
+      {
+        "key": "1.75",
+        "count": 19
+      },
+      {
+        "key": "2.25",
+        "count": 19
+      },
+      {
+        "key": "3.25",
+        "count": 15
+      },
+      {
+        "key": "1.25",
+        "count": 11
+      }
+    ],
+    "onsetDiff": [
+      {
+        "key": "0.5",
+        "count": 294
+      },
+      {
+        "key": "0.75",
+        "count": 186
+      }
+    ],
+    "durationGeneratedToTruth": [
+      {
+        "key": "0.5->1",
+        "count": 51
+      },
+      {
+        "key": "1->0.5",
+        "count": 39
+      },
+      {
+        "key": "0.25->0.75",
+        "count": 25
+      },
+      {
+        "key": "0.25->1",
+        "count": 16
+      },
+      {
+        "key": "1.5->1",
+        "count": 15
+      },
+      {
+        "key": "0.75->0.25",
+        "count": 13
+      },
+      {
+        "key": "1.25->0.75",
+        "count": 10
+      },
+      {
+        "key": "1->0.25",
+        "count": 8
+      },
+      {
+        "key": "1.25->0.5",
+        "count": 7
+      },
+      {
+        "key": "0.25->2",
+        "count": 6
+      },
+      {
+        "key": "0.75->1.25",
+        "count": 5
+      },
+      {
+        "key": "0.75->1.5",
+        "count": 5
+      },
+      {
+        "key": "2->0.75",
+        "count": 4
+      },
+      {
+        "key": "0.25->1.25",
+        "count": 3
+      },
+      {
+        "key": "0.75->4",
+        "count": 2
+      },
+      {
+        "key": "1.5->0.75",
+        "count": 2
+      },
+      {
+        "key": "1.75->0.75",
+        "count": 2
+      },
+      {
+        "key": "1.75->1",
+        "count": 2
+      },
+      {
+        "key": "2->0.5",
+        "count": 2
+      },
+      {
+        "key": "3->0.5",
+        "count": 2
+      }
+    ],
+    "missingOnsetDuration": [
+      {
+        "key": "1:0.5",
+        "count": 38
+      },
+      {
+        "key": "3.5:0.5",
+        "count": 37
+      },
+      {
+        "key": "0:0.5",
+        "count": 24
+      },
+      {
+        "key": "0:1",
+        "count": 23
+      },
+      {
+        "key": "1:1",
+        "count": 23
+      },
+      {
+        "key": "0.5:0.5",
+        "count": 22
+      },
+      {
+        "key": "1.5:0.5",
+        "count": 19
+      },
+      {
+        "key": "2:0.5",
+        "count": 18
+      },
+      {
+        "key": "3:0.5",
+        "count": 18
+      },
+      {
+        "key": "0.75:0.75",
+        "count": 12
+      },
+      {
+        "key": "2:0.75",
+        "count": 12
+      },
+      {
+        "key": "2.75:0.75",
+        "count": 11
+      },
+      {
+        "key": "2.5:0.5",
+        "count": 8
+      },
+      {
+        "key": "2:1",
+        "count": 7
+      },
+      {
+        "key": "3:1",
+        "count": 6
+      },
+      {
+        "key": "2:0.25",
+        "count": 5
+      },
+      {
+        "key": "1.25:0.5",
+        "count": 4
+      },
+      {
+        "key": "2:1.5",
+        "count": 4
+      },
+      {
+        "key": "0.5:0.75",
+        "count": 3
+      },
+      {
+        "key": "1.75:0.25",
+        "count": 3
+      }
+    ],
+    "extraOnsetDuration": [
+      {
+        "key": "3.75:0.25",
+        "count": 33
+      },
+      {
+        "key": "0:0.5",
+        "count": 21
+      },
+      {
+        "key": "3.5:0.5",
+        "count": 17
+      },
+      {
+        "key": "2:0.5",
+        "count": 13
+      },
+      {
+        "key": "2:0.75",
+        "count": 13
+      },
+      {
+        "key": "0:1",
+        "count": 11
+      },
+      {
+        "key": "1.25:0.5",
+        "count": 11
+      },
+      {
+        "key": "1.75:0.5",
+        "count": 11
+      },
+      {
+        "key": "2.25:0.75",
+        "count": 10
+      },
+      {
+        "key": "3:0.5",
+        "count": 10
+      },
+      {
+        "key": "3.5:0.25",
+        "count": 10
+      },
+      {
+        "key": "1.5:0.5",
+        "count": 9
+      },
+      {
+        "key": "3.25:0.5",
+        "count": 9
+      },
+      {
+        "key": "0.75:0.5",
+        "count": 8
+      },
+      {
+        "key": "2.75:0.75",
+        "count": 8
+      },
+      {
+        "key": "0:0.75",
+        "count": 7
+      },
+      {
+        "key": "1.25:0.25",
+        "count": 7
+      },
+      {
+        "key": "2.75:0.25",
+        "count": 7
+      },
+      {
+        "key": "3.25:0.25",
+        "count": 7
+      },
+      {
+        "key": "1:0.75",
+        "count": 6
+      }
+    ]
+  },
+  "topContextRanks": {
+    "pitch": [
+      {
+        "count": 19,
+        "key": "delta=-2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+        "examples": [
+          {
+            "m": 14,
+            "t": "A#2",
+            "g": "G#2",
+            "d": -2,
+            "o": 0,
+            "ctx": "delta=-2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+            "y": 0.8878352612826603,
+            "trDist": 0.059566710045911186,
+            "baDist": 0.0026241026749368457,
+            "midi": 44,
+            "alt": null
+          },
+          {
+            "m": 14,
+            "t": "A#2",
+            "g": "G#2",
+            "d": -2,
+            "o": 0,
+            "ctx": "delta=-2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+            "y": 0.8878352612826603,
+            "trDist": 0.059566710045911186,
+            "baDist": 0.0026241026749368457,
+            "midi": 44,
+            "alt": null
+          },
+          {
+            "m": 15,
+            "t": "C2",
+            "g": "A#1",
+            "d": -2,
+            "o": 0,
+            "ctx": "delta=-2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+            "y": 0.9056524703087887,
+            "trDist": 0.07738391907203956,
+            "baDist": 0.015193106351191532,
+            "midi": 34,
+            "alt": null
+          },
+          {
+            "m": 16,
+            "t": "D2",
+            "g": "C2",
+            "d": -2,
+            "o": 0,
+            "ctx": "delta=-2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+            "y": 0.9026828978622328,
+            "trDist": 0.07441434662548363,
+            "baDist": 0.012223533904635597,
+            "midi": 36,
+            "alt": null
+          },
+          {
+            "m": 16,
+            "t": "D3",
+            "g": "C3",
+            "d": -2,
+            "o": 0,
+            "ctx": "delta=-2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+            "y": 0.8818971496437054,
+            "trDist": 0.05362859840695622,
+            "baDist": 0.0025551471760826283,
+            "midi": 48,
+            "alt": null
+          },
+          {
+            "m": 16,
+            "t": "D2",
+            "g": "C2",
+            "d": -2,
+            "o": 0,
+            "ctx": "delta=-2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+            "y": 0.9026828978622328,
+            "trDist": 0.07441434662548363,
+            "baDist": 0.012223533904635597,
+            "midi": 36,
+            "alt": null
+          },
+          {
+            "m": 20,
+            "t": "C2",
+            "g": "A#1",
+            "d": -2,
+            "o": 0,
+            "ctx": "delta=-2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+            "y": 0.3203913895486928,
+            "trDist": 0.07728184891265039,
+            "baDist": 0.015091036191802298,
+            "midi": 34,
+            "alt": null
+          },
+          {
+            "m": 22,
+            "t": "A#2",
+            "g": "G#2",
+            "d": -2,
+            "o": 0,
+            "ctx": "delta=-2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+            "y": 0.3025754275534435,
+            "trDist": 0.05946588691740112,
+            "baDist": 0.0027249258034469648,
+            "midi": 44,
+            "alt": null
+          }
+        ]
+      },
+      {
+        "count": 13,
+        "key": "delta=2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+        "examples": [
+          {
+            "m": 13,
+            "t": "G#1",
+            "g": "A#1",
+            "d": 2,
+            "o": 0,
+            "ctx": "delta=2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+            "y": 0.7395879809976246,
+            "trDist": 0.0823441647432076,
+            "baDist": 0.01520635555592842,
+            "midi": 34,
+            "alt": null
+          },
+          {
+            "m": 21,
+            "t": "G#1",
+            "g": "A#1",
+            "d": 2,
+            "o": 0,
+            "ctx": "delta=2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+            "y": 0.3203920546318284,
+            "trDist": 0.077282513995786,
+            "baDist": 0.015091701274937919,
+            "midi": 34,
+            "alt": null
+          }
+        ]
+      },
+      {
+        "count": 13,
+        "key": "delta=-3|abs=3|onset=0.25|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+        "examples": []
+      },
+      {
+        "count": 9,
+        "key": "delta=2|abs=2|onset=0.25|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+        "examples": []
+      },
+      {
+        "count": 9,
+        "key": "delta=3|abs=3|onset=0|clef=treble|role=upper|clefSign=treble|amb=false|notes=2|dur=2|noteDur=6|stem=-|hollow=false|dotted=true|beam=false",
+        "examples": []
+      },
+      {
+        "count": 8,
+        "key": "delta=3|abs=3|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+        "examples": [
+          {
+            "m": 8,
+            "t": "C2",
+            "g": "D#2",
+            "d": 3,
+            "o": 0,
+            "ctx": "delta=3|abs=3|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=4|stem=-|hollow=false|dotted=false|beam=false",
+            "y": 0.5598332422802851,
+            "trDist": 0.06866716454176919,
+            "baDist": 0.0064763518209211,
+            "midi": 39,
+            "alt": null
+          }
+        ]
+      },
+      {
+        "count": 8,
+        "key": "delta=3|abs=3|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=2|dur=2|noteDur=4,12|stem=down|hollow=false|dotted=true|beam=false",
+        "examples": []
+      },
+      {
+        "count": 7,
+        "key": "delta=2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=2|stem=down|hollow=false|dotted=true|beam=false",
+        "examples": [
+          {
+            "m": 13,
+            "t": "G#2",
+            "g": "A#2",
+            "d": 2,
+            "o": 0,
+            "ctx": "delta=2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=2|stem=down|hollow=false|dotted=true|beam=false",
+            "y": 0.7188022327790974,
+            "trDist": 0.061558416524680415,
+            "baDist": 0.00042767447521041557,
+            "midi": 46,
+            "alt": null
+          },
+          {
+            "m": 21,
+            "t": "G#2",
+            "g": "A#2",
+            "d": 2,
+            "o": 0,
+            "ctx": "delta=2|abs=2|onset=0|clef=bass|role=lower|clefSign=bass|amb=false|notes=1|dur=2|noteDur=2|stem=down|hollow=false|dotted=true|beam=false",
+            "y": 0.29960584323040307,
+            "trDist": 0.05649630259436067,
+            "baDist": 0.00031255701132176794,
+            "midi": 46,
+            "alt": null
+          }
+        ]
+      }
+    ],
+    "onset": [
+      {
+        "count": 9,
+        "key": "signed=-0.75|abs=0.75|clef=treble|eventStart=8|eventDur=3|notes=3|genDur=0.75|truthDur=0.75|pitchDelta=0",
+        "examples": [
+          {
+            "m": 36,
+            "t": "F5@2.75",
+            "g": "F5@2",
+            "key": "signed=-0.75|abs=0.75|clef=treble|eventStart=8|eventDur=3|notes=3|genDur=0.75|truthDur=0.75|pitchDelta=0"
+          },
+          {
+            "m": 38,
+            "t": "D#5@2.75",
+            "g": "D#5@2",
+            "key": "signed=-0.75|abs=0.75|clef=treble|eventStart=8|eventDur=3|notes=3|genDur=0.75|truthDur=0.75|pitchDelta=0"
+          },
+          {
+            "m": 64,
+            "t": "F5@2.75",
+            "g": "F5@2",
+            "key": "signed=-0.75|abs=0.75|clef=treble|eventStart=8|eventDur=3|notes=3|genDur=0.75|truthDur=0.75|pitchDelta=0"
+          },
+          {
+            "m": 66,
+            "t": "D#5@2.75",
+            "g": "D#5@2",
+            "key": "signed=-0.75|abs=0.75|clef=treble|eventStart=8|eventDur=3|notes=3|genDur=0.75|truthDur=0.75|pitchDelta=0"
+          }
+        ]
+      },
+      {
+        "count": 6,
+        "key": "signed=0.5|abs=0.5|clef=bass|eventStart=8|eventDur=2|notes=3|genDur=0.5|truthDur=0.5|pitchDelta=-1",
+        "examples": [
+          {
+            "m": 9,
+            "t": "B1@1.5",
+            "g": "A#1@2",
+            "key": "signed=0.5|abs=0.5|clef=bass|eventStart=8|eventDur=2|notes=3|genDur=0.5|truthDur=0.5|pitchDelta=-1"
+          },
+          {
+            "m": 9,
+            "t": "F#2@1.5",
+            "g": "F2@2",
+            "key": "signed=0.5|abs=0.5|clef=bass|eventStart=8|eventDur=2|notes=3|genDur=0.5|truthDur=0.5|pitchDelta=-1"
+          },
+          {
+            "m": 9,
+            "t": "B2@1.5",
+            "g": "A#2@2",
+            "key": "signed=0.5|abs=0.5|clef=bass|eventStart=8|eventDur=2|notes=3|genDur=0.5|truthDur=0.5|pitchDelta=-1"
+          },
+          {
+            "m": 65,
+            "t": "B2@1.5",
+            "g": "A#2@2",
+            "key": "signed=0.5|abs=0.5|clef=bass|eventStart=8|eventDur=2|notes=3|genDur=0.5|truthDur=0.5|pitchDelta=-1"
+          },
+          {
+            "m": 69,
+            "t": "B2@1.5",
+            "g": "A#2@2",
+            "key": "signed=0.5|abs=0.5|clef=bass|eventStart=8|eventDur=2|notes=3|genDur=0.5|truthDur=0.5|pitchDelta=-1"
+          }
+        ]
+      },
+      {
+        "count": 6,
+        "key": "signed=0.5|abs=0.5|clef=treble|eventStart=6|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=1",
+        "examples": [
+          {
+            "m": 41,
+            "t": "G5@1",
+            "g": "G#5@1.5",
+            "key": "signed=0.5|abs=0.5|clef=treble|eventStart=6|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=1"
+          },
+          {
+            "m": 45,
+            "t": "G5@1",
+            "g": "G#5@1.5",
+            "key": "signed=0.5|abs=0.5|clef=treble|eventStart=6|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=1"
+          },
+          {
+            "m": 69,
+            "t": "G5@1",
+            "g": "G#5@1.5",
+            "key": "signed=0.5|abs=0.5|clef=treble|eventStart=6|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=1"
+          }
+        ]
+      },
+      {
+        "count": 6,
+        "key": "signed=-0.5|abs=0.5|clef=bass|eventStart=6|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=2",
+        "examples": [
+          {
+            "m": 41,
+            "t": "C2@2",
+            "g": "D2@1.5",
+            "key": "signed=-0.5|abs=0.5|clef=bass|eventStart=6|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=2"
+          },
+          {
+            "m": 65,
+            "t": "C3@2",
+            "g": "D3@1.5",
+            "key": "signed=-0.5|abs=0.5|clef=bass|eventStart=6|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=2"
+          },
+          {
+            "m": 69,
+            "t": "C2@2",
+            "g": "D2@1.5",
+            "key": "signed=-0.5|abs=0.5|clef=bass|eventStart=6|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=2"
+          },
+          {
+            "m": 69,
+            "t": "C3@2",
+            "g": "D3@1.5",
+            "key": "signed=-0.5|abs=0.5|clef=bass|eventStart=6|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=2"
+          }
+        ]
+      },
+      {
+        "count": 6,
+        "key": "signed=0.5|abs=0.5|clef=treble|eventStart=4|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=0",
+        "examples": [
+          {
+            "m": 45,
+            "t": "A#5@0.5",
+            "g": "A#5@1",
+            "key": "signed=0.5|abs=0.5|clef=treble|eventStart=4|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=0"
+          },
+          {
+            "m": 69,
+            "t": "A#5@0.5",
+            "g": "A#5@1",
+            "key": "signed=0.5|abs=0.5|clef=treble|eventStart=4|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=0"
+          }
+        ]
+      },
+      {
+        "count": 5,
+        "key": "signed=0.75|abs=0.75|clef=treble|eventStart=11|eventDur=3|notes=2|genDur=0.75|truthDur=0.75|pitchDelta=0",
+        "examples": [
+          {
+            "m": 36,
+            "t": "D#5@2",
+            "g": "D#5@2.75",
+            "key": "signed=0.75|abs=0.75|clef=treble|eventStart=11|eventDur=3|notes=2|genDur=0.75|truthDur=0.75|pitchDelta=0"
+          },
+          {
+            "m": 64,
+            "t": "D#5@2",
+            "g": "D#5@2.75",
+            "key": "signed=0.75|abs=0.75|clef=treble|eventStart=11|eventDur=3|notes=2|genDur=0.75|truthDur=0.75|pitchDelta=0"
+          }
+        ]
+      },
+      {
+        "count": 5,
+        "key": "signed=-0.5|abs=0.5|clef=treble|eventStart=0|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=5",
+        "examples": [
+          {
+            "m": 37,
+            "t": "F4@0.5",
+            "g": "A#4@0",
+            "key": "signed=-0.5|abs=0.5|clef=treble|eventStart=0|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=5"
+          },
+          {
+            "m": 43,
+            "t": "F5@0.5",
+            "g": "A#5@0",
+            "key": "signed=-0.5|abs=0.5|clef=treble|eventStart=0|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=5"
+          },
+          {
+            "m": 65,
+            "t": "F4@0.5",
+            "g": "A#4@0",
+            "key": "signed=-0.5|abs=0.5|clef=treble|eventStart=0|eventDur=2|notes=2|genDur=0.5|truthDur=0.5|pitchDelta=5"
+          }
+        ]
+      },
+      {
+        "count": 4,
+        "key": "signed=0.75|abs=0.75|clef=treble|eventStart=14|eventDur=2|notes=1|genDur=0.5|truthDur=0.75|pitchDelta=0",
+        "examples": [
+          {
+            "m": 30,
+            "t": "C5@2.75",
+            "g": "C5@3.5",
+            "key": "signed=0.75|abs=0.75|clef=treble|eventStart=14|eventDur=2|notes=1|genDur=0.5|truthDur=0.75|pitchDelta=0"
+          },
+          {
+            "m": 42,
+            "t": "D#5@2.75",
+            "g": "D#5@3.5",
+            "key": "signed=0.75|abs=0.75|clef=treble|eventStart=14|eventDur=2|notes=1|genDur=0.5|truthDur=0.75|pitchDelta=0"
+          },
+          {
+            "m": 80,
+            "t": "D#5@2.75",
+            "g": "D#5@3.5",
+            "key": "signed=0.75|abs=0.75|clef=treble|eventStart=14|eventDur=2|notes=1|genDur=0.5|truthDur=0.75|pitchDelta=0"
+          }
+        ]
+      }
+    ],
+    "chord": [
+      {
+        "count": 6,
+        "key": "1->0|onset=3.75|div=15|events=bass@14/n1/d2,treble@14/n1/d2",
+        "examples": [
+          {
+            "m": 13,
+            "truth": 1,
+            "gen": 0,
+            "onset": 3.75,
+            "div": 15,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=14|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=2/2"
+            ]
+          },
+          {
+            "m": 21,
+            "truth": 1,
+            "gen": 0,
+            "onset": 3.75,
+            "div": 15,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=14|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=2/2"
+            ]
+          },
+          {
+            "m": 73,
+            "truth": 1,
+            "gen": 0,
+            "onset": 3.75,
+            "div": 15,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=14|dur=2|notes=1|noteDur=6|midi=70|beam=false|stem=false|dotted=true|atStart=2/2"
+            ]
+          },
+          {
+            "m": 74,
+            "truth": 1,
+            "gen": 0,
+            "onset": 3.75,
+            "div": 15,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=14|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=2/2"
+            ]
+          },
+          {
+            "m": 81,
+            "truth": 1,
+            "gen": 0,
+            "onset": 3.75,
+            "div": 15,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=14|dur=2|notes=1|noteDur=6|midi=70|beam=false|stem=false|dotted=true|atStart=2/2"
+            ]
+          },
+          {
+            "m": 82,
+            "truth": 1,
+            "gen": 0,
+            "onset": 3.75,
+            "div": 15,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=14|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=2/2"
+            ]
+          }
+        ]
+      },
+      {
+        "count": 6,
+        "key": "1->2|onset=2.75|div=11|events=bass@10/n1/d2,treble@11/n2/d3,bass@12/n2/d2",
+        "examples": [
+          {
+            "m": 36,
+            "truth": 1,
+            "gen": 2,
+            "onset": 2.75,
+            "div": 11,
+            "events": [
+              "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+              "clef=treble|start=11|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2",
+              "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2"
+            ]
+          },
+          {
+            "m": 44,
+            "truth": 1,
+            "gen": 2,
+            "onset": 2.75,
+            "div": 11,
+            "events": [
+              "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+              "clef=treble|start=11|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2",
+              "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2"
+            ]
+          },
+          {
+            "m": 64,
+            "truth": 1,
+            "gen": 2,
+            "onset": 2.75,
+            "div": 11,
+            "events": [
+              "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+              "clef=treble|start=11|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2",
+              "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2"
+            ]
+          },
+          {
+            "m": 100,
+            "truth": 1,
+            "gen": 2,
+            "onset": 2.75,
+            "div": 11,
+            "events": [
+              "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+              "clef=treble|start=11|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2",
+              "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2"
+            ]
+          },
+          {
+            "m": 120,
+            "truth": 1,
+            "gen": 2,
+            "onset": 2.75,
+            "div": 11,
+            "events": [
+              "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+              "clef=treble|start=11|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2",
+              "clef=bass|start=12|dur=2|notes=2|noteDur=2,4|midi=48,53|beam=false|stem=true|dotted=true|atStart=1/2"
+            ]
+          },
+          {
+            "m": 124,
+            "truth": 1,
+            "gen": 2,
+            "onset": 2.75,
+            "div": 11,
+            "events": [
+              "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+              "clef=treble|start=11|dur=3|notes=2|noteDur=4,6|midi=70,75|beam=false|stem=false|dotted=true|atStart=1/2",
+              "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=46,50|beam=true|stem=true|dotted=true|atStart=1/2"
+            ]
+          }
+        ]
+      },
+      {
+        "count": 6,
+        "key": "3->4|onset=3.5|div=14|events=bass@14/n2/d2,treble@14/n2/d2",
+        "examples": [
+          {
+            "m": 36,
+            "truth": 3,
+            "gen": 4,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+              "clef=treble|start=14|dur=2|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+            ]
+          },
+          {
+            "m": 44,
+            "truth": 3,
+            "gen": 4,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+              "clef=treble|start=14|dur=2|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+            ]
+          },
+          {
+            "m": 64,
+            "truth": 3,
+            "gen": 4,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+              "clef=treble|start=14|dur=2|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+            ]
+          },
+          {
+            "m": 100,
+            "truth": 3,
+            "gen": 4,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+              "clef=treble|start=14|dur=2|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+            ]
+          },
+          {
+            "m": 120,
+            "truth": 3,
+            "gen": 4,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+              "clef=treble|start=14|dur=2|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+            ]
+          },
+          {
+            "m": 124,
+            "truth": 3,
+            "gen": 4,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=2|noteDur=6,8|midi=38,46|beam=false|stem=true|dotted=true|atStart=2/4",
+              "clef=treble|start=14|dur=2|notes=2|noteDur=4,6|midi=70,77|beam=false|stem=false|dotted=true|atStart=2/4"
+            ]
+          }
+        ]
+      },
+      {
+        "count": 5,
+        "key": "4->5|onset=0|div=0|events=bass@0/n3/d2,treble@0/n2/d2",
+        "examples": [
+          {
+            "m": 37,
+            "truth": 4,
+            "gen": 5,
+            "onset": 0,
+            "div": 0,
+            "events": [
+              "clef=bass|start=0|dur=2|notes=3|noteDur=4,12|midi=34,41,46|beam=false|stem=true|dotted=true|atStart=2/5",
+              "clef=treble|start=0|dur=2|notes=2|noteDur=6|midi=70,77|beam=false|stem=false|dotted=true|atStart=2/5"
+            ]
+          },
+          {
+            "m": 65,
+            "truth": 4,
+            "gen": 5,
+            "onset": 0,
+            "div": 0,
+            "events": [
+              "clef=bass|start=0|dur=2|notes=3|noteDur=4,12|midi=34,41,46|beam=false|stem=true|dotted=true|atStart=2/5",
+              "clef=treble|start=0|dur=2|notes=2|noteDur=6|midi=70,77|beam=false|stem=false|dotted=true|atStart=2/5"
+            ]
+          },
+          {
+            "m": 97,
+            "truth": 4,
+            "gen": 5,
+            "onset": 0,
+            "div": 0,
+            "events": [
+              "clef=bass|start=0|dur=2|notes=3|noteDur=2,3,8|midi=34,41,46|beam=true|stem=true|dotted=true|atStart=2/5",
+              "clef=treble|start=0|dur=2|notes=2|noteDur=6|midi=70,77|beam=false|stem=false|dotted=true|atStart=2/5"
+            ]
+          },
+          {
+            "m": 105,
+            "truth": 4,
+            "gen": 5,
+            "onset": 0,
+            "div": 0,
+            "events": [
+              "clef=bass|start=0|dur=2|notes=3|noteDur=4,12|midi=34,41,46|beam=false|stem=true|dotted=true|atStart=2/5",
+              "clef=treble|start=0|dur=2|notes=2|noteDur=6|midi=70,77|beam=false|stem=false|dotted=true|atStart=2/5"
+            ]
+          },
+          {
+            "m": 117,
+            "truth": 4,
+            "gen": 5,
+            "onset": 0,
+            "div": 0,
+            "events": [
+              "clef=bass|start=0|dur=2|notes=3|noteDur=4,12|midi=34,41,46|beam=false|stem=true|dotted=true|atStart=2/5",
+              "clef=treble|start=0|dur=2|notes=2|noteDur=6|midi=70,77|beam=false|stem=false|dotted=true|atStart=2/5"
+            ]
+          }
+        ]
+      },
+      {
+        "count": 4,
+        "key": "0->1|onset=3.75|div=15|events=bass@14/n1/d1,treble@14/n1/d1,treble@15/n1/d1",
+        "examples": [
+          {
+            "m": 15,
+            "truth": 0,
+            "gen": 1,
+            "onset": 3.75,
+            "div": 15,
+            "events": [
+              "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=14|dur=1|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=15|dur=1|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=1/1"
+            ]
+          },
+          {
+            "m": 23,
+            "truth": 0,
+            "gen": 1,
+            "onset": 3.75,
+            "div": 15,
+            "events": [
+              "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=14|dur=1|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=15|dur=1|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=1/1"
+            ]
+          },
+          {
+            "m": 76,
+            "truth": 0,
+            "gen": 1,
+            "onset": 3.75,
+            "div": 15,
+            "events": [
+              "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=14|dur=1|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=15|dur=1|notes=1|noteDur=8|midi=75|beam=false|stem=true|dotted=false|atStart=1/1"
+            ]
+          },
+          {
+            "m": 83,
+            "truth": 0,
+            "gen": 1,
+            "onset": 3.75,
+            "div": 15,
+            "events": [
+              "clef=bass|start=14|dur=1|notes=1|noteDur=6|midi=32|beam=false|stem=false|dotted=true|atStart=2/2",
+              "clef=treble|start=14|dur=1|notes=1|noteDur=4|midi=72|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=15|dur=1|notes=1|noteDur=8|midi=72|beam=false|stem=true|dotted=false|atStart=1/1"
+            ]
+          }
+        ]
+      },
+      {
+        "count": 4,
+        "key": "1->2|onset=3.5|div=14|events=bass@14/n1/d2,treble@14/n1/d2",
+        "examples": [
+          {
+            "m": 16,
+            "truth": 1,
+            "gen": 2,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=14|dur=2|notes=1|noteDur=4|midi=79|beam=false|stem=false|dotted=false|atStart=2/2"
+            ]
+          },
+          {
+            "m": 25,
+            "truth": 1,
+            "gen": 2,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=38|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=14|dur=2|notes=1|noteDur=4|midi=80|beam=false|stem=false|dotted=false|atStart=2/2"
+            ]
+          },
+          {
+            "m": 77,
+            "truth": 1,
+            "gen": 2,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=6|midi=36|beam=false|stem=false|dotted=true|atStart=2/2",
+              "clef=treble|start=14|dur=2|notes=1|noteDur=4|midi=79|beam=false|stem=false|dotted=false|atStart=2/2"
+            ]
+          },
+          {
+            "m": 85,
+            "truth": 1,
+            "gen": 2,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=2/2",
+              "clef=treble|start=14|dur=2|notes=1|noteDur=4|midi=79|beam=false|stem=false|dotted=false|atStart=2/2"
+            ]
+          }
+        ]
+      },
+      {
+        "count": 4,
+        "key": "2->0|onset=3.5|div=14|events=bass@14/n1/d2",
+        "examples": [
+          {
+            "m": 18,
+            "truth": 2,
+            "gen": 0,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=2|midi=53|beam=false|stem=true|dotted=true|atStart=1/1"
+            ]
+          },
+          {
+            "m": 78,
+            "truth": 2,
+            "gen": 0,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=38|beam=false|stem=false|dotted=false|atStart=1/1"
+            ]
+          },
+          {
+            "m": 79,
+            "truth": 2,
+            "gen": 0,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=2|midi=53|beam=false|stem=true|dotted=true|atStart=1/1"
+            ]
+          },
+          {
+            "m": 123,
+            "truth": 2,
+            "gen": 0,
+            "onset": 3.5,
+            "div": 14,
+            "events": [
+              "clef=bass|start=14|dur=2|notes=1|noteDur=2|midi=43|beam=false|stem=true|dotted=true|atStart=1/1"
+            ]
+          }
+        ]
+      },
+      {
+        "count": 4,
+        "key": "5->4|onset=1|div=4|events=bass@4/n2/d2,treble@4/n2/d4",
+        "examples": [
+          {
+            "m": 36,
+            "truth": 5,
+            "gen": 4,
+            "onset": 1,
+            "div": 4,
+            "events": [
+              "clef=bass|start=4|dur=2|notes=2|noteDur=4,6|midi=43,48|beam=false|stem=true|dotted=true|atStart=2/4",
+              "clef=treble|start=4|dur=4|notes=2|noteDur=4,6|midi=67,75|beam=false|stem=false|dotted=true|atStart=2/4"
+            ]
+          },
+          {
+            "m": 64,
+            "truth": 5,
+            "gen": 4,
+            "onset": 1,
+            "div": 4,
+            "events": [
+              "clef=bass|start=4|dur=2|notes=2|noteDur=4,6|midi=43,48|beam=false|stem=true|dotted=true|atStart=2/4",
+              "clef=treble|start=4|dur=4|notes=2|noteDur=4,6|midi=67,75|beam=false|stem=false|dotted=true|atStart=2/4"
+            ]
+          },
+          {
+            "m": 100,
+            "truth": 5,
+            "gen": 4,
+            "onset": 1,
+            "div": 4,
+            "events": [
+              "clef=bass|start=4|dur=2|notes=2|noteDur=4,6|midi=43,48|beam=false|stem=true|dotted=true|atStart=2/4",
+              "clef=treble|start=4|dur=4|notes=2|noteDur=4|midi=72,75|beam=false|stem=false|dotted=false|atStart=2/4"
+            ]
+          },
+          {
+            "m": 124,
+            "truth": 5,
+            "gen": 4,
+            "onset": 1,
+            "div": 4,
+            "events": [
+              "clef=bass|start=4|dur=2|notes=2|noteDur=4,6|midi=42,46|beam=false|stem=true|dotted=true|atStart=2/4",
+              "clef=treble|start=4|dur=4|notes=2|noteDur=4,6|midi=67,75|beam=false|stem=false|dotted=true|atStart=2/4"
+            ]
+          }
+        ]
+      }
+    ],
+    "duration": {
+      "total": 227,
+      "histogram": {
+        "beamed-subdivision": 57,
+        "onset-coupled": 39,
+        "too-short": 101,
+        "too-long": 30
+      },
+      "signed": {
+        "1": 9,
+        "2": 1,
+        "0.5": 158,
+        "1.75": 7,
+        "1.25": 4,
+        "0.75": 41,
+        "2.25": 1,
+        "1.5": 2,
+        "2.5": 2,
+        "3.25": 2
+      },
+      "sample": [
+        {
+          "m": 1,
+          "d": 0.5,
+          "truth": "F5@3.5/0.5",
+          "gen": "F5@3.5/1",
+          "pitchDelta": 0,
+          "onsetDelta": 0
+        },
+        {
+          "m": 2,
+          "d": 1.75,
+          "truth": "D#4@2/2",
+          "gen": "D#4@2.25/0.25",
+          "pitchDelta": 0,
+          "onsetDelta": 0.25
+        },
+        {
+          "m": 2,
+          "d": 1.75,
+          "truth": "A#4@2/2",
+          "gen": "A#4@2.25/0.25",
+          "pitchDelta": 0,
+          "onsetDelta": 0.25
+        },
+        {
+          "m": 2,
+          "d": 1.25,
+          "truth": "G5@2.75/0.75",
+          "gen": "G5@3/2",
+          "pitchDelta": 0,
+          "onsetDelta": 0.25
+        },
+        {
+          "m": 4,
+          "d": 1.75,
+          "truth": "D4@0/2",
+          "gen": "F2@0/0.25",
+          "pitchDelta": -21,
+          "onsetDelta": 0
+        },
+        {
+          "m": 4,
+          "d": 1.75,
+          "truth": "F4@0/2",
+          "gen": "F4@0/0.25",
+          "pitchDelta": 0,
+          "onsetDelta": 0
+        },
+        {
+          "m": 4,
+          "d": 1.75,
+          "truth": "A#4@0/2",
+          "gen": "A#4@0/0.25",
+          "pitchDelta": 0,
+          "onsetDelta": 0
+        },
+        {
+          "m": 4,
+          "d": 1.75,
+          "truth": "D5@0/2",
+          "gen": "D5@0/0.25",
+          "pitchDelta": 0,
+          "onsetDelta": 0
+        },
+        {
+          "m": 4,
+          "d": 0.75,
+          "truth": "A#5@1.5/0.5",
+          "gen": "A#5@1.75/1.25",
+          "pitchDelta": 0,
+          "onsetDelta": 0.25
+        },
+        {
+          "m": 4,
+          "d": 2.25,
+          "truth": "D#4@2/4",
+          "gen": "D#4@2.25/1.75",
+          "pitchDelta": 0,
+          "onsetDelta": 0.25
+        },
+        {
+          "m": 4,
+          "d": 1.75,
+          "truth": "C6@2.75/0.25",
+          "gen": "C6@3/2",
+          "pitchDelta": 0,
+          "onsetDelta": 0.25
+        },
+        {
+          "m": 5,
+          "d": 1,
+          "truth": "C6@0/2",
+          "gen": "C6@0/1",
+          "pitchDelta": 0,
+          "onsetDelta": 0
+        },
+        {
+          "m": 5,
+          "d": 0.5,
+          "truth": "G1@3.5/0.5",
+          "gen": "G1@3/1",
+          "pitchDelta": 0,
+          "onsetDelta": 0.5
+        },
+        {
+          "m": 7,
+          "d": 0.5,
+          "truth": "A#1@0.5/0.5",
+          "gen": "A#1@1.25/1",
+          "pitchDelta": 0,
+          "onsetDelta": 0.75
+        },
+        {
+          "m": 7,
+          "d": 0.5,
+          "truth": "F4@0.5/0.5",
+          "gen": "F4@1.25/1",
+          "pitchDelta": 0,
+          "onsetDelta": 0.75
+        },
+        {
+          "m": 8,
+          "d": 0.5,
+          "truth": "D#4@0/1",
+          "gen": "D#4@0.75/1.5",
+          "pitchDelta": 0,
+          "onsetDelta": 0.75
+        },
+        {
+          "m": 8,
+          "d": 0.5,
+          "truth": "G4@0/1",
+          "gen": "G4@0.75/1.5",
+          "pitchDelta": 0,
+          "onsetDelta": 0.75
+        },
+        {
+          "m": 10,
+          "d": 2,
+          "truth": "D#3@0/1",
+          "gen": "C3@0/3",
+          "pitchDelta": -3,
+          "onsetDelta": 0
+        },
+        {
+          "m": 10,
+          "d": 0.75,
+          "truth": "A#4@1.5/0.25",
+          "gen": "D#4@1/1",
+          "pitchDelta": -7,
+          "onsetDelta": 0.5
+        },
+        {
+          "m": 10,
+          "d": 1.5,
+          "truth": "D#2@2/0.5",
+          "gen": "A#1@2/2",
+          "pitchDelta": -5,
+          "onsetDelta": 0
+        },
+        {
+          "m": 10,
+          "d": 1.5,
+          "truth": "D#3@2/0.5",
+          "gen": "A#2@2/2",
+          "pitchDelta": -5,
+          "onsetDelta": 0
+        },
+        {
+          "m": 10,
+          "d": 0.5,
+          "truth": "D#3@3/0.5",
+          "gen": "A2@3/1",
+          "pitchDelta": -6,
+          "onsetDelta": 0
+        },
+        {
+          "m": 11,
+          "d": 0.75,
+          "truth": "A#4@2/1",
+          "gen": "A#4@1.75/1.75",
+          "pitchDelta": 0,
+          "onsetDelta": 0.25
+        },
+        {
+          "m": 12,
+          "d": 0.5,
+          "truth": "A#1@2/1",
+          "gen": "A#1@1.75/0.5",
+          "pitchDelta": 0,
+          "onsetDelta": 0.25
+        },
+        {
+          "m": 12,
+          "d": 0.5,
+          "truth": "A#2@2/1",
+          "gen": "A#2@2.25/0.5",
+          "pitchDelta": 0,
+          "onsetDelta": 0.25
+        },
+        {
+          "m": 13,
+          "d": 0.5,
+          "truth": "G#1@2/0.5",
+          "gen": "A#1@2/1",
+          "pitchDelta": 2,
+          "onsetDelta": 0
+        },
+        {
+          "m": 13,
+          "d": 0.5,
+          "truth": "G#2@2/0.5",
+          "gen": "A#2@2/1",
+          "pitchDelta": 2,
+          "onsetDelta": 0
+        },
+        {
+          "m": 14,
+          "d": 0.5,
+          "truth": "D5@2/1",
+          "gen": "C5@2/1.5",
+          "pitchDelta": -2,
+          "onsetDelta": 0
+        },
+        {
+          "m": 15,
+          "d": 0.5,
+          "truth": "D#5@2/1",
+          "gen": "D5@2/1.5",
+          "pitchDelta": -1,
+          "onsetDelta": 0
+        },
+        {
+          "m": 16,
+          "d": 0.5,
+          "truth": "F5@2/1",
+          "gen": "D#5@2/1.5",
+          "pitchDelta": -2,
+          "onsetDelta": 0
+        },
+        {
+          "m": 16,
+          "d": 0.5,
+          "truth": "C5@3/1",
+          "gen": "G5@3.5/0.5",
+          "pitchDelta": 7,
+          "onsetDelta": 0.5
+        },
+        {
+          "m": 17,
+          "d": 0.75,
+          "truth": "G4@0/1.5",
+          "gen": "G5@0/0.75",
+          "pitchDelta": 12,
+          "onsetDelta": 0
+        },
+        {
+          "m": 17,
+          "d": 0.75,
+          "truth": "C5@0/1.5",
+          "gen": "F5@0.75/0.75",
+          "pitchDelta": 5,
+          "onsetDelta": 0.75
+        },
+        {
+          "m": 18,
+          "d": 0.5,
+          "truth": "A#3@0/1",
+          "gen": "C5@0/1.5",
+          "pitchDelta": 14,
+          "onsetDelta": 0
+        },
+        {
+          "m": 18,
+          "d": 0.5,
+          "truth": "D#4@0/1",
+          "gen": "G4@0/1.5",
+          "pitchDelta": 4,
+          "onsetDelta": 0
+        },
+        {
+          "m": 18,
+          "d": 0.5,
+          "truth": "A#4@1.75/1",
+          "gen": "G4@2/0.5",
+          "pitchDelta": -3,
+          "onsetDelta": 0.25
+        },
+        {
+          "m": 19,
+          "d": 0.5,
+          "truth": "F5@0.75/0.75",
+          "gen": "D#5@1/0.25",
+          "pitchDelta": -2,
+          "onsetDelta": 0.25
+        },
+        {
+          "m": 19,
+          "d": 0.75,
+          "truth": "A#4@2/1",
+          "gen": "A#4@1.75/1.75",
+          "pitchDelta": 0,
+          "onsetDelta": 0.25
+        },
+        {
+          "m": 20,
+          "d": 0.5,
+          "truth": "G5@1.5/0.5",
+          "gen": "D4@2/1",
+          "pitchDelta": -17,
+          "onsetDelta": 0.5
+        },
+        {
+          "m": 20,
+          "d": 0.5,
+          "truth": "A#1@2/1",
+          "gen": "A#1@2/0.5",
+          "pitchDelta": 0,
+          "onsetDelta": 0
+        }
+      ]
+    }
+  },
+  "rejectedCandidateChecks": [
+    {
+      "candidate": "pitch correction",
+      "reason": "largest category, but top exact pitch contexts are small and include both +2 and -2 under the same broad visual conditions"
+    },
+    {
+      "candidate": "dense treble onset shift",
+      "reason": "representative measures show note-by-note swaps plus pitch mismatches, not a whole-event timing error"
+    },
+    {
+      "candidate": "final-sixteenth snap/prune",
+      "reason": "truth check found most 3.75q tail notes do not match truth at 3.5q; broad snap would hurt more cases than help"
+    },
+    {
+      "candidate": "measure-grid merge/drop",
+      "reason": "extra measures are high-confidence full-density spans; no generic sliver/empty/system confidence discriminator"
+    }
+  ],
+  "decision": "Leave OMR code unchanged for this broad pass; no generic discriminator cleared the benchmark-driven safety bar."
+}

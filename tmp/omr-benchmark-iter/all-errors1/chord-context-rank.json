@@ -1,0 +1,2371 @@
+{
+  "top": [
+    {
+      "count": 6,
+      "key": "1->0|onset=3.75|div=15|events=bass@14/n1/d2,treble@14/n1/d2",
+      "examples": [
+        {
+          "m": 13,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=2/2"
+          ]
+        },
+        {
+          "m": 21,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=2/2"
+          ]
+        },
+        {
+          "m": 73,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=6|midi=70|beam=false|stem=false|dotted=true|atStart=2/2"
+          ]
+        },
+        {
+          "m": 74,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=2/2"
+          ]
+        },
+        {
+          "m": 81,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=6|midi=70|beam=false|stem=false|dotted=true|atStart=2/2"
+          ]
+        },
+        {
+          "m": 82,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=2/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 6,
+      "key": "1->2|onset=2.75|div=11|events=bass@10/n1/d2,treble@11/n2/d3,bass@12/n2/d2",
+      "examples": [
+        {
+          "m": 36,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=11|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2"
+          ]
+        },
+        {
+          "m": 44,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=11|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2"
+          ]
+        },
+        {
+          "m": 64,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=11|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2"
+          ]
+        },
+        {
+          "m": 100,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=11|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2"
+          ]
+        },
+        {
+          "m": 120,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=11|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=2,4|midi=48,53|beam=false|stem=true|dotted=true|atStart=1/2"
+          ]
+        },
+        {
+          "m": 124,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=11|dur=3|notes=2|noteDur=4,6|midi=70,75|beam=false|stem=false|dotted=true|atStart=1/2",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=46,50|beam=true|stem=true|dotted=true|atStart=1/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 6,
+      "key": "3->4|onset=3.5|div=14|events=bass@14/n2/d2,treble@14/n2/d2",
+      "examples": [
+        {
+          "m": 36,
+          "truth": 3,
+          "gen": 4,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+            "clef=treble|start=14|dur=2|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 44,
+          "truth": 3,
+          "gen": 4,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+            "clef=treble|start=14|dur=2|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 64,
+          "truth": 3,
+          "gen": 4,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+            "clef=treble|start=14|dur=2|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 100,
+          "truth": 3,
+          "gen": 4,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+            "clef=treble|start=14|dur=2|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 120,
+          "truth": 3,
+          "gen": 4,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+            "clef=treble|start=14|dur=2|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 124,
+          "truth": 3,
+          "gen": 4,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=2|noteDur=6,8|midi=38,46|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=14|dur=2|notes=2|noteDur=4,6|midi=70,77|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 5,
+      "key": "4->5|onset=0|div=0|events=bass@0/n3/d2,treble@0/n2/d2",
+      "examples": [
+        {
+          "m": 37,
+          "truth": 4,
+          "gen": 5,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=3|noteDur=4,12|midi=34,41,46|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=0|dur=2|notes=2|noteDur=6|midi=70,77|beam=false|stem=false|dotted=true|atStart=2/5"
+          ]
+        },
+        {
+          "m": 65,
+          "truth": 4,
+          "gen": 5,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=3|noteDur=4,12|midi=34,41,46|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=0|dur=2|notes=2|noteDur=6|midi=70,77|beam=false|stem=false|dotted=true|atStart=2/5"
+          ]
+        },
+        {
+          "m": 97,
+          "truth": 4,
+          "gen": 5,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=3|noteDur=2,3,8|midi=34,41,46|beam=true|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=0|dur=2|notes=2|noteDur=6|midi=70,77|beam=false|stem=false|dotted=true|atStart=2/5"
+          ]
+        },
+        {
+          "m": 105,
+          "truth": 4,
+          "gen": 5,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=3|noteDur=4,12|midi=34,41,46|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=0|dur=2|notes=2|noteDur=6|midi=70,77|beam=false|stem=false|dotted=true|atStart=2/5"
+          ]
+        },
+        {
+          "m": 117,
+          "truth": 4,
+          "gen": 5,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=3|noteDur=4,12|midi=34,41,46|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=0|dur=2|notes=2|noteDur=6|midi=70,77|beam=false|stem=false|dotted=true|atStart=2/5"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "0->1|onset=3.75|div=15|events=bass@14/n1/d1,treble@14/n1/d1,treble@15/n1/d1",
+      "examples": [
+        {
+          "m": 15,
+          "truth": 0,
+          "gen": 1,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=1|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=15|dur=1|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 23,
+          "truth": 0,
+          "gen": 1,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=1|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=15|dur=1|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 76,
+          "truth": 0,
+          "gen": 1,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=1|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=15|dur=1|notes=1|noteDur=8|midi=75|beam=false|stem=true|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 83,
+          "truth": 0,
+          "gen": 1,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=1|notes=1|noteDur=6|midi=32|beam=false|stem=false|dotted=true|atStart=2/2",
+            "clef=treble|start=14|dur=1|notes=1|noteDur=4|midi=72|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=15|dur=1|notes=1|noteDur=8|midi=72|beam=false|stem=true|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "1->2|onset=3.5|div=14|events=bass@14/n1/d2,treble@14/n1/d2",
+      "examples": [
+        {
+          "m": 16,
+          "truth": 1,
+          "gen": 2,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=4|midi=79|beam=false|stem=false|dotted=false|atStart=2/2"
+          ]
+        },
+        {
+          "m": 25,
+          "truth": 1,
+          "gen": 2,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=38|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=4|midi=80|beam=false|stem=false|dotted=false|atStart=2/2"
+          ]
+        },
+        {
+          "m": 77,
+          "truth": 1,
+          "gen": 2,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=6|midi=36|beam=false|stem=false|dotted=true|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=4|midi=79|beam=false|stem=false|dotted=false|atStart=2/2"
+          ]
+        },
+        {
+          "m": 85,
+          "truth": 1,
+          "gen": 2,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=4|midi=79|beam=false|stem=false|dotted=false|atStart=2/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "2->0|onset=3.5|div=14|events=bass@14/n1/d2",
+      "examples": [
+        {
+          "m": 18,
+          "truth": 2,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=2|midi=53|beam=false|stem=true|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 78,
+          "truth": 2,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=38|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 79,
+          "truth": 2,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=2|midi=53|beam=false|stem=true|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 123,
+          "truth": 2,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=2|midi=43|beam=false|stem=true|dotted=true|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "5->4|onset=1|div=4|events=bass@4/n2/d2,treble@4/n2/d4",
+      "examples": [
+        {
+          "m": 36,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=4|dur=2|notes=2|noteDur=4,6|midi=43,48|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=4|dur=4|notes=2|noteDur=4,6|midi=67,75|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 64,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=4|dur=2|notes=2|noteDur=4,6|midi=43,48|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=4|dur=4|notes=2|noteDur=4,6|midi=67,75|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 100,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=4|dur=2|notes=2|noteDur=4,6|midi=43,48|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=4|dur=4|notes=2|noteDur=4|midi=72,75|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        },
+        {
+          "m": 124,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=4|dur=2|notes=2|noteDur=4,6|midi=42,46|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=4|dur=4|notes=2|noteDur=4,6|midi=67,75|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "5->4|onset=0|div=0|events=bass@0/n3/d2,treble@0/n1/d2",
+      "examples": [
+        {
+          "m": 39,
+          "truth": 5,
+          "gen": 4,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=3|noteDur=4,12|midi=34,41,46|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=0|dur=2|notes=1|noteDur=2|midi=74|beam=false|stem=true|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 67,
+          "truth": 5,
+          "gen": 4,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=3|noteDur=4,12|midi=34,41,46|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=0|dur=2|notes=1|noteDur=2|midi=74|beam=false|stem=true|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 99,
+          "truth": 5,
+          "gen": 4,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=3|noteDur=4,6|midi=34,41,46|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=0|dur=2|notes=1|noteDur=6|midi=74|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 119,
+          "truth": 5,
+          "gen": 4,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=3|noteDur=4,12|midi=34,41,46|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=0|dur=2|notes=1|noteDur=2|midi=74|beam=false|stem=true|dotted=true|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "1->2|onset=2.75|div=11|events=bass@10/n1/d3,treble@12/n2/d3",
+      "examples": [
+        {
+          "m": 40,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=3|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=12|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2"
+          ]
+        },
+        {
+          "m": 68,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=3|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=12|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2"
+          ]
+        },
+        {
+          "m": 104,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=3|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=12|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2"
+          ]
+        },
+        {
+          "m": 116,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=3|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=12|dur=3|notes=2|noteDur=4|midi=68,75|beam=false|stem=false|dotted=false|atStart=1/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "3->4|onset=3.5|div=14|events=bass@13/n2/d2,bass@15/n2/d1,treble@15/n2/d1",
+      "examples": [
+        {
+          "m": 40,
+          "truth": 3,
+          "gen": 4,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=13|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2",
+            "clef=bass|start=15|dur=1|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+            "clef=treble|start=15|dur=1|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 68,
+          "truth": 3,
+          "gen": 4,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=13|dur=2|notes=2|noteDur=2,4|midi=48,53|beam=false|stem=true|dotted=true|atStart=1/2",
+            "clef=bass|start=15|dur=1|notes=2|noteDur=4,6|midi=36,48|beam=false|stem=false|dotted=true|atStart=2/4",
+            "clef=treble|start=15|dur=1|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 104,
+          "truth": 3,
+          "gen": 4,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=13|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2",
+            "clef=bass|start=15|dur=1|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+            "clef=treble|start=15|dur=1|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 116,
+          "truth": 3,
+          "gen": 4,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=13|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2",
+            "clef=bass|start=15|dur=1|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/4",
+            "clef=treble|start=15|dur=1|notes=2|noteDur=4,6|midi=68,77|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "0->1|onset=2.25|div=9|events=bass@8/n3/d2,treble@8/n2/d1,treble@9/n1/d2,bass@10/n1/d3",
+      "examples": [
+        {
+          "m": 45,
+          "truth": 0,
+          "gen": 1,
+          "onset": 2.25,
+          "div": 9,
+          "events": [
+            "clef=bass|start=8|dur=2|notes=3|noteDur=4|midi=39,48,51|beam=false|stem=true|dotted=false|atStart=2/5",
+            "clef=treble|start=8|dur=1|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=2/5",
+            "clef=treble|start=9|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=bass|start=10|dur=3|notes=1|noteDur=4|midi=39|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 101,
+          "truth": 0,
+          "gen": 1,
+          "onset": 2.25,
+          "div": 9,
+          "events": [
+            "clef=bass|start=8|dur=2|notes=3|noteDur=4,6|midi=39,46,51|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=8|dur=1|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=2/5",
+            "clef=treble|start=9|dur=2|notes=1|noteDur=4|midi=79|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=10|dur=3|notes=1|noteDur=6|midi=39|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 121,
+          "truth": 0,
+          "gen": 1,
+          "onset": 2.25,
+          "div": 9,
+          "events": [
+            "clef=bass|start=8|dur=2|notes=3|noteDur=4,6,8|midi=41,43,50|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=8|dur=1|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=2/5",
+            "clef=treble|start=9|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=bass|start=10|dur=3|notes=1|noteDur=6|midi=41|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 125,
+          "truth": 0,
+          "gen": 1,
+          "onset": 2.25,
+          "div": 9,
+          "events": [
+            "clef=bass|start=8|dur=2|notes=3|noteDur=4,6,8|midi=41,44,50|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=8|dur=1|notes=2|noteDur=4|midi=75,77|beam=false|stem=false|dotted=false|atStart=2/5",
+            "clef=treble|start=9|dur=2|notes=1|noteDur=4|midi=77|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=10|dur=3|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "1->2|onset=2.5|div=10|events=bass@9/n1/d1,bass@10/n1/d2",
+      "examples": [
+        {
+          "m": 48,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.5,
+          "div": 10,
+          "events": [
+            "clef=bass|start=9|dur=1|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 49,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.5,
+          "div": 10,
+          "events": [
+            "clef=bass|start=9|dur=1|notes=1|noteDur=6|midi=36|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 52,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.5,
+          "div": 10,
+          "events": [
+            "clef=bass|start=9|dur=1|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 53,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.5,
+          "div": 10,
+          "events": [
+            "clef=bass|start=9|dur=1|notes=1|noteDur=6|midi=36|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "1->0|onset=3.25|div=13|events=bass@12/n2/d2,bass@14/n1/d1",
+      "examples": [
+        {
+          "m": 48,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.25,
+          "div": 13,
+          "events": [
+            "clef=bass|start=12|dur=2|notes=2|noteDur=4|midi=31,39|beam=false|stem=true|dotted=false|atStart=1/2",
+            "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 49,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.25,
+          "div": 13,
+          "events": [
+            "clef=bass|start=12|dur=2|notes=2|noteDur=4,6|midi=31,39|beam=false|stem=true|dotted=true|atStart=1/2",
+            "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 52,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.25,
+          "div": 13,
+          "events": [
+            "clef=bass|start=12|dur=2|notes=2|noteDur=4|midi=31,39|beam=false|stem=true|dotted=false|atStart=1/2",
+            "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 53,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.25,
+          "div": 13,
+          "events": [
+            "clef=bass|start=12|dur=2|notes=2|noteDur=4,6|midi=31,39|beam=false|stem=true|dotted=true|atStart=1/2",
+            "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "1->0|onset=3.5|div=14|events=bass@14/n1/d1,bass@15/n1/d1",
+      "examples": [
+        {
+          "m": 48,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=15|dur=1|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 49,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=15|dur=1|notes=1|noteDur=6|midi=36|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 52,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=15|dur=1|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 53,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=15|dur=1|notes=1|noteDur=6|midi=36|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "2->1|onset=3|div=12|events=bass@11/n1/d1,bass@12/n1/d1,bass@13/n1/d1",
+      "examples": [
+        {
+          "m": 50,
+          "truth": 2,
+          "gen": 1,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=bass|start=11|dur=1|notes=1|noteDur=16|midi=31|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=1|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=13|dur=1|notes=1|noteDur=6|midi=32|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 51,
+          "truth": 2,
+          "gen": 1,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=bass|start=11|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=1|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=13|dur=1|notes=1|noteDur=4|midi=39|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 54,
+          "truth": 2,
+          "gen": 1,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=bass|start=11|dur=1|notes=1|noteDur=8|midi=32|beam=false|stem=true|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=1|notes=1|noteDur=6|midi=36|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=bass|start=13|dur=1|notes=1|noteDur=4|midi=32|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 55,
+          "truth": 2,
+          "gen": 1,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=bass|start=11|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=1|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=13|dur=1|notes=1|noteDur=4|midi=39|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 4,
+      "key": "0->1|onset=2.75|div=11|events=bass@10/n1/d1,bass@11/n1/d1,bass@12/n1/d1",
+      "examples": [
+        {
+          "m": 50,
+          "truth": 0,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=1|notes=1|noteDur=4|midi=31|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=11|dur=1|notes=1|noteDur=16|midi=31|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=1|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 51,
+          "truth": 0,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=1|notes=1|noteDur=4|midi=32|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=11|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=1|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 54,
+          "truth": 0,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=1|notes=1|noteDur=4|midi=31|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=11|dur=1|notes=1|noteDur=8|midi=32|beam=false|stem=true|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=1|notes=1|noteDur=6|midi=36|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 55,
+          "truth": 0,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=1|notes=1|noteDur=4|midi=32|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=11|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=1|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "1->0|onset=3.5|div=14|events=",
+      "examples": [
+        {
+          "m": 5,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": []
+        },
+        {
+          "m": 29,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": []
+        },
+        {
+          "m": 47,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": []
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "2->1|onset=3.5|div=14|events=bass@13/n1/d1,treble@13/n1/d1,treble@14/n1/d2",
+      "examples": [
+        {
+          "m": 22,
+          "truth": 2,
+          "gen": 1,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=13|dur=1|notes=1|noteDur=4|midi=32|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=13|dur=1|notes=1|noteDur=4|midi=72|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=8|midi=72|beam=false|stem=true|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 75,
+          "truth": 2,
+          "gen": 1,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=13|dur=1|notes=1|noteDur=4|midi=32|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=13|dur=1|notes=1|noteDur=4|midi=72|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=8|midi=72|beam=false|stem=true|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 84,
+          "truth": 2,
+          "gen": 1,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=13|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=13|dur=1|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=8|midi=75|beam=false|stem=true|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "2->1|onset=2.75|div=11|events=bass@10/n1/d3,treble@11/n1/d3",
+      "examples": [
+        {
+          "m": 30,
+          "truth": 2,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=3|notes=1|noteDur=2|midi=46|beam=false|stem=true|dotted=true|atStart=1/1",
+            "clef=treble|start=11|dur=3|notes=1|noteDur=4|midi=74|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 42,
+          "truth": 2,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=3|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=11|dur=3|notes=1|noteDur=4|midi=77|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 118,
+          "truth": 2,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=3|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=11|dur=3|notes=1|noteDur=4|midi=77|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "4->5|onset=0|div=0|events=bass@0/n2/d2,treble@0/n3/d5",
+      "examples": [
+        {
+          "m": 31,
+          "truth": 4,
+          "gen": 5,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=2|noteDur=4,12|midi=34,46|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=0|dur=5|notes=3|noteDur=6,8|midi=61,65,70|beam=false|stem=true|dotted=true|atStart=2/5"
+          ]
+        },
+        {
+          "m": 91,
+          "truth": 4,
+          "gen": 5,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=2|noteDur=4,12|midi=34,46|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=0|dur=5|notes=3|noteDur=6,8|midi=61,65,70|beam=false|stem=true|dotted=true|atStart=2/5"
+          ]
+        },
+        {
+          "m": 111,
+          "truth": 4,
+          "gen": 5,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=2|noteDur=4,12|midi=34,46|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=0|dur=5|notes=3|noteDur=1,6,8|midi=61,65,70|beam=false|stem=true|dotted=true|atStart=2/5"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "2->4|onset=0.75|div=3|events=bass@3/n1/d2",
+      "examples": [
+        {
+          "m": 31,
+          "truth": 2,
+          "gen": 4,
+          "onset": 0.75,
+          "div": 3,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=2|midi=46|beam=false|stem=true|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 91,
+          "truth": 2,
+          "gen": 4,
+          "onset": 0.75,
+          "div": 3,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=2|midi=46|beam=false|stem=true|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 111,
+          "truth": 2,
+          "gen": 4,
+          "onset": 0.75,
+          "div": 3,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=2|midi=46|beam=false|stem=true|dotted=true|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "0->3|onset=3.75|div=15|events=bass@15/n1/d1,treble@15/n2/d1",
+      "examples": [
+        {
+          "m": 34,
+          "truth": 0,
+          "gen": 3,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=15|dur=1|notes=1|noteDur=4|midi=38|beam=false|stem=false|dotted=false|atStart=2/3",
+            "clef=treble|start=15|dur=1|notes=2|noteDur=6|midi=74,77|beam=false|stem=false|dotted=true|atStart=2/3"
+          ]
+        },
+        {
+          "m": 57,
+          "truth": 0,
+          "gen": 3,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=15|dur=1|notes=1|noteDur=6|midi=43|beam=false|stem=false|dotted=true|atStart=2/3",
+            "clef=treble|start=15|dur=1|notes=2|noteDur=8,12|midi=62,67|beam=false|stem=true|dotted=true|atStart=2/3"
+          ]
+        },
+        {
+          "m": 60,
+          "truth": 0,
+          "gen": 3,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=15|dur=1|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=2/3",
+            "clef=treble|start=15|dur=1|notes=2|noteDur=4|midi=68,72|beam=false|stem=false|dotted=false|atStart=2/3"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "1->2|onset=2.75|div=11|events=bass@10/n1/d3,treble@11/n2/d2",
+      "examples": [
+        {
+          "m": 37,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=3|notes=1|noteDur=4|midi=39|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=11|dur=2|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=1/2"
+          ]
+        },
+        {
+          "m": 65,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=3|notes=1|noteDur=6|midi=39|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=treble|start=11|dur=2|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=1/2"
+          ]
+        },
+        {
+          "m": 97,
+          "truth": 1,
+          "gen": 2,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=3|notes=1|noteDur=6|midi=39|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=treble|start=11|dur=2|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=1/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "2->4|onset=3|div=12|events=treble@11/n2/d2,bass@13/n2/d2,treble@13/n2/d2",
+      "examples": [
+        {
+          "m": 37,
+          "truth": 2,
+          "gen": 4,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=treble|start=11|dur=2|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=13|dur=2|notes=2|noteDur=2,4|midi=46,51|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=13|dur=2|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        },
+        {
+          "m": 65,
+          "truth": 2,
+          "gen": 4,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=treble|start=11|dur=2|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=13|dur=2|notes=2|noteDur=2,4|midi=46,51|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=13|dur=2|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        },
+        {
+          "m": 101,
+          "truth": 2,
+          "gen": 4,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=treble|start=11|dur=2|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=13|dur=2|notes=2|noteDur=2,4|midi=46,51|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=13|dur=2|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "2->1|onset=2.75|div=11|events=bass@10/n1/d2,treble@11/n1/d3,bass@12/n2/d2",
+      "examples": [
+        {
+          "m": 38,
+          "truth": 2,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=11|dur=3|notes=1|noteDur=4|midi=77|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2"
+          ]
+        },
+        {
+          "m": 66,
+          "truth": 2,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=11|dur=3|notes=1|noteDur=4|midi=77|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2"
+          ]
+        },
+        {
+          "m": 102,
+          "truth": 2,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=41|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=11|dur=3|notes=1|noteDur=4|midi=77|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=3,4|midi=48,53|beam=true|stem=true|dotted=true|atStart=1/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "4->3|onset=3.5|div=14|events=bass@14/n2/d2,treble@14/n1/d2",
+      "examples": [
+        {
+          "m": 38,
+          "truth": 4,
+          "gen": 3,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/3",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=2/3"
+          ]
+        },
+        {
+          "m": 66,
+          "truth": 4,
+          "gen": 3,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/3",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=2/3"
+          ]
+        },
+        {
+          "m": 102,
+          "truth": 4,
+          "gen": 3,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=2|noteDur=4,8|midi=36,48|beam=false|stem=true|dotted=false|atStart=2/3",
+            "clef=treble|start=14|dur=2|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=2/3"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "0->1|onset=3.75|div=15|events=bass@14/n2/d1,treble@14/n1/d1,treble@15/n1/d1",
+      "examples": [
+        {
+          "m": 39,
+          "truth": 0,
+          "gen": 1,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=1|notes=2|noteDur=2,8|midi=38,50|beam=false|stem=true|dotted=true|atStart=2/3",
+            "clef=treble|start=14|dur=1|notes=1|noteDur=2|midi=77|beam=true|stem=true|dotted=true|atStart=2/3",
+            "clef=treble|start=15|dur=1|notes=1|noteDur=4|midi=82|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 109,
+          "truth": 0,
+          "gen": 1,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=1|notes=2|noteDur=4,12|midi=31,43|beam=false|stem=true|dotted=true|atStart=2/3",
+            "clef=treble|start=14|dur=1|notes=1|noteDur=6|midi=74|beam=false|stem=false|dotted=true|atStart=2/3",
+            "clef=treble|start=15|dur=1|notes=1|noteDur=6|midi=94|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 119,
+          "truth": 0,
+          "gen": 1,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=14|dur=1|notes=2|noteDur=4,12|midi=38,50|beam=false|stem=true|dotted=true|atStart=2/3",
+            "clef=treble|start=14|dur=1|notes=1|noteDur=4|midi=79|beam=false|stem=false|dotted=false|atStart=2/3",
+            "clef=treble|start=15|dur=1|notes=1|noteDur=4|midi=82|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "5->4|onset=1|div=4|events=bass@3/n1/d2,bass@5/n2/d2,treble@5/n2/d4",
+      "examples": [
+        {
+          "m": 40,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=5|dur=2|notes=2|noteDur=4,6|midi=43,48|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=5|dur=4|notes=2|noteDur=4|midi=72,75|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        },
+        {
+          "m": 68,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=5|dur=2|notes=2|noteDur=4,6|midi=43,48|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=5|dur=4|notes=2|noteDur=4,6|midi=67,75|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 116,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=5|dur=2|notes=2|noteDur=4,6|midi=43,48|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=5|dur=4|notes=2|noteDur=4,6|midi=67,75|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "5->4|onset=1.5|div=6|events=bass@5/n2/d1,treble@5/n2/d1,bass@6/n2/d2,treble@6/n2/d2",
+      "examples": [
+        {
+          "m": 41,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1.5,
+          "div": 6,
+          "events": [
+            "clef=bass|start=5|dur=1|notes=2|noteDur=4,6|midi=41,46|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=5|dur=1|notes=2|noteDur=2,4|midi=74,82|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=bass|start=6|dur=2|notes=2|noteDur=4,12|midi=38,50|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=6|dur=2|notes=2|noteDur=4,6|midi=74,80|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 101,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1.5,
+          "div": 6,
+          "events": [
+            "clef=bass|start=5|dur=1|notes=2|noteDur=4,6|midi=41,46|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=5|dur=1|notes=2|noteDur=4,6|midi=74,82|beam=false|stem=false|dotted=true|atStart=2/4",
+            "clef=bass|start=6|dur=2|notes=2|noteDur=4,12|midi=38,50|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=6|dur=2|notes=2|noteDur=4,6|midi=74,80|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 125,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1.5,
+          "div": 6,
+          "events": [
+            "clef=bass|start=5|dur=1|notes=2|noteDur=4,6|midi=41,44|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=5|dur=1|notes=2|noteDur=4,6|midi=74,80|beam=false|stem=false|dotted=true|atStart=2/4",
+            "clef=bass|start=6|dur=2|notes=2|noteDur=4,12|midi=39,48|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=6|dur=2|notes=2|noteDur=6|midi=74,79|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "1->2|onset=3.5|div=14|events=bass@14/n2/d2",
+      "examples": [
+        {
+          "m": 41,
+          "truth": 1,
+          "gen": 2,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=2|noteDur=4,12|midi=38,50|beam=false|stem=true|dotted=true|atStart=1/2"
+          ]
+        },
+        {
+          "m": 69,
+          "truth": 1,
+          "gen": 2,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=2|noteDur=2,4|midi=38,50|beam=false|stem=true|dotted=true|atStart=1/2"
+          ]
+        },
+        {
+          "m": 105,
+          "truth": 1,
+          "gen": 2,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=2|noteDur=4,12|midi=38,50|beam=false|stem=true|dotted=true|atStart=1/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "0->1|onset=2.25|div=9|events=bass@8/n3/d2,treble@8/n2/d1,treble@9/n1/d2,bass@10/n1/d2",
+      "examples": [
+        {
+          "m": 41,
+          "truth": 0,
+          "gen": 1,
+          "onset": 2.25,
+          "div": 9,
+          "events": [
+            "clef=bass|start=8|dur=2|notes=3|noteDur=4,6|midi=39,48,51|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=8|dur=1|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=2/5",
+            "clef=treble|start=9|dur=2|notes=1|noteDur=4|midi=79|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=10|dur=2|notes=1|noteDur=6|midi=39|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 69,
+          "truth": 0,
+          "gen": 1,
+          "onset": 2.25,
+          "div": 9,
+          "events": [
+            "clef=bass|start=8|dur=2|notes=3|noteDur=4,6,8|midi=39,46,51|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=8|dur=1|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=2/5",
+            "clef=treble|start=9|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=39|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 105,
+          "truth": 0,
+          "gen": 1,
+          "onset": 2.25,
+          "div": 9,
+          "events": [
+            "clef=bass|start=8|dur=2|notes=3|noteDur=4,8|midi=39,48,51|beam=false|stem=true|dotted=false|atStart=2/5",
+            "clef=treble|start=8|dur=1|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=2/5",
+            "clef=treble|start=9|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=bass|start=10|dur=2|notes=1|noteDur=4|midi=39|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "5->4|onset=1.5|div=6|events=bass@6/n2/d2,treble@6/n2/d2",
+      "examples": [
+        {
+          "m": 45,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1.5,
+          "div": 6,
+          "events": [
+            "clef=bass|start=6|dur=2|notes=2|noteDur=2,4|midi=38,50|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=6|dur=2|notes=2|noteDur=6|midi=74,80|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 69,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1.5,
+          "div": 6,
+          "events": [
+            "clef=bass|start=6|dur=2|notes=2|noteDur=4,12|midi=38,50|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=6|dur=2|notes=2|noteDur=4,6|midi=74,80|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 121,
+          "truth": 5,
+          "gen": 4,
+          "onset": 1.5,
+          "div": 6,
+          "events": [
+            "clef=bass|start=6|dur=2|notes=2|noteDur=4,12|midi=39,48|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=6|dur=2|notes=2|noteDur=6|midi=74,80|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 3,
+      "key": "2->4|onset=3|div=12|events=treble@11/n2/d1,bass@12/n2/d2,treble@12/n2/d2",
+      "examples": [
+        {
+          "m": 69,
+          "truth": 2,
+          "gen": 4,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=treble|start=11|dur=1|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=2,4|midi=46,51|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=12|dur=2|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        },
+        {
+          "m": 105,
+          "truth": 2,
+          "gen": 4,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=treble|start=11|dur=1|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=2,4|midi=46,51|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=12|dur=2|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        },
+        {
+          "m": 117,
+          "truth": 2,
+          "gen": 4,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=treble|start=11|dur=1|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=2,4|midi=46,51|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=12|dur=2|notes=2|noteDur=4|midi=75,79|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "2->1|onset=1.5|div=6|events=bass@5/n1/d3,treble@5/n1/d2,treble@7/n1/d7",
+      "examples": [
+        {
+          "m": 11,
+          "truth": 2,
+          "gen": 1,
+          "onset": 1.5,
+          "div": 6,
+          "events": [
+            "clef=bass|start=5|dur=3|notes=1|noteDur=4|midi=39|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=5|dur=2|notes=1|noteDur=6|midi=70|beam=false|stem=false|dotted=true|atStart=2/2",
+            "clef=treble|start=7|dur=7|notes=1|noteDur=6|midi=70|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 19,
+          "truth": 2,
+          "gen": 1,
+          "onset": 1.5,
+          "div": 6,
+          "events": [
+            "clef=bass|start=5|dur=3|notes=1|noteDur=4|midi=39|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=5|dur=2|notes=1|noteDur=6|midi=70|beam=false|stem=false|dotted=true|atStart=2/2",
+            "clef=treble|start=7|dur=7|notes=1|noteDur=6|midi=70|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "2->1|onset=3|div=12|events=bass@12/n1/d2",
+      "examples": [
+        {
+          "m": 16,
+          "truth": 2,
+          "gen": 1,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=bass|start=12|dur=2|notes=1|noteDur=4|midi=48|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 76,
+          "truth": 2,
+          "gen": 1,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=bass|start=12|dur=2|notes=1|noteDur=2|midi=46|beam=false|stem=true|dotted=true|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "0->1|onset=0.75|div=3|events=treble@3/n1/d3,bass@4/n1/d2",
+      "examples": [
+        {
+          "m": 17,
+          "truth": 0,
+          "gen": 1,
+          "onset": 0.75,
+          "div": 3,
+          "events": [
+            "clef=treble|start=3|dur=3|notes=1|noteDur=4|midi=77|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=4|dur=2|notes=1|noteDur=2|midi=50|beam=false|stem=true|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 78,
+          "truth": 0,
+          "gen": 1,
+          "onset": 0.75,
+          "div": 3,
+          "events": [
+            "clef=treble|start=3|dur=3|notes=1|noteDur=4|midi=77|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=4|dur=2|notes=1|noteDur=2|midi=50|beam=false|stem=true|dotted=true|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "5->2|onset=2|div=8|events=treble@7/n1/d7,bass@8/n2/d2",
+      "examples": [
+        {
+          "m": 19,
+          "truth": 5,
+          "gen": 2,
+          "onset": 2,
+          "div": 8,
+          "events": [
+            "clef=treble|start=7|dur=7|notes=1|noteDur=6|midi=70|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=bass|start=8|dur=2|notes=2|noteDur=4,6|midi=39,51|beam=false|stem=false|dotted=true|atStart=1/2"
+          ]
+        },
+        {
+          "m": 80,
+          "truth": 5,
+          "gen": 2,
+          "onset": 2,
+          "div": 8,
+          "events": [
+            "clef=treble|start=7|dur=7|notes=1|noteDur=6|midi=70|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=bass|start=8|dur=2|notes=2|noteDur=6,8|midi=39,51|beam=false|stem=true|dotted=true|atStart=1/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "3->1|onset=3|div=12|events=bass@12/n1/d2",
+      "examples": [
+        {
+          "m": 19,
+          "truth": 3,
+          "gen": 1,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=bass|start=12|dur=2|notes=1|noteDur=4|midi=51|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 79,
+          "truth": 3,
+          "gen": 1,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=bass|start=12|dur=2|notes=1|noteDur=4|midi=55|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "1->3|onset=3|div=12|events=bass@12/n1/d2,treble@12/n2/d2",
+      "examples": [
+        {
+          "m": 20,
+          "truth": 1,
+          "gen": 3,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=bass|start=12|dur=2|notes=1|noteDur=2|midi=46|beam=false|stem=true|dotted=true|atStart=2/3",
+            "clef=treble|start=12|dur=2|notes=2|noteDur=4|midi=68,72|beam=false|stem=false|dotted=false|atStart=2/3"
+          ]
+        },
+        {
+          "m": 81,
+          "truth": 1,
+          "gen": 3,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=bass|start=12|dur=2|notes=1|noteDur=2|midi=46|beam=false|stem=true|dotted=true|atStart=2/3",
+            "clef=treble|start=12|dur=2|notes=2|noteDur=4|midi=68,72|beam=false|stem=false|dotted=false|atStart=2/3"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "6->1|onset=1|div=4|events=treble@3/n1/d3,bass@4/n1/d2",
+      "examples": [
+        {
+          "m": 25,
+          "truth": 6,
+          "gen": 1,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=treble|start=3|dur=3|notes=1|noteDur=4|midi=77|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=4|dur=2|notes=1|noteDur=2|midi=50|beam=false|stem=true|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 85,
+          "truth": 6,
+          "gen": 1,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=treble|start=3|dur=3|notes=1|noteDur=4|midi=79|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=4|dur=2|notes=1|noteDur=4|midi=51|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "1->2|onset=1.5|div=6|events=bass@6/n1/d2,treble@6/n1/d2",
+      "examples": [
+        {
+          "m": 25,
+          "truth": 1,
+          "gen": 2,
+          "onset": 1.5,
+          "div": 6,
+          "events": [
+            "clef=bass|start=6|dur=2|notes=1|noteDur=4|midi=38|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=6|dur=2|notes=1|noteDur=4|midi=76|beam=false|stem=false|dotted=false|atStart=2/2"
+          ]
+        },
+        {
+          "m": 85,
+          "truth": 1,
+          "gen": 2,
+          "onset": 1.5,
+          "div": 6,
+          "events": [
+            "clef=bass|start=6|dur=2|notes=1|noteDur=6|midi=39|beam=false|stem=false|dotted=true|atStart=2/2",
+            "clef=treble|start=6|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=2/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "3->6|onset=0.75|div=3|events=bass@3/n1/d2",
+      "examples": [
+        {
+          "m": 26,
+          "truth": 3,
+          "gen": 6,
+          "onset": 0.75,
+          "div": 3,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=6|midi=43|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 87,
+          "truth": 3,
+          "gen": 6,
+          "onset": 0.75,
+          "div": 3,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=6|midi=43|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "3->0|onset=3.5|div=14|events=bass@14/n1/d2",
+      "examples": [
+        {
+          "m": 26,
+          "truth": 3,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=6|midi=43|beam=false|stem=false|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 111,
+          "truth": 3,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=14|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "2->0|onset=3.5|div=14|events=bass@13/n1/d3,treble@13/n1/d3",
+      "examples": [
+        {
+          "m": 28,
+          "truth": 2,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=13|dur=3|notes=1|noteDur=6|midi=43|beam=false|stem=false|dotted=true|atStart=2/2",
+            "clef=treble|start=13|dur=3|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=2/2"
+          ]
+        },
+        {
+          "m": 72,
+          "truth": 2,
+          "gen": 0,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=13|dur=3|notes=1|noteDur=4|midi=39|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=13|dur=3|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=2/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "2->1|onset=2.75|div=11|events=bass@10/n1/d1,bass@11/n1/d2",
+      "examples": [
+        {
+          "m": 31,
+          "truth": 2,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=1|notes=1|noteDur=4|midi=39|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=11|dur=2|notes=1|noteDur=4|midi=51|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 91,
+          "truth": 2,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=1|notes=1|noteDur=6|midi=39|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=bass|start=11|dur=2|notes=1|noteDur=4|midi=51|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "1->4|onset=3|div=12|events=bass@11/n1/d2,bass@13/n2/d2,treble@13/n2/d2",
+      "examples": [
+        {
+          "m": 31,
+          "truth": 1,
+          "gen": 4,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=bass|start=11|dur=2|notes=1|noteDur=4|midi=51|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=13|dur=2|notes=2|noteDur=2,4|midi=34,46|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=13|dur=2|notes=2|noteDur=6|midi=67,70|beam=false|stem=false|dotted=true|atStart=2/4"
+          ]
+        },
+        {
+          "m": 91,
+          "truth": 1,
+          "gen": 4,
+          "onset": 3,
+          "div": 12,
+          "events": [
+            "clef=bass|start=11|dur=2|notes=1|noteDur=4|midi=51|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=13|dur=2|notes=2|noteDur=3,4|midi=34,46|beam=true|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=13|dur=2|notes=2|noteDur=6,12|midi=67,70|beam=false|stem=true|dotted=true|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "3->1|onset=3.5|div=14|events=bass@13/n2/d2,treble@13/n2/d2,bass@15/n1/d1",
+      "examples": [
+        {
+          "m": 31,
+          "truth": 3,
+          "gen": 1,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=13|dur=2|notes=2|noteDur=2,4|midi=34,46|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=13|dur=2|notes=2|noteDur=6|midi=67,70|beam=false|stem=false|dotted=true|atStart=2/4",
+            "clef=bass|start=15|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 91,
+          "truth": 3,
+          "gen": 1,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=bass|start=13|dur=2|notes=2|noteDur=3,4|midi=34,46|beam=true|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=13|dur=2|notes=2|noteDur=6,12|midi=67,70|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=bass|start=15|dur=1|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "5->4|onset=2|div=8|events=bass@7/n1/d1,treble@7/n2/d1,bass@8/n2/d2,treble@8/n2/d3",
+      "examples": [
+        {
+          "m": 33,
+          "truth": 5,
+          "gen": 4,
+          "onset": 2,
+          "div": 8,
+          "events": [
+            "clef=bass|start=7|dur=1|notes=1|noteDur=4|midi=31|beam=false|stem=false|dotted=false|atStart=2/3",
+            "clef=treble|start=7|dur=1|notes=2|noteDur=1,4|midi=72,75|beam=false|stem=true|dotted=false|atStart=2/3",
+            "clef=bass|start=8|dur=2|notes=2|noteDur=2,4|midi=36,48|beam=true|stem=true|dotted=false|atStart=2/4",
+            "clef=treble|start=8|dur=3|notes=2|noteDur=4|midi=70,74|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        },
+        {
+          "m": 93,
+          "truth": 5,
+          "gen": 4,
+          "onset": 2,
+          "div": 8,
+          "events": [
+            "clef=bass|start=7|dur=1|notes=1|noteDur=4|midi=31|beam=false|stem=false|dotted=false|atStart=2/3",
+            "clef=treble|start=7|dur=1|notes=2|noteDur=1,4|midi=72,75|beam=false|stem=true|dotted=false|atStart=2/3",
+            "clef=bass|start=8|dur=2|notes=2|noteDur=2,4|midi=36,48|beam=true|stem=true|dotted=false|atStart=2/4",
+            "clef=treble|start=8|dur=3|notes=2|noteDur=4|midi=70,74|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "0->3|onset=1.75|div=7|events=bass@7/n1/d1,treble@7/n2/d1,bass@8/n2/d2,treble@8/n2/d3",
+      "examples": [
+        {
+          "m": 33,
+          "truth": 0,
+          "gen": 3,
+          "onset": 1.75,
+          "div": 7,
+          "events": [
+            "clef=bass|start=7|dur=1|notes=1|noteDur=4|midi=31|beam=false|stem=false|dotted=false|atStart=2/3",
+            "clef=treble|start=7|dur=1|notes=2|noteDur=1,4|midi=72,75|beam=false|stem=true|dotted=false|atStart=2/3",
+            "clef=bass|start=8|dur=2|notes=2|noteDur=2,4|midi=36,48|beam=true|stem=true|dotted=false|atStart=2/4",
+            "clef=treble|start=8|dur=3|notes=2|noteDur=4|midi=70,74|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        },
+        {
+          "m": 93,
+          "truth": 0,
+          "gen": 3,
+          "onset": 1.75,
+          "div": 7,
+          "events": [
+            "clef=bass|start=7|dur=1|notes=1|noteDur=4|midi=31|beam=false|stem=false|dotted=false|atStart=2/3",
+            "clef=treble|start=7|dur=1|notes=2|noteDur=1,4|midi=72,75|beam=false|stem=true|dotted=false|atStart=2/3",
+            "clef=bass|start=8|dur=2|notes=2|noteDur=2,4|midi=36,48|beam=true|stem=true|dotted=false|atStart=2/4",
+            "clef=treble|start=8|dur=3|notes=2|noteDur=4|midi=70,74|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "5->4|onset=0|div=0|events=bass@0/n2/d2,treble@0/n2/d4",
+      "examples": [
+        {
+          "m": 34,
+          "truth": 5,
+          "gen": 4,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=2|noteDur=3,4|midi=38,50|beam=true|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=0|dur=4|notes=2|noteDur=4|midi=74,79|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        },
+        {
+          "m": 114,
+          "truth": 5,
+          "gen": 4,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=2|notes=2|noteDur=2,4|midi=38,50|beam=false|stem=true|dotted=true|atStart=2/4",
+            "clef=treble|start=0|dur=4|notes=2|noteDur=4|midi=74,79|beam=false|stem=false|dotted=false|atStart=2/4"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "4->2|onset=1|div=4|events=bass@3/n1/d2,treble@4/n2/d3,bass@5/n1/d2",
+      "examples": [
+        {
+          "m": 34,
+          "truth": 4,
+          "gen": 2,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=4|midi=38|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=4|dur=3|notes=2|noteDur=4|midi=74,80|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=5|dur=2|notes=1|noteDur=2|midi=50|beam=false|stem=true|dotted=true|atStart=1/1"
+          ]
+        },
+        {
+          "m": 114,
+          "truth": 4,
+          "gen": 2,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=4|midi=38|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=treble|start=4|dur=3|notes=2|noteDur=4|midi=74,80|beam=false|stem=false|dotted=false|atStart=1/2",
+            "clef=bass|start=5|dur=2|notes=1|noteDur=2|midi=50|beam=false|stem=true|dotted=true|atStart=1/1"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "5->7|onset=0|div=0|events=bass@0/n3/d3,treble@0/n4/d3",
+      "examples": [
+        {
+          "m": 35,
+          "truth": 5,
+          "gen": 7,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=3|notes=3|noteDur=6,8|midi=43,50,55|beam=false|stem=true|dotted=true|atStart=2/7",
+            "clef=treble|start=0|dur=3|notes=4|noteDur=4,12|midi=69,72,77|beam=false|stem=true|dotted=true|atStart=2/7"
+          ]
+        },
+        {
+          "m": 95,
+          "truth": 5,
+          "gen": 7,
+          "onset": 0,
+          "div": 0,
+          "events": [
+            "clef=bass|start=0|dur=3|notes=3|noteDur=2,4,6|midi=43,50,55|beam=false|stem=true|dotted=true|atStart=2/7",
+            "clef=treble|start=0|dur=3|notes=4|noteDur=4,12|midi=69,72,77|beam=false|stem=true|dotted=true|atStart=2/7"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "2->6|onset=0.5|div=2|events=",
+      "examples": [
+        {
+          "m": 35,
+          "truth": 2,
+          "gen": 6,
+          "onset": 0.5,
+          "div": 2,
+          "events": []
+        },
+        {
+          "m": 95,
+          "truth": 2,
+          "gen": 6,
+          "onset": 0.5,
+          "div": 2,
+          "events": []
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "4->5|onset=1|div=4|events=bass@4/n3/d3,treble@4/n3/d3",
+      "examples": [
+        {
+          "m": 35,
+          "truth": 4,
+          "gen": 5,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=4|dur=3|notes=3|noteDur=6,8|midi=43,50,55|beam=false|stem=true|dotted=true|atStart=2/6",
+            "clef=treble|start=4|dur=3|notes=3|noteDur=6,8|midi=59,62,67|beam=false|stem=true|dotted=true|atStart=2/6"
+          ]
+        },
+        {
+          "m": 95,
+          "truth": 4,
+          "gen": 5,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=4|dur=3|notes=3|noteDur=6,8|midi=43,50,55|beam=false|stem=true|dotted=true|atStart=2/6",
+            "clef=treble|start=4|dur=3|notes=3|noteDur=6,8|midi=59,62,67|beam=false|stem=true|dotted=true|atStart=2/6"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "3->2|onset=0.5|div=2|events=bass@3/n1/d2,treble@3/n1/d2",
+      "examples": [
+        {
+          "m": 37,
+          "truth": 3,
+          "gen": 2,
+          "onset": 0.5,
+          "div": 2,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=3|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=2/2"
+          ]
+        },
+        {
+          "m": 65,
+          "truth": 3,
+          "gen": 2,
+          "onset": 0.5,
+          "div": 2,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=4|midi=34|beam=false|stem=false|dotted=false|atStart=2/2",
+            "clef=treble|start=3|dur=2|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=2/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "1->0|onset=3.75|div=15|events=bass@15/n2/d1",
+      "examples": [
+        {
+          "m": 37,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=15|dur=1|notes=2|noteDur=4,6|midi=38,50|beam=false|stem=false|dotted=true|atStart=1/2"
+          ]
+        },
+        {
+          "m": 97,
+          "truth": 1,
+          "gen": 0,
+          "onset": 3.75,
+          "div": 15,
+          "events": [
+            "clef=bass|start=15|dur=1|notes=2|noteDur=4,12|midi=38,50|beam=false|stem=true|dotted=true|atStart=1/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "4->5|onset=1|div=4|events=bass@3/n1/d2,bass@5/n2/d1,treble@5/n3/d3",
+      "examples": [
+        {
+          "m": 38,
+          "truth": 4,
+          "gen": 5,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=5|dur=1|notes=2|noteDur=4,6|midi=43,48|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=5|dur=3|notes=3|noteDur=4|midi=75,79,82|beam=false|stem=false|dotted=false|atStart=2/5"
+          ]
+        },
+        {
+          "m": 66,
+          "truth": 4,
+          "gen": 5,
+          "onset": 1,
+          "div": 4,
+          "events": [
+            "clef=bass|start=3|dur=2|notes=1|noteDur=4|midi=36|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=5|dur=1|notes=2|noteDur=4,6|midi=43,48|beam=false|stem=true|dotted=true|atStart=2/5",
+            "clef=treble|start=5|dur=3|notes=3|noteDur=4|midi=75,79,82|beam=false|stem=false|dotted=false|atStart=2/5"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "2->1|onset=2.75|div=11|events=bass@10/n1/d2,treble@11/n1/d2,bass@12/n2/d2",
+      "examples": [
+        {
+          "m": 39,
+          "truth": 2,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=2|notes=1|noteDur=6|midi=39|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=treble|start=11|dur=2|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=2,4|midi=46,51|beam=false|stem=true|dotted=true|atStart=1/2"
+          ]
+        },
+        {
+          "m": 119,
+          "truth": 2,
+          "gen": 1,
+          "onset": 2.75,
+          "div": 11,
+          "events": [
+            "clef=bass|start=10|dur=2|notes=1|noteDur=6|midi=39|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=treble|start=11|dur=2|notes=1|noteDur=4|midi=75|beam=false|stem=false|dotted=false|atStart=1/1",
+            "clef=bass|start=12|dur=2|notes=2|noteDur=2,4|midi=46,51|beam=false|stem=true|dotted=true|atStart=1/2"
+          ]
+        }
+      ]
+    },
+    {
+      "count": 2,
+      "key": "2->3|onset=3.5|div=14|events=treble@13/n1/d1,bass@14/n2/d1,treble@14/n1/d1,treble@15/n1/d1",
+      "examples": [
+        {
+          "m": 39,
+          "truth": 2,
+          "gen": 3,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=treble|start=13|dur=1|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=bass|start=14|dur=1|notes=2|noteDur=2,8|midi=38,50|beam=false|stem=true|dotted=true|atStart=2/3",
+            "clef=treble|start=14|dur=1|notes=1|noteDur=2|midi=77|beam=true|stem=true|dotted=true|atStart=2/3",
+            "clef=treble|start=15|dur=1|notes=1|noteDur=4|midi=82|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        },
+        {
+          "m": 119,
+          "truth": 2,
+          "gen": 3,
+          "onset": 3.5,
+          "div": 14,
+          "events": [
+            "clef=treble|start=13|dur=1|notes=1|noteDur=6|midi=77|beam=false|stem=false|dotted=true|atStart=1/1",
+            "clef=bass|start=14|dur=1|notes=2|noteDur=4,12|midi=38,50|beam=false|stem=true|dotted=true|atStart=2/3",
+            "clef=treble|start=14|dur=1|notes=1|noteDur=4|midi=79|beam=false|stem=false|dotted=false|atStart=2/3",
+            "clef=treble|start=15|dur=1|notes=1|noteDur=4|midi=82|beam=false|stem=false|dotted=false|atStart=1/1"
+          ]
+        }
+      ]
+    }
+  ]
+}

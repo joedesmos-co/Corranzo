@@ -1,0 +1,49 @@
+OMR accuracy report
+Generated: a-cruel-angels-thesis-neon-genesis-evangelion beam ownership simulation
+Ground truth: A Cruel Angel's Thesis
+Likely main issue: Rhythm inference (rhythm-inference)
+Evidence: pitch=34% | duration=81% | onset=72% | time=2% | noteDetectionF1=89% | measureCountAccuracy=98% | firstBreak=m1 (wrongPitch=2, timing=1) | noteCountDifference=-2 | measureCountDifference=2
+
+Pitch accuracy: 34%
+Matched pitch accuracy: 39%
+Pitch accuracy at correct onset: 41%
+Order-sensitive pitch recovery: 11%
+Duration accuracy: 81%
+Onset accuracy: 72%
+Onset time accuracy: 2%
+Measure count accuracy: 98%
+Note detection F1: 89%
+Chord grouping accuracy: 66%
+Note count: generated 2808, truth 2810, diff -2
+Measure count: generated 127, truth 125, diff 2
+First likely alignment break: measure 1 (wrongPitch=2, timing=1)
+
+Worst measures:
+  m115: error 100%; truth 30, generated 26, missing 5, extra 1, pitch 23, duration 8, onset 9, time 25, chord 22
+  m63: error 100%; truth 30, generated 30, missing 3, extra 3, pitch 23, duration 2, onset 10, time 27, chord 24
+  m9: error 100%; truth 31, generated 32, missing 12, extra 13, pitch 12, duration 0, onset 8, time 19, chord 27
+  m125: error 100%; truth 35, generated 30, missing 5, extra 0, pitch 24, duration 8, onset 9, time 30, chord 13
+  m35: error 100%; truth 30, generated 30, missing 1, extra 1, pitch 22, duration 4, onset 9, time 29, chord 22
+  m95: error 100%; truth 30, generated 30, missing 2, extra 2, pitch 21, duration 5, onset 8, time 28, chord 20
+  m123: error 100%; truth 30, generated 31, missing 1, extra 2, pitch 19, duration 3, onset 15, time 29, chord 11
+  m87: error 100%; truth 33, generated 27, missing 6, extra 0, pitch 12, duration 1, onset 7, time 27, chord 26
+  m47: error 100%; truth 13, generated 35, missing 0, extra 22, pitch 7, duration 2, onset 4, time 13, chord 30
+  m26: error 100%; truth 30, generated 27, missing 3, extra 0, pitch 24, duration 0, onset 8, time 27, chord 15
+
+Missing notes: m5@2 G2; m7@1 F2; m7@1 A#2; m7@1 D4; m7@1 A#4
+Extra notes: m5@1 D#4; m7@3.75 D#2; m7@3.75 D#4; m7@3.75 G4; m8@2.25 C2
+Wrong pitches: m1@0 D#2 vs C4; m1@2 D#2 vs C4; m2@0 F2 vs D4; m3@0 D#2 vs C4; m3@2 D#4 vs F4
+Wrong durations: m1@3.5 1q vs 0.5q; m2@2 0.25q vs 2q; m2@2 0.25q vs 2q; m2@2.75 2q vs 0.75q; m4@1.5 1.25q vs 0.5q
+Wrong onsets: m5 2q vs 2.75q; m5 3q vs 3.5q; m6 1.75q vs 1q; m6 1q vs 1.5q; m6 1.25q vs 2q
+Wrong onset times: m1 delta 0.164s; m1 delta 0.579s; m1 delta 0.579s; m1 delta 0.579s; m1 delta 0.579s
+Chord grouping mismatches: m5@3.5 truth 1, generated 0; m5@1 truth 0, generated 1; m6@2.75 truth 1, generated 2; m6@3 truth 2, generated 3; m6@3.5 truth 3, generated 0
+
+Ties: detected 519, applied 131, uncertain slurs 1072
+Applied tie pairs: m1->m2 midi 77 (ink-arc); m2->m2 midi 77 (ink-arc); m2->m2 midi 79 (ink-arc); m2->m3 midi 79 (ink-arc); m4->m4 midi 82 (ink-arc)
+
+Rests: detected 45 glyph(s), applied 19 vector rest event(s), skipped 26
+Skipped rest reasons: overlaps-staff-notes=25, duplicate-rest=1
+
+Staccato: detected 476, applied 384
+
+Accent: detected 0, applied 0

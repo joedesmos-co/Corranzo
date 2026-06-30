@@ -1,0 +1,381 @@
+{
+  "path": "tmp/omr-benchmark-iter/rhythm-voice2/after-dense.json",
+  "metrics": {
+    "pitchAccuracy": 0.3434,
+    "matchedPitchAccuracy": 0.3869,
+    "durationAccuracy": 0.432,
+    "matchedDurationAccuracy": 0.4868,
+    "onsetAccuracy": 0.7064,
+    "matchedOnsetAccuracy": 0.7959,
+    "timeAccuracy": 0.0146,
+    "matchedTimeAccuracy": 0.0164,
+    "measureCountAccuracy": 0.9843,
+    "noteDetectionPrecision": 0.8882,
+    "noteDetectionRecall": 0.8875,
+    "noteDetectionF1": 0.8879,
+    "chordGroupingAccuracy": 0.6592,
+    "pitchAccuracyAtCorrectOnset": 0.4171,
+    "orderSensitivePitchRecovery": 0.1267
+  },
+  "totals": {
+    "truthMeasureCount": 125,
+    "generatedMeasureCount": 127,
+    "measureCountDifference": 2,
+    "truthNoteCount": 2810,
+    "generatedNoteCount": 2808,
+    "noteCountDifference": -2,
+    "matchedNoteCount": 2494,
+    "correctPitchCount": 965,
+    "correctDurationCount": 1214,
+    "correctOnsetCount": 1985,
+    "correctTimeCount": 41,
+    "missingNoteCount": 316,
+    "extraNoteCount": 314,
+    "wrongPitchCount": 1529,
+    "wrongDurationCount": 1280,
+    "wrongOnsetCount": 509,
+    "wrongTimeCount": 2453,
+    "chordMismatchCount": 1154,
+    "chordComparableCount": 3386,
+    "greedyCorrectPitchCount": 609,
+    "pitchCorrectAtCorrectOnsetCount": 828,
+    "onsetCorrectMatchedCount": 1985
+  },
+  "truncatedWrongDurations": 1240,
+  "analysis": {
+    "total": 40,
+    "histogram": {
+      "too-short": 21,
+      "beamed-subdivision": 4,
+      "onset-coupled": 15
+    },
+    "signed": {
+      "1": 10,
+      "3": 2,
+      "0.5": 22,
+      "1.5": 6
+    },
+    "sample": [
+      {
+        "m": 1,
+        "d": 0.5,
+        "truth": "C4@0/2",
+        "gen": "D#2@0/1.5",
+        "pitchDelta": -21,
+        "onsetDelta": 0
+      },
+      {
+        "m": 1,
+        "d": 0.5,
+        "truth": "D#4@0/2",
+        "gen": "D#4@0/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 1,
+        "d": 0.5,
+        "truth": "G4@0/2",
+        "gen": "G4@0/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 1,
+        "d": 0.5,
+        "truth": "C4@2/2",
+        "gen": "D#2@2/1.5",
+        "pitchDelta": -21,
+        "onsetDelta": 0
+      },
+      {
+        "m": 1,
+        "d": 0.5,
+        "truth": "F4@2/2",
+        "gen": "F4@2/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 1,
+        "d": 0.5,
+        "truth": "G#4@2/2",
+        "gen": "G#4@2/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 1,
+        "d": 1.5,
+        "truth": "F5@3.5/0.5",
+        "gen": "F5@3.5/2",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 2,
+        "d": 1.5,
+        "truth": "D4@0/2",
+        "gen": "F2@0/0.5",
+        "pitchDelta": -21,
+        "onsetDelta": 0
+      },
+      {
+        "m": 2,
+        "d": 1.5,
+        "truth": "F4@0/2",
+        "gen": "F4@0/0.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 2,
+        "d": 1.5,
+        "truth": "A#4@0/2",
+        "gen": "A#4@0/0.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 2,
+        "d": 1,
+        "truth": "F5@0/0.5",
+        "gen": "F5@0/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 2,
+        "d": 1,
+        "truth": "F5@0.5/0.5",
+        "gen": "F5@0.75/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 2,
+        "d": 0.5,
+        "truth": "A#5@1/0.5",
+        "gen": "A#5@1.25/1",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 2,
+        "d": 1,
+        "truth": "G#5@1.5/0.5",
+        "gen": "G#5@1.75/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 2,
+        "d": 0.5,
+        "truth": "D#4@2/2",
+        "gen": "D#4@2.25/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 2,
+        "d": 0.5,
+        "truth": "A#4@2/2",
+        "gen": "A#4@2.25/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 2,
+        "d": 1,
+        "truth": "F5@2.25/0.5",
+        "gen": "F5@2.5/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 3,
+        "d": 0.5,
+        "truth": "D#4@2/2",
+        "gen": "D#4@2/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 3,
+        "d": 0.5,
+        "truth": "F4@2/2",
+        "gen": "D#4@2/1.5",
+        "pitchDelta": -2,
+        "onsetDelta": 0
+      },
+      {
+        "m": 3,
+        "d": 0.5,
+        "truth": "G#4@2/2",
+        "gen": "G#4@2/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 3,
+        "d": 0.5,
+        "truth": "C5@2/2",
+        "gen": "C5@2/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 4,
+        "d": 1,
+        "truth": "D4@0/2",
+        "gen": "F2@0/1",
+        "pitchDelta": -21,
+        "onsetDelta": 0
+      },
+      {
+        "m": 4,
+        "d": 1,
+        "truth": "F4@0/2",
+        "gen": "F4@0/1",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 4,
+        "d": 1.5,
+        "truth": "G4@0/2",
+        "gen": "G4@0.25/0.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 4,
+        "d": 1,
+        "truth": "A#4@0/2",
+        "gen": "A#4@0/1",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 4,
+        "d": 1,
+        "truth": "D5@0/2",
+        "gen": "D5@0/1",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 4,
+        "d": 0.5,
+        "truth": "A#5@0/0.5",
+        "gen": "A#5@0/1",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 4,
+        "d": 0.5,
+        "truth": "A#5@0.5/0.5",
+        "gen": "A#5@0.75/1",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 4,
+        "d": 0.5,
+        "truth": "G5@1/0.5",
+        "gen": "G5@1.25/1",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 4,
+        "d": 1.5,
+        "truth": "A#5@1.5/0.5",
+        "gen": "A#5@1.75/2",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 4,
+        "d": 3,
+        "truth": "D#4@2/4",
+        "gen": "D#4@2.25/1",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 4,
+        "d": 1,
+        "truth": "G4@2/2",
+        "gen": "G4@2.25/1",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 4,
+        "d": 1,
+        "truth": "C5@2/2",
+        "gen": "C5@2.25/1",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 4,
+        "d": 3,
+        "truth": "C6@2.75/0.25",
+        "gen": "C6@3/3.25",
+        "pitchDelta": 0,
+        "onsetDelta": 0.25
+      },
+      {
+        "m": 5,
+        "d": 0.5,
+        "truth": "D#4@0/2",
+        "gen": "D#4@0/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 5,
+        "d": 0.5,
+        "truth": "G4@0/2",
+        "gen": "G4@0/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 5,
+        "d": 0.5,
+        "truth": "C5@0/2",
+        "gen": "C5@0/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 5,
+        "d": 0.5,
+        "truth": "C6@0/2",
+        "gen": "C6@0/1.5",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      },
+      {
+        "m": 5,
+        "d": 0.5,
+        "truth": "G1@3.5/0.5",
+        "gen": "G1@3/1",
+        "pitchDelta": 0,
+        "onsetDelta": 0.5
+      },
+      {
+        "m": 6,
+        "d": 0.5,
+        "truth": "C2@0/0.5",
+        "gen": "C2@0/1",
+        "pitchDelta": 0,
+        "onsetDelta": 0
+      }
+    ]
+  }
+}

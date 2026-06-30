@@ -1,10 +1,40 @@
 import { OMR_DISCLAIMER } from './omrMusicalConstants.js'
+import { aggregateBeamStemDiagnostics } from './beamStemReconstructionDiagnostics.js'
 
 function average(values) {
   if (!values.length) {
     return 0
   }
   return values.reduce((sum, value) => sum + value, 0) / values.length
+}
+
+function mergeReasonCounts(target, source = {}) {
+  for (const [reason, count] of Object.entries(source)) {
+    target[reason] = (target[reason] ?? 0) + count
+  }
+}
+
+function summarizeMusicalEventReconstruction(pages = []) {
+  const summary = {
+    adjustedEventCount: 0,
+    adjustedNoteCount: 0,
+    reasons: {},
+  }
+  for (const page of pages) {
+    for (const system of page.systems ?? []) {
+      for (const measure of system.measures ?? []) {
+        const diagnostics = measure.musicalEventReconstructionDiagnostics
+        if (!diagnostics) {
+          continue
+        }
+        summary.adjustedEventCount += diagnostics.adjustedEventCount ?? 0
+        summary.adjustedNoteCount += diagnostics.adjustedNoteCount ?? 0
+        mergeReasonCounts(summary.reasons, diagnostics.reasons)
+      }
+    }
+  }
+  summary.reasons = Object.fromEntries(Object.entries(summary.reasons).sort())
+  return summary
 }
 
 /**
@@ -30,6 +60,12 @@ export function buildOmrDiagnostics({
         detectedNoteheads: measure.vectorNoteCount ?? measure.vectorNoteMatching?.detectedNoteheads ?? 0,
         emittedNoteheads: measure.vectorNoteMatching?.emittedNoteheads ?? 0,
         dedupedDuringGrouping: measure.vectorNoteMatching?.dedupedDuringGrouping ?? 0,
+        musicalEventReconstruction: measure.musicalEventReconstructionDiagnostics ?? {
+          adjustedEventCount: 0,
+          adjustedNoteCount: 0,
+          reasons: {},
+        },
+        beamStem: measure.beamStemDiagnostics ?? null,
       })),
     })),
   }))
@@ -53,6 +89,8 @@ export function buildOmrDiagnostics({
     uncertainMeasures,
     totalMeasures,
     musical,
+    musicalEventReconstruction: summarizeMusicalEventReconstruction(pages),
+    beamStemReconstruction: aggregateBeamStemDiagnostics(pages),
     warnings,
     disclaimer: OMR_DISCLAIMER,
   }

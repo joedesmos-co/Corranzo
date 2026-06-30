@@ -1,0 +1,2404 @@
+{
+  "generatedAt": "2026-06-30T12:22:39.658Z",
+  "source": "tmp/omr-benchmark-iter/rhythm-voice6/baseline-internal-measures.json",
+  "sourceInterpretation": "source internal measures are replayed through current reconstructMusicalEvents before classification/simulation",
+  "truth": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl",
+  "caseDefinition": "same-clef note events in the same measure where a 2- or 3-note anchor chord is followed one division later by a single note, the follower is vertically inside/repeating/above the anchor stack, and the x gap exceeds the current split-chord threshold",
+  "threshold": {
+    "OMR_CHORD_MERGE_X": 10,
+    "SPLIT_CHORD_TONE_MAX_X": 12
+  },
+  "baseline": {
+    "totals": {
+      "chordMismatchCount": 1134,
+      "wrongOnsetCount": 480,
+      "wrongPitchCount": 1533,
+      "wrongDurationCount": 226,
+      "generatedNoteCount": 2808,
+      "generatedMeasureCount": 127
+    },
+    "metrics": {
+      "chordGroupingAccuracy": 0.6641,
+      "onsetAccuracy": 0.7181,
+      "pitchAccuracy": 0.3434,
+      "pitchAccuracyAtCorrectOnset": 0.4103,
+      "durationAccuracy": 0.8085
+    }
+  },
+  "totalCases": 42,
+  "histograms": {
+    "failureKey": {
+      "anchor-not-dense": 19,
+      "beam-evidence": 8,
+      "x-gap-only": 6,
+      "anchor-not-dense+outside-pitch-span": 4,
+      "anchor-not-dense+follower-not-longer": 3,
+      "anchor-not-dense+follower-not-longer+outside-pitch-span": 1,
+      "follower-not-longer": 1
+    },
+    "anchorNoteCount": {
+      "2": 27,
+      "3": 15
+    },
+    "clef": {
+      "bass": 22,
+      "treble": 20
+    },
+    "role": {
+      "inner": 16,
+      "bottom-repeat": 13,
+      "top-repeat": 8,
+      "above": 5
+    },
+    "rawSameSixteenth": {
+      "false": 42
+    },
+    "rawSameEighth": {
+      "false": 24,
+      "true": 18
+    },
+    "beamEvidence": {
+      "false->false": 34,
+      "true->false": 8
+    },
+    "insidePitchSpan": {
+      "true": 37,
+      "false": 5
+    },
+    "sameDuration": {
+      "false": 37,
+      "true": 5
+    },
+    "followerLonger": {
+      "true": 37,
+      "false": 5
+    },
+    "sameStartCompanion": {
+      "true": 29,
+      "false": 13
+    },
+    "followerStartCompanion": {
+      "false": 33,
+      "true": 9
+    },
+    "interveningAttack": {
+      "false": 42
+    },
+    "repeatedPitchGhost": {
+      "false": 42
+    },
+    "nearestPitchDistance": {
+      "0": 22,
+      "1": 3,
+      "2": 10,
+      "3": 2,
+      "4": 1,
+      "5": 1,
+      "7": 3
+    },
+    "sharedStemEvidence": {
+      "false": 42
+    },
+    "beamOrSharedStemEvidence": {
+      "false": 34,
+      "true": 8
+    }
+  },
+  "cases": [
+    {
+      "measureNumber": 30,
+      "page": 2,
+      "systemIndex": 4,
+      "anchorStartDivision": 5,
+      "followerStartDivision": 6,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 219.163,
+      "followerCx": 248.169,
+      "xGap": 29.006,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": true,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": true,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": true,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        7,
+        12
+      ],
+      "anchorMidis": [
+        53,
+        48,
+        41
+      ],
+      "followerMidi": 41,
+      "failureReasons": [
+        "x-gap-too-wide",
+        "beam-evidence"
+      ],
+      "failureKey": "beam-evidence",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 30,
+      "page": 2,
+      "systemIndex": 4,
+      "anchorStartDivision": 13,
+      "followerStartDivision": 14,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 342.437,
+      "followerCx": 371.443,
+      "xGap": 29.006,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": true,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        7,
+        12
+      ],
+      "anchorMidis": [
+        58,
+        53,
+        46
+      ],
+      "followerMidi": 46,
+      "failureReasons": [
+        "x-gap-too-wide"
+      ],
+      "failureKey": "x-gap-only",
+      "wouldPassCurrentExceptXGap": true
+    },
+    {
+      "measureNumber": 37,
+      "page": 3,
+      "systemIndex": 0,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 547.082,
+      "followerCx": 568.213,
+      "xGap": 21.13,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "top-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        4
+      ],
+      "anchorMidis": [
+        79,
+        75
+      ],
+      "followerMidi": 79,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 40,
+      "page": 3,
+      "systemIndex": 1,
+      "anchorStartDivision": 9,
+      "followerStartDivision": 10,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 3,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 569.887,
+      "followerCx": 596.067,
+      "xGap": 26.18,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": true,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": true,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        7,
+        12
+      ],
+      "anchorMidis": [
+        53,
+        48,
+        41
+      ],
+      "followerMidi": 41,
+      "failureReasons": [
+        "x-gap-too-wide",
+        "beam-evidence"
+      ],
+      "failureKey": "beam-evidence",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 41,
+      "page": 3,
+      "systemIndex": 1,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 821.095,
+      "followerCx": 840.772,
+      "xGap": 19.677,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "top-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        4
+      ],
+      "anchorMidis": [
+        79,
+        75
+      ],
+      "followerMidi": 79,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 43,
+      "page": 3,
+      "systemIndex": 2,
+      "anchorStartDivision": 9,
+      "followerStartDivision": 10,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 3,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 554.361,
+      "followerCx": 588.397,
+      "xGap": 34.036,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "top-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        5,
+        12
+      ],
+      "anchorMidis": [
+        48,
+        43,
+        36
+      ],
+      "followerMidi": 48,
+      "failureReasons": [
+        "x-gap-too-wide"
+      ],
+      "failureKey": "x-gap-only",
+      "wouldPassCurrentExceptXGap": true
+    },
+    {
+      "measureNumber": 43,
+      "page": 3,
+      "systemIndex": 2,
+      "anchorStartDivision": 13,
+      "followerStartDivision": 14,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 630.942,
+      "followerCx": 664.979,
+      "xGap": 34.036,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        1,
+        11
+      ],
+      "anchorMidis": [
+        46,
+        34
+      ],
+      "followerMidi": 45,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 45,
+      "page": 3,
+      "systemIndex": 3,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 285.448,
+      "followerCx": 305.502,
+      "xGap": 20.054,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        2,
+        2
+      ],
+      "anchorMidis": [
+        79,
+        75
+      ],
+      "followerMidi": 77,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 46,
+      "page": 3,
+      "systemIndex": 3,
+      "anchorStartDivision": 9,
+      "followerStartDivision": 10,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 3,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 561.372,
+      "followerCx": 589.557,
+      "xGap": 28.185,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        7,
+        12
+      ],
+      "anchorMidis": [
+        53,
+        48,
+        41
+      ],
+      "followerMidi": 41,
+      "failureReasons": [
+        "x-gap-too-wide"
+      ],
+      "failureKey": "x-gap-only",
+      "wouldPassCurrentExceptXGap": true
+    },
+    {
+      "measureNumber": 47,
+      "page": 3,
+      "systemIndex": 3,
+      "anchorStartDivision": 3,
+      "followerStartDivision": 4,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 1,
+      "sameDuration": true,
+      "followerLonger": false,
+      "anchorCx": 729.231,
+      "followerCx": 752.492,
+      "xGap": 23.261,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        3,
+        5
+      ],
+      "anchorMidis": [
+        82,
+        77,
+        74
+      ],
+      "followerMidi": 77,
+      "failureReasons": [
+        "follower-not-longer",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "follower-not-longer",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 49,
+      "page": 3,
+      "systemIndex": 4,
+      "anchorStartDivision": 5,
+      "followerStartDivision": 6,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 1,
+      "sameDuration": true,
+      "followerLonger": false,
+      "anchorCx": 665.532,
+      "followerCx": 710.424,
+      "xGap": 44.892,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        3,
+        5
+      ],
+      "anchorMidis": [
+        39,
+        31
+      ],
+      "followerMidi": 34,
+      "failureReasons": [
+        "anchor-not-dense",
+        "follower-not-longer",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense+follower-not-longer",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 53,
+      "page": 4,
+      "systemIndex": 0,
+      "anchorStartDivision": 5,
+      "followerStartDivision": 6,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 1,
+      "sameDuration": true,
+      "followerLonger": false,
+      "anchorCx": 665.53,
+      "followerCx": 710.422,
+      "xGap": 44.892,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        3,
+        5
+      ],
+      "anchorMidis": [
+        39,
+        31
+      ],
+      "followerMidi": 34,
+      "failureReasons": [
+        "anchor-not-dense",
+        "follower-not-longer",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense+follower-not-longer",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 56,
+      "page": 4,
+      "systemIndex": 2,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 271.144,
+      "followerCx": 290.027,
+      "xGap": 18.883,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "above",
+      "insidePitchSpan": false,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": true,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        7,
+        11
+      ],
+      "anchorMidis": [
+        72,
+        68
+      ],
+      "followerMidi": 79,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide",
+        "outside-pitch-span"
+      ],
+      "failureKey": "anchor-not-dense+outside-pitch-span",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 57,
+      "page": 4,
+      "systemIndex": 2,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 548.959,
+      "followerCx": 568.238,
+      "xGap": 19.279,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "above",
+      "insidePitchSpan": false,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": true,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        5,
+        10
+      ],
+      "anchorMidis": [
+        67,
+        62
+      ],
+      "followerMidi": 72,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide",
+        "outside-pitch-span"
+      ],
+      "failureKey": "anchor-not-dense+outside-pitch-span",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 58,
+      "page": 4,
+      "systemIndex": 2,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 1,
+      "sameDuration": true,
+      "followerLonger": false,
+      "anchorCx": 817.595,
+      "followerCx": 836.478,
+      "xGap": 18.883,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "above",
+      "insidePitchSpan": false,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": true,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        7,
+        11
+      ],
+      "anchorMidis": [
+        72,
+        68
+      ],
+      "followerMidi": 79,
+      "failureReasons": [
+        "anchor-not-dense",
+        "follower-not-longer",
+        "x-gap-too-wide",
+        "outside-pitch-span"
+      ],
+      "failureKey": "anchor-not-dense+follower-not-longer+outside-pitch-span",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 59,
+      "page": 4,
+      "systemIndex": 3,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 276.873,
+      "followerCx": 295.099,
+      "xGap": 18.226,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "above",
+      "insidePitchSpan": false,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": true,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        4,
+        7
+      ],
+      "anchorMidis": [
+        70,
+        67
+      ],
+      "followerMidi": 74,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide",
+        "outside-pitch-span"
+      ],
+      "failureKey": "anchor-not-dense+outside-pitch-span",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 60,
+      "page": 4,
+      "systemIndex": 3,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 536.175,
+      "followerCx": 554.401,
+      "xGap": 18.226,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "above",
+      "insidePitchSpan": false,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": true,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        7,
+        11
+      ],
+      "anchorMidis": [
+        72,
+        68
+      ],
+      "followerMidi": 79,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide",
+        "outside-pitch-span"
+      ],
+      "failureKey": "anchor-not-dense+outside-pitch-span",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 65,
+      "page": 4,
+      "systemIndex": 5,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 547.079,
+      "followerCx": 568.209,
+      "xGap": 21.13,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "top-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        4
+      ],
+      "anchorMidis": [
+        79,
+        75
+      ],
+      "followerMidi": 79,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 67,
+      "page": 5,
+      "systemIndex": 0,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 283.886,
+      "followerCx": 303.697,
+      "xGap": 19.811,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        2,
+        8
+      ],
+      "anchorMidis": [
+        77,
+        67
+      ],
+      "followerMidi": 75,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 68,
+      "page": 5,
+      "systemIndex": 0,
+      "anchorStartDivision": 9,
+      "followerStartDivision": 10,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 3,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 557.977,
+      "followerCx": 585.204,
+      "xGap": 27.227,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": true,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": true,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        7,
+        12
+      ],
+      "anchorMidis": [
+        53,
+        48,
+        41
+      ],
+      "followerMidi": 41,
+      "failureReasons": [
+        "x-gap-too-wide",
+        "beam-evidence"
+      ],
+      "failureKey": "beam-evidence",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 69,
+      "page": 5,
+      "systemIndex": 0,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 812.655,
+      "followerCx": 832.083,
+      "xGap": 19.428,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        2,
+        2
+      ],
+      "anchorMidis": [
+        79,
+        75
+      ],
+      "followerMidi": 77,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 71,
+      "page": 5,
+      "systemIndex": 1,
+      "anchorStartDivision": 9,
+      "followerStartDivision": 10,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 3,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 556.167,
+      "followerCx": 590.379,
+      "xGap": 34.212,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "top-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        5,
+        12
+      ],
+      "anchorMidis": [
+        48,
+        43,
+        36
+      ],
+      "followerMidi": 48,
+      "failureReasons": [
+        "x-gap-too-wide"
+      ],
+      "failureKey": "x-gap-only",
+      "wouldPassCurrentExceptXGap": true
+    },
+    {
+      "measureNumber": 71,
+      "page": 5,
+      "systemIndex": 1,
+      "anchorStartDivision": 13,
+      "followerStartDivision": 14,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 633.146,
+      "followerCx": 667.358,
+      "xGap": 34.212,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        1,
+        11
+      ],
+      "anchorMidis": [
+        46,
+        34
+      ],
+      "followerMidi": 45,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 87,
+      "page": 6,
+      "systemIndex": 0,
+      "anchorStartDivision": 5,
+      "followerStartDivision": 6,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 779.95,
+      "followerCx": 809.514,
+      "xGap": 29.564,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": true,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": true,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        7,
+        12
+      ],
+      "anchorMidis": [
+        55,
+        50,
+        43
+      ],
+      "followerMidi": 43,
+      "failureReasons": [
+        "x-gap-too-wide",
+        "beam-evidence"
+      ],
+      "failureKey": "beam-evidence",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 88,
+      "page": 6,
+      "systemIndex": 1,
+      "anchorStartDivision": 13,
+      "followerStartDivision": 14,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 352.871,
+      "followerCx": 383.482,
+      "xGap": 30.611,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": true,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        7,
+        12
+      ],
+      "anchorMidis": [
+        56,
+        51,
+        44
+      ],
+      "followerMidi": 44,
+      "failureReasons": [
+        "x-gap-too-wide"
+      ],
+      "failureKey": "x-gap-only",
+      "wouldPassCurrentExceptXGap": true
+    },
+    {
+      "measureNumber": 89,
+      "page": 6,
+      "systemIndex": 1,
+      "anchorStartDivision": 9,
+      "followerStartDivision": 10,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 3,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 555.616,
+      "followerCx": 586.227,
+      "xGap": 30.611,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        7,
+        12
+      ],
+      "anchorMidis": [
+        60,
+        55,
+        48
+      ],
+      "followerMidi": 48,
+      "failureReasons": [
+        "x-gap-too-wide"
+      ],
+      "failureKey": "x-gap-only",
+      "wouldPassCurrentExceptXGap": true
+    },
+    {
+      "measureNumber": 91,
+      "page": 6,
+      "systemIndex": 2,
+      "anchorStartDivision": 5,
+      "followerStartDivision": 6,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 224,
+      "followerCx": 252.656,
+      "xGap": 28.656,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        2,
+        10
+      ],
+      "anchorMidis": [
+        53,
+        41
+      ],
+      "followerMidi": 51,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 97,
+      "page": 6,
+      "systemIndex": 4,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 279.744,
+      "followerCx": 298.909,
+      "xGap": 19.164,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        2,
+        2
+      ],
+      "anchorMidis": [
+        79,
+        75
+      ],
+      "followerMidi": 77,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 98,
+      "page": 6,
+      "systemIndex": 4,
+      "anchorStartDivision": 9,
+      "followerStartDivision": 10,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 3,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 544.696,
+      "followerCx": 571.519,
+      "xGap": 26.823,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": true,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": true,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        7,
+        12
+      ],
+      "anchorMidis": [
+        53,
+        48,
+        41
+      ],
+      "followerMidi": 41,
+      "failureReasons": [
+        "x-gap-too-wide",
+        "beam-evidence"
+      ],
+      "failureKey": "beam-evidence",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 99,
+      "page": 6,
+      "systemIndex": 4,
+      "anchorStartDivision": 7,
+      "followerStartDivision": 8,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 799.548,
+      "followerCx": 819.272,
+      "xGap": 19.723,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        2,
+        8
+      ],
+      "anchorMidis": [
+        77,
+        67
+      ],
+      "followerMidi": 75,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 101,
+      "page": 6,
+      "systemIndex": 5,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 547.082,
+      "followerCx": 568.212,
+      "xGap": 21.13,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "top-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        4
+      ],
+      "anchorMidis": [
+        79,
+        75
+      ],
+      "followerMidi": 79,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 103,
+      "page": 7,
+      "systemIndex": 0,
+      "anchorStartDivision": 13,
+      "followerStartDivision": 14,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 361.909,
+      "followerCx": 393.904,
+      "xGap": 31.995,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": false,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        1,
+        11
+      ],
+      "anchorMidis": [
+        46,
+        34
+      ],
+      "followerMidi": 45,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 104,
+      "page": 7,
+      "systemIndex": 0,
+      "anchorStartDivision": 9,
+      "followerStartDivision": 10,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 3,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 551.502,
+      "followerCx": 579.247,
+      "xGap": 27.745,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": true,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": true,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        7,
+        12
+      ],
+      "anchorMidis": [
+        53,
+        48,
+        41
+      ],
+      "followerMidi": 41,
+      "failureReasons": [
+        "x-gap-too-wide",
+        "beam-evidence"
+      ],
+      "failureKey": "beam-evidence",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 105,
+      "page": 7,
+      "systemIndex": 0,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 810.554,
+      "followerCx": 830.322,
+      "xGap": 19.768,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        2,
+        2
+      ],
+      "anchorMidis": [
+        79,
+        75
+      ],
+      "followerMidi": 77,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 107,
+      "page": 7,
+      "systemIndex": 1,
+      "anchorStartDivision": 5,
+      "followerStartDivision": 6,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 464.114,
+      "followerCx": 496.021,
+      "xGap": 31.906,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": true,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        12
+      ],
+      "anchorMidis": [
+        43,
+        31
+      ],
+      "followerMidi": 31,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 111,
+      "page": 7,
+      "systemIndex": 2,
+      "anchorStartDivision": 5,
+      "followerStartDivision": 6,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 1,
+      "sameDuration": true,
+      "followerLonger": false,
+      "anchorCx": 777.424,
+      "followerCx": 805.102,
+      "xGap": 27.678,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        2,
+        10
+      ],
+      "anchorMidis": [
+        53,
+        41
+      ],
+      "followerMidi": 51,
+      "failureReasons": [
+        "anchor-not-dense",
+        "follower-not-longer",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense+follower-not-longer",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 116,
+      "page": 7,
+      "systemIndex": 4,
+      "anchorStartDivision": 9,
+      "followerStartDivision": 10,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 3,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 548.702,
+      "followerCx": 576.671,
+      "xGap": 27.969,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": true,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": true,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        7,
+        12
+      ],
+      "anchorMidis": [
+        53,
+        48,
+        41
+      ],
+      "followerMidi": 41,
+      "failureReasons": [
+        "x-gap-too-wide",
+        "beam-evidence"
+      ],
+      "failureKey": "beam-evidence",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 117,
+      "page": 7,
+      "systemIndex": 4,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 809.644,
+      "followerCx": 829.558,
+      "xGap": 19.914,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        2,
+        2
+      ],
+      "anchorMidis": [
+        79,
+        75
+      ],
+      "followerMidi": 77,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 119,
+      "page": 7,
+      "systemIndex": 5,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 540.506,
+      "followerCx": 561.582,
+      "xGap": 21.076,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "top-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        10
+      ],
+      "anchorMidis": [
+        77,
+        67
+      ],
+      "followerMidi": 77,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 121,
+      "page": 8,
+      "systemIndex": 0,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 283.607,
+      "followerCx": 303.374,
+      "xGap": 19.767,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "inner",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        2,
+        2
+      ],
+      "anchorMidis": [
+        79,
+        75
+      ],
+      "followerMidi": 77,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 122,
+      "page": 8,
+      "systemIndex": 0,
+      "anchorStartDivision": 9,
+      "followerStartDivision": 10,
+      "startGap": 1,
+      "anchorClef": "bass",
+      "followerClef": "bass",
+      "sameClef": true,
+      "anchorNoteCount": 3,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 3,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 555.991,
+      "followerCx": 583.736,
+      "xGap": 27.745,
+      "rawSameSixteenth": false,
+      "rawSameEighth": false,
+      "role": "bottom-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": true,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": true,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        5,
+        9
+      ],
+      "anchorMidis": [
+        50,
+        46,
+        41
+      ],
+      "followerMidi": 41,
+      "failureReasons": [
+        "x-gap-too-wide",
+        "beam-evidence"
+      ],
+      "failureKey": "beam-evidence",
+      "wouldPassCurrentExceptXGap": false
+    },
+    {
+      "measureNumber": 125,
+      "page": 8,
+      "systemIndex": 1,
+      "anchorStartDivision": 8,
+      "followerStartDivision": 9,
+      "startGap": 1,
+      "anchorClef": "treble",
+      "followerClef": "treble",
+      "sameClef": true,
+      "anchorNoteCount": 2,
+      "followerNoteCount": 1,
+      "anchorDurationDivisions": 1,
+      "followerDurationDivisions": 2,
+      "sameDuration": false,
+      "followerLonger": true,
+      "anchorCx": 547.082,
+      "followerCx": 568.213,
+      "xGap": 21.131,
+      "rawSameSixteenth": false,
+      "rawSameEighth": true,
+      "role": "top-repeat",
+      "insidePitchSpan": true,
+      "anchorBeamEvidence": false,
+      "followerBeamEvidence": false,
+      "anyBeamEvidence": false,
+      "sharedStemEvidence": false,
+      "sameStartCompanion": true,
+      "followerStartCompanion": false,
+      "interveningAttack": false,
+      "repeatedPitchGhost": false,
+      "pitchStepDistances": [
+        0,
+        2
+      ],
+      "anchorMidis": [
+        77,
+        75
+      ],
+      "followerMidi": 77,
+      "failureReasons": [
+        "anchor-not-dense",
+        "x-gap-too-wide"
+      ],
+      "failureKey": "anchor-not-dense",
+      "wouldPassCurrentExceptXGap": false
+    }
+  ],
+  "simulations": [
+    {
+      "name": "x-gap-only-current-gates-except-x",
+      "applied": 6,
+      "totals": {
+        "chordMismatchCount": 1142,
+        "wrongOnsetCount": 478,
+        "wrongPitchCount": 1533,
+        "wrongDurationCount": 236,
+        "generatedNoteCount": 2808,
+        "generatedMeasureCount": 127
+      },
+      "deltaVsBaseline": {
+        "chordMismatchCount": 8,
+        "wrongOnsetCount": -2,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 10
+      },
+      "metrics": {
+        "chordGroupingAccuracy": 0.6621,
+        "onsetAccuracy": 0.7189,
+        "pitchAccuracy": 0.3434,
+        "pitchAccuracyAtCorrectOnset": 0.4099,
+        "durationAccuracy": 0.805
+      }
+    },
+    {
+      "name": "dense-x-gap-only",
+      "applied": 6,
+      "totals": {
+        "chordMismatchCount": 1142,
+        "wrongOnsetCount": 478,
+        "wrongPitchCount": 1533,
+        "wrongDurationCount": 236,
+        "generatedNoteCount": 2808,
+        "generatedMeasureCount": 127
+      },
+      "deltaVsBaseline": {
+        "chordMismatchCount": 8,
+        "wrongOnsetCount": -2,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 10
+      },
+      "metrics": {
+        "chordGroupingAccuracy": 0.6621,
+        "onsetAccuracy": 0.7189,
+        "pitchAccuracy": 0.3434,
+        "pitchAccuracyAtCorrectOnset": 0.4099,
+        "durationAccuracy": 0.805
+      }
+    },
+    {
+      "name": "dense-x-gap-only-bottom-repeat",
+      "applied": 4,
+      "totals": {
+        "chordMismatchCount": 1138,
+        "wrongOnsetCount": 481,
+        "wrongPitchCount": 1533,
+        "wrongDurationCount": 231,
+        "generatedNoteCount": 2808,
+        "generatedMeasureCount": 127
+      },
+      "deltaVsBaseline": {
+        "chordMismatchCount": 4,
+        "wrongOnsetCount": 1,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 5
+      },
+      "metrics": {
+        "chordGroupingAccuracy": 0.6631,
+        "onsetAccuracy": 0.7178,
+        "pitchAccuracy": 0.3434,
+        "pitchAccuracyAtCorrectOnset": 0.4105,
+        "durationAccuracy": 0.8068
+      }
+    },
+    {
+      "name": "dense-x-gap-only-inner-or-top",
+      "applied": 2,
+      "totals": {
+        "chordMismatchCount": 1138,
+        "wrongOnsetCount": 477,
+        "wrongPitchCount": 1533,
+        "wrongDurationCount": 231,
+        "generatedNoteCount": 2808,
+        "generatedMeasureCount": 127
+      },
+      "deltaVsBaseline": {
+        "chordMismatchCount": 4,
+        "wrongOnsetCount": -3,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 5
+      },
+      "metrics": {
+        "chordGroupingAccuracy": 0.6631,
+        "onsetAccuracy": 0.7192,
+        "pitchAccuracy": 0.3434,
+        "pitchAccuracyAtCorrectOnset": 0.4097,
+        "durationAccuracy": 0.8068
+      }
+    },
+    {
+      "name": "two-note-treble-same-eighth-inner",
+      "applied": 7,
+      "totals": {
+        "chordMismatchCount": 1140,
+        "wrongOnsetCount": 480,
+        "wrongPitchCount": 1533,
+        "wrongDurationCount": 224,
+        "generatedNoteCount": 2808,
+        "generatedMeasureCount": 127
+      },
+      "deltaVsBaseline": {
+        "chordMismatchCount": 6,
+        "wrongOnsetCount": 0,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": -2
+      },
+      "metrics": {
+        "chordGroupingAccuracy": 0.6626,
+        "onsetAccuracy": 0.7181,
+        "pitchAccuracy": 0.3434,
+        "pitchAccuracyAtCorrectOnset": 0.4103,
+        "durationAccuracy": 0.8093
+      }
+    },
+    {
+      "name": "two-note-treble-same-eighth-repeat",
+      "applied": 6,
+      "totals": {
+        "chordMismatchCount": 1140,
+        "wrongOnsetCount": 479,
+        "wrongPitchCount": 1533,
+        "wrongDurationCount": 228,
+        "generatedNoteCount": 2808,
+        "generatedMeasureCount": 127
+      },
+      "deltaVsBaseline": {
+        "chordMismatchCount": 6,
+        "wrongOnsetCount": -1,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 2
+      },
+      "metrics": {
+        "chordGroupingAccuracy": 0.6626,
+        "onsetAccuracy": 0.7185,
+        "pitchAccuracy": 0.3434,
+        "pitchAccuracyAtCorrectOnset": 0.4101,
+        "durationAccuracy": 0.8078
+      }
+    },
+    {
+      "name": "all-inside-no-beam-follower-longer",
+      "applied": 25,
+      "totals": {
+        "chordMismatchCount": 1154,
+        "wrongOnsetCount": 476,
+        "wrongPitchCount": 1534,
+        "wrongDurationCount": 236,
+        "generatedNoteCount": 2808,
+        "generatedMeasureCount": 127
+      },
+      "deltaVsBaseline": {
+        "chordMismatchCount": 20,
+        "wrongOnsetCount": -4,
+        "wrongPitchCount": 1,
+        "wrongDurationCount": 10
+      },
+      "metrics": {
+        "chordGroupingAccuracy": 0.6592,
+        "onsetAccuracy": 0.7196,
+        "pitchAccuracy": 0.3431,
+        "pitchAccuracyAtCorrectOnset": 0.409,
+        "durationAccuracy": 0.805
+      }
+    },
+    {
+      "name": "all-inside-no-beam-follower-longer-no-follower-companion",
+      "applied": 22,
+      "totals": {
+        "chordMismatchCount": 1152,
+        "wrongOnsetCount": 477,
+        "wrongPitchCount": 1534,
+        "wrongDurationCount": 236,
+        "generatedNoteCount": 2808,
+        "generatedMeasureCount": 127
+      },
+      "deltaVsBaseline": {
+        "chordMismatchCount": 18,
+        "wrongOnsetCount": -3,
+        "wrongPitchCount": 1,
+        "wrongDurationCount": 10
+      },
+      "metrics": {
+        "chordGroupingAccuracy": 0.6597,
+        "onsetAccuracy": 0.7192,
+        "pitchAccuracy": 0.3431,
+        "pitchAccuracyAtCorrectOnset": 0.4092,
+        "durationAccuracy": 0.805
+      }
+    }
+  ],
+  "decision": {
+    "keepCodeUnchanged": true,
+    "reason": "No simulated discriminator improved chord grouping meaningfully while preserving onset and pitch. Dense/x-gap-only merges worsened chord grouping; broad vertical-stack merges worsened chord and sometimes pitch/duration.",
+    "rejectedRules": [
+      {
+        "name": "x-gap-only-current-gates-except-x",
+        "applied": 6,
+        "deltaVsBaseline": {
+          "chordMismatchCount": 8,
+          "wrongOnsetCount": -2,
+          "wrongPitchCount": 0,
+          "wrongDurationCount": 10
+        }
+      },
+      {
+        "name": "dense-x-gap-only",
+        "applied": 6,
+        "deltaVsBaseline": {
+          "chordMismatchCount": 8,
+          "wrongOnsetCount": -2,
+          "wrongPitchCount": 0,
+          "wrongDurationCount": 10
+        }
+      },
+      {
+        "name": "dense-x-gap-only-bottom-repeat",
+        "applied": 4,
+        "deltaVsBaseline": {
+          "chordMismatchCount": 4,
+          "wrongOnsetCount": 1,
+          "wrongPitchCount": 0,
+          "wrongDurationCount": 5
+        }
+      },
+      {
+        "name": "dense-x-gap-only-inner-or-top",
+        "applied": 2,
+        "deltaVsBaseline": {
+          "chordMismatchCount": 4,
+          "wrongOnsetCount": -3,
+          "wrongPitchCount": 0,
+          "wrongDurationCount": 5
+        }
+      },
+      {
+        "name": "two-note-treble-same-eighth-inner",
+        "applied": 7,
+        "deltaVsBaseline": {
+          "chordMismatchCount": 6,
+          "wrongOnsetCount": 0,
+          "wrongPitchCount": 0,
+          "wrongDurationCount": -2
+        }
+      },
+      {
+        "name": "two-note-treble-same-eighth-repeat",
+        "applied": 6,
+        "deltaVsBaseline": {
+          "chordMismatchCount": 6,
+          "wrongOnsetCount": -1,
+          "wrongPitchCount": 0,
+          "wrongDurationCount": 2
+        }
+      },
+      {
+        "name": "all-inside-no-beam-follower-longer",
+        "applied": 25,
+        "deltaVsBaseline": {
+          "chordMismatchCount": 20,
+          "wrongOnsetCount": -4,
+          "wrongPitchCount": 1,
+          "wrongDurationCount": 10
+        }
+      },
+      {
+        "name": "all-inside-no-beam-follower-longer-no-follower-companion",
+        "applied": 22,
+        "deltaVsBaseline": {
+          "chordMismatchCount": 18,
+          "wrongOnsetCount": -3,
+          "wrongPitchCount": 1,
+          "wrongDurationCount": 10
+        }
+      }
+    ]
+  }
+}

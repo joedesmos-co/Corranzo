@@ -1,0 +1,947 @@
+{
+  "version": 1,
+  "generatedAt": "2026-06-30T18:08:26.840Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "outDir": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/beam-ownership2",
+  "fixtures": [
+    {
+      "fixture": {
+        "id": "clean",
+        "label": "Gymnopédie No. 1 (clean)",
+        "pdfPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+        "truthPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.mxl"
+      },
+      "baseline": {
+        "metrics": {
+          "pitchAccuracy": 1,
+          "durationAccuracy": 0.9979,
+          "onsetAccuracy": 1,
+          "chordGroupingAccuracy": 1,
+          "noteDetectionF1": 1,
+          "wrongPitchCount": 0,
+          "wrongDurationCount": 1,
+          "wrongOnsetCount": 0,
+          "chordMismatchCount": 0,
+          "generatedNoteCount": 469,
+          "generatedMeasureCount": 78
+        }
+      },
+      "simulated": {
+        "metrics": {
+          "pitchAccuracy": 1,
+          "durationAccuracy": 0.9979,
+          "onsetAccuracy": 1,
+          "chordGroupingAccuracy": 1,
+          "noteDetectionF1": 1,
+          "wrongPitchCount": 0,
+          "wrongDurationCount": 1,
+          "wrongOnsetCount": 0,
+          "chordMismatchCount": 0,
+          "generatedNoteCount": 469,
+          "generatedMeasureCount": 78
+        }
+      },
+      "delta": {
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 0,
+        "wrongOnsetCount": 0,
+        "chordMismatchCount": 0,
+        "generatedNoteCount": 0,
+        "generatedMeasureCount": 0
+      },
+      "perMeasureDelta": {
+        "changedMeasureCount": 0,
+        "totals": {
+          "wrongDurationCount": 0,
+          "wrongOnsetCount": 0,
+          "wrongPitchCount": 0,
+          "chordMismatchCount": 0,
+          "errorCount": 0
+        },
+        "measures": [],
+        "worseDuration": [],
+        "betterDuration": [],
+        "onsetWorse": [],
+        "onsetBetter": []
+      },
+      "simulation": {
+        "candidateEvents": 0,
+        "appliedEvents": 0,
+        "appliedMovingNotes": 0,
+        "appliedSustainedNotes": 0,
+        "skippedReasons": {},
+        "samples": [],
+        "measureCountBefore": 78,
+        "measureCountAfter": 78,
+        "noteCountBefore": 469,
+        "noteCountAfter": 469,
+        "noteCountChanged": false,
+        "measureCountChanged": false
+      },
+      "outputs": {
+        "baselineXml": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/beam-ownership2/clean/baseline.xml",
+        "simulatedXml": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/beam-ownership2/clean/simulated.xml",
+        "baselineJson": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/beam-ownership2/clean/baseline.json",
+        "simulatedJson": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/beam-ownership2/clean/simulated.json"
+      }
+    },
+    {
+      "fixture": {
+        "id": "dense",
+        "label": "A Cruel Angel's Thesis (dense)",
+        "pdfPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+        "truthPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl"
+      },
+      "baseline": {
+        "metrics": {
+          "pitchAccuracy": 0.3434,
+          "durationAccuracy": 0.8096,
+          "onsetAccuracy": 0.7181,
+          "chordGroupingAccuracy": 0.6641,
+          "noteDetectionF1": 0.8893,
+          "wrongPitchCount": 1533,
+          "wrongDurationCount": 223,
+          "wrongOnsetCount": 480,
+          "chordMismatchCount": 1134,
+          "generatedNoteCount": 2808,
+          "generatedMeasureCount": 127
+        }
+      },
+      "simulated": {
+        "metrics": {
+          "pitchAccuracy": 0.3434,
+          "durationAccuracy": 0.8089,
+          "onsetAccuracy": 0.7189,
+          "chordGroupingAccuracy": 0.6641,
+          "noteDetectionF1": 0.8893,
+          "wrongPitchCount": 1533,
+          "wrongDurationCount": 225,
+          "wrongOnsetCount": 478,
+          "chordMismatchCount": 1134,
+          "generatedNoteCount": 2808,
+          "generatedMeasureCount": 127
+        }
+      },
+      "delta": {
+        "pitchAccuracy": 0,
+        "durationAccuracy": -0.0007000000000000339,
+        "onsetAccuracy": 0.0008000000000000229,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 2,
+        "wrongOnsetCount": -2,
+        "chordMismatchCount": 0,
+        "generatedNoteCount": 0,
+        "generatedMeasureCount": 0
+      },
+      "perMeasureDelta": {
+        "changedMeasureCount": 6,
+        "totals": {
+          "wrongDurationCount": 2,
+          "wrongOnsetCount": -2,
+          "wrongPitchCount": 0,
+          "chordMismatchCount": 0,
+          "errorCount": 0
+        },
+        "measures": [
+          {
+            "measureNumber": 29,
+            "delta": {
+              "wrongDurationCount": -1,
+              "wrongOnsetCount": 0,
+              "wrongPitchCount": 0,
+              "chordMismatchCount": 0,
+              "errorCount": -1
+            },
+            "baseline": {
+              "wrongDurationCount": 11,
+              "wrongOnsetCount": 6,
+              "wrongPitchCount": 13,
+              "chordMismatchCount": 20,
+              "errorCount": 73
+            },
+            "simulated": {
+              "wrongDurationCount": 10,
+              "wrongOnsetCount": 6,
+              "wrongPitchCount": 13,
+              "chordMismatchCount": 20,
+              "errorCount": 72
+            }
+          },
+          {
+            "measureNumber": 33,
+            "delta": {
+              "wrongDurationCount": 0,
+              "wrongOnsetCount": -1,
+              "wrongPitchCount": 0,
+              "chordMismatchCount": 0,
+              "errorCount": -1
+            },
+            "baseline": {
+              "wrongDurationCount": 4,
+              "wrongOnsetCount": 10,
+              "wrongPitchCount": 14,
+              "chordMismatchCount": 18,
+              "errorCount": 76
+            },
+            "simulated": {
+              "wrongDurationCount": 4,
+              "wrongOnsetCount": 9,
+              "wrongPitchCount": 14,
+              "chordMismatchCount": 18,
+              "errorCount": 75
+            }
+          },
+          {
+            "measureNumber": 35,
+            "delta": {
+              "wrongDurationCount": 1,
+              "wrongOnsetCount": 0,
+              "wrongPitchCount": 0,
+              "chordMismatchCount": 0,
+              "errorCount": 1
+            },
+            "baseline": {
+              "wrongDurationCount": 3,
+              "wrongOnsetCount": 9,
+              "wrongPitchCount": 22,
+              "chordMismatchCount": 22,
+              "errorCount": 87
+            },
+            "simulated": {
+              "wrongDurationCount": 4,
+              "wrongOnsetCount": 9,
+              "wrongPitchCount": 22,
+              "chordMismatchCount": 22,
+              "errorCount": 88
+            }
+          },
+          {
+            "measureNumber": 85,
+            "delta": {
+              "wrongDurationCount": 1,
+              "wrongOnsetCount": 0,
+              "wrongPitchCount": 0,
+              "chordMismatchCount": 0,
+              "errorCount": 1
+            },
+            "baseline": {
+              "wrongDurationCount": 7,
+              "wrongOnsetCount": 2,
+              "wrongPitchCount": 16,
+              "chordMismatchCount": 13,
+              "errorCount": 65
+            },
+            "simulated": {
+              "wrongDurationCount": 8,
+              "wrongOnsetCount": 2,
+              "wrongPitchCount": 16,
+              "chordMismatchCount": 13,
+              "errorCount": 66
+            }
+          },
+          {
+            "measureNumber": 93,
+            "delta": {
+              "wrongDurationCount": 0,
+              "wrongOnsetCount": -1,
+              "wrongPitchCount": 0,
+              "chordMismatchCount": 0,
+              "errorCount": -1
+            },
+            "baseline": {
+              "wrongDurationCount": 5,
+              "wrongOnsetCount": 7,
+              "wrongPitchCount": 14,
+              "chordMismatchCount": 18,
+              "errorCount": 74
+            },
+            "simulated": {
+              "wrongDurationCount": 5,
+              "wrongOnsetCount": 6,
+              "wrongPitchCount": 14,
+              "chordMismatchCount": 18,
+              "errorCount": 73
+            }
+          },
+          {
+            "measureNumber": 96,
+            "delta": {
+              "wrongDurationCount": 1,
+              "wrongOnsetCount": 0,
+              "wrongPitchCount": 0,
+              "chordMismatchCount": 0,
+              "errorCount": 1
+            },
+            "baseline": {
+              "wrongDurationCount": 0,
+              "wrongOnsetCount": 5,
+              "wrongPitchCount": 7,
+              "chordMismatchCount": 9,
+              "errorCount": 48
+            },
+            "simulated": {
+              "wrongDurationCount": 1,
+              "wrongOnsetCount": 5,
+              "wrongPitchCount": 7,
+              "chordMismatchCount": 9,
+              "errorCount": 49
+            }
+          }
+        ],
+        "worseDuration": [
+          {
+            "measureNumber": 35,
+            "delta": {
+              "wrongDurationCount": 1,
+              "wrongOnsetCount": 0,
+              "wrongPitchCount": 0,
+              "chordMismatchCount": 0,
+              "errorCount": 1
+            },
+            "baseline": {
+              "wrongDurationCount": 3,
+              "wrongOnsetCount": 9,
+              "wrongPitchCount": 22,
+              "chordMismatchCount": 22,
+              "errorCount": 87
+            },
+            "simulated": {
+              "wrongDurationCount": 4,
+              "wrongOnsetCount": 9,
+              "wrongPitchCount": 22,
+              "chordMismatchCount": 22,
+              "errorCount": 88
+            }
+          },
+          {
+            "measureNumber": 85,
+            "delta": {
+              "wrongDurationCount": 1,
+              "wrongOnsetCount": 0,
+              "wrongPitchCount": 0,
+              "chordMismatchCount": 0,
+              "errorCount": 1
+            },
+            "baseline": {
+              "wrongDurationCount": 7,
+              "wrongOnsetCount": 2,
+              "wrongPitchCount": 16,
+              "chordMismatchCount": 13,
+              "errorCount": 65
+            },
+            "simulated": {
+              "wrongDurationCount": 8,
+              "wrongOnsetCount": 2,
+              "wrongPitchCount": 16,
+              "chordMismatchCount": 13,
+              "errorCount": 66
+            }
+          },
+          {
+            "measureNumber": 96,
+            "delta": {
+              "wrongDurationCount": 1,
+              "wrongOnsetCount": 0,
+              "wrongPitchCount": 0,
+              "chordMismatchCount": 0,
+              "errorCount": 1
+            },
+            "baseline": {
+              "wrongDurationCount": 0,
+              "wrongOnsetCount": 5,
+              "wrongPitchCount": 7,
+              "chordMismatchCount": 9,
+              "errorCount": 48
+            },
+            "simulated": {
+              "wrongDurationCount": 1,
+              "wrongOnsetCount": 5,
+              "wrongPitchCount": 7,
+              "chordMismatchCount": 9,
+              "errorCount": 49
+            }
+          }
+        ],
+        "betterDuration": [
+          {
+            "measureNumber": 29,
+            "delta": {
+              "wrongDurationCount": -1,
+              "wrongOnsetCount": 0,
+              "wrongPitchCount": 0,
+              "chordMismatchCount": 0,
+              "errorCount": -1
+            },
+            "baseline": {
+              "wrongDurationCount": 11,
+              "wrongOnsetCount": 6,
+              "wrongPitchCount": 13,
+              "chordMismatchCount": 20,
+              "errorCount": 73
+            },
+            "simulated": {
+              "wrongDurationCount": 10,
+              "wrongOnsetCount": 6,
+              "wrongPitchCount": 13,
+              "chordMismatchCount": 20,
+              "errorCount": 72
+            }
+          }
+        ],
+        "onsetWorse": [],
+        "onsetBetter": [
+          {
+            "measureNumber": 33,
+            "delta": {
+              "wrongDurationCount": 0,
+              "wrongOnsetCount": -1,
+              "wrongPitchCount": 0,
+              "chordMismatchCount": 0,
+              "errorCount": -1
+            },
+            "baseline": {
+              "wrongDurationCount": 4,
+              "wrongOnsetCount": 10,
+              "wrongPitchCount": 14,
+              "chordMismatchCount": 18,
+              "errorCount": 76
+            },
+            "simulated": {
+              "wrongDurationCount": 4,
+              "wrongOnsetCount": 9,
+              "wrongPitchCount": 14,
+              "chordMismatchCount": 18,
+              "errorCount": 75
+            }
+          },
+          {
+            "measureNumber": 93,
+            "delta": {
+              "wrongDurationCount": 0,
+              "wrongOnsetCount": -1,
+              "wrongPitchCount": 0,
+              "chordMismatchCount": 0,
+              "errorCount": -1
+            },
+            "baseline": {
+              "wrongDurationCount": 5,
+              "wrongOnsetCount": 7,
+              "wrongPitchCount": 14,
+              "chordMismatchCount": 18,
+              "errorCount": 74
+            },
+            "simulated": {
+              "wrongDurationCount": 5,
+              "wrongOnsetCount": 6,
+              "wrongPitchCount": 14,
+              "chordMismatchCount": 18,
+              "errorCount": 73
+            }
+          }
+        ]
+      },
+      "simulation": {
+        "candidateEvents": 24,
+        "appliedEvents": 24,
+        "appliedMovingNotes": 38,
+        "appliedSustainedNotes": 29,
+        "skippedReasons": {},
+        "samples": [
+          {
+            "measureNumber": 6,
+            "eventIndex": 7,
+            "startDivision": 7,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-6-1",
+            "movingNoteCount": 1,
+            "sustainedNoteCount": 2,
+            "stemDirections": [
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 23,
+            "eventIndex": 1,
+            "startDivision": 0,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-23-3",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 24,
+            "eventIndex": 1,
+            "startDivision": 0,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-24-2",
+            "movingNoteCount": 1,
+            "sustainedNoteCount": 2,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 29,
+            "eventIndex": 4,
+            "startDivision": 8,
+            "originalDurationDivisions": 4,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-29-2",
+            "movingNoteCount": 1,
+            "sustainedNoteCount": 2,
+            "stemDirections": [
+              "down"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 32,
+            "eventIndex": 3,
+            "startDivision": 4,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-32-1",
+            "movingNoteCount": 1,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 33,
+            "eventIndex": 10,
+            "startDivision": 11,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-33-2",
+            "movingNoteCount": 1,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 35,
+            "eventIndex": 11,
+            "startDivision": 13,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-35-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 38,
+            "eventIndex": 7,
+            "startDivision": 8,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-38-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 40,
+            "eventIndex": 7,
+            "startDivision": 9,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-40-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 47,
+            "eventIndex": 14,
+            "startDivision": 12,
+            "originalDurationDivisions": 4,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-47-1",
+            "movingNoteCount": 1,
+            "sustainedNoteCount": 2,
+            "stemDirections": [
+              "down"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 60,
+            "eventIndex": 3,
+            "startDivision": 3,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-60-1",
+            "movingNoteCount": 1,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 66,
+            "eventIndex": 7,
+            "startDivision": 8,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-66-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 70,
+            "eventIndex": 7,
+            "startDivision": 8,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-70-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 85,
+            "eventIndex": 1,
+            "startDivision": 0,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-85-1",
+            "movingNoteCount": 1,
+            "sustainedNoteCount": 2,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 92,
+            "eventIndex": 3,
+            "startDivision": 4,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-92-1",
+            "movingNoteCount": 1,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 93,
+            "eventIndex": 10,
+            "startDivision": 11,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-93-2",
+            "movingNoteCount": 1,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 96,
+            "eventIndex": 7,
+            "startDivision": 7,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-96-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 98,
+            "eventIndex": 7,
+            "startDivision": 9,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-98-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 100,
+            "eventIndex": 7,
+            "startDivision": 8,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-100-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 102,
+            "eventIndex": 7,
+            "startDivision": 8,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-102-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 118,
+            "eventIndex": 7,
+            "startDivision": 8,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-118-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 120,
+            "eventIndex": 7,
+            "startDivision": 8,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-120-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 122,
+            "eventIndex": 7,
+            "startDivision": 9,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-122-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          },
+          {
+            "measureNumber": 126,
+            "eventIndex": 7,
+            "startDivision": 8,
+            "originalDurationDivisions": 3,
+            "beamedDurationDivisions": 2,
+            "beamGroupId": "rg-126-1",
+            "movingNoteCount": 2,
+            "sustainedNoteCount": 1,
+            "stemDirections": [
+              "down",
+              "up"
+            ],
+            "reasons": [
+              "beamed-and-unbeamed-notes",
+              "mixed-stem-directions",
+              "multiple-likely-voices",
+              "event-longer-than-beam-unit"
+            ]
+          }
+        ],
+        "measureCountBefore": 127,
+        "measureCountAfter": 127,
+        "noteCountBefore": 2808,
+        "noteCountAfter": 2808,
+        "noteCountChanged": false,
+        "measureCountChanged": false
+      },
+      "outputs": {
+        "baselineXml": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/beam-ownership2/dense/baseline.xml",
+        "simulatedXml": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/beam-ownership2/dense/simulated.xml",
+        "baselineJson": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/beam-ownership2/dense/baseline.json",
+        "simulatedJson": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/beam-ownership2/dense/simulated.json"
+      }
+    }
+  ]
+}

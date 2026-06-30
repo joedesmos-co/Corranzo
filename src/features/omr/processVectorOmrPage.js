@@ -27,6 +27,17 @@ import {
   noteheadGlyphKey,
 } from './vectorOrphanNoteheads.js'
 import { summarizeVectorChordGrouping } from './omrChordGroupingDiagnostics.js'
+import { enrichNoteheadRhythm } from './detectNoteRhythmFeatures.js'
+import { vectorGlyphAllocationBounds } from './vectorGlyphMeasureBounds.js'
+import { summarizeVectorRhythmDiagnostics } from './vectorRhythmDiagnostics.js'
+import {
+  reconstructMusicalEvents,
+  summarizeMusicalEventReconstruction,
+} from './reconstructMusicalEvents.js'
+import {
+  buildBeamStemGraph,
+  summarizeBeamStemGraph,
+} from './beamStemReconstructionDiagnostics.js'
 
 const NOTEHEAD_GLYPHS = new Set(['\ue0a3', '\ue0a4'])
 const SHARP_GLYPH = '\ue262'
@@ -172,6 +183,7 @@ function noteheadsForMeasure(
   keySignature,
   placement = {},
   orphanGlyphs = [],
+  inkThreshold = 170,
 ) {
   const notes = []
   const consumed = new Set()
@@ -250,6 +262,13 @@ function noteheadsForMeasure(
   )
   const staccatoResult = assignVectorStaccato(glyphs, sortedNotes, measureBox, imageData)
   const accentResult = assignVectorAccent(glyphs, sortedNotes, measureBox, imageData)
+  const allocationBounds = vectorGlyphAllocationBounds(measureBox, placement)
+  const rhythmBounds = {
+    left: allocationBounds.x0 * imageData.width,
+    right: allocationBounds.x1 * imageData.width,
+    top: allocationBounds.y0 * imageData.height,
+    bottom: allocationBounds.y1 * imageData.height,
+  }
   const mappedNotes = sortedNotes.map((note, index) => {
       const localAccidental = localAccidentals.get(index) ?? null
       const stateKey = accidentalStateKey(note)
@@ -263,7 +282,7 @@ function noteheadsForMeasure(
         accidentalState.set(stateKey, resolved.measureAccidentalState)
       }
 
-      return {
+      const withPitch = {
         ...note,
         midi: resolved.midi,
         alter: resolved.alter,
@@ -278,6 +297,9 @@ function noteheadsForMeasure(
         articulation: staccatoResult.assignments.get(index) ?? null,
         accentArticulation: accentResult.assignments.get(index) ?? null,
       }
+      return imageData?.data?.length
+        ? enrichNoteheadRhythm(imageData, withPitch, measureBox, inkThreshold, rhythmBounds)
+        : withPitch
     })
   return {
     notes: mappedNotes,
@@ -691,6 +713,584 @@ export function splitMixedClefEvents(events) {
   return sortVectorRhythmEvents(expanded)
 }
 
+function noteClefFromNotes(notes) {
+  return notes?.[0]?.clef ?? 'treble'
+}
+
+function groupIncludesClef(group, clef) {
+  return (group.notes ?? []).some((note) => (note.clef ?? 'treble') === clef)
+}
+
+function nextSameClefRhythmStart(groups, index, rhythmStarts, totalDivisions) {
+  const clef = noteClefFromNotes(groups[index]?.notes)
+  for (let offset = index + 1; offset < groups.length; offset += 1) {
+    if (groupIncludesClef(groups[offset], clef)) {
+      return rhythmStarts[offset]
+    }
+  }
+  return totalDivisions
+}
+
+export function hasConfidentQuarterInference(notes, globalDuration = OMR_DIVISIONS_PER_QUARTER) {
+  if (globalDuration <= OMR_DURATION_DIVISIONS.eighth + 1) {
+    return false
+  }
+  return (notes ?? []).some(
+    (note) =>
+      note.durationDivisions === OMR_DIVISIONS_PER_QUARTER &&
+      (note.confidence ?? 0) >= 0.78 &&
+      note.stem &&
+      !note.hollow &&
+      (note.beams ?? 0) === 0 &&
+      (note.beamStrength ?? 0) < 8,
+  )
+}
+
+export function isDenseSubdivisionRun(globalDuration, sameClefSpan) {
+  return (
+    globalDuration <= OMR_DURATION_DIVISIONS.eighth + 1 &&
+    sameClefSpan <= OMR_DURATION_DIVISIONS.eighth + 1
+  )
+}
+
+export function hasBeamEvidenceForNotes(notes) {
+  return (notes ?? []).some(
+    (note) => (note.beams ?? 0) >= 1 || (note.beamStrength ?? 0) >= 8,
+  )
+}
+
+function inferredBeamDurationCap(notes) {
+  if (!hasBeamEvidenceForNotes(notes)) {
+    return null
+  }
+  let cap = OMR_DIVISIONS_PER_QUARTER
+  for (const note of notes ?? []) {
+    if ((note.beamStrength ?? 0) >= 14) {
+      cap = Math.min(cap, OMR_DURATION_DIVISIONS.sixteenth)
+    } else if ((note.beams ?? 0) >= 1 || (note.beamStrength ?? 0) >= 8) {
+      cap = Math.min(cap, OMR_DURATION_DIVISIONS.eighth)
+    }
+  }
+  return cap
+}
+
+function countSameClefEventsInSpan(clefEvents, startIndex, spanDivisions) {
+  const start = clefEvents[startIndex]?.startDivision ?? 0
+  let count = 0
+  for (let index = startIndex; index < clefEvents.length; index += 1) {
+    const eventStart = clefEvents[index].startDivision ?? 0
+    if (eventStart >= start + spanDivisions) {
+      break
+    }
+    count += 1
+  }
+  return count
+}
+
+function sameClefSubdivisionRun(clefEvents, index) {
+  const quarterSpan = OMR_DIVISIONS_PER_QUARTER
+  if (countSameClefEventsInSpan(clefEvents, index, quarterSpan) >= 3) {
+    return true
+  }
+  const start = clefEvents[index]?.startDivision ?? 0
+  const prev = index > 0 ? clefEvents[index - 1] : null
+  const next = index + 1 < clefEvents.length ? clefEvents[index + 1] : null
+  const eighthGap = OMR_DURATION_DIVISIONS.eighth + 1
+  if (prev && start - (prev.startDivision ?? 0) <= eighthGap && hasBeamEvidenceForNotes(prev.notes)) {
+    return true
+  }
+  if (next && (next.startDivision ?? 0) - start <= eighthGap && hasBeamEvidenceForNotes(next.notes)) {
+    return true
+  }
+  return false
+}
+
+export function eventPitchMultiset(notes) {
+  return new Set((notes ?? []).map((note) => note.midi).filter(Number.isFinite))
+}
+
+export function eventsShareHarmonicPitch(leftEvent, rightEvent) {
+  const left = eventPitchMultiset(leftEvent?.notes)
+  const right = eventPitchMultiset(rightEvent?.notes)
+  if (!left.size || !right.size) {
+    return false
+  }
+  for (const midi of left) {
+    if (right.has(midi)) {
+      return true
+    }
+  }
+  return false
+}
+
+function hasLongToneEvidence(notes = []) {
+  return notes.some(
+    (note) =>
+      note.hollow === true ||
+      (note.durationDivisions ?? 0) >= OMR_DURATION_DIVISIONS.half,
+  )
+}
+
+function hasDottedEvidence(notes = []) {
+  return notes.some((note) => note.dotted === true)
+}
+
+function hasStemEvidence(notes = []) {
+  return notes.some((note) => note.stem)
+}
+
+function hasOnlyQuarterDurationEvidence(notes = []) {
+  return (
+    notes.length > 0 &&
+    notes.every(
+      (note) =>
+        (note.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER) ===
+        OMR_DIVISIONS_PER_QUARTER,
+    )
+  )
+}
+
+/**
+ * A same-staff onset missed inside a dense upper chord can stretch a plain
+ * quarter-looking chord to five sixteenth divisions. That span has no supported
+ * note value in the emitted MusicXML, so keep the conservative quarter value
+ * unless ink evidence shows a longer/dotted note.
+ */
+export function unsupportedUpperChordOverhangCap(clefEvents, index, sameClefSpan) {
+  const event = clefEvents[index]
+  const notes = event?.notes ?? []
+  const duration = event?.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+  const unsupportedOverhang = OMR_DIVISIONS_PER_QUARTER + 1
+  if (
+    noteClefFromNotes(notes) === 'bass' ||
+    notes.length < 3 ||
+    (duration !== OMR_DIVISIONS_PER_QUARTER && duration !== unsupportedOverhang) ||
+    sameClefSpan !== unsupportedOverhang ||
+    !hasOnlyQuarterDurationEvidence(notes) ||
+    hasLongToneEvidence(notes) ||
+    hasDottedEvidence(notes) ||
+    hasBeamEvidenceForNotes(notes) ||
+    sameClefSubdivisionRun(clefEvents, index)
+  ) {
+    return null
+  }
+  return OMR_DIVISIONS_PER_QUARTER
+}
+
+/**
+ * Dense piano reductions can hold an opening lower-staff chord while a same-clef
+ * inner voice enters one beat later. This is not a subdivision run: the opening
+ * event is a multi-note bass chord with long-tone glyph evidence and no beams.
+ */
+export function openingBassChordSustainSpan(clefEvents, index, totalDivisions) {
+  const anchor = clefEvents[index]
+  const next = clefEvents[index + 1]
+  const following = clefEvents[index + 2]
+  const start = anchor?.startDivision ?? 0
+  const duration = anchor?.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+  const half = OMR_DURATION_DIVISIONS.half
+  const quarter = OMR_DIVISIONS_PER_QUARTER
+  const notes = anchor?.notes ?? []
+
+  if (
+    start !== 0 ||
+    duration !== quarter ||
+    totalDivisions < half ||
+    noteClefFromNotes(notes) !== 'bass' ||
+    notes.length < 3 ||
+    !hasLongToneEvidence(notes) ||
+    hasBeamEvidenceForNotes(notes) ||
+    sameClefSubdivisionRun(clefEvents, index) ||
+    !next ||
+    (next.startDivision ?? 0) !== quarter ||
+    (next.notes?.length ?? 0) !== 1 ||
+    hasBeamEvidenceForNotes(next.notes)
+  ) {
+    return null
+  }
+
+  if (following && (following.startDivision ?? 0) < half) {
+    return null
+  }
+
+  return Math.min(half, totalDivisions - start)
+}
+
+/**
+ * A plain lower-staff opening note can be stretched across a dense subdivision
+ * run when no stem/beam was recovered. If the same bass voice re-enters inside
+ * the first beat, keep the opening event at an eighth unless ink supports a
+ * long tone.
+ */
+export function openingBassSubdivisionCap(clefEvents, index, totalDivisions) {
+  const anchor = clefEvents[index]
+  const next = clefEvents[index + 1]
+  const following = clefEvents[index + 2]
+  const start = anchor?.startDivision ?? 0
+  const duration = anchor?.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+  const notes = anchor?.notes ?? []
+  const eighth = OMR_DURATION_DIVISIONS.eighth
+  const firstBeat = OMR_DIVISIONS_PER_QUARTER
+  const nextGap = next ? (next.startDivision ?? 0) - start : null
+  const followingGap = following ? (following.startDivision ?? 0) - start : null
+
+  if (
+    start !== 0 ||
+    noteClefFromNotes(notes) !== 'bass' ||
+    notes.length !== 1 ||
+    duration < OMR_DURATION_DIVISIONS.half ||
+    nextGap == null ||
+    nextGap < eighth + 1 ||
+    nextGap > firstBeat ||
+    followingGap == null ||
+    followingGap > firstBeat + eighth ||
+    !hasOnlyQuarterDurationEvidence(notes) ||
+    hasLongToneEvidence(notes) ||
+    hasDottedEvidence(notes) ||
+    hasStemEvidence(notes) ||
+    hasBeamEvidenceForNotes(notes) ||
+    (next.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER) > eighth
+  ) {
+    return null
+  }
+
+  return Math.min(eighth, Math.max(1, totalDivisions - start))
+}
+
+/**
+ * Half notes on dense grand-staff scores often leave one or two same-pitch chord
+ * fragments on the sixteenth grid before the next true same-clef attack a half
+ * beat away. Extend only when every intermediate onset shares pitch with the
+ * opening harmonic attack (not a beamed subdivision run).
+ */
+export function sparseHarmonicHalfSpan(clefEvents, index, totalDivisions) {
+  const anchor = clefEvents[index]
+  const start = anchor?.startDivision ?? 0
+  const duration = anchor?.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+  const half = OMR_DURATION_DIVISIONS.half
+  const sixteenthGridGap = OMR_DURATION_DIVISIONS.eighth + 1
+  if (duration !== sixteenthGridGap || duration >= half || start < half) {
+    return null
+  }
+  if (hasBeamEvidenceForNotes(anchor?.notes) || sameClefSubdivisionRun(clefEvents, index)) {
+    return null
+  }
+  if (index + 1 >= clefEvents.length) {
+    return null
+  }
+  const immediateSpan = (clefEvents[index + 1].startDivision ?? 0) - start
+  if (immediateSpan > sixteenthGridGap) {
+    return null
+  }
+
+  let fragmentCount = 0
+  for (let look = index + 1; look < clefEvents.length; look += 1) {
+    const ahead = clefEvents[look]
+    const aheadStart = ahead?.startDivision ?? 0
+    const span = aheadStart - start
+    if (span > half + sixteenthGridGap) {
+      break
+    }
+    if (span >= half - 1) {
+      if (
+        fragmentCount >= 1 &&
+        fragmentCount <= 3 &&
+        countSameClefEventsInSpan(clefEvents, index, span) <= fragmentCount + 2 &&
+        !hasBeamEvidenceForNotes(ahead?.notes)
+      ) {
+        return Math.min(half, span, totalDivisions - start)
+      }
+      break
+    }
+    if (span <= sixteenthGridGap) {
+      if (hasBeamEvidenceForNotes(ahead?.notes)) {
+        return null
+      }
+      if (!eventsShareHarmonicPitch(anchor, ahead)) {
+        break
+      }
+      fragmentCount += 1
+      if (fragmentCount > 3) {
+        return null
+      }
+      continue
+    }
+    break
+  }
+  return null
+}
+
+/**
+ * When a clef voice has no later attack in the measure, a sixteenth-grid gap at
+ * beat 2+ often means a half note should sustain through the bar remainder.
+ */
+export function terminalHarmonicHalfSpan(clefEvents, index, totalDivisions) {
+  const anchor = clefEvents[index]
+  const start = anchor?.startDivision ?? 0
+  const duration = anchor?.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+  const half = OMR_DURATION_DIVISIONS.half
+  const sixteenthGridGap = OMR_DURATION_DIVISIONS.eighth + 1
+  const remaining = totalDivisions - start
+  if (
+    index + 1 < clefEvents.length ||
+    duration !== sixteenthGridGap ||
+    remaining < half - 1 ||
+    start < half ||
+    hasBeamEvidenceForNotes(anchor?.notes) ||
+    sameClefSubdivisionRun(clefEvents, index)
+  ) {
+    return null
+  }
+  return Math.min(half, remaining)
+}
+
+/**
+ * Grand-staff voices sustain independently. Recompute each clef's durations from
+ * the next onset on the same staff instead of the next mixed-clef onset.
+ */
+export function extendDurationsPerClefVoice(events, totalDivisions) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (!noteEvents.length) {
+    return events
+  }
+
+  const byClef = new Map()
+  for (const event of noteEvents) {
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    if (!byClef.has(clef)) {
+      byClef.set(clef, [])
+    }
+    byClef.get(clef).push(event)
+  }
+
+  const durationByEvent = new Map()
+  const sortedAll = [...noteEvents].sort(
+    (left, right) => (left.startDivision ?? 0) - (right.startDivision ?? 0),
+  )
+  for (const clefEvents of byClef.values()) {
+    const sorted = [...clefEvents].sort(
+      (left, right) => (left.startDivision ?? 0) - (right.startDivision ?? 0),
+    )
+    for (let index = 0; index < sorted.length; index += 1) {
+      const event = sorted[index]
+      const clef = event.notes?.[0]?.clef ?? 'treble'
+      const start = event.startDivision ?? 0
+      const globalDuration = event.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+      const nextSameClefStart =
+        index + 1 < sorted.length ? sorted[index + 1].startDivision ?? totalDivisions : null
+      let duration = globalDuration
+      if (nextSameClefStart != null) {
+        const sameClefSpan = Math.max(1, nextSameClefStart - start)
+        if (sameClefSpan > duration) {
+          const foreignInterrupt = sortedAll.some((other) => {
+            if (other === event) {
+              return false
+            }
+            const otherStart = other.startDivision ?? 0
+            const otherClef = other.notes?.[0]?.clef ?? 'treble'
+            return (
+              otherClef !== clef &&
+              otherStart > start &&
+              otherStart < start + sameClefSpan
+            )
+          })
+          if (foreignInterrupt) {
+            const extremeTrebleStretch =
+              clef !== 'bass' &&
+              globalDuration <= OMR_DURATION_DIVISIONS.eighth + 1 &&
+              sameClefSpan > OMR_DIVISIONS_PER_QUARTER * 2
+            if (!extremeTrebleStretch && !hasBeamEvidenceForNotes(event.notes)) {
+              duration = sameClefSpan
+            }
+          }
+          const overhangCap = unsupportedUpperChordOverhangCap(sorted, index, sameClefSpan)
+          if (overhangCap != null && duration > overhangCap) {
+            duration = overhangCap
+          }
+        }
+        if (
+          hasConfidentQuarterInference(event.notes ?? [], globalDuration) &&
+          !hasBeamEvidenceForNotes(event.notes) &&
+          !sameClefSubdivisionRun(sorted, index) &&
+          duration < OMR_DIVISIONS_PER_QUARTER
+        ) {
+          const quarterFloor = OMR_DIVISIONS_PER_QUARTER
+          if (sameClefSpan >= quarterFloor) {
+            duration = Math.min(quarterFloor, totalDivisions - start)
+          } else if (
+            sameClefSpan <= OMR_DURATION_DIVISIONS.eighth + 1 &&
+            index + 1 < sorted.length &&
+            !hasBeamEvidenceForNotes(sorted[index + 1].notes) &&
+            countSameClefEventsInSpan(sorted, index, quarterFloor) <= 2 &&
+            index + 2 < sorted.length
+          ) {
+            const extendedSpan = (sorted[index + 2].startDivision ?? totalDivisions) - start
+            if (extendedSpan >= quarterFloor) {
+              duration = Math.min(quarterFloor, extendedSpan, totalDivisions - start)
+            }
+          }
+        }
+        const harmonicHalf = sparseHarmonicHalfSpan(sorted, index, totalDivisions)
+        if (harmonicHalf != null && harmonicHalf > duration) {
+          duration = harmonicHalf
+        }
+        const openingChordHalf = openingBassChordSustainSpan(sorted, index, totalDivisions)
+        if (openingChordHalf != null && openingChordHalf > duration) {
+          duration = openingChordHalf
+        }
+      } else {
+        const terminalHalf = terminalHarmonicHalfSpan(sorted, index, totalDivisions)
+        if (terminalHalf != null && terminalHalf > duration) {
+          duration = terminalHalf
+        }
+      }
+      duration = Math.min(duration, Math.max(1, totalDivisions - start))
+      durationByEvent.set(event, duration)
+    }
+  }
+
+  return sortVectorRhythmEvents(
+    events.map((event) => {
+      if (event.type !== 'note' || !durationByEvent.has(event)) {
+        return event
+      }
+      const previous = event.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+      const durationDivisions = durationByEvent.get(event)
+      if (durationDivisions === previous) {
+        return event
+      }
+      const clef = event.notes?.[0]?.clef ?? 'treble'
+      const capped =
+        clef !== 'bass' &&
+        previous <= OMR_DURATION_DIVISIONS.eighth + 1 &&
+        durationDivisions === previous
+      return {
+        ...event,
+        durationDivisions,
+        ...durationMeta(durationDivisions),
+        perClefDurationAdjusted: !capped,
+        ...(capped ? { perClefStretchCapped: true } : {}),
+      }
+    }),
+  )
+}
+
+/**
+ * Cap gap-stretched events when ink evidence shows a beamed subdivision.
+ */
+export function refineEventDurationsFromBeamEvidence(events, totalDivisions = 16) {
+  return sortVectorRhythmEvents(
+    events.map((event) => {
+      if (event.type !== 'note') {
+        return event
+      }
+      const start = event.startDivision ?? 0
+      const beamCap = inferredBeamDurationCap(event.notes)
+      if (beamCap == null || (event.durationDivisions ?? 0) <= beamCap) {
+        return event
+      }
+      const duration = Math.min(beamCap, Math.max(1, totalDivisions - start))
+      return {
+        ...event,
+        durationDivisions: duration,
+        ...durationMeta(duration),
+        beamDurationAdjusted: true,
+      }
+    }),
+  )
+}
+
+export function refineUnsupportedUpperChordOverhangs(events) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const byClef = new Map()
+  for (const event of noteEvents) {
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    if (!byClef.has(clef)) {
+      byClef.set(clef, [])
+    }
+    byClef.get(clef).push(event)
+  }
+
+  const cappedByEvent = new Map()
+  for (const clefEvents of byClef.values()) {
+    const sorted = [...clefEvents].sort(
+      (left, right) => (left.startDivision ?? 0) - (right.startDivision ?? 0),
+    )
+    for (let index = 0; index < sorted.length - 1; index += 1) {
+      const event = sorted[index]
+      const sameClefSpan = (sorted[index + 1].startDivision ?? 0) - (event.startDivision ?? 0)
+      const cap = unsupportedUpperChordOverhangCap(sorted, index, sameClefSpan)
+      if (cap != null && (event.durationDivisions ?? 0) > cap) {
+        cappedByEvent.set(event, cap)
+      }
+    }
+  }
+
+  if (!cappedByEvent.size) {
+    return events
+  }
+
+  return sortVectorRhythmEvents(
+    events.map((event) => {
+      const durationDivisions = cappedByEvent.get(event)
+      if (durationDivisions == null) {
+        return event
+      }
+      return {
+        ...event,
+        durationDivisions,
+        ...durationMeta(durationDivisions),
+        unsupportedUpperChordOverhangAdjusted: true,
+      }
+    }),
+  )
+}
+
+export function refineOpeningBassSubdivisionDurations(events, totalDivisions = 16) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const byClef = new Map()
+  for (const event of noteEvents) {
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    if (!byClef.has(clef)) {
+      byClef.set(clef, [])
+    }
+    byClef.get(clef).push(event)
+  }
+
+  const cappedByEvent = new Map()
+  for (const clefEvents of byClef.values()) {
+    const sorted = [...clefEvents].sort(
+      (left, right) => (left.startDivision ?? 0) - (right.startDivision ?? 0),
+    )
+    for (let index = 0; index < sorted.length - 1; index += 1) {
+      const cap = openingBassSubdivisionCap(sorted, index, totalDivisions)
+      const event = sorted[index]
+      if (cap != null && (event.durationDivisions ?? 0) > cap) {
+        cappedByEvent.set(event, cap)
+      }
+    }
+  }
+
+  if (!cappedByEvent.size) {
+    return events
+  }
+
+  return sortVectorRhythmEvents(
+    events.map((event) => {
+      const durationDivisions = cappedByEvent.get(event)
+      if (durationDivisions == null) {
+        return event
+      }
+      return {
+        ...event,
+        durationDivisions,
+        ...durationMeta(durationDivisions),
+        openingBassSubdivisionAdjusted: true,
+      }
+    }),
+  )
+}
+
 const VECTOR_DURATION_LADDER = [
   { divisions: OMR_DIVISIONS_PER_QUARTER * 4, durationType: 'whole', dotted: false },
   { divisions: OMR_DIVISIONS_PER_QUARTER * 3, durationType: 'half', dotted: true },
@@ -886,7 +1486,12 @@ function snapStartDivision(rawStart, totalDivisions) {
   return Math.min(totalDivisions - 1, Math.round(clamped / grid) * grid)
 }
 
-function startDivisionFromPosition(positionInMeasure, totalDivisions, denseMeasure = false) {
+function startDivisionFromPosition(
+  positionInMeasure,
+  totalDivisions,
+  denseMeasure = false,
+  notes = [],
+) {
   if (!Number.isFinite(positionInMeasure)) {
     return 0
   }
@@ -894,8 +1499,6 @@ function startDivisionFromPosition(positionInMeasure, totalDivisions, denseMeasu
   if (!denseMeasure) {
     return snapStartDivision(raw, totalDivisions)
   }
-  // Dense chord-heavy measures need sixteenth snapping so split chord fragments
-  // keep distinct onsets instead of collapsing to the same eighth-grid slot.
   const grid = Math.max(1, OMR_DIVISIONS_PER_QUARTER / 4)
   const clamped = Math.max(0, Math.min(totalDivisions - 1, raw))
   return Math.max(0, Math.min(totalDivisions - 1, Math.round(clamped / grid) * grid))
@@ -1014,7 +1617,12 @@ function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivis
         const clusterNotes = group.notes ?? []
         const positionInMeasure = groupAnchorPosition(group)
         return {
-          startDivision: startDivisionFromPosition(positionInMeasure, totalDivisions, denseMeasure),
+          startDivision: startDivisionFromPosition(
+            positionInMeasure,
+            totalDivisions,
+            denseMeasure,
+            clusterNotes,
+          ),
           notes: clusterNotes,
           cx: average(clusterNotes.map((note) => note.cx)),
           positionInMeasure,
@@ -1080,9 +1688,16 @@ function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivis
       }
     }),
   )
+  events = extendDurationsPerClefVoice(events, totalDivisions)
+  if (denseMeasure) {
+    events = refineEventDurationsFromBeamEvidence(events, totalDivisions)
+  }
   events = coalesceSameOnsetChordEvents(events)
   events = extendCombinedGrandStaffOpening(events, totalDivisions)
   events = extendPenultimateHalfBeforeFinalQuarter(events, timeSignature, totalDivisions)
+  events = refineUnsupportedUpperChordOverhangs(events)
+  events = refineOpeningBassSubdivisionDurations(events, totalDivisions)
+  events = reconstructMusicalEvents(events, { totalDivisions })
   return clampMeasureEventDurations(events, totalDivisions)
 }
 
@@ -1126,6 +1741,7 @@ export function buildVectorMeasureRecord({
   timeSignature,
   measurePlacement = {},
   orphanGlyphs = [],
+  inkThreshold = 170,
 }) {
   const { notes, vectorStaccatoDiagnostics, vectorAccentDiagnostics } = noteheadsForMeasure(
     glyphs,
@@ -1134,6 +1750,7 @@ export function buildVectorMeasureRecord({
     keySignature,
     measurePlacement,
     orphanGlyphs,
+    inkThreshold,
   )
   const detectedRests = restsForMeasure(glyphs, imageData, measureBox, notes)
   const beats = timeSignature?.beats ?? 4
@@ -1170,6 +1787,16 @@ export function buildVectorMeasureRecord({
     events,
   })
   const vectorChordDiagnostics = summarizeVectorChordGrouping(events)
+  const vectorRhythmDiagnostics = summarizeVectorRhythmDiagnostics(events, notes, totalDivisions)
+  const musicalEventReconstructionDiagnostics = summarizeMusicalEventReconstruction(events)
+  const beamStemGraph = buildBeamStemGraph({
+    notes,
+    events,
+    measureBox,
+    imageData,
+    inkThreshold,
+  })
+  const beamStemDiagnostics = summarizeBeamStemGraph(beamStemGraph)
   return {
     measureNumber: measureBox.measureNumber,
     page: measureBox.page,
@@ -1190,6 +1817,10 @@ export function buildVectorMeasureRecord({
     vectorAccentDiagnostics,
     vectorNoteMatching,
     vectorChordDiagnostics,
+    vectorRhythmDiagnostics,
+    musicalEventReconstructionDiagnostics,
+    beamStemGraph,
+    beamStemDiagnostics,
   }
 }
 
@@ -1238,6 +1869,7 @@ export function processVectorPageSystems({
         keySignature,
         timeSignature,
         measurePlacement,
+        inkThreshold,
       })
       noteCount += record.vectorNoteCount ?? 0
       return record
@@ -1275,6 +1907,7 @@ export function processVectorPageSystems({
         timeSignature,
         measurePlacement,
         orphanGlyphs,
+        inkThreshold,
       })
       noteCount += (rebuilt.vectorNoteCount ?? 0) - (previous.vectorNoteCount ?? 0)
       measureRecordsBySystem[systemIndex][measureIndex] = rebuilt
