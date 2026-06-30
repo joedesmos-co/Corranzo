@@ -1,0 +1,365 @@
+{
+  "path": "tmp/omr-benchmark-iter/next-target-current/before/dense-full.json",
+  "title": "a-cruel-angels-thesis-neon-genesis-evangelion",
+  "metrics": {
+    "pitchAccuracy": 0.3434,
+    "matchedPitchAccuracy": 0.3863,
+    "durationAccuracy": 0.8096,
+    "matchedDurationAccuracy": 0.9107,
+    "onsetAccuracy": 0.7181,
+    "matchedOnsetAccuracy": 0.8078,
+    "timeAccuracy": 0.0157,
+    "matchedTimeAccuracy": 0.0176,
+    "measureCountAccuracy": 0.9843,
+    "noteDetectionPrecision": 0.8896,
+    "noteDetectionRecall": 0.889,
+    "noteDetectionF1": 0.8893,
+    "chordGroupingAccuracy": 0.6641,
+    "pitchAccuracyAtCorrectOnset": 0.4103,
+    "orderSensitivePitchRecovery": 0.1114
+  },
+  "totals": {
+    "truthMeasureCount": 125,
+    "generatedMeasureCount": 127,
+    "measureCountDifference": 2,
+    "truthNoteCount": 2810,
+    "generatedNoteCount": 2808,
+    "noteCountDifference": -2,
+    "matchedNoteCount": 2498,
+    "correctPitchCount": 965,
+    "correctDurationCount": 2275,
+    "correctOnsetCount": 2018,
+    "correctTimeCount": 44,
+    "missingNoteCount": 312,
+    "extraNoteCount": 310,
+    "wrongPitchCount": 1533,
+    "wrongDurationCount": 223,
+    "wrongOnsetCount": 480,
+    "wrongTimeCount": 2454,
+    "chordMismatchCount": 1134,
+    "chordComparableCount": 3376,
+    "greedyCorrectPitchCount": 652,
+    "pitchCorrectAtCorrectOnsetCount": 828,
+    "onsetCorrectMatchedCount": 2018
+  },
+  "analysis": {
+    "total": 1533,
+    "histogram": {
+      "±1-accidental": 179,
+      "±2-diatonic": 363,
+      "±octave": 70,
+      "±octave-other": 0,
+      "other": 921
+    },
+    "signed": {
+      "1": 82,
+      "2": 189,
+      "3": 96,
+      "4": 56,
+      "5": 94,
+      "6": 14,
+      "7": 26,
+      "8": 18,
+      "9": 14,
+      "10": 6,
+      "11": 4,
+      "12": 21,
+      "13": 3,
+      "14": 16,
+      "15": 17,
+      "16": 20,
+      "17": 11,
+      "19": 1,
+      "20": 7,
+      "21": 8,
+      "22": 2,
+      "23": 1,
+      "24": 2,
+      "25": 3,
+      "26": 3,
+      "31": 1,
+      "32": 2,
+      "40": 1,
+      "42": 1,
+      "44": 3,
+      "45": 1,
+      "-21": 8,
+      "-2": 174,
+      "-1": 97,
+      "-3": 125,
+      "-12": 37,
+      "-7": 38,
+      "-5": 70,
+      "-6": 39,
+      "-14": 6,
+      "-4": 72,
+      "-43": 3,
+      "-17": 10,
+      "-15": 10,
+      "-13": 4,
+      "-18": 4,
+      "-16": 10,
+      "-9": 25,
+      "-24": 9,
+      "-19": 13,
+      "-20": 9,
+      "-8": 24,
+      "-42": 1,
+      "-33": 3,
+      "-38": 2,
+      "-37": 3,
+      "-36": 1,
+      "-41": 2,
+      "-30": 2,
+      "-28": 2,
+      "-35": 1,
+      "-22": 2,
+      "-29": 1,
+      "-10": 1,
+      "-11": 1,
+      "-40": 1
+    },
+    "sample": [
+      {
+        "m": 1,
+        "d": -21,
+        "truth": "C4",
+        "gen": "D#2"
+      },
+      {
+        "m": 1,
+        "d": -21,
+        "truth": "C4",
+        "gen": "D#2"
+      },
+      {
+        "m": 2,
+        "d": -21,
+        "truth": "D4",
+        "gen": "F2"
+      },
+      {
+        "m": 3,
+        "d": -21,
+        "truth": "C4",
+        "gen": "D#2"
+      },
+      {
+        "m": 3,
+        "d": -2,
+        "truth": "F4",
+        "gen": "D#4"
+      },
+      {
+        "m": 4,
+        "d": -21,
+        "truth": "D4",
+        "gen": "F2"
+      },
+      {
+        "m": 6,
+        "d": 25,
+        "truth": "G2",
+        "gen": "G#4"
+      },
+      {
+        "m": 6,
+        "d": 15,
+        "truth": "C3",
+        "gen": "D#4"
+      },
+      {
+        "m": 6,
+        "d": 31,
+        "truth": "G2",
+        "gen": "D5"
+      },
+      {
+        "m": 6,
+        "d": 20,
+        "truth": "C3",
+        "gen": "G#4"
+      },
+      {
+        "m": 6,
+        "d": 12,
+        "truth": "D#3",
+        "gen": "D#4"
+      },
+      {
+        "m": 6,
+        "d": 24,
+        "truth": "C3",
+        "gen": "C5"
+      },
+      {
+        "m": 6,
+        "d": 15,
+        "truth": "F3",
+        "gen": "G#4"
+      },
+      {
+        "m": 6,
+        "d": 26,
+        "truth": "C3",
+        "gen": "D5"
+      },
+      {
+        "m": 6,
+        "d": 15,
+        "truth": "F3",
+        "gen": "G#4"
+      },
+      {
+        "m": 6,
+        "d": 20,
+        "truth": "C3",
+        "gen": "G#4"
+      },
+      {
+        "m": 7,
+        "d": 2,
+        "truth": "G#4",
+        "gen": "A#4"
+      },
+      {
+        "m": 7,
+        "d": 2,
+        "truth": "D#2",
+        "gen": "F2"
+      },
+      {
+        "m": 7,
+        "d": -1,
+        "truth": "D#4",
+        "gen": "D4"
+      },
+      {
+        "m": 7,
+        "d": 1,
+        "truth": "G4",
+        "gen": "G#4"
+      },
+      {
+        "m": 8,
+        "d": 5,
+        "truth": "C4",
+        "gen": "F4"
+      },
+      {
+        "m": 8,
+        "d": 3,
+        "truth": "C2",
+        "gen": "D#2"
+      },
+      {
+        "m": 8,
+        "d": -2,
+        "truth": "C3",
+        "gen": "A#2"
+      },
+      {
+        "m": 8,
+        "d": -1,
+        "truth": "D#2",
+        "gen": "D2"
+      },
+      {
+        "m": 8,
+        "d": 2,
+        "truth": "F2",
+        "gen": "G2"
+      },
+      {
+        "m": 8,
+        "d": -3,
+        "truth": "F3",
+        "gen": "D3"
+      },
+      {
+        "m": 8,
+        "d": -2,
+        "truth": "F4",
+        "gen": "D#4"
+      },
+      {
+        "m": 8,
+        "d": -1,
+        "truth": "G#4",
+        "gen": "G4"
+      },
+      {
+        "m": 8,
+        "d": -12,
+        "truth": "C5",
+        "gen": "C4"
+      },
+      {
+        "m": 8,
+        "d": 2,
+        "truth": "F2",
+        "gen": "G2"
+      },
+      {
+        "m": 8,
+        "d": 5,
+        "truth": "F4",
+        "gen": "A#4"
+      },
+      {
+        "m": 8,
+        "d": 2,
+        "truth": "D#4",
+        "gen": "F4"
+      },
+      {
+        "m": 9,
+        "d": 7,
+        "truth": "A#2",
+        "gen": "F3"
+      },
+      {
+        "m": 9,
+        "d": 2,
+        "truth": "A#2",
+        "gen": "C3"
+      },
+      {
+        "m": 9,
+        "d": 1,
+        "truth": "D4",
+        "gen": "D#4"
+      },
+      {
+        "m": 9,
+        "d": -2,
+        "truth": "G4",
+        "gen": "F4"
+      },
+      {
+        "m": 9,
+        "d": -1,
+        "truth": "B1",
+        "gen": "A#1"
+      },
+      {
+        "m": 9,
+        "d": -1,
+        "truth": "F#2",
+        "gen": "F2"
+      },
+      {
+        "m": 9,
+        "d": -1,
+        "truth": "B2",
+        "gen": "A#2"
+      },
+      {
+        "m": 9,
+        "d": -2,
+        "truth": "G2",
+        "gen": "F2"
+      }
+    ]
+  }
+}

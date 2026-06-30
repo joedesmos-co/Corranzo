@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   collapseUniformOversampledSpans,
   mergeNarrowMeasureSpans,
+  mergeTrailingNarrowMeasureSpans,
   MIN_MEASURE_SPAN_FRAC,
 } from '../src/features/omr/buildOmrMeasureGrid.js'
 import {
@@ -57,6 +58,42 @@ describe('collapseUniformOversampledSpans', () => {
     const { spans: collapsed, collapsedPairs } = collapseUniformOversampledSpans(spans, contentWidth)
     expect(collapsedPairs).toBe(0)
     expect(collapsed).toEqual(spans)
+  })
+})
+
+describe('mergeTrailingNarrowMeasureSpans', () => {
+  it('merges two narrow trailing spans when they combine to a normal measure width', () => {
+    const contentWidth = 1
+    const spans = [
+      { x0: 0, x1: 0.353 },
+      { x0: 0.353, x1: 0.653 },
+      { x0: 0.653, x1: 0.81 },
+      { x0: 0.81, x1: 0.97 },
+    ]
+    const { spans: merged, mergedCount } = mergeTrailingNarrowMeasureSpans(spans, contentWidth)
+    expect(mergedCount).toBe(1)
+    expect(merged).toHaveLength(3)
+    expect(merged[2]).toEqual({ x0: 0.653, x1: 0.97 })
+  })
+
+  it('requires unreliable barline evidence before merging a single short trailing span', () => {
+    const contentWidth = 1
+    const spans = [
+      { x0: 0, x1: 0.237 },
+      { x0: 0.237, x1: 0.524 },
+      { x0: 0.524, x1: 0.815 },
+      { x0: 0.815, x1: 0.971 },
+    ]
+    const stable = mergeTrailingNarrowMeasureSpans(spans, contentWidth)
+    expect(stable.mergedCount).toBe(0)
+    expect(stable.spans).toHaveLength(4)
+
+    const unreliable = mergeTrailingNarrowMeasureSpans(spans, contentWidth, {
+      allowSingleTrailingMerge: true,
+    })
+    expect(unreliable.mergedCount).toBe(1)
+    expect(unreliable.spans).toHaveLength(3)
+    expect(unreliable.spans[2]).toEqual({ x0: 0.524, x1: 0.971 })
   })
 })
 
@@ -117,6 +154,7 @@ describe('omrMeasureGridDiagnostics formatting', () => {
         reliabilityReason: 'density-thinned',
         reliabilityConfident: false,
         mergedNarrowSpans: 2,
+        mergedTrailingSpans: 1,
         collapsedPairs: 3,
         suspiciousShortMeasures: 0,
         spanWidthPercents: [25, 25, 25, 25],
@@ -126,6 +164,8 @@ describe('omrMeasureGridDiagnostics formatting', () => {
     const totals = summarizeOmrMeasureGridDiagnostics(entries)
     expect(totals.measureCount).toBe(4)
     expect(totals.collapsedPairs).toBe(3)
+    expect(totals.mergedTrailingSpans).toBe(1)
     expect(formatOmrMeasureGridDiagnosticsReport(entries)).toMatch(/measures 7→4/)
+    expect(formatOmrMeasureGridDiagnosticsReport(entries)).toMatch(/trailing=1/)
   })
 })

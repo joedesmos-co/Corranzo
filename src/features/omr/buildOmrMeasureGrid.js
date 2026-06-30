@@ -12,6 +12,11 @@ export const MIN_MEASURE_SPAN_FRAC = 0.045
 const OVERSAMPLE_COLLAPSE_MIN_SPANS = 5
 const OVERSAMPLE_MAX_MEAN_WIDTH_FRAC = 0.17
 const OVERSAMPLE_MAX_WIDTH_CV = 0.22
+const TRAILING_SHORT_SPAN_RATIO = 0.62
+const TRAILING_PAIR_MIN_COMBINED_RATIO = 0.75
+const TRAILING_PAIR_MAX_COMBINED_RATIO = 1.35
+const TRAILING_SINGLE_MIN_COMBINED_RATIO = 1.1
+const TRAILING_SINGLE_MAX_COMBINED_RATIO = 1.65
 
 function average(values) {
   if (!values.length) {
@@ -31,6 +36,14 @@ function coefficientOfVariation(values) {
   const variance =
     values.reduce((sum, value) => sum + (value - mean) ** 2, 0) / values.length
   return Math.sqrt(variance) / mean
+}
+
+function median(values) {
+  if (!values.length) {
+    return 0
+  }
+  const sorted = [...values].sort((left, right) => left - right)
+  return sorted[Math.floor(sorted.length / 2)]
 }
 
 function boundariesToSpans(boundaries, contentWidth) {
@@ -92,6 +105,73 @@ export function mergeNarrowMeasureSpans(spans, contentWidth, minFrac = MIN_MEASU
     }
   }
   return { spans: result, mergedCount }
+}
+
+/**
+ * Dense systems can leave one false barline near the right edge after normal
+ * density thinning. Merge only narrow trailing spans with local width evidence:
+ * two short tail spans must combine to a normal measure, while a single short
+ * tail requires an already-unreliable dense/thinned barline grid.
+ */
+export function mergeTrailingNarrowMeasureSpans(
+  spans,
+  contentWidth,
+  {
+    shortRatio = TRAILING_SHORT_SPAN_RATIO,
+    pairMinCombinedRatio = TRAILING_PAIR_MIN_COMBINED_RATIO,
+    pairMaxCombinedRatio = TRAILING_PAIR_MAX_COMBINED_RATIO,
+    singleMinCombinedRatio = TRAILING_SINGLE_MIN_COMBINED_RATIO,
+    singleMaxCombinedRatio = TRAILING_SINGLE_MAX_COMBINED_RATIO,
+    allowSingleTrailingMerge = false,
+  } = {},
+) {
+  if (spans.length < 3) {
+    return { spans, mergedCount: 0 }
+  }
+  const result = spans.map((span) => ({ ...span }))
+  const widthFracs = result.map((span) => (span.x1 - span.x0) / contentWidth)
+  const medianWidth = median(widthFracs)
+  if (medianWidth <= 0) {
+    return { spans: result, mergedCount: 0 }
+  }
+
+  const lastIndex = result.length - 1
+  const lastWidth = widthFracs[lastIndex]
+  const previousWidth = widthFracs[lastIndex - 1]
+  const lastIsShort = lastWidth < medianWidth * shortRatio
+  const previousIsShort = previousWidth < medianWidth * shortRatio
+  const combinedRatio = (previousWidth + lastWidth) / medianWidth
+
+  if (
+    previousIsShort &&
+    lastIsShort &&
+    combinedRatio >= pairMinCombinedRatio &&
+    combinedRatio <= pairMaxCombinedRatio
+  ) {
+    result[lastIndex - 1] = {
+      x0: result[lastIndex - 1].x0,
+      x1: result[lastIndex].x1,
+    }
+    result.splice(lastIndex, 1)
+    return { spans: result, mergedCount: 1 }
+  }
+
+  if (
+    allowSingleTrailingMerge &&
+    lastIsShort &&
+    !previousIsShort &&
+    combinedRatio >= singleMinCombinedRatio &&
+    combinedRatio <= singleMaxCombinedRatio
+  ) {
+    result[lastIndex - 1] = {
+      x0: result[lastIndex - 1].x0,
+      x1: result[lastIndex].x1,
+    }
+    result.splice(lastIndex, 1)
+    return { spans: result, mergedCount: 1 }
+  }
+
+  return { spans: result, mergedCount: 0 }
 }
 
 /**
@@ -238,6 +318,12 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
 
   const narrowAfter = mergeNarrowMeasureSpans(spans, contentWidth)
   spans = narrowAfter.spans
+  const trailingNarrow = mergeTrailingNarrowMeasureSpans(spans, contentWidth, {
+    allowSingleTrailingMerge:
+      reliability?.confident === false &&
+      UNRELIABLE_BARLINE_REASONS.has(reliability.reason),
+  })
+  spans = trailingNarrow.spans
 
   if (spans.length === 0) {
     spans = fallbackSpans({ x0: x0Content, x1: x1Content })
@@ -266,6 +352,7 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
     initialMeasureCount,
     finalMeasureCount: measureBoxes.length,
     mergedNarrowSpans: narrowMerge.mergedCount + narrowAfter.mergedCount,
+    mergedTrailingSpans: trailingNarrow.mergedCount,
     collapsedPairs,
     suspiciousShortMeasures,
     spanWidthPercents,

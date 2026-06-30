@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-06-30T17:57:51.443Z",
+  "generatedAt": "2026-06-30T18:45:06.793Z",
   "fixtureCount": 2,
   "statusCounts": {
     "pass": 2,
@@ -26,7 +26,7 @@
       "count": 1
     },
     {
-      "category": "too-short",
+      "category": "onset-coupled",
       "count": 1
     }
   ],
@@ -99,35 +99,35 @@
       "failureReasons": [],
       "thresholdFailures": [],
       "metrics": {
-        "pitchAccuracy": 0.3434,
-        "durationAccuracy": 0.8096,
-        "onsetAccuracy": 0.7181,
-        "chordGroupingAccuracy": 0.6641,
-        "noteDetectionF1": 0.8893,
-        "measureCountDiff": 2,
+        "pitchAccuracy": 0.9274,
+        "durationAccuracy": 0.9466,
+        "onsetAccuracy": 0.9577,
+        "chordGroupingAccuracy": 0.9187,
+        "noteDetectionF1": 0.9893,
+        "measureCountDiff": 0,
         "noteCountDiff": -2,
-        "wrongPitch": 1533,
-        "wrongDuration": 223,
-        "wrongOnset": 480,
-        "chordMismatch": 1134,
+        "wrongPitch": 173,
+        "wrongDuration": 119,
+        "wrongOnset": 88,
+        "chordMismatch": 238,
         "topErrorCategory": {
           "source": "rhythm-inference",
           "label": "Rhythm inference",
-          "confidence": 0.884
+          "confidence": 0.886
         },
         "topDurationErrorCategory": {
-          "category": "too-short",
-          "count": 97
+          "category": "onset-coupled",
+          "count": 51
         },
         "durationErrorHistogram": {
-          "too-short": 97,
-          "too-long": 30,
-          "beamed-subdivision": 57,
+          "too-short": 42,
+          "too-long": 9,
+          "beamed-subdivision": 17,
           "bass-sustain": 0,
           "melody-accompaniment": 0,
           "rest-gap": 0,
           "tie-sustain": 0,
-          "onset-coupled": 39,
+          "onset-coupled": 51,
           "other": 0
         },
         "truncatedWrongDurations": 0
@@ -138,12 +138,12 @@
         "maxPages": 24,
         "preprocessPages": true,
         "omrNoteCount": 2808,
-        "omrMeasureCount": 127
+        "omrMeasureCount": 125
       },
       "error": null,
       "generatedTitle": "a-cruel-angels-thesis-neon-genesis-evangelion",
       "groundTruthTitle": "A Cruel Angel's Thesis",
-      "omrConfidence": 0.8649048128494793,
+      "omrConfidence": 0.864903289855071,
       "omrFailureReasons": [],
       "rejectedOrphanCount": 0
     }
