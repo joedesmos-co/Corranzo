@@ -1,0 +1,689 @@
+[
+  {
+    "m": 5,
+    "label": "D2",
+    "truthQ": 2.75,
+    "genQ_matched": 2,
+    "expectedDiv": 11,
+    "genDiv_matched": 8,
+    "instanceCount": 1,
+    "exactAtExpected": 0,
+    "withinTol": 0,
+    "classification": "true_missing_slot",
+    "instances": [
+      {
+        "startDiv": 8,
+        "startQ": 2,
+        "pos": 0.6496,
+        "raw": 10,
+        "snap8": 10,
+        "snap16": 10,
+        "deltaFromExpected": -3,
+        "clef": "bass",
+        "midi": 38
+      }
+    ]
+  },
+  {
+    "m": 8,
+    "label": "D#3",
+    "truthQ": 1.5,
+    "genQ_matched": 1,
+    "expectedDiv": 6,
+    "genDiv_matched": 4,
+    "instanceCount": 3,
+    "exactAtExpected": 1,
+    "withinTol": 1,
+    "classification": "matcher_picks_wrong_instance",
+    "instances": [
+      {
+        "startDiv": 4,
+        "startQ": 1,
+        "pos": 0.271,
+        "raw": 4,
+        "snap8": 4,
+        "snap16": 4,
+        "deltaFromExpected": -2,
+        "clef": "bass",
+        "midi": 51
+      },
+      {
+        "startDiv": 6,
+        "startQ": 1.5,
+        "pos": 0.3864,
+        "raw": 6,
+        "snap8": 6,
+        "snap16": 6,
+        "deltaFromExpected": 0,
+        "clef": "bass",
+        "midi": 50
+      },
+      {
+        "startDiv": 14,
+        "startQ": 3.5,
+        "pos": 0.8761,
+        "raw": 14,
+        "snap8": 14,
+        "snap16": 14,
+        "deltaFromExpected": 8,
+        "clef": "bass",
+        "midi": 51
+      }
+    ]
+  },
+  {
+    "m": 9,
+    "label": "B1",
+    "truthQ": 1.5,
+    "genQ_matched": 2.25,
+    "expectedDiv": 6,
+    "genDiv_matched": 9,
+    "instanceCount": 7,
+    "exactAtExpected": 1,
+    "withinTol": 2,
+    "classification": "matcher_picks_wrong_instance",
+    "instances": [
+      {
+        "startDiv": 3,
+        "startQ": 0.75,
+        "pos": 0.2115,
+        "raw": 3,
+        "snap8": 4,
+        "snap16": 3,
+        "deltaFromExpected": -3,
+        "clef": "bass",
+        "midi": 36
+      },
+      {
+        "startDiv": 5,
+        "startQ": 1.25,
+        "pos": 0.3152,
+        "raw": 5,
+        "snap8": 6,
+        "snap16": 5,
+        "deltaFromExpected": -1,
+        "clef": "bass",
+        "midi": 34
+      },
+      {
+        "startDiv": 6,
+        "startQ": 1.5,
+        "pos": 0.3942,
+        "raw": 6,
+        "snap8": 6,
+        "snap16": 6,
+        "deltaFromExpected": 0,
+        "clef": "bass",
+        "midi": 34
+      },
+      {
+        "startDiv": 8,
+        "startQ": 2,
+        "pos": 0.4732,
+        "raw": 8,
+        "snap8": 8,
+        "snap16": 8,
+        "deltaFromExpected": 2,
+        "clef": "bass",
+        "midi": 34
+      },
+      {
+        "startDiv": 9,
+        "startQ": 2.25,
+        "pos": 0.562,
+        "raw": 9,
+        "snap8": 10,
+        "snap16": 9,
+        "deltaFromExpected": 3,
+        "clef": "bass",
+        "midi": 35
+      },
+      {
+        "startDiv": 10,
+        "startQ": 2.5,
+        "pos": 0.641,
+        "raw": 10,
+        "snap8": 10,
+        "snap16": 10,
+        "deltaFromExpected": 4,
+        "clef": "bass",
+        "midi": 36
+      },
+      {
+        "startDiv": 13,
+        "startQ": 3.25,
+        "pos": 0.8187,
+        "raw": 13,
+        "snap8": 14,
+        "snap16": 13,
+        "deltaFromExpected": 7,
+        "clef": "bass",
+        "midi": 34
+      }
+    ]
+  },
+  {
+    "m": 9,
+    "label": "F#2",
+    "truthQ": 1.5,
+    "genQ_matched": 2.25,
+    "expectedDiv": 6,
+    "genDiv_matched": 9,
+    "instanceCount": 6,
+    "exactAtExpected": 1,
+    "withinTol": 2,
+    "classification": "matcher_picks_wrong_instance",
+    "instances": [
+      {
+        "startDiv": 0,
+        "startQ": 0,
+        "pos": 0.0573,
+        "raw": 1,
+        "snap8": 2,
+        "snap16": 1,
+        "deltaFromExpected": -6,
+        "clef": "bass",
+        "midi": 41
+      },
+      {
+        "startDiv": 5,
+        "startQ": 1.25,
+        "pos": 0.3152,
+        "raw": 5,
+        "snap8": 6,
+        "snap16": 5,
+        "deltaFromExpected": -1,
+        "clef": "bass",
+        "midi": 41
+      },
+      {
+        "startDiv": 6,
+        "startQ": 1.5,
+        "pos": 0.3942,
+        "raw": 6,
+        "snap8": 6,
+        "snap16": 6,
+        "deltaFromExpected": 0,
+        "clef": "bass",
+        "midi": 41
+      },
+      {
+        "startDiv": 8,
+        "startQ": 2,
+        "pos": 0.4732,
+        "raw": 8,
+        "snap8": 8,
+        "snap16": 8,
+        "deltaFromExpected": 2,
+        "clef": "bass",
+        "midi": 41
+      },
+      {
+        "startDiv": 9,
+        "startQ": 2.25,
+        "pos": 0.562,
+        "raw": 9,
+        "snap8": 10,
+        "snap16": 9,
+        "deltaFromExpected": 3,
+        "clef": "bass",
+        "midi": 42
+      },
+      {
+        "startDiv": 10,
+        "startQ": 2.5,
+        "pos": 0.641,
+        "raw": 10,
+        "snap8": 10,
+        "snap16": 10,
+        "deltaFromExpected": 4,
+        "clef": "bass",
+        "midi": 43
+      }
+    ]
+  },
+  {
+    "m": 9,
+    "label": "B2",
+    "truthQ": 1.5,
+    "genQ_matched": 2.25,
+    "expectedDiv": 6,
+    "genDiv_matched": 9,
+    "instanceCount": 9,
+    "exactAtExpected": 1,
+    "withinTol": 2,
+    "classification": "matcher_picks_wrong_instance",
+    "instances": [
+      {
+        "startDiv": 2,
+        "startQ": 0.5,
+        "pos": 0.143,
+        "raw": 2,
+        "snap8": 2,
+        "snap16": 2,
+        "deltaFromExpected": -4,
+        "clef": "bass",
+        "midi": 48
+      },
+      {
+        "startDiv": 3,
+        "startQ": 0.75,
+        "pos": 0.2115,
+        "raw": 3,
+        "snap8": 4,
+        "snap16": 3,
+        "deltaFromExpected": -3,
+        "clef": "bass",
+        "midi": 48
+      },
+      {
+        "startDiv": 5,
+        "startQ": 1.25,
+        "pos": 0.3152,
+        "raw": 5,
+        "snap8": 6,
+        "snap16": 5,
+        "deltaFromExpected": -1,
+        "clef": "bass",
+        "midi": 46
+      },
+      {
+        "startDiv": 6,
+        "startQ": 1.5,
+        "pos": 0.3942,
+        "raw": 6,
+        "snap8": 6,
+        "snap16": 6,
+        "deltaFromExpected": 0,
+        "clef": "bass",
+        "midi": 46
+      },
+      {
+        "startDiv": 8,
+        "startQ": 2,
+        "pos": 0.4732,
+        "raw": 8,
+        "snap8": 8,
+        "snap16": 8,
+        "deltaFromExpected": 2,
+        "clef": "bass",
+        "midi": 46
+      },
+      {
+        "startDiv": 9,
+        "startQ": 2.25,
+        "pos": 0.562,
+        "raw": 9,
+        "snap8": 10,
+        "snap16": 9,
+        "deltaFromExpected": 3,
+        "clef": "bass",
+        "midi": 47
+      },
+      {
+        "startDiv": 10,
+        "startQ": 2.5,
+        "pos": 0.641,
+        "raw": 10,
+        "snap8": 10,
+        "snap16": 10,
+        "deltaFromExpected": 4,
+        "clef": "bass",
+        "midi": 48
+      },
+      {
+        "startDiv": 12,
+        "startQ": 3,
+        "pos": 0.72,
+        "raw": 12,
+        "snap8": 12,
+        "snap16": 12,
+        "deltaFromExpected": 6,
+        "clef": "bass",
+        "midi": 48
+      },
+      {
+        "startDiv": 13,
+        "startQ": 3.25,
+        "pos": 0.8187,
+        "raw": 13,
+        "snap8": 14,
+        "snap16": 13,
+        "deltaFromExpected": 7,
+        "clef": "bass",
+        "midi": 46
+      }
+    ]
+  },
+  {
+    "m": 9,
+    "label": "C2",
+    "truthQ": 2,
+    "genQ_matched": 2.5,
+    "expectedDiv": 8,
+    "genDiv_matched": 10,
+    "instanceCount": 3,
+    "exactAtExpected": 0,
+    "withinTol": 1,
+    "classification": "near_slot_matcher",
+    "instances": [
+      {
+        "startDiv": 3,
+        "startQ": 0.75,
+        "pos": 0.2115,
+        "raw": 3,
+        "snap8": 4,
+        "snap16": 3,
+        "deltaFromExpected": -5,
+        "clef": "bass",
+        "midi": 36
+      },
+      {
+        "startDiv": 9,
+        "startQ": 2.25,
+        "pos": 0.562,
+        "raw": 9,
+        "snap8": 10,
+        "snap16": 9,
+        "deltaFromExpected": 1,
+        "clef": "bass",
+        "midi": 35
+      },
+      {
+        "startDiv": 10,
+        "startQ": 2.5,
+        "pos": 0.641,
+        "raw": 10,
+        "snap8": 10,
+        "snap16": 10,
+        "deltaFromExpected": 2,
+        "clef": "bass",
+        "midi": 36
+      }
+    ]
+  },
+  {
+    "m": 9,
+    "label": "G2",
+    "truthQ": 2,
+    "genQ_matched": 2.5,
+    "expectedDiv": 8,
+    "genDiv_matched": 10,
+    "instanceCount": 2,
+    "exactAtExpected": 0,
+    "withinTol": 1,
+    "classification": "near_slot_matcher",
+    "instances": [
+      {
+        "startDiv": 9,
+        "startQ": 2.25,
+        "pos": 0.562,
+        "raw": 9,
+        "snap8": 10,
+        "snap16": 9,
+        "deltaFromExpected": 1,
+        "clef": "bass",
+        "midi": 42
+      },
+      {
+        "startDiv": 10,
+        "startQ": 2.5,
+        "pos": 0.641,
+        "raw": 10,
+        "snap8": 10,
+        "snap16": 10,
+        "deltaFromExpected": 2,
+        "clef": "bass",
+        "midi": 43
+      }
+    ]
+  },
+  {
+    "m": 55,
+    "label": "C6",
+    "truthQ": 0,
+    "genQ_matched": 0.5,
+    "expectedDiv": 0,
+    "genDiv_matched": 2,
+    "instanceCount": 1,
+    "exactAtExpected": 0,
+    "withinTol": 0,
+    "classification": "true_missing_slot",
+    "instances": [
+      {
+        "startDiv": 2,
+        "startQ": 0.5,
+        "pos": 0.0978,
+        "raw": 2,
+        "snap8": 2,
+        "snap16": 2,
+        "deltaFromExpected": 2,
+        "clef": "treble",
+        "midi": 84
+      }
+    ]
+  },
+  {
+    "m": 121,
+    "label": "B1",
+    "truthQ": 1.5,
+    "genQ_matched": 0.75,
+    "expectedDiv": 6,
+    "genDiv_matched": 3,
+    "instanceCount": 5,
+    "exactAtExpected": 1,
+    "withinTol": 2,
+    "classification": "matcher_picks_wrong_instance",
+    "instances": [
+      {
+        "startDiv": 0,
+        "startQ": 0,
+        "pos": 0.0687,
+        "raw": 1,
+        "snap8": 2,
+        "snap16": 1,
+        "deltaFromExpected": -6,
+        "clef": "bass",
+        "midi": 36
+      },
+      {
+        "startDiv": 3,
+        "startQ": 0.75,
+        "pos": 0.1757,
+        "raw": 3,
+        "snap8": 4,
+        "snap16": 3,
+        "deltaFromExpected": -3,
+        "clef": "bass",
+        "midi": 36
+      },
+      {
+        "startDiv": 5,
+        "startQ": 1.25,
+        "pos": 0.2827,
+        "raw": 5,
+        "snap8": 6,
+        "snap16": 5,
+        "deltaFromExpected": -1,
+        "clef": "bass",
+        "midi": 36
+      },
+      {
+        "startDiv": 6,
+        "startQ": 1.5,
+        "pos": 0.4059,
+        "raw": 6,
+        "snap8": 6,
+        "snap16": 6,
+        "deltaFromExpected": 0,
+        "clef": "bass",
+        "midi": 36
+      },
+      {
+        "startDiv": 12,
+        "startQ": 3,
+        "pos": 0.7537,
+        "raw": 12,
+        "snap8": 12,
+        "snap16": 12,
+        "deltaFromExpected": 6,
+        "clef": "bass",
+        "midi": 35
+      }
+    ]
+  },
+  {
+    "m": 121,
+    "label": "C2",
+    "truthQ": 2,
+    "genQ_matched": 1.25,
+    "expectedDiv": 8,
+    "genDiv_matched": 5,
+    "instanceCount": 5,
+    "exactAtExpected": 0,
+    "withinTol": 0,
+    "classification": "true_missing_slot",
+    "instances": [
+      {
+        "startDiv": 0,
+        "startQ": 0,
+        "pos": 0.0687,
+        "raw": 1,
+        "snap8": 2,
+        "snap16": 1,
+        "deltaFromExpected": -8,
+        "clef": "bass",
+        "midi": 36
+      },
+      {
+        "startDiv": 3,
+        "startQ": 0.75,
+        "pos": 0.1757,
+        "raw": 3,
+        "snap8": 4,
+        "snap16": 3,
+        "deltaFromExpected": -5,
+        "clef": "bass",
+        "midi": 36
+      },
+      {
+        "startDiv": 5,
+        "startQ": 1.25,
+        "pos": 0.2827,
+        "raw": 5,
+        "snap8": 6,
+        "snap16": 5,
+        "deltaFromExpected": -3,
+        "clef": "bass",
+        "midi": 36
+      },
+      {
+        "startDiv": 6,
+        "startQ": 1.5,
+        "pos": 0.4059,
+        "raw": 6,
+        "snap8": 6,
+        "snap16": 6,
+        "deltaFromExpected": -2,
+        "clef": "bass",
+        "midi": 36
+      },
+      {
+        "startDiv": 12,
+        "startQ": 3,
+        "pos": 0.7537,
+        "raw": 12,
+        "snap8": 12,
+        "snap16": 12,
+        "deltaFromExpected": 4,
+        "clef": "bass",
+        "midi": 35
+      }
+    ]
+  },
+  {
+    "m": 122,
+    "label": "D#2",
+    "truthQ": 1.5,
+    "genQ_matched": 1,
+    "expectedDiv": 6,
+    "genDiv_matched": 4,
+    "instanceCount": 3,
+    "exactAtExpected": 0,
+    "withinTol": 0,
+    "classification": "true_missing_slot",
+    "instances": [
+      {
+        "startDiv": 0,
+        "startQ": 0,
+        "pos": 0.0291,
+        "raw": 0,
+        "snap8": 0,
+        "snap16": 0,
+        "deltaFromExpected": -6,
+        "clef": "bass",
+        "midi": 38
+      },
+      {
+        "startDiv": 2,
+        "startQ": 0.5,
+        "pos": 0.1494,
+        "raw": 2,
+        "snap8": 2,
+        "snap16": 2,
+        "deltaFromExpected": -4,
+        "clef": "bass",
+        "midi": 38
+      },
+      {
+        "startDiv": 14,
+        "startQ": 3.5,
+        "pos": 0.9014,
+        "raw": 14,
+        "snap8": 14,
+        "snap16": 14,
+        "deltaFromExpected": 8,
+        "clef": "bass",
+        "midi": 38
+      }
+    ]
+  },
+  {
+    "m": 125,
+    "label": "G1",
+    "truthQ": 1,
+    "genQ_matched": 1.75,
+    "expectedDiv": 4,
+    "genDiv_matched": 7,
+    "instanceCount": 0,
+    "exactAtExpected": 0,
+    "withinTol": 0,
+    "classification": "true_missing_slot",
+    "instances": []
+  },
+  {
+    "m": 125,
+    "label": "G2",
+    "truthQ": 1,
+    "genQ_matched": 1.75,
+    "expectedDiv": 4,
+    "genDiv_matched": 7,
+    "instanceCount": 1,
+    "exactAtExpected": 0,
+    "withinTol": 1,
+    "classification": "near_slot_matcher",
+    "instances": [
+      {
+        "startDiv": 5,
+        "startQ": 1.25,
+        "pos": 0.2854,
+        "raw": 5,
+        "snap8": 6,
+        "snap16": 5,
+        "deltaFromExpected": 1,
+        "clef": "bass",
+        "midi": 43
+      }
+    ]
+  }
+]

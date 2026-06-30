@@ -1,0 +1,401 @@
+{
+  "dense": {
+    "before": {
+      "pitch": 0.9274,
+      "duration": 0.952,
+      "onset": 0.9577,
+      "wrongPitch": 173,
+      "wrongDuration": 104,
+      "wrongOnset": 88,
+      "chordMismatch": 238,
+      "trailing119_125": 107
+    },
+    "after": {
+      "pitch": 0.9367,
+      "duration": 0.9523,
+      "onset": 0.9555,
+      "wrongPitch": 147,
+      "wrongDuration": 103,
+      "wrongOnset": 94,
+      "chordMismatch": 239,
+      "trailing119_125": 81
+    }
+  },
+  "clean": {
+    "before": {
+      "pitch": 1,
+      "duration": 0.9979,
+      "onset": 1,
+      "wrongPitch": 0,
+      "wrongDuration": 1,
+      "wrongOnset": 0,
+      "chordMismatch": 0,
+      "trailing119_125": 0
+    },
+    "after": {
+      "pitch": 1,
+      "duration": 0.9979,
+      "onset": 1,
+      "wrongPitch": 0,
+      "wrongDuration": 1,
+      "wrongOnset": 0,
+      "chordMismatch": 0,
+      "trailing119_125": 0
+    }
+  },
+  "staffGapNorm": {
+    "documentReference": {
+      "treble": 0.0060070671378091856,
+      "bass": 0.0060070671378091856,
+      "combined": 0.0060070671378091856,
+      "sampleCount": {
+        "treble": 44,
+        "bass": 44
+      }
+    },
+    "pages": [
+      {
+        "page": 1,
+        "applied": false,
+        "canNormalize": false,
+        "referenceGaps": {
+          "treble": null,
+          "bass": null,
+          "combined": null,
+          "sampleCount": {
+            "treble": 0,
+            "bass": 0
+          }
+        },
+        "systemsAffected": [],
+        "gapSamples": {
+          "treble": [
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ],
+          "bass": [
+            0.0060070671378091856,
+            0.005830388692579513,
+            0.005830388692579513,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ]
+        }
+      },
+      {
+        "page": 2,
+        "applied": false,
+        "canNormalize": true,
+        "referenceGaps": {
+          "treble": 0.0060070671378091856,
+          "bass": 0.0060070671378091856,
+          "combined": 0.0060070671378091856,
+          "sampleCount": {
+            "treble": 5,
+            "bass": 5
+          }
+        },
+        "systemsAffected": [],
+        "gapSamples": {
+          "treble": [
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.006007067137809213
+          ],
+          "bass": [
+            0.0060070671378091925,
+            0.006007067137809199,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ]
+        }
+      },
+      {
+        "page": 3,
+        "applied": false,
+        "canNormalize": true,
+        "referenceGaps": {
+          "treble": 0.0060070671378091856,
+          "bass": 0.0060070671378091856,
+          "combined": 0.0060070671378091856,
+          "sampleCount": {
+            "treble": 11,
+            "bass": 11
+          }
+        },
+        "systemsAffected": [],
+        "gapSamples": {
+          "treble": [
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ],
+          "bass": [
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.006007067137809199,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ]
+        }
+      },
+      {
+        "page": 4,
+        "applied": false,
+        "canNormalize": true,
+        "referenceGaps": {
+          "treble": 0.0060070671378091856,
+          "bass": 0.0060070671378091856,
+          "combined": 0.0060070671378091856,
+          "sampleCount": {
+            "treble": 17,
+            "bass": 17
+          }
+        },
+        "systemsAffected": [],
+        "gapSamples": {
+          "treble": [
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.006007067137809213,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ],
+          "bass": [
+            0.0060070671378091925,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ]
+        }
+      },
+      {
+        "page": 5,
+        "applied": false,
+        "canNormalize": true,
+        "referenceGaps": {
+          "treble": 0.0060070671378091856,
+          "bass": 0.0060070671378091856,
+          "combined": 0.0060070671378091856,
+          "sampleCount": {
+            "treble": 23,
+            "bass": 23
+          }
+        },
+        "systemsAffected": [],
+        "gapSamples": {
+          "treble": [
+            0.0060070671378091856,
+            0.0060070671378091925,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ],
+          "bass": [
+            0.0060070671378091925,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.006007067137809213,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ]
+        }
+      },
+      {
+        "page": 6,
+        "applied": false,
+        "canNormalize": true,
+        "referenceGaps": {
+          "treble": 0.0060070671378091856,
+          "bass": 0.0060070671378091856,
+          "combined": 0.0060070671378091856,
+          "sampleCount": {
+            "treble": 29,
+            "bass": 29
+          }
+        },
+        "systemsAffected": [],
+        "gapSamples": {
+          "treble": [
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ],
+          "bass": [
+            0.0060070671378091925,
+            0.006007067137809199,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ]
+        }
+      },
+      {
+        "page": 7,
+        "applied": false,
+        "canNormalize": true,
+        "referenceGaps": {
+          "treble": 0.0060070671378091856,
+          "bass": 0.0060070671378091856,
+          "combined": 0.0060070671378091856,
+          "sampleCount": {
+            "treble": 35,
+            "bass": 35
+          }
+        },
+        "systemsAffected": [],
+        "gapSamples": {
+          "treble": [
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0061837455830388716,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ],
+          "bass": [
+            0.0060070671378091925,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.0060070671378091856
+          ]
+        }
+      },
+      {
+        "page": 8,
+        "applied": true,
+        "canNormalize": true,
+        "referenceGaps": {
+          "treble": 0.0060070671378091856,
+          "bass": 0.0060070671378091856,
+          "combined": 0.0060070671378091856,
+          "sampleCount": {
+            "treble": 41,
+            "bass": 41
+          }
+        },
+        "systemsAffected": [
+          {
+            "page": 8,
+            "systemIndex": 0,
+            "originalGaps": {
+              "treble": 0.00636,
+              "bass": 0.008304
+            },
+            "normalizedGaps": {
+              "treble": 0.00636,
+              "bass": 0.006007
+            },
+            "referenceGaps": {
+              "treble": 0.006007,
+              "bass": 0.006007
+            },
+            "staffChanges": [
+              {
+                "role": "bass",
+                "originalGap": 0.008304,
+                "normalizedGap": 0.006007,
+                "deviationRatio": 0.3824
+              }
+            ]
+          },
+          {
+            "page": 8,
+            "systemIndex": 1,
+            "originalGaps": {
+              "treble": 0.008304,
+              "bass": 0.008304
+            },
+            "normalizedGaps": {
+              "treble": 0.006007,
+              "bass": 0.006007
+            },
+            "referenceGaps": {
+              "treble": 0.006007,
+              "bass": 0.006007
+            },
+            "staffChanges": [
+              {
+                "role": "treble",
+                "originalGap": 0.008304,
+                "normalizedGap": 0.006007,
+                "deviationRatio": 0.3824
+              },
+              {
+                "role": "bass",
+                "originalGap": 0.008304,
+                "normalizedGap": 0.006007,
+                "deviationRatio": 0.3824
+              }
+            ]
+          },
+          {
+            "page": 8,
+            "systemIndex": 2,
+            "originalGaps": {
+              "treble": 0.009364,
+              "bass": 0.007597
+            },
+            "normalizedGaps": {
+              "treble": 0.006007,
+              "bass": 0.006007
+            },
+            "referenceGaps": {
+              "treble": 0.006007,
+              "bass": 0.006007
+            },
+            "staffChanges": [
+              {
+                "role": "treble",
+                "originalGap": 0.009364,
+                "normalizedGap": 0.006007,
+                "deviationRatio": 0.5588
+              },
+              {
+                "role": "bass",
+                "originalGap": 0.007597,
+                "normalizedGap": 0.006007,
+                "deviationRatio": 0.2647
+              }
+            ]
+          }
+        ],
+        "gapSamples": {
+          "treble": [
+            0.006360424028268551,
+            0.006007067137809179,
+            0.0060070671378091856
+          ],
+          "bass": [
+            0.0060070671378091856,
+            0.0060070671378091856,
+            0.006007067137809199
+          ]
+        }
+      }
+    ],
+    "systemsNormalized": 3
+  }
+}

@@ -1,0 +1,48 @@
+OMR accuracy report
+Generated: gymnopedie-no-1-satie inner-voice phase simulation
+Ground truth: Gymnopédie No. 1
+Likely main issue: Measure allocation (measure-allocation)
+Evidence: pitch=100% | duration=100% | onset=100% | time=99% | noteDetectionF1=100% | measureCountAccuracy=100% | firstBreak=m78 ()
+
+Pitch accuracy: 100%
+Matched pitch accuracy: 100%
+Pitch accuracy at correct onset: 100%
+Order-sensitive pitch recovery: 0%
+Duration accuracy: 100%
+Onset accuracy: 100%
+Onset time accuracy: 99%
+Measure count accuracy: 100%
+Note detection F1: 100%
+Chord grouping accuracy: 100%
+Note count: generated 469, truth 469, diff 0
+Measure count: generated 78, truth 78, diff 0
+First likely alignment break: measure 78 ()
+
+Worst measures:
+  m78: error 100%; truth 7, generated 7, missing 0, extra 0, pitch 0, duration 0, onset 0, time 7, chord 0
+  m34: error 14%; truth 7, generated 7, missing 0, extra 0, pitch 0, duration 1, onset 0, time 0, chord 0
+  m1: error 0%; truth 4, generated 4, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+  m2: error 0%; truth 4, generated 4, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+  m3: error 0%; truth 4, generated 4, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+  m4: error 0%; truth 4, generated 4, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+  m5: error 0%; truth 6, generated 6, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+  m6: error 0%; truth 7, generated 7, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+  m7: error 0%; truth 7, generated 7, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+  m8: error 0%; truth 5, generated 5, missing 0, extra 0, pitch 0, duration 0, onset 0, time 0, chord 0
+
+Missing notes: none
+Extra notes: none
+Wrong pitches: none
+Wrong durations: m34@0 2q vs 1q
+Wrong onsets: none
+Wrong onset times: m78 delta 0.58s; m78 delta 0.58s; m78 delta 0.58s; m78 delta 0.58s; m78 delta 0.58s
+Chord grouping mismatches: none
+
+Ties: detected 2, applied 2, uncertain slurs 177
+Applied tie pairs: m68->m69 midi 38 (ink-arc); m69->m70 midi 38 (ink-arc)
+
+Rests: detected 8 glyph(s), applied 8 vector rest event(s), skipped 0
+
+Staccato: detected 74, applied 69
+
+Accent: detected 0, applied 0

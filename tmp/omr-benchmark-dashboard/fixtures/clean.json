@@ -19979,6 +19979,113 @@
       "reassignedOrphanCount": 0,
       "rejectedOrphanReasons": {}
     },
+    "staffGapNormalization": {
+      "documentReference": {
+        "treble": 0.0060070671378091856,
+        "bass": 0.0060070671378091856,
+        "combined": 0.0060070671378091856,
+        "sampleCount": {
+          "treble": 15,
+          "bass": 15
+        }
+      },
+      "pages": [
+        {
+          "page": 1,
+          "applied": false,
+          "canNormalize": false,
+          "referenceGaps": {
+            "treble": null,
+            "bass": null,
+            "combined": null,
+            "sampleCount": {
+              "treble": 0,
+              "bass": 0
+            }
+          },
+          "systemsAffected": [],
+          "gapSamples": {
+            "treble": [
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.006007067137809213,
+              0.0060070671378091856
+            ],
+            "bass": [
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.0060070671378091856
+            ]
+          }
+        },
+        {
+          "page": 2,
+          "applied": false,
+          "canNormalize": true,
+          "referenceGaps": {
+            "treble": 0.0060070671378091856,
+            "bass": 0.0060070671378091856,
+            "combined": 0.0060070671378091856,
+            "sampleCount": {
+              "treble": 5,
+              "bass": 5
+            }
+          },
+          "systemsAffected": [],
+          "gapSamples": {
+            "treble": [
+              0.0060070671378091856,
+              0.006007067137809179,
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.006007067137809213
+            ],
+            "bass": [
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.0060070671378091856
+            ]
+          }
+        },
+        {
+          "page": 3,
+          "applied": false,
+          "canNormalize": true,
+          "referenceGaps": {
+            "treble": 0.0060070671378091856,
+            "bass": 0.0060070671378091856,
+            "combined": 0.0060070671378091856,
+            "sampleCount": {
+              "treble": 10,
+              "bass": 10
+            }
+          },
+          "systemsAffected": [],
+          "gapSamples": {
+            "treble": [
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.0060070671378091856
+            ],
+            "bass": [
+              0.0060070671378091856,
+              0.006007067137809199,
+              0.0060070671378091856,
+              0.0060070671378091856,
+              0.0060070671378091856
+            ]
+          }
+        }
+      ],
+      "systemsNormalized": 0
+    },
     "layoutConsistency": {
       "inconsistent": false,
       "pagesCompared": 3,

@@ -32,6 +32,7 @@ import {
 import { detectStaffClefsFromGlyphs } from './pitchFromStaffPosition.js'
 import { serializeOmrMeasureBox } from './omrMeasureGridMeta.js'
 import { computeOmrMeasureVisualExtents } from './omrMeasureVisualExtents.js'
+import { normalizePageStaffLineGaps } from './normalizeStaffLineGaps.js'
 
 function measureGridEntriesForSystem(
   measureBoxes,
@@ -81,6 +82,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     dense = false,
     keySignature: inheritedKeySignature = null,
     timeSignature: inheritedTimeSignature = null,
+    documentStaffGapReference = null,
   } = options
 
   omrDebugStep('processOmrPage:start', imageData, { page })
@@ -127,6 +129,19 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     measureCounter += measureBoxes.length
     systemMeasureBoxes.push(measureBoxes)
     measureGridDiagnostics.push(gridDiagnostics)
+  }
+
+  const staffGapNormalizationResult = normalizePageStaffLineGaps({
+    systemMeasureBoxes,
+    systems,
+    page,
+    documentGapReference: documentStaffGapReference,
+  })
+  for (const systemDiag of staffGapNormalizationResult.staffGapNormalization.systemsAffected) {
+    const gridDiag = measureGridDiagnostics[systemDiag.systemIndex]
+    if (gridDiag) {
+      gridDiag.staffGapNormalization = systemDiag
+    }
   }
 
   if (hasVectorOmrNoteheads(pageText)) {
@@ -185,6 +200,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       staccatoDiagnostics: vector.staccatoDiagnostics,
       accentDiagnostics: vector.accentDiagnostics,
       orphanDiagnostics: vector.orphanDiagnostics,
+      staffGapNormalization: staffGapNormalizationResult.staffGapNormalization,
     }
     omrDebugStep(`processOmrPage:done:page-${page}`, imageData, {
       notes,
@@ -312,6 +328,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     keySignature,
     inkThreshold,
     dense: noteheadOptions.dense,
+    staffGapNormalization: staffGapNormalizationResult.staffGapNormalization,
   }
   omrDebugStep(`processOmrPage:done:page-${page}`, imageData, {
     notes,

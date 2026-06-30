@@ -1,0 +1,522 @@
+{
+  "rerank": [
+    {
+      "bucket": "chordMismatch",
+      "count": 239
+    },
+    {
+      "bucket": "wrongPitch",
+      "count": 147
+    },
+    {
+      "bucket": "wrongDuration",
+      "count": 103
+    },
+    {
+      "bucket": "wrongOnset",
+      "count": 94
+    },
+    {
+      "bucket": "missingNotes",
+      "count": 31
+    },
+    {
+      "bucket": "extraNotes",
+      "count": 28
+    },
+    {
+      "bucket": "noteDelta",
+      "count": 0
+    },
+    {
+      "bucket": "measureDelta",
+      "count": 0
+    }
+  ],
+  "deltaVsStaffGapBaseline": {
+    "wrongPitch": -26,
+    "wrongOnset": 6,
+    "wrongDuration": -1,
+    "chordMismatch": 1,
+    "trailing119_125": -26,
+    "page8Pitch": -26,
+    "pitchAcc": 0.009299999999999975
+  },
+  "pitch": {
+    "total": 147,
+    "atCorrectOnset": 66,
+    "trailing119_125": 81,
+    "page8": 81,
+    "nonTrailing": 66,
+    "histOnsetOk": {
+      "other": 34,
+      "±2-diatonic": 25,
+      "±1-accidental": 7
+    },
+    "trailingByMeasure": {
+      "119": 11,
+      "120": 11,
+      "121": 14,
+      "122": 11,
+      "123": 12,
+      "124": 11,
+      "125": 11
+    },
+    "topPage8Pairs": [
+      {
+        "pair": "C2→G1",
+        "count": 6
+      },
+      {
+        "pair": "F2→G2",
+        "count": 6
+      },
+      {
+        "pair": "A#2→F1",
+        "count": 5
+      },
+      {
+        "pair": "A#1→C2",
+        "count": 4
+      },
+      {
+        "pair": "D#2→F2",
+        "count": 4
+      },
+      {
+        "pair": "C3→G1",
+        "count": 4
+      },
+      {
+        "pair": "A#2→G2",
+        "count": 4
+      },
+      {
+        "pair": "C2→D2",
+        "count": 3
+      },
+      {
+        "pair": "C3→A#2",
+        "count": 3
+      },
+      {
+        "pair": "D#2→D2",
+        "count": 3
+      },
+      {
+        "pair": "D#3→C2",
+        "count": 3
+      },
+      {
+        "pair": "F3→C2",
+        "count": 3
+      }
+    ]
+  },
+  "duration": {
+    "total": 103,
+    "hist": {
+      "too-short": 24,
+      "too-long": 9,
+      "beamed-subdivision": 17,
+      "bass-sustain": 0,
+      "melody-accompaniment": 0,
+      "rest-gap": 0,
+      "tie-sustain": 0,
+      "onset-coupled": 53,
+      "other": 0
+    },
+    "pitchOnsetOk": 48,
+    "topFixablePatterns": [
+      [
+        "1q->0.5q",
+        28
+      ],
+      [
+        "0.5q->1q",
+        17
+      ],
+      [
+        "0.75q->0.25q",
+        13
+      ],
+      [
+        "1q->1.5q",
+        8
+      ],
+      [
+        "1.25q->0.25q",
+        6
+      ],
+      [
+        "1.25q->0.5q",
+        5
+      ],
+      [
+        "0.5q->1.25q",
+        4
+      ],
+      [
+        "1q->1.75q",
+        4
+      ],
+      [
+        "1.5q->1q",
+        3
+      ],
+      [
+        "1q->0.25q",
+        3
+      ],
+      [
+        "0.5q->3q",
+        3
+      ],
+      [
+        "2q->0.25q",
+        2
+      ]
+    ]
+  },
+  "onset": {
+    "total": 94,
+    "pitchDurOk": 41,
+    "hist": [
+      [
+        "0.5",
+        61
+      ],
+      [
+        "0.75",
+        33
+      ]
+    ],
+    "byPage": {
+      "1": 38,
+      "2": 4,
+      "3": 3,
+      "4": 4,
+      "5": 3,
+      "6": 7,
+      "8": 35
+    }
+  },
+  "chord": {
+    "total": 239,
+    "page8": 1,
+    "pureHotMeasures": [
+      {
+        "measureNumber": 61,
+        "chordMismatch": 26,
+        "wrongPitch": 0,
+        "wrongOnset": 0,
+        "wrongDuration": 0
+      },
+      {
+        "measureNumber": 25,
+        "chordMismatch": 24,
+        "wrongPitch": 0,
+        "wrongOnset": 2,
+        "wrongDuration": 0
+      },
+      {
+        "measureNumber": 33,
+        "chordMismatch": 18,
+        "wrongPitch": 1,
+        "wrongOnset": 0,
+        "wrongDuration": 0
+      },
+      {
+        "measureNumber": 113,
+        "chordMismatch": 12,
+        "wrongPitch": 0,
+        "wrongOnset": 0,
+        "wrongDuration": 2
+      },
+      {
+        "measureNumber": 45,
+        "chordMismatch": 10,
+        "wrongPitch": 0,
+        "wrongOnset": 1,
+        "wrongDuration": 2
+      },
+      {
+        "measureNumber": 94,
+        "chordMismatch": 8,
+        "wrongPitch": 0,
+        "wrongOnset": 0,
+        "wrongDuration": 0
+      },
+      {
+        "measureNumber": 27,
+        "chordMismatch": 6,
+        "wrongPitch": 0,
+        "wrongOnset": 1,
+        "wrongDuration": 0
+      },
+      {
+        "measureNumber": 57,
+        "chordMismatch": 6,
+        "wrongPitch": 0,
+        "wrongOnset": 0,
+        "wrongDuration": 0
+      }
+    ]
+  },
+  "targets": {
+    "remainingPage8Pitch": {
+      "count": 81,
+      "onsetOk": 32,
+      "diatonic": 24,
+      "accidental": 5,
+      "trailing": 81,
+      "shareOfWrongPitch": 0.5510204081632653
+    },
+    "page8Accidentals": {
+      "count": 5,
+      "onsetOk": 0,
+      "shareOfWrongPitch": 0.034013605442176874
+    },
+    "onsetCoupled": {
+      "wrongOnsetTotal": 94,
+      "independent": 41,
+      "durationOnsetCoupled": 53,
+      "pitchWithOnset": 81,
+      "page8Onset": 35
+    },
+    "chordMismatch": {
+      "total": 239,
+      "page8": 1,
+      "pureHotMeasures": [
+        {
+          "measureNumber": 61,
+          "chordMismatch": 26,
+          "wrongPitch": 0,
+          "wrongOnset": 0,
+          "wrongDuration": 0
+        },
+        {
+          "measureNumber": 25,
+          "chordMismatch": 24,
+          "wrongPitch": 0,
+          "wrongOnset": 2,
+          "wrongDuration": 0
+        },
+        {
+          "measureNumber": 33,
+          "chordMismatch": 18,
+          "wrongPitch": 1,
+          "wrongOnset": 0,
+          "wrongDuration": 0
+        },
+        {
+          "measureNumber": 113,
+          "chordMismatch": 12,
+          "wrongPitch": 0,
+          "wrongOnset": 0,
+          "wrongDuration": 2
+        },
+        {
+          "measureNumber": 45,
+          "chordMismatch": 10,
+          "wrongPitch": 0,
+          "wrongOnset": 1,
+          "wrongDuration": 2
+        },
+        {
+          "measureNumber": 94,
+          "chordMismatch": 8,
+          "wrongPitch": 0,
+          "wrongOnset": 0,
+          "wrongDuration": 0
+        },
+        {
+          "measureNumber": 27,
+          "chordMismatch": 6,
+          "wrongPitch": 0,
+          "wrongOnset": 1,
+          "wrongDuration": 0
+        },
+        {
+          "measureNumber": 57,
+          "chordMismatch": 6,
+          "wrongPitch": 0,
+          "wrongOnset": 0,
+          "wrongDuration": 0
+        }
+      ]
+    },
+    "duration": {
+      "total": 103,
+      "hist": {
+        "too-short": 24,
+        "too-long": 9,
+        "beamed-subdivision": 17,
+        "bass-sustain": 0,
+        "melody-accompaniment": 0,
+        "rest-gap": 0,
+        "tie-sustain": 0,
+        "onset-coupled": 53,
+        "other": 0
+      },
+      "pitchOnsetOk": 48,
+      "topPatterns": [
+        [
+          "1q->0.5q",
+          28
+        ],
+        [
+          "0.5q->1q",
+          17
+        ],
+        [
+          "0.75q->0.25q",
+          13
+        ],
+        [
+          "1q->1.5q",
+          8
+        ],
+        [
+          "1.25q->0.25q",
+          6
+        ],
+        [
+          "1.25q->0.5q",
+          5
+        ],
+        [
+          "0.5q->1.25q",
+          4
+        ],
+        [
+          "1q->1.75q",
+          4
+        ],
+        [
+          "1.5q->1q",
+          3
+        ],
+        [
+          "1q->0.25q",
+          3
+        ],
+        [
+          "0.5q->3q",
+          3
+        ],
+        [
+          "2q->0.25q",
+          2
+        ]
+      ]
+    }
+  },
+  "worstMeasures": [
+    {
+      "m": 9,
+      "p": 8,
+      "d": 4,
+      "o": 18,
+      "c": 23,
+      "miss": 0,
+      "extra": 7,
+      "page": 1
+    },
+    {
+      "m": 7,
+      "p": 4,
+      "d": 2,
+      "o": 8,
+      "c": 20,
+      "miss": 11,
+      "extra": 3,
+      "page": 1
+    },
+    {
+      "m": 8,
+      "p": 12,
+      "d": 2,
+      "o": 7,
+      "c": 13,
+      "miss": 5,
+      "extra": 6,
+      "page": 1
+    },
+    {
+      "m": 61,
+      "p": 0,
+      "d": 0,
+      "o": 0,
+      "c": 26,
+      "miss": 3,
+      "extra": 3,
+      "page": 4
+    },
+    {
+      "m": 121,
+      "p": 14,
+      "d": 2,
+      "o": 9,
+      "c": 0,
+      "miss": 0,
+      "extra": 0,
+      "page": 8
+    },
+    {
+      "m": 25,
+      "p": 0,
+      "d": 0,
+      "o": 2,
+      "c": 24,
+      "miss": 0,
+      "extra": 0,
+      "page": 2
+    },
+    {
+      "m": 119,
+      "p": 11,
+      "d": 3,
+      "o": 6,
+      "c": 0,
+      "miss": 1,
+      "extra": 1,
+      "page": 8
+    },
+    {
+      "m": 123,
+      "p": 12,
+      "d": 3,
+      "o": 5,
+      "c": 0,
+      "miss": 1,
+      "extra": 1,
+      "page": 8
+    },
+    {
+      "m": 125,
+      "p": 11,
+      "d": 1,
+      "o": 2,
+      "c": 1,
+      "miss": 1,
+      "extra": 0,
+      "page": 8
+    },
+    {
+      "m": 33,
+      "p": 1,
+      "d": 0,
+      "o": 0,
+      "c": 18,
+      "miss": 0,
+      "extra": 0,
+      "page": 2
+    }
+  ],
+  "metrics": {
+    "pitch": 0.9367,
+    "duration": 0.9523,
+    "onset": 0.9555
+  }
+}

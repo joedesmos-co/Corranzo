@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-06-30T19:06:00.343Z",
+  "generatedAt": "2026-06-30T20:08:35.225Z",
   "fixtureCount": 2,
   "statusCounts": {
     "pass": 2,
@@ -99,17 +99,17 @@
       "failureReasons": [],
       "thresholdFailures": [],
       "metrics": {
-        "pitchAccuracy": 0.9274,
-        "durationAccuracy": 0.952,
-        "onsetAccuracy": 0.9577,
-        "chordGroupingAccuracy": 0.9187,
-        "noteDetectionF1": 0.9893,
+        "pitchAccuracy": 0.9367,
+        "durationAccuracy": 0.9523,
+        "onsetAccuracy": 0.9555,
+        "chordGroupingAccuracy": 0.9184,
+        "noteDetectionF1": 0.9895,
         "measureCountDiff": 0,
-        "noteCountDiff": -2,
-        "wrongPitch": 173,
-        "wrongDuration": 104,
-        "wrongOnset": 88,
-        "chordMismatch": 238,
+        "noteCountDiff": -3,
+        "wrongPitch": 147,
+        "wrongDuration": 103,
+        "wrongOnset": 94,
+        "chordMismatch": 239,
         "topErrorCategory": {
           "source": "rhythm-inference",
           "label": "Rhythm inference",
@@ -117,17 +117,17 @@
         },
         "topDurationErrorCategory": {
           "category": "onset-coupled",
-          "count": 51
+          "count": 53
         },
         "durationErrorHistogram": {
-          "too-short": 27,
+          "too-short": 24,
           "too-long": 9,
           "beamed-subdivision": 17,
           "bass-sustain": 0,
           "melody-accompaniment": 0,
           "rest-gap": 0,
           "tie-sustain": 0,
-          "onset-coupled": 51,
+          "onset-coupled": 53,
           "other": 0
         },
         "truncatedWrongDurations": 0
@@ -137,7 +137,7 @@
         "truthPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl",
         "maxPages": 24,
         "preprocessPages": true,
-        "omrNoteCount": 2808,
+        "omrNoteCount": 2807,
         "omrMeasureCount": 125
       },
       "error": null,

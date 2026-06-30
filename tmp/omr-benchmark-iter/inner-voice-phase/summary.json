@@ -1,0 +1,244 @@
+{
+  "generatedAt": "2026-06-30T23:27:34.094Z",
+  "fixtures": [
+    {
+      "fixture": {
+        "id": "clean",
+        "label": "Gymnopédie No. 1 (clean)",
+        "pdfPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+        "truthPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.mxl"
+      },
+      "baseline": {
+        "metrics": {
+          "pitchAccuracy": 1,
+          "durationAccuracy": 0.9979,
+          "onsetAccuracy": 1,
+          "chordGroupingAccuracy": 1,
+          "noteDetectionF1": 1,
+          "wrongPitchCount": 0,
+          "wrongDurationCount": 1,
+          "wrongOnsetCount": 0,
+          "chordMismatchCount": 0,
+          "generatedNoteCount": 469,
+          "generatedMeasureCount": 78
+        }
+      },
+      "simulated": {
+        "metrics": {
+          "pitchAccuracy": 1,
+          "durationAccuracy": 0.9979,
+          "onsetAccuracy": 1,
+          "chordGroupingAccuracy": 1,
+          "noteDetectionF1": 1,
+          "wrongPitchCount": 0,
+          "wrongDurationCount": 1,
+          "wrongOnsetCount": 0,
+          "chordMismatchCount": 0,
+          "generatedNoteCount": 469,
+          "generatedMeasureCount": 78
+        }
+      },
+      "delta": {
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 0,
+        "wrongOnsetCount": 0,
+        "chordMismatchCount": 0,
+        "generatedNoteCount": 0,
+        "generatedMeasureCount": 0
+      },
+      "watchMeasures": [],
+      "simulation": {
+        "candidateMeasures": 0,
+        "appliedMeasures": 0,
+        "rejectedReasons": {},
+        "samples": [],
+        "noteCountChanged": false,
+        "measureCountChanged": false,
+        "noteCountBefore": 469,
+        "noteCountAfter": 469
+      },
+      "outputs": {
+        "baselineXml": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/inner-voice-phase/clean/baseline.xml",
+        "simulatedXml": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/inner-voice-phase/clean/simulated.xml",
+        "baselineJson": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/inner-voice-phase/clean/baseline.json",
+        "simulatedJson": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/inner-voice-phase/clean/simulated.json"
+      }
+    },
+    {
+      "fixture": {
+        "id": "dense",
+        "label": "A Cruel Angel's Thesis (dense)",
+        "pdfPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+        "truthPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl"
+      },
+      "baseline": {
+        "metrics": {
+          "pitchAccuracy": 0.9367,
+          "durationAccuracy": 0.9523,
+          "onsetAccuracy": 0.9555,
+          "chordGroupingAccuracy": 0.9184,
+          "noteDetectionF1": 0.9895,
+          "wrongPitchCount": 147,
+          "wrongDurationCount": 103,
+          "wrongOnsetCount": 94,
+          "chordMismatchCount": 239,
+          "generatedNoteCount": 2807,
+          "generatedMeasureCount": 125
+        }
+      },
+      "simulated": {
+        "metrics": {
+          "pitchAccuracy": 0.9377,
+          "durationAccuracy": 0.9534,
+          "onsetAccuracy": 0.9555,
+          "chordGroupingAccuracy": 0.9322,
+          "noteDetectionF1": 0.9906,
+          "wrongPitchCount": 147,
+          "wrongDurationCount": 103,
+          "wrongOnsetCount": 97,
+          "chordMismatchCount": 197,
+          "generatedNoteCount": 2807,
+          "generatedMeasureCount": 125
+        }
+      },
+      "delta": {
+        "pitchAccuracy": 0.0010000000000000009,
+        "durationAccuracy": 0.0010999999999999899,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0.013800000000000034,
+        "noteDetectionF1": 0.0010999999999999899,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 0,
+        "wrongOnsetCount": 3,
+        "chordMismatchCount": -42,
+        "generatedNoteCount": 0,
+        "generatedMeasureCount": 0
+      },
+      "watchMeasures": [
+        {
+          "measureNumber": 33,
+          "delta": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": -18,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": -18
+          },
+          "baseline": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 1,
+            "chordMismatchCount": 18,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 49
+          },
+          "simulated": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 1,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 31
+          }
+        },
+        {
+          "measureNumber": 61,
+          "delta": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 3,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": -24,
+            "missingNoteCount": -3,
+            "extraNoteCount": -3,
+            "errorCount": -24
+          },
+          "baseline": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 26,
+            "missingNoteCount": 3,
+            "extraNoteCount": 3,
+            "errorCount": 59
+          },
+          "simulated": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 3,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 2,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 35
+          }
+        }
+      ],
+      "simulation": {
+        "candidateMeasures": 3,
+        "appliedMeasures": 3,
+        "rejectedReasons": {},
+        "samples": [
+          {
+            "measureNumber": 33,
+            "startDivision": 9,
+            "endDivision": 13,
+            "shiftDivisions": 1,
+            "columnCount": 4,
+            "columnSizes": [
+              1,
+              5,
+              1,
+              5
+            ]
+          },
+          {
+            "measureNumber": 61,
+            "startDivision": 8,
+            "endDivision": 14,
+            "shiftDivisions": 1,
+            "columnCount": 6,
+            "columnSizes": [
+              1,
+              4,
+              1,
+              4,
+              1,
+              4
+            ]
+          },
+          {
+            "measureNumber": 113,
+            "startDivision": 10,
+            "endDivision": 14,
+            "shiftDivisions": 1,
+            "columnCount": 4,
+            "columnSizes": [
+              1,
+              5,
+              1,
+              5
+            ]
+          }
+        ],
+        "noteCountChanged": false,
+        "measureCountChanged": false,
+        "noteCountBefore": 2807,
+        "noteCountAfter": 2807
+      },
+      "outputs": {
+        "baselineXml": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/inner-voice-phase/dense/baseline.xml",
+        "simulatedXml": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/inner-voice-phase/dense/simulated.xml",
+        "baselineJson": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/inner-voice-phase/dense/baseline.json",
+        "simulatedJson": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/inner-voice-phase/dense/simulated.json"
+      }
+    }
+  ]
+}

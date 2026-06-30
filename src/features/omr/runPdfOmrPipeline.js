@@ -25,6 +25,11 @@ import {
   formatOmrMeasurePlaybackReport,
 } from './omrMeasurePlaybackReport.js'
 import {
+  applyInnerVoicePhaseCorrection,
+  NARROW_MIN_STACK_NOTES,
+} from './innerVoicePhaseCorrection.js'
+import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
+import {
   OMR_DEFAULT_TEMPO,
   OMR_PIANO_STAVES_PER_SYSTEM,
   OMR_STATUS,
@@ -32,6 +37,10 @@ import {
   omrPageProgressLabel,
   yieldToBrowser,
 } from './omrConstants.js'
+import {
+  computeDocumentStaffGapReference,
+  mergeStaffGapSamples,
+} from './normalizeStaffLineGaps.js'
 
 const DEFAULT_MAX_PAGES = 24
 
@@ -120,6 +129,8 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     },
   }
   const orphanDiagnosticsPages = []
+  const staffGapNormalizationPages = []
+  let documentStaffGapSamples = { treble: [], bass: [] }
 
   let measureCounter = 1
   const measureGridDiagnosticsEntries = []
@@ -184,6 +195,8 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
 
     omrDebugStep(`pipeline:page-${page}:before-analyze`, imageData)
 
+    const documentStaffGapReference = computeDocumentStaffGapReference(documentStaffGapSamples)
+
     const pageResult = analyzePage
       ? await analyzePage(imageData, {
           page,
@@ -192,6 +205,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
           stavesPerSystem,
           keySignature,
           timeSignature,
+          documentStaffGapReference,
         })
       : processOmrPageAnalysis(imageData, {
           page,
@@ -200,6 +214,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
           stavesPerSystem,
           keySignature,
           timeSignature,
+          documentStaffGapReference,
         })
 
     omrDebugStep(`pipeline:page-${page}:after-analyze`, null, {
@@ -216,6 +231,13 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     diagnostics.notes += pageResult.stats.notes
     diagnostics.uncertainMeasures += pageResult.stats.uncertainMeasures
     measureGridDiagnosticsEntries.push(...(pageResult.measureGridDiagnostics ?? []))
+    if (pageResult.staffGapNormalization) {
+      staffGapNormalizationPages.push(pageResult.staffGapNormalization)
+      documentStaffGapSamples = mergeStaffGapSamples(
+        documentStaffGapSamples,
+        pageResult.staffGapNormalization.gapSamples,
+      )
+    }
     if (pageResult.stats.systems > 0) {
       diagnostics.pagesWithSystems += 1
     }
@@ -331,6 +353,24 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     throw error
   }
 
+  const beats = timeSignature?.beats ?? 4
+  const beatType = timeSignature?.beatType ?? 4
+  const measureDivisions = Math.round(beats * OMR_DIVISIONS_PER_QUARTER * (4 / beatType))
+  const innerVoicePhaseCorrection = applyInnerVoicePhaseCorrection(measureRhythms, {
+    totalDivisions: measureDivisions,
+    minStackNotes: NARROW_MIN_STACK_NOTES,
+  })
+  if (innerVoicePhaseCorrection.summary.appliedMeasures > 0) {
+    for (let index = 0; index < measureRhythms.length; index += 1) {
+      measureRhythms[index] = innerVoicePhaseCorrection.measures[index]
+    }
+    omrTrace('pipeline:inner-voice-phase-correction', {
+      appliedMeasures: innerVoicePhaseCorrection.summary.appliedMeasures,
+      minStackNotes: NARROW_MIN_STACK_NOTES,
+      samples: innerVoicePhaseCorrection.summary.samples?.slice(0, 4) ?? [],
+    }, traceRunId)
+  }
+
   const musicXml = buildOmrMusicXml({
     title,
     measures: measureRhythms,
@@ -380,6 +420,14 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
 
   const noteMatching = summarizeNoteMatchingReport(measureRhythms)
   const orphanNoteheads = summarizeOrphanDiagnostics(orphanDiagnosticsPages)
+  const staffGapNormalization = {
+    documentReference: computeDocumentStaffGapReference(documentStaffGapSamples),
+    pages: staffGapNormalizationPages,
+    systemsNormalized: staffGapNormalizationPages.reduce(
+      (sum, pageEntry) => sum + (pageEntry.systemsAffected?.length ?? 0),
+      0,
+    ),
+  }
 
   return {
     musicXml,
@@ -388,6 +436,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       ...richDiagnostics,
       noteMatching,
       orphanNoteheads,
+      staffGapNormalization,
       layoutConsistency,
       preprocessLog,
       difficulty,
@@ -395,6 +444,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       measureGrid,
       measureGridDiagnostics,
       measureGridDiagnosticsEntries,
+      innerVoicePhaseCorrection: innerVoicePhaseCorrection.summary,
     },
     measureGrid,
     measureGridDiagnostics,

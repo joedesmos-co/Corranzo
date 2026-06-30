@@ -1,0 +1,216 @@
+[
+  {
+    "m": 5,
+    "label": "D2",
+    "expectedDiv": 11,
+    "genMatchedDiv": 8,
+    "classification": "true_missing_slot",
+    "best": {
+      "startDiv": 8,
+      "pos": 0.6496007430522346,
+      "playablePos": 0.7176574475275321,
+      "snapBox": 10,
+      "snapPlay": 11,
+      "xNorm": 0.5775537790755885
+    },
+    "playableFixes": true,
+    "openingFix": false
+  },
+  {
+    "m": 8,
+    "label": "D#3",
+    "expectedDiv": 6,
+    "genMatchedDiv": 4,
+    "classification": "matcher_picks_wrong_instance",
+    "best": {
+      "startDiv": 6,
+      "pos": 0.3864191213106426,
+      "playablePos": 0.36103031231290944,
+      "snapBox": 6,
+      "snapPlay": 6,
+      "xNorm": 0.38817390538994156
+    },
+    "playableFixes": false,
+    "openingFix": false
+  },
+  {
+    "m": 9,
+    "label": "B1",
+    "expectedDiv": 6,
+    "genMatchedDiv": 9,
+    "classification": "matcher_picks_wrong_instance",
+    "best": {
+      "startDiv": 6,
+      "pos": 0.39423689652345545,
+      "playablePos": 0.40370312812164477,
+      "snapBox": 6,
+      "snapPlay": 6,
+      "xNorm": 0.715608312057234
+    },
+    "playableFixes": false,
+    "openingFix": false
+  },
+  {
+    "m": 9,
+    "label": "F#2",
+    "expectedDiv": 6,
+    "genMatchedDiv": 9,
+    "classification": "matcher_picks_wrong_instance",
+    "best": {
+      "startDiv": 6,
+      "pos": 0.39423711044072174,
+      "playablePos": 0.40370337561443986,
+      "snapBox": 6,
+      "snapPlay": 6,
+      "xNorm": 0.7156084008328996
+    },
+    "playableFixes": false,
+    "openingFix": false
+  },
+  {
+    "m": 9,
+    "label": "B2",
+    "expectedDiv": 6,
+    "genMatchedDiv": 9,
+    "classification": "matcher_picks_wrong_instance",
+    "best": {
+      "startDiv": 6,
+      "pos": 0.39423711044072174,
+      "playablePos": 0.40370337561443986,
+      "snapBox": 6,
+      "snapPlay": 6,
+      "xNorm": 0.7156084008328996
+    },
+    "playableFixes": false,
+    "openingFix": false
+  },
+  {
+    "m": 9,
+    "label": "C2",
+    "expectedDiv": 8,
+    "genMatchedDiv": 10,
+    "classification": "near_slot_matcher",
+    "best": {
+      "startDiv": 9,
+      "pos": 0.5619997917128486,
+      "playablePos": 0.5977973614743022,
+      "snapBox": 9,
+      "snapPlay": 10,
+      "xNorm": 0.7852299135608322
+    },
+    "playableFixes": false,
+    "openingFix": false
+  },
+  {
+    "m": 9,
+    "label": "G2",
+    "expectedDiv": 8,
+    "genMatchedDiv": 10,
+    "classification": "near_slot_matcher",
+    "best": {
+      "startDiv": 9,
+      "pos": 0.5619999537008209,
+      "playablePos": 0.5977975488872058,
+      "snapBox": 9,
+      "snapPlay": 10,
+      "xNorm": 0.7852299807858407
+    },
+    "playableFixes": false,
+    "openingFix": false
+  },
+  {
+    "m": 55,
+    "label": "C6",
+    "expectedDiv": 0,
+    "genMatchedDiv": 2,
+    "classification": "true_missing_slot",
+    "best": {
+      "startDiv": 2,
+      "pos": 0.09777912490349028,
+      "playablePos": 0.05577156405779777,
+      "snapBox": 2,
+      "snapPlay": 1,
+      "xNorm": 0.4322803758480738
+    },
+    "playableFixes": false,
+    "openingFix": true
+  },
+  {
+    "m": 121,
+    "label": "B1",
+    "expectedDiv": 6,
+    "genMatchedDiv": 3,
+    "classification": "matcher_picks_wrong_instance",
+    "best": {
+      "startDiv": 6,
+      "pos": 0.4058845228030407,
+      "playablePos": 0.4281125914676609,
+      "snapBox": 6,
+      "snapPlay": 7,
+      "xNorm": 0.7893594723181092
+    },
+    "playableFixes": false,
+    "openingFix": false
+  },
+  {
+    "m": 121,
+    "label": "C2",
+    "expectedDiv": 8,
+    "genMatchedDiv": 5,
+    "classification": "true_missing_slot",
+    "best": {
+      "startDiv": 6,
+      "pos": 0.4058845228030407,
+      "playablePos": 0.4281125914676609,
+      "snapBox": 6,
+      "snapPlay": 7,
+      "xNorm": 0.7893594723181092
+    },
+    "playableFixes": false,
+    "openingFix": false
+  },
+  {
+    "m": 122,
+    "label": "D#2",
+    "expectedDiv": 6,
+    "genMatchedDiv": 4,
+    "classification": "true_missing_slot",
+    "best": {
+      "startDiv": 2,
+      "pos": 0.14939062378065127,
+      "playablePos": 0.15073124298494525,
+      "snapBox": 2,
+      "snapPlay": 2,
+      "xNorm": 0.18645131220247893
+    },
+    "playableFixes": false,
+    "openingFix": false
+  },
+  {
+    "m": 125,
+    "label": "G1",
+    "expectedDiv": 4,
+    "genMatchedDiv": 7,
+    "classification": "true_missing_slot",
+    "best": null,
+    "playableFixes": false,
+    "openingFix": false
+  },
+  {
+    "m": 125,
+    "label": "G2",
+    "expectedDiv": 4,
+    "genMatchedDiv": 7,
+    "classification": "near_slot_matcher",
+    "best": {
+      "startDiv": 5,
+      "pos": 0.28537933129723625,
+      "playablePos": 0.34726645821721863,
+      "snapBox": 5,
+      "snapPlay": 6,
+      "xNorm": 0.37687656838130285
+    },
+    "playableFixes": false,
+    "openingFix": false
+  }
+]

@@ -1,0 +1,419 @@
+{
+  "funnel": {
+    "truthNotes": 28,
+    "rawGlyphsInM7Rect": 14,
+    "assignedGlyphs": 20,
+    "rectNotAssigned": [],
+    "detectedNoteheads": 20,
+    "groupedEvents": 10,
+    "emittedNoteheads": 20,
+    "dedupeLoss": 0,
+    "musicXmlNotes": 20,
+    "missingEvaluator": 11,
+    "extraEvaluator": 3
+  },
+  "m7Bounds": {
+    "x0": 0.065,
+    "x1": 0.285,
+    "playableX0": 0.13979999999999998,
+    "y0": 0.46713780918727915,
+    "y1": 0.553356890459364
+  },
+  "glyphColumnCounts": [
+    {
+      "x": 0.15709291119357344,
+      "count": 6
+    },
+    {
+      "x": 0.18790371479296672,
+      "count": 2
+    },
+    {
+      "x": 0.21871461676943732,
+      "count": 4
+    },
+    {
+      "x": 0.2495253506833869,
+      "count": 3
+    },
+    {
+      "x": 0.2803362526598575,
+      "count": 5
+    }
+  ],
+  "genColumns": [
+    {
+      "x": 0.15709325497106225,
+      "onset": 0,
+      "notes": [
+        "A#2",
+        "F2",
+        "A#1",
+        "F4",
+        "D4",
+        "A#3"
+      ]
+    },
+    {
+      "x": 0.18790400049925243,
+      "onset": 1.25,
+      "notes": [
+        "A#1",
+        "F4"
+      ]
+    },
+    {
+      "x": 0.21871481844446247,
+      "onset": 2.25,
+      "notes": [
+        "A#2",
+        "F2",
+        "A#4",
+        "D4"
+      ]
+    },
+    {
+      "x": 0.2495254851334037,
+      "onset": 3,
+      "notes": [
+        "D3",
+        "D2",
+        "G#4"
+      ]
+    },
+    {
+      "x": 0.2803363881881634,
+      "onset": 3.75,
+      "notes": [
+        "D#3",
+        "A#2",
+        "D#2",
+        "G4",
+        "D#4"
+      ]
+    }
+  ],
+  "genByOnset": {
+    "0": [
+      "A#2",
+      "F2",
+      "A#1",
+      "F4",
+      "D4",
+      "A#3"
+    ],
+    "3": [
+      "D3",
+      "D2",
+      "G#4"
+    ],
+    "1.25": [
+      "A#1",
+      "F4"
+    ],
+    "2.25": [
+      "A#2",
+      "F2",
+      "A#4",
+      "D4"
+    ],
+    "3.75": [
+      "D#3",
+      "A#2",
+      "D#2",
+      "G4",
+      "D#4"
+    ]
+  },
+  "missingTrace": [
+    {
+      "label": "F2",
+      "truthOnset": 1,
+      "genOnsets": [
+        0,
+        2.25
+      ],
+      "nearestGenOnset": 0,
+      "onsetDelta": -1,
+      "category": "onsetSlotMismatch"
+    },
+    {
+      "label": "A#2",
+      "truthOnset": 1,
+      "genOnsets": [
+        0,
+        2.25,
+        3.75
+      ],
+      "nearestGenOnset": 0,
+      "onsetDelta": -1,
+      "category": "onsetSlotMismatch"
+    },
+    {
+      "label": "D4",
+      "truthOnset": 1,
+      "genOnsets": [
+        0,
+        2.25
+      ],
+      "nearestGenOnset": 0,
+      "onsetDelta": -1,
+      "category": "onsetSlotMismatch"
+    },
+    {
+      "label": "A#4",
+      "truthOnset": 1,
+      "genOnsets": [
+        2.25
+      ],
+      "nearestGenOnset": 2.25,
+      "onsetDelta": 1.25,
+      "category": "onsetSlotMismatch"
+    },
+    {
+      "label": "D2",
+      "truthOnset": 1.5,
+      "genOnsets": [
+        3
+      ],
+      "nearestGenOnset": 3,
+      "onsetDelta": 1.5,
+      "category": "onsetSlotMismatch"
+    },
+    {
+      "label": "D3",
+      "truthOnset": 1.5,
+      "genOnsets": [
+        3
+      ],
+      "nearestGenOnset": 3,
+      "onsetDelta": 1.5,
+      "category": "onsetSlotMismatch"
+    },
+    {
+      "label": "D#3",
+      "truthOnset": 2,
+      "genOnsets": [
+        3.75
+      ],
+      "nearestGenOnset": 3.75,
+      "onsetDelta": 1.75,
+      "category": "onsetSlotMismatch"
+    },
+    {
+      "label": "D#4",
+      "truthOnset": 2,
+      "genOnsets": [
+        3.75
+      ],
+      "nearestGenOnset": 3.75,
+      "onsetDelta": 1.75,
+      "category": "onsetSlotMismatch"
+    },
+    {
+      "label": "G4",
+      "truthOnset": 2,
+      "genOnsets": [
+        3.75
+      ],
+      "nearestGenOnset": 3.75,
+      "onsetDelta": 1.75,
+      "category": "onsetSlotMismatch"
+    },
+    {
+      "label": "F4",
+      "truthOnset": 2.25,
+      "genOnsets": [
+        1.25,
+        0
+      ],
+      "nearestGenOnset": 1.25,
+      "onsetDelta": -1,
+      "category": "onsetSlotMismatch"
+    },
+    {
+      "label": "D#2",
+      "truthOnset": 2.5,
+      "genOnsets": [
+        3.75
+      ],
+      "nearestGenOnset": 3.75,
+      "onsetDelta": 1.25,
+      "category": "onsetSlotMismatch"
+    }
+  ],
+  "extra": [
+    {
+      "id": "P1-m7-n98",
+      "measureNumber": 7,
+      "onsetQuarters": 3.75,
+      "durationQuarters": 0.25,
+      "midi": 39,
+      "label": "D#2",
+      "partId": "P1",
+      "voice": 2
+    },
+    {
+      "id": "P1-m7-n100",
+      "measureNumber": 7,
+      "onsetQuarters": 3.75,
+      "durationQuarters": 0.25,
+      "midi": 63,
+      "label": "D#4",
+      "partId": "P1",
+      "voice": 1
+    },
+    {
+      "id": "P1-m7-n99",
+      "measureNumber": 7,
+      "onsetQuarters": 3.75,
+      "durationQuarters": 0.25,
+      "midi": 67,
+      "label": "G4",
+      "partId": "P1",
+      "voice": 1
+    }
+  ],
+  "rhythmSlots": [
+    {
+      "type": "note",
+      "startDivision": 0,
+      "durationDivisions": 2,
+      "voice": 2,
+      "midi": 46
+    },
+    {
+      "type": "chord",
+      "startDivision": 0,
+      "durationDivisions": 2,
+      "voice": 2,
+      "midi": 41
+    },
+    {
+      "type": "chord",
+      "startDivision": 0,
+      "durationDivisions": 2,
+      "voice": 2,
+      "midi": 34
+    },
+    {
+      "type": "note",
+      "startDivision": 0,
+      "durationDivisions": 3,
+      "voice": 1,
+      "midi": 65
+    },
+    {
+      "type": "chord",
+      "startDivision": 0,
+      "durationDivisions": 3,
+      "voice": 1,
+      "midi": 62
+    },
+    {
+      "type": "chord",
+      "startDivision": 0,
+      "durationDivisions": 3,
+      "voice": 1,
+      "midi": 58
+    },
+    {
+      "type": "note",
+      "startDivision": 5,
+      "durationDivisions": 4,
+      "voice": 2,
+      "midi": 34
+    },
+    {
+      "type": "note",
+      "startDivision": 5,
+      "durationDivisions": 4,
+      "voice": 1,
+      "midi": 65
+    },
+    {
+      "type": "note",
+      "startDivision": 9,
+      "durationDivisions": 3,
+      "voice": 2,
+      "midi": 46
+    },
+    {
+      "type": "chord",
+      "startDivision": 9,
+      "durationDivisions": 3,
+      "voice": 2,
+      "midi": 41
+    },
+    {
+      "type": "note",
+      "startDivision": 9,
+      "durationDivisions": 3,
+      "voice": 1,
+      "midi": 70
+    },
+    {
+      "type": "chord",
+      "startDivision": 9,
+      "durationDivisions": 3,
+      "voice": 1,
+      "midi": 62
+    },
+    {
+      "type": "note",
+      "startDivision": 12,
+      "durationDivisions": 3,
+      "voice": 2,
+      "midi": 50
+    },
+    {
+      "type": "chord",
+      "startDivision": 12,
+      "durationDivisions": 3,
+      "voice": 2,
+      "midi": 38
+    },
+    {
+      "type": "note",
+      "startDivision": 12,
+      "durationDivisions": 3,
+      "voice": 1,
+      "midi": 68
+    },
+    {
+      "type": "note",
+      "startDivision": 15,
+      "durationDivisions": 1,
+      "voice": 2,
+      "midi": 51
+    },
+    {
+      "type": "chord",
+      "startDivision": 15,
+      "durationDivisions": 1,
+      "voice": 2,
+      "midi": 46
+    },
+    {
+      "type": "chord",
+      "startDivision": 15,
+      "durationDivisions": 1,
+      "voice": 2,
+      "midi": 39
+    },
+    {
+      "type": "note",
+      "startDivision": 15,
+      "durationDivisions": 1,
+      "voice": 1,
+      "midi": 67
+    },
+    {
+      "type": "chord",
+      "startDivision": 15,
+      "durationDivisions": 1,
+      "voice": 1,
+      "midi": 63
+    }
+  ]
+}

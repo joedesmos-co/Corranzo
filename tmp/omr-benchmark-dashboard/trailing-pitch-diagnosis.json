@@ -1,0 +1,244 @@
+{
+  "totalNotes": 205,
+  "onsetOk": 56,
+  "matchedGen": 35,
+  "stepOff": 22,
+  "fixByGap": 8,
+  "matchedBad": 33,
+  "roleHist": {
+    "lower": 26,
+    "upper": 9,
+    "unknown": 0
+  },
+  "boxGaps": [
+    {
+      "m": 119,
+      "sys": 0,
+      "upperGap": 0.00636,
+      "lowerGap": 0.0083
+    },
+    {
+      "m": 120,
+      "sys": 0,
+      "upperGap": 0.00636,
+      "lowerGap": 0.0083
+    },
+    {
+      "m": 121,
+      "sys": 0,
+      "upperGap": 0.00636,
+      "lowerGap": 0.0083
+    },
+    {
+      "m": 122,
+      "sys": 1,
+      "upperGap": 0.0083,
+      "lowerGap": 0.0083
+    },
+    {
+      "m": 123,
+      "sys": 1,
+      "upperGap": 0.0083,
+      "lowerGap": 0.0083
+    },
+    {
+      "m": 124,
+      "sys": 1,
+      "upperGap": 0.0083,
+      "lowerGap": 0.0083
+    },
+    {
+      "m": 125,
+      "sys": 2,
+      "upperGap": 0.00936,
+      "lowerGap": 0.0076
+    }
+  ],
+  "examples": [
+    {
+      "m": 119,
+      "truth": "A#1",
+      "gen": "C2",
+      "delta": 2,
+      "yNorm": 0.17620073634204278,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "B1",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 119,
+      "truth": "A#2",
+      "gen": "G#2",
+      "delta": -2,
+      "yNorm": 0.15541501187648474,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "B2",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 119,
+      "truth": "A#1",
+      "gen": "C2",
+      "delta": 2,
+      "yNorm": 0.17620073634204278,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "B1",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 119,
+      "truth": "D#2",
+      "gen": "F2",
+      "delta": 2,
+      "yNorm": 0.1643233016627079,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "F2",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 120,
+      "truth": "C2",
+      "gen": "D2",
+      "delta": 2,
+      "yNorm": 0.17323156769596193,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "C2",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 121,
+      "truth": "A#1",
+      "gen": "C2",
+      "delta": 2,
+      "yNorm": 0.176200783847981,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "B1",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 121,
+      "truth": "A#2",
+      "gen": "G#2",
+      "delta": -2,
+      "yNorm": 0.15541496437054622,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "B2",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 121,
+      "truth": "A#1",
+      "gen": "B1",
+      "delta": 1,
+      "yNorm": 0.17620071258907352,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "B1",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 122,
+      "truth": "C2",
+      "gen": "D2",
+      "delta": 2,
+      "yNorm": 0.3484260807600949,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "C2",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 122,
+      "truth": "G2",
+      "gen": "F#2",
+      "delta": -1,
+      "yNorm": 0.3365481710213775,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "G2",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 122,
+      "truth": "G4",
+      "gen": "G#4",
+      "delta": 1,
+      "yNorm": 0.26825824228028516,
+      "clef": "treble",
+      "role": "upper",
+      "gap": 0.0083,
+      "fixedLabel": "C5",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 122,
+      "truth": "C5",
+      "gen": "D5",
+      "delta": 2,
+      "yNorm": 0.25934995249406184,
+      "clef": "treble",
+      "role": "upper",
+      "gap": 0.0083,
+      "fixedLabel": "F5",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 122,
+      "truth": "C2",
+      "gen": "D2",
+      "delta": 2,
+      "yNorm": 0.3484260807600949,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "C2",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 122,
+      "truth": "G2",
+      "gen": "F#2",
+      "delta": -1,
+      "yNorm": 0.3365481710213775,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "G2",
+      "bassGap": 0.0083
+    },
+    {
+      "m": 122,
+      "truth": "D#2",
+      "gen": "F2",
+      "delta": 2,
+      "yNorm": 0.342486864608076,
+      "clef": "bass",
+      "role": "lower",
+      "gap": 0.0083,
+      "fixedLabel": "E2",
+      "bassGap": 0.0083
+    }
+  ],
+  "wrongBySys": {
+    "0": 32,
+    "1": 49,
+    "2": 26
+  }
+}

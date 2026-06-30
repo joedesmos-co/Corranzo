@@ -1,0 +1,1481 @@
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url' }
+[omr-trace] pipeline:pdf-load-success { totalPages: 8 }
+[omr-trace] pipeline:page-1:loop-start
+[omr] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-1:owned-render-copy {
+  label: 'pipeline:page-1:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:skipped-owned-copy {
+  label: 'preprocess:skipped-owned-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+[omr] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 1 }
+[omr] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { notes: 252, systems: 5, source: 'vector-glyphs' }
+[omr] pipeline:page-1:after-analyze { notes: 252, systems: 5 }
+[omr-trace] pipeline:page-2:loop-start
+[omr] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-2:owned-render-copy {
+  label: 'pipeline:page-2:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:skipped-owned-copy {
+  label: 'preprocess:skipped-owned-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+[omr] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 2 }
+[omr] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { notes: 389, systems: 6, source: 'vector-glyphs' }
+[omr] pipeline:page-2:after-analyze { notes: 389, systems: 6 }
+[omr-trace] pipeline:page-3:loop-start
+[omr] pipeline:page-3:after-pdf-render {
+  label: 'pipeline:page-3:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-3:owned-render-copy {
+  label: 'pipeline:page-3:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-3:after-preprocess {
+  label: 'pipeline:page-3:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-3:before-analyze {
+  label: 'pipeline:page-3:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { page: 3 }
+[omr] processOmrPage:done:page-3 {
+  label: 'processOmrPage:done:page-3',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { notes: 398, systems: 6, source: 'vector-glyphs' }
+[omr] pipeline:page-3:after-analyze { notes: 398, systems: 6 }
+[omr-trace] pipeline:page-4:loop-start
+[omr] pipeline:page-4:after-pdf-render {
+  label: 'pipeline:page-4:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-4:owned-render-copy {
+  label: 'pipeline:page-4:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:skipped-owned-copy {
+  label: 'preprocess:skipped-owned-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-4:after-preprocess {
+  label: 'pipeline:page-4:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+[omr] pipeline:page-4:before-analyze {
+  label: 'pipeline:page-4:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 4 }
+[omr] processOmrPage:done:page-4 {
+  label: 'processOmrPage:done:page-4',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { notes: 308, systems: 6, source: 'vector-glyphs' }
+[omr] pipeline:page-4:after-analyze { notes: 308, systems: 6 }
+[omr-trace] pipeline:page-5:loop-start
+[omr] pipeline:page-5:after-pdf-render {
+  label: 'pipeline:page-5:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-5:owned-render-copy {
+  label: 'pipeline:page-5:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:skipped-owned-copy {
+  label: 'preprocess:skipped-owned-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-5:after-preprocess {
+  label: 'pipeline:page-5:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+[omr] pipeline:page-5:before-analyze {
+  label: 'pipeline:page-5:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 5 }
+[omr] processOmrPage:done:page-5 {
+  label: 'processOmrPage:done:page-5',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { notes: 348, systems: 6, source: 'vector-glyphs' }
+[omr] pipeline:page-5:after-analyze { notes: 348, systems: 6 }
+[omr-trace] pipeline:page-6:loop-start
+[omr] pipeline:page-6:after-pdf-render {
+  label: 'pipeline:page-6:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-6:owned-render-copy {
+  label: 'pipeline:page-6:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:skipped-owned-copy {
+  label: 'preprocess:skipped-owned-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-6:after-preprocess {
+  label: 'pipeline:page-6:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+[omr] pipeline:page-6:before-analyze {
+  label: 'pipeline:page-6:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 6 }
+[omr] processOmrPage:done:page-6 {
+  label: 'processOmrPage:done:page-6',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { notes: 465, systems: 6, source: 'vector-glyphs' }
+[omr] pipeline:page-6:after-analyze { notes: 465, systems: 6 }
+[omr-trace] pipeline:page-7:loop-start
+[omr] pipeline:page-7:after-pdf-render {
+  label: 'pipeline:page-7:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-7:owned-render-copy {
+  label: 'pipeline:page-7:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-7:after-preprocess {
+  label: 'pipeline:page-7:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { applied: [ 'contrast', 'denoise', 'deskew', 'staff-recovery' ] }
+[omr] pipeline:page-7:before-analyze {
+  label: 'pipeline:page-7:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { page: 7 }
+[omr] processOmrPage:done:page-7 {
+  label: 'processOmrPage:done:page-7',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 245
+} { notes: 443, systems: 6, source: 'vector-glyphs' }
+[omr] pipeline:page-7:after-analyze { notes: 443, systems: 6 }
+[omr-trace] pipeline:page-8:loop-start
+[omr] pipeline:page-8:after-pdf-render {
+  label: 'pipeline:page-8:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-8:owned-render-copy {
+  label: 'pipeline:page-8:owned-render-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] preprocess:skipped-owned-copy {
+  label: 'preprocess:skipped-owned-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] pipeline:page-8:after-preprocess {
+  label: 'pipeline:page-8:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+[omr] pipeline:page-8:before-analyze {
+  label: 'pipeline:page-8:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 8 }
+[omr] processOmrPage:done:page-8 {
+  label: 'processOmrPage:done:page-8',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { notes: 204, systems: 3, source: 'vector-glyphs' }
+[omr] pipeline:page-8:after-analyze { notes: 204, systems: 3 }
+[omr-trace] pipeline:measure-playback-report {
+  firstBadMeasure: 5,
+  flagged: [
+     5,  9, 25, 27,
+    32, 55, 56, 57
+  ]
+}
+[omr-trace] pipeline:success { noteCount: 2807, measureCount: 125 }
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 1 }
+[omr] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { notes: 252, systems: 5, source: 'vector-glyphs' }
+[omr] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 2 }
+[omr] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { notes: 389, systems: 6, source: 'vector-glyphs' }
+{
+  "evaluator": {
+    "measureNumber": 33,
+    "truthNoteCount": 30,
+    "generatedNoteCount": 30,
+    "matchedNoteCount": 30,
+    "missingNoteCount": 0,
+    "extraNoteCount": 0,
+    "wrongPitchCount": 1,
+    "wrongDurationCount": 0,
+    "wrongOnsetCount": 0,
+    "wrongTimeCount": 30,
+    "chordMismatchCount": 18,
+    "errorCount": 49,
+    "errorRate": 1
+  },
+  "chordGroupMismatches": [
+    {
+      "measureNumber": 33,
+      "onsetQuarters": 2.5,
+      "truthCount": 1,
+      "generatedCount": 5,
+      "truthGroupIndex": 3
+    },
+    {
+      "measureNumber": 33,
+      "onsetQuarters": 2.75,
+      "truthCount": 5,
+      "generatedCount": 1,
+      "truthGroupIndex": 4
+    },
+    {
+      "measureNumber": 33,
+      "onsetQuarters": 3.25,
+      "truthCount": 1,
+      "generatedCount": 5,
+      "truthGroupIndex": 5
+    },
+    {
+      "measureNumber": 33,
+      "onsetQuarters": 3.5,
+      "truthCount": 5,
+      "generatedCount": 0
+    },
+    {
+      "measureNumber": 33,
+      "onsetQuarters": 2.25,
+      "truthCount": 0,
+      "generatedCount": 1
+    }
+  ],
+  "funnel": {
+    "truthNotes": 30,
+    "detectedNoteheads": 30,
+    "emittedNoteheads": 30,
+    "dedupeLoss": 0,
+    "musicXmlNotes": 30
+  },
+  "truthGroups": [
+    {
+      "onset": 0,
+      "count": 7,
+      "pitches": [
+        "A4",
+        "C5",
+        "D3",
+        "F5",
+        "G2",
+        "G3",
+        "G5"
+      ],
+      "voices": [
+        1,
+        5
+      ]
+    },
+    {
+      "onset": 1,
+      "count": 6,
+      "pitches": [
+        "B3",
+        "D3",
+        "D4",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "voices": [
+        1,
+        5
+      ]
+    },
+    {
+      "onset": 2,
+      "count": 5,
+      "pitches": [
+        "B4",
+        "D5",
+        "G1",
+        "G2",
+        "G5"
+      ],
+      "voices": [
+        1,
+        5
+      ]
+    },
+    {
+      "onset": 2.5,
+      "count": 1,
+      "pitches": [
+        "G1"
+      ],
+      "voices": [
+        5
+      ]
+    },
+    {
+      "onset": 2.75,
+      "count": 5,
+      "pitches": [
+        "A5",
+        "C5",
+        "F5",
+        "G1",
+        "G2"
+      ],
+      "voices": [
+        1,
+        5
+      ]
+    },
+    {
+      "onset": 3.25,
+      "count": 1,
+      "pitches": [
+        "G1"
+      ],
+      "voices": [
+        5
+      ]
+    },
+    {
+      "onset": 3.5,
+      "count": 5,
+      "pitches": [
+        "B5",
+        "D5",
+        "G1",
+        "G2",
+        "G5"
+      ],
+      "voices": [
+        1,
+        5
+      ]
+    }
+  ],
+  "generatedGroups": [
+    {
+      "onset": 0,
+      "count": 7,
+      "pitches": [
+        "A4",
+        "C5",
+        "D3",
+        "F5",
+        "F5",
+        "G2",
+        "G3"
+      ],
+      "voices": [
+        1,
+        2
+      ]
+    },
+    {
+      "onset": 1,
+      "count": 6,
+      "pitches": [
+        "B3",
+        "D3",
+        "D4",
+        "G2",
+        "G3",
+        "G4"
+      ],
+      "voices": [
+        1,
+        2
+      ]
+    },
+    {
+      "onset": 1.75,
+      "count": 5,
+      "pitches": [
+        "B4",
+        "D5",
+        "G1",
+        "G2",
+        "G5"
+      ],
+      "voices": [
+        1,
+        2
+      ]
+    },
+    {
+      "onset": 2.25,
+      "count": 1,
+      "pitches": [
+        "G1"
+      ],
+      "voices": [
+        2
+      ]
+    },
+    {
+      "onset": 2.5,
+      "count": 5,
+      "pitches": [
+        "A5",
+        "C5",
+        "F5",
+        "G1",
+        "G2"
+      ],
+      "voices": [
+        1,
+        2
+      ]
+    },
+    {
+      "onset": 3,
+      "count": 1,
+      "pitches": [
+        "G1"
+      ],
+      "voices": [
+        2
+      ]
+    },
+    {
+      "onset": 3.25,
+      "count": 5,
+      "pitches": [
+        "B5",
+        "D5",
+        "G1",
+        "G2",
+        "G5"
+      ],
+      "voices": [
+        1,
+        2
+      ]
+    }
+  ],
+  "omrEvents": [
+    {
+      "startDivision": 0,
+      "onsetQuarters": 0,
+      "durationQuarters": 0.75,
+      "noteCount": 3,
+      "clef": "bass",
+      "bass": [
+        "D3",
+        "G2",
+        "G3"
+      ],
+      "treble": [],
+      "xNorm": [
+        0.7099
+      ],
+      "adjusted": false,
+      "reasons": []
+    },
+    {
+      "startDivision": 0,
+      "onsetQuarters": 0,
+      "durationQuarters": 0.75,
+      "noteCount": 4,
+      "clef": "treble",
+      "bass": [],
+      "treble": [
+        "A4",
+        "C5",
+        "F5",
+        "F5"
+      ],
+      "xNorm": [
+        0.6997,
+        0.7102,
+        0.7099
+      ],
+      "adjusted": false,
+      "reasons": []
+    },
+    {
+      "startDivision": 4,
+      "onsetQuarters": 1,
+      "durationQuarters": 0.75,
+      "noteCount": 3,
+      "clef": "bass",
+      "bass": [
+        "D3",
+        "G2",
+        "G3"
+      ],
+      "treble": [],
+      "xNorm": [
+        0.7585
+      ],
+      "adjusted": false,
+      "reasons": []
+    },
+    {
+      "startDivision": 4,
+      "onsetQuarters": 1,
+      "durationQuarters": 0.75,
+      "noteCount": 3,
+      "clef": "treble",
+      "bass": [],
+      "treble": [
+        "B3",
+        "D4",
+        "G4"
+      ],
+      "xNorm": [
+        0.7585
+      ],
+      "adjusted": false,
+      "reasons": []
+    },
+    {
+      "startDivision": 7,
+      "onsetQuarters": 1.75,
+      "durationQuarters": 0.5,
+      "noteCount": 2,
+      "clef": "bass",
+      "bass": [
+        "G1",
+        "G2"
+      ],
+      "treble": [],
+      "xNorm": [
+        0.8071
+      ],
+      "adjusted": false,
+      "reasons": []
+    },
+    {
+      "startDivision": 7,
+      "onsetQuarters": 1.75,
+      "durationQuarters": 0.75,
+      "noteCount": 3,
+      "clef": "treble",
+      "bass": [],
+      "treble": [
+        "B4",
+        "D5",
+        "G5"
+      ],
+      "xNorm": [
+        0.8071
+      ],
+      "adjusted": false,
+      "reasons": []
+    },
+    {
+      "startDivision": 9,
+      "onsetQuarters": 2.25,
+      "durationQuarters": 0.25,
+      "noteCount": 1,
+      "clef": "bass",
+      "bass": [
+        "G1"
+      ],
+      "treble": [],
+      "xNorm": [
+        0.8425
+      ],
+      "adjusted": false,
+      "reasons": []
+    },
+    {
+      "startDivision": 10,
+      "onsetQuarters": 2.5,
+      "durationQuarters": 0.5,
+      "noteCount": 2,
+      "clef": "bass",
+      "bass": [
+        "G1",
+        "G2"
+      ],
+      "treble": [],
+      "xNorm": [
+        0.8646
+      ],
+      "adjusted": false,
+      "reasons": []
+    },
+    {
+      "startDivision": 10,
+      "onsetQuarters": 2.5,
+      "durationQuarters": 0.75,
+      "noteCount": 3,
+      "clef": "treble",
+      "bass": [],
+      "treble": [
+        "A5",
+        "C5",
+        "F5"
+      ],
+      "xNorm": [
+        0.8646
+      ],
+      "adjusted": false,
+      "reasons": []
+    },
+    {
+      "startDivision": 12,
+      "onsetQuarters": 3,
+      "durationQuarters": 0.25,
+      "noteCount": 1,
+      "clef": "bass",
+      "bass": [
+        "G1"
+      ],
+      "treble": [],
+      "xNorm": [
+        0.8999
+      ],
+      "adjusted": false,
+      "reasons": []
+    },
+    {
+      "startDivision": 13,
+      "onsetQuarters": 3.25,
+      "durationQuarters": 0.75,
+      "noteCount": 2,
+      "clef": "bass",
+      "bass": [
+        "G1",
+        "G2"
+      ],
+      "treble": [],
+      "xNorm": [
+        0.922
+      ],
+      "adjusted": false,
+      "reasons": []
+    },
+    {
+      "startDivision": 13,
+      "onsetQuarters": 3.25,
+      "durationQuarters": 0.75,
+      "noteCount": 3,
+      "clef": "treble",
+      "bass": [],
+      "treble": [
+        "B5",
+        "D5",
+        "G5"
+      ],
+      "xNorm": [
+        0.922
+      ],
+      "adjusted": false,
+      "reasons": []
+    }
+  ],
+  "vectorChordDiagnostics": {
+    "onsetCount": 7,
+    "noteEventCount": 12,
+    "sequentialSameXCount": 0,
+    "fragmentedOnsetCount": 0,
+    "onsets": [
+      {
+        "startDivision": 0,
+        "eventCount": 2,
+        "noteCount": 7,
+        "clefs": [
+          "bass",
+          "treble"
+        ],
+        "voices": [
+          2,
+          1
+        ],
+        "fragmentedSameClef": false
+      },
+      {
+        "startDivision": 4,
+        "eventCount": 2,
+        "noteCount": 6,
+        "clefs": [
+          "bass",
+          "treble"
+        ],
+        "voices": [
+          2,
+          1
+        ],
+        "fragmentedSameClef": false
+      },
+      {
+        "startDivision": 7,
+        "eventCount": 2,
+        "noteCount": 5,
+        "clefs": [
+          "bass",
+          "treble"
+        ],
+        "voices": [
+          2,
+          1
+        ],
+        "fragmentedSameClef": false
+      },
+      {
+        "startDivision": 9,
+        "eventCount": 1,
+        "noteCount": 1,
+        "clefs": [
+          "bass"
+        ],
+        "voices": [
+          2
+        ],
+        "fragmentedSameClef": false
+      },
+      {
+        "startDivision": 10,
+        "eventCount": 2,
+        "noteCount": 5,
+        "clefs": [
+          "bass",
+          "treble"
+        ],
+        "voices": [
+          2,
+          1
+        ],
+        "fragmentedSameClef": false
+      },
+      {
+        "startDivision": 12,
+        "eventCount": 1,
+        "noteCount": 1,
+        "clefs": [
+          "bass"
+        ],
+        "voices": [
+          2
+        ],
+        "fragmentedSameClef": false
+      },
+      {
+        "startDivision": 13,
+        "eventCount": 2,
+        "noteCount": 5,
+        "clefs": [
+          "bass",
+          "treble"
+        ],
+        "voices": [
+          2,
+          1
+        ],
+        "fragmentedSameClef": false
+      }
+    ],
+    "forwardCount": 1,
+    "backupCount": 7,
+    "sequence": [
+      {
+        "type": "note",
+        "startDivision": 0,
+        "durationDivisions": 3,
+        "voice": 2,
+        "midi": 55
+      },
+      {
+        "type": "chord",
+        "startDivision": 0,
+        "durationDivisions": 3,
+        "voice": 2,
+        "midi": 50
+      },
+      {
+        "type": "chord",
+        "startDivision": 0,
+        "durationDivisions": 3,
+        "voice": 2,
+        "midi": 43
+      },
+      {
+        "type": "backup",
+        "to": 0,
+        "amount": 3
+      },
+      {
+        "type": "note",
+        "startDivision": 0,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 77
+      },
+      {
+        "type": "chord",
+        "startDivision": 0,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 77
+      },
+      {
+        "type": "chord",
+        "startDivision": 0,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 72
+      },
+      {
+        "type": "chord",
+        "startDivision": 0,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 69
+      },
+      {
+        "type": "forward",
+        "to": 4,
+        "amount": 1
+      },
+      {
+        "type": "note",
+        "startDivision": 4,
+        "durationDivisions": 3,
+        "voice": 2,
+        "midi": 55
+      },
+      {
+        "type": "chord",
+        "startDivision": 4,
+        "durationDivisions": 3,
+        "voice": 2,
+        "midi": 50
+      },
+      {
+        "type": "chord",
+        "startDivision": 4,
+        "durationDivisions": 3,
+        "voice": 2,
+        "midi": 43
+      },
+      {
+        "type": "backup",
+        "to": 4,
+        "amount": 3
+      },
+      {
+        "type": "note",
+        "startDivision": 4,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 67
+      },
+      {
+        "type": "chord",
+        "startDivision": 4,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 62
+      },
+      {
+        "type": "chord",
+        "startDivision": 4,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 59
+      },
+      {
+        "type": "note",
+        "startDivision": 7,
+        "durationDivisions": 2,
+        "voice": 2,
+        "midi": 43
+      },
+      {
+        "type": "chord",
+        "startDivision": 7,
+        "durationDivisions": 2,
+        "voice": 2,
+        "midi": 31
+      },
+      {
+        "type": "backup",
+        "to": 7,
+        "amount": 2
+      },
+      {
+        "type": "note",
+        "startDivision": 7,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 79
+      },
+      {
+        "type": "chord",
+        "startDivision": 7,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 74
+      },
+      {
+        "type": "chord",
+        "startDivision": 7,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 71
+      },
+      {
+        "type": "backup",
+        "to": 9,
+        "amount": 1
+      },
+      {
+        "type": "note",
+        "startDivision": 9,
+        "durationDivisions": 1,
+        "voice": 2,
+        "midi": 31
+      },
+      {
+        "type": "note",
+        "startDivision": 10,
+        "durationDivisions": 2,
+        "voice": 2,
+        "midi": 43
+      },
+      {
+        "type": "chord",
+        "startDivision": 10,
+        "durationDivisions": 2,
+        "voice": 2,
+        "midi": 31
+      },
+      {
+        "type": "backup",
+        "to": 10,
+        "amount": 2
+      },
+      {
+        "type": "note",
+        "startDivision": 10,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 81
+      },
+      {
+        "type": "chord",
+        "startDivision": 10,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 77
+      },
+      {
+        "type": "chord",
+        "startDivision": 10,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 72
+      },
+      {
+        "type": "backup",
+        "to": 12,
+        "amount": 1
+      },
+      {
+        "type": "note",
+        "startDivision": 12,
+        "durationDivisions": 1,
+        "voice": 2,
+        "midi": 31
+      },
+      {
+        "type": "note",
+        "startDivision": 13,
+        "durationDivisions": 3,
+        "voice": 2,
+        "midi": 43
+      },
+      {
+        "type": "chord",
+        "startDivision": 13,
+        "durationDivisions": 3,
+        "voice": 2,
+        "midi": 31
+      },
+      {
+        "type": "backup",
+        "to": 13,
+        "amount": 3
+      },
+      {
+        "type": "note",
+        "startDivision": 13,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 83
+      },
+      {
+        "type": "chord",
+        "startDivision": 13,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 79
+      },
+      {
+        "type": "chord",
+        "startDivision": 13,
+        "durationDivisions": 3,
+        "voice": 1,
+        "midi": 74
+      }
+    ]
+  },
+  "musicalEventReconstruction": {
+    "adjustedEventCount": 0,
+    "adjustedNoteCount": 0,
+    "reasons": {}
+  },
+  "mismatchAccounting": {
+    "2.5_truth1_gen5": 4,
+    "2.75_truth5_gen1": 4,
+    "3.25_truth1_gen5": 4,
+    "3.5_truth5_gen0": 5,
+    "2.25_truth0_gen1": 1,
+    "total": 18
+  }
+}
