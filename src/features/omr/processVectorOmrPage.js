@@ -731,10 +731,7 @@ function nextSameClefRhythmStart(groups, index, rhythmStarts, totalDivisions) {
   return totalDivisions
 }
 
-export function hasConfidentQuarterInference(notes, globalDuration = OMR_DIVISIONS_PER_QUARTER) {
-  if (globalDuration <= OMR_DURATION_DIVISIONS.eighth + 1) {
-    return false
-  }
+function hasQuarterStemInk(notes) {
   return (notes ?? []).some(
     (note) =>
       note.durationDivisions === OMR_DIVISIONS_PER_QUARTER &&
@@ -744,6 +741,13 @@ export function hasConfidentQuarterInference(notes, globalDuration = OMR_DIVISIO
       (note.beams ?? 0) === 0 &&
       (note.beamStrength ?? 0) < 8,
   )
+}
+
+export function hasConfidentQuarterInference(notes, globalDuration = OMR_DIVISIONS_PER_QUARTER) {
+  if (globalDuration <= OMR_DURATION_DIVISIONS.eighth + 1) {
+    return false
+  }
+  return hasQuarterStemInk(notes)
 }
 
 export function isDenseSubdivisionRun(globalDuration, sameClefSpan) {
@@ -1024,6 +1028,71 @@ export function sparseHarmonicHalfSpan(clefEvents, index, totalDivisions) {
  * When a clef voice has no later attack in the measure, a sixteenth-grid gap at
  * beat 2+ often means a half note should sustain through the bar remainder.
  */
+function sameClefChordEventCount(clefEvents, index) {
+  const start = clefEvents[index]?.startDivision ?? 0
+  let count = 0
+  for (let look = index; look < clefEvents.length; look += 1) {
+    if ((clefEvents[look]?.startDivision ?? 0) !== start) {
+      break
+    }
+    count += 1
+  }
+  return count
+}
+
+function isSameOnsetClefCluster(clefEvents, index) {
+  const start = clefEvents[index]?.startDivision ?? 0
+  const count = sameClefChordEventCount(clefEvents, index)
+  if (count < 2) {
+    return false
+  }
+  return clefEvents[index + count - 1]?.startDivision === start
+}
+
+function nextDistinctSameClefStart(clefEvents, index, totalDivisions) {
+  const start = clefEvents[index]?.startDivision ?? 0
+  for (let look = index + 1; look < clefEvents.length; look += 1) {
+    const nextStart = clefEvents[look]?.startDivision ?? totalDivisions
+    if (nextStart > start) {
+      return nextStart
+    }
+  }
+  return totalDivisions
+}
+
+/**
+ * When a same-clef voice lands on the beat grid as an eighth but the next
+ * distinct same-clef attack is exactly one quarter away, sustain through that
+ * beat for same-onset harmonic chords. Bass inner voices that re-enter on the
+ * offbeat keep their shorter span.
+ */
+export function sameClefBeatQuarterFloor(clefEvents, index, totalDivisions, currentDuration) {
+  const anchor = clefEvents[index]
+  const start = anchor?.startDivision ?? 0
+  const duration = currentDuration ?? anchor?.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+  const quarter = OMR_DIVISIONS_PER_QUARTER
+  const notes = anchor?.notes ?? []
+  const nextStart = nextDistinctSameClefStart(clefEvents, index, totalDivisions)
+  const sameClefSpan = nextStart - start
+
+  if (
+    duration !== OMR_DURATION_DIVISIONS.eighth ||
+    sameClefSpan !== quarter ||
+    start % quarter !== 0 ||
+    nextStart % quarter !== 0 ||
+    hasBeamEvidenceForNotes(notes) ||
+    (sameClefSubdivisionRun(clefEvents, index) &&
+      !isSameOnsetClefCluster(clefEvents, index))
+  ) {
+    return null
+  }
+  if (notes.length < 2 && sameClefChordEventCount(clefEvents, index) < 2) {
+    return null
+  }
+
+  return Math.min(quarter, totalDivisions - start)
+}
+
 export function terminalHarmonicHalfSpan(clefEvents, index, totalDivisions) {
   const anchor = clefEvents[index]
   const start = anchor?.startDivision ?? 0
@@ -1130,6 +1199,15 @@ export function extendDurationsPerClefVoice(events, totalDivisions) {
             }
           }
         }
+        const beatQuarterFloor = sameClefBeatQuarterFloor(
+          sorted,
+          index,
+          totalDivisions,
+          duration,
+        )
+        if (beatQuarterFloor != null && beatQuarterFloor > duration) {
+          duration = beatQuarterFloor
+        }
         const harmonicHalf = sparseHarmonicHalfSpan(sorted, index, totalDivisions)
         if (harmonicHalf != null && harmonicHalf > duration) {
           duration = harmonicHalf
@@ -1170,6 +1248,56 @@ export function extendDurationsPerClefVoice(events, totalDivisions) {
         ...durationMeta(durationDivisions),
         perClefDurationAdjusted: !capped,
         ...(capped ? { perClefStretchCapped: true } : {}),
+      }
+    }),
+  )
+}
+
+export function applySameClefBeatQuarterFloors(events, totalDivisions) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (!noteEvents.length) {
+    return events
+  }
+
+  const byClef = new Map()
+  for (const event of noteEvents) {
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    if (!byClef.has(clef)) {
+      byClef.set(clef, [])
+    }
+    byClef.get(clef).push(event)
+  }
+
+  const durationByEvent = new Map()
+  for (const clefEvents of byClef.values()) {
+    const sorted = [...clefEvents].sort(
+      (left, right) => (left.startDivision ?? 0) - (right.startDivision ?? 0),
+    )
+    for (let index = 0; index < sorted.length; index += 1) {
+      const event = sorted[index]
+      const duration = event.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+      const floor = sameClefBeatQuarterFloor(sorted, index, totalDivisions, duration)
+      if (floor != null && floor > duration) {
+        durationByEvent.set(event, floor)
+      }
+    }
+  }
+
+  if (!durationByEvent.size) {
+    return events
+  }
+
+  return sortVectorRhythmEvents(
+    events.map((event) => {
+      const durationDivisions = durationByEvent.get(event)
+      if (durationDivisions == null) {
+        return event
+      }
+      return {
+        ...event,
+        durationDivisions,
+        ...durationMeta(durationDivisions),
+        sameClefBeatQuarterAdjusted: true,
       }
     }),
   )
@@ -1698,6 +1826,7 @@ function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivis
   events = refineUnsupportedUpperChordOverhangs(events)
   events = refineOpeningBassSubdivisionDurations(events, totalDivisions)
   events = reconstructMusicalEvents(events, { totalDivisions })
+  events = applySameClefBeatQuarterFloors(events, totalDivisions)
   return clampMeasureEventDurations(events, totalDivisions)
 }
 

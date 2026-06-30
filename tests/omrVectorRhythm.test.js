@@ -15,6 +15,7 @@ import {
   refineOpeningBassSubdivisionDurations,
   refineUnsupportedUpperChordOverhangs,
   sparseHarmonicHalfSpan,
+  sameClefBeatQuarterFloor,
   terminalHarmonicHalfSpan,
   shouldInferRhythmFromPositions,
   unsupportedUpperChordOverhangCap,
@@ -674,6 +675,105 @@ describe('extendDurationsPerClefVoice', () => {
     ]
     expect(sparseHarmonicHalfSpan(clefEvents, 0, 16)).toBeNull()
     expect(terminalHarmonicHalfSpan(clefEvents, 0, 16)).toBeNull()
+  })
+
+  it('extends split same-onset chord tones from an eighth to a quarter on the beat grid', () => {
+    const events = extendDurationsPerClefVoice(
+      [
+        {
+          type: 'note',
+          startDivision: 8,
+          durationDivisions: 2,
+          notes: [{ clef: 'treble', midi: 67 }],
+        },
+        {
+          type: 'note',
+          startDivision: 8,
+          durationDivisions: 2,
+          notes: [{ clef: 'treble', midi: 71 }],
+        },
+        {
+          type: 'note',
+          startDivision: 8,
+          durationDivisions: 2,
+          notes: [{ clef: 'treble', midi: 74 }],
+        },
+        {
+          type: 'note',
+          startDivision: 8,
+          durationDivisions: 2,
+          notes: [{ clef: 'bass', midi: 43 }],
+        },
+        {
+          type: 'note',
+          startDivision: 10,
+          durationDivisions: 2,
+          notes: [{ clef: 'bass', midi: 43 }],
+        },
+        {
+          type: 'note',
+          startDivision: 12,
+          durationDivisions: 2,
+          notes: [{ clef: 'treble', midi: 67 }],
+        },
+      ],
+      16,
+    )
+    const trebleAtBeatTwo = events.filter((event) => event.startDivision === 8 && event.notes?.[0]?.clef === 'treble')
+    expect(trebleAtBeatTwo.every((event) => event.durationDivisions === 4)).toBe(true)
+    expect(events.find((event) => event.notes?.[0]?.midi === 43 && event.startDivision === 8)?.durationDivisions).toBe(2)
+  })
+
+  it('extends a same-clef harmonic chord from an eighth to a quarter on the beat grid', () => {
+    const events = extendDurationsPerClefVoice(
+      [
+        {
+          type: 'note',
+          startDivision: 8,
+          durationDivisions: 2,
+          notes: [
+            { clef: 'treble', midi: 67 },
+            { clef: 'treble', midi: 71 },
+            { clef: 'treble', midi: 74 },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 8,
+          durationDivisions: 2,
+          notes: [{ clef: 'bass', midi: 43 }],
+        },
+        {
+          type: 'note',
+          startDivision: 10,
+          durationDivisions: 2,
+          notes: [{ clef: 'bass', midi: 43 }],
+        },
+        {
+          type: 'note',
+          startDivision: 12,
+          durationDivisions: 2,
+          notes: [{ clef: 'treble', midi: 67 }],
+        },
+      ],
+      16,
+    )
+    expect(events.find((event) => event.notes?.some((note) => note.midi === 74))?.durationDivisions).toBe(4)
+    expect(events.find((event) => event.notes?.[0]?.midi === 43 && event.startDivision === 8)?.durationDivisions).toBe(2)
+  })
+
+  it('does not extend single-voice eighths that re-enter on the offbeat', () => {
+    expect(
+      sameClefBeatQuarterFloor(
+        [
+          { startDivision: 8, durationDivisions: 2, notes: [{ clef: 'bass', midi: 43 }] },
+          { startDivision: 10, durationDivisions: 2, notes: [{ clef: 'bass', midi: 43 }] },
+        ],
+        0,
+        16,
+        2,
+      ),
+    ).toBeNull()
   })
 
   it('extends the last bass attack in a measure to a half beat', () => {

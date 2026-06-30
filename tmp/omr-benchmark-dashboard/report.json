@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-06-30T18:45:06.793Z",
+  "generatedAt": "2026-06-30T19:06:00.343Z",
   "fixtureCount": 2,
   "statusCounts": {
     "pass": 2,
@@ -100,14 +100,14 @@
       "thresholdFailures": [],
       "metrics": {
         "pitchAccuracy": 0.9274,
-        "durationAccuracy": 0.9466,
+        "durationAccuracy": 0.952,
         "onsetAccuracy": 0.9577,
         "chordGroupingAccuracy": 0.9187,
         "noteDetectionF1": 0.9893,
         "measureCountDiff": 0,
         "noteCountDiff": -2,
         "wrongPitch": 173,
-        "wrongDuration": 119,
+        "wrongDuration": 104,
         "wrongOnset": 88,
         "chordMismatch": 238,
         "topErrorCategory": {
@@ -120,7 +120,7 @@
           "count": 51
         },
         "durationErrorHistogram": {
-          "too-short": 42,
+          "too-short": 27,
           "too-long": 9,
           "beamed-subdivision": 17,
           "bass-sustain": 0,

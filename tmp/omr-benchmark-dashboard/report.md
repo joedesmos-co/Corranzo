@@ -1,6 +1,6 @@
 # OMR benchmark dashboard
 
-Generated: 2026-06-30T18:45:06.793Z
+Generated: 2026-06-30T19:06:00.343Z
 Fixtures: 2
 Overall: PASS
 
@@ -25,7 +25,7 @@ Overall: PASS
 - PDF: `/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf`
 - Truth: `/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl`
   pitch 93% | duration 95% | onset 96% | chord 92% | F1 99%
-  measureΔ 0 | noteΔ -2 | wrongPitch 173 | wrongDuration 119 | wrongOnset 88 | chordMismatch 238
+  measureΔ 0 | noteΔ -2 | wrongPitch 173 | wrongDuration 104 | wrongOnset 88 | chordMismatch 238
   top error category: Rhythm inference (rhythm-inference)
   top duration error category: onset-coupled (51 sampled)
 
