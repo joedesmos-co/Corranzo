@@ -10,11 +10,11 @@ function readSrc(...parts) {
 }
 
 describe('Corranzo UX polish sprint', () => {
-  it('reopens the Library setup rail when users navigate back to Library', () => {
+  it('opens a real empty Practice state when Practice is selected without files', () => {
     const app = readSrc('App.jsx')
 
     expect(app).toMatch(/setSidebarOpen\(true\)[\s\S]*navigateToView\(home\.view\)/)
-    expect(app).toMatch(/meta\?\.blocked[\s\S]*setSidebarOpen\(true\)[\s\S]*navigateToView\('library'\)/)
+    expect(app).toMatch(/meta\?\.emptyPractice[\s\S]*setSidebarOpen\(false\)[\s\S]*navigateToView\('practice'\)/)
     expect(app).toMatch(/if \(view === 'library'\) \{[\s\S]*setSidebarOpen\(true\)/)
   })
 
@@ -22,8 +22,10 @@ describe('Corranzo UX polish sprint', () => {
     const app = readSrc('App.jsx')
     const placeholder = readSrc('components', 'AppViewPlaceholder.jsx')
 
-    expect(app).toContain('Start with the demo piece')
+    expect(app).toContain('Try the demo piece, or add your sheet music and timing file.')
+    expect(app).toContain('Start Practice')
     expect(app).toContain("secondaryActionLabel=")
+    expect(app).toContain('Add My Sheet Music')
     expect(app).toContain('Try Demo Piece')
     expect(app).toContain('handleLoadSampleFixtures')
     expect(placeholder).toContain('secondaryActionLabel')
@@ -37,11 +39,11 @@ describe('Corranzo UX polish sprint', () => {
     const demo = readSrc('components', 'DemoPieceCard.jsx')
 
     expect(welcome).toMatch(/Try the[\s\S]*demo first/)
-    expect(welcome).toContain('PDF + MusicXML/MXL')
+    expect(welcome).toContain('sheet music and timing file')
     expect(library).toContain('Start practicing')
     expect(library).toContain('Upload one file at a time')
     expect(upload).toContain('Add your files')
-    expect(upload).toContain('Timing:')
+    expect(upload).toContain('Choose sheet music + timing file together. MIDI is optional.')
     expect(demo).toContain('No files needed')
     expect(demo).toContain('Try Demo Piece')
   })
@@ -52,10 +54,14 @@ describe('Corranzo UX polish sprint', () => {
     const appCss = readSrc('App.css')
 
     expect(panel).toContain('summary="Optional settings"')
+    expect(panel).toContain('aria-label="Files"')
+    expect(panel).toContain('aria-label="Playback options"')
+    expect(panel).toContain('aria-label="Troubleshooting"')
+    expect(panel).toMatch(/title="Diagnostics"[\s\S]*defaultOpen=\{false\}/)
     expect(omrPanel).toContain('aria-busy={isGenerating}')
     expect(omrPanel).toContain('PDF playback ready')
     expect(appCss).toContain('.library-omr-panel__progress-bar')
     expect(appCss).toContain('.app-view-placeholder__secondary')
-    expect(appCss).toMatch(/@media \(max-width: 900px\)[\s\S]*\.topbar__feedback[\s\S]*display: none/)
+    expect(appCss).toMatch(/@media \(max-width: 900px\)[\s\S]*\.topbar__actions[\s\S]*min-width: 0/)
   })
 })

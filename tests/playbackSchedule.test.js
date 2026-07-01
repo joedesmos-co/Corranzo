@@ -73,7 +73,8 @@ describe('MIDI-to-performed mapping', () => {
       assessment: ALIGNMENT_ASSESSMENT.UNLIKELY_MATCH,
     })
     expect(result.method).toBe(MIDI_MAP_METHOD.PROPORTIONAL)
-    expect(result.warning).toMatch(/proportional/i)
+    expect(result.warning).toMatch(/Timing sync may need help/i)
+    expect(result.warning).not.toMatch(/MIDI-to-score|low confidence|proportional/i)
     expect(result.events[2].scoreTimeSeconds).toBeCloseTo(6, 6)
   })
 

@@ -14,6 +14,9 @@ describe('Practice page simplification', () => {
     expect(panel).toMatch(/title="Advanced"/)
     expect(panel).not.toMatch(/title="More"/)
     expect(panel).not.toMatch(/title="Setup"/)
+    expect(panel).toContain('aria-label="Files"')
+    expect(panel).toContain('aria-label="Playback options"')
+    expect(panel).toContain('aria-label="Troubleshooting"')
     expect(panel).toMatch(/PracticeScoreCursorSection/)
     expect(panel).toMatch(/PracticeMetronomeAdvancedSettings/)
   })
@@ -70,15 +73,21 @@ describe('Practice page simplification', () => {
 
   it('uses beginner-facing Wait For You controls under Mode', () => {
     const waitForYou = readSrc('components', 'practice', 'WaitForYouSection.jsx')
+    const waitForYouHook = readSrc('features', 'practice', 'useWaitForYou.js')
+    const practiceSession = readSrc('features', 'practice', 'usePracticeSession.js')
     const practiceCss = readSrc('styles', 'practice.css')
 
     expect(waitForYou).toContain("[WFY_CHECKPOINT_MODE.BEAT]: 'Tap through beats'")
     expect(waitForYou).toContain("[WFY_CHECKPOINT_MODE.NOTE]: 'Play each note'")
+    expect(readSrc('features', 'practice', 'waitForYouCheckpointMode.js')).not.toContain('Beat checkpoints')
     expect(waitForYou).toContain('wait-for-you__primary-action')
     expect(waitForYou).toContain('Play the note shown on the score, or tap Continue.')
     expect(waitForYou).toContain('Tap Continue to move through beats.')
     expect(practiceCss).toContain('.practice-control-panel__primary > .wait-for-you')
     expect(practiceCss).toMatch(/\.wait-for-you__btn--primary \{[\s\S]*#d8f5e4/)
+    expect(waitForYouHook).toContain('goToCheckpoint(startIndex, { sync: false })')
+    expect(waitForYouHook).toContain('goToCheckpoint(0, { sync: false })')
+    expect(practiceSession).toMatch(/if \(options\.sync === false\)[\s\S]*setPracticeTime\(\)[\s\S]*else[\s\S]*flushSync/)
   })
 
   it('keeps tempo sliders usable for touch and pointer users', () => {

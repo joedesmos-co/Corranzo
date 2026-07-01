@@ -8,6 +8,12 @@ import {
   FEEDBACK_SUBJECT,
   LOCAL_ONLY_MESSAGE,
 } from '../src/features/beta/betaInfo.js'
+import { readFileSync } from 'node:fs'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..')
+const readSrc = (...parts) => readFileSync(join(root, 'src', ...parts), 'utf8')
 
 describe('public beta polish', () => {
   it('builds a prefilled email feedback link', () => {
@@ -28,5 +34,22 @@ describe('public beta polish', () => {
   it('keeps the local-only explanation short and explicit', () => {
     expect(LOCAL_ONLY_MESSAGE).toContain('stay in this browser')
     expect(LOCAL_ONLY_MESSAGE).toContain('No account or cloud sync')
+  })
+
+  it('keeps beta and restore notices subtle in the app chrome', () => {
+    const topbar = readSrc('components', 'TopBar.jsx')
+    const restoreBanner = readSrc('components', 'SessionRestoreBanner.jsx')
+    const css = readSrc('App.css')
+
+    expect(topbar).toContain('Progress')
+    expect(topbar).not.toContain("label: 'Log'")
+    expect(topbar).toContain('title={`${BETA_LABEL} v${BETA_VERSION}`}')
+    expect(topbar).toContain('Beta')
+    expect(topbar).not.toContain('{BETA_LABEL} <span aria-hidden="true">·</span> v{BETA_VERSION}')
+    expect(restoreBanner).toMatch(/window\.setTimeout\(onDismiss, 5200\)/)
+    expect(restoreBanner).toMatch(/tone === 'error'/)
+    expect(css).toMatch(/\.session-restore-banner \{[\s\S]*position: fixed/)
+    expect(css).toMatch(/\.session-restore-banner \{[\s\S]*width: min\(420px, calc\(100vw - 32px\)\)/)
+    expect(css).not.toMatch(/session-restore-banner \+ \.main-layout/)
   })
 })

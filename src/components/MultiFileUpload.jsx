@@ -12,7 +12,7 @@ const ACCEPT_ALL = [
 ].join(',')
 
 /**
- * One upload box for all score files: drag/drop or pick PDF + MusicXML/MXL +
+ * One upload box for all score files: drag/drop or pick PDF + timing file +
  * optional MIDI at once. Each file is routed to the SAME import handler the
  * per-file cards use; this component adds no parsing.
  */
@@ -91,7 +91,7 @@ export default function MultiFileUpload({
         disabled={disabled}
       >
         <span className="multi-upload__title">Add your files</span>
-        <span className="multi-upload__hint">Choose PDF + MusicXML/MXL together. MIDI is optional.</span>
+        <span className="multi-upload__hint">Choose sheet music + timing file together. MIDI is optional.</span>
         <span className="multi-upload__cta" aria-hidden="true">
           Choose files
         </span>

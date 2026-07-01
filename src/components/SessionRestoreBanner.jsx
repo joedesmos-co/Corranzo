@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { RESTORE_STATUS } from '../hooks/useSessionPersistence.js'
 
 export default function SessionRestoreBanner({
@@ -6,6 +7,21 @@ export default function SessionRestoreBanner({
   onDismiss,
   onClearSaved,
 }) {
+  const tone =
+    status === RESTORE_STATUS.FAILED || status === RESTORE_STATUS.EXPIRED
+      ? 'error'
+      : status === RESTORE_STATUS.PARTIAL
+        ? 'info'
+        : 'success'
+
+  useEffect(() => {
+    if (!message || tone === 'error' || typeof onDismiss !== 'function') {
+      return undefined
+    }
+    const timeout = window.setTimeout(onDismiss, 5200)
+    return () => window.clearTimeout(timeout)
+  }, [message, onDismiss, tone])
+
   if (
     !message ||
     status === RESTORE_STATUS.NONE ||
@@ -14,13 +30,6 @@ export default function SessionRestoreBanner({
   ) {
     return null
   }
-
-  const tone =
-    status === RESTORE_STATUS.FAILED || status === RESTORE_STATUS.EXPIRED
-      ? 'error'
-      : status === RESTORE_STATUS.PARTIAL
-        ? 'info'
-        : 'success'
 
   return (
     <div className={`session-restore-banner session-restore-banner--${tone}`} role="status">

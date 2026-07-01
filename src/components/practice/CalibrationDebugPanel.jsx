@@ -39,7 +39,7 @@ export default function CalibrationDebugPanel({
         <p className="practice-section__hint">
           {hasAnchors
             ? 'Calibration snapshot is not loaded yet. Re-run auto setup to refresh diagnostics, or wait for setup to finish.'
-            : 'Run score-follow setup to capture calibration diagnostics.'}
+            : 'Run score cursor setup to capture calibration diagnostics.'}
         </p>
         {hasAnchors && onRotatePage && (
           <div className="calibration-debug-panel__actions">

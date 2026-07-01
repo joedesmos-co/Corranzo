@@ -4,12 +4,12 @@ export const GUIDED_TUTORIAL_STEPS = [
   {
     id: 'welcome',
     title: 'Welcome',
-    body: 'Corranzo helps you practice sheet music with playback, score-following, and Wait For You.',
+    body: 'Corranzo helps you practice sheet music with playback, a score cursor, and Wait For You.',
   },
   {
     id: 'library',
     title: 'Library',
-    body: 'Add a PDF plus MusicXML or MXL. PDF-only playback is experimental.',
+    body: 'Add sheet music plus a timing file. PDF-only playback is experimental.',
     targetId: 'library-upload',
     view: 'library',
   },
@@ -50,7 +50,7 @@ export const GUIDED_TUTORIAL_STEPS = [
   {
     id: 'advanced',
     title: 'Advanced',
-    body: 'Advanced is optional: files, setup, tracks, and diagnostics live here.',
+    body: 'Advanced is optional: files, playback options, and troubleshooting live here.',
     targetId: 'practice-advanced',
     view: 'practice',
   },

@@ -66,13 +66,13 @@ export default function useWaitForYou({
   const currentCheckpoint = getCurrentCheckpoint(checkpoints, checkpointIndex)
 
   const goToCheckpoint = useCallback(
-    (index) => {
+    (index, seekOptions = {}) => {
       const checkpoint = getCurrentCheckpoint(checkpoints, index)
       if (!checkpoint) {
         return
       }
       setCheckpointIndex(index)
-      seekToPracticeTime(checkpoint.timeSeconds)
+      seekToPracticeTime(checkpoint.timeSeconds, seekOptions)
       onEnsurePaused()
     },
     [checkpoints, seekToPracticeTime, onEnsurePaused],
@@ -95,9 +95,9 @@ export default function useWaitForYou({
       const startIndex = checkpoints.length
         ? findCheckpointIndexAtTime(checkpoints, startTime)
         : 0
-      goToCheckpoint(startIndex)
+      goToCheckpoint(startIndex, { sync: false })
     } else if (checkpointsChanged) {
-      goToCheckpoint(0)
+      goToCheckpoint(0, { sync: false })
     }
 
     wasActiveRef.current = true

@@ -102,7 +102,11 @@ describe('guided tutorial UI wiring', () => {
   it('wires replay and real UI targets without visible extra setup clutter', () => {
     expect(readSrc('App.jsx')).toMatch(/GuidedTutorial/)
     expect(readSrc('components', 'TopBar.jsx')).toMatch(/onReplayTutorial/)
+    expect(readSrc('components', 'TopBar.jsx')).toContain('Replay tutorial')
+    expect(readSrc('components', 'TopBar.jsx')).toContain('How files work')
+    expect(readSrc('components', 'TopBar.jsx')).toContain('Contact / Feedback')
     expect(readSrc('components', 'TopBar.jsx')).toMatch(/data-tour-id=\{id === 'practice' \? 'topbar-practice'/)
+    expect(readSrc('App.css')).toMatch(/\.topbar__help-menu:not\(\[open\]\) \.topbar__help-panel[\s\S]*display: none/)
     expect(readSrc('components', 'MultiFileUpload.jsx')).toMatch(/data-tour-id="library-upload"/)
     expect(readSrc('components', 'practice', 'PracticeTransportSection.jsx')).toMatch(/data-tour-id="practice-playback"/)
     expect(readSrc('components', 'practice', 'PracticeModeSection.jsx')).toMatch(/data-tour-id="practice-mode"/)
@@ -111,17 +115,27 @@ describe('guided tutorial UI wiring', () => {
     expect(readSrc('components', 'practice', 'PracticeControlPanel.jsx')).toMatch(/dataTourId="practice-advanced"/)
   })
 
-  it('offers the demo before Practice controls are available and hides Done until the finish step', () => {
+  it('offers clear first-run choices and hides Done until the finish step', () => {
     const app = readSrc('App.jsx')
     const tutorial = readSrc('components', 'onboarding', 'GuidedTutorial.jsx')
+    const css = readSrc('App.css')
 
     expect(app).toMatch(/canStartDemo=\{isDemoSampleEnabled\(\) && restoreGateOpen && !practiceReady\}/)
     expect(app).toMatch(/onStartDemo=\{handleLoadSampleFixtures\}/)
+    expect(app).toMatch(/onAddSheetMusic=\{handleTutorialAddSheetMusic\}/)
     expect(tutorial).toContain('practiceStepNeedsScore')
+    expect(tutorial).toContain('isChoiceStep')
     expect(tutorial).toContain('Try Demo Piece')
+    expect(tutorial).toContain('Add My Sheet Music')
+    expect(tutorial).toMatch(/\{!isChoiceStep && <div className="guided-tour__backdrop" \/>/)
+    expect(tutorial).toMatch(/const canAdvance = !practiceStepNeedsScore && !isChoiceStep/)
     expect(tutorial).toContain('Open the demo piece so the tour can show Play')
     expect(tutorial).toMatch(/\{isLastStep && \([\s\S]*Done/)
     expect(tutorial).toMatch(/!isLastStep && canAdvance/)
+    expect(app).toContain('app--guided-choice')
+    expect(css).toContain('.guided-tour--choice')
+    expect(css).toContain('.guided-tour__card--choice')
+    expect(css).toMatch(/@media \(max-width: 640px\)[\s\S]*\.app--guided-choice \.main-layout--empty-score[\s\S]*margin-top: 300px/)
   })
 
   it('keeps the added Help control from overflowing tablet top bars', () => {
@@ -129,5 +143,6 @@ describe('guided tutorial UI wiring', () => {
 
     expect(css).toMatch(/@media \(max-width: 900px\)[\s\S]*\.topbar__actions[\s\S]*min-width: 0/)
     expect(css).toMatch(/@media \(max-width: 900px\)[\s\S]*\.topbar__nav-btn[\s\S]*padding: 8px var\(--sf-space-md\)/)
+    expect(css).toMatch(/@media \(max-width: 640px\)[\s\S]*\.topbar__help-panel[\s\S]*width: min\(190px, calc\(100vw - 32px\)\)/)
   })
 })

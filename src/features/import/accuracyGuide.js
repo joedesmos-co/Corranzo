@@ -6,14 +6,14 @@ export const ACCURACY_TIERS = [
   {
     id: 'best',
     label: 'Best',
-    summary: 'Source notation or MusicXML / MXL',
+    summary: 'Sheet music + timing file',
     detail:
-      'Timing from your notation app (MusicXML, MXL, or future MuseScore .mscz/.mscx) — powers Wait For You, loops, and accurate score follow.',
+      'Timing from your notation app powers Wait For You, loops, and an accurate score cursor.',
   },
   {
     id: 'good',
-    label: 'Good',
-    summary: 'PDF + MusicXML / MXL',
+    label: 'Ready',
+    summary: 'PDF + timing file',
     detail:
       'The PDF is what you read; the timing file tells Corranzo where measures and beats are. This is the recommended Practice setup today.',
   },
@@ -32,7 +32,7 @@ export function evaluateAccuracySetup({ hasPdf, hasMusicXml }) {
       tierId: 'good',
       tier: ACCURACY_TIERS.find((item) => item.id === 'good'),
       headline: 'Ready for Practice',
-      detail: 'PDF and score timing are loaded — you are set for accurate follow-along.',
+      detail: 'Sheet music and timing are loaded — you are set for accurate follow-along.',
     }
   }
 
@@ -41,7 +41,7 @@ export function evaluateAccuracySetup({ hasPdf, hasMusicXml }) {
       tierId: 'basic',
       tier: ACCURACY_TIERS.find((item) => item.id === 'basic'),
       headline: 'PDF only so far',
-      detail: 'Add MusicXML or MXL next — that is what makes Practice interactive.',
+      detail: 'Add a timing file next — that is what makes Practice interactive.',
     }
   }
 
@@ -58,7 +58,7 @@ export function evaluateAccuracySetup({ hasPdf, hasMusicXml }) {
     tierId: 'empty',
     tier: null,
     headline: 'Start here',
-    detail: 'Upload a PDF, then MusicXML/MXL from your notation app.',
+    detail: 'Upload your sheet music PDF, then add a timing file from your notation app.',
   }
 }
 
@@ -70,7 +70,7 @@ export function buildLibraryAccuracyWarnings({ hasPdf, hasMusicXml, hasMidi }) {
       id: 'pdf-only',
       strength: 'strong',
       message:
-        'PDF alone cannot provide exact measure timing or note-following. Add MusicXML/MXL (or MuseScore export when supported) for accurate Practice features.',
+        'PDF alone cannot provide exact measure timing or note-following. Add a timing file for accurate Practice features.',
     })
   }
 

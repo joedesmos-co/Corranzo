@@ -19,15 +19,15 @@ export function buildPracticeGuidance({
   }
 
   if (timingError) {
-    steps.push('Re-upload your score timing file in Library, then return to Practice.')
+    steps.push('Re-upload your timing file in Library, then return to Practice.')
     return steps
   }
 
   if (!hasMusicXml) {
     steps.push(
-      'In Library, add score timing — export MusicXML or MXL from MuseScore (best accuracy today). PDF alone cannot provide exact timing.',
+      'In Library, add a timing file — export MusicXML or MXL from MuseScore for best accuracy today.',
     )
-    steps.push('That unlocks measure numbers, loops, Wait For You, and score follow.')
+    steps.push('That unlocks measure numbers, loops, Wait For You, and the score cursor.')
     return steps.slice(0, 3)
   }
 
@@ -38,7 +38,7 @@ export function buildPracticeGuidance({
       steps.push('Mute left or right hand under Tracks / hands to focus on one hand.')
     } else {
       steps.push(
-        'Score follow may need a quick Setup pass on your PDF — mark a few measures if the cursor looks off.',
+        'The score cursor may need a quick setup pass — mark a few measures if it looks off.',
       )
       steps.push('Press Play (Space) to hear the score and move through measures with the cursor.')
       steps.push('Wait For You: Manual continue always works; MIDI and microphone are optional.')

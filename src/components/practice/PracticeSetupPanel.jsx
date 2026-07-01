@@ -8,9 +8,9 @@ export default function PracticeSetupPanel({ session, scoreFollow }) {
 
   return (
     <div className="practice-setup">
-      <section className="practice-section practice-section--setup" aria-label="Score follow setup">
+      <section className="practice-section practice-section--setup" aria-label="Score cursor setup">
         <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">
-          Score follow
+          Score cursor
         </h3>
         <ScoreFollowApproximateHint label={scoreFollow?.followApproximateLabel} />
         {scoreFollow && (

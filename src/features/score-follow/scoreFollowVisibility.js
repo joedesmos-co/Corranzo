@@ -15,14 +15,14 @@ export const CURSOR_HIDE_REASON = {
 export const CURSOR_HIDE_REASON_LABELS = {
   [CURSOR_HIDE_REASON.VISIBLE]: 'Cursor visible on this page',
   [CURSOR_HIDE_REASON.NO_PDF]: 'No PDF loaded',
-  [CURSOR_HIDE_REASON.NO_TIMING]: 'No score timing file loaded',
+  [CURSOR_HIDE_REASON.NO_TIMING]: 'No timing file loaded',
   [CURSOR_HIDE_REASON.NO_ANCHORS]: 'No measure anchors placed',
-  [CURSOR_HIDE_REASON.OVERLAY_DISABLED]: 'Score-follow overlay is off',
+  [CURSOR_HIDE_REASON.OVERLAY_DISABLED]: 'Score cursor is off',
   [CURSOR_HIDE_REASON.ALIGNMENT_MODE]: 'Hidden during alignment mode',
   [CURSOR_HIDE_REASON.CURSOR_NOT_COMPUTED]: 'Could not compute cursor position',
   [CURSOR_HIDE_REASON.WRONG_PAGE]: 'Cursor is on a different PDF page',
-  [CURSOR_HIDE_REASON.NEEDS_SETUP]: 'Score follow needs setup',
-  [CURSOR_HIDE_REASON.LOW_TRUST]: 'Score follow needs setup',
+  [CURSOR_HIDE_REASON.NEEDS_SETUP]: 'Score cursor needs setup',
+  [CURSOR_HIDE_REASON.LOW_TRUST]: 'Score cursor needs setup',
   [CURSOR_HIDE_REASON.NOTE_TARGET]: 'Hidden while Your note is shown',
 }
 
@@ -37,7 +37,7 @@ export function getCursorFollowHint(reason, { cursorPage, visiblePageNumber } = 
       return 'Place at least one measure anchor to see the follow cursor.'
     case CURSOR_HIDE_REASON.NEEDS_SETUP:
     case CURSOR_HIDE_REASON.LOW_TRUST:
-      return 'Score follow needs setup — mark measures manually or use the demo sample for a calibrated cursor.'
+      return 'Score cursor needs setup — mark measures manually or use the demo sample for a calibrated cursor.'
     case CURSOR_HIDE_REASON.NOTE_TARGET:
       return 'Follow the amber Your note marker during Wait For You.'
     case CURSOR_HIDE_REASON.WRONG_PAGE:
@@ -45,7 +45,7 @@ export function getCursorFollowHint(reason, { cursorPage, visiblePageNumber } = 
         ? `Follow cursor is on page ${cursorPage} — switch to page ${cursorPage} to see it.`
         : 'Follow cursor is on another page.'
     case CURSOR_HIDE_REASON.CURSOR_NOT_COMPUTED:
-      return 'Score follow needs setup.'
+      return 'Score cursor needs setup.'
     default:
       return null
   }

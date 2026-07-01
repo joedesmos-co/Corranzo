@@ -35,7 +35,7 @@ function getSetupStatus({
     return {
       tone: 'active',
       title: experimentalOmrPlayback
-        ? setupMessage || 'Setting up score-follow…'
+        ? setupMessage || 'Setting up score cursor…'
         : 'Scanning PDF…',
       detail: null,
     }
@@ -51,7 +51,7 @@ function getSetupStatus({
     return {
       tone: setupPhase === 'failed' ? 'setup' : 'ready',
       title: setupMessage || 'Experimental playback ready',
-      detail: 'Experimental PDF playback may be inaccurate. For accurate playback, upload MusicXML/MXL.',
+      detail: 'Experimental PDF playback may be inaccurate. For accurate playback, upload a timing file.',
     }
   }
   if (setupPhase === 'needs-setup' || setupPhase === 'failed') {
@@ -72,7 +72,7 @@ function getSetupStatus({
     return {
       tone: 'setup',
       title:
-        hasPdf && hasTiming ? 'Preparing score follow…' : 'Waiting for PDF + timing',
+        hasPdf && hasTiming ? 'Preparing score cursor…' : 'Waiting for sheet music + timing',
       detail: null,
     }
   }
@@ -124,8 +124,8 @@ export default function ScoreFollowControls({
 
   if (!hasPdf) {
     return (
-      <Root className={rootClass} aria-label="Score follow">
-        {!embedded && <h4 className="score-follow-controls__title">Score follow</h4>}
+      <Root className={rootClass} aria-label="Score cursor">
+        {!embedded && <h4 className="score-follow-controls__title">Score cursor</h4>}
         <p className="score-follow-controls__empty">Load a PDF from the Library first.</p>
       </Root>
     )
@@ -133,10 +133,10 @@ export default function ScoreFollowControls({
 
   if (!hasTiming) {
     return (
-      <Root className={rootClass} aria-label="Score follow">
-        {!embedded && <h4 className="score-follow-controls__title">Score follow</h4>}
+      <Root className={rootClass} aria-label="Score cursor">
+        {!embedded && <h4 className="score-follow-controls__title">Score cursor</h4>}
         <p className="score-follow-controls__empty">
-          Load MusicXML in Library to enable score follow.
+          Add a timing file in Library to enable the score cursor.
         </p>
       </Root>
     )
@@ -176,8 +176,8 @@ export default function ScoreFollowControls({
   }
 
   return (
-    <Root className={rootClass} aria-label="Score follow">
-      {!embedded && <h4 className="score-follow-controls__title">Score follow</h4>}
+    <Root className={rootClass} aria-label="Score cursor">
+      {!embedded && <h4 className="score-follow-controls__title">Score cursor</h4>}
 
       {embedded && (
         <div
@@ -309,7 +309,7 @@ export default function ScoreFollowControls({
             {setupStatus?.message || 'Experimental playback ready'}
           </p>
           <p className="score-follow-controls__status score-follow-controls__status--hint">
-            Experimental PDF playback may be inaccurate. For accurate playback, upload MusicXML/MXL.
+            Experimental PDF playback may be inaccurate. For accurate playback, upload a timing file.
           </p>
           <button
             type="button"
@@ -317,7 +317,7 @@ export default function ScoreFollowControls({
             onClick={onRetryAutoSetup}
             disabled={!onRetryAutoSetup || isSemiAutoAnalyzing}
           >
-            {autoFailed ? 'Retry score-follow setup' : 'Try score-follow setup'}
+            {autoFailed ? 'Retry cursor setup' : 'Try cursor setup'}
           </button>
         </div>
       ) : autoFailed ? (

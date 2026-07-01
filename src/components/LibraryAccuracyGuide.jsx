@@ -16,10 +16,10 @@ export default function LibraryAccuracyGuide({ hasPdf, hasMusicXml }) {
       </p>
 
       <details className="library-accuracy-guide__more">
-        <summary>Why MusicXML matters</summary>
+        <summary>Why a timing file helps</summary>
         <div className="library-accuracy-guide__body">
           <p className="library-accuracy-guide__intro">
-            Corranzo is most accurate with <strong>MusicXML or MXL</strong> from your notation app.
+            Corranzo is most accurate with a <strong>timing file</strong> from your notation app.
             A PDF alone is great for reading, but cannot tell the app exactly which note is which.
           </p>
 
@@ -44,9 +44,9 @@ export default function LibraryAccuracyGuide({ hasPdf, hasMusicXml }) {
               <dd>PDF — what you read on screen</dd>
             </div>
             <div>
-              <dt>2 — Score timing</dt>
+              <dt>2 — Timing file</dt>
               <dd>
-                {extensions} — measures, Wait For You, score follow (.mxl, .musicxml, .xml today)
+                {extensions} — measures, Wait For You, and the score cursor
               </dd>
             </div>
             <div>

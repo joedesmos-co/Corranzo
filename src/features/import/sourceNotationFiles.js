@@ -4,8 +4,8 @@ export const MUSESCORE_PLANNED_MESSAGE =
   'MuseScore source files (.mscz, .mscx) are planned. For now, export MusicXML or MXL from MuseScore for best accuracy.'
 
 export const SCORE_TIMING_ROLE = {
-  label: 'Score timing / source notation',
-  shortLabel: 'Score timing',
+  label: 'Timing file',
+  shortLabel: 'Timing file',
   /** Parsed today for measure/beat intelligence */
   parsedExtensions: ['.mxl', '.musicxml', '.xml'],
   /** Accepted in the file picker; .mscz/.mscx show a planned message */

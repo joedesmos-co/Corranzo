@@ -75,6 +75,24 @@ describe('PDF page navigation responsiveness', () => {
   })
 })
 
+describe('PDF toolbar prominence', () => {
+  const toolbar = readSrc('components', 'pdf', 'PdfViewerToolbar.jsx')
+  const css = readFileSync(join(root, 'src', 'App.css'), 'utf8')
+
+  it('keeps markup tools behind one secondary popover', () => {
+    expect(toolbar).toContain('label="Markup"')
+    expect(toolbar).toContain('panelClassName="tb-popover__panel--markup"')
+    expect(toolbar).toContain('aria-label="Markup tools"')
+    expect(toolbar).toContain('Undo markup')
+    expect(toolbar).toContain('Export markup')
+    expect(toolbar).toContain('Import markup')
+    expect(toolbar).not.toContain('label="Brush settings"')
+    expect(toolbar).not.toContain('Export JSON')
+    expect(toolbar).not.toContain('Import JSON')
+    expect(css).toContain('.tb-popover__panel--markup')
+  })
+})
+
 describe('phase 3 mobile and build polish', () => {
   const appCss = readFileSync(join(root, 'src', 'App.css'), 'utf8')
   const practiceCss = readFileSync(join(root, 'src', 'styles', 'practice.css'), 'utf8')

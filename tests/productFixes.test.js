@@ -295,8 +295,8 @@ describe('Fix E: setup panel has no long instruction blocks', () => {
       join(__dir, '..', 'src', 'components', 'pdf', 'ScoreFollowControls.jsx'),
       'utf8',
     )
-    // The setup detail should reference MusicXML and be concise
-    expect(src).toMatch(/Mark system starts|load MusicXML/i)
+    // The setup detail should stay concise.
+    expect(src).toMatch(/Mark system starts|timing file/i)
     // Confirm we removed the long paragraph from old version
     expect(src).not.toMatch(/Automatic setup requires/)
     expect(src).not.toMatch(/score-follow system needs/)

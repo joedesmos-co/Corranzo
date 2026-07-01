@@ -48,7 +48,7 @@ export default function ScoreTimingDiagnosticsPanel({
   if (!hasMusicXml && !isLoading && !error) {
     return (
       <p className="timing-diagnostics__empty">
-        Load a score timing file to inspect measure data and file alignment.
+        Load a timing file to inspect measure data and file alignment.
       </p>
     )
   }
@@ -62,7 +62,7 @@ export default function ScoreTimingDiagnosticsPanel({
         Clock: {syncLabel}
       </p>
 
-      {isLoading && <p className="timing-diagnostics__status">Parsing score timing…</p>}
+      {isLoading && <p className="timing-diagnostics__status">Parsing timing file…</p>}
       {error && <p className="timing-diagnostics__error">{error}</p>}
 
       {timingMap?.fileName && (

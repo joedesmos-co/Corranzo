@@ -231,7 +231,7 @@ export default function App() {
           type: validation.softWarning ? 'info' : 'success',
           message: validation.softWarning
             ? `${validation.softWarning} Loaded ${file.name}. Previous generated playback was cleared.`
-            : `Loaded ${file.name}. Previous generated playback was cleared; generate again or upload MusicXML/MXL.`,
+            : `Loaded ${file.name}. Previous generated playback was cleared; generate again or add a timing file.`,
         })
       } else if (midiSource || nextMusicXmlSource) {
         setLibraryFeedback({
@@ -246,7 +246,7 @@ export default function App() {
             ? { type: 'info', message: validation.softWarning }
             : {
                 type: 'success',
-                message: `Loaded ${file.name}. Add score timing, then open Practice.`,
+                message: `Loaded ${file.name}. Add a timing file, then open Practice.`,
               },
         )
       }
@@ -278,7 +278,7 @@ export default function App() {
         type: 'success',
         message: fullSet
           ? `Loaded ${file.name}. All files ready — opening Practice.`
-          : `Loaded ${file.name}. Add a PDF + timing to open Practice.`,
+          : `Loaded ${file.name}. Add sheet music and a timing file to open Practice.`,
       })
       if (fullSet) {
         navigateToView('practice')
@@ -310,7 +310,7 @@ export default function App() {
         type: 'success',
         message: fullSet
           ? `Loaded ${file.name}. All files ready — opening Practice.`
-          : `Loaded ${file.name}. Add a PDF to open Practice.`,
+          : `Loaded ${file.name}. Add sheet music to open Practice.`,
       })
       if (fullSet) {
         navigateToView('practice')
@@ -608,7 +608,7 @@ export default function App() {
               type: loadedSoftWarning ? 'info' : 'success',
               message: loadedSoftWarning
                 ? `${loadedSoftWarning} Loaded ${classified.pdf[0].name}. Previous generated playback was cleared.`
-                : `Loaded ${classified.pdf[0].name}. Previous generated playback was cleared; generate again or upload MusicXML/MXL.`,
+                : `Loaded ${classified.pdf[0].name}. Previous generated playback was cleared; generate again or add a timing file.`,
             })
           } else if (loadedMidi || loadedXml) {
             setLibraryFeedback({
@@ -623,7 +623,7 @@ export default function App() {
                 ? { type: 'info', message: loadedSoftWarning }
                 : {
                     type: 'success',
-                    message: `Loaded ${classified.pdf[0].name}. Add score timing, then open Practice.`,
+                    message: `Loaded ${classified.pdf[0].name}. Add a timing file, then open Practice.`,
                   },
             )
           }
@@ -634,8 +634,8 @@ export default function App() {
             message: fullSet
               ? 'All files ready — opening Practice.'
               : classified.musicXml[0]
-                ? `Loaded ${classified.musicXml[0].name}. Add a PDF to open Practice.`
-                : `Loaded ${classified.midi[0].name}. Add a PDF + timing to open Practice.`,
+                ? `Loaded ${classified.musicXml[0].name}. Add sheet music to open Practice.`
+                : `Loaded ${classified.midi[0].name}. Add sheet music and a timing file to open Practice.`,
           })
         }
 
@@ -857,6 +857,18 @@ export default function App() {
     setGuidedTutorialOpen(true)
   }
 
+  function showFileHelp() {
+    setShowWelcome(false)
+    setSidebarOpen(true)
+    navigateToView('library')
+  }
+
+  function handleTutorialAddSheetMusic() {
+    finishGuidedTutorial('add-sheet-music')
+    setSidebarOpen(true)
+    navigateToView('library')
+  }
+
   useEffect(() => {
     logAppViewDebug('render-state', {
       activeView,
@@ -914,15 +926,11 @@ export default function App() {
       })
       return
     }
-    if (meta?.blocked) {
+    if (meta?.emptyPractice) {
       dismissOnboarding()
       setShowWelcome(false)
-      setSidebarOpen(true)
-      setLibraryFeedback({
-        type: 'info',
-        message: 'Add a PDF and MusicXML/MXL first — then Practice will open.',
-      })
-      navigateToView('library')
+      setSidebarOpen(false)
+      navigateToView('practice')
       return
     }
     if (view === 'library') {
@@ -947,25 +955,32 @@ export default function App() {
         !((musicXmlSource?.omrMeta?.durationSeconds ?? 0) > 0)
       return (
         <AppViewPlaceholder
-          title={omrInvalid ? 'Generated playback is not ready' : 'Practice needs a score first'}
+          title={omrInvalid ? 'Generated playback is not ready' : 'Start Practice'}
           message={
             omrInvalid
-              ? 'Experimental PDF playback could not be validated. Return to Library and regenerate, or upload MusicXML/MXL.'
-              : 'Start with the demo piece, or add a PDF and MusicXML/MXL in Library.'
+              ? 'Experimental PDF playback could not be validated. Return to Library and regenerate, or upload a timing file.'
+              : 'Try the demo piece, or add your sheet music and timing file.'
           }
-          actionLabel="Back to Library"
-          onAction={() => {
-            setSidebarOpen(true)
-            navigateToView('library')
-          }}
-          secondaryActionLabel={
-            !omrInvalid && isDemoSampleEnabled() && restoreGateOpen ? 'Try Demo Piece' : null
+          actionLabel={
+            !omrInvalid && isDemoSampleEnabled() && restoreGateOpen
+              ? 'Try Demo Piece'
+              : 'Back to Library'
           }
-          onSecondaryAction={
+          onAction={
             !omrInvalid && isDemoSampleEnabled() && restoreGateOpen
               ? handleLoadSampleFixtures
-              : null
+              : () => {
+                  setSidebarOpen(true)
+                  navigateToView('library')
+                }
           }
+          secondaryActionLabel={!omrInvalid ? 'Add My Sheet Music' : null}
+          onSecondaryAction={!omrInvalid
+            ? () => {
+                setSidebarOpen(true)
+                navigateToView('library')
+              }
+            : null}
         />
       )
     }
@@ -1008,13 +1023,18 @@ export default function App() {
     )
   }
 
+  const guidedChoiceOpen = guidedTutorialOpen && restoreGateOpen && !practiceReady
+
   const appBody = (
-    <div className={`app${isRestoring ? ' app--restoring' : ''}`}>
+    <div
+      className={`app${isRestoring ? ' app--restoring' : ''}${guidedChoiceOpen ? ' app--guided-choice' : ''}`}
+    >
       <TopBar
         activeView={activeView}
         onNavigate={handleNavigate}
         onGoHome={goHome}
         onReplayTutorial={replayGuidedTutorial}
+        onShowFileHelp={showFileHelp}
         practiceReady={practiceReady}
       />
 
@@ -1121,6 +1141,7 @@ export default function App() {
           canStartDemo={isDemoSampleEnabled() && restoreGateOpen && !practiceReady}
           demoLoading={sampleLoadState.loading}
           onStartDemo={handleLoadSampleFixtures}
+          onAddSheetMusic={handleTutorialAddSheetMusic}
           onNavigate={navigateToView}
           onSkip={() => finishGuidedTutorial('skipped')}
           onDone={() => finishGuidedTutorial('done')}

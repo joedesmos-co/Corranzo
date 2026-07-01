@@ -69,6 +69,7 @@ export default function GuidedTutorial({
   canStartDemo = false,
   demoLoading = false,
   onStartDemo,
+  onAddSheetMusic,
   onNavigate,
   onSkip,
   onDone,
@@ -78,15 +79,27 @@ export default function GuidedTutorial({
   const [targetSnapshot, setTargetSnapshot] = useState(null)
   const step = steps[stepIndex] ?? steps[steps.length - 1]
   const isLastStep = stepIndex >= steps.length - 1
+  const isChoiceStep = step?.id === 'welcome' && !practiceReady
   const practiceStepNeedsScore = step?.view === 'practice' && !practiceReady
   const showDemoPrompt =
+    !isChoiceStep &&
     !practiceReady &&
     canStartDemo &&
     typeof onStartDemo === 'function' &&
     (step?.id === 'welcome' || practiceStepNeedsScore)
-  const canAdvance = !practiceStepNeedsScore
-  const displayTitle = practiceStepNeedsScore ? 'Try the demo first' : step?.title
-  const displayBody = practiceStepNeedsScore
+  const showChoiceActions = isChoiceStep && (
+    (canStartDemo && typeof onStartDemo === 'function') ||
+    typeof onAddSheetMusic === 'function'
+  )
+  const canAdvance = !practiceStepNeedsScore && !isChoiceStep
+  const displayTitle = isChoiceStep
+    ? 'Start with Corranzo'
+    : practiceStepNeedsScore
+      ? 'Try the demo first'
+      : step?.title
+  const displayBody = isChoiceStep
+    ? 'Choose the demo for a quick tour, or add your own sheet music.'
+    : practiceStepNeedsScore
     ? 'Open the demo piece so the tour can show Play, Wait For You, and the score cursor on the real Practice screen.'
     : step?.body
   const progressLabel = `${Math.min(stepIndex + 1, steps.length)} of ${steps.length}`
@@ -206,6 +219,10 @@ export default function GuidedTutorial({
     onDone?.()
   }
 
+  function handleAddSheetMusic() {
+    onAddSheetMusic?.()
+  }
+
   function handleNext() {
     if (isLastStep) {
       handleDone()
@@ -219,11 +236,16 @@ export default function GuidedTutorial({
   }
 
   return (
-    <div className="guided-tour" role="dialog" aria-modal="true" aria-labelledby="guided-tour-title">
-      <div className="guided-tour__backdrop" />
+    <div
+      className={`guided-tour${isChoiceStep ? ' guided-tour--choice' : ''}`}
+      role="dialog"
+      aria-modal={isChoiceStep ? undefined : 'true'}
+      aria-labelledby="guided-tour-title"
+    >
+      {!isChoiceStep && <div className="guided-tour__backdrop" />}
       {visibleTargetRect && <div className="guided-tour__highlight" style={highlightStyle} />}
       <section
-        className={`guided-tour__card${visibleTargetRect ? '' : ' guided-tour__card--center'}`}
+        className={`guided-tour__card${visibleTargetRect || isChoiceStep ? '' : ' guided-tour__card--center'}${isChoiceStep ? ' guided-tour__card--choice' : ''}`}
         style={visibleTargetRect ? cardStyle : undefined}
       >
         <p className="guided-tour__step">{progressLabel}</p>
@@ -231,6 +253,29 @@ export default function GuidedTutorial({
           {displayTitle}
         </h2>
         <p className="guided-tour__body">{displayBody}</p>
+        {showChoiceActions && (
+          <div className="guided-tour__choice-actions" aria-label="Choose how to start">
+            {canStartDemo && typeof onStartDemo === 'function' && (
+              <button
+                type="button"
+                className="guided-tour__btn guided-tour__btn--primary guided-tour__btn--choice"
+                onClick={onStartDemo}
+                disabled={demoLoading}
+              >
+                {demoLoading ? 'Opening demo…' : 'Try Demo Piece'}
+              </button>
+            )}
+            {typeof onAddSheetMusic === 'function' && (
+              <button
+                type="button"
+                className="guided-tour__btn guided-tour__btn--choice guided-tour__btn--secondary"
+                onClick={handleAddSheetMusic}
+              >
+                Add My Sheet Music
+              </button>
+            )}
+          </div>
+        )}
         {showDemoPrompt && (
           <div className="guided-tour__demo">
             <p className="guided-tour__demo-copy">

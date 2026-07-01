@@ -16,7 +16,7 @@ export const FILE_IMPORT_LIMITS = {
     acceptExtensions: ['.mid', '.midi'],
   },
   musicXml: {
-    label: 'MusicXML',
+    label: 'Timing file',
     softMaxBytes: 10 * MB,
     hardMaxBytes: 30 * MB,
     acceptMime: [
@@ -61,7 +61,7 @@ export function validateFileForImport(file, kind) {
         ? 'Please choose a PDF file (.pdf).'
         : kind === 'midi'
           ? 'Please choose a MIDI file (.mid or .midi).'
-          : 'Please choose MusicXML (.musicxml, .xml, .mxl) or MuseScore source (.mscz, .mscx — export MusicXML/MXL for now).'
+          : 'Please choose a timing file (.musicxml, .xml, .mxl) or MuseScore source (.mscz, .mscx — export a timing file for now).'
     return { ok: false, message: hint }
   }
 

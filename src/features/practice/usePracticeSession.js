@@ -151,15 +151,20 @@ export default function usePracticeSession({
   }, [sourcesRevision]) // eslint-disable-line react-hooks/exhaustive-deps -- new score files → start at 0
 
   const seekToPracticeTime = useCallback(
-    (seconds) => {
+    (seconds, options = {}) => {
       if (!hasMusicXml) {
         return
       }
       // Paused scrub uses manualTime for practiceTime; flush so the score-follow
       // cursor and page follow see the new position in the same frame as the bar.
-      flushSync(() => {
+      const setPracticeTime = () => {
         clock.setManualTime(seconds)
-      })
+      }
+      if (options.sync === false) {
+        setPracticeTime()
+      } else {
+        flushSync(setPracticeTime)
+      }
       playback.seek(seconds)
     },
     [hasMusicXml, playback, clock.setManualTime],

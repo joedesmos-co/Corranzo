@@ -22,10 +22,10 @@ export default function PracticeFilesSummary({
       </div>
       <div className={`practice-files__item${hasMusicXml ? ' practice-files__item--ok' : ''}`}>
         <span className="practice-files__label-row">
-          <span className="practice-files__label">Score timing</span>
-          <PracticeHelpTip label="About score timing">
+          <span className="practice-files__label">Timing file</span>
+          <PracticeHelpTip label="About timing files">
             MusicXML/MXL (or future MuseScore source files) tells Corranzo where measures and beats
-            fall in time — measure display, loops, Wait For You, and score follow. PDF alone cannot
+            fall in time — measure display, loops, Wait For You, and the score cursor. PDF alone cannot
             provide this; MIDI is playback only.
           </PracticeHelpTip>
         </span>
@@ -37,7 +37,7 @@ export default function PracticeFilesSummary({
             ? 'Loading…'
             : hasMusicXml
               ? timingFileName || 'Loaded'
-              : 'Missing — add MusicXML/MXL in Library'}
+              : 'Missing — add a timing file in Library'}
         </span>
         {timingError && (
           <span className="practice-files__hint practice-files__hint--error practice-files__hint--wrap" role="alert">
@@ -46,7 +46,7 @@ export default function PracticeFilesSummary({
         )}
         {!hasMusicXml && !timingError && (
           <span className="practice-files__hint practice-empty-state practice-files__hint--wrap">
-            Score timing is required — export MusicXML or MXL from MuseScore or your notation app.
+            A timing file is required — export MusicXML or MXL from MuseScore or your notation app.
           </span>
         )}
       </div>

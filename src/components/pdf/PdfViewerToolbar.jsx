@@ -108,44 +108,69 @@ export default function PdfViewerToolbar({
 
         <span className="viewer-float-toolbar__sep" aria-hidden="true" />
 
-        {DRAW_TOOLS.map(({ id, icon, label }) => (
-          <ToolbarIconButton
-            key={id}
-            icon={icon}
-            label={label}
-            active={activeTool === id}
-            disabled={disabled}
-            onClick={() => onToolChange(id)}
-          />
-        ))}
-
         <ToolbarPopover
-          icon="⚙"
-          label="Brush settings"
+          icon="✎"
+          label="Markup"
+          active={activeTool !== ANNOTATION_TOOLS.POINTER}
           disabled={disabled}
-          panelClassName="tb-popover__panel--brush-settings"
+          panelClassName="tb-popover__panel--markup"
         >
-          <AnnotationToolSettings
-            disabled={disabled}
-            activeTool={activeTool}
-            toolSettings={toolSettings}
-            onUpdate={onUpdateToolSettings}
-            compact
-          />
+          <div className="tb-markup">
+            <div className="tb-markup__tools" aria-label="Markup tools">
+              {DRAW_TOOLS.map(({ id, icon, label }) => (
+                <ToolbarIconButton
+                  key={id}
+                  icon={icon}
+                  label={label}
+                  active={activeTool === id}
+                  disabled={disabled}
+                  onClick={() => onToolChange(id)}
+                />
+              ))}
+            </div>
+            <AnnotationToolSettings
+              disabled={disabled}
+              activeTool={activeTool}
+              toolSettings={toolSettings}
+              onUpdate={onUpdateToolSettings}
+              compact
+            />
+            <div className="tb-menu tb-markup__actions">
+              <button
+                type="button"
+                className="tb-menu__item"
+                disabled={disabled || !canUndoAnnotations}
+                onClick={onUndoAnnotation}
+              >
+                Undo markup
+              </button>
+              <button
+                type="button"
+                className="tb-menu__item"
+                disabled={disabled || !canUndoAnnotations}
+                onClick={onClearAnnotations}
+              >
+                Clear page markup
+              </button>
+              <button
+                type="button"
+                className="tb-menu__item"
+                disabled={disabled}
+                onClick={onExportAnnotations}
+              >
+                Export markup
+              </button>
+              <button
+                type="button"
+                className="tb-menu__item"
+                disabled={disabled}
+                onClick={handleImportClick}
+              >
+                Import markup
+              </button>
+            </div>
+          </div>
         </ToolbarPopover>
-
-        <ToolbarIconButton
-          icon="↶"
-          label="Undo"
-          disabled={disabled || !canUndoAnnotations}
-          onClick={onUndoAnnotation}
-        />
-        <ToolbarIconButton
-          icon="⌧"
-          label="Clear page"
-          disabled={disabled || !canUndoAnnotations}
-          onClick={onClearAnnotations}
-        />
 
         <span className="viewer-float-toolbar__sep" aria-hidden="true" />
 
@@ -158,22 +183,6 @@ export default function PdfViewerToolbar({
               onClick={onTogglePaper}
             >
               {paperTheme === 'dark' ? 'Light paper' : 'Dark paper'}
-            </button>
-            <button
-              type="button"
-              className="tb-menu__item"
-              disabled={disabled}
-              onClick={onExportAnnotations}
-            >
-              Export JSON
-            </button>
-            <button
-              type="button"
-              className="tb-menu__item"
-              disabled={disabled}
-              onClick={handleImportClick}
-            >
-              Import JSON
             </button>
             {variant === 'embedded' ? (
               <button

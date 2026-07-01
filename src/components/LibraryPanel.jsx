@@ -108,7 +108,7 @@ export default function LibraryPanel({
       <header className="library-panel__hero">
         <p className="library-panel__tagline">Start practicing</p>
         <p className="library-panel__browser-hint" role="note">
-          Try the demo, or add PDF + MusicXML/MXL. MIDI is optional.
+          Try the demo, or add sheet music + a timing file. MIDI is optional.
         </p>
       </header>
 
@@ -170,7 +170,7 @@ export default function LibraryPanel({
         </div>
       ) : showOmrPanel ? (
         <p className="library-panel__workflow library-panel__workflow-next" role="status">
-          PDF-only playback is experimental. MusicXML/MXL gives the most reliable Practice timing.
+          PDF-only playback is experimental. A timing file gives the most reliable Practice timing.
         </p>
       ) : null}
 
@@ -205,16 +205,16 @@ export default function LibraryPanel({
 
       <div className="panel library-panel__upload-card library-panel__musicxml">
         <h2 className="panel__title practice-section__title--editorial">
-          <span className="panel__step-badge">2</span> Score timing
+          <span className="panel__step-badge">2</span> Timing file
         </h2>
         <p className="panel__hint">
-          MusicXML/MXL — score timing for Practice, loops &amp; Wait For You.
+          Keeps Practice, loops, and Wait For You lined up with your score.
         </p>
 
         <label
           className={`upload-btn upload-btn--musicxml${uploadsDisabled ? ' upload-btn--disabled' : ''}`}
         >
-          Upload MusicXML / MXL
+          Upload Timing File
           <input
             type="file"
             accept={ACCEPT_ATTRIBUTES.scoreTiming}
@@ -229,7 +229,7 @@ export default function LibraryPanel({
             {musicXmlFileName}
           </p>
         ) : (
-          <p className="library-panel__empty">Export MusicXML or MXL from your notation app.</p>
+          <p className="library-panel__empty">Usually MusicXML or MXL from your notation app.</p>
         )}
       </div>
 

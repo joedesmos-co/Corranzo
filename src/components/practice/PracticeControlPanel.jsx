@@ -98,7 +98,7 @@ export default memo(function PracticeControlPanel({
           waitForYouDisabled={omrWaitForYouDisabled}
           waitForYouDisabledReason={
             omrWaitForYouDisabled
-              ? 'Wait For You is disabled for generated PDF playback until score-follow setup succeeds.'
+              ? 'Wait For You is disabled for generated PDF playback until the score cursor is ready.'
               : ''
           }
           compact
@@ -201,46 +201,57 @@ export default memo(function PracticeControlPanel({
           dataTourId="practice-advanced"
         >
           <div className="practice-more">
-            {filesReady ? filesBlock : null}
-            <PracticeImportNotices
-              warnings={detailWarnings}
-              guidance={session.importReadiness?.guidance ?? []}
-              maxGuidance={2}
-            />
-            <PracticeEnvironmentNotices />
-            <PracticeMetronomeAdvancedSettings />
-            <PracticePositionTick collapsible />
-            <PracticeTracksCompactSection session={session} />
-            <PracticeSetupPanel
-              session={session}
-              scoreFollow={scoreFollow}
-            />
-            {session.webMidi.isGranted && midiWaitForYouActive && (
-              <MidiDiagnosticsPanel
-                statusLabel={session.webMidi.statusLabel}
-                latencyMs={session.webMidi.latencyMs}
-                noteCount={session.webMidi.noteCount}
-                sustain={session.webMidi.sustain}
-                activeNotes={session.webMidi.activeNotes}
-                lastNote={session.webMidi.lastNote}
+            <section className="practice-more__group" aria-label="Files">
+              <h4 className="practice-more__group-title">Files</h4>
+              {filesReady ? filesBlock : null}
+              <PracticeImportNotices
+                warnings={detailWarnings}
+                guidance={session.importReadiness?.guidance ?? []}
+                maxGuidance={2}
               />
-            )}
-            <p className="practice-shortcuts-hint" aria-label="Keyboard shortcuts">
-              <kbd>Space</kbd> play · <kbd>Enter</kbd> continue · <kbd>←</kbd>
-              <kbd>→</kbd> pages · <kbd>F</kbd> fullscreen
-            </p>
-            <PracticeCollapsibleSection
-              title="Diagnostics"
-              summary={diagnosticsSummary}
-              defaultOpen={false}
-            >
-              <PracticeDiagnosticsPanel
+            </section>
+
+            <section className="practice-more__group" aria-label="Playback options">
+              <h4 className="practice-more__group-title">Playback options</h4>
+              <PracticeMetronomeAdvancedSettings />
+              <PracticePositionTick collapsible />
+              <PracticeTracksCompactSection session={session} />
+            </section>
+
+            <section className="practice-more__group" aria-label="Troubleshooting">
+              <h4 className="practice-more__group-title">Troubleshooting</h4>
+              <PracticeEnvironmentNotices />
+              <PracticeSetupPanel
                 session={session}
                 scoreFollow={scoreFollow}
-                pieceName={pdfFileName}
-                pdfPageNumber={pdfPageNumber}
               />
-            </PracticeCollapsibleSection>
+              {session.webMidi.isGranted && midiWaitForYouActive && (
+                <MidiDiagnosticsPanel
+                  statusLabel={session.webMidi.statusLabel}
+                  latencyMs={session.webMidi.latencyMs}
+                  noteCount={session.webMidi.noteCount}
+                  sustain={session.webMidi.sustain}
+                  activeNotes={session.webMidi.activeNotes}
+                  lastNote={session.webMidi.lastNote}
+                />
+              )}
+              <p className="practice-shortcuts-hint" aria-label="Keyboard shortcuts">
+                <kbd>Space</kbd> play · <kbd>Enter</kbd> continue · <kbd>←</kbd>
+                <kbd>→</kbd> pages · <kbd>F</kbd> fullscreen
+              </p>
+              <PracticeCollapsibleSection
+                title="Diagnostics"
+                summary={diagnosticsSummary}
+                defaultOpen={false}
+              >
+                <PracticeDiagnosticsPanel
+                  session={session}
+                  scoreFollow={scoreFollow}
+                  pieceName={pdfFileName}
+                  pdfPageNumber={pdfPageNumber}
+                />
+              </PracticeCollapsibleSection>
+            </section>
           </div>
         </PracticeCollapsibleSection>
 

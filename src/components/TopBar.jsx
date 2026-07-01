@@ -8,7 +8,7 @@ import CorranzoLogo from './CorranzoLogo.jsx'
 const VIEWS = [
   { id: 'library', label: 'Library' },
   { id: 'practice', label: 'Practice' },
-  { id: 'profile', label: 'Log' },
+  { id: 'profile', label: 'Progress' },
 ]
 
 export default function TopBar({
@@ -16,11 +16,12 @@ export default function TopBar({
   onNavigate,
   onGoHome,
   onReplayTutorial,
+  onShowFileHelp,
   practiceReady = true,
 }) {
   function handleNavigate(id) {
     if (id === 'practice' && !practiceReady) {
-      onNavigate(id, { blocked: true })
+      onNavigate(id, { emptyPractice: true })
       return
     }
     onNavigate(id)
@@ -29,6 +30,19 @@ export default function TopBar({
   function handleGoHome(event) {
     event.preventDefault()
     onGoHome?.()
+  }
+
+  function closeHelpMenu(event) {
+    event.currentTarget.closest('details')?.removeAttribute('open')
+  }
+
+  function handleShowFileHelp(event) {
+    closeHelpMenu(event)
+    if (typeof onShowFileHelp === 'function') {
+      onShowFileHelp()
+      return
+    }
+    handleNavigate('library')
   }
 
   return (
@@ -40,8 +54,8 @@ export default function TopBar({
         aria-label="Corranzo home"
       >
         <CorranzoLogo className="topbar__logo" width={148} height={40} loading="eager" />
-        <span className="topbar__beta">
-          {BETA_LABEL} <span aria-hidden="true">·</span> v{BETA_VERSION}
+        <span className="topbar__beta" title={`${BETA_LABEL} v${BETA_VERSION}`}>
+          Beta
         </span>
       </a>
       <div className="topbar__actions">
@@ -58,7 +72,7 @@ export default function TopBar({
               aria-current={activeView === id ? 'page' : undefined}
               title={
                 id === 'practice' && !practiceReady
-                  ? 'Add a PDF and MusicXML/MXL in Library first'
+                  ? 'Try the demo or add sheet music first'
                   : undefined
               }
             >
@@ -66,17 +80,31 @@ export default function TopBar({
             </button>
           ))}
         </nav>
-        {onReplayTutorial && (
-          <button
-            type="button"
-            className="topbar__help"
-            data-tour-id="topbar-help"
-            onClick={onReplayTutorial}
-          >
-            Help
-          </button>
-        )}
-        <FeedbackLink className="topbar__feedback" label="Feedback" />
+        <details className="topbar__help-menu" data-tour-id="topbar-help">
+          <summary className="topbar__help">Help</summary>
+          <div className="topbar__help-panel">
+            {onReplayTutorial && (
+              <button
+                type="button"
+                className="topbar__help-item"
+                onClick={(event) => {
+                  closeHelpMenu(event)
+                  onReplayTutorial()
+                }}
+              >
+                Replay tutorial
+              </button>
+            )}
+            <button
+              type="button"
+              className="topbar__help-item"
+              onClick={handleShowFileHelp}
+            >
+              How files work
+            </button>
+            <FeedbackLink className="topbar__help-item topbar__help-link" label="Contact / Feedback" />
+          </div>
+        </details>
       </div>
     </header>
   )

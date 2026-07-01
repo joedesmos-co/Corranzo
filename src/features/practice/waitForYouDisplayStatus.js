@@ -14,7 +14,7 @@ export const WFY_DISPLAY_STATUS = {
 
 export const WFY_DISPLAY_LABELS = {
   [WFY_DISPLAY_STATUS.INACTIVE]: '',
-  [WFY_DISPLAY_STATUS.NO_CHECKPOINTS]: 'No checkpoints',
+  [WFY_DISPLAY_STATUS.NO_CHECKPOINTS]: 'No practice steps',
   [WFY_DISPLAY_STATUS.COMPLETE]: 'Section complete',
   [WFY_DISPLAY_STATUS.WAITING]: 'Waiting',
   [WFY_DISPLAY_STATUS.CORRECT]: 'Correct note',

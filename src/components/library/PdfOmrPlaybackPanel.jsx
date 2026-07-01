@@ -228,7 +228,7 @@ export default function PdfOmrPlaybackPanel({
       </div>
       <p className="library-omr-panel__lede">
         Have only a PDF? Corranzo can try to make playable timing locally. It is experimental;
-        MusicXML/MXL is still best when you have it.
+        A timing file is still best when you have it.
       </p>
       <div className="library-omr-panel__actions">
         <button
@@ -269,7 +269,7 @@ export default function PdfOmrPlaybackPanel({
       )}
       {!isGenerating && status === OMR_STATUS.READY && (
         <p className="library-omr-panel__status library-omr-panel__disclaimer" role="note">
-          Experimental PDF playback may be inaccurate. For accurate playback, upload MusicXML/MXL.
+          Experimental PDF playback may be inaccurate. For accurate playback, upload a timing file.
         </p>
       )}
       {!isGenerating && status === OMR_STATUS.FAILED && error && (

@@ -72,7 +72,7 @@ export default function PracticeDiagnosticsPanel({
 
       {scoreFollow?.debug && (
         <details className="practice-diagnostics__group">
-          <summary>Score follow</summary>
+          <summary>Score cursor</summary>
           <div className="practice-diagnostics__group-body">
             <dl className="practice-diagnostics__kv">
               <div>

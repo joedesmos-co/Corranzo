@@ -19,7 +19,7 @@ function statusMessage(status, currentCheckpoint, checkpointMode, displayLabel) 
     return displayLabel
   }
   if (status === WFY_STATUS.NO_CHECKPOINTS) {
-    return 'No checkpoints'
+    return 'No practice steps'
   }
   if (status === WFY_STATUS.COMPLETE) {
     return 'Section complete'
@@ -138,7 +138,7 @@ export default function WaitForYouSection({
         <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
           Wait For You
           <PracticeHelpTip label="About Wait For You">
-            Pauses at each checkpoint until you play or tap Continue.
+            Pauses at each practice step until you play or tap Continue.
           </PracticeHelpTip>
         </h3>
         {status === WFY_STATUS.WAITING && displayStatus !== WFY_DISPLAY_STATUS.CONTINUING && (
@@ -153,7 +153,7 @@ export default function WaitForYouSection({
         )}
       </div>
 
-      <div className="wait-for-you__checkpoint-mode" role="radiogroup" aria-label="Checkpoint type">
+      <div className="wait-for-you__checkpoint-mode" role="radiogroup" aria-label="Practice step type">
         <span className="wait-for-you__checkpoint-mode-label">Step by</span>
         {Object.values(WFY_CHECKPOINT_MODE).map((mode) => (
           <label key={mode} className="wait-for-you__checkpoint-mode-option">
@@ -247,7 +247,7 @@ export default function WaitForYouSection({
                 : ' · marked on score'}
             </>
           ) : (
-            <>Open Setup to show the note marker.</>
+            <>Open Advanced to show the note marker.</>
           )}
         </p>
       )}

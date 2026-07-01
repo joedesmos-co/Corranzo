@@ -37,7 +37,7 @@ export default function PracticePositionSection({
           <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">Position</h3>
         )}
         <p className="practice-section__status practice-section__status--loading" role="status">
-          Reading score timing…
+          Reading timing file…
         </p>
       </section>
     )

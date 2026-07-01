@@ -33,7 +33,7 @@ export function buildFilePairWarnings(diagnostics) {
       id: 'pair-repeat-interpretation',
       strength: 'mild',
       message:
-        'These files look like the same piece. Total length may differ because repeats or endings are interpreted differently between the sound file and score timing.',
+        'These files look like the same piece. Total length may differ because repeats or endings are interpreted differently between the sound file and timing file.',
     })
     return warnings
   }
@@ -51,8 +51,8 @@ export function buildFilePairWarnings(diagnostics) {
       strength,
       message:
         strength === 'strong'
-          ? `Playback is about ${absDuration.toFixed(0)} seconds longer than the score timing file. If this is the same piece, repeats may be played in one file but not the other.`
-          : `Playback length differs by about ${absDuration.toFixed(0)} seconds${midiLonger ? ' (sound file is longer)' : ' (score timing is longer)'}.`,
+          ? `Playback is about ${absDuration.toFixed(0)} seconds longer than the timing file. If this is the same piece, repeats may be played in one file but not the other.`
+          : `Playback length differs by about ${absDuration.toFixed(0)} seconds${midiLonger ? ' (sound file is longer)' : ' (timing file is longer)'}.`,
     })
   }
 

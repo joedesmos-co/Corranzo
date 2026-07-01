@@ -55,10 +55,10 @@ export default function PracticeStatusBar({
           hint="Optional backing audio"
         />
         <StatusItem
-          label="Score timing"
+          label="Timing file"
           loaded={hasMusicXml}
           fileName={timingFileName}
-          hint="Measure & beat intelligence"
+          hint="Measures & beats"
         />
         {showAlignmentRow && (
           <div className="practice-status__item practice-status__item--alignment">

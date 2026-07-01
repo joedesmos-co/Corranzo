@@ -173,6 +173,6 @@ export function mapMidiEventsToPerformedTimeline(
   return {
     ...fallback,
     warning:
-      'MIDI-to-score sync uses proportional stretch (low confidence). Re-export matching files for tighter alignment.',
+      'Timing sync may need help reading these files. Re-export matching files for tighter alignment.',
   }
 }

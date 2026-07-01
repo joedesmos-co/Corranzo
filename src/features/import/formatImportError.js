@@ -27,7 +27,7 @@ export function formatMusicXmlImportError(error) {
   }
 
   if (lower.includes('unsupported file type')) {
-    return 'Unsupported file type. Upload .musicxml, .xml, .mxl, or MuseScore source (.mscz, .mscx — export MusicXML/MXL for now).'
+    return 'Unsupported timing file. Upload .musicxml, .xml, .mxl, or MuseScore source (.mscz, .mscx — export a timing file for now).'
   }
 
   if (lower.includes('score-timewise') || lower.includes('timewise')) {
@@ -46,7 +46,7 @@ export function formatMusicXmlImportError(error) {
     return 'Could not read this MusicXML file. The file may be damaged or use features Corranzo does not support yet.'
   }
 
-  return raw || 'Could not load this score timing file.'
+  return raw || 'Could not load this timing file.'
 }
 
 export function formatMidiImportError(error) {

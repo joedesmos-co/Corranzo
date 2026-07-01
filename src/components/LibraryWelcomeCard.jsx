@@ -28,7 +28,7 @@ export default function LibraryWelcomeCard({
         </h2>
         <p className="library-welcome__summary">
           Corranzo helps you read a PDF score while playback and the cursor stay in sync. Try the
-          demo first, then add your own PDF and MusicXML/MXL when you are ready.
+          demo first, then add your own sheet music and timing file when you are ready.
         </p>
         <p className="library-welcome__lead">
           MIDI is optional for backing sound. Your files stay in this browser.
@@ -72,7 +72,7 @@ export default function LibraryWelcomeCard({
       </div>
 
       <p className="library-welcome__best">
-        Best setup: PDF + MusicXML/MXL. Add MIDI only when you want backing audio.
+        Best setup: sheet music PDF + timing file. Add MIDI only when you want backing audio.
       </p>
 
       <footer className="library-welcome__footer">

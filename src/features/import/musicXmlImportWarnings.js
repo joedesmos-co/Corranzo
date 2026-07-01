@@ -22,7 +22,7 @@ export function analyzeMusicXmlImport(timingMap) {
     warnings.push({
       id: 'xml-no-notes',
       message:
-        'This file has measures but no playable notes. Beat checkpoints may still work; note matching in Wait For You will not.',
+        'This file has measures but no playable notes. Beat practice steps may still work; note matching in Wait For You will not.',
     })
   }
 

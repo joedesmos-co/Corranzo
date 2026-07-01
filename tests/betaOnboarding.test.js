@@ -30,7 +30,7 @@ describe('beta onboarding', () => {
     const welcome = readSrc('components', 'LibraryWelcomeCard.jsx')
     expect(welcome).toContain('Practice with a score that follows you')
     expect(welcome).toContain('PDF score')
-    expect(welcome).toContain('MusicXML/MXL')
+    expect(welcome).toContain('timing file')
     expect(welcome).toContain('MIDI is optional')
     expect(welcome).toMatch(/Try the[\s\S]*demo first/)
     expect(welcome).toContain('library-welcome__summary')

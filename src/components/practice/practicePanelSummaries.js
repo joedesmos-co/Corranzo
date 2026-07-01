@@ -23,7 +23,7 @@ export function buildSetupSummary(session, scoreFollow) {
     parts.push('Note matching')
   }
 
-  return parts.length > 0 ? parts.join(' · ') : 'Score following'
+  return parts.length > 0 ? parts.join(' · ') : 'Score cursor'
 }
 
 export function buildDiagnosticsSummary(session) {

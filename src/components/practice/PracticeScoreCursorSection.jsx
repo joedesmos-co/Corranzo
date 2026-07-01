@@ -40,7 +40,7 @@ export default function PracticeScoreCursorSection({ scoreFollow, disabled = fal
           disabled={!canToggle}
           onChange={(event) => scoreFollow.setEnabled(event.target.checked)}
         />
-        <span>Show score-follow cursor</span>
+        <span>Show score cursor</span>
       </label>
 
       {setupPhase === 'failed' && (

@@ -11,7 +11,7 @@ export default function DevSampleLoadPanel({ loading, error, onLoad }) {
         everything and opens Practice.
       </p>
       <ul className="library-sample__features">
-        <li>Score follow &amp; loops</li>
+        <li>Score cursor &amp; loops</li>
         <li>Wait For You &amp; note guide</li>
         <li>Dense piano playback</li>
       </ul>

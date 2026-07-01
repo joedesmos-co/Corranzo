@@ -10,7 +10,7 @@ export const PRACTICE_SYNC_LABELS = {
   [PRACTICE_SYNC_STATUS.NONE]: 'No timing sources',
   [PRACTICE_SYNC_STATUS.MIDI_ONLY]: 'Playback file only',
   [PRACTICE_SYNC_STATUS.MUSICXML_ONLY]: 'Score timing file only',
-  [PRACTICE_SYNC_STATUS.BOTH_LOADED]: 'Playback + score timing loaded',
+  [PRACTICE_SYNC_STATUS.BOTH_LOADED]: 'Playback + timing file loaded',
   [PRACTICE_SYNC_STATUS.FOLLOWING_MIDI]: 'Following playback time',
 }
 
