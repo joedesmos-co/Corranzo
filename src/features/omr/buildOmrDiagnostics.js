@@ -1,5 +1,10 @@
 import { OMR_DISCLAIMER } from './omrMusicalConstants.js'
 import { aggregateBeamStemDiagnostics } from './beamStemReconstructionDiagnostics.js'
+import {
+  buildScoreGraph,
+  summarizeScoreGraph,
+  buildRuntimeVsScoreGraphReport,
+} from './scoreGraph.js'
 
 function average(values) {
   if (!values.length) {
@@ -74,6 +79,12 @@ export function buildOmrDiagnostics({
     page.systems.flatMap((system) => system.measures.map((measure) => measure.confidence)),
   )
 
+  // ScoreGraph IR — observation only (Phase 1). Built from the same pages the
+  // rest of this function reads; does not affect MusicXML or existing metrics.
+  const scoreGraph = buildScoreGraph(pages)
+  const scoreGraphSummary = summarizeScoreGraph(scoreGraph)
+  const runtimeVsScoreGraph = buildRuntimeVsScoreGraphReport(pages, scoreGraph)
+
   const overallConfidence = average(allMeasureConfidence)
   const warnings = [OMR_DISCLAIMER]
   if (uncertainMeasures > 0) {
@@ -91,6 +102,8 @@ export function buildOmrDiagnostics({
     musical,
     musicalEventReconstruction: summarizeMusicalEventReconstruction(pages),
     beamStemReconstruction: aggregateBeamStemDiagnostics(pages),
+    scoreGraph: scoreGraphSummary,
+    runtimeVsScoreGraph,
     warnings,
     disclaimer: OMR_DISCLAIMER,
   }

@@ -229,6 +229,8 @@ export function buildFixtureDashboardRecord({
         ),
     generatedTitle: report.summary?.generatedTitle ?? null,
     groundTruthTitle: report.summary?.groundTruthTitle ?? null,
+    scoreGraph: report.generatedOmrDiagnostics?.scoreGraph ?? null,
+    runtimeVsScoreGraph: report.generatedOmrDiagnostics?.runtimeVsScoreGraph ?? null,
     omrConfidence: report.generatedOmrDiagnostics?.difficulty?.confidence ?? null,
     omrFailureReasons: report.generatedOmrDiagnostics?.failureReasons ?? [],
     rejectedOrphanCount: Object.values(
@@ -332,6 +334,20 @@ export function formatOmrBenchmarkMarkdown(summary) {
             : ''
         lines.push(
           `  top duration error category: ${durationTop.category} (${durationTop.count} sampled)${partial}`,
+        )
+      }
+    }
+    if (record.scoreGraph) {
+      const graph = record.scoreGraph
+      const bridge = graph.geometryBridge
+      const coverage = bridge?.coverage != null ? pct(bridge.coverage) : 'n/a'
+      lines.push(
+        `  ScoreGraph IR (observation): ${graph.totalNodes} nodes, ${graph.totalEdges} edges across ${graph.measureCount} measures; geometry bridge ${coverage}`,
+      )
+      const parity = record.runtimeVsScoreGraph?.parity
+      if (parity) {
+        lines.push(
+          `  IR ↔ runtime parity: noteheads ${parity.noteheads ? 'ok' : 'MISMATCH'}, rests ${parity.rests ? 'ok' : 'MISMATCH'}`,
         )
       }
     }
