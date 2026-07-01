@@ -19230,6 +19230,54 @@
         }
       ]
     },
+    "scoreGraph": {
+      "version": 1,
+      "measureCount": 78,
+      "measuresWithBeamStemGraph": 78,
+      "nodeCounts": {
+        "notehead": 469,
+        "rest": 8,
+        "stem": 469,
+        "accidental": 43
+      },
+      "edgeCounts": {
+        "note_in_voice": 469,
+        "tie_links": 375,
+        "head_in_chord": 181,
+        "head_geometry_link": 469,
+        "stem_owns_head": 469
+      },
+      "totalNodes": 989,
+      "totalEdges": 1963,
+      "onsetColumns": 188,
+      "geometryBridge": {
+        "matched": 469,
+        "total": 469,
+        "coverage": 1
+      }
+    },
+    "runtimeVsScoreGraph": {
+      "runtime": {
+        "noteCount": 469,
+        "restCount": 8,
+        "noteEventCount": 288
+      },
+      "scoreGraph": {
+        "noteheadNodes": 469,
+        "restNodes": 8,
+        "stemNodes": 469,
+        "beamNodes": 0
+      },
+      "parity": {
+        "noteheads": true,
+        "rests": true
+      },
+      "geometryBridge": {
+        "matched": 469,
+        "total": 469,
+        "coverage": 1
+      }
+    },
     "warnings": [
       "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
     ],
@@ -22544,6 +22592,7 @@
     "truthPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.mxl",
     "maxPages": 24,
     "preprocessPages": true,
+    "promoteScoreGraphClips": false,
     "omrNoteCount": 469,
     "omrMeasureCount": 78
   }

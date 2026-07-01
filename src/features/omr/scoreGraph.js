@@ -82,7 +82,7 @@ function nearestNotehead(candidates, cx, cy) {
 /**
  * Build one MeasureGraph from a runtime measure record. Pure — reads only.
  */
-export function buildMeasureGraph(measure = {}, { defaultTotalDivisions = 16 } = {}) {
+export function buildMeasureGraph(measure = {}, { defaultTotalDivisions = 16, totalDivisions = null } = {}) {
   const page = measure.page ?? null
   const measureNumber = measure.measureNumber ?? null
   const systemIndex = measure.systemIndex ?? null
@@ -101,7 +101,15 @@ export function buildMeasureGraph(measure = {}, { defaultTotalDivisions = 16 } =
       (event.startDivision ?? 0) + (event.durationDivisions ?? 0),
     )
   }
-  const totalDivisions = observedBudget > 0 ? observedBudget : defaultTotalDivisions
+  // An explicit budget (the measure's true length, e.g. the score-level mode of
+  // measure ends) takes precedence — otherwise a note that overflows the bar
+  // would inflate the observed budget and hide its own overflow.
+  const resolvedTotalDivisions =
+    Number.isFinite(totalDivisions) && totalDivisions > 0
+      ? totalDivisions
+      : observedBudget > 0
+        ? observedBudget
+        : defaultTotalDivisions
 
   events.forEach((event, eventIndex) => {
     const onsetDivision = event.startDivision ?? 0
@@ -109,8 +117,11 @@ export function buildMeasureGraph(measure = {}, { defaultTotalDivisions = 16 } =
       nodes.push({
         id: `${idPrefix}-r${eventIndex}`,
         kind: SCORE_GRAPH_NODE.REST,
+        eventIndex,
         onsetDivision,
         durationDivisions: event.durationDivisions ?? 0,
+        durationType: event.durationType ?? null,
+        clef: event.clef ?? null,
         source: 'vector-event',
       })
       return
@@ -123,13 +134,19 @@ export function buildMeasureGraph(measure = {}, { defaultTotalDivisions = 16 } =
       const node = {
         id,
         kind: SCORE_GRAPH_NODE.NOTEHEAD,
+        eventIndex,
         midi: Number.isFinite(note.midi) ? note.midi : null,
         pitch: Number.isFinite(note.midi) ? midiToWrittenPitch(note.midi) : null,
         clef: note.clef ?? null,
         voice,
         onsetDivision,
         durationDivisions: event.durationDivisions ?? null,
+        durationType: event.durationType ?? null,
         dotted: Boolean(event.dotted),
+        tieStart: Boolean(note.tieStart),
+        tieStop: Boolean(note.tieStop),
+        articulation: note.articulation ?? null,
+        beams: event.beams ?? null,
         cx: round(note.cx),
         cy: round(note.cy),
         confidence: note.pitchConfidence ?? event.confidence ?? null,
@@ -240,7 +257,7 @@ export function buildMeasureGraph(measure = {}, { defaultTotalDivisions = 16 } =
     measureNumber,
     page,
     systemIndex,
-    totalDivisions,
+    totalDivisions: resolvedTotalDivisions,
     geometry: beamStemGraph?.measureBounds ?? null,
     onsetColumns: extractOnsetColumns(events),
     nodes,
@@ -256,15 +273,51 @@ export function buildMeasureGraph(measure = {}, { defaultTotalDivisions = 16 } =
  * Build the whole ScoreGraph from the page diagnostics the pipeline already
  * carries (pages -> systems -> measure records). Pure — reads only.
  */
+function measureEnd(measure) {
+  let end = 0
+  for (const event of measure.events ?? []) {
+    end = Math.max(end, (event.startDivision ?? 0) + (event.durationDivisions ?? 0))
+  }
+  return end
+}
+
+// The measure budget is the score-level mode of measure ends: in a single-time-
+// signature score most measures tile to the true bar length, so the mode is that
+// length, and the minority of over/under-filled measures cannot skew it.
+function modeMeasureBudget(records) {
+  const counts = new Map()
+  for (const record of records) {
+    const end = measureEnd(record)
+    if (end > 0) {
+      counts.set(end, (counts.get(end) ?? 0) + 1)
+    }
+  }
+  let best = null
+  let bestCount = 0
+  for (const [end, count] of counts) {
+    if (count > bestCount || (count === bestCount && (best == null || end > best))) {
+      best = end
+      bestCount = count
+    }
+  }
+  return best
+}
+
 export function buildScoreGraph(pages = [], options = {}) {
-  const measures = []
+  const records = []
   for (const page of pages ?? []) {
     for (const system of page.systems ?? []) {
       for (const measure of system.measures ?? []) {
-        measures.push(buildMeasureGraph(measure, options))
+        records.push(measure)
       }
     }
   }
+  const totalDivisions = Number.isFinite(options.totalDivisions)
+    ? options.totalDivisions
+    : modeMeasureBudget(records)
+  const measures = records.map((measure) =>
+    buildMeasureGraph(measure, { ...options, totalDivisions }),
+  )
   return { version: SCORE_GRAPH_VERSION, measures }
 }
 

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-01T03:26:35.271Z",
+  "generatedAt": "2026-07-01T16:08:43.099Z",
   "fixtureCount": 2,
   "statusCounts": {
     "pass": 2,
@@ -72,12 +72,61 @@
         "truthPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.mxl",
         "maxPages": 24,
         "preprocessPages": true,
+        "promoteScoreGraphClips": false,
         "omrNoteCount": 469,
         "omrMeasureCount": 78
       },
       "error": null,
       "generatedTitle": "gymnopedie-no-1-satie",
       "groundTruthTitle": "Gymnopédie No. 1",
+      "scoreGraph": {
+        "version": 1,
+        "measureCount": 78,
+        "measuresWithBeamStemGraph": 78,
+        "nodeCounts": {
+          "notehead": 469,
+          "rest": 8,
+          "stem": 469,
+          "accidental": 43
+        },
+        "edgeCounts": {
+          "note_in_voice": 469,
+          "tie_links": 375,
+          "head_in_chord": 181,
+          "head_geometry_link": 469,
+          "stem_owns_head": 469
+        },
+        "totalNodes": 989,
+        "totalEdges": 1963,
+        "onsetColumns": 188,
+        "geometryBridge": {
+          "matched": 469,
+          "total": 469,
+          "coverage": 1
+        }
+      },
+      "runtimeVsScoreGraph": {
+        "runtime": {
+          "noteCount": 469,
+          "restCount": 8,
+          "noteEventCount": 288
+        },
+        "scoreGraph": {
+          "noteheadNodes": 469,
+          "restNodes": 8,
+          "stemNodes": 469,
+          "beamNodes": 0
+        },
+        "parity": {
+          "noteheads": true,
+          "rests": true
+        },
+        "geometryBridge": {
+          "matched": 469,
+          "total": 469,
+          "coverage": 1
+        }
+      },
       "omrConfidence": 0.8650000000000003,
       "omrFailureReasons": [],
       "rejectedOrphanCount": 0
@@ -130,17 +179,72 @@
         "truthPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl",
         "maxPages": 24,
         "preprocessPages": true,
+        "promoteScoreGraphClips": false,
         "omrNoteCount": 2807,
         "omrMeasureCount": 125
       },
       "error": null,
       "generatedTitle": "a-cruel-angels-thesis-neon-genesis-evangelion",
       "groundTruthTitle": "A Cruel Angel's Thesis",
+      "scoreGraph": {
+        "version": 1,
+        "measureCount": 125,
+        "measuresWithBeamStemGraph": 125,
+        "nodeCounts": {
+          "notehead": 2807,
+          "stem": 2806,
+          "beam": 239,
+          "rest": 19,
+          "accidental": 59
+        },
+        "edgeCounts": {
+          "note_in_voice": 2807,
+          "tie_links": 2042,
+          "head_in_chord": 1137,
+          "beam_links_stem": 955,
+          "head_geometry_link": 2807,
+          "stem_owns_head": 2806
+        },
+        "totalNodes": 5930,
+        "totalEdges": 12554,
+        "onsetColumns": 1156,
+        "geometryBridge": {
+          "matched": 2807,
+          "total": 2807,
+          "coverage": 1
+        }
+      },
+      "runtimeVsScoreGraph": {
+        "runtime": {
+          "noteCount": 2807,
+          "restCount": 19,
+          "noteEventCount": 1670
+        },
+        "scoreGraph": {
+          "noteheadNodes": 2807,
+          "restNodes": 19,
+          "stemNodes": 2806,
+          "beamNodes": 239
+        },
+        "parity": {
+          "noteheads": true,
+          "rests": true
+        },
+        "geometryBridge": {
+          "matched": 2807,
+          "total": 2807,
+          "coverage": 1
+        }
+      },
       "omrConfidence": 0.864903289855071,
       "omrFailureReasons": [],
       "rejectedOrphanCount": 0
     }
   ],
   "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
-  "mode": "live"
+  "mode": "live",
+  "pipelineOptions": {
+    "preprocessPages": true,
+    "promoteScoreGraphClips": false
+  }
 }

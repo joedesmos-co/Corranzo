@@ -33,7 +33,7 @@ function MidiTransportControls({
         {simple ? (
           <button
             type="button"
-            className={`midi-transport__btn midi-transport__btn--primary${
+            className={`midi-transport__btn midi-transport__btn--primary midi-transport__btn--text${
               isPlaying ? ' midi-transport__btn--active' : ''
             }`}
             disabled={disabled || (!isPlaying && playDisabled)}
@@ -42,7 +42,10 @@ function MidiTransportControls({
             aria-pressed={isPlaying}
             title={playPauseTitle}
           >
-            {isPlaying ? '❚❚' : '▶'}
+            <span className="midi-transport__btn-icon" aria-hidden="true">
+              {isPlaying ? '❚❚' : '▶'}
+            </span>
+            <span>{isPlaying ? 'Pause' : 'Play'}</span>
           </button>
         ) : (
           <>

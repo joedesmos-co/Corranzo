@@ -111,6 +111,19 @@ describe('guided tutorial UI wiring', () => {
     expect(readSrc('components', 'practice', 'PracticeControlPanel.jsx')).toMatch(/dataTourId="practice-advanced"/)
   })
 
+  it('offers the demo before Practice controls are available and hides Done until the finish step', () => {
+    const app = readSrc('App.jsx')
+    const tutorial = readSrc('components', 'onboarding', 'GuidedTutorial.jsx')
+
+    expect(app).toMatch(/canStartDemo=\{isDemoSampleEnabled\(\) && restoreGateOpen && !practiceReady\}/)
+    expect(app).toMatch(/onStartDemo=\{handleLoadSampleFixtures\}/)
+    expect(tutorial).toContain('practiceStepNeedsScore')
+    expect(tutorial).toContain('Try Demo Piece')
+    expect(tutorial).toContain('Open the demo piece so the tour can show Play')
+    expect(tutorial).toMatch(/\{isLastStep && \([\s\S]*Done/)
+    expect(tutorial).toMatch(/!isLastStep && canAdvance/)
+  })
+
   it('keeps the added Help control from overflowing tablet top bars', () => {
     const css = readSrc('App.css')
 

@@ -66,6 +66,9 @@ function getCardStyle(rect) {
 export default function GuidedTutorial({
   activeView,
   practiceReady = false,
+  canStartDemo = false,
+  demoLoading = false,
+  onStartDemo,
   onNavigate,
   onSkip,
   onDone,
@@ -75,6 +78,17 @@ export default function GuidedTutorial({
   const [targetSnapshot, setTargetSnapshot] = useState(null)
   const step = steps[stepIndex] ?? steps[steps.length - 1]
   const isLastStep = stepIndex >= steps.length - 1
+  const practiceStepNeedsScore = step?.view === 'practice' && !practiceReady
+  const showDemoPrompt =
+    !practiceReady &&
+    canStartDemo &&
+    typeof onStartDemo === 'function' &&
+    (step?.id === 'welcome' || practiceStepNeedsScore)
+  const canAdvance = !practiceStepNeedsScore
+  const displayTitle = practiceStepNeedsScore ? 'Try the demo first' : step?.title
+  const displayBody = practiceStepNeedsScore
+    ? 'Open the demo piece so the tour can show Play, Wait For You, and the score cursor on the real Practice screen.'
+    : step?.body
   const progressLabel = `${Math.min(stepIndex + 1, steps.length)} of ${steps.length}`
 
   const targetAvailable = useCallback((targetId) => Boolean(getTargetSnapshot(targetId)), [])
@@ -82,7 +96,7 @@ export default function GuidedTutorial({
   const stepAvailable = useCallback(
     (candidate) => {
       if (candidate?.view && candidate.view !== activeView) {
-        return candidate.view !== 'practice' || practiceReady
+        return candidate.view === 'practice' ? true : false
       }
       if (!candidate?.targetId) {
         return true
@@ -117,17 +131,19 @@ export default function GuidedTutorial({
       return undefined
     }
     if (step.view === 'practice' && !practiceReady) {
-      const timeoutId = window.setTimeout(() => {
-        goToNextAvailable(stepIndex + 1)
-      }, 0)
-      return () => window.clearTimeout(timeoutId)
+      setTargetSnapshot(null)
+      return undefined
     }
     onNavigate?.(step.view)
     return undefined
-  }, [activeView, goToNextAvailable, onNavigate, practiceReady, step, stepIndex])
+  }, [activeView, onNavigate, practiceReady, step])
 
   useEffect(() => {
     if (!step?.targetId) {
+      return undefined
+    }
+    if (practiceStepNeedsScore) {
+      setTargetSnapshot(null)
       return undefined
     }
     if (step.view && activeView !== step.view) {
@@ -160,7 +176,7 @@ export default function GuidedTutorial({
       window.removeEventListener('resize', measureOrSkip)
       window.removeEventListener('scroll', measureOrSkip, true)
     }
-  }, [activeView, goToNextAvailable, step, stepIndex])
+  }, [activeView, goToNextAvailable, practiceStepNeedsScore, step, stepIndex])
 
   const visibleTargetRect =
     step?.targetId &&
@@ -212,9 +228,24 @@ export default function GuidedTutorial({
       >
         <p className="guided-tour__step">{progressLabel}</p>
         <h2 id="guided-tour-title" className="guided-tour__title">
-          {step.title}
+          {displayTitle}
         </h2>
-        <p className="guided-tour__body">{step.body}</p>
+        <p className="guided-tour__body">{displayBody}</p>
+        {showDemoPrompt && (
+          <div className="guided-tour__demo">
+            <p className="guided-tour__demo-copy">
+              New here? Open the demo first so the tour can point to real Practice controls.
+            </p>
+            <button
+              type="button"
+              className="guided-tour__btn guided-tour__btn--primary guided-tour__btn--demo"
+              onClick={onStartDemo}
+              disabled={demoLoading}
+            >
+              {demoLoading ? 'Opening demo…' : 'Try Demo Piece'}
+            </button>
+          </div>
+        )}
         <div className="guided-tour__actions">
           <button type="button" className="guided-tour__btn guided-tour__btn--ghost" onClick={handleSkip}>
             Skip
@@ -227,10 +258,12 @@ export default function GuidedTutorial({
           >
             Back
           </button>
-          <button type="button" className="guided-tour__btn" onClick={handleDone}>
-            Done
-          </button>
-          {!isLastStep && (
+          {isLastStep && (
+            <button type="button" className="guided-tour__btn" onClick={handleDone}>
+              Done
+            </button>
+          )}
+          {!isLastStep && canAdvance && (
             <button type="button" className="guided-tour__btn guided-tour__btn--primary" onClick={handleNext}>
               Next
             </button>

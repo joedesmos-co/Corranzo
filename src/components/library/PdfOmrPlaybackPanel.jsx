@@ -219,7 +219,7 @@ export default function PdfOmrPlaybackPanel({
   const pdfBytesAvailable = Boolean(pdfSource) || Boolean(pdfFileUrl)
 
   return (
-    <section className="library-omr-panel" aria-label="Experimental PDF playback">
+    <section className="library-omr-panel" aria-label="Experimental PDF playback" aria-busy={isGenerating}>
       <div className="library-omr-panel__header">
         <h2 className="library-omr-panel__title practice-section__title--editorial">
           Experimental PDF playback
@@ -227,8 +227,8 @@ export default function PdfOmrPlaybackPanel({
         <span className="library-omr-panel__badge">Beta</span>
       </div>
       <p className="library-omr-panel__lede">
-        Generate rough playback from a piano PDF, including some scanned or dense scores.
-        Experimental PDF playback may be inaccurate. For accurate playback, upload MusicXML/MXL.
+        Have only a PDF? Corranzo can try to make playable timing locally. It is experimental;
+        MusicXML/MXL is still best when you have it.
       </p>
       <div className="library-omr-panel__actions">
         <button
@@ -255,13 +255,16 @@ export default function PdfOmrPlaybackPanel({
         )}
       </div>
       {isGenerating && (
-        <p className="library-omr-panel__status" role="status" aria-live="polite">
-          {progressLabel || OMR_STATUS_LABEL[status] || 'Analyzing PDF…'}
-        </p>
+        <div className="library-omr-panel__progress" role="status" aria-live="polite">
+          <span className="library-omr-panel__progress-bar" aria-hidden="true" />
+          <p className="library-omr-panel__status">
+            {progressLabel || OMR_STATUS_LABEL[status] || 'Analyzing PDF…'}
+          </p>
+        </div>
       )}
       {!isGenerating && status === OMR_STATUS.READY && summary && (
         <p className="library-omr-panel__status library-omr-panel__status--ready" role="status">
-          Ready — {summary}
+          PDF playback ready — {summary}
         </p>
       )}
       {!isGenerating && status === OMR_STATUS.READY && (

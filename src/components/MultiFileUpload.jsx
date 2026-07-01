@@ -90,8 +90,8 @@ export default function MultiFileUpload({
         onDragLeave={handleDragLeave}
         disabled={disabled}
       >
-        <span className="multi-upload__title">Drop your score files here</span>
-        <span className="multi-upload__hint">PDF + MusicXML/MXL + optional MIDI</span>
+        <span className="multi-upload__title">Add your files</span>
+        <span className="multi-upload__hint">Choose PDF + MusicXML/MXL together. MIDI is optional.</span>
         <span className="multi-upload__cta" aria-hidden="true">
           Choose files
         </span>
@@ -111,13 +111,13 @@ export default function MultiFileUpload({
 
       <ul className="multi-upload__status" aria-label="Detected files">
         <li className={`multi-upload__chip${statusClass(hasPdf)}`}>
-          PDF: {hasPdf ? 'ready' : 'missing'}
+          PDF: {hasPdf ? 'Ready' : 'Needed'}
         </li>
         <li className={`multi-upload__chip${statusClass(hasMusicXml)}`}>
-          Score: {hasMusicXml ? 'ready' : 'missing'}
+          Timing: {hasMusicXml ? 'Ready' : 'Needed'}
         </li>
         <li className={`multi-upload__chip${statusClass(hasMidi)}`}>
-          MIDI: {hasMidi ? 'ready' : 'optional'}
+          Sound: {hasMidi ? 'Ready' : 'Optional'}
         </li>
       </ul>
 

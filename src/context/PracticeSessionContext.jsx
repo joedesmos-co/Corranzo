@@ -260,6 +260,7 @@ export function PracticeSessionProvider({
     () => ({
       hasMidi: session.hasMidi,
       hasMusicXml: session.hasMusicXml,
+      isDemoPiece: session.isDemoPiece,
       sources: session.sources,
       playback: {
         isLoading: session.playback.isLoading,
@@ -286,6 +287,12 @@ export function PracticeSessionProvider({
         setMetronomeSubdivision: session.playback.setMetronomeSubdivision,
         setMetronomeCountIn: session.playback.setMetronomeCountIn,
       },
+      waitForYou: {
+        active: session.waitForYou.active,
+        status: session.waitForYou.status,
+        displayStatus: session.waitForYou.displayStatus,
+        markCorrectAndContinue: session.waitForYou.markCorrectAndContinue,
+      },
       handlePlay: session.handlePlay,
       handleMidiStop: session.handleMidiStop,
       handleMidiSeek: session.handleMidiSeek,
@@ -293,6 +300,7 @@ export function PracticeSessionProvider({
     [
       session.hasMidi,
       session.hasMusicXml,
+      session.isDemoPiece,
       session.sources,
       session.playback.isLoading,
       session.playback.error,
@@ -317,6 +325,10 @@ export function PracticeSessionProvider({
       session.playback.setMetronomeLevel,
       session.playback.setMetronomeSubdivision,
       session.playback.setMetronomeCountIn,
+      session.waitForYou.active,
+      session.waitForYou.status,
+      session.waitForYou.displayStatus,
+      session.waitForYou.markCorrectAndContinue,
       session.handlePlay,
       session.handleMidiStop,
       session.handleMidiSeek,

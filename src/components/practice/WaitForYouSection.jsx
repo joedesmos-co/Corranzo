@@ -10,8 +10,8 @@ import WaitForYouInputSourceSelector from './WaitForYouInputSourceSelector.jsx'
 import PracticeHelpTip from './PracticeHelpTip.jsx'
 
 const CHECKPOINT_LABELS = {
-  [WFY_CHECKPOINT_MODE.BEAT]: 'Beat',
-  [WFY_CHECKPOINT_MODE.NOTE]: 'Note',
+  [WFY_CHECKPOINT_MODE.BEAT]: 'Tap through beats',
+  [WFY_CHECKPOINT_MODE.NOTE]: 'Play each note',
 }
 
 function statusMessage(status, currentCheckpoint, checkpointMode, displayLabel) {
@@ -123,6 +123,14 @@ export default function WaitForYouSection({
     displayLabel,
   )
   const statusModifier = statusClassName(displayStatus, status)
+  const primaryActionDisabled =
+    status === WFY_STATUS.COMPLETE ||
+    status === WFY_STATUS.NO_CHECKPOINTS ||
+    displayStatus === WFY_DISPLAY_STATUS.CONTINUING
+  const primaryActionCopy =
+    checkpointMode === WFY_CHECKPOINT_MODE.NOTE
+      ? 'Play the note shown on the score, or tap Continue.'
+      : 'Tap Continue to move through beats.'
 
   return (
     <section className={sectionClass} aria-label="Wait For You">
@@ -145,15 +153,6 @@ export default function WaitForYouSection({
         )}
       </div>
 
-      <WaitForYouInputSourceSelector
-        checkpointMode={checkpointMode}
-        inputSource={inputSource}
-        onInputSourceChange={onInputSourceChange}
-        midiAvailable={midiAvailable}
-        microphoneAvailable={microphoneAvailable}
-        disabled={status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS}
-      />
-
       <div className="wait-for-you__checkpoint-mode" role="radiogroup" aria-label="Checkpoint type">
         <span className="wait-for-you__checkpoint-mode-label">Step by</span>
         {Object.values(WFY_CHECKPOINT_MODE).map((mode) => (
@@ -167,6 +166,27 @@ export default function WaitForYouSection({
             <span>{CHECKPOINT_LABELS[mode]}</span>
           </label>
         ))}
+      </div>
+
+      <WaitForYouInputSourceSelector
+        checkpointMode={checkpointMode}
+        inputSource={inputSource}
+        onInputSourceChange={onInputSourceChange}
+        midiAvailable={midiAvailable}
+        microphoneAvailable={microphoneAvailable}
+        disabled={status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS}
+      />
+
+      <div className="wait-for-you__primary-action">
+        <p>{primaryActionCopy}</p>
+        <button
+          type="button"
+          className="wait-for-you__btn wait-for-you__btn--primary"
+          disabled={primaryActionDisabled}
+          onClick={onMarkCorrect}
+        >
+          Continue
+        </button>
       </div>
 
       {showMatchSettings && matchSettings && (
@@ -323,18 +343,6 @@ export default function WaitForYouSection({
             Show hint
           </button>
         )}
-        <button
-          type="button"
-          className="wait-for-you__btn wait-for-you__btn--primary"
-          disabled={
-            status === WFY_STATUS.COMPLETE ||
-            status === WFY_STATUS.NO_CHECKPOINTS ||
-            displayStatus === WFY_DISPLAY_STATUS.CONTINUING
-          }
-          onClick={onMarkCorrect}
-        >
-          Continue
-        </button>
         {onSkip && (
           <button
             type="button"

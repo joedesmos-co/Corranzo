@@ -1,0 +1,46 @@
+{
+  "id": "la-campanella",
+  "comparison": {
+    "runtime": {
+      "noteCount": 4089,
+      "measureCount": 160
+    },
+    "shadow": {
+      "noteCount": 4089,
+      "measureCount": 160
+    },
+    "noteCountDiff": 0,
+    "measureCountDiff": 0,
+    "identicalBytes": false
+  },
+  "agreementVsRuntime": {
+    "pitch": 1,
+    "duration": 0.9998,
+    "onset": 0.9998,
+    "chord": 0.9971,
+    "f1": 1
+  },
+  "vsTruth": {
+    "runtime": {
+      "pitch": 0.2402,
+      "duration": 0.6423,
+      "onset": 0.3936,
+      "chord": 0.5166,
+      "f1": 0.7665
+    },
+    "shadow": {
+      "pitch": 0.24,
+      "duration": 0.6425,
+      "onset": 0.3945,
+      "chord": 0.5177,
+      "f1": 0.7663
+    },
+    "delta": {
+      "pitch": -0.0002,
+      "duration": 0.0002,
+      "onset": 0.0009,
+      "chord": 0.0011,
+      "f1": -0.0002
+    }
+  }
+}

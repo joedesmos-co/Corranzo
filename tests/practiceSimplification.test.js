@@ -33,6 +33,7 @@ describe('Practice page simplification', () => {
 
   it('supports a simplified transport and basic metronome controls', () => {
     const transport = readSrc('components', 'practice', 'PracticeTransportSection.jsx')
+    const transportTick = readSrc('components', 'practice', 'PracticeTransportTick.jsx')
     const midiControls = readSrc('components', 'practice', 'MidiTransportControls.jsx')
     const playbackSettings = readSrc('components', 'practice', 'PracticePlaybackSettings.jsx')
 
@@ -40,7 +41,44 @@ describe('Practice page simplification', () => {
     expect(transport).toMatch(/simple=\{compact\}/)
     expect(midiControls).toMatch(/simple \?/)
     expect(midiControls).toMatch(/isPlaying \? onPause : onPlay/)
+    expect(midiControls).toContain('midi-transport__btn--text')
+    expect(midiControls).toContain("{isPlaying ? 'Pause' : 'Play'}")
     expect(playbackSettings).toMatch(/showMetronomeDetails = true/)
+    expect(transportTick).toMatch(/mappingWarning=\{stable\.isDemoPiece \? null : stable\.playback\.mappingWarning\}/)
+    expect(transportTick).toContain('waitForYouActive={stable.waitForYou.active}')
+    expect(transport).toContain('practice-transport__wfy-primary')
+    expect(transport).toContain('Wait For You is active. Play the prompt below, or tap Continue.')
+    expect(transport).toContain('onClick={onWaitForYouContinue}')
+  })
+
+  it('keeps the first Practice action path above stats and status', () => {
+    const panel = readSrc('components', 'practice', 'PracticeControlPanel.jsx')
+    const transportIndex = panel.indexOf('<PracticeTransportTick />')
+    const modeIndex = panel.indexOf('<PracticeModeSection')
+    const waitForYouIndex = panel.indexOf('<WaitForYouSection')
+    const cursorIndex = panel.indexOf('<PracticeScoreCursorSection')
+    const statusIndex = panel.indexOf('<PracticeStatusStrip')
+    const statsIndex = panel.indexOf('<PracticeStatsCard')
+
+    expect(transportIndex).toBeGreaterThan(-1)
+    expect(modeIndex).toBeGreaterThan(transportIndex)
+    expect(waitForYouIndex).toBeGreaterThan(modeIndex)
+    expect(cursorIndex).toBeGreaterThan(waitForYouIndex)
+    expect(statusIndex).toBeGreaterThan(cursorIndex)
+    expect(statsIndex).toBeGreaterThan(statusIndex)
+  })
+
+  it('uses beginner-facing Wait For You controls under Mode', () => {
+    const waitForYou = readSrc('components', 'practice', 'WaitForYouSection.jsx')
+    const practiceCss = readSrc('styles', 'practice.css')
+
+    expect(waitForYou).toContain("[WFY_CHECKPOINT_MODE.BEAT]: 'Tap through beats'")
+    expect(waitForYou).toContain("[WFY_CHECKPOINT_MODE.NOTE]: 'Play each note'")
+    expect(waitForYou).toContain('wait-for-you__primary-action')
+    expect(waitForYou).toContain('Play the note shown on the score, or tap Continue.')
+    expect(waitForYou).toContain('Tap Continue to move through beats.')
+    expect(practiceCss).toContain('.practice-control-panel__primary > .wait-for-you')
+    expect(practiceCss).toMatch(/\.wait-for-you__btn--primary \{[\s\S]*#d8f5e4/)
   })
 
   it('keeps tempo sliders usable for touch and pointer users', () => {

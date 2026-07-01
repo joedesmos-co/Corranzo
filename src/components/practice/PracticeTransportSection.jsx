@@ -21,6 +21,9 @@ export default function PracticeTransportSection({
   metronomeCountIn,
   metronomeDisplay,
   mappingWarning,
+  waitForYouActive = false,
+  waitForYouContinueDisabled = false,
+  onWaitForYouContinue,
   onPlaybackRateChange,
   onMetronomeEnabledChange,
   onMetronomeLevelChange,
@@ -42,7 +45,7 @@ export default function PracticeTransportSection({
       data-tour-id="practice-playback"
     >
       <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
-        Playback
+        Play
         <PracticeHelpTip label="About playback">
           Plays the score with the built-in piano. MIDI backing is optional.
         </PracticeHelpTip>
@@ -85,20 +88,34 @@ export default function PracticeTransportSection({
             showMetronomeDetails={false}
           />
 
-          <MidiTransportControls
-            disabled={disabled || isLoading}
-            playDisabled={playDisabled || isLoading}
-            seekDisabled={seekDisabled || isLoading}
-            isPlaying={isPlaying}
-            currentTime={isLoading ? 0 : currentTime}
-            duration={isLoading ? 0 : duration}
-            onPlay={onPlay}
-            onPause={onPause}
-            onStop={onStop}
-            onSeek={onSeek}
-            onTestSound={onTestSound}
-            simple={compact}
-          />
+          {waitForYouActive ? (
+            <div className="practice-transport__wfy-primary">
+              <p>Wait For You is active. Play the prompt below, or tap Continue.</p>
+              <button
+                type="button"
+                className="midi-transport__btn midi-transport__btn--primary midi-transport__btn--text"
+                disabled={waitForYouContinueDisabled}
+                onClick={onWaitForYouContinue}
+              >
+                Continue
+              </button>
+            </div>
+          ) : (
+            <MidiTransportControls
+              disabled={disabled || isLoading}
+              playDisabled={playDisabled || isLoading}
+              seekDisabled={seekDisabled || isLoading}
+              isPlaying={isPlaying}
+              currentTime={isLoading ? 0 : currentTime}
+              duration={isLoading ? 0 : duration}
+              onPlay={onPlay}
+              onPause={onPause}
+              onStop={onStop}
+              onSeek={onSeek}
+              onTestSound={onTestSound}
+              simple={compact}
+            />
+          )}
         </div>
       )}
     </section>

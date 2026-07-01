@@ -1,0 +1,373 @@
+[
+  {
+    "id": "clean",
+    "label": "Gymnopedie No. 1 (clean)",
+    "default": {
+      "pitch": 1,
+      "duration": 1,
+      "onset": 1,
+      "chord": 1,
+      "f1": 1,
+      "wrongPitch": 0,
+      "wrongDuration": 0,
+      "wrongOnset": 0,
+      "chordMismatch": 0,
+      "noteDelta": 0,
+      "measureDelta": 0
+    },
+    "reconstructed": {
+      "pitch": 1,
+      "duration": 1,
+      "onset": 1,
+      "chord": 1,
+      "f1": 1,
+      "wrongPitch": 0,
+      "wrongDuration": 0,
+      "wrongOnset": 0,
+      "chordMismatch": 0,
+      "noteDelta": 0,
+      "measureDelta": 0
+    },
+    "simulated": {
+      "pitch": 1,
+      "duration": 1,
+      "onset": 1,
+      "chord": 1,
+      "f1": 1,
+      "wrongPitch": 0,
+      "wrongDuration": 0,
+      "wrongOnset": 0,
+      "chordMismatch": 0,
+      "noteDelta": 0,
+      "measureDelta": 0
+    },
+    "reconstructionVsRuntime": {
+      "runtime": {
+        "noteCount": 469,
+        "measureCount": 78
+      },
+      "shadow": {
+        "noteCount": 469,
+        "measureCount": 78
+      },
+      "noteCountDiff": 0,
+      "measureCountDiff": 0,
+      "identicalBytes": false
+    },
+    "promotion": {
+      "enabled": true,
+      "guard": {
+        "beamAttachmentRateMin": 0.6,
+        "graphBeamedButCurrentLongMin": 1
+      },
+      "solverChangedMeasureCount": 74,
+      "solverClipDecisionCount": 76,
+      "promotedMeasureCount": 0,
+      "promotedDecisions": 0,
+      "skippedCount": 0,
+      "promotedMeasureNumbers": [],
+      "promotedLog": [],
+      "filteredOutMeasureNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76
+      ]
+    },
+    "perPromotedMeasure": []
+  },
+  {
+    "id": "dense",
+    "label": "A Cruel Angel's Thesis (dense)",
+    "default": {
+      "pitch": 0.9367,
+      "duration": 0.9559,
+      "onset": 0.9555,
+      "chord": 0.9396,
+      "f1": 0.9895,
+      "wrongPitch": 147,
+      "wrongDuration": 93,
+      "wrongOnset": 94,
+      "chordMismatch": 175,
+      "noteDelta": -3,
+      "measureDelta": 0
+    },
+    "reconstructed": {
+      "pitch": 0.9367,
+      "duration": 0.9601,
+      "onset": 0.9555,
+      "chord": 0.9184,
+      "f1": 0.9895,
+      "wrongPitch": 147,
+      "wrongDuration": 81,
+      "wrongOnset": 94,
+      "chordMismatch": 239,
+      "noteDelta": -3,
+      "measureDelta": 0
+    },
+    "simulated": {
+      "pitch": 0.9367,
+      "duration": 0.9623,
+      "onset": 0.9555,
+      "chord": 0.9184,
+      "f1": 0.9895,
+      "wrongPitch": 147,
+      "wrongDuration": 75,
+      "wrongOnset": 94,
+      "chordMismatch": 239,
+      "noteDelta": -3,
+      "measureDelta": 0
+    },
+    "reconstructionVsRuntime": {
+      "runtime": {
+        "noteCount": 2807,
+        "measureCount": 125
+      },
+      "shadow": {
+        "noteCount": 2807,
+        "measureCount": 125
+      },
+      "noteCountDiff": 0,
+      "measureCountDiff": 0,
+      "identicalBytes": false
+    },
+    "promotion": {
+      "enabled": true,
+      "guard": {
+        "beamAttachmentRateMin": 0.6,
+        "graphBeamedButCurrentLongMin": 1
+      },
+      "solverChangedMeasureCount": 6,
+      "solverClipDecisionCount": 7,
+      "promotedMeasureCount": 3,
+      "promotedDecisions": 4,
+      "skippedCount": 0,
+      "promotedMeasureNumbers": [
+        56,
+        58,
+        59
+      ],
+      "promotedLog": [
+        {
+          "measureNumber": 56,
+          "confidence": 0.9,
+          "margin": 0.5625,
+          "decisions": [
+            {
+              "voice": 1,
+              "startDivision": 0,
+              "violation": "same-voice-overlap",
+              "before": 12,
+              "after": 3
+            }
+          ],
+          "guard": {
+            "passes": true,
+            "beamAttachmentRate": 0.9524,
+            "graphBeamedButCurrentLong": 3,
+            "beamCandidateCount": 5,
+            "mixedOwnershipEventCount": 0,
+            "splitCandidateEventCount": 0
+          }
+        },
+        {
+          "measureNumber": 58,
+          "confidence": 0.9,
+          "margin": 0.5625,
+          "decisions": [
+            {
+              "voice": 1,
+              "startDivision": 0,
+              "violation": "same-voice-overlap",
+              "before": 12,
+              "after": 3
+            }
+          ],
+          "guard": {
+            "passes": true,
+            "beamAttachmentRate": 0.9524,
+            "graphBeamedButCurrentLong": 2,
+            "beamCandidateCount": 6,
+            "mixedOwnershipEventCount": 1,
+            "splitCandidateEventCount": 1
+          }
+        },
+        {
+          "measureNumber": 59,
+          "confidence": 0.9,
+          "margin": 0.625,
+          "decisions": [
+            {
+              "voice": 2,
+              "startDivision": 0,
+              "violation": "same-voice-overlap",
+              "before": 12,
+              "after": 3
+            },
+            {
+              "voice": 1,
+              "startDivision": 0,
+              "violation": "same-voice-overlap",
+              "before": 4,
+              "after": 3
+            }
+          ],
+          "guard": {
+            "passes": true,
+            "beamAttachmentRate": 0.6364,
+            "graphBeamedButCurrentLong": 3,
+            "beamCandidateCount": 3,
+            "mixedOwnershipEventCount": 0,
+            "splitCandidateEventCount": 0
+          }
+        }
+      ],
+      "filteredOutMeasureNumbers": [
+        5,
+        9,
+        27
+      ]
+    },
+    "perPromotedMeasure": [
+      {
+        "measureNumber": 56,
+        "wrongDuration": [
+          1,
+          0
+        ],
+        "wrongOnset": [
+          0,
+          0
+        ],
+        "wrongPitch": [
+          0,
+          0
+        ],
+        "chordMismatch": [
+          0,
+          0
+        ],
+        "error": [
+          22,
+          21
+        ]
+      },
+      {
+        "measureNumber": 58,
+        "wrongDuration": [
+          1,
+          0
+        ],
+        "wrongOnset": [
+          0,
+          0
+        ],
+        "wrongPitch": [
+          0,
+          0
+        ],
+        "chordMismatch": [
+          0,
+          0
+        ],
+        "error": [
+          22,
+          21
+        ]
+      },
+      {
+        "measureNumber": 59,
+        "wrongDuration": [
+          4,
+          0
+        ],
+        "wrongOnset": [
+          0,
+          0
+        ],
+        "wrongPitch": [
+          1,
+          1
+        ],
+        "chordMismatch": [
+          0,
+          0
+        ],
+        "error": [
+          27,
+          23
+        ]
+      }
+    ]
+  }
+]

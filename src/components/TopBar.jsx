@@ -8,7 +8,7 @@ import CorranzoLogo from './CorranzoLogo.jsx'
 const VIEWS = [
   { id: 'library', label: 'Library' },
   { id: 'practice', label: 'Practice' },
-  { id: 'profile', label: 'Profile' },
+  { id: 'profile', label: 'Log' },
 ]
 
 export default function TopBar({
@@ -58,7 +58,7 @@ export default function TopBar({
               aria-current={activeView === id ? 'page' : undefined}
               title={
                 id === 'practice' && !practiceReady
-                  ? 'Upload a PDF and score timing file in Library first'
+                  ? 'Add a PDF and MusicXML/MXL in Library first'
                   : undefined
               }
             >

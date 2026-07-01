@@ -24,15 +24,14 @@ export default function LibraryWelcomeCard({
         <CorranzoLogo className="library-welcome__logo" width={220} height={60} loading="eager" />
         <p className="library-welcome__eyebrow">{BETA_LABEL}</p>
         <h2 id="welcome-heading" className="library-welcome__title">
-          Practice sheet music with a score that follows you
+          Practice with a score that follows you
         </h2>
         <p className="library-welcome__summary">
-          Corranzo is a sheet music practice app. Upload PDF sheet music with MIDI and MusicXML
-          files, then practice with synchronized playback and a moving score-follow cursor — so you
-          can learn pieces more effectively.
+          Corranzo helps you read a PDF score while playback and the cursor stay in sync. Try the
+          demo first, then add your own PDF and MusicXML/MXL when you are ready.
         </p>
         <p className="library-welcome__lead">
-          Try the built-in demo, or add your own files when you are ready.
+          MIDI is optional for backing sound. Your files stay in this browser.
         </p>
         <div className="library-welcome__actions">
           <button type="button" className="library-welcome__btn" onClick={handleDismiss}>
@@ -57,12 +56,12 @@ export default function LibraryWelcomeCard({
           <li>
             <span>1</span>
             <strong>Add files</strong>
-            <small>PDF + MusicXML</small>
+            <small>PDF + timing</small>
           </li>
           <li>
             <span>2</span>
             <strong>Practice</strong>
-            <small>Play, loop, or wait</small>
+            <small>Play, loop, wait</small>
           </li>
           <li>
             <span>3</span>
@@ -73,7 +72,7 @@ export default function LibraryWelcomeCard({
       </div>
 
       <p className="library-welcome__best">
-        Best now: piano PDF + MusicXML/MIDI. Some PDFs may need setup.
+        Best setup: PDF + MusicXML/MXL. Add MIDI only when you want backing audio.
       </p>
 
       <footer className="library-welcome__footer">

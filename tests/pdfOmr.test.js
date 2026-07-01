@@ -175,3 +175,189 @@ describe('experimental PDF OMR rhythm (v2)', () => {
     expect(timing.durationSeconds).toBeGreaterThan(0)
   })
 })
+
+function scoreGraphPromotionMeasures() {
+  return [
+    {
+      measureNumber: 1,
+      page: 1,
+      systemIndex: 0,
+      confidence: 0.95,
+      events: [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 8,
+          durationType: 'half',
+          notes: [{ midi: 60, clef: 'treble', cx: 20, cy: 50 }],
+        },
+        {
+          type: 'note',
+          startDivision: 4,
+          durationDivisions: 4,
+          durationType: 'quarter',
+          notes: [{ midi: 62, clef: 'treble', cx: 60, cy: 48 }],
+        },
+      ],
+    },
+    {
+      measureNumber: 2,
+      page: 1,
+      systemIndex: 0,
+      confidence: 0.95,
+      events: [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 4,
+          durationType: 'quarter',
+          notes: [{ midi: 64, clef: 'treble', cx: 20, cy: 46 }],
+        },
+        {
+          type: 'note',
+          startDivision: 4,
+          durationDivisions: 4,
+          durationType: 'quarter',
+          notes: [{ midi: 65, clef: 'treble', cx: 60, cy: 45 }],
+        },
+      ],
+    },
+  ]
+}
+
+function scoreGraphPromotionAnalyzePage(measures = scoreGraphPromotionMeasures()) {
+  return () => ({
+    stats: {
+      systems: 1,
+      measures: measures.length,
+      notes: measures.reduce(
+        (sum, measure) =>
+          sum + measure.events.reduce((eventSum, event) => eventSum + (event.notes?.length ?? 0), 0),
+        0,
+      ),
+      uncertainMeasures: 0,
+    },
+    nextMeasureNumber: (measures.at(-1)?.measureNumber ?? 0) + 1,
+    keySignature: { fifths: 0, mode: 'major', confidence: 1 },
+    timeSignature: { beats: 4, beatType: 4, confidence: 1 },
+    measureRhythms: measures,
+    measureGrid: [],
+    measureGridDiagnostics: [],
+    pageEntry: {
+      page: 1,
+      systems: [
+        {
+          systemIndex: 0,
+          confidence: 0.95,
+          measures,
+        },
+      ],
+    },
+  })
+}
+
+function noteSignature(xml) {
+  const timing = parseMusicXml(xml, 'scoregraph-promotion.musicxml')
+  return timing.notes
+    .filter((note) => !note.isRest)
+    .map((note) => ({
+      measureNumber: note.measureNumber,
+      midi: note.midi,
+      quarterTime: note.quarterTime,
+      durationQuarters: note.durationQuarters,
+    }))
+}
+
+describe('ScoreGraph clip promotion pipeline gate', () => {
+  it('keeps default and explicit-off OMR output byte-identical', async () => {
+    const page = rhythmicPianoPage({ measuresPerSystem: 2 })
+    const baseOptions = {
+      numPages: 1,
+      preprocessPages: false,
+      renderPage: renderPagesFromArray([page]),
+      analyzePage: scoreGraphPromotionAnalyzePage(),
+      title: 'scoregraph-gate',
+    }
+
+    const baseline = await runPdfOmrPipeline('synthetic', baseOptions)
+    const explicitOff = await runPdfOmrPipeline('synthetic', {
+      ...baseOptions,
+      promoteScoreGraphClips: false,
+    })
+
+    expect(explicitOff.musicXml).toBe(baseline.musicXml)
+    expect(explicitOff.diagnostics).not.toHaveProperty('scoreGraphClipPromotion')
+  })
+
+  it('promotes only eligible durations when enabled and preserves note/measure/onset invariants', async () => {
+    const page = rhythmicPianoPage({ measuresPerSystem: 2 })
+    const baseOptions = {
+      numPages: 1,
+      preprocessPages: false,
+      renderPage: renderPagesFromArray([page]),
+      analyzePage: scoreGraphPromotionAnalyzePage(),
+      title: 'scoregraph-promoted',
+    }
+
+    const baseline = await runPdfOmrPipeline('synthetic', baseOptions)
+    const promoted = await runPdfOmrPipeline('synthetic', {
+      ...baseOptions,
+      promoteScoreGraphClips: true,
+    })
+
+    expect(promoted.diagnostics.scoreGraphClipPromotion).toMatchObject({
+      enabled: true,
+      promotedToRuntime: true,
+      promotedMeasureCount: 1,
+      promotedDecisions: 1,
+      promotedMeasureNumbers: [1],
+    })
+    expect(promoted.noteCount).toBe(baseline.noteCount)
+    expect(promoted.measureCount).toBe(baseline.measureCount)
+
+    const before = noteSignature(baseline.musicXml)
+    const after = noteSignature(promoted.musicXml)
+    expect(after.map(({ measureNumber, midi, quarterTime }) => ({ measureNumber, midi, quarterTime }))).toEqual(
+      before.map(({ measureNumber, midi, quarterTime }) => ({ measureNumber, midi, quarterTime })),
+    )
+    expect(before.map((note) => note.durationQuarters)).toEqual([2, 1, 1, 1])
+    expect(after.map((note) => note.durationQuarters)).toEqual([1, 1, 1, 1])
+  })
+
+  it('leaves no-violation scores unchanged even when promotion diagnostics are enabled', async () => {
+    const page = rhythmicPianoPage({ measuresPerSystem: 2 })
+    const cleanMeasures = [
+      {
+        measureNumber: 1,
+        page: 1,
+        systemIndex: 0,
+        confidence: 0.95,
+        events: [
+          { type: 'note', startDivision: 0, durationDivisions: 4, notes: [{ midi: 60, clef: 'treble' }] },
+          { type: 'note', startDivision: 4, durationDivisions: 4, notes: [{ midi: 62, clef: 'treble' }] },
+        ],
+      },
+    ]
+    const baseOptions = {
+      numPages: 1,
+      preprocessPages: false,
+      renderPage: renderPagesFromArray([page]),
+      analyzePage: scoreGraphPromotionAnalyzePage(cleanMeasures),
+      title: 'scoregraph-noop',
+    }
+
+    const baseline = await runPdfOmrPipeline('synthetic', baseOptions)
+    const promoted = await runPdfOmrPipeline('synthetic', {
+      ...baseOptions,
+      promoteScoreGraphClips: true,
+    })
+
+    expect(promoted.musicXml).toBe(baseline.musicXml)
+    expect(promoted.diagnostics.scoreGraphClipPromotion).toMatchObject({
+      enabled: true,
+      promotedToRuntime: false,
+      promotedMeasureCount: 0,
+      promotedDecisions: 0,
+    })
+  })
+})

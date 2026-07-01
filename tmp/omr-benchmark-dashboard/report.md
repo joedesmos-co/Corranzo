@@ -1,6 +1,6 @@
 # OMR benchmark dashboard
 
-Generated: 2026-07-01T03:26:35.271Z
+Generated: 2026-07-01T16:08:43.099Z
 Fixtures: 2
 Overall: PASS
 
@@ -19,6 +19,8 @@ Overall: PASS
   pitch 100% | duration 100% | onset 100% | chord 100% | F1 100%
   measureΔ 0 | noteΔ 0 | wrongPitch 0 | wrongDuration 0 | wrongOnset 0 | chordMismatch 0
   top error category: Measure allocation (measure-allocation)
+  ScoreGraph IR (observation): 989 nodes, 1963 edges across 78 measures; geometry bridge 100%
+  IR ↔ runtime parity: noteheads ok, rests ok
 
 ### A Cruel Angel's Thesis (dense) (`pass`)
 - PDF: `/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf`
@@ -27,6 +29,8 @@ Overall: PASS
   measureΔ 0 | noteΔ -3 | wrongPitch 147 | wrongDuration 93 | wrongOnset 94 | chordMismatch 175
   top error category: Rhythm inference (rhythm-inference)
   top duration error category: onset-coupled (50 sampled)
+  ScoreGraph IR (observation): 5930 nodes, 12554 edges across 125 measures; geometry bridge 100%
+  IR ↔ runtime parity: noteheads ok, rests ok
 
 ## Top error categories (across fixtures)
 - measure-allocation: 1

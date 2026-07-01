@@ -50,6 +50,7 @@ export function buildOmrDiagnostics({
   musical = {},
   uncertainMeasures = 0,
   totalMeasures = 0,
+  includeScoreGraph = false,
 } = {}) {
   const pageSummaries = pages.map((page) => ({
     page: page.page,
@@ -104,6 +105,9 @@ export function buildOmrDiagnostics({
     beamStemReconstruction: aggregateBeamStemDiagnostics(pages),
     scoreGraph: scoreGraphSummary,
     runtimeVsScoreGraph,
+    // Full IR is heavy (thousands of nodes on dense scores) and dev/shadow-only.
+    // Off by default so runtime diagnostics stay lean and unchanged.
+    ...(includeScoreGraph ? { scoreGraphFull: scoreGraph } : {}),
     warnings,
     disclaimer: OMR_DISCLAIMER,
   }

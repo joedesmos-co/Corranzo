@@ -82,16 +82,6 @@ export default memo(function PracticeControlPanel({
 
   return (
     <aside className="practice-control-panel" aria-label="Practice controls">
-      <PracticeStatusStrip session={session} scoreFollow={scoreFollow} />
-
-      {practicePiece?.id && (
-        <PracticeStatsCard
-          pieceId={practicePiece.id}
-          liveSession={practiceStats?.liveSession ?? null}
-          compact
-        />
-      )}
-
       <PracticeImportNotices
         warnings={visibleWarnings}
         guidance={[]}
@@ -114,89 +104,99 @@ export default memo(function PracticeControlPanel({
           compact
         />
 
+        <WaitForYouSection
+          active={session.waitForYou.active}
+          status={session.waitForYou.status}
+          displayStatus={session.waitForYou.displayStatus}
+          displayLabel={session.waitForYou.displayLabel}
+          checkpointMode={session.checkpointMode}
+          noteTarget={waitForYouNoteTarget?.target ?? null}
+          noteTargetWrongPage={waitForYouNoteTarget?.wrongPage ?? false}
+          onCheckpointModeChange={session.setCheckpointMode}
+          currentCheckpoint={session.waitForYou.currentCheckpoint}
+          checkpointIndex={session.waitForYou.checkpointIndex}
+          totalCheckpoints={session.waitForYou.totalCheckpoints}
+          inputSource={session.wfyInputSource}
+          onInputSourceChange={session.setWfyInputSource}
+          midiAvailable={isWebMidiSupported()}
+          microphoneAvailable={isMicrophoneSupported()}
+          inputMatchingActive={session.waitForYouInput.matchingEnabled}
+          inputFeedback={session.waitForYouInput.inputFeedback}
+          guidance={session.waitForYou.guidance}
+          onMarkCorrect={session.waitForYou.markCorrectAndContinue}
+          onSkip={session.waitForYou.skipCheckpoint}
+          onShowHint={session.waitForYou.showHint}
+          onRestart={session.waitForYou.restart}
+          onPlayReference={session.referencePlayback.playCheckpointReference}
+          referencePlaying={session.referencePlayback.isPlaying}
+          showMatchSettings={false}
+          compact
+        />
+
+        {midiWaitForYouActive && (
+          <MidiInputStatusPanel
+            support={session.webMidi.support}
+            permission={session.webMidi.permission}
+            devices={session.webMidi.devices}
+            lastNote={session.webMidi.lastNote}
+            errorMessage={session.webMidi.errorMessage}
+            isGranted={session.webMidi.isGranted}
+            deviceStatusLabel={session.webMidi.statusLabel}
+            activeDeviceId={session.webMidi.activeDeviceId}
+            onSelectDevice={session.webMidi.selectDevice}
+            onRequestAccess={session.webMidi.requestAccess}
+            onRefreshDevices={session.webMidi.refreshDevices}
+            listenHint={
+              session.waitForYouInput.matchingEnabled
+                ? 'Listening'
+                : 'Enable MIDI to continue automatically.'
+            }
+            compact
+          />
+        )}
+
+        {micWaitForYouActive && (
+          <MicrophoneInputStatusPanel
+            support={session.microphone.support}
+            permission={session.microphone.permission}
+            errorMessage={session.microphone.errorMessage}
+            isGranted={session.microphone.isGranted}
+            isListening={session.microphone.isListening}
+            lastHeardMidi={session.waitForYouMic.lastHeardMidi}
+            liveFrame={session.waitForYouMic.liveFrame}
+            calibration={session.waitForYouMic.calibration}
+            inputFeedback={session.waitForYouMic.inputFeedback}
+            isChordCheckpoint={session.waitForYouMic.isChordCheckpoint}
+            chordMicMode={session.waitForYouMic.chordMicMode}
+            onRequestAccess={session.microphone.requestAccess}
+            onDisable={session.microphone.disable}
+            onRetryCalibration={session.waitForYouMic.retryCalibration}
+            compact
+          />
+        )}
+
         <PracticeScoreCursorSection
           scoreFollow={scoreFollow}
           disabled={session.timingDisabled}
         />
       </div>
 
-      <WaitForYouSection
-        active={session.waitForYou.active}
-        status={session.waitForYou.status}
-        displayStatus={session.waitForYou.displayStatus}
-        displayLabel={session.waitForYou.displayLabel}
-        checkpointMode={session.checkpointMode}
-        noteTarget={waitForYouNoteTarget?.target ?? null}
-        noteTargetWrongPage={waitForYouNoteTarget?.wrongPage ?? false}
-        onCheckpointModeChange={session.setCheckpointMode}
-        currentCheckpoint={session.waitForYou.currentCheckpoint}
-        checkpointIndex={session.waitForYou.checkpointIndex}
-        totalCheckpoints={session.waitForYou.totalCheckpoints}
-        inputSource={session.wfyInputSource}
-        onInputSourceChange={session.setWfyInputSource}
-        midiAvailable={isWebMidiSupported()}
-        microphoneAvailable={isMicrophoneSupported()}
-        inputMatchingActive={session.waitForYouInput.matchingEnabled}
-        inputFeedback={session.waitForYouInput.inputFeedback}
-        guidance={session.waitForYou.guidance}
-        onMarkCorrect={session.waitForYou.markCorrectAndContinue}
-        onSkip={session.waitForYou.skipCheckpoint}
-        onShowHint={session.waitForYou.showHint}
-        onRestart={session.waitForYou.restart}
-        onPlayReference={session.referencePlayback.playCheckpointReference}
-        referencePlaying={session.referencePlayback.isPlaying}
-        showMatchSettings={false}
-        compact
-      />
-
-      {midiWaitForYouActive && (
-        <MidiInputStatusPanel
-          support={session.webMidi.support}
-          permission={session.webMidi.permission}
-          devices={session.webMidi.devices}
-          lastNote={session.webMidi.lastNote}
-          errorMessage={session.webMidi.errorMessage}
-          isGranted={session.webMidi.isGranted}
-          deviceStatusLabel={session.webMidi.statusLabel}
-          activeDeviceId={session.webMidi.activeDeviceId}
-          onSelectDevice={session.webMidi.selectDevice}
-          onRequestAccess={session.webMidi.requestAccess}
-          onRefreshDevices={session.webMidi.refreshDevices}
-          listenHint={
-            session.waitForYouInput.matchingEnabled
-              ? 'Listening'
-              : 'Enable MIDI to continue automatically.'
-          }
-          compact
-        />
-      )}
-
-      {micWaitForYouActive && (
-        <MicrophoneInputStatusPanel
-          support={session.microphone.support}
-          permission={session.microphone.permission}
-          errorMessage={session.microphone.errorMessage}
-          isGranted={session.microphone.isGranted}
-          isListening={session.microphone.isListening}
-          lastHeardMidi={session.waitForYouMic.lastHeardMidi}
-          liveFrame={session.waitForYouMic.liveFrame}
-          calibration={session.waitForYouMic.calibration}
-          inputFeedback={session.waitForYouMic.inputFeedback}
-          isChordCheckpoint={session.waitForYouMic.isChordCheckpoint}
-          chordMicMode={session.waitForYouMic.chordMicMode}
-          onRequestAccess={session.microphone.requestAccess}
-          onDisable={session.microphone.disable}
-          onRetryCalibration={session.waitForYouMic.retryCalibration}
-          compact
-        />
-      )}
-
       <PracticeLoopCompactSection session={session} />
+
+      <PracticeStatusStrip session={session} scoreFollow={scoreFollow} />
+
+      {practicePiece?.id && (
+        <PracticeStatsCard
+          pieceId={practicePiece.id}
+          liveSession={practiceStats?.liveSession ?? null}
+          compact
+        />
+      )}
 
       <div className="practice-control-panel__footer">
         <PracticeCollapsibleSection
           title="Advanced"
-          summary={`Files, setup & ${diagnosticsSummary.toLowerCase()}`}
+          summary="Optional settings"
           defaultOpen={openSetupByDefault}
           dataTourId="practice-advanced"
         >

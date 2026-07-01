@@ -1,0 +1,862 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-01T16:08:52.763Z",
+  "fixtureCount": 2,
+  "statusCounts": {
+    "pass": 1,
+    "fail": 1,
+    "rejected": 0,
+    "skipped": 0,
+    "error": 0
+  },
+  "overallPass": false,
+  "topErrorCategories": [
+    {
+      "category": "measure-allocation",
+      "count": 1
+    },
+    {
+      "category": "rhythm-inference",
+      "count": 1
+    }
+  ],
+  "topDurationErrorCategories": [
+    {
+      "category": "too-short",
+      "count": 1
+    },
+    {
+      "category": "onset-coupled",
+      "count": 1
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "clean",
+      "label": "Gymnopédie No. 1 (clean)",
+      "tier": "clean",
+      "pdfPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+      "truthPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.mxl",
+      "status": "fail",
+      "failureReasons": [
+        "durationAccuracy: 0.838 (need ≥0.95)"
+      ],
+      "thresholdFailures": [
+        {
+          "metric": "durationAccuracy",
+          "actual": 0.838,
+          "expected": 0.95,
+          "mode": "gte"
+        }
+      ],
+      "metrics": {
+        "pitchAccuracy": 1,
+        "durationAccuracy": 0.838,
+        "onsetAccuracy": 1,
+        "chordGroupingAccuracy": 1,
+        "noteDetectionF1": 1,
+        "measureCountDiff": 0,
+        "noteCountDiff": 0,
+        "wrongPitch": 0,
+        "wrongDuration": 76,
+        "wrongOnset": 0,
+        "chordMismatch": 0,
+        "topErrorCategory": {
+          "source": "measure-allocation",
+          "label": "Measure allocation",
+          "confidence": 0.22
+        },
+        "topDurationErrorCategory": {
+          "category": "too-short",
+          "count": 76
+        },
+        "durationErrorHistogram": {
+          "too-short": 76,
+          "too-long": 0,
+          "beamed-subdivision": 0,
+          "bass-sustain": 0,
+          "melody-accompaniment": 0,
+          "rest-gap": 0,
+          "tie-sustain": 0,
+          "onset-coupled": 0,
+          "other": 0
+        },
+        "truncatedWrongDurations": 0
+      },
+      "run": {
+        "pdfPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+        "truthPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.mxl",
+        "maxPages": 24,
+        "preprocessPages": true,
+        "promoteScoreGraphClips": true,
+        "omrNoteCount": 469,
+        "omrMeasureCount": 78
+      },
+      "error": null,
+      "generatedTitle": "gymnopedie-no-1-satie",
+      "groundTruthTitle": "Gymnopédie No. 1",
+      "scoreGraph": {
+        "version": 1,
+        "measureCount": 78,
+        "measuresWithBeamStemGraph": 78,
+        "nodeCounts": {
+          "notehead": 469,
+          "rest": 8,
+          "stem": 469,
+          "accidental": 43
+        },
+        "edgeCounts": {
+          "note_in_voice": 469,
+          "tie_links": 375,
+          "head_in_chord": 181,
+          "head_geometry_link": 469,
+          "stem_owns_head": 469
+        },
+        "totalNodes": 989,
+        "totalEdges": 1963,
+        "onsetColumns": 188,
+        "geometryBridge": {
+          "matched": 469,
+          "total": 469,
+          "coverage": 1
+        }
+      },
+      "runtimeVsScoreGraph": {
+        "runtime": {
+          "noteCount": 469,
+          "restCount": 8,
+          "noteEventCount": 288
+        },
+        "scoreGraph": {
+          "noteheadNodes": 469,
+          "restNodes": 8,
+          "stemNodes": 469,
+          "beamNodes": 0
+        },
+        "parity": {
+          "noteheads": true,
+          "rests": true
+        },
+        "geometryBridge": {
+          "matched": 469,
+          "total": 469,
+          "coverage": 1
+        }
+      },
+      "scoreGraphClipPromotion": {
+        "enabled": true,
+        "promotedToRuntime": true,
+        "promotedMeasureCount": 74,
+        "promotedDecisions": 76,
+        "skippedCount": 0,
+        "promotedMeasureNumbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76
+        ],
+        "promotedLog": [
+          {
+            "measureNumber": 1,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 2,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 3,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 4,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 5,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 6,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 7,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 8,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 9,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 10,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 11,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 12,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 13,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 14,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 15,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 16,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 17,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 18,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 19,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 20,
+            "confidence": 0.9,
+            "margin": 0.6667,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 4
+              }
+            ]
+          }
+        ]
+      },
+      "omrConfidence": 0.8650000000000003,
+      "omrFailureReasons": [],
+      "rejectedOrphanCount": 0
+    },
+    {
+      "id": "dense",
+      "label": "A Cruel Angel's Thesis (dense)",
+      "tier": "dense",
+      "pdfPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+      "truthPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl",
+      "status": "pass",
+      "failureReasons": [],
+      "thresholdFailures": [],
+      "metrics": {
+        "pitchAccuracy": 0.9367,
+        "durationAccuracy": 0.9577,
+        "onsetAccuracy": 0.9552,
+        "chordGroupingAccuracy": 0.9396,
+        "noteDetectionF1": 0.9895,
+        "measureCountDiff": 0,
+        "noteCountDiff": -3,
+        "wrongPitch": 147,
+        "wrongDuration": 88,
+        "wrongOnset": 95,
+        "chordMismatch": 175,
+        "topErrorCategory": {
+          "source": "rhythm-inference",
+          "label": "Rhythm inference",
+          "confidence": 0.886
+        },
+        "topDurationErrorCategory": {
+          "category": "onset-coupled",
+          "count": 49
+        },
+        "durationErrorHistogram": {
+          "too-short": 20,
+          "too-long": 9,
+          "beamed-subdivision": 10,
+          "bass-sustain": 0,
+          "melody-accompaniment": 0,
+          "rest-gap": 0,
+          "tie-sustain": 0,
+          "onset-coupled": 49,
+          "other": 0
+        },
+        "truncatedWrongDurations": 0
+      },
+      "run": {
+        "pdfPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+        "truthPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl",
+        "maxPages": 24,
+        "preprocessPages": true,
+        "promoteScoreGraphClips": true,
+        "omrNoteCount": 2807,
+        "omrMeasureCount": 125
+      },
+      "error": null,
+      "generatedTitle": "a-cruel-angels-thesis-neon-genesis-evangelion",
+      "groundTruthTitle": "A Cruel Angel's Thesis",
+      "scoreGraph": {
+        "version": 1,
+        "measureCount": 125,
+        "measuresWithBeamStemGraph": 125,
+        "nodeCounts": {
+          "notehead": 2807,
+          "stem": 2806,
+          "beam": 239,
+          "rest": 19,
+          "accidental": 59
+        },
+        "edgeCounts": {
+          "note_in_voice": 2807,
+          "tie_links": 2042,
+          "head_in_chord": 1137,
+          "beam_links_stem": 955,
+          "head_geometry_link": 2807,
+          "stem_owns_head": 2806
+        },
+        "totalNodes": 5930,
+        "totalEdges": 12554,
+        "onsetColumns": 1156,
+        "geometryBridge": {
+          "matched": 2807,
+          "total": 2807,
+          "coverage": 1
+        }
+      },
+      "runtimeVsScoreGraph": {
+        "runtime": {
+          "noteCount": 2807,
+          "restCount": 19,
+          "noteEventCount": 1670
+        },
+        "scoreGraph": {
+          "noteheadNodes": 2807,
+          "restNodes": 19,
+          "stemNodes": 2806,
+          "beamNodes": 239
+        },
+        "parity": {
+          "noteheads": true,
+          "rests": true
+        },
+        "geometryBridge": {
+          "matched": 2807,
+          "total": 2807,
+          "coverage": 1
+        }
+      },
+      "scoreGraphClipPromotion": {
+        "enabled": true,
+        "promotedToRuntime": true,
+        "promotedMeasureCount": 10,
+        "promotedDecisions": 20,
+        "skippedCount": 0,
+        "promotedMeasureNumbers": [
+          5,
+          9,
+          27,
+          29,
+          33,
+          56,
+          58,
+          59,
+          89,
+          94
+        ],
+        "promotedLog": [
+          {
+            "measureNumber": 5,
+            "confidence": 0.9,
+            "margin": 0.25,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 8,
+                "after": 4
+              }
+            ]
+          },
+          {
+            "measureNumber": 9,
+            "confidence": 0.9,
+            "margin": 0.5,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 10,
+                "after": 2
+              }
+            ]
+          },
+          {
+            "measureNumber": 27,
+            "confidence": 0.9,
+            "margin": 0.0625,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 2,
+                "violation": "same-voice-overlap",
+                "before": 2,
+                "after": 1
+              }
+            ]
+          },
+          {
+            "measureNumber": 29,
+            "confidence": 0.9,
+            "margin": 0.25,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 3,
+                "violation": "same-voice-overlap",
+                "before": 2,
+                "after": 1
+              },
+              {
+                "voice": 2,
+                "startDivision": 11,
+                "violation": "same-voice-overlap",
+                "before": 2,
+                "after": 1
+              },
+              {
+                "voice": 1,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 5,
+                "after": 4
+              },
+              {
+                "voice": 1,
+                "startDivision": 9,
+                "violation": "same-voice-overlap",
+                "before": 4,
+                "after": 3
+              }
+            ]
+          },
+          {
+            "measureNumber": 33,
+            "confidence": 0.9,
+            "margin": 0.125,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 14,
+                "violation": "overflow",
+                "before": 3,
+                "after": 2
+              },
+              {
+                "voice": 1,
+                "startDivision": 14,
+                "violation": "overflow",
+                "before": 3,
+                "after": 2
+              }
+            ]
+          },
+          {
+            "measureNumber": 56,
+            "confidence": 0.9,
+            "margin": 0.5625,
+            "decisions": [
+              {
+                "voice": 1,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 3
+              }
+            ]
+          },
+          {
+            "measureNumber": 58,
+            "confidence": 0.9,
+            "margin": 0.5625,
+            "decisions": [
+              {
+                "voice": 1,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 3
+              }
+            ]
+          },
+          {
+            "measureNumber": 59,
+            "confidence": 0.9,
+            "margin": 0.625,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 12,
+                "after": 3
+              },
+              {
+                "voice": 1,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 4,
+                "after": 3
+              }
+            ]
+          },
+          {
+            "measureNumber": 89,
+            "confidence": 0.9,
+            "margin": 0.25,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 3,
+                "violation": "same-voice-overlap",
+                "before": 2,
+                "after": 1
+              },
+              {
+                "voice": 2,
+                "startDivision": 11,
+                "violation": "same-voice-overlap",
+                "before": 2,
+                "after": 1
+              },
+              {
+                "voice": 1,
+                "startDivision": 0,
+                "violation": "same-voice-overlap",
+                "before": 5,
+                "after": 4
+              },
+              {
+                "voice": 1,
+                "startDivision": 9,
+                "violation": "same-voice-overlap",
+                "before": 4,
+                "after": 3
+              }
+            ]
+          },
+          {
+            "measureNumber": 94,
+            "confidence": 0.9,
+            "margin": 0.1875,
+            "decisions": [
+              {
+                "voice": 2,
+                "startDivision": 10,
+                "violation": "same-voice-overlap",
+                "before": 3,
+                "after": 2
+              },
+              {
+                "voice": 2,
+                "startDivision": 14,
+                "violation": "overflow",
+                "before": 3,
+                "after": 2
+              },
+              {
+                "voice": 1,
+                "startDivision": 14,
+                "violation": "overflow",
+                "before": 3,
+                "after": 2
+              }
+            ]
+          }
+        ]
+      },
+      "omrConfidence": 0.864903289855071,
+      "omrFailureReasons": [],
+      "rejectedOrphanCount": 0
+    }
+  ],
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "mode": "live",
+  "pipelineOptions": {
+    "preprocessPages": true,
+    "promoteScoreGraphClips": true
+  }
+}

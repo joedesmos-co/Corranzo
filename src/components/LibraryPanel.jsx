@@ -106,9 +106,9 @@ export default function LibraryPanel({
   return (
     <aside className={`library-panel ${className}`.trim()}>
       <header className="library-panel__hero">
-        <p className="library-panel__tagline">Your practice library</p>
+        <p className="library-panel__tagline">Start practicing</p>
         <p className="library-panel__browser-hint" role="note">
-          Add PDF + MusicXML. MIDI is optional.
+          Try the demo, or add PDF + MusicXML/MXL. MIDI is optional.
         </p>
       </header>
 
@@ -158,6 +158,9 @@ export default function LibraryPanel({
 
       {canOpenPractice && onOpenPractice ? (
         <div className="library-panel__workflow library-panel__open-practice">
+          <p className="library-panel__workflow-lead">
+            Your score is ready.
+          </p>
           <button type="button" className="upload-btn upload-btn--practice" onClick={onOpenPractice}>
             Open Practice
           </button>
@@ -167,12 +170,12 @@ export default function LibraryPanel({
         </div>
       ) : showOmrPanel ? (
         <p className="library-panel__workflow library-panel__workflow-next" role="status">
-          Or upload MusicXML/MXL for accurate Practice timing.
+          PDF-only playback is experimental. MusicXML/MXL gives the most reliable Practice timing.
         </p>
       ) : null}
 
       <details className="library-panel__advanced">
-        <summary className="library-panel__advanced-summary">Advanced upload (one file at a time)</summary>
+        <summary className="library-panel__advanced-summary">Upload one file at a time</summary>
 
       <div className="panel library-panel__upload-card">
         <h2 className="panel__title practice-section__title--editorial">
@@ -205,7 +208,7 @@ export default function LibraryPanel({
           <span className="panel__step-badge">2</span> Score timing
         </h2>
         <p className="panel__hint">
-          MusicXML/MXL — required; powers Practice, loops &amp; Wait For You.
+          MusicXML/MXL — score timing for Practice, loops &amp; Wait For You.
         </p>
 
         <label

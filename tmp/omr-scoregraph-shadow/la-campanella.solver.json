@@ -1,0 +1,869 @@
+{
+  "id": "la-campanella",
+  "diagnostics": {
+    "measureCount": 160,
+    "candidateMeasures": 80,
+    "hardConstraintFailures": 34,
+    "changedMeasures": 30,
+    "clipDecisions": 53,
+    "violationTypes": {
+      "same-voice-overlap": 53
+    },
+    "candidateReasons": {
+      "hard-constraint-violation": 34,
+      "mixed-beam-ownership-column": 64
+    },
+    "fallbackReasons": {
+      "identity-baseline": 126,
+      "ambiguous-culprit": 3,
+      "none": 30,
+      "clip-unresolved": 1
+    },
+    "candidateMeasureNumbers": [
+      8,
+      14,
+      19,
+      21,
+      23,
+      24,
+      25,
+      27,
+      28,
+      29,
+      30,
+      32,
+      35,
+      37,
+      40,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      76,
+      78,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      117,
+      128,
+      130,
+      131,
+      132,
+      133,
+      138,
+      139,
+      140,
+      142,
+      143,
+      145,
+      148,
+      154
+    ],
+    "changedMeasureNumbers": [
+      14,
+      19,
+      21,
+      28,
+      29,
+      40,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      62,
+      64,
+      66,
+      68,
+      69,
+      94,
+      97,
+      98,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      132,
+      145,
+      154
+    ],
+    "changedMeasureLog": [
+      {
+        "measureNumber": 14,
+        "confidence": 0.9,
+        "margin": 0.5625,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 4
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 4,
+            "after": 3
+          }
+        ]
+      },
+      {
+        "measureNumber": 19,
+        "confidence": 0.9,
+        "margin": 1.0625,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 4
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          }
+        ]
+      },
+      {
+        "measureNumber": 21,
+        "confidence": 0.9,
+        "margin": 0.5,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 10,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 28,
+        "confidence": 0.9,
+        "margin": 0.75,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 4,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 29,
+        "confidence": 0.9,
+        "margin": 0.75,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 4,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 40,
+        "confidence": 0.9,
+        "margin": 0.5,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 4
+          }
+        ]
+      },
+      {
+        "measureNumber": 52,
+        "confidence": 0.9,
+        "margin": 1.1875,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 53,
+        "confidence": 0.9,
+        "margin": 0.6875,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 4,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 54,
+        "confidence": 0.9,
+        "margin": 0.6875,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 4,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 55,
+        "confidence": 0.9,
+        "margin": 0.6875,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 4,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 56,
+        "confidence": 0.9,
+        "margin": 1.25,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 1
+          }
+        ]
+      },
+      {
+        "measureNumber": 57,
+        "confidence": 0.9,
+        "margin": 0.625,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 4
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 4,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 62,
+        "confidence": 0.9,
+        "margin": 1.125,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          }
+        ]
+      },
+      {
+        "measureNumber": 64,
+        "confidence": 0.9,
+        "margin": 1.1875,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 66,
+        "confidence": 0.9,
+        "margin": 1.1875,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 68,
+        "confidence": 0.9,
+        "margin": 0.125,
+        "decisions": [
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 4,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 69,
+        "confidence": 0.9,
+        "margin": 1.25,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 1
+          }
+        ]
+      },
+      {
+        "measureNumber": 94,
+        "confidence": 0.9,
+        "margin": 0.5,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 10,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 97,
+        "confidence": 0.9,
+        "margin": 1.25,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 1
+          }
+        ]
+      },
+      {
+        "measureNumber": 98,
+        "confidence": 0.9,
+        "margin": 0.125,
+        "decisions": [
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 4,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 104,
+        "confidence": 0.9,
+        "margin": 0.625,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 3
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 4,
+            "after": 3
+          }
+        ]
+      },
+      {
+        "measureNumber": 105,
+        "confidence": 0.9,
+        "margin": 1.25,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 106,
+        "confidence": 0.9,
+        "margin": 0.75,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 4,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 107,
+        "confidence": 0.9,
+        "margin": 1.25,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 108,
+        "confidence": 0.9,
+        "margin": 1.25,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 109,
+        "confidence": 0.9,
+        "margin": 1.125,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 4
+          },
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 110,
+        "confidence": 0.9,
+        "margin": 0.625,
+        "decisions": [
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 132,
+        "confidence": 0.9,
+        "margin": 0.625,
+        "decisions": [
+          {
+            "voice": 1,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 2
+          }
+        ]
+      },
+      {
+        "measureNumber": 145,
+        "confidence": 0.9,
+        "margin": 0.75,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 0,
+            "violation": "same-voice-overlap",
+            "before": 12,
+            "after": 4
+          },
+          {
+            "voice": 2,
+            "startDivision": 8,
+            "violation": "same-voice-overlap",
+            "before": 8,
+            "after": 4
+          }
+        ]
+      },
+      {
+        "measureNumber": 154,
+        "confidence": 0.9,
+        "margin": 0.5,
+        "decisions": [
+          {
+            "voice": 2,
+            "startDivision": 4,
+            "violation": "same-voice-overlap",
+            "before": 8,
+            "after": 4
+          },
+          {
+            "voice": 1,
+            "startDivision": 4,
+            "violation": "same-voice-overlap",
+            "before": 8,
+            "after": 4
+          }
+        ]
+      }
+    ]
+  },
+  "solverVsRuntime": {
+    "noteCountDiff": 0,
+    "measureCountDiff": 0,
+    "identicalBytes": false,
+    "agreement": {
+      "pitch": 1,
+      "duration": 0.9841,
+      "onset": 0.9998,
+      "chord": 0.9971,
+      "f1": 1
+    }
+  },
+  "vsTruth": {
+    "runtime": {
+      "pitch": 0.2402,
+      "duration": 0.6423,
+      "onset": 0.3936,
+      "chord": 0.5166,
+      "f1": 0.7665
+    },
+    "solver": {
+      "pitch": 0.2407,
+      "duration": 0.6514,
+      "onset": 0.3938,
+      "chord": 0.5177,
+      "f1": 0.7661
+    },
+    "delta": {
+      "pitch": 0.0005,
+      "duration": 0.0091,
+      "onset": 0.0002,
+      "chord": 0.0011,
+      "f1": -0.0004
+    }
+  },
+  "candidateMeasures": [
+    8,
+    14,
+    19,
+    21,
+    23,
+    24,
+    25,
+    27,
+    28,
+    29,
+    30,
+    32,
+    35,
+    37,
+    40,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    76,
+    78,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    117,
+    128,
+    130,
+    131,
+    132,
+    133,
+    138,
+    139,
+    140,
+    142,
+    143,
+    145,
+    148,
+    154
+  ],
+  "changedMeasures": [
+    14,
+    19,
+    21,
+    28,
+    29,
+    40,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    62,
+    64,
+    66,
+    68,
+    69,
+    94,
+    97,
+    98,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    132,
+    145,
+    154
+  ]
+}

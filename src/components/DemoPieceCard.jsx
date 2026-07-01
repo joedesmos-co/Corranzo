@@ -15,10 +15,11 @@ export default function DemoPieceCard({
       aria-labelledby="demo-piece-title"
     >
       <div className="demo-piece__copy">
-        <p className="demo-piece__badge">Built-in demo</p>
+        <p className="demo-piece__badge">Demo piece</p>
         <h3 id="demo-piece-title" className="demo-piece__title">
           {DEMO_PIECE.title}
         </h3>
+        <p className="demo-piece__intro">No files needed. Open this and press Play.</p>
         <p className="demo-piece__subtitle">
           {DEMO_PIECE.subtitle}
           {DEMO_PIECE.measureCount != null && DEMO_PIECE.pageCount != null
@@ -34,7 +35,7 @@ export default function DemoPieceCard({
           onClick={onLoad}
           aria-label={`Try demo: ${DEMO_PIECE.title}`}
         >
-          {loading ? 'Opening…' : 'Try demo'}
+          {loading ? 'Opening…' : 'Try Demo Piece'}
         </button>
         <p className="demo-piece__credit">{DEMO_PIECE.attribution}</p>
       </div>

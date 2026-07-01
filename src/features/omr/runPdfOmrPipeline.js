@@ -4,6 +4,7 @@ import {
   renderPdfPageImageData,
 } from '../score-follow/pdfPageAnalysis.js'
 import { buildOmrMusicXml } from './buildOmrMusicXml.js'
+import { promoteMeasureRhythmsWithClips } from './scoreGraphSolver.js'
 import { parseTempoFromTextItems } from './parseOmrTempoMarking.js'
 import { buildOmrDiagnostics } from './buildOmrDiagnostics.js'
 import { summarizeNoteMatchingReport } from './omrNoteMatchingDiagnostics.js'
@@ -77,6 +78,8 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     title = 'PDF OMR',
     preprocessPages = true,
     traceRunId = null,
+    includeScoreGraph = false,
+    promoteScoreGraphClips = false,
   } = options
 
   omrTrace('pipeline:enter', { preprocessPages }, traceRunId)
@@ -337,6 +340,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     musical,
     uncertainMeasures: diagnostics.uncertainMeasures,
     totalMeasures: diagnostics.measures,
+    includeScoreGraph,
   })
 
   const difficulty = assessOmrDifficulty({
@@ -516,6 +520,38 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     }, traceRunId)
   }
 
+  // Phase 3C: gated, DEFAULT-OFF promotion of high-confidence hard-constraint clip
+  // decisions. When the flag is false (default) this block is skipped entirely and
+  // runtime output is byte-identical. When true, only the clipped note's duration
+  // changes; pitch/onset/chord/note-count/measure-count are preserved.
+  const scoreGraphClipPromotion = {
+    enabled: promoteScoreGraphClips,
+    promotedToRuntime: false,
+    promotedMeasureCount: 0,
+    promotedDecisions: 0,
+    skippedCount: 0,
+    promotedMeasureNumbers: [],
+  }
+  if (promoteScoreGraphClips) {
+    const promotion = promoteMeasureRhythmsWithClips(measureRhythms, {
+      totalDivisions: measureDivisions,
+      minConfidence: 0.9,
+    })
+    for (let index = 0; index < measureRhythms.length; index += 1) {
+      measureRhythms[index] = promotion.measures[index]
+    }
+    scoreGraphClipPromotion.promotedToRuntime = promotion.promotedMeasureNumbers.length > 0
+    scoreGraphClipPromotion.promotedMeasureCount = promotion.summary.promotedMeasureCount
+    scoreGraphClipPromotion.promotedDecisions = promotion.summary.promotedDecisions
+    scoreGraphClipPromotion.skippedCount = promotion.summary.skippedCount
+    scoreGraphClipPromotion.promotedMeasureNumbers = promotion.promotedMeasureNumbers
+    scoreGraphClipPromotion.promotedLog = promotion.promotedLog.slice(0, 20)
+    omrTrace('pipeline:scoregraph-clip-promotion', {
+      promotedMeasureCount: promotion.summary.promotedMeasureCount,
+      promotedDecisions: promotion.summary.promotedDecisions,
+    }, traceRunId)
+  }
+
   const musicXml = buildOmrMusicXml({
     title,
     measures: measureRhythms,
@@ -594,6 +630,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       phantomColumnCorrection: phantomColumnCorrectionSummary,
       terminalEarlyColumnCorrection: terminalEarlyColumnCorrectionSummary,
       terminalSameClefChordQuarterCorrection,
+      ...(promoteScoreGraphClips ? { scoreGraphClipPromotion } : {}),
     },
     measureGrid,
     measureGridDiagnostics,

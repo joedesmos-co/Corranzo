@@ -28,11 +28,11 @@ describe('beta onboarding', () => {
 
   it('homepage explains what Corranzo is and how to use it', () => {
     const welcome = readSrc('components', 'LibraryWelcomeCard.jsx')
-    expect(welcome).toContain('sheet music practice app')
-    expect(welcome).toContain('PDF sheet music')
-    expect(welcome).toContain('MIDI and MusicXML')
-    expect(welcome).toContain('synchronized playback')
-    expect(welcome).toContain('score-follow cursor')
+    expect(welcome).toContain('Practice with a score that follows you')
+    expect(welcome).toContain('PDF score')
+    expect(welcome).toContain('MusicXML/MXL')
+    expect(welcome).toContain('MIDI is optional')
+    expect(welcome).toMatch(/Try the[\s\S]*demo first/)
     expect(welcome).toContain('library-welcome__summary')
     expect(welcome).toContain('CorranzoLogo')
     expect(welcome).toContain('library-welcome__logo')

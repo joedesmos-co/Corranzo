@@ -3,11 +3,17 @@ import { usePracticeSessionStable } from '../../context/PracticeSessionContext.j
 import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
 import PracticeTransportSection from './PracticeTransportSection.jsx'
 import useRenderCount from '../../dev/useRenderCount.js'
+import { WFY_STATUS } from '../../features/practice/waitForYouEngine.js'
+import { WFY_DISPLAY_STATUS } from '../../features/practice/waitForYouDisplayStatus.js'
 
 function PracticeTransportTick() {
   useRenderCount('PracticeTransportTick')
   const stable = usePracticeSessionStable()
   const tick = usePracticeTick()
+  const waitForYouContinueDisabled =
+    stable.waitForYou.status === WFY_STATUS.COMPLETE ||
+    stable.waitForYou.status === WFY_STATUS.NO_CHECKPOINTS ||
+    stable.waitForYou.displayStatus === WFY_DISPLAY_STATUS.CONTINUING
 
   return (
     <PracticeTransportSection
@@ -28,7 +34,10 @@ function PracticeTransportTick() {
       metronomeSubdivision={stable.playback.metronomeSubdivision}
       metronomeCountIn={stable.playback.metronomeCountIn}
       metronomeDisplay={stable.playback.metronomeDisplay}
-      mappingWarning={stable.playback.mappingWarning}
+      mappingWarning={stable.isDemoPiece ? null : stable.playback.mappingWarning}
+      waitForYouActive={stable.waitForYou.active}
+      waitForYouContinueDisabled={waitForYouContinueDisabled}
+      onWaitForYouContinue={stable.waitForYou.markCorrectAndContinue}
       onPlaybackRateChange={stable.playback.setPlaybackRate}
       onMetronomeEnabledChange={stable.playback.setMetronomeEnabled}
       onMetronomeLevelChange={stable.playback.setMetronomeLevel}

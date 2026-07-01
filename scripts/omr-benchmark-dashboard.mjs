@@ -6,6 +6,7 @@
  *   node scripts/omr-benchmark-dashboard.mjs
  *   node scripts/omr-benchmark-dashboard.mjs --manifest benchmarks/omr-benchmark.manifest.json
  *   node scripts/omr-benchmark-dashboard.mjs --from-reports tmp/omr-benchmark-iter/rhythm-voice2
+ *   node scripts/omr-benchmark-dashboard.mjs --promote-scoregraph-clips
  *   node scripts/omr-benchmark-dashboard.mjs --json tmp/omr-benchmark-dashboard/report.json --md tmp/omr-benchmark-dashboard/report.md
  *
  * Requires local PDF + MXL assets (see manifest). Does not change OMR runtime logic.
@@ -57,6 +58,8 @@ function usage() {
     '                            (expects clean.json + dense.json or <id>.json per fixture)',
     '  --max-pages <n>           Override per-fixture max pages',
     '  --no-preprocess           Disable OMR preprocessing',
+    '  --promote-scoregraph-clips',
+    '                            Dev-only: enable default-off ScoreGraph hard-constraint clip promotion',
     '  --allow-missing           Skip fixtures with missing PDF/truth instead of erroring',
     '  --help                    Show this help',
   ].join('\n')
@@ -118,7 +121,7 @@ async function makePdfTextExtractor(pdfPath) {
   }
 }
 
-async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages }) {
+async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, promoteScoreGraphClips = false }) {
   const rendered = await renderPdfToPages(pdfPath, { rootDir: ROOT })
   const extractPageText = await makePdfTextExtractor(pdfPath)
   return runPdfOmrPipeline(pdfPath, {
@@ -127,6 +130,7 @@ async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages }) {
     numPages: rendered.numPages,
     maxPages,
     preprocessPages,
+    promoteScoreGraphClips,
     title: basename(pdfPath).replace(/\.pdf$/i, ''),
   })
 }
@@ -185,10 +189,15 @@ async function evaluateFixture(fixture, options) {
 
   const maxPages = Math.max(1, Number(options.maxPages ?? resolved.maxPages ?? 24))
   const preprocessPages = options.preprocessPages !== false
+  const promoteScoreGraphClips = options.promoteScoreGraphClips === true
 
   try {
     console.error(`Running OMR: ${resolved.label ?? resolved.id}`)
-    const omrResult = await generateOmrFromPdf(resolved.pdfPath, { maxPages, preprocessPages })
+    const omrResult = await generateOmrFromPdf(resolved.pdfPath, {
+      maxPages,
+      preprocessPages,
+      promoteScoreGraphClips,
+    })
     const groundTruthMusicXml = await readScoreXml(resolved.truthPath)
     const report = evaluateOmrAccuracy({
       generatedMusicXml: omrResult.musicXml,
@@ -211,6 +220,7 @@ async function evaluateFixture(fixture, options) {
               truthPath: resolved.truthPath,
               maxPages,
               preprocessPages,
+              promoteScoreGraphClips,
               omrNoteCount: omrResult.noteCount ?? null,
               omrMeasureCount: omrResult.measureCount ?? null,
             },
@@ -229,6 +239,7 @@ async function evaluateFixture(fixture, options) {
         truthPath: resolved.truthPath,
         maxPages,
         preprocessPages,
+        promoteScoreGraphClips,
         omrNoteCount: omrResult.noteCount ?? null,
         omrMeasureCount: omrResult.measureCount ?? null,
       },
@@ -247,6 +258,7 @@ async function evaluateFixture(fixture, options) {
         truthPath: resolved.truthPath,
         maxPages,
         preprocessPages,
+        promoteScoreGraphClips,
         omrConfidence: error?.difficulty?.confidence ?? null,
         failureReasons: error?.difficulty?.reasons ?? [],
       },
@@ -283,6 +295,7 @@ async function main() {
   const maxPagesOverride = argValue(args, '--max-pages')
   const allowMissing = hasFlag(args, '--allow-missing')
   const preprocessPages = !hasFlag(args, '--no-preprocess')
+  const promoteScoreGraphClips = hasFlag(args, '--promote-scoregraph-clips')
 
   const manifest = loadManifest(manifestPath)
   const records = []
@@ -310,6 +323,7 @@ async function main() {
         allowMissing,
         maxPages: maxPagesOverride ? Number(maxPagesOverride) : undefined,
         preprocessPages,
+        promoteScoreGraphClips,
         outDir,
         saveFixtureReports: true,
       }),
@@ -319,6 +333,10 @@ async function main() {
   const summary = summarizeOmrBenchmarkDashboard(records)
   summary.manifestPath = manifestPath
   summary.mode = fromReportsDir ? 'from-reports' : 'live'
+  summary.pipelineOptions = {
+    preprocessPages,
+    promoteScoreGraphClips,
+  }
 
   writeText(jsonPath, `${serializeOmrBenchmarkReport(summary)}\n`)
   writeText(mdPath, formatOmrBenchmarkMarkdown(summary))

@@ -231,6 +231,9 @@ export function buildFixtureDashboardRecord({
     groundTruthTitle: report.summary?.groundTruthTitle ?? null,
     scoreGraph: report.generatedOmrDiagnostics?.scoreGraph ?? null,
     runtimeVsScoreGraph: report.generatedOmrDiagnostics?.runtimeVsScoreGraph ?? null,
+    ...(report.generatedOmrDiagnostics?.scoreGraphClipPromotion
+      ? { scoreGraphClipPromotion: report.generatedOmrDiagnostics.scoreGraphClipPromotion }
+      : {}),
     omrConfidence: report.generatedOmrDiagnostics?.difficulty?.confidence ?? null,
     omrFailureReasons: report.generatedOmrDiagnostics?.failureReasons ?? [],
     rejectedOrphanCount: Object.values(
@@ -293,6 +296,16 @@ function fixtureMetricLine(record) {
   ].join('\n')
 }
 
+function promotedMeasuresLine(promotion) {
+  const measures = promotion.promotedMeasureNumbers ?? []
+  const preview = measures.slice(0, 24).join(', ')
+  const suffix = measures.length > 24 ? `, ... (+${measures.length - 24} more)` : ''
+  return [
+    `  ScoreGraph clip promotion: ${promotion.promotedMeasureCount ?? 0} measures, ${promotion.promotedDecisions ?? 0} decisions, skipped ${promotion.skippedCount ?? 0}`,
+    measures.length ? `  promoted measures: ${preview}${suffix}` : null,
+  ].filter(Boolean).join('\n')
+}
+
 export function formatOmrBenchmarkMarkdown(summary) {
   const lines = [
     '# OMR benchmark dashboard',
@@ -350,6 +363,9 @@ export function formatOmrBenchmarkMarkdown(summary) {
           `  IR ↔ runtime parity: noteheads ${parity.noteheads ? 'ok' : 'MISMATCH'}, rests ${parity.rests ? 'ok' : 'MISMATCH'}`,
         )
       }
+    }
+    if (record.scoreGraphClipPromotion) {
+      lines.push(promotedMeasuresLine(record.scoreGraphClipPromotion))
     }
     if (record.failureReasons?.length) {
       lines.push(`- reasons: ${record.failureReasons.join('; ')}`)

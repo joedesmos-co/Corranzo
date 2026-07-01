@@ -115,6 +115,31 @@ describe('omrBenchmarkDashboard', () => {
     expect(summary.fixtureCount).toBe(2)
   })
 
+  it('surfaces ScoreGraph clip promotion diagnostics when present', () => {
+    const record = buildFixtureDashboardRecord({
+      fixture: { id: 'dense', label: 'Dense', pdf: '~/y.pdf', truth: '~/y.mxl' },
+      report: {
+        ...sampleDenseReport,
+        generatedOmrDiagnostics: {
+          ...sampleDenseReport.generatedOmrDiagnostics,
+          scoreGraphClipPromotion: {
+            enabled: true,
+            promotedMeasureCount: 2,
+            promotedDecisions: 3,
+            skippedCount: 1,
+            promotedMeasureNumbers: [5, 9],
+          },
+        },
+      },
+    })
+    const summary = summarizeOmrBenchmarkDashboard([record])
+    const markdown = formatOmrBenchmarkMarkdown(summary)
+
+    expect(record.scoreGraphClipPromotion.promotedMeasureNumbers).toEqual([5, 9])
+    expect(markdown).toContain('ScoreGraph clip promotion: 2 measures, 3 decisions, skipped 1')
+    expect(markdown).toContain('promoted measures: 5, 9')
+  })
+
   it('reports threshold failures with readable reasons', () => {
     const failures = assessFixtureThresholds(
       { pitchAccuracy: 0.5, measureCountDiff: 3, noteCountDiff: -2 },

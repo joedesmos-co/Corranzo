@@ -91,6 +91,7 @@
   padding: 10px var(--sf-space-xl);
   border-radius: var(--sf-radius-md);
   cursor: pointer;
+  min-height: 38px;
 }
 
 .topbar__nav-btn:hover {
@@ -212,6 +213,22 @@
   line-height: 1.45;
 }
 
+.guided-tour__demo {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgba(72, 180, 120, 0.24);
+  border-radius: 8px;
+  background: rgba(72, 180, 120, 0.08);
+}
+
+.guided-tour__demo-copy {
+  margin: 0;
+  color: var(--sf-text-secondary);
+  font-size: var(--sf-font-small);
+  line-height: 1.4;
+}
+
 .guided-tour__actions {
   display: flex;
   align-items: center;
@@ -252,6 +269,12 @@
   border-color: rgba(72, 180, 120, 0.45);
   background: rgba(72, 180, 120, 0.14);
   color: #d8f5e4;
+}
+
+.guided-tour__btn--demo {
+  justify-self: start;
+  min-height: 40px;
+  padding-inline: 14px;
 }
 
 /* —— Library + viewer layout —— */
@@ -433,6 +456,13 @@
   letter-spacing: -0.01em;
   line-height: 1.25;
   overflow-wrap: break-word;
+}
+
+.demo-piece__intro {
+  margin: var(--sf-space-sm) 0 0;
+  color: var(--sf-text-body);
+  font-size: var(--sf-font-small);
+  line-height: 1.45;
 }
 
 .demo-piece__subtitle,
@@ -687,6 +717,8 @@
   color: var(--sf-text-body);
   cursor: pointer;
   text-align: center;
+  min-height: 148px;
+  justify-content: center;
   transition:
     border-color var(--sf-duration) var(--sf-ease),
     background var(--sf-duration) var(--sf-ease);
@@ -710,11 +742,11 @@
 
 .multi-upload__title {
   font-family: var(--sf-font-display);
-  font-size: var(--sf-font-small);
+  font-size: var(--sf-font-section);
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
   text-transform: none;
-  color: var(--sf-text-secondary);
+  color: var(--sf-text-primary);
 }
 
 .multi-upload__hint {
@@ -757,6 +789,7 @@
   font-size: var(--sf-font-caption);
   text-align: center;
   color: var(--sf-text-muted);
+  line-height: 1.25;
 }
 
 .multi-upload__chip--ready {
@@ -785,7 +818,7 @@
   cursor: pointer;
   font-size: var(--sf-font-small);
   color: var(--sf-text-muted);
-  padding: var(--sf-space-xs) 0;
+  padding: var(--sf-space-sm) 0;
 }
 
 .panel--dev {
@@ -999,7 +1032,7 @@
   margin: 0 0 var(--sf-space-md);
   font-size: var(--sf-font-caption);
   line-height: 1.45;
-  color: var(--sf-text-muted);
+  color: var(--sf-text-body);
 }
 
 .library-panel__workflow-title {
@@ -1081,6 +1114,7 @@
   border: 1px solid var(--sf-border);
   font-size: 0.8rem;
   line-height: 1.45;
+  border-left-width: 3px;
 }
 
 .library-panel__feedback--success {
@@ -1093,7 +1127,8 @@
   color: var(--sf-text-body);
   background: var(--sf-bg-panel);
   border: 1px solid var(--sf-border);
-  border-radius: 0;
+  border-left-width: 3px;
+  border-left-color: var(--sf-border-strong);
 }
 
 .library-panel__feedback--error {
@@ -1167,6 +1202,10 @@
 
 .library-omr-panel__status--ready {
   color: #c8e6d4;
+  padding: var(--sf-space-sm) var(--sf-space-md);
+  border: 1px solid rgba(72, 140, 100, 0.35);
+  border-radius: var(--sf-radius-sm);
+  background: rgba(72, 140, 100, 0.12);
 }
 
 .library-omr-panel__status--error {
@@ -1176,6 +1215,44 @@
 .library-omr-panel__disclaimer {
   font-style: italic;
   opacity: 0.9;
+}
+
+.library-omr-panel__progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sf-space-xs);
+  margin-top: var(--sf-space-sm);
+}
+
+.library-omr-panel__progress-bar {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 3px;
+  overflow: hidden;
+  border-radius: var(--sf-radius-pill);
+  background: var(--sf-border-muted);
+}
+
+.library-omr-panel__progress-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 42%;
+  background: var(--sf-text-primary);
+  animation: omr-progress-slide 1.2s ease-in-out infinite;
+}
+
+@keyframes omr-progress-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(80%);
+  }
+  100% {
+    transform: translateX(240%);
+  }
 }
 
 /* —— PDF viewer —— */
@@ -1976,6 +2053,14 @@
   line-height: 1.5;
 }
 
+.pdf-canvas__placeholder {
+  padding: var(--sf-space-xl);
+  border: 1px dashed var(--sf-border-strong);
+  border-radius: var(--sf-radius-md);
+  background: var(--sf-bg-panel);
+  color: var(--sf-text-body);
+}
+
 .pdf-canvas__status--error {
   color: #f0a0a8;
 }
@@ -2195,6 +2280,10 @@
     padding: 8px var(--sf-space-md);
   }
 
+  .topbar__feedback {
+    display: none;
+  }
+
   .library-panel {
     width: 260px;
     padding: 16px;
@@ -2260,15 +2349,23 @@
   }
 
   .topbar__nav {
+    flex: 1 1 auto;
     gap: 2px;
   }
 
   .topbar__nav-btn {
+    flex: 1 1 0;
     padding: 7px 10px;
   }
 
-  .topbar__feedback {
+  .topbar__help {
+    flex: 0 0 auto;
     padding: 7px 0 7px 10px;
+    white-space: nowrap;
+  }
+
+  .multi-upload__dropzone {
+    min-height: 132px;
   }
 
   .guided-tour__card {
@@ -3621,8 +3718,35 @@
   color: var(--sf-text-muted);
 }
 
-.app-view-placeholder__action {
+.app-view-placeholder__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sf-space-sm);
+  flex-wrap: wrap;
   margin-top: var(--sf-space-sm);
+}
+
+.app-view-placeholder__action {
+  min-width: 10rem;
+}
+
+.app-view-placeholder__secondary {
+  min-height: 42px;
+  min-width: 10rem;
+  padding: var(--sf-space-sm) var(--sf-space-lg);
+  border: 1px solid var(--sf-border-strong);
+  border-radius: var(--sf-radius-md);
+  background: var(--sf-bg-panel);
+  color: var(--sf-text-primary);
+  font: inherit;
+  font-size: var(--sf-font-small);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.app-view-placeholder__secondary:hover:not(:disabled) {
+  background: var(--sf-bg-panel-inset);
 }
 
 .session-restore-banner {
@@ -3655,6 +3779,7 @@
   margin: 0;
   font-size: 0.85rem;
   color: #d4e0f4;
+  line-height: 1.45;
 }
 
 .session-restore-banner__actions {
@@ -3935,6 +4060,10 @@
   .library-welcome__actions {
     width: 100%;
   }
+
+  .app-view-placeholder {
+    padding: var(--sf-space-2xl) var(--sf-space-lg);
+  }
 }
 
 @media (max-width: 640px) {
@@ -3958,6 +4087,12 @@
 
   .library-welcome__btn {
     flex: 1 1 9rem;
+  }
+
+  .app-view-placeholder__actions,
+  .app-view-placeholder__action,
+  .app-view-placeholder__secondary {
+    width: 100%;
   }
 
   .demo-piece {

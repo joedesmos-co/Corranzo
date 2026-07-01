@@ -159,9 +159,10 @@ export default function App() {
   const goHome = useCallback(() => {
     const home = getHomeNavigationTarget()
     setShowWelcome(home.showWelcome)
+    setSidebarOpen(true)
     navigateToView(home.view)
     window.scrollTo(0, 0)
-  }, [navigateToView])
+  }, [navigateToView, setSidebarOpen])
 
   useEffect(() => {
     return () => {
@@ -916,12 +917,16 @@ export default function App() {
     if (meta?.blocked) {
       dismissOnboarding()
       setShowWelcome(false)
+      setSidebarOpen(true)
       setLibraryFeedback({
         type: 'info',
         message: 'Add a PDF and MusicXML/MXL first — then Practice will open.',
       })
       navigateToView('library')
       return
+    }
+    if (view === 'library') {
+      setSidebarOpen(true)
     }
     navigateToView(view)
   }
@@ -946,10 +951,21 @@ export default function App() {
           message={
             omrInvalid
               ? 'Experimental PDF playback could not be validated. Return to Library and regenerate, or upload MusicXML/MXL.'
-              : 'Upload a PDF and generate or upload MusicXML/MXL from Library, then open Practice again.'
+              : 'Start with the demo piece, or add a PDF and MusicXML/MXL in Library.'
           }
           actionLabel="Back to Library"
-          onAction={() => navigateToView('library')}
+          onAction={() => {
+            setSidebarOpen(true)
+            navigateToView('library')
+          }}
+          secondaryActionLabel={
+            !omrInvalid && isDemoSampleEnabled() && restoreGateOpen ? 'Try Demo Piece' : null
+          }
+          onSecondaryAction={
+            !omrInvalid && isDemoSampleEnabled() && restoreGateOpen
+              ? handleLoadSampleFixtures
+              : null
+          }
         />
       )
     }
@@ -1102,6 +1118,9 @@ export default function App() {
         <GuidedTutorial
           activeView={activeView}
           practiceReady={practiceReady}
+          canStartDemo={isDemoSampleEnabled() && restoreGateOpen && !practiceReady}
+          demoLoading={sampleLoadState.loading}
+          onStartDemo={handleLoadSampleFixtures}
           onNavigate={navigateToView}
           onSkip={() => finishGuidedTutorial('skipped')}
           onDone={() => finishGuidedTutorial('done')}
