@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   buildVectorEvents,
+  applyTerminalSameClefChordQuarterDurations,
   durationMeta,
   extendCombinedGrandStaffOpening,
   extendDurationsPerClefVoice,
@@ -17,6 +18,7 @@ import {
   sparseHarmonicHalfSpan,
   sameClefBeatQuarterFloor,
   terminalHarmonicHalfSpan,
+  terminalSameClefChordQuarterSpan,
   shouldInferRhythmFromPositions,
   unsupportedUpperChordOverhangCap,
 } from '../src/features/omr/processVectorOmrPage.js'
@@ -805,6 +807,90 @@ describe('extendDurationsPerClefVoice', () => {
     )
     expect(bass?.durationDivisions).toBe(8)
     expect(bass?.perClefDurationAdjusted).toBe(true)
+  })
+
+  it('extends terminal same-clef chord eighths on the beat grid to quarters', () => {
+    const events = extendDurationsPerClefVoice(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 6,
+          notes: [{ clef: 'treble', midi: 72 }],
+        },
+        {
+          type: 'note',
+          startDivision: 8,
+          durationDivisions: 2,
+          notes: [
+            { clef: 'treble', midi: 74, durationDivisions: 4 },
+            { clef: 'treble', midi: 71, durationDivisions: 4 },
+            { clef: 'treble', midi: 67, durationDivisions: 4 },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 10,
+          durationDivisions: 2,
+          notes: [{ clef: 'bass', midi: 43 }],
+        },
+      ],
+      16,
+    )
+    const terminalChord = events.find(
+      (event) => event.startDivision === 8 && event.notes?.[0]?.clef === 'treble',
+    )
+    expect(terminalChord?.durationDivisions).toBe(4)
+    expect(terminalChord?.perClefDurationAdjusted).toBe(true)
+  })
+
+  it('does not extend terminal beamed chord eighths to quarters', () => {
+    const clefEvents = [
+      {
+        type: 'note',
+        startDivision: 8,
+        durationDivisions: 2,
+        notes: [
+          { clef: 'treble', midi: 74, beams: 1 },
+          { clef: 'treble', midi: 71 },
+        ],
+      },
+    ]
+    expect(terminalSameClefChordQuarterSpan(clefEvents, 0, 16)).toBeNull()
+  })
+
+  it('applies terminal chord quarters after upstream onset realignment', () => {
+    const events = applyTerminalSameClefChordQuarterDurations(
+      [
+        {
+          type: 'note',
+          startDivision: 9,
+          durationDivisions: 4,
+          notes: [{ clef: 'treble', midi: 68 }],
+        },
+        {
+          type: 'note',
+          startDivision: 12,
+          durationDivisions: 2,
+          notes: [
+            { clef: 'treble', midi: 70 },
+            { clef: 'treble', midi: 67 },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 15,
+          durationDivisions: 1,
+          notes: [{ clef: 'bass', midi: 34 }],
+        },
+      ],
+      16,
+    )
+    const terminalChord = events.find(
+      (event) => event.startDivision === 12 && event.notes?.[0]?.clef === 'treble',
+    )
+    expect(terminalChord?.durationDivisions).toBe(4)
+    expect(terminalChord?.terminalSameClefChordQuarterAdjusted).toBe(true)
   })
 
   it('extends an opening bass chord over a same-clef inner voice', () => {

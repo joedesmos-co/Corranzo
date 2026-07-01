@@ -1,0 +1,460 @@
+{
+  "generatedAt": "2026-07-01T00:09:06.524Z",
+  "context": "post-inner-voice-phase runtime (narrow stack>=5)",
+  "baseline": {
+    "dense": {
+      "truthMeasureCount": 125,
+      "generatedMeasureCount": 125,
+      "measureCountDifference": 0,
+      "truthNoteCount": 2810,
+      "generatedNoteCount": 2807,
+      "noteCountDifference": -3,
+      "matchedNoteCount": 2779,
+      "correctPitchCount": 2632,
+      "correctDurationCount": 2686,
+      "correctOnsetCount": 2685,
+      "correctTimeCount": 44,
+      "missingNoteCount": 31,
+      "extraNoteCount": 28,
+      "wrongPitchCount": 147,
+      "wrongDurationCount": 93,
+      "wrongOnsetCount": 94,
+      "wrongTimeCount": 2735,
+      "chordMismatchCount": 201,
+      "chordComparableCount": 2909,
+      "greedyCorrectPitchCount": 2512,
+      "pitchCorrectAtCorrectOnsetCount": 2581,
+      "onsetCorrectMatchedCount": 2685
+    },
+    "clean": {
+      "truthMeasureCount": 78,
+      "generatedMeasureCount": 78,
+      "measureCountDifference": 0,
+      "truthNoteCount": 469,
+      "generatedNoteCount": 469,
+      "noteCountDifference": 0,
+      "matchedNoteCount": 469,
+      "correctPitchCount": 469,
+      "correctDurationCount": 468,
+      "correctOnsetCount": 469,
+      "correctTimeCount": 462,
+      "missingNoteCount": 0,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 0,
+      "wrongDurationCount": 1,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 0,
+      "chordComparableCount": 469,
+      "greedyCorrectPitchCount": 469,
+      "pitchCorrectAtCorrectOnsetCount": 469,
+      "onsetCorrectMatchedCount": 469
+    }
+  },
+  "innerVoiceShipped": {
+    "chordDelta": -18,
+    "m33": {
+      "before": 18,
+      "after": 0
+    },
+    "m113": {
+      "chord": 12,
+      "note": "fix applied but chord unchanged — investigate false-positive apply"
+    }
+  },
+  "decoupledRerank": [
+    {
+      "rank": 1,
+      "bucket": "wrongPitch @ correct onset",
+      "count": 104
+    },
+    {
+      "rank": 2,
+      "bucket": "wrongDuration @ correct onset+pitch",
+      "count": 41
+    },
+    {
+      "rank": 3,
+      "bucket": "chordMismatch (raw total)",
+      "count": 201
+    },
+    {
+      "rank": 4,
+      "bucket": "missingNotes",
+      "count": 31
+    },
+    {
+      "rank": 5,
+      "bucket": "extraNotes",
+      "count": 28
+    },
+    {
+      "rank": 6,
+      "bucket": "wrongPitch onset-coupled",
+      "count": 43
+    },
+    {
+      "rank": 7,
+      "bucket": "wrongOnset (raw total)",
+      "count": 94
+    },
+    {
+      "rank": 8,
+      "bucket": "wrongDuration onset-coupled",
+      "count": 50
+    }
+  ],
+  "pitchAtCorrectOnsetCount": 104,
+  "pitchOnsetCoupledCount": 43,
+  "durIndependentHot": [
+    {
+      "m": 70,
+      "count": 5
+    },
+    {
+      "m": 59,
+      "count": 3
+    },
+    {
+      "m": 9,
+      "count": 2
+    },
+    {
+      "m": 39,
+      "count": 2
+    },
+    {
+      "m": 113,
+      "count": 2
+    },
+    {
+      "m": 121,
+      "count": 2
+    },
+    {
+      "m": 1,
+      "count": 1
+    },
+    {
+      "m": 5,
+      "count": 1
+    },
+    {
+      "m": 10,
+      "count": 1
+    },
+    {
+      "m": 13,
+      "count": 1
+    },
+    {
+      "m": 14,
+      "count": 1
+    },
+    {
+      "m": 15,
+      "count": 1
+    }
+  ],
+  "durationPatternsIndependent": [
+    {
+      "pattern": "0.5->1",
+      "count": 8
+    },
+    {
+      "pattern": "1->0.5",
+      "count": 7
+    },
+    {
+      "pattern": "1->1.5",
+      "count": 6
+    },
+    {
+      "pattern": "0.75->0.25",
+      "count": 5
+    },
+    {
+      "pattern": "1->1.75",
+      "count": 3
+    },
+    {
+      "pattern": "0.5->3",
+      "count": 3
+    },
+    {
+      "pattern": "1.25->0.25",
+      "count": 3
+    },
+    {
+      "pattern": "0.5->1.25",
+      "count": 3
+    },
+    {
+      "pattern": "2->1",
+      "count": 1
+    },
+    {
+      "pattern": "0.5->2.5",
+      "count": 1
+    }
+  ],
+  "q1toHalfIndependent": {
+    "count": 7,
+    "byMeasure": [
+      {
+        "m": 70,
+        "count": 5
+      },
+      {
+        "m": 16,
+        "count": 1
+      },
+      {
+        "m": 76,
+        "count": 1
+      }
+    ]
+  },
+  "chordHotspots": [
+    {
+      "m": 61,
+      "chord": 26,
+      "pitch": 0,
+      "onset": 0,
+      "dur": 0,
+      "missing": 3,
+      "extra": 3,
+      "pure": false
+    },
+    {
+      "m": 9,
+      "chord": 23,
+      "pitch": 8,
+      "onset": 18,
+      "dur": 4,
+      "missing": 0,
+      "extra": 7,
+      "pure": false
+    },
+    {
+      "m": 7,
+      "chord": 20,
+      "pitch": 4,
+      "onset": 8,
+      "dur": 2,
+      "missing": 11,
+      "extra": 3,
+      "pure": false
+    },
+    {
+      "m": 97,
+      "chord": 16,
+      "pitch": 2,
+      "onset": 1,
+      "dur": 0,
+      "missing": 0,
+      "extra": 0,
+      "pure": false
+    },
+    {
+      "m": 55,
+      "chord": 14,
+      "pitch": 1,
+      "onset": 3,
+      "dur": 2,
+      "missing": 0,
+      "extra": 0,
+      "pure": false
+    },
+    {
+      "m": 8,
+      "chord": 13,
+      "pitch": 12,
+      "onset": 7,
+      "dur": 2,
+      "missing": 5,
+      "extra": 6,
+      "pure": false
+    },
+    {
+      "m": 113,
+      "chord": 12,
+      "pitch": 0,
+      "onset": 0,
+      "dur": 2,
+      "missing": 0,
+      "extra": 0,
+      "pure": true
+    },
+    {
+      "m": 45,
+      "chord": 10,
+      "pitch": 0,
+      "onset": 1,
+      "dur": 2,
+      "missing": 0,
+      "extra": 0,
+      "pure": false
+    },
+    {
+      "m": 70,
+      "chord": 8,
+      "pitch": 0,
+      "onset": 3,
+      "dur": 6,
+      "missing": 1,
+      "extra": 1,
+      "pure": false
+    },
+    {
+      "m": 94,
+      "chord": 8,
+      "pitch": 0,
+      "onset": 0,
+      "dur": 0,
+      "missing": 0,
+      "extra": 0,
+      "pure": true
+    },
+    {
+      "m": 6,
+      "chord": 6,
+      "pitch": 10,
+      "onset": 3,
+      "dur": 0,
+      "missing": 0,
+      "extra": 0,
+      "pure": false
+    },
+    {
+      "m": 27,
+      "chord": 6,
+      "pitch": 0,
+      "onset": 1,
+      "dur": 0,
+      "missing": 0,
+      "extra": 0,
+      "pure": false
+    },
+    {
+      "m": 57,
+      "chord": 6,
+      "pitch": 0,
+      "onset": 0,
+      "dur": 0,
+      "missing": 0,
+      "extra": 0,
+      "pure": true
+    },
+    {
+      "m": 25,
+      "chord": 4,
+      "pitch": 0,
+      "onset": 2,
+      "dur": 0,
+      "missing": 0,
+      "extra": 0,
+      "pure": false
+    },
+    {
+      "m": 88,
+      "chord": 4,
+      "pitch": 0,
+      "onset": 2,
+      "dur": 0,
+      "missing": 0,
+      "extra": 0,
+      "pure": false
+    }
+  ],
+  "pureChordHotspots": [
+    {
+      "m": 113,
+      "chord": 12,
+      "pitch": 0,
+      "onset": 0,
+      "dur": 2,
+      "missing": 0,
+      "extra": 0,
+      "pure": true
+    },
+    {
+      "m": 94,
+      "chord": 8,
+      "pitch": 0,
+      "onset": 0,
+      "dur": 0,
+      "missing": 0,
+      "extra": 0,
+      "pure": true
+    },
+    {
+      "m": 57,
+      "chord": 6,
+      "pitch": 0,
+      "onset": 0,
+      "dur": 0,
+      "missing": 0,
+      "extra": 0,
+      "pure": true
+    }
+  ],
+  "missingHotspots": [
+    {
+      "m": 7,
+      "count": 11
+    },
+    {
+      "m": 8,
+      "count": 5
+    },
+    {
+      "m": 60,
+      "count": 3
+    },
+    {
+      "m": 61,
+      "count": 3
+    },
+    {
+      "m": 5,
+      "count": 1
+    },
+    {
+      "m": 70,
+      "count": 1
+    },
+    {
+      "m": 95,
+      "count": 1
+    },
+    {
+      "m": 119,
+      "count": 1
+    },
+    {
+      "m": 120,
+      "count": 1
+    },
+    {
+      "m": 122,
+      "count": 1
+    },
+    {
+      "m": 123,
+      "count": 1
+    },
+    {
+      "m": 124,
+      "count": 1
+    }
+  ],
+  "m7MissingCount": 11,
+  "page8": {
+    "pitch": 81,
+    "onset": 35,
+    "chord": 1,
+    "missing": 6,
+    "dur": 9
+  }
+}

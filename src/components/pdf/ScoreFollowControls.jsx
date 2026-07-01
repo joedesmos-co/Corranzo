@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { CURSOR_HIDE_REASON, getCursorFollowHint } from '../../features/score-follow/scoreFollowVisibility.js'
-import { isAutomaticAnchorSource } from '../../features/score-follow/anchorUtils.js'
 
 function formatDebugNumber(value) {
   return Number.isFinite(value) ? value.toFixed(4) : '—'
@@ -11,10 +9,6 @@ function formatMeasureBox(box) {
     return '—'
   }
   return `x ${formatDebugNumber(box.x0)}-${formatDebugNumber(box.x1)} · y ${formatDebugNumber(box.y0)}-${formatDebugNumber(box.y1)}${box.source ? ` · ${box.source}` : ''}`
-}
-
-function anchorSourceLabel(anchor) {
-  return isAutomaticAnchorSource(anchor?.source) ? 'auto' : 'manual'
 }
 
 function formatOmrMeasureBox(box) {
@@ -102,9 +96,6 @@ export default function ScoreFollowControls({
   onPlacementMeasureNumberChange,
   measureBounds,
   anchors,
-  onDeleteAnchor,
-  onClearAnchors,
-  onClearManualMarkers,
   onUndoLastMarker,
   onAdvancePlacementMeasure,
   markingProgress,
@@ -112,11 +103,9 @@ export default function ScoreFollowControls({
   debug,
   onRetryAutoSetup,
   onCancelAutoSetup,
-  onResetSemiAutoSetup,
   setupStatus,
   semiAutoSetup,
   isSemiAutoAnalyzing,
-  anchorCounts,
   followNeedsSetup = false,
   experimentalOmrPlayback = false,
   embedded = false,
@@ -127,13 +116,11 @@ export default function ScoreFollowControls({
   onConfirmSystemStartMarks,
   onUndoSystemStartMark,
   onExitSystemStartMode,
+  showCursorToggle = true,
+  allowSystemStartFallback = true,
 }) {
   const Root = embedded ? 'div' : 'aside'
   const rootClass = `score-follow-controls${embedded ? ' score-follow-controls--embedded' : ''}`
-  const [markersListOpen, setMarkersListOpen] = useState(false)
-  // Manual marking tools stay hidden behind this disclosure unless auto setup
-  // genuinely fails — automatic setup is the product, manual is the rescue path.
-  const [showAdjust, setShowAdjust] = useState(false)
 
   if (!hasPdf) {
     return (
@@ -160,8 +147,6 @@ export default function ScoreFollowControls({
   const nextMeasure = markingProgress?.nextMeasure ?? placementMeasureNumber
   const progressRatio =
     totalMeasures > 0 ? Math.min(1, markedCount / totalMeasures) : 0
-  const manualCount = anchorCounts?.manual ?? 0
-
   const cardStatus = getSetupStatus({
     alignmentMode,
     anchors,
@@ -176,7 +161,6 @@ export default function ScoreFollowControls({
     setupMessage: setupStatus?.message,
   })
 
-  const hasAutoAnchors = (anchorCounts?.auto ?? 0) > 0
   // Auto setup genuinely failed (ran and produced no usable mapping) — the only
   // time the manual "Mark system starts" rescue path is surfaced up front.
   const autoFailed =
@@ -187,38 +171,8 @@ export default function ScoreFollowControls({
     !isSemiAutoAnalyzing &&
     !canFollow
 
-  function handleStartMarking() {
-    onAlignmentModeChange(true)
-  }
-
   function handleDoneMarking() {
     onAlignmentModeChange(false)
-  }
-
-  function handleClearManual() {
-    if (manualCount === 0) {
-      return
-    }
-    if (
-      window.confirm(
-        `Remove all ${manualCount} manual marker${manualCount === 1 ? '' : 's'}? Auto markers will stay.`,
-      )
-    ) {
-      onClearManualMarkers?.()
-    }
-  }
-
-  function handleClearAll() {
-    if (anchors.length === 0) {
-      return
-    }
-    if (
-      window.confirm(
-        `Remove all ${anchors.length} marker${anchors.length === 1 ? '' : 's'} (manual and auto)?`,
-      )
-    ) {
-      onClearAnchors?.()
-    }
   }
 
   return (
@@ -372,14 +326,16 @@ export default function ScoreFollowControls({
           <p className="score-follow-controls__auto-error">
             {semiAutoSetup?.error ?? 'Auto setup could not find systems. Mark system starts.'}
           </p>
-          <button
-            type="button"
-            className="score-follow-controls__system-start-btn"
-            onClick={onEnterSystemStartMode}
-            disabled={!onEnterSystemStartMode}
-          >
-            Mark system starts
-          </button>
+          {allowSystemStartFallback && (
+            <button
+              type="button"
+              className="score-follow-controls__system-start-btn"
+              onClick={onEnterSystemStartMode}
+              disabled={!onEnterSystemStartMode}
+            >
+              Mark system starts
+            </button>
+          )}
           <button
             type="button"
             className="score-follow-controls__auto-btn score-follow-controls__auto-btn--secondary"
@@ -389,64 +345,18 @@ export default function ScoreFollowControls({
             {isSemiAutoAnalyzing ? 'Scanning…' : 'Re-run auto setup'}
           </button>
         </div>
-      ) : anchors.length > 0 && !isSemiAutoAnalyzing ? (
-        /* Auto setup worked — keep manual tools tucked behind a disclosure. */
-        <div className="score-follow-controls__adjust">
-          <button
-            type="button"
-            className="score-follow-controls__adjust-toggle"
-            onClick={() => setShowAdjust((value) => !value)}
-            aria-expanded={showAdjust}
-          >
-            {showAdjust ? 'Hide adjustments' : 'Adjust cursor'}
-          </button>
-          {showAdjust && (
-            <div className="score-follow-controls__adjust-panel">
-              <button
-                type="button"
-                className="score-follow-controls__auto-btn score-follow-controls__auto-btn--secondary"
-                onClick={onRetryAutoSetup}
-                disabled={!onRetryAutoSetup || isSemiAutoAnalyzing}
-              >
-                Re-run auto setup
-              </button>
-              {hasAutoAnchors && (
-                <button
-                  type="button"
-                  className="score-follow-controls__auto-btn score-follow-controls__auto-btn--secondary"
-                  onClick={onResetSemiAutoSetup}
-                  disabled={isSemiAutoAnalyzing}
-                >
-                  Clear auto guides
-                </button>
-              )}
-              <button
-                type="button"
-                className="score-follow-controls__mark-start-btn score-follow-controls__mark-start-btn--secondary"
-                onClick={handleStartMarking}
-                disabled={isSemiAutoAnalyzing}
-              >
-                Fix / add markers manually
-              </button>
-            </div>
-          )}
-        </div>
       ) : null}
 
-      <label className="score-follow-controls__row">
-        <input
-          type="checkbox"
-          checked={enabled}
-          onChange={(event) => onEnabledChange(event.target.checked)}
-          disabled={alignmentMode || isSemiAutoAnalyzing}
-        />
-        <span>Show moving cursor while practicing</span>
-      </label>
-
-      {!embedded && anchors.length === 0 && !alignmentMode && (
-        <p className="score-follow-controls__empty">
-          Tap <strong>Start marking measures</strong>, then tap where each measure begins on the PDF.
-        </p>
+      {showCursorToggle && (
+        <label className="score-follow-controls__row">
+          <input
+            type="checkbox"
+            checked={enabled}
+            onChange={(event) => onEnabledChange(event.target.checked)}
+            disabled={alignmentMode || isSemiAutoAnalyzing}
+          />
+          <span>Show moving cursor while practicing</span>
+        </label>
       )}
 
       {anchors.length > 0 && !embedded && (
@@ -470,71 +380,6 @@ export default function ScoreFollowControls({
               </p>
             )}
         </>
-      )}
-
-      {anchors.length > 0 && (
-        <details
-          className="score-follow-controls__markers-details"
-          open={markersListOpen || alignmentMode}
-          onToggle={(event) => setMarkersListOpen(event.currentTarget.open)}
-        >
-          <summary>
-            View markers ({anchors.length}
-            {manualCount > 0 || hasAutoAnchors
-              ? ` · ${manualCount} manual${hasAutoAnchors ? `, ${anchorCounts.auto} auto` : ''}`
-              : ''}
-            )
-          </summary>
-          <ul className="score-follow-controls__list">
-            {anchors.map((anchor) => {
-              const sourceLabel = anchorSourceLabel(anchor)
-              return (
-                <li key={anchor.id} className="score-follow-controls__item">
-                <span>
-                  Measure {anchor.measureNumber}
-                  <span className="score-follow-controls__item-meta"> · page {anchor.page}</span>
-                  <span
-                    className={`score-follow-controls__source-badge score-follow-controls__source-badge--${sourceLabel}`}
-                  >
-                    {sourceLabel}
-                  </span>
-                </span>
-                <button
-                  type="button"
-                  className="score-follow-controls__delete"
-                  onClick={() => onDeleteAnchor(anchor.id)}
-                  aria-label={`Remove marker for measure ${anchor.measureNumber}`}
-                >
-                  ×
-                </button>
-              </li>
-              )
-            })}
-          </ul>
-        </details>
-      )}
-
-      {(manualCount > 0 || anchors.length > 0) && (
-        <div className="score-follow-controls__clear-row">
-          {manualCount > 0 && (
-            <button
-              type="button"
-              className="score-follow-controls__clear"
-              onClick={handleClearManual}
-            >
-              Clear manual markers
-            </button>
-          )}
-          {anchors.length > 0 && (
-            <button
-              type="button"
-              className="score-follow-controls__clear score-follow-controls__clear--all"
-              onClick={handleClearAll}
-            >
-              Remove all markers
-            </button>
-          )}
-        </div>
       )}
 
       {debug?.autoSetupRuntime && (

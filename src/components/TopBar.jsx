@@ -11,7 +11,13 @@ const VIEWS = [
   { id: 'profile', label: 'Profile' },
 ]
 
-export default function TopBar({ activeView, onNavigate, onGoHome, practiceReady = true }) {
+export default function TopBar({
+  activeView,
+  onNavigate,
+  onGoHome,
+  onReplayTutorial,
+  practiceReady = true,
+}) {
   function handleNavigate(id) {
     if (id === 'practice' && !practiceReady) {
       onNavigate(id, { blocked: true })
@@ -44,6 +50,7 @@ export default function TopBar({ activeView, onNavigate, onGoHome, practiceReady
             <button
               key={id}
               type="button"
+              data-tour-id={id === 'practice' ? 'topbar-practice' : undefined}
               className={`topbar__nav-btn${activeView === id ? ' topbar__nav-btn--active' : ''}${
                 id === 'practice' && !practiceReady ? ' topbar__nav-btn--muted' : ''
               }`}
@@ -59,6 +66,16 @@ export default function TopBar({ activeView, onNavigate, onGoHome, practiceReady
             </button>
           ))}
         </nav>
+        {onReplayTutorial && (
+          <button
+            type="button"
+            className="topbar__help"
+            data-tour-id="topbar-help"
+            onClick={onReplayTutorial}
+          >
+            Help
+          </button>
+        )}
         <FeedbackLink className="topbar__feedback" label="Feedback" />
       </div>
     </header>

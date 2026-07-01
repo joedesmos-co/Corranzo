@@ -2,7 +2,7 @@ import { PRACTICE_MODE } from '../../features/practice/practiceMode.js'
 import PracticeHelpTip from './PracticeHelpTip.jsx'
 
 const MODE_LABELS = {
-  [PRACTICE_MODE.NORMAL]: 'Playback',
+  [PRACTICE_MODE.NORMAL]: 'Play Along',
   [PRACTICE_MODE.WAIT_FOR_YOU]: 'Wait For You',
 }
 
@@ -19,6 +19,7 @@ export default function PracticeModeSection({
     <section
       className={`practice-section practice-mode${compact ? ' practice-section--compact' : ''}`}
       aria-label="Practice mode"
+      data-tour-id="practice-mode"
     >
       <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
         Mode

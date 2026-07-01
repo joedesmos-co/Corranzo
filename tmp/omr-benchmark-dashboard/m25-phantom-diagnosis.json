@@ -1,0 +1,152 @@
+{
+  "measureNumber": 25,
+  "columns": [
+    {
+      "startDivision": 0,
+      "onsetQuarter": 0,
+      "noteCount": 5,
+      "role": "stack",
+      "midis": [
+        55,
+        43,
+        79,
+        72,
+        69
+      ]
+    },
+    {
+      "startDivision": 2,
+      "onsetQuarter": 0.5,
+      "noteCount": 1,
+      "role": "solo",
+      "midis": [
+        50
+      ]
+    },
+    {
+      "startDivision": 3,
+      "onsetQuarter": 0.75,
+      "noteCount": 1,
+      "role": "phantom-solo",
+      "midis": [
+        43
+      ]
+    },
+    {
+      "startDivision": 5,
+      "onsetQuarter": 1.25,
+      "noteCount": 6,
+      "role": "linked-stack",
+      "midis": [
+        55,
+        50,
+        43,
+        79,
+        71,
+        67
+      ]
+    },
+    {
+      "startDivision": 7,
+      "onsetQuarter": 1.75,
+      "noteCount": 1,
+      "role": "phantom-solo",
+      "midis": [
+        43
+      ]
+    },
+    {
+      "startDivision": 9,
+      "onsetQuarter": 2.25,
+      "noteCount": 6,
+      "role": "linked-stack",
+      "midis": [
+        55,
+        50,
+        43,
+        79,
+        72,
+        69
+      ]
+    },
+    {
+      "startDivision": 11,
+      "onsetQuarter": 2.75,
+      "noteCount": 1,
+      "role": "phantom-solo",
+      "midis": [
+        43
+      ]
+    },
+    {
+      "startDivision": 12,
+      "onsetQuarter": 3,
+      "noteCount": 4,
+      "role": "stack",
+      "midis": [
+        55,
+        43,
+        74,
+        71
+      ]
+    },
+    {
+      "startDivision": 14,
+      "onsetQuarter": 3.5,
+      "noteCount": 2,
+      "role": "stack",
+      "midis": [
+        50,
+        43
+      ]
+    }
+  ],
+  "correction": {
+    "phantomColumns": [
+      {
+        "startDivision": 3,
+        "noteCount": 1,
+        "midis": [
+          43
+        ]
+      },
+      {
+        "startDivision": 7,
+        "noteCount": 1,
+        "midis": [
+          43
+        ]
+      }
+    ],
+    "stackShifts": [
+      {
+        "fromDivision": 5,
+        "toDivision": 4
+      },
+      {
+        "fromDivision": 9,
+        "toDivision": 8
+      }
+    ],
+    "pairs": [
+      {
+        "phantomStartDivision": 3,
+        "stackStartDivision": 5,
+        "stackNoteCount": 6,
+        "duplicateMidis": [
+          43
+        ],
+        "splitsAttack": true
+      },
+      {
+        "phantomStartDivision": 7,
+        "stackStartDivision": 9,
+        "stackNoteCount": 6,
+        "duplicateMidis": [
+          43
+        ],
+        "splitsAttack": true
+      }
+    ]
+  }
+}

@@ -5,14 +5,17 @@ export default function PracticeCollapsibleSection({
   summary,
   defaultOpen = false,
   onOpenChange,
+  dataTourId = null,
   children,
 }) {
   const [open, setOpen] = useState(defaultOpen)
 
   useEffect(() => {
     if (defaultOpen) {
-      setOpen(true)
+      const timeoutId = window.setTimeout(() => setOpen(true), 0)
+      return () => window.clearTimeout(timeoutId)
     }
+    return undefined
   }, [defaultOpen])
 
   useEffect(() => {
@@ -22,6 +25,7 @@ export default function PracticeCollapsibleSection({
   return (
     <section
       className={`practice-section practice-section--collapsible${open ? ' practice-section--collapsible-open' : ''}`}
+      data-tour-id={dataTourId ?? undefined}
     >
       <button
         type="button"

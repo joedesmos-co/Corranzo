@@ -21,6 +21,7 @@ export default function PracticePlaybackSettings({
   metronomeDisplay,
   mappingWarning,
   disabled = false,
+  showMetronomeDetails = true,
 }) {
   return (
     <div className="practice-playback-settings">
@@ -60,55 +61,61 @@ export default function PracticePlaybackSettings({
           />
           Metronome
         </label>
-        <label className="practice-playback-settings__label practice-playback-settings__label--inline">
-          Volume
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.05}
-            value={metronomeLevel}
-            disabled={disabled}
-            aria-label="Metronome volume"
-            onChange={(event) => onMetronomeLevelChange(Number(event.target.value))}
-          />
-        </label>
+        {showMetronomeDetails && (
+          <label className="practice-playback-settings__label practice-playback-settings__label--inline">
+            Volume
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.05}
+              value={metronomeLevel}
+              disabled={disabled}
+              aria-label="Metronome volume"
+              onChange={(event) => onMetronomeLevelChange(Number(event.target.value))}
+            />
+          </label>
+        )}
       </div>
 
-      <div className="practice-playback-settings__row practice-playback-settings__row--grid">
-        <label className="practice-playback-settings__label" htmlFor="metronome-subdivision">
-          Subdivision
-          <select
-            id="metronome-subdivision"
-            value={metronomeSubdivision}
-            disabled={disabled}
-            onChange={(event) => onMetronomeSubdivisionChange(event.target.value)}
-          >
-            {METRONOME_SUBDIVISION_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="practice-playback-settings__label" htmlFor="metronome-count-in">
-          Count-in
-          <select
-            id="metronome-count-in"
-            value={metronomeCountIn}
-            disabled={disabled}
-            onChange={(event) => onMetronomeCountInChange(Number(event.target.value))}
-          >
-            {METRONOME_COUNT_IN_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
+      {showMetronomeDetails && (
+        <div className="practice-playback-settings__row practice-playback-settings__row--grid">
+          <label className="practice-playback-settings__label" htmlFor="metronome-subdivision">
+            Subdivision
+            <select
+              id="metronome-subdivision"
+              value={metronomeSubdivision}
+              disabled={disabled}
+              onChange={(event) => onMetronomeSubdivisionChange(event.target.value)}
+            >
+              {METRONOME_SUBDIVISION_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="practice-playback-settings__label" htmlFor="metronome-count-in">
+            Count-in
+            <select
+              id="metronome-count-in"
+              value={metronomeCountIn}
+              disabled={disabled}
+              onChange={(event) => onMetronomeCountInChange(Number(event.target.value))}
+            >
+              {METRONOME_COUNT_IN_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      )}
 
-      <MetronomeBeatIndicator display={metronomeDisplay} disabled={disabled} />
+      {showMetronomeDetails && (
+        <MetronomeBeatIndicator display={metronomeDisplay} disabled={disabled} />
+      )}
 
       {mappingWarning && (
         <p className="practice-section__error">{mappingWarning}</p>

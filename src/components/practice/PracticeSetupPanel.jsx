@@ -1,10 +1,9 @@
 import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
 import WaitForYouMatchSettingsPanel from './WaitForYouMatchSettingsPanel.jsx'
 import ScoreFollowControls from '../pdf/ScoreFollowControls.jsx'
-import CalibrationDebugPanel from './CalibrationDebugPanel.jsx'
 import ScoreFollowApproximateHint from './ScoreFollowApproximateHint.jsx'
 
-export default function PracticeSetupPanel({ session, scoreFollow, pdfPageNumber = 1 }) {
+export default function PracticeSetupPanel({ session, scoreFollow }) {
   const measureBounds = session.measure?.bounds
 
   return (
@@ -40,7 +39,6 @@ export default function PracticeSetupPanel({ session, scoreFollow, pdfPageNumber
             setupStatus={scoreFollow.setupStatus}
             semiAutoSetup={scoreFollow.semiAutoSetup}
             isSemiAutoAnalyzing={scoreFollow.isSemiAutoAnalyzing}
-            anchorCounts={scoreFollow.anchorCounts}
             followNeedsSetup={scoreFollow.followNeedsSetup}
             experimentalOmrPlayback={scoreFollow.experimentalOmrPlayback}
             embedded
@@ -50,26 +48,11 @@ export default function PracticeSetupPanel({ session, scoreFollow, pdfPageNumber
             onConfirmSystemStartMarks={scoreFollow.confirmSystemStartMarks}
             onUndoSystemStartMark={scoreFollow.undoLastSystemStartMark}
             onExitSystemStartMode={scoreFollow.exitSystemStartMode}
+            showCursorToggle={false}
+            allowSystemStartFallback
           />
         )}
       </section>
-
-      <details className="practice-diagnostics__group" open={Boolean(scoreFollow?.calibrationDebugSnapshot)}>
-        <summary>Calibration debug (beta)</summary>
-        <div className="practice-diagnostics__group-body">
-          <CalibrationDebugPanel
-            snapshot={scoreFollow?.calibrationDebugSnapshot ?? null}
-            pieceName={session.sources?.playbackFileName ?? null}
-            anchors={scoreFollow?.anchors ?? []}
-            showOverlay={scoreFollow?.showCalibrationOverlay}
-            onShowOverlayChange={scoreFollow?.setShowCalibrationOverlay}
-            onRotatePage={scoreFollow?.rotatePageView}
-            onApplyAutoRotations={scoreFollow?.applyAutoPageRotations}
-            visiblePageNumber={pdfPageNumber}
-            setupPhase={scoreFollow?.setupStatus?.phase ?? null}
-          />
-        </div>
-      </details>
 
       {session.isWaitForYou && session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE && (
         <section className="practice-section" aria-label="Note matching options">

@@ -38,7 +38,12 @@ export default function WaitForYouInputSourceSelector({
   ]
 
   return (
-    <div className="wfy-input-source" role="radiogroup" aria-label="How you continue">
+    <div
+      className="wfy-input-source"
+      role="radiogroup"
+      aria-label="How you continue"
+      data-tour-id="practice-input-source"
+    >
       <p className="wfy-input-source__label">Input</p>
       <div className="wfy-input-source__options">
         {options.map((option) => (

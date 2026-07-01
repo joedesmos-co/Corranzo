@@ -6,6 +6,7 @@ import AppViewPlaceholder from './components/AppViewPlaceholder.jsx'
 import AppFooter from './components/AppFooter.jsx'
 import SessionRestoreBanner from './components/SessionRestoreBanner.jsx'
 import SessionRestoreOverlay from './components/SessionRestoreOverlay.jsx'
+import GuidedTutorial from './components/onboarding/GuidedTutorial.jsx'
 import useRestoreUploadGate from './features/import/useRestoreUploadGate.js'
 import PdfViewer from './components/PdfViewer.jsx'
 import PracticeView from './components/practice/PracticeView.jsx'
@@ -26,6 +27,11 @@ import {
   loadPracticePrefs,
   savePracticePrefs,
 } from './features/session/practicePrefsStorage.js'
+import {
+  completeGuidedTutorial,
+  isGuidedTutorialCompleted,
+  shouldOpenGuidedTutorial,
+} from './features/onboarding/guidedTutorial.js'
 import {
   readFileArrayBuffer,
   validateFileForImport,
@@ -84,6 +90,9 @@ export default function App() {
   const [pdfMeta, setPdfMeta] = useState(null)
   const [initialPracticePrefs, setInitialPracticePrefs] = useState(null)
   const [showWelcome, setShowWelcome] = useState(() => !isOnboardingDismissed())
+  const [guidedTutorialOpen, setGuidedTutorialOpen] = useState(() =>
+    shouldOpenGuidedTutorial({ completed: isGuidedTutorialCompleted() }),
+  )
   const [demoCardHidden, setDemoCardHidden] = useState(() => isDemoCardHidden())
   const practicePrefsRef = useRef(null)
   const pendingClassifiedUploadRef = useRef(null)
@@ -828,8 +837,24 @@ export default function App() {
     }
   }, [activeView, pdfFile, pdfBuffer, resetPdfViewerRuntime])
 
-  const showLibraryIntro = activeView === 'library' && showWelcome && restoreGateOpen
+  const showLibraryIntro =
+    activeView === 'library' &&
+    showWelcome &&
+    restoreGateOpen &&
+    !guidedTutorialOpen
   const showLibraryWorkspace = activeView === 'library' && !showLibraryIntro
+
+  function finishGuidedTutorial(reason) {
+    completeGuidedTutorial(reason)
+    dismissOnboarding()
+    setShowWelcome(false)
+    setGuidedTutorialOpen(false)
+  }
+
+  function replayGuidedTutorial() {
+    setShowWelcome(false)
+    setGuidedTutorialOpen(true)
+  }
 
   useEffect(() => {
     logAppViewDebug('render-state', {
@@ -973,6 +998,7 @@ export default function App() {
         activeView={activeView}
         onNavigate={handleNavigate}
         onGoHome={goHome}
+        onReplayTutorial={replayGuidedTutorial}
         practiceReady={practiceReady}
       />
 
@@ -1070,6 +1096,16 @@ export default function App() {
 
       {(activeView === 'library' || activeView === 'profile' || isLegalView(activeView)) && (
         <AppFooter onLegalNavigate={navigateToView} />
+      )}
+
+      {guidedTutorialOpen && restoreGateOpen && (
+        <GuidedTutorial
+          activeView={activeView}
+          practiceReady={practiceReady}
+          onNavigate={navigateToView}
+          onSkip={() => finishGuidedTutorial('skipped')}
+          onDone={() => finishGuidedTutorial('done')}
+        />
       )}
     </div>
   )

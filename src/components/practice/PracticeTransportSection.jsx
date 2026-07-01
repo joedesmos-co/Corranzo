@@ -39,6 +39,7 @@ export default function PracticeTransportSection({
     <section
       className={`practice-section practice-transport${compact ? ' practice-section--compact' : ''}`}
       aria-label="Playback"
+      data-tour-id="practice-playback"
     >
       <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
         Playback
@@ -81,6 +82,7 @@ export default function PracticeTransportSection({
             metronomeDisplay={metronomeDisplay}
             mappingWarning={mappingWarning}
             disabled={disabled || isLoading}
+            showMetronomeDetails={false}
           />
 
           <MidiTransportControls
@@ -95,6 +97,7 @@ export default function PracticeTransportSection({
             onStop={onStop}
             onSeek={onSeek}
             onTestSound={onTestSound}
+            simple={compact}
           />
         </div>
       )}

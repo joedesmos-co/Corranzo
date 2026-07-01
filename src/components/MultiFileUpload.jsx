@@ -80,7 +80,7 @@ export default function MultiFileUpload({
   const statusClass = (ready) => (ready ? ' multi-upload__chip--ready' : '')
 
   return (
-    <section className="multi-upload" aria-label="Upload score files">
+    <section className="multi-upload" aria-label="Upload score files" data-tour-id="library-upload">
       <button
         type="button"
         className={`multi-upload__dropzone${dragOver ? ' multi-upload__dropzone--over' : ''}`}

@@ -21,7 +21,9 @@ import PracticeDiagnosticsPanel from './PracticeDiagnosticsPanel.jsx'
 import PracticeEnvironmentNotices from './PracticeEnvironmentNotices.jsx'
 import PracticeStatusStrip from './PracticeStatusStrip.jsx'
 import PracticeStatsCard from './PracticeStatsCard.jsx'
-import { buildDiagnosticsSummary, buildSetupSummary } from './practicePanelSummaries.js'
+import PracticeMetronomeAdvancedSettings from './PracticeMetronomeAdvancedSettings.jsx'
+import PracticeScoreCursorSection from './PracticeScoreCursorSection.jsx'
+import { buildDiagnosticsSummary } from './practicePanelSummaries.js'
 
 export default memo(function PracticeControlPanel({
   pdfFileName,
@@ -29,7 +31,6 @@ export default memo(function PracticeControlPanel({
   waitForYouNoteTarget = null,
 }) {
   const { session, scoreFollow, practicePiece, practiceStats } = usePracticeSessionContext()
-  const setupSummary = buildSetupSummary(session, scoreFollow)
   const diagnosticsSummary = buildDiagnosticsSummary(session)
 
   const needsScoreFollowSetup =
@@ -43,6 +44,14 @@ export default memo(function PracticeControlPanel({
   const filesReady = Boolean(pdfFileName && session.hasMusicXml)
   const omrWaitForYouDisabled =
     Boolean(scoreFollow?.experimentalOmrPlayback) && !scoreFollow?.canFollow
+  const midiWaitForYouActive =
+    session.isWaitForYou &&
+    session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
+    session.wfyInputSource === WFY_INPUT_SOURCE.MIDI
+  const micWaitForYouActive =
+    session.isWaitForYou &&
+    session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
+    session.wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE
 
   const importWarnings = [...(session.importReadiness?.warnings ?? [])]
   if (scoreFollow?.anchorStorageWarning) {
@@ -105,9 +114,10 @@ export default memo(function PracticeControlPanel({
           compact
         />
 
-        <PracticeLoopCompactSection session={session} />
-
-        <PracticePositionTick collapsible />
+        <PracticeScoreCursorSection
+          scoreFollow={scoreFollow}
+          disabled={session.timingDisabled}
+        />
       </div>
 
       <WaitForYouSection
@@ -139,69 +149,56 @@ export default memo(function PracticeControlPanel({
         compact
       />
 
-      {session.isWaitForYou &&
-        session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
-        session.wfyInputSource === WFY_INPUT_SOURCE.MIDI && (
-          <>
-            <MidiInputStatusPanel
-              support={session.webMidi.support}
-              permission={session.webMidi.permission}
-              devices={session.webMidi.devices}
-              lastNote={session.webMidi.lastNote}
-              errorMessage={session.webMidi.errorMessage}
-              isGranted={session.webMidi.isGranted}
-              deviceStatusLabel={session.webMidi.statusLabel}
-              activeDeviceId={session.webMidi.activeDeviceId}
-              onSelectDevice={session.webMidi.selectDevice}
-              onRequestAccess={session.webMidi.requestAccess}
-              onRefreshDevices={session.webMidi.refreshDevices}
-              listenHint={
-                session.waitForYouInput.matchingEnabled
-                  ? 'Listening'
-                  : 'Enable MIDI to continue automatically.'
-              }
-              compact
-            />
-            {session.webMidi.isGranted && (
-              <MidiDiagnosticsPanel
-                statusLabel={session.webMidi.statusLabel}
-                latencyMs={session.webMidi.latencyMs}
-                noteCount={session.webMidi.noteCount}
-                sustain={session.webMidi.sustain}
-                activeNotes={session.webMidi.activeNotes}
-                lastNote={session.webMidi.lastNote}
-              />
-            )}
-          </>
-        )}
+      {midiWaitForYouActive && (
+        <MidiInputStatusPanel
+          support={session.webMidi.support}
+          permission={session.webMidi.permission}
+          devices={session.webMidi.devices}
+          lastNote={session.webMidi.lastNote}
+          errorMessage={session.webMidi.errorMessage}
+          isGranted={session.webMidi.isGranted}
+          deviceStatusLabel={session.webMidi.statusLabel}
+          activeDeviceId={session.webMidi.activeDeviceId}
+          onSelectDevice={session.webMidi.selectDevice}
+          onRequestAccess={session.webMidi.requestAccess}
+          onRefreshDevices={session.webMidi.refreshDevices}
+          listenHint={
+            session.waitForYouInput.matchingEnabled
+              ? 'Listening'
+              : 'Enable MIDI to continue automatically.'
+          }
+          compact
+        />
+      )}
 
-      {session.isWaitForYou &&
-        session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
-        session.wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE && (
-          <MicrophoneInputStatusPanel
-            support={session.microphone.support}
-            permission={session.microphone.permission}
-            errorMessage={session.microphone.errorMessage}
-            isGranted={session.microphone.isGranted}
-            isListening={session.microphone.isListening}
-            lastHeardMidi={session.waitForYouMic.lastHeardMidi}
-            liveFrame={session.waitForYouMic.liveFrame}
-            calibration={session.waitForYouMic.calibration}
-            inputFeedback={session.waitForYouMic.inputFeedback}
-            isChordCheckpoint={session.waitForYouMic.isChordCheckpoint}
-            chordMicMode={session.waitForYouMic.chordMicMode}
-            onRequestAccess={session.microphone.requestAccess}
-            onDisable={session.microphone.disable}
-            onRetryCalibration={session.waitForYouMic.retryCalibration}
-            compact
-          />
-        )}
+      {micWaitForYouActive && (
+        <MicrophoneInputStatusPanel
+          support={session.microphone.support}
+          permission={session.microphone.permission}
+          errorMessage={session.microphone.errorMessage}
+          isGranted={session.microphone.isGranted}
+          isListening={session.microphone.isListening}
+          lastHeardMidi={session.waitForYouMic.lastHeardMidi}
+          liveFrame={session.waitForYouMic.liveFrame}
+          calibration={session.waitForYouMic.calibration}
+          inputFeedback={session.waitForYouMic.inputFeedback}
+          isChordCheckpoint={session.waitForYouMic.isChordCheckpoint}
+          chordMicMode={session.waitForYouMic.chordMicMode}
+          onRequestAccess={session.microphone.requestAccess}
+          onDisable={session.microphone.disable}
+          onRetryCalibration={session.waitForYouMic.retryCalibration}
+          compact
+        />
+      )}
+
+      <PracticeLoopCompactSection session={session} />
 
       <div className="practice-control-panel__footer">
         <PracticeCollapsibleSection
-          title="More"
-          summary="Files, tracks & shortcuts"
-          defaultOpen={false}
+          title="Advanced"
+          summary={`Files, setup & ${diagnosticsSummary.toLowerCase()}`}
+          defaultOpen={openSetupByDefault}
+          dataTourId="practice-advanced"
         >
           <div className="practice-more">
             {filesReady ? filesBlock : null}
@@ -211,13 +208,29 @@ export default memo(function PracticeControlPanel({
               maxGuidance={2}
             />
             <PracticeEnvironmentNotices />
+            <PracticeMetronomeAdvancedSettings />
+            <PracticePositionTick collapsible />
             <PracticeTracksCompactSection session={session} />
+            <PracticeSetupPanel
+              session={session}
+              scoreFollow={scoreFollow}
+            />
+            {session.webMidi.isGranted && midiWaitForYouActive && (
+              <MidiDiagnosticsPanel
+                statusLabel={session.webMidi.statusLabel}
+                latencyMs={session.webMidi.latencyMs}
+                noteCount={session.webMidi.noteCount}
+                sustain={session.webMidi.sustain}
+                activeNotes={session.webMidi.activeNotes}
+                lastNote={session.webMidi.lastNote}
+              />
+            )}
             <p className="practice-shortcuts-hint" aria-label="Keyboard shortcuts">
               <kbd>Space</kbd> play · <kbd>Enter</kbd> continue · <kbd>←</kbd>
               <kbd>→</kbd> pages · <kbd>F</kbd> fullscreen
             </p>
             <PracticeCollapsibleSection
-              title="Advanced"
+              title="Diagnostics"
               summary={diagnosticsSummary}
               defaultOpen={false}
             >
@@ -232,20 +245,6 @@ export default memo(function PracticeControlPanel({
         </PracticeCollapsibleSection>
 
         {!filesReady && filesBlock}
-
-        <PracticeCollapsibleSection
-          title="Setup"
-          summary={setupSummary}
-          defaultOpen={openSetupByDefault}
-          onOpenChange={scoreFollow?.setSetupPanelOpen}
-        >
-          <PracticeSetupPanel
-            session={session}
-            scoreFollow={scoreFollow}
-            pdfPageNumber={pdfPageNumber}
-          />
-        </PracticeCollapsibleSection>
-
       </div>
     </aside>
   )

@@ -1,0 +1,158 @@
+{
+  "generatedAt": "2026-07-01T00:05:53.587Z",
+  "results": [
+    {
+      "fixture": "clean",
+      "simulation": {
+        "candidateEvents": 0,
+        "appliedEvents": 0,
+        "samples": [],
+        "noteCountChanged": false,
+        "measureCountChanged": false,
+        "noteCountBefore": 469,
+        "noteCountAfter": 469
+      },
+      "baseline": {
+        "pitchAccuracy": 1,
+        "durationAccuracy": 0.9979,
+        "onsetAccuracy": 1,
+        "chordGroupingAccuracy": 1,
+        "noteDetectionF1": 1,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 1,
+        "wrongOnsetCount": 0,
+        "chordMismatchCount": 0,
+        "generatedNoteCount": 469,
+        "generatedMeasureCount": 78
+      },
+      "simulated": {
+        "pitchAccuracy": 1,
+        "durationAccuracy": 0.9979,
+        "onsetAccuracy": 1,
+        "chordGroupingAccuracy": 1,
+        "noteDetectionF1": 1,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 1,
+        "wrongOnsetCount": 0,
+        "chordMismatchCount": 0,
+        "generatedNoteCount": 469,
+        "generatedMeasureCount": 78
+      },
+      "delta": {
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 0,
+        "wrongOnsetCount": 0,
+        "chordMismatchCount": 0,
+        "generatedNoteCount": 0,
+        "generatedMeasureCount": 0
+      }
+    },
+    {
+      "fixture": "dense",
+      "simulation": {
+        "candidateEvents": 4,
+        "appliedEvents": 4,
+        "samples": [
+          {
+            "measureNumber": 17,
+            "startDivision": 8,
+            "clef": "treble",
+            "noteCount": 3,
+            "midis": [
+              74,
+              71,
+              67
+            ],
+            "from": 2,
+            "to": 4
+          },
+          {
+            "measureNumber": 29,
+            "startDivision": 12,
+            "clef": "treble",
+            "noteCount": 2,
+            "midis": [
+              70,
+              67
+            ],
+            "from": 2,
+            "to": 4
+          },
+          {
+            "measureNumber": 77,
+            "startDivision": 8,
+            "clef": "treble",
+            "noteCount": 3,
+            "midis": [
+              74,
+              71,
+              67
+            ],
+            "from": 2,
+            "to": 4
+          },
+          {
+            "measureNumber": 89,
+            "startDivision": 12,
+            "clef": "treble",
+            "noteCount": 2,
+            "midis": [
+              70,
+              67
+            ],
+            "from": 2,
+            "to": 4
+          }
+        ],
+        "noteCountChanged": false,
+        "measureCountChanged": false,
+        "noteCountBefore": 2807,
+        "noteCountAfter": 2807
+      },
+      "baseline": {
+        "pitchAccuracy": 0.9367,
+        "durationAccuracy": 0.9523,
+        "onsetAccuracy": 0.9555,
+        "chordGroupingAccuracy": 0.9309,
+        "noteDetectionF1": 0.9895,
+        "wrongPitchCount": 147,
+        "wrongDurationCount": 103,
+        "wrongOnsetCount": 94,
+        "chordMismatchCount": 201,
+        "generatedNoteCount": 2807,
+        "generatedMeasureCount": 125
+      },
+      "simulated": {
+        "pitchAccuracy": 0.9367,
+        "durationAccuracy": 0.9559,
+        "onsetAccuracy": 0.9555,
+        "chordGroupingAccuracy": 0.9309,
+        "noteDetectionF1": 0.9895,
+        "wrongPitchCount": 147,
+        "wrongDurationCount": 93,
+        "wrongOnsetCount": 94,
+        "chordMismatchCount": 201,
+        "generatedNoteCount": 2807,
+        "generatedMeasureCount": 125
+      },
+      "delta": {
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0.0035999999999999366,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": -10,
+        "wrongOnsetCount": 0,
+        "chordMismatchCount": 0,
+        "generatedNoteCount": 0,
+        "generatedMeasureCount": 0
+      }
+    }
+  ]
+}

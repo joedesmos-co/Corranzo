@@ -1113,6 +1113,78 @@ export function terminalHarmonicHalfSpan(clefEvents, index, totalDivisions) {
   return Math.min(half, remaining)
 }
 
+export function terminalSameClefChordQuarterSpan(clefEvents, index, totalDivisions) {
+  const anchor = clefEvents[index]
+  const start = anchor?.startDivision ?? 0
+  const duration = anchor?.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+  const remaining = totalDivisions - start
+  const notes = anchor?.notes ?? []
+  const quarter = OMR_DIVISIONS_PER_QUARTER
+  if (
+    index + 1 < clefEvents.length ||
+    duration !== OMR_DURATION_DIVISIONS.eighth ||
+    start < quarter * 2 ||
+    start % quarter !== 0 ||
+    remaining < quarter ||
+    notes.length < 2 ||
+    hasBeamEvidenceForNotes(notes) ||
+    sameClefSubdivisionRun(clefEvents, index)
+  ) {
+    return null
+  }
+  return Math.min(quarter, remaining)
+}
+
+export function applyTerminalSameClefChordQuarterDurations(events, totalDivisions) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (!noteEvents.length) {
+    return events
+  }
+
+  const byClef = new Map()
+  for (const event of noteEvents) {
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    if (!byClef.has(clef)) {
+      byClef.set(clef, [])
+    }
+    byClef.get(clef).push(event)
+  }
+
+  const durationByEvent = new Map()
+  for (const clefEvents of byClef.values()) {
+    const sorted = [...clefEvents].sort(
+      (left, right) => (left.startDivision ?? 0) - (right.startDivision ?? 0),
+    )
+    for (let index = 0; index < sorted.length; index += 1) {
+      const event = sorted[index]
+      const duration = event.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+      const terminalQuarter = terminalSameClefChordQuarterSpan(sorted, index, totalDivisions)
+      if (terminalQuarter != null && terminalQuarter > duration) {
+        durationByEvent.set(event, terminalQuarter)
+      }
+    }
+  }
+
+  if (!durationByEvent.size) {
+    return events
+  }
+
+  return sortVectorRhythmEvents(
+    events.map((event) => {
+      const durationDivisions = durationByEvent.get(event)
+      if (durationDivisions == null) {
+        return event
+      }
+      return {
+        ...event,
+        durationDivisions,
+        ...durationMeta(durationDivisions),
+        terminalSameClefChordQuarterAdjusted: true,
+      }
+    }),
+  )
+}
+
 /**
  * Grand-staff voices sustain independently. Recompute each clef's durations from
  * the next onset on the same staff instead of the next mixed-clef onset.
@@ -1217,6 +1289,10 @@ export function extendDurationsPerClefVoice(events, totalDivisions) {
           duration = openingChordHalf
         }
       } else {
+        const terminalQuarter = terminalSameClefChordQuarterSpan(sorted, index, totalDivisions)
+        if (terminalQuarter != null && terminalQuarter > duration) {
+          duration = terminalQuarter
+        }
         const terminalHalf = terminalHarmonicHalfSpan(sorted, index, totalDivisions)
         if (terminalHalf != null && terminalHalf > duration) {
           duration = terminalHalf

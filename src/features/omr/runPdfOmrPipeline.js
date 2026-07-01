@@ -28,6 +28,11 @@ import {
   applyInnerVoicePhaseCorrection,
   NARROW_MIN_STACK_NOTES,
 } from './innerVoicePhaseCorrection.js'
+import {
+  applyPhantomColumnCorrection,
+  DEFAULT_MIN_STACK_NOTES as PHANTOM_COLUMN_MIN_STACK_NOTES,
+} from './phantomColumnSimulation.js'
+import { applyTerminalSameClefChordQuarterDurations } from './processVectorOmrPage.js'
 import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
 import {
   OMR_DEFAULT_TEMPO,
@@ -371,6 +376,95 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     }, traceRunId)
   }
 
+  const phantomColumnCorrection = applyPhantomColumnCorrection(measureRhythms, {
+    totalDivisions: measureDivisions,
+    minStackNotes: PHANTOM_COLUMN_MIN_STACK_NOTES,
+  })
+  const phantomColumnCorrectionSummary = {
+    ...phantomColumnCorrection.summary,
+    promotedToRuntime: false,
+  }
+  if (
+    phantomColumnCorrection.summary.appliedMeasures > 0 &&
+    !phantomColumnCorrection.summary.noteCountChanged &&
+    !phantomColumnCorrection.summary.measureCountChanged
+  ) {
+    for (let index = 0; index < measureRhythms.length; index += 1) {
+      measureRhythms[index] = phantomColumnCorrection.measures[index]
+    }
+    phantomColumnCorrectionSummary.promotedToRuntime = true
+    omrTrace('pipeline:phantom-column-correction', {
+      appliedMeasures: phantomColumnCorrection.summary.appliedMeasures,
+      minStackNotes: PHANTOM_COLUMN_MIN_STACK_NOTES,
+      samples: phantomColumnCorrection.summary.samples?.slice(0, 4) ?? [],
+    }, traceRunId)
+  } else if (phantomColumnCorrection.summary.appliedMeasures > 0) {
+    omrTrace('pipeline:phantom-column-correction-skipped', {
+      noteCountChanged: phantomColumnCorrection.summary.noteCountChanged,
+      measureCountChanged: phantomColumnCorrection.summary.measureCountChanged,
+      appliedMeasures: phantomColumnCorrection.summary.appliedMeasures,
+    }, traceRunId)
+  }
+
+  const terminalSameClefChordQuarterCorrection = {
+    appliedMeasures: 0,
+    appliedEvents: 0,
+    samples: [],
+  }
+  for (let index = 0; index < measureRhythms.length; index += 1) {
+    const measure = measureRhythms[index]
+    const beforeEvents = measure.events ?? []
+    const adjustedEvents = applyTerminalSameClefChordQuarterDurations(
+      beforeEvents,
+      measureDivisions,
+    )
+    if (adjustedEvents === beforeEvents) {
+      continue
+    }
+
+    const newSamples = []
+    for (let eventIndex = 0; eventIndex < adjustedEvents.length; eventIndex += 1) {
+      const before = beforeEvents[eventIndex]
+      const after = adjustedEvents[eventIndex]
+      if (
+        before?.terminalSameClefChordQuarterAdjusted ||
+        !after?.terminalSameClefChordQuarterAdjusted
+      ) {
+        continue
+      }
+      newSamples.push({
+        measureNumber: measure.measureNumber ?? null,
+        startDivision: after.startDivision ?? null,
+        clef: after.notes?.[0]?.clef ?? null,
+        noteCount: after.notes?.length ?? 0,
+        durationDivisions: after.durationDivisions ?? null,
+      })
+    }
+    if (!newSamples.length) {
+      continue
+    }
+
+    measureRhythms[index] = {
+      ...measure,
+      events: adjustedEvents,
+    }
+    terminalSameClefChordQuarterCorrection.appliedMeasures += 1
+    terminalSameClefChordQuarterCorrection.appliedEvents += newSamples.length
+    terminalSameClefChordQuarterCorrection.samples.push(
+      ...newSamples.slice(
+        0,
+        Math.max(0, 12 - terminalSameClefChordQuarterCorrection.samples.length),
+      ),
+    )
+  }
+  if (terminalSameClefChordQuarterCorrection.appliedEvents > 0) {
+    omrTrace('pipeline:terminal-same-clef-chord-quarter-correction', {
+      appliedMeasures: terminalSameClefChordQuarterCorrection.appliedMeasures,
+      appliedEvents: terminalSameClefChordQuarterCorrection.appliedEvents,
+      samples: terminalSameClefChordQuarterCorrection.samples.slice(0, 4),
+    }, traceRunId)
+  }
+
   const musicXml = buildOmrMusicXml({
     title,
     measures: measureRhythms,
@@ -445,6 +539,8 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       measureGridDiagnostics,
       measureGridDiagnosticsEntries,
       innerVoicePhaseCorrection: innerVoicePhaseCorrection.summary,
+      phantomColumnCorrection: phantomColumnCorrectionSummary,
+      terminalSameClefChordQuarterCorrection,
     },
     measureGrid,
     measureGridDiagnostics,

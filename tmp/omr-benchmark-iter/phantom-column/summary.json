@@ -1,0 +1,719 @@
+{
+  "generatedAt": "2026-06-30T23:55:47.739Z",
+  "minStackNotes": 4,
+  "fixtures": [
+    {
+      "fixture": {
+        "id": "clean",
+        "label": "Gymnopédie No. 1 (clean)",
+        "pdfPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+        "truthPath": "/Users/ryland/Downloads/gymnopedie-no-1-satie.mxl"
+      },
+      "baseline": {
+        "metrics": {
+          "pitchAccuracy": 1,
+          "durationAccuracy": 0.9979,
+          "onsetAccuracy": 1,
+          "chordGroupingAccuracy": 1,
+          "noteDetectionF1": 1,
+          "wrongPitchCount": 0,
+          "wrongDurationCount": 1,
+          "wrongOnsetCount": 0,
+          "chordMismatchCount": 0,
+          "missingNoteCount": 0,
+          "extraNoteCount": 0,
+          "generatedNoteCount": 469,
+          "generatedMeasureCount": 78
+        }
+      },
+      "simulated": {
+        "metrics": {
+          "pitchAccuracy": 1,
+          "durationAccuracy": 0.9979,
+          "onsetAccuracy": 1,
+          "chordGroupingAccuracy": 1,
+          "noteDetectionF1": 1,
+          "wrongPitchCount": 0,
+          "wrongDurationCount": 1,
+          "wrongOnsetCount": 0,
+          "chordMismatchCount": 0,
+          "missingNoteCount": 0,
+          "extraNoteCount": 0,
+          "generatedNoteCount": 469,
+          "generatedMeasureCount": 78
+        }
+      },
+      "delta": {
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 0,
+        "wrongOnsetCount": 0,
+        "chordMismatchCount": 0,
+        "missingNoteCount": 0,
+        "extraNoteCount": 0,
+        "generatedNoteCount": 0,
+        "generatedMeasureCount": 0
+      },
+      "watchMeasures": [
+        {
+          "measureNumber": 25,
+          "delta": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "baseline": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "simulated": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          }
+        },
+        {
+          "measureNumber": 7,
+          "delta": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "baseline": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "simulated": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          }
+        },
+        {
+          "measureNumber": 33,
+          "delta": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "baseline": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "simulated": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          }
+        },
+        {
+          "measureNumber": 34,
+          "delta": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "baseline": {
+            "wrongDurationCount": 1,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 1
+          },
+          "simulated": {
+            "wrongDurationCount": 1,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 1
+          }
+        },
+        {
+          "measureNumber": 61,
+          "delta": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "baseline": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "simulated": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          }
+        }
+      ],
+      "simulation": {
+        "candidateMeasures": 0,
+        "appliedMeasures": 0,
+        "rejectedReasons": {},
+        "samples": [],
+        "noteCountChanged": false,
+        "measureCountChanged": false,
+        "minPairs": 2,
+        "minStackNotes": 4,
+        "stackShift": -1,
+        "noteCountBefore": 469,
+        "noteCountAfter": 469
+      },
+      "measureDiagnosis": null,
+      "outputs": {
+        "baselineXml": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/phantom-column/clean/baseline.xml",
+        "simulatedXml": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/phantom-column/clean/simulated.xml",
+        "baselineJson": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/phantom-column/clean/baseline.json",
+        "simulatedJson": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/phantom-column/clean/simulated.json"
+      }
+    },
+    {
+      "fixture": {
+        "id": "dense",
+        "label": "A Cruel Angel's Thesis (dense)",
+        "pdfPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+        "truthPath": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl"
+      },
+      "baseline": {
+        "metrics": {
+          "pitchAccuracy": 0.9367,
+          "durationAccuracy": 0.9523,
+          "onsetAccuracy": 0.9555,
+          "chordGroupingAccuracy": 0.9243,
+          "noteDetectionF1": 0.9895,
+          "wrongPitchCount": 147,
+          "wrongDurationCount": 103,
+          "wrongOnsetCount": 94,
+          "chordMismatchCount": 221,
+          "missingNoteCount": 31,
+          "extraNoteCount": 28,
+          "generatedNoteCount": 2807,
+          "generatedMeasureCount": 125
+        }
+      },
+      "simulated": {
+        "metrics": {
+          "pitchAccuracy": 0.9367,
+          "durationAccuracy": 0.9523,
+          "onsetAccuracy": 0.9555,
+          "chordGroupingAccuracy": 0.9309,
+          "noteDetectionF1": 0.9895,
+          "wrongPitchCount": 147,
+          "wrongDurationCount": 103,
+          "wrongOnsetCount": 94,
+          "chordMismatchCount": 201,
+          "missingNoteCount": 31,
+          "extraNoteCount": 28,
+          "generatedNoteCount": 2807,
+          "generatedMeasureCount": 125
+        }
+      },
+      "delta": {
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0.006599999999999939,
+        "noteDetectionF1": 0,
+        "wrongPitchCount": 0,
+        "wrongDurationCount": 0,
+        "wrongOnsetCount": 0,
+        "chordMismatchCount": -20,
+        "missingNoteCount": 0,
+        "extraNoteCount": 0,
+        "generatedNoteCount": 0,
+        "generatedMeasureCount": 0
+      },
+      "watchMeasures": [
+        {
+          "measureNumber": 25,
+          "delta": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": -20,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": -20
+          },
+          "baseline": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 2,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 24,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 53
+          },
+          "simulated": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 2,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 4,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 33
+          }
+        },
+        {
+          "measureNumber": 7,
+          "delta": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "baseline": {
+            "wrongDurationCount": 2,
+            "wrongOnsetCount": 8,
+            "wrongPitchCount": 4,
+            "chordMismatchCount": 20,
+            "missingNoteCount": 11,
+            "extraNoteCount": 3,
+            "errorCount": 65
+          },
+          "simulated": {
+            "wrongDurationCount": 2,
+            "wrongOnsetCount": 8,
+            "wrongPitchCount": 4,
+            "chordMismatchCount": 20,
+            "missingNoteCount": 11,
+            "extraNoteCount": 3,
+            "errorCount": 65
+          }
+        },
+        {
+          "measureNumber": 33,
+          "delta": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "baseline": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 1,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 31
+          },
+          "simulated": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 1,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 31
+          }
+        },
+        {
+          "measureNumber": 34,
+          "delta": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "baseline": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 27
+          },
+          "simulated": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 27
+          }
+        },
+        {
+          "measureNumber": 61,
+          "delta": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 0,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "errorCount": 0
+          },
+          "baseline": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 26,
+            "missingNoteCount": 3,
+            "extraNoteCount": 3,
+            "errorCount": 59
+          },
+          "simulated": {
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongPitchCount": 0,
+            "chordMismatchCount": 26,
+            "missingNoteCount": 3,
+            "extraNoteCount": 3,
+            "errorCount": 59
+          }
+        }
+      ],
+      "simulation": {
+        "candidateMeasures": 3,
+        "appliedMeasures": 3,
+        "rejectedReasons": {},
+        "samples": [
+          {
+            "measureNumber": 25,
+            "phantomStarts": [
+              3,
+              7
+            ],
+            "stackShifts": [
+              {
+                "fromDivision": 5,
+                "toDivision": 4
+              },
+              {
+                "fromDivision": 9,
+                "toDivision": 8
+              }
+            ],
+            "pairs": [
+              {
+                "phantomStartDivision": 3,
+                "stackStartDivision": 5,
+                "stackNoteCount": 6,
+                "duplicateMidis": [
+                  43
+                ],
+                "splitsAttack": true
+              },
+              {
+                "phantomStartDivision": 7,
+                "stackStartDivision": 9,
+                "stackNoteCount": 6,
+                "duplicateMidis": [
+                  43
+                ],
+                "splitsAttack": true
+              }
+            ]
+          },
+          {
+            "measureNumber": 29,
+            "phantomStarts": [
+              3,
+              11
+            ],
+            "stackShifts": [
+              {
+                "fromDivision": 5,
+                "toDivision": 4
+              },
+              {
+                "fromDivision": 13,
+                "toDivision": 12
+              }
+            ],
+            "pairs": [
+              {
+                "phantomStartDivision": 3,
+                "stackStartDivision": 5,
+                "stackNoteCount": 4,
+                "duplicateMidis": [],
+                "splitsAttack": false
+              },
+              {
+                "phantomStartDivision": 11,
+                "stackStartDivision": 13,
+                "stackNoteCount": 4,
+                "duplicateMidis": [],
+                "splitsAttack": false
+              }
+            ]
+          },
+          {
+            "measureNumber": 89,
+            "phantomStarts": [
+              3,
+              11
+            ],
+            "stackShifts": [
+              {
+                "fromDivision": 5,
+                "toDivision": 4
+              },
+              {
+                "fromDivision": 13,
+                "toDivision": 12
+              }
+            ],
+            "pairs": [
+              {
+                "phantomStartDivision": 3,
+                "stackStartDivision": 5,
+                "stackNoteCount": 4,
+                "duplicateMidis": [],
+                "splitsAttack": false
+              },
+              {
+                "phantomStartDivision": 11,
+                "stackStartDivision": 13,
+                "stackNoteCount": 4,
+                "duplicateMidis": [],
+                "splitsAttack": false
+              }
+            ]
+          }
+        ],
+        "noteCountChanged": false,
+        "measureCountChanged": false,
+        "minPairs": 2,
+        "minStackNotes": 4,
+        "stackShift": -1,
+        "noteCountBefore": 2807,
+        "noteCountAfter": 2807
+      },
+      "measureDiagnosis": {
+        "measureNumber": 25,
+        "columns": [
+          {
+            "startDivision": 0,
+            "onsetQuarter": 0,
+            "noteCount": 5,
+            "role": "stack",
+            "midis": [
+              55,
+              43,
+              79,
+              72,
+              69
+            ]
+          },
+          {
+            "startDivision": 2,
+            "onsetQuarter": 0.5,
+            "noteCount": 1,
+            "role": "solo",
+            "midis": [
+              50
+            ]
+          },
+          {
+            "startDivision": 3,
+            "onsetQuarter": 0.75,
+            "noteCount": 1,
+            "role": "phantom-solo",
+            "midis": [
+              43
+            ]
+          },
+          {
+            "startDivision": 5,
+            "onsetQuarter": 1.25,
+            "noteCount": 6,
+            "role": "linked-stack",
+            "midis": [
+              55,
+              50,
+              43,
+              79,
+              71,
+              67
+            ]
+          },
+          {
+            "startDivision": 7,
+            "onsetQuarter": 1.75,
+            "noteCount": 1,
+            "role": "phantom-solo",
+            "midis": [
+              43
+            ]
+          },
+          {
+            "startDivision": 9,
+            "onsetQuarter": 2.25,
+            "noteCount": 6,
+            "role": "linked-stack",
+            "midis": [
+              55,
+              50,
+              43,
+              79,
+              72,
+              69
+            ]
+          },
+          {
+            "startDivision": 11,
+            "onsetQuarter": 2.75,
+            "noteCount": 1,
+            "role": "phantom-solo",
+            "midis": [
+              43
+            ]
+          },
+          {
+            "startDivision": 12,
+            "onsetQuarter": 3,
+            "noteCount": 4,
+            "role": "stack",
+            "midis": [
+              55,
+              43,
+              74,
+              71
+            ]
+          },
+          {
+            "startDivision": 14,
+            "onsetQuarter": 3.5,
+            "noteCount": 2,
+            "role": "stack",
+            "midis": [
+              50,
+              43
+            ]
+          }
+        ],
+        "correction": {
+          "phantomColumns": [
+            {
+              "startDivision": 3,
+              "noteCount": 1,
+              "midis": [
+                43
+              ]
+            },
+            {
+              "startDivision": 7,
+              "noteCount": 1,
+              "midis": [
+                43
+              ]
+            }
+          ],
+          "stackShifts": [
+            {
+              "fromDivision": 5,
+              "toDivision": 4
+            },
+            {
+              "fromDivision": 9,
+              "toDivision": 8
+            }
+          ],
+          "pairs": [
+            {
+              "phantomStartDivision": 3,
+              "stackStartDivision": 5,
+              "stackNoteCount": 6,
+              "duplicateMidis": [
+                43
+              ],
+              "splitsAttack": true
+            },
+            {
+              "phantomStartDivision": 7,
+              "stackStartDivision": 9,
+              "stackNoteCount": 6,
+              "duplicateMidis": [
+                43
+              ],
+              "splitsAttack": true
+            }
+          ]
+        }
+      },
+      "outputs": {
+        "baselineXml": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/phantom-column/dense/baseline.xml",
+        "simulatedXml": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/phantom-column/dense/simulated.xml",
+        "baselineJson": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/phantom-column/dense/baseline.json",
+        "simulatedJson": "/Users/ryland/Documents/scoreflow/tmp/omr-benchmark-iter/phantom-column/dense/simulated.json"
+      }
+    }
+  ]
+}

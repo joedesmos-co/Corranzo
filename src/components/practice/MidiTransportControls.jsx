@@ -16,10 +16,11 @@ function MidiTransportControls({
   onSeek,
   onTestSound,
   playbackBlockedTitle,
+  simple = false,
 }) {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0
-  const playTitle =
-    playbackBlockedTitle ?? (playDisabled ? 'Playback unavailable' : 'Play (Space)')
+  const playTitle = playbackBlockedTitle ?? (playDisabled ? 'Playback unavailable' : 'Play (Space)')
+  const playPauseTitle = isPlaying ? 'Pause (Space)' : playTitle
 
   function handleSeek(event) {
     const value = Number(event.target.value)
@@ -29,39 +30,57 @@ function MidiTransportControls({
   return (
     <div className="midi-transport">
       <div className="midi-transport__buttons">
-        <button
-          type="button"
-          className={`midi-transport__btn${
-            isPlaying ? ' midi-transport__btn--active' : ''
-          }`}
-          disabled={disabled || playDisabled}
-          onClick={onPlay}
-          aria-label={playTitle}
-          aria-pressed={isPlaying}
-          title={playTitle}
-        >
-          ▶
-        </button>
-        <button
-          type="button"
-          className="midi-transport__btn"
-          disabled={disabled}
-          onClick={onPause}
-          aria-label="Pause (Space)"
-          title="Pause (Space)"
-        >
-          ❚❚
-        </button>
-        <button
-          type="button"
-          className="midi-transport__btn"
-          disabled={disabled}
-          onClick={onStop}
-          aria-label="Stop"
-        >
-          ■
-        </button>
-        {onTestSound && (
+        {simple ? (
+          <button
+            type="button"
+            className={`midi-transport__btn midi-transport__btn--primary${
+              isPlaying ? ' midi-transport__btn--active' : ''
+            }`}
+            disabled={disabled || (!isPlaying && playDisabled)}
+            onClick={isPlaying ? onPause : onPlay}
+            aria-label={playPauseTitle}
+            aria-pressed={isPlaying}
+            title={playPauseTitle}
+          >
+            {isPlaying ? '❚❚' : '▶'}
+          </button>
+        ) : (
+          <>
+            <button
+              type="button"
+              className={`midi-transport__btn${
+                isPlaying ? ' midi-transport__btn--active' : ''
+              }`}
+              disabled={disabled || playDisabled}
+              onClick={onPlay}
+              aria-label={playTitle}
+              aria-pressed={isPlaying}
+              title={playTitle}
+            >
+              ▶
+            </button>
+            <button
+              type="button"
+              className="midi-transport__btn"
+              disabled={disabled}
+              onClick={onPause}
+              aria-label="Pause (Space)"
+              title="Pause (Space)"
+            >
+              ❚❚
+            </button>
+            <button
+              type="button"
+              className="midi-transport__btn"
+              disabled={disabled}
+              onClick={onStop}
+              aria-label="Stop"
+            >
+              ■
+            </button>
+          </>
+        )}
+        {!simple && onTestSound && (
           <button
             type="button"
             className="midi-transport__btn midi-transport__btn--test"
@@ -100,6 +119,7 @@ function transportPropsEqual(prev, next) {
   if (prev.seekDisabled !== next.seekDisabled) return false
   if (prev.isPlaying !== next.isPlaying) return false
   if (prev.duration !== next.duration) return false
+  if (prev.simple !== next.simple) return false
   if (quantizePracticeTime(prev.currentTime) !== quantizePracticeTime(next.currentTime)) {
     return false
   }
