@@ -34,8 +34,8 @@
   "metrics": {
     "pitchAccuracy": 1,
     "matchedPitchAccuracy": 1,
-    "durationAccuracy": 0.9979,
-    "matchedDurationAccuracy": 0.9979,
+    "durationAccuracy": 1,
+    "matchedDurationAccuracy": 1,
     "onsetAccuracy": 1,
     "matchedOnsetAccuracy": 1,
     "timeAccuracy": 0.9851,
@@ -57,13 +57,13 @@
     "noteCountDifference": 0,
     "matchedNoteCount": 469,
     "correctPitchCount": 469,
-    "correctDurationCount": 468,
+    "correctDurationCount": 469,
     "correctOnsetCount": 469,
     "correctTimeCount": 462,
     "missingNoteCount": 0,
     "extraNoteCount": 0,
     "wrongPitchCount": 0,
-    "wrongDurationCount": 1,
+    "wrongDurationCount": 0,
     "wrongOnsetCount": 0,
     "wrongTimeCount": 7,
     "chordMismatchCount": 0,
@@ -87,21 +87,6 @@
       "chordMismatchCount": 0,
       "errorCount": 7,
       "errorRate": 1
-    },
-    {
-      "measureNumber": 34,
-      "truthNoteCount": 7,
-      "generatedNoteCount": 7,
-      "matchedNoteCount": 7,
-      "missingNoteCount": 0,
-      "extraNoteCount": 0,
-      "wrongPitchCount": 0,
-      "wrongDurationCount": 1,
-      "wrongOnsetCount": 0,
-      "wrongTimeCount": 0,
-      "chordMismatchCount": 0,
-      "errorCount": 1,
-      "errorRate": 0.1429
     },
     {
       "measureNumber": 1,
@@ -210,6 +195,21 @@
     },
     {
       "measureNumber": 8,
+      "truthNoteCount": 5,
+      "generatedNoteCount": 5,
+      "matchedNoteCount": 5,
+      "missingNoteCount": 0,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 0,
+      "wrongDurationCount": 0,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 0,
+      "chordMismatchCount": 0,
+      "errorCount": 0,
+      "errorRate": 0
+    },
+    {
+      "measureNumber": 9,
       "truthNoteCount": 5,
       "generatedNoteCount": 5,
       "matchedNoteCount": 5,
@@ -728,12 +728,12 @@
       "missingNoteCount": 0,
       "extraNoteCount": 0,
       "wrongPitchCount": 0,
-      "wrongDurationCount": 1,
+      "wrongDurationCount": 0,
       "wrongOnsetCount": 0,
       "wrongTimeCount": 0,
       "chordMismatchCount": 0,
-      "errorCount": 1,
-      "errorRate": 0.1429
+      "errorCount": 0,
+      "errorRate": 0
     },
     {
       "measureNumber": 35,
@@ -1400,35 +1400,7 @@
     "missingNotes": [],
     "extraNotes": [],
     "wrongPitches": [],
-    "wrongDurations": [
-      {
-        "measureNumber": 34,
-        "onsetDiffQuarters": 0,
-        "timeDiffSeconds": 0,
-        "durationDiffQuarters": 1,
-        "pitchDeltaSemitones": 0,
-        "truth": {
-          "id": "P1-m34-n229",
-          "measureNumber": 34,
-          "onsetQuarters": 0,
-          "durationQuarters": 1,
-          "midi": 71,
-          "label": "B4",
-          "partId": "P1",
-          "voice": 1
-        },
-        "generated": {
-          "id": "P1-m34-n195",
-          "measureNumber": 34,
-          "onsetQuarters": 0,
-          "durationQuarters": 2,
-          "midi": 71,
-          "label": "B4",
-          "partId": "P1",
-          "voice": 1
-        }
-      }
-    ],
+    "wrongDurations": [],
     "wrongOnsets": [],
     "wrongTimes": [
       {

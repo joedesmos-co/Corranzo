@@ -605,15 +605,29 @@ function closesOnFinalBeat(events, totalDivisions) {
   return lastStart + OMR_DIVISIONS_PER_QUARTER >= totalDivisions
 }
 
-function followsWithUpperStaffContent(followerNotes, bassNote) {
-  if (!followerNotes?.length || !bassNote) {
-    return false
+function sameClefRearticulatesDifferentPitchBeforeClosing(events, openingNote, totalDivisions) {
+  const clef = openingNote.clef ?? 'treble'
+  const openingStep = writtenStep(openingNote.midi)
+  const last = events[events.length - 1]
+  const closingStart = last?.startDivision ?? totalDivisions
+  for (const event of events) {
+    if (event.type !== 'note') {
+      continue
+    }
+    const start = event.startDivision ?? 0
+    if (start <= 0 || start >= closingStart) {
+      continue
+    }
+    for (const note of event.notes ?? []) {
+      if ((note.clef ?? clef) !== clef) {
+        continue
+      }
+      if (writtenStep(note.midi) !== openingStep) {
+        return true
+      }
+    }
   }
-  if (followerNotes.some((note) => note.clef === 'treble')) {
-    return true
-  }
-  const bassMidi = bassNote.midi ?? 0
-  return followerNotes.some((note) => note.midi >= bassMidi + 12)
+  return false
 }
 
 function sameStartTrebleDuration(trebleNote, bassNote, events, extended, totalDivisions) {
@@ -622,7 +636,8 @@ function sameStartTrebleDuration(trebleNote, bassNote, events, extended, totalDi
     if (
       closesOnFinalBeat(events, totalDivisions) &&
       closingNote &&
-      writtenStep(closingNote.midi) === writtenStep(trebleNote.midi)
+      writtenStep(closingNote.midi) === writtenStep(trebleNote.midi) &&
+      !sameClefRearticulatesDifferentPitchBeforeClosing(events, trebleNote, totalDivisions)
     ) {
       return OMR_DURATION_DIVISIONS.half
     }
@@ -640,6 +655,17 @@ function sameStartTrebleDuration(trebleNote, bassNote, events, extended, totalDi
     return extended
   }
   return OMR_DIVISIONS_PER_QUARTER
+}
+
+function followsWithUpperStaffContent(followerNotes, bassNote) {
+  if (!followerNotes?.length || !bassNote) {
+    return false
+  }
+  if (followerNotes.some((note) => note.clef === 'treble')) {
+    return true
+  }
+  const bassMidi = bassNote.midi ?? 0
+  return followerNotes.some((note) => note.midi >= bassMidi + 12)
 }
 
 function isAuxiliaryUpperVoice(note, peers) {

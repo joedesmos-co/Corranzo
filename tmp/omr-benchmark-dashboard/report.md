@@ -1,6 +1,6 @@
 # OMR benchmark dashboard
 
-Generated: 2026-07-01T00:47:30.453Z
+Generated: 2026-07-01T02:10:32.900Z
 Fixtures: 2
 Overall: PASS
 
@@ -17,9 +17,8 @@ Overall: PASS
 - PDF: `/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf`
 - Truth: `/Users/ryland/Downloads/gymnopedie-no-1-satie.mxl`
   pitch 100% | duration 100% | onset 100% | chord 100% | F1 100%
-  measureΔ 0 | noteΔ 0 | wrongPitch 0 | wrongDuration 1 | wrongOnset 0 | chordMismatch 0
+  measureΔ 0 | noteΔ 0 | wrongPitch 0 | wrongDuration 0 | wrongOnset 0 | chordMismatch 0
   top error category: Measure allocation (measure-allocation)
-  top duration error category: too-long (1 sampled)
 
 ### A Cruel Angel's Thesis (dense) (`pass`)
 - PDF: `/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf`

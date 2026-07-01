@@ -1260,6 +1260,51 @@ describe('extendCombinedGrandStaffOpening', () => {
     expect(extended[0].durationType).toBe('half')
     expect(extended[0].dotted).toBe(true)
   })
+
+  it('keeps a quarter opening treble when the voice rearticulates before the closing echo', () => {
+    const events = extendCombinedGrandStaffOpening(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 4,
+          durationType: 'quarter',
+          notes: [{ clef: 'bass', midi: 35 }],
+        },
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 4,
+          durationType: 'quarter',
+          notes: [{ clef: 'treble', midi: 71 }],
+        },
+        {
+          type: 'note',
+          startDivision: 4,
+          durationDivisions: 4,
+          durationType: 'quarter',
+          notes: [{ clef: 'bass', midi: 66 }, { clef: 'bass', midi: 62 }, { clef: 'bass', midi: 59 }],
+        },
+        {
+          type: 'note',
+          startDivision: 4,
+          durationDivisions: 4,
+          durationType: 'quarter',
+          notes: [{ clef: 'treble', midi: 69 }],
+        },
+        {
+          type: 'note',
+          startDivision: 8,
+          durationDivisions: 4,
+          durationType: 'quarter',
+          notes: [{ clef: 'treble', midi: 71 }],
+        },
+      ],
+      12,
+    )
+    expect(events[1].durationDivisions).toBe(4)
+    expect(events[1].durationType).toBe('quarter')
+  })
 })
 
 describe('buildOmrMusicXml overlapping grand-staff rhythm', () => {
