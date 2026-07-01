@@ -25,11 +25,16 @@ import {
   formatOmrMeasurePlaybackReport,
 } from './omrMeasurePlaybackReport.js'
 import {
+  applyOpeningLeadNoteMerge,
+  DEFAULT_MIN_STACK_NOTES as OPENING_LEAD_MIN_STACK_NOTES,
+} from './openingLeadNoteMerge.js'
+import {
   applyInnerVoicePhaseCorrection,
   NARROW_MIN_STACK_NOTES,
 } from './innerVoicePhaseCorrection.js'
 import {
   applyPhantomColumnCorrection,
+  applyTerminalEarlyColumnCorrection,
   DEFAULT_MIN_STACK_NOTES as PHANTOM_COLUMN_MIN_STACK_NOTES,
 } from './phantomColumnSimulation.js'
 import { applyTerminalSameClefChordQuarterDurations } from './processVectorOmrPage.js'
@@ -361,6 +366,24 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   const beats = timeSignature?.beats ?? 4
   const beatType = timeSignature?.beatType ?? 4
   const measureDivisions = Math.round(beats * OMR_DIVISIONS_PER_QUARTER * (4 / beatType))
+  const openingLeadNoteMerge = applyOpeningLeadNoteMerge(measureRhythms, {
+    minStackNotes: OPENING_LEAD_MIN_STACK_NOTES,
+  })
+  if (
+    openingLeadNoteMerge.summary.appliedMeasures > 0 &&
+    !openingLeadNoteMerge.summary.noteCountChanged &&
+    !openingLeadNoteMerge.summary.measureCountChanged
+  ) {
+    for (let index = 0; index < measureRhythms.length; index += 1) {
+      measureRhythms[index] = openingLeadNoteMerge.measures[index]
+    }
+    omrTrace('pipeline:opening-lead-note-merge', {
+      appliedMeasures: openingLeadNoteMerge.summary.appliedMeasures,
+      minStackNotes: OPENING_LEAD_MIN_STACK_NOTES,
+      samples: openingLeadNoteMerge.summary.samples?.slice(0, 4) ?? [],
+    }, traceRunId)
+  }
+
   const innerVoicePhaseCorrection = applyInnerVoicePhaseCorrection(measureRhythms, {
     totalDivisions: measureDivisions,
     minStackNotes: NARROW_MIN_STACK_NOTES,
@@ -403,6 +426,34 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       noteCountChanged: phantomColumnCorrection.summary.noteCountChanged,
       measureCountChanged: phantomColumnCorrection.summary.measureCountChanged,
       appliedMeasures: phantomColumnCorrection.summary.appliedMeasures,
+    }, traceRunId)
+  }
+
+  const terminalEarlyColumnCorrection = applyTerminalEarlyColumnCorrection(measureRhythms, {
+    totalDivisions: measureDivisions,
+  })
+  const terminalEarlyColumnCorrectionSummary = {
+    ...terminalEarlyColumnCorrection.summary,
+    promotedToRuntime: false,
+  }
+  if (
+    terminalEarlyColumnCorrection.summary.appliedMeasures > 0 &&
+    !terminalEarlyColumnCorrection.summary.noteCountChanged &&
+    !terminalEarlyColumnCorrection.summary.measureCountChanged
+  ) {
+    for (let index = 0; index < measureRhythms.length; index += 1) {
+      measureRhythms[index] = terminalEarlyColumnCorrection.measures[index]
+    }
+    terminalEarlyColumnCorrectionSummary.promotedToRuntime = true
+    omrTrace('pipeline:terminal-early-column-correction', {
+      appliedMeasures: terminalEarlyColumnCorrection.summary.appliedMeasures,
+      samples: terminalEarlyColumnCorrection.summary.samples?.slice(0, 4) ?? [],
+    }, traceRunId)
+  } else if (terminalEarlyColumnCorrection.summary.appliedMeasures > 0) {
+    omrTrace('pipeline:terminal-early-column-correction-skipped', {
+      noteCountChanged: terminalEarlyColumnCorrection.summary.noteCountChanged,
+      measureCountChanged: terminalEarlyColumnCorrection.summary.measureCountChanged,
+      appliedMeasures: terminalEarlyColumnCorrection.summary.appliedMeasures,
     }, traceRunId)
   }
 
@@ -539,7 +590,9 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       measureGridDiagnostics,
       measureGridDiagnosticsEntries,
       innerVoicePhaseCorrection: innerVoicePhaseCorrection.summary,
+      openingLeadNoteMerge: openingLeadNoteMerge.summary,
       phantomColumnCorrection: phantomColumnCorrectionSummary,
+      terminalEarlyColumnCorrection: terminalEarlyColumnCorrectionSummary,
       terminalSameClefChordQuarterCorrection,
     },
     measureGrid,

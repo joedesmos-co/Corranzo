@@ -22492,6 +22492,17 @@
       "noteCountBefore": 469,
       "noteCountAfter": 469
     },
+    "openingLeadNoteMerge": {
+      "candidateMeasures": 0,
+      "appliedMeasures": 0,
+      "samples": [],
+      "noteCountChanged": false,
+      "measureCountChanged": false,
+      "maxLeadGap": 1,
+      "minStackNotes": 3,
+      "noteCountBefore": 469,
+      "noteCountAfter": 469
+    },
     "phantomColumnCorrection": {
       "candidateMeasures": 0,
       "appliedMeasures": 0,
@@ -22502,6 +22513,22 @@
       "minPairs": 2,
       "minStackNotes": 4,
       "stackShift": -1,
+      "strategy": "linked-stack-realign",
+      "noteCountBefore": 469,
+      "noteCountAfter": 469,
+      "promotedToRuntime": false
+    },
+    "terminalEarlyColumnCorrection": {
+      "candidateMeasures": 0,
+      "appliedMeasures": 0,
+      "rejectedReasons": {},
+      "samples": [],
+      "noteCountChanged": false,
+      "measureCountChanged": false,
+      "minPairs": 2,
+      "minStackNotes": 4,
+      "stackShift": -1,
+      "strategy": "shift-terminal-early-forward",
       "noteCountBefore": 469,
       "noteCountAfter": 469,
       "promotedToRuntime": false

@@ -1,0 +1,182 @@
+{
+  "samples": [
+    {
+      "measureNumber": 57,
+      "fromDivision": 0,
+      "toDivision": 1,
+      "stackNoteCount": 3
+    },
+    {
+      "measureNumber": 113,
+      "fromDivision": 0,
+      "toDivision": 1,
+      "stackNoteCount": 6
+    }
+  ],
+  "base": {
+    "totals": {
+      "chord": 201,
+      "onset": 94,
+      "dur": 93,
+      "pitch": 147
+    },
+    "m57": {
+      "measureNumber": 57,
+      "truthNoteCount": 24,
+      "generatedNoteCount": 24,
+      "matchedNoteCount": 24,
+      "missingNoteCount": 0,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 0,
+      "wrongDurationCount": 0,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 24,
+      "chordMismatchCount": 6,
+      "errorCount": 30,
+      "errorRate": 1
+    },
+    "m94": {
+      "measureNumber": 94,
+      "truthNoteCount": 27,
+      "generatedNoteCount": 27,
+      "matchedNoteCount": 27,
+      "missingNoteCount": 0,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 0,
+      "wrongDurationCount": 0,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 27,
+      "chordMismatchCount": 8,
+      "errorCount": 35,
+      "errorRate": 1
+    },
+    "m113": {
+      "measureNumber": 113,
+      "truthNoteCount": 26,
+      "generatedNoteCount": 26,
+      "matchedNoteCount": 26,
+      "missingNoteCount": 0,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 0,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 26,
+      "chordMismatchCount": 12,
+      "errorCount": 40,
+      "errorRate": 1
+    },
+    "m33": {
+      "measureNumber": 33,
+      "truthNoteCount": 30,
+      "generatedNoteCount": 30,
+      "matchedNoteCount": 30,
+      "missingNoteCount": 0,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 1,
+      "wrongDurationCount": 0,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 30,
+      "chordMismatchCount": 0,
+      "errorCount": 31,
+      "errorRate": 1
+    },
+    "m7": {
+      "measureNumber": 7,
+      "truthNoteCount": 28,
+      "generatedNoteCount": 20,
+      "matchedNoteCount": 17,
+      "missingNoteCount": 11,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 8,
+      "wrongTimeCount": 17,
+      "chordMismatchCount": 20,
+      "errorCount": 65,
+      "errorRate": 1
+    }
+  },
+  "merge3": {
+    "totals": {
+      "chord": 183,
+      "onset": 94,
+      "dur": 93,
+      "pitch": 147
+    },
+    "m57": {
+      "measureNumber": 57,
+      "truthNoteCount": 24,
+      "generatedNoteCount": 24,
+      "matchedNoteCount": 24,
+      "missingNoteCount": 0,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 0,
+      "wrongDurationCount": 0,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 24,
+      "chordMismatchCount": 0,
+      "errorCount": 24,
+      "errorRate": 1
+    },
+    "m94": {
+      "measureNumber": 94,
+      "truthNoteCount": 27,
+      "generatedNoteCount": 27,
+      "matchedNoteCount": 27,
+      "missingNoteCount": 0,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 0,
+      "wrongDurationCount": 0,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 27,
+      "chordMismatchCount": 8,
+      "errorCount": 35,
+      "errorRate": 1
+    },
+    "m113": {
+      "measureNumber": 113,
+      "truthNoteCount": 26,
+      "generatedNoteCount": 26,
+      "matchedNoteCount": 26,
+      "missingNoteCount": 0,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 0,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 26,
+      "chordMismatchCount": 0,
+      "errorCount": 28,
+      "errorRate": 1
+    },
+    "m33": {
+      "measureNumber": 33,
+      "truthNoteCount": 30,
+      "generatedNoteCount": 30,
+      "matchedNoteCount": 30,
+      "missingNoteCount": 0,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 1,
+      "wrongDurationCount": 0,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 30,
+      "chordMismatchCount": 0,
+      "errorCount": 31,
+      "errorRate": 1
+    },
+    "m7": {
+      "measureNumber": 7,
+      "truthNoteCount": 28,
+      "generatedNoteCount": 20,
+      "matchedNoteCount": 17,
+      "missingNoteCount": 11,
+      "extraNoteCount": 3,
+      "wrongPitchCount": 4,
+      "wrongDurationCount": 2,
+      "wrongOnsetCount": 8,
+      "wrongTimeCount": 17,
+      "chordMismatchCount": 20,
+      "errorCount": 65,
+      "errorRate": 1
+    }
+  }
+}

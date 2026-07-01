@@ -1,0 +1,713 @@
+{
+  "candidates": [
+    {
+      "measure": 94,
+      "metrics": {
+        "chord": 8,
+        "dur": 0,
+        "onset": 0,
+        "pitch": 0,
+        "miss": 0,
+        "extra": 0
+      },
+      "columns": [
+        {
+          "div": 0,
+          "onsetQ": 0,
+          "count": 5,
+          "midis": [
+            48,
+            43,
+            36,
+            72,
+            67
+          ]
+        },
+        {
+          "div": 2,
+          "onsetQ": 0.5,
+          "count": 1,
+          "midis": [
+            36
+          ]
+        },
+        {
+          "div": 4,
+          "onsetQ": 1,
+          "count": 4,
+          "midis": [
+            48,
+            43,
+            75,
+            67
+          ]
+        },
+        {
+          "div": 5,
+          "onsetQ": 1.25,
+          "count": 2,
+          "midis": [
+            51,
+            39
+          ]
+        },
+        {
+          "div": 7,
+          "onsetQ": 1.75,
+          "count": 6,
+          "midis": [
+            53,
+            48,
+            41,
+            77,
+            72,
+            68
+          ]
+        },
+        {
+          "div": 9,
+          "onsetQ": 2.25,
+          "count": 1,
+          "midis": [
+            41
+          ]
+        },
+        {
+          "div": 10,
+          "onsetQ": 2.5,
+          "count": 2,
+          "midis": [
+            75,
+            68
+          ]
+        },
+        {
+          "div": 12,
+          "onsetQ": 3,
+          "count": 2,
+          "midis": [
+            53,
+            48
+          ]
+        },
+        {
+          "div": 13,
+          "onsetQ": 3.25,
+          "count": 4,
+          "midis": [
+            48,
+            36,
+            77,
+            68
+          ]
+        }
+      ],
+      "chordExamples": [
+        {
+          "measureNumber": 94,
+          "onsetQuarters": 2.5,
+          "truthCount": 1,
+          "generatedCount": 2,
+          "truthGroupIndex": 5
+        },
+        {
+          "measureNumber": 94,
+          "onsetQuarters": 3,
+          "truthCount": 2,
+          "generatedCount": 4,
+          "truthGroupIndex": 7
+        },
+        {
+          "measureNumber": 94,
+          "onsetQuarters": 3.5,
+          "truthCount": 4,
+          "generatedCount": 0
+        },
+        {
+          "measureNumber": 94,
+          "onsetQuarters": 2.25,
+          "truthCount": 0,
+          "generatedCount": 1
+        }
+      ]
+    },
+    {
+      "measure": 57,
+      "metrics": {
+        "chord": 6,
+        "dur": 0,
+        "onset": 0,
+        "pitch": 0,
+        "miss": 0,
+        "extra": 0
+      },
+      "columns": [
+        {
+          "div": 0,
+          "onsetQ": 0,
+          "count": 1,
+          "midis": [
+            77
+          ]
+        },
+        {
+          "div": 1,
+          "onsetQ": 0.25,
+          "count": 3,
+          "midis": [
+            43,
+            84,
+            79
+          ]
+        },
+        {
+          "div": 3,
+          "onsetQ": 0.75,
+          "count": 3,
+          "midis": [
+            43,
+            74,
+            70
+          ]
+        },
+        {
+          "div": 4,
+          "onsetQ": 1,
+          "count": 1,
+          "midis": [
+            43
+          ]
+        },
+        {
+          "div": 6,
+          "onsetQ": 1.5,
+          "count": 3,
+          "midis": [
+            82,
+            74,
+            70
+          ]
+        },
+        {
+          "div": 7,
+          "onsetQ": 1.75,
+          "count": 1,
+          "midis": [
+            43
+          ]
+        },
+        {
+          "div": 8,
+          "onsetQ": 2,
+          "count": 2,
+          "midis": [
+            70,
+            67
+          ]
+        },
+        {
+          "div": 9,
+          "onsetQ": 2.25,
+          "count": 2,
+          "midis": [
+            43,
+            74
+          ]
+        },
+        {
+          "div": 11,
+          "onsetQ": 2.75,
+          "count": 3,
+          "midis": [
+            43,
+            70,
+            67
+          ]
+        },
+        {
+          "div": 13,
+          "onsetQ": 3.25,
+          "count": 2,
+          "midis": [
+            43,
+            74
+          ]
+        },
+        {
+          "div": 15,
+          "onsetQ": 3.75,
+          "count": 3,
+          "midis": [
+            43,
+            70,
+            67
+          ]
+        }
+      ],
+      "chordExamples": [
+        {
+          "measureNumber": 57,
+          "onsetQuarters": 0,
+          "truthCount": 4,
+          "generatedCount": 1,
+          "truthGroupIndex": 0
+        },
+        {
+          "measureNumber": 57,
+          "onsetQuarters": 0.75,
+          "truthCount": 0,
+          "generatedCount": 3
+        }
+      ]
+    },
+    {
+      "measure": 70,
+      "metrics": {
+        "chord": 8,
+        "dur": 6,
+        "onset": 3,
+        "pitch": 0,
+        "miss": 1,
+        "extra": 1
+      },
+      "columns": [
+        {
+          "div": 0,
+          "onsetQ": 0,
+          "count": 5,
+          "midis": [
+            51,
+            39,
+            63,
+            58,
+            55
+          ]
+        },
+        {
+          "div": 2,
+          "onsetQ": 0.5,
+          "count": 2,
+          "midis": [
+            51,
+            75
+          ]
+        },
+        {
+          "div": 4,
+          "onsetQ": 1,
+          "count": 2,
+          "midis": [
+            39,
+            70
+          ]
+        },
+        {
+          "div": 6,
+          "onsetQ": 1.5,
+          "count": 1,
+          "midis": [
+            70
+          ]
+        },
+        {
+          "div": 7,
+          "onsetQ": 1.75,
+          "count": 2,
+          "midis": [
+            51,
+            39
+          ]
+        },
+        {
+          "div": 9,
+          "onsetQ": 2.25,
+          "count": 1,
+          "midis": [
+            39
+          ]
+        },
+        {
+          "div": 11,
+          "onsetQ": 2.75,
+          "count": 1,
+          "midis": [
+            51
+          ]
+        },
+        {
+          "div": 13,
+          "onsetQ": 3.25,
+          "count": 2,
+          "midis": [
+            39,
+            75
+          ]
+        }
+      ],
+      "chordExamples": [
+        {
+          "measureNumber": 70,
+          "onsetQuarters": 1.5,
+          "truthCount": 2,
+          "generatedCount": 1,
+          "truthGroupIndex": 2
+        },
+        {
+          "measureNumber": 70,
+          "onsetQuarters": 1.75,
+          "truthCount": 1,
+          "generatedCount": 2,
+          "truthGroupIndex": 3
+        },
+        {
+          "measureNumber": 70,
+          "onsetQuarters": 2,
+          "truthCount": 2,
+          "generatedCount": 1,
+          "truthGroupIndex": 4
+        },
+        {
+          "measureNumber": 70,
+          "onsetQuarters": 3,
+          "truthCount": 1,
+          "generatedCount": 2,
+          "truthGroupIndex": 6
+        },
+        {
+          "measureNumber": 70,
+          "onsetQuarters": 3.5,
+          "truthCount": 2,
+          "generatedCount": 0
+        },
+        {
+          "measureNumber": 70,
+          "onsetQuarters": 0.5,
+          "truthCount": 0,
+          "generatedCount": 2
+        }
+      ]
+    },
+    {
+      "measure": 25,
+      "metrics": {
+        "chord": 4,
+        "dur": 0,
+        "onset": 2,
+        "pitch": 0,
+        "miss": 0,
+        "extra": 0
+      },
+      "columns": [
+        {
+          "div": 0,
+          "onsetQ": 0,
+          "count": 5,
+          "midis": [
+            55,
+            43,
+            79,
+            72,
+            69
+          ]
+        },
+        {
+          "div": 2,
+          "onsetQ": 0.5,
+          "count": 1,
+          "midis": [
+            50
+          ]
+        },
+        {
+          "div": 3,
+          "onsetQ": 0.75,
+          "count": 1,
+          "midis": [
+            43
+          ]
+        },
+        {
+          "div": 5,
+          "onsetQ": 1.25,
+          "count": 6,
+          "midis": [
+            55,
+            50,
+            43,
+            79,
+            71,
+            67
+          ]
+        },
+        {
+          "div": 7,
+          "onsetQ": 1.75,
+          "count": 1,
+          "midis": [
+            43
+          ]
+        },
+        {
+          "div": 9,
+          "onsetQ": 2.25,
+          "count": 6,
+          "midis": [
+            55,
+            50,
+            43,
+            79,
+            72,
+            69
+          ]
+        },
+        {
+          "div": 11,
+          "onsetQ": 2.75,
+          "count": 1,
+          "midis": [
+            43
+          ]
+        },
+        {
+          "div": 12,
+          "onsetQ": 3,
+          "count": 4,
+          "midis": [
+            55,
+            43,
+            74,
+            71
+          ]
+        },
+        {
+          "div": 14,
+          "onsetQ": 3.5,
+          "count": 2,
+          "midis": [
+            50,
+            43
+          ]
+        }
+      ],
+      "chordExamples": [
+        {
+          "measureNumber": 25,
+          "onsetQuarters": 0,
+          "truthCount": 6,
+          "generatedCount": 5,
+          "truthGroupIndex": 0
+        },
+        {
+          "measureNumber": 25,
+          "onsetQuarters": 3,
+          "truthCount": 5,
+          "generatedCount": 4,
+          "truthGroupIndex": 6
+        },
+        {
+          "measureNumber": 25,
+          "onsetQuarters": 3.5,
+          "truthCount": 1,
+          "generatedCount": 2,
+          "truthGroupIndex": 7
+        },
+        {
+          "measureNumber": 25,
+          "onsetQuarters": 0.75,
+          "truthCount": 0,
+          "generatedCount": 1
+        }
+      ]
+    },
+    {
+      "measure": 61,
+      "metrics": {
+        "chord": 26,
+        "dur": 0,
+        "onset": 0,
+        "pitch": 0,
+        "miss": 3,
+        "extra": 3
+      },
+      "columns": [
+        {
+          "div": 0,
+          "onsetQ": 0,
+          "count": 2,
+          "midis": [
+            53,
+            46
+          ]
+        },
+        {
+          "div": 2,
+          "onsetQ": 0.5,
+          "count": 2,
+          "midis": [
+            53,
+            46
+          ]
+        },
+        {
+          "div": 4,
+          "onsetQ": 1,
+          "count": 3,
+          "midis": [
+            58,
+            53,
+            46
+          ]
+        },
+        {
+          "div": 6,
+          "onsetQ": 1.5,
+          "count": 3,
+          "midis": [
+            58,
+            53,
+            46
+          ]
+        },
+        {
+          "div": 7,
+          "onsetQ": 1.75,
+          "count": 4,
+          "midis": [
+            58,
+            53,
+            46,
+            55
+          ]
+        },
+        {
+          "div": 8,
+          "onsetQ": 2,
+          "count": 1,
+          "midis": [
+            59
+          ]
+        },
+        {
+          "div": 9,
+          "onsetQ": 2.25,
+          "count": 4,
+          "midis": [
+            58,
+            53,
+            46,
+            62
+          ]
+        },
+        {
+          "div": 10,
+          "onsetQ": 2.5,
+          "count": 1,
+          "midis": [
+            67
+          ]
+        },
+        {
+          "div": 11,
+          "onsetQ": 2.75,
+          "count": 4,
+          "midis": [
+            58,
+            53,
+            46,
+            59
+          ]
+        },
+        {
+          "div": 13,
+          "onsetQ": 3.25,
+          "count": 1,
+          "midis": [
+            62
+          ]
+        },
+        {
+          "div": 14,
+          "onsetQ": 3.5,
+          "count": 4,
+          "midis": [
+            58,
+            53,
+            46,
+            67
+          ]
+        },
+        {
+          "div": 15,
+          "onsetQ": 3.75,
+          "count": 1,
+          "midis": [
+            71
+          ]
+        }
+      ],
+      "chordExamples": [
+        {
+          "measureNumber": 61,
+          "onsetQuarters": 2,
+          "truthCount": 4,
+          "generatedCount": 1,
+          "truthGroupIndex": 4
+        },
+        {
+          "measureNumber": 61,
+          "onsetQuarters": 2.25,
+          "truthCount": 1,
+          "generatedCount": 4,
+          "truthGroupIndex": 5
+        },
+        {
+          "measureNumber": 61,
+          "onsetQuarters": 2.5,
+          "truthCount": 4,
+          "generatedCount": 1,
+          "truthGroupIndex": 6
+        },
+        {
+          "measureNumber": 61,
+          "onsetQuarters": 2.75,
+          "truthCount": 1,
+          "generatedCount": 4,
+          "truthGroupIndex": 7
+        },
+        {
+          "measureNumber": 61,
+          "onsetQuarters": 3,
+          "truthCount": 4,
+          "generatedCount": 1,
+          "truthGroupIndex": 8
+        },
+        {
+          "measureNumber": 61,
+          "onsetQuarters": 3.25,
+          "truthCount": 1,
+          "generatedCount": 4,
+          "truthGroupIndex": 9
+        },
+        {
+          "measureNumber": 61,
+          "onsetQuarters": 3.5,
+          "truthCount": 4,
+          "generatedCount": 1,
+          "truthGroupIndex": 10
+        },
+        {
+          "measureNumber": 61,
+          "onsetQuarters": 3.75,
+          "truthCount": 1,
+          "generatedCount": 0
+        },
+        {
+          "measureNumber": 61,
+          "onsetQuarters": 1.75,
+          "truthCount": 0,
+          "generatedCount": 4
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,454 @@
+{
+  "generatedAt": "2026-07-01T02:43:38.534Z",
+  "context": "post-m113 opening lead-note merge (chord 201→189)",
+  "baseline": {
+    "dense": {
+      "truthMeasureCount": 125,
+      "generatedMeasureCount": 125,
+      "measureCountDifference": 0,
+      "truthNoteCount": 2810,
+      "generatedNoteCount": 2807,
+      "noteCountDifference": -3,
+      "matchedNoteCount": 2779,
+      "correctPitchCount": 2632,
+      "correctDurationCount": 2686,
+      "correctOnsetCount": 2685,
+      "correctTimeCount": 44,
+      "missingNoteCount": 31,
+      "extraNoteCount": 28,
+      "wrongPitchCount": 147,
+      "wrongDurationCount": 93,
+      "wrongOnsetCount": 94,
+      "wrongTimeCount": 2735,
+      "chordMismatchCount": 189,
+      "chordComparableCount": 2903,
+      "greedyCorrectPitchCount": 2510,
+      "pitchCorrectAtCorrectOnsetCount": 2581,
+      "onsetCorrectMatchedCount": 2685
+    },
+    "clean": {
+      "truthMeasureCount": 78,
+      "generatedMeasureCount": 78,
+      "measureCountDifference": 0,
+      "truthNoteCount": 469,
+      "generatedNoteCount": 469,
+      "noteCountDifference": 0,
+      "matchedNoteCount": 469,
+      "correctPitchCount": 469,
+      "correctDurationCount": 469,
+      "correctOnsetCount": 469,
+      "correctTimeCount": 462,
+      "missingNoteCount": 0,
+      "extraNoteCount": 0,
+      "wrongPitchCount": 0,
+      "wrongDurationCount": 0,
+      "wrongOnsetCount": 0,
+      "wrongTimeCount": 7,
+      "chordMismatchCount": 0,
+      "chordComparableCount": 469,
+      "greedyCorrectPitchCount": 469,
+      "pitchCorrectAtCorrectOnsetCount": 469,
+      "onsetCorrectMatchedCount": 469
+    }
+  },
+  "decoupledRerank": [
+    {
+      "rank": 1,
+      "bucket": "wrongPitch @ correct onset",
+      "count": 104
+    },
+    {
+      "rank": 2,
+      "bucket": "wrongDuration @ correct onset+pitch",
+      "count": 40
+    },
+    {
+      "rank": 3,
+      "bucket": "chordMismatch raw",
+      "count": 189
+    },
+    {
+      "rank": 4,
+      "bucket": "missingNotes",
+      "count": 31
+    },
+    {
+      "rank": 5,
+      "bucket": "extraNotes",
+      "count": 28
+    },
+    {
+      "rank": 6,
+      "bucket": "wrongPitch onset-coupled",
+      "count": 43
+    },
+    {
+      "rank": 7,
+      "bucket": "wrongOnset raw",
+      "count": 94
+    },
+    {
+      "rank": 8,
+      "bucket": "wrongDuration onset-coupled",
+      "count": 51
+    }
+  ],
+  "pureChordHotspots": [
+    {
+      "m": 94,
+      "chord": 8,
+      "dur": 0,
+      "pureDur": true
+    },
+    {
+      "m": 57,
+      "chord": 6,
+      "dur": 0,
+      "pureDur": true
+    }
+  ],
+  "pureChordNoDuration": [
+    {
+      "m": 94,
+      "chord": 8
+    },
+    {
+      "m": 57,
+      "chord": 6
+    }
+  ],
+  "pureDurationHotspots": [
+    {
+      "m": 23,
+      "dur": 3
+    },
+    {
+      "m": 113,
+      "dur": 2
+    },
+    {
+      "m": 10,
+      "dur": 1
+    },
+    {
+      "m": 13,
+      "dur": 1
+    },
+    {
+      "m": 14,
+      "dur": 1
+    },
+    {
+      "m": 15,
+      "dur": 1
+    },
+    {
+      "m": 16,
+      "dur": 1
+    },
+    {
+      "m": 18,
+      "dur": 1
+    },
+    {
+      "m": 29,
+      "dur": 1
+    },
+    {
+      "m": 30,
+      "dur": 1
+    },
+    {
+      "m": 54,
+      "dur": 1
+    },
+    {
+      "m": 56,
+      "dur": 1
+    },
+    {
+      "m": 58,
+      "dur": 1
+    },
+    {
+      "m": 67,
+      "dur": 1
+    },
+    {
+      "m": 71,
+      "dur": 1
+    },
+    {
+      "m": 75,
+      "dur": 1
+    },
+    {
+      "m": 76,
+      "dur": 1
+    },
+    {
+      "m": 78,
+      "dur": 1
+    },
+    {
+      "m": 86,
+      "dur": 1
+    },
+    {
+      "m": 90,
+      "dur": 1
+    },
+    {
+      "m": 103,
+      "dur": 1
+    },
+    {
+      "m": 106,
+      "dur": 1
+    },
+    {
+      "m": 110,
+      "dur": 1
+    },
+    {
+      "m": 115,
+      "dur": 1
+    }
+  ],
+  "chordHotspots": [
+    {
+      "m": 61,
+      "chord": 26,
+      "pitch": 0,
+      "onset": 0,
+      "dur": 0,
+      "miss": 3,
+      "extra": 3
+    },
+    {
+      "m": 9,
+      "chord": 23,
+      "pitch": 8,
+      "onset": 18,
+      "dur": 4,
+      "miss": 0,
+      "extra": 7
+    },
+    {
+      "m": 7,
+      "chord": 20,
+      "pitch": 4,
+      "onset": 8,
+      "dur": 2,
+      "miss": 11,
+      "extra": 3
+    },
+    {
+      "m": 97,
+      "chord": 16,
+      "pitch": 2,
+      "onset": 1,
+      "dur": 0,
+      "miss": 0,
+      "extra": 0
+    },
+    {
+      "m": 55,
+      "chord": 14,
+      "pitch": 1,
+      "onset": 3,
+      "dur": 2,
+      "miss": 0,
+      "extra": 0
+    },
+    {
+      "m": 8,
+      "chord": 13,
+      "pitch": 12,
+      "onset": 7,
+      "dur": 2,
+      "miss": 5,
+      "extra": 6
+    },
+    {
+      "m": 45,
+      "chord": 10,
+      "pitch": 0,
+      "onset": 1,
+      "dur": 2,
+      "miss": 0,
+      "extra": 0
+    },
+    {
+      "m": 70,
+      "chord": 8,
+      "pitch": 0,
+      "onset": 3,
+      "dur": 6,
+      "miss": 1,
+      "extra": 1
+    },
+    {
+      "m": 94,
+      "chord": 8,
+      "pitch": 0,
+      "onset": 0,
+      "dur": 0,
+      "miss": 0,
+      "extra": 0
+    },
+    {
+      "m": 6,
+      "chord": 6,
+      "pitch": 10,
+      "onset": 3,
+      "dur": 0,
+      "miss": 0,
+      "extra": 0
+    },
+    {
+      "m": 27,
+      "chord": 6,
+      "pitch": 0,
+      "onset": 1,
+      "dur": 0,
+      "miss": 0,
+      "extra": 0
+    },
+    {
+      "m": 57,
+      "chord": 6,
+      "pitch": 0,
+      "onset": 0,
+      "dur": 0,
+      "miss": 0,
+      "extra": 0
+    },
+    {
+      "m": 25,
+      "chord": 4,
+      "pitch": 0,
+      "onset": 2,
+      "dur": 0,
+      "miss": 0,
+      "extra": 0
+    },
+    {
+      "m": 88,
+      "chord": 4,
+      "pitch": 0,
+      "onset": 2,
+      "dur": 0,
+      "miss": 0,
+      "extra": 0
+    },
+    {
+      "m": 60,
+      "chord": 3,
+      "pitch": 0,
+      "onset": 0,
+      "dur": 0,
+      "miss": 3,
+      "extra": 0
+    }
+  ],
+  "page8Cluster": {
+    "pitch": 81,
+    "onset": 35,
+    "chord": 1,
+    "dur": 9,
+    "miss": 6
+  },
+  "pitchAtCorrectOnsetHotspots": [
+    {
+      "m": 6,
+      "count": 6
+    },
+    {
+      "m": 119,
+      "count": 6
+    },
+    {
+      "m": 122,
+      "count": 6
+    },
+    {
+      "m": 121,
+      "count": 5
+    },
+    {
+      "m": 124,
+      "count": 5
+    },
+    {
+      "m": 8,
+      "count": 4
+    },
+    {
+      "m": 123,
+      "count": 4
+    },
+    {
+      "m": 125,
+      "count": 4
+    },
+    {
+      "m": 1,
+      "count": 2
+    },
+    {
+      "m": 3,
+      "count": 2
+    },
+    {
+      "m": 9,
+      "count": 2
+    },
+    {
+      "m": 120,
+      "count": 2
+    }
+  ],
+  "durationIndependent": {
+    "q1toHalf": 7,
+    "byMeasure": [
+      {
+        "m": 70,
+        "count": 5
+      },
+      {
+        "m": 59,
+        "count": 3
+      },
+      {
+        "m": 9,
+        "count": 2
+      },
+      {
+        "m": 39,
+        "count": 2
+      },
+      {
+        "m": 121,
+        "count": 2
+      },
+      {
+        "m": 1,
+        "count": 1
+      },
+      {
+        "m": 5,
+        "count": 1
+      },
+      {
+        "m": 10,
+        "count": 1
+      }
+    ]
+  },
+  "closed": {
+    "m113": "fixed opening lead-note merge (-12 chord)",
+    "m33": "fixed inner-voice phase",
+    "m25": "phantom stack realign (-20 chord partial)"
+  }
+}

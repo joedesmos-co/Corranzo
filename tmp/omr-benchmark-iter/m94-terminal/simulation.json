@@ -1,0 +1,2333 @@
+{
+  "generatedAt": "2026-07-01T03:14:46.204Z",
+  "diagnosis": {
+    "measureNumber": 94,
+    "truthChordGroups": [
+      {
+        "onsetQuarters": 0,
+        "noteCount": 5,
+        "midis": [
+          36,
+          43,
+          48,
+          67,
+          72
+        ]
+      },
+      {
+        "onsetQuarters": 0.5,
+        "noteCount": 1,
+        "midis": [
+          36
+        ]
+      },
+      {
+        "onsetQuarters": 1,
+        "noteCount": 4,
+        "midis": [
+          43,
+          48,
+          67,
+          75
+        ]
+      },
+      {
+        "onsetQuarters": 1.5,
+        "noteCount": 2,
+        "midis": [
+          39,
+          51
+        ]
+      },
+      {
+        "onsetQuarters": 2,
+        "noteCount": 6,
+        "midis": [
+          41,
+          48,
+          53,
+          68,
+          72,
+          77
+        ]
+      },
+      {
+        "onsetQuarters": 2.5,
+        "noteCount": 1,
+        "midis": [
+          41
+        ]
+      },
+      {
+        "onsetQuarters": 2.75,
+        "noteCount": 2,
+        "midis": [
+          68,
+          75
+        ]
+      },
+      {
+        "onsetQuarters": 3,
+        "noteCount": 2,
+        "midis": [
+          48,
+          53
+        ]
+      },
+      {
+        "onsetQuarters": 3.5,
+        "noteCount": 4,
+        "midis": [
+          36,
+          48,
+          68,
+          77
+        ]
+      }
+    ],
+    "baselineGenerated": {
+      "columns": [
+        {
+          "div": 0,
+          "q": 0,
+          "noteCount": 5,
+          "midis": [
+            36,
+            43,
+            48,
+            67,
+            72
+          ]
+        },
+        {
+          "div": 2,
+          "q": 0.5,
+          "noteCount": 1,
+          "midis": [
+            36
+          ]
+        },
+        {
+          "div": 4,
+          "q": 1,
+          "noteCount": 4,
+          "midis": [
+            43,
+            48,
+            67,
+            75
+          ]
+        },
+        {
+          "div": 5,
+          "q": 1.25,
+          "noteCount": 2,
+          "midis": [
+            39,
+            51
+          ]
+        },
+        {
+          "div": 7,
+          "q": 1.75,
+          "noteCount": 6,
+          "midis": [
+            41,
+            48,
+            53,
+            68,
+            72,
+            77
+          ]
+        },
+        {
+          "div": 9,
+          "q": 2.25,
+          "noteCount": 1,
+          "midis": [
+            41
+          ]
+        },
+        {
+          "div": 10,
+          "q": 2.5,
+          "noteCount": 2,
+          "midis": [
+            68,
+            75
+          ]
+        },
+        {
+          "div": 12,
+          "q": 3,
+          "noteCount": 2,
+          "midis": [
+            48,
+            53
+          ]
+        },
+        {
+          "div": 13,
+          "q": 3.25,
+          "noteCount": 4,
+          "midis": [
+            36,
+            48,
+            68,
+            77
+          ]
+        }
+      ],
+      "chordMismatches": [
+        {
+          "measureNumber": 94,
+          "onsetQuarters": 2.5,
+          "truthCount": 1,
+          "generatedCount": 2,
+          "truthGroupIndex": 5
+        },
+        {
+          "measureNumber": 94,
+          "onsetQuarters": 3,
+          "truthCount": 2,
+          "generatedCount": 4,
+          "truthGroupIndex": 7
+        },
+        {
+          "measureNumber": 94,
+          "onsetQuarters": 3.5,
+          "truthCount": 4,
+          "generatedCount": 0
+        },
+        {
+          "measureNumber": 94,
+          "onsetQuarters": 2.25,
+          "truthCount": 0,
+          "generatedCount": 1
+        }
+      ],
+      "phantomVariant": null
+    },
+    "terminalPattern": {
+      "phantomSoloAt225": "gen bass solo @2.25q; truth wants @2.5q",
+      "trebleStackAt25": "gen 2-note stack @2.5q; truth wants @2.75q",
+      "quarterAnchorAt30": "gen 2-note bass @3.0q matches truth",
+      "terminalStackAt325": "gen 4-note stack @3.25q; truth wants @3.5q"
+    }
+  },
+  "variants": [
+    {
+      "variant": "drop-terminal-phantom",
+      "label": "drop solo @2.25q only",
+      "gates": {
+        "pass": false,
+        "denseImproved": false,
+        "cleanStable": true,
+        "targetImproved": true,
+        "controlsStable": true,
+        "watch": [
+          {
+            "measureNumber": 94,
+            "baselineChord": 8,
+            "simulatedChord": 7,
+            "delta": {
+              "chordMismatchCount": -1
+            }
+          },
+          {
+            "measureNumber": 7,
+            "baselineChord": 20,
+            "simulatedChord": 20,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 25,
+            "baselineChord": 4,
+            "simulatedChord": 4,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 29,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 33,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 57,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 61,
+            "baselineChord": 26,
+            "simulatedChord": 26,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 89,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 113,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          }
+        ],
+        "targetMeasure": {
+          "measureNumber": 94,
+          "baselineChord": 8,
+          "simulatedChord": 7,
+          "delta": {
+            "chordMismatchCount": -1
+          }
+        },
+        "m94ChordDelta": -1,
+        "metrics": {
+          "baseline": {
+            "chordMismatchCount": 183,
+            "wrongOnsetCount": 94,
+            "wrongDurationCount": 93,
+            "wrongPitchCount": 147,
+            "generatedNoteCount": 2807
+          },
+          "simulated": {
+            "chordMismatchCount": 318,
+            "wrongOnsetCount": 96,
+            "wrongDurationCount": 94,
+            "wrongPitchCount": 142,
+            "generatedNoteCount": 2778
+          },
+          "delta": {
+            "chordMismatchCount": 135,
+            "wrongOnsetCount": 2,
+            "wrongDurationCount": 1,
+            "wrongPitchCount": -5,
+            "generatedNoteCount": -29
+          }
+        }
+      },
+      "m94": {
+        "columns": [
+          {
+            "div": 0,
+            "q": 0,
+            "noteCount": 5,
+            "midis": [
+              36,
+              43,
+              48,
+              67,
+              72
+            ]
+          },
+          {
+            "div": 2,
+            "q": 0.5,
+            "noteCount": 1,
+            "midis": [
+              36
+            ]
+          },
+          {
+            "div": 4,
+            "q": 1,
+            "noteCount": 4,
+            "midis": [
+              43,
+              48,
+              67,
+              75
+            ]
+          },
+          {
+            "div": 5,
+            "q": 1.25,
+            "noteCount": 2,
+            "midis": [
+              39,
+              51
+            ]
+          },
+          {
+            "div": 7,
+            "q": 1.75,
+            "noteCount": 6,
+            "midis": [
+              41,
+              48,
+              53,
+              68,
+              72,
+              77
+            ]
+          },
+          {
+            "div": 10,
+            "q": 2.5,
+            "noteCount": 2,
+            "midis": [
+              68,
+              75
+            ]
+          },
+          {
+            "div": 12,
+            "q": 3,
+            "noteCount": 2,
+            "midis": [
+              48,
+              53
+            ]
+          },
+          {
+            "div": 13,
+            "q": 3.25,
+            "noteCount": 4,
+            "midis": [
+              36,
+              48,
+              68,
+              77
+            ]
+          }
+        ],
+        "chordMismatches": [
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 2.5,
+            "truthCount": 1,
+            "generatedCount": 2,
+            "truthGroupIndex": 5
+          },
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 3,
+            "truthCount": 2,
+            "generatedCount": 4,
+            "truthGroupIndex": 7
+          },
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 3.5,
+            "truthCount": 4,
+            "generatedCount": 0
+          }
+        ],
+        "phantomVariant": {
+          "candidateMeasures": 29,
+          "appliedMeasures": 29,
+          "rejectedReasons": {},
+          "samples": [
+            {
+              "measureNumber": 6,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 35,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 37,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 39,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 43,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 46,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 47,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 48,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 49,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 50,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 51,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 52,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            }
+          ],
+          "noteCountChanged": true,
+          "measureCountChanged": false,
+          "minPairs": 2,
+          "minStackNotes": 4,
+          "stackShift": -1,
+          "strategy": "drop-terminal-phantom",
+          "noteCountBefore": 2807,
+          "noteCountAfter": 2778
+        }
+      }
+    },
+    {
+      "variant": "shift-terminal-early-forward",
+      "label": "shift terminal early columns +0.25q",
+      "gates": {
+        "pass": true,
+        "denseImproved": true,
+        "cleanStable": true,
+        "targetImproved": true,
+        "controlsStable": true,
+        "watch": [
+          {
+            "measureNumber": 94,
+            "baselineChord": 8,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": -8
+            }
+          },
+          {
+            "measureNumber": 7,
+            "baselineChord": 20,
+            "simulatedChord": 20,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 25,
+            "baselineChord": 4,
+            "simulatedChord": 4,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 29,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 33,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 57,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 61,
+            "baselineChord": 26,
+            "simulatedChord": 26,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 89,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 113,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          }
+        ],
+        "targetMeasure": {
+          "measureNumber": 94,
+          "baselineChord": 8,
+          "simulatedChord": 0,
+          "delta": {
+            "chordMismatchCount": -8
+          }
+        },
+        "m94ChordDelta": -8,
+        "metrics": {
+          "baseline": {
+            "chordMismatchCount": 183,
+            "wrongOnsetCount": 94,
+            "wrongDurationCount": 93,
+            "wrongPitchCount": 147,
+            "generatedNoteCount": 2807
+          },
+          "simulated": {
+            "chordMismatchCount": 175,
+            "wrongOnsetCount": 94,
+            "wrongDurationCount": 93,
+            "wrongPitchCount": 147,
+            "generatedNoteCount": 2807
+          },
+          "delta": {
+            "chordMismatchCount": -8,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0,
+            "generatedNoteCount": 0
+          }
+        }
+      },
+      "m94": {
+        "columns": [
+          {
+            "div": 0,
+            "q": 0,
+            "noteCount": 5,
+            "midis": [
+              36,
+              43,
+              48,
+              67,
+              72
+            ]
+          },
+          {
+            "div": 2,
+            "q": 0.5,
+            "noteCount": 1,
+            "midis": [
+              36
+            ]
+          },
+          {
+            "div": 4,
+            "q": 1,
+            "noteCount": 4,
+            "midis": [
+              43,
+              48,
+              67,
+              75
+            ]
+          },
+          {
+            "div": 5,
+            "q": 1.25,
+            "noteCount": 2,
+            "midis": [
+              39,
+              51
+            ]
+          },
+          {
+            "div": 7,
+            "q": 1.75,
+            "noteCount": 6,
+            "midis": [
+              41,
+              48,
+              53,
+              68,
+              72,
+              77
+            ]
+          },
+          {
+            "div": 10,
+            "q": 2.5,
+            "noteCount": 1,
+            "midis": [
+              41
+            ]
+          },
+          {
+            "div": 11,
+            "q": 2.75,
+            "noteCount": 2,
+            "midis": [
+              68,
+              75
+            ]
+          },
+          {
+            "div": 12,
+            "q": 3,
+            "noteCount": 2,
+            "midis": [
+              48,
+              53
+            ]
+          },
+          {
+            "div": 14,
+            "q": 3.5,
+            "noteCount": 4,
+            "midis": [
+              36,
+              48,
+              68,
+              77
+            ]
+          }
+        ],
+        "chordMismatches": [],
+        "phantomVariant": {
+          "candidateMeasures": 1,
+          "appliedMeasures": 1,
+          "rejectedReasons": {},
+          "samples": [
+            {
+              "measureNumber": 94,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [
+                {
+                  "fromDivision": 9,
+                  "toDivision": 10
+                },
+                {
+                  "fromDivision": 10,
+                  "toDivision": 11
+                },
+                {
+                  "fromDivision": 13,
+                  "toDivision": 14
+                }
+              ],
+              "droppedPhantomStarts": [],
+              "pairs": [
+                {
+                  "phantomStartDivision": 9,
+                  "stackStartDivision": 10,
+                  "stackNoteCount": 2,
+                  "duplicateMidis": [],
+                  "splitsAttack": false
+                },
+                {
+                  "phantomStartDivision": null,
+                  "stackStartDivision": 13,
+                  "stackNoteCount": 4,
+                  "duplicateMidis": [],
+                  "splitsAttack": false
+                }
+              ]
+            }
+          ],
+          "noteCountChanged": false,
+          "measureCountChanged": false,
+          "minPairs": 2,
+          "minStackNotes": 4,
+          "stackShift": -1,
+          "strategy": "shift-terminal-early-forward",
+          "noteCountBefore": 2807,
+          "noteCountAfter": 2807
+        }
+      }
+    },
+    {
+      "variant": "drop-and-shift-terminal",
+      "label": "drop solo @2.25q + shift stacks +0.25q",
+      "gates": {
+        "pass": false,
+        "denseImproved": true,
+        "cleanStable": true,
+        "targetImproved": true,
+        "controlsStable": true,
+        "watch": [
+          {
+            "measureNumber": 94,
+            "baselineChord": 8,
+            "simulatedChord": 7,
+            "delta": {
+              "chordMismatchCount": -1
+            }
+          },
+          {
+            "measureNumber": 7,
+            "baselineChord": 20,
+            "simulatedChord": 20,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 25,
+            "baselineChord": 4,
+            "simulatedChord": 4,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 29,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 33,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 57,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 61,
+            "baselineChord": 26,
+            "simulatedChord": 26,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 89,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          },
+          {
+            "measureNumber": 113,
+            "baselineChord": 0,
+            "simulatedChord": 0,
+            "delta": {
+              "chordMismatchCount": 0
+            }
+          }
+        ],
+        "targetMeasure": {
+          "measureNumber": 94,
+          "baselineChord": 8,
+          "simulatedChord": 7,
+          "delta": {
+            "chordMismatchCount": -1
+          }
+        },
+        "m94ChordDelta": -1,
+        "metrics": {
+          "baseline": {
+            "chordMismatchCount": 183,
+            "wrongOnsetCount": 94,
+            "wrongDurationCount": 93,
+            "wrongPitchCount": 147,
+            "generatedNoteCount": 2807
+          },
+          "simulated": {
+            "chordMismatchCount": 182,
+            "wrongOnsetCount": 94,
+            "wrongDurationCount": 93,
+            "wrongPitchCount": 147,
+            "generatedNoteCount": 2806
+          },
+          "delta": {
+            "chordMismatchCount": -1,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0,
+            "generatedNoteCount": -1
+          }
+        }
+      },
+      "m94": {
+        "columns": [
+          {
+            "div": 0,
+            "q": 0,
+            "noteCount": 5,
+            "midis": [
+              36,
+              43,
+              48,
+              67,
+              72
+            ]
+          },
+          {
+            "div": 2,
+            "q": 0.5,
+            "noteCount": 1,
+            "midis": [
+              36
+            ]
+          },
+          {
+            "div": 4,
+            "q": 1,
+            "noteCount": 4,
+            "midis": [
+              43,
+              48,
+              67,
+              75
+            ]
+          },
+          {
+            "div": 5,
+            "q": 1.25,
+            "noteCount": 2,
+            "midis": [
+              39,
+              51
+            ]
+          },
+          {
+            "div": 7,
+            "q": 1.75,
+            "noteCount": 6,
+            "midis": [
+              41,
+              48,
+              53,
+              68,
+              72,
+              77
+            ]
+          },
+          {
+            "div": 11,
+            "q": 2.75,
+            "noteCount": 2,
+            "midis": [
+              68,
+              75
+            ]
+          },
+          {
+            "div": 12,
+            "q": 3,
+            "noteCount": 2,
+            "midis": [
+              48,
+              53
+            ]
+          },
+          {
+            "div": 14,
+            "q": 3.5,
+            "noteCount": 4,
+            "midis": [
+              36,
+              48,
+              68,
+              77
+            ]
+          }
+        ],
+        "chordMismatches": [
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 2.5,
+            "truthCount": 1,
+            "generatedCount": 2,
+            "truthGroupIndex": 5
+          },
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 3,
+            "truthCount": 2,
+            "generatedCount": 4,
+            "truthGroupIndex": 7
+          },
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 3.5,
+            "truthCount": 4,
+            "generatedCount": 0
+          }
+        ],
+        "phantomVariant": {
+          "candidateMeasures": 1,
+          "appliedMeasures": 1,
+          "rejectedReasons": {},
+          "samples": [
+            {
+              "measureNumber": 94,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [
+                {
+                  "fromDivision": 10,
+                  "toDivision": 11
+                },
+                {
+                  "fromDivision": 13,
+                  "toDivision": 14
+                }
+              ],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": [
+                {
+                  "phantomStartDivision": 9,
+                  "stackStartDivision": 10,
+                  "stackNoteCount": 2,
+                  "duplicateMidis": [],
+                  "splitsAttack": false
+                },
+                {
+                  "phantomStartDivision": null,
+                  "stackStartDivision": 13,
+                  "stackNoteCount": 4,
+                  "duplicateMidis": [],
+                  "splitsAttack": false
+                }
+              ]
+            }
+          ],
+          "noteCountChanged": true,
+          "measureCountChanged": false,
+          "minPairs": 2,
+          "minStackNotes": 4,
+          "stackShift": -1,
+          "strategy": "drop-and-shift-terminal",
+          "noteCountBefore": 2807,
+          "noteCountAfter": 2806
+        }
+      }
+    }
+  ],
+  "promote": {
+    "variant": "shift-terminal-early-forward",
+    "label": "shift terminal early columns +0.25q",
+    "gates": {
+      "pass": true,
+      "denseImproved": true,
+      "cleanStable": true,
+      "targetImproved": true,
+      "controlsStable": true,
+      "watch": [
+        {
+          "measureNumber": 94,
+          "baselineChord": 8,
+          "simulatedChord": 0,
+          "delta": {
+            "chordMismatchCount": -8
+          }
+        },
+        {
+          "measureNumber": 7,
+          "baselineChord": 20,
+          "simulatedChord": 20,
+          "delta": {
+            "chordMismatchCount": 0
+          }
+        },
+        {
+          "measureNumber": 25,
+          "baselineChord": 4,
+          "simulatedChord": 4,
+          "delta": {
+            "chordMismatchCount": 0
+          }
+        },
+        {
+          "measureNumber": 29,
+          "baselineChord": 0,
+          "simulatedChord": 0,
+          "delta": {
+            "chordMismatchCount": 0
+          }
+        },
+        {
+          "measureNumber": 33,
+          "baselineChord": 0,
+          "simulatedChord": 0,
+          "delta": {
+            "chordMismatchCount": 0
+          }
+        },
+        {
+          "measureNumber": 57,
+          "baselineChord": 0,
+          "simulatedChord": 0,
+          "delta": {
+            "chordMismatchCount": 0
+          }
+        },
+        {
+          "measureNumber": 61,
+          "baselineChord": 26,
+          "simulatedChord": 26,
+          "delta": {
+            "chordMismatchCount": 0
+          }
+        },
+        {
+          "measureNumber": 89,
+          "baselineChord": 0,
+          "simulatedChord": 0,
+          "delta": {
+            "chordMismatchCount": 0
+          }
+        },
+        {
+          "measureNumber": 113,
+          "baselineChord": 0,
+          "simulatedChord": 0,
+          "delta": {
+            "chordMismatchCount": 0
+          }
+        }
+      ],
+      "targetMeasure": {
+        "measureNumber": 94,
+        "baselineChord": 8,
+        "simulatedChord": 0,
+        "delta": {
+          "chordMismatchCount": -8
+        }
+      },
+      "m94ChordDelta": -8,
+      "metrics": {
+        "baseline": {
+          "chordMismatchCount": 183,
+          "wrongOnsetCount": 94,
+          "wrongDurationCount": 93,
+          "wrongPitchCount": 147,
+          "generatedNoteCount": 2807
+        },
+        "simulated": {
+          "chordMismatchCount": 175,
+          "wrongOnsetCount": 94,
+          "wrongDurationCount": 93,
+          "wrongPitchCount": 147,
+          "generatedNoteCount": 2807
+        },
+        "delta": {
+          "chordMismatchCount": -8,
+          "wrongOnsetCount": 0,
+          "wrongDurationCount": 0,
+          "wrongPitchCount": 0,
+          "generatedNoteCount": 0
+        }
+      }
+    }
+  },
+  "results": [
+    {
+      "variant": "baseline",
+      "label": "runtime baseline (no terminal variant)",
+      "fixture": "clean",
+      "metrics": {
+        "chordMismatchCount": 0,
+        "wrongOnsetCount": 0,
+        "wrongDurationCount": 0,
+        "wrongPitchCount": 0,
+        "generatedNoteCount": 469
+      },
+      "watch": [
+        {
+          "measureNumber": 94,
+          "chordMismatchCount": null
+        },
+        {
+          "measureNumber": 7,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 25,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 29,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 33,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 57,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 61,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 89,
+          "chordMismatchCount": null
+        },
+        {
+          "measureNumber": 113,
+          "chordMismatchCount": null
+        }
+      ]
+    },
+    {
+      "variant": "drop-terminal-phantom",
+      "label": "drop solo @2.25q only",
+      "fixture": "clean",
+      "metrics": {
+        "chordMismatchCount": 0,
+        "wrongOnsetCount": 0,
+        "wrongDurationCount": 0,
+        "wrongPitchCount": 0,
+        "generatedNoteCount": 469
+      },
+      "watch": [
+        {
+          "measureNumber": 94,
+          "chordMismatchCount": null
+        },
+        {
+          "measureNumber": 7,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 25,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 29,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 33,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 57,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 61,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 89,
+          "chordMismatchCount": null
+        },
+        {
+          "measureNumber": 113,
+          "chordMismatchCount": null
+        }
+      ]
+    },
+    {
+      "variant": "shift-terminal-early-forward",
+      "label": "shift terminal early columns +0.25q",
+      "fixture": "clean",
+      "metrics": {
+        "chordMismatchCount": 0,
+        "wrongOnsetCount": 0,
+        "wrongDurationCount": 0,
+        "wrongPitchCount": 0,
+        "generatedNoteCount": 469
+      },
+      "watch": [
+        {
+          "measureNumber": 94,
+          "chordMismatchCount": null
+        },
+        {
+          "measureNumber": 7,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 25,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 29,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 33,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 57,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 61,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 89,
+          "chordMismatchCount": null
+        },
+        {
+          "measureNumber": 113,
+          "chordMismatchCount": null
+        }
+      ]
+    },
+    {
+      "variant": "drop-and-shift-terminal",
+      "label": "drop solo @2.25q + shift stacks +0.25q",
+      "fixture": "clean",
+      "metrics": {
+        "chordMismatchCount": 0,
+        "wrongOnsetCount": 0,
+        "wrongDurationCount": 0,
+        "wrongPitchCount": 0,
+        "generatedNoteCount": 469
+      },
+      "watch": [
+        {
+          "measureNumber": 94,
+          "chordMismatchCount": null
+        },
+        {
+          "measureNumber": 7,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 25,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 29,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 33,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 57,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 61,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 89,
+          "chordMismatchCount": null
+        },
+        {
+          "measureNumber": 113,
+          "chordMismatchCount": null
+        }
+      ]
+    },
+    {
+      "variant": "baseline",
+      "label": "runtime baseline (no terminal variant)",
+      "fixture": "dense",
+      "metrics": {
+        "chordMismatchCount": 183,
+        "wrongOnsetCount": 94,
+        "wrongDurationCount": 93,
+        "wrongPitchCount": 147,
+        "generatedNoteCount": 2807
+      },
+      "watch": [
+        {
+          "measureNumber": 94,
+          "chordMismatchCount": 8
+        },
+        {
+          "measureNumber": 7,
+          "chordMismatchCount": 20
+        },
+        {
+          "measureNumber": 25,
+          "chordMismatchCount": 4
+        },
+        {
+          "measureNumber": 29,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 33,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 57,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 61,
+          "chordMismatchCount": 26
+        },
+        {
+          "measureNumber": 89,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 113,
+          "chordMismatchCount": 0
+        }
+      ],
+      "m94": {
+        "columns": [
+          {
+            "div": 0,
+            "q": 0,
+            "noteCount": 5,
+            "midis": [
+              36,
+              43,
+              48,
+              67,
+              72
+            ]
+          },
+          {
+            "div": 2,
+            "q": 0.5,
+            "noteCount": 1,
+            "midis": [
+              36
+            ]
+          },
+          {
+            "div": 4,
+            "q": 1,
+            "noteCount": 4,
+            "midis": [
+              43,
+              48,
+              67,
+              75
+            ]
+          },
+          {
+            "div": 5,
+            "q": 1.25,
+            "noteCount": 2,
+            "midis": [
+              39,
+              51
+            ]
+          },
+          {
+            "div": 7,
+            "q": 1.75,
+            "noteCount": 6,
+            "midis": [
+              41,
+              48,
+              53,
+              68,
+              72,
+              77
+            ]
+          },
+          {
+            "div": 9,
+            "q": 2.25,
+            "noteCount": 1,
+            "midis": [
+              41
+            ]
+          },
+          {
+            "div": 10,
+            "q": 2.5,
+            "noteCount": 2,
+            "midis": [
+              68,
+              75
+            ]
+          },
+          {
+            "div": 12,
+            "q": 3,
+            "noteCount": 2,
+            "midis": [
+              48,
+              53
+            ]
+          },
+          {
+            "div": 13,
+            "q": 3.25,
+            "noteCount": 4,
+            "midis": [
+              36,
+              48,
+              68,
+              77
+            ]
+          }
+        ],
+        "chordMismatches": [
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 2.5,
+            "truthCount": 1,
+            "generatedCount": 2,
+            "truthGroupIndex": 5
+          },
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 3,
+            "truthCount": 2,
+            "generatedCount": 4,
+            "truthGroupIndex": 7
+          },
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 3.5,
+            "truthCount": 4,
+            "generatedCount": 0
+          },
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 2.25,
+            "truthCount": 0,
+            "generatedCount": 1
+          }
+        ],
+        "phantomVariant": null
+      }
+    },
+    {
+      "variant": "drop-terminal-phantom",
+      "label": "drop solo @2.25q only",
+      "fixture": "dense",
+      "metrics": {
+        "chordMismatchCount": 318,
+        "wrongOnsetCount": 96,
+        "wrongDurationCount": 94,
+        "wrongPitchCount": 142,
+        "generatedNoteCount": 2778
+      },
+      "watch": [
+        {
+          "measureNumber": 94,
+          "chordMismatchCount": 7
+        },
+        {
+          "measureNumber": 7,
+          "chordMismatchCount": 20
+        },
+        {
+          "measureNumber": 25,
+          "chordMismatchCount": 4
+        },
+        {
+          "measureNumber": 29,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 33,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 57,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 61,
+          "chordMismatchCount": 26
+        },
+        {
+          "measureNumber": 89,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 113,
+          "chordMismatchCount": 0
+        }
+      ],
+      "m94": {
+        "columns": [
+          {
+            "div": 0,
+            "q": 0,
+            "noteCount": 5,
+            "midis": [
+              36,
+              43,
+              48,
+              67,
+              72
+            ]
+          },
+          {
+            "div": 2,
+            "q": 0.5,
+            "noteCount": 1,
+            "midis": [
+              36
+            ]
+          },
+          {
+            "div": 4,
+            "q": 1,
+            "noteCount": 4,
+            "midis": [
+              43,
+              48,
+              67,
+              75
+            ]
+          },
+          {
+            "div": 5,
+            "q": 1.25,
+            "noteCount": 2,
+            "midis": [
+              39,
+              51
+            ]
+          },
+          {
+            "div": 7,
+            "q": 1.75,
+            "noteCount": 6,
+            "midis": [
+              41,
+              48,
+              53,
+              68,
+              72,
+              77
+            ]
+          },
+          {
+            "div": 10,
+            "q": 2.5,
+            "noteCount": 2,
+            "midis": [
+              68,
+              75
+            ]
+          },
+          {
+            "div": 12,
+            "q": 3,
+            "noteCount": 2,
+            "midis": [
+              48,
+              53
+            ]
+          },
+          {
+            "div": 13,
+            "q": 3.25,
+            "noteCount": 4,
+            "midis": [
+              36,
+              48,
+              68,
+              77
+            ]
+          }
+        ],
+        "chordMismatches": [
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 2.5,
+            "truthCount": 1,
+            "generatedCount": 2,
+            "truthGroupIndex": 5
+          },
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 3,
+            "truthCount": 2,
+            "generatedCount": 4,
+            "truthGroupIndex": 7
+          },
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 3.5,
+            "truthCount": 4,
+            "generatedCount": 0
+          }
+        ],
+        "phantomVariant": {
+          "candidateMeasures": 29,
+          "appliedMeasures": 29,
+          "rejectedReasons": {},
+          "samples": [
+            {
+              "measureNumber": 6,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 35,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 37,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 39,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 43,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 46,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 47,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 48,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 49,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 50,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 51,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            },
+            {
+              "measureNumber": 52,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": []
+            }
+          ],
+          "noteCountChanged": true,
+          "measureCountChanged": false,
+          "minPairs": 2,
+          "minStackNotes": 4,
+          "stackShift": -1,
+          "strategy": "drop-terminal-phantom",
+          "noteCountBefore": 2807,
+          "noteCountAfter": 2778
+        }
+      }
+    },
+    {
+      "variant": "shift-terminal-early-forward",
+      "label": "shift terminal early columns +0.25q",
+      "fixture": "dense",
+      "metrics": {
+        "chordMismatchCount": 175,
+        "wrongOnsetCount": 94,
+        "wrongDurationCount": 93,
+        "wrongPitchCount": 147,
+        "generatedNoteCount": 2807
+      },
+      "watch": [
+        {
+          "measureNumber": 94,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 7,
+          "chordMismatchCount": 20
+        },
+        {
+          "measureNumber": 25,
+          "chordMismatchCount": 4
+        },
+        {
+          "measureNumber": 29,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 33,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 57,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 61,
+          "chordMismatchCount": 26
+        },
+        {
+          "measureNumber": 89,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 113,
+          "chordMismatchCount": 0
+        }
+      ],
+      "m94": {
+        "columns": [
+          {
+            "div": 0,
+            "q": 0,
+            "noteCount": 5,
+            "midis": [
+              36,
+              43,
+              48,
+              67,
+              72
+            ]
+          },
+          {
+            "div": 2,
+            "q": 0.5,
+            "noteCount": 1,
+            "midis": [
+              36
+            ]
+          },
+          {
+            "div": 4,
+            "q": 1,
+            "noteCount": 4,
+            "midis": [
+              43,
+              48,
+              67,
+              75
+            ]
+          },
+          {
+            "div": 5,
+            "q": 1.25,
+            "noteCount": 2,
+            "midis": [
+              39,
+              51
+            ]
+          },
+          {
+            "div": 7,
+            "q": 1.75,
+            "noteCount": 6,
+            "midis": [
+              41,
+              48,
+              53,
+              68,
+              72,
+              77
+            ]
+          },
+          {
+            "div": 10,
+            "q": 2.5,
+            "noteCount": 1,
+            "midis": [
+              41
+            ]
+          },
+          {
+            "div": 11,
+            "q": 2.75,
+            "noteCount": 2,
+            "midis": [
+              68,
+              75
+            ]
+          },
+          {
+            "div": 12,
+            "q": 3,
+            "noteCount": 2,
+            "midis": [
+              48,
+              53
+            ]
+          },
+          {
+            "div": 14,
+            "q": 3.5,
+            "noteCount": 4,
+            "midis": [
+              36,
+              48,
+              68,
+              77
+            ]
+          }
+        ],
+        "chordMismatches": [],
+        "phantomVariant": {
+          "candidateMeasures": 1,
+          "appliedMeasures": 1,
+          "rejectedReasons": {},
+          "samples": [
+            {
+              "measureNumber": 94,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [
+                {
+                  "fromDivision": 9,
+                  "toDivision": 10
+                },
+                {
+                  "fromDivision": 10,
+                  "toDivision": 11
+                },
+                {
+                  "fromDivision": 13,
+                  "toDivision": 14
+                }
+              ],
+              "droppedPhantomStarts": [],
+              "pairs": [
+                {
+                  "phantomStartDivision": 9,
+                  "stackStartDivision": 10,
+                  "stackNoteCount": 2,
+                  "duplicateMidis": [],
+                  "splitsAttack": false
+                },
+                {
+                  "phantomStartDivision": null,
+                  "stackStartDivision": 13,
+                  "stackNoteCount": 4,
+                  "duplicateMidis": [],
+                  "splitsAttack": false
+                }
+              ]
+            }
+          ],
+          "noteCountChanged": false,
+          "measureCountChanged": false,
+          "minPairs": 2,
+          "minStackNotes": 4,
+          "stackShift": -1,
+          "strategy": "shift-terminal-early-forward",
+          "noteCountBefore": 2807,
+          "noteCountAfter": 2807
+        }
+      }
+    },
+    {
+      "variant": "drop-and-shift-terminal",
+      "label": "drop solo @2.25q + shift stacks +0.25q",
+      "fixture": "dense",
+      "metrics": {
+        "chordMismatchCount": 182,
+        "wrongOnsetCount": 94,
+        "wrongDurationCount": 93,
+        "wrongPitchCount": 147,
+        "generatedNoteCount": 2806
+      },
+      "watch": [
+        {
+          "measureNumber": 94,
+          "chordMismatchCount": 7
+        },
+        {
+          "measureNumber": 7,
+          "chordMismatchCount": 20
+        },
+        {
+          "measureNumber": 25,
+          "chordMismatchCount": 4
+        },
+        {
+          "measureNumber": 29,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 33,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 57,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 61,
+          "chordMismatchCount": 26
+        },
+        {
+          "measureNumber": 89,
+          "chordMismatchCount": 0
+        },
+        {
+          "measureNumber": 113,
+          "chordMismatchCount": 0
+        }
+      ],
+      "m94": {
+        "columns": [
+          {
+            "div": 0,
+            "q": 0,
+            "noteCount": 5,
+            "midis": [
+              36,
+              43,
+              48,
+              67,
+              72
+            ]
+          },
+          {
+            "div": 2,
+            "q": 0.5,
+            "noteCount": 1,
+            "midis": [
+              36
+            ]
+          },
+          {
+            "div": 4,
+            "q": 1,
+            "noteCount": 4,
+            "midis": [
+              43,
+              48,
+              67,
+              75
+            ]
+          },
+          {
+            "div": 5,
+            "q": 1.25,
+            "noteCount": 2,
+            "midis": [
+              39,
+              51
+            ]
+          },
+          {
+            "div": 7,
+            "q": 1.75,
+            "noteCount": 6,
+            "midis": [
+              41,
+              48,
+              53,
+              68,
+              72,
+              77
+            ]
+          },
+          {
+            "div": 11,
+            "q": 2.75,
+            "noteCount": 2,
+            "midis": [
+              68,
+              75
+            ]
+          },
+          {
+            "div": 12,
+            "q": 3,
+            "noteCount": 2,
+            "midis": [
+              48,
+              53
+            ]
+          },
+          {
+            "div": 14,
+            "q": 3.5,
+            "noteCount": 4,
+            "midis": [
+              36,
+              48,
+              68,
+              77
+            ]
+          }
+        ],
+        "chordMismatches": [
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 2.5,
+            "truthCount": 1,
+            "generatedCount": 2,
+            "truthGroupIndex": 5
+          },
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 3,
+            "truthCount": 2,
+            "generatedCount": 4,
+            "truthGroupIndex": 7
+          },
+          {
+            "measureNumber": 94,
+            "onsetQuarters": 3.5,
+            "truthCount": 4,
+            "generatedCount": 0
+          }
+        ],
+        "phantomVariant": {
+          "candidateMeasures": 1,
+          "appliedMeasures": 1,
+          "rejectedReasons": {},
+          "samples": [
+            {
+              "measureNumber": 94,
+              "phantomStarts": [
+                9
+              ],
+              "stackShifts": [
+                {
+                  "fromDivision": 10,
+                  "toDivision": 11
+                },
+                {
+                  "fromDivision": 13,
+                  "toDivision": 14
+                }
+              ],
+              "droppedPhantomStarts": [
+                9
+              ],
+              "pairs": [
+                {
+                  "phantomStartDivision": 9,
+                  "stackStartDivision": 10,
+                  "stackNoteCount": 2,
+                  "duplicateMidis": [],
+                  "splitsAttack": false
+                },
+                {
+                  "phantomStartDivision": null,
+                  "stackStartDivision": 13,
+                  "stackNoteCount": 4,
+                  "duplicateMidis": [],
+                  "splitsAttack": false
+                }
+              ]
+            }
+          ],
+          "noteCountChanged": true,
+          "measureCountChanged": false,
+          "minPairs": 2,
+          "minStackNotes": 4,
+          "stackShift": -1,
+          "strategy": "drop-and-shift-terminal",
+          "noteCountBefore": 2807,
+          "noteCountAfter": 2806
+        }
+      }
+    }
+  ]
+}

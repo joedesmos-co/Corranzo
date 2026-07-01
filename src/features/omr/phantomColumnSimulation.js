@@ -8,6 +8,15 @@ const PHANTOM_STACK_GAP = 2
 const DEFAULT_MIN_PAIRS = 2
 const DEFAULT_MIN_STACK_NOTES = 4
 const DEFAULT_STACK_SHIFT = -SIXTEENTH
+const TERMINAL_EARLY_REGION_START = 9
+const TERMINAL_FORWARD_SHIFT = SIXTEENTH
+
+export const PHANTOM_COLUMN_STRATEGIES = {
+  LINKED_STACK_REALIGN: 'linked-stack-realign',
+  DROP_TERMINAL_PHANTOM: 'drop-terminal-phantom',
+  SHIFT_TERMINAL_EARLY_FORWARD: 'shift-terminal-early-forward',
+  DROP_AND_SHIFT_TERMINAL: 'drop-and-shift-terminal',
+}
 
 export {
   DEFAULT_MIN_PAIRS,
@@ -16,6 +25,8 @@ export {
   PHANTOM_MOD,
   PHANTOM_STACK_GAP,
   STACK_MOD,
+  TERMINAL_EARLY_REGION_START,
+  TERMINAL_FORWARD_SHIFT,
 }
 
 function cloneEvent(event) {
@@ -162,7 +173,90 @@ export function diagnoseMeasurePhantomColumns(measure, options = {}) {
   }
 }
 
+function columnByDivision(columns, startDivision) {
+  return columns.find((column) => (column.startDivision ?? 0) === startDivision) ?? null
+}
+
+/**
+ * Terminal Family B: columns in the last 1.5 beats landed one sixteenth early.
+ * Signature (m94-like): solo @2.25q, 2-note stack @2.5q, quarter anchor @3.0q,
+ * 4-note terminal stack @3.25q that should sit @3.5q.
+ */
+export function detectTerminalEarlyColumnCorrection(
+  columns,
+  {
+    totalDivisions = OMR_DIVISIONS_PER_QUARTER * 4,
+    terminalRegionStart = TERMINAL_EARLY_REGION_START,
+    minTerminalStackNotes = 4,
+  } = {},
+) {
+  const leadSolo = columnByDivision(columns, terminalRegionStart)
+  const followStack = columnByDivision(columns, terminalRegionStart + 1)
+  const quarterAnchor = columnByDivision(columns, terminalRegionStart + 3)
+  const lateStack = columns
+    .filter(
+      (column) =>
+        (column.startDivision ?? 0) > terminalRegionStart + 2 &&
+        (column.startDivision ?? 0) < totalDivisions &&
+        column.noteCount >= minTerminalStackNotes &&
+        (column.startDivision ?? 0) % OMR_DIVISIONS_PER_QUARTER === 1,
+    )
+    .sort((left, right) => (right.startDivision ?? 0) - (left.startDivision ?? 0))[0]
+
+  if (
+    !leadSolo ||
+    leadSolo.noteCount !== 1 ||
+    !followStack ||
+    followStack.noteCount !== 2 ||
+    !quarterAnchor ||
+    quarterAnchor.noteCount !== 2 ||
+    (quarterAnchor.startDivision ?? 0) % OMR_DIVISIONS_PER_QUARTER !== 0 ||
+    !lateStack
+  ) {
+    return null
+  }
+
+  const stackShifts = [
+    { fromDivision: leadSolo.startDivision, toDivision: leadSolo.startDivision + TERMINAL_FORWARD_SHIFT },
+    { fromDivision: followStack.startDivision, toDivision: followStack.startDivision + TERMINAL_FORWARD_SHIFT },
+    { fromDivision: lateStack.startDivision, toDivision: lateStack.startDivision + TERMINAL_FORWARD_SHIFT },
+  ].filter(({ toDivision }) => toDivision < totalDivisions)
+
+  if (stackShifts.length < 3) {
+    return null
+  }
+
+  return {
+    phantomColumns: [
+      {
+        startDivision: leadSolo.startDivision,
+        noteCount: leadSolo.noteCount,
+        midis: [...columnMidis(leadSolo)],
+      },
+    ],
+    stackShifts,
+    shiftReason: 'terminal-early-forward-realign',
+    pairs: [
+      {
+        phantomStartDivision: leadSolo.startDivision,
+        stackStartDivision: followStack.startDivision,
+        stackNoteCount: followStack.noteCount,
+        duplicateMidis: [],
+        splitsAttack: false,
+      },
+      {
+        phantomStartDivision: null,
+        stackStartDivision: lateStack.startDivision,
+        stackNoteCount: lateStack.noteCount,
+        duplicateMidis: [],
+        splitsAttack: false,
+      },
+    ],
+  }
+}
+
 function applyStackShift(measure, correction) {
+  const shiftReason = correction.shiftReason ?? 'linked-stack-phantom-realign'
   const shiftByStart = new Map(
     correction.stackShifts.map(({ fromDivision, toDivision }) => [fromDivision, toDivision]),
   )
@@ -179,7 +273,7 @@ function applyStackShift(measure, correction) {
       startDivision: shiftByStart.get(startDivision),
       phantomColumnAdjusted: true,
       phantomColumnReasons: [
-        ...new Set([...(event.phantomColumnReasons ?? []), 'linked-stack-phantom-realign']),
+        ...new Set([...(event.phantomColumnReasons ?? []), shiftReason]),
       ],
     }
   })
@@ -198,6 +292,63 @@ function applyStackShift(measure, correction) {
  * Realign stacks that sit +0.25q early beside Family B phantom solo columns.
  * Phantom solos are kept; stacks shift one sixteenth earlier.
  */
+function dropPhantomColumns(measure, phantomStarts) {
+  const dropSet = new Set(phantomStarts)
+  const events = (measure.events ?? []).filter((event) => {
+    if (event.type !== 'note') {
+      return true
+    }
+    return !dropSet.has(event.startDivision ?? 0)
+  })
+  return {
+    ...measure,
+    events,
+    phantomColumnCorrection: {
+      applied: true,
+      droppedPhantomStarts: [...phantomStarts],
+    },
+  }
+}
+
+function detectCorrectionForStrategy(columns, options) {
+  const strategy = options.strategy ?? PHANTOM_COLUMN_STRATEGIES.LINKED_STACK_REALIGN
+  if (strategy === PHANTOM_COLUMN_STRATEGIES.SHIFT_TERMINAL_EARLY_FORWARD) {
+    return detectTerminalEarlyColumnCorrection(columns, options)
+  }
+  if (strategy === PHANTOM_COLUMN_STRATEGIES.DROP_TERMINAL_PHANTOM) {
+    const leadSolo = columnByDivision(columns, TERMINAL_EARLY_REGION_START)
+    if (!leadSolo || leadSolo.noteCount !== 1) {
+      return null
+    }
+    return {
+      phantomColumns: [
+        {
+          startDivision: leadSolo.startDivision,
+          noteCount: leadSolo.noteCount,
+          midis: [...columnMidis(leadSolo)],
+        },
+      ],
+      stackShifts: [],
+      dropPhantomStarts: [leadSolo.startDivision],
+      pairs: [],
+    }
+  }
+  if (strategy === PHANTOM_COLUMN_STRATEGIES.DROP_AND_SHIFT_TERMINAL) {
+    const terminal = detectTerminalEarlyColumnCorrection(columns, options)
+    if (!terminal) {
+      return null
+    }
+    return {
+      ...terminal,
+      stackShifts: terminal.stackShifts.filter(
+        ({ fromDivision }) => fromDivision !== TERMINAL_EARLY_REGION_START,
+      ),
+      dropPhantomStarts: terminal.phantomColumns.map((column) => column.startDivision),
+    }
+  }
+  return detectPhantomColumnCorrection(columns, options)
+}
+
 export function applyPhantomColumnCorrection(
   measures = [],
   {
@@ -205,6 +356,7 @@ export function applyPhantomColumnCorrection(
     minPairs = DEFAULT_MIN_PAIRS,
     minStackNotes = DEFAULT_MIN_STACK_NOTES,
     stackShift = DEFAULT_STACK_SHIFT,
+    strategy = PHANTOM_COLUMN_STRATEGIES.LINKED_STACK_REALIGN,
     cloneMeasures = false,
   } = {},
 ) {
@@ -220,32 +372,48 @@ export function applyPhantomColumnCorrection(
     minPairs,
     minStackNotes,
     stackShift,
+    strategy,
   }
 
   for (const measure of measures) {
     const workingMeasure = cloneMeasures ? cloneMeasure(measure) : measure
     const columns = extractOnsetColumns(workingMeasure.events)
-    const correction = detectPhantomColumnCorrection(columns, { minPairs, minStackNotes, stackShift })
+    const correction = detectCorrectionForStrategy(columns, {
+      minPairs,
+      minStackNotes,
+      stackShift,
+      strategy,
+      totalDivisions,
+    })
     if (!correction) {
       correctedMeasures.push(workingMeasure)
       continue
     }
     summary.candidateMeasures += 1
-    const maxShiftedStart = Math.max(...correction.stackShifts.map(({ toDivision }) => toDivision))
+    const maxShiftedStart = correction.stackShifts?.length
+      ? Math.max(...correction.stackShifts.map(({ toDivision }) => toDivision))
+      : -1
     if (maxShiftedStart >= totalDivisions) {
       summary.rejectedReasons['shift-past-measure-end'] =
         (summary.rejectedReasons['shift-past-measure-end'] ?? 0) + 1
       correctedMeasures.push(workingMeasure)
       continue
     }
-    const adjusted = applyStackShift(workingMeasure, correction)
+    let adjusted = workingMeasure
+    if (correction.stackShifts?.length) {
+      adjusted = applyStackShift(adjusted, correction)
+    }
+    if (correction.dropPhantomStarts?.length) {
+      adjusted = dropPhantomColumns(adjusted, correction.dropPhantomStarts)
+    }
     summary.appliedMeasures += 1
     if (summary.samples.length < 12) {
       summary.samples.push({
         measureNumber: measure.measureNumber ?? null,
-        phantomStarts: correction.phantomColumns.map((column) => column.startDivision),
-        stackShifts: correction.stackShifts,
-        pairs: correction.pairs,
+        phantomStarts: correction.phantomColumns?.map((column) => column.startDivision) ?? [],
+        stackShifts: correction.stackShifts ?? [],
+        droppedPhantomStarts: correction.dropPhantomStarts ?? [],
+        pairs: correction.pairs ?? [],
       })
     }
     correctedMeasures.push(adjusted)
@@ -268,5 +436,18 @@ export function simulatePhantomColumnCorrection(measures = [], options = {}) {
   return applyPhantomColumnCorrection(measures, {
     ...options,
     cloneMeasures: true,
+  })
+}
+
+/** Offline variant probe — same as simulate but records strategy name explicitly. */
+export function simulatePhantomColumnVariant(measures = [], options = {}) {
+  return simulatePhantomColumnCorrection(measures, options)
+}
+
+/** Runtime helper — terminal Family B early columns shifted +0.25q (m94-like). */
+export function applyTerminalEarlyColumnCorrection(measures = [], options = {}) {
+  return applyPhantomColumnCorrection(measures, {
+    ...options,
+    strategy: PHANTOM_COLUMN_STRATEGIES.SHIFT_TERMINAL_EARLY_FORWARD,
   })
 }

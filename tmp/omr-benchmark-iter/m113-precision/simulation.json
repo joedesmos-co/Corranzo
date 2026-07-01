@@ -1,0 +1,511 @@
+{
+  "generatedAt": "2026-07-01T02:28:15.516Z",
+  "promote": true,
+  "fixtures": [
+    {
+      "fixture": "clean",
+      "baseline": {
+        "chordMismatchCount": 0,
+        "wrongOnsetCount": 0,
+        "wrongDurationCount": 0,
+        "wrongPitchCount": 0,
+        "generatedNoteCount": 469
+      },
+      "simulated": {
+        "chordMismatchCount": 0,
+        "wrongOnsetCount": 0,
+        "wrongDurationCount": 0,
+        "wrongPitchCount": 0,
+        "generatedNoteCount": 469
+      },
+      "watch": [
+        {
+          "measureNumber": 113,
+          "delta": {
+            "chordMismatchCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0
+          }
+        },
+        {
+          "measureNumber": 7,
+          "baseline": {
+            "measureNumber": 7,
+            "truthNoteCount": 7,
+            "generatedNoteCount": 7,
+            "matchedNoteCount": 7,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 0,
+            "chordMismatchCount": 0,
+            "errorCount": 0,
+            "errorRate": 0
+          },
+          "simulated": {
+            "measureNumber": 7,
+            "truthNoteCount": 7,
+            "generatedNoteCount": 7,
+            "matchedNoteCount": 7,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 0,
+            "chordMismatchCount": 0,
+            "errorCount": 0,
+            "errorRate": 0
+          },
+          "delta": {
+            "chordMismatchCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0
+          }
+        },
+        {
+          "measureNumber": 25,
+          "baseline": {
+            "measureNumber": 25,
+            "truthNoteCount": 6,
+            "generatedNoteCount": 6,
+            "matchedNoteCount": 6,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 0,
+            "chordMismatchCount": 0,
+            "errorCount": 0,
+            "errorRate": 0
+          },
+          "simulated": {
+            "measureNumber": 25,
+            "truthNoteCount": 6,
+            "generatedNoteCount": 6,
+            "matchedNoteCount": 6,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 0,
+            "chordMismatchCount": 0,
+            "errorCount": 0,
+            "errorRate": 0
+          },
+          "delta": {
+            "chordMismatchCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0
+          }
+        },
+        {
+          "measureNumber": 33,
+          "baseline": {
+            "measureNumber": 33,
+            "truthNoteCount": 5,
+            "generatedNoteCount": 5,
+            "matchedNoteCount": 5,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 0,
+            "chordMismatchCount": 0,
+            "errorCount": 0,
+            "errorRate": 0
+          },
+          "simulated": {
+            "measureNumber": 33,
+            "truthNoteCount": 5,
+            "generatedNoteCount": 5,
+            "matchedNoteCount": 5,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 0,
+            "chordMismatchCount": 0,
+            "errorCount": 0,
+            "errorRate": 0
+          },
+          "delta": {
+            "chordMismatchCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0
+          }
+        },
+        {
+          "measureNumber": 34,
+          "baseline": {
+            "measureNumber": 34,
+            "truthNoteCount": 7,
+            "generatedNoteCount": 7,
+            "matchedNoteCount": 7,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 0,
+            "chordMismatchCount": 0,
+            "errorCount": 0,
+            "errorRate": 0
+          },
+          "simulated": {
+            "measureNumber": 34,
+            "truthNoteCount": 7,
+            "generatedNoteCount": 7,
+            "matchedNoteCount": 7,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 0,
+            "chordMismatchCount": 0,
+            "errorCount": 0,
+            "errorRate": 0
+          },
+          "delta": {
+            "chordMismatchCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0
+          }
+        },
+        {
+          "measureNumber": 61,
+          "baseline": {
+            "measureNumber": 61,
+            "truthNoteCount": 7,
+            "generatedNoteCount": 7,
+            "matchedNoteCount": 7,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 0,
+            "chordMismatchCount": 0,
+            "errorCount": 0,
+            "errorRate": 0
+          },
+          "simulated": {
+            "measureNumber": 61,
+            "truthNoteCount": 7,
+            "generatedNoteCount": 7,
+            "matchedNoteCount": 7,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 0,
+            "chordMismatchCount": 0,
+            "errorCount": 0,
+            "errorRate": 0
+          },
+          "delta": {
+            "chordMismatchCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0
+          }
+        }
+      ],
+      "merge": {
+        "candidateMeasures": 0,
+        "appliedMeasures": 0,
+        "samples": [],
+        "noteCountChanged": false,
+        "measureCountChanged": false,
+        "maxLeadGap": 1,
+        "minStackNotes": 4,
+        "noteCountBefore": 469,
+        "noteCountAfter": 469
+      }
+    },
+    {
+      "fixture": "dense",
+      "baseline": {
+        "chordMismatchCount": 201,
+        "wrongOnsetCount": 94,
+        "wrongDurationCount": 93,
+        "wrongPitchCount": 147,
+        "generatedNoteCount": 2807
+      },
+      "simulated": {
+        "chordMismatchCount": 189,
+        "wrongOnsetCount": 94,
+        "wrongDurationCount": 93,
+        "wrongPitchCount": 147,
+        "generatedNoteCount": 2807
+      },
+      "watch": [
+        {
+          "measureNumber": 113,
+          "baseline": {
+            "measureNumber": 113,
+            "truthNoteCount": 26,
+            "generatedNoteCount": 26,
+            "matchedNoteCount": 26,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 2,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 26,
+            "chordMismatchCount": 12,
+            "errorCount": 40,
+            "errorRate": 1
+          },
+          "simulated": {
+            "measureNumber": 113,
+            "truthNoteCount": 26,
+            "generatedNoteCount": 26,
+            "matchedNoteCount": 26,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 2,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 26,
+            "chordMismatchCount": 0,
+            "errorCount": 28,
+            "errorRate": 1
+          },
+          "delta": {
+            "chordMismatchCount": -12,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0
+          }
+        },
+        {
+          "measureNumber": 7,
+          "baseline": {
+            "measureNumber": 7,
+            "truthNoteCount": 28,
+            "generatedNoteCount": 20,
+            "matchedNoteCount": 17,
+            "missingNoteCount": 11,
+            "extraNoteCount": 3,
+            "wrongPitchCount": 4,
+            "wrongDurationCount": 2,
+            "wrongOnsetCount": 8,
+            "wrongTimeCount": 17,
+            "chordMismatchCount": 20,
+            "errorCount": 65,
+            "errorRate": 1
+          },
+          "simulated": {
+            "measureNumber": 7,
+            "truthNoteCount": 28,
+            "generatedNoteCount": 20,
+            "matchedNoteCount": 17,
+            "missingNoteCount": 11,
+            "extraNoteCount": 3,
+            "wrongPitchCount": 4,
+            "wrongDurationCount": 2,
+            "wrongOnsetCount": 8,
+            "wrongTimeCount": 17,
+            "chordMismatchCount": 20,
+            "errorCount": 65,
+            "errorRate": 1
+          },
+          "delta": {
+            "chordMismatchCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0
+          }
+        },
+        {
+          "measureNumber": 25,
+          "baseline": {
+            "measureNumber": 25,
+            "truthNoteCount": 27,
+            "generatedNoteCount": 27,
+            "matchedNoteCount": 27,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 2,
+            "wrongTimeCount": 27,
+            "chordMismatchCount": 4,
+            "errorCount": 33,
+            "errorRate": 1
+          },
+          "simulated": {
+            "measureNumber": 25,
+            "truthNoteCount": 27,
+            "generatedNoteCount": 27,
+            "matchedNoteCount": 27,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 2,
+            "wrongTimeCount": 27,
+            "chordMismatchCount": 4,
+            "errorCount": 33,
+            "errorRate": 1
+          },
+          "delta": {
+            "chordMismatchCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0
+          }
+        },
+        {
+          "measureNumber": 33,
+          "baseline": {
+            "measureNumber": 33,
+            "truthNoteCount": 30,
+            "generatedNoteCount": 30,
+            "matchedNoteCount": 30,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 1,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 30,
+            "chordMismatchCount": 0,
+            "errorCount": 31,
+            "errorRate": 1
+          },
+          "simulated": {
+            "measureNumber": 33,
+            "truthNoteCount": 30,
+            "generatedNoteCount": 30,
+            "matchedNoteCount": 30,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 1,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 30,
+            "chordMismatchCount": 0,
+            "errorCount": 31,
+            "errorRate": 1
+          },
+          "delta": {
+            "chordMismatchCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0
+          }
+        },
+        {
+          "measureNumber": 34,
+          "baseline": {
+            "measureNumber": 34,
+            "truthNoteCount": 27,
+            "generatedNoteCount": 27,
+            "matchedNoteCount": 27,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 27,
+            "chordMismatchCount": 0,
+            "errorCount": 27,
+            "errorRate": 1
+          },
+          "simulated": {
+            "measureNumber": 34,
+            "truthNoteCount": 27,
+            "generatedNoteCount": 27,
+            "matchedNoteCount": 27,
+            "missingNoteCount": 0,
+            "extraNoteCount": 0,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 27,
+            "chordMismatchCount": 0,
+            "errorCount": 27,
+            "errorRate": 1
+          },
+          "delta": {
+            "chordMismatchCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0
+          }
+        },
+        {
+          "measureNumber": 61,
+          "baseline": {
+            "measureNumber": 61,
+            "truthNoteCount": 30,
+            "generatedNoteCount": 30,
+            "matchedNoteCount": 27,
+            "missingNoteCount": 3,
+            "extraNoteCount": 3,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 27,
+            "chordMismatchCount": 26,
+            "errorCount": 59,
+            "errorRate": 1
+          },
+          "simulated": {
+            "measureNumber": 61,
+            "truthNoteCount": 30,
+            "generatedNoteCount": 30,
+            "matchedNoteCount": 27,
+            "missingNoteCount": 3,
+            "extraNoteCount": 3,
+            "wrongPitchCount": 0,
+            "wrongDurationCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongTimeCount": 27,
+            "chordMismatchCount": 26,
+            "errorCount": 59,
+            "errorRate": 1
+          },
+          "delta": {
+            "chordMismatchCount": 0,
+            "wrongOnsetCount": 0,
+            "wrongDurationCount": 0,
+            "wrongPitchCount": 0
+          }
+        }
+      ],
+      "merge": {
+        "candidateMeasures": 1,
+        "appliedMeasures": 1,
+        "samples": [
+          {
+            "measureNumber": 113,
+            "fromDivision": 0,
+            "toDivision": 1,
+            "stackNoteCount": 6
+          }
+        ],
+        "noteCountChanged": false,
+        "measureCountChanged": false,
+        "maxLeadGap": 1,
+        "minStackNotes": 4,
+        "noteCountBefore": 2807,
+        "noteCountAfter": 2807
+      }
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "measureNumber": 94,
+  "truthChordGroups": [
+    {
+      "onsetQuarters": 0,
+      "noteCount": 5,
+      "midis": [
+        36,
+        43,
+        48,
+        67,
+        72
+      ]
+    },
+    {
+      "onsetQuarters": 0.5,
+      "noteCount": 1,
+      "midis": [
+        36
+      ]
+    },
+    {
+      "onsetQuarters": 1,
+      "noteCount": 4,
+      "midis": [
+        43,
+        48,
+        67,
+        75
+      ]
+    },
+    {
+      "onsetQuarters": 1.5,
+      "noteCount": 2,
+      "midis": [
+        39,
+        51
+      ]
+    },
+    {
+      "onsetQuarters": 2,
+      "noteCount": 6,
+      "midis": [
+        41,
+        48,
+        53,
+        68,
+        72,
+        77
+      ]
+    },
+    {
+      "onsetQuarters": 2.5,
+      "noteCount": 1,
+      "midis": [
+        41
+      ]
+    },
+    {
+      "onsetQuarters": 2.75,
+      "noteCount": 2,
+      "midis": [
+        68,
+        75
+      ]
+    },
+    {
+      "onsetQuarters": 3,
+      "noteCount": 2,
+      "midis": [
+        48,
+        53
+      ]
+    },
+    {
+      "onsetQuarters": 3.5,
+      "noteCount": 4,
+      "midis": [
+        36,
+        48,
+        68,
+        77
+      ]
+    }
+  ],
+  "baselineGenerated": {
+    "columns": [
+      {
+        "div": 0,
+        "q": 0,
+        "noteCount": 5,
+        "midis": [
+          36,
+          43,
+          48,
+          67,
+          72
+        ]
+      },
+      {
+        "div": 2,
+        "q": 0.5,
+        "noteCount": 1,
+        "midis": [
+          36
+        ]
+      },
+      {
+        "div": 4,
+        "q": 1,
+        "noteCount": 4,
+        "midis": [
+          43,
+          48,
+          67,
+          75
+        ]
+      },
+      {
+        "div": 5,
+        "q": 1.25,
+        "noteCount": 2,
+        "midis": [
+          39,
+          51
+        ]
+      },
+      {
+        "div": 7,
+        "q": 1.75,
+        "noteCount": 6,
+        "midis": [
+          41,
+          48,
+          53,
+          68,
+          72,
+          77
+        ]
+      },
+      {
+        "div": 9,
+        "q": 2.25,
+        "noteCount": 1,
+        "midis": [
+          41
+        ]
+      },
+      {
+        "div": 10,
+        "q": 2.5,
+        "noteCount": 2,
+        "midis": [
+          68,
+          75
+        ]
+      },
+      {
+        "div": 12,
+        "q": 3,
+        "noteCount": 2,
+        "midis": [
+          48,
+          53
+        ]
+      },
+      {
+        "div": 13,
+        "q": 3.25,
+        "noteCount": 4,
+        "midis": [
+          36,
+          48,
+          68,
+          77
+        ]
+      }
+    ],
+    "chordMismatches": [
+      {
+        "measureNumber": 94,
+        "onsetQuarters": 2.5,
+        "truthCount": 1,
+        "generatedCount": 2,
+        "truthGroupIndex": 5
+      },
+      {
+        "measureNumber": 94,
+        "onsetQuarters": 3,
+        "truthCount": 2,
+        "generatedCount": 4,
+        "truthGroupIndex": 7
+      },
+      {
+        "measureNumber": 94,
+        "onsetQuarters": 3.5,
+        "truthCount": 4,
+        "generatedCount": 0
+      },
+      {
+        "measureNumber": 94,
+        "onsetQuarters": 2.25,
+        "truthCount": 0,
+        "generatedCount": 1
+      }
+    ],
+    "phantomVariant": null
+  },
+  "terminalPattern": {
+    "phantomSoloAt225": "gen bass solo @2.25q; truth wants @2.5q",
+    "trebleStackAt25": "gen 2-note stack @2.5q; truth wants @2.75q",
+    "quarterAnchorAt30": "gen 2-note bass @3.0q matches truth",
+    "terminalStackAt325": "gen 4-note stack @3.25q; truth wants @3.5q"
+  }
+}

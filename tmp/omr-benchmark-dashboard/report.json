@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-01T02:10:32.900Z",
+  "generatedAt": "2026-07-01T03:26:35.271Z",
   "fixtureCount": 2,
   "statusCounts": {
     "pass": 2,
@@ -95,14 +95,14 @@
         "pitchAccuracy": 0.9367,
         "durationAccuracy": 0.9559,
         "onsetAccuracy": 0.9555,
-        "chordGroupingAccuracy": 0.9309,
+        "chordGroupingAccuracy": 0.9396,
         "noteDetectionF1": 0.9895,
         "measureCountDiff": 0,
         "noteCountDiff": -3,
         "wrongPitch": 147,
         "wrongDuration": 93,
         "wrongOnset": 94,
-        "chordMismatch": 201,
+        "chordMismatch": 175,
         "topErrorCategory": {
           "source": "rhythm-inference",
           "label": "Rhythm inference",
@@ -110,17 +110,17 @@
         },
         "topDurationErrorCategory": {
           "category": "onset-coupled",
-          "count": 49
+          "count": 50
         },
         "durationErrorHistogram": {
-          "too-short": 18,
+          "too-short": 17,
           "too-long": 9,
           "beamed-subdivision": 17,
           "bass-sustain": 0,
           "melody-accompaniment": 0,
           "rest-gap": 0,
           "tie-sustain": 0,
-          "onset-coupled": 49,
+          "onset-coupled": 50,
           "other": 0
         },
         "truncatedWrongDurations": 0
