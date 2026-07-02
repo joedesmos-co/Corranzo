@@ -1,5 +1,8 @@
 import { memo, useCallback, useRef } from 'react'
-import { mapAnalysisPointToViewerOverlay } from '../../utils/analysisViewerCoords.js'
+import {
+  mapAnalysisAxisRectToViewerOverlay,
+  mapAnalysisPointToViewerOverlay,
+} from '../../utils/analysisViewerCoords.js'
 import useScoreFollowCursorElement from '../../features/score-follow/useScoreFollowCursorElement.js'
 import {
   ANCHOR_SOURCE,
@@ -29,6 +32,7 @@ function scoreFollowOverlayPropsEqual(prev, next) {
   if (prev.systemStartMarks !== next.systemStartMarks) return false
   if (prev.showCandidateAnchors !== next.showCandidateAnchors) return false
   if (prev.candidateAnchors !== next.candidateAnchors) return false
+  if (prev.viewerRotation !== next.viewerRotation) return false
   const pc = prev.cursor
   const nc = next.cursor
   if (pc?.visible !== nc?.visible) return false
@@ -36,7 +40,14 @@ function scoreFollowOverlayPropsEqual(prev, next) {
   if (pc?.smoothed !== nc?.smoothed) return false
   const pt = prev.noteTarget
   const nt = next.noteTarget
+  if (pt?.targetKey !== nt?.targetKey) return false
+  if (pt?.page !== nt?.page) return false
+  if (pt?.displayMode !== nt?.displayMode) return false
   if (pt?.x !== nt?.x || pt?.y !== nt?.y) return false
+  if (pt?.highlight?.x0 !== nt?.highlight?.x0) return false
+  if (pt?.highlight?.y0 !== nt?.highlight?.y0) return false
+  if (pt?.highlight?.x1 !== nt?.highlight?.x1) return false
+  if (pt?.highlight?.y1 !== nt?.highlight?.y1) return false
   return true
 }
 
@@ -62,6 +73,7 @@ function ScoreFollowOverlay({
   candidateAnchors = null,
   showCandidateAnchors = false,
   getPageViewRotation,
+  viewerRotation = 0,
 }) {
   const layerRef = useRef(null)
   const cursorRef = useRef(null)
@@ -92,12 +104,21 @@ function ScoreFollowOverlay({
   const hasSystemStartMarks = systemStartMode && pageSystemStartMarks.length > 0
   const cursorSmoothed = cursor?.smoothed ?? false
 
-  const noteTargetOverlay =
-    showNoteTarget && noteTarget
+  const noteTargetOnPage =
+    showNoteTarget && noteTarget?.visible && noteTarget.page === pageNumber
+  const noteHighlightOverlay =
+    noteTargetOnPage && noteTarget.highlight
+      ? mapAnalysisAxisRectToViewerOverlay(
+          noteTarget.highlight,
+          viewerRotation,
+        )
+      : null
+  const noteFallbackOverlay =
+    noteTargetOnPage && !noteHighlightOverlay
       ? mapAnalysisPointToViewerOverlay(
           noteTarget.x,
           noteTarget.y,
-          getPageViewRotation?.(pageNumber) ?? 0,
+          viewerRotation,
         )
       : null
 
@@ -131,7 +152,7 @@ function ScoreFollowOverlay({
     !alignmentMode &&
     !systemStartMode &&
     !showCursor &&
-    !showNoteTarget &&
+    !noteTargetOnPage &&
     !hasBands &&
     !hasMarkers &&
     !hasCandidates
@@ -218,7 +239,25 @@ function ScoreFollowOverlay({
         </div>
       )}
 
-      {noteTargetOverlay && (
+      {noteHighlightOverlay && (
+        <div
+          className={`score-follow-overlay__note-highlight${
+            noteTarget.highlight.isChord ? ' score-follow-overlay__note-highlight--chord' : ''
+          }${
+            noteTarget.highlight.approximate ? ' score-follow-overlay__note-highlight--approximate' : ''
+          }`}
+          style={{
+            left: `${noteHighlightOverlay.x0 * 100}%`,
+            top: `${noteHighlightOverlay.y0 * 100}%`,
+            width: `${(noteHighlightOverlay.x1 - noteHighlightOverlay.x0) * 100}%`,
+            height: `${(noteHighlightOverlay.y1 - noteHighlightOverlay.y0) * 100}%`,
+          }}
+          role="img"
+          aria-label={`Target note${noteTarget.isChord ? ' chord' : ''} highlight at measure ${noteTarget.measureNumber ?? ''}`}
+        />
+      )}
+
+      {noteFallbackOverlay && (
         <div
           className={`score-follow-overlay__note-target score-follow-overlay__note-target--compact${
             noteTarget.isWideChord
@@ -228,11 +267,11 @@ function ScoreFollowOverlay({
                 : ''
           }`}
           style={{
-            left: `${noteTargetOverlay.x * 100}%`,
-            top: `${noteTargetOverlay.y * 100}%`,
+            left: `${noteFallbackOverlay.x * 100}%`,
+            top: `${noteFallbackOverlay.y * 100}%`,
           }}
           role="img"
-          aria-label={`Target note${noteTarget.isChord ? ' chord' : ''} at measure ${noteTarget.measureNumber ?? ''}`}
+          aria-label={`Approximate target note${noteTarget.isChord ? ' chord' : ''} marker at measure ${noteTarget.measureNumber ?? ''}`}
         >
           <span className="score-follow-overlay__note-target-ring" />
           <span className="score-follow-overlay__note-target-dot" />

@@ -138,7 +138,7 @@ const bass = resolveNoteTargetPosition({
 })
 
 assert(treble.visible && bass.visible, 'staff targets visible')
-assert(treble.y < bass.y, 'staff 1 should be above staff 2 on page')
+assert(treble.noteAnchorY < bass.noteAnchorY, 'staff 1 should be above staff 2 on page')
 
 // --- chord centroid ---
 const chordCheckpoint = {
@@ -154,7 +154,12 @@ const chordTarget = resolveNoteTargetPosition({
   anchors: systemAnchors,
 })
 assert(chordTarget.isChord, 'chord flag')
-assert(chordTarget.y > treble.y && chordTarget.y < bass.y, 'chord y between staves')
+assert(
+  chordTarget.noteAnchorY > treble.noteAnchorY &&
+    chordTarget.noteAnchorY < bass.noteAnchorY,
+  'chord y between staves',
+)
+assert(chordTarget.highlight, 'chord uses geometry highlight')
 
 // --- page inference ---
 const page2Anchor = [

@@ -129,6 +129,10 @@ export default function WaitForYouSection({
     checkpointMode,
     displayLabel,
   )
+  const targetApproximate = Boolean(
+    noteTarget?.visible &&
+      (noteTarget.approximate || (noteTarget.confidence != null && noteTarget.confidence < 0.7)),
+  )
   const statusModifier = statusClassName(displayStatus, status)
   const primaryActionDisabled =
     status === WFY_STATUS.COMPLETE ||
@@ -251,12 +255,14 @@ export default function WaitForYouSection({
           ) : noteTarget?.visible ? (
             <>
               <span className="wait-for-you__note-target-chip">Your note</span>
-              {noteTarget.confidence != null && noteTarget.confidence < 0.7
-                ? ' · approximate position'
-                : ' · marked on score'}
+              {targetApproximate
+                ? ' · target approximate'
+                : noteTarget.displayMode === 'highlight'
+                  ? ' · highlighted on score'
+                  : ' · approximate marker'}
             </>
           ) : (
-            <>Open Advanced to show the note marker.</>
+            <>Open Advanced to show the target highlight.</>
           )}
         </p>
       )}

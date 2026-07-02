@@ -172,8 +172,14 @@ export function buildMeasureAnchorGeometry(anchors, timingMap, measureNumber, pr
 
   if (exact) {
     placement = 'exact-anchor'
-    xMeasureStart = exact.x
-    xMeasureEnd = exact.x + 0.05
+    const playableStart = Number.isFinite(exact.meta?.playableStartX)
+      ? exact.meta.playableStartX
+      : exact.x
+    const playableEnd = Number.isFinite(exact.meta?.playableEndX)
+      ? exact.meta.playableEndX
+      : exact.x + 0.05
+    xMeasureStart = playableStart
+    xMeasureEnd = Math.max(playableEnd, playableStart + 0.03)
   } else if (neighborBounds && neighbors.after?.measureNumber > neighbors.before?.measureNumber) {
     placement = 'measure-bracket'
     xMeasureStart = neighborBounds.xStart

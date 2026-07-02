@@ -172,6 +172,7 @@ function PdfPageFrame({
                 candidateAnchors={scoreFollow.candidateAnchors ?? null}
                 showCandidateAnchors={scoreFollow.showCandidateAnchors ?? false}
                 getPageViewRotation={scoreFollow.getPageViewRotation}
+                viewerRotation={viewRotation}
               />
             </PdfOverlayLayer>
           )}

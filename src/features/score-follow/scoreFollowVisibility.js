@@ -39,7 +39,7 @@ export function getCursorFollowHint(reason, { cursorPage, visiblePageNumber } = 
     case CURSOR_HIDE_REASON.LOW_TRUST:
       return 'Score cursor needs setup — mark measures manually or use the demo sample for a calibrated cursor.'
     case CURSOR_HIDE_REASON.NOTE_TARGET:
-      return 'Follow the amber Your note marker during Wait For You.'
+      return 'Follow the amber Your note highlight during Wait For You.'
     case CURSOR_HIDE_REASON.WRONG_PAGE:
       return cursorPage != null && visiblePageNumber != null
         ? `Follow cursor is on page ${cursorPage} — switch to page ${cursorPage} to see it.`
