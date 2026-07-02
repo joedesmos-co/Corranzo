@@ -151,7 +151,7 @@ export default function useWaitForYou({
   )
 
   const onPlayerInputMatched = useCallback(() => {
-    markCorrectAndContinue()
+    markCorrectAndContinue({ immediate: true })
   }, [markCorrectAndContinue])
 
   const restart = useCallback(() => {

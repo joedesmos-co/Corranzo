@@ -112,7 +112,6 @@ export default memo(function PracticeControlPanel({
           checkpointMode={session.checkpointMode}
           noteTarget={waitForYouNoteTarget?.target ?? null}
           noteTargetWrongPage={waitForYouNoteTarget?.wrongPage ?? false}
-          onCheckpointModeChange={session.setCheckpointMode}
           currentCheckpoint={session.waitForYou.currentCheckpoint}
           checkpointIndex={session.waitForYou.checkpointIndex}
           totalCheckpoints={session.waitForYou.totalCheckpoints}
@@ -129,6 +128,9 @@ export default memo(function PracticeControlPanel({
           onRestart={session.waitForYou.restart}
           onPlayReference={session.referencePlayback.playCheckpointReference}
           referencePlaying={session.referencePlayback.isPlaying}
+          referenceError={session.referencePlayback.error}
+          micListening={session.microphone.isListening}
+          onRequestMicAccess={session.microphone.requestAccess}
           showMatchSettings={false}
           compact
         />

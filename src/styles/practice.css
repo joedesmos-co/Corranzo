@@ -1023,6 +1023,33 @@
   border: 1px solid rgba(200, 160, 60, 0.28);
 }
 
+.wait-for-you__mic-off,
+.wait-for-you__reference-error {
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(220, 170, 70, 0.32);
+  border-radius: 8px;
+  background: rgba(220, 170, 70, 0.1);
+  color: #efd8a8;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.wait-for-you__mic-off {
+  display: grid;
+  gap: 8px;
+}
+
+.wait-for-you__mic-off p {
+  margin: 0;
+}
+
+.wait-for-you__reference-error {
+  border-color: rgba(220, 90, 90, 0.4);
+  background: rgba(220, 90, 90, 0.1);
+  color: #f2c0c0;
+}
+
 .wait-for-you__explainer {
   margin: 0 0 12px;
   font-size: 0.82rem;

@@ -22,7 +22,7 @@ export const ACCURACY_TIERS = [
     label: 'Basic',
     summary: 'PDF only',
     detail:
-      'Read and annotate the score, but without a timing file Corranzo cannot follow measures or notes exactly.',
+      'PDF-only generated scores are experimental. Read and annotate the score, but use PDF + a timing file for reliable Practice.',
   },
 ]
 
@@ -41,7 +41,7 @@ export function evaluateAccuracySetup({ hasPdf, hasMusicXml }) {
       tierId: 'basic',
       tier: ACCURACY_TIERS.find((item) => item.id === 'basic'),
       headline: 'PDF only so far',
-      detail: 'Add a timing file next — that is what makes Practice interactive.',
+      detail: 'PDF-only generated scores are experimental. Add a timing file for the best Practice experience.',
     }
   }
 

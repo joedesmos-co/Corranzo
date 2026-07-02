@@ -23,6 +23,8 @@ export default function MultiFileUpload({
   onFileSelect,
   onMusicXmlSelect,
   onMidiSelect,
+  onClearMusicXml,
+  onClearMidi,
   onClassifiedUpload = null,
   disabled = false,
 }) {
@@ -78,6 +80,8 @@ export default function MultiFileUpload({
   }
 
   const statusClass = (ready) => (ready ? ' multi-upload__chip--ready' : '')
+  const canClearMusicXml = hasMusicXml && typeof onClearMusicXml === 'function'
+  const canClearMidi = hasMidi && typeof onClearMidi === 'function'
 
   return (
     <section className="multi-upload" aria-label="Upload score files" data-tour-id="library-upload">
@@ -114,10 +118,30 @@ export default function MultiFileUpload({
           PDF: {hasPdf ? 'Ready' : 'Needed'}
         </li>
         <li className={`multi-upload__chip${statusClass(hasMusicXml)}`}>
-          Timing: {hasMusicXml ? 'Ready' : 'Needed'}
+          <span>Timing: {hasMusicXml ? 'Ready' : 'Needed'}</span>
+          {canClearMusicXml && (
+            <button
+              type="button"
+              className="multi-upload__remove"
+              onClick={onClearMusicXml}
+              disabled={disabled}
+            >
+              Remove
+            </button>
+          )}
         </li>
         <li className={`multi-upload__chip${statusClass(hasMidi)}`}>
-          Sound: {hasMidi ? 'Ready' : 'Optional'}
+          <span>Sound: {hasMidi ? 'Ready' : 'Optional'}</span>
+          {canClearMidi && (
+            <button
+              type="button"
+              className="multi-upload__remove"
+              onClick={onClearMidi}
+              disabled={disabled}
+            >
+              Remove
+            </button>
+          )}
         </li>
       </ul>
 

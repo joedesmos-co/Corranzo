@@ -50,9 +50,7 @@ export default function usePracticeSession({
   const [practiceMode, setPracticeMode] = useState(
     prefs.practiceMode ?? PRACTICE_MODE.NORMAL,
   )
-  const [checkpointMode, setCheckpointMode] = useState(
-    prefs.checkpointMode ?? WFY_CHECKPOINT_MODE.BEAT,
-  )
+  const [checkpointMode, setCheckpointMode] = useState(WFY_CHECKPOINT_MODE.NOTE)
   const matchSettingsState = useWaitForYouMatchSettings(prefs.matchSettings)
   const autoMidiRequestedRef = useRef(false)
   const ensurePausedRef = useRef(() => {})
@@ -424,11 +422,11 @@ export default function usePracticeSession({
   const waitForYouForUi = useMemo(() => {
     const markCorrectFromUser = () => {
       onRecordWfyEvent?.('manual-continue')
-      waitForYou.markCorrectAndContinue()
+      waitForYou.markCorrectAndContinue({ immediate: true })
     }
     const skipCheckpoint = () => {
       onRecordWfyEvent?.('skipped')
-      waitForYou.markCorrectAndContinue()
+      waitForYou.markCorrectAndContinue({ immediate: true })
     }
     const displayStatus = resolveWfyDisplayStatus({
       active: waitForYou.active,

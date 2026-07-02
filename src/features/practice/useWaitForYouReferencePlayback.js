@@ -20,7 +20,8 @@ export default function useWaitForYouReferencePlayback({ onBeforePlay } = {}) {
       const duration = midis.length > 1 ? 0.7 : 0.55
       await playReferenceMidis(midis, duration)
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Could not play reference'
+      const detail = err instanceof Error ? err.message : 'Could not play reference'
+      const message = `Piano reference sound unavailable. ${detail}`
       setError(message)
     } finally {
       setIsPlaying(false)

@@ -104,6 +104,7 @@ export default function App() {
   const [sampleLoadState, setSampleLoadState] = useState({ loading: false, error: null })
   const [demoPieceActive, setDemoPieceActive] = useState(false)
   const [libraryFeedback, setLibraryFeedback] = useState(null)
+  const [fileHelpSignal, setFileHelpSignal] = useState(0)
   const [pdfSoftWarning, setPdfSoftWarning] = useState(null)
   const [practicePdfReady, setPracticePdfReady] = useState(false)
   const [pdfViewerRevision, setPdfViewerRevision] = useState(0)
@@ -204,11 +205,9 @@ export default function App() {
 
     try {
       const buffer = await file.arrayBuffer()
-      const nextMusicXmlSource = clearOmrGeneratedPlaybackSource(musicXmlSource)
-      const clearedGeneratedPlayback = nextMusicXmlSource !== musicXmlSource
-      if (clearedGeneratedPlayback) {
-        setMusicXmlSource(null)
-      }
+      const clearedCompanionFiles = Boolean(midiSource || musicXmlSource)
+      setMusicXmlSource(null)
+      setMidiSource(null)
       setPdfBuffer(buffer.slice(0))
       setPdfFile((previous) => {
         if (previous) {
@@ -226,19 +225,12 @@ export default function App() {
       setNumPages(null)
       resetPdfViewerRuntime()
       setPdfSoftWarning(validation.softWarning)
-      if (clearedGeneratedPlayback) {
-        setLibraryFeedback({
-          type: validation.softWarning ? 'info' : 'success',
-          message: validation.softWarning
-            ? `${validation.softWarning} Loaded ${file.name}. Previous generated playback was cleared.`
-            : `Loaded ${file.name}. Previous generated playback was cleared; generate again or add a timing file.`,
-        })
-      } else if (midiSource || nextMusicXmlSource) {
+      if (clearedCompanionFiles) {
         setLibraryFeedback({
           type: 'info',
           message: validation.softWarning
-            ? `${validation.softWarning} PDF updated — check timing/sound still match.`
-            : `PDF updated. Check your timing & sound files still match.`,
+            ? `${validation.softWarning} Loaded ${file.name}. Previous timing and sound files were cleared. Add matching files for this PDF.`
+            : `Loaded ${file.name}. Previous timing and sound files were cleared. Add matching files for this PDF.`,
         })
       } else {
         setLibraryFeedback(
@@ -251,11 +243,7 @@ export default function App() {
         )
       }
 
-      if (isFullPracticeSet(true, midiSource, nextMusicXmlSource)) {
-        navigateToView('practice')
-      } else {
-        navigateToView('library')
-      }
+      navigateToView('library')
     } catch (error) {
       setLibraryFeedback({
         type: 'error',
@@ -322,6 +310,26 @@ export default function App() {
       })
     }
   }, [pdfFile, midiSource, clearDemoPiece, markDemoCardHidden, navigateToView])
+
+  const handleClearMusicXml = useCallback(() => {
+    clearDemoPiece()
+    setMusicXmlSource(null)
+    setLibraryFeedback({
+      type: 'info',
+      message: 'Timing file removed. Add a timing file to use Practice, loops, and Wait For You.',
+    })
+    navigateToView('library')
+  }, [clearDemoPiece, navigateToView])
+
+  const handleClearMidi = useCallback(() => {
+    clearDemoPiece()
+    setMidiSource(null)
+    setLibraryFeedback({
+      type: 'info',
+      message: 'Sound file removed. Timing, the score cursor, and Wait For You still work without MIDI.',
+    })
+    navigateToView('library')
+  }, [clearDemoPiece, navigateToView])
 
   const handleOmrGenerated = useCallback(async ({
     fileName: generatedFileName,
@@ -544,7 +552,7 @@ export default function App() {
       let loadedMidi = midiSource
       let loadedXml = musicXmlSource
       let loadedSoftWarning = pdfSoftWarning
-      let clearedGeneratedPlaybackForPdf = false
+      let clearedCompanionFilesForPdf = false
 
       try {
         if (classified.pdf[0]) {
@@ -574,12 +582,11 @@ export default function App() {
           loadedSoftWarning = validation.softWarning ?? null
           setPdfSoftWarning(loadedSoftWarning)
           loadedPdf = true
-          const nextXml = clearOmrGeneratedPlaybackSource(loadedXml)
-          clearedGeneratedPlaybackForPdf = nextXml !== loadedXml
-          if (clearedGeneratedPlaybackForPdf) {
-            setMusicXmlSource(null)
-            loadedXml = null
-          }
+          clearedCompanionFilesForPdf = Boolean(loadedMidi || loadedXml)
+          setMidiSource(null)
+          setMusicXmlSource(null)
+          loadedMidi = null
+          loadedXml = null
         }
 
         if (classified.musicXml[0]) {
@@ -603,19 +610,28 @@ export default function App() {
         }
 
         if (classified.pdf[0]) {
-          if (clearedGeneratedPlaybackForPdf && !classified.musicXml[0]) {
+          const loadedNewCompanionFile = Boolean(classified.musicXml[0] || classified.midi[0])
+          const fullSet = isFullPracticeSet(loadedPdf, loadedMidi, loadedXml)
+          if (fullSet) {
             setLibraryFeedback({
-              type: loadedSoftWarning ? 'info' : 'success',
+              type: 'success',
               message: loadedSoftWarning
-                ? `${loadedSoftWarning} Loaded ${classified.pdf[0].name}. Previous generated playback was cleared.`
-                : `Loaded ${classified.pdf[0].name}. Previous generated playback was cleared; generate again or add a timing file.`,
+                ? `${loadedSoftWarning} Loaded ${classified.pdf[0].name} with matching timing and sound — opening Practice.`
+                : `Loaded ${classified.pdf[0].name} with matching timing and sound — opening Practice.`,
             })
-          } else if (loadedMidi || loadedXml) {
+          } else if (clearedCompanionFilesForPdf && !loadedNewCompanionFile) {
             setLibraryFeedback({
               type: 'info',
               message: loadedSoftWarning
-                ? `${loadedSoftWarning} PDF updated — check timing/sound still match.`
-                : 'PDF updated. Check your timing & sound files still match.',
+                ? `${loadedSoftWarning} Loaded ${classified.pdf[0].name}. Previous timing and sound files were cleared. Add matching files for this PDF.`
+                : `Loaded ${classified.pdf[0].name}. Previous timing and sound files were cleared. Add matching files for this PDF.`,
+            })
+          } else if (loadedNewCompanionFile) {
+            setLibraryFeedback({
+              type: 'success',
+              message: loadedSoftWarning
+                ? `${loadedSoftWarning} Loaded ${classified.pdf[0].name} with the new companion file${classified.musicXml[0] && classified.midi[0] ? 's' : ''}.`
+                : `Loaded ${classified.pdf[0].name} with the new companion file${classified.musicXml[0] && classified.midi[0] ? 's' : ''}.`,
             })
           } else {
             setLibraryFeedback(
@@ -860,6 +876,7 @@ export default function App() {
   function showFileHelp() {
     setShowWelcome(false)
     setSidebarOpen(true)
+    setFileHelpSignal((signal) => signal + 1)
     navigateToView('library')
   }
 
@@ -1082,6 +1099,8 @@ export default function App() {
             onFileSelect={wrapUpload('pdf', handleFileSelect)}
             onMidiSelect={wrapUpload('midi', handleMidiSelect)}
             onMusicXmlSelect={wrapUpload('musicXml', handleMusicXmlSelect)}
+            onClearMidi={handleClearMidi}
+            onClearMusicXml={handleClearMusicXml}
             onOmrGenerated={handleOmrGenerated}
             onImportFeedback={setLibraryFeedback}
             pdfSource={pdfBuffer}
@@ -1093,6 +1112,7 @@ export default function App() {
             sampleLoadError={sampleLoadState.error}
             importFeedback={libraryFeedback}
             showDemo={!demoCardHidden && isDemoSampleEnabled() && restoreGateOpen}
+            fileHelpSignal={fileHelpSignal}
           />
           <div className="main-layout__score">
             <PdfViewer

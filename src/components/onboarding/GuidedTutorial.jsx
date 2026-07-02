@@ -63,6 +63,27 @@ function getCardStyle(rect) {
   }
 }
 
+function getBackdropStyles(rect) {
+  if (!rect || typeof window === 'undefined') {
+    return null
+  }
+  const padding = 8
+  const hole = {
+    left: clamp(rect.left - padding, 0, window.innerWidth),
+    top: clamp(rect.top - padding, 0, window.innerHeight),
+    right: clamp(rect.right + padding, 0, window.innerWidth),
+    bottom: clamp(rect.bottom + padding, 0, window.innerHeight),
+  }
+  const holeHeight = Math.max(0, hole.bottom - hole.top)
+
+  return [
+    { left: 0, top: 0, width: window.innerWidth, height: hole.top },
+    { left: 0, top: hole.bottom, width: window.innerWidth, height: window.innerHeight - hole.bottom },
+    { left: 0, top: hole.top, width: hole.left, height: holeHeight },
+    { left: hole.right, top: hole.top, width: window.innerWidth - hole.right, height: holeHeight },
+  ].filter((style) => style.width > 0 && style.height > 0)
+}
+
 export default function GuidedTutorial({
   activeView,
   practiceReady = false,
@@ -198,6 +219,7 @@ export default function GuidedTutorial({
       ? targetSnapshot.rect
       : null
   const cardStyle = useMemo(() => getCardStyle(visibleTargetRect), [visibleTargetRect])
+  const backdropStyles = useMemo(() => getBackdropStyles(visibleTargetRect), [visibleTargetRect])
   const highlightStyle = visibleTargetRect
     ? {
         left: visibleTargetRect.left - 6,
@@ -242,7 +264,16 @@ export default function GuidedTutorial({
       aria-modal={isChoiceStep ? undefined : 'true'}
       aria-labelledby="guided-tour-title"
     >
-      {!isChoiceStep && <div className="guided-tour__backdrop" />}
+      {!isChoiceStep && !visibleTargetRect && <div className="guided-tour__backdrop" />}
+      {!isChoiceStep &&
+        visibleTargetRect &&
+        backdropStyles?.map((style, index) => (
+          <div
+            key={`scrim-${index}`}
+            className="guided-tour__backdrop guided-tour__backdrop--piece"
+            style={style}
+          />
+        ))}
       {visibleTargetRect && <div className="guided-tour__highlight" style={highlightStyle} />}
       <section
         className={`guided-tour__card${visibleTargetRect || isChoiceStep ? '' : ' guided-tour__card--center'}${isChoiceStep ? ' guided-tour__card--choice' : ''}`}

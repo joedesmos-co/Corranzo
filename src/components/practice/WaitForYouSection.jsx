@@ -9,11 +9,6 @@ import WaitForYouMatchSettingsPanel from './WaitForYouMatchSettingsPanel.jsx'
 import WaitForYouInputSourceSelector from './WaitForYouInputSourceSelector.jsx'
 import PracticeHelpTip from './PracticeHelpTip.jsx'
 
-const CHECKPOINT_LABELS = {
-  [WFY_CHECKPOINT_MODE.BEAT]: 'Tap through beats',
-  [WFY_CHECKPOINT_MODE.NOTE]: 'Play each note',
-}
-
 function statusMessage(status, currentCheckpoint, checkpointMode, displayLabel) {
   if (displayLabel) {
     return displayLabel
@@ -64,7 +59,6 @@ export default function WaitForYouSection({
   displayStatus = null,
   displayLabel = '',
   checkpointMode,
-  onCheckpointModeChange,
   currentCheckpoint,
   checkpointIndex,
   totalCheckpoints,
@@ -81,10 +75,13 @@ export default function WaitForYouSection({
   onResetMatchSettings,
   onPlayReference,
   referencePlaying,
+  referenceError = null,
   onMarkCorrect,
   onSkip,
   onShowHint,
   onRestart,
+  micListening = false,
+  onRequestMicAccess = null,
   noteTarget = null,
   noteTargetWrongPage = false,
   showMatchSettings = true,
@@ -116,6 +113,16 @@ export default function WaitForYouSection({
     inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
     currentCheckpoint?.isChord &&
     status === WFY_STATUS.WAITING
+  const showMicRealityNote =
+    checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
+    inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+    !currentCheckpoint?.isChord &&
+    status === WFY_STATUS.WAITING
+  const showMicOffNotice =
+    checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
+    inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+    status === WFY_STATUS.WAITING &&
+    !micListening
   const currentStatusMessage = statusMessage(
     status,
     currentCheckpoint,
@@ -130,7 +137,7 @@ export default function WaitForYouSection({
   const primaryActionCopy =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE
       ? 'Play the note shown on the score, or tap Continue.'
-      : 'Tap Continue to move through beats.'
+      : 'Tap Continue to move to the next practice step.'
 
   return (
     <section className={sectionClass} aria-label="Wait For You">
@@ -151,21 +158,6 @@ export default function WaitForYouSection({
             Continuing
           </span>
         )}
-      </div>
-
-      <div className="wait-for-you__checkpoint-mode" role="radiogroup" aria-label="Practice step type">
-        <span className="wait-for-you__checkpoint-mode-label">Step by</span>
-        {Object.values(WFY_CHECKPOINT_MODE).map((mode) => (
-          <label key={mode} className="wait-for-you__checkpoint-mode-option">
-            <input
-              type="radio"
-              name="wfy-checkpoint-mode"
-              checked={checkpointMode === mode}
-              onChange={() => onCheckpointModeChange(mode)}
-            />
-            <span>{CHECKPOINT_LABELS[mode]}</span>
-          </label>
-        ))}
       </div>
 
       <WaitForYouInputSourceSelector
@@ -229,9 +221,26 @@ export default function WaitForYouSection({
         </p>
       )}
 
+      {showMicOffNotice && (
+        <div className="wait-for-you__mic-off" role="status" aria-live="polite">
+          <p>Microphone is off. Turn it on to have Wait For You listen.</p>
+          {onRequestMicAccess && (
+            <button type="button" className="wait-for-you__btn" onClick={onRequestMicAccess}>
+              Enable microphone
+            </button>
+          )}
+        </div>
+      )}
+
       {showMicChordHint && (
         <p className="wait-for-you__mic-chord-hint" role="status">
-          Mic chord mode: play notes one at a time, or use MIDI for chords together.
+          Microphone works best one note at a time. Use MIDI for chords played together.
+        </p>
+      )}
+
+      {showMicRealityNote && (
+        <p className="wait-for-you__mic-chord-hint" role="note">
+          Microphone works best one note at a time. MIDI is best for chords.
         </p>
       )}
 
@@ -277,6 +286,12 @@ export default function WaitForYouSection({
           )}
           {guidance.hint && <p className="wait-for-you__guidance-hint">{guidance.hint}</p>}
         </div>
+      )}
+
+      {referenceError && (
+        <p className="wait-for-you__reference-error" role="alert">
+          {referenceError}
+        </p>
       )}
 
       {/* Live "hearing X" confirmation (mic) while still waiting. */}

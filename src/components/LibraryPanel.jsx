@@ -33,6 +33,8 @@ export default function LibraryPanel({
   onFileSelect,
   onMidiSelect,
   onMusicXmlSelect,
+  onClearMidi,
+  onClearMusicXml,
   onClassifiedUpload = null,
   onImportFeedback,
   onLoadSampleFixtures,
@@ -45,6 +47,7 @@ export default function LibraryPanel({
   importFeedback = null,
   uploadsDisabled = false,
   showDemo = true,
+  fileHelpSignal = 0,
 }) {
   const hasPdf = Boolean(pdfFileUrl || pdfSource || fileName)
   const hasMusicXml = isLibraryScoreTimingReady(musicXmlSource)
@@ -129,6 +132,8 @@ export default function LibraryPanel({
         onFileSelect={onFileSelect}
         onMusicXmlSelect={onMusicXmlSelect}
         onMidiSelect={onMidiSelect}
+        onClearMusicXml={onClearMusicXml}
+        onClearMidi={onClearMidi}
         onClassifiedUpload={onClassifiedUpload}
         disabled={uploadsDisabled}
       />
@@ -154,7 +159,11 @@ export default function LibraryPanel({
         />
       )}
 
-      <LibraryAccuracyGuide hasPdf={hasPdf} hasMusicXml={hasMusicXml} />
+      <LibraryAccuracyGuide
+        hasPdf={hasPdf}
+        hasMusicXml={hasMusicXml}
+        openHelpSignal={fileHelpSignal}
+      />
 
       {canOpenPractice && onOpenPractice ? (
         <div className="library-panel__workflow library-panel__open-practice">
@@ -225,9 +234,21 @@ export default function LibraryPanel({
         </label>
 
         {musicXmlFileName ? (
-          <p className="library-panel__file" title={musicXmlFileName}>
-            {musicXmlFileName}
-          </p>
+          <div className="library-panel__loaded-file">
+            <p className="library-panel__file" title={musicXmlFileName}>
+              {musicXmlFileName}
+            </p>
+            {onClearMusicXml && (
+              <button
+                type="button"
+                className="library-panel__file-remove"
+                onClick={onClearMusicXml}
+                disabled={uploadsDisabled}
+              >
+                Remove Timing File
+              </button>
+            )}
+          </div>
         ) : (
           <p className="library-panel__empty">Usually MusicXML or MXL from your notation app.</p>
         )}
@@ -253,9 +274,21 @@ export default function LibraryPanel({
         </label>
 
         {midiFileName ? (
-          <p className="library-panel__file" title={midiFileName}>
-            {midiFileName}
-          </p>
+          <div className="library-panel__loaded-file">
+            <p className="library-panel__file" title={midiFileName}>
+              {midiFileName}
+            </p>
+            {onClearMidi && (
+              <button
+                type="button"
+                className="library-panel__file-remove"
+                onClick={onClearMidi}
+                disabled={uploadsDisabled}
+              >
+                Remove Sound File
+              </button>
+            )}
+          </div>
         ) : (
           <p className="library-panel__empty">Add MIDI only if you want backing playback.</p>
         )}

@@ -1,22 +1,30 @@
 import * as Tone from 'tone'
 import { startToneFromUserGesture } from '../audio/toneAudioUnlock.js'
 
-let synth = null
-let synthConnected = false
+let referenceInstrument = null
+let instrumentConnected = false
+let createPianoInstrument = null
 
-function getSynth() {
-  if (!synth) {
-    synth = new Tone.PolySynth(Tone.Synth, {
-      envelope: { attack: 0.02, release: 0.4 },
-    })
+async function getReferenceInstrument() {
+  if (!referenceInstrument) {
+    if (!createPianoInstrument) {
+      const module = await import('../playback/pianoInstrument.js')
+      createPianoInstrument = module.createPianoInstrument
+    }
+    referenceInstrument = createPianoInstrument({ tone: Tone })
+    instrumentConnected = false
   }
-  return synth
+  return referenceInstrument
 }
 
-function connectSynthToDestination() {
-  if (!synthConnected && synth) {
-    synth.toDestination()
-    synthConnected = true
+function connectInstrumentToDestination(instrument) {
+  if (!instrumentConnected && instrument?.output) {
+    if (typeof instrument.output.toDestination === 'function') {
+      instrument.output.toDestination()
+    } else {
+      instrument.output.connect?.(Tone.Destination)
+    }
+    instrumentConnected = true
   }
 }
 
@@ -33,15 +41,24 @@ export async function playReferenceMidis(midis, durationSeconds = 0.55) {
   }
 
   await startToneFromUserGesture()
-  connectSynthToDestination()
+  const instrument = await getReferenceInstrument()
+  connectInstrumentToDestination(instrument)
+  await Promise.race([
+    instrument.whenReady?.() ?? Promise.resolve(),
+    new Promise((resolve) => globalThis.setTimeout(resolve, 800)),
+  ])
   const names = midis.map((midi) => midiToNoteName(midi))
-  getSynth().triggerAttackRelease(names, durationSeconds)
+  const now = Tone.now()
+  names.forEach((name) => {
+    instrument.triggerAttackRelease(name, durationSeconds, now, 0.62)
+  })
 }
 
 export function disposeReferencePlayer() {
-  if (synth) {
-    synth.dispose()
-    synth = null
-    synthConnected = false
+  if (referenceInstrument) {
+    referenceInstrument.releaseAll?.()
+    referenceInstrument.dispose()
+    referenceInstrument = null
+    instrumentConnected = false
   }
 }
