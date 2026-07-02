@@ -1035,6 +1035,7 @@ export default function App() {
           onNextPage={handleNextPage}
           onGoToPage={handleGoToPage}
           onTogglePaper={togglePaperTheme}
+          timingSourceKind={musicXmlSource?.source ?? null}
         />
       </PracticeSessionProvider>
     )

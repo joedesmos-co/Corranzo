@@ -4585,3 +4585,508 @@
 .practice-tracks-compact .midi-tracks {
   margin-top: 2px;
 }
+
+/* —— Practice view switch (Score | Visual) —— */
+
+.practice-workspace__main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.practice-view-switchbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sf-space-sm);
+  padding: 6px var(--sf-space-md);
+  border-bottom: 1px solid var(--sf-border);
+  background: var(--sf-bg-panel);
+}
+
+.practice-view-switchbar__label {
+  font-size: var(--sf-font-caption);
+  color: var(--sf-text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.practice-view-switch {
+  display: inline-flex;
+  border: 1px solid var(--sf-border-strong);
+  border-radius: var(--sf-radius-md);
+  overflow: hidden;
+}
+
+.practice-view-switch__option {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--sf-text-muted);
+  font: inherit;
+  font-size: var(--sf-font-small);
+  padding: 5px 14px;
+  cursor: pointer;
+}
+
+.practice-view-switch__option + .practice-view-switch__option {
+  border-left: 1px solid var(--sf-border-strong);
+}
+
+.practice-view-switch__option:hover {
+  color: var(--sf-text-primary);
+}
+
+.practice-view-switch__option[aria-pressed='true'] {
+  background: var(--sf-accent);
+  color: #000000;
+  cursor: default;
+}
+
+/* —— Visual practice mode —— */
+
+.visual-practice {
+  /* Learning-mode accent (mint) — used for playhead, targets, played notes. */
+  --vp-accent: #6ee7b7;
+  --vp-accent-glow: rgba(110, 231, 183, 0.55);
+  --vp-played: #57b48a;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sf-space-sm);
+  padding: var(--sf-space-md);
+  background: var(--sf-bg-app);
+  overflow: hidden;
+}
+
+.visual-practice--empty {
+  align-items: center;
+  justify-content: center;
+}
+
+.visual-practice__empty {
+  max-width: 420px;
+  text-align: center;
+  border: 1px solid var(--sf-border);
+  border-radius: var(--sf-radius-lg);
+  background: var(--sf-bg-panel);
+  padding: var(--sf-space-lg);
+}
+
+.visual-practice__empty h3 {
+  margin: 0 0 8px;
+  font-size: var(--sf-font-heading);
+  color: var(--sf-text-primary);
+}
+
+.visual-practice__empty p {
+  margin: 0;
+  font-size: var(--sf-font-body);
+  color: var(--sf-text-muted);
+  line-height: 1.5;
+}
+
+/* OMR provenance note: tucked into a collapsed details row so it never
+   nags during normal use. */
+.visual-practice__omr-details {
+  flex: 0 0 auto;
+  font-size: var(--sf-font-caption);
+  color: var(--sf-text-subtle);
+}
+
+.visual-practice__omr-details summary {
+  cursor: pointer;
+  user-select: none;
+  width: fit-content;
+}
+
+.visual-practice__omr-details summary:hover {
+  color: var(--sf-text-muted);
+}
+
+.visual-practice__omr-note {
+  margin: 6px 0 0;
+  padding: 8px 12px;
+  border: 1px solid var(--sf-border);
+  border-radius: var(--sf-radius-md);
+  background: var(--sf-bg-panel-inset);
+  color: var(--sf-text-muted);
+  font-size: var(--sf-font-small);
+  line-height: 1.45;
+}
+
+.visual-practice__target {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  border: 1px solid var(--sf-border);
+  border-radius: var(--sf-radius-lg);
+  background: var(--sf-bg-panel);
+}
+
+.visual-practice__target--waiting {
+  border-color: var(--sf-border-focus);
+}
+
+.visual-practice__target--complete {
+  border-color: var(--sf-border-strong);
+}
+
+.visual-practice__target-kicker {
+  font-size: var(--sf-font-caption);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sf-text-muted);
+}
+
+.visual-practice__target-notes {
+  font-size: 1.3rem;
+  color: var(--sf-text-primary);
+  font-weight: 650;
+}
+
+.visual-practice__target-meta {
+  font-size: var(--sf-font-small);
+  color: var(--sf-text-subtle);
+}
+
+/* Staff lane: dark card with a fixed playhead and scrolling SVG notation. */
+.staff-lane {
+  position: relative;
+  /* Shrinkable so the target callout and keyboard strip always stay visible
+     in short viewports (mobile) instead of being clipped — but tall enough
+     that a grand staff at minimum zoom keeps both staves readable. */
+  flex: 1 1 200px;
+  min-height: 150px;
+  border: 1px solid var(--sf-border);
+  border-radius: var(--sf-radius-lg);
+  background: var(--sf-bg-panel);
+  overflow: hidden;
+}
+
+/* Far-future notes fade out toward the right edge: readability first. */
+.staff-lane::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 16%;
+  background: linear-gradient(to right, transparent, var(--sf-bg-panel) 88%);
+  pointer-events: none;
+}
+
+.staff-lane__svg {
+  display: block;
+}
+
+.staff-lane__mask {
+  fill: var(--sf-bg-panel);
+}
+
+.staff-lane__line {
+  stroke: #71717a;
+  stroke-width: 1.25;
+}
+
+.staff-lane__barline {
+  stroke: var(--sf-border-strong);
+  stroke-width: 1;
+}
+
+.staff-lane__timesig text {
+  fill: var(--sf-text-muted);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  user-select: none;
+}
+
+.staff-lane__clef {
+  fill: var(--sf-text-subtle);
+  user-select: none;
+}
+
+.staff-lane__clef--letter {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 700;
+  fill: var(--sf-text-muted);
+}
+
+.staff-lane__playhead {
+  stroke: var(--vp-accent, #6ee7b7);
+  stroke-width: 2;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 4px var(--vp-accent-glow, rgba(110, 231, 183, 0.55)));
+}
+
+.staff-lane__playhead-cap {
+  fill: var(--vp-accent, #6ee7b7);
+  filter: drop-shadow(0 0 5px var(--vp-accent-glow, rgba(110, 231, 183, 0.55)));
+}
+
+.staff-lane__ledger {
+  stroke: var(--sf-text-subtle);
+  stroke-width: 1;
+}
+
+.staff-lane__sharp {
+  fill: currentColor;
+  user-select: none;
+}
+
+.staff-lane__head {
+  fill: currentColor;
+}
+
+.staff-lane__stem {
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.staff-lane__head--hollow {
+  fill: transparent;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* Upcoming notes: dim gray. */
+.staff-lane__note {
+  color: #a1a1aa;
+}
+
+/* Current notes: bright, larger, with a mint glow — one obvious target. */
+.staff-lane__note--current {
+  color: #ffffff;
+  filter: drop-shadow(0 0 7px var(--vp-accent-glow, rgba(110, 231, 183, 0.65)))
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.9));
+}
+
+/* Played notes: fade out with a soft green tint. */
+.staff-lane__note--past {
+  color: var(--vp-played, #57b48a);
+  opacity: 0.5;
+  transition: opacity 400ms ease, color 400ms ease;
+}
+
+.visual-practice__keyboard-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  padding-top: 34px;
+}
+
+/* Floating letter chips above the target keys. */
+.visual-practice__key-chips {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 34px;
+  pointer-events: none;
+}
+
+.visual-practice__key-chip {
+  position: absolute;
+  top: 2px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid var(--vp-accent, #6ee7b7);
+  background: rgba(110, 231, 183, 0.14);
+  color: var(--vp-accent, #6ee7b7);
+  font-size: var(--sf-font-small);
+  font-weight: 700;
+  box-shadow: 0 0 8px var(--vp-accent-glow, rgba(110, 231, 183, 0.45));
+}
+
+.visual-practice__keyboard {
+  position: relative;
+  display: flex;
+  height: 116px;
+  border: 1px solid var(--sf-border);
+  border-radius: var(--sf-radius-md);
+  overflow: hidden;
+  background: var(--sf-bg-panel);
+}
+
+.visual-practice__key {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  background: #d4d4d8;
+  border-right: 1px solid #52525b;
+  color: #18181b;
+  transition: transform 170ms ease, box-shadow 170ms ease;
+}
+
+/* Mint press fill lives on an overlay so it can fade smoothly in and out. */
+.visual-practice__key::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, #d3f7e7, var(--vp-accent, #6ee7b7));
+  opacity: 0;
+  transition: opacity 170ms ease;
+  pointer-events: none;
+}
+
+.visual-practice__key:last-child {
+  border-right: none;
+}
+
+.visual-practice__key--black {
+  position: absolute;
+  top: 0;
+  height: 58%;
+  background: #09090b;
+  border: 1px solid #3f3f46;
+  border-top: none;
+  border-radius: 0 0 3px 3px;
+  color: var(--sf-text-primary);
+  z-index: 1;
+}
+
+/* Pressed target keys: slight depression + glow, fading in under 200ms and
+   releasing just as smoothly when the target moves on. */
+.visual-practice__key--target {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.35),
+    0 0 14px var(--vp-accent-glow, rgba(110, 231, 183, 0.55));
+}
+
+.visual-practice__key--target::after {
+  opacity: 1;
+}
+
+.visual-practice__key--black::after {
+  background: linear-gradient(to bottom, #79dcb2, #3ea67c);
+  border-radius: 0 0 3px 3px;
+}
+
+.visual-practice__key--black.visual-practice__key--target {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.5),
+    0 0 12px var(--vp-accent-glow, rgba(110, 231, 183, 0.55));
+}
+
+.visual-practice__key-label {
+  position: relative;
+  z-index: 1;
+  font-size: var(--sf-font-micro);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0.75;
+}
+
+@keyframes visual-practice-chip-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.visual-practice__key-chip {
+  animation: visual-practice-chip-in 160ms ease-out;
+}
+
+/* Legend: what the colors mean, at a glance. */
+.visual-practice__legend {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  gap: var(--sf-space-md);
+  padding: 2px 0;
+}
+
+.visual-practice__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--sf-font-caption);
+  color: var(--sf-text-muted);
+}
+
+.visual-practice__legend-item::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.visual-practice__legend-item--played::before {
+  background: var(--vp-played, #57b48a);
+}
+
+.visual-practice__legend-item--now::before {
+  background: #ffffff;
+  box-shadow: 0 0 5px var(--vp-accent-glow, rgba(110, 231, 183, 0.6));
+}
+
+.visual-practice__legend-item--upcoming::before {
+  background: #71717a;
+}
+
+@media (max-width: 900px) {
+  .visual-practice {
+    padding: var(--sf-space-sm);
+    gap: 8px;
+  }
+
+  .visual-practice__keyboard-wrap {
+    padding-top: 26px;
+  }
+
+  .visual-practice__key-chips {
+    height: 26px;
+  }
+
+  .visual-practice__key-chip {
+    width: 20px;
+    height: 20px;
+    font-size: var(--sf-font-micro);
+  }
+
+  .visual-practice__keyboard {
+    height: 64px;
+  }
+
+  .visual-practice__target {
+    padding: 8px 12px;
+  }
+
+  .visual-practice__target-notes {
+    font-size: 1.1rem;
+  }
+
+  .visual-practice__legend-item {
+    font-size: var(--sf-font-micro);
+  }
+}
+
+@media (max-width: 600px) {
+  /* Keys are only a few px wide here — keep labels for target keys only. */
+  .visual-practice__key:not(.visual-practice__key--target) .visual-practice__key-label {
+    display: none;
+  }
+}

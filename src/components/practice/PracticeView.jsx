@@ -1,11 +1,18 @@
-import { memo, useCallback, useRef } from 'react'
+import { memo, useCallback, useRef, useState } from 'react'
 import PracticePageFollowController from './PracticePageFollowController.jsx'
 import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
 import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
 import usePracticeKeyboardShortcuts from '../../features/practice/usePracticeKeyboardShortcuts.js'
+import {
+  PRACTICE_VIEW_MODE,
+  PRACTICE_VIEW_MODE_LABELS,
+  loadPracticeViewMode,
+  savePracticeViewMode,
+} from '../../features/practice/practiceViewMode.js'
 import PdfViewer from '../PdfViewer.jsx'
 import PracticeControlPanel from './PracticeControlPanel.jsx'
 import ScoreFollowSetupStatus from './ScoreFollowSetupStatus.jsx'
+import VisualPracticeView from './VisualPracticeView.jsx'
 import '../../styles/practice.css'
 
 export default function PracticeView({
@@ -20,12 +27,21 @@ export default function PracticeView({
   onNextPage,
   onGoToPage,
   onTogglePaper,
+  timingSourceKind = null,
 }) {
   const { session, scoreFollow, waitForYouNoteTarget } = usePracticeSessionContext()
   const pdfActionsRef = useRef(null)
   const scoreScrollRef = useRef(null)
   const sessionRef = useRef(session)
   sessionRef.current = session
+
+  const [viewMode, setViewMode] = useState(() => loadPracticeViewMode())
+  const isVisualView = viewMode === PRACTICE_VIEW_MODE.VISUAL
+
+  const handleViewModeChange = useCallback((mode) => {
+    setViewMode(mode)
+    savePracticeViewMode(mode)
+  }, [])
 
   const handleGoToPage = useCallback(
     (page) => {
@@ -86,30 +102,39 @@ export default function PracticeView({
         </div>
       ) : (
         <PracticeWorkspaceLayout>
-          <PracticePageFollowController
-            scrollContainerRef={scoreScrollRef}
-            pageNumber={pageNumber}
-            numPages={numPages}
-            onGoToPage={handleGoToPage}
-            onPrevPage={onPrevPage}
-            onNextPage={onNextPage}
-          />
-          <div ref={scoreScrollRef} className="practice-workspace__score">
-            <ScoreFollowSetupStatus setupStatus={scoreFollow.setupStatus} />
-            <PdfViewer
-              variant="practice"
-              file={pdfFile}
-              fileName={fileName}
-              pdfMeta={pdfMeta}
+          {!isVisualView && (
+            <PracticePageFollowController
+              scrollContainerRef={scoreScrollRef}
               pageNumber={pageNumber}
               numPages={numPages}
-              paperTheme={paperTheme}
-              onDocumentLoadSuccess={onDocumentLoadSuccess}
+              onGoToPage={handleGoToPage}
               onPrevPage={onPrevPage}
               onNextPage={onNextPage}
-              onTogglePaper={onTogglePaper}
-              actionsRef={pdfActionsRef}
             />
+          )}
+          <div className="practice-workspace__main">
+            <PracticeViewSwitchBar viewMode={viewMode} onViewModeChange={handleViewModeChange} />
+            {isVisualView ? (
+              <VisualPracticeView timingSourceKind={timingSourceKind} />
+            ) : (
+              <div ref={scoreScrollRef} className="practice-workspace__score">
+                <ScoreFollowSetupStatus setupStatus={scoreFollow.setupStatus} />
+                <PdfViewer
+                  variant="practice"
+                  file={pdfFile}
+                  fileName={fileName}
+                  pdfMeta={pdfMeta}
+                  pageNumber={pageNumber}
+                  numPages={numPages}
+                  paperTheme={paperTheme}
+                  onDocumentLoadSuccess={onDocumentLoadSuccess}
+                  onPrevPage={onPrevPage}
+                  onNextPage={onNextPage}
+                  onTogglePaper={onTogglePaper}
+                  actionsRef={pdfActionsRef}
+                />
+              </div>
+            )}
           </div>
           <PracticeControlPanel
             pdfFileName={fileName || null}
@@ -121,6 +146,36 @@ export default function PracticeView({
     </main>
   )
 }
+
+const PracticeViewSwitchBar = memo(function PracticeViewSwitchBar({
+  viewMode,
+  onViewModeChange,
+}) {
+  return (
+    <div className="practice-view-switchbar">
+      <span className="practice-view-switchbar__label" id="practice-view-switch-label">
+        View
+      </span>
+      <div
+        className="practice-view-switch"
+        role="group"
+        aria-labelledby="practice-view-switch-label"
+      >
+        {Object.values(PRACTICE_VIEW_MODE).map((mode) => (
+          <button
+            key={mode}
+            type="button"
+            className="practice-view-switch__option"
+            aria-pressed={viewMode === mode}
+            onClick={() => onViewModeChange(mode)}
+          >
+            {PRACTICE_VIEW_MODE_LABELS[mode]}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+})
 
 const PracticeWorkspaceLayout = memo(function PracticeWorkspaceLayout({ children }) {
   const tick = usePracticeTick()
