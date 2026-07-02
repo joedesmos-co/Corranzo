@@ -32,7 +32,7 @@ describe('omrBenchmarkDashboard', () => {
     )
     const validation = validateOmrBenchmarkManifest(manifest)
     expect(validation.ok).toBe(true)
-    expect(manifest.fixtures.map((fixture) => fixture.id)).toEqual(['clean', 'dense'])
+    expect(manifest.fixtures.map((fixture) => fixture.id)).toEqual(['clean', 'dense', 'simple'])
   })
 
   it('extracts dashboard metrics from an accuracy report', () => {

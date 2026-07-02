@@ -39,7 +39,9 @@ import {
   summarizeBeamStemGraph,
 } from './beamStemReconstructionDiagnostics.js'
 
-const NOTEHEAD_GLYPHS = new Set(['\ue0a3', '\ue0a4'])
+const HALF_NOTEHEAD_GLYPH = '\ue0a3'
+const WHOLE_NOTEHEAD_GLYPH = '\ue0a2'
+const NOTEHEAD_GLYPHS = new Set([HALF_NOTEHEAD_GLYPH, WHOLE_NOTEHEAD_GLYPH, '\ue0a4'])
 const SHARP_GLYPH = '\ue262'
 const NATURAL_GLYPH = '\ue261'
 const FLAT_GLYPH = '\ue260'
@@ -225,6 +227,10 @@ function noteheadsForMeasure(
     notes.push({
       naturalMidi,
       clef,
+      // The glyph codepoint is authoritative for hollowness (half vs black)
+      // on vector pages; ink probing misreads ledger-line noteheads.
+      hollowGlyph:
+        glyph.text === HALF_NOTEHEAD_GLYPH || glyph.text === WHOLE_NOTEHEAD_GLYPH,
       cx: glyph.x,
       cy: glyph.y,
       xNorm,
@@ -1584,8 +1590,28 @@ export function extendCombinedGrandStaffOpening(events, totalDivisions) {
   const peerStart = sameStart
     ? OMR_DIVISIONS_PER_QUARTER
     : (second.startDivision ?? OMR_DIVISIONS_PER_QUARTER)
+  // A sustained opening bass must be supported by the ink. When the vector
+  // glyph proves a black notehead (hollowGlyph === false), the opening cannot
+  // sustain past the next bass attack: simple scores repeat or walk the bass
+  // in quarters, and neither reading survives a re-attack. A glyph-backed
+  // hollow opening (e.g. a dotted half under same-staff chords) keeps the
+  // full extension, as do notes without glyph evidence (raster path), where
+  // baseline behavior is unchanged.
+  const firstStart = first.startDivision ?? 0
+  const provenBlackNotehead =
+    first.notes[0]?.hollowGlyph === false && !hasLongToneEvidence(first.notes)
+  const nextBassStart = provenBlackNotehead
+    ? events.find(
+        (event) =>
+          event !== first &&
+          event.type === 'note' &&
+          noteClefFromNotes(event.notes ?? []) === 'bass' &&
+          (event.startDivision ?? 0) > firstStart,
+      )?.startDivision
+    : null
   const extended = Math.min(
     totalDivisions,
+    nextBassStart ?? totalDivisions,
     sameStart
       ? OMR_DURATION_DIVISIONS.half + OMR_DIVISIONS_PER_QUARTER
       : peerStart + OMR_DURATION_DIVISIONS.half,
@@ -1630,6 +1656,18 @@ export function extendPenultimateHalfBeforeFinalQuarter(events, timeSignature, t
     return events
   }
   const lastStart = last.startDivision ?? 0
+  // "Lone closing note" means one voice closes alone. When another note event
+  // starts on the same division (e.g. both staves close together in a simple
+  // grand-staff score), the premise does not hold — leave durations alone.
+  const closingPeers = events.some(
+    (event) =>
+      event !== last &&
+      event.type === 'note' &&
+      (event.startDivision ?? 0) === lastStart,
+  )
+  if (closingPeers) {
+    return events
+  }
   const sharedBeat = lastStart - OMR_DIVISIONS_PER_QUARTER
   if (sharedBeat < 0) {
     return events

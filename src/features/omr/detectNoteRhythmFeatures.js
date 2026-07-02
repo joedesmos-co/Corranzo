@@ -169,7 +169,13 @@ export function enrichNoteheadRhythm(imageData, notehead, measureBox, inkThresho
   const staffMidY = Math.round(
     ((measureBox.y0 + measureBox.y1) / 2) * imageData.height,
   )
-  const hollow = isHollowNotehead(imageData, notehead.cx, notehead.cy, inkThreshold)
+  // Vector noteheads carry authoritative hollowness from the glyph codepoint
+  // (half/whole vs black). Prefer it over ink probing, which misreads hollow
+  // heads crossed by ledger lines and filled heads touched by other ink.
+  const hollow =
+    typeof notehead.hollowGlyph === 'boolean'
+      ? notehead.hollowGlyph
+      : isHollowNotehead(imageData, notehead.cx, notehead.cy, inkThreshold)
   const stem = detectStem(imageData, notehead.cx, notehead.cy, inkThreshold, staffMidY)
   const beams = countBeams(imageData, stem, inkThreshold, bounds)
   const beamStrength = measureBeamStrength(imageData, stem, inkThreshold)

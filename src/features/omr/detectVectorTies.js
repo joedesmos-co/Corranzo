@@ -46,6 +46,7 @@ function flattenMeasureNotes(measureRecords) {
           clef: note.clef,
           cx: note.cx ?? event.cx,
           cy: note.cy,
+          lineYs: note.pitchMapping?.lineYs ?? null,
         })
       }
     }
@@ -83,29 +84,135 @@ function findNextSamePitchInstance(instances, fromIndex) {
   return null
 }
 
+function staffGapPx(fromNote, measureBox, imageData) {
+  const staffLines = measureBox?.staffLines
+  const lineYs =
+    fromNote?.lineYs ??
+    (fromNote?.clef === 'bass' ? staffLines?.bass : staffLines?.treble) ??
+    staffLines?.treble
+  if (Array.isArray(lineYs) && lineYs.length >= 2) {
+    const sorted = [...lineYs].sort((left, right) => left - right)
+    const gaps = []
+    for (let index = 1; index < sorted.length; index += 1) {
+      gaps.push((sorted[index] - sorted[index - 1]) * imageData.height)
+    }
+    gaps.sort((left, right) => left - right)
+    const median = gaps[Math.floor(gaps.length / 2)]
+    if (Number.isFinite(median) && median > 4) {
+      return median
+    }
+  }
+  return 11
+}
+
+/**
+ * A tie is a thin arc that spans the whole gap between two noteheads. Require
+ * continuous column coverage inside the inter-note window on one consistent
+ * side instead of a raw ink count: stems (one column) and fingering digits
+ * (narrow) no longer read as ties. Rows that are continuous ink across the
+ * whole window (staff lines) are measured empirically and excluded — an arc
+ * curves, so it never lives on one single pixel row.
+ */
 function detectInkArcBetween(imageData, fromNote, toNote, measureBox, inkThreshold) {
   const bounds = measureBounds(measureBox, imageData)
   const dx = Math.abs(toNote.cx - fromNote.cx)
   if (dx <= 22) {
     return detectTieToNext(imageData, fromNote.cx, fromNote.cy, inkThreshold, bounds)
   }
-
-  const x0 = Math.min(fromNote.cx, toNote.cx) + 4
-  const x1 = Math.max(fromNote.cx, toNote.cx) + 10
-  const yMid = (fromNote.cy + toNote.cy) / 2
-  let arcInk = 0
-  for (let x = x0; x <= x1; x += 2) {
-    for (let y = yMid - 8; y <= yMid + 2; y += 1) {
-      if (inkAt(imageData, x, y, inkThreshold)) {
-        arcInk += 1
-      }
-    }
-  }
   const maxSpan =
     fromNote.measureNumber === toNote.measureNumber
       ? MAX_SAME_MEASURE_TIE_PX
       : MAX_CROSS_MEASURE_TIE_PX
-  return dx <= maxSpan && arcInk >= 4 && arcInk <= 72
+  if (dx > maxSpan) {
+    return false
+  }
+
+  // Interior window: clear of both noteheads and their stems.
+  const xStart = Math.ceil(Math.min(fromNote.cx, toNote.cx) + 8)
+  const xEnd = Math.floor(Math.max(fromNote.cx, toNote.cx) - 8)
+  if (xEnd - xStart < 6) {
+    return detectTieToNext(imageData, fromNote.cx, fromNote.cy, inkThreshold, bounds)
+  }
+
+  const yMid = (fromNote.cy + toNote.cy) / 2
+  const gap = staffGapPx(fromNote, measureBox, imageData)
+  const bandMin = 3
+  const bandMax = Math.max(6, Math.round(gap * 1.8))
+
+  // Rows that are continuous ink across the whole window are drawn lines
+  // (staff lines), not arc evidence. Detect them empirically and pad by one
+  // row for antialiasing fuzz.
+  const continuousRows = new Set()
+  for (let offset = -(bandMax + 1); offset <= bandMax + 1; offset += 1) {
+    const y = Math.round(yMid + offset)
+    let inked = 0
+    let total = 0
+    for (let x = xStart; x <= xEnd; x += 1) {
+      total += 1
+      if (inkAt(imageData, x, y, inkThreshold)) {
+        inked += 1
+      }
+    }
+    if (total && inked / total >= 0.85) {
+      continuousRows.add(y)
+    }
+  }
+  const nearLineRow = (y) => {
+    const row = Math.round(y)
+    return (
+      continuousRows.has(row) ||
+      continuousRows.has(row - 1) ||
+      continuousRows.has(row + 1)
+    )
+  }
+
+  const midStart = xStart + (xEnd - xStart) / 3
+  const midEnd = xEnd - (xEnd - xStart) / 3
+  let columns = 0
+  let midColumns = 0
+  const covered = { below: 0, above: 0 }
+  const midCovered = { below: 0, above: 0 }
+  for (let x = xStart; x <= xEnd; x += 1) {
+    columns += 1
+    const inMiddle = x >= midStart && x <= midEnd
+    if (inMiddle) {
+      midColumns += 1
+    }
+    let below = false
+    let above = false
+    for (let offset = bandMin; offset <= bandMax; offset += 1) {
+      if (!below && !nearLineRow(yMid + offset) && inkAt(imageData, x, yMid + offset, inkThreshold)) {
+        below = true
+      }
+      if (!above && !nearLineRow(yMid - offset) && inkAt(imageData, x, yMid - offset, inkThreshold)) {
+        above = true
+      }
+      if (below && above) {
+        break
+      }
+    }
+    if (below) {
+      covered.below += 1
+      if (inMiddle) {
+        midCovered.below += 1
+      }
+    }
+    if (above) {
+      covered.above += 1
+      if (inMiddle) {
+        midCovered.above += 1
+      }
+    }
+  }
+  if (!columns || !midColumns) {
+    return false
+  }
+  // A tie arc is shallow: its ends dip under the band near the noteheads, but
+  // its apex region is continuous. Require a solid middle third plus majority
+  // coverage overall, on one consistent side of the notehead row.
+  const sidePasses = (side) =>
+    covered[side] / columns >= 0.5 && midCovered[side] / midColumns >= 0.75
+  return sidePasses('below') || sidePasses('above')
 }
 
 function nearestInstance(instances, glyph, imageData) {
@@ -319,7 +426,9 @@ export function applyVectorPageTies({
           continue
         }
       }
-      if (!detectTieToNext(imageData, from.cx, from.cy, inkThreshold, measureBounds(box, imageData))) {
+      // The arc-coverage test below is the real evidence check; the local
+      // notehead probe only vetoes pairs whose gap is too wide to scan.
+      if (to.cx - from.cx > MAX_CROSS_MEASURE_TIE_PX && !detectTieToNext(imageData, from.cx, from.cy, inkThreshold, measureBounds(box, imageData))) {
         continue
       }
     }

@@ -35,6 +35,23 @@
         "maxMeasureCountDiff": 4,
         "maxNoteCountDiff": 20
       }
+    },
+    {
+      "id": "simple",
+      "label": "Twinkle Twinkle Little Star (simple/legacy-font)",
+      "tier": "simple",
+      "pdf": "~/Downloads/twinkle-twinkle-little-star-easy.pdf",
+      "truth": "~/Downloads/twinkle-twinkle-little-star-easy.mxl",
+      "maxPages": 4,
+      "thresholds": {
+        "pitchAccuracy": 0.95,
+        "durationAccuracy": 0.9,
+        "onsetAccuracy": 0.85,
+        "chordGroupingAccuracy": 0.95,
+        "noteDetectionF1": 0.95,
+        "maxMeasureCountDiff": 0,
+        "maxNoteCountDiff": 0
+      }
     }
   ]
 }

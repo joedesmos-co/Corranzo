@@ -21,7 +21,10 @@ export function parseTempoFromTextItems(items = [], { pageNumber = 1 } = {}) {
     return { bpm: OMR_DEFAULT_TEMPO, confidence: 0, fromDefault: true, source: 'default' }
   }
 
-  const equalsMatch = text.match(/(?:♩|q|Q)\s*=\s*(\d{2,3})/i)
+  // Accept the plain quarter note character, SMuFL metronome note glyphs
+  // (U+ECA0-U+ECB6, e.g. Bravura metNoteQuarterUp U+ECA5 in musescore.com
+  // exports), or a bare q before the equals sign.
+  const equalsMatch = text.match(/(?:\u2669|[\ueca0-\uecb6]|q|Q)\s*=\s*(\d{2,3})/i)
   if (equalsMatch) {
     const bpm = clampBpm(Number(equalsMatch[1]))
     return { bpm, confidence: 0.88, fromDefault: false, source: 'metronome-mark' }

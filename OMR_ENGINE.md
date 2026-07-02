@@ -54,12 +54,18 @@ simulation-only. Runtime MusicXML remains on the diagnostics-only baseline.
 
 ## Current Benchmark Snapshot
 
-Source: `tmp/omr-benchmark-dashboard/report.md`, generated 2026-06-30.
+Updated 2026-07-01 after the real-world simple-score (legacy music font) pass.
 
 | Fixture | Pitch | Duration | Onset | Chord | F1 | Measures | Notes | Wrong pitch | Wrong duration | Wrong onset | Chord mismatches |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Gymnopedie clean | 100% | 100% | 100% | 100% | 100% | 78, delta 0 | 469, delta 0 | 0 | 1 | 0 | 0 |
-| Cruel Angel dense | 34% | 81% | 72% | 66% | 89% | 127, delta +2 | 2808, delta -2 | 1533 | 223 | 480 | 1134 |
+| Gymnopedie clean | 100% | 100% | 100% | 100% | 100% | 78, delta 0 | 469, delta 0 | 0 | 0 | 0 | 0 |
+| Cruel Angel dense | 94% | 96% | 96% | 94% | 99% | 125, delta 0 | 2810, delta 0 | 147 | 77 | 94 | 172 |
+| Twinkle simple (legacy font) | 100% | 97% | 93% | 100% | 100% | 12, delta 0 | 86, delta 0 | 0 | 3 | 6 | 0 |
+
+The `simple` fixture (`twinkle-twinkle-little-star-easy.pdf/.mxl` in
+`~/Downloads`, same location as the other fixtures) guards the
+musescore.com/TCPDF legacy-MScore-font path. Its residual errors are one
+eighth-note run measure (m10) — rhythm-grid inference, not detection.
 
 Dense benchmark interpretation:
 
@@ -78,6 +84,35 @@ Clean benchmark interpretation:
 
 ## Successful Improvements To Preserve
 
+- Legacy music-font normalization (`normalizeLegacyMusicFontGlyphs.js`):
+  musescore.com/TCPDF beginner PDFs embed the pre-SMuFL MScore font
+  (noteheads U+E12B–E12D, clefs U+E19E/E19C, ASCII time-sig digits). They used
+  to fall to the raster path (2 same-beat notes became 4, fingering digits
+  became notes, pitches off by a step, ties dead). Mapping the glyphs to SMuFL
+  at `processOmrPage` entry routes them onto the vector path: Twinkle went
+  from pitch 30%/F1 75%/142 notes to pitch 100%/F1 100%/86 notes exact. Gated
+  to pages with zero SMuFL noteheads and only rewrites glyphs in the fonts
+  that contain legacy noteheads — SMuFL pages are byte-identical passthrough.
+- Glyph-derived hollowness: vector noteheads carry `hollowGlyph` from the
+  codepoint (half/whole vs black); `enrichNoteheadRhythm` prefers it over ink
+  probing, which misreads ledger-line noteheads. Whole-note glyph U+E0A2 also
+  added to vector notehead detection (fixed dense noteΔ from -3 to 0).
+- Evidence-gated opening-bass stretch: `extendCombinedGrandStaffOpening` no
+  longer sustains a proven-black (hollowGlyph === false) opening bass past the
+  next bass attack. Hollow or evidence-free openings keep the old behavior
+  (Gymnopedie's dotted-half bass under same-staff chords still extends).
+- `extendPenultimateHalfBeforeFinalQuarter` closing-peer guard: skips when
+  another note event starts on the closing division (both staves closing
+  together in simple scores is not a "lone closing note").
+- Tie ink-arc detector rewritten as column-coverage: the arc must cover ≥50%
+  of the inter-note window with a ≥75% solid middle third on one consistent
+  side, with empirically-detected continuous rows (staff lines) excluded.
+  Stems, fingering digits, and staff/ledger lines no longer read as ties.
+  Twinkle false ties 7 → 0; Gymnopedie real-tie recall 0 → 6 of 14 (baseline
+  "2 detected" were both false); dense wrong durations 93 → 77.
+- Tempo: metronome-mark parsing accepts SMuFL metronome note glyphs
+  (U+ECA0–U+ECB6, e.g. Bravura U+ECA5 + "= 72" as separate text items).
+  Twinkle onset-time accuracy 2% → 93%.
 - Vector rhythm gap-to-next-onset fixed note durations stretching to barlines.
 - Accidentals: improved local binding and hybrid key-relative carry-forward.
 - Ties: conservative vector tie detection, MusicXML tie emission, and sustained
@@ -113,6 +148,14 @@ Clean benchmark interpretation:
 
 Do not retry these blindly.
 
+- Capping the opening-bass stretch at the next same-clef onset regardless of
+  notehead evidence: broke clean duration 100% -> 77% (Gymnopedie's sustained
+  bass sits under same-staff chords). Same-pitch-only caps missed walking
+  bass lines. The keeper is the glyph-evidence gate (hollowGlyph === false).
+- Tie arc bands measured as distance-from-notehead-row: space-position notes
+  have staff lines ~half a gap away, and grid-predicted ledger-row exclusion
+  vetoes real tie apexes where no ledger is actually drawn. The keeper is
+  empirical continuous-row detection inside the scan window.
 - Global staff-y offsets: regressed or did not help.
 - Broad clef/staff remapping: tiny gains only.
 - Full voice split pipeline: regressed badly.

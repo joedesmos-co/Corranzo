@@ -33,6 +33,7 @@ import { detectStaffClefsFromGlyphs } from './pitchFromStaffPosition.js'
 import { serializeOmrMeasureBox } from './omrMeasureGridMeta.js'
 import { computeOmrMeasureVisualExtents } from './omrMeasureVisualExtents.js'
 import { normalizePageStaffLineGaps } from './normalizeStaffLineGaps.js'
+import { normalizeLegacyMusicFontGlyphs } from './normalizeLegacyMusicFontGlyphs.js'
 
 function measureGridEntriesForSystem(
   measureBoxes,
@@ -77,7 +78,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
   const {
     page = 1,
     measureNumberStart = 1,
-    pageText = [],
+    pageText: rawPageText = [],
     stavesPerSystem = OMR_PIANO_STAVES_PER_SYSTEM,
     dense = false,
     keySignature: inheritedKeySignature = null,
@@ -85,7 +86,17 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     documentStaffGapReference = null,
   } = options
 
-  omrDebugStep('processOmrPage:start', imageData, { page })
+  // Legacy music fonts (e.g. MScore in musescore.com/TCPDF exports) draw
+  // noteheads/clefs at pre-SMuFL codepoints. Normalize them to SMuFL so such
+  // pages take the vector path instead of the weak raster fallback. Identity
+  // for pages that already contain SMuFL noteheads.
+  const legacyFontNormalization = normalizeLegacyMusicFontGlyphs(rawPageText)
+  const pageText = legacyFontNormalization.items
+
+  omrDebugStep('processOmrPage:start', imageData, {
+    page,
+    legacyFontGlyphsApplied: legacyFontNormalization.applied || undefined,
+  })
   assertPixelViewReadable(imageData.data, `processOmrPage:page-${page}-input`)
 
   const scanQuality = estimatePageScanQuality(imageData)
@@ -201,11 +212,15 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       accentDiagnostics: vector.accentDiagnostics,
       orphanDiagnostics: vector.orphanDiagnostics,
       staffGapNormalization: staffGapNormalizationResult.staffGapNormalization,
+      legacyFontNormalization: legacyFontNormalization.applied
+        ? legacyFontNormalization.diagnostics
+        : null,
     }
     omrDebugStep(`processOmrPage:done:page-${page}`, imageData, {
       notes,
       systems: systems.length,
       source: vector.source,
+      legacyFontGlyphsApplied: legacyFontNormalization.applied || undefined,
     })
     return result
   }
