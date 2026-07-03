@@ -77,12 +77,13 @@ export function replayMicSamples(samples, sampleRate, options = {}) {
     }
 
     if (calibration && !calibration.done) {
+      const calibrationRms = frame.filteredRms ?? frame.rms
       const acceptSample = shouldAcceptCalibrationSample({
-        rms: frame.rms,
+        rms: calibrationRms,
         gateOpen: frame.gateOpen,
         hasPitch: frame.midi != null,
       })
-      const { done } = pushCalibrationSample(calibration, frame.rms, { acceptSample })
+      const { done } = pushCalibrationSample(calibration, calibrationRms, { acceptSample })
       if (done) {
         calibrationResult = finalizeMicCalibration(calibration)
         analyzer.noiseFloor.floor = calibrationResult.noiseFloor

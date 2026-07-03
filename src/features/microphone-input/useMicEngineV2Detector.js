@@ -127,12 +127,13 @@ export default function useMicEngineV2Detector({
               forceMicCalibrationTimeout(calibration)
               finishCalibration(calibration)
             } else {
+              const calibrationRms = previewFrame.filteredRms ?? previewFrame.rms
               const acceptSample = shouldAcceptCalibrationSample({
-                rms: previewFrame.rms,
+                rms: calibrationRms,
                 gateOpen: previewFrame.gateOpen,
                 hasPitch: previewFrame.midi != null,
               })
-              const { done } = pushCalibrationSample(calibration, previewFrame.rms, { acceptSample })
+              const { done } = pushCalibrationSample(calibration, calibrationRms, { acceptSample })
               if (done) {
                 finishCalibration(calibration)
               }

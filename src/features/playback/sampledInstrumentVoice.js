@@ -105,6 +105,144 @@ function buildSamplerFromBuffers({ tone, buffers, urls, volume, release, attack 
   })
 }
 
+function compactOptions(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return value
+  }
+  const out = {}
+  for (const [key, nested] of Object.entries(value)) {
+    if (nested === undefined) {
+      continue
+    }
+    out[key] = compactOptions(nested)
+  }
+  return out
+}
+
+/**
+ * Polyphonic wrapper for synth fallbacks. Tone.PolySynth only accepts voices
+ * that extend Tone.Monophonic; PluckSynth intentionally does not. Try the
+ * native route first, then fall back to a tiny voice pool for non-Monophonic
+ * triggerAttack/triggerAttackRelease instruments.
+ */
+export function createPolyphonicFallbackVoice(
+  tone,
+  { voice, maxPolyphony = 16, voiceOptions = {} } = {},
+) {
+  if (!tone || typeof voice !== 'function') {
+    throw new Error('createPolyphonicFallbackVoice requires a Tone voice constructor')
+  }
+
+  const options = compactOptions(voiceOptions) ?? {}
+  if (typeof tone.PolySynth === 'function') {
+    try {
+      const poly = new tone.PolySynth({ voice, maxPolyphony })
+      poly.set?.(options)
+      return poly
+    } catch (error) {
+      const message = error?.message ?? ''
+      if (!/Monophonic/i.test(message)) {
+        throw error
+      }
+    }
+  }
+
+  let destination = null
+  let nextIndex = 0
+  const slots = []
+
+  function createSlot() {
+    const instance = new voice()
+    instance.set?.(options)
+    if (destination) {
+      instance.connect?.(destination)
+    }
+    const slot = { instance, note: null, busyUntil: 0 }
+    slots.push(slot)
+    return slot
+  }
+
+  function selectSlot(time = 0) {
+    const at = Number.isFinite(Number(time)) ? Number(time) : 0
+    const free = slots.find((slot) => slot.busyUntil <= at)
+    if (free) {
+      return free
+    }
+    if (slots.length < maxPolyphony) {
+      return createSlot()
+    }
+    const slot = slots[nextIndex % slots.length]
+    nextIndex += 1
+    return slot
+  }
+
+  function releaseSlot(slot, time) {
+    slot.instance.triggerRelease?.(slot.note, time)
+    slot.note = null
+    slot.busyUntil = 0
+  }
+
+  return {
+    set(nextOptions) {
+      Object.assign(options, compactOptions(nextOptions) ?? {})
+      for (const slot of slots) {
+        slot.instance.set?.(options)
+      }
+    },
+    connect(nextDestination) {
+      destination = nextDestination
+      for (const slot of slots) {
+        slot.instance.connect?.(nextDestination)
+      }
+      return nextDestination
+    },
+    triggerAttackRelease(note, duration, time, velocity) {
+      const slot = selectSlot(time)
+      const safeDuration = Number.isFinite(Number(duration)) ? Math.max(0, Number(duration)) : 0
+      if (slot.note != null && slot.instance.triggerRelease) {
+        releaseSlot(slot, time)
+      }
+      slot.note = note
+      slot.busyUntil = (Number.isFinite(Number(time)) ? Number(time) : 0) + safeDuration
+      if (slot.instance.triggerAttackRelease) {
+        slot.instance.triggerAttackRelease(note, duration, time, velocity)
+      } else {
+        slot.instance.triggerAttack?.(note, time, velocity)
+      }
+    },
+    triggerAttack(note, time, velocity) {
+      const slot = selectSlot(time)
+      if (slot.note != null && slot.instance.triggerRelease) {
+        releaseSlot(slot, time)
+      }
+      slot.note = note
+      slot.busyUntil = Infinity
+      slot.instance.triggerAttack?.(note, time, velocity)
+    },
+    triggerRelease(note, time) {
+      for (const slot of slots) {
+        if (slot.note === note) {
+          releaseSlot(slot, time)
+        }
+      }
+    },
+    releaseAll(time) {
+      for (const slot of slots) {
+        if (slot.note != null || slot.busyUntil > 0) {
+          releaseSlot(slot, time)
+        }
+        slot.instance.releaseAll?.(time)
+      }
+    },
+    dispose() {
+      for (const slot of slots) {
+        slot.instance.dispose?.()
+      }
+      slots.length = 0
+    },
+  }
+}
+
 /**
  * Default sampler loader: resolves the shared decoded buffers, then builds a
  * Tone.Sampler from them (instant, no extra network). Returns a promise so the

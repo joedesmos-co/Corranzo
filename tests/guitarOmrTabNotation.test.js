@@ -135,6 +135,42 @@ describe('guitar OMR tablature detection', () => {
     expect(result.measureRhythms.map((measure) => measure.measureNumber)).toEqual([1, 2, 3, 4])
   })
 
+  it('does not let leading unsupported notation bands shift generated TAB measure numbers', () => {
+    const page = makeWhitePage(1000, 820)
+    const leading = drawStaff(page, 60, 5)
+    const notation = drawStaff(page, 240, 5)
+    drawStaff(page, 315, 6)
+    for (const x of [100, 300, 500, 700, 900]) {
+      drawVertical(page, x, leading.top, leading.bottom)
+      drawVertical(page, x, notation.top, notation.bottom)
+    }
+
+    const pageText = [200, 400, 600, 800].map((x, index) => ({
+      text: String(index),
+      x,
+      y: page.height - 365,
+      width: 8,
+      height: 10,
+      fontName: 'TabDigit',
+      pageWidth: page.width,
+      pageHeight: page.height,
+    }))
+
+    const result = processOmrPageAnalysis(page, {
+      page: 1,
+      measureNumberStart: 1,
+      pageText,
+      stavesPerSystem: 1,
+      instrument: getInstrument('guitar'),
+      timeSignature: { beats: 4, beatType: 4, confidence: 0 },
+    })
+
+    expect(result.measureRhythms.map((measure) => measure.measureNumber)).toEqual([1, 2, 3, 4])
+    expect(result.measureGrid.map((measure) => measure.measureNumber)).toEqual([1, 2, 3, 4])
+    expect(result.nextMeasureNumber).toBe(5)
+    expect(result.stats.measures).toBe(4)
+  })
+
   it('merges TAB notes that quantize to the same onset into one chord event', () => {
     const { events } = buildTabMeasureEvents([
       { string: 1, fret: 0, midi: 64, x: 80, positionInMeasure: 0.86 },

@@ -99,12 +99,13 @@ export default function usePitchDetector({
               forceMicCalibrationTimeout(calibration)
               finishCalibration(calibration)
             } else {
+              const calibrationRms = frame.filteredRms ?? frame.rms
               const acceptSample = shouldAcceptCalibrationSample({
-                rms: frame.rms,
+                rms: calibrationRms,
                 gateOpen: frame.gateOpen,
                 hasPitch: frame.midi != null,
               })
-              const { done } = pushCalibrationSample(calibration, frame.rms, { acceptSample })
+              const { done } = pushCalibrationSample(calibration, calibrationRms, { acceptSample })
               if (done) {
                 finishCalibration(calibration)
               }

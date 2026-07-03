@@ -201,6 +201,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     const positionedGlyphs = textGlyphsToImage(pageText, imageData)
     const beats = inheritedTimeSignature?.beats ?? 4
     const tabDiagnostics = { tabStaves: 0, tabNotes: 0, tabPositionalMeasures: 0, attachedPositions: 0 }
+    let tabMeasureCounter = measureNumberStart
 
     for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
       const role = systemRoles?.[systemIndex]
@@ -209,6 +210,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           ? role.pairedWithIndex
           : systemIndex
       const measureBoxes = systemMeasureBoxes[targetIndex] ?? []
+      const emittedMeasureBoxes = []
       const systemMeasures = []
 
       if (role?.tabStave && measureBoxes.length > 0) {
@@ -228,10 +230,16 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           if (!measureNotes?.length) {
             continue
           }
+          const outputMeasureNumber = tabMeasureCounter
+          tabMeasureCounter += 1
+          const emittedMeasureBox = {
+            ...measureBox,
+            measureNumber: outputMeasureNumber,
+          }
           const { events } = buildTabMeasureEvents(measureNotes, { beats })
           const noteCount = events.reduce((sum, event) => sum + (event.notes?.length ?? 0), 0)
           const measureRecord = {
-            measureNumber: measureBox.measureNumber,
+            measureNumber: outputMeasureNumber,
             page,
             systemIndex: targetIndex,
             events,
@@ -243,6 +251,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
             confidence: 0.6,
             vectorNoteCount: noteCount,
           }
+          emittedMeasureBoxes.push(emittedMeasureBox)
           systemMeasures.push(measureRecord)
           measureRhythms.push(measureRecord)
           notes += noteCount
@@ -262,10 +271,10 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         systemRoles?.some(
           (candidate) => candidate.kind === 'tab' && candidate.pairedWithIndex === systemIndex,
         )
-      if (role?.tabStave || !partnerHasPairedTab) {
+      if ((role?.tabStave || !partnerHasPairedTab) && emittedMeasureBoxes.length > 0) {
         measureGrid.push(
           ...measureGridEntriesForSystem(
-            measureBoxes,
+            emittedMeasureBoxes,
             systemMeasures,
             'tab-vector',
             imageData.width,
@@ -286,10 +295,10 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       measureRhythms,
       measureGrid,
       measureGridDiagnostics,
-      nextMeasureNumber: measureCounter,
+      nextMeasureNumber: tabMeasureCounter,
       stats: {
         systems: systems.length,
-        measures: measureCounter - measureNumberStart,
+        measures: tabMeasureCounter - measureNumberStart,
         notes,
         uncertainMeasures,
       },

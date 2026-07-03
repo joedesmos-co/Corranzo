@@ -17,13 +17,15 @@ import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 /**
  * Light high-pass to reduce rumble / HVAC false triggers.
  */
-function highPassInPlace(samples, strength = 0.965) {
-  let previous = 0
+function highPassInPlace(samples, coefficient = 0.995) {
+  let previousInput = samples[0] ?? 0
+  let previousOutput = 0
   for (let index = 0; index < samples.length; index += 1) {
-    const value = samples[index]
-    const filtered = value - previous * strength
-    previous = value
-    samples[index] = filtered
+    const input = samples[index]
+    const output = coefficient * (previousOutput + input - previousInput)
+    previousInput = input
+    previousOutput = output
+    samples[index] = output
   }
 }
 

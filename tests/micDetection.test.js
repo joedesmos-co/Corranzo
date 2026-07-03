@@ -110,6 +110,16 @@ describe('pitch detection', () => {
     expect(frame?.clarity).toBeGreaterThan(0.5)
     expect(frame?.rms).toBeGreaterThan(0.05)
   })
+
+  it('keeps guitar-range fundamentals available to the noise gate', () => {
+    const lowE = synthSine(82.41, 0.05, 2048 / SAMPLE_RATE)
+    const analyzer = createMicFrameAnalyzer()
+    const frame = analyzeMicFrame(lowE, SAMPLE_RATE, analyzer.noiseFloor)
+
+    expect(frame?.rms).toBeGreaterThan(0.03)
+    expect(frame?.filteredRms).toBeGreaterThan(0.02)
+    expect(frame?.gateOpen).toBe(true)
+  })
 })
 
 // ─── cents tolerance ──────────────────────────────────────────────────────────

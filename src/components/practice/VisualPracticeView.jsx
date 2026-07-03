@@ -8,6 +8,7 @@ import {
   buildKeyboardKeys,
   buildVisualLaneGroups,
   computeKeyboardRange,
+  resolveVisualFrameTime,
   resolveVisualTarget,
   selectVisualWindow,
 } from '../../features/practice/visualPracticeLane.js'
@@ -70,6 +71,12 @@ function VisualPracticeView({ timingSourceKind = null }) {
   const isWaitForYou = visual.isWaitForYou
   const wfyStatus = visual.wfyStatus
   const wfyCheckpoint = visual.wfyCheckpoint
+  const waitForYouWaiting = isWaitForYou && wfyStatus === WFY_STATUS.WAITING
+  const visualFrameTime = resolveVisualFrameTime({
+    currentTime,
+    waitForYouWaiting,
+    waitForYouCheckpoint: wfyCheckpoint,
+  })
 
   const { index: targetIndex, group: targetGroup } = useMemo(
     () => resolveVisualTarget(groups, { currentTime, waitForYouCheckpoint: wfyCheckpoint }),
@@ -79,7 +86,7 @@ function VisualPracticeView({ timingSourceKind = null }) {
   // Window slides on whole seconds: statuses are index-driven, and the
   // look-ahead margin covers the coarseness, so the note layer's props stay
   // referentially stable between beats — scrolling itself is rAF-driven.
-  const timeBucket = Math.floor(currentTime)
+  const timeBucket = Math.floor(visualFrameTime)
   const visibleGroups = useMemo(
     () => selectVisualWindow(groups, timeBucket, targetIndex),
     [groups, timeBucket, targetIndex],
@@ -93,9 +100,9 @@ function VisualPracticeView({ timingSourceKind = null }) {
   useEffect(() => {
     frameStateRef.current = {
       isPlaying: tick.playbackIsPlaying,
-      practiceTime: currentTime,
+      practiceTime: visualFrameTime,
     }
-  }, [tick.playbackIsPlaying, currentTime])
+  }, [tick.playbackIsPlaying, visualFrameTime])
   const getFrameTime = useCallback(() => {
     const state = frameStateRef.current
     return state.isPlaying && getScoreTime ? getScoreTime() : state.practiceTime
@@ -142,7 +149,7 @@ function VisualPracticeView({ timingSourceKind = null }) {
         targetIndex={targetIndex}
         totalGroups={groups.length}
         isWaitForYou={isWaitForYou}
-        waiting={isWaitForYou && wfyStatus === WFY_STATUS.WAITING}
+        waiting={waitForYouWaiting}
         complete={laneComplete}
         strings={laneStrings}
         tabPositions={tabPositions}

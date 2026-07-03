@@ -10,6 +10,7 @@
 
 import {
   createCachedSamplerSync,
+  createPolyphonicFallbackVoice,
   createSampledInstrumentVoice,
   defaultLoadSampler,
   preloadInstrumentSampleBuffers,
@@ -95,21 +96,26 @@ function createPluckedSynthVoice(tone, { volume = SYNTH_VOLUME_DB } = {}) {
   const SynthVoice = tone.PluckSynth ?? tone.AMSynth ?? tone.Synth
   const usingPluck = Boolean(tone.PluckSynth)
   const usingAm = !usingPluck && Boolean(tone.AMSynth)
-  const synth = new tone.PolySynth({ voice: SynthVoice, maxPolyphony: 24 })
-  synth.set?.({
-    volume,
-    attackNoise: usingPluck ? 1.35 : undefined,
-    dampening: usingPluck ? 2600 : undefined,
-    resonance: usingPluck ? 0.85 : undefined,
-    harmonicity: usingAm ? 2.1 : undefined,
-    oscillator: { type: usingPluck ? 'triangle' : usingAm ? 'sine' : 'triangle' },
-    envelope: usingPluck
-      ? undefined
-      : { attack: 0.006, decay: 1.2, sustain: 0.06, release: 0.82 },
-    modulation: usingAm ? { type: 'triangle' } : undefined,
-    modulationEnvelope: usingAm
-      ? { attack: 0.003, decay: 0.2, sustain: 0, release: 0.08 }
-      : undefined,
+  const synth = createPolyphonicFallbackVoice(tone, {
+    voice: SynthVoice,
+    maxPolyphony: 24,
+    voiceOptions: usingPluck
+      ? {
+          volume,
+          attackNoise: 1.35,
+          dampening: 2600,
+          resonance: 0.85,
+        }
+      : {
+          volume,
+          harmonicity: usingAm ? 2.1 : undefined,
+          oscillator: { type: usingAm ? 'sine' : 'triangle' },
+          envelope: { attack: 0.006, decay: 1.2, sustain: 0.06, release: 0.82 },
+          modulation: usingAm ? { type: 'triangle' } : undefined,
+          modulationEnvelope: usingAm
+            ? { attack: 0.003, decay: 0.2, sustain: 0, release: 0.08 }
+            : undefined,
+        },
   })
 
   synth.connect(filter)

@@ -64,6 +64,42 @@ function micFeedbackFromResult(result) {
   })
 }
 
+function summarizeV2Notes(notes = []) {
+  return notes.map((note) => ({
+    midi: note.midi,
+    confidence: note.confidence ?? null,
+    ratio: note.ratio ?? null,
+    detected: Boolean(note.detected),
+  }))
+}
+
+function micFrameRejectReason({
+  frame,
+  matchingEnabled,
+  expectedMidis,
+  isMicV2Polyphonic,
+}) {
+  if (frame.calibrating) {
+    return 'calibrating'
+  }
+  if (!matchingEnabled) {
+    return 'matching-disabled'
+  }
+  if (!expectedMidis?.length) {
+    return 'no-expected-midi'
+  }
+  if (isMicV2Polyphonic && frame.v2Active && !frame.v2DetectedMidis?.length) {
+    return 'v2-below-threshold'
+  }
+  if (!frame.gateOpen) {
+    return 'noise-gate-closed'
+  }
+  if (frame.midi == null) {
+    return 'no-midi-detected'
+  }
+  return null
+}
+
 /**
  * Bridges microphone pitch detection to Wait For You checkpoint matching.
  */
@@ -311,16 +347,50 @@ export default function useWaitForYouMicInput({
         micEngineMode: frame.micEngineMode ?? micEngineMode,
       })
 
+      const frameDetectedMidis =
+        frame.v2DetectedMidis?.length
+          ? [...frame.v2DetectedMidis]
+          : frame.midi != null && frame.gateOpen
+            ? [frame.midi]
+            : []
+
+      reportMicDebug({
+        lastFrame: {
+          rms: frame.rms ?? null,
+          filteredRms: frame.filteredRms ?? null,
+          level: frame.level ?? null,
+          noiseFloor: frame.noiseFloor ?? null,
+          gateOpen: Boolean(frame.gateOpen),
+          midi: frame.midi ?? null,
+          clarity: frame.clarity ?? null,
+          signalQuality: frame.signalQuality ?? null,
+          diagnostic,
+          calibrationStatus: frame.calibrationStatus ?? null,
+          calibrationNoiseFloor: frame.calibration?.noiseFloor ?? null,
+          calibrationGateThreshold: frame.calibration?.gateThreshold ?? null,
+          expectedMidis: [...expectedMidis],
+          micEngineMode: frame.micEngineMode ?? micEngineMode,
+          v2Active: Boolean(frame.v2Active),
+          v2MeanConfidence: frame.v2MeanConfidence ?? null,
+          v2DetectedMidis: frame.v2DetectedMidis ? [...frame.v2DetectedMidis] : [],
+          v2Notes: summarizeV2Notes(frame.v2Notes ?? []),
+          usedV1Fallback: Boolean(frame.usedV1Fallback),
+          rejectReason: micFrameRejectReason({
+            frame,
+            matchingEnabled,
+            expectedMidis,
+            isMicV2Polyphonic,
+          }),
+        },
+        lastFrameDetectedMidis: frameDetectedMidis,
+      })
+
       if (frame.v2DetectedMidis?.length) {
         reportMicDebug({
           lastDetectedMidis: [...frame.v2DetectedMidis],
           lastDetectedCount: frame.v2DetectedMidis.length,
           v2MeanConfidence: frame.v2MeanConfidence ?? null,
-          lastV2Notes: (frame.v2Notes ?? []).map((note) => ({
-            midi: note.midi,
-            confidence: note.confidence ?? null,
-            detected: Boolean(note.detected),
-          })),
+          lastV2Notes: summarizeV2Notes(frame.v2Notes ?? []),
           v2Active: Boolean(frame.v2Active),
           usedV1Fallback: Boolean(frame.usedV1Fallback),
         })

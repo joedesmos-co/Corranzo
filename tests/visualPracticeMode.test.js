@@ -26,6 +26,7 @@ import {
   findVisualTargetIndex,
   isBlackKey,
   laneYForMidi,
+  resolveVisualFrameTime,
   resolveVisualTarget,
   selectVisualWindow,
 } from '../src/features/practice/visualPracticeLane.js'
@@ -137,6 +138,40 @@ describe('visual practice lane', () => {
       waitForYouCheckpoint: { id: 'beat-m2-b1', timeSeconds: checkpoints[5].timeSeconds },
     })
     expect(fallback.index).toBe(5)
+  })
+
+  it('pins the visual lane clock to the waiting Wait For You checkpoint', () => {
+    const timingMap = parseMusicXml(F.straight4())
+    const groups = buildVisualLaneGroups(timingMap)
+    const checkpoints = buildNoteCheckpoints(timingMap)
+    const liveCheckpoint = checkpoints[2]
+
+    const visualTime = resolveVisualFrameTime({
+      currentTime: checkpoints[4].timeSeconds,
+      waitForYouWaiting: true,
+      waitForYouCheckpoint: liveCheckpoint,
+    })
+    const target = resolveVisualTarget(groups, {
+      currentTime: checkpoints[4].timeSeconds,
+      waitForYouCheckpoint: liveCheckpoint,
+    })
+    const visible = selectVisualWindow(groups, visualTime, target.index, {
+      lookBehindSeconds: 0.25,
+      lookAheadSeconds: 0.75,
+    })
+
+    expect(visualTime).toBe(liveCheckpoint.timeSeconds)
+    expect(target.group.id).toBe(liveCheckpoint.id)
+    expect(visible.find((group) => group.id === liveCheckpoint.id)?.status).toBe(
+      VISUAL_GROUP_STATUS.CURRENT,
+    )
+    expect(
+      resolveVisualFrameTime({
+        currentTime: checkpoints[4].timeSeconds,
+        waitForYouWaiting: false,
+        waitForYouCheckpoint: liveCheckpoint,
+      }),
+    ).toBe(checkpoints[4].timeSeconds)
   })
 
   it('windows the lane and tags past/current/upcoming', () => {

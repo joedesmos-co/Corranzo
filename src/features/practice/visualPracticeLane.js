@@ -115,6 +115,27 @@ export function resolveVisualTarget(groups, { currentTime = 0, waitForYouCheckpo
 }
 
 /**
+ * Visual-only clock for lane windowing and scroll position.
+ *
+ * During Wait For You the engine may be paused while the active checkpoint is
+ * already known. Prefer that checkpoint time so Score view target anchors and
+ * Visual lane playhead stay on the same note; normal playback still uses the
+ * existing practice/playback clock.
+ */
+export function resolveVisualFrameTime({
+  currentTime = 0,
+  waitForYouWaiting = false,
+  waitForYouCheckpoint = null,
+} = {}) {
+  const checkpointTime = Number(waitForYouCheckpoint?.timeSeconds)
+  if (waitForYouWaiting && Number.isFinite(checkpointTime)) {
+    return checkpointTime
+  }
+  const normalizedCurrentTime = Number(currentTime)
+  return Number.isFinite(normalizedCurrentTime) ? normalizedCurrentTime : 0
+}
+
+/**
  * Slice the lane to the visible window around `currentTime` and tag each
  * group past/current/upcoming. Keeps DOM small on long pieces.
  */

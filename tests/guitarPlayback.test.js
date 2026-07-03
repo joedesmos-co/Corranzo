@@ -22,7 +22,6 @@ import {
 } from '../src/features/playback/instrumentVoices.js'
 import { createInstrumentVoiceResolver } from '../src/features/playback/instrumentVoiceResolver.js'
 import { ScorePlaybackEngine } from '../src/features/playback/scorePlaybackEngine.js'
-import { INSTRUMENT_STATUS } from '../src/features/playback/guitarInstrument.js'
 
 function makeFakeTone() {
   class Node {
@@ -144,6 +143,36 @@ describe('guitar voice', () => {
 
     expect(voice.status).toBe(INSTRUMENT_STATUS.LOADING)
     voice.triggerAttackRelease('E2', 0.5, 0, 0.7)
+    expect(voice.isUsingSampler()).toBe(false)
+  })
+
+  it('does not route PluckSynth through Tone.PolySynth when Tone rejects it', () => {
+    const tone = makeFakeTone()
+    const pluckCalls = []
+    tone.PluckSynth = class {
+      set() {}
+      connect() {}
+      triggerAttackRelease(...args) {
+        pluckCalls.push(args)
+      }
+      dispose() {}
+    }
+    tone.PolySynth = class {
+      constructor({ voice }) {
+        if (voice === tone.PluckSynth) {
+          throw new Error('Voice must extend Monophonic class')
+        }
+      }
+    }
+
+    const voice = createGuitarInstrument({
+      tone,
+      loadSampler: () => new Promise(() => {}),
+      createSamplerSync: () => null,
+    })
+
+    voice.triggerAttackRelease('E2', 0.5, 0, 0.7)
+    expect(pluckCalls).toEqual([['E2', 0.5, 0, expect.any(Number)]])
     expect(voice.isUsingSampler()).toBe(false)
   })
 
