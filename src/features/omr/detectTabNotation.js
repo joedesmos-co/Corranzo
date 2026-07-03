@@ -38,13 +38,26 @@ export function classifySystemStaves(system, { stringCount = 6 } = {}) {
   const notationStaves = []
   const tabStaves = []
   for (const stave of staves) {
-    if ((stave.lineCount ?? 0) === stringCount && stave.lineYs?.length === stringCount) {
-      tabStaves.push(stave)
+    const tabLineYs = resolveTabLineYs(stave, stringCount)
+    if (tabLineYs) {
+      tabStaves.push({ ...stave, lineYs: tabLineYs })
     } else {
       notationStaves.push(stave)
     }
   }
   return { notationStaves, tabStaves }
+}
+
+function resolveTabLineYs(stave, stringCount) {
+  if ((stave?.lineCount ?? 0) !== stringCount) {
+    return null
+  }
+  const detectedLineYs = Array.isArray(stave.detectedLineYs) ? stave.detectedLineYs : null
+  if (detectedLineYs?.length === stringCount) {
+    return detectedLineYs
+  }
+  const lineYs = Array.isArray(stave.lineYs) ? stave.lineYs : null
+  return lineYs?.length === stringCount ? lineYs : null
 }
 
 /** True when any detected system contains a tablature staff. */
@@ -328,7 +341,20 @@ export function buildTabMeasureEvents(measureNotes, { beats = 4 } = {}) {
     })
   }
 
-  return { events, uncertain: true }
+  return { events: mergeTabEventsWithSameStart(events), uncertain: true }
+}
+
+function mergeTabEventsWithSameStart(events) {
+  const merged = []
+  for (const event of events) {
+    const previous = merged[merged.length - 1]
+    if (previous && previous.startDivision === event.startDivision) {
+      previous.notes.push(...(event.notes ?? []))
+      continue
+    }
+    merged.push({ ...event, notes: [...(event.notes ?? [])] })
+  }
+  return merged
 }
 
 /**

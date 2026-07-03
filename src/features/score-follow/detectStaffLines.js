@@ -179,11 +179,13 @@ function clusterStaffLineRows(lineRows, height, minGapNorm) {
     .map((rows) => {
       const y0 = rows[0] / height
       const y1 = rows[rows.length - 1] / height
+      const detectedLineYs = rows.map((row) => row / height)
       return {
         y0,
         y1,
         center: (y0 + y1) / 2,
         lineCount: rows.length,
+        detectedLineYs,
         lineYs: normalizedStaffLineYs(rows, height),
       }
     })
@@ -392,6 +394,7 @@ function mergeStaveGroup(group) {
       y1: stave.y1,
       center: stave.center,
       lineCount: stave.lineCount,
+      detectedLineYs: stave.detectedLineYs ?? null,
       lineYs: stave.lineYs ?? null,
     })),
   }

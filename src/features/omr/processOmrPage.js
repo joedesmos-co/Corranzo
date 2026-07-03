@@ -204,7 +204,11 @@ export function processOmrPageAnalysis(imageData, options = {}) {
 
     for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
       const role = systemRoles?.[systemIndex]
-      const measureBoxes = systemMeasureBoxes[systemIndex] ?? []
+      const targetIndex =
+        role?.tabStave && role.kind === 'tab' && role.pairedWithIndex != null
+          ? role.pairedWithIndex
+          : systemIndex
+      const measureBoxes = systemMeasureBoxes[targetIndex] ?? []
       const systemMeasures = []
 
       if (role?.tabStave && measureBoxes.length > 0) {
@@ -229,7 +233,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           const measureRecord = {
             measureNumber: measureBox.measureNumber,
             page,
-            systemIndex,
+            systemIndex: targetIndex,
             events,
             // Positional rhythm is expected-approximate for tablature (the
             // page carries no duration info) — distinct from a failed rhythm
@@ -251,9 +255,30 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         confidence: systemConfidenceFromMeasures(systemMeasures),
         measures: systemMeasures,
       })
-      measureGrid.push(
-        ...measureGridEntriesForSystem(measureBoxes, systemMeasures, 'tab-vector', imageData.width),
-      )
+      const pairedTabUsesPartnerBoxes =
+        role?.tabStave && role.kind === 'tab' && role.pairedWithIndex != null
+      const partnerHasPairedTab =
+        !role?.tabStave &&
+        systemRoles?.some(
+          (candidate) => candidate.kind === 'tab' && candidate.pairedWithIndex === systemIndex,
+        )
+      if (role?.tabStave || !partnerHasPairedTab) {
+        measureGrid.push(
+          ...measureGridEntriesForSystem(
+            measureBoxes,
+            systemMeasures,
+            'tab-vector',
+            imageData.width,
+          ),
+        )
+      }
+      if (pairedTabUsesPartnerBoxes) {
+        measureGridDiagnostics.push({
+          page,
+          systemIndex,
+          tabStaffUsesMeasureBoxesFrom: targetIndex,
+        })
+      }
     }
 
     const result = {
