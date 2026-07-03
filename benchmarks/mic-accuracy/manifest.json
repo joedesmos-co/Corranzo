@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "description": "Labeled microphone clips for offline Wait For You pitch-detection measurement. Synthetic entries ship with the repo; file entries are in-repo WAV fixtures (replace with live mic captures when available).",
+  "defaultSampleRate": 44100,
+  "clips": [
+    {
+      "id": "synth-a4-clean",
+      "label": "note",
+      "expectedMidi": 69,
+      "expectedOnsetMs": 120,
+      "instrument": "piano",
+      "micDevice": "synthetic",
+      "noiseCondition": "clean",
+      "synthetic": { "type": "sine", "frequency": 440, "seconds": 0.6, "amplitude": 0.35 },
+      "notes": "Synthetic sine — baseline sanity check only."
+    },
+    {
+      "id": "synth-a3-harmonic",
+      "label": "note",
+      "expectedMidi": 57,
+      "expectedOnsetMs": 120,
+      "instrument": "piano",
+      "micDevice": "synthetic",
+      "noiseCondition": "clean",
+      "synthetic": {
+        "type": "harmonic",
+        "frequency": 220,
+        "seconds": 0.6,
+        "harmonics": [
+          { "multiple": 1, "amplitude": 0.12 },
+          { "multiple": 2, "amplitude": 0.35 }
+        ]
+      },
+      "notes": "Harmonic-rich synthetic tone — not used for threshold tuning."
+    },
+    {
+      "id": "synth-silence",
+      "label": "silence",
+      "expectedMidi": null,
+      "instrument": "piano",
+      "micDevice": "synthetic",
+      "noiseCondition": "clean",
+      "synthetic": { "type": "silence", "seconds": 0.6 },
+      "notes": "Silence control — stabilizer should not emit a note."
+    },
+    {
+      "id": "synth-noise",
+      "label": "noise",
+      "expectedMidi": null,
+      "instrument": "piano",
+      "micDevice": "synthetic",
+      "noiseCondition": "noisy",
+      "synthetic": { "type": "noise", "seconds": 0.6, "seed": 11 },
+      "notes": "Noise control — should not produce a stable pitch."
+    },
+    {
+      "id": "real-piano-c4",
+      "label": "note",
+      "expectedMidi": 60,
+      "instrument": "piano",
+      "micDevice": "in-repo fixture",
+      "noiseCondition": "clean",
+      "file": "clips/real-piano-c4.wav",
+      "startMs": 80,
+      "endMs": 1600,
+      "expectedOnsetMs": 120,
+      "notes": "Middle C — generated fixture; swap for a live mic capture when available."
+    },
+    {
+      "id": "real-piano-e4",
+      "label": "note",
+      "expectedMidi": 64,
+      "instrument": "piano",
+      "micDevice": "in-repo fixture",
+      "noiseCondition": "clean",
+      "file": "clips/real-piano-e4.wav",
+      "startMs": 80,
+      "endMs": 1600,
+      "expectedOnsetMs": 120,
+      "notes": "E4 — generated fixture; swap for a live mic capture when available."
+    },
+    {
+      "id": "real-guitar-g3",
+      "label": "note",
+      "expectedMidi": 55,
+      "instrument": "guitar",
+      "micDevice": "in-repo fixture",
+      "noiseCondition": "clean",
+      "file": "clips/real-guitar-g3.wav",
+      "startMs": 80,
+      "endMs": 1500,
+      "expectedOnsetMs": 100,
+      "notes": "Steel-string G3 — generated fixture."
+    },
+    {
+      "id": "real-room-quiet",
+      "label": "silence",
+      "expectedMidi": null,
+      "instrument": "piano",
+      "micDevice": "in-repo fixture",
+      "noiseCondition": "clean",
+      "file": "clips/real-room-quiet.wav",
+      "startMs": null,
+      "endMs": null,
+      "notes": "Quiet room bed — should not produce a stable pitch."
+    },
+    {
+      "id": "real-room-noisy",
+      "label": "silence",
+      "expectedMidi": null,
+      "instrument": "piano",
+      "micDevice": "in-repo fixture",
+      "noiseCondition": "noisy",
+      "file": "clips/real-room-noisy.wav",
+      "startMs": null,
+      "endMs": null,
+      "notes": "Noisy room bed — should not produce a stable pitch."
+    }
+  ]
+}

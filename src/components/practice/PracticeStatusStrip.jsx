@@ -3,7 +3,8 @@ import {
   SCORE_FOLLOW_OMR_SETUP_FAILED,
   SCORE_FOLLOW_OMR_SETUP_RUNNING,
 } from '../../features/score-follow/scoreFollowUserMessages.js'
-import { INSTRUMENT_STATUS } from '../../features/playback/pianoInstrumentStatus.js'
+import { INSTRUMENT_STATUS, buildInstrumentStatusLabels } from '../../features/playback/instrumentVoiceStatus.js'
+import { getInstrument } from '../../features/instruments/instruments.js'
 import { WFY_INPUT_SOURCE } from '../../features/microphone-input/micInputConstants.js'
 import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
 
@@ -15,17 +16,21 @@ function StatusChip({ label, tone = 'neutral' }) {
   )
 }
 
-function soundStatus(playback) {
+function soundStatus(playback, instrumentLabel = 'Piano') {
+  const labels = buildInstrumentStatusLabels(instrumentLabel)
   if (playback.error) {
     return { label: 'Sound issue', tone: 'warning' }
   }
   if (playback.instrumentStatus === INSTRUMENT_STATUS.SAMPLED) {
-    return { label: 'Piano ready', tone: 'ready' }
+    return { label: labels[INSTRUMENT_STATUS.SAMPLED], tone: 'ready' }
   }
   if (playback.instrumentStatus === INSTRUMENT_STATUS.SYNTH) {
-    return { label: 'Synth fallback', tone: 'neutral' }
+    return { label: labels[INSTRUMENT_STATUS.SYNTH], tone: 'warning' }
   }
-  return { label: 'Piano loading', tone: 'neutral' }
+  if (playback.instrumentStatus === INSTRUMENT_STATUS.LOADING) {
+    return { label: labels[INSTRUMENT_STATUS.LOADING], tone: 'neutral' }
+  }
+  return { label: labels[INSTRUMENT_STATUS.LOADING], tone: 'neutral' }
 }
 
 function followStatus(session, scoreFollow) {
@@ -96,13 +101,13 @@ function inputStatus(session) {
 
 export default function PracticeStatusStrip({ session, scoreFollow }) {
   const statuses = [
-    soundStatus(session.playback),
+    soundStatus(session.playback, getInstrument(session.instrumentId).label),
     followStatus(session, scoreFollow),
     inputStatus(session),
   ].filter(Boolean)
 
   return (
-    <div className="practice-status-strip" aria-label="Practice status">
+    <div className="practice-status-strip" aria-label="Practice status" aria-live="polite">
       {statuses.map((status) => (
         <StatusChip key={status.label} {...status} />
       ))}

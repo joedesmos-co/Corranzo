@@ -34,6 +34,15 @@ import { serializeOmrMeasureBox } from './omrMeasureGridMeta.js'
 import { computeOmrMeasureVisualExtents } from './omrMeasureVisualExtents.js'
 import { normalizePageStaffLineGaps } from './normalizeStaffLineGaps.js'
 import { normalizeLegacyMusicFontGlyphs } from './normalizeLegacyMusicFontGlyphs.js'
+import {
+  attachTabPositionsToEvents,
+  buildTabMeasureEvents,
+  classifySystemStaves,
+  extractTabDigitNotes,
+  groupTabNotesByMeasure,
+  resolveGuitarSystemRoles,
+  systemsContainTablature,
+} from './detectTabNotation.js'
 
 function measureGridEntriesForSystem(
   measureBoxes,
@@ -84,7 +93,14 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     keySignature: inheritedKeySignature = null,
     timeSignature: inheritedTimeSignature = null,
     documentStaffGapReference = null,
+    /** Instrument definition (features/instruments). Null = legacy piano path. */
+    instrument = null,
   } = options
+
+  const tabCapable = Boolean(instrument?.omr?.supportsTablature && instrument?.strings)
+  const tabStringCount = instrument?.strings?.count ?? 6
+  const tabTuning = instrument?.strings?.tuning ?? null
+  const tabFretCount = instrument?.strings?.fretCount ?? 24
 
   // Legacy music fonts (e.g. MScore in musescore.com/TCPDF exports) draw
   // noteheads/clefs at pre-SMuFL codepoints. Normalize them to SMuFL so such
@@ -125,8 +141,27 @@ export function processOmrPageAnalysis(imageData, options = {}) {
   const measureGrid = []
   const measureGridDiagnostics = []
 
+  // Fretted-instrument pages: classify bands up front so a notation-over-TAB
+  // pair shares ONE set of measure numbers (the TAB band re-reads its
+  // partner's measures instead of counting new ones). Null for piano.
+  const systemRoles = tabCapable
+    ? resolveGuitarSystemRoles(systems, { stringCount: tabStringCount })
+    : null
+
   for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
     const system = systems[systemIndex]
+    const role = systemRoles?.[systemIndex]
+    if (role?.kind === 'tab' && role.pairedWithIndex != null) {
+      // Paired TAB staff — engraves the same measures as the notation band
+      // directly above; contributes positions, never new measures.
+      systemMeasureBoxes.push([])
+      measureGridDiagnostics.push({
+        page,
+        systemIndex,
+        tabStaffPairedWith: role.pairedWithIndex,
+      })
+      continue
+    }
     const { measureBoxes, diagnostics: gridDiagnostics } = buildMeasureBoxesForSystemWithDiagnostics({
       page,
       systemIndex,
@@ -155,6 +190,103 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     }
   }
 
+  // TAB-only pages (no SMuFL noteheads, tablature staves present): assemble
+  // note events from fret digits — the raster notehead detector would only
+  // misread digit ink. Never reached for piano (tabCapable is false).
+  if (
+    tabCapable &&
+    !hasVectorOmrNoteheads(pageText) &&
+    systemsContainTablature(systems, { stringCount: tabStringCount })
+  ) {
+    const positionedGlyphs = textGlyphsToImage(pageText, imageData)
+    const beats = inheritedTimeSignature?.beats ?? 4
+    const tabDiagnostics = { tabStaves: 0, tabNotes: 0, tabPositionalMeasures: 0, attachedPositions: 0 }
+
+    for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
+      const role = systemRoles?.[systemIndex]
+      const measureBoxes = systemMeasureBoxes[systemIndex] ?? []
+      const systemMeasures = []
+
+      if (role?.tabStave && measureBoxes.length > 0) {
+        tabDiagnostics.tabStaves += 1
+        const tabNotes = extractTabDigitNotes(
+          positionedGlyphs,
+          role.tabStave,
+          measureBoxes,
+          imageData,
+          { tuning: tabTuning ?? undefined, fretCount: tabFretCount },
+        )
+        tabDiagnostics.tabNotes += tabNotes.length
+        const byMeasure = groupTabNotesByMeasure(tabNotes)
+
+        for (const measureBox of measureBoxes) {
+          const measureNotes = byMeasure.get(measureBox.measureNumber)
+          if (!measureNotes?.length) {
+            continue
+          }
+          const { events } = buildTabMeasureEvents(measureNotes, { beats })
+          const noteCount = events.reduce((sum, event) => sum + (event.notes?.length ?? 0), 0)
+          const measureRecord = {
+            measureNumber: measureBox.measureNumber,
+            page,
+            systemIndex,
+            events,
+            // Positional rhythm is expected-approximate for tablature (the
+            // page carries no duration info) — distinct from a failed rhythm
+            // detection, so it does not count into `uncertainMeasures`.
+            uncertain: false,
+            rhythmApproximate: true,
+            confidence: 0.6,
+            vectorNoteCount: noteCount,
+          }
+          systemMeasures.push(measureRecord)
+          measureRhythms.push(measureRecord)
+          notes += noteCount
+          tabDiagnostics.tabPositionalMeasures += 1
+        }
+      }
+
+      pageEntry.systems.push({
+        systemIndex,
+        confidence: systemConfidenceFromMeasures(systemMeasures),
+        measures: systemMeasures,
+      })
+      measureGrid.push(
+        ...measureGridEntriesForSystem(measureBoxes, systemMeasures, 'tab-vector', imageData.width),
+      )
+    }
+
+    const result = {
+      pageEntry,
+      measureRhythms,
+      measureGrid,
+      measureGridDiagnostics,
+      nextMeasureNumber: measureCounter,
+      stats: {
+        systems: systems.length,
+        measures: measureCounter - measureNumberStart,
+        notes,
+        uncertainMeasures,
+      },
+      keySignature: inheritedKeySignature ?? keySignature,
+      timeSignature: inheritedTimeSignature ?? { beats: 4, beatType: 4, confidence: 0 },
+      inkThreshold,
+      dense: false,
+      source: 'tab-vector',
+      tabDiagnostics,
+      staffGapNormalization: staffGapNormalizationResult.staffGapNormalization,
+      legacyFontNormalization: legacyFontNormalization.applied
+        ? legacyFontNormalization.diagnostics
+        : null,
+    }
+    omrDebugStep(`processOmrPage:done:page-${page}`, imageData, {
+      notes,
+      systems: systems.length,
+      source: 'tab-vector',
+    })
+    return result
+  }
+
   if (hasVectorOmrNoteheads(pageText)) {
     const vector = processVectorPageSystems({
       imageData,
@@ -165,6 +297,46 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       inheritedTimeSignature,
       inkThreshold,
     })
+
+    // Mixed notation+TAB (fretted instruments): pull string/fret positions
+    // off the TAB staff and attach them to the notation-staff events by
+    // x-proximity. Pitch and rhythm keep coming from the notation staff.
+    let tabDiagnostics = null
+    if (tabCapable && systemRoles) {
+      tabDiagnostics = { tabStaves: 0, tabNotes: 0, tabPositionalMeasures: 0, attachedPositions: 0 }
+      const positionedGlyphs = textGlyphsToImage(pageText, imageData)
+      for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
+        const role = systemRoles[systemIndex]
+        if (!role?.tabStave) {
+          continue
+        }
+        const targetIndex = role.kind === 'mixed' ? systemIndex : role.pairedWithIndex
+        if (targetIndex == null) {
+          continue
+        }
+        tabDiagnostics.tabStaves += 1
+        const targetBoxes = systemMeasureBoxes[targetIndex] ?? []
+        const tabNotes = extractTabDigitNotes(
+          positionedGlyphs,
+          role.tabStave,
+          targetBoxes,
+          imageData,
+          { tuning: tabTuning ?? undefined, fretCount: tabFretCount },
+        )
+        tabDiagnostics.tabNotes += tabNotes.length
+        const byMeasure = groupTabNotesByMeasure(tabNotes)
+        for (const measureRecord of vector.measureRecordsBySystem[targetIndex] ?? []) {
+          const measureNotes = byMeasure.get(measureRecord.measureNumber)
+          if (!measureNotes?.length) {
+            continue
+          }
+          const attached = attachTabPositionsToEvents(measureRecord.events, measureNotes)
+          measureRecord.events = attached.events
+          tabDiagnostics.attachedPositions += attached.attachedCount
+        }
+      }
+    }
+
     for (let systemIndex = 0; systemIndex < systemMeasureBoxes.length; systemIndex += 1) {
       const systemMeasures = vector.measureRecordsBySystem[systemIndex] ?? []
       for (const measureRecord of systemMeasures) {
@@ -206,6 +378,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       inkThreshold,
       dense: false,
       source: vector.source,
+      tabDiagnostics,
       tieDiagnostics: vector.tieDiagnostics,
       restDiagnostics: vector.restDiagnostics,
       staccatoDiagnostics: vector.staccatoDiagnostics,

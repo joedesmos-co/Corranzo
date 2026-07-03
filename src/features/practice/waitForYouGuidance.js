@@ -1,6 +1,7 @@
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 import { WFY_INPUT_OUTCOME } from './waitForYouInputFeedback.js'
 import { getExpectedMidis } from './waitForYouNoteMatch.js'
+import { describeTabPosition } from '../instruments/fretboard.js'
 
 /**
  * Wait For You guidance layer (pure). Turns the current checkpoint + the latest
@@ -42,9 +43,13 @@ export function missingLabels(expectedMidis, matchedIndices) {
 
 /**
  * "right hand" / "left hand" when every note in the checkpoint is on one staff
- * (treble = 1 ≈ right, bass = 2 ≈ left). Null when mixed/unknown.
+ * (treble = 1 ≈ right, bass = 2 ≈ left). Null when mixed/unknown — and null
+ * for instruments without a grand staff (a guitar has no per-staff hands).
  */
-export function staffHandHint(checkpoint) {
+export function staffHandHint(checkpoint, instrument = null) {
+  if (instrument && !instrument.notation?.grandStaff) {
+    return null
+  }
   const staves = new Set(
     (checkpoint?.notes ?? [])
       .map((n) => n?.staff)
@@ -55,16 +60,54 @@ export function staffHandHint(checkpoint) {
 }
 
 /**
- * Escalating hint that gets more specific the more times the player is wrong:
- *   1 → gentle nudge, 2 → reveal the note, 3+ → reveal note + which hand.
+ * Fretted-instrument position phrase for the checkpoint's notes, e.g.
+ * "fret 2 · D string" or "open A string + fret 3 · B string". Null for
+ * keyboard instruments or when no positions are known.
  */
-export function buildEscalatingHint({ expectedMidis, wrongAttempts, checkpoint }) {
+export function positionHintForCheckpoint(checkpoint, { strings = null, tabPositions = null } = {}) {
+  if (!strings || !checkpoint?.notes?.length) {
+    return null
+  }
+  const parts = []
+  for (const note of checkpoint.notes) {
+    if (note?.midi == null) {
+      continue
+    }
+    const position =
+      note.string != null && note.fret != null
+        ? { string: note.string, fret: note.fret }
+        : tabPositions?.get(note.id) ?? null
+    const label = position ? describeTabPosition(position, strings) : null
+    if (label) {
+      parts.push(label)
+    }
+  }
+  return parts.length ? parts.join(' + ') : null
+}
+
+/**
+ * Escalating hint that gets more specific the more times the player is wrong:
+ *   1 → gentle nudge, 2 → reveal the note, 3+ → reveal note + which hand
+ * (piano) or fretboard position (guitar).
+ */
+export function buildEscalatingHint({
+  expectedMidis,
+  wrongAttempts,
+  checkpoint,
+  instrument = null,
+  strings = null,
+  tabPositions = null,
+}) {
   if (!expectedMidis?.length || wrongAttempts <= 0) return null
   const isChord = expectedMidis.length > 1
   const label = expectedLabelFor(expectedMidis)
   if (wrongAttempts === 1) return 'Not quite — try again.'
   if (wrongAttempts === 2) return `Expected ${label}.`
-  const hand = staffHandHint(checkpoint)
+  const position = positionHintForCheckpoint(checkpoint, { strings, tabPositions })
+  if (position) {
+    return isChord ? `Play ${label} together (${position}).` : `Play ${label} (${position}).`
+  }
+  const hand = staffHandHint(checkpoint, instrument)
   if (isChord) return `Play ${label} together${hand ? ` with your ${hand}` : ''}.`
   return `Play ${label}${hand ? ` with your ${hand}` : ''}.`
 }
@@ -86,6 +129,9 @@ export function buildGuidance({
   hintRequested = false,
   complete = false,
   matchingActive = true,
+  instrument = null,
+  strings = null,
+  tabPositions = null,
 }) {
   const expectedMidis = getExpectedMidis(checkpoint)
   const isChord = expectedMidis.length > 1
@@ -126,7 +172,14 @@ export function buildGuidance({
       tone: 'error',
       primary: 'Missed / late',
       playedLabel,
-      hint: buildEscalatingHint({ expectedMidis, wrongAttempts, checkpoint }),
+      hint: buildEscalatingHint({
+        expectedMidis,
+        wrongAttempts,
+        checkpoint,
+        instrument,
+        strings,
+        tabPositions,
+      }),
       // After enough wrong tries, surface the target on the score too.
       showTarget: wrongAttempts >= HINT_AFTER_WRONG_ATTEMPTS,
     }
@@ -161,7 +214,15 @@ export function buildGuidance({
       tone: 'hint',
       primary: buildTargetHint({ expectedMidis }),
       hint:
-        buildEscalatingHint({ expectedMidis, wrongAttempts, checkpoint }) ??
+        buildEscalatingHint({
+          expectedMidis,
+          wrongAttempts,
+          checkpoint,
+          instrument,
+          strings,
+          tabPositions,
+        }) ??
+        positionHintForCheckpoint(checkpoint, { strings, tabPositions }) ??
         (timedOut ? 'Take your time — here is the note.' : null),
       showTarget: true,
     }

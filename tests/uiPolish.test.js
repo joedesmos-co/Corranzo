@@ -102,15 +102,17 @@ describe('phase 3 mobile and build polish', () => {
   const controlPanel = readSrc('components', 'practice', 'PracticeControlPanel.jsx')
 
   it('uses larger toolbar touch targets on tablet widths', () => {
-    expect(appCss).toMatch(/@media \(max-width: 1100px\)[\s\S]*\.tb-icon[\s\S]*40px/)
+    expect(appCss).toMatch(/@media \(max-width: 1100px\)[\s\S]*\.tb-icon[\s\S]*44px/)
   })
 
   it('reserves enough stage padding for the practice toolbar', () => {
     expect(appCss).toMatch(/pdf-viewer-section--practice \.pdf-viewer-stage[\s\S]*padding-top: 52px/)
   })
 
-  it('consolidates tablet workspace rules at 1100px with sticky footer', () => {
-    expect(practiceCss).toMatch(/@media \(max-width: 1100px\)[\s\S]*practice-control-panel__footer[\s\S]*sticky/)
+  it('consolidates tablet workspace rules with sticky footer in stacked layouts', () => {
+    expect(practiceCss).toMatch(
+      /@media \(max-width: 1100px\) and \(orientation: portrait\)[\s\S]*practice-control-panel__footer[\s\S]*sticky/,
+    )
     expect(practiceCss).not.toMatch(
       /practice-control-panel[\s\S]{0,120}border-top: 1px solid #243552/,
     )

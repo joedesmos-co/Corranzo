@@ -40,12 +40,12 @@ export default function PracticeScoreCursorSection({ scoreFollow, disabled = fal
           disabled={!canToggle}
           onChange={(event) => scoreFollow.setEnabled(event.target.checked)}
         />
-        <span>Show score cursor</span>
+        <span>Show cursor on score</span>
       </label>
 
       {setupPhase === 'failed' && (
         <p className="practice-section__hint practice-score-cursor__hint">
-          Score setup needs attention in Advanced.
+          Cursor setup failed — open Advanced → Practice setup.
         </p>
       )}
     </section>

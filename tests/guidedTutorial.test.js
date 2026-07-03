@@ -138,6 +138,7 @@ describe('guided tutorial UI wiring', () => {
     expect(css).toContain('.guided-tour--choice')
     expect(css).toContain('.guided-tour__card--choice')
     expect(css).toMatch(/@media \(max-width: 640px\)[\s\S]*\.app--guided-choice \.main-layout--empty-score[\s\S]*margin-top: 300px/)
+    expect(css).toMatch(/@media \(max-width: 640px\)[\s\S]*\.guided-tour__card--choice[\s\S]*var\(--sf-topbar-height\)/)
   })
 
   it('keeps the added Help control from overflowing tablet top bars', () => {

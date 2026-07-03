@@ -86,14 +86,19 @@
 
   /* Layout */
   --sf-sidebar-width: 300px;
+  --sf-viewport-height: 100vh;
   --sf-topbar-height: 72px;
   --sf-content-max: 1100px;
   --sf-copy-max: min(36rem, 100%);
 
-  /* Motion */
-  --sf-ease: ease;
+  /* Motion — short, ease-out; compositor-friendly where possible */
+  --sf-ease: cubic-bezier(0.33, 1, 0.38, 1);
+  --sf-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --sf-ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
   --sf-duration-fast: 0.15s;
   --sf-duration: 0.2s;
+  --sf-duration-fade: 0.24s;
+  --sf-duration-press: 170ms;
 
   /* Focus */
   --sf-focus-ring: 0 0 0 1px #000000, 0 0 0 2px #ffffff;

@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync, existsSync } from 'node:fs'
+import { join } from 'node:path'
 import {
   categorizePitchDeltaSemitones,
+  classifyPitchErrorRootCause,
   PITCH_ERROR_CATEGORY,
+  PITCH_ROOT_CAUSE,
+  summarizePitchErrorRootCauses,
   summarizePitchErrors,
 } from '../src/features/omr/omrPitchErrorAnalysis.js'
 import { normalizedStaffLineYs } from '../src/features/score-follow/detectStaffLines.js'
@@ -92,5 +97,59 @@ describe('omrPitchErrorAnalysis', () => {
     expect(summary.total).toBe(2)
     expect(summary.histogram[PITCH_ERROR_CATEGORY.DIATONIC_STEP]).toBe(1)
     expect(summary.histogram[PITCH_ERROR_CATEGORY.OCTAVE]).toBe(1)
+  })
+})
+
+describe('pitch error root-cause classification', () => {
+  it('labels onset-coupled pitch errors as grouping artifacts', () => {
+    const bucket = classifyPitchErrorRootCause({
+      onsetDiffQuarters: 0.5,
+      durationDiffQuarters: 0,
+      pitchDeltaSemitones: -1,
+      truth: { label: 'A#2' },
+      generated: { label: 'A2' },
+    })
+    expect(bucket).toBe(PITCH_ROOT_CAUSE.GROUPING_ARTIFACT)
+  })
+
+  it('labels same-step missing sharps as accidental misses at correct onset', () => {
+    const bucket = classifyPitchErrorRootCause({
+      onsetDiffQuarters: 0,
+      durationDiffQuarters: 0,
+      pitchDeltaSemitones: -1,
+      truth: { label: 'A#2' },
+      generated: { label: 'A2' },
+    })
+    expect(bucket).toBe(PITCH_ROOT_CAUSE.ACCIDENTAL_MISS)
+  })
+
+  it('labels large register slips as staff/clef/register pairing', () => {
+    const bucket = classifyPitchErrorRootCause({
+      onsetDiffQuarters: 0,
+      durationDiffQuarters: 0,
+      pitchDeltaSemitones: -21,
+      truth: { label: 'C4' },
+      generated: { label: 'D#2' },
+    })
+    expect(bucket).toBe(PITCH_ROOT_CAUSE.STAFF_CLEF_REGISTER)
+  })
+
+  it('does not promote accidentals to the primary dense root cause', () => {
+    const fixturePath = join(
+      process.cwd(),
+      'tmp/omr-benchmark-dashboard/fixtures/dense.json',
+    )
+    if (!existsSync(fixturePath)) {
+      return
+    }
+    const report = JSON.parse(readFileSync(fixturePath, 'utf8'))
+    const summary = summarizePitchErrorRootCauses(report.debug?.wrongPitches ?? [])
+    expect(summary.total).toBe(147)
+    expect(summary.primaryRootCause?.bucket).toBe(PITCH_ROOT_CAUSE.GROUPING_ARTIFACT)
+    expect(summary.histogram[PITCH_ROOT_CAUSE.GROUPING_ARTIFACT]).toBeGreaterThanOrEqual(80)
+    expect(summary.histogram[PITCH_ROOT_CAUSE.ACCIDENTAL_MISS]).toBeLessThan(15)
+    expect(summary.atCorrectOnsetHistogram[PITCH_ROOT_CAUSE.STAFF_CLEF_REGISTER]).toBeGreaterThan(
+      summary.atCorrectOnsetHistogram[PITCH_ROOT_CAUSE.ACCIDENTAL_MISS],
+    )
   })
 })

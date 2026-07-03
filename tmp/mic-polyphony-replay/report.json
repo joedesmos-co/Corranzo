@@ -1,0 +1,1240 @@
+{
+  "generatedAt": "2026-07-03T04:50:19.022Z",
+  "manifest": "/Users/ryland/Documents/scoreflow/benchmarks/mic-polyphony/manifest.json",
+  "constantsTuned": false,
+  "runtimeMicChanged": false,
+  "v1": {
+    "clipCount": 9,
+    "measuredClipCount": 9,
+    "skippedClipCount": 0,
+    "chordClipCount": 6,
+    "rejectClipCount": 3,
+    "chordHits": 0,
+    "partialChords": 0,
+    "chordMisses": 6,
+    "chordHitRate": 0,
+    "perNoteHitRate": 0,
+    "missedNoteCount": 17,
+    "falsePositiveNotes": 0,
+    "falsePositiveRate": 0,
+    "meanConfidence": null,
+    "meanLatencyMs": null,
+    "engine": "v1-monophonic-baseline",
+    "scorerVersion": null,
+    "tuningRecommendation": "Polyphony replay uses the V1 monophonic pipeline as a baseline — do not tune constants from chord metrics until Mic Engine V2 is integrated.",
+    "byChordType": {
+      "simultaneous": {
+        "count": 5,
+        "chordHitRate": 0,
+        "perNoteHitRate": 0,
+        "falsePositiveRate": null,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      },
+      "rolled": {
+        "count": 1,
+        "chordHitRate": 0,
+        "perNoteHitRate": 0,
+        "falsePositiveRate": null,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      }
+    },
+    "byChordShape": {
+      "dyad": {
+        "count": 2,
+        "chordHitRate": 0,
+        "perNoteHitRate": 0,
+        "falsePositiveRate": null,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      },
+      "triad": {
+        "count": 2,
+        "chordHitRate": 0,
+        "perNoteHitRate": 0,
+        "falsePositiveRate": null,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      },
+      "simultaneous-4plus": {
+        "count": 1,
+        "chordHitRate": 0,
+        "perNoteHitRate": 0,
+        "falsePositiveRate": null,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      },
+      "rolled": {
+        "count": 1,
+        "chordHitRate": 0,
+        "perNoteHitRate": 0,
+        "falsePositiveRate": null,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      }
+    },
+    "byInstrument": {
+      "piano": {
+        "count": 9,
+        "chordHitRate": 0,
+        "perNoteHitRate": 0,
+        "falsePositiveRate": 0,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      }
+    },
+    "byNoiseCondition": {
+      "clean": {
+        "count": 8,
+        "chordHitRate": 0,
+        "perNoteHitRate": 0,
+        "falsePositiveRate": 0,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      },
+      "noisy": {
+        "count": 1,
+        "chordHitRate": null,
+        "perNoteHitRate": null,
+        "falsePositiveRate": 0,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      }
+    },
+    "bySource": {
+      "synthetic": {
+        "count": 6,
+        "chordHitRate": 0,
+        "perNoteHitRate": 0,
+        "falsePositiveRate": 0,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      },
+      "file": {
+        "count": 3,
+        "chordHitRate": 0,
+        "perNoteHitRate": 0,
+        "falsePositiveRate": 0,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      }
+    },
+    "bassWeakness": {
+      "bassExpectedNotes": 2,
+      "bassMatchedNotes": 0,
+      "bassMissedNotes": 2,
+      "bassHitRate": 0
+    },
+    "perClip": [
+      {
+        "clipId": "synth-dyad-c4-e4",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          64
+        ],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "synthetic",
+        "chordShape": "dyad",
+        "outcome": "miss",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": 0,
+        "matchedMidis": [],
+        "missedMidis": [
+          60,
+          64
+        ],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-c-major-triad",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "synthetic",
+        "chordShape": "triad",
+        "outcome": "miss",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": 0,
+        "matchedMidis": [],
+        "missedMidis": [
+          60,
+          64,
+          67
+        ],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-g7-tetrad",
+        "label": "chord",
+        "expectedMidis": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "synthetic",
+        "chordShape": "simultaneous-4plus",
+        "outcome": "miss",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": 0,
+        "matchedMidis": [],
+        "missedMidis": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "bassMissedMidis": [
+          55,
+          59
+        ],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-rolled-c-major",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": "rolled",
+        "source": "synthetic",
+        "chordShape": "rolled",
+        "outcome": "miss",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": 0,
+        "matchedMidis": [],
+        "missedMidis": [
+          60,
+          64,
+          67
+        ],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-silence",
+        "label": "silence",
+        "expectedMidis": [],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": null,
+        "source": "synthetic",
+        "outcome": "correct-reject",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": null,
+        "matchedMidis": [],
+        "missedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-noise",
+        "label": "noise",
+        "expectedMidis": [],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "noisy",
+        "chordType": null,
+        "source": "synthetic",
+        "outcome": "correct-reject",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": null,
+        "matchedMidis": [],
+        "missedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      },
+      {
+        "clipId": "real-c-major-triad",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "instrument": "piano",
+        "micDevice": "in-repo fixture",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "file",
+        "chordShape": "triad",
+        "outcome": "miss",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": 0,
+        "matchedMidis": [],
+        "missedMidis": [
+          60,
+          64,
+          67
+        ],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      },
+      {
+        "clipId": "real-dyad-c4-g4",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          67
+        ],
+        "instrument": "piano",
+        "micDevice": "in-repo fixture",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "file",
+        "chordShape": "dyad",
+        "outcome": "miss",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": 0,
+        "matchedMidis": [],
+        "missedMidis": [
+          60,
+          67
+        ],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      },
+      {
+        "clipId": "real-room-quiet",
+        "label": "silence",
+        "expectedMidis": [],
+        "instrument": "piano",
+        "micDevice": "in-repo fixture",
+        "noiseCondition": "clean",
+        "chordType": null,
+        "source": "file",
+        "outcome": "correct-reject",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": null,
+        "matchedMidis": [],
+        "missedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      }
+    ]
+  },
+  "v2": {
+    "clipCount": 9,
+    "measuredClipCount": 9,
+    "skippedClipCount": 0,
+    "chordClipCount": 6,
+    "rejectClipCount": 3,
+    "chordHits": 6,
+    "partialChords": 0,
+    "chordMisses": 0,
+    "chordHitRate": 1,
+    "perNoteHitRate": 1,
+    "missedNoteCount": 0,
+    "falsePositiveNotes": 0,
+    "falsePositiveRate": 0,
+    "meanConfidence": 0.5009001872751595,
+    "meanLatencyMs": -120,
+    "engine": "v2-score-informed-phase-2b",
+    "scorerVersion": "phase-2b",
+    "tuningRecommendation": "V2 score-informed prototype — offline only; do not promote to live mic until browser QA and WFY adapter land.",
+    "byChordType": {
+      "simultaneous": {
+        "count": 5,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": null,
+        "meanConfidence": 0.49074780629957804,
+        "meanLatencyMs": -120
+      },
+      "rolled": {
+        "count": 1,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": null,
+        "meanConfidence": 0.5516620921530664,
+        "meanLatencyMs": -120
+      }
+    },
+    "byChordShape": {
+      "dyad": {
+        "count": 2,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": null,
+        "meanConfidence": 0.5338344475383978,
+        "meanLatencyMs": -120
+      },
+      "triad": {
+        "count": 2,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": null,
+        "meanConfidence": 0.4419780148374772,
+        "meanLatencyMs": -120
+      },
+      "simultaneous-4plus": {
+        "count": 1,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": null,
+        "meanConfidence": 0.5021141067461403,
+        "meanLatencyMs": -120
+      },
+      "rolled": {
+        "count": 1,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": null,
+        "meanConfidence": 0.5516620921530664,
+        "meanLatencyMs": -120
+      }
+    },
+    "byInstrument": {
+      "piano": {
+        "count": 9,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": 0,
+        "meanConfidence": 0.5009001872751595,
+        "meanLatencyMs": -120
+      }
+    },
+    "byNoiseCondition": {
+      "clean": {
+        "count": 8,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": 0,
+        "meanConfidence": 0.5009001872751595,
+        "meanLatencyMs": -120
+      },
+      "noisy": {
+        "count": 1,
+        "chordHitRate": null,
+        "perNoteHitRate": null,
+        "falsePositiveRate": 0,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      }
+    },
+    "bySource": {
+      "synthetic": {
+        "count": 6,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": 0,
+        "meanConfidence": 0.5057015088040837,
+        "meanLatencyMs": -120
+      },
+      "file": {
+        "count": 3,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": 0,
+        "meanConfidence": 0.491297544217311,
+        "meanLatencyMs": -120
+      }
+    },
+    "bassWeakness": {
+      "bassExpectedNotes": 2,
+      "bassMatchedNotes": 2,
+      "bassMissedNotes": 0,
+      "bassHitRate": 1
+    },
+    "perClip": [
+      {
+        "clipId": "synth-dyad-c4-e4",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          64
+        ],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "synthetic",
+        "chordShape": "dyad",
+        "outcome": "chord-hit",
+        "skipped": false,
+        "chordHit": true,
+        "partialChord": false,
+        "perNoteHitRate": 1,
+        "matchedMidis": [
+          60,
+          64
+        ],
+        "missedMidis": [],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": 0.526478142614659,
+        "meanLatencyMs": -120,
+        "detectionCount": 2,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-c-major-triad",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "synthetic",
+        "chordShape": "triad",
+        "outcome": "chord-hit",
+        "skipped": false,
+        "chordHit": true,
+        "partialChord": false,
+        "perNoteHitRate": 1,
+        "matchedMidis": [
+          60,
+          64,
+          67
+        ],
+        "missedMidis": [],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": 0.442551693702469,
+        "meanLatencyMs": -120,
+        "detectionCount": 3,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-g7-tetrad",
+        "label": "chord",
+        "expectedMidis": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "synthetic",
+        "chordShape": "simultaneous-4plus",
+        "outcome": "chord-hit",
+        "skipped": false,
+        "chordHit": true,
+        "partialChord": false,
+        "perNoteHitRate": 1,
+        "matchedMidis": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "missedMidis": [],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": 0.5021141067461403,
+        "meanLatencyMs": -120,
+        "detectionCount": 4,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-rolled-c-major",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": "rolled",
+        "source": "synthetic",
+        "chordShape": "rolled",
+        "outcome": "chord-hit",
+        "skipped": false,
+        "chordHit": true,
+        "partialChord": false,
+        "perNoteHitRate": 1,
+        "matchedMidis": [
+          60,
+          64,
+          67
+        ],
+        "missedMidis": [],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": 0.5516620921530664,
+        "meanLatencyMs": -120,
+        "detectionCount": 3,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-silence",
+        "label": "silence",
+        "expectedMidis": [],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": null,
+        "source": "synthetic",
+        "outcome": "correct-reject",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": null,
+        "matchedMidis": [],
+        "missedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-noise",
+        "label": "noise",
+        "expectedMidis": [],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "noisy",
+        "chordType": null,
+        "source": "synthetic",
+        "outcome": "correct-reject",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": null,
+        "matchedMidis": [],
+        "missedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      },
+      {
+        "clipId": "real-c-major-triad",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "instrument": "piano",
+        "micDevice": "in-repo fixture",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "file",
+        "chordShape": "triad",
+        "outcome": "chord-hit",
+        "skipped": false,
+        "chordHit": true,
+        "partialChord": false,
+        "perNoteHitRate": 1,
+        "matchedMidis": [
+          60,
+          64,
+          67
+        ],
+        "missedMidis": [],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": 0.44140433597248535,
+        "meanLatencyMs": -120,
+        "detectionCount": 3,
+        "missingFile": false
+      },
+      {
+        "clipId": "real-dyad-c4-g4",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          67
+        ],
+        "instrument": "piano",
+        "micDevice": "in-repo fixture",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "file",
+        "chordShape": "dyad",
+        "outcome": "chord-hit",
+        "skipped": false,
+        "chordHit": true,
+        "partialChord": false,
+        "perNoteHitRate": 1,
+        "matchedMidis": [
+          60,
+          67
+        ],
+        "missedMidis": [],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": 0.5411907524621367,
+        "meanLatencyMs": -120,
+        "detectionCount": 2,
+        "missingFile": false
+      },
+      {
+        "clipId": "real-room-quiet",
+        "label": "silence",
+        "expectedMidis": [],
+        "instrument": "piano",
+        "micDevice": "in-repo fixture",
+        "noiseCondition": "clean",
+        "chordType": null,
+        "source": "file",
+        "outcome": "correct-reject",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": null,
+        "matchedMidis": [],
+        "missedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      }
+    ]
+  },
+  "comparison": {
+    "v1Engine": "v1-monophonic-baseline",
+    "v2Engine": "v2-score-informed-phase-2b",
+    "chordHitRate": {
+      "v1": 0,
+      "v2": 1,
+      "delta": 1
+    },
+    "perNoteHitRate": {
+      "v1": 0,
+      "v2": 1,
+      "delta": 1
+    },
+    "falsePositiveRate": {
+      "v1": 0,
+      "v2": 0,
+      "delta": 0
+    },
+    "missedNoteCount": {
+      "v1": 17,
+      "v2": 0
+    },
+    "falsePositiveNotes": {
+      "v1": 0,
+      "v2": 0
+    },
+    "meanConfidence": {
+      "v1": null,
+      "v2": 0.5009001872751595
+    },
+    "verdict": "v2-improves",
+    "diagnosis": "Score-informed harmonic scoring improves chord detection on offline fixtures."
+  },
+  "phase2bComparison": {
+    "baseline": {
+      "chordHitRate": 0.5,
+      "perNoteHitRate": 0.706,
+      "falsePositiveRate": 0,
+      "missedNoteCount": 5,
+      "engine": "v2-score-informed-prototype"
+    },
+    "current": {
+      "chordHitRate": 1,
+      "perNoteHitRate": 1,
+      "falsePositiveRate": 0,
+      "missedNoteCount": 0,
+      "engine": "v2-score-informed-phase-2b",
+      "scorerVersion": "phase-2b"
+    },
+    "delta": {
+      "chordHitRate": 0.5,
+      "perNoteHitRate": 0.29400000000000004,
+      "falsePositiveRate": 0,
+      "missedNoteCount": -5
+    },
+    "improved": true
+  },
+  "summary": {
+    "clipCount": 9,
+    "measuredClipCount": 9,
+    "skippedClipCount": 0,
+    "chordClipCount": 6,
+    "rejectClipCount": 3,
+    "chordHits": 6,
+    "partialChords": 0,
+    "chordMisses": 0,
+    "chordHitRate": 1,
+    "perNoteHitRate": 1,
+    "missedNoteCount": 0,
+    "falsePositiveNotes": 0,
+    "falsePositiveRate": 0,
+    "meanConfidence": 0.5009001872751595,
+    "meanLatencyMs": -120,
+    "engine": "v2-score-informed-phase-2b",
+    "scorerVersion": "phase-2b",
+    "tuningRecommendation": "V2 score-informed prototype — offline only; do not promote to live mic until browser QA and WFY adapter land.",
+    "byChordType": {
+      "simultaneous": {
+        "count": 5,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": null,
+        "meanConfidence": 0.49074780629957804,
+        "meanLatencyMs": -120
+      },
+      "rolled": {
+        "count": 1,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": null,
+        "meanConfidence": 0.5516620921530664,
+        "meanLatencyMs": -120
+      }
+    },
+    "byChordShape": {
+      "dyad": {
+        "count": 2,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": null,
+        "meanConfidence": 0.5338344475383978,
+        "meanLatencyMs": -120
+      },
+      "triad": {
+        "count": 2,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": null,
+        "meanConfidence": 0.4419780148374772,
+        "meanLatencyMs": -120
+      },
+      "simultaneous-4plus": {
+        "count": 1,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": null,
+        "meanConfidence": 0.5021141067461403,
+        "meanLatencyMs": -120
+      },
+      "rolled": {
+        "count": 1,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": null,
+        "meanConfidence": 0.5516620921530664,
+        "meanLatencyMs": -120
+      }
+    },
+    "byInstrument": {
+      "piano": {
+        "count": 9,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": 0,
+        "meanConfidence": 0.5009001872751595,
+        "meanLatencyMs": -120
+      }
+    },
+    "byNoiseCondition": {
+      "clean": {
+        "count": 8,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": 0,
+        "meanConfidence": 0.5009001872751595,
+        "meanLatencyMs": -120
+      },
+      "noisy": {
+        "count": 1,
+        "chordHitRate": null,
+        "perNoteHitRate": null,
+        "falsePositiveRate": 0,
+        "meanConfidence": null,
+        "meanLatencyMs": null
+      }
+    },
+    "bySource": {
+      "synthetic": {
+        "count": 6,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": 0,
+        "meanConfidence": 0.5057015088040837,
+        "meanLatencyMs": -120
+      },
+      "file": {
+        "count": 3,
+        "chordHitRate": 1,
+        "perNoteHitRate": 1,
+        "falsePositiveRate": 0,
+        "meanConfidence": 0.491297544217311,
+        "meanLatencyMs": -120
+      }
+    },
+    "bassWeakness": {
+      "bassExpectedNotes": 2,
+      "bassMatchedNotes": 2,
+      "bassMissedNotes": 0,
+      "bassHitRate": 1
+    },
+    "perClip": [
+      {
+        "clipId": "synth-dyad-c4-e4",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          64
+        ],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "synthetic",
+        "chordShape": "dyad",
+        "outcome": "chord-hit",
+        "skipped": false,
+        "chordHit": true,
+        "partialChord": false,
+        "perNoteHitRate": 1,
+        "matchedMidis": [
+          60,
+          64
+        ],
+        "missedMidis": [],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": 0.526478142614659,
+        "meanLatencyMs": -120,
+        "detectionCount": 2,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-c-major-triad",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "synthetic",
+        "chordShape": "triad",
+        "outcome": "chord-hit",
+        "skipped": false,
+        "chordHit": true,
+        "partialChord": false,
+        "perNoteHitRate": 1,
+        "matchedMidis": [
+          60,
+          64,
+          67
+        ],
+        "missedMidis": [],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": 0.442551693702469,
+        "meanLatencyMs": -120,
+        "detectionCount": 3,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-g7-tetrad",
+        "label": "chord",
+        "expectedMidis": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "synthetic",
+        "chordShape": "simultaneous-4plus",
+        "outcome": "chord-hit",
+        "skipped": false,
+        "chordHit": true,
+        "partialChord": false,
+        "perNoteHitRate": 1,
+        "matchedMidis": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "missedMidis": [],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": 0.5021141067461403,
+        "meanLatencyMs": -120,
+        "detectionCount": 4,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-rolled-c-major",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": "rolled",
+        "source": "synthetic",
+        "chordShape": "rolled",
+        "outcome": "chord-hit",
+        "skipped": false,
+        "chordHit": true,
+        "partialChord": false,
+        "perNoteHitRate": 1,
+        "matchedMidis": [
+          60,
+          64,
+          67
+        ],
+        "missedMidis": [],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": 0.5516620921530664,
+        "meanLatencyMs": -120,
+        "detectionCount": 3,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-silence",
+        "label": "silence",
+        "expectedMidis": [],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "clean",
+        "chordType": null,
+        "source": "synthetic",
+        "outcome": "correct-reject",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": null,
+        "matchedMidis": [],
+        "missedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      },
+      {
+        "clipId": "synth-noise",
+        "label": "noise",
+        "expectedMidis": [],
+        "instrument": "piano",
+        "micDevice": "synthetic",
+        "noiseCondition": "noisy",
+        "chordType": null,
+        "source": "synthetic",
+        "outcome": "correct-reject",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": null,
+        "matchedMidis": [],
+        "missedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      },
+      {
+        "clipId": "real-c-major-triad",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "instrument": "piano",
+        "micDevice": "in-repo fixture",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "file",
+        "chordShape": "triad",
+        "outcome": "chord-hit",
+        "skipped": false,
+        "chordHit": true,
+        "partialChord": false,
+        "perNoteHitRate": 1,
+        "matchedMidis": [
+          60,
+          64,
+          67
+        ],
+        "missedMidis": [],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": 0.44140433597248535,
+        "meanLatencyMs": -120,
+        "detectionCount": 3,
+        "missingFile": false
+      },
+      {
+        "clipId": "real-dyad-c4-g4",
+        "label": "chord",
+        "expectedMidis": [
+          60,
+          67
+        ],
+        "instrument": "piano",
+        "micDevice": "in-repo fixture",
+        "noiseCondition": "clean",
+        "chordType": "simultaneous",
+        "source": "file",
+        "chordShape": "dyad",
+        "outcome": "chord-hit",
+        "skipped": false,
+        "chordHit": true,
+        "partialChord": false,
+        "perNoteHitRate": 1,
+        "matchedMidis": [
+          60,
+          67
+        ],
+        "missedMidis": [],
+        "bassMissedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": 0.5411907524621367,
+        "meanLatencyMs": -120,
+        "detectionCount": 2,
+        "missingFile": false
+      },
+      {
+        "clipId": "real-room-quiet",
+        "label": "silence",
+        "expectedMidis": [],
+        "instrument": "piano",
+        "micDevice": "in-repo fixture",
+        "noiseCondition": "clean",
+        "chordType": null,
+        "source": "file",
+        "outcome": "correct-reject",
+        "skipped": false,
+        "chordHit": false,
+        "partialChord": false,
+        "perNoteHitRate": null,
+        "matchedMidis": [],
+        "missedMidis": [],
+        "falsePositiveMidis": [],
+        "falsePositive": false,
+        "meanConfidence": null,
+        "meanLatencyMs": null,
+        "detectionCount": 0,
+        "missingFile": false
+      }
+    ]
+  },
+  "engine": "v2-score-informed-phase-2b"
+}

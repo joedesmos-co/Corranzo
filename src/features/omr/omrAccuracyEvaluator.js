@@ -3,6 +3,7 @@ import {
   matchMeasureNotes,
   matchMeasureNotesGreedy,
 } from './omrMeasureNoteMatching.js'
+import { groupAccuracyReportErrors, formatErrorGroupingMarkdown } from './omrDiagnosticGrouping.js'
 
 export const OMR_ACCURACY_SOURCE = {
   STAFF_DETECTION: 'staff-detection',
@@ -678,6 +679,8 @@ export function formatOmrAccuracyReport(report) {
       `  m${measure.measureNumber}: error ${pct(measure.errorRate)}; truth ${measure.truthNoteCount}, generated ${measure.generatedNoteCount}, missing ${measure.missingNoteCount}, extra ${measure.extraNoteCount}, pitch ${measure.wrongPitchCount}, duration ${measure.wrongDurationCount}, onset ${measure.wrongOnsetCount}, time ${measure.wrongTimeCount}, chord ${measure.chordMismatchCount}`,
     )
   }
+  lines.push('')
+  lines.push(formatErrorGroupingMarkdown(groupAccuracyReportErrors(report), { title: 'Error grouping' }).trimEnd())
   lines.push('')
   lines.push(
     examplesLine('Missing notes', report.debug.missingNotes, (note) => {

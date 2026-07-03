@@ -6,13 +6,13 @@
   flex-direction: column;
   min-height: 0;
   min-width: 0;
-  max-height: calc(100vh - var(--sf-topbar-height));
+  max-height: calc(var(--sf-viewport-height) - var(--sf-topbar-height));
   overflow: hidden;
   background: var(--sf-bg-raised);
 }
 
 .session-restore-banner ~ .practice-workspace {
-  max-height: calc(100vh - var(--sf-topbar-height) - 52px);
+  max-height: calc(var(--sf-viewport-height) - var(--sf-topbar-height) - 52px);
 }
 
 .practice-workspace__layout {
@@ -253,7 +253,9 @@
 /* Approximate-cursor hint: shown briefly, then quietly fades out (the timing is
    driven by ScoreFollowApproximateHint; this only animates the fade). */
 .score-follow-approximate-hint {
-  transition: opacity 0.6s ease, visibility 0.6s ease;
+  transition:
+    opacity var(--sf-duration-fade) var(--sf-ease-out),
+    visibility var(--sf-duration-fade) var(--sf-ease-out);
 }
 
 .score-follow-approximate-hint--dismissed {
@@ -305,7 +307,7 @@
   border: 2px solid var(--sf-border-strong);
   border-top-color: var(--sf-text-muted);
   border-radius: 50%;
-  animation: score-follow-setup-spin 0.8s linear infinite;
+  animation: score-follow-setup-spin 0.65s linear infinite;
   flex-shrink: 0;
 }
 
@@ -578,7 +580,7 @@
 
 .practice-section__status--loading {
   color: var(--sf-text-muted);
-  animation: practice-status-pulse 1.4s ease-in-out infinite;
+  animation: practice-status-pulse 2s var(--sf-ease-in-out) infinite;
 }
 
 @keyframes practice-status-pulse {
@@ -2836,7 +2838,6 @@
 .practice-section__collapse {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.22s ease;
   pointer-events: none;
   visibility: hidden;
 }
@@ -3284,7 +3285,7 @@
   position: absolute;
   left: 50%;
   bottom: 48px;
-  transform: translateX(-50%) translateY(12px);
+  transform: translateX(-50%) translateY(6px);
   z-index: 12;
   display: flex;
   flex-direction: column;
@@ -3300,8 +3301,8 @@
   pointer-events: none;
   opacity: 0;
   transition:
-    opacity 0.28s ease,
-    transform 0.28s ease;
+    opacity var(--sf-duration) var(--sf-ease-out),
+    transform var(--sf-duration) var(--sf-ease-out);
 }
 
 .practice-fullscreen-hud--visible {
@@ -3321,7 +3322,7 @@
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, #456a9a, var(--sf-accent));
-  transition: width 0.12s linear;
+  transition: width var(--sf-duration-fast) linear;
 }
 
 .practice-fullscreen-hud__row {
@@ -3758,7 +3759,10 @@
   color: var(--sf-text-muted);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid transparent;
-  transition: background 0.12s ease, color 0.12s ease, transform 0.12s ease;
+  transition:
+    background var(--sf-duration-fast) var(--sf-ease-out),
+    color var(--sf-duration-fast) var(--sf-ease-out),
+    transform var(--sf-duration-fast) var(--sf-ease-out);
 }
 
 .metronome-beat-indicator__beat--downbeat {
@@ -3768,7 +3772,7 @@
 .metronome-beat-indicator__beat--active {
   color: #f4f7fc;
   background: rgba(109, 74, 255, 0.35);
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 
 .metronome-beat-indicator__beat--accent.metronome-beat-indicator__beat--active {
@@ -4194,7 +4198,8 @@
   max-width: min(45%, 18rem);
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1100px) and (orientation: portrait),
+  (max-width: 900px) {
   .practice-workspace__layout {
     flex-direction: column;
     overflow-y: auto;
@@ -4265,7 +4270,9 @@
     min-width: 0;
     padding: 0 8px;
   }
+}
 
+@media (max-width: 1100px) {
   .practice-shortcuts-hint__keys {
     display: none;
   }
@@ -4303,6 +4310,34 @@
   .score-follow-controls__delete {
     width: 36px;
     height: 36px;
+  }
+}
+
+@media (max-width: 1100px) and (orientation: landscape) and (min-width: 901px) {
+  .practice-control-panel {
+    flex: 0 0 min(var(--sf-sidebar-width), 34vw);
+    width: min(var(--sf-sidebar-width), 34vw);
+    max-width: 34vw;
+  }
+}
+
+@media (max-width: 1100px) and (max-height: 500px) and (orientation: landscape) {
+  .practice-workspace__score {
+    min-height: 34vh;
+  }
+
+  .practice-control-panel {
+    max-height: 58vh;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape) and (min-height: 501px) and (max-height: 900px) {
+  .practice-workspace__score {
+    min-height: 42vh;
+  }
+
+  .practice-control-panel {
+    max-height: 52vh;
   }
 }
 
@@ -4654,12 +4689,13 @@
   --vp-accent: #6ee7b7;
   --vp-accent-glow: rgba(110, 231, 183, 0.55);
   --vp-played: #57b48a;
+  --vp-upcoming: #b4b4bb;
   flex: 1;
   min-width: 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--sf-space-sm);
+  gap: var(--sf-space-md);
   padding: var(--sf-space-md);
   background: var(--sf-bg-app);
   overflow: hidden;
@@ -4724,8 +4760,8 @@
 .visual-practice__target {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 10px 14px;
+  gap: 4px;
+  padding: 12px 16px;
   border: 1px solid var(--sf-border);
   border-radius: var(--sf-radius-lg);
   background: var(--sf-bg-panel);
@@ -4747,13 +4783,16 @@
 }
 
 .visual-practice__target-notes {
-  font-size: 1.3rem;
+  font-size: 1.35rem;
+  line-height: 1.28;
+  letter-spacing: 0.01em;
   color: var(--sf-text-primary);
   font-weight: 650;
 }
 
 .visual-practice__target-meta {
   font-size: var(--sf-font-small);
+  line-height: 1.35;
   color: var(--sf-text-subtle);
 }
 
@@ -4763,12 +4802,17 @@
   /* Shrinkable so the target callout and keyboard strip always stay visible
      in short viewports (mobile) instead of being clipped — but tall enough
      that a grand staff at minimum zoom keeps both staves readable. */
-  flex: 1 1 200px;
-  min-height: 150px;
+  flex: 1 1 220px;
+  min-height: 168px;
   border: 1px solid var(--sf-border);
   border-radius: var(--sf-radius-lg);
   background: var(--sf-bg-panel);
   overflow: hidden;
+}
+
+.staff-lane__scroll,
+.tab-lane__scroll {
+  will-change: transform;
 }
 
 /* Far-future notes fade out toward the right edge: readability first. */
@@ -4792,8 +4836,8 @@
 }
 
 .staff-lane__line {
-  stroke: #71717a;
-  stroke-width: 1.25;
+  stroke: #8b8b94;
+  stroke-width: 1.35;
 }
 
 .staff-lane__barline {
@@ -4858,9 +4902,13 @@
   stroke-width: 2;
 }
 
-/* Upcoming notes: dim gray. */
+/* Upcoming notes: readable gray with a smooth handoff to current/past. */
 .staff-lane__note {
-  color: #a1a1aa;
+  color: var(--vp-upcoming, #b4b4bb);
+  transition:
+    color var(--sf-duration-press) var(--sf-ease-out),
+    opacity var(--sf-duration-press) var(--sf-ease-out),
+    filter var(--sf-duration-press) var(--sf-ease-out);
 }
 
 /* Current notes: bright, larger, with a mint glow — one obvious target. */
@@ -4874,13 +4922,185 @@
 .staff-lane__note--past {
   color: var(--vp-played, #57b48a);
   opacity: 0.5;
-  transition: opacity 400ms ease, color 400ms ease;
+  transition: opacity var(--sf-duration-press) var(--sf-ease-out), color var(--sf-duration-press) var(--sf-ease-out);
+}
+
+/* ── Tablature lane (guitar Visual Practice) — same card treatment and
+      status palette as the staff lane; only the visualization differs. ── */
+.tab-lane {
+  position: relative;
+  flex: 1 1 220px;
+  min-height: 168px;
+  border: 1px solid var(--sf-border);
+  border-radius: var(--sf-radius-lg);
+  background: var(--sf-bg-panel);
+  overflow: hidden;
+}
+
+.tab-lane::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 16%;
+  background: linear-gradient(to right, transparent, var(--sf-bg-panel) 88%);
+  pointer-events: none;
+}
+
+.tab-lane__svg {
+  display: block;
+}
+
+.tab-lane__mask {
+  fill: var(--sf-bg-panel);
+}
+
+.tab-lane__line {
+  stroke: #8b8b94;
+  stroke-width: 1.35;
+}
+
+.tab-lane__line--inner {
+  stroke: #52525b;
+  stroke-width: 1;
+}
+
+.tab-lane__barline {
+  stroke: var(--sf-border-strong);
+  stroke-width: 1;
+}
+
+.tab-lane__string-label {
+  fill: var(--sf-text-subtle);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  user-select: none;
+}
+
+.tab-lane__playhead {
+  stroke: var(--vp-accent, #6ee7b7);
+  stroke-width: 2;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 4px var(--vp-accent-glow, rgba(110, 231, 183, 0.55)));
+}
+
+.tab-lane__playhead-cap {
+  fill: var(--vp-accent, #6ee7b7);
+  filter: drop-shadow(0 0 5px var(--vp-accent-glow, rgba(110, 231, 183, 0.55)));
+}
+
+/* Fret discs read like tab digits on a badge: dim gray upcoming, bright
+   current with the shared mint glow, faded green once played. */
+.tab-lane__note {
+  color: var(--vp-upcoming, #b4b4bb);
+  transition:
+    color var(--sf-duration-press) var(--sf-ease-out),
+    opacity var(--sf-duration-press) var(--sf-ease-out),
+    filter var(--sf-duration-press) var(--sf-ease-out);
+}
+
+.tab-lane__disc {
+  fill: var(--sf-bg-panel-inset);
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.tab-lane__fret {
+  fill: currentColor;
+  font-weight: 700;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+.tab-lane__note--current {
+  color: #ffffff;
+  filter: drop-shadow(0 0 7px var(--vp-accent-glow, rgba(110, 231, 183, 0.65)))
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.9));
+}
+
+.tab-lane__note--past {
+  color: var(--vp-played, #57b48a);
+  opacity: 0.5;
+  transition: opacity var(--sf-duration-press) var(--sf-ease-out), color var(--sf-duration-press) var(--sf-ease-out);
+}
+
+/* ── Fretboard target strip (guitar counterpart of the keyboard strip) ── */
+.visual-practice__fretboard-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  padding-top: 10px;
+}
+
+.visual-practice__fretboard {
+  border: 1px solid var(--sf-border-strong);
+  border-radius: var(--sf-radius-md);
+  overflow: hidden;
+  background: var(--sf-bg-panel-inset);
+}
+
+.visual-practice__fret-string {
+  display: flex;
+  height: 18px;
+  position: relative;
+}
+
+.visual-practice__fret-string::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: #52525b;
+  pointer-events: none;
+}
+
+.visual-practice__fret-cell {
+  position: relative;
+  border-right: 1px solid var(--sf-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visual-practice__fret-cell--nut {
+  border-right: 3px solid #71717a;
+  background: rgba(113, 113, 122, 0.12);
+}
+
+.visual-practice__fret-dot {
+  position: relative;
+  z-index: 1;
+  min-width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--vp-accent, #6ee7b7);
+  color: #0f172a;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: center;
+  box-shadow: 0 0 6px var(--vp-accent-glow, rgba(110, 231, 183, 0.65));
+}
+
+.visual-practice__fret-numbers {
+  display: flex;
+  padding-top: 3px;
+}
+
+.visual-practice__fret-number {
+  text-align: center;
+  font-size: 10px;
+  color: var(--sf-text-subtle);
+  font-variant-numeric: tabular-nums;
 }
 
 .visual-practice__keyboard-wrap {
   position: relative;
   flex: 0 0 auto;
-  padding-top: 34px;
+  padding-top: 38px;
 }
 
 /* Floating letter chips above the target keys. */
@@ -4889,32 +5109,38 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 34px;
+  height: 38px;
   pointer-events: none;
 }
 
 .visual-practice__key-chip {
   position: absolute;
-  top: 2px;
+  top: 4px;
   transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   border: 1.5px solid var(--vp-accent, #6ee7b7);
-  background: rgba(110, 231, 183, 0.14);
+  background: rgba(110, 231, 183, 0.16);
   color: var(--vp-accent, #6ee7b7);
   font-size: var(--sf-font-small);
   font-weight: 700;
   box-shadow: 0 0 8px var(--vp-accent-glow, rgba(110, 231, 183, 0.45));
+  transition:
+    left var(--sf-duration-press) var(--sf-ease-out),
+    opacity var(--sf-duration-press) var(--sf-ease-out),
+    transform var(--sf-duration-press) var(--sf-ease-out);
+  will-change: left, transform;
+  animation: visual-practice-chip-in var(--sf-duration-press) var(--sf-ease-out);
 }
 
 .visual-practice__keyboard {
   position: relative;
   display: flex;
-  height: 116px;
+  height: 120px;
   border: 1px solid var(--sf-border);
   border-radius: var(--sf-radius-md);
   overflow: hidden;
@@ -4927,11 +5153,14 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding-bottom: 4px;
+  padding-bottom: 6px;
   background: #d4d4d8;
   border-right: 1px solid #52525b;
   color: #18181b;
-  transition: transform 170ms ease, box-shadow 170ms ease;
+  transition:
+    transform var(--sf-duration-press) var(--sf-ease-out),
+    box-shadow var(--sf-duration-press) var(--sf-ease-out);
+  will-change: transform;
 }
 
 /* Mint press fill lives on an overlay so it can fade smoothly in and out. */
@@ -4941,7 +5170,7 @@
   inset: 0;
   background: linear-gradient(to bottom, #d3f7e7, var(--vp-accent, #6ee7b7));
   opacity: 0;
-  transition: opacity 170ms ease;
+  transition: opacity var(--sf-duration-press) var(--sf-ease-out);
   pointer-events: none;
 }
 
@@ -4952,13 +5181,16 @@
 .visual-practice__key--black {
   position: absolute;
   top: 0;
-  height: 58%;
+  height: 60%;
   background: #09090b;
   border: 1px solid #3f3f46;
   border-top: none;
   border-radius: 0 0 3px 3px;
   color: var(--sf-text-primary);
   z-index: 1;
+  transition:
+    transform var(--sf-duration-press) var(--sf-ease-out),
+    box-shadow var(--sf-duration-press) var(--sf-ease-out);
 }
 
 /* Pressed target keys: slight depression + glow, fading in under 200ms and
@@ -4998,16 +5230,12 @@
 @keyframes visual-practice-chip-in {
   from {
     opacity: 0;
-    transform: translateX(-50%) scale(0.7);
+    transform: translateX(-50%) translateY(-4px) scale(0.82);
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) scale(1);
+    transform: translateX(-50%) translateY(0) scale(1);
   }
-}
-
-.visual-practice__key-chip {
-  animation: visual-practice-chip-in 160ms ease-out;
 }
 
 /* Legend: what the colors mean, at a glance. */
@@ -5044,39 +5272,66 @@
 }
 
 .visual-practice__legend-item--upcoming::before {
-  background: #71717a;
+  background: var(--vp-upcoming, #b4b4bb);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .staff-lane__note,
+  .tab-lane__note,
+  .visual-practice__key,
+  .visual-practice__key--black,
+  .visual-practice__key-chip {
+    transition: none;
+    animation: none;
+  }
+
+  .staff-lane__scroll,
+  .tab-lane__scroll {
+    will-change: auto;
+  }
 }
 
 @media (max-width: 900px) {
   .visual-practice {
-    padding: var(--sf-space-sm);
-    gap: 8px;
+    padding: var(--sf-space-sm) var(--sf-space-sm);
+    gap: 10px;
+  }
+
+  .staff-lane,
+  .tab-lane {
+    flex-basis: 180px;
+    min-height: 148px;
+  }
+
+  .visual-practice__legend {
+    flex-wrap: wrap;
   }
 
   .visual-practice__keyboard-wrap {
-    padding-top: 26px;
+    padding-top: 30px;
   }
 
   .visual-practice__key-chips {
-    height: 26px;
+    height: 30px;
   }
 
   .visual-practice__key-chip {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
+    top: 3px;
     font-size: var(--sf-font-micro);
   }
 
   .visual-practice__keyboard {
-    height: 64px;
+    height: 72px;
   }
 
   .visual-practice__target {
-    padding: 8px 12px;
+    padding: 10px 12px;
   }
 
   .visual-practice__target-notes {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
   }
 
   .visual-practice__legend-item {

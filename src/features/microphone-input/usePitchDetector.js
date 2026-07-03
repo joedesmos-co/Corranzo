@@ -104,8 +104,14 @@ export default function usePitchDetector({
           uiFrameSkipRef.current += 1
           if (onFrame && uiFrameSkipRef.current >= UI_FRAME_INTERVAL) {
             uiFrameSkipRef.current = 0
+            const stabilizer = stabilizerRef.current
+            const stabilizerPending =
+              stabilizer.candidateMidi != null &&
+              stabilizer.stableCount > 0 &&
+              stabilizer.stableCount < stabilizer.holdFrames
             onFrame({
               ...frame,
+              stabilizerPending,
               calibrating: stillCalibrating,
               calibrationStatus: stillCalibrating
                 ? MIC_CALIBRATION_STATUS.MEASURING

@@ -28,6 +28,7 @@ function PdfPageFrame({
   scoreFollow,
 }) {
   const frameRef = useRef(null)
+  const overlayLayoutFrameRef = useRef(null)
   const [overlayLayout, setOverlayLayout] = useState(null)
 
   const syncOverlayLayout = useCallback(() => {
@@ -55,6 +56,10 @@ function PdfPageFrame({
     window.addEventListener('resize', syncOverlayLayout)
 
     return () => {
+      if (overlayLayoutFrameRef.current != null) {
+        cancelAnimationFrame(overlayLayoutFrameRef.current)
+        overlayLayoutFrameRef.current = null
+      }
       observer.disconnect()
       window.removeEventListener('resize', syncOverlayLayout)
     }
@@ -71,7 +76,13 @@ function PdfPageFrame({
   const handlePageLoadSuccess = useCallback(
     (page) => {
       onPageLoadSuccess(page)
-      requestAnimationFrame(syncOverlayLayout)
+      if (overlayLayoutFrameRef.current != null) {
+        cancelAnimationFrame(overlayLayoutFrameRef.current)
+      }
+      overlayLayoutFrameRef.current = requestAnimationFrame(() => {
+        overlayLayoutFrameRef.current = null
+        syncOverlayLayout()
+      })
     },
     [onPageLoadSuccess, syncOverlayLayout],
   )

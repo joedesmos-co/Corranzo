@@ -105,7 +105,11 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null) {
         }))
     : timingMap.notes.filter((note) => !note.isRest && note.midi != null)
 
-  let notes = sourceNotes.filter((note) => !note.isRest && note.midi != null)
+  // TAB-staff mirrors duplicate standard-staff notes in mixed guitar scores;
+  // one played note must count once. Piano scores never set this flag.
+  let notes = sourceNotes.filter(
+    (note) => !note.isRest && note.midi != null && !note.isTabMirror,
+  )
   notes = filterByLoopRegion(notes, loopRegion)
 
   const groups = groupNotesByTime(notes)

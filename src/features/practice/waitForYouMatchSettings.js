@@ -9,8 +9,8 @@ export const WFY_MATCH_DEFAULTS = {
   allowOctaveMistakes: false,
   transpositionEnabled: false,
   transpositionOffset: 0,
-  chordWindowMs: 450,
-  /** Collect hand-separated notes within this window when matching polyphonic checkpoints (MIDI). */
+  chordWindowMs: 500,
+  /** Score checkpoint grouping only — not used for MIDI rolled-chord input timing. */
   musicalEventWindowMs: 180,
   /** Mic collects one pitch at a time — allow longer gaps between chord tones. */
   micChordCollectionWindowMs: 3500,
@@ -24,11 +24,15 @@ export const WFY_MATCH_DEFAULTS = {
   // Cents tolerance for accepting a microphone pitch as the expected note. A
   // little slack absorbs real-world tuning/intonation. MIDI input is exact and
   // ignores this.
-  micCentsTolerance: 30,
+  micCentsTolerance: 35,
 }
 
 export const CHORD_WINDOW_MS_MIN = 200
 export const CHORD_WINDOW_MS_MAX = 2000
+/** Max time from the first rolled chord tone to collect the rest (MIDI input only). */
+export const ROLLED_CHORD_TOTAL_CAP_MS = 1750
+export const ROLLED_CHORD_TOTAL_CAP_MS_MIN = 1500
+export const ROLLED_CHORD_TOTAL_CAP_MS_MAX = 2000
 export const MUSICAL_EVENT_WINDOW_MS_MIN = 120
 export const MUSICAL_EVENT_WINDOW_MS_MAX = 180
 export const MIC_CHORD_COLLECTION_WINDOW_MS = 3500

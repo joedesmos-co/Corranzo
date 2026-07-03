@@ -28,10 +28,22 @@ function durationTypeForDivisions(durationDivisions, dotted) {
   return TYPE_BY_DIVISIONS[base] ?? 'quarter'
 }
 
-function pitchXml(note) {
-  const pitch = midiToWrittenPitch(note.midi)
+function pitchXml(note, octaveShiftSemitones = 0) {
+  // Staff-position pitches are written pitch; instruments that sound an
+  // octave below written (guitar) shift here so MusicXML carries sounding
+  // pitch. Tab-derived notes are already sounding pitch — never shifted.
+  const shift = note.soundingPitch ? 0 : octaveShiftSemitones
+  const pitch = midiToWrittenPitch(note.midi + shift)
   const alterXml = pitch.alter != null ? `<alter>${pitch.alter}</alter>` : ''
   return `<pitch><step>${pitch.step}</step>${alterXml}<octave>${pitch.octave}</octave></pitch>`
+}
+
+/** <technical> string/fret for fretted instruments; empty when absent. */
+function technicalXml(note) {
+  if (note.string == null || note.fret == null) {
+    return ''
+  }
+  return `<technical><string>${note.string}</string><fret>${note.fret}</fret></technical>`
 }
 
 function noteXml(
@@ -47,6 +59,7 @@ function noteXml(
     articulation = null,
     accentArticulation = null,
     voice = 1,
+    octaveShiftSemitones = 0,
   } = {},
 ) {
   const dotXml = dotted ? '<dot/>' : ''
@@ -73,13 +86,14 @@ function noteXml(
     tieStart || tieStop
       ? `${tieStart ? '<tied type="start"/>' : ''}${tieStop ? '<tied type="stop"/>' : ''}`
       : ''
+  const fretXml = technicalXml(note)
   const notationsXml =
-    articulationXml || tiedXml
-      ? `<notations>${articulationXml}${tiedXml}</notations>`
+    articulationXml || tiedXml || fretXml
+      ? `<notations>${articulationXml}${tiedXml}${fretXml}</notations>`
       : ''
   return (
     `<note>${chord ? '<chord/>' : ''}` +
-    `${pitchXml(note)}` +
+    `${pitchXml(note, octaveShiftSemitones)}` +
     `${dotXml}<duration>${duration}</duration><voice>${voice}</voice>` +
     `<type>${type}</type>${beamXml}${tieXml}${notationsXml}</note>`
   )
@@ -145,6 +159,8 @@ export function buildOmrMusicXml({
   measures = [],
   musical = {},
   includeDisclaimer = true,
+  /** Instrument definition; null keeps the long-standing piano emission. */
+  instrument = null,
 } = {}) {
   const sortedMeasures = [...measures].sort((a, b) => a.measureNumber - b.measureNumber)
   if (!sortedMeasures.length) {
@@ -160,6 +176,15 @@ export function buildOmrMusicXml({
   const emitKey = shouldEmitKeySignature(keySignature)
   const emitTempo = shouldEmitTempo(tempo)
 
+  const partName = instrument?.omr?.partName ?? 'Piano'
+  // Instruments that sound an octave below written treble (guitar) emit the
+  // octave-marked clef and sounding pitches; piano's 0 keeps output identical.
+  const writtenOctaveOffset = instrument?.notation?.writtenOctaveOffset ?? 0
+  const octaveShiftSemitones = writtenOctaveOffset * 12
+  const clefOctaveXml = writtenOctaveOffset
+    ? `<clef-octave-change>${writtenOctaveOffset}</clef-octave-change>`
+    : ''
+
   let measuresXml = ''
   for (const measure of sortedMeasures) {
     let inner = ''
@@ -170,7 +195,7 @@ export function buildOmrMusicXml({
       }
       inner +=
         `<time><beats>${timeSignature.beats}</beats><beat-type>${timeSignature.beatType}</beat-type></time>` +
-        `<clef><sign>G</sign><line>2</line></clef></attributes>`
+        `<clef><sign>G</sign><line>2</line>${clefOctaveXml}</clef></attributes>`
       if (includeDisclaimer) {
         inner += `<direction><words>${escapeXml(OMR_DISCLAIMER)}</words></direction>`
       }
@@ -237,6 +262,7 @@ export function buildOmrMusicXml({
           articulation: note.articulation,
           accentArticulation: note.accentArticulation,
           voice,
+          octaveShiftSemitones,
         })
       })
       cursor += duration
@@ -249,7 +275,7 @@ export function buildOmrMusicXml({
     `<?xml version="1.0" encoding="UTF-8"?>` +
     `<score-partwise version="3.1">` +
     `<work><work-title>${escapeXml(title)}</work-title></work>` +
-    `<part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>` +
+    `<part-list><score-part id="P1"><part-name>${escapeXml(partName)}</part-name></score-part></part-list>` +
     `<part id="P1">${measuresXml}</part>` +
     `</score-partwise>`
   )

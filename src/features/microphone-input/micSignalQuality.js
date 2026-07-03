@@ -3,6 +3,7 @@ export const MIC_SIGNAL_QUALITY = {
   TOO_QUIET: 'too-quiet',
   TOO_NOISY: 'too-noisy',
   WEAK: 'weak',
+  UNSTABLE: 'unstable',
   LISTENING: 'listening',
   GOOD: 'good',
 }
@@ -11,7 +12,8 @@ export const MIC_SIGNAL_QUALITY_LABELS = {
   [MIC_SIGNAL_QUALITY.SILENT]: 'Quiet — play a note to test',
   [MIC_SIGNAL_QUALITY.TOO_QUIET]: 'Too quiet — move closer or play a bit louder',
   [MIC_SIGNAL_QUALITY.TOO_NOISY]: 'Too noisy — try a quieter room or lower room volume',
-  [MIC_SIGNAL_QUALITY.WEAK]: 'Unclear — try one clear note at a time',
+  [MIC_SIGNAL_QUALITY.WEAK]: 'Unclear pitch — try one clear note at a time',
+  [MIC_SIGNAL_QUALITY.UNSTABLE]: 'Pitch detected but not stable — hold the note',
   [MIC_SIGNAL_QUALITY.LISTENING]: 'Listening…',
   [MIC_SIGNAL_QUALITY.GOOD]: 'Good signal — single notes should register well',
 }
@@ -19,7 +21,13 @@ export const MIC_SIGNAL_QUALITY_LABELS = {
 /**
  * User-facing mic signal guidance (not raw DSP jargon).
  */
-export function classifyMicSignalQuality({ rms = 0, clarity = 0, passesGate = false, hasPitch = false }) {
+export function classifyMicSignalQuality({
+  rms = 0,
+  clarity = 0,
+  passesGate = false,
+  hasPitch = false,
+  stabilizerPending = false,
+}) {
   if (rms < 0.0035) {
     return MIC_SIGNAL_QUALITY.SILENT
   }
@@ -28,6 +36,9 @@ export function classifyMicSignalQuality({ rms = 0, clarity = 0, passesGate = fa
   }
   if (rms > 0.32) {
     return MIC_SIGNAL_QUALITY.TOO_NOISY
+  }
+  if (stabilizerPending) {
+    return MIC_SIGNAL_QUALITY.UNSTABLE
   }
   if (hasPitch && clarity >= 0.4) {
     return MIC_SIGNAL_QUALITY.GOOD

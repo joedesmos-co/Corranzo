@@ -24,7 +24,12 @@ export function buildScoreNoteSchedule(timingMap, { rate = 1 } = {}) {
 
   return getTimeline(timingMap)
     .performedNotes()
-    .filter((note) => !note.isRest && note.midi != null && !note.suppressPlaybackAttack)
+    .filter(
+      (note) =>
+        // TAB-staff mirrors duplicate standard-staff notes in mixed guitar
+        // scores; each played note sounds once. Piano never sets isTabMirror.
+        !note.isRest && note.midi != null && !note.suppressPlaybackAttack && !note.isTabMirror,
+    )
     .map((note) => {
       const writtenDurationSeconds = Math.max(note.durationSeconds, 0.03)
       return {

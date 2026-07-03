@@ -1,5 +1,6 @@
 import { cloneElement, isValidElement, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { isTabletLikeDevice } from '../../features/platform/browserPracticeSupport.js'
+import { focusFirstElement, handleFocusTrap } from '../../utils/focusTrap.js'
 import { Document } from 'react-pdf'
 import '../../pdf/setupPdfWorker.js'
 import useElementSize from '../../hooks/useElementSize.js'
@@ -53,6 +54,8 @@ export default function PdfFullscreen({
   stabilizeLayout = false,
 }) {
   const containerRef = useRef(null)
+  const dialogRef = useRef(null)
+  const previousFocusRef = useRef(null)
   const rawContainerSize = useElementSize(containerRef)
   const containerSize = useStableElementSize(rawContainerSize, {
     enabled: stabilizeLayout,
@@ -187,6 +190,28 @@ export default function PdfFullscreen({
   ])
 
   useEffect(() => {
+    previousFocusRef.current = document.activeElement
+    const frameId = window.requestAnimationFrame(() => {
+      focusFirstElement(dialogRef.current)
+    })
+    return () => {
+      window.cancelAnimationFrame(frameId)
+      const previous = previousFocusRef.current
+      if (previous instanceof HTMLElement && document.contains(previous)) {
+        previous.focus()
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    function handleFocusTrapKeyDown(event) {
+      handleFocusTrap(dialogRef.current, event)
+    }
+    window.addEventListener('keydown', handleFocusTrapKeyDown, true)
+    return () => window.removeEventListener('keydown', handleFocusTrapKeyDown, true)
+  }, [])
+
+  useEffect(() => {
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
@@ -209,6 +234,7 @@ export default function PdfFullscreen({
 
   return (
     <div
+      ref={dialogRef}
       className="pdf-fullscreen"
       role="dialog"
       aria-modal="true"

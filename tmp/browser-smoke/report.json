@@ -1,0 +1,82 @@
+{
+  "generatedAt": "2026-07-03T01:51:35.189Z",
+  "baseUrl": "http://127.0.0.1:4173",
+  "checks": [
+    {
+      "viewport": "desktop",
+      "overflow": {
+        "overflow": false,
+        "docScrollWidth": 1280,
+        "docClientWidth": 1280
+      },
+      "pass": true
+    },
+    {
+      "viewport": "desktop-practice",
+      "overflow": {
+        "overflow": false,
+        "docScrollWidth": 1280,
+        "docClientWidth": 1280
+      },
+      "pass": true
+    },
+    {
+      "viewport": "ipad",
+      "overflow": {
+        "overflow": false,
+        "docScrollWidth": 820,
+        "docClientWidth": 820
+      },
+      "pass": true
+    },
+    {
+      "viewport": "ipad-practice",
+      "overflow": {
+        "overflow": false,
+        "docScrollWidth": 820,
+        "docClientWidth": 820
+      },
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "overflow": {
+        "overflow": false,
+        "docScrollWidth": 390,
+        "docClientWidth": 390
+      },
+      "pass": true
+    },
+    {
+      "viewport": "mobile-practice",
+      "overflow": {
+        "overflow": false,
+        "docScrollWidth": 390,
+        "docClientWidth": 390
+      },
+      "pass": true
+    }
+  ],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failures": [],
+  "passes": [
+    "cold load renders top bar",
+    "Piano practice opens with playback panel",
+    "Piano Play clicked without crash",
+    "Guitar shows empty practice after Piano load",
+    "Guitar Play clicked without crash",
+    "Repeated Piano ↔ Guitar switches keep PDF previews",
+    "Visual view renders",
+    "Score view renders",
+    "Wait For You section visible",
+    "Hear It control deferred until checkpoint (Wait For You mode enabled)",
+    "Progress instrument filters switch",
+    "Reload restored active instrument (Guitar)",
+    "Reload preserved Piano bundle — PDF visible in Library",
+    "PDF preview still works after switching back post-reload",
+    "No horizontal overflow on desktop/iPad/mobile",
+    "No console errors",
+    "No uncaught page errors"
+  ]
+}

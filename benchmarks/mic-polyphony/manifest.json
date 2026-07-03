@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "description": "Labeled chord clips for offline polyphonic mic measurement. Replays through the V1 monophonic pipeline as a baseline until Mic Engine V2 ships.",
+  "defaultSampleRate": 44100,
+  "clips": [
+    {
+      "id": "synth-dyad-c4-e4",
+      "label": "chord",
+      "expectedMidis": [60, 64],
+      "chordType": "simultaneous",
+      "instrument": "piano",
+      "micDevice": "synthetic",
+      "noiseCondition": "clean",
+      "synthetic": {
+        "type": "chord-simultaneous",
+        "midis": [60, 64],
+        "seconds": 1.6,
+        "amplitude": 0.3
+      },
+      "expectedOnsetMs": 120,
+      "notes": "Synthetic dyad — V1 baseline should struggle."
+    },
+    {
+      "id": "synth-c-major-triad",
+      "label": "chord",
+      "expectedMidis": [60, 64, 67],
+      "chordType": "simultaneous",
+      "instrument": "piano",
+      "micDevice": "synthetic",
+      "noiseCondition": "clean",
+      "synthetic": {
+        "type": "chord-simultaneous",
+        "midis": [60, 64, 67],
+        "seconds": 1.8,
+        "amplitude": 0.32
+      },
+      "expectedOnsetMs": 120,
+      "notes": "Synthetic C major triad."
+    },
+    {
+      "id": "synth-g7-tetrad",
+      "label": "chord",
+      "expectedMidis": [55, 59, 62, 65],
+      "chordType": "simultaneous",
+      "instrument": "piano",
+      "micDevice": "synthetic",
+      "noiseCondition": "clean",
+      "synthetic": {
+        "type": "chord-simultaneous",
+        "midis": [55, 59, 62, 65],
+        "seconds": 1.8,
+        "amplitude": 0.3
+      },
+      "expectedOnsetMs": 120,
+      "notes": "Four-note synthetic chord."
+    },
+    {
+      "id": "synth-rolled-c-major",
+      "label": "chord",
+      "expectedMidis": [60, 64, 67],
+      "chordType": "rolled",
+      "rollMs": 80,
+      "instrument": "piano",
+      "micDevice": "synthetic",
+      "noiseCondition": "clean",
+      "synthetic": {
+        "type": "chord-rolled",
+        "midis": [60, 64, 67],
+        "seconds": 2,
+        "staggerMs": 80,
+        "amplitude": 0.3
+      },
+      "expectedOnsetMs": 120,
+      "notes": "Rolled chord — documents V1 sequential collection behavior."
+    },
+    {
+      "id": "synth-silence",
+      "label": "silence",
+      "expectedMidis": null,
+      "instrument": "piano",
+      "micDevice": "synthetic",
+      "noiseCondition": "clean",
+      "synthetic": { "type": "silence", "seconds": 0.8 },
+      "notes": "Silence control."
+    },
+    {
+      "id": "synth-noise",
+      "label": "noise",
+      "expectedMidis": null,
+      "instrument": "piano",
+      "micDevice": "synthetic",
+      "noiseCondition": "noisy",
+      "synthetic": { "type": "noise", "seconds": 0.8, "seed": 13 },
+      "notes": "Noise control."
+    },
+    {
+      "id": "real-c-major-triad",
+      "label": "chord",
+      "expectedMidis": [60, 64, 67],
+      "chordType": "simultaneous",
+      "instrument": "piano",
+      "micDevice": "in-repo fixture",
+      "noiseCondition": "clean",
+      "file": "clips/real-c-major-triad.wav",
+      "startMs": 80,
+      "endMs": 1800,
+      "expectedOnsetMs": 120,
+      "notes": "Generated fixture — replace with live mic capture."
+    },
+    {
+      "id": "real-dyad-c4-g4",
+      "label": "chord",
+      "expectedMidis": [60, 67],
+      "chordType": "simultaneous",
+      "instrument": "piano",
+      "micDevice": "in-repo fixture",
+      "noiseCondition": "clean",
+      "file": "clips/real-dyad-c4-g4.wav",
+      "startMs": 80,
+      "endMs": 1600,
+      "expectedOnsetMs": 120,
+      "notes": "Two-note fixture."
+    },
+    {
+      "id": "real-room-quiet",
+      "label": "silence",
+      "expectedMidis": null,
+      "instrument": "piano",
+      "micDevice": "in-repo fixture",
+      "noiseCondition": "clean",
+      "file": "clips/real-room-quiet.wav",
+      "notes": "Quiet room bed."
+    }
+  ]
+}

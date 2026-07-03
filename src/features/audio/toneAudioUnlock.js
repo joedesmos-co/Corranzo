@@ -1,4 +1,5 @@
 import * as Tone from 'tone'
+import { configurePlaybackAudioContext } from '../playback/playbackAudioConfig.js'
 
 let startPromise = null
 let userUnlockedAudio = false
@@ -18,6 +19,7 @@ export function hasUserUnlockedAudio() {
  */
 export function startToneFromUserGesture() {
   userUnlockedAudio = true
+  configurePlaybackAudioContext(Tone)
   try {
     if (Tone.getContext().state === 'running') {
       return Promise.resolve()
@@ -40,6 +42,7 @@ export function startToneFromUserGesture() {
 export async function awaitToneStarted(audioContextStart) {
   if (audioContextStart) {
     userUnlockedAudio = true
+    configurePlaybackAudioContext(Tone)
     await audioContextStart
     return
   }
@@ -47,6 +50,7 @@ export async function awaitToneStarted(audioContextStart) {
     await startToneFromUserGesture()
   } else {
     userUnlockedAudio = true
+    configurePlaybackAudioContext(Tone)
   }
 }
 

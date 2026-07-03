@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   GUIDED_TUTORIAL_STEPS,
   resolveNextAvailableTutorialIndex,
 } from '../../features/onboarding/guidedTutorial.js'
+import { focusFirstElement, handleFocusTrap } from '../../utils/focusTrap.js'
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
@@ -98,6 +99,8 @@ export default function GuidedTutorial({
 }) {
   const [stepIndex, setStepIndex] = useState(0)
   const [targetSnapshot, setTargetSnapshot] = useState(null)
+  const cardRef = useRef(null)
+  const previousFocusRef = useRef(null)
   const step = steps[stepIndex] ?? steps[steps.length - 1]
   const isLastStep = stepIndex >= steps.length - 1
   const isChoiceStep = step?.id === 'welcome' && !practiceReady
@@ -212,6 +215,37 @@ export default function GuidedTutorial({
     }
   }, [activeView, goToNextAvailable, practiceStepNeedsScore, step, stepIndex])
 
+  useEffect(() => {
+    previousFocusRef.current = document.activeElement
+    return () => {
+      const previous = previousFocusRef.current
+      if (previous instanceof HTMLElement && document.contains(previous)) {
+        previous.focus()
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      focusFirstElement(cardRef.current)
+    })
+    return () => window.cancelAnimationFrame(frameId)
+  }, [stepIndex])
+
+  useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        onSkip?.()
+        return
+      }
+      handleFocusTrap(cardRef.current, event)
+    }
+
+    window.addEventListener('keydown', handleKeyDown, true)
+    return () => window.removeEventListener('keydown', handleKeyDown, true)
+  }, [onSkip])
+
   const visibleTargetRect =
     step?.targetId &&
     (!step.view || activeView === step.view) &&
@@ -261,7 +295,7 @@ export default function GuidedTutorial({
     <div
       className={`guided-tour${isChoiceStep ? ' guided-tour--choice' : ''}`}
       role="dialog"
-      aria-modal={isChoiceStep ? undefined : 'true'}
+      aria-modal="true"
       aria-labelledby="guided-tour-title"
     >
       {!isChoiceStep && !visibleTargetRect && <div className="guided-tour__backdrop" />}
@@ -276,6 +310,7 @@ export default function GuidedTutorial({
         ))}
       {visibleTargetRect && <div className="guided-tour__highlight" style={highlightStyle} />}
       <section
+        ref={cardRef}
         className={`guided-tour__card${visibleTargetRect || isChoiceStep ? '' : ' guided-tour__card--center'}${isChoiceStep ? ' guided-tour__card--choice' : ''}`}
         style={visibleTargetRect ? cardStyle : undefined}
       >

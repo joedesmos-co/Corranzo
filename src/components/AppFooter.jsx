@@ -33,7 +33,7 @@ export default function AppFooter({ onLegalNavigate }) {
         <a href={FEEDBACK_MAILTO}>{FEEDBACK_EMAIL}</a>
       </span>
       <span>Uploads and practice stats stay on your device.</span>
-      <span>Built for piano practice. More instruments later.</span>
+      <span>Built for piano and guitar practice.</span>
     </footer>
   )
 }

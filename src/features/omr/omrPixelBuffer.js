@@ -65,7 +65,7 @@ export function describeOmrImageBuffer(imageData, label = 'image') {
 }
 
 /**
- * Copy pixels element-wise into a fresh owned buffer.
+ * Copy pixels into a fresh owned buffer.
  */
 export function copyOmrPixels(imageData, label = 'copyOmrPixels') {
   if (!imageData?.data || imageData.width <= 0 || imageData.height <= 0) {
@@ -73,11 +73,7 @@ export function copyOmrPixels(imageData, label = 'copyOmrPixels') {
   }
   assertPixelViewReadable(imageData.data, `${label}-input`)
 
-  const length = imageData.data.length
-  const data = new Uint8ClampedArray(length)
-  for (let i = 0; i < length; i += 1) {
-    data[i] = imageData.data[i]
-  }
+  const data = imageData.data.slice()
   assertBufferNotDetached(data.buffer, `${label}-output`)
 
   return {
@@ -92,23 +88,22 @@ export const cloneOmrPixelBuffer = copyOmrPixels
 
 export function copyPixelView(data, label = 'copyPixelView') {
   assertPixelViewReadable(data, `${label}-input`)
-  const out = new Uint8ClampedArray(data.length)
-  for (let i = 0; i < data.length; i += 1) {
-    out[i] = data[i]
-  }
+  const out = data.slice()
   assertBufferNotDetached(out.buffer, `${label}-output`)
   return out
 }
 
 /**
- * Boring worker payload: plain number array, no TypedArray, no transfer list.
+ * Worker payload: owned pixel copy suitable for transferable postMessage.
  */
 export function serializeOmrImageForWorker(imageData, label = 'serialize-for-worker') {
   assertPixelViewReadable(imageData.data, `${label}-input`)
+  const pixels = imageData.data.slice()
   return {
     width: imageData.width,
     height: imageData.height,
-    pixels: Array.from(imageData.data),
+    pixels,
+    transferBuffer: pixels.buffer,
   }
 }
 
@@ -118,15 +113,27 @@ export function deserializeOmrImageFromWorker(payload, label = 'deserialize-from
     throw new Error(`[OMR ${label}] invalid worker image payload`)
   }
   const expectedLength = width * height * 4
-  if (pixels.length !== expectedLength) {
-    throw new Error(
-      `[OMR ${label}] pixel length mismatch (got ${pixels.length}, expected ${expectedLength})`,
-    )
-  }
 
-  const data = new Uint8ClampedArray(pixels.length)
-  for (let i = 0; i < pixels.length; i += 1) {
-    data[i] = pixels[i]
+  let data
+  if (pixels instanceof Uint8ClampedArray) {
+    if (pixels.length !== expectedLength) {
+      throw new Error(
+        `[OMR ${label}] pixel length mismatch (got ${pixels.length}, expected ${expectedLength})`,
+      )
+    }
+    data = pixels
+  } else if (Array.isArray(pixels)) {
+    if (pixels.length !== expectedLength) {
+      throw new Error(
+        `[OMR ${label}] pixel length mismatch (got ${pixels.length}, expected ${expectedLength})`,
+      )
+    }
+    data = new Uint8ClampedArray(pixels.length)
+    for (let i = 0; i < pixels.length; i += 1) {
+      data[i] = pixels[i]
+    }
+  } else {
+    throw new Error(`[OMR ${label}] invalid worker pixel payload type`)
   }
   assertBufferNotDetached(data.buffer, `${label}-output`)
 

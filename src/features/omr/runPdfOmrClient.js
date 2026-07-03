@@ -10,6 +10,8 @@ import { omrTrace } from './omrTrace.js'
 
 let activeWorker = null
 
+const OMR_PAGE_TIMEOUT_MS = 120_000
+
 function terminateActiveWorker() {
   if (activeWorker) {
     activeWorker.terminate()
@@ -67,22 +69,47 @@ function createWorkerAnalyzer(signal, traceRunId = null) {
       }
 
       let abortHandler = null
+      let pageTimeoutId = null
       const cleanupAbort = () => {
         if (abortHandler) {
           signal?.removeEventListener('abort', abortHandler)
           abortHandler = null
         }
       }
-
-      abortHandler = () => {
+      const clearPageTimeout = () => {
+        if (pageTimeoutId != null) {
+          window.clearTimeout(pageTimeoutId)
+          pageTimeoutId = null
+        }
+      }
+      const finish = (handler, value) => {
+        clearPageTimeout()
         cleanupAbort()
         pending = null
+        handler(value)
+      }
+
+      abortHandler = () => {
+        finish(reject, new DOMException('OMR generation cancelled.', 'AbortError'))
         terminateActiveWorker()
-        reject(new DOMException('OMR generation cancelled.', 'AbortError'))
       }
       signal?.addEventListener('abort', abortHandler, { once: true })
 
-      pending = { resolve, reject, cleanupAbort }
+      pending = {
+        resolve: (value) => finish(resolve, value),
+        reject: (error) => finish(reject, error),
+        cleanupAbort,
+      }
+
+      pageTimeoutId = window.setTimeout(() => {
+        finish(
+          reject,
+          new Error(
+            `OMR timed out on page ${pageOptions?.page ?? '?'}. Try again, cancel, or upload a timing file.`,
+          ),
+        )
+        terminateActiveWorker()
+      }, OMR_PAGE_TIMEOUT_MS)
 
       try {
         omrTrace('client:before-worker-postMessage', {
@@ -109,7 +136,7 @@ function createWorkerAnalyzer(signal, traceRunId = null) {
           pixels: payload.pixels,
           pageOptions,
           traceRunId,
-        })
+        }, payload.transferBuffer ? [payload.transferBuffer] : undefined)
 
         omrDebugStep('client:after-worker-postMessage', imageData, { page: pageOptions?.page })
       } catch (error) {
@@ -117,9 +144,7 @@ function createWorkerAnalyzer(signal, traceRunId = null) {
           message: error?.message ?? String(error),
           stack: error?.stack,
         }, traceRunId)
-        cleanupAbort()
-        pending = null
-        reject(error)
+        finish(reject, error)
       }
     })
 }

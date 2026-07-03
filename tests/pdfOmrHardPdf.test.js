@@ -193,7 +193,9 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
     const analyzePage = async (imageData, pageOptions) => {
       const payload = serializeOmrImageForWorker(imageData, 'test:serialize')
       expect(isDetachedPixelBuffer(imageData.data)).toBe(false)
-      expect(Array.isArray(payload.pixels)).toBe(true)
+      expect(
+        payload.pixels instanceof Uint8ClampedArray || Array.isArray(payload.pixels),
+      ).toBe(true)
 
       const workerImage = deserializeOmrImageFromWorker(payload, 'test:deserialize')
       expect(isDetachedPixelBuffer(imageData.data)).toBe(false)

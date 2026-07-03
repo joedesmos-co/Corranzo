@@ -4,6 +4,8 @@ import { parseMidiFile } from './parseMidiFile.js'
 import { INSTRUMENT_STATUS } from './pianoInstrumentStatus.js'
 import { alignChordScoreTime } from './pianoVoiceMix.js'
 import { mapPlaybackVelocity } from './pianoVelocity.js'
+import { createInstrumentVoiceResolver } from './instrumentVoiceResolver.js'
+import { DEFAULT_INSTRUMENT_ID } from '../instruments/instruments.js'
 
 const loadPianoInstrumentModule = () => import('./pianoInstrument.js')
 const PLAY_READY_TIMEOUT_MS = 5000
@@ -48,8 +50,41 @@ export class MidiPlaybackEngine {
     this.onInstrumentStatus = null
     this.instrumentStatus = null
     this.loadPianoInstrument = loadPianoInstrument
-    this.createPianoInstrument = null
+    // Voice factories are resolved per instrument through the shared resolver;
+    // the piano slot honours the legacy `loadPianoInstrument` test seam above.
+    this.voiceResolver = createInstrumentVoiceResolver({
+      legacyPianoModuleLoader: () => this.loadPianoInstrument(),
+    })
     this.instrumentLoadPromise = null
+    this.testToneTimerId = null
+    this.testToneInstrument = null
+  }
+
+  /** Instrument used for all tracks (default piano). */
+  get instrumentId() {
+    return this.voiceResolver.instrumentId
+  }
+
+  /** Legacy test seam — injects the piano voice factory directly. */
+  get createPianoInstrument() {
+    return this.voiceResolver.getFactory(DEFAULT_INSTRUMENT_ID)
+  }
+
+  set createPianoInstrument(factory) {
+    this.voiceResolver.setFactory(DEFAULT_INSTRUMENT_ID, factory)
+  }
+
+  /** Switch instrument; existing track voices rebuild on next play. */
+  setInstrumentId(instrumentId) {
+    const changed = this.voiceResolver.setInstrumentId(instrumentId)
+    if (changed) {
+      for (const track of this.trackStates) {
+        track.instrument?.dispose()
+        track.instrument = null
+      }
+      this.recomputeInstrumentStatus()
+    }
+    return changed
   }
 
   // Aggregate per-track status without claiming a fallback before playback has
@@ -123,15 +158,12 @@ export class MidiPlaybackEngine {
   }
 
   /**
-   * Fetch/decode piano samples ahead of Play without wiring per-track instruments.
+   * Fetch/decode the current instrument's samples ahead of Play without wiring
+   * per-track instruments.
    */
   async preload() {
     try {
-      const module = await this.loadPianoInstrument()
-      if (!this.createPianoInstrument) {
-        this.createPianoInstrument = module.createPianoInstrument
-      }
-      await module.preloadPianoSampleBuffers({ tone: Tone })
+      await this.voiceResolver.preload(Tone)
     } catch {
       // Non-fatal — playFromUserGesture will retry instrument creation.
     }
@@ -149,12 +181,17 @@ export class MidiPlaybackEngine {
     if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) {
       return ready
     }
+    let timeoutId = null
     return Promise.race([
       ready,
       new Promise((resolve) => {
-        setTimeout(() => resolve('timeout'), timeoutMs)
+        timeoutId = setTimeout(() => resolve('timeout'), timeoutMs)
       }),
-    ])
+    ]).finally(() => {
+      if (timeoutId != null) {
+        clearTimeout(timeoutId)
+      }
+    })
   }
 
   scheduleNotesFrom(fromSeconds) {
@@ -201,26 +238,35 @@ export class MidiPlaybackEngine {
   }
 
   async ensureTrackInstruments() {
+    const expectedInstrumentId = this.voiceResolver.instrumentId
+    for (const track of this.trackStates) {
+      if (track.instrument && track.instrumentVoiceId !== expectedInstrumentId) {
+        track.instrument.dispose()
+        track.instrument = null
+        track.instrumentVoiceId = null
+      }
+    }
     if (this.trackStates.every((track) => track.instrument)) {
       return
     }
     if (!this.instrumentLoadPromise) {
       this.instrumentLoadPromise = Promise.resolve()
         .then(async () => {
-          if (!this.createPianoInstrument) {
-            const module = await this.loadPianoInstrument()
-            this.createPianoInstrument = module.createPianoInstrument
+          const createVoice = await this.voiceResolver.ensureFactory()
+          if (!createVoice) {
+            return
           }
           for (const track of this.trackStates) {
             if (track.instrument) {
               continue
             }
-            const instrument = this.createPianoInstrument({
+            const instrument = createVoice({
               tone: Tone,
               onStatus: () => this.recomputeInstrumentStatus(),
             })
             instrument.output.connect(track.output)
             track.instrument = instrument
+            track.instrumentVoiceId = expectedInstrumentId
           }
           this.recomputeInstrumentStatus()
         })
@@ -232,7 +278,8 @@ export class MidiPlaybackEngine {
   }
 
   rebuildTrackInstruments() {
-    if (!this.createPianoInstrument) {
+    const createVoice = this.voiceResolver.getFactory()
+    if (!createVoice) {
       return
     }
     for (const track of this.trackStates) {
@@ -243,13 +290,14 @@ export class MidiPlaybackEngine {
       track.instrument.dispose()
 
       // Recreated from the shared, already-decoded sample buffers, so this is a
-      // memory-only rebuild (no re-fetch) and stays on the sampled piano.
-      const instrument = this.createPianoInstrument({
+      // memory-only rebuild (no re-fetch) and stays on the sampled voice.
+      const instrument = createVoice({
         tone: Tone,
         onStatus: () => this.recomputeInstrumentStatus(),
       })
       instrument.output.connect(track.output)
       track.instrument = instrument
+      track.instrumentVoiceId = this.voiceResolver.instrumentId
       track.output.gain.value = muted ? 0 : 1
     }
     this.recomputeInstrumentStatus()
@@ -338,6 +386,7 @@ export class MidiPlaybackEngine {
 
   async playTestTone(audioContextStart) {
     await awaitToneStarted(audioContextStart)
+    this.disposeTestTone()
 
     if (!this.createPianoInstrument) {
       const module = await this.loadPianoInstrument()
@@ -351,10 +400,28 @@ export class MidiPlaybackEngine {
     instrument.triggerAttackRelease('E4', 0.32, now + 0.22, 0.5)
     instrument.triggerAttackRelease('G4', 0.45, now + 0.44, 0.48)
 
-    window.setTimeout(() => {
+    this.testToneInstrument = instrument
+    this.testToneTimerId = window.setTimeout(() => {
+      if (this.testToneInstrument !== instrument) {
+        return
+      }
       instrument.releaseAll()
       instrument.dispose()
+      this.testToneInstrument = null
+      this.testToneTimerId = null
     }, 1400)
+  }
+
+  disposeTestTone() {
+    if (this.testToneTimerId != null) {
+      window.clearTimeout(this.testToneTimerId)
+      this.testToneTimerId = null
+    }
+    if (this.testToneInstrument) {
+      this.testToneInstrument.releaseAll?.()
+      this.testToneInstrument.dispose()
+      this.testToneInstrument = null
+    }
   }
 
   getDuration() {
@@ -383,12 +450,14 @@ export class MidiPlaybackEngine {
 
   dispose() {
     this.loadToken += 1
+    this.disposeTestTone()
     this.stopPlaybackInternal()
     this.midi = null
     this.playbackDuration = 0
   }
 
   stopPlaybackInternal() {
+    this.disposeTestTone()
     this.clearScheduledPlayback({ rebuildInstruments: false })
     this.disposeTracks()
   }

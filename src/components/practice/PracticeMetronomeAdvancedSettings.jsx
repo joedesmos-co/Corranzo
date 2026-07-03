@@ -18,6 +18,9 @@ export default function PracticeMetronomeAdvancedSettings() {
       <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">
         Metronome
       </h3>
+      <p className="practice-section__hint practice-section__hint--inline">
+        Turn on the metronome in Play above, then adjust details here.
+      </p>
 
       <div className="practice-playback-settings">
         <label className="practice-playback-settings__label practice-playback-settings__label--inline">

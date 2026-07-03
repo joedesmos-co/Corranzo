@@ -1,5 +1,6 @@
 import { useEffect, useReducer, useState } from 'react'
 import { useProfileStats } from '../../context/ProfileStatsContext.jsx'
+import { useInstrument } from '../../context/instrumentContext.js'
 import { EXERCISE_TYPES } from '../../features/profile/exerciseTypes.js'
 import {
   MANUAL_TIMER_IDLE,
@@ -49,6 +50,7 @@ function formatDuration(seconds) {
 
 export default function ManualPracticeLog() {
   const { saveManualPracticeSession } = useProfileStats()
+  const { instrumentId } = useInstrument()
   const [timerState, dispatchTimer] = useReducer(
     timerReducer,
     undefined,
@@ -56,6 +58,7 @@ export default function ManualPracticeLog() {
   )
   const [displayMs, setDisplayMs] = useState(0)
   const [pendingSave, setPendingSave] = useState(null)
+  const [sessionInstrumentId, setSessionInstrumentId] = useState(null)
   const [pieceTitle, setPieceTitle] = useState('')
   const [exerciseType, setExerciseType] = useState('scales')
   const [notes, setNotes] = useState('')
@@ -83,6 +86,7 @@ export default function ManualPracticeLog() {
   function handleStart() {
     setSaveMessage('')
     setPendingSave(null)
+    setSessionInstrumentId(instrumentId)
     dispatchTimer({ type: 'start', now: Date.now() })
   }
 
@@ -109,11 +113,13 @@ export default function ManualPracticeLog() {
       durationSeconds: result.elapsedSeconds,
       startedAt: result.startedAt,
       endedAt: result.endedAt,
+      instrumentId: sessionInstrumentId ?? instrumentId,
     })
   }
 
   function handleDiscard() {
     setPendingSave(null)
+    setSessionInstrumentId(null)
     setPieceTitle('')
     setExerciseType('scales')
     setNotes('')
@@ -134,10 +140,12 @@ export default function ManualPracticeLog() {
       durationSeconds: pendingSave.durationSeconds,
       startedAt: pendingSave.startedAt,
       endedAt: pendingSave.endedAt,
+      instrumentId: pendingSave.instrumentId,
     })
 
     setSaveMessage('Session saved to your practice log.')
     setPendingSave(null)
+    setSessionInstrumentId(null)
     setPieceTitle('')
     setExerciseType('scales')
     setNotes('')

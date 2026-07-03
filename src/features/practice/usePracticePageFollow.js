@@ -4,6 +4,7 @@ const SCROLL_ALPHA = 0.11
 const LOOKAHEAD_RATIO = 0.36
 const PAGE_SWITCH_DEBOUNCE_MS = 16
 const USER_SCROLL_SUSPEND_MS = 2000
+const DOM_CACHE_REFRESH_FRAMES = 30
 
 /**
  * Resolve which PDF page page-follow should keep in view.
@@ -36,9 +37,24 @@ export default function usePracticePageFollow({
   const pageSwitchTimerRef = useRef(null)
   const lastRequestedPageRef = useRef(pageNumber)
   const userScrollUntilRef = useRef(0)
+  const cursorRef = useRef(cursor)
+  const noteFollowTargetRef = useRef(noteFollowTarget)
+  const domCacheRef = useRef({
+    container: null,
+    cursorElement: null,
+    pageFrame: null,
+    pageNumber: null,
+    frameCounter: 0,
+  })
+
+  cursorRef.current = cursor
+  noteFollowTargetRef.current = noteFollowTarget
 
   useEffect(() => {
-    const followPage = resolvePageFollowTarget({ cursor, noteFollowTarget })
+    const followPage = resolvePageFollowTarget({
+      cursor: cursorRef.current,
+      noteFollowTarget: noteFollowTargetRef.current,
+    })
     if (!active || !scrollContainerRef?.current || followPage == null) {
       return undefined
     }
@@ -75,6 +91,7 @@ export default function usePracticePageFollow({
 
   useEffect(() => {
     lastRequestedPageRef.current = pageNumber
+    domCacheRef.current.pageNumber = null
   }, [pageNumber])
 
   useEffect(() => {
@@ -98,7 +115,10 @@ export default function usePracticePageFollow({
   }, [active, scrollContainerRef])
 
   useEffect(() => {
-    const followPage = resolvePageFollowTarget({ cursor, noteFollowTarget })
+    const followPage = resolvePageFollowTarget({
+      cursor: cursorRef.current,
+      noteFollowTarget: noteFollowTargetRef.current,
+    })
     if (
       !active ||
       !scrollContainerRef?.current ||
@@ -106,10 +126,25 @@ export default function usePracticePageFollow({
       followPage !== pageNumber
     ) {
       scrollStateRef.current.seeded = false
+      domCacheRef.current.pageNumber = null
       return undefined
     }
 
     let frameId = 0
+
+    const refreshDomCache = (container) => {
+      const cache = domCacheRef.current
+      cache.container = container
+      cache.cursorElement = container.querySelector(
+        '.pdf-page-window__slot--active .score-follow-cursor, .pdf-page-frame .score-follow-cursor',
+      )
+      const pdfPage = container.querySelector(
+        '.pdf-page-window__slot--active .react-pdf__Page, .pdf-page-frame .react-pdf__Page',
+      )
+      cache.pageFrame = pdfPage || container.querySelector('.pdf-page-frame')
+      cache.pageNumber = pageNumber
+      cache.frameCounter = 0
+    }
 
     const tick = () => {
       const container = scrollContainerRef.current
@@ -125,28 +160,29 @@ export default function usePracticePageFollow({
 
       const userSuspended = Date.now() < userScrollUntilRef.current
       if (!userSuspended) {
-        const containerRect = container.getBoundingClientRect()
-        const cursorElement = container.querySelector(
-          '.pdf-page-window__slot--active .score-follow-cursor, .pdf-page-frame .score-follow-cursor',
-        )
+        const cache = domCacheRef.current
+        if (cache.pageNumber !== pageNumber || cache.frameCounter >= DOM_CACHE_REFRESH_FRAMES) {
+          refreshDomCache(container)
+        } else {
+          cache.frameCounter += 1
+        }
+
+        const liveCursor = cursorRef.current
+        const containerRect = cache.container.getBoundingClientRect()
         let cursorPixelY
-        if (cursorElement && cursorElement.style.display !== 'none') {
-          const cursorRect = cursorElement.getBoundingClientRect()
+        if (cache.cursorElement && cache.cursorElement.style.display !== 'none') {
+          const cursorRect = cache.cursorElement.getBoundingClientRect()
           cursorPixelY =
             cursorRect.top - containerRect.top + cursorRect.height / 2 + container.scrollTop
-        } else {
-          const pdfPage = container.querySelector(
-            '.pdf-page-window__slot--active .react-pdf__Page, .pdf-page-frame .react-pdf__Page',
-          )
-          const pageFrame = pdfPage || container.querySelector('.pdf-page-frame')
-          if (!pageFrame) {
-            frameId = requestAnimationFrame(tick)
-            return
-          }
-          const frameRect = pageFrame.getBoundingClientRect()
+        } else if (cache.pageFrame && Number.isFinite(liveCursor?.y)) {
+          const frameRect = cache.pageFrame.getBoundingClientRect()
           cursorPixelY =
-            frameRect.top - containerRect.top + cursor.y * frameRect.height + container.scrollTop
+            frameRect.top - containerRect.top + liveCursor.y * frameRect.height + container.scrollTop
+        } else {
+          frameId = requestAnimationFrame(tick)
+          return
         }
+
         const targetScrollTop = cursorPixelY - container.clientHeight * LOOKAHEAD_RATIO
         const maxScroll = Math.max(0, container.scrollHeight - container.clientHeight)
         const clampedTarget = Math.min(maxScroll, Math.max(0, targetScrollTop))
@@ -169,12 +205,6 @@ export default function usePracticePageFollow({
     return () => cancelAnimationFrame(frameId)
   }, [
     active,
-    cursor?.x,
-    cursor?.y,
-    cursor?.visible,
-    cursor?.page,
-    noteFollowTarget?.active,
-    noteFollowTarget?.page,
     pageNumber,
     scrollContainerRef,
   ])

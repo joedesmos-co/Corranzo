@@ -21,19 +21,19 @@ export default function WaitForYouInputSourceSelector({
       id: WFY_INPUT_SOURCE.MIDI,
       label: WFY_INPUT_SOURCE_LABELS[WFY_INPUT_SOURCE.MIDI],
       available: midiAvailable,
-      hint: 'Most accurate input',
+      hint: 'Best for chords',
     },
     {
       id: WFY_INPUT_SOURCE.MICROPHONE,
       label: WFY_INPUT_SOURCE_LABELS[WFY_INPUT_SOURCE.MICROPHONE],
       available: microphoneAvailable,
-      hint: 'For acoustic instruments',
+      hint: 'Acoustic instruments',
     },
     {
       id: WFY_INPUT_SOURCE.MANUAL,
       label: WFY_INPUT_SOURCE_LABELS[WFY_INPUT_SOURCE.MANUAL],
       available: true,
-      hint: 'Continue manually',
+      hint: 'No input device needed',
     },
   ]
 
@@ -44,7 +44,7 @@ export default function WaitForYouInputSourceSelector({
       aria-label="How you continue"
       data-tour-id="practice-input-source"
     >
-      <p className="wfy-input-source__label">Input</p>
+      <p className="wfy-input-source__label">Continue with</p>
       <div className="wfy-input-source__options">
         {options.map((option) => (
           <label

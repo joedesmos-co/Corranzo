@@ -7,8 +7,11 @@ import {
   extractFixtureMetrics,
   formatOmrBenchmarkMarkdown,
   OMR_BENCHMARK_STATUS,
+  parseChecksum,
+  resolveFixtureAssetPath,
   summarizeOmrBenchmarkDashboard,
   validateOmrBenchmarkManifest,
+  verifyChecksum,
 } from '../src/features/omr/omrBenchmarkDashboard.js'
 
 const sampleDenseReport = JSON.parse(
@@ -32,7 +35,37 @@ describe('omrBenchmarkDashboard', () => {
     )
     const validation = validateOmrBenchmarkManifest(manifest)
     expect(validation.ok).toBe(true)
-    expect(manifest.fixtures.map((fixture) => fixture.id)).toEqual(['clean', 'dense', 'simple'])
+    const ids = manifest.fixtures.map((fixture) => fixture.id)
+    expect(ids).toContain('clean')
+    expect(ids).toContain('dense')
+    expect(ids).toContain('simple')
+  })
+
+  it('includes La Campanella as optional, diagnostic-only fixtures with checksums', () => {
+    const manifest = JSON.parse(
+      readFileSync(join(process.cwd(), 'benchmarks/omr-benchmark.manifest.json'), 'utf8'),
+    )
+    const campanella = manifest.fixtures.filter((fixture) => fixture.id.startsWith('campanella'))
+    expect(campanella.length).toBeGreaterThanOrEqual(1)
+    for (const fixture of campanella) {
+      expect(fixture.optional).toBe(true)
+      expect(fixture.diagnosticOnly).toBe(true)
+      // Diagnostic-only fixtures must not carry pass/fail thresholds.
+      expect(fixture.thresholds).toBeUndefined()
+      expect(fixture.checksums?.pdf).toMatch(/^sha256:/)
+      expect(fixture.checksums?.truth).toMatch(/^sha256:/)
+    }
+  })
+
+  it('every fixture declares stable checksums for integrity', () => {
+    const manifest = JSON.parse(
+      readFileSync(join(process.cwd(), 'benchmarks/omr-benchmark.manifest.json'), 'utf8'),
+    )
+    expect(Array.isArray(manifest.fixtureSearchPaths)).toBe(true)
+    for (const fixture of manifest.fixtures) {
+      expect(fixture.checksums?.pdf).toMatch(/^sha256:[0-9a-f]{64}$/)
+      expect(fixture.checksums?.truth).toMatch(/^sha256:[0-9a-f]{64}$/)
+    }
   })
 
   it('extracts dashboard metrics from an accuracy report', () => {
@@ -46,6 +79,8 @@ describe('omrBenchmarkDashboard', () => {
     expect(metrics.wrongDuration).toBe(243)
     expect(metrics.topErrorCategory?.source).toBe('rhythm-inference')
     expect(metrics.topDurationErrorCategory?.category).toBeTruthy()
+    expect(metrics.topPitchErrorCategory?.category).toBeTruthy()
+    expect(metrics.errorGrouping?.primarySource).toBe('rhythm-inference')
   })
 
   it('marks dense fixture fail when thresholds are too high', () => {
@@ -112,7 +147,10 @@ describe('omrBenchmarkDashboard', () => {
     expect(markdown).toContain('# OMR benchmark dashboard')
     expect(markdown).toContain('### Clean (`pass`)')
     expect(markdown).toContain('top error category:')
+    expect(markdown).toContain('Aggregated duration error histogram')
     expect(summary.fixtureCount).toBe(2)
+    expect(summary.version).toBe(2)
+    expect(summary.aggregatedDurationTop?.length).toBeGreaterThan(0)
   })
 
   it('surfaces ScoreGraph clip promotion diagnostics when present', () => {
@@ -150,5 +188,101 @@ describe('omrBenchmarkDashboard', () => {
       'measureCountDiff',
       'noteCountDiff',
     ])
+  })
+
+  it('resolves fixture assets across search paths, honoring existence', () => {
+    const present = new Set(['/root/tmp/sprint1/song.pdf'])
+    const resolved = resolveFixtureAssetPath({
+      fileName: 'song.pdf',
+      searchPaths: ['benchmarks/omr-fixtures', '~/Downloads', 'tmp/sprint1'],
+      rootDir: '/root',
+      homeDir: '/home/me',
+      exists: (candidate) => present.has(candidate),
+    })
+    expect(resolved.candidates).toEqual([
+      '/root/benchmarks/omr-fixtures/song.pdf',
+      '/home/me/Downloads/song.pdf',
+      '/root/tmp/sprint1/song.pdf',
+    ])
+    expect(resolved.resolvedPath).toBe('/root/tmp/sprint1/song.pdf')
+  })
+
+  it('falls back to a legacy absolute path when provided', () => {
+    const resolved = resolveFixtureAssetPath({
+      fileName: 'song.pdf',
+      legacyPath: '~/Downloads/song.pdf',
+      searchPaths: ['benchmarks/omr-fixtures'],
+      rootDir: '/root',
+      homeDir: '/home/me',
+      exists: (candidate) => candidate === '/home/me/Downloads/song.pdf',
+    })
+    expect(resolved.resolvedPath).toBe('/home/me/Downloads/song.pdf')
+  })
+
+  it('parses and verifies sha256 checksums', () => {
+    expect(parseChecksum('sha256:ABCDEF')).toEqual({ algorithm: 'sha256', digest: 'abcdef' })
+    expect(parseChecksum('abcdef')).toEqual({ algorithm: 'sha256', digest: 'abcdef' })
+    expect(verifyChecksum('sha256:abc', 'ABC')).toMatchObject({ ok: true })
+    expect(verifyChecksum('sha256:abc', 'def')).toMatchObject({ ok: false })
+    expect(verifyChecksum(null, 'def')).toBeNull()
+  })
+
+  it('treats diagnostic-only fixtures as non-blocking (skipped) even when metrics are poor', () => {
+    const record = buildFixtureDashboardRecord({
+      fixture: {
+        id: 'campanella-grandes',
+        label: 'La Campanella',
+        optional: true,
+        diagnosticOnly: true,
+        thresholds: { pitchAccuracy: 0.99 },
+      },
+      report: sampleDenseReport,
+    })
+    expect(record.status).toBe(OMR_BENCHMARK_STATUS.SKIPPED)
+    expect(record.diagnosticOnly).toBe(true)
+    expect(record.thresholdFailures).toEqual([])
+    // Metrics are still observed for diagnostics.
+    expect(record.metrics?.namedErrorBuckets).toBeTruthy()
+  })
+
+  it('skips optional fixtures when assets are missing', () => {
+    const missing = new Error('Missing assets: pdf x')
+    missing.code = 'missing-assets'
+    const record = buildFixtureDashboardRecord({
+      fixture: { id: 'campanella-etude', label: 'La Campanella (etude)', optional: true },
+      error: missing,
+    })
+    expect(record.status).toBe(OMR_BENCHMARK_STATUS.SKIPPED)
+  })
+
+  it('surfaces the largest remaining error bucket in the summary + markdown', () => {
+    const summary = summarizeOmrBenchmarkDashboard([
+      buildFixtureDashboardRecord({
+        fixture: { id: 'dense', label: 'Dense' },
+        report: sampleDenseReport,
+      }),
+    ])
+    expect(summary.largestNamedBucket).toBeTruthy()
+    expect(summary.largestNamedBucket.count).toBeGreaterThan(0)
+    expect(summary.rankedNamedBuckets.length).toBeGreaterThan(0)
+    const markdown = formatOmrBenchmarkMarkdown(summary)
+    expect(markdown).toContain('Largest remaining error bucket')
+    expect(markdown).toContain('## Error buckets (across fixtures)')
+  })
+
+  it('includes V2 rhythm attribution and hotspot traces for dense fixtures', () => {
+    const currentDense = JSON.parse(
+      readFileSync(join(process.cwd(), 'tmp/omr-benchmark-dashboard/fixtures/dense.json'), 'utf8'),
+    )
+    const record = buildFixtureDashboardRecord({
+      fixture: { id: 'dense', label: "A Cruel Angel's Thesis (dense)" },
+      report: currentDense,
+    })
+    expect(record.metrics.rhythmErrorAttribution?.ranked?.length).toBeGreaterThan(0)
+    expect(record.hotspotDiagnostics?.measureNumbers).toEqual([7, 9, 121])
+    const markdown = formatOmrBenchmarkMarkdown(summarizeOmrBenchmarkDashboard([record]))
+    expect(markdown).toContain('Rhythm/voice attribution (V2 Phase 1)')
+    expect(markdown).toContain('Hotspot measures (dense)')
+    expect(markdown).toContain('m9: 18 wrong onsets')
   })
 })

@@ -12,6 +12,10 @@ import {
   frequencyMatchesMidi,
 } from '../src/features/microphone-input/pitchDetection.js'
 import {
+  analyzeMicFrame,
+  createMicFrameAnalyzer,
+} from '../src/features/microphone-input/micFrameAnalysis.js'
+import {
   createNoteStabilizer,
   pushStableNote,
   resetNoteStabilizer,
@@ -97,6 +101,15 @@ describe('pitch detection', () => {
     // Either no pitch, or low-clarity → not a confident note.
     expect(note).toBeNull()
   })
+
+  it('analyzeMicFrame detects pitch on a steady analyser-sized window', () => {
+    const window = synthSine(261.63, 0.35, 2048 / SAMPLE_RATE)
+    const analyzer = createMicFrameAnalyzer()
+    const frame = analyzeMicFrame(window, SAMPLE_RATE, analyzer.noiseFloor)
+    expect(frame?.midi).toBe(60)
+    expect(frame?.clarity).toBeGreaterThan(0.5)
+    expect(frame?.rms).toBeGreaterThan(0.05)
+  })
 })
 
 // ─── cents tolerance ──────────────────────────────────────────────────────────
@@ -126,7 +139,7 @@ describe('cents tolerance', () => {
   })
 
   it('default match settings expose ~30 cents tolerance, clamped to a sane range', () => {
-    expect(normalizeMatchSettings({}).micCentsTolerance).toBe(30)
+    expect(normalizeMatchSettings({}).micCentsTolerance).toBe(35)
     expect(normalizeMatchSettings({ micCentsTolerance: 1000 }).micCentsTolerance).toBeLessThanOrEqual(50)
     expect(normalizeMatchSettings({ micCentsTolerance: 0 }).micCentsTolerance).toBeGreaterThanOrEqual(15)
   })

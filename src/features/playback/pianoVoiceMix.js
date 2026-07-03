@@ -31,6 +31,16 @@ export function resetVoiceMix(state) {
   state.lastTriggerAt = null
 }
 
+/** Drop a released note from mix tracking so tails do not inflate density ducking. */
+export function releaseVoiceFromMix(state, note, time) {
+  if (!state?.active?.length || !note) {
+    return
+  }
+  state.active = state.active.filter(
+    (voice) => !(voice.note === note && voice.end > time),
+  )
+}
+
 export function pruneVoices(state, beforeTime) {
   if (!state?.active?.length) {
     return
@@ -130,7 +140,7 @@ export function planNoteTrigger(state, { time, velocity, duration, note = null }
     reduced = true
   }
 
-  adjusted = Math.min(0.92, Math.max(0.32, adjusted))
+  adjusted = Math.min(0.86, Math.max(0.32, adjusted))
 
   const victims = note ? findVoicesToSteal(state, time, 1) : []
   if (victims.length > 0) {

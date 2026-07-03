@@ -15,7 +15,7 @@ import { assessOmrDifficulty, OMR_FAILURE_REASON } from './assessOmrDifficulty.j
 import { validateOmrMultiPageLayout } from './validateOmrMultiPage.js'
 import { copyOmrPixels } from './omrPixelBuffer.js'
 import { omrDebugStep } from './omrDebug.js'
-import { omrTrace } from './omrTrace.js'
+import { omrTrace, createOmrPhaseTracer, omrTracePhaseStart, omrTracePhaseEnd } from './omrTrace.js'
 import { buildOmrMeasureGridMetadata } from './omrMeasureGridMeta.js'
 import {
   formatOmrMeasureGridDiagnosticsReport,
@@ -42,12 +42,12 @@ import { applyTerminalSameClefChordQuarterDurations } from './processVectorOmrPa
 import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
 import {
   OMR_DEFAULT_TEMPO,
-  OMR_PIANO_STAVES_PER_SYSTEM,
   OMR_STATUS,
   OMR_TOO_DIFFICULT_MESSAGE,
   omrPageProgressLabel,
   yieldToBrowser,
 } from './omrConstants.js'
+import { getInstrument } from '../instruments/instruments.js'
 import {
   computeDocumentStaffGapReference,
   mergeStaffGapSamples,
@@ -74,7 +74,9 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     signal = null,
     maxPages = DEFAULT_MAX_PAGES,
     numPages: numPagesOverride = null,
-    stavesPerSystem = OMR_PIANO_STAVES_PER_SYSTEM,
+    /** Instrument the score is read for (default piano — legacy behavior). */
+    instrumentId = null,
+    stavesPerSystem: stavesPerSystemOverride = null,
     title = 'PDF OMR',
     preprocessPages = true,
     traceRunId = null,
@@ -82,14 +84,21 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     promoteScoreGraphClips = false,
   } = options
 
+  const instrument = getInstrument(instrumentId)
+  // Piano's registry default is the grand staff (2), so omitting both options
+  // reproduces the long-standing behavior exactly.
+  const stavesPerSystem = stavesPerSystemOverride ?? instrument.omr.stavesPerSystem
+
   omrTrace('pipeline:enter', { preprocessPages }, traceRunId)
   onStatus(OMR_STATUS.ANALYZING)
 
+  const phaseTracer = createOmrPhaseTracer(traceRunId)
   omrTrace('pipeline:pdf-load-start', {
     sourceType: typeof pdfSource === 'string' ? 'url' : 'bytes',
   }, traceRunId)
-  const totalPages =
-    numPagesOverride ?? (await getPdfPageCount(pdfSource))
+  const totalPages = await phaseTracer.run('pdf-load', async () =>
+    numPagesOverride ?? (await getPdfPageCount(pdfSource)),
+  )
   omrTrace('pipeline:pdf-load-success', { totalPages }, traceRunId)
   throwIfCancelled(signal)
 
@@ -140,6 +149,12 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       reassignedOrphanCount: 0,
       rejectedOrphanReasons: {},
     },
+    tablature: {
+      tabStaves: 0,
+      tabNotes: 0,
+      tabPositionalMeasures: 0,
+      attachedPositions: 0,
+    },
   }
   const orphanDiagnosticsPages = []
   const staffGapNormalizationPages = []
@@ -149,6 +164,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   const measureGridDiagnosticsEntries = []
 
   for (let page = 1; page <= pageCount; page += 1) {
+    const pagePhase = omrTracePhaseStart(`page-${page}`, traceRunId)
     omrTrace(`pipeline:page-${page}:loop-start`, null, traceRunId)
     throwIfCancelled(signal)
     onProgress?.({
@@ -216,6 +232,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
           measureNumberStart: measureCounter,
           pageText,
           stavesPerSystem,
+          instrument,
           keySignature,
           timeSignature,
           documentStaffGapReference,
@@ -225,6 +242,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
           measureNumberStart: measureCounter,
           pageText,
           stavesPerSystem,
+          instrument,
           keySignature,
           timeSignature,
           documentStaffGapReference,
@@ -287,6 +305,14 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       diagnostics.accent.appliedAccentCount += pageAccent.appliedAccentCount ?? 0
     }
 
+    const pageTab = pageResult.tabDiagnostics
+    if (pageTab) {
+      diagnostics.tablature.tabStaves += pageTab.tabStaves ?? 0
+      diagnostics.tablature.tabNotes += pageTab.tabNotes ?? 0
+      diagnostics.tablature.tabPositionalMeasures += pageTab.tabPositionalMeasures ?? 0
+      diagnostics.tablature.attachedPositions += pageTab.attachedPositions ?? 0
+    }
+
     const pageOrphans = pageResult.orphanDiagnostics
     if (pageOrphans) {
       orphanDiagnosticsPages.push(pageOrphans)
@@ -309,6 +335,11 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     pageDiagnostics.push(pageResult.pageEntry)
     measureRhythms.push(...pageResult.measureRhythms)
     measureGridEntries.push(...(pageResult.measureGrid ?? []))
+    omrTracePhaseEnd(pagePhase, {
+      systems: pageResult.stats?.systems ?? 0,
+      measures: pageResult.stats?.measures ?? 0,
+      notes: pageResult.stats?.notes ?? 0,
+    })
   }
 
   if (diagnostics.systems === 0) {
@@ -321,7 +352,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     })
     throw new Error(
       assessment.message ??
-        'No staff systems detected. Try a cleaner digital piano PDF.',
+        `No staff systems detected. Try a cleaner digital ${instrument.label.toLowerCase()} PDF.`,
     )
   }
 
@@ -370,6 +401,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   const beats = timeSignature?.beats ?? 4
   const beatType = timeSignature?.beatType ?? 4
   const measureDivisions = Math.round(beats * OMR_DIVISIONS_PER_QUARTER * (4 / beatType))
+  const postProcessPhase = omrTracePhaseStart('post-process', traceRunId)
   const openingLeadNoteMerge = applyOpeningLeadNoteMerge(measureRhythms, {
     minStackNotes: OPENING_LEAD_MIN_STACK_NOTES,
   })
@@ -552,12 +584,17 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     }, traceRunId)
   }
 
-  const musicXml = buildOmrMusicXml({
-    title,
-    measures: measureRhythms,
-    musical,
-    includeDisclaimer: true,
-  })
+  omrTracePhaseEnd(postProcessPhase, { measureCount: measureRhythms.length })
+
+  const musicXml = phaseTracer.sync('build-musicxml', () =>
+    buildOmrMusicXml({
+      title,
+      measures: measureRhythms,
+      musical,
+      includeDisclaimer: true,
+      instrument,
+    }),
+  )
   const measurePlaybackReport = buildOmrMeasurePlaybackReport({
     measures: measureRhythms,
     musical,

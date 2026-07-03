@@ -37,5 +37,8 @@ export function formatDemoLoadError(error) {
   if (/network|failed to fetch|load failed/i.test(message)) {
     return 'Demo unavailable — check your connection and try again.'
   }
+  if (/timed out|took too long/i.test(message)) {
+    return 'Demo took too long to load. Check your connection and try again.'
+  }
   return DEMO_UNAVAILABLE_MESSAGE
 }

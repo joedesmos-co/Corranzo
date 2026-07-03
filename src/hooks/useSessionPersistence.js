@@ -6,11 +6,14 @@ import {
   loadSessionMeta,
   saveSessionFiles,
   saveSessionMeta,
+  validateRestoredInstrumentBundles,
   validateRestoredSession,
 } from '../features/session/sessionPersistence.js'
 import { shouldDeferSessionRestore } from '../features/session/sessionRestoreRouting.js'
+import { withTimeout } from '../utils/asyncWithTimeout.js'
 
 const SAVE_DEBOUNCE_MS = 1200
+const RESTORE_TIMEOUT_MS = 30_000
 
 export const RESTORE_STATUS = {
   IDLE: 'idle',
@@ -48,7 +51,9 @@ export default function useSessionPersistence({
   musicXmlSource,
   activeView,
   pageNumber,
-  practicePrefs,
+  practicePrefsRef = null,
+  instrumentId = null,
+  getInstrumentSessionBundles = null,
   onRestore,
   restoreSuspended = false,
 }) {
@@ -59,6 +64,13 @@ export default function useSessionPersistence({
   const deferredRestoreRef = useRef(
     restoreSuspended || shouldDeferSessionRestore(window.location.pathname),
   )
+  const mountedRef = useRef(true)
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false
+    }
+  }, [])
 
   const isRestoring = restoreStatus === RESTORE_STATUS.RESTORING
   const restoreGateOpen = !isRestoring
@@ -72,23 +84,33 @@ export default function useSessionPersistence({
     try {
       const loaded = loadSessionMeta()
       if (!loaded) {
+        if (!mountedRef.current) return
         setRestoreStatus(RESTORE_STATUS.NONE)
         return
       }
 
+      if (!mountedRef.current) return
       setRestoreStatus(RESTORE_STATUS.RESTORING)
 
       if (loaded.expired) {
+        if (!mountedRef.current) return
         setRestoreStatus(RESTORE_STATUS.EXPIRED)
         setRestoreMessage('Your saved session was older than a week and was not restored.')
         await clearSessionStorage()
         return
       }
 
-      const files = await loadSessionFiles()
+      const files = await withTimeout(
+        loadSessionFiles(),
+        RESTORE_TIMEOUT_MS,
+        'Restoring files timed out. Skip restore or clear the saved session.',
+      )
+      if (!mountedRef.current) return
       const result = validateRestoredSession(loaded.meta, files)
+      const instrumentBundles = validateRestoredInstrumentBundles(loaded.meta, files)
 
       if (!result.ok || !result.pdfMeta) {
+        if (!mountedRef.current) return
         setRestoreStatus(RESTORE_STATUS.FAILED)
         setRestoreMessage(
           'Could not restore your last session — upload your files again, or clear the saved session below.',
@@ -96,16 +118,23 @@ export default function useSessionPersistence({
         return
       }
 
-      await onRestore({
-        pdfFile: result.pdfFile,
-        pdfMeta: result.pdfMeta,
-        midiSource: result.midiSource,
-        musicXmlSource: result.musicXmlSource,
-        activeView: loaded.meta.activeView ?? 'library',
-        pageNumber: loaded.meta.pageNumber ?? 1,
-        practicePrefs: loaded.meta.practicePrefs ?? null,
-        issues: result.issues ?? [],
-      })
+      await withTimeout(
+        onRestore({
+          pdfFile: result.pdfFile,
+          pdfMeta: result.pdfMeta,
+          midiSource: result.midiSource,
+          musicXmlSource: result.musicXmlSource,
+          activeView: loaded.meta.activeView ?? 'library',
+          pageNumber: loaded.meta.pageNumber ?? 1,
+          practicePrefs: loaded.meta.practicePrefs ?? null,
+          instrumentId: loaded.meta.instrumentId ?? null,
+          instrumentBundles,
+          issues: result.issues ?? [],
+        }),
+        RESTORE_TIMEOUT_MS,
+        'Restoring files timed out. Skip restore or clear the saved session.',
+      )
+      if (!mountedRef.current) return
 
       if (result.partial) {
         setRestoreStatus(RESTORE_STATUS.PARTIAL)
@@ -119,6 +148,7 @@ export default function useSessionPersistence({
         setRestoreMessage('Restored your last practice session.')
       }
     } catch (error) {
+      if (!mountedRef.current) return
       setRestoreStatus(RESTORE_STATUS.FAILED)
       setRestoreMessage(
         error instanceof Error
@@ -169,7 +199,9 @@ export default function useSessionPersistence({
         musicXmlSource,
         activeView,
         pageNumber,
-        practicePrefs,
+        practicePrefs: practicePrefsRef?.current ?? null,
+        instrumentId,
+        instrumentBundles: getInstrumentSessionBundles?.() ?? null,
       })
 
       saveSessionMeta(meta)
@@ -179,6 +211,18 @@ export default function useSessionPersistence({
           pdf: { data: pdfBuffer.slice(0) },
           midi: midiSource?.data ? { data: midiSource.data.slice(0) } : null,
           musicXml: musicXmlSource?.data ? { data: musicXmlSource.data.slice(0) } : null,
+          instrumentFiles: Object.fromEntries(
+            Object.entries(getInstrumentSessionBundles?.() ?? {}).map(([bundleInstrumentId, bundle]) => [
+              bundleInstrumentId,
+              {
+                pdf: bundle.pdfBuffer ? { data: bundle.pdfBuffer.slice(0) } : null,
+                midi: bundle.midiSource?.data ? { data: bundle.midiSource.data.slice(0) } : null,
+                musicXml: bundle.musicXmlSource?.data
+                  ? { data: bundle.musicXmlSource.data.slice(0) }
+                  : null,
+              },
+            ]),
+          ),
         })
       } catch {
         // Private browsing / quota — metadata still helps user know what they had
@@ -191,7 +235,9 @@ export default function useSessionPersistence({
     musicXmlSource,
     activeView,
     pageNumber,
-    practicePrefs,
+    practicePrefsRef,
+    instrumentId,
+    getInstrumentSessionBundles,
     restoreGateOpen,
   ])
 
@@ -214,12 +260,21 @@ export default function useSessionPersistence({
     setRestoreMessage(null)
   }, [])
 
+  const skipRestore = useCallback(() => {
+    restoreAttemptedRef.current = true
+    setRestoreStatus(RESTORE_STATUS.FAILED)
+    setRestoreMessage(
+      'Skipped restore. Upload your files, or clear the saved session below.',
+    )
+  }, [])
+
   return {
     restoreStatus,
     restoreMessage,
     isRestoring,
     restoreGateOpen,
     clearSavedSession,
+    skipRestore,
     dismissRestoreMessage: () => setRestoreMessage(null),
   }
 }

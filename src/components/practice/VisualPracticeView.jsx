@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
 import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
+import { useInstrument } from '../../context/instrumentContext.js'
 import { WFY_STATUS } from '../../features/practice/waitForYouEngine.js'
 import {
   buildBarlineTimes,
@@ -11,12 +12,22 @@ import {
   selectVisualWindow,
 } from '../../features/practice/visualPracticeLane.js'
 import { detectStaves } from '../../features/practice/staffLaneLayout.js'
+import { buildTargetPositions } from '../../features/practice/tabLaneLayout.js'
+import {
+  getTabPositionsForTimingMap,
+  resolveStringsForTimingMap,
+} from '../../features/instruments/timingMapTabPositions.js'
+import { describeTabPosition } from '../../features/instruments/fretboard.js'
 import StaffVisualLane from './StaffVisualLane.jsx'
+import TabVisualLane from './TabVisualLane.jsx'
 
 /**
- * Beginner-friendly Visual practice mode: a scrolling staff lane (Simply
- * Piano-style) with a fixed playhead, the current target called out, and a
- * keyboard strip mirroring the target keys.
+ * Beginner-friendly Visual practice mode: a scrolling note lane with a fixed
+ * playhead, the current target called out, and a target strip underneath.
+ *
+ * The lane visualization is chosen by the selected instrument (staff +
+ * keyboard strip for piano, tablature + fretboard strip for guitar); the
+ * groups, target resolution, window, clock, and scrolling engine are shared.
  *
  * Read-only view over the existing practice session — playback, the
  * practice clock, and Wait For You all keep working unchanged.
@@ -24,6 +35,7 @@ import StaffVisualLane from './StaffVisualLane.jsx'
 export default function VisualPracticeView({ timingSourceKind = null }) {
   const { session } = usePracticeSessionContext()
   const tick = usePracticeTick()
+  const { instrument } = useInstrument()
 
   const timingMap = session.timing.timingMap
   const timingLoading = session.timing.isLoading
@@ -37,6 +49,16 @@ export default function VisualPracticeView({ timingSourceKind = null }) {
   const groups = useMemo(
     () => buildVisualLaneGroups(timingMap, loopRegion),
     [timingMap, loopRegion],
+  )
+  const laneKind = instrument.visualPractice.kind
+  const isFretboardLane = laneKind === 'fretboard'
+  const laneStrings = useMemo(
+    () => (isFretboardLane ? resolveStringsForTimingMap(timingMap, instrument) : null),
+    [isFretboardLane, timingMap, instrument],
+  )
+  const tabPositions = useMemo(
+    () => (isFretboardLane && timingMap ? getTabPositionsForTimingMap(timingMap, instrument) : null),
+    [isFretboardLane, timingMap, instrument],
   )
   const staves = useMemo(() => detectStaves(groups), [groups])
   // Keyboard shows a focused octave window (not the piece's full extremes).
@@ -84,19 +106,21 @@ export default function VisualPracticeView({ timingSourceKind = null }) {
     return state.isPlaying && getScoreTime ? getScoreTime() : state.practiceTime
   }, [getScoreTime])
 
-  // Cheap enough to rebuild per tick (~a few octaves of keys); avoids
-  // memoizing on a derived object the React Compiler cannot verify as stable.
-  const keyboardKeys = buildKeyboardKeys(keyboardRange, targetGroup?.midis ?? [])
+  const targetMidisKey = targetGroup?.midis?.join(',') ?? ''
+  const keyboardKeys = useMemo(
+    () => buildKeyboardKeys(keyboardRange, targetGroup?.midis ?? []),
+    [keyboardRange, targetMidisKey],
+  )
 
   if (!timingMap || !groups.length) {
     return (
       <div className="visual-practice visual-practice--empty" aria-label="Visual practice">
         <div className="visual-practice__empty">
-          <h3>Visual mode needs note timing</h3>
+          <h3>{timingLoading ? 'Loading notes…' : 'No notes to show yet'}</h3>
           <p>
             {timingLoading
-              ? 'Preparing note data…'
-              : 'Add a MusicXML timing file (or open the demo piece) to see notes here. The Score view keeps working for PDF-only pieces.'}
+              ? 'Reading the timing file for this piece.'
+              : 'Visual mode needs a timing file (MusicXML or MXL). Add one in Library, or open the demo piece to try it now. The Score view still works for PDF-only pieces.'}
           </p>
         </div>
       </div>
@@ -125,17 +149,37 @@ export default function VisualPracticeView({ timingSourceKind = null }) {
         isWaitForYou={isWaitForYou}
         waiting={isWaitForYou && wfyStatus === WFY_STATUS.WAITING}
         complete={laneComplete}
+        strings={laneStrings}
+        tabPositions={tabPositions}
       />
 
-      <StaffVisualLane
-        visibleGroups={visibleGroups}
-        staves={staves}
-        getFrameTime={getFrameTime}
-        barlineTimes={barlineTimes}
-        timeSignature={timeSignature}
-      />
+      {isFretboardLane ? (
+        <TabVisualLane
+          visibleGroups={visibleGroups}
+          strings={laneStrings}
+          tabPositions={tabPositions}
+          getFrameTime={getFrameTime}
+          barlineTimes={barlineTimes}
+        />
+      ) : (
+        <StaffVisualLane
+          visibleGroups={visibleGroups}
+          staves={staves}
+          getFrameTime={getFrameTime}
+          barlineTimes={barlineTimes}
+          timeSignature={timeSignature}
+        />
+      )}
 
-      <VisualKeyboardStrip keys={keyboardKeys} />
+      {isFretboardLane ? (
+        <VisualFretboardStrip
+          targetGroup={targetGroup}
+          strings={laneStrings}
+          tabPositions={tabPositions}
+        />
+      ) : (
+        <VisualKeyboardStrip keys={keyboardKeys} />
+      )}
 
       <div className="visual-practice__legend" aria-hidden="true">
         <span className="visual-practice__legend-item visual-practice__legend-item--played">
@@ -152,6 +196,27 @@ export default function VisualPracticeView({ timingSourceKind = null }) {
   )
 }
 
+/**
+ * Instrument-aware note callout: piano shows pitch labels; fretted
+ * instruments append the position ("E3 · fret 2 · D string").
+ */
+function describeTargetNotes(targetGroup, strings, tabPositions) {
+  const notes = targetGroup?.notes ?? []
+  if (!strings) {
+    return notes.map((note) => note.label).join(' + ')
+  }
+  return notes
+    .map((note) => {
+      const position =
+        note.string != null && note.fret != null
+          ? { string: note.string, fret: note.fret }
+          : tabPositions?.get(note.id) ?? null
+      const positionLabel = position ? describeTabPosition(position, strings) : null
+      return positionLabel ? `${note.label} · ${positionLabel}` : note.label
+    })
+    .join(' + ')
+}
+
 function VisualTargetHeader({
   targetGroup,
   targetIndex,
@@ -159,6 +224,8 @@ function VisualTargetHeader({
   isWaitForYou,
   waiting,
   complete,
+  strings = null,
+  tabPositions = null,
 }) {
   if (complete) {
     return (
@@ -188,18 +255,88 @@ function VisualTargetHeader({
       className={`visual-practice__target${
         waiting ? ' visual-practice__target--waiting' : ''
       }`}
+      aria-live="polite"
+      aria-atomic="true"
     >
       <span className="visual-practice__target-kicker">
         {isWaitForYou ? 'Play this' : 'Next up'}
       </span>
       <strong className="visual-practice__target-notes">
-        {targetGroup.notes.map((note) => note.label).join(' + ')}
+        {describeTargetNotes(targetGroup, strings, tabPositions)}
         {targetGroup.isChord ? ' (together)' : ''}
       </strong>
       <span className="visual-practice__target-meta">
         {position} · {Math.min(targetIndex + 1, totalGroups)} of {totalGroups}
         {waiting ? ' · waiting for you' : ''}
       </span>
+    </div>
+  )
+}
+
+/** Fret window the strip always shows, widened to include target frets. */
+const STRIP_MIN_FRETS = 5
+
+/**
+ * Display-only fretboard segment highlighting the current target positions —
+ * the guitar counterpart of the keyboard strip. Strings run top-down like
+ * printed tab (string 1 highest); frets run left-to-right from the nut.
+ */
+function VisualFretboardStrip({ targetGroup, strings, tabPositions }) {
+  const stringCount = strings?.count ?? 6
+  const targets = buildTargetPositions(targetGroup, tabPositions)
+
+  const maxTargetFret = targets.reduce((max, target) => Math.max(max, target.fret), 0)
+  const fretCount = Math.max(STRIP_MIN_FRETS, maxTargetFret + 1)
+  const fretWidthPercent = 100 / (fretCount + 1) // slot 0 = open/nut zone
+
+  const targetsByKey = new Map(
+    targets.map((target) => [`${target.string}:${target.fret}`, target]),
+  )
+
+  const rows = []
+  for (let stringNumber = 1; stringNumber <= stringCount; stringNumber += 1) {
+    const cells = []
+    for (let fret = 0; fret <= fretCount; fret += 1) {
+      const target = targetsByKey.get(`${stringNumber}:${fret}`)
+      cells.push({ fret, target: target ?? null })
+    }
+    rows.push({ stringNumber, cells })
+  }
+
+  return (
+    <div className="visual-practice__fretboard-wrap" aria-hidden="true">
+      <div className="visual-practice__fretboard">
+        {rows.map((row) => (
+          <div key={row.stringNumber} className="visual-practice__fret-string">
+            {row.cells.map((cell) => (
+              <div
+                key={cell.fret}
+                className={`visual-practice__fret-cell${
+                  cell.fret === 0 ? ' visual-practice__fret-cell--nut' : ''
+                }${cell.target ? ' visual-practice__fret-cell--target' : ''}`}
+                style={{ width: `${fretWidthPercent}%` }}
+              >
+                {cell.target && (
+                  <span className="visual-practice__fret-dot">
+                    {cell.fret === 0 ? 'O' : cell.fret}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="visual-practice__fret-numbers">
+        {Array.from({ length: fretCount + 1 }, (_, fret) => (
+          <span
+            key={fret}
+            className="visual-practice__fret-number"
+            style={{ width: `${fretWidthPercent}%` }}
+          >
+            {fret === 0 ? 'open' : fret}
+          </span>
+        ))}
+      </div>
     </div>
   )
 }

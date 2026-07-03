@@ -6168,25 +6168,53 @@
     "pagesWithSystems": 3,
     "preprocessPages": true,
     "ties": {
-      "detectedTieCount": 2,
-      "appliedTieCount": 2,
+      "detectedTieCount": 6,
+      "appliedTieCount": 6,
       "appliedTiePairs": [
         {
-          "fromMeasure": 68,
-          "toMeasure": 69,
-          "midi": 38,
-          "clef": "bass",
+          "fromMeasure": 48,
+          "toMeasure": 49,
+          "midi": 66,
+          "clef": "treble",
+          "source": "ink-arc"
+        },
+        {
+          "fromMeasure": 49,
+          "toMeasure": 50,
+          "midi": 66,
+          "clef": "treble",
+          "source": "ink-arc"
+        },
+        {
+          "fromMeasure": 50,
+          "toMeasure": 51,
+          "midi": 66,
+          "clef": "treble",
+          "source": "ink-arc"
+        },
+        {
+          "fromMeasure": 58,
+          "toMeasure": 59,
+          "midi": 64,
+          "clef": "treble",
+          "source": "ink-arc"
+        },
+        {
+          "fromMeasure": 59,
+          "toMeasure": 60,
+          "midi": 64,
+          "clef": "treble",
           "source": "ink-arc"
         },
         {
           "fromMeasure": 69,
           "toMeasure": 70,
-          "midi": 38,
-          "clef": "bass",
+          "midi": 74,
+          "clef": "treble",
           "source": "ink-arc"
         }
       ],
-      "uncertainSlurCount": 177,
+      "uncertainSlurCount": 164,
       "tieControlGlyphCount": 0
     },
     "rests": {
@@ -6207,6 +6235,12 @@
       "orphanNoteheadCount": 0,
       "reassignedOrphanCount": 0,
       "rejectedOrphanReasons": {}
+    },
+    "tablature": {
+      "tabStaves": 0,
+      "tabNotes": 0,
+      "tabPositionalMeasures": 0,
+      "attachedPositions": 0
     },
     "overallConfidence": 0.8650000000000003,
     "totalMeasures": 78,
@@ -7067,11 +7101,11 @@
                 "y1": 316.32
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": false,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 4,
+                "durationDivisions": 16,
                 "stem": false
               },
               "attachedStemIds": [
@@ -7745,11 +7779,11 @@
                 "y1": 274.31
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": false,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 4,
+                "durationDivisions": 8,
                 "stem": true
               },
               "attachedStemIds": [
@@ -8193,11 +8227,11 @@
                 "y1": 316.32
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": false,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 4,
+                "durationDivisions": 16,
                 "stem": false
               },
               "attachedStemIds": [
@@ -8871,11 +8905,11 @@
                 "y1": 274.31
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": false,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 4,
+                "durationDivisions": 8,
                 "stem": true
               },
               "attachedStemIds": [
@@ -9319,11 +9353,11 @@
                 "y1": 316.32
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": false,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 4,
+                "durationDivisions": 16,
                 "stem": false
               },
               "attachedStemIds": [
@@ -10401,11 +10435,11 @@
                 "y1": 512.8
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": true,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 6,
+                "durationDivisions": 12,
                 "stem": true
               },
               "attachedStemIds": [
@@ -10458,11 +10492,11 @@
                 "y1": 521.2
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": true,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 2,
+                "durationDivisions": 12,
                 "stem": true
               },
               "attachedStemIds": [
@@ -11227,11 +11261,11 @@
                 "y1": 554.81
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": false,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 4,
+                "durationDivisions": 16,
                 "stem": false
               },
               "attachedStemIds": [
@@ -12340,11 +12374,11 @@
                 "y1": 512.8
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": false,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 4,
+                "durationDivisions": 8,
                 "stem": true
               },
               "attachedStemIds": [
@@ -12397,11 +12431,11 @@
                 "y1": 521.2
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": true,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 2,
+                "durationDivisions": 12,
                 "stem": true
               },
               "attachedStemIds": [
@@ -12933,11 +12967,11 @@
                 "y1": 554.81
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": false,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 4,
+                "durationDivisions": 16,
                 "stem": false
               },
               "attachedStemIds": [
@@ -13756,11 +13790,11 @@
                 "y1": 512.8
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": true,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 6,
+                "durationDivisions": 12,
                 "stem": true
               },
               "attachedStemIds": [
@@ -13813,11 +13847,11 @@
                 "y1": 521.2
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": true,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 2,
+                "durationDivisions": 12,
                 "stem": true
               },
               "attachedStemIds": [
@@ -15172,11 +15206,11 @@
                 "y1": 749.58
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": false,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 4,
+                "durationDivisions": 8,
                 "stem": true
               },
               "attachedStemIds": [
@@ -15229,11 +15263,11 @@
                 "y1": 757.98
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": true,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 2,
+                "durationDivisions": 12,
                 "stem": true
               },
               "attachedStemIds": [
@@ -16790,11 +16824,11 @@
                 "y1": 749.58
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": false,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 4,
+                "durationDivisions": 8,
                 "stem": true
               },
               "attachedStemIds": [
@@ -16847,11 +16881,11 @@
                 "y1": 757.98
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": true,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 2,
+                "durationDivisions": 12,
                 "stem": true
               },
               "attachedStemIds": [
@@ -18729,11 +18763,11 @@
                 "y1": 988.07
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": true,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 6,
+                "durationDivisions": 12,
                 "stem": true
               },
               "attachedStemIds": [
@@ -18786,11 +18820,11 @@
                 "y1": 996.47
               },
               "rhythmProbe": {
-                "hollow": false,
+                "hollow": true,
                 "dotted": true,
                 "beams": 0,
                 "beamStrength": 0,
-                "durationDivisions": 2,
+                "durationDivisions": 12,
                 "stem": true
               },
               "attachedStemIds": [
@@ -19231,7 +19265,7 @@
       ]
     },
     "scoreGraph": {
-      "version": 1,
+      "version": 2,
       "measureCount": 78,
       "measuresWithBeamStemGraph": 78,
       "nodeCounts": {
@@ -19250,6 +19284,410 @@
       "totalNodes": 989,
       "totalEdges": 1963,
       "onsetColumns": 188,
+      "voiceBudgetDiagnostics": {
+        "measuresWithOverflow": 0,
+        "measuresWithUnderflow": 0,
+        "totalOverflowEvents": 0
+      },
+      "durationObservation": {
+        "nodesWithWrittenSoundingSplit": 3,
+        "tieNodes": 375,
+        "gapToNextNodes": 0,
+        "beamLadderNodes": 0,
+        "tieChainCount": 370,
+        "tieChains": [
+          {
+            "pitchKey": "43|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 1,
+                "onsetDivision": 0,
+                "writtenDurationDivisions": 12,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 43,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "66|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 1,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 66,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "62|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 1,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 62,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "59|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 1,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 59,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "38|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 2,
+                "onsetDivision": 0,
+                "writtenDurationDivisions": 12,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 38,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "66|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 2,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 66,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "61|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 2,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 61,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "57|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 2,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 57,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "43|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 3,
+                "onsetDivision": 0,
+                "writtenDurationDivisions": 12,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 43,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "66|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 3,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 66,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "62|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 3,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 62,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "59|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 3,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 59,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "38|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 4,
+                "onsetDivision": 0,
+                "writtenDurationDivisions": 12,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 38,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "66|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 4,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 66,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "61|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 4,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 61,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "57|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 4,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 57,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "43|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 5,
+                "onsetDivision": 0,
+                "writtenDurationDivisions": 12,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 43,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "66|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 5,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 66,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "62|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 5,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 62,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "59|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 5,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 8,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 59,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "78|treble",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 5,
+                "onsetDivision": 4,
+                "writtenDurationDivisions": 4,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 78,
+                "clef": "treble"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "81|treble",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 5,
+                "onsetDivision": 8,
+                "writtenDurationDivisions": 4,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 81,
+                "clef": "treble"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "38|bass",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 6,
+                "onsetDivision": 0,
+                "writtenDurationDivisions": 12,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 38,
+                "clef": "bass"
+              }
+            ],
+            "spansBar": false
+          },
+          {
+            "pitchKey": "79|treble",
+            "segmentCount": 1,
+            "segments": [
+              {
+                "measureNumber": 6,
+                "onsetDivision": 0,
+                "writtenDurationDivisions": 4,
+                "tieStart": true,
+                "tieStop": false,
+                "midi": 79,
+                "clef": "treble"
+              }
+            ],
+            "spansBar": false
+          }
+        ]
+      },
+      "staffLaneObservation": {
+        "grandStaffMeasures": 70,
+        "accompanimentNodes": 4,
+        "latePhaseNodes": 44,
+        "crossStaffPairs": 4
+      },
       "geometryBridge": {
         "matched": 469,
         "total": 469,

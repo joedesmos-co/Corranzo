@@ -138,6 +138,7 @@ export default function useScoreFollow({
 }) {
   const isDemoSession =
     isDemoPiece || isDemoFixtureFileSet(pdfFileName, timingSourceId ?? null)
+  const mountedRef = useRef(true)
   // When bundled demo anchors are disabled (dev/test honesty switch), the demo
   // piece runs the SAME automatic setup pipeline as a user upload.
   const useBundledDemoAnchors = isDemoSession && !areBundledDemoAnchorsDisabled()
@@ -229,6 +230,7 @@ export default function useScoreFollow({
 
   useEffect(() => {
     return () => {
+      mountedRef.current = false
       autoSetupAbortRef.current?.abort(createSetupAbortError())
       autoSetupAbortRef.current = null
       autoSetupInFlightRef.current = false
@@ -774,7 +776,7 @@ export default function useScoreFollow({
           signal: controller.signal,
           maxDurationMs: setupTimeoutMs,
           onProgress: (progress, message) => {
-            if (controller.signal.aborted) {
+            if (!mountedRef.current || controller.signal.aborted) {
               return
             }
             setSemiAutoSetup((previous) => ({
@@ -799,6 +801,9 @@ export default function useScoreFollow({
           result = await Promise.race([analysisPromise, timeoutPromise])
         } else {
           result = await analysisPromise
+        }
+        if (!mountedRef.current) {
+          return
         }
 
         const recordAutoSetupRuntime = (partial) => {
@@ -939,6 +944,9 @@ export default function useScoreFollow({
             : SCORE_FOLLOW_NEEDS_QUICK_SETUP,
         })
       } catch (error) {
+        if (!mountedRef.current) {
+          return
+        }
         if (controller.signal.aborted && !scanTimedOut) {
           setSemiAutoSetup(idleSemiAutoSetupState())
           setSetupStatus(

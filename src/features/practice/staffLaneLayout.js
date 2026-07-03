@@ -177,8 +177,8 @@ export const HOLLOW_NOTE_MIN_SECONDS = 1.0
 
 /** Notehead ellipse radii, in SVG units (shared with the renderer so stems
     attach exactly at the notehead edge). */
-export const NOTEHEAD_RX = 6.6
-export const NOTEHEAD_RY = 4.9
+export const NOTEHEAD_RX = 7
+export const NOTEHEAD_RY = 5.2
 
 /** Stem length, in staff line gaps (≈ one octave, standard engraving). */
 export const STEM_LENGTH_GAPS = 3.2

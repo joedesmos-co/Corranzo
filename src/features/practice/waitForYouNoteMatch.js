@@ -1,9 +1,14 @@
-import { findMatchingExpectedIndex, matchesAnyExpected } from './midiPitchMatch.js'
+import { findMatchingExpectedIndex, matchesAnyExpected, pitchMatches } from './midiPitchMatch.js'
 import {
+  CHORD_WINDOW_MS_MAX,
+  CHORD_WINDOW_MS_MIN,
   MIC_CHORD_COLLECTION_WINDOW_MS_MAX,
   MIC_CHORD_COLLECTION_WINDOW_MS_MIN,
   MUSICAL_EVENT_WINDOW_MS_MAX,
   MUSICAL_EVENT_WINDOW_MS_MIN,
+  ROLLED_CHORD_TOTAL_CAP_MS,
+  ROLLED_CHORD_TOTAL_CAP_MS_MAX,
+  ROLLED_CHORD_TOTAL_CAP_MS_MIN,
 } from './waitForYouMatchSettings.js'
 import {
   evaluateMicChordCollection,
@@ -41,7 +46,8 @@ export function createMusicalEventBufferState() {
     matchedIndices: new Set(),
     timeoutId: null,
     lastPlayedMidi: null,
-    windowStartMs: null,
+    attemptStartMs: null,
+    lastMatchMs: null,
   }
 }
 
@@ -60,13 +66,15 @@ export function resetMusicalEventBufferState(state) {
   }
   state.matchedIndices.clear()
   state.lastPlayedMidi = null
-  state.windowStartMs = null
+  state.attemptStartMs = null
+  state.lastMatchMs = null
 }
 
 export function resetChordMatchState(state) {
   resetMusicalEventBufferState(state)
 }
 
+/** Score grouping window — not used for MIDI rolled-chord input timing. */
 export function resolveMusicalEventWindowMs(settings = {}) {
   return Math.min(
     MUSICAL_EVENT_WINDOW_MS_MAX,
@@ -77,34 +85,69 @@ export function resolveMusicalEventWindowMs(settings = {}) {
   )
 }
 
+/** Sliding gap between rolled MIDI chord tones (from match settings). */
+export function resolveRolledChordSlideWindowMs(settings = {}) {
+  return Math.min(
+    CHORD_WINDOW_MS_MAX,
+    Math.max(CHORD_WINDOW_MS_MIN, Number(settings.chordWindowMs) || 500),
+  )
+}
+
+/** Hard cap for a full rolled MIDI chord attempt from the first matched tone. */
+export function resolveRolledChordTotalCapMs(settings = {}) {
+  const raw = Number(settings.rolledChordTotalCapMs)
+  if (!Number.isFinite(raw) || raw <= 0) {
+    return ROLLED_CHORD_TOTAL_CAP_MS
+  }
+  return Math.min(
+    ROLLED_CHORD_TOTAL_CAP_MS_MAX,
+    Math.max(ROLLED_CHORD_TOTAL_CAP_MS_MIN, raw),
+  )
+}
+
 export function resolveMicChordSequenceWindowMs(settings = {}) {
   return resolveMicChordCollectionWindowMs(settings)
 }
 
-function ensureMusicalEventWindow(state, windowMs, now = Date.now()) {
-  if (state.windowStartMs == null || now - state.windowStartMs > windowMs) {
-    resetMusicalEventBufferState(state)
-    state.windowStartMs = now
+function resetPolyphonicAttempt(state) {
+  if (state.timeoutId != null) {
+    clearTimeout(state.timeoutId)
+    state.timeoutId = null
+  }
+  state.matchedIndices.clear()
+  state.attemptStartMs = null
+  state.lastMatchMs = null
+}
+
+function ensurePolyphonicAttemptFresh(state, slideWindowMs, totalCapMs, now = Date.now()) {
+  if (state.attemptStartMs == null) {
+    return
+  }
+  if (now - state.attemptStartMs > totalCapMs) {
+    resetPolyphonicAttempt(state)
+    return
+  }
+  if (state.lastMatchMs != null && now - state.lastMatchMs > slideWindowMs) {
+    resetPolyphonicAttempt(state)
   }
 }
 
-function scheduleMusicalEventReset(state, windowMs) {
+function schedulePolyphonicSlideReset(state, slideWindowMs) {
   if (state.timeoutId != null) {
     clearTimeout(state.timeoutId)
   }
-  const elapsed = Date.now() - (state.windowStartMs ?? Date.now())
-  const remaining = Math.max(0, windowMs - elapsed)
   state.timeoutId = setTimeout(() => {
-    resetMusicalEventBufferState(state)
-  }, remaining)
+    resetPolyphonicAttempt(state)
+  }, slideWindowMs)
 }
 
 function evaluatePolyphonicInput(checkpoint, playedMidi, bufferState, settings) {
   const expected = getExpectedMidis(checkpoint)
-  const windowMs = resolveMusicalEventWindowMs(settings)
+  const slideWindowMs = resolveRolledChordSlideWindowMs(settings)
+  const totalCapMs = resolveRolledChordTotalCapMs(settings)
   const now = Date.now()
 
-  ensureMusicalEventWindow(bufferState, windowMs, now)
+  ensurePolyphonicAttemptFresh(bufferState, slideWindowMs, totalCapMs, now)
   bufferState.lastPlayedMidi = playedMidi
 
   const couldMatch = matchesAnyExpected(playedMidi, expected, settings)
@@ -138,8 +181,12 @@ function evaluatePolyphonicInput(checkpoint, playedMidi, bufferState, settings) 
     }
   }
 
+  if (bufferState.attemptStartMs == null) {
+    bufferState.attemptStartMs = now
+  }
+  bufferState.lastMatchMs = now
   bufferState.matchedIndices.add(matchIndex)
-  scheduleMusicalEventReset(bufferState, windowMs)
+  schedulePolyphonicSlideReset(bufferState, slideWindowMs)
 
   if (bufferState.matchedIndices.size >= expected.length) {
     resetMusicalEventBufferState(bufferState)
@@ -168,6 +215,15 @@ function evaluatePolyphonicInput(checkpoint, playedMidi, bufferState, settings) 
  * Pure function — does not call onMatch; caller handles COMPLETE.
  */
 export function evaluateNoteInput(checkpoint, playedMidi, bufferState, settings) {
+  if (!checkpoint) {
+    return {
+      outcome: MATCH_OUTCOME.NO_EXPECTED,
+      expected: [],
+      matchedIndices: bufferState?.matchedIndices ?? new Set(),
+      isChord: false,
+    }
+  }
+
   const expected = getExpectedMidis(checkpoint)
   if (expected.length === 0) {
     return {
@@ -339,14 +395,80 @@ export function evaluateMicNoteInputWithBuffer(checkpoint, playedMidi, bufferSta
 }
 
 /**
+ * Mic Engine V2 — simultaneous score-informed chord/single-note evaluation.
+ */
+export function evaluateMicScoreInformedInput(checkpoint, detectedMidis = [], settings) {
+  const expected = getExpectedMidis(checkpoint)
+  const targets = getMicChordMatchTargets(checkpoint, settings)
+  const fullExpected = targets.fullExpected ?? expected
+
+  if (fullExpected.length === 0) {
+    return {
+      outcome: MATCH_OUTCOME.NO_EXPECTED,
+      expected: fullExpected,
+      matchedIndices: new Set(),
+      isChord: false,
+    }
+  }
+
+  const matchedIndices = new Set()
+  for (let index = 0; index < fullExpected.length; index += 1) {
+    const expectedMidi = fullExpected[index]
+    const heard = (detectedMidis ?? []).some((midi) =>
+      pitchMatches(midi, expectedMidi, settings ?? {}),
+    )
+    if (heard) {
+      matchedIndices.add(index)
+    }
+  }
+
+  if (matchedIndices.size === fullExpected.length) {
+    return {
+      outcome: MATCH_OUTCOME.COMPLETE,
+      expected: fullExpected,
+      matchedIndices,
+      isChord: fullExpected.length > 1,
+      playedMidi: detectedMidis?.[0] ?? null,
+      micEngineMode: 'v2-score-informed',
+      detectedMidis: [...(detectedMidis ?? [])],
+    }
+  }
+
+  if (matchedIndices.size > 0) {
+    return {
+      outcome: MATCH_OUTCOME.CHORD_PROGRESS,
+      expected: fullExpected,
+      matchedIndices,
+      isChord: fullExpected.length > 1,
+      playedMidi: detectedMidis?.[0] ?? null,
+      micEngineMode: 'v2-score-informed',
+      detectedMidis: [...(detectedMidis ?? [])],
+      matchedCount: matchedIndices.size,
+      totalExpected: fullExpected.length,
+    }
+  }
+
+  return {
+    outcome: MATCH_OUTCOME.WRONG,
+    expected: fullExpected,
+    matchedIndices,
+    isChord: fullExpected.length > 1,
+    playedMidi: detectedMidis?.[0] ?? null,
+    micEngineMode: 'v2-score-informed',
+    detectedMidis: [...(detectedMidis ?? [])],
+    micChordMode: targets.mode,
+  }
+}
+
+/**
  * @deprecated Use evaluateNoteInput — kept for tests importing tryMatchCheckpoint
  */
 export function tryMatchCheckpoint(checkpoint, playedMidi, chordState, onMatch, settings) {
   const result = evaluateNoteInput(checkpoint, playedMidi, chordState, settings ?? {
     transpositionOffset: 0,
     allowOctaveMistakes: false,
-    chordWindowMs: 450,
-    musicalEventWindowMs: 150,
+    chordWindowMs: 500,
+    musicalEventWindowMs: 180,
   })
   if (result.outcome === MATCH_OUTCOME.COMPLETE) {
     onMatch()

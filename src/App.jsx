@@ -24,7 +24,7 @@ import {
   hideDemoCard,
   isDemoCardHidden,
   isOnboardingDismissed,
-  loadPracticePrefs,
+  resetPracticeTimePrefs,
   savePracticePrefs,
 } from './features/session/practicePrefsStorage.js'
 import {
@@ -56,7 +56,15 @@ import {
 } from './features/import/classifyUploadFiles.js'
 import { resolveRestoredActiveView } from './features/session/sessionRestoreRouting.js'
 import { getHomeNavigationTarget } from './features/navigation/goHome.js'
-import { warmupPianoSamplesOnIdle } from './features/playback/pianoSampleWarmup.js'
+import { warmupAllInstrumentSamplesOnIdle } from './features/playback/instrumentSampleWarmup.js'
+import { useInstrument } from './context/instrumentContext.js'
+import { DEFAULT_INSTRUMENT_ID, normalizeInstrumentId } from './features/instruments/instruments.js'
+import {
+  bundleHasActiveFile,
+  createEmptyInstrumentBundle,
+  createInstrumentBundleStore,
+  snapshotInstrumentBundle,
+} from './features/instruments/instrumentPracticeBundle.js'
 import { createMusicXmlSource, cloneMusicXmlSource, clearOmrGeneratedPlaybackSource, describeMusicXmlSource, isMusicXmlSourceReady, isOmrGeneratedPlayback, isPracticePlaybackReady, validateRestoredOmrPlayback } from './features/import/musicXmlSource.js'
 import { describePdfPracticeSource, refreshOwnedPdfFromBlobUrl } from './features/import/pdfPracticeSource.js'
 import { validateOmrGeneratedPlayback } from './features/omr/validateOmrGeneratedPlayback.js'
@@ -84,6 +92,7 @@ function isFullPracticeSet(pdfLoaded, midiSource, musicXmlSource) {
 }
 
 export default function App() {
+  const { instrumentId, setInstrumentId } = useInstrument()
   const [activeView, setActiveView] = useState(resolveInitialView)
   const [pdfFile, setPdfFile] = useState(null)
   const [pdfBuffer, setPdfBuffer] = useState(null)
@@ -96,6 +105,23 @@ export default function App() {
   const [demoCardHidden, setDemoCardHidden] = useState(() => isDemoCardHidden())
   const practicePrefsRef = useRef(null)
   const pendingClassifiedUploadRef = useRef(null)
+  // Instrument-scoped active practice bundles. The currently selected
+  // instrument's bundle lives in the App-level state below; the store keeps the
+  // other instruments' saved bundles so switching never bleeds files/state.
+  const instrumentBundleStoreRef = useRef(createInstrumentBundleStore())
+  const activeInstrumentRef = useRef(normalizeInstrumentId(instrumentId))
+
+  const syncPracticePrefsSnapshot = useCallback((snapshot) => {
+    practicePrefsRef.current = snapshot
+    setInitialPracticePrefs(snapshot)
+    if (snapshot) {
+      savePracticePrefs(snapshot)
+    }
+  }, [])
+
+  const resetPracticePrefsForNewScore = useCallback(() => {
+    syncPracticePrefsSnapshot(resetPracticeTimePrefs())
+  }, [syncPracticePrefsSnapshot])
   const [fileName, setFileName] = useState('')
   const [pageNumber, setPageNumber] = useState(1)
   const [numPages, setNumPages] = useState(null)
@@ -118,6 +144,77 @@ export default function App() {
     togglePaperTheme,
   } = useWorkspacePreferences()
 
+  const resetPdfViewerRuntime = useCallback(() => {
+    clearWarmPages()
+    setPracticePdfReady(false)
+    setPdfViewerRevision((revision) => revision + 1)
+  }, [])
+
+  // Live mirror of the currently selected instrument's active bundle. Kept in a
+  // ref (updated every render) so the instrument-switch effect can snapshot the
+  // OUTGOING instrument before applying the incoming one.
+  const liveBundleRef = useRef(null)
+  liveBundleRef.current = {
+    pdfFile,
+    pdfBuffer,
+    pdfMeta,
+    fileName,
+    pageNumber,
+    numPages,
+    midiSource,
+    musicXmlSource,
+    practicePrefs: practicePrefsRef.current,
+    pdfSoftWarning,
+    demoPieceActive,
+  }
+
+  // Apply an instrument's saved bundle to the App-level active state. Passing
+  // an empty bundle shows that instrument's empty Practice state. The PDF blob
+  // URL is owned per bundle, so we never revoke here — the owning bundle keeps
+  // it alive until its own PDF is replaced/cleared.
+  const applyInstrumentBundle = useCallback((bundle) => {
+    const next = bundle ?? createEmptyInstrumentBundle()
+    setPdfFile(next.pdfFile)
+    setPdfBuffer(next.pdfBuffer)
+    setPdfMeta(next.pdfMeta)
+    setFileName(next.fileName ?? '')
+    setPageNumber(next.pageNumber ?? 1)
+    setNumPages(next.numPages ?? null)
+    setMidiSource(next.midiSource)
+    setMusicXmlSource(next.musicXmlSource)
+    setPdfSoftWarning(next.pdfSoftWarning ?? null)
+    setDemoPieceActive(Boolean(next.demoPieceActive))
+    practicePrefsRef.current = next.practicePrefs ?? null
+    setInitialPracticePrefs(next.practicePrefs ?? null)
+    resetPdfViewerRuntime()
+  }, [resetPdfViewerRuntime])
+
+  // Save the current instrument's bundle and restore the newly selected one
+  // whenever the app-wide instrument changes. This keeps Piano and Guitar
+  // active files/practice state fully separate.
+  useEffect(() => {
+    const nextInstrument = normalizeInstrumentId(instrumentId)
+    const previousInstrument = activeInstrumentRef.current
+    if (nextInstrument === previousInstrument) {
+      return
+    }
+
+    const store = instrumentBundleStoreRef.current
+    store.set(previousInstrument, snapshotInstrumentBundle(liveBundleRef.current))
+    activeInstrumentRef.current = nextInstrument
+    applyInstrumentBundle(store.get(nextInstrument))
+  }, [instrumentId, applyInstrumentBundle])
+
+  const getInstrumentSessionBundles = useCallback(() => {
+    const bundles = Object.fromEntries(instrumentBundleStoreRef.current.entries())
+    const activeInstrument = normalizeInstrumentId(activeInstrumentRef.current)
+    const activeBundle = snapshotInstrumentBundle(liveBundleRef.current)
+    if (activeBundle.pdfFile && activeBundle.pdfBuffer) {
+      bundles[activeInstrument] = activeBundle
+    }
+    return bundles
+  }, [])
+
   useEffect(() => {
     function handlePopState() {
       setActiveView(normalizeAppView(getViewFromPathname(window.location.pathname) ?? 'library'))
@@ -138,7 +235,9 @@ export default function App() {
   }, [activeView, pdfFile])
 
   useEffect(() => {
-    warmupPianoSamplesOnIdle()
+    // Warm every supported instrument during idle time so the first Play / Hear It
+    // on either Piano or Guitar uses decoded samples, not the synth fallback.
+    warmupAllInstrumentSamplesOnIdle()
   }, [])
 
   useEffect(() => {
@@ -167,11 +266,20 @@ export default function App() {
 
   useEffect(() => {
     return () => {
-      if (pdfFile) {
-        URL.revokeObjectURL(pdfFile)
+      const pdfUrls = new Set()
+      if (liveBundleRef.current?.pdfFile) {
+        pdfUrls.add(liveBundleRef.current.pdfFile)
+      }
+      for (const bundle of instrumentBundleStoreRef.current.values()) {
+        if (bundle?.pdfFile) {
+          pdfUrls.add(bundle.pdfFile)
+        }
+      }
+      for (const pdfUrl of pdfUrls) {
+        URL.revokeObjectURL(pdfUrl)
       }
     }
-  }, [pdfFile])
+  }, [])
 
   const clearDemoPiece = useCallback(() => {
     setDemoPieceActive(false)
@@ -180,12 +288,6 @@ export default function App() {
   const markDemoCardHidden = useCallback(() => {
     hideDemoCard()
     setDemoCardHidden(true)
-  }, [])
-
-  const resetPdfViewerRuntime = useCallback(() => {
-    clearWarmPages()
-    setPracticePdfReady(false)
-    setPdfViewerRevision((revision) => revision + 1)
   }, [])
 
   const clearGeneratedPlaybackAfterOmrFailure = useCallback(() => {
@@ -224,6 +326,7 @@ export default function App() {
       setPageNumber(1)
       setNumPages(null)
       resetPdfViewerRuntime()
+      resetPracticePrefsForNewScore()
       setPdfSoftWarning(validation.softWarning)
       if (clearedCompanionFiles) {
         setLibraryFeedback({
@@ -250,7 +353,7 @@ export default function App() {
         message: formatPdfImportError(error),
       })
     }
-  }, [midiSource, musicXmlSource, clearDemoPiece, markDemoCardHidden, navigateToView, resetPdfViewerRuntime])
+  }, [midiSource, musicXmlSource, clearDemoPiece, markDemoCardHidden, navigateToView, resetPdfViewerRuntime, resetPracticePrefsForNewScore])
 
   const handleMidiSelect = useCallback(async (file) => {
     clearDemoPiece()
@@ -292,7 +395,9 @@ export default function App() {
       setMusicXmlSource({
         fileName: file.name,
         data,
+        source: 'upload',
       })
+      resetPracticePrefsForNewScore()
       const fullSet = isFullPracticeSet(Boolean(pdfFile), midiSource, { data })
       setLibraryFeedback({
         type: 'success',
@@ -309,7 +414,7 @@ export default function App() {
         message: formatMusicXmlImportError(error),
       })
     }
-  }, [pdfFile, midiSource, clearDemoPiece, markDemoCardHidden, navigateToView])
+  }, [pdfFile, midiSource, clearDemoPiece, markDemoCardHidden, navigateToView, resetPracticePrefsForNewScore])
 
   const handleClearMusicXml = useCallback(() => {
     clearDemoPiece()
@@ -437,6 +542,7 @@ export default function App() {
       activeView: activeViewRef.current,
       pageNumber,
       practicePrefs: practicePrefsRef.current,
+      instrumentId,
     })
     saveSessionMeta(sessionMeta)
     try {
@@ -468,6 +574,7 @@ export default function App() {
     pdfMeta,
     midiSource,
     pageNumber,
+    instrumentId,
     clearDemoPiece,
     markDemoCardHidden,
     clearGeneratedPlaybackAfterOmrFailure,
@@ -522,12 +629,9 @@ export default function App() {
       // Demo is loaded — the upload/demo sidebar is no longer useful, so collapse
       // it. The PDF viewer's sidebar toggle still reopens it on demand.
       setSidebarOpen(false)
-      const clearedPrefs = {
-        ...(loadPracticePrefs() ?? {}),
-        practiceTime: 0,
-      }
+      const clearedPrefs = resetPracticeTimePrefs()
       savePracticePrefs(clearedPrefs)
-      setInitialPracticePrefs(clearedPrefs)
+      syncPracticePrefsSnapshot(clearedPrefs)
       setLibraryFeedback({
         type: 'success',
         message: `${meta.title} loaded — opening Practice. Press Play, then try Wait For You.`,
@@ -540,7 +644,7 @@ export default function App() {
         error: formatDemoLoadError(loadError),
       })
     }
-  }, [setSidebarOpen, markDemoCardHidden, navigateToView, resetPdfViewerRuntime])
+  }, [setSidebarOpen, markDemoCardHidden, navigateToView, resetPdfViewerRuntime, syncPracticePrefsSnapshot])
 
   const handleClassifiedUpload = useCallback(
     async (classified) => {
@@ -579,6 +683,7 @@ export default function App() {
           setPageNumber(1)
           setNumPages(null)
           resetPdfViewerRuntime()
+          resetPracticePrefsForNewScore()
           loadedSoftWarning = validation.softWarning ?? null
           setPdfSoftWarning(loadedSoftWarning)
           loadedPdf = true
@@ -593,12 +698,13 @@ export default function App() {
           const file = classified.musicXml[0]
           if (isMuseScoreSourceFile(file)) {
             setLibraryFeedback({ type: 'info', message: MUSESCORE_PLANNED_MESSAGE })
-            return notices
+          } else {
+            const data = await readFileArrayBuffer(file, 'musicXml')
+            const nextXml = { fileName: file.name, data, source: 'upload' }
+            setMusicXmlSource(nextXml)
+            loadedXml = nextXml
+            resetPracticePrefsForNewScore()
           }
-          const data = await readFileArrayBuffer(file, 'musicXml')
-          const nextXml = { fileName: file.name, data }
-          setMusicXmlSource(nextXml)
-          loadedXml = nextXml
         }
 
         if (classified.midi[0]) {
@@ -678,6 +784,7 @@ export default function App() {
       markDemoCardHidden,
       navigateToView,
       resetPdfViewerRuntime,
+      resetPracticePrefsForNewScore,
     ],
   )
 
@@ -741,6 +848,7 @@ export default function App() {
     setMusicXmlSource(nextMusicXml)
     setPageNumber(payload.pageNumber ?? 1)
     resetPdfViewerRuntime()
+    practicePrefsRef.current = payload.practicePrefs ?? null
     setInitialPracticePrefs(payload.practicePrefs)
     setActiveView(
       normalizeAppView(
@@ -755,7 +863,30 @@ export default function App() {
     setPdfSoftWarning(null)
     setDemoPieceActive(false)
     markDemoCardHidden()
-  }, [markDemoCardHidden, resetPdfViewerRuntime])
+    // Restore the instrument the session was saved with. Legacy piano-era sessions
+    // omit instrumentId — normalize to Piano per instruments.js default contract.
+    const restoredInstrument = normalizeInstrumentId(payload.instrumentId ?? DEFAULT_INSTRUMENT_ID)
+    for (const [bundleInstrumentId, bundle] of Object.entries(payload.instrumentBundles ?? {})) {
+      const normalizedBundleInstrument = normalizeInstrumentId(bundleInstrumentId)
+      if (normalizedBundleInstrument === restoredInstrument || !bundle?.pdfFile) {
+        continue
+      }
+      const bundleBuffer = await bundle.pdfFile.arrayBuffer()
+      instrumentBundleStoreRef.current.set(normalizedBundleInstrument, {
+        ...bundle,
+        pdfFile: URL.createObjectURL(bundle.pdfFile),
+        pdfBuffer: bundleBuffer.slice(0),
+        musicXmlSource: bundle.musicXmlSource ? cloneMusicXmlSource(bundle.musicXmlSource) : null,
+      })
+    }
+    // The restored files ARE this instrument's active bundle — mark it as the
+    // current instrument so the switch effect treats the restore as authoritative
+    // and does not clobber it with an empty bundle. Any other instrument keeps an
+    // empty bundle until the user loads files for it.
+    activeInstrumentRef.current = restoredInstrument
+    instrumentBundleStoreRef.current.clear(restoredInstrument)
+    setInstrumentId(restoredInstrument)
+  }, [markDemoCardHidden, resetPdfViewerRuntime, setInstrumentId])
 
   const onLegalRoute = isLegalPathname(window.location.pathname)
 
@@ -766,7 +897,9 @@ export default function App() {
     musicXmlSource,
     activeView,
     pageNumber,
-    practicePrefs: practicePrefsRef.current,
+    practicePrefsRef,
+    instrumentId,
+    getInstrumentSessionBundles,
     onRestore: handleSessionRestore,
     restoreSuspended: onLegalRoute,
   })
@@ -843,9 +976,10 @@ export default function App() {
       })
       .catch((error) => {
         if (!cancelled) {
-          logAppViewDebug('practice-pdf-refresh:error', {
-            message: error instanceof Error ? error.message : String(error),
-          })
+          const message =
+            error instanceof Error ? error.message : 'Could not reload the PDF in Practice.'
+          setPdfSoftWarning(`PDF reload failed: ${message}. Return to Library and reopen the file.`)
+          logAppViewDebug('practice-pdf-refresh:error', { message })
         }
       })
 
@@ -972,11 +1106,11 @@ export default function App() {
         !((musicXmlSource?.omrMeta?.durationSeconds ?? 0) > 0)
       return (
         <AppViewPlaceholder
-          title={omrInvalid ? 'Generated playback is not ready' : 'Start Practice'}
+          title={omrInvalid ? 'Generated playback is not ready' : 'No piece open yet'}
           message={
             omrInvalid
-              ? 'Experimental PDF playback could not be validated. Return to Library and regenerate, or upload a timing file.'
-              : 'Try the demo piece, or add your sheet music and timing file.'
+              ? 'This experimental PDF playback could not be validated. Go back to Library to regenerate it, or add a timing file.'
+              : 'Open the demo piece to start now, or add your own sheet music and timing file in Library.'
           }
           actionLabel={
             !omrInvalid && isDemoSampleEnabled() && restoreGateOpen
@@ -1044,19 +1178,19 @@ export default function App() {
   const guidedChoiceOpen = guidedTutorialOpen && restoreGateOpen && !practiceReady
 
   const appBody = (
-    <div
-      className={`app${isRestoring ? ' app--restoring' : ''}${guidedChoiceOpen ? ' app--guided-choice' : ''}`}
-    >
-      <TopBar
-        activeView={activeView}
-        onNavigate={handleNavigate}
-        onGoHome={goHome}
-        onReplayTutorial={replayGuidedTutorial}
-        onShowFileHelp={showFileHelp}
-        practiceReady={practiceReady}
-      />
-
-      {isRestoring && <SessionRestoreOverlay />}
+    <>
+      <div
+        className={`app${isRestoring ? ' app--restoring' : ''}${guidedChoiceOpen ? ' app--guided-choice' : ''}`}
+        inert={isRestoring ? true : undefined}
+      >
+        <TopBar
+          activeView={activeView}
+          onNavigate={handleNavigate}
+          onGoHome={goHome}
+          onReplayTutorial={replayGuidedTutorial}
+          onShowFileHelp={showFileHelp}
+          practiceReady={practiceReady}
+        />
 
       <SessionRestoreBanner
         status={sessionPersistence.restoreStatus}
@@ -1093,7 +1227,9 @@ export default function App() {
               navigateToView('practice')
               setLibraryFeedback({
                 type: 'info',
-                message: 'Opened Practice. Add a sound file anytime for backing audio.',
+                message: midiSource
+                  ? 'Opened Practice.'
+                  : 'Opened Practice. Add a sound file anytime for backing audio.',
               })
             }}
             onClassifiedUpload={gatedClassifiedUpload}
@@ -1151,11 +1287,14 @@ export default function App() {
       {activeView === 'terms' && <TermsOfServicePage />}
       {activeView === 'contact' && <ContactPage />}
 
-      {(activeView === 'library' || activeView === 'profile' || isLegalView(activeView)) && (
-        <AppFooter onLegalNavigate={navigateToView} />
-      )}
+      {(activeView === 'library' ||
+        activeView === 'practice' ||
+        activeView === 'profile' ||
+        isLegalView(activeView)) && <AppFooter onLegalNavigate={navigateToView} />}
 
-      {guidedTutorialOpen && restoreGateOpen && (
+      {guidedTutorialOpen &&
+        restoreGateOpen &&
+        (activeView === 'library' || activeView === 'practice') && (
         <GuidedTutorial
           activeView={activeView}
           practiceReady={practiceReady}
@@ -1168,7 +1307,9 @@ export default function App() {
           onDone={() => finishGuidedTutorial('done')}
         />
       )}
-    </div>
+      </div>
+      {isRestoring && <SessionRestoreOverlay onSkip={sessionPersistence.skipRestore} />}
+    </>
   )
 
   return (

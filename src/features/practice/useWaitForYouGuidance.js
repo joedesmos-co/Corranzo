@@ -18,6 +18,9 @@ export default function useWaitForYouGuidance({
   matchingActive = true,
   complete = false,
   timeoutMs = WFY_HINT_TIMEOUT_MS,
+  instrument = null,
+  strings = null,
+  tabPositions = null,
 }) {
   const checkpointId = currentCheckpoint?.id ?? null
   const [wrongAttempts, setWrongAttempts] = useState(0)
@@ -59,6 +62,15 @@ export default function useWaitForYouGuidance({
     return () => clearTimeout(id)
   }, [active, matchingActive, complete, checkpointId, wrongAttempts, timeoutMs])
 
+  useEffect(() => {
+    if (!active) {
+      setWrongAttempts(0)
+      setTimedOut(false)
+      setHintRequested(false)
+      setTrackedFeedback(null)
+    }
+  }, [active])
+
   const requestHint = useCallback(() => setHintRequested(true), [])
 
   const guidance = useMemo(
@@ -71,8 +83,11 @@ export default function useWaitForYouGuidance({
         hintRequested,
         complete,
         matchingActive,
+        instrument,
+        strings,
+        tabPositions,
       }),
-    [currentCheckpoint, inputFeedback, wrongAttempts, timedOut, hintRequested, complete, matchingActive],
+    [currentCheckpoint, inputFeedback, wrongAttempts, timedOut, hintRequested, complete, matchingActive, instrument, strings, tabPositions],
   )
 
   return { guidance, wrongAttempts, timedOut, hintRequested, requestHint }

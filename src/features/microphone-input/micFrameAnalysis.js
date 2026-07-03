@@ -29,14 +29,16 @@ function highPassInPlace(samples, strength = 0.965) {
 
 /**
  * Analyze one analyser frame for pitch, level, and user-facing quality.
+ *
+ * Pitch runs on the raw analyser window; a light high-pass copy is used only for
+ * the noise floor and gate so rumble does not open the gate without affecting
+ * autocorrelation on periodic tones.
  */
 export function analyzeMicFrame(samples, sampleRate, noiseFloorTracker, options = {}) {
   if (!samples?.length || !sampleRate) {
     return null
   }
-  const { centsTolerance = 30 } = options
-
-  highPassInPlace(samples)
+  const { centsTolerance = 35 } = options
 
   let rms = 0
   for (let index = 0; index < samples.length; index += 1) {
@@ -44,25 +46,36 @@ export function analyzeMicFrame(samples, sampleRate, noiseFloorTracker, options 
   }
   rms = Math.sqrt(rms / samples.length)
 
+  const filtered = new Float32Array(samples)
+  highPassInPlace(filtered)
+
+  let filteredRms = 0
+  for (let index = 0; index < filtered.length; index += 1) {
+    filteredRms += filtered[index] * filtered[index]
+  }
+  filteredRms = Math.sqrt(filteredRms / filtered.length)
+
   const pitch = detectPitchAutocorrelation(samples, sampleRate)
   const note = pitchToMidiNote(pitch, { centsTolerance })
   const hasPitch = note?.midi != null
 
-  const isQuietFrame = !hasPitch && rms < (noiseFloorTracker?.floor ?? 0.006) * 4
-  const noiseFloor = updateNoiseFloor(noiseFloorTracker, rms, isQuietFrame)
-  const gateOpen = passesNoiseGate(rms, noiseFloor)
+  const isQuietFrame = !hasPitch && filteredRms < (noiseFloorTracker?.floor ?? 0.006) * 4
+  const noiseFloor = updateNoiseFloor(noiseFloorTracker, filteredRms, isQuietFrame)
+  const gateOpen = passesNoiseGate(filteredRms, noiseFloor)
 
   const signalQuality = classifyMicSignalQuality({
     rms,
     clarity: note?.clarity ?? pitch?.clarity ?? 0,
     passesGate: gateOpen,
     hasPitch,
+    stabilizerPending: options.stabilizerPending ?? false,
   })
 
   const level = Math.min(1, rms / 0.22)
 
   return {
     rms,
+    filteredRms,
     level,
     noiseFloor,
     gateOpen,

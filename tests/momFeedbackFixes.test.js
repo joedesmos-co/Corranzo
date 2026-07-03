@@ -55,17 +55,17 @@ describe('Corranzo mom-test feedback pass', () => {
   it('makes microphone-off and microphone-reality states explicit in Wait For You', () => {
     const waitForYou = readSrc('components', 'practice', 'WaitForYouSection.jsx')
 
-    expect(waitForYou).toContain('Microphone is off. Turn it on to have Wait For You listen.')
+    expect(waitForYou).toContain('Microphone is off. Turn it on so Wait For You can hear you.')
     expect(waitForYou).toContain('Enable microphone')
-    expect(waitForYou).toContain('Microphone works best one note at a time')
-    expect(waitForYou).toContain('MIDI is best for chords')
+    expect(waitForYou).toContain('Microphone hears one note at a time')
+    expect(waitForYou).toContain('Use MIDI for chords played together')
   })
 
   it('defaults Wait For You to note mode and keeps beat stepping out of beginner UI', () => {
     const practiceSession = readSrc('features', 'practice', 'usePracticeSession.js')
     const waitForYou = readSrc('components', 'practice', 'WaitForYouSection.jsx')
 
-    expect(practiceSession).toContain('useState(WFY_CHECKPOINT_MODE.NOTE)')
+    expect(practiceSession).toContain('prefs.checkpointMode === WFY_CHECKPOINT_MODE.BEAT')
     expect(waitForYou).not.toContain('Tap through beats')
     expect(waitForYou).not.toContain('name="wfy-checkpoint-mode"')
   })
@@ -79,15 +79,17 @@ describe('Corranzo mom-test feedback pass', () => {
     expect(practiceSession).toContain('waitForYou.markCorrectAndContinue({ immediate: true })')
   })
 
-  it('uses the main piano instrument for Hear it and exposes clear failure copy', () => {
+  it('uses the main instrument voice for Hear it and exposes clear failure copy', () => {
     const player = readSrc('features', 'practice', 'referenceNotePlayer.js')
     const hook = readSrc('features', 'practice', 'useWaitForYouReferencePlayback.js')
     const waitForYou = readSrc('components', 'practice', 'WaitForYouSection.jsx')
 
-    expect(player).toContain("await import('../playback/pianoInstrument.js')")
-    expect(player).toContain('createPianoInstrument({ tone: Tone })')
+    // Reference playback resolves the real sampled voice through the
+    // instrument voice registry (piano by default) — never a bare synth.
+    expect(player).toContain('loadInstrumentVoiceModule')
+    expect(player).toContain('createInstrumentVoice({ tone: Tone })')
     expect(player).not.toContain('new Tone.PolySynth')
-    expect(hook).toContain('Piano reference sound unavailable')
+    expect(hook).toContain('reference sound unavailable')
     expect(waitForYou).toContain('wait-for-you__reference-error')
   })
 

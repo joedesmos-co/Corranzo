@@ -32,6 +32,7 @@ import {
   evaluateNoteInput,
   MATCH_OUTCOME,
   resolveMusicalEventWindowMs,
+  resolveRolledChordSlideWindowMs,
 } from '../src/features/practice/waitForYouNoteMatch.js'
 import {
   MIC_CHORD_COLLECTION_WINDOW_MS,
@@ -192,13 +193,13 @@ describe('Wait For You — MIDI chord unchanged', () => {
     vi.useRealTimers()
   })
 
-  it('accepts simultaneous MIDI chord tones within 180ms', () => {
+  it('accepts rolled MIDI chord tones within the input slide window', () => {
     const state = createMusicalEventBufferState()
     const cp = noteCheckpoint([C4, E4, G4])
     expect(evaluateNoteInput(cp, C4, state, settings).outcome).toBe(MATCH_OUTCOME.CHORD_PROGRESS)
     expect(evaluateNoteInput(cp, E4, state, settings).outcome).toBe(MATCH_OUTCOME.CHORD_PROGRESS)
     expect(evaluateNoteInput(cp, G4, state, settings).outcome).toBe(MATCH_OUTCOME.COMPLETE)
-    expect(resolveMusicalEventWindowMs(settings)).toBe(180)
+    expect(resolveRolledChordSlideWindowMs(settings)).toBe(500)
   })
 })
 

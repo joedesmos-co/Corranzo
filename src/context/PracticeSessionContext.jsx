@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useRef } from 'react'
 import * as Tone from 'tone'
-import { disposeReferencePlayer } from '../features/practice/referenceNotePlayer.js'
+import { disposeReferencePlayer, releaseReferenceVoices, warmupReferenceVoice } from '../features/practice/referenceNotePlayer.js'
 import { setupAudioVisibilityResume } from '../features/audio/audioLifecycle.js'
 import { isDemoFixtureFileSet } from '../features/demo/demoBundledAnchors.js'
 import { buildPdfFingerprint } from '../features/score-follow/scoreFollowStorage.js'
@@ -13,7 +13,8 @@ import { PRACTICE_MODE } from '../features/practice/practiceMode.js'
 import { WFY_CHECKPOINT_MODE } from '../features/practice/waitForYouCheckpointMode.js'
 import { WFY_STATUS } from '../features/practice/waitForYouEngine.js'
 import { useProfileStats } from './ProfileStatsContext.jsx'
-import { PracticeTickContext, ScoreFollowCursorContext } from './PracticeTickContext.jsx'
+import { PracticeTickContext, ScoreFollowCursorContext, quantizePracticeTime } from './PracticeTickContext.jsx'
+import { useInstrument } from './instrumentContext.js'
 
 const PracticeSessionContext = createContext(null)
 const PracticeSessionStableContext = createContext(null)
@@ -38,6 +39,7 @@ export function PracticeSessionProvider({
   experimentalOmrPlayback = false,
 }) {
   const { recordWfyEvent, refreshStats } = useProfileStats()
+  const { instrumentId } = useInstrument()
 
   const resolvedDemoPiece = useMemo(
     () =>
@@ -78,6 +80,7 @@ export function PracticeSessionProvider({
         recordAutoPracticeLoop()
       }
     },
+    instrumentId,
   })
 
   const pdfFingerprint = useMemo(() => buildPdfFingerprint(pdfMeta), [pdfMeta])
@@ -88,6 +91,7 @@ export function PracticeSessionProvider({
     measureNumber: session.measure.currentMeasure?.number ?? null,
     tempoBpm: session.playback.effectiveTempo ?? null,
     onStatsFlush: refreshStats,
+    instrumentId,
   })
 
   const sessionReady = Boolean(
@@ -154,15 +158,50 @@ export function PracticeSessionProvider({
 
   const previousViewRef = useRef(activeView)
 
+  const onPracticePrefsChangeRef = useRef(onPracticePrefsChange)
+  onPracticePrefsChangeRef.current = onPracticePrefsChange
+
+  const practicePrefsSnapshotRef = useRef(session.practicePrefsSnapshot)
+  practicePrefsSnapshotRef.current = session.practicePrefsSnapshot
+
   useEffect(() => {
-    onPracticePrefsChange?.(session.practicePrefsSnapshot)
-  }, [session.practicePrefsSnapshot, onPracticePrefsChange])
+    onPracticePrefsChangeRef.current?.(practicePrefsSnapshotRef.current)
+  }, [
+    session.practiceMode,
+    session.checkpointMode,
+    session.wfyInputSource,
+    session.loop.snapMode,
+    session.loop.enabled,
+    session.loop.startMeasureNumber,
+    session.loop.endMeasureNumber,
+    session.loop.startBeat,
+    session.loop.endBeat,
+    session.rawMatchSettings,
+  ])
+
+  useEffect(() => {
+    if (!session.playback.isPlaying) {
+      onPracticePrefsChangeRef.current?.(practicePrefsSnapshotRef.current)
+      return undefined
+    }
+    const intervalId = window.setInterval(() => {
+      onPracticePrefsChangeRef.current?.(practicePrefsSnapshotRef.current)
+    }, 1000)
+    return () => window.clearInterval(intervalId)
+  }, [session.playback.isPlaying])
 
   useEffect(() => {
     return () => {
       disposeReferencePlayer()
     }
   }, [])
+
+  useEffect(() => {
+    releaseReferenceVoices()
+    warmupReferenceVoice(instrumentId).catch(() => {
+      // Non-fatal — Hear It still attempts load on first click.
+    })
+  }, [instrumentId])
 
   useEffect(() => {
     return setupAudioVisibilityResume(() => [Tone.getContext()], { onlyAfterUserUnlock: true })
@@ -180,8 +219,8 @@ export function PracticeSessionProvider({
 
   const tickValue = useMemo(
     () => ({
-      practiceTime: session.clock.practiceTime,
-      playbackCurrentTime: session.playback.currentTime,
+      practiceTime: quantizePracticeTime(session.clock.practiceTime),
+      playbackCurrentTime: quantizePracticeTime(session.playback.currentTime),
       playbackDuration: session.playback.duration,
       playbackIsPlaying: session.playback.isPlaying,
     }),

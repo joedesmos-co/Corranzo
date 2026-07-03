@@ -98,7 +98,7 @@ export default memo(function PracticeControlPanel({
           waitForYouDisabled={omrWaitForYouDisabled}
           waitForYouDisabledReason={
             omrWaitForYouDisabled
-              ? 'Wait For You is disabled for generated PDF playback until the score cursor is ready.'
+              ? 'Set up the score cursor in Advanced before using Wait For You with PDF playback.'
               : ''
           }
           compact
@@ -150,8 +150,8 @@ export default memo(function PracticeControlPanel({
             onRefreshDevices={session.webMidi.refreshDevices}
             listenHint={
               session.waitForYouInput.matchingEnabled
-                ? 'Listening'
-                : 'Enable MIDI to continue automatically.'
+                ? 'Listening for your notes'
+                : 'Enable MIDI to match notes automatically.'
             }
             compact
           />
@@ -198,7 +198,7 @@ export default memo(function PracticeControlPanel({
       <div className="practice-control-panel__footer">
         <PracticeCollapsibleSection
           title="Advanced"
-          summary="Optional settings"
+          summary="Files, playback, setup"
           defaultOpen={openSetupByDefault}
           dataTourId="practice-advanced"
         >
@@ -214,14 +214,14 @@ export default memo(function PracticeControlPanel({
             </section>
 
             <section className="practice-more__group" aria-label="Playback options">
-              <h4 className="practice-more__group-title">Playback options</h4>
+              <h4 className="practice-more__group-title">Playback</h4>
               <PracticeMetronomeAdvancedSettings />
-              <PracticePositionTick collapsible />
               <PracticeTracksCompactSection session={session} />
+              <PracticePositionTick collapsible />
             </section>
 
-            <section className="practice-more__group" aria-label="Troubleshooting">
-              <h4 className="practice-more__group-title">Troubleshooting</h4>
+            <section className="practice-more__group" aria-label="Practice setup">
+              <h4 className="practice-more__group-title">Practice setup</h4>
               <PracticeEnvironmentNotices />
               <PracticeSetupPanel
                 session={session}
@@ -237,6 +237,10 @@ export default memo(function PracticeControlPanel({
                   lastNote={session.webMidi.lastNote}
                 />
               )}
+            </section>
+
+            <section className="practice-more__group" aria-label="Help">
+              <h4 className="practice-more__group-title">Help</h4>
               <p className="practice-shortcuts-hint" aria-label="Keyboard shortcuts">
                 <kbd>Space</kbd> play · <kbd>Enter</kbd> continue · <kbd>←</kbd>
                 <kbd>→</kbd> pages · <kbd>F</kbd> fullscreen

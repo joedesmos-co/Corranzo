@@ -22,21 +22,21 @@ export const GUIDED_TUTORIAL_STEPS = [
   {
     id: 'play-controls',
     title: 'Play Controls',
-    body: 'Use Play/Pause and Tempo to control the built-in piano.',
+    body: 'Use Play/Pause and Tempo to control the built-in instrument sound.',
     targetId: 'practice-playback',
     view: 'practice',
   },
   {
     id: 'practice-mode',
     title: 'Practice Mode',
-    body: 'Play Along runs normally. Wait For You pauses until you continue.',
+    body: 'Play Along keeps moving. Wait For You pauses until you play each note or tap Continue.',
     targetId: 'practice-mode',
     view: 'practice',
   },
   {
     id: 'input-source',
     title: 'Input Source',
-    body: 'Use Manual, Mic, or MIDI. MIDI is best for chords.',
+    body: 'Choose MIDI for chords, Microphone for acoustic instruments, or Continue button to tap through.',
     targetId: 'practice-input-source',
     view: 'practice',
   },
@@ -50,7 +50,7 @@ export const GUIDED_TUTORIAL_STEPS = [
   {
     id: 'advanced',
     title: 'Advanced',
-    body: 'Advanced is optional: files, playback options, and troubleshooting live here.',
+    body: 'Advanced holds files, playback options, cursor setup, and note matching.',
     targetId: 'practice-advanced',
     view: 'practice',
   },

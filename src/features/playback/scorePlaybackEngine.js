@@ -12,15 +12,15 @@ import { METRONOME_COUNT_IN, METRONOME_SUBDIVISION } from './metronomeConstants.
 import { createMetronomeVoice, metronomeLevelToDb } from './metronomeVoice.js'
 import { alignChordScoreTime } from './pianoVoiceMix.js'
 import { mapPlaybackVelocity } from './pianoVelocity.js'
+import { createInstrumentVoiceResolver } from './instrumentVoiceResolver.js'
+import { DEFAULT_INSTRUMENT_ID } from '../instruments/instruments.js'
+import { PLAY_READY_TIMEOUT_MS } from './playbackAudioConfig.js'
+import { INSTRUMENT_STATUS } from './instrumentVoiceStatus.js'
 
 const LOOKAHEAD_SECONDS = 2.5
 const SCHEDULE_TICK_MS = 200
-// On Play, wait up to this long for the sampled piano before starting, so the
-// first note is real piano rather than the synth fallback. Samples preloaded at
-// score-load usually make this resolve instantly; on failure/timeout we proceed
-// on the synth rather than blocking playback.
-const PLAY_READY_TIMEOUT_MS = 5000
 const loadPianoInstrumentModule = () => import('./pianoInstrument.js')
+const DEFAULT_LOADERS = { loadPianoInstrument: loadPianoInstrumentModule }
 
 const MIDI_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
@@ -52,11 +52,25 @@ function softenVelocity(velocity) {
   return mapPlaybackVelocity(velocity)
 }
 
+function metronomeDisplayStatesEqual(previous, next) {
+  if (!previous || !next) {
+    return false
+  }
+  return (
+    previous.phase === next.phase &&
+    previous.beat === next.beat &&
+    previous.measureNumber === next.measureNumber &&
+    previous.accent === next.accent &&
+    previous.countInActive === next.countInActive &&
+    previous.countInProgress === next.countInProgress
+  )
+}
+
 /**
  * Windowed playback engine driven by the performed score timeline.
  */
 export class ScorePlaybackEngine {
-  constructor({ loadPianoInstrument = loadPianoInstrumentModule } = {}) {
+  constructor({ loadPianoInstrument = DEFAULT_LOADERS.loadPianoInstrument } = {}) {
     this.timingMap = null
     this.noteEvents = []
     this.metronomeEvents = []
@@ -87,34 +101,82 @@ export class ScorePlaybackEngine {
     this.countInEvents = []
     this.onMetronomeDisplay = null
     this.metronomeDisplayState = null
+    this.mergedScheduleEvents = []
+    this.scheduleEventIndex = 0
+    this.mutedTrackIds = new Set()
+    this.appliedMetronomeLevel = null
     /** Bumped on seek/pause/stop so stale interval callbacks never reschedule. */
     this.scheduleGeneration = 0
     this.onInstrumentStatus = null
     this.instrumentStatus = null
     this.loadPianoInstrument = loadPianoInstrument
-    this.createPianoInstrument = null
+    // Voice factories are resolved per instrument through the shared resolver;
+    // the piano slot honours the legacy `loadPianoInstrument` test seam above.
+    this.voiceResolver = createInstrumentVoiceResolver({
+      legacyPianoModuleLoader: () => this.loadPianoInstrument(),
+    })
+    /** Instrument the current `this.voice` was created for. */
+    this.voiceInstrumentId = null
     this.voiceLoadPromise = null
   }
 
+  /** Instrument for the loaded piece (default piano). */
+  get instrumentId() {
+    return this.voiceResolver.instrumentId
+  }
+
+  /**
+   * Legacy test seam: `engine.createPianoInstrument = factory` injects the
+   * piano voice factory directly (bypassing module load), exactly as before.
+   */
+  get createPianoInstrument() {
+    return this.voiceResolver.getFactory(DEFAULT_INSTRUMENT_ID)
+  }
+
+  set createPianoInstrument(factory) {
+    this.voiceResolver.setFactory(DEFAULT_INSTRUMENT_ID, factory)
+  }
+
+  /**
+   * Switch the playback instrument. Disposes the current voice so the next
+   * play creates the right one; transport state is otherwise untouched.
+   */
+  setInstrumentId(instrumentId) {
+    const changed = this.voiceResolver.setInstrumentId(instrumentId)
+    if (changed) {
+      if (this.voice) {
+        this.disposeVoices()
+      }
+      this.handleInstrumentStatus(INSTRUMENT_STATUS.LOADING)
+    }
+    return changed
+  }
+
   async ensureVoices() {
+    if (
+      this.voice &&
+      this.voiceInstrumentId != null &&
+      this.voiceInstrumentId !== this.voiceResolver.instrumentId
+    ) {
+      this.disposeVoices()
+    }
     if (this.voice) {
       return
     }
     if (!this.voiceLoadPromise) {
       this.voiceLoadPromise = Promise.resolve()
         .then(async () => {
-          if (!this.createPianoInstrument) {
-            const module = await this.loadPianoInstrument()
-            this.createPianoInstrument = module.createPianoInstrument
-          }
-          if (!this.voice) {
+          const instrumentId = this.voiceResolver.instrumentId
+          const createVoice = await this.voiceResolver.ensureFactory(instrumentId)
+          if (!this.voice && createVoice) {
             this.output = new Tone.Gain(1).toDestination()
             // The instrument module and samples are first requested here, after
             // the Play/Test Sound gesture has already unlocked Web Audio.
-            this.voice = this.createPianoInstrument({
+            this.voice = createVoice({
               tone: Tone,
               onStatus: (status) => this.handleInstrumentStatus(status),
             })
+            this.voiceInstrumentId = instrumentId
             this.voice.output.connect(this.output)
             this.syncOutputMute()
           }
@@ -132,16 +194,13 @@ export class ScorePlaybackEngine {
   }
 
   /**
-   * Fetch/decode piano samples ahead of Play without wiring the audio graph.
-   * Safe before user gesture — suspended contexts still fetch + decode buffers.
+   * Fetch/decode the current instrument's samples ahead of Play without wiring
+   * the audio graph. Safe before user gesture — suspended contexts still fetch
+   * and decode buffers.
    */
   async preload() {
     try {
-      const module = await this.loadPianoInstrument()
-      if (!this.createPianoInstrument) {
-        this.createPianoInstrument = module.createPianoInstrument
-      }
-      await module.preloadPianoSampleBuffers({ tone: Tone })
+      await this.voiceResolver.preload(Tone)
     } catch {
       // Non-fatal — playFromUserGesture will retry instrument creation.
     }
@@ -153,12 +212,17 @@ export class ScorePlaybackEngine {
     if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) {
       return ready
     }
+    let timeoutId = null
     return Promise.race([
       ready,
       new Promise((resolve) => {
-        setTimeout(() => resolve('timeout'), timeoutMs)
+        timeoutId = setTimeout(() => resolve('timeout'), timeoutMs)
       }),
-    ])
+    ]).finally(() => {
+      if (timeoutId != null) {
+        clearTimeout(timeoutId)
+      }
+    })
   }
 
   handleInstrumentStatus(status) {
@@ -178,6 +242,7 @@ export class ScorePlaybackEngine {
       this.output?.dispose()
       this.voice = null
       this.output = null
+      this.voiceInstrumentId = null
     }
     if (this.metronome) {
       this.metronome.dispose()
@@ -185,9 +250,17 @@ export class ScorePlaybackEngine {
     }
   }
 
-  async load({ timingMap, midiArrayBuffer = null, alignmentDiagnostics = null }) {
+  async load({
+    timingMap,
+    midiArrayBuffer = null,
+    alignmentDiagnostics = null,
+    instrumentId = null,
+  }) {
     const loadToken = ++this.loadToken
     this.stopInternal()
+    if (instrumentId != null) {
+      this.setInstrumentId(instrumentId)
+    }
 
     if (!timingMap) {
       this.timingMap = null
@@ -212,6 +285,7 @@ export class ScorePlaybackEngine {
     this.mappingWarning = schedule.mappingWarning ?? null
     this.duration = getTimeline(timingMap).performedDurationSeconds
     this.tracks = schedule.tracks ?? []
+    this.syncMutedTrackCache()
     this.offsetScoreSeconds = 0
     this.scheduledUntilScore = 0
     this.scheduledEvents.clear()
@@ -240,11 +314,53 @@ export class ScorePlaybackEngine {
   rebuildMetronomeEvents() {
     if (!this.timingMap) {
       this.metronomeEvents = []
+      this.rebuildScheduleEvents()
       return
     }
     this.metronomeEvents = buildMetronomeSchedule(this.timingMap, {
       subdivision: this.metronomeSubdivision,
     })
+    this.rebuildScheduleEvents()
+  }
+
+  rebuildScheduleEvents() {
+    if (!this.metronomeEvents.length) {
+      this.mergedScheduleEvents = this.noteEvents
+    } else {
+      this.mergedScheduleEvents = [...this.noteEvents, ...this.metronomeEvents]
+      this.mergedScheduleEvents.sort(
+        (left, right) => (left.scoreTimeSeconds ?? 0) - (right.scoreTimeSeconds ?? 0),
+      )
+    }
+    this.resetScheduleEventIndex(this.offsetScoreSeconds)
+  }
+
+  resetScheduleEventIndex(scoreSeconds) {
+    const events = this.mergedScheduleEvents
+    let index = 0
+    while (index < events.length) {
+      const event = events[index]
+      const eventStart = event.type === 'note'
+        ? alignChordScoreTime(event.scoreTimeSeconds)
+        : event.scoreTimeSeconds
+      if (eventStart >= scoreSeconds - 1e-6) {
+        break
+      }
+      const eventEnd = event.type === 'note'
+        ? eventStart + (event.baseDurationSeconds ?? 0.03)
+        : eventStart
+      if (eventEnd > scoreSeconds) {
+        break
+      }
+      index += 1
+    }
+    this.scheduleEventIndex = index
+  }
+
+  syncMutedTrackCache() {
+    this.mutedTrackIds = new Set(
+      this.tracks.filter((track) => track.muted).map((track) => track.id),
+    )
   }
 
   emitMetronomeDisplay() {
@@ -262,6 +378,9 @@ export class ScorePlaybackEngine {
       playbackStartScoreTime: this.offsetScoreSeconds,
       beatsPerMeasure,
     })
+    if (metronomeDisplayStatesEqual(this.metronomeDisplayState, next)) {
+      return
+    }
     this.metronomeDisplayState = next
     this.onMetronomeDisplay(next)
   }
@@ -304,6 +423,7 @@ export class ScorePlaybackEngine {
     this.scheduledEvents.clear()
     this.playing = true
     this.playStartedAt = Tone.now()
+    this.resetScheduleEventIndex(this.offsetScoreSeconds)
     this.scheduledUntilScore = this.offsetScoreSeconds
     this.scheduleWindow(this.offsetScoreSeconds, this.offsetScoreSeconds + LOOKAHEAD_SECONDS)
     this.startScheduleLoop()
@@ -417,17 +537,24 @@ export class ScorePlaybackEngine {
       return
     }
     const now = Tone.now()
-    this.applyMetronomeLevel()
+    if (this.appliedMetronomeLevel !== this.metronomeLevel) {
+      this.appliedMetronomeLevel = this.metronomeLevel
+      this.applyMetronomeLevel()
+    }
 
-    const events = this.metronomeEnabled && !this.countInActive
-      ? [...this.noteEvents, ...this.metronomeEvents]
-      : this.noteEvents
+    const useMetronome = this.metronomeEnabled && !this.countInActive
+    const events = useMetronome ? this.mergedScheduleEvents : this.noteEvents
 
-    for (const event of events) {
+    for (let index = this.scheduleEventIndex; index < events.length; index += 1) {
+      const event = events[index]
       if (event.type === 'note') {
         const alignedStart = alignChordScoreTime(event.scoreTimeSeconds)
         const baseDuration = event.baseDurationSeconds ?? 0.03
         const noteEnd = alignedStart + baseDuration
+        if (alignedStart >= toScoreSeconds) {
+          this.scheduleEventIndex = index
+          break
+        }
         if (noteEnd <= fromScoreSeconds || alignedStart >= toScoreSeconds) {
           continue
         }
@@ -460,6 +587,10 @@ export class ScorePlaybackEngine {
       }
 
       if (event.scoreTimeSeconds < fromScoreSeconds || event.scoreTimeSeconds >= toScoreSeconds) {
+        if (event.scoreTimeSeconds >= toScoreSeconds) {
+          this.scheduleEventIndex = index
+          break
+        }
         continue
       }
 
@@ -492,6 +623,7 @@ export class ScorePlaybackEngine {
     this.offsetScoreSeconds = Math.max(0, Math.min(scoreSeconds, this.duration || scoreSeconds))
     this.scheduledEvents.clear()
     this.scheduledUntilScore = this.offsetScoreSeconds
+    this.resetScheduleEventIndex(this.offsetScoreSeconds)
     if (wasPlaying) {
       this.beginScorePlayback()
     }
@@ -549,11 +681,13 @@ export class ScorePlaybackEngine {
   }
 
   rebuildPlaybackVoice() {
-    if (!this.voice || !this.createPianoInstrument || !this.output) {
+    const instrumentId = this.voiceInstrumentId ?? this.voiceResolver.instrumentId
+    const createVoice = this.voiceResolver.getFactory(instrumentId)
+    if (!this.voice || !createVoice || !this.output) {
       return
     }
     this.voice.dispose()
-    this.voice = this.createPianoInstrument({
+    this.voice = createVoice({
       tone: Tone,
       onStatus: (status) => this.handleInstrumentStatus(status),
     })
@@ -620,6 +754,7 @@ export class ScorePlaybackEngine {
 
     this.offsetScoreSeconds = clamped
     this.scheduledUntilScore = clamped
+    this.resetScheduleEventIndex(clamped)
 
     if (wasPlaying) {
       this.beginScorePlayback()
@@ -641,6 +776,7 @@ export class ScorePlaybackEngine {
     if (resetOffset) {
       this.offsetScoreSeconds = 0
       this.scheduledUntilScore = 0
+      this.resetScheduleEventIndex(0)
     }
     this.emitMetronomeDisplay()
   }
@@ -666,6 +802,7 @@ export class ScorePlaybackEngine {
     if (track) {
       track.muted = muted
     }
+    this.syncMutedTrackCache()
     this.syncOutputMute()
     // Re-schedule so a (un)muted hand takes effect within the current window.
     // Notes already triggered keep ringing briefly; new notes honour the mute.

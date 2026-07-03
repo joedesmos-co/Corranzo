@@ -2,6 +2,7 @@ import {
   rebuildMusicXmlSourceFromSessionMeta,
   validateOmrSourceMeta,
 } from '../import/musicXmlSource.js'
+import { SUPPORTED_INSTRUMENT_IDS, normalizeInstrumentId } from '../instruments/instruments.js'
 
 const DB_NAME = 'scoreflow-session'
 const DB_VERSION = 1
@@ -11,6 +12,10 @@ export const SESSION_META_VERSION = 1
 export const SESSION_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000
 
 const FILE_KEYS = ['pdf', 'midi', 'musicXml']
+
+function instrumentFileKey(instrumentId, fileKey) {
+  return `instrument:${normalizeInstrumentId(instrumentId)}:${fileKey}`
+}
 
 function openDatabase() {
   return new Promise((resolve, reject) => {
@@ -111,7 +116,7 @@ export function clearSessionMeta() {
   }
 }
 
-export async function saveSessionFiles({ pdf, midi, musicXml }) {
+export async function saveSessionFiles({ pdf, midi, musicXml, instrumentFiles = null }) {
   const db = await openDatabase()
   try {
     if (pdf?.data) {
@@ -129,6 +134,17 @@ export async function saveSessionFiles({ pdf, midi, musicXml }) {
     } else {
       await deleteFile(db, 'musicXml')
     }
+    for (const instrumentId of SUPPORTED_INSTRUMENT_IDS) {
+      const files = instrumentFiles?.[instrumentId] ?? null
+      for (const fileKey of FILE_KEYS) {
+        const storageKey = instrumentFileKey(instrumentId, fileKey)
+        if (files?.[fileKey]?.data) {
+          await putFile(db, storageKey, files[fileKey].data)
+        } else {
+          await deleteFile(db, storageKey)
+        }
+      }
+    }
   } finally {
     db.close()
   }
@@ -143,6 +159,22 @@ export async function loadSessionFiles() {
       if (buffer instanceof ArrayBuffer) {
         entries[key] = buffer
       }
+    }
+    const instrumentFiles = {}
+    for (const instrumentId of SUPPORTED_INSTRUMENT_IDS) {
+      const files = {}
+      for (const key of FILE_KEYS) {
+        const buffer = await getFile(db, instrumentFileKey(instrumentId, key))
+        if (buffer instanceof ArrayBuffer) {
+          files[key] = buffer
+        }
+      }
+      if (Object.keys(files).length > 0) {
+        instrumentFiles[instrumentId] = files
+      }
+    }
+    if (Object.keys(instrumentFiles).length > 0) {
+      entries.instrumentFiles = instrumentFiles
     }
     return entries
   } finally {
@@ -237,6 +269,73 @@ export function validateRestoredSession(meta, files) {
   }
 }
 
+export function buildSessionBundleMeta(bundle = {}) {
+  return {
+    pdfMeta: bundle.pdfMeta ?? null,
+    midiFileName: bundle.midiSource?.fileName ?? null,
+    midiSize: bundle.midiSource?.data?.byteLength ?? null,
+    musicXmlFileName: bundle.musicXmlSource?.fileName ?? null,
+    musicXmlSize: bundle.musicXmlSource?.data?.byteLength ?? null,
+    musicXmlSourceKind: bundle.musicXmlSource?.source ?? null,
+    omrMeta: bundle.musicXmlSource?.omrMeta ?? null,
+    pageNumber: bundle.pageNumber ?? 1,
+    practicePrefs: bundle.practicePrefs ?? null,
+    pdfSoftWarning: bundle.pdfSoftWarning ?? null,
+    demoPieceActive: Boolean(bundle.demoPieceActive),
+  }
+}
+
+function buildInstrumentBundlesMeta(instrumentBundles) {
+  if (!instrumentBundles || typeof instrumentBundles !== 'object') {
+    return null
+  }
+  const entries = Object.entries(instrumentBundles)
+    .map(([instrumentId, bundle]) => [
+      normalizeInstrumentId(instrumentId),
+      buildSessionBundleMeta(bundle),
+    ])
+    .filter(([, bundleMeta]) => Boolean(bundleMeta.pdfMeta?.fileName))
+  return entries.length > 0 ? Object.fromEntries(entries) : null
+}
+
+export function validateRestoredInstrumentBundles(meta, files) {
+  const bundleMetaByInstrument = meta?.instrumentBundles
+  if (!bundleMetaByInstrument || typeof bundleMetaByInstrument !== 'object') {
+    return {}
+  }
+
+  const restored = {}
+  for (const instrumentId of SUPPORTED_INSTRUMENT_IDS) {
+    const bundleMeta = bundleMetaByInstrument[instrumentId]
+    if (!bundleMeta?.pdfMeta?.fileName) {
+      continue
+    }
+    const result = validateRestoredSession(
+      {
+        ...bundleMeta,
+        activeView: meta.activeView ?? 'library',
+        instrumentId,
+      },
+      files.instrumentFiles?.[instrumentId] ?? {},
+    )
+    if (!result.ok || !result.pdfMeta) {
+      continue
+    }
+    restored[instrumentId] = {
+      pdfFile: result.pdfFile,
+      pdfMeta: result.pdfMeta,
+      midiSource: result.midiSource,
+      musicXmlSource: result.musicXmlSource,
+      pageNumber: bundleMeta.pageNumber ?? 1,
+      practicePrefs: bundleMeta.practicePrefs ?? null,
+      pdfSoftWarning: bundleMeta.pdfSoftWarning ?? null,
+      demoPieceActive: Boolean(bundleMeta.demoPieceActive),
+      issues: result.issues ?? [],
+    }
+  }
+  return restored
+}
+
 export function buildSessionMeta({
   pdfMeta,
   midiSource,
@@ -244,6 +343,8 @@ export function buildSessionMeta({
   activeView,
   pageNumber,
   practicePrefs,
+  instrumentId = null,
+  instrumentBundles = null,
 }) {
   return {
     pdfMeta,
@@ -256,5 +357,9 @@ export function buildSessionMeta({
     activeView,
     pageNumber,
     practicePrefs,
+    // Which instrument the session was practiced with (piano when absent —
+    // every pre-instrument session was piano).
+    instrumentId,
+    instrumentBundles: buildInstrumentBundlesMeta(instrumentBundles),
   }
 }

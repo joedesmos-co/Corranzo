@@ -1,4 +1,8 @@
 import { normalizeExerciseType } from './exerciseTypes.js'
+import {
+  isSupportedInstrumentId,
+  normalizeInstrumentId,
+} from '../instruments/instruments.js'
 
 export const PROFILE_STATS_VERSION = 1
 export const MAX_RECENT_SESSIONS = 20
@@ -26,11 +30,59 @@ export function createEmptyStats() {
     legacyAutoPracticeSeconds: 0,
     legacyAutoSessionsCompleted: 0,
     autoPracticeSeconds: 0,
+    autoPracticeSecondsByInstrument: {},
     lastAutoPracticedAt: null,
+    lastAutoPracticedAtByInstrument: {},
     lastPracticedAt: null,
     pieces: {},
     recentSessions: [],
   }
+}
+
+/**
+ * Per-instrument counter map ({ piano: n, guitar: n }). Unsupported keys are
+ * dropped; when the map is missing entirely, legacy global auto seconds are
+ * attributed to piano (every pre-instrument session was piano).
+ */
+function normalizeInstrumentNumberMap(raw, { legacyPianoValue = 0 } = {}) {
+  const map = {}
+  if (isRecord(raw)) {
+    for (const [key, value] of Object.entries(raw)) {
+      if (!isSupportedInstrumentId(key)) {
+        continue
+      }
+      const amount = nonNegativeNumber(value)
+      if (amount > 0) {
+        map[key] = amount
+      }
+    }
+    return map
+  }
+  if (legacyPianoValue > 0) {
+    map.piano = legacyPianoValue
+  }
+  return map
+}
+
+function normalizeInstrumentTimestampMap(raw, { legacyPianoValue = null } = {}) {
+  const map = {}
+  if (isRecord(raw)) {
+    for (const [key, value] of Object.entries(raw)) {
+      if (!isSupportedInstrumentId(key)) {
+        continue
+      }
+      const timestamp = normalizeTimestamp(value)
+      if (timestamp != null) {
+        map[key] = timestamp
+      }
+    }
+    return map
+  }
+  const legacy = normalizeTimestamp(legacyPianoValue)
+  if (legacy != null) {
+    map.piano = legacy
+  }
+  return map
 }
 
 function sumSessionDurations(sessions) {
@@ -98,6 +150,9 @@ function normalizeSession(session) {
       typeof session.pieceTitle === 'string' && session.pieceTitle.trim()
         ? session.pieceTitle.trim().slice(0, 120)
         : 'Untitled piece',
+    // Every practice session belongs to an instrument; records predating the
+    // instrument layer were all piano.
+    instrumentId: normalizeInstrumentId(session.instrumentId),
     exerciseType:
       source === 'manual' ? normalizeExerciseType(session.exerciseType) : null,
     notes:
@@ -128,6 +183,26 @@ function normalizePieces(rawPieces) {
       continue
     }
 
+    const lastInstrumentId = normalizeInstrumentId(value.lastInstrumentId)
+    const autoPracticeSeconds = nonNegativeNumber(value.autoPracticeSeconds)
+    const autoPracticeSecondsByInstrument = normalizeInstrumentNumberMap(
+      value.autoPracticeSecondsByInstrument,
+    )
+    const hasStoredInstrumentBreakdown =
+      isRecord(value.autoPracticeSecondsByInstrument) &&
+      Object.keys(autoPracticeSecondsByInstrument).length > 0
+    if (!hasStoredInstrumentBreakdown && autoPracticeSeconds > 0) {
+      autoPracticeSecondsByInstrument[lastInstrumentId] = autoPracticeSeconds
+    }
+
+    const lastPracticedAt = normalizeTimestamp(value.lastPracticedAt)
+    const lastPracticedAtByInstrument = normalizeInstrumentTimestampMap(
+      value.lastPracticedAtByInstrument,
+    )
+    if (Object.keys(lastPracticedAtByInstrument).length === 0 && lastPracticedAt != null) {
+      lastPracticedAtByInstrument[lastInstrumentId] = lastPracticedAt
+    }
+
     pieces[id] = {
       id,
       title:
@@ -138,7 +213,10 @@ function normalizePieces(rawPieces) {
         value.totalPracticeSeconds ?? value.totalSeconds,
       ),
       totalSessions: nonNegativeNumber(value.totalSessions ?? value.sessionCount),
-      autoPracticeSeconds: nonNegativeNumber(value.autoPracticeSeconds),
+      autoPracticeSeconds,
+      autoPracticeSecondsByInstrument,
+      autoPracticeInstrumentBreakdownEstimated:
+        !hasStoredInstrumentBreakdown && autoPracticeSeconds > 0,
       measuresPlayed: nonNegativeNumber(value.measuresPlayed),
       loopsCompleted: nonNegativeNumber(value.loopsCompleted),
       lastTempoBpm:
@@ -148,7 +226,9 @@ function normalizePieces(rawPieces) {
       wfyCorrect: nonNegativeNumber(value.wfyCorrect),
       wfyMissed: nonNegativeNumber(value.wfyMissed),
       wfySkipped: nonNegativeNumber(value.wfySkipped),
-      lastPracticedAt: normalizeTimestamp(value.lastPracticedAt),
+      lastPracticedAt,
+      lastPracticedAtByInstrument,
+      lastInstrumentId,
     }
   }
 
@@ -176,6 +256,9 @@ export function normalizeStats(raw) {
   const manualPracticeSeconds = sumSessionDurations(manualSessions)
   const legacyAutoPracticeSeconds = sumSessionDurations(legacyAutoSessions)
 
+  const autoPracticeSeconds = nonNegativeNumber(raw.autoPracticeSeconds)
+  const lastAutoPracticedAt = normalizeTimestamp(raw.lastAutoPracticedAt)
+
   return reconcileProfileStats({
     version: PROFILE_STATS_VERSION,
     totalPracticeSeconds: manualPracticeSeconds,
@@ -183,8 +266,16 @@ export function normalizeStats(raw) {
     manualSessionsCompleted: manualSessions.length,
     legacyAutoPracticeSeconds,
     legacyAutoSessionsCompleted: legacyAutoSessions.length,
-    autoPracticeSeconds: nonNegativeNumber(raw.autoPracticeSeconds),
-    lastAutoPracticedAt: normalizeTimestamp(raw.lastAutoPracticedAt),
+    autoPracticeSeconds,
+    autoPracticeSecondsByInstrument: normalizeInstrumentNumberMap(
+      raw.autoPracticeSecondsByInstrument,
+      { legacyPianoValue: autoPracticeSeconds },
+    ),
+    lastAutoPracticedAt,
+    lastAutoPracticedAtByInstrument: normalizeInstrumentTimestampMap(
+      raw.lastAutoPracticedAtByInstrument,
+      { legacyPianoValue: lastAutoPracticedAt },
+    ),
     lastPracticedAt:
       manualSessions[0]?.endedAt ?? normalizeTimestamp(raw.lastPracticedAt),
     pieces: normalizePieces(raw.pieces),

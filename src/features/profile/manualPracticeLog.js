@@ -1,4 +1,5 @@
 import { normalizeExerciseType } from './exerciseTypes.js'
+import { normalizeInstrumentId } from '../instruments/instruments.js'
 import { loadStats, saveStats } from './profileStorage.js'
 import { MAX_RECENT_SESSIONS, reconcileProfileStats } from './profileStatsSchema.js'
 
@@ -34,6 +35,7 @@ export function saveManualSession({
   durationSeconds,
   startedAt,
   endedAt = Date.now(),
+  instrumentId = null,
 }) {
   const stats = loadStats()
   const duration = Number(durationSeconds)
@@ -55,11 +57,13 @@ export function saveManualSession({
       ? startedAtTimestamp
       : safeEndedAt - normalizedDuration * 1000
 
+  const normalizedInstrumentId = normalizeInstrumentId(instrumentId)
   const session = {
     id: `manual-${safeEndedAt}-${Math.random().toString(36).slice(2, 8)}`,
     source: 'manual',
     pieceId,
     pieceTitle: title,
+    instrumentId: normalizedInstrumentId,
     exerciseType: normalizeExerciseType(exerciseType),
     notes: normalizeNotes(notes),
     startedAt: safeStartedAt,
@@ -75,6 +79,7 @@ export function saveManualSession({
       (existingPiece?.totalPracticeSeconds ?? 0) + normalizedDuration,
     totalSessions: (existingPiece?.totalSessions ?? 0) + 1,
     lastPracticedAt: safeEndedAt,
+    lastInstrumentId: normalizedInstrumentId,
   }
 
   const nextStats = reconcileProfileStats({

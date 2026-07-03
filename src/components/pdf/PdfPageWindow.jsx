@@ -50,6 +50,7 @@ function PdfPageWindow({
   )
   const prevPageRef = useRef(pageNumber)
   const pendingRasterRef = useRef(false)
+  const warmSwitchFrameRef = useRef(null)
   const timingRef = useRef(new Map())
 
   useEffect(() => {
@@ -59,7 +60,11 @@ function PdfPageWindow({
     }
     beginPageSwitch({ fromPage: prev, toPage: pageNumber, trigger: switchTrigger })
     if (isPageWarm(pageNumber)) {
-      requestAnimationFrame(() => {
+      if (warmSwitchFrameRef.current != null) {
+        cancelAnimationFrame(warmSwitchFrameRef.current)
+      }
+      warmSwitchFrameRef.current = requestAnimationFrame(() => {
+        warmSwitchFrameRef.current = null
         completePageSwitch({ toPage: pageNumber, wasWarm: true, rasterMs: 0 })
       })
       pendingRasterRef.current = false
@@ -68,6 +73,14 @@ function PdfPageWindow({
     }
     prevPageRef.current = pageNumber
   }, [pageNumber, switchTrigger])
+
+  useEffect(() => {
+    return () => {
+      if (warmSwitchFrameRef.current != null) {
+        cancelAnimationFrame(warmSwitchFrameRef.current)
+      }
+    }
+  }, [])
 
   const markTiming = useCallback((key) => {
     timingRef.current.set(key, performance.now())

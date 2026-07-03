@@ -358,13 +358,19 @@ describe('Fix F: sampled piano keeps the piano-like synth fallback', () => {
     const match = src.match(/tone\.Filter\s*\(\s*\{[^}]*frequency\s*:\s*(\d{3,})/s)
     expect(match).toBeTruthy()
     const freq = parseInt(match[1], 10)
-    expect(freq).toBeGreaterThanOrEqual(2800)
+    // Synth path is pre-warmed; a lower cutoff keeps the fallback less beep-like.
+    expect(freq).toBeGreaterThanOrEqual(2200)
+    expect(freq).toBeLessThanOrEqual(3200)
   })
 
   it('reverb is applied (wet > 0)', () => {
-    const src = pianoInstrumentSource()
-    expect(src).toMatch(/tone\.Reverb/)
-    const match = src.match(/wet\s*:\s*([\d.]+)/)
+    const voiceSrc = readFileSync(
+      join(__dir, '..', 'src', 'features', 'playback', 'sampledInstrumentVoice.js'),
+      'utf8',
+    )
+    expect(voiceSrc).toMatch(/tone\.Reverb/)
+    const pianoSrc = pianoInstrumentSource()
+    const match = pianoSrc.match(/reverbWet:\s*([\d.]+)/)
     expect(match).toBeTruthy()
     const wet = parseFloat(match[1])
     expect(wet).toBeGreaterThan(0)

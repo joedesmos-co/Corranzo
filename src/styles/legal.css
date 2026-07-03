@@ -3,7 +3,9 @@
   width: 100%;
   max-width: var(--sf-content-max);
   margin: 0 auto;
-  padding: var(--sf-space-4xl) var(--sf-space-3xl) 56px;
+  padding: var(--sf-space-4xl) max(var(--sf-space-3xl), env(safe-area-inset-right, 0px))
+    max(56px, calc(env(safe-area-inset-bottom, 0px) + 40px))
+    max(var(--sf-space-3xl), env(safe-area-inset-left, 0px));
   overflow-y: auto;
   background: var(--sf-bg-raised);
 }
@@ -92,7 +94,9 @@
 
 @media (max-width: 640px) {
   .legal-page {
-    padding: var(--sf-space-3xl) var(--sf-space-lg) 40px;
+    padding: var(--sf-space-3xl) max(var(--sf-space-lg), env(safe-area-inset-right, 0px))
+      max(32px, calc(env(safe-area-inset-bottom, 0px) + 24px))
+      max(var(--sf-space-lg), env(safe-area-inset-left, 0px));
   }
 
   .legal-page__title {
@@ -102,6 +106,8 @@
 
 @media (max-width: 480px) {
   .legal-page {
-    padding: var(--sf-space-2xl) var(--sf-space-md) 32px;
+    padding: var(--sf-space-2xl) max(var(--sf-space-md), env(safe-area-inset-right, 0px))
+      max(28px, calc(env(safe-area-inset-bottom, 0px) + 20px))
+      max(var(--sf-space-md), env(safe-area-inset-left, 0px));
   }
 }

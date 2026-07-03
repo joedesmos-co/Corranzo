@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { formatMusicXmlImportError } from '../import/formatImportError.js'
 import { musicXmlSourceKey } from '../import/musicXmlSource.js'
+import { withTimeout } from '../../utils/asyncWithTimeout.js'
 import { loadMusicXmlFile } from './loadMusicXmlFile.js'
 import { parseMusicXml } from './parseMusicXml.js'
 import { getDebugState } from './timingQuery.js'
+
+const TIMING_PARSE_TIMEOUT_MS = 30_000
 
 export default function useMusicXmlTiming(musicXmlSource, queryTime = 0) {
   const loadGenerationRef = useRef(0)
@@ -33,8 +36,16 @@ export default function useMusicXmlTiming(musicXmlSource, queryTime = 0) {
 
       try {
         const file = new File([xmlData], xmlFileName ?? 'score.musicxml')
-        const xmlString = await loadMusicXmlFile(file)
-        const parsed = parseMusicXml(xmlString, xmlFileName)
+        const xmlString = await withTimeout(
+          loadMusicXmlFile(file),
+          TIMING_PARSE_TIMEOUT_MS,
+          'Timing file took too long to read. It may be corrupt or very large.',
+        )
+        const parsed = await withTimeout(
+          Promise.resolve().then(() => parseMusicXml(xmlString, xmlFileName)),
+          TIMING_PARSE_TIMEOUT_MS,
+          'Timing file took too long to parse. It may be corrupt or very large.',
+        )
 
         if (loadGenerationRef.current !== loadGeneration) {
           return

@@ -11,7 +11,6 @@ export default function MetronomeBeatIndicator({ display, disabled = false }) {
   return (
     <div
       className={`metronome-beat-indicator${isCountIn ? ' metronome-beat-indicator--count-in' : ''}`}
-      aria-live="polite"
       aria-label={
         isCountIn
           ? `Count-in beat ${activeBeat ?? ''}`
@@ -21,7 +20,7 @@ export default function MetronomeBeatIndicator({ display, disabled = false }) {
       {isCountIn && (
         <span className="metronome-beat-indicator__status">Count-in</span>
       )}
-      <div className="metronome-beat-indicator__beats" role="list">
+      <div className="metronome-beat-indicator__beats" role="list" aria-hidden="true">
         {slots.map((beatNumber) => {
           const isActive = activeBeat === beatNumber
           const isDownbeat = beatNumber === 1

@@ -47,12 +47,12 @@ export default function PracticeTransportSection({
       <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
         Play
         <PracticeHelpTip label="About playback">
-          Plays the score with the built-in piano. MIDI backing is optional.
+          Built-in instrument sound from your selection above. Optional MIDI file adds backing tracks.
         </PracticeHelpTip>
       </h3>
 
       {!canPlay ? (
-        <p className="practice-section__hint">Timing file required.</p>
+        <p className="practice-section__hint">Add a timing file in Library to enable practice.</p>
       ) : (
         <div className="practice-section__body practice-section__body--flat">
           {isLoading && (
@@ -90,7 +90,7 @@ export default function PracticeTransportSection({
 
           {waitForYouActive ? (
             <div className="practice-transport__wfy-primary">
-              <p>Wait For You is active. Play the prompt below, or tap Continue.</p>
+              <p>Paused for your input — play the note below or tap Continue.</p>
               <button
                 type="button"
                 className="midi-transport__btn midi-transport__btn--primary midi-transport__btn--text"

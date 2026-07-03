@@ -123,6 +123,7 @@ export default function MultiFileUpload({
             <button
               type="button"
               className="multi-upload__remove"
+              aria-label="Remove timing file"
               onClick={onClearMusicXml}
               disabled={disabled}
             >
@@ -136,6 +137,7 @@ export default function MultiFileUpload({
             <button
               type="button"
               className="multi-upload__remove"
+              aria-label="Remove sound file"
               onClick={onClearMidi}
               disabled={disabled}
             >

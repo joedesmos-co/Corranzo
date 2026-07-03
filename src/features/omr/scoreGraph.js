@@ -19,8 +19,14 @@
 
 import { midiToWrittenPitch } from './pitchFromStaffPosition.js'
 import { extractOnsetColumns } from './innerVoicePhaseCorrection.js'
+import {
+  observeNoteheadDuration,
+  observeRestDuration,
+  summarizeDurationObservation,
+} from './scoreGraphDurationObservation.js'
+import { classifyStaffLaneForNote, measureClefContext, buildMeasureStaffLaneDiagnostics, summarizeStaffLaneDiagnostics } from './scoreGraphStaffLaneDiagnostics.js'
 
-export const SCORE_GRAPH_VERSION = 1
+export const SCORE_GRAPH_VERSION = 2
 
 export const SCORE_GRAPH_NODE = {
   NOTEHEAD: 'notehead',
@@ -52,6 +58,59 @@ function round(value, digits = 2) {
 
 function voiceForClef(clef) {
   return clef === 'bass' ? 2 : 1
+}
+
+/** Observation-only voice budget diagnostics for solver prep (no runtime effect). */
+function computeVoiceBudgetDiagnostics(events = [], totalDivisions = 16) {
+  const perVoice = new Map()
+  let observedEnd = 0
+  const overflowEvents = []
+
+  for (const event of events) {
+    const start = event.startDivision ?? 0
+    const duration = event.durationDivisions ?? 0
+    const end = start + duration
+    observedEnd = Math.max(observedEnd, end)
+    if (end > totalDivisions) {
+      overflowEvents.push({
+        type: event.type ?? 'note',
+        startDivision: start,
+        durationDivisions: duration,
+        overflowBy: end - totalDivisions,
+      })
+    }
+    if (event.type === 'rest') {
+      const voice = voiceForClef(event.clef ?? 'treble')
+      perVoice.set(voice, Math.max(perVoice.get(voice) ?? 0, end))
+      continue
+    }
+    for (const note of event.notes ?? []) {
+      const voice = voiceForClef(note.clef ?? 'treble')
+      perVoice.set(voice, Math.max(perVoice.get(voice) ?? 0, end))
+    }
+  }
+
+  const overflowDivision = observedEnd > totalDivisions ? observedEnd - totalDivisions : 0
+  const underflowDivision =
+    observedEnd > 0 && observedEnd < totalDivisions ? totalDivisions - observedEnd : 0
+
+  return {
+    voiceBudget: {
+      totalDivisions,
+      observedEnd,
+      overflowDivision,
+      underflowDivision,
+      tileComplete: observedEnd === totalDivisions,
+    },
+    voiceDiagnostics: {
+      overflowCount: overflowEvents.length,
+      underflowGap: underflowDivision,
+      perVoice: [...perVoice.entries()]
+        .map(([voice, endDivision]) => ({ voice, endDivision }))
+        .sort((left, right) => left.voice - right.voice),
+      overflowEvents,
+    },
+  }
 }
 
 function nearestNotehead(candidates, cx, cy) {
@@ -111,9 +170,13 @@ export function buildMeasureGraph(measure = {}, { defaultTotalDivisions = 16, to
         ? observedBudget
         : defaultTotalDivisions
 
+  const budgetDiagnostics = computeVoiceBudgetDiagnostics(events, resolvedTotalDivisions)
+  const staffLaneContext = measureClefContext(events)
+
   events.forEach((event, eventIndex) => {
     const onsetDivision = event.startDivision ?? 0
     if (event.type === 'rest') {
+      const durationObs = observeRestDuration({ event, totalDivisions: resolvedTotalDivisions })
       nodes.push({
         id: `${idPrefix}-r${eventIndex}`,
         kind: SCORE_GRAPH_NODE.REST,
@@ -121,6 +184,11 @@ export function buildMeasureGraph(measure = {}, { defaultTotalDivisions = 16, to
         onsetDivision,
         durationDivisions: event.durationDivisions ?? 0,
         durationType: event.durationType ?? null,
+        writtenDurationDivisions: durationObs.writtenDurationDivisions,
+        soundingReleaseDivision: durationObs.soundingReleaseDivision,
+        durationSource: durationObs.durationSource,
+        releaseSource: durationObs.releaseSource,
+        tieSustainSource: durationObs.tieSustainSource,
         clef: event.clef ?? null,
         source: 'vector-event',
       })
@@ -131,6 +199,13 @@ export function buildMeasureGraph(measure = {}, { defaultTotalDivisions = 16, to
     ;(event.notes ?? []).forEach((note, noteIndex) => {
       const id = `${idPrefix}-e${eventIndex}n${noteIndex}`
       const voice = voiceForClef(note.clef)
+      const durationObs = observeNoteheadDuration({
+        note,
+        event,
+        events,
+        totalDivisions: resolvedTotalDivisions,
+      })
+      const staffLane = classifyStaffLaneForNote(note, event, staffLaneContext)
       const node = {
         id,
         kind: SCORE_GRAPH_NODE.NOTEHEAD,
@@ -139,9 +214,21 @@ export function buildMeasureGraph(measure = {}, { defaultTotalDivisions = 16, to
         pitch: Number.isFinite(note.midi) ? midiToWrittenPitch(note.midi) : null,
         clef: note.clef ?? null,
         voice,
+        staff: staffLane.staff,
+        voiceId: staffLane.voiceId,
+        staffLane: staffLane.staffLane,
+        accompanimentLane: staffLane.accompanimentLane,
+        latePhaseEligible: staffLane.latePhaseEligible,
         onsetDivision,
         durationDivisions: event.durationDivisions ?? null,
         durationType: event.durationType ?? null,
+        writtenDurationDivisions: durationObs.writtenDurationDivisions,
+        soundingReleaseDivision: durationObs.soundingReleaseDivision,
+        durationSource: durationObs.durationSource,
+        releaseSource: durationObs.releaseSource,
+        tieSustainSource: durationObs.tieSustainSource,
+        gapToNextOnset: durationObs.gapToNextOnset,
+        gapSpanDivisions: durationObs.gapSpanDivisions,
         dotted: Boolean(event.dotted),
         tieStart: Boolean(note.tieStart),
         tieStop: Boolean(note.tieStop),
@@ -258,8 +345,10 @@ export function buildMeasureGraph(measure = {}, { defaultTotalDivisions = 16, to
     page,
     systemIndex,
     totalDivisions: resolvedTotalDivisions,
+    ...budgetDiagnostics,
     geometry: beamStemGraph?.measureBounds ?? null,
     onsetColumns: extractOnsetColumns(events),
+    staffLaneDiagnostics: buildMeasureStaffLaneDiagnostics(events),
     nodes,
     edges,
     provenance: {
@@ -351,12 +440,23 @@ export function summarizeScoreGraph(scoreGraph = { measures: [] }) {
   let bridgeMatched = 0
   let bridgeTotal = 0
   let measuresWithGraph = 0
+  let measuresWithOverflow = 0
+  let measuresWithUnderflow = 0
+  let totalOverflowEvents = 0
   for (const measure of scoreGraph.measures ?? []) {
     onsetColumns += measure.onsetColumns?.length ?? 0
     bridgeMatched += measure.provenance?.geometryBridge?.matched ?? 0
     bridgeTotal += measure.provenance?.geometryBridge?.total ?? 0
     if (measure.provenance?.hasBeamStemGraph) {
       measuresWithGraph += 1
+    }
+    const overflowCount = measure.voiceDiagnostics?.overflowCount ?? 0
+    if (overflowCount > 0) {
+      measuresWithOverflow += 1
+      totalOverflowEvents += overflowCount
+    }
+    if ((measure.voiceDiagnostics?.underflowGap ?? 0) > 0) {
+      measuresWithUnderflow += 1
     }
   }
   return {
@@ -368,6 +468,13 @@ export function summarizeScoreGraph(scoreGraph = { measures: [] }) {
     totalNodes: Object.values(nodeCounts).reduce((sum, count) => sum + count, 0),
     totalEdges: Object.values(edgeCounts).reduce((sum, count) => sum + count, 0),
     onsetColumns,
+    voiceBudgetDiagnostics: {
+      measuresWithOverflow,
+      measuresWithUnderflow,
+      totalOverflowEvents,
+    },
+    durationObservation: summarizeDurationObservation(scoreGraph.measures ?? []),
+    staffLaneObservation: summarizeStaffLaneDiagnostics(scoreGraph.measures ?? []),
     geometryBridge: {
       matched: bridgeMatched,
       total: bridgeTotal,

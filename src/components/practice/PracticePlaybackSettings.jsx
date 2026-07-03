@@ -118,7 +118,9 @@ export default function PracticePlaybackSettings({
       )}
 
       {mappingWarning && (
-        <p className="practice-section__error">{mappingWarning}</p>
+        <p className="practice-section__error" role="alert">
+          {mappingWarning}
+        </p>
       )}
     </div>
   )

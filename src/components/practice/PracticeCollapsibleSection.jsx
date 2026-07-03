@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 
 export default function PracticeCollapsibleSection({
   title,
@@ -9,6 +9,7 @@ export default function PracticeCollapsibleSection({
   children,
 }) {
   const [open, setOpen] = useState(defaultOpen)
+  const panelId = useId()
 
   useEffect(() => {
     if (defaultOpen) {
@@ -31,6 +32,7 @@ export default function PracticeCollapsibleSection({
         type="button"
         className="practice-section__toggle"
         aria-expanded={open}
+        aria-controls={panelId}
         onClick={() => setOpen((value) => !value)}
       >
         <span className="practice-section__toggle-label">
@@ -43,7 +45,7 @@ export default function PracticeCollapsibleSection({
           {open ? '▾' : '▸'}
         </span>
       </button>
-      <div className="practice-section__collapse" aria-hidden={!open}>
+      <div id={panelId} className="practice-section__collapse" aria-hidden={!open}>
         <div className="practice-section__collapse-inner" inert={open ? undefined : true}>
           {children}
         </div>

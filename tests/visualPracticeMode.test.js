@@ -321,7 +321,7 @@ describe('practice view integration', () => {
 
     // Gentle guidance for missing timing and OMR-derived notes. The OMR note
     // stays collapsed inside a details fold during normal use.
-    expect(src).toContain('Visual mode needs note timing')
+    expect(src).toContain('Visual mode needs a timing file')
     expect(src).toContain("timingSourceKind === 'omr'")
     expect(src).toContain('read automatically from the PDF')
     expect(src).toContain('<details className="visual-practice__omr-details">')
@@ -337,7 +337,7 @@ describe('practice view integration', () => {
     expect(src).toContain('requestAnimationFrame')
     expect(src).toContain("el.setAttribute(")
     expect(src).toContain('getFrameTime()')
-    expect(src).toMatch(/translate\(\$\{playheadXRef\.current - t \* PX_PER_SECOND\}/)
+    expect(src).toMatch(/translate3d\(\$\{playheadXRef\.current - t \* PX_PER_SECOND\}px, 0, 0\)/)
 
     // Playhead is a fixed vertical line outside the scrolling group (the
     // scroll <g> closes before the playhead renders), with x1 === x2.
@@ -383,17 +383,36 @@ describe('practice view integration', () => {
   it('keyboard presses animate briefly (depress + glow fade under 200ms)', () => {
     const css = readSrc('styles', 'practice.css')
 
-    expect(css).toContain('transition: transform 170ms ease, box-shadow 170ms ease;')
-    expect(css).toContain('transition: opacity 170ms ease;')
+    expect(css).toMatch(/transform var\(--sf-duration-press\)/)
+    expect(css).toMatch(/opacity var\(--sf-duration-press\)/)
     expect(css).toMatch(/__key--target \{\s*\n\s*transform: translateY\(2px\)/)
-    expect(css).toContain('visual-practice-chip-in 160ms')
+    expect(css).toContain('visual-practice-chip-in var(--sf-duration-press)')
+    expect(css).toContain('will-change: left, transform')
+    expect(css).toContain('will-change: transform')
 
-    // No slow animations sneaking in (spec: keep under ~200ms).
-    const durations = [...css.matchAll(/visual-practice__key[^{]*\{[^}]*?(\d+)ms/gs)].map((m) =>
-      Number(m[1]),
-    )
+    const durations = [...css.matchAll(/visual-practice__key[^{]*\{[^}]*?(?:var\(--sf-duration-press\)|(\d+)ms)/gs)]
+      .map((m) => (m[1] ? Number(m[1]) : 170))
     expect(durations.length).toBeGreaterThan(0)
     expect(Math.max(...durations)).toBeLessThanOrEqual(200)
+  })
+
+  it('lane scroll uses GPU-friendly transforms without changing timing constants', () => {
+    const staffLane = readSrc('components', 'practice', 'StaffVisualLane.jsx')
+    const tabLane = readSrc('components', 'practice', 'TabVisualLane.jsx')
+    const lane = readSrc('features', 'practice', 'visualPracticeLane.js')
+
+    expect(staffLane).toContain('translate3d(')
+    expect(tabLane).toContain('translate3d(')
+    expect(lane).toContain('pixelsPerSecond: 110')
+    expect(lane).toContain('nowLineFraction: 0.22')
+  })
+
+  it('improves note readability and honors reduced motion in visual practice', () => {
+    const css = readSrc('styles', 'practice.css')
+    expect(css).toContain('--vp-upcoming')
+    expect(css).toContain('.staff-lane__scroll')
+    expect(css).toContain('@media (prefers-reduced-motion: reduce)')
+    expect(css).toMatch(/\.staff-lane__note[\s\S]*transition:/)
   })
 
   it('staff lane styles express upcoming/current/played states without the old block lane', () => {

@@ -24,7 +24,12 @@
     "fixtures:anchors": "node scripts/generate-demo-anchors.mjs",
     "fixtures:minimal": "node scripts/generate-fixtures.mjs",
     "benchmark:alignment": "node scripts/benchmark-alignment-corpus.mjs --ci-only --json /tmp/alignment-benchmark.json",
-    "dataset:barline:export": "node scripts/export-barline-dataset.mjs --dry-run --json /tmp/barline-dataset-manifest.json"
+    "dataset:barline:export": "node scripts/export-barline-dataset.mjs --dry-run --json /tmp/barline-dataset-manifest.json",
+    "mic:accuracy-replay": "node scripts/mic-accuracy-replay.mjs",
+    "mic:generate-clips": "node scripts/generate-mic-accuracy-clips.mjs",
+    "mic:browser-qa": "node scripts/browser-mic-wfy-qa.mjs",
+    "mic:polyphony-replay": "node scripts/mic-polyphony-replay.mjs",
+    "mic:generate-polyphony-clips": "node scripts/generate-mic-polyphony-clips.mjs"
   },
   "dependencies": {
     "@tonejs/midi": "^2.0.28",
@@ -44,6 +49,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
+    "playwright": "^1.61.1",
     "vite": "^8.0.12",
     "vitest": "^3.2.6",
     "wrangler": "^4.104.0"

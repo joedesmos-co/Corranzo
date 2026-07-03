@@ -49,10 +49,15 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null) {
       .filter((note) => note.midi != null)
       .sort((a, b) => b.midi - a.midi)
       .map((note) => ({
+        id: note.id ?? null,
         midi: note.midi,
         label: note.label ?? midiToNoteLabel(note.midi),
         staff: note.staff ?? null,
         durationSeconds: note.durationSeconds ?? null,
+        // Fretted-instrument position when the score provides one; derived
+        // positions come from getTabPositionsForTimingMap via the note id.
+        string: note.string ?? null,
+        fret: note.fret ?? null,
       }))
 
     return {

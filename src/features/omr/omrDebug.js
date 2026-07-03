@@ -1,30 +1,22 @@
 import { describeOmrImageBuffer } from './omrPixelBuffer.js'
+import { getOmrDiagnosticFlags } from './omrDiagnosticFlags.js'
 
 export function isOmrDebugEnabled() {
-  try {
-    if (typeof import.meta !== 'undefined' && import.meta.env?.PROD) {
-      return false
-    }
-    if (typeof localStorage !== 'undefined' && localStorage.getItem('scoreflow:omr-debug') === '0') {
-      return false
-    }
-  } catch {
-    // ignore storage errors
-  }
-  return typeof import.meta === 'undefined' || import.meta.env?.DEV !== false
+  return getOmrDiagnosticFlags().debug
 }
 
 export function omrDebugStep(label, imageData = null, extra = null) {
   if (!isOmrDebugEnabled()) {
     return
   }
+  const prefix = '[omr-debug]'
   if (imageData) {
-    console.debug(`[omr] ${label}`, describeOmrImageBuffer(imageData, label), extra ?? '')
+    console.debug(`${prefix} ${label}`, describeOmrImageBuffer(imageData, label), extra ?? '')
     return
   }
   if (extra != null) {
-    console.debug(`[omr] ${label}`, extra)
+    console.debug(`${prefix} ${label}`, extra)
     return
   }
-  console.debug(`[omr] ${label}`)
+  console.debug(`${prefix} ${label}`)
 }

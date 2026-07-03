@@ -57,13 +57,24 @@ button:focus:not(:focus-visible),
 .wait-for-you__btn,
 .wait-for-you__btn--primary {
   transition:
-    background var(--sf-duration-fast) var(--sf-ease),
-    border-color var(--sf-duration-fast) var(--sf-ease),
-    color var(--sf-duration-fast) var(--sf-ease),
-    filter var(--sf-duration-fast) var(--sf-ease),
-    box-shadow var(--sf-duration-fast) var(--sf-ease),
-    opacity var(--sf-duration-fast) var(--sf-ease),
-    transform var(--sf-duration-fast) var(--sf-ease);
+    background var(--sf-duration-fast) var(--sf-ease-out),
+    border-color var(--sf-duration-fast) var(--sf-ease-out),
+    color var(--sf-duration-fast) var(--sf-ease-out),
+    filter var(--sf-duration-fast) var(--sf-ease-out),
+    box-shadow var(--sf-duration-fast) var(--sf-ease-out),
+    opacity var(--sf-duration-fast) var(--sf-ease-out),
+    transform var(--sf-duration-fast) var(--sf-ease-out);
+}
+
+.topbar__nav-btn:active:not(:disabled),
+.demo-piece__button:active:not(:disabled),
+.upload-btn:active:not(:disabled),
+.library-welcome__btn:active:not(:disabled),
+.wait-for-you__btn:active:not(:disabled),
+.session-restore-banner__btn:active:not(:disabled),
+.pdf-fullscreen__close:active:not(:disabled),
+.practice-fullscreen-hud__play:active:not(:disabled) {
+  opacity: 0.9;
 }
 
 .topbar__nav-btn:focus-visible,

@@ -20,6 +20,7 @@ export default function usePracticeStatsTracker({
   measureNumber = null,
   tempoBpm = null,
   onStatsFlush = null,
+  instrumentId = null,
 }) {
   const [liveSession, setLiveSession] = useState(null)
 
@@ -30,7 +31,7 @@ export default function usePracticeStatsTracker({
       return undefined
     }
 
-    beginAutoPracticeSession(piece)
+    beginAutoPracticeSession(piece, { instrumentId })
     setLiveSession(snapshotActiveSession())
 
     const tickId = setInterval(() => {
@@ -44,7 +45,7 @@ export default function usePracticeStatsTracker({
       setLiveSession(null)
       onStatsFlush?.(nextStats)
     }
-  }, [active, piece?.id, piece?.title, onStatsFlush])
+  }, [active, piece?.id, piece?.title, onStatsFlush, instrumentId])
 
   useEffect(() => {
     if (!active || measureNumber == null) {

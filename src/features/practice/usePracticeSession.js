@@ -30,6 +30,12 @@ import {
 } from './waitForYouDisplayStatus.js'
 import useImportReadiness from '../import/useImportReadiness.js'
 import { savePracticePrefs, loadPracticePrefs } from '../session/practicePrefsStorage.js'
+import { quantizePracticeTime } from '../../context/PracticeTickContext.jsx'
+import { getInstrument } from '../instruments/instruments.js'
+import {
+  getTabPositionsForTimingMap,
+  resolveStringsForTimingMap,
+} from '../instruments/timingMapTabPositions.js'
 
 /**
  * Wires playback, timing, navigation, loop, and Wait For You hooks for the Practice view.
@@ -44,13 +50,18 @@ export default function usePracticeSession({
   isDemoPiece = false,
   onRecordWfyEvent = null,
   onWfyCheckpointCompleted = null,
+  instrumentId = null,
 }) {
   const prefs = initialPracticePrefs ?? loadPracticePrefs() ?? {}
 
   const [practiceMode, setPracticeMode] = useState(
     prefs.practiceMode ?? PRACTICE_MODE.NORMAL,
   )
-  const [checkpointMode, setCheckpointMode] = useState(WFY_CHECKPOINT_MODE.NOTE)
+  const [checkpointMode, setCheckpointMode] = useState(
+    prefs.checkpointMode === WFY_CHECKPOINT_MODE.BEAT
+      ? WFY_CHECKPOINT_MODE.BEAT
+      : WFY_CHECKPOINT_MODE.NOTE,
+  )
   const matchSettingsState = useWaitForYouMatchSettings(prefs.matchSettings)
   const autoMidiRequestedRef = useRef(false)
   const ensurePausedRef = useRef(() => {})
@@ -74,6 +85,7 @@ export default function usePracticeSession({
     midiSource,
     timingLoading: timing.isLoading,
     alignmentDiagnostics: alignment.diagnostics,
+    instrumentId,
   })
 
   const hasMidi = Boolean(midiSource?.data)
@@ -170,6 +182,7 @@ export default function usePracticeSession({
 
   const referencePlayback = useWaitForYouReferencePlayback({
     onBeforePlay: () => ensurePausedRef.current(),
+    instrumentId,
   })
 
   const loop = usePracticeLoop(
@@ -191,12 +204,15 @@ export default function usePracticeSession({
   })
 
   const micCaptureActive =
-    practiceActive && wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE
+    practiceActive &&
+    isWaitForYou &&
+    wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE
 
   const microphone = useMicrophoneCapture({ active: micCaptureActive })
 
   const webMidi = useWebMidiInput({
     listen:
+      practiceActive &&
       isWaitForYou &&
       checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
       wfyInputSource === WFY_INPUT_SOURCE.MIDI,
@@ -220,6 +236,7 @@ export default function usePracticeSession({
 
   const waitForYouMic = useWaitForYouMicInput({
     active:
+      isWaitForYou &&
       practiceActive &&
       wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
       !waitForYou.displayPhase,
@@ -288,12 +305,31 @@ export default function usePracticeSession({
     waitForYou.currentCheckpoint,
   ])
 
+  // Instrument interpretation for guidance copy: fretted instruments get
+  // position phrases ("fret 2 · D string"); keyboard instruments keep the
+  // long-standing hand hints. The checkpoint engine itself stays generic.
+  const guidanceInstrument = useMemo(() => getInstrument(instrumentId), [instrumentId])
+  const guidanceStrings = useMemo(
+    () => resolveStringsForTimingMap(timing.timingMap, guidanceInstrument),
+    [timing.timingMap, guidanceInstrument],
+  )
+  const guidanceTabPositions = useMemo(
+    () =>
+      guidanceStrings && timing.timingMap
+        ? getTabPositionsForTimingMap(timing.timingMap, guidanceInstrument)
+        : null,
+    [guidanceStrings, timing.timingMap, guidanceInstrument],
+  )
+
   const waitForYouGuidance = useWaitForYouGuidance({
     active: isWaitForYou,
     currentCheckpoint: waitForYou.currentCheckpoint,
     inputFeedback: waitForYouInput.inputFeedback,
     matchingActive: Boolean(waitForYouInput.matchingEnabled),
     complete: waitForYou.isComplete,
+    instrument: guidanceInstrument,
+    strings: guidanceStrings,
+    tabPositions: guidanceTabPositions,
   })
 
   const waitForYouRef = useRef(waitForYou)
@@ -384,6 +420,10 @@ export default function usePracticeSession({
     [ensurePaused],
   )
 
+  const practiceTimeForSnapshotDeps = playback.isPlaying
+    ? quantizePracticeTime(clock.practiceTime)
+    : clock.practiceTime
+
   const practicePrefsSnapshot = useMemo(
     () => ({
       practiceMode,
@@ -404,7 +444,7 @@ export default function usePracticeSession({
       practiceMode,
       checkpointMode,
       wfyInputSource,
-      clock.practiceTime,
+      practiceTimeForSnapshotDeps,
       loop.snapMode,
       loop.enabled,
       loop.startMeasureNumber,
@@ -415,9 +455,34 @@ export default function usePracticeSession({
     ],
   )
 
+  const practicePrefsSnapshotRef = useRef(practicePrefsSnapshot)
+  practicePrefsSnapshotRef.current = practicePrefsSnapshot
+
   useEffect(() => {
-    savePracticePrefs(practicePrefsSnapshot)
-  }, [practicePrefsSnapshot])
+    savePracticePrefs(practicePrefsSnapshotRef.current)
+  }, [
+    practiceMode,
+    checkpointMode,
+    wfyInputSource,
+    loop.snapMode,
+    loop.enabled,
+    loop.startMeasureNumber,
+    loop.endMeasureNumber,
+    loop.startBeat,
+    loop.endBeat,
+    matchSettingsState.rawSettings,
+  ])
+
+  useEffect(() => {
+    if (!playback.isPlaying) {
+      savePracticePrefs(practicePrefsSnapshotRef.current)
+      return undefined
+    }
+    const intervalId = window.setInterval(() => {
+      savePracticePrefs(practicePrefsSnapshotRef.current)
+    }, 1000)
+    return () => window.clearInterval(intervalId)
+  }, [playback.isPlaying])
 
   const waitForYouForUi = useMemo(() => {
     const markCorrectFromUser = () => {
@@ -452,18 +517,8 @@ export default function usePracticeSession({
     onRecordWfyEvent,
   ])
 
-  return {
-    practicePrefsSnapshot,
-    practiceMode,
-    setPracticeMode: handlePracticeModeChange,
-    isWaitForYou,
-    hasMidi,
-    hasMusicXml,
-    sources: {
-      playbackFileName: midiSource?.fileName ?? null,
-      timingFileName: musicXmlSource?.fileName ?? null,
-    },
-    playback: {
+  const playbackForSession = useMemo(
+    () => ({
       ...playback,
       controlsDisabled: !hasMusicXml || playback.isLoading,
       playDisabled: !hasMusicXml || playback.isLoading || isWaitForYou,
@@ -471,36 +526,100 @@ export default function usePracticeSession({
       transportHint: isWaitForYou
         ? 'Paused in Wait For You — play the target note or press Enter to continue.'
         : null,
-    },
-    clock,
-    practiceTime,
-    timing,
-    alignment,
-    measure,
-    beat,
-    loop,
-    waitForYou: waitForYouForUi,
-    waitForYouMidi,
-    waitForYouMic,
-    waitForYouInput,
-    wfyInputSource,
-    setWfyInputSource: handleWfyInputSourceChange,
-    microphone,
-    matchSettings: matchSettingsState.settings,
-    rawMatchSettings: matchSettingsState.rawSettings,
-    updateMatchSetting: matchSettingsState.updateSetting,
-    resetMatchSettings: matchSettingsState.resetSettings,
-    referencePlayback,
-    checkpointMode,
-    setCheckpointMode,
-    webMidi,
-    timingDisabled,
-    seekToPracticeTime: seekToPracticeTimeWithWfy,
-    handlePlay,
-    handleMidiStop,
-    handleMidiSeek,
-    handleToggleMute,
-    importReadiness,
-    isDemoPiece,
-  }
+    }),
+    [
+      playback,
+      hasMusicXml,
+      isWaitForYou,
+    ],
+  )
+
+  return useMemo(
+    () => ({
+      practicePrefsSnapshot,
+      practiceMode,
+      setPracticeMode: handlePracticeModeChange,
+      isWaitForYou,
+      hasMidi,
+      hasMusicXml,
+      instrumentId,
+      sources: {
+        playbackFileName: midiSource?.fileName ?? null,
+        timingFileName: musicXmlSource?.fileName ?? null,
+      },
+      playback: playbackForSession,
+      clock,
+      practiceTime,
+      timing,
+      alignment,
+      measure,
+      beat,
+      loop,
+      waitForYou: waitForYouForUi,
+      waitForYouMidi,
+      waitForYouMic,
+      waitForYouInput,
+      wfyInputSource,
+      setWfyInputSource: handleWfyInputSourceChange,
+      microphone,
+      matchSettings: matchSettingsState.settings,
+      rawMatchSettings: matchSettingsState.rawSettings,
+      updateMatchSetting: matchSettingsState.updateSetting,
+      resetMatchSettings: matchSettingsState.resetSettings,
+      referencePlayback,
+      checkpointMode,
+      setCheckpointMode,
+      webMidi,
+      timingDisabled,
+      seekToPracticeTime: seekToPracticeTimeWithWfy,
+      handlePlay,
+      handleMidiStop,
+      handleMidiSeek,
+      handleToggleMute,
+      importReadiness,
+      isDemoPiece,
+    }),
+    [
+      practicePrefsSnapshot,
+      practiceMode,
+      handlePracticeModeChange,
+      isWaitForYou,
+      hasMidi,
+      hasMusicXml,
+      instrumentId,
+      midiSource?.fileName,
+      musicXmlSource?.fileName,
+      playbackForSession,
+      clock,
+      practiceTime,
+      timing,
+      alignment,
+      measure,
+      beat,
+      loop,
+      waitForYouForUi,
+      waitForYouMidi,
+      waitForYouMic,
+      waitForYouInput,
+      wfyInputSource,
+      handleWfyInputSourceChange,
+      microphone,
+      matchSettingsState.settings,
+      matchSettingsState.rawSettings,
+      matchSettingsState.updateSetting,
+      matchSettingsState.resetSettings,
+      referencePlayback,
+      checkpointMode,
+      setCheckpointMode,
+      webMidi,
+      timingDisabled,
+      seekToPracticeTimeWithWfy,
+      handlePlay,
+      handleMidiStop,
+      handleMidiSeek,
+      handleToggleMute,
+      importReadiness,
+      isDemoPiece,
+    ],
+  )
 }

@@ -37,7 +37,7 @@ export default function PracticeFilesSummary({
             ? 'Loading…'
             : hasMusicXml
               ? timingFileName || 'Loaded'
-              : 'Missing — add a timing file in Library'}
+              : 'Not added yet'}
         </span>
         {timingError && (
           <span className="practice-files__hint practice-files__hint--error practice-files__hint--wrap" role="alert">
@@ -46,7 +46,7 @@ export default function PracticeFilesSummary({
         )}
         {!hasMusicXml && !timingError && (
           <span className="practice-files__hint practice-empty-state practice-files__hint--wrap">
-            A timing file is required — export MusicXML or MXL from MuseScore or your notation app.
+            Required for timing. Add a timing file in Library — export MusicXML or MXL from MuseScore or your notation app.
           </span>
         )}
       </div>
@@ -62,11 +62,11 @@ export default function PracticeFilesSummary({
           className="practice-files__value practice-files__value--truncate"
           title={hasMidi ? playbackFileName || undefined : undefined}
         >
-          {hasMidi ? playbackFileName || 'Loaded' : 'Optional — add from Library'}
+          {hasMidi ? playbackFileName || 'Loaded' : 'Not added (optional)'}
         </span>
         {!hasMidi && (
           <span className="practice-files__hint practice-files__hint--wrap">
-            Optional — add a MIDI file in Library if you want backing audio while you practice.
+            Optional. Add a MIDI file in Library for backing audio while you practice.
           </span>
         )}
       </div>

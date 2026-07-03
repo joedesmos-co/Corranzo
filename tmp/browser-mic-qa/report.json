@@ -1,0 +1,1741 @@
+{
+  "generatedAt": "2026-07-03T04:41:34.141Z",
+  "baseUrl": "http://127.0.0.1:5173",
+  "scenarios": [
+    {
+      "id": "permission-denied",
+      "blocked": true
+    },
+    {
+      "id": "wfy-mic-main",
+      "chipAfterEnable": "Mic listening",
+      "calLabel": "Room is noisy — play a bit louder or move closer"
+    },
+    {
+      "id": "quiet-room",
+      "quietCal": "Mic ready"
+    },
+    {
+      "id": "noisy-room",
+      "noisyCal": "Mic ready",
+      "noisyStatus": "mic-input-status__calibration mic-input-status__calibration--ready"
+    },
+    {
+      "id": "bass+treble chord (demo checkpoint)",
+      "clip": "/Users/ryland/Documents/scoreflow/tmp/browser-mic-qa/v2-chord-fixture.wav",
+      "best": {
+        "engineMode": "v2-score-informed",
+        "v2Enabled": true,
+        "v2Active": true,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": true,
+        "expectedMidis": [
+          45,
+          49,
+          57
+        ],
+        "lastDetectedMidis": [],
+        "lastDetectedCount": 0,
+        "v2MeanConfidence": 0,
+        "lastV2Notes": [
+          {
+            "midi": 45,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 49,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 57,
+            "confidence": 0,
+            "detected": false
+          }
+        ],
+        "usedV1Fallback": false,
+        "lastOutcome": "complete",
+        "lastMatchedCount": 2,
+        "lastMatchDetectedMidis": [
+          61,
+          42
+        ]
+      },
+      "maxMatched": 2,
+      "trail": [
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        }
+      ]
+    },
+    {
+      "id": "single piano C4 fixture",
+      "clip": "/Users/ryland/Documents/scoreflow/benchmarks/mic-accuracy/clips/real-piano-c4.wav",
+      "best": {
+        "engineMode": "v2-score-informed",
+        "v2Enabled": true,
+        "v2Active": true,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": true,
+        "expectedMidis": [
+          45,
+          49,
+          57
+        ],
+        "lastDetectedMidis": [],
+        "lastDetectedCount": 0,
+        "v2MeanConfidence": 0,
+        "lastV2Notes": [
+          {
+            "midi": 45,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 49,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 57,
+            "confidence": 0,
+            "detected": false
+          }
+        ],
+        "usedV1Fallback": false,
+        "lastOutcome": "complete",
+        "lastMatchedCount": 2,
+        "lastMatchDetectedMidis": [
+          61,
+          42
+        ]
+      },
+      "maxMatched": 2,
+      "trail": [
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        }
+      ]
+    },
+    {
+      "id": "repeated piano C4 (looped fixture)",
+      "clip": "/Users/ryland/Documents/scoreflow/benchmarks/mic-accuracy/clips/real-piano-c4.wav",
+      "best": {
+        "engineMode": "v2-score-informed",
+        "v2Enabled": true,
+        "v2Active": true,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": true,
+        "expectedMidis": [
+          66,
+          49,
+          57
+        ],
+        "lastDetectedMidis": [],
+        "lastDetectedCount": 0,
+        "v2MeanConfidence": 0,
+        "lastV2Notes": [
+          {
+            "midi": 66,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 49,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 57,
+            "confidence": 0,
+            "detected": false
+          }
+        ],
+        "usedV1Fallback": false,
+        "lastOutcome": "complete",
+        "lastMatchedCount": 1
+      },
+      "maxMatched": 1,
+      "trail": [
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            66,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 1,
+          "outcome": "complete"
+        }
+      ]
+    },
+    {
+      "id": "wrong note (E4 vs chord checkpoint)",
+      "clip": "/Users/ryland/Documents/scoreflow/benchmarks/mic-accuracy/clips/real-piano-e4.wav",
+      "best": {
+        "engineMode": "v2-score-informed",
+        "v2Enabled": true,
+        "v2Active": true,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": true,
+        "expectedMidis": [
+          61,
+          42
+        ],
+        "lastDetectedMidis": [],
+        "lastDetectedCount": 0,
+        "v2MeanConfidence": 0,
+        "lastV2Notes": [
+          {
+            "midi": 61,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 42,
+            "confidence": 0,
+            "detected": false
+          }
+        ],
+        "usedV1Fallback": false
+      },
+      "maxMatched": 0,
+      "trail": [
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        }
+      ],
+      "progress": "0%"
+    },
+    {
+      "id": "2-note dyad fixture (C4+G4)",
+      "clip": "/Users/ryland/Documents/scoreflow/benchmarks/mic-polyphony/clips/real-dyad-c4-g4.wav",
+      "best": {
+        "engineMode": "v2-score-informed",
+        "v2Enabled": true,
+        "v2Active": true,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": true,
+        "expectedMidis": [
+          45,
+          49,
+          57
+        ],
+        "lastDetectedMidis": [],
+        "lastDetectedCount": 0,
+        "v2MeanConfidence": 0,
+        "lastV2Notes": [
+          {
+            "midi": 45,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 49,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 57,
+            "confidence": 0,
+            "detected": false
+          }
+        ],
+        "usedV1Fallback": false,
+        "lastOutcome": "complete",
+        "lastMatchedCount": 2,
+        "lastMatchDetectedMidis": [
+          61,
+          42
+        ]
+      },
+      "maxMatched": 2,
+      "trail": [
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        }
+      ]
+    },
+    {
+      "id": "3-note triad fixture (C major)",
+      "clip": "/Users/ryland/Documents/scoreflow/benchmarks/mic-polyphony/clips/real-c-major-triad.wav",
+      "best": {
+        "engineMode": "v2-score-informed",
+        "v2Enabled": true,
+        "v2Active": true,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": true,
+        "expectedMidis": [
+          45,
+          49,
+          57
+        ],
+        "lastDetectedMidis": [],
+        "lastDetectedCount": 0,
+        "v2MeanConfidence": 0,
+        "lastV2Notes": [
+          {
+            "midi": 45,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 49,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 57,
+            "confidence": 0,
+            "detected": false
+          }
+        ],
+        "usedV1Fallback": false,
+        "lastOutcome": "complete",
+        "lastMatchedCount": 2,
+        "lastMatchDetectedMidis": [
+          61,
+          42
+        ]
+      },
+      "maxMatched": 2,
+      "trail": [
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [
+            57
+          ],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        },
+        {
+          "expected": [
+            45,
+            49,
+            57
+          ],
+          "detected": [],
+          "matched": 2,
+          "matchMidis": [
+            61,
+            42
+          ],
+          "outcome": "complete"
+        }
+      ]
+    },
+    {
+      "id": "quiet room",
+      "clip": "/Users/ryland/Documents/scoreflow/benchmarks/mic-accuracy/clips/real-room-quiet.wav",
+      "best": {
+        "engineMode": "v2-score-informed",
+        "v2Enabled": true,
+        "v2Active": true,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": true,
+        "expectedMidis": [
+          61,
+          42
+        ],
+        "lastDetectedMidis": [],
+        "lastDetectedCount": 0,
+        "v2MeanConfidence": 0,
+        "lastV2Notes": [
+          {
+            "midi": 61,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 42,
+            "confidence": 0,
+            "detected": false
+          }
+        ],
+        "usedV1Fallback": false
+      },
+      "maxMatched": 0,
+      "trail": [
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        }
+      ],
+      "progress": "0%"
+    },
+    {
+      "id": "noisy room",
+      "clip": "/Users/ryland/Documents/scoreflow/benchmarks/mic-accuracy/clips/real-room-noisy.wav",
+      "best": {
+        "engineMode": "v2-score-informed",
+        "v2Enabled": true,
+        "v2Active": true,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": true,
+        "expectedMidis": [
+          61,
+          42
+        ],
+        "lastDetectedMidis": [],
+        "lastDetectedCount": 0,
+        "v2MeanConfidence": 0,
+        "lastV2Notes": [
+          {
+            "midi": 61,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 42,
+            "confidence": 0,
+            "detected": false
+          }
+        ],
+        "usedV1Fallback": false
+      },
+      "maxMatched": 0,
+      "trail": [
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        }
+      ],
+      "progress": "0%"
+    },
+    {
+      "id": "soft playing (low amplitude C4)",
+      "clip": "/Users/ryland/Documents/scoreflow/tmp/browser-mic-qa/v2-soft-c4.wav",
+      "best": {
+        "engineMode": "v2-score-informed",
+        "v2Enabled": true,
+        "v2Active": true,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": true,
+        "expectedMidis": [
+          61,
+          42
+        ],
+        "lastDetectedMidis": [],
+        "lastDetectedCount": 0,
+        "v2MeanConfidence": 0,
+        "lastV2Notes": [
+          {
+            "midi": 61,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 42,
+            "confidence": 0,
+            "detected": false
+          }
+        ],
+        "usedV1Fallback": false
+      },
+      "maxMatched": 0,
+      "trail": [
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": [
+            61
+          ]
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": [
+            61
+          ]
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": [
+            61
+          ]
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": [
+            61
+          ]
+        }
+      ]
+    },
+    {
+      "id": "loud playing (high amplitude C4)",
+      "clip": "/Users/ryland/Documents/scoreflow/tmp/browser-mic-qa/v2-loud-c4.wav",
+      "best": {
+        "engineMode": "v2-score-informed",
+        "v2Enabled": true,
+        "v2Active": true,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": true,
+        "expectedMidis": [
+          61,
+          42
+        ],
+        "lastDetectedMidis": [],
+        "lastDetectedCount": 0,
+        "v2MeanConfidence": 0.04697610047982596,
+        "lastV2Notes": [
+          {
+            "midi": 61,
+            "confidence": 0.09395220095965191,
+            "detected": false
+          },
+          {
+            "midi": 42,
+            "confidence": 0,
+            "detected": false
+          }
+        ],
+        "usedV1Fallback": false
+      },
+      "maxMatched": 0,
+      "trail": [
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": [
+            61
+          ]
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": [
+            61
+          ]
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": [
+            61
+          ]
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": [
+            61
+          ]
+        }
+      ]
+    },
+    {
+      "id": "non-matching audio no advance",
+      "clip": "/Users/ryland/Documents/scoreflow/benchmarks/mic-accuracy/clips/real-room-quiet.wav",
+      "best": {
+        "engineMode": "v2-score-informed",
+        "v2Enabled": true,
+        "v2Active": true,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": true,
+        "expectedMidis": [
+          61,
+          42
+        ],
+        "lastDetectedMidis": [],
+        "lastDetectedCount": 0,
+        "v2MeanConfidence": 0,
+        "lastV2Notes": [
+          {
+            "midi": 61,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 42,
+            "confidence": 0,
+            "detected": false
+          }
+        ],
+        "usedV1Fallback": false
+      },
+      "maxMatched": 0,
+      "trail": [
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        },
+        {
+          "expected": [
+            61,
+            42
+          ],
+          "detected": []
+        }
+      ],
+      "progress": "0%"
+    },
+    {
+      "id": "mic-engine-v2-real-world",
+      "devDefault": true,
+      "debugOnEnable": {
+        "engineMode": "v2-score-informed",
+        "v2Enabled": true,
+        "v2Active": true,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": true,
+        "expectedMidis": [
+          61,
+          42
+        ],
+        "lastDetectedMidis": [],
+        "lastDetectedCount": 0,
+        "v2MeanConfidence": 0,
+        "lastV2Notes": [
+          {
+            "midi": 61,
+            "confidence": 0,
+            "detected": false
+          },
+          {
+            "midi": 42,
+            "confidence": 0,
+            "detected": false
+          }
+        ],
+        "usedV1Fallback": false
+      },
+      "firstCheckpointExpected": [
+        61,
+        42
+      ],
+      "reloadOptOut": {
+        "engineMode": "v1-monophonic",
+        "v2Enabled": false,
+        "v2Active": false,
+        "v2SessionFallback": false,
+        "isMicV2Polyphonic": false,
+        "expectedMidis": [
+          61,
+          42
+        ]
+      },
+      "documentedFailures": []
+    }
+  ],
+  "passes": [
+    {
+      "name": "mic permission denied shows Mic blocked",
+      "detail": ""
+    },
+    {
+      "name": "WFY section visible with Microphone source",
+      "detail": ""
+    },
+    {
+      "name": "mic permission grant enables capture",
+      "detail": "wfy-enable"
+    },
+    {
+      "name": "mic shows calibrating or ready after grant",
+      "detail": "Mic listening"
+    },
+    {
+      "name": "mic calibration status line present",
+      "detail": "Room is noisy — play a bit louder or move closer"
+    },
+    {
+      "name": "Hear It does not dismiss mic panel",
+      "detail": ""
+    },
+    {
+      "name": "leaving WFY hides mic panel and test UI",
+      "detail": ""
+    },
+    {
+      "name": "re-entering WFY shows mic off until re-enabled",
+      "detail": ""
+    },
+    {
+      "name": "instrument switch does not show stale Last confirmed mic feedback",
+      "detail": ""
+    },
+    {
+      "name": "ipad WFY mic layout — no horizontal overflow",
+      "detail": ""
+    },
+    {
+      "name": "mobile WFY mic layout — no horizontal overflow",
+      "detail": ""
+    },
+    {
+      "name": "quiet room fixture calibrates without crash",
+      "detail": "Mic ready"
+    },
+    {
+      "name": "noisy room fixture surfaces room guidance",
+      "detail": "Mic ready"
+    },
+    {
+      "name": "noisy room does not show false Last confirmed",
+      "detail": ""
+    },
+    {
+      "name": "V2: __SCOREFLOW_MIC_DEBUG__ reports engineMode/v2Enabled/isMicV2Polyphonic",
+      "detail": "mode=v2-score-informed poly=true devDefault=true"
+    },
+    {
+      "name": "bass+treble chord (demo checkpoint): debug reports detected notes/confidence",
+      "detail": "midis=[] conf=0"
+    },
+    {
+      "name": "bass+treble chord (demo checkpoint): matched 2 expected tone(s)",
+      "detail": "[61,42]"
+    },
+    {
+      "name": "single piano C4 fixture: debug reports detected notes/confidence",
+      "detail": "midis=[] conf=0"
+    },
+    {
+      "name": "single piano C4 fixture: mic enabled without crash",
+      "detail": ""
+    },
+    {
+      "name": "repeated piano C4 (looped fixture): debug reports detected notes/confidence",
+      "detail": "midis=[] conf=0"
+    },
+    {
+      "name": "repeated piano C4 (looped fixture): mic enabled without crash",
+      "detail": ""
+    },
+    {
+      "name": "wrong note (E4 vs chord checkpoint): debug reports detected notes/confidence",
+      "detail": "midis=[] conf=0"
+    },
+    {
+      "name": "wrong note (E4 vs chord checkpoint): no spurious advance",
+      "detail": "progress=0%"
+    },
+    {
+      "name": "2-note dyad fixture (C4+G4): debug reports detected notes/confidence",
+      "detail": "midis=[] conf=0"
+    },
+    {
+      "name": "3-note triad fixture (C major): debug reports detected notes/confidence",
+      "detail": "midis=[] conf=0"
+    },
+    {
+      "name": "quiet room: debug reports detected notes/confidence",
+      "detail": "midis=[] conf=0"
+    },
+    {
+      "name": "quiet room: no spurious advance",
+      "detail": "progress=0%"
+    },
+    {
+      "name": "noisy room: debug reports detected notes/confidence",
+      "detail": "midis=[] conf=0"
+    },
+    {
+      "name": "noisy room: no spurious advance",
+      "detail": "progress=0%"
+    },
+    {
+      "name": "soft playing (low amplitude C4): debug reports detected notes/confidence",
+      "detail": "midis=[] conf=0"
+    },
+    {
+      "name": "soft playing (low amplitude C4): mic enabled without crash",
+      "detail": ""
+    },
+    {
+      "name": "loud playing (high amplitude C4): debug reports detected notes/confidence",
+      "detail": "midis=[] conf=0.04697610047982596"
+    },
+    {
+      "name": "non-matching audio no advance: debug reports detected notes/confidence",
+      "detail": "midis=[] conf=0"
+    },
+    {
+      "name": "non-matching audio no advance: no spurious advance",
+      "detail": "progress=0%"
+    },
+    {
+      "name": "V2: Hear It does not dismiss mic panel",
+      "detail": ""
+    },
+    {
+      "name": "V2: leaving WFY hides mic panel/test (state cleared)",
+      "detail": ""
+    },
+    {
+      "name": "V2: instrument switch does not leave stale mic feedback",
+      "detail": ""
+    },
+    {
+      "name": "V2 opt-out: reload with flag=false restores V1",
+      "detail": "v1-monophonic"
+    }
+  ],
+  "failures": [],
+  "notes": [
+    "Mic engine debug: {\"engineMode\":\"v2-score-informed\",\"v2Enabled\":true,\"v2Active\":true,\"v2SessionFallback\":false,\"isMicV2Polyphonic\":true,\"expectedMidis\":[45,49,57],\"lastDetectedMidis\":[],\"lastDetectedCount\":0,\"v2MeanConfidence\":0,\"lastV2Notes\":[{\"midi\":45,\"confidence\":0,\"detected\":false},{\"midi\":49,\"confidence\":0,\"detected\":false},{\"midi\":57,\"confidence\":0,\"detected\":false}],\"usedV1Fallback\":false,\"lastOutcome\":\"complete\",\"lastMatchedCount\":2,\"lastMatchDetectedMidis\":[61,42]}",
+    "Mic test panel not visible — may still be calibrating in fake stream",
+    "Guitar WFY mic panel visible after switch: true",
+    "V2 real-world QA running against dev default (no localStorage flag)"
+  ],
+  "tuningChanged": false
+}

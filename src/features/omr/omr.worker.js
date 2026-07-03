@@ -8,7 +8,7 @@ import { processOmrPageAnalysis } from './processOmrPage.js'
 self.onmessage = (event) => {
   const traceRunId = event.data?.traceRunId ?? null
   omrTrace('worker:onmessage-start', {
-    hasPixels: Array.isArray(event.data?.pixels),
+    hasPixels: event.data?.pixels instanceof Uint8ClampedArray || Array.isArray(event.data?.pixels),
     width: event.data?.width,
     height: event.data?.height,
   }, traceRunId)

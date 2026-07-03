@@ -1,13 +1,24 @@
 {
   "version": 1,
-  "description": "Developer OMR accuracy fixtures. PDF + MXL live outside the repo (typically ~/Downloads). Thresholds are regression floors, not product targets.",
+  "description": "Developer OMR accuracy fixtures. Score PDF + MXL files are NOT vendored into the repo (they are third-party/copyrighted). Each fixture lists stable search paths and a sha256 checksum so any machine can verify it has the exact expected file. See benchmarks/omr-fixtures/README.md for setup. Thresholds are regression floors, not product targets.",
+  "fixtureSearchPaths": [
+    "benchmarks/omr-fixtures",
+    "~/Downloads",
+    "tmp/sprint1"
+  ],
   "fixtures": [
     {
       "id": "clean",
       "label": "Gymnopédie No. 1 (clean)",
       "tier": "clean",
-      "pdf": "~/Downloads/gymnopedie-no-1-satie.pdf",
-      "truth": "~/Downloads/gymnopedie-no-1-satie.mxl",
+      "pdf": "gymnopedie-no-1-satie.pdf",
+      "truth": "gymnopedie-no-1-satie.mxl",
+      "pdfLegacyPath": "~/Downloads/gymnopedie-no-1-satie.pdf",
+      "truthLegacyPath": "~/Downloads/gymnopedie-no-1-satie.mxl",
+      "checksums": {
+        "pdf": "sha256:da3155794240fd53032e85453bf682b8458cdb04d379cb4a59e0ff4d93758bae",
+        "truth": "sha256:a655f6bb407557e5531103353267ed32015e77ff56ea76e4625d902c465f314d"
+      },
       "maxPages": 24,
       "thresholds": {
         "pitchAccuracy": 0.95,
@@ -23,8 +34,14 @@
       "id": "dense",
       "label": "A Cruel Angel's Thesis (dense)",
       "tier": "dense",
-      "pdf": "~/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
-      "truth": "~/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl",
+      "pdf": "a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+      "truth": "a-cruel-angels-thesis-neon-genesis-evangelion.mxl",
+      "pdfLegacyPath": "~/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+      "truthLegacyPath": "~/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.mxl",
+      "checksums": {
+        "pdf": "sha256:9710272721af102d199d6ef965e8ca1fcfca6bbf2dc40263f701b460e310c68d",
+        "truth": "sha256:6c1d8d753049821764110dd04f7571f3bffd629411694496ad6880890a32ff91"
+      },
       "maxPages": 24,
       "thresholds": {
         "pitchAccuracy": 0.3,
@@ -40,8 +57,14 @@
       "id": "simple",
       "label": "Twinkle Twinkle Little Star (simple/legacy-font)",
       "tier": "simple",
-      "pdf": "~/Downloads/twinkle-twinkle-little-star-easy.pdf",
-      "truth": "~/Downloads/twinkle-twinkle-little-star-easy.mxl",
+      "pdf": "twinkle-twinkle-little-star-easy.pdf",
+      "truth": "twinkle-twinkle-little-star-easy.mxl",
+      "pdfLegacyPath": "~/Downloads/twinkle-twinkle-little-star-easy.pdf",
+      "truthLegacyPath": "~/Downloads/twinkle-twinkle-little-star-easy.mxl",
+      "checksums": {
+        "pdf": "sha256:b13d2131515543181a99f07536ddef1f6fa7dddf04cc1eb7c008aef955ec10f8",
+        "truth": "sha256:4515c53ffb0bb91932cdd1768d6d841c06ce2a1759dc7e12e51d7fbdfa5e26d1"
+      },
       "maxPages": 4,
       "thresholds": {
         "pitchAccuracy": 0.95,
@@ -52,6 +75,36 @@
         "maxMeasureCountDiff": 0,
         "maxNoteCountDiff": 0
       }
+    },
+    {
+      "id": "campanella-grandes",
+      "label": "La Campanella (Grandes études de Paganini No. 3)",
+      "tier": "extreme",
+      "optional": true,
+      "diagnosticOnly": true,
+      "pdf": "la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.pdf",
+      "truth": "la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.mxl",
+      "checksums": {
+        "pdf": "sha256:3ab86a247c2c38d36ece65c1c977c0d24217a5c77d9b8caeefbce55f84cc8b60",
+        "truth": "sha256:2da9b329953a588aa0bc430aa798216fb726b5eaf6bcdeba0e45e454990324bd"
+      },
+      "maxPages": 24,
+      "notes": "Extreme-difficulty stress fixture. Diagnostic-only: no thresholds, never blocks the dashboard. Included only when the truth file is present; otherwise skipped."
+    },
+    {
+      "id": "campanella-etude",
+      "label": "La Campanella (Étude S.141/3, G minor)",
+      "tier": "extreme",
+      "optional": true,
+      "diagnosticOnly": true,
+      "pdf": "etude-s-1413-in-g-minor-la-campanella-liszt.pdf",
+      "truth": "etude-s-1413-in-g-minor-la-campanella-liszt.mxl",
+      "checksums": {
+        "pdf": "sha256:5c40124f2ad616edfb06ab390f4ac95be9d6137403cd40a19a1b41bfa5afbd7d",
+        "truth": "sha256:2e17943683b18560ffb569aaa2cc117f9329c7583b40359011936f8c68b8130a"
+      },
+      "maxPages": 24,
+      "notes": "Alternate La Campanella engraving. Diagnostic-only stress fixture; skipped unless present locally."
     }
   ]
 }

@@ -1,9 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { startToneFromUserGesture } from '../audio/toneAudioUnlock.js'
 import { formatMidiImportError } from '../import/formatImportError.js'
+import { quantizePracticeTime } from '../../context/PracticeTickContext.jsx'
 import { displayTempoAtTime } from './scorePlaybackSchedule.js'
 import { METRONOME_COUNT_IN, METRONOME_SUBDIVISION } from './metronomeConstants.js'
 import { ScorePlaybackEngine } from './scorePlaybackEngine.js'
+
+/** React display rate for transport time — wall-clock playback stays accurate via getScoreTime(). */
+const TIME_UPDATE_INTERVAL_MS = 100
 
 /**
  * Playback hook driven by the performed score timeline (MusicXML required).
@@ -13,9 +17,11 @@ export default function useScorePlayback({
   midiSource,
   timingLoading = false,
   alignmentDiagnostics = null,
+  instrumentId = null,
 }) {
   const engineRef = useRef(null)
   const loadGenerationRef = useRef(0)
+  const mountedRef = useRef(true)
   const [tracks, setTracks] = useState([])
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
@@ -36,20 +42,71 @@ export default function useScorePlayback({
 
   useEffect(() => {
     const engine = new ScorePlaybackEngine()
+    let lastTimeEmit = 0
+    let pendingTime = null
+    let pendingDuration = null
+    let pendingIsPlaying = null
+    let timeFlushId = null
+
+    const flushTimeUpdate = () => {
+      timeFlushId = null
+      if (pendingTime == null) {
+        return
+      }
+      setCurrentTime(pendingTime)
+      pendingTime = null
+      if (pendingDuration != null) {
+        setDuration(pendingDuration)
+        pendingDuration = null
+      }
+      if (pendingIsPlaying != null) {
+        setIsPlaying(pendingIsPlaying)
+        pendingIsPlaying = null
+      }
+    }
+
     engine.onTimeUpdate = (time, total) => {
-      setCurrentTime(time)
-      setDuration(total)
-      setIsPlaying(engine.isPlaying())
+      pendingTime = time
+      pendingDuration = total
+      pendingIsPlaying = engine.isPlaying()
+      const now = performance.now()
+      if (now - lastTimeEmit >= TIME_UPDATE_INTERVAL_MS) {
+        lastTimeEmit = now
+        flushTimeUpdate()
+        return
+      }
+      if (timeFlushId == null) {
+        timeFlushId = requestAnimationFrame(() => {
+          lastTimeEmit = performance.now()
+          flushTimeUpdate()
+        })
+      }
     }
     engine.onInstrumentStatus = (status) => {
       setInstrumentStatus(status)
     }
     engine.onMetronomeDisplay = (state) => {
-      setMetronomeDisplay(state)
+      setMetronomeDisplay((previous) => {
+        if (
+          previous?.phase === state.phase &&
+          previous?.beat === state.beat &&
+          previous?.measureNumber === state.measureNumber &&
+          previous?.accent === state.accent &&
+          previous?.countInActive === state.countInActive &&
+          previous?.countInProgress === state.countInProgress
+        ) {
+          return previous
+        }
+        return state
+      })
     }
     engineRef.current = engine
 
     return () => {
+      mountedRef.current = false
+      if (timeFlushId != null) {
+        cancelAnimationFrame(timeFlushId)
+      }
       engine.dispose()
       engineRef.current = null
     }
@@ -66,7 +123,7 @@ export default function useScorePlayback({
     }
 
     if (!timingMap || timingLoading) {
-      if (!timingLoading) {
+      if (!timingMap && !timingLoading) {
         engine.stop()
         setTracks([])
         setDuration(0)
@@ -75,8 +132,8 @@ export default function useScorePlayback({
         setError(null)
         setMappingWarning(null)
         setAudioSource('musicxml')
-        setIsLoading(false)
       }
+      setIsLoading(false)
       return undefined
     }
 
@@ -99,6 +156,7 @@ export default function useScorePlayback({
           timingMap,
           midiArrayBuffer: midiData ?? null,
           alignmentDiagnostics,
+          instrumentId,
         })
         if (loadGenerationRef.current !== loadGeneration) {
           return
@@ -118,9 +176,14 @@ export default function useScorePlayback({
         )
         setCurrentTime(0)
         setIsPlaying(false)
-        // Begin fetching/decoding the sampled piano now, while the user reads the
-        // score, so the first note on Play is real piano (no synth/beep intro).
-        engine.preload?.()
+        // Decode samples and create the voice while the user reads the score so
+        // status shows loading/ready and the first Play note is sampled.
+        await engine.preload?.()
+        try {
+          await engine.ensureVoices?.()
+        } catch {
+          // Voice graph may not be ready before the first user gesture — non-fatal.
+        }
       } catch (loadError) {
         if (loadGenerationRef.current === loadGeneration) {
           setError(formatMidiImportError(loadError))
@@ -149,14 +212,16 @@ export default function useScorePlayback({
     midiFileName,
     midiData?.byteLength,
     alignmentDiagnostics,
+    instrumentId,
   ])
 
+  const quantizedTimeForTempo = quantizePracticeTime(currentTime)
   const effectiveTempo = useMemo(() => {
     if (!timingMap) {
       return null
     }
-    return Math.round(displayTempoAtTime(timingMap, currentTime, playbackRate))
-  }, [timingMap, currentTime, playbackRate])
+    return Math.round(displayTempoAtTime(timingMap, quantizedTimeForTempo, playbackRate))
+  }, [timingMap, quantizedTimeForTempo, playbackRate])
 
   const play = useCallback(() => {
     const engine = engineRef.current
@@ -168,6 +233,9 @@ export default function useScorePlayback({
     const audioStart = startToneFromUserGesture()
 
     engine.playFromUserGesture(audioStart).catch((playError) => {
+      if (!mountedRef.current) {
+        return
+      }
       setError(formatMidiImportError(playError))
       setIsPlaying(false)
     })
@@ -227,6 +295,9 @@ export default function useScorePlayback({
 
     const audioStart = startToneFromUserGesture()
     engine.playTestTone(audioStart).catch((playError) => {
+      if (!mountedRef.current) {
+        return
+      }
       setError(formatMidiImportError(playError))
     })
   }, [])

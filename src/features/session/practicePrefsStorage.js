@@ -25,6 +25,12 @@ export function savePracticePrefs(prefs) {
   }
 }
 
+/** Reset scrub position when the open score or timing file changes in Library. */
+export function resetPracticeTimePrefs(existing = null) {
+  const base = existing ?? loadPracticePrefs() ?? {}
+  return { ...base, practiceTime: 0 }
+}
+
 export function loadMatchSettingsFromPrefs() {
   const prefs = loadPracticePrefs()
   return prefs?.matchSettings ?? WFY_MATCH_DEFAULTS

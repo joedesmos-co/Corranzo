@@ -30,6 +30,7 @@ export default function PracticeFullscreenHud({
     <div
       className={`practice-fullscreen-hud${visible ? ' practice-fullscreen-hud--visible' : ''}`}
       aria-label="Practice controls"
+      inert={visible ? undefined : true}
     >
       <div className="practice-fullscreen-hud__timeline" aria-hidden>
         <div

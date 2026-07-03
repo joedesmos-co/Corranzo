@@ -1,9 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { runPdfOmrClient, cancelActiveOmrWorker } from '../../features/omr/runPdfOmrClient.js'
+import { useInstrument } from '../../context/instrumentContext.js'
 import { describePdfSourceType, isPdfBufferAttached } from '../../features/omr/omrPdfSource.js'
 import { beginOmrUiBlock, endOmrUiBlock, releaseOmrUiLocks } from '../../features/omr/omrUiGuard.js'
 import { OMR_STATUS, OMR_STATUS_LABEL, yieldToBrowser } from '../../features/omr/omrConstants.js'
 import { nextOmrTraceRunId, omrTrace } from '../../features/omr/omrTrace.js'
+import {
+  buildOmrDiagnosticExport,
+  copyOmrDiagnosticExport,
+  describeOmrDevTools,
+  toggleOmrDebug,
+  toggleOmrTrace,
+} from '../../features/omr/omrDevTools.js'
+import { getOmrDiagnosticFlags } from '../../features/omr/omrDiagnosticFlags.js'
 
 function resetOmrPanelState(setters) {
   setters.setIsGenerating(false)
@@ -19,14 +28,19 @@ export default function PdfOmrPlaybackPanel({
   onGenerated = null,
   onFeedback = null,
 }) {
+  const { instrumentId } = useInstrument()
   const [status, setStatus] = useState(OMR_STATUS.IDLE)
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState(null)
   const [summary, setSummary] = useState(null)
   const [progressLabel, setProgressLabel] = useState('')
+  const [devFlags, setDevFlags] = useState(() => getOmrDiagnosticFlags())
+  const [devCopyStatus, setDevCopyStatus] = useState('')
   const abortRef = useRef(null)
   const activeRunRef = useRef(0)
   const completedRunRef = useRef(false)
+  const lastDiagnosticsRef = useRef(null)
+  const lastRunMetaRef = useRef(null)
 
   useEffect(() => () => {
     if (!completedRunRef.current) {
@@ -106,11 +120,18 @@ export default function PdfOmrPlaybackPanel({
       const result = await runPdfOmrClient(pdfSource, {
         title: pdfFileName?.replace(/\.[^.]+$/, '') ?? 'PDF score',
         pdfFileUrl,
+        instrumentId,
         onStatus: (nextStatus) => {
+          if (activeRunRef.current !== runId || controller.signal.aborted) {
+            return
+          }
           omrTrace('ui:onStatus', { nextStatus }, runId)
           setStatus(nextStatus)
         },
         onProgress: (progress) => {
+          if (activeRunRef.current !== runId || controller.signal.aborted) {
+            return
+          }
           setProgressLabel(progress.label ?? '')
         },
         signal: controller.signal,
@@ -133,6 +154,15 @@ export default function PdfOmrPlaybackPanel({
         measureCount: result.measureCount,
       }, runId)
 
+      lastDiagnosticsRef.current = result.diagnostics ?? null
+      lastRunMetaRef.current = {
+        runId,
+        noteCount: result.noteCount,
+        measureCount: result.measureCount,
+        uncertainMeasures: result.uncertainMeasures ?? null,
+        overallConfidence: result.overallConfidence ?? null,
+      }
+
       cancelActiveOmrWorker()
       endOmrUiBlock()
 
@@ -146,6 +176,11 @@ export default function PdfOmrPlaybackPanel({
         diagnostics: result.diagnostics,
         measureGrid: result.measureGrid,
       })
+
+      if (activeRunRef.current !== runId || controller.signal.aborted) {
+        omrTrace('ui:handleGenerate:stale-run-after-onGenerated', null, runId)
+        return
+      }
 
       completedRunRef.current = true
       resetInFinally = false
@@ -216,7 +251,31 @@ export default function PdfOmrPlaybackPanel({
     }
   }, [pdfSource, pdfFileUrl, pdfFileName, isGenerating, disabled, onGenerated, onFeedback])
 
+  const handleCopyDiagnostics = useCallback(async () => {
+    const bundle = buildOmrDiagnosticExport({
+      diagnostics: lastDiagnosticsRef.current,
+      runMeta: lastRunMetaRef.current,
+    })
+    const result = await copyOmrDiagnosticExport(bundle)
+    setDevCopyStatus(result.ok ? 'Diagnostics copied.' : 'Copy failed — see console.')
+    if (!result.ok) {
+      console.info(describeOmrDevTools())
+      console.info(result.text)
+    }
+  }, [])
+
+  const handleToggleTrace = useCallback(() => {
+    const next = toggleOmrTrace(!devFlags.trace)
+    setDevFlags(next)
+  }, [devFlags.trace])
+
+  const handleToggleDebug = useCallback(() => {
+    const next = toggleOmrDebug(!devFlags.debug)
+    setDevFlags(next)
+  }, [devFlags.debug])
+
   const pdfBytesAvailable = Boolean(pdfSource) || Boolean(pdfFileUrl)
+  const showDevTools = import.meta.env.DEV
 
   return (
     <section className="library-omr-panel" aria-label="Experimental PDF playback" aria-busy={isGenerating}>
@@ -227,8 +286,8 @@ export default function PdfOmrPlaybackPanel({
         <span className="library-omr-panel__badge">Beta</span>
       </div>
       <p className="library-omr-panel__lede">
-        Have only a PDF? Corranzo can try to make playable timing locally. It is experimental;
-        A timing file is still best when you have it.
+        Have only a PDF? Corranzo can try to make playable timing locally. This is experimental;
+        a timing file is still best when you have one.
       </p>
       <div className="library-omr-panel__actions">
         <button
@@ -276,6 +335,40 @@ export default function PdfOmrPlaybackPanel({
         <p className="library-omr-panel__status library-omr-panel__status--error" role="alert">
           {error}
         </p>
+      )}
+      {showDevTools && (
+        <div className="profile-dev-tools library-omr-panel__dev-tools" aria-label="OMR developer tools">
+          <span className="profile-dev-tools__label">OMR diagnostics</span>
+          <button
+            type="button"
+            className="profile-dev-tools__btn"
+            onClick={handleCopyDiagnostics}
+            disabled={!lastDiagnosticsRef.current}
+          >
+            Copy diagnostic JSON
+          </button>
+          <button
+            type="button"
+            className={`profile-dev-tools__btn${devFlags.trace ? '' : ' profile-dev-tools__btn--muted'}`}
+            onClick={handleToggleTrace}
+            aria-pressed={devFlags.trace}
+          >
+            Trace {devFlags.trace ? 'on' : 'off'}
+          </button>
+          <button
+            type="button"
+            className={`profile-dev-tools__btn${devFlags.debug ? '' : ' profile-dev-tools__btn--muted'}`}
+            onClick={handleToggleDebug}
+            aria-pressed={devFlags.debug}
+          >
+            Debug {devFlags.debug ? 'on' : 'off'}
+          </button>
+          {devCopyStatus && (
+            <span className="library-omr-panel__status" role="status">
+              {devCopyStatus}
+            </span>
+          )}
+        </div>
       )}
     </section>
   )

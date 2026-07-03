@@ -6,6 +6,7 @@ import { MidiPlaybackEngine } from './midiPlaybackEngine.js'
 export default function useMidiPlayback(midiSource) {
   const engineRef = useRef(null)
   const loadGenerationRef = useRef(0)
+  const mountedRef = useRef(true)
   const [tracks, setTracks] = useState([])
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
@@ -27,6 +28,7 @@ export default function useMidiPlayback(midiSource) {
     engineRef.current = engine
 
     return () => {
+      mountedRef.current = false
       engine.dispose()
       engineRef.current = null
     }
@@ -115,6 +117,9 @@ export default function useMidiPlayback(midiSource) {
     engine
       .playFromUserGesture(audioStart)
       .catch((playError) => {
+        if (!mountedRef.current) {
+          return
+        }
         setError(formatMidiImportError(playError))
         setIsPlaying(false)
       })
@@ -144,6 +149,9 @@ export default function useMidiPlayback(midiSource) {
 
     const audioStart = startToneFromUserGesture()
     engine.playTestTone(audioStart).catch((playError) => {
+      if (!mountedRef.current) {
+        return
+      }
       setError(formatMidiImportError(playError))
     })
   }, [])

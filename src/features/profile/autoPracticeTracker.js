@@ -1,3 +1,4 @@
+import { normalizeInstrumentId } from '../instruments/instruments.js'
 import { loadStats, saveStats } from './profileStorage.js'
 import { reconcileProfileStats } from './profileStatsSchema.js'
 
@@ -36,7 +37,7 @@ function normalizePieceTitle(title) {
   return 'Untitled piece'
 }
 
-export function beginAutoPracticeSession(piece) {
+export function beginAutoPracticeSession(piece, { instrumentId = null } = {}) {
   const id = String(piece?.id ?? '').trim()
   if (!id) {
     activeSession = null
@@ -47,6 +48,7 @@ export function beginAutoPracticeSession(piece) {
   activeSession = {
     pieceId: id,
     pieceTitle: normalizePieceTitle(piece.title),
+    instrumentId: normalizeInstrumentId(instrumentId),
     startedAt: Date.now(),
     accumulatedSeconds: 0,
     measuresVisited: new Set(),
@@ -68,6 +70,7 @@ export function snapshotActiveSession() {
   return {
     pieceId: activeSession.pieceId,
     pieceTitle: activeSession.pieceTitle,
+    instrumentId: activeSession.instrumentId,
     startedAt: activeSession.startedAt,
     practiceSeconds: activeSession.accumulatedSeconds,
     measuresPlayed: activeSession.measuresVisited.size,
@@ -144,11 +147,23 @@ function applySessionToStats(stats, session) {
   }
   const endedAt = Date.now()
   const duration = session.accumulatedSeconds
+  const instrumentId = normalizeInstrumentId(session.instrumentId)
+  const secondsByInstrument = { ...(stats.autoPracticeSecondsByInstrument ?? {}) }
+  secondsByInstrument[instrumentId] = (secondsByInstrument[instrumentId] ?? 0) + duration
+  const lastByInstrument = { ...(stats.lastAutoPracticedAtByInstrument ?? {}) }
+  lastByInstrument[instrumentId] = endedAt
+  const pieceSecondsByInstrument = { ...(existing.autoPracticeSecondsByInstrument ?? {}) }
+  pieceSecondsByInstrument[instrumentId] =
+    (pieceSecondsByInstrument[instrumentId] ?? 0) + duration
+  const pieceLastByInstrument = { ...(existing.lastPracticedAtByInstrument ?? {}) }
+  pieceLastByInstrument[instrumentId] = endedAt
 
   return reconcileProfileStats({
     ...stats,
     autoPracticeSeconds: (stats.autoPracticeSeconds ?? 0) + duration,
+    autoPracticeSecondsByInstrument: secondsByInstrument,
     lastAutoPracticedAt: endedAt,
+    lastAutoPracticedAtByInstrument: lastByInstrument,
     pieces: {
       ...stats.pieces,
       [pieceId]: {
@@ -156,6 +171,8 @@ function applySessionToStats(stats, session) {
         id: pieceId,
         title: session.pieceTitle,
         autoPracticeSeconds: (existing.autoPracticeSeconds ?? 0) + duration,
+        autoPracticeSecondsByInstrument: pieceSecondsByInstrument,
+        autoPracticeInstrumentBreakdownEstimated: false,
         measuresPlayed:
           (existing.measuresPlayed ?? 0) + session.measuresVisited.size,
         loopsCompleted: (existing.loopsCompleted ?? 0) + session.loopsCompleted,
@@ -164,6 +181,8 @@ function applySessionToStats(stats, session) {
         wfyMissed: (existing.wfyMissed ?? 0) + session.wfyMissed,
         wfySkipped: (existing.wfySkipped ?? 0) + session.wfySkipped,
         lastPracticedAt: endedAt,
+        lastPracticedAtByInstrument: pieceLastByInstrument,
+        lastInstrumentId: normalizeInstrumentId(session.instrumentId),
       },
     },
   })

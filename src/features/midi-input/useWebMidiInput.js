@@ -23,6 +23,9 @@ export default function useWebMidiInput({ listen = false }) {
   const activityRef = useRef(createMidiActivity())
   const latencyRef = useRef(null)
   const rememberedNameRef = useRef(loadLastMidiDeviceName())
+  const mountedRef = useRef(true)
+  const listenRef = useRef(listen)
+  const requestGenerationRef = useRef(0)
 
   const support = isWebMidiSupported() ? WEB_MIDI_SUPPORT.SUPPORTED : WEB_MIDI_SUPPORT.UNSUPPORTED
 
@@ -45,10 +48,33 @@ export default function useWebMidiInput({ listen = false }) {
   // sync inside selectDevice (the only place the selection changes).
   const selectedDeviceIdRef = useRef(selectedDeviceId)
 
+  useEffect(() => {
+    listenRef.current = listen
+  }, [listen])
+
+  const detachAll = useCallback(() => {
+    const access = accessRef.current
+    if (!access) return
+    access.onstatechange = null
+    if (!access.inputs) return
+    for (const input of access.inputs.values()) {
+      input.onmidimessage = null
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false
+      requestGenerationRef.current += 1
+      detachAll()
+    }
+  }, [detachAll])
+
   // The note path: parse → fold into the activity model → notify listeners
   // SYNCHRONOUSLY (before any React state update, so matching stays immediate) →
   // then refresh the diagnostic state.
   const handleMessage = useCallback((event) => {
+    if (!mountedRef.current || !listenRef.current) return
     const parsed = parseMidiMessage(event.data)
     if (!parsed) return
     const receive = typeof performance !== 'undefined' ? performance.now() : Date.now()
@@ -93,7 +119,7 @@ export default function useWebMidiInput({ listen = false }) {
   // device name so it auto-reconnects next time it appears.
   const syncDevicesAndActive = useCallback(() => {
     const access = accessRef.current
-    if (!access?.inputs) return
+    if (!mountedRef.current || !access?.inputs) return
     const list = [...access.inputs.values()].map(describeDevice)
     setDevices(list)
 
@@ -109,22 +135,40 @@ export default function useWebMidiInput({ listen = false }) {
       setActiveNotes([])
       setSustain(false)
     }
-    attachToActiveDevice(access, active?.id ?? null)
-  }, [attachToActiveDevice])
+    if (listenRef.current) {
+      attachToActiveDevice(access, active?.id ?? null)
+    } else {
+      detachAll()
+    }
+  }, [attachToActiveDevice, detachAll])
 
   const requestAccess = useCallback(async () => {
     if (support !== WEB_MIDI_SUPPORT.SUPPORTED) {
       return false
     }
+    const requestGeneration = requestGenerationRef.current + 1
+    requestGenerationRef.current = requestGeneration
     setErrorMessage(null)
     try {
       const access = await navigator.requestMIDIAccess({ sysex: false })
+      if (!mountedRef.current || requestGenerationRef.current !== requestGeneration) {
+        access.onstatechange = null
+        if (access.inputs) {
+          for (const input of access.inputs.values()) {
+            input.onmidimessage = null
+          }
+        }
+        return false
+      }
       accessRef.current = access
       setPermission(WEB_MIDI_PERMISSION.GRANTED)
       access.onstatechange = () => syncDevicesAndActive()
       syncDevicesAndActive()
       return true
     } catch (error) {
+      if (!mountedRef.current || requestGenerationRef.current !== requestGeneration) {
+        return false
+      }
       const message = error instanceof Error ? error.message : 'MIDI access failed'
       if (error?.name === 'SecurityError' || message.toLowerCase().includes('denied')) {
         setPermission(WEB_MIDI_PERMISSION.DENIED)
@@ -148,10 +192,12 @@ export default function useWebMidiInput({ listen = false }) {
   // Re-assert handlers if listening starts after access was granted.
   useEffect(() => {
     if (!listen || permission !== WEB_MIDI_PERMISSION.GRANTED || !accessRef.current) {
+      detachAll()
       return
     }
+    accessRef.current.onstatechange = () => syncDevicesAndActive()
     syncDevicesAndActive()
-  }, [listen, permission, syncDevicesAndActive])
+  }, [detachAll, listen, permission, syncDevicesAndActive])
 
   const subscribeNoteOn = useCallback((listener) => {
     noteOnListenersRef.current.add(listener)

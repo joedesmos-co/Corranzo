@@ -19,7 +19,7 @@ const NOW_LINE_FRACTION = VISUAL_LANE_DEFAULTS.nowLineFraction
 const MIN_SCALE = 0.9
 const MAX_SCALE = 2.6
 /** Current-target noteheads render slightly larger for instant focus. */
-const CURRENT_HEAD_SCALE = 1.3
+const CURRENT_HEAD_SCALE = 1.35
 const LEDGER_HALF_WIDTH = 11
 /** Extra vertical coverage for the clef-zone mask (in line gaps). */
 const STAFF_MASK_OVERDRAW_GAPS = 6
@@ -113,7 +113,7 @@ function StaffVisualLane({ visibleGroups, staves, getFrameTime, barlineTimes = [
         const t = getFrameTime()
         el.setAttribute(
           'transform',
-          `translate(${playheadXRef.current - t * PX_PER_SECOND} 0)`,
+          `translate3d(${playheadXRef.current - t * PX_PER_SECOND}px, 0, 0)`,
         )
       }
       frame = requestAnimationFrame(step)

@@ -3,7 +3,9 @@
   width: 100%;
   max-width: var(--sf-content-max);
   margin: 0 auto;
-  padding: var(--sf-space-4xl) var(--sf-space-3xl) 56px;
+  padding: var(--sf-space-4xl) max(var(--sf-space-3xl), env(safe-area-inset-right, 0px))
+    max(56px, calc(env(safe-area-inset-bottom, 0px) + 40px))
+    max(var(--sf-space-3xl), env(safe-area-inset-left, 0px));
   overflow-y: auto;
   background: var(--sf-bg-raised);
 }
@@ -24,6 +26,39 @@
   margin: var(--sf-space-sm) 0 0;
   color: var(--sf-text-muted);
   line-height: 1.5;
+}
+
+/* Stats instrument scope: All instruments · Piano · Guitar. */
+.profile-scope {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  margin-bottom: var(--sf-space-2xl);
+  background: var(--sf-bg-panel-inset);
+  border: 1px solid var(--sf-border-strong);
+  border-radius: var(--sf-radius-md);
+}
+
+.profile-scope__option {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--sf-text-muted);
+  padding: 6px 16px;
+  border-radius: calc(var(--sf-radius-md) - 3px);
+  cursor: pointer;
+  font-size: 0.9rem;
+  min-height: 32px;
+}
+
+.profile-scope__option:hover {
+  color: var(--sf-text-secondary);
+  background: var(--sf-bg-panel);
+}
+
+.profile-scope__option--active {
+  color: var(--sf-text-primary);
+  background: var(--sf-bg-panel);
+  border-color: var(--sf-border-strong);
 }
 
 .profile-stats-grid {
@@ -183,9 +218,32 @@
   color: var(--sf-text-secondary);
 }
 
+@media (max-width: 900px) {
+  .profile-view {
+    padding: var(--sf-space-3xl) max(var(--sf-space-2xl), env(safe-area-inset-right, 0px))
+      max(48px, calc(env(safe-area-inset-bottom, 0px) + 36px))
+      max(var(--sf-space-2xl), env(safe-area-inset-left, 0px));
+  }
+}
+
 @media (max-width: 760px) {
   .profile-view {
-    padding: var(--sf-space-2xl) var(--sf-space-lg) var(--sf-space-4xl);
+    padding: var(--sf-space-2xl) max(var(--sf-space-lg), env(safe-area-inset-right, 0px))
+      max(40px, calc(env(safe-area-inset-bottom, 0px) + 32px))
+      max(var(--sf-space-lg), env(safe-area-inset-left, 0px));
+  }
+
+  .profile-scope {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .profile-scope__option {
+    flex: 1 1 0;
+    min-width: min(100%, 9rem);
+    min-height: 44px;
+    text-align: center;
   }
 
   .profile-stats-grid,

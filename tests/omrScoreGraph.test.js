@@ -76,6 +76,37 @@ function edgesOfKind(graph, kind) {
 }
 
 describe('ScoreGraph IR — measure graph', () => {
+  it('observes written/sounding duration fields on musical nodes', () => {
+    const graph = buildMeasureGraph(sampleMeasure())
+    const trebleHead = graph.nodes.find(
+      (node) => node.kind === SCORE_GRAPH_NODE.NOTEHEAD && node.clef === 'treble',
+    )
+    const bassHead = graph.nodes.find(
+      (node) => node.kind === SCORE_GRAPH_NODE.NOTEHEAD && node.clef === 'bass',
+    )
+    expect(trebleHead.writtenDurationDivisions).toBe(4)
+    expect(trebleHead.soundingReleaseDivision).toBe(4)
+    expect(trebleHead.durationSource).toBeTruthy()
+    expect(bassHead.tieSustainSource).toBe('tie-start')
+    expect(bassHead.soundingReleaseDivision).toBeGreaterThan(bassHead.onsetDivision + 4)
+  })
+
+  it('observes voice budget overflow/underflow without changing runtime events', () => {
+    const overflow = {
+      measureNumber: 2,
+      page: 1,
+      systemIndex: 0,
+      events: [
+        { type: 'note', startDivision: 12, durationDivisions: 8, notes: [{ midi: 60, clef: 'treble' }] },
+      ],
+    }
+    const graph = buildMeasureGraph(overflow, { totalDivisions: 16 })
+    expect(graph.voiceBudget.totalDivisions).toBe(16)
+    expect(graph.voiceBudget.overflowDivision).toBe(4)
+    expect(graph.voiceDiagnostics.overflowCount).toBe(1)
+    expect(graph.voiceDiagnostics.underflowGap).toBe(0)
+  })
+
   it('derives noteheads/rests/accidentals from events and stems/beams from the graph', () => {
     const graph = buildMeasureGraph(sampleMeasure())
     expect(nodesOfKind(graph, SCORE_GRAPH_NODE.NOTEHEAD)).toHaveLength(3)
@@ -122,9 +153,15 @@ describe('ScoreGraph IR — summary + runtime parity', () => {
   it('summarizes node/edge counts and bridge coverage', () => {
     const scoreGraph = buildScoreGraph(pagesFrom(sampleMeasure()))
     const summary = summarizeScoreGraph(scoreGraph)
+    expect(summary.version).toBe(2)
     expect(summary.measureCount).toBe(1)
     expect(summary.nodeCounts[SCORE_GRAPH_NODE.NOTEHEAD]).toBe(3)
     expect(summary.geometryBridge).toEqual({ matched: 2, total: 2, coverage: 1 })
+    expect(summary.voiceBudgetDiagnostics).toMatchObject({
+      measuresWithOverflow: 0,
+      measuresWithUnderflow: 0,
+      totalOverflowEvents: 0,
+    })
   })
 
   it('mirrors runtime events exactly (parity holds by construction)', () => {

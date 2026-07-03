@@ -1,7 +1,7 @@
 const MIN_MIDI = 21
 const MAX_MIDI = 108
 const A4_FREQUENCY = 440
-const MIN_CORRELATION = 0.012
+const MIN_CORRELATION = 0.011
 
 /**
  * Lightweight autocorrelation pitch estimate (monophonic).

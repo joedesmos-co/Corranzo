@@ -9,10 +9,12 @@ import {
 } from '../features/profile/practiceStats.js'
 import { saveManualSession } from '../features/profile/manualPracticeLog.js'
 import { recordWfyPracticeEvent } from '../features/profile/autoPracticeTracker.js'
+import { useInstrument } from './instrumentContext.js'
 
 const ProfileStatsContext = createContext(null)
 
 export function ProfileStatsProvider({ children }) {
+  const { instrumentId } = useInstrument()
   const [stats, setStats] = useState(() => loadStats())
 
   const beginPracticeSession = useCallback((piece) => beginSession(piece), [])
@@ -30,11 +32,16 @@ export function ProfileStatsProvider({ children }) {
     return emptyStats
   }, [])
 
-  const saveManualPracticeSession = useCallback((sessionDetails) => {
-    const nextStats = saveManualSession(sessionDetails)
-    setStats(nextStats)
-    return nextStats
-  }, [])
+  const saveManualPracticeSession = useCallback(
+    (sessionDetails) => {
+      // Manual log entries record the app-wide selected instrument unless the
+      // caller explicitly names one.
+      const nextStats = saveManualSession({ instrumentId, ...sessionDetails })
+      setStats(nextStats)
+      return nextStats
+    },
+    [instrumentId],
+  )
 
   const refreshStats = useCallback(() => {
     const nextStats = loadStats()

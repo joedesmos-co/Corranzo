@@ -7,7 +7,6 @@ import {
   numberOf,
   parseXmlOrdered,
   rootElement,
-  textOf,
 } from './xmlTree.js'
 import { quartersToSeconds } from './timingMath.js'
 import { buildPerformedMeasureTimeline } from './parseMeasureRepeats.js'
@@ -246,6 +245,141 @@ function readArticulations(noteNode) {
   }
 }
 
+/**
+ * Fretted-instrument position from <notations><technical><string>/<fret>.
+ * Returns null when absent so plain (piano) notes keep their exact shape.
+ */
+function readTechnicalPosition(noteNode) {
+  const notations = findChild(noteNode, 'notations')
+  if (!notations) {
+    return null
+  }
+  const technical = findChild(notations, 'technical')
+  if (!technical) {
+    return null
+  }
+  const string = numberOf(childText(technical, 'string'), NaN)
+  const fret = numberOf(childText(technical, 'fret'), NaN)
+  if (!Number.isFinite(string) && !Number.isFinite(fret)) {
+    return null
+  }
+  return {
+    ...(Number.isFinite(string) && string > 0 ? { string } : {}),
+    ...(Number.isFinite(fret) && fret >= 0 ? { fret } : {}),
+  }
+}
+
+/** Clef declarations from an <attributes> node, keyed by staff number. */
+function readClefDeclarations(attributesNode, clefsByStaff) {
+  for (const clefNode of findChildren(attributesNode, 'clef')) {
+    const staffNumber = numberOf(attr(clefNode, 'number'), 1)
+    const sign = childText(clefNode, 'sign')
+    if (!sign) {
+      continue
+    }
+    const line = numberOf(childText(clefNode, 'line'), NaN)
+    const octaveChange = numberOf(childText(clefNode, 'clef-octave-change'), 0)
+    clefsByStaff.set(staffNumber, {
+      staff: staffNumber,
+      sign: String(sign).toUpperCase(),
+      line: Number.isFinite(line) ? line : null,
+      octaveChange: Number.isFinite(octaveChange) ? octaveChange : 0,
+    })
+  }
+}
+
+/** <staff-details> (line count + string tuning) keyed by staff number. */
+function readStaffDetails(attributesNode, staffDetailsByStaff) {
+  for (const detailsNode of findChildren(attributesNode, 'staff-details')) {
+    const staffNumber = numberOf(attr(detailsNode, 'number'), 1)
+    const staffLines = numberOf(childText(detailsNode, 'staff-lines'), NaN)
+    const tunings = findChildren(detailsNode, 'staff-tuning')
+      .map((tuningNode) => {
+        const line = numberOf(attr(tuningNode, 'line'), NaN)
+        const step = childText(tuningNode, 'tuning-step')
+        const octave = numberOf(childText(tuningNode, 'tuning-octave'), NaN)
+        const alter = numberOf(childText(tuningNode, 'tuning-alter'), 0)
+        if (!Number.isFinite(line) || !step || !Number.isFinite(octave) || !(step in STEP_TO_SEMITONE)) {
+          return null
+        }
+        return {
+          line,
+          midi: Math.round((octave + 1) * 12 + STEP_TO_SEMITONE[step] + alter),
+        }
+      })
+      .filter(Boolean)
+
+    const existing = staffDetailsByStaff.get(staffNumber) ?? { staff: staffNumber }
+    if (Number.isFinite(staffLines) && staffLines > 0) {
+      existing.staffLines = staffLines
+    }
+    if (tunings.length > 0) {
+      // staff-tuning line 1 = bottom line = lowest string; string numbering is
+      // the reverse (string 1 = highest). Emit tuning indexed by string number.
+      const byLineDesc = [...tunings].sort((left, right) => right.line - left.line)
+      existing.tuning = byLineDesc.map((entry) => entry.midi)
+    }
+    staffDetailsByStaff.set(staffNumber, existing)
+  }
+}
+
+/**
+ * Mixed notation+TAB parts engrave every note twice (once per staff). Mark the
+ * TAB-staff copies as mirrors — playback and checkpoints skip them — and copy
+ * their string/fret onto the matching standard-staff note. Parts without a TAB
+ * staff (every piano score) are untouched.
+ */
+function reconcileTabMirrorNotes(notes, partNotationById) {
+  for (const [partId, info] of partNotationById) {
+    const clefs = [...info.clefs.values()]
+    const tabStaves = new Set(clefs.filter((clef) => clef.sign === 'TAB').map((clef) => clef.staff))
+    const standardStaves = new Set(
+      clefs.filter((clef) => clef.sign !== 'TAB').map((clef) => clef.staff),
+    )
+    if (tabStaves.size === 0 || standardStaves.size === 0) {
+      continue
+    }
+
+    const partNotes = notes.filter(
+      (note) => note.partId === partId && !note.isRest && note.midi != null,
+    )
+    const standardByKey = new Map()
+    for (const note of partNotes) {
+      if (!tabStaves.has(note.staff ?? 1)) {
+        const key = `${note.quarterTime.toFixed(6)}|${note.midi}`
+        const bucket = standardByKey.get(key)
+        if (bucket) {
+          bucket.push(note)
+        } else {
+          standardByKey.set(key, [note])
+        }
+      }
+    }
+
+    const consumed = new Set()
+    for (const note of partNotes) {
+      if (!tabStaves.has(note.staff ?? 1)) {
+        continue
+      }
+      const key = `${note.quarterTime.toFixed(6)}|${note.midi}`
+      const matches = standardByKey.get(key)
+      const match = matches?.find((candidate) => !consumed.has(candidate))
+      if (match) {
+        consumed.add(match)
+        note.isTabMirror = true
+        // The TAB staff supplies positions the notation staff lacks; explicit
+        // notation-staff <technical> always wins.
+        if (note.string != null && match.string == null) {
+          match.string = note.string
+        }
+        if (note.fret != null && match.fret == null) {
+          match.fret = note.fret
+        }
+      }
+    }
+  }
+}
+
 function walkPart({
   partNode,
   partId,
@@ -255,6 +389,7 @@ function walkPart({
   timeSignatureEvents,
   notes,
   rawTimingEvents,
+  partNotation = null,
 }) {
   const measureNodes = findChildren(partNode, 'measure')
   let divisions = DEFAULT_DIVISIONS
@@ -288,6 +423,10 @@ function walkPart({
           const newDivisions = numberOf(childText(child, 'divisions'), NaN)
           if (Number.isFinite(newDivisions) && newDivisions > 0) {
             divisions = newDivisions
+          }
+          if (partNotation) {
+            readClefDeclarations(child, partNotation.clefs)
+            readStaffDetails(child, partNotation.staffDetails)
           }
           const timeNode = findChild(child, 'time')
           if (timeNode) {
@@ -381,7 +520,9 @@ function walkPart({
             const midi = isRest ? null : pitchNodeToMidi(findChild(child, 'pitch'))
             const { tieStart, tieStop } = readTieFlags(child)
             const { staccato, accent } = readArticulations(child)
+            const technicalPosition = isRest ? null : readTechnicalPosition(child)
             notes.push({
+              ...(technicalPosition ?? {}),
               id: `${partId}-m${measureNumber}-n${notes.length}`,
               partId,
               measureNumber,
@@ -499,6 +640,16 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const timeSignatureEvents = []
   const notes = []
   const rawTimingEvents = []
+  const partNotationById = new Map()
+
+  const notationForPart = (partId) => {
+    let info = partNotationById.get(partId)
+    if (!info) {
+      info = { clefs: new Map(), staffDetails: new Map() }
+      partNotationById.set(partId, info)
+    }
+    return info
+  }
 
   // Primary part defines measure boundaries and the tempo map.
   const primaryNode = partNodes[0]
@@ -512,25 +663,32 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     timeSignatureEvents,
     notes,
     rawTimingEvents,
+    partNotation: notationForPart(primaryId),
   })
 
   partNodes.slice(1).forEach((partNode, index) => {
+    const partId = attr(partNode, 'id') ?? `P${index + 2}`
     walkPart({
       partNode,
-      partId: attr(partNode, 'id') ?? `P${index + 2}`,
+      partId,
       isPrimary: false,
       measureBoundaries,
       tempoEvents,
       timeSignatureEvents,
       notes,
       rawTimingEvents,
+      partNotation: notationForPart(partId),
     })
   })
+
+  // Mixed notation+TAB parts: tag TAB-staff duplicates before playback events
+  // are derived. No-op for scores without a TAB staff.
+  reconcileTabMirrorNotes(notes, partNotationById)
 
   applyTieSustainToNotes(notes)
   rawTimingEvents.length = 0
   for (const note of notes) {
-    if (note.isRest || note.midi == null || note.suppressPlaybackAttack) {
+    if (note.isRest || note.midi == null || note.suppressPlaybackAttack || note.isTabMirror) {
       continue
     }
     rawTimingEvents.push({
@@ -664,12 +822,28 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
 
   const durationSeconds = performedMeasureTimeline.performedDurationSeconds || writtenDurationSeconds
 
-  const pitchNotes = notes.filter((note) => !note.isRest && note.midi != null)
+  const pitchNotes = notes.filter(
+    (note) => !note.isRest && note.midi != null && !note.isTabMirror,
+  )
+
+  // Instrument-relevant notation facts (clefs, TAB staves, string tuning).
+  const allClefs = [...partNotationById.values()].flatMap((info) => [...info.clefs.values()])
+  const hasTabStaff = allClefs.some((clef) => clef.sign === 'TAB')
+  const hasStandardStaff = allClefs.some((clef) => clef.sign !== 'TAB')
+  const partNameSuggestsGuitar = [...partNames.values()].some((name) =>
+    /guitar/i.test(name),
+  )
+  const notation = {
+    hasTabStaff,
+    hasStandardStaff: hasStandardStaff || !hasTabStaff,
+    suggestedInstrumentId: hasTabStaff || partNameSuggestsGuitar ? 'guitar' : null,
+  }
 
   return {
     version: 2,
     fileName,
     title: getWorkTitle(score),
+    notation,
     durationSeconds,
     writtenDurationSeconds,
     noteCount: pitchNotes.length,
@@ -683,12 +857,24 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     timingEvents,
     parts: partNodes.map((partNode, index) => {
       const id = attr(partNode, 'id') ?? `P${index + 1}`
+      const info = partNotationById.get(id)
+      const clefs = info ? [...info.clefs.values()] : []
+      const tabStaves = clefs
+        .filter((clef) => clef.sign === 'TAB')
+        .map((clef) => clef.staff)
+      const tuning =
+        info && tabStaves.length > 0
+          ? ([...info.staffDetails.values()].find((details) => details.tuning)?.tuning ?? null)
+          : null
       return {
         id,
         name: partNames.get(id) ?? id,
         measureCount: findChildren(partNode, 'measure').length,
         noteCount: pitchNotes.filter((note) => note.partId === id).length,
         staves: countPartStaves(partNode),
+        clefs,
+        tabStaves,
+        tuning,
       }
     }),
     // Total staves drawn per system (e.g. 2 for a piano grand staff). Used to

@@ -28,5 +28,5 @@ export const WFY_INPUT_SOURCE = {
 export const WFY_INPUT_SOURCE_LABELS = {
   [WFY_INPUT_SOURCE.MIDI]: 'MIDI keyboard',
   [WFY_INPUT_SOURCE.MICROPHONE]: 'Microphone',
-  [WFY_INPUT_SOURCE.MANUAL]: 'Manual continue',
+  [WFY_INPUT_SOURCE.MANUAL]: 'Continue button',
 }

@@ -38,7 +38,9 @@ export default function MidiInputStatusPanel({
       aria-label="MIDI keyboard"
     >
       <div className="practice-input-status__header">
-        <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">Input</h3>
+        <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">
+          MIDI keyboard
+        </h3>
         <span
           className={`practice-status-chip${
             isGranted && devices.length > 0 ? ' practice-status-chip--ready' : ''

@@ -47,9 +47,15 @@ export default function useWaitForYouMidiInput({
     resetFeedback()
   }, [currentCheckpoint?.id, matchSettings, resetFeedback])
 
+  useEffect(() => {
+    if (!active) {
+      resetFeedback()
+    }
+  }, [active, resetFeedback])
+
   const handleNoteOn = useCallback(
     (midi) => {
-      if (!currentCheckpoint || !matchSettings) {
+      if (!matchingEnabled || !currentCheckpoint || !matchSettings) {
         return
       }
 
@@ -59,6 +65,10 @@ export default function useWaitForYouMidiInput({
         chordStateRef.current,
         matchSettings,
       )
+
+      if (result.outcome === MATCH_OUTCOME.NO_EXPECTED) {
+        return
+      }
 
       const feedbackOutcome = toFeedbackOutcome(
         result.outcome,
@@ -83,7 +93,7 @@ export default function useWaitForYouMidiInput({
         onPlayerInputMatched()
       }
     },
-    [currentCheckpoint, matchSettings, onPlayerInputMatched, onWrongNote],
+    [matchingEnabled, currentCheckpoint, matchSettings, onPlayerInputMatched, onWrongNote],
   )
 
   useEffect(() => {

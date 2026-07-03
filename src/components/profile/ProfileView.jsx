@@ -1,6 +1,13 @@
+import { useMemo, useState } from 'react'
 import { useProfileStats } from '../../context/ProfileStatsContext.jsx'
 import { exerciseTypeLabel } from '../../features/profile/exerciseTypes.js'
+import { getInstrument } from '../../features/instruments/instruments.js'
 import { isManualSession } from '../../features/profile/manualPracticeLog.js'
+import {
+  STATS_SCOPE_ALL,
+  filterStatsByInstrument,
+  listStatsScopes,
+} from '../../features/profile/statsInstrumentFilter.js'
 import ManualPracticeLog from './ManualPracticeLog.jsx'
 
 function formatDuration(seconds) {
@@ -41,44 +48,87 @@ function StatCard({ label, value }) {
   )
 }
 
+/** Three views over one stats store: both instruments combined, piano, guitar. */
+function StatsScopeSelector({ scope, onScopeChange }) {
+  return (
+    <div className="profile-scope" role="radiogroup" aria-label="Stats instrument filter">
+      {listStatsScopes().map((option) => (
+        <button
+          key={option.id}
+          type="button"
+          role="radio"
+          aria-checked={scope === option.id}
+          className={`profile-scope__option${
+            scope === option.id ? ' profile-scope__option--active' : ''
+          }`}
+          onClick={() => onScopeChange(option.id)}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 export default function ProfileView() {
   const { stats, resetAllStats } = useProfileStats()
-  const manualSessions = stats.recentSessions.filter(isManualSession).slice(0, 5)
-  const hasManualHistory = (stats.manualSessionsCompleted ?? 0) > 0
+  const [statsScope, setStatsScope] = useState(STATS_SCOPE_ALL)
+
+  // One stats implementation, three projections (all / piano / guitar).
+  const viewStats = useMemo(
+    () => filterStatsByInstrument(stats, statsScope),
+    [stats, statsScope],
+  )
+  const scopedToInstrument = statsScope !== STATS_SCOPE_ALL
+
+  const manualSessions = viewStats.recentSessions.filter(isManualSession).slice(0, 5)
+  const hasManualHistory = (viewStats.manualSessionsCompleted ?? 0) > 0
+  const scopeLabel = viewStats.statsScopeLabel ?? 'this instrument'
+  const piecesWithActivity = Object.values(viewStats.pieces ?? {}).filter(
+    (piece) => (piece.autoPracticeSeconds ?? 0) > 0,
+  )
+  const hasPieceActivity = piecesWithActivity.length > 0
 
   return (
     <main className="profile-view" aria-labelledby="profile-heading">
       <header className="profile-header">
         <h2 id="profile-heading" className="profile-header__title">
-          Practice log
+          Progress
         </h2>
         <p className="profile-header__lede">
-          Start the timer when you practice and save what you worked on. Time is
-          only recorded when you log a session — not from playback or browsing pieces.
+          Log practice sessions manually below. Corranzo also tracks time automatically while you
+          play an open piece in Practice.
         </p>
       </header>
 
       <ManualPracticeLog />
 
+      <StatsScopeSelector scope={statsScope} onScopeChange={setStatsScope} />
+
       <div className="profile-stats-grid profile-stats-grid--two">
         <StatCard
           label="Auto-tracked practice"
-          value={formatDuration(stats.autoPracticeSeconds ?? 0)}
+          value={
+            (viewStats.autoPracticeSeconds ?? 0) > 0
+              ? formatDuration(viewStats.autoPracticeSeconds ?? 0)
+              : 'None yet'
+          }
         />
         <StatCard
           label="Last auto session"
-          value={formatDate(stats.lastAutoPracticedAt)}
+          value={
+            viewStats.lastAutoPracticedAt ? formatDate(viewStats.lastAutoPracticedAt) : 'None yet'
+          }
         />
       </div>
 
-      {Object.values(stats.pieces ?? {}).some((piece) => (piece.autoPracticeSeconds ?? 0) > 0) && (
+      {hasPieceActivity ? (
         <section className="profile-panel" aria-labelledby="auto-piece-stats-heading">
           <h3 id="auto-piece-stats-heading" className="profile-panel__title">
             Per-piece activity
           </h3>
           <ul className="profile-list">
-            {Object.values(stats.pieces)
-              .filter((piece) => (piece.autoPracticeSeconds ?? 0) > 0)
+            {piecesWithActivity
               .sort((a, b) => (b.lastPracticedAt ?? 0) - (a.lastPracticedAt ?? 0))
               .slice(0, 8)
               .map((piece) => (
@@ -96,26 +146,51 @@ export default function ProfileView() {
               ))}
           </ul>
         </section>
+      ) : (
+        <section className="profile-panel" aria-labelledby="auto-piece-stats-heading">
+          <h3 id="auto-piece-stats-heading" className="profile-panel__title">
+            Per-piece activity
+          </h3>
+          <div className="profile-empty">
+            <p>
+              {scopedToInstrument
+                ? `No ${scopeLabel.toLowerCase()} pieces practiced yet. Open a piece with ${scopeLabel} selected and practice to see it here.`
+                : 'Practice a piece to see it tracked here automatically — no timer needed.'}
+            </p>
+          </div>
+        </section>
       )}
 
       <div className="profile-stats-grid profile-stats-grid--two">
         <StatCard
           label="Logged practice time"
-          value={formatDuration(stats.totalPracticeSeconds)}
+          value={formatDuration(viewStats.totalPracticeSeconds)}
         />
         <StatCard
           label="Logged sessions"
-          value={stats.manualSessionsCompleted ?? 0}
+          value={viewStats.manualSessionsCompleted ?? 0}
         />
       </div>
 
       {!hasManualHistory ? (
         <div className="profile-empty">
-          <h3>Your practice log starts here</h3>
-          <p>
-            Press Start timer above when you begin practicing, then save the session
-            with what you worked on.
-          </p>
+          {scopedToInstrument ? (
+            <>
+              <h3>No {scopeLabel.toLowerCase()} sessions yet</h3>
+              <p>
+                Log a session while {scopeLabel} is selected and it shows up here.
+                Use Start timer above.
+              </p>
+            </>
+          ) : (
+            <>
+              <h3>No logged sessions yet</h3>
+              <p>
+                Press Start timer above when you begin practicing, then save the session
+                with what you worked on.
+              </p>
+            </>
+          )}
         </div>
       ) : (
         <section
@@ -131,6 +206,7 @@ export default function ProfileView() {
                 <span>
                   <strong>{session.pieceTitle}</strong>
                   <small>
+                    {getInstrument(session.instrumentId).label} ·{' '}
                     {exerciseTypeLabel(session.exerciseType)} ·{' '}
                     {formatDate(session.endedAt)}
                   </small>

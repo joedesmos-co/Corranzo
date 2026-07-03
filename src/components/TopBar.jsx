@@ -4,6 +4,7 @@ import {
 } from '../features/beta/betaInfo.js'
 import FeedbackLink from './FeedbackLink.jsx'
 import CorranzoLogo from './CorranzoLogo.jsx'
+import InstrumentSelector from './InstrumentSelector.jsx'
 
 const VIEWS = [
   { id: 'library', label: 'Library' },
@@ -36,6 +37,16 @@ export default function TopBar({
     event.currentTarget.closest('details')?.removeAttribute('open')
   }
 
+  function handleHelpPanelKeyDown(event) {
+    if (event.key === 'Escape') {
+      event.preventDefault()
+      const details = event.currentTarget.closest('details')
+      const summary = details?.querySelector('summary')
+      details?.removeAttribute('open')
+      summary?.focus()
+    }
+  }
+
   function handleShowFileHelp(event) {
     closeHelpMenu(event)
     if (typeof onShowFileHelp === 'function') {
@@ -59,6 +70,7 @@ export default function TopBar({
         </span>
       </a>
       <div className="topbar__actions">
+        <InstrumentSelector />
         <nav className="topbar__nav" aria-label="Main">
           {VIEWS.map(({ id, label }) => (
             <button
@@ -82,7 +94,7 @@ export default function TopBar({
         </nav>
         <details className="topbar__help-menu" data-tour-id="topbar-help">
           <summary className="topbar__help">Help</summary>
-          <div className="topbar__help-panel">
+          <div className="topbar__help-panel" onKeyDown={handleHelpPanelKeyDown}>
             {onReplayTutorial && (
               <button
                 type="button"

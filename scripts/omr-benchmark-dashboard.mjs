@@ -11,6 +11,7 @@
  *
  * Requires local PDF + MXL assets (see manifest). Does not change OMR runtime logic.
  */
+import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -19,13 +20,24 @@ import { runPdfOmrPipeline } from '../src/features/omr/runPdfOmrPipeline.js'
 import { evaluateOmrAccuracy } from '../src/features/omr/omrAccuracyEvaluator.js'
 import {
   buildFixtureDashboardRecord,
+  DEFAULT_FIXTURE_SEARCH_PATHS,
   expandHomePath,
   formatOmrBenchmarkMarkdown,
   OMR_BENCHMARK_STATUS,
+  parseChecksum,
+  resolveFixtureAssetPath,
   serializeOmrBenchmarkReport,
   summarizeOmrBenchmarkDashboard,
   validateOmrBenchmarkManifest,
+  verifyChecksum,
 } from '../src/features/omr/omrBenchmarkDashboard.js'
+import { buildRhythmShadowBenchmarkComparison } from '../src/features/omr/omrRhythmShadowReport.js'
+import { buildVoiceSerializationShadowBenchmarkComparison } from '../src/features/omr/omrVoiceSerializationShadowReport.js'
+import { formatRolloutGateDocument } from '../src/features/omr/omrRolloutGate.js'
+import {
+  buildVoiceSerializationQualification,
+  formatVoiceSerializationQualificationDocument,
+} from '../src/features/omr/omrVoiceSerializationQualification.js'
 import {
   makeRenderPageCallback,
   renderPdfToPages,
@@ -54,14 +66,21 @@ function usage() {
     '  --manifest <path>         Fixture manifest (default: benchmarks/omr-benchmark.manifest.json)',
     '  --json <path>             JSON report path (default: tmp/omr-benchmark-dashboard/report.json)',
     '  --md <path>               Markdown report path (default: tmp/omr-benchmark-dashboard/report.md)',
+    '  --check-fixtures          Verify fixture presence + sha256 checksums and exit (no OMR run)',
     '  --from-reports <dir>      Build dashboard from existing evaluate-omr-accuracy JSON files',
     '                            (expects clean.json + dense.json or <id>.json per fixture)',
     '  --max-pages <n>           Override per-fixture max pages',
     '  --no-preprocess           Disable OMR preprocessing',
     '  --promote-scoregraph-clips',
     '                            Dev-only: enable default-off ScoreGraph hard-constraint clip promotion',
-    '  --allow-missing           Skip fixtures with missing PDF/truth instead of erroring',
-    '  --help                    Show this help',
+  '  --allow-missing           Skip fixtures with missing PDF/truth instead of erroring',
+  '  --only-fixtures <ids>     Comma-separated fixture ids to evaluate (live run only)',
+  '  --help                    Show this help',
+    '',
+    'Diagnostic flags (browser / dev):',
+    '  scoreflow:omr-trace=1|0   Structured pipeline trace logs',
+    '  scoreflow:omr-debug=1|0   Per-step image buffer debug',
+    '  scoreflow:omr-trace-groups=1  Collapse trace phases in console groups',
   ].join('\n')
 }
 
@@ -121,7 +140,7 @@ async function makePdfTextExtractor(pdfPath) {
   }
 }
 
-async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, promoteScoreGraphClips = false }) {
+async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, promoteScoreGraphClips = false, includeScoreGraph = false }) {
   const rendered = await renderPdfToPages(pdfPath, { rootDir: ROOT })
   const extractPageText = await makePdfTextExtractor(pdfPath)
   return runPdfOmrPipeline(pdfPath, {
@@ -131,16 +150,61 @@ async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, promoteS
     maxPages,
     preprocessPages,
     promoteScoreGraphClips,
+    includeScoreGraph,
     title: basename(pdfPath).replace(/\.pdf$/i, ''),
   })
 }
 
-function resolveFixturePaths(fixture, homeDir = process.env.HOME ?? '') {
+function sha256File(filePath) {
+  return createHash('sha256').update(readFileSync(filePath)).digest('hex')
+}
+
+function resolveFixturePaths(fixture, manifest = {}, homeDir = process.env.HOME ?? '') {
+  const searchPaths = manifest.fixtureSearchPaths ?? DEFAULT_FIXTURE_SEARCH_PATHS
+  const pdf = resolveFixtureAssetPath({
+    fileName: fixture.pdf,
+    legacyPath: fixture.pdfLegacyPath,
+    searchPaths,
+    rootDir: ROOT,
+    homeDir,
+    exists: existsSync,
+  })
+  const truth = resolveFixtureAssetPath({
+    fileName: fixture.truth,
+    legacyPath: fixture.truthLegacyPath,
+    searchPaths,
+    rootDir: ROOT,
+    homeDir,
+    exists: existsSync,
+  })
   return {
     ...fixture,
-    pdfPath: expandHomePath(fixture.pdf, homeDir),
-    truthPath: expandHomePath(fixture.truth, homeDir),
+    pdfPath: pdf.resolvedPath ?? pdf.candidates[0] ?? expandHomePath(fixture.pdf, homeDir),
+    truthPath: truth.resolvedPath ?? truth.candidates[0] ?? expandHomePath(fixture.truth, homeDir),
+    pdfCandidates: pdf.candidates,
+    truthCandidates: truth.candidates,
   }
+}
+
+function verifyFixtureChecksums(resolved) {
+  const results = {}
+  for (const [kind, pathKey, checksumKey] of [
+    ['pdf', 'pdfPath', 'pdf'],
+    ['truth', 'truthPath', 'truth'],
+  ]) {
+    const expected = resolved.checksums?.[checksumKey]
+    if (!expected) {
+      results[kind] = { skipped: true, reason: 'no-checksum-in-manifest' }
+      continue
+    }
+    const filePath = resolved[pathKey]
+    if (!filePath || !existsSync(filePath)) {
+      results[kind] = { ok: false, reason: 'file-missing', expected: parseChecksum(expected)?.digest }
+      continue
+    }
+    results[kind] = verifyChecksum(expected, sha256File(filePath))
+  }
+  return results
 }
 
 function loadManifest(manifestPath) {
@@ -161,6 +225,7 @@ function reportPathForFixture(fromReportsDir, fixture) {
   for (const alias of aliases) {
     candidates.push(
       join(fromReportsDir, `${alias}.json`),
+      join(fromReportsDir, 'fixtures', `${alias}.json`),
       join(fromReportsDir, `after-${alias}.json`),
       join(fromReportsDir, `before-${alias}.json`),
     )
@@ -168,23 +233,45 @@ function reportPathForFixture(fromReportsDir, fixture) {
   return candidates.find((candidate) => existsSync(candidate)) ?? null
 }
 
+function reportForFixtureCache(report) {
+  if (!report?.generatedOmrDiagnostics?.scoreGraphFull) {
+    return report
+  }
+  const generatedOmrDiagnostics = { ...report.generatedOmrDiagnostics }
+  delete generatedOmrDiagnostics.scoreGraphFull
+  return { ...report, generatedOmrDiagnostics }
+}
+
 async function evaluateFixture(fixture, options) {
-  const resolved = resolveFixturePaths(fixture)
+  const resolved = resolveFixturePaths(fixture, options.manifest)
+  const optional = Boolean(fixture.optional) || Boolean(fixture.diagnosticOnly)
   const pdfExists = existsSync(resolved.pdfPath)
   const truthExists = existsSync(resolved.truthPath)
 
   if (!pdfExists || !truthExists) {
-    if (options.allowMissing) {
-      return buildFixtureDashboardRecord({
-        fixture: resolved,
-        error: new Error(
-          `Missing assets: ${!pdfExists ? `pdf ${resolved.pdfPath}` : ''}${!pdfExists && !truthExists ? '; ' : ''}${!truthExists ? `truth ${resolved.truthPath}` : ''}`,
-        ),
-      })
+    // Optional/diagnostic-only fixtures are skipped when absent (no error).
+    if (optional || options.allowMissing) {
+      const missingError = new Error(
+        `Missing assets: ${!pdfExists ? `pdf ${resolved.pdfPath}` : ''}${!pdfExists && !truthExists ? '; ' : ''}${!truthExists ? `truth ${resolved.truthPath}` : ''}`,
+      )
+      missingError.code = 'missing-assets'
+      if (optional) {
+        console.error(`Skipping optional fixture (assets missing): ${resolved.label ?? resolved.id}`)
+      }
+      return buildFixtureDashboardRecord({ fixture: resolved, error: missingError })
     }
     throw new Error(
       `Fixture "${resolved.id}" is missing assets. PDF exists=${pdfExists}, truth exists=${truthExists}.`,
     )
+  }
+
+  const checksumResults = verifyFixtureChecksums(resolved)
+  for (const [kind, result] of Object.entries(checksumResults)) {
+    if (result && result.ok === false) {
+      console.error(
+        `WARNING: ${resolved.id} ${kind} checksum mismatch (expected ${result.expected ?? '?'}, got ${result.actual ?? 'missing'})`,
+      )
+    }
   }
 
   const maxPages = Math.max(1, Number(options.maxPages ?? resolved.maxPages ?? 24))
@@ -197,6 +284,7 @@ async function evaluateFixture(fixture, options) {
       maxPages,
       preprocessPages,
       promoteScoreGraphClips,
+      includeScoreGraph: true,
     })
     const groundTruthMusicXml = await readScoreXml(resolved.truthPath)
     const report = evaluateOmrAccuracy({
@@ -214,7 +302,7 @@ async function evaluateFixture(fixture, options) {
         fixtureReportPath,
         `${JSON.stringify(
           {
-            ...report,
+            ...reportForFixtureCache(report),
             run: {
               pdfPath: resolved.pdfPath,
               truthPath: resolved.truthPath,
@@ -231,7 +319,7 @@ async function evaluateFixture(fixture, options) {
       )
     }
 
-    return buildFixtureDashboardRecord({
+    const record = buildFixtureDashboardRecord({
       fixture: resolved,
       report,
       run: {
@@ -242,8 +330,19 @@ async function evaluateFixture(fixture, options) {
         promoteScoreGraphClips,
         omrNoteCount: omrResult.noteCount ?? null,
         omrMeasureCount: omrResult.measureCount ?? null,
+        checksums: checksumResults,
       },
+      scoreGraphMeasures: omrResult.diagnostics?.scoreGraphFull?.measures ?? null,
     })
+    await attachRhythmShadow(record, report, resolved, {
+      runtimeMusicXml: omrResult.musicXml,
+      scoreGraph: omrResult.diagnostics?.scoreGraphFull ?? null,
+    })
+    await attachVoiceSerializationShadow(record, report, resolved, {
+      runtimeMusicXml: omrResult.musicXml,
+      scoreGraph: omrResult.diagnostics?.scoreGraphFull ?? null,
+    })
+    return record
   } catch (error) {
     const rejected = error?.difficulty?.tooDifficult
     if (rejected) {
@@ -266,10 +365,10 @@ async function evaluateFixture(fixture, options) {
   }
 }
 
-function loadFixtureFromReport(fixture, reportPath) {
-  const resolved = resolveFixturePaths(fixture)
+function loadFixtureFromReport(fixture, reportPath, manifest) {
+  const resolved = resolveFixturePaths(fixture, manifest)
   const report = JSON.parse(readFileSync(reportPath, 'utf8'))
-  return buildFixtureDashboardRecord({
+  const record = buildFixtureDashboardRecord({
     fixture: resolved,
     report,
     run: report.run ?? {
@@ -278,6 +377,171 @@ function loadFixtureFromReport(fixture, reportPath) {
       sourceReport: reportPath,
     },
   })
+  return { record, report, resolved }
+}
+
+function mergeRhythmShadowCache(records, outDir) {
+  const cachePath = join(outDir, 'rhythm-shadow-report.json')
+  if (!existsSync(cachePath)) {
+    return
+  }
+  let cache
+  try {
+    cache = JSON.parse(readFileSync(cachePath, 'utf8'))
+  } catch {
+    return
+  }
+  for (const record of records) {
+    if (
+      record.rhythmShadow &&
+      record.rhythmShadow.status !== 'shadow-only-no-scoregraph' &&
+      record.rhythmShadow.solverDiagnostics
+    ) {
+      continue
+    }
+    const cached = cache.fixtures?.find((entry) => entry.fixtureId === record.id)
+    if (cached) {
+      record.rhythmShadow = cached
+    }
+  }
+}
+
+function mergeVoiceSerializationShadowCache(records, outDir) {
+  const cachePath = join(outDir, 'voice-serialization-shadow-report.json')
+  if (!existsSync(cachePath)) {
+    return
+  }
+  let cache
+  try {
+    cache = JSON.parse(readFileSync(cachePath, 'utf8'))
+  } catch {
+    return
+  }
+  for (const record of records) {
+    if (
+      record.voiceSerializationShadow &&
+      record.voiceSerializationShadow.status !== 'shadow-only-no-scoregraph' &&
+      record.voiceSerializationShadow.solverDiagnostics
+    ) {
+      continue
+    }
+    const cached = cache.fixtures?.find((entry) => entry.fixtureId === record.id)
+    if (cached) {
+      record.voiceSerializationShadow = cached
+    }
+  }
+}
+
+async function attachRhythmShadow(record, report, resolvedFixture, { runtimeMusicXml = null, scoreGraph = null } = {}) {
+  if (!report?.generatedOmrDiagnostics?.pages?.length && !scoreGraph?.measures?.length) {
+    record.rhythmShadow = null
+    return
+  }
+  const truthPath = resolvedFixture?.truthPath ?? report.run?.truthPath
+  let groundTruthMusicXml = null
+  if (truthPath && existsSync(truthPath)) {
+    try {
+      groundTruthMusicXml = await readScoreXml(truthPath)
+    } catch {
+      groundTruthMusicXml = null
+    }
+  }
+  record.rhythmShadow = buildRhythmShadowBenchmarkComparison({
+    report,
+    fixtureId: resolvedFixture?.id ?? record.id ?? null,
+    groundTruthMusicXml,
+    runtimeMusicXml,
+    scoreGraph,
+    title: report.summary?.generatedTitle ?? null,
+  })
+}
+
+async function attachVoiceSerializationShadow(
+  record,
+  report,
+  resolvedFixture,
+  { runtimeMusicXml = null, scoreGraph = null } = {},
+) {
+  if (!report?.generatedOmrDiagnostics?.pages?.length && !scoreGraph?.measures?.length) {
+    record.voiceSerializationShadow = null
+    return
+  }
+  const truthPath = resolvedFixture?.truthPath ?? report.run?.truthPath
+  let groundTruthMusicXml = null
+  if (truthPath && existsSync(truthPath)) {
+    try {
+      groundTruthMusicXml = await readScoreXml(truthPath)
+    } catch {
+      groundTruthMusicXml = null
+    }
+  }
+  record.voiceSerializationShadow = buildVoiceSerializationShadowBenchmarkComparison({
+    report,
+    fixtureId: resolvedFixture?.id ?? record.id ?? null,
+    groundTruthMusicXml,
+    runtimeMusicXml,
+    scoreGraph,
+    title: report.summary?.generatedTitle ?? null,
+  })
+  record.voiceSerializationQualification = buildVoiceSerializationQualification(
+    record.voiceSerializationShadow,
+    {
+      fixtureId: resolvedFixture?.id ?? record.id ?? null,
+      fixtureMetrics: record.metrics ?? null,
+    },
+  )
+}
+
+function checkFixtures(manifest) {
+  let anyMismatch = false
+  let anyMissingRequired = false
+
+  for (const fixture of manifest.fixtures) {
+    const resolved = resolveFixturePaths(fixture, manifest)
+    const optional = Boolean(fixture.optional) || Boolean(fixture.diagnosticOnly)
+    const tag = optional ? ' (optional)' : ''
+    console.log(`\n${fixture.id}${tag}: ${fixture.label ?? ''}`)
+
+    for (const [kind, pathKey] of [
+      ['pdf', 'pdfPath'],
+      ['truth', 'truthPath'],
+    ]) {
+      const filePath = resolved[pathKey]
+      const exists = filePath && existsSync(filePath)
+      if (!exists) {
+        console.log(`  ${kind}: MISSING (looked in: ${resolved[`${kind}Candidates`]?.join(', ')})`)
+        if (!optional) {
+          anyMissingRequired = true
+        }
+        continue
+      }
+      const expected = resolved.checksums?.[kind]
+      if (!expected) {
+        console.log(`  ${kind}: present, no checksum in manifest → ${filePath}`)
+        continue
+      }
+      const result = verifyChecksum(expected, sha256File(filePath))
+      if (result.ok) {
+        console.log(`  ${kind}: OK (${result.algorithm}) → ${filePath}`)
+      } else {
+        anyMismatch = true
+        console.log(
+          `  ${kind}: CHECKSUM MISMATCH → ${filePath}\n    expected ${result.expected}\n    actual   ${result.actual}`,
+        )
+      }
+    }
+  }
+
+  console.log('')
+  if (anyMismatch) {
+    console.log('Result: checksum mismatch detected.')
+    process.exitCode = 1
+  } else if (anyMissingRequired) {
+    console.log('Result: required fixture assets missing.')
+    process.exitCode = 1
+  } else {
+    console.log('Result: all present fixtures match their manifest checksums.')
+  }
 }
 
 async function main() {
@@ -294,17 +558,31 @@ async function main() {
   const fromReportsDir = argValue(args, '--from-reports')
   const maxPagesOverride = argValue(args, '--max-pages')
   const allowMissing = hasFlag(args, '--allow-missing')
+  const onlyFixturesRaw = argValue(args, '--only-fixtures')
+  const onlyFixtureIds = onlyFixturesRaw
+    ? onlyFixturesRaw.split(',').map((entry) => entry.trim()).filter(Boolean)
+    : null
   const preprocessPages = !hasFlag(args, '--no-preprocess')
   const promoteScoreGraphClips = hasFlag(args, '--promote-scoregraph-clips')
+  const checkFixturesOnly = hasFlag(args, '--check-fixtures')
 
   const manifest = loadManifest(manifestPath)
+
+  if (checkFixturesOnly) {
+    checkFixtures(manifest)
+    return
+  }
+
   const records = []
 
   for (const fixture of manifest.fixtures) {
+    if (onlyFixtureIds && !onlyFixtureIds.includes(fixture.id)) {
+      continue
+    }
     if (fromReportsDir) {
       const reportPath = reportPathForFixture(fromReportsDir, fixture)
       if (!reportPath) {
-        const resolved = resolveFixturePaths(fixture)
+        const resolved = resolveFixturePaths(fixture, manifest)
         records.push(
           buildFixtureDashboardRecord({
             fixture: resolved,
@@ -314,12 +592,16 @@ async function main() {
         continue
       }
       console.error(`Loading report: ${reportPath}`)
-      records.push(loadFixtureFromReport(fixture, reportPath))
+      const { record, report, resolved } = loadFixtureFromReport(fixture, reportPath, manifest)
+      await attachRhythmShadow(record, report, resolved)
+      await attachVoiceSerializationShadow(record, report, resolved)
+      records.push(record)
       continue
     }
 
     records.push(
       await evaluateFixture(fixture, {
+        manifest,
         allowMissing,
         maxPages: maxPagesOverride ? Number(maxPagesOverride) : undefined,
         preprocessPages,
@@ -328,6 +610,11 @@ async function main() {
         saveFixtureReports: true,
       }),
     )
+  }
+
+  if (fromReportsDir) {
+    mergeRhythmShadowCache(records, outDir)
+    mergeVoiceSerializationShadowCache(records, outDir)
   }
 
   const summary = summarizeOmrBenchmarkDashboard(records)
@@ -340,6 +627,162 @@ async function main() {
 
   writeText(jsonPath, `${serializeOmrBenchmarkReport(summary)}\n`)
   writeText(mdPath, formatOmrBenchmarkMarkdown(summary))
+
+  const hotspotRecords = records
+    .filter((record) => record.hotspotDiagnostics)
+    .map((record) => ({
+      fixtureId: record.id,
+      label: record.label,
+      ...record.hotspotDiagnostics,
+    }))
+  if (hotspotRecords.length) {
+    const hotspotPath = join(outDir, 'onset-voice-phase-trace.json')
+    writeText(
+      hotspotPath,
+      `${JSON.stringify(
+        {
+          generatedAt: summary.generatedAt,
+          manifestPath,
+          hotspots: hotspotRecords,
+        },
+        null,
+        2,
+      )}\n`,
+    )
+    console.error(`Wrote ${hotspotPath}`)
+  }
+
+  const durationSplitRecords = records
+    .filter((record) => record.writtenSoundingDuration)
+    .map((record) => ({
+      fixtureId: record.id,
+      label: record.label,
+      ...record.writtenSoundingDuration,
+    }))
+  if (durationSplitRecords.length) {
+    const durationSplitPath = join(outDir, 'duration-split-trace.json')
+    writeText(
+      durationSplitPath,
+      `${JSON.stringify(
+        {
+          generatedAt: summary.generatedAt,
+          manifestPath,
+          phase: 3,
+          fixtures: durationSplitRecords,
+        },
+        null,
+        2,
+      )}\n`,
+    )
+    console.error(`Wrote ${durationSplitPath}`)
+  }
+
+  const tieSustainRecords = records
+    .filter((record) => record.tieSustainConstraints)
+    .map((record) => ({
+      fixtureId: record.id,
+      label: record.label,
+      ...record.tieSustainConstraints,
+    }))
+  if (tieSustainRecords.length) {
+    const tieSustainPath = join(outDir, 'tie-sustain-constraint-trace.json')
+    writeText(
+      tieSustainPath,
+      `${JSON.stringify(
+        {
+          generatedAt: summary.generatedAt,
+          manifestPath,
+          phase: 4,
+          fixtures: tieSustainRecords,
+        },
+        null,
+        2,
+      )}\n`,
+    )
+    console.error(`Wrote ${tieSustainPath}`)
+  }
+
+  const rhythmShadowRecords = records
+    .filter((record) => record.rhythmShadow && record.rhythmShadow.status !== 'unavailable')
+    .map((record) => ({
+      fixtureId: record.id,
+      label: record.label,
+      ...record.rhythmShadow,
+    }))
+  if (rhythmShadowRecords.length) {
+    const rhythmShadowPath = join(outDir, 'rhythm-shadow-report.json')
+    writeText(
+      rhythmShadowPath,
+      `${JSON.stringify(
+        {
+          generatedAt: summary.generatedAt,
+          manifestPath,
+          promoted: false,
+          engine: 'v2-rhythm-shadow-prototype',
+          fixtures: rhythmShadowRecords,
+        },
+        null,
+        2,
+      )}\n`,
+    )
+    console.error(`Wrote ${rhythmShadowPath}`)
+  }
+
+  const voiceSerializationRecords = records
+    .filter((record) => record.voiceSerializationShadow && record.voiceSerializationShadow.status !== 'unavailable')
+    .map((record) => ({
+      fixtureId: record.id,
+      label: record.label,
+      ...record.voiceSerializationShadow,
+    }))
+  if (voiceSerializationRecords.length) {
+    const voiceSerializationPath = join(outDir, 'voice-serialization-shadow-report.json')
+    writeText(
+      voiceSerializationPath,
+      `${JSON.stringify(
+        {
+          generatedAt: summary.generatedAt,
+          manifestPath,
+          promoted: false,
+          engine: 'v2-voice-serialization-shadow',
+          phase: 6,
+          fixtures: voiceSerializationRecords,
+        },
+        null,
+        2,
+      )}\n`,
+    )
+    console.error(`Wrote ${voiceSerializationPath}`)
+  }
+
+  if (summary.voiceSerializationQualification) {
+    const qualificationPath = join(outDir, 'voice-serialization-qualification.json')
+    writeText(
+      qualificationPath,
+      `${JSON.stringify(summary.voiceSerializationQualification, null, 2)}\n`,
+    )
+    console.error(`Wrote ${qualificationPath}`)
+
+    const qualificationDocPath = join(ROOT, 'docs', 'OMR_V2_PHASE_7_QUALIFICATION.md')
+    writeText(
+      qualificationDocPath,
+      formatVoiceSerializationQualificationDocument(summary.voiceSerializationQualification),
+    )
+    console.error(`Wrote ${qualificationDocPath}`)
+  }
+
+  if (summary.rolloutGate) {
+    const rolloutGatePath = join(outDir, 'omr-v2-rollout-gate.json')
+    writeText(
+      rolloutGatePath,
+      `${JSON.stringify(summary.rolloutGate, null, 2)}\n`,
+    )
+    console.error(`Wrote ${rolloutGatePath}`)
+
+    const rolloutDocPath = join(ROOT, 'docs', 'OMR_V2_ROLLOUT_GATE.md')
+    writeText(rolloutDocPath, formatRolloutGateDocument(summary.rolloutGate))
+    console.error(`Wrote ${rolloutDocPath}`)
+  }
 
   console.log(formatOmrBenchmarkMarkdown(summary))
   console.error(`\nWrote ${jsonPath}`)

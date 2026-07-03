@@ -24,13 +24,13 @@ export default function PracticeModeSection({
       <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
         Mode
         <PracticeHelpTip label="About practice modes">
-          Playback moves normally. Wait For You pauses for your input.
+          Play Along keeps the score moving. Wait For You pauses at each note until you play it or tap Continue.
         </PracticeHelpTip>
       </h3>
 
       {!hasMusicXml ? (
         <p className="practice-section__hint practice-empty-state">
-          Timing file required.
+          Add a timing file in Library to enable practice.
         </p>
       ) : (
         <div className="practice-mode__options" role="radiogroup" aria-label="Practice mode">

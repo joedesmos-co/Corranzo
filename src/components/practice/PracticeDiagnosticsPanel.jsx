@@ -107,22 +107,24 @@ export default function PracticeDiagnosticsPanel({
         </details>
       )}
 
-      <details className="practice-diagnostics__group">
-        <summary>Calibration debug (beta)</summary>
-        <div className="practice-diagnostics__group-body">
-          <CalibrationDebugPanel
-            snapshot={scoreFollow?.calibrationDebugSnapshot ?? null}
-            pieceName={pieceName ?? session.sources?.playbackFileName ?? null}
-            anchors={scoreFollow?.anchors ?? []}
-            showOverlay={scoreFollow?.showCalibrationOverlay}
-            onShowOverlayChange={scoreFollow?.setShowCalibrationOverlay}
-            onRotatePage={scoreFollow?.rotatePageView}
-            onApplyAutoRotations={scoreFollow?.applyAutoPageRotations}
-            visiblePageNumber={pdfPageNumber}
-            setupPhase={scoreFollow?.setupStatus?.phase ?? null}
-          />
-        </div>
-      </details>
+      {import.meta.env.DEV && (
+        <details className="practice-diagnostics__group">
+          <summary>Calibration debug</summary>
+          <div className="practice-diagnostics__group-body">
+            <CalibrationDebugPanel
+              snapshot={scoreFollow?.calibrationDebugSnapshot ?? null}
+              pieceName={pieceName ?? session.sources?.playbackFileName ?? null}
+              anchors={scoreFollow?.anchors ?? []}
+              showOverlay={scoreFollow?.showCalibrationOverlay}
+              onShowOverlayChange={scoreFollow?.setShowCalibrationOverlay}
+              onRotatePage={scoreFollow?.rotatePageView}
+              onApplyAutoRotations={scoreFollow?.applyAutoPageRotations}
+              visiblePageNumber={pdfPageNumber}
+              setupPhase={scoreFollow?.setupStatus?.phase ?? null}
+            />
+          </div>
+        </details>
+      )}
 
       {import.meta.env.DEV && SmokeTestChecklist && (
         <Suspense fallback={null}>

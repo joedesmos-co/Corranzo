@@ -108,15 +108,9 @@ export default function WaitForYouSection({
     status === WFY_STATUS.WAITING &&
     guidance?.primary != null
 
-  const showMicChordHint =
+  const showMicInputHint =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
-    currentCheckpoint?.isChord &&
-    status === WFY_STATUS.WAITING
-  const showMicRealityNote =
-    checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
-    inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
-    !currentCheckpoint?.isChord &&
     status === WFY_STATUS.WAITING
   const showMicOffNotice =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
@@ -140,8 +134,8 @@ export default function WaitForYouSection({
     displayStatus === WFY_DISPLAY_STATUS.CONTINUING
   const primaryActionCopy =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE
-      ? 'Play the note shown on the score, or tap Continue.'
-      : 'Tap Continue to move to the next practice step.'
+      ? 'Play the highlighted note, or tap Continue.'
+      : 'Tap Continue to move to the next step.'
 
   return (
     <section className={sectionClass} aria-label="Wait For You">
@@ -149,7 +143,7 @@ export default function WaitForYouSection({
         <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
           Wait For You
           <PracticeHelpTip label="About Wait For You">
-            Pauses at each practice step until you play or tap Continue.
+            Pauses at each note in your loop until you play it or tap Continue.
           </PracticeHelpTip>
         </h3>
         {status === WFY_STATUS.WAITING && displayStatus !== WFY_DISPLAY_STATUS.CONTINUING && (
@@ -197,7 +191,11 @@ export default function WaitForYouSection({
       )}
 
       {currentStatusMessage && (
-        <p className={`wait-for-you__status wait-for-you__status--${statusModifier}`}>
+        <p
+          className={`wait-for-you__status wait-for-you__status--${statusModifier}`}
+          role="status"
+          aria-live="polite"
+        >
           {currentStatusMessage}
         </p>
       )}
@@ -220,14 +218,14 @@ export default function WaitForYouSection({
       {inputMatchingActive && (
         <p className="wait-for-you__listening">
           {inputSource === WFY_INPUT_SOURCE.MICROPHONE
-            ? 'Mic listening'
-            : 'MIDI listening'}
+            ? 'Listening on mic'
+            : 'Listening on MIDI'}
         </p>
       )}
 
       {showMicOffNotice && (
         <div className="wait-for-you__mic-off" role="status" aria-live="polite">
-          <p>Microphone is off. Turn it on to have Wait For You listen.</p>
+          <p>Microphone is off. Turn it on so Wait For You can hear you.</p>
           {onRequestMicAccess && (
             <button type="button" className="wait-for-you__btn" onClick={onRequestMicAccess}>
               Enable microphone
@@ -236,15 +234,9 @@ export default function WaitForYouSection({
         </div>
       )}
 
-      {showMicChordHint && (
+      {showMicInputHint && (
         <p className="wait-for-you__mic-chord-hint" role="status">
-          Microphone works best one note at a time. Use MIDI for chords played together.
-        </p>
-      )}
-
-      {showMicRealityNote && (
-        <p className="wait-for-you__mic-chord-hint" role="note">
-          Microphone works best one note at a time. MIDI is best for chords.
+          Microphone hears one note at a time. Use MIDI for chords played together.
         </p>
       )}
 
@@ -256,13 +248,13 @@ export default function WaitForYouSection({
             <>
               <span className="wait-for-you__note-target-chip">Your note</span>
               {targetApproximate
-                ? ' · target approximate'
+                ? ' · approximate position'
                 : noteTarget.displayMode === 'highlight'
                   ? ' · highlighted on score'
-                  : ' · approximate marker'}
+                  : ' · approximate position'}
             </>
           ) : (
-            <>Open Advanced to show the target highlight.</>
+            <>Set up the score cursor in Advanced to highlight your note.</>
           )}
         </p>
       )}

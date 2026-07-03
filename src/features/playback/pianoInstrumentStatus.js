@@ -1,11 +1,12 @@
-export const INSTRUMENT_STATUS = {
-  LOADING: 'loading',
-  SAMPLED: 'sampled',
-  SYNTH: 'synth',
-}
+import {
+  INSTRUMENT_STATUS,
+  buildInstrumentStatusLabels,
+} from './instrumentVoiceStatus.js'
 
-export const INSTRUMENT_STATUS_LABEL = {
-  [INSTRUMENT_STATUS.LOADING]: 'Loading piano…',
-  [INSTRUMENT_STATUS.SAMPLED]: 'Piano ready',
-  [INSTRUMENT_STATUS.SYNTH]: 'Using basic synth fallback',
-}
+/**
+ * Piano-worded status labels (legacy import path — the canonical status enum
+ * lives in instrumentVoiceStatus.js and is shared by every instrument voice).
+ */
+export { INSTRUMENT_STATUS }
+
+export const INSTRUMENT_STATUS_LABEL = buildInstrumentStatusLabels('Piano')

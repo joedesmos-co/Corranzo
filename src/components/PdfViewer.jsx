@@ -60,6 +60,7 @@ export default function PdfViewer({
   // Score-follow setup lives in Practice; keep PDF column layout identical to Practice embed.
   const showScoreFollowPanel = false
   const canvasRef = useRef(null)
+  const fitResetFrameRef = useRef(null)
   const rawCanvasSize = useElementSize(canvasRef)
   const canvasSize = useStableElementSize(rawCanvasSize, {
     enabled: !isPracticeEmbed,
@@ -183,9 +184,23 @@ export default function PdfViewer({
     setFitMode(mode)
     if (mode === 'page') {
       resetPdfCanvasScroll(canvasRef.current)
-      requestAnimationFrame(() => resetPdfCanvasScroll(canvasRef.current))
+      if (fitResetFrameRef.current != null) {
+        cancelAnimationFrame(fitResetFrameRef.current)
+      }
+      fitResetFrameRef.current = requestAnimationFrame(() => {
+        fitResetFrameRef.current = null
+        resetPdfCanvasScroll(canvasRef.current)
+      })
     }
   }
+
+  useEffect(() => {
+    return () => {
+      if (fitResetFrameRef.current != null) {
+        cancelAnimationFrame(fitResetFrameRef.current)
+      }
+    }
+  }, [])
 
   useLayoutEffect(() => {
     if (fitMode === 'page') {
@@ -516,7 +531,7 @@ export default function PdfViewer({
           >
           {!file ? (
             <p className="pdf-canvas__placeholder">
-              Add a PDF to preview your score.
+              Add a PDF from the sidebar to preview your score here.
             </p>
           ) : documentError ? (
             <p className="pdf-canvas__status pdf-canvas__status--error" role="alert">

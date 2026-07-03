@@ -42,7 +42,7 @@ export default function PracticeLoopCompactSection({ session }) {
 
       {isWaitForYou && (
         <p className="practice-section__hint practice-loop-compact__hint">
-          Range sets Wait For You practice steps.
+          Loop range sets which notes Wait For You stops at.
         </p>
       )}
     </section>
