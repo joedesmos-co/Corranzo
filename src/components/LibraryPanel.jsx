@@ -38,6 +38,7 @@ export default function LibraryPanel({
   onClassifiedUpload = null,
   onImportFeedback,
   onLoadSampleFixtures,
+  demoPiece,
   onOpenPractice,
   pdfSource = null,
   pdfFileUrl = null,
@@ -117,6 +118,7 @@ export default function LibraryPanel({
 
       {showDemo && onLoadSampleFixtures && (
         <DemoPieceCard
+          demoPiece={demoPiece}
           compact
           loading={sampleLoadLoading}
           error={sampleLoadError}

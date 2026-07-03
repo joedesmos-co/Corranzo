@@ -136,12 +136,12 @@ export default function useScoreFollow({
   experimentalOmrPlayback = false,
   omrMeasureGrid = null,
 }) {
-  const isDemoSession =
-    isDemoPiece || isDemoFixtureFileSet(pdfFileName, timingSourceId ?? null)
+  const isBundledDemoSession = isDemoFixtureFileSet(pdfFileName, timingSourceId ?? null)
+  const isDemoSession = isDemoPiece || isBundledDemoSession
   const mountedRef = useRef(true)
   // When bundled demo anchors are disabled (dev/test honesty switch), the demo
   // piece runs the SAME automatic setup pipeline as a user upload.
-  const useBundledDemoAnchors = isDemoSession && !areBundledDemoAnchorsDisabled()
+  const useBundledDemoAnchors = isBundledDemoSession && !areBundledDemoAnchorsDisabled()
 
   const setupFailedMessage = experimentalOmrPlayback
     ? SCORE_FOLLOW_OMR_SETUP_FAILED
@@ -1183,7 +1183,14 @@ export default function useScoreFollow({
   ])
 
   useEffect(() => {
-    if (isDemoSession || !sessionReady || !isHydrated || timingLoading || !hasTiming || !timingMap) {
+    if (
+      isBundledDemoSession ||
+      !sessionReady ||
+      !isHydrated ||
+      timingLoading ||
+      !hasTiming ||
+      !timingMap
+    ) {
       return
     }
 
@@ -1212,7 +1219,7 @@ export default function useScoreFollow({
     layoutSupplementKeyRef.current = supplementKey
     setSupplementalAnchors(layoutAnchors)
   }, [
-    isDemoSession,
+    isBundledDemoSession,
     sessionReady,
     isHydrated,
     timingLoading,

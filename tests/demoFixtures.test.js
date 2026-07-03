@@ -3,7 +3,18 @@ import { existsSync, readFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import JSZip from 'jszip'
-import { DEMO_PIECE, FIXTURE_FILENAMES, FIXTURE_PATHS } from '../src/dev/fixturePaths.js'
+import {
+  DEMO_PIECE,
+  FIXTURE_FILENAMES,
+  FIXTURE_PATHS,
+  GUITAR_DEMO_PIECE,
+  GUITAR_FIXTURE_FILENAMES,
+  GUITAR_FIXTURE_PATHS,
+  getDemoPieceForInstrument,
+  getFixtureFilenamesForInstrument,
+  getFixturePathsForInstrument,
+} from '../src/dev/fixturePaths.js'
+import { INSTRUMENT_IDS } from '../src/features/instruments/instruments.js'
 import { isDemoFixtureFileSet } from '../src/features/demo/demoBundledAnchors.js'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import { analyzeSemiAutoScoreSetup } from '../src/features/score-follow/semiAutoScoreAlignment.js'
@@ -201,5 +212,57 @@ describe('Hungarian Dance demo fixtures', () => {
       expect(anchor(104).x).toBeGreaterThan(0.65)
       expect(anchor(104).x).toBeLessThan(0.85)
     })
+  })
+})
+
+describe('Guitar demo fixtures', () => {
+  it('exposes a dedicated public-domain beginner guitar demo', () => {
+    expect(GUITAR_DEMO_PIECE.id).toBe('guitar-ode-to-joy')
+    expect(GUITAR_DEMO_PIECE.title).toContain('Ode to Joy')
+    expect(GUITAR_DEMO_PIECE.measureCount).toBeGreaterThanOrEqual(5)
+    expect(GUITAR_DEMO_PIECE.measureCount).toBeLessThanOrEqual(10)
+    expect(getDemoPieceForInstrument(INSTRUMENT_IDS.GUITAR)).toBe(GUITAR_DEMO_PIECE)
+    expect(getDemoPieceForInstrument(INSTRUMENT_IDS.PIANO)).toBe(DEMO_PIECE)
+  })
+
+  it('keeps Piano and Guitar demo bundles independent', () => {
+    expect(getFixturePathsForInstrument(INSTRUMENT_IDS.PIANO)).toBe(FIXTURE_PATHS)
+    expect(getFixturePathsForInstrument(INSTRUMENT_IDS.GUITAR)).toBe(GUITAR_FIXTURE_PATHS)
+    expect(getFixtureFilenamesForInstrument(INSTRUMENT_IDS.PIANO)).toBe(FIXTURE_FILENAMES)
+    expect(getFixtureFilenamesForInstrument(INSTRUMENT_IDS.GUITAR)).toBe(GUITAR_FIXTURE_FILENAMES)
+    expect(GUITAR_FIXTURE_PATHS.pdf).not.toBe(FIXTURE_PATHS.pdf)
+    expect(GUITAR_FIXTURE_PATHS.midi).not.toBe(FIXTURE_PATHS.midi)
+    expect(GUITAR_FIXTURE_PATHS.musicXml).not.toBe(FIXTURE_PATHS.musicXml)
+  })
+
+  it('ships guitar PDF, MusicXML, and MIDI on disk', () => {
+    for (const path of [
+      GUITAR_FIXTURE_PATHS.pdf,
+      GUITAR_FIXTURE_PATHS.midi,
+      GUITAR_FIXTURE_PATHS.musicXml,
+    ]) {
+      expect(existsSync(fixturePath(path)), path).toBe(true)
+    }
+  })
+
+  it('parses as a short guitar score with standard notation and TAB positions', () => {
+    const xml = readFileSync(fixturePath(GUITAR_FIXTURE_PATHS.musicXml), 'utf8')
+    const timingMap = parseMusicXml(xml, GUITAR_FIXTURE_FILENAMES.musicXml)
+    const playable = timingMap.notes.filter((note) => !note.isRest && !note.isTabMirror)
+
+    expect(timingMap.notation.hasStandardStaff).toBe(true)
+    expect(timingMap.notation.hasTabStaff).toBe(true)
+    expect(timingMap.notation.suggestedInstrumentId).toBe('guitar')
+    expect(timingMap.durationSeconds).toBeGreaterThanOrEqual(20)
+    expect(timingMap.durationSeconds).toBeLessThanOrEqual(40)
+    expect(timingMap.parts[0].tuning).toEqual([64, 59, 55, 50, 45, 40])
+    expect(timingMap.notes.filter((note) => note.isTabMirror)).toHaveLength(playable.length)
+    expect(playable.every((note) => note.string != null && note.fret != null)).toBe(true)
+  })
+
+  it('does not route the Guitar demo through Piano bundled anchors', () => {
+    expect(
+      isDemoFixtureFileSet(GUITAR_FIXTURE_FILENAMES.pdf, GUITAR_FIXTURE_FILENAMES.musicXml),
+    ).toBe(false)
   })
 })

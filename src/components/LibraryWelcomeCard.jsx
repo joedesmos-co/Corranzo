@@ -10,6 +10,7 @@ import CorranzoLogo from './CorranzoLogo.jsx'
 export default function LibraryWelcomeCard({
   onDismiss,
   onTrySample,
+  demoPiece,
   sampleLoading = false,
   sampleError = null,
 }) {
@@ -43,6 +44,7 @@ export default function LibraryWelcomeCard({
 
       {onTrySample && (
         <DemoPieceCard
+          demoPiece={demoPiece}
           loading={sampleLoading}
           error={sampleError}
           onLoad={onTrySample}

@@ -1,6 +1,7 @@
 import { DEMO_PIECE } from '../dev/fixturePaths.js'
 
 export default function DemoPieceCard({
+  demoPiece = DEMO_PIECE,
   loading = false,
   error = null,
   onLoad,
@@ -17,13 +18,13 @@ export default function DemoPieceCard({
       <div className="demo-piece__copy">
         <p className="demo-piece__badge">Demo piece</p>
         <h3 id="demo-piece-title" className="demo-piece__title">
-          {DEMO_PIECE.title}
+          {demoPiece.title}
         </h3>
         <p className="demo-piece__intro">No files needed. Open this and press Play.</p>
         <p className="demo-piece__subtitle">
-          {DEMO_PIECE.subtitle}
-          {DEMO_PIECE.measureCount != null && DEMO_PIECE.pageCount != null
-            ? ` · ${DEMO_PIECE.measureCount} measures · ${DEMO_PIECE.pageCount} pages`
+          {demoPiece.subtitle}
+          {demoPiece.measureCount != null && demoPiece.pageCount != null
+            ? ` · ${demoPiece.measureCount} measures · ${demoPiece.pageCount} pages`
             : ''}
         </p>
       </div>
@@ -33,11 +34,11 @@ export default function DemoPieceCard({
           className="demo-piece__button"
           disabled={loading}
           onClick={onLoad}
-          aria-label={`Try demo: ${DEMO_PIECE.title}`}
+          aria-label={`Try demo: ${demoPiece.title}`}
         >
           {loading ? 'Opening…' : 'Try Demo Piece'}
         </button>
-        <p className="demo-piece__credit">{DEMO_PIECE.attribution}</p>
+        <p className="demo-piece__credit">{demoPiece.attribution}</p>
       </div>
       {error && (
         <div className="demo-piece__error-block" role="alert">
@@ -48,7 +49,7 @@ export default function DemoPieceCard({
               className="demo-piece__retry"
               disabled={loading}
               onClick={retry}
-              aria-label={`Retry loading demo: ${DEMO_PIECE.title}`}
+              aria-label={`Retry loading demo: ${demoPiece.title}`}
             >
               Retry
             </button>

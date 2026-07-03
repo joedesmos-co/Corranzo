@@ -1,4 +1,8 @@
-import { DEMO_PIECE, FIXTURE_FILENAMES, FIXTURE_PATHS } from './fixturePaths.js'
+import {
+  getDemoPieceForInstrument,
+  getFixtureFilenamesForInstrument,
+  getFixturePathsForInstrument,
+} from './fixturePaths.js'
 import { withTimeout } from '../utils/asyncWithTimeout.js'
 
 const DEMO_FETCH_TIMEOUT_MS = 30_000
@@ -13,23 +17,26 @@ async function fetchAsFile(url, fileName, type) {
 }
 
 /**
- * Loads bundled demo piece (Hungarian Dance No. 5) — same shape as user uploads.
+ * Loads the bundled demo piece for the active instrument — same shape as user uploads.
  */
-export async function fetchSampleFixtureFiles() {
+export async function fetchSampleFixtureFiles(instrumentId) {
+  const paths = getFixturePathsForInstrument(instrumentId)
+  const fileNames = getFixtureFilenamesForInstrument(instrumentId)
+  const meta = getDemoPieceForInstrument(instrumentId)
   return withTimeout(
     Promise.all([
-      fetchAsFile(FIXTURE_PATHS.pdf, FIXTURE_FILENAMES.pdf, 'application/pdf'),
-      fetchAsFile(FIXTURE_PATHS.midi, FIXTURE_FILENAMES.midi, 'audio/midi'),
+      fetchAsFile(paths.pdf, fileNames.pdf, 'application/pdf'),
+      fetchAsFile(paths.midi, fileNames.midi, 'audio/midi'),
       fetchAsFile(
-        FIXTURE_PATHS.musicXml,
-        FIXTURE_FILENAMES.musicXml,
+        paths.musicXml,
+        fileNames.musicXml,
         'application/vnd.recordare.musicxml',
       ),
     ]).then(([pdfFile, midiFile, musicXmlFile]) => ({
       pdfFile,
       midiFile,
       musicXmlFile,
-      meta: DEMO_PIECE,
+      meta,
     })),
     DEMO_FETCH_TIMEOUT_MS,
     'Demo files took too long to load. Check your connection and try again.',

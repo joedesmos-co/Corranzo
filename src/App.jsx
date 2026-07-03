@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react'
 import TopBar from './components/TopBar.jsx'
 import LibraryPanel from './components/LibraryPanel.jsx'
 import LibraryWelcomeCard from './components/LibraryWelcomeCard.jsx'
@@ -45,6 +45,7 @@ import {
 import { isDemoSampleEnabled } from './features/demo/demoSampleAccess.js'
 import { formatDemoLoadError } from './features/demo/formatDemoLoadError.js'
 import { fetchSampleFixtureFiles } from './dev/loadSampleFixtures.js'
+import { getDemoPieceForInstrument } from './dev/fixturePaths.js'
 import {
   getViewFromPathname,
   isLegalPathname,
@@ -135,6 +136,10 @@ export default function App() {
   const [practicePdfReady, setPracticePdfReady] = useState(false)
   const [pdfViewerRevision, setPdfViewerRevision] = useState(0)
   const activeViewRef = useRef(activeView)
+  const activeDemoPiece = useMemo(
+    () => getDemoPieceForInstrument(instrumentId),
+    [instrumentId],
+  )
 
   const {
     sidebarOpen,
@@ -589,7 +594,7 @@ export default function App() {
     setSampleLoadState({ loading: true, error: null })
 
     try {
-      const { pdfFile, midiFile, musicXmlFile, meta } = await fetchSampleFixtureFiles()
+      const { pdfFile, midiFile, musicXmlFile, meta } = await fetchSampleFixtureFiles(instrumentId)
 
       const pdfData = await pdfFile.arrayBuffer()
       setPdfBuffer(pdfData.slice(0))
@@ -644,7 +649,14 @@ export default function App() {
         error: formatDemoLoadError(loadError),
       })
     }
-  }, [setSidebarOpen, markDemoCardHidden, navigateToView, resetPdfViewerRuntime, syncPracticePrefsSnapshot])
+  }, [
+    instrumentId,
+    setSidebarOpen,
+    markDemoCardHidden,
+    navigateToView,
+    resetPdfViewerRuntime,
+    syncPracticePrefsSnapshot,
+  ])
 
   const handleClassifiedUpload = useCallback(
     async (classified) => {
@@ -1206,6 +1218,7 @@ export default function App() {
             onTrySample={
               isDemoSampleEnabled() && restoreGateOpen ? handleLoadSampleFixtures : undefined
             }
+            demoPiece={activeDemoPiece}
             sampleLoading={sampleLoadState.loading}
             sampleError={sampleLoadState.error}
           />
@@ -1245,6 +1258,7 @@ export default function App() {
             onLoadSampleFixtures={
               isDemoSampleEnabled() && restoreGateOpen ? handleLoadSampleFixtures : undefined
             }
+            demoPiece={activeDemoPiece}
             sampleLoadLoading={sampleLoadState.loading}
             sampleLoadError={sampleLoadState.error}
             importFeedback={libraryFeedback}
