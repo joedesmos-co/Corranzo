@@ -301,13 +301,11 @@ describe('practice view integration', () => {
     const src = readSrc('components', 'practice', 'VisualPracticeView.jsx')
 
     expect(src).toContain('buildVisualLaneGroups(timingMap, loopRegion)')
-    expect(src).toContain('session.timing.timingMap')
-    expect(src).toContain('session.loop.region')
-    // Lane honors the loop region only when it is actually constraining:
-    // always in Wait For You (checkpoint id parity), else only when loop is on.
-    expect(src).toContain('session.isWaitForYou || session.loop.enabled')
+    expect(src).toContain('usePracticeVisualSession')
+    expect(src).toContain('visual.timingMap')
+    expect(src).toContain('visual.loopRegion')
     expect(src).toContain('usePracticeTick')
-    expect(src).toContain('session.waitForYou.currentCheckpoint')
+    expect(src).toContain('visual.wfyCheckpoint')
     expect(src).toContain('WFY_STATUS.WAITING')
 
     // Staff lane + beginner affordances: target callout, keyboard strip.
@@ -317,7 +315,7 @@ describe('practice view integration', () => {
     expect(src).toContain('VisualKeyboardStrip')
 
     // Frame time comes from the engine's interpolated clock while playing.
-    expect(src).toContain('session.playback.getScoreTime')
+    expect(src).toContain('visual.getScoreTime')
 
     // Gentle guidance for missing timing and OMR-derived notes. The OMR note
     // stays collapsed inside a details fold during normal use.

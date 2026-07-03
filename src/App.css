@@ -2318,6 +2318,12 @@
   overflow: hidden;
 }
 
+.pdf-fullscreen__stage.pdf-canvas--fit-width {
+  overflow: auto;
+  align-items: flex-start;
+  -webkit-overflow-scrolling: touch;
+}
+
 .pdf-fullscreen__stage .react-pdf__Document {
   display: flex;
   align-items: center;

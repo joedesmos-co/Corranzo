@@ -38,6 +38,19 @@ export default function usePitchDetector({
   const calibrationStartedAtRef = useRef(0)
   const rafRef = useRef(null)
   const uiFrameSkipRef = useRef(0)
+  const onFrameRef = useRef(onFrame)
+  const onStableMidiRef = useRef(onStableMidi)
+  const onCalibrationRef = useRef(onCalibration)
+
+  useEffect(() => {
+    onFrameRef.current = onFrame
+  }, [onFrame])
+  useEffect(() => {
+    onStableMidiRef.current = onStableMidi
+  }, [onStableMidi])
+  useEffect(() => {
+    onCalibrationRef.current = onCalibration
+  }, [onCalibration])
 
   const finishCalibration = (calibration) => {
     if (!calibration || calibrationResultRef.current) {
@@ -48,7 +61,7 @@ export default function usePitchDetector({
     calibrationResultRef.current = result
     analyzerRef.current.noiseFloor.floor = result.noiseFloor
     applyMicCalibrationToStabilizer(stabilizerRef.current, result)
-    onCalibration?.(result)
+    onCalibrationRef.current?.(result)
   }
 
   useEffect(() => {
@@ -57,7 +70,7 @@ export default function usePitchDetector({
     calibrationRef.current = createMicCalibration({ frames: CALIBRATION_FRAMES })
     calibrationResultRef.current = null
     calibrationStartedAtRef.current = performance.now()
-  }, [enabled, onStableMidi, calibrationKey])
+  }, [enabled, calibrationKey])
 
   useEffect(() => {
     if (!enabled) {
@@ -102,14 +115,14 @@ export default function usePitchDetector({
           const stillCalibrating = calibrating && !calibrationComplete
 
           uiFrameSkipRef.current += 1
-          if (onFrame && uiFrameSkipRef.current >= UI_FRAME_INTERVAL) {
+          if (onFrameRef.current && uiFrameSkipRef.current >= UI_FRAME_INTERVAL) {
             uiFrameSkipRef.current = 0
             const stabilizer = stabilizerRef.current
             const stabilizerPending =
               stabilizer.candidateMidi != null &&
               stabilizer.stableCount > 0 &&
               stabilizer.stableCount < stabilizer.holdFrames
-            onFrame({
+            onFrameRef.current({
               ...frame,
               stabilizerPending,
               calibrating: stillCalibrating,
@@ -120,14 +133,14 @@ export default function usePitchDetector({
             })
           }
 
-          if (onStableMidi && !stillCalibrating) {
+          if (onStableMidiRef.current && !stillCalibrating) {
             const stableMidi = pushStableNote(stabilizerRef.current, {
               midi: frame.midi,
               clarity: frame.clarity,
               rms: frame.rms,
             })
             if (stableMidi != null) {
-              onStableMidi(stableMidi, frame)
+              onStableMidiRef.current(stableMidi, frame)
             }
           }
         }
@@ -144,7 +157,7 @@ export default function usePitchDetector({
       }
       resetNoteStabilizer(stabilizerRef.current)
     }
-  }, [enabled, analyserRef, getTimeDomainBuffer, sampleRate, centsTolerance, onFrame, onStableMidi, onCalibration, calibrationKey])
+  }, [enabled, analyserRef, getTimeDomainBuffer, sampleRate, centsTolerance, calibrationKey])
 
   return {
     retryCalibration: () => {

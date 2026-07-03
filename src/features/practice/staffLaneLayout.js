@@ -254,9 +254,13 @@ export const NOTEHEAD_SECOND_OFFSET = 12
 export function buildStaffLaneStems(
   groups,
   geometry,
-  { pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond, noteheadRx = NOTEHEAD_RX } = {},
+  {
+    pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond,
+    noteheadRx = NOTEHEAD_RX,
+    notes: prebuiltNotes = null,
+  } = {},
 ) {
-  const notes = buildStaffLaneNotes(groups, geometry, { pixelsPerSecond })
+  const notes = prebuiltNotes ?? buildStaffLaneNotes(groups, geometry, { pixelsPerSecond })
 
   const chords = new Map()
   for (const note of notes) {

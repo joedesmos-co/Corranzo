@@ -18,11 +18,17 @@ export default function useMidiPlayback(midiSource) {
   useEffect(() => {
     const engine = new MidiPlaybackEngine()
     engine.onTimeUpdate = (time, total) => {
+      if (!mountedRef.current) {
+        return
+      }
       setCurrentTime(time)
       setDuration(total)
       setIsPlaying(engine.isPlaying())
     }
     engine.onInstrumentStatus = (status) => {
+      if (!mountedRef.current) {
+        return
+      }
       setInstrumentStatus(status)
     }
     engineRef.current = engine

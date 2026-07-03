@@ -50,7 +50,7 @@ export default function useScorePlayback({
 
     const flushTimeUpdate = () => {
       timeFlushId = null
-      if (pendingTime == null) {
+      if (!mountedRef.current || pendingTime == null) {
         return
       }
       setCurrentTime(pendingTime)
@@ -66,6 +66,9 @@ export default function useScorePlayback({
     }
 
     engine.onTimeUpdate = (time, total) => {
+      if (!mountedRef.current) {
+        return
+      }
       pendingTime = time
       pendingDuration = total
       pendingIsPlaying = engine.isPlaying()
@@ -83,9 +86,15 @@ export default function useScorePlayback({
       }
     }
     engine.onInstrumentStatus = (status) => {
+      if (!mountedRef.current) {
+        return
+      }
       setInstrumentStatus(status)
     }
     engine.onMetronomeDisplay = (state) => {
+      if (!mountedRef.current) {
+        return
+      }
       setMetronomeDisplay((previous) => {
         if (
           previous?.phase === state.phase &&
@@ -123,17 +132,17 @@ export default function useScorePlayback({
     }
 
     if (!timingMap || timingLoading) {
-      if (!timingMap && !timingLoading) {
-        engine.stop()
+      engine.stop()
+      setIsPlaying(false)
+      if (!timingMap) {
         setTracks([])
         setDuration(0)
         setCurrentTime(0)
-        setIsPlaying(false)
         setError(null)
         setMappingWarning(null)
         setAudioSource('musicxml')
       }
-      setIsLoading(false)
+      setIsLoading(Boolean(timingLoading))
       return undefined
     }
 

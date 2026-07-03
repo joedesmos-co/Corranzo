@@ -51,6 +51,7 @@ export default function PdfViewer({
   onToggleSidebar,
   onTogglePaper,
   actionsRef,
+  scrollContainerRef,
 }) {
   const isPracticeEmbed = variant === 'practice'
   const geometryDebugEnabled = isGeometryDebugEnabled()
@@ -60,6 +61,20 @@ export default function PdfViewer({
   // Score-follow setup lives in Practice; keep PDF column layout identical to Practice embed.
   const showScoreFollowPanel = false
   const canvasRef = useRef(null)
+  const assignCanvasRef = useCallback(
+    (node) => {
+      canvasRef.current = node
+      if (!scrollContainerRef) {
+        return
+      }
+      if (typeof scrollContainerRef === 'function') {
+        scrollContainerRef(node)
+        return
+      }
+      scrollContainerRef.current = node
+    },
+    [scrollContainerRef],
+  )
   const fitResetFrameRef = useRef(null)
   const rawCanvasSize = useElementSize(canvasRef)
   const canvasSize = useStableElementSize(rawCanvasSize, {
@@ -526,7 +541,7 @@ export default function PdfViewer({
           )}
 
           <div
-            ref={canvasRef}
+            ref={assignCanvasRef}
             className={`pdf-canvas pdf-canvas--fit-${fitMode} pdf-canvas--paper-${paperTheme}`}
           >
           {!file ? (

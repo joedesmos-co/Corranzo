@@ -49,6 +49,27 @@ export default function useMicEngineV2Detector({
   const uiFrameSkipRef = useRef(0)
   const expectedMidisRef = useRef(expectedMidis)
   const v2ErroredRef = useRef(false)
+  const onFrameRef = useRef(onFrame)
+  const onStableMidiRef = useRef(onStableMidi)
+  const onStableChordRef = useRef(onStableChord)
+  const onCalibrationRef = useRef(onCalibration)
+  const onV2RuntimeErrorRef = useRef(onV2RuntimeError)
+
+  useEffect(() => {
+    onFrameRef.current = onFrame
+  }, [onFrame])
+  useEffect(() => {
+    onStableMidiRef.current = onStableMidi
+  }, [onStableMidi])
+  useEffect(() => {
+    onStableChordRef.current = onStableChord
+  }, [onStableChord])
+  useEffect(() => {
+    onCalibrationRef.current = onCalibration
+  }, [onCalibration])
+  useEffect(() => {
+    onV2RuntimeErrorRef.current = onV2RuntimeError
+  }, [onV2RuntimeError])
 
   const finishCalibration = (calibration) => {
     if (!calibration || calibrationResultRef.current) {
@@ -59,7 +80,7 @@ export default function useMicEngineV2Detector({
     calibrationResultRef.current = result
     analyzerRef.current.noiseFloor.floor = result.noiseFloor
     applyMicCalibrationToStabilizer(stabilizerRef.current, result)
-    onCalibration?.(result)
+    onCalibrationRef.current?.(result)
   }
 
   useEffect(() => {
@@ -134,14 +155,14 @@ export default function useMicEngineV2Detector({
             })
 
             uiFrameSkipRef.current += 1
-            if (onFrame && uiFrameSkipRef.current >= UI_FRAME_INTERVAL) {
+            if (onFrameRef.current && uiFrameSkipRef.current >= UI_FRAME_INTERVAL) {
               uiFrameSkipRef.current = 0
               const stabilizer = stabilizerRef.current
               const stabilizerPending =
                 stabilizer.candidateMidi != null &&
                 stabilizer.stableCount > 0 &&
                 stabilizer.stableCount < stabilizer.holdFrames
-              onFrame({
+              onFrameRef.current({
                 ...(tickResult.frame ?? previewFrame),
                 stabilizerPending,
                 calibrating: false,
@@ -153,9 +174,9 @@ export default function useMicEngineV2Detector({
               })
             }
 
-            if (onStableChord && tickResult.stableMidis?.length > 1) {
-              onStableChord(tickResult.stableMidis, tickResult.frame)
-            } else if (onStableMidi) {
+            if (onStableChordRef.current && tickResult.stableMidis?.length > 1) {
+              onStableChordRef.current(tickResult.stableMidis, tickResult.frame)
+            } else if (onStableMidiRef.current) {
               let stableMidi = tickResult.stableMidi
               if (stableMidi == null && expectedMidisRef.current.length <= 1) {
                 stableMidi = pushStableNote(stabilizerRef.current, {
@@ -168,14 +189,14 @@ export default function useMicEngineV2Detector({
                 }
               }
               if (stableMidi != null) {
-                onStableMidi(stableMidi, tickResult.frame ?? previewFrame)
+                onStableMidiRef.current(stableMidi, tickResult.frame ?? previewFrame)
               }
             }
           } else if (previewFrame) {
             uiFrameSkipRef.current += 1
-            if (onFrame && uiFrameSkipRef.current >= UI_FRAME_INTERVAL) {
+            if (onFrameRef.current && uiFrameSkipRef.current >= UI_FRAME_INTERVAL) {
               uiFrameSkipRef.current = 0
-              onFrame({
+              onFrameRef.current({
                 ...previewFrame,
                 stabilizerPending: false,
                 calibrating: stillCalibrating,
@@ -191,7 +212,7 @@ export default function useMicEngineV2Detector({
       } catch (error) {
         if (!v2ErroredRef.current) {
           v2ErroredRef.current = true
-          onV2RuntimeError?.(error)
+          onV2RuntimeErrorRef.current?.(error)
         }
       }
       rafRef.current = requestAnimationFrame(tick)
@@ -213,11 +234,7 @@ export default function useMicEngineV2Detector({
     getTimeDomainBuffer,
     sampleRate,
     centsTolerance,
-    onFrame,
-    onStableMidi,
-    onStableChord,
-    onCalibration,
-    onV2RuntimeError,
+    calibrationKey,
     stableFrameThreshold,
   ])
 

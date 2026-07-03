@@ -77,14 +77,16 @@ function StaffVisualLane({ visibleGroups, staves, getFrameTime, barlineTimes = [
   // the outer ledger margins symmetrically.
   const offsetY = (size.height > 0 ? size.height / scale - geometry.height : 0) / 2
 
-  const notes = useMemo(
-    () => buildStaffLaneNotes(visibleGroups, geometry, { pixelsPerSecond: PX_PER_SECOND }),
-    [visibleGroups, geometry],
-  )
-  const stems = useMemo(
-    () => buildStaffLaneStems(visibleGroups, geometry, { pixelsPerSecond: PX_PER_SECOND }),
-    [visibleGroups, geometry],
-  )
+  const { notes, stems } = useMemo(() => {
+    const builtNotes = buildStaffLaneNotes(visibleGroups, geometry, {
+      pixelsPerSecond: PX_PER_SECOND,
+    })
+    const builtStems = buildStaffLaneStems(visibleGroups, geometry, {
+      pixelsPerSecond: PX_PER_SECOND,
+      notes: builtNotes,
+    })
+    return { notes: builtNotes, stems: builtStems }
+  }, [visibleGroups, geometry])
 
   // Barlines within the visible groups' span (deterministic x, like notes).
   const visibleBarlines = useMemo(() => {

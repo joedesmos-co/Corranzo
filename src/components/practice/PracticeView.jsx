@@ -31,7 +31,7 @@ export default function PracticeView({
 }) {
   const { session, scoreFollow, waitForYouNoteTarget } = usePracticeSessionContext()
   const pdfActionsRef = useRef(null)
-  const scoreScrollRef = useRef(null)
+  const pdfScrollRef = useRef(null)
   const sessionRef = useRef(session)
   sessionRef.current = session
 
@@ -104,7 +104,7 @@ export default function PracticeView({
         <PracticeWorkspaceLayout>
           {!isVisualView && (
             <PracticePageFollowController
-              scrollContainerRef={scoreScrollRef}
+              scrollContainerRef={pdfScrollRef}
               pageNumber={pageNumber}
               numPages={numPages}
               onGoToPage={handleGoToPage}
@@ -117,7 +117,7 @@ export default function PracticeView({
             {isVisualView ? (
               <VisualPracticeView timingSourceKind={timingSourceKind} />
             ) : (
-              <div ref={scoreScrollRef} className="practice-workspace__score">
+              <div className="practice-workspace__score">
                 <ScoreFollowSetupStatus setupStatus={scoreFollow.setupStatus} />
                 <PdfViewer
                   variant="practice"
@@ -132,6 +132,7 @@ export default function PracticeView({
                   onNextPage={onNextPage}
                   onTogglePaper={onTogglePaper}
                   actionsRef={pdfActionsRef}
+                  scrollContainerRef={pdfScrollRef}
                 />
               </div>
             )}

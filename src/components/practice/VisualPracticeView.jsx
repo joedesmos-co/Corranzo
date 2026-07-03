@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
-import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import { usePracticeVisualSession } from '../../context/PracticeSessionContext.jsx'
 import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
 import { useInstrument } from '../../context/instrumentContext.js'
 import { WFY_STATUS } from '../../features/practice/waitForYouEngine.js'
@@ -32,19 +32,14 @@ import TabVisualLane from './TabVisualLane.jsx'
  * Read-only view over the existing practice session — playback, the
  * practice clock, and Wait For You all keep working unchanged.
  */
-export default function VisualPracticeView({ timingSourceKind = null }) {
-  const { session } = usePracticeSessionContext()
+function VisualPracticeView({ timingSourceKind = null }) {
+  const visual = usePracticeVisualSession()
   const tick = usePracticeTick()
   const { instrument } = useInstrument()
 
-  const timingMap = session.timing.timingMap
-  const timingLoading = session.timing.isLoading
-  // In Wait For You, use the same loop region useWaitForYou consumes so
-  // group ids always match the live checkpoints. In normal playback only
-  // honor the region while the loop is actually on — playback ignores a
-  // set-but-disabled region, so the lane must too.
-  const loopRegion =
-    session.isWaitForYou || session.loop.enabled ? session.loop.region : null
+  const timingMap = visual.timingMap
+  const timingLoading = visual.timingLoading
+  const loopRegion = visual.loopRegion
 
   const groups = useMemo(
     () => buildVisualLaneGroups(timingMap, loopRegion),
@@ -72,9 +67,9 @@ export default function VisualPracticeView({ timingSourceKind = null }) {
   }, [timingMap])
 
   const currentTime = tick.practiceTime ?? 0
-  const isWaitForYou = session.isWaitForYou
-  const wfyStatus = session.waitForYou.status
-  const wfyCheckpoint = isWaitForYou ? session.waitForYou.currentCheckpoint : null
+  const isWaitForYou = visual.isWaitForYou
+  const wfyStatus = visual.wfyStatus
+  const wfyCheckpoint = visual.wfyCheckpoint
 
   const { index: targetIndex, group: targetGroup } = useMemo(
     () => resolveVisualTarget(groups, { currentTime, waitForYouCheckpoint: wfyCheckpoint }),
@@ -93,7 +88,7 @@ export default function VisualPracticeView({ timingSourceKind = null }) {
   // Per-frame time source for the lane scroll: the engine's wall-clock
   // interpolated score time while playing (same source as the score-follow
   // cursor), the practice clock otherwise (paused / Wait For You / scrub).
-  const getScoreTime = session.playback.getScoreTime
+  const getScoreTime = visual.getScoreTime
   const frameStateRef = useRef({ isPlaying: false, practiceTime: 0 })
   useEffect(() => {
     frameStateRef.current = {
@@ -196,6 +191,8 @@ export default function VisualPracticeView({ timingSourceKind = null }) {
   )
 }
 
+export default memo(VisualPracticeView)
+
 /**
  * Instrument-aware note callout: piano shows pitch labels; fretted
  * instruments append the position ("E3 · fret 2 · D string").
@@ -217,7 +214,7 @@ function describeTargetNotes(targetGroup, strings, tabPositions) {
     .join(' + ')
 }
 
-function VisualTargetHeader({
+const VisualTargetHeader = memo(function VisualTargetHeader({
   targetGroup,
   targetIndex,
   totalGroups,
@@ -271,7 +268,7 @@ function VisualTargetHeader({
       </span>
     </div>
   )
-}
+})
 
 /** Fret window the strip always shows, widened to include target frets. */
 const STRIP_MIN_FRETS = 5
@@ -281,27 +278,32 @@ const STRIP_MIN_FRETS = 5
  * the guitar counterpart of the keyboard strip. Strings run top-down like
  * printed tab (string 1 highest); frets run left-to-right from the nut.
  */
-function VisualFretboardStrip({ targetGroup, strings, tabPositions }) {
+const VisualFretboardStrip = memo(function VisualFretboardStrip({
+  targetGroup,
+  strings,
+  tabPositions,
+}) {
   const stringCount = strings?.count ?? 6
-  const targets = buildTargetPositions(targetGroup, tabPositions)
-
-  const maxTargetFret = targets.reduce((max, target) => Math.max(max, target.fret), 0)
-  const fretCount = Math.max(STRIP_MIN_FRETS, maxTargetFret + 1)
-  const fretWidthPercent = 100 / (fretCount + 1) // slot 0 = open/nut zone
-
-  const targetsByKey = new Map(
-    targets.map((target) => [`${target.string}:${target.fret}`, target]),
-  )
-
-  const rows = []
-  for (let stringNumber = 1; stringNumber <= stringCount; stringNumber += 1) {
-    const cells = []
-    for (let fret = 0; fret <= fretCount; fret += 1) {
-      const target = targetsByKey.get(`${stringNumber}:${fret}`)
-      cells.push({ fret, target: target ?? null })
+  const targetKey = targetGroup?.id ?? ''
+  const { fretWidthPercent, rows, fretCount } = useMemo(() => {
+    const targets = buildTargetPositions(targetGroup, tabPositions)
+    const maxTargetFret = targets.reduce((max, target) => Math.max(max, target.fret), 0)
+    const count = Math.max(STRIP_MIN_FRETS, maxTargetFret + 1)
+    const widthPercent = 100 / (count + 1)
+    const targetsByKey = new Map(
+      targets.map((target) => [`${target.string}:${target.fret}`, target]),
+    )
+    const builtRows = []
+    for (let stringNumber = 1; stringNumber <= stringCount; stringNumber += 1) {
+      const cells = []
+      for (let fret = 0; fret <= count; fret += 1) {
+        const target = targetsByKey.get(`${stringNumber}:${fret}`)
+        cells.push({ fret, target: target ?? null })
+      }
+      builtRows.push({ stringNumber, cells })
     }
-    rows.push({ stringNumber, cells })
-  }
+    return { fretWidthPercent: widthPercent, rows: builtRows, fretCount: count }
+  }, [targetGroup, tabPositions, stringCount, targetKey])
 
   return (
     <div className="visual-practice__fretboard-wrap" aria-hidden="true">
@@ -339,43 +341,48 @@ function VisualFretboardStrip({ targetGroup, strings, tabPositions }) {
       </div>
     </div>
   )
-}
+})
 
 /**
  * Display-only keyboard segment highlighting the current target keys, with
  * floating letter chips above each target key (Simply Piano-style).
  */
-function VisualKeyboardStrip({ keys }) {
-  const whiteKeys = keys.filter((key) => !key.black)
-  if (!whiteKeys.length) {
+const VisualKeyboardStrip = memo(function VisualKeyboardStrip({ keys }) {
+  const layout = useMemo(() => {
+    const whiteKeys = keys.filter((key) => !key.black)
+    if (!whiteKeys.length) {
+      return null
+    }
+    const whiteWidthPercent = 100 / whiteKeys.length
+    const blackKeys = []
+    const chips = []
+    let whiteCount = 0
+    for (const key of keys) {
+      let centerPercent
+      if (key.black) {
+        const leftPercent = (whiteCount - 0.32) * whiteWidthPercent
+        centerPercent = leftPercent + whiteWidthPercent * 0.32
+        blackKeys.push({ ...key, leftPercent })
+      } else {
+        centerPercent = (whiteCount + 0.5) * whiteWidthPercent
+        whiteCount += 1
+      }
+      if (key.isTarget && key.label) {
+        chips.push({
+          midi: key.midi,
+          centerPercent,
+          letter: key.label.replace(/-?\d+$/, ''),
+        })
+      }
+    }
+    return { whiteKeys, whiteWidthPercent, blackKeys, chips }
+  }, [keys])
+
+  if (!layout) {
     return null
   }
-  const whiteWidthPercent = 100 / whiteKeys.length
 
-  // Position each black key between its neighbouring white keys, and give
-  // every key a horizontal center for the target chips.
-  const blackKeys = []
-  const chips = []
-  let whiteCount = 0
-  for (const key of keys) {
-    let centerPercent
-    if (key.black) {
-      const leftPercent = (whiteCount - 0.32) * whiteWidthPercent
-      centerPercent = leftPercent + whiteWidthPercent * 0.32
-      blackKeys.push({ ...key, leftPercent })
-    } else {
-      centerPercent = (whiteCount + 0.5) * whiteWidthPercent
-      whiteCount += 1
-    }
-    if (key.isTarget && key.label) {
-      chips.push({
-        midi: key.midi,
-        centerPercent,
-        // Letter only (with accidental) — octave numbers crowd the chip.
-        letter: key.label.replace(/-?\d+$/, ''),
-      })
-    }
-  }
+  const { whiteKeys, whiteWidthPercent, blackKeys, chips } = layout
 
   return (
     <div className="visual-practice__keyboard-wrap" aria-hidden="true">
@@ -415,4 +422,4 @@ function VisualKeyboardStrip({ keys }) {
       </div>
     </div>
   )
-}
+})

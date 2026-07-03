@@ -203,6 +203,24 @@ export default function usePracticeSession({
     onCheckpointCompleted: onWfyCheckpointCompleted,
   })
 
+  const wfyAdvanceRef = useRef(waitForYou.onPlayerInputMatched)
+  const onRecordWfyEventRef = useRef(onRecordWfyEvent)
+  useEffect(() => {
+    wfyAdvanceRef.current = waitForYou.onPlayerInputMatched
+  }, [waitForYou.onPlayerInputMatched])
+  useEffect(() => {
+    onRecordWfyEventRef.current = onRecordWfyEvent
+  }, [onRecordWfyEvent])
+
+  const handleWfyPlayerInputMatched = useCallback(() => {
+    onRecordWfyEventRef.current?.('correct')
+    wfyAdvanceRef.current()
+  }, [])
+
+  const handleWfyWrongNote = useCallback(() => {
+    onRecordWfyEventRef.current?.('missed')
+  }, [])
+
   const micCaptureActive =
     practiceActive &&
     isWaitForYou &&
@@ -226,11 +244,8 @@ export default function usePracticeSession({
     checkpointMode,
     currentCheckpoint: waitForYou.currentCheckpoint,
     matchSettings: matchSettingsState.settings,
-    onPlayerInputMatched: () => {
-      onRecordWfyEvent?.('correct')
-      waitForYou.onPlayerInputMatched()
-    },
-    onWrongNote: () => onRecordWfyEvent?.('missed'),
+    onPlayerInputMatched: handleWfyPlayerInputMatched,
+    onWrongNote: handleWfyWrongNote,
     webMidi,
   })
 
@@ -243,11 +258,8 @@ export default function usePracticeSession({
     checkpointMode,
     currentCheckpoint: waitForYou.currentCheckpoint,
     matchSettings: matchSettingsState.settings,
-    onPlayerInputMatched: () => {
-      onRecordWfyEvent?.('correct')
-      waitForYou.onPlayerInputMatched()
-    },
-    onWrongNote: () => onRecordWfyEvent?.('missed'),
+    onPlayerInputMatched: handleWfyPlayerInputMatched,
+    onWrongNote: handleWfyWrongNote,
     microphone,
   })
 

@@ -7,6 +7,7 @@ import {
   completePageSwitch,
   isPageWarm,
   markPageWarm,
+  markPageCold,
   notePageRender,
 } from '../../features/pdf/pdfPagePerf.js'
 
@@ -52,6 +53,17 @@ function PdfPageWindow({
   const pendingRasterRef = useRef(false)
   const warmSwitchFrameRef = useRef(null)
   const timingRef = useRef(new Map())
+  const prevPagesRef = useRef(pages)
+
+  useEffect(() => {
+    const prev = prevPagesRef.current
+    for (const slotPage of prev) {
+      if (!pages.includes(slotPage)) {
+        markPageCold(slotPage)
+      }
+    }
+    prevPagesRef.current = pages
+  }, [pages])
 
   useEffect(() => {
     const prev = prevPageRef.current

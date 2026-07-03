@@ -54,6 +54,11 @@ export function markPageWarm(pageNumber) {
   log('debug', 'page warm', { pageNumber })
 }
 
+export function markPageCold(pageNumber) {
+  warmPages.delete(pageNumber)
+  log('debug', 'page cold', { pageNumber })
+}
+
 export function isPageWarm(pageNumber) {
   return warmPages.has(pageNumber)
 }

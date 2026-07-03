@@ -18,6 +18,7 @@ import { useInstrument } from './instrumentContext.js'
 
 const PracticeSessionContext = createContext(null)
 const PracticeSessionStableContext = createContext(null)
+const PracticeVisualContext = createContext(null)
 
 export function PracticeSessionProvider({
   activeView = 'library',
@@ -295,6 +296,29 @@ export function PracticeSessionProvider({
     ],
   )
 
+  const visualValue = useMemo(
+    () => ({
+      timingMap: session.timing.timingMap,
+      timingLoading: session.timing.isLoading,
+      loopRegion:
+        session.isWaitForYou || session.loop.enabled ? session.loop.region : null,
+      isWaitForYou: session.isWaitForYou,
+      wfyStatus: session.waitForYou.status,
+      wfyCheckpoint: session.isWaitForYou ? session.waitForYou.currentCheckpoint : null,
+      getScoreTime: session.playback.getScoreTime,
+    }),
+    [
+      session.timing.timingMap,
+      session.timing.isLoading,
+      session.isWaitForYou,
+      session.loop.enabled,
+      session.loop.region,
+      session.waitForYou.status,
+      session.waitForYou.currentCheckpoint,
+      session.playback.getScoreTime,
+    ],
+  )
+
   const stableValue = useMemo(
     () => ({
       hasMidi: session.hasMidi,
@@ -377,14 +401,24 @@ export function PracticeSessionProvider({
   return (
     <PracticeSessionContext.Provider value={value}>
       <PracticeSessionStableContext.Provider value={stableValue}>
-        <PracticeTickContext.Provider value={tickValue}>
-          <ScoreFollowCursorContext.Provider value={cursorValue}>
-            {children}
-          </ScoreFollowCursorContext.Provider>
-        </PracticeTickContext.Provider>
+        <PracticeVisualContext.Provider value={visualValue}>
+          <PracticeTickContext.Provider value={tickValue}>
+            <ScoreFollowCursorContext.Provider value={cursorValue}>
+              {children}
+            </ScoreFollowCursorContext.Provider>
+          </PracticeTickContext.Provider>
+        </PracticeVisualContext.Provider>
       </PracticeSessionStableContext.Provider>
     </PracticeSessionContext.Provider>
   )
+}
+
+export function usePracticeVisualSession() {
+  const value = useContext(PracticeVisualContext)
+  if (!value) {
+    throw new Error('usePracticeVisualSession must be used within PracticeSessionProvider')
+  }
+  return value
 }
 
 export function usePracticeSessionStable() {
