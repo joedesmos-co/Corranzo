@@ -61,8 +61,8 @@ describe('launch readiness fixes', () => {
   it('fixes experimental OMR panel copy typo', () => {
     const omr = readSrc('components', 'library', 'PdfOmrPlaybackPanel.jsx')
 
-    expect(omr).toContain('a timing file is still best when you have one.')
-    expect(omr).not.toContain('A timing file is still best')
+    expect(omr).toContain('Upload MusicXML/MXL anytime for the most accurate timing.')
+    expect(omr).not.toContain('Generate experimental playback from PDF')
   })
 
   it('keeps the guided tutorial off Profile and legal views', () => {

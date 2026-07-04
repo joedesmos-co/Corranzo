@@ -54,6 +54,8 @@ export default function LibraryPanel({
   pdfSource = null,
   pdfFileUrl = null,
   onOmrGenerated = null,
+  autoOmrRequest = null,
+  onAutoOmrRequestConsumed = null,
   sampleLoadLoading = false,
   sampleLoadError = null,
   importFeedback = null,
@@ -67,6 +69,11 @@ export default function LibraryPanel({
   const hasMusicXml = isLibraryScoreTimingReady(musicXmlSource)
   const hasMidi = Boolean(midiFileName)
   const showOmrPanel = shouldShowLibraryOmrPanel({ hasPdf, musicXmlSource })
+  const autoOmrRequestForCurrentPdf =
+    autoOmrRequest?.instrumentId === instrumentId &&
+    autoOmrRequest?.pdfFileName === fileName
+      ? autoOmrRequest
+      : null
   const activeInstrument = getInstrument(instrumentId)
   const visiblePracticePieces = useMemo(
     () =>
@@ -330,12 +337,14 @@ export default function LibraryPanel({
                   disabled={uploadsDisabled}
                   onGenerated={onOmrGenerated}
                   onFeedback={onImportFeedback}
+                  autoStartKey={autoOmrRequestForCurrentPdf?.key ?? null}
+                  onAutoStartConsumed={onAutoOmrRequestConsumed}
                 />
               )}
 
               {showOmrPanel && (
                 <p className="library-panel__workflow library-panel__workflow-next" role="status">
-                  PDF-only playback is experimental. A timing file gives the most reliable Practice timing.
+                  Upload MusicXML/MXL anytime for the most accurate timing.
                 </p>
               )}
 

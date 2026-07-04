@@ -64,10 +64,12 @@ describe('OMR viewer recovery', () => {
     expect(omrPanel).toMatch(/resetInFinally && activeRunRef\.current === runId/)
   })
 
-  it('labels generated PDF playback as experimental and exposes cursor retry', () => {
+  it('uses friendly PDF timing copy and exposes cursor retry', () => {
     expect(omrPanel).toContain(
-      'Experimental PDF playback may be inaccurate. For accurate playback, upload a timing file.',
+      'Upload MusicXML/MXL anytime for the most accurate timing.',
     )
+    expect(omrPanel).toContain('Try again')
+    expect(omrPanel).not.toContain('Generate experimental playback from PDF')
     expect(scoreFollowControls).toContain(
       'Experimental PDF playback may be inaccurate. For accurate playback, upload a timing file.',
     )

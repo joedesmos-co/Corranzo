@@ -91,6 +91,29 @@ function isFullPracticeSet(pdfLoaded, midiSource, musicXmlSource) {
   return Boolean(pdfLoaded && midiSource?.data && musicXmlSource?.data)
 }
 
+function buildAutoOmrRequest(file, instrumentId) {
+  if (!file) {
+    return null
+  }
+  const normalizedInstrument = normalizeInstrumentId(instrumentId)
+  const fileName = file.name ?? 'score.pdf'
+  const size = Number.isFinite(file.size) ? file.size : 0
+  const lastModified = Number.isFinite(file.lastModified) ? file.lastModified : 0
+  return {
+    key: `${normalizedInstrument}:${fileName}:${size}:${lastModified}`,
+    instrumentId: normalizedInstrument,
+    pdfFileName: fileName,
+  }
+}
+
+function pdfOmrPreparingMessage(fileName, { clearedCompanionFiles = false, softWarning = null } = {}) {
+  const clearedHint = clearedCompanionFiles
+    ? ' Previous timing and sound files were cleared.'
+    : ''
+  const warningHint = softWarning ? `${softWarning} ` : ''
+  return `${warningHint}Loaded ${fileName}.${clearedHint} Getting your music ready... This may take a moment. Upload MusicXML/MXL anytime for the most accurate timing.`
+}
+
 export default function App() {
   const { instrumentId, setInstrumentId } = useInstrument()
   const [activeView, setActiveView] = useState(resolveInitialView)
@@ -130,6 +153,7 @@ export default function App() {
   const [sampleLoadState, setSampleLoadState] = useState({ loading: false, error: null })
   const [demoPieceActive, setDemoPieceActive] = useState(false)
   const [libraryFeedback, setLibraryFeedback] = useState(null)
+  const [autoOmrRequest, setAutoOmrRequest] = useState(null)
   const [libraryTab, setLibraryTab] = useState(LIBRARY_TABS.PRACTICE)
   const [fileHelpSignal, setFileHelpSignal] = useState(0)
   const [pdfSoftWarning, setPdfSoftWarning] = useState(null)
@@ -185,6 +209,7 @@ export default function App() {
     setMusicXmlSource(next.musicXmlSource)
     setPdfSoftWarning(next.pdfSoftWarning ?? null)
     setDemoPieceActive(Boolean(next.demoPieceActive))
+    setAutoOmrRequest(null)
     practicePrefsRef.current = next.practicePrefs ?? null
     setInitialPracticePrefs(next.practicePrefs ?? null)
     resetPdfViewerRuntime()
@@ -330,23 +355,14 @@ export default function App() {
       resetPdfViewerRuntime()
       resetPracticePrefsForNewScore()
       setPdfSoftWarning(validation.softWarning)
-      if (clearedCompanionFiles) {
-        setLibraryFeedback({
-          type: 'info',
-          message: validation.softWarning
-            ? `${validation.softWarning} Loaded ${file.name}. Previous timing and sound files were cleared. Add matching files for this PDF.`
-            : `Loaded ${file.name}. Previous timing and sound files were cleared. Add matching files for this PDF.`,
-        })
-      } else {
-        setLibraryFeedback(
-          validation.softWarning
-            ? { type: 'info', message: validation.softWarning }
-            : {
-                type: 'success',
-                message: `Loaded ${file.name}. Add a timing file, then open Practice.`,
-              },
-        )
-      }
+      setAutoOmrRequest(buildAutoOmrRequest(file, activeInstrumentRef.current))
+      setLibraryFeedback({
+        type: clearedCompanionFiles || validation.softWarning ? 'info' : 'success',
+        message: pdfOmrPreparingMessage(file.name, {
+          clearedCompanionFiles,
+          softWarning: validation.softWarning,
+        }),
+      })
 
       navigateToView('library')
     } catch (error) {
@@ -399,6 +415,7 @@ export default function App() {
         data,
         source: 'upload',
       })
+      setAutoOmrRequest(null)
       resetPracticePrefsForNewScore()
       const fullSet = isFullPracticeSet(Boolean(pdfFile), midiSource, { data })
       setLibraryFeedback({
@@ -421,6 +438,7 @@ export default function App() {
   const handleClearMusicXml = useCallback(() => {
     clearDemoPiece()
     setMusicXmlSource(null)
+    setAutoOmrRequest(null)
     setLibraryFeedback({
       type: 'info',
       message: 'Timing file removed. Add a timing file to use Practice, loops, and Wait For You.',
@@ -444,8 +462,29 @@ export default function App() {
     noteCount,
     measureCount,
     measureGrid,
+    sourcePdfFileName = null,
+    sourcePdfFileUrl = null,
+    sourceInstrumentId = null,
   }) => {
     releaseOmrUiLocks()
+    const currentBundle = liveBundleRef.current ?? {}
+    const currentInstrument = normalizeInstrumentId(activeInstrumentRef.current)
+    const generatedInstrument = normalizeInstrumentId(sourceInstrumentId ?? currentInstrument)
+    if (generatedInstrument !== currentInstrument) {
+      const message = 'That PDF changed before timing finished. Upload it again or retry.'
+      setLibraryFeedback({ type: 'info', message })
+      return { ok: false, message }
+    }
+    if (sourcePdfFileUrl && currentBundle.pdfFile && sourcePdfFileUrl !== currentBundle.pdfFile) {
+      const message = 'That PDF changed before timing finished. Upload it again or retry.'
+      setLibraryFeedback({ type: 'info', message })
+      return { ok: false, message }
+    }
+    if (sourcePdfFileName && currentBundle.pdfMeta?.fileName && sourcePdfFileName !== currentBundle.pdfMeta.fileName) {
+      const message = 'That PDF changed before timing finished. Upload it again or retry.'
+      setLibraryFeedback({ type: 'info', message })
+      return { ok: false, message }
+    }
 
     const playbackValidation = validateOmrGeneratedPlayback(musicXml, generatedFileName)
     if (!playbackValidation.ok) {
@@ -457,7 +496,9 @@ export default function App() {
       return { ok: false, message: playbackValidation.message }
     }
 
-    if (!pdfFile) {
+    const activePdfFile = currentBundle.pdfFile ?? pdfFile
+    const activePdfMeta = currentBundle.pdfMeta ?? pdfMeta
+    if (!activePdfFile) {
       const message = 'Generated playback failed — PDF preview is missing. Re-upload the PDF and try again.'
       clearGeneratedPlaybackAfterOmrFailure()
       setLibraryFeedback({
@@ -470,7 +511,7 @@ export default function App() {
     let nextPdfFile
     let nextPdfBuffer
     try {
-      const refreshed = await refreshOwnedPdfFromBlobUrl(pdfFile, { revokePrevious: false })
+      const refreshed = await refreshOwnedPdfFromBlobUrl(activePdfFile, { revokePrevious: false })
       nextPdfFile = refreshed.pdfFile
       nextPdfBuffer = refreshed.pdfBuffer
       setPdfBuffer(refreshed.pdfBuffer)
@@ -495,12 +536,12 @@ export default function App() {
       return { ok: false, message }
     }
 
-    const stablePdfMeta = pdfMeta ?? {
+    const stablePdfMeta = activePdfMeta ?? {
       fileName: generatedFileName?.replace(/\.omr\.musicxml$/i, '.pdf') || 'score.pdf',
       size: nextPdfBuffer?.byteLength ?? null,
       lastModified: Date.now(),
     }
-    if (!pdfMeta) {
+    if (!activePdfMeta) {
       setPdfMeta(stablePdfMeta)
       setFileName(stablePdfMeta.fileName)
     }
@@ -532,19 +573,21 @@ export default function App() {
     dismissOnboarding()
     setShowWelcome(false)
     setMusicXmlSource(nextMusicXmlSource)
+    setAutoOmrRequest(null)
     setLibraryFeedback({
       type: 'success',
-      message: `Experimental playback ready (${playbackValidation.noteCount} notes, ${Math.round(playbackValidation.durationSeconds)}s). Saved in Library — open Practice to try it.`,
+      message: `Timing ready from PDF (${playbackValidation.noteCount} notes, ${Math.round(playbackValidation.durationSeconds)}s). Opening Practice.`,
     })
+    navigateToView('practice')
 
     const sessionMeta = buildSessionMeta({
       pdfMeta: stablePdfMeta,
       midiSource,
       musicXmlSource: nextMusicXmlSource,
-      activeView: activeViewRef.current,
+      activeView: 'practice',
       pageNumber,
       practicePrefs: practicePrefsRef.current,
-      instrumentId,
+      instrumentId: currentInstrument,
     })
     saveSessionMeta(sessionMeta)
     try {
@@ -577,6 +620,7 @@ export default function App() {
     midiSource,
     pageNumber,
     instrumentId,
+    navigateToView,
     clearDemoPiece,
     markDemoCardHidden,
     clearGeneratedPlaybackAfterOmrFailure,
@@ -624,6 +668,7 @@ export default function App() {
       })
 
       setPdfSoftWarning(null)
+      setAutoOmrRequest(null)
       setShowWelcome(false)
       dismissOnboarding()
       markDemoCardHidden()
@@ -725,6 +770,11 @@ export default function App() {
         }
 
         if (classified.pdf[0]) {
+          if (loadedXml?.data) {
+            setAutoOmrRequest(null)
+          } else {
+            setAutoOmrRequest(buildAutoOmrRequest(classified.pdf[0], activeInstrumentRef.current))
+          }
           const loadedNewCompanionFile = Boolean(classified.musicXml[0] || classified.midi[0])
           const fullSet = isFullPracticeSet(loadedPdf, loadedMidi, loadedXml)
           if (fullSet) {
@@ -737,28 +787,37 @@ export default function App() {
           } else if (clearedCompanionFilesForPdf && !loadedNewCompanionFile) {
             setLibraryFeedback({
               type: 'info',
-              message: loadedSoftWarning
-                ? `${loadedSoftWarning} Loaded ${classified.pdf[0].name}. Previous timing and sound files were cleared. Add matching files for this PDF.`
-                : `Loaded ${classified.pdf[0].name}. Previous timing and sound files were cleared. Add matching files for this PDF.`,
+              message: pdfOmrPreparingMessage(classified.pdf[0].name, {
+                clearedCompanionFiles: true,
+                softWarning: loadedSoftWarning,
+              }),
             })
-          } else if (loadedNewCompanionFile) {
+          } else if (loadedXml?.data) {
             setLibraryFeedback({
               type: 'success',
               message: loadedSoftWarning
-                ? `${loadedSoftWarning} Loaded ${classified.pdf[0].name} with the new companion file${classified.musicXml[0] && classified.midi[0] ? 's' : ''}.`
-                : `Loaded ${classified.pdf[0].name} with the new companion file${classified.musicXml[0] && classified.midi[0] ? 's' : ''}.`,
+                ? `${loadedSoftWarning} Loaded ${classified.pdf[0].name} with timing.`
+                : `Loaded ${classified.pdf[0].name} with timing.`,
+            })
+          } else if (loadedNewCompanionFile) {
+            setLibraryFeedback({
+              type: loadedSoftWarning ? 'info' : 'success',
+              message: pdfOmrPreparingMessage(classified.pdf[0].name, {
+                softWarning: loadedSoftWarning,
+              }),
             })
           } else {
-            setLibraryFeedback(
-              loadedSoftWarning
-                ? { type: 'info', message: loadedSoftWarning }
-                : {
-                    type: 'success',
-                    message: `Loaded ${classified.pdf[0].name}. Add a timing file, then open Practice.`,
-                  },
-            )
+            setLibraryFeedback({
+              type: loadedSoftWarning ? 'info' : 'success',
+              message: pdfOmrPreparingMessage(classified.pdf[0].name, {
+                softWarning: loadedSoftWarning,
+              }),
+            })
           }
         } else if (classified.musicXml[0] || classified.midi[0]) {
+          if (classified.musicXml[0]) {
+            setAutoOmrRequest(null)
+          }
           const fullSet = isFullPracticeSet(loadedPdf, loadedMidi, loadedXml)
           setLibraryFeedback({
             type: 'success',
@@ -857,6 +916,7 @@ export default function App() {
     setMusicXmlSource(nextMusicXml)
     setPageNumber(payload.pageNumber ?? 1)
     resetPdfViewerRuntime()
+    setAutoOmrRequest(null)
     practicePrefsRef.current = payload.practicePrefs ?? null
     setInitialPracticePrefs(payload.practicePrefs)
     setActiveView(
@@ -1297,6 +1357,8 @@ export default function App() {
             onClearMidi={handleClearMidi}
             onClearMusicXml={handleClearMusicXml}
             onOmrGenerated={handleOmrGenerated}
+            autoOmrRequest={autoOmrRequest}
+            onAutoOmrRequestConsumed={() => setAutoOmrRequest(null)}
             onImportFeedback={setLibraryFeedback}
             pdfSource={pdfBuffer}
             pdfFileUrl={pdfFile}

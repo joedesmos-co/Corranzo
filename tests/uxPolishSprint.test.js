@@ -60,7 +60,7 @@ describe('Corranzo UX polish sprint', () => {
     expect(panel).toContain('aria-label="Help"')
     expect(panel).toMatch(/title="Diagnostics"[\s\S]*defaultOpen=\{false\}/)
     expect(omrPanel).toContain('aria-busy={isGenerating}')
-    expect(omrPanel).toContain('PDF playback ready')
+    expect(omrPanel).toContain('Timing ready from PDF')
     expect(appCss).toContain('.library-omr-panel__progress-bar')
     expect(appCss).toContain('.app-view-placeholder__secondary')
     expect(appCss).toMatch(/@media \(max-width: 900px\)[\s\S]*\.topbar__actions[\s\S]*min-width: 0/)

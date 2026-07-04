@@ -20,6 +20,14 @@ function resetOmrPanelState(setters) {
   setters.setProgressLabel('')
 }
 
+function formatOmrFailureMessage(error) {
+  const rawMessage = error?.message ?? ''
+  if (/too difficult|confidence|unsupported|failed/i.test(rawMessage)) {
+    return 'We could not read enough of this PDF automatically. You can try again, or upload MusicXML/MXL for the most accurate timing.'
+  }
+  return 'We could not get timing ready from this PDF. You can try again, or upload MusicXML/MXL for the most accurate timing.'
+}
+
 export default function PdfOmrPlaybackPanel({
   pdfSource = null,
   pdfFileUrl = null,
@@ -27,6 +35,8 @@ export default function PdfOmrPlaybackPanel({
   disabled = false,
   onGenerated = null,
   onFeedback = null,
+  autoStartKey = null,
+  onAutoStartConsumed = null,
 }) {
   const { instrumentId } = useInstrument()
   const [status, setStatus] = useState(OMR_STATUS.IDLE)
@@ -36,11 +46,13 @@ export default function PdfOmrPlaybackPanel({
   const [progressLabel, setProgressLabel] = useState('')
   const [devFlags, setDevFlags] = useState(() => getOmrDiagnosticFlags())
   const [devCopyStatus, setDevCopyStatus] = useState('')
+  const [hasDiagnostics, setHasDiagnostics] = useState(false)
   const abortRef = useRef(null)
   const activeRunRef = useRef(0)
   const completedRunRef = useRef(false)
   const lastDiagnosticsRef = useRef(null)
   const lastRunMetaRef = useRef(null)
+  const autoStartedKeyRef = useRef(null)
 
   useEffect(() => () => {
     if (!completedRunRef.current) {
@@ -56,6 +68,7 @@ export default function PdfOmrPlaybackPanel({
     abortRef.current?.abort()
     cancelActiveOmrWorker()
     setError(null)
+    setHasDiagnostics(false)
     resetOmrPanelState({ setIsGenerating, setStatus, setProgressLabel })
     endOmrUiBlock()
     releaseOmrUiLocks()
@@ -109,6 +122,7 @@ export default function PdfOmrPlaybackPanel({
     setError(null)
     onFeedback?.(null)
     setSummary(null)
+    setHasDiagnostics(false)
     setProgressLabel('Starting…')
     setIsGenerating(true)
     setStatus(OMR_STATUS.ANALYZING)
@@ -155,6 +169,7 @@ export default function PdfOmrPlaybackPanel({
       }, runId)
 
       lastDiagnosticsRef.current = result.diagnostics ?? null
+      setHasDiagnostics(Boolean(result.diagnostics))
       lastRunMetaRef.current = {
         runId,
         noteCount: result.noteCount,
@@ -175,6 +190,9 @@ export default function PdfOmrPlaybackPanel({
         measureCount: result.measureCount,
         diagnostics: result.diagnostics,
         measureGrid: result.measureGrid,
+        sourcePdfFileName: pdfFileName ?? null,
+        sourcePdfFileUrl: pdfFileUrl ?? null,
+        sourceInstrumentId: instrumentId,
       })
 
       if (activeRunRef.current !== runId || controller.signal.aborted) {
@@ -228,10 +246,11 @@ export default function PdfOmrPlaybackPanel({
         return
       }
       resetInFinally = false
-      const message = err?.message ?? 'Experimental PDF playback failed.'
+      const message = formatOmrFailureMessage(err)
       omrTrace('ui:setError', { message }, runId)
       setError(message)
       setSummary(null)
+      setHasDiagnostics(false)
       setIsGenerating(false)
       setProgressLabel('')
       setStatus(OMR_STATUS.FAILED)
@@ -249,7 +268,34 @@ export default function PdfOmrPlaybackPanel({
         completed: completedRunRef.current,
       }, runId)
     }
-  }, [pdfSource, pdfFileUrl, pdfFileName, isGenerating, disabled, onGenerated, onFeedback])
+  }, [pdfSource, pdfFileUrl, pdfFileName, instrumentId, isGenerating, disabled, onGenerated, onFeedback])
+
+  useEffect(() => {
+    if (!autoStartKey || autoStartedKeyRef.current === autoStartKey) {
+      return
+    }
+    if ((!pdfSource && !pdfFileUrl) || disabled || isGenerating) {
+      return
+    }
+    if (status === OMR_STATUS.READY || status === OMR_STATUS.FAILED) {
+      return
+    }
+    autoStartedKeyRef.current = autoStartKey
+    const autoRunTimer = setTimeout(() => {
+      onAutoStartConsumed?.(autoStartKey)
+      handleGenerate()
+    }, 0)
+    return () => clearTimeout(autoRunTimer)
+  }, [
+    autoStartKey,
+    pdfSource,
+    pdfFileUrl,
+    disabled,
+    isGenerating,
+    status,
+    onAutoStartConsumed,
+    handleGenerate,
+  ])
 
   const handleCopyDiagnostics = useCallback(async () => {
     const bundle = buildOmrDiagnosticExport({
@@ -278,16 +324,15 @@ export default function PdfOmrPlaybackPanel({
   const showDevTools = import.meta.env.DEV
 
   return (
-    <section className="library-omr-panel" aria-label="Experimental PDF playback" aria-busy={isGenerating}>
+    <section className="library-omr-panel" aria-label="PDF timing generation" aria-busy={isGenerating}>
       <div className="library-omr-panel__header">
         <h2 className="library-omr-panel__title practice-section__title--editorial">
-          Experimental PDF playback
+          Getting your music ready
         </h2>
-        <span className="library-omr-panel__badge">Beta</span>
+        <span className="library-omr-panel__badge">Local</span>
       </div>
       <p className="library-omr-panel__lede">
-        Have only a PDF? Corranzo can try to make playable timing locally. This is experimental;
-        a timing file is still best when you have one.
+        This may take a moment. Upload MusicXML/MXL anytime for the most accurate timing.
       </p>
       <div className="library-omr-panel__actions">
         <button
@@ -296,7 +341,11 @@ export default function PdfOmrPlaybackPanel({
           disabled={disabled || isGenerating || !pdfBytesAvailable}
           onClick={handleGenerate}
         >
-          {isGenerating ? OMR_STATUS_LABEL[status] || 'Analyzing PDF…' : 'Generate experimental playback from PDF'}
+          {isGenerating
+            ? 'Getting your music ready...'
+            : status === OMR_STATUS.FAILED
+              ? 'Try again'
+              : 'Generate timing from PDF'}
         </button>
         {!pdfBytesAvailable && !isGenerating && (
           <p className="library-omr-panel__status" role="status">
@@ -317,18 +366,18 @@ export default function PdfOmrPlaybackPanel({
         <div className="library-omr-panel__progress" role="status" aria-live="polite">
           <span className="library-omr-panel__progress-bar" aria-hidden="true" />
           <p className="library-omr-panel__status">
-            {progressLabel || OMR_STATUS_LABEL[status] || 'Analyzing PDF…'}
+            Getting your music ready... {progressLabel || OMR_STATUS_LABEL[status] || 'This may take a moment.'}
           </p>
         </div>
       )}
       {!isGenerating && status === OMR_STATUS.READY && summary && (
         <p className="library-omr-panel__status library-omr-panel__status--ready" role="status">
-          PDF playback ready — {summary}
+          Timing ready from PDF — {summary}
         </p>
       )}
       {!isGenerating && status === OMR_STATUS.READY && (
         <p className="library-omr-panel__status library-omr-panel__disclaimer" role="note">
-          Experimental PDF playback may be inaccurate. For accurate playback, upload a timing file.
+          Upload MusicXML/MXL anytime for the most accurate timing.
         </p>
       )}
       {!isGenerating && status === OMR_STATUS.FAILED && error && (
@@ -343,7 +392,7 @@ export default function PdfOmrPlaybackPanel({
             type="button"
             className="profile-dev-tools__btn"
             onClick={handleCopyDiagnostics}
-            disabled={!lastDiagnosticsRef.current}
+            disabled={!hasDiagnostics}
           >
             Copy diagnostic JSON
           </button>
