@@ -1,6 +1,5 @@
 import LibraryAccuracyGuide from './LibraryAccuracyGuide.jsx'
 import MultiFileUpload from './MultiFileUpload.jsx'
-import DemoPieceCard from './DemoPieceCard.jsx'
 import PdfOmrPlaybackPanel from './library/PdfOmrPlaybackPanel.jsx'
 import {
   ACCEPT_ATTRIBUTES,
@@ -13,6 +12,14 @@ import {
   isLibraryScoreTimingReady,
   shouldShowLibraryOmrPanel,
 } from '../features/import/musicXmlSource.js'
+import { getInstrument } from '../features/instruments/instruments.js'
+import {
+  DIFFICULTY_FILTERS,
+  LIBRARY_TABS,
+  getBuiltInPracticePieces,
+  groupPracticePiecesByDifficulty,
+} from '../features/library/practiceLibrary.js'
+import { useEffect, useMemo, useState } from 'react'
 
 function rejectMessage(kind) {
   if (kind === 'pdf') {
@@ -26,6 +33,9 @@ function rejectMessage(kind) {
 
 export default function LibraryPanel({
   className = '',
+  activeTab = LIBRARY_TABS.PRACTICE,
+  onTabChange,
+  instrumentId,
   fileName,
   midiFileName,
   musicXmlFileName,
@@ -38,7 +48,6 @@ export default function LibraryPanel({
   onClassifiedUpload = null,
   onImportFeedback,
   onLoadSampleFixtures,
-  demoPiece,
   onOpenPractice,
   pdfSource = null,
   pdfFileUrl = null,
@@ -47,14 +56,31 @@ export default function LibraryPanel({
   sampleLoadError = null,
   importFeedback = null,
   uploadsDisabled = false,
-  showDemo = true,
   fileHelpSignal = 0,
 }) {
+  const [difficultyFilter, setDifficultyFilter] = useState('all')
   const hasPdf = Boolean(pdfFileUrl || pdfSource || fileName)
   const hasMusicXml = isLibraryScoreTimingReady(musicXmlSource)
   const hasMidi = Boolean(midiFileName)
   const canOpenPractice = hasPdf && hasMusicXml
   const showOmrPanel = shouldShowLibraryOmrPanel({ hasPdf, musicXmlSource })
+  const activeInstrument = getInstrument(instrumentId)
+  const practicePieces = useMemo(
+    () => getBuiltInPracticePieces({ instrumentId, difficulty: difficultyFilter }),
+    [instrumentId, difficultyFilter],
+  )
+  const practiceGroups = useMemo(
+    () => groupPracticePiecesByDifficulty(practicePieces),
+    [practicePieces],
+  )
+  const selectedTab = activeTab === LIBRARY_TABS.UPLOADS ? LIBRARY_TABS.UPLOADS : LIBRARY_TABS.PRACTICE
+  const selectTab = (tab) => {
+    onTabChange?.(tab)
+  }
+
+  useEffect(() => {
+    setDifficultyFilter('all')
+  }, [instrumentId])
 
   function reportReject(kind) {
     onImportFeedback?.({ type: 'error', message: rejectMessage(kind) })
@@ -112,33 +138,131 @@ export default function LibraryPanel({
       <header className="library-panel__hero">
         <p className="library-panel__tagline">Start practicing</p>
         <p className="library-panel__browser-hint" role="note">
-          Try the demo, or add sheet music + a timing file. MIDI is optional.
+          Choose a built-in piece, or add your own files.
         </p>
       </header>
 
-      {showDemo && onLoadSampleFixtures && (
-        <DemoPieceCard
-          demoPiece={demoPiece}
-          compact
-          loading={sampleLoadLoading}
-          error={sampleLoadError}
-          onLoad={onLoadSampleFixtures}
-          onRetry={onLoadSampleFixtures}
-        />
-      )}
+      <div className="library-panel__tabs" role="tablist" aria-label="Library sections">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={selectedTab === LIBRARY_TABS.PRACTICE}
+          className={`library-panel__tab${selectedTab === LIBRARY_TABS.PRACTICE ? ' library-panel__tab--active' : ''}`}
+          onClick={() => selectTab(LIBRARY_TABS.PRACTICE)}
+        >
+          Practice Library
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={selectedTab === LIBRARY_TABS.UPLOADS}
+          className={`library-panel__tab${selectedTab === LIBRARY_TABS.UPLOADS ? ' library-panel__tab--active' : ''}`}
+          onClick={() => selectTab(LIBRARY_TABS.UPLOADS)}
+        >
+          My Uploads
+        </button>
+      </div>
 
-      <MultiFileUpload
-        hasPdf={hasPdf}
-        hasMusicXml={hasMusicXml}
-        hasMidi={hasMidi}
-        onFileSelect={onFileSelect}
-        onMusicXmlSelect={onMusicXmlSelect}
-        onMidiSelect={onMidiSelect}
-        onClearMusicXml={onClearMusicXml}
-        onClearMidi={onClearMidi}
-        onClassifiedUpload={onClassifiedUpload}
-        disabled={uploadsDisabled}
-      />
+      {selectedTab === LIBRARY_TABS.PRACTICE ? (
+        <section className="practice-library" aria-labelledby="practice-library-heading">
+          <div className="practice-library__header">
+            <div>
+              <p className="practice-library__eyebrow">{activeInstrument.label}</p>
+              <h2 id="practice-library-heading" className="practice-library__title">
+                Practice Library
+              </h2>
+            </div>
+            <div className="practice-library__filters" aria-label="Difficulty filter">
+              {DIFFICULTY_FILTERS.map((filter) => (
+                <button
+                  key={filter.id}
+                  type="button"
+                  className={`practice-library__filter${difficultyFilter === filter.id ? ' practice-library__filter--active' : ''}`}
+                  aria-pressed={difficultyFilter === filter.id}
+                  onClick={() => setDifficultyFilter(filter.id)}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {practiceGroups.length > 0 ? (
+            <div className="practice-library__groups">
+              {practiceGroups.map((group) => (
+                <section className="practice-library__group" key={group.difficulty}>
+                  <h3 className="practice-library__group-title">{group.difficulty}</h3>
+                  <div className="practice-library__grid">
+                    {group.pieces.map((piece) => (
+                      <article className="practice-piece-card" key={piece.id}>
+                        <div className="practice-piece-card__main">
+                          <p className="practice-piece-card__meta">
+                            {piece.instrument} - {piece.difficulty} - {piece.approxDuration}
+                          </p>
+                          <h4 className="practice-piece-card__title">{piece.title}</h4>
+                          <p className="practice-piece-card__subtitle">{piece.subtitle}</p>
+                          <p className="practice-piece-card__teaches">{piece.teaches}</p>
+                        </div>
+                        <div className="practice-piece-card__action">
+                          <button
+                            type="button"
+                            className="practice-piece-card__button"
+                            disabled={sampleLoadLoading || !onLoadSampleFixtures}
+                            onClick={onLoadSampleFixtures}
+                            aria-label={`Start practice: ${piece.title}`}
+                          >
+                            {sampleLoadLoading ? 'Opening...' : 'Start Practice'}
+                          </button>
+                          <p className="practice-piece-card__credit">{piece.attribution}</p>
+                        </div>
+                        {sampleLoadError && (
+                          <div className="practice-piece-card__error-block" role="alert">
+                            <p className="practice-piece-card__error">{sampleLoadError}</p>
+                            <button
+                              type="button"
+                              className="practice-piece-card__retry"
+                              disabled={sampleLoadLoading || !onLoadSampleFixtures}
+                              onClick={onLoadSampleFixtures}
+                            >
+                              Retry
+                            </button>
+                          </div>
+                        )}
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          ) : (
+            <p className="practice-library__empty">
+              No built-in {activeInstrument.label} pieces match this difficulty yet.
+            </p>
+          )}
+        </section>
+      ) : (
+        <>
+      <section className="library-panel__uploads" aria-labelledby="library-uploads-heading">
+        <div className="library-panel__uploads-header">
+          <p className="practice-library__eyebrow">Your files</p>
+          <h2 id="library-uploads-heading" className="practice-library__title">
+            My Uploads
+          </h2>
+        </div>
+
+        <MultiFileUpload
+          hasPdf={hasPdf}
+          hasMusicXml={hasMusicXml}
+          hasMidi={hasMidi}
+          onFileSelect={onFileSelect}
+          onMusicXmlSelect={onMusicXmlSelect}
+          onMidiSelect={onMidiSelect}
+          onClearMusicXml={onClearMusicXml}
+          onClearMidi={onClearMidi}
+          onClassifiedUpload={onClassifiedUpload}
+          disabled={uploadsDisabled}
+        />
+      </section>
 
       {importFeedback?.message && (
         <p
@@ -296,6 +420,8 @@ export default function LibraryPanel({
         )}
       </div>
       </details>
+        </>
+      )}
     </aside>
   )
 }

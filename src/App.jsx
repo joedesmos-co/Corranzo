@@ -60,6 +60,7 @@ import { getHomeNavigationTarget } from './features/navigation/goHome.js'
 import { warmupAllInstrumentSamplesOnIdle } from './features/playback/instrumentSampleWarmup.js'
 import { useInstrument } from './context/instrumentContext.js'
 import { DEFAULT_INSTRUMENT_ID, normalizeInstrumentId } from './features/instruments/instruments.js'
+import { LIBRARY_TABS } from './features/library/practiceLibrary.js'
 import {
   bundleHasActiveFile,
   createEmptyInstrumentBundle,
@@ -131,6 +132,7 @@ export default function App() {
   const [sampleLoadState, setSampleLoadState] = useState({ loading: false, error: null })
   const [demoPieceActive, setDemoPieceActive] = useState(false)
   const [libraryFeedback, setLibraryFeedback] = useState(null)
+  const [libraryTab, setLibraryTab] = useState(LIBRARY_TABS.PRACTICE)
   const [fileHelpSignal, setFileHelpSignal] = useState(0)
   const [pdfSoftWarning, setPdfSoftWarning] = useState(null)
   const [practicePdfReady, setPracticePdfReady] = useState(false)
@@ -264,6 +266,7 @@ export default function App() {
   const goHome = useCallback(() => {
     const home = getHomeNavigationTarget()
     setShowWelcome(home.showWelcome)
+    setLibraryTab(LIBRARY_TABS.PRACTICE)
     setSidebarOpen(true)
     navigateToView(home.view)
     window.scrollTo(0, 0)
@@ -1000,12 +1003,14 @@ export default function App() {
     }
   }, [activeView, pdfFile, pdfBuffer, resetPdfViewerRuntime])
 
+  const practiceLibraryIsFirstRunHome = true
   const showLibraryIntro =
+    !practiceLibraryIsFirstRunHome &&
     activeView === 'library' &&
     showWelcome &&
     restoreGateOpen &&
     !guidedTutorialOpen
-  const showLibraryWorkspace = activeView === 'library' && !showLibraryIntro
+  const showLibraryWorkspace = activeView === 'library'
 
   function finishGuidedTutorial(reason) {
     completeGuidedTutorial(reason)
@@ -1022,6 +1027,7 @@ export default function App() {
   function showFileHelp() {
     setShowWelcome(false)
     setSidebarOpen(true)
+    setLibraryTab(LIBRARY_TABS.UPLOADS)
     setFileHelpSignal((signal) => signal + 1)
     navigateToView('library')
   }
@@ -1029,6 +1035,7 @@ export default function App() {
   function handleTutorialAddSheetMusic() {
     finishGuidedTutorial('add-sheet-music')
     setSidebarOpen(true)
+    setLibraryTab(LIBRARY_TABS.UPLOADS)
     navigateToView('library')
   }
 
@@ -1134,6 +1141,7 @@ export default function App() {
               ? handleLoadSampleFixtures
               : () => {
                   setSidebarOpen(true)
+                  setLibraryTab(LIBRARY_TABS.UPLOADS)
                   navigateToView('library')
                 }
           }
@@ -1141,6 +1149,7 @@ export default function App() {
           onSecondaryAction={!omrInvalid
             ? () => {
                 setSidebarOpen(true)
+                setLibraryTab(LIBRARY_TABS.UPLOADS)
                 navigateToView('library')
               }
             : null}
@@ -1227,10 +1236,23 @@ export default function App() {
 
       {showLibraryWorkspace && (
         <main
-          className={`main-layout${sidebarOpen ? '' : ' main-layout--sidebar-hidden'}${pdfFile ? '' : ' main-layout--empty-score'}`}
+          className={
+            libraryTab === LIBRARY_TABS.PRACTICE
+              ? 'library-main'
+              : `main-layout${sidebarOpen ? '' : ' main-layout--sidebar-hidden'}${pdfFile ? '' : ' main-layout--empty-score'}`
+          }
         >
           <LibraryPanel
-            className={sidebarOpen ? '' : 'library-panel--hidden'}
+            className={
+              libraryTab === LIBRARY_TABS.PRACTICE
+                ? 'library-panel--practice-library'
+                : sidebarOpen
+                  ? ''
+                  : 'library-panel--hidden'
+            }
+            activeTab={libraryTab}
+            onTabChange={setLibraryTab}
+            instrumentId={instrumentId}
             fileName={fileName}
             midiFileName={midiSource?.fileName}
             musicXmlFileName={musicXmlSource?.fileName}
@@ -1265,23 +1287,25 @@ export default function App() {
             showDemo={!demoCardHidden && isDemoSampleEnabled() && restoreGateOpen}
             fileHelpSignal={fileHelpSignal}
           />
-          <div className="main-layout__score">
-            <PdfViewer
-              key={`library-pdf-${pdfViewerRevision}-${pdfFile ?? 'empty'}`}
-              file={pdfFile}
-              fileName={fileName}
-              pdfMeta={pdfMeta}
-              pageNumber={pageNumber}
-              numPages={numPages}
-              paperTheme={paperTheme}
-              sidebarOpen={sidebarOpen}
-              onDocumentLoadSuccess={handleDocumentLoadSuccess}
-              onPrevPage={handlePrevPage}
-              onNextPage={handleNextPage}
-              onToggleSidebar={toggleSidebar}
-              onTogglePaper={togglePaperTheme}
-            />
-          </div>
+          {libraryTab === LIBRARY_TABS.UPLOADS && (
+            <div className="main-layout__score">
+              <PdfViewer
+                key={`library-pdf-${pdfViewerRevision}-${pdfFile ?? 'empty'}`}
+                file={pdfFile}
+                fileName={fileName}
+                pdfMeta={pdfMeta}
+                pageNumber={pageNumber}
+                numPages={numPages}
+                paperTheme={paperTheme}
+                sidebarOpen={sidebarOpen}
+                onDocumentLoadSuccess={handleDocumentLoadSuccess}
+                onPrevPage={handlePrevPage}
+                onNextPage={handleNextPage}
+                onToggleSidebar={toggleSidebar}
+                onTogglePaper={togglePaperTheme}
+              />
+            </div>
+          )}
         </main>
       )}
 

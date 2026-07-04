@@ -22,6 +22,7 @@ import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
 export const TAB_CLEF_GLYPHS = new Set(['\uE06D', '\uE06E'])
 
 const DIGIT_RE = /^[0-9]$/
+const STAFF_LINE_COLLAPSE_EPSILON = 0.003
 
 /**
  * Split a detected system's staves into notation vs tablature staves.
@@ -49,15 +50,49 @@ export function classifySystemStaves(system, { stringCount = 6 } = {}) {
 }
 
 function resolveTabLineYs(stave, stringCount) {
-  if ((stave?.lineCount ?? 0) !== stringCount) {
-    return null
-  }
-  const detectedLineYs = Array.isArray(stave.detectedLineYs) ? stave.detectedLineYs : null
+  const detectedLineYs = Array.isArray(stave?.detectedLineYs) ? stave.detectedLineYs : null
   if (detectedLineYs?.length === stringCount) {
     return detectedLineYs
   }
-  const lineYs = Array.isArray(stave.lineYs) ? stave.lineYs : null
+  const collapsedDetectedLineYs = collapseNearbyStaffLineYs(detectedLineYs)
+  if (collapsedDetectedLineYs?.length === stringCount) {
+    return collapsedDetectedLineYs
+  }
+
+  const lineYs = Array.isArray(stave?.lineYs) ? stave.lineYs : null
   return lineYs?.length === stringCount ? lineYs : null
+}
+
+function collapseNearbyStaffLineYs(lineYs) {
+  if (!Array.isArray(lineYs) || lineYs.length === 0) {
+    return null
+  }
+  const sorted = lineYs
+    .map(Number)
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right)
+  if (!sorted.length) {
+    return null
+  }
+
+  const collapsed = []
+  let group = [sorted[0]]
+  for (let index = 1; index < sorted.length; index += 1) {
+    const y = sorted[index]
+    const previous = group[group.length - 1]
+    if (y - previous <= STAFF_LINE_COLLAPSE_EPSILON) {
+      group.push(y)
+      continue
+    }
+    collapsed.push(average(group))
+    group = [y]
+  }
+  collapsed.push(average(group))
+  return collapsed
+}
+
+function average(values) {
+  return values.reduce((sum, value) => sum + value, 0) / values.length
 }
 
 /** True when any detected system contains a tablature staff. */
@@ -269,7 +304,9 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
 
 function findMeasureBoxForX(measureBoxes, xNorm) {
   for (const box of measureBoxes ?? []) {
-    const start = box.playableX0 ?? box.x0
+    // TAB digits are musical content, so measure assignment must use the raw
+    // barline boundary. `playableX0` is cursor metadata and can skip beat 1.
+    const start = box.x0
     if (xNorm >= start && xNorm <= box.x1) {
       return box
     }
@@ -278,7 +315,7 @@ function findMeasureBoxForX(measureBoxes, xNorm) {
 }
 
 function positionWithinBox(box, xNorm) {
-  const start = box.playableX0 ?? box.x0
+  const start = box.x0
   const span = box.x1 - start
   if (span <= 0) {
     return 0

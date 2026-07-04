@@ -185,7 +185,11 @@ function buildPdf() {
   const text = (x, y, size, value) => {
     ops.push(`BT /F1 ${size} Tf ${x} ${y} Td (${pdfEscape(value)}) Tj ET`)
   }
-  const line = (x1, y1, x2, y2, w = 0.8) => {
+  const line = (x1, y1, x2, y2, w = 0.8, gray = 0) => {
+    if (gray > 0) {
+      ops.push(`q ${gray} G ${w} w ${x1} ${y1} m ${x2} ${y2} l S Q`)
+      return
+    }
     ops.push(`${w} w ${x1} ${y1} m ${x2} ${y2} l S`)
   }
   const circle = (x, y) => {
@@ -200,27 +204,33 @@ function buildPdf() {
   const measureWidth = 126
   const startX = 74
   let noteIndex = 0
+  const totalMeasures = Math.ceil(NOTES.length / 4)
   for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
+    const measureStart = systemIndex * 4
+    const measureCount = Math.min(4, Math.max(0, totalMeasures - measureStart))
+    if (measureCount <= 0) {
+      continue
+    }
     const y = systems[systemIndex]
     text(38, y + 18, 10, systemIndex === 0 ? 'Staff' : 'Staff')
-    for (let i = 0; i < 5; i += 1) line(startX, y - i * 8, startX + measureWidth * 4, y - i * 8)
+    for (let i = 0; i < 5; i += 1) line(startX, y - i * 8, startX + measureWidth * measureCount, y - i * 8)
     text(38, y - 74, 10, 'TAB')
-    for (let i = 0; i < 6; i += 1) line(startX, y - 84 - i * 8, startX + measureWidth * 4, y - 84 - i * 8)
-    for (let measure = 0; measure <= 4; measure += 1) {
+    for (let i = 0; i < 6; i += 1) line(startX, y - 84 - i * 8, startX + measureWidth * measureCount, y - 84 - i * 8)
+    for (let measure = 0; measure <= measureCount; measure += 1) {
       const x = startX + measure * measureWidth
       line(x, y + 2, x, y - 34)
       line(x, y - 82, x, y - 124)
     }
-    for (let measure = 0; measure < 4; measure += 1) {
+    for (let measure = 0; measure < measureCount; measure += 1) {
       const mx = startX + measure * measureWidth
-      text(mx + 4, y + 10, 8, String(systemIndex * 4 + measure + 1))
+      text(mx + 4, y + 10, 8, String(measureStart + measure + 1))
       for (let beat = 0; beat < 4; beat += 1) {
         const note = NOTES[noteIndex]
         if (!note) break
         const x = mx + 20 + beat * 27
         const staffY = y - staffOffset(note[0])
         circle(x, staffY)
-        line(x + 6, staffY, x + 6, staffY + 32, 0.7)
+        line(x + 6, staffY, x + 6, staffY + 28, 0.35, 0.68)
         const tabY = y - 84 - (note[2] - 1) * 8
         text(x - 3, tabY - 3, 10, String(note[3]))
         noteIndex += 1

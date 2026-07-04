@@ -1,0 +1,89 @@
+import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import {
+  BUILT_IN_PRACTICE_PIECES,
+  LIBRARY_TABS,
+  getBuiltInPracticePieces,
+  groupPracticePiecesByDifficulty,
+} from '../src/features/library/practiceLibrary.js'
+import { INSTRUMENT_IDS } from '../src/features/instruments/instruments.js'
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..')
+
+function readSrc(...parts) {
+  return readFileSync(join(root, 'src', ...parts), 'utf8')
+}
+
+describe('practice library pieces', () => {
+  it('ships the current Piano and Guitar demos as built-in practice pieces', () => {
+    expect(BUILT_IN_PRACTICE_PIECES).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'hungarian-dance-no5',
+          title: 'Hungarian Dance No. 5',
+          instrumentId: INSTRUMENT_IDS.PIANO,
+          instrument: 'Piano',
+          difficulty: 'Advanced',
+          approxDuration: expect.any(String),
+          teaches: expect.any(String),
+        }),
+        expect.objectContaining({
+          id: 'guitar-ode-to-joy',
+          title: 'Ode to Joy',
+          instrumentId: INSTRUMENT_IDS.GUITAR,
+          instrument: 'Guitar',
+          difficulty: 'Beginner',
+          approxDuration: expect.any(String),
+          teaches: expect.any(String),
+        }),
+      ]),
+    )
+  })
+
+  it('filters built-in pieces to the selected instrument', () => {
+    const pianoPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.PIANO })
+    const guitarPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.GUITAR })
+
+    expect(pianoPieces.map((piece) => piece.title)).toEqual(['Hungarian Dance No. 5'])
+    expect(guitarPieces.map((piece) => piece.title)).toEqual(['Ode to Joy'])
+    expect(pianoPieces.every((piece) => piece.instrumentId === INSTRUMENT_IDS.PIANO)).toBe(true)
+    expect(guitarPieces.every((piece) => piece.instrumentId === INSTRUMENT_IDS.GUITAR)).toBe(true)
+  })
+
+  it('groups visible pieces by difficulty without showing empty levels', () => {
+    const groups = groupPracticePiecesByDifficulty(
+      getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.GUITAR }),
+    )
+
+    expect(groups).toEqual([
+      {
+        difficulty: 'Beginner',
+        pieces: [expect.objectContaining({ title: 'Ode to Joy' })],
+      },
+    ])
+  })
+})
+
+describe('library tab shell', () => {
+  it('defaults the Library tab to Practice Library and routes file help to My Uploads', () => {
+    const app = readSrc('App.jsx')
+
+    expect(LIBRARY_TABS.PRACTICE).toBe('practice')
+    expect(app).toContain('useState(LIBRARY_TABS.PRACTICE)')
+    expect(app).toContain("className={\n            libraryTab === LIBRARY_TABS.PRACTICE")
+    expect(app).toContain('setLibraryTab(LIBRARY_TABS.UPLOADS)')
+  })
+
+  it('keeps uploads and OMR controls inside the My Uploads panel', () => {
+    const library = readSrc('components', 'LibraryPanel.jsx')
+
+    expect(library).toContain('Practice Library')
+    expect(library).toContain('My Uploads')
+    expect(library).toContain('Start Practice')
+    expect(library).toContain('MultiFileUpload')
+    expect(library).toContain('PdfOmrPlaybackPanel')
+    expect(library).toContain('Upload one file at a time')
+  })
+})

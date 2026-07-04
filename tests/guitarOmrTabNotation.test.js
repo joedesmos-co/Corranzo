@@ -94,6 +94,42 @@ describe('guitar OMR tablature detection', () => {
     expect(systemsContainTablature([system], { stringCount: 6 })).toBe(false)
   })
 
+  it('collapses doubled raster rows before classifying six-line TAB staves', () => {
+    const tabLineYs = [0.32, 0.33, 0.34, 0.35, 0.36, 0.37]
+    const doubled = tabLineYs.flatMap((y) => [y, y + 0.0007])
+    const system = {
+      lineCount: doubled.length,
+      detectedLineYs: doubled,
+      lineYs: doubled.slice(0, 5),
+    }
+
+    const classified = classifySystemStaves(system, { stringCount: 6 })
+
+    expect(classified.notationStaves).toHaveLength(0)
+    expect(classified.tabStaves).toHaveLength(1)
+    expect(classified.tabStaves[0].lineYs).toHaveLength(6)
+    expect(systemsContainTablature([system], { stringCount: 6 })).toBe(true)
+  })
+
+  it('keeps first-beat TAB digits left of the cursor playable start', () => {
+    const tabStave = {
+      lineYs: [0.2, 0.28, 0.36, 0.44, 0.52, 0.6],
+    }
+
+    const notes = extractTabDigitNotes(
+      [
+        { text: '0', x: 15, y: 20, width: 4 },
+        { text: '1', x: 35, y: 20, width: 4 },
+      ],
+      tabStave,
+      [{ measureNumber: 1, x0: 0.1, playableX0: 0.3, x1: 0.5 }],
+      { width: 100, height: 100 },
+    )
+
+    expect(notes.map((note) => note.fret)).toEqual([0, 1])
+    expect(notes.every((note) => note.measureNumber === 1)).toBe(true)
+  })
+
   it('reads a paired notation-over-TAB system from the notation measure boxes', () => {
     const page = makeWhitePage()
     const notation = drawStaff(page, 100, 5)

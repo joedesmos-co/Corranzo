@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { existsSync, readFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -17,7 +17,16 @@ import {
 import { INSTRUMENT_IDS } from '../src/features/instruments/instruments.js'
 import { isDemoFixtureFileSet } from '../src/features/demo/demoBundledAnchors.js'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
+import { runPdfOmrPipeline } from '../src/features/omr/runPdfOmrPipeline.js'
+import {
+  OMR_DIAGNOSTIC_FLAG,
+  setOmrDiagnosticFlag,
+} from '../src/features/omr/omrDiagnosticFlags.js'
 import { analyzeSemiAutoScoreSetup } from '../src/features/score-follow/semiAutoScoreAlignment.js'
+import {
+  setPdfAnalysisCanvasFactory,
+  setPdfjsLoader,
+} from '../src/features/score-follow/pdfPageAnalysis.js'
 import {
   assessBundledMeasureCursorX,
   validateBundledAnchorPayload,
@@ -73,6 +82,25 @@ async function rasterizePdfPages(pdfPath) {
   }
   return pages
 }
+
+async function configureNodePdfAnalysis() {
+  const [{ createCanvas }, pdfjs] = await Promise.all([
+    import('@napi-rs/canvas'),
+    import('pdfjs-dist/legacy/build/pdf.mjs'),
+  ])
+  setPdfjsLoader(() => pdfjs)
+  setPdfAnalysisCanvasFactory((width, height) => createCanvas(width, height))
+}
+
+beforeAll(() => {
+  setOmrDiagnosticFlag(OMR_DIAGNOSTIC_FLAG.DEBUG, false)
+  setOmrDiagnosticFlag(OMR_DIAGNOSTIC_FLAG.TRACE, false)
+})
+
+afterAll(() => {
+  setPdfjsLoader(null)
+  setPdfAnalysisCanvasFactory(null)
+})
 
 describe('Hungarian Dance demo fixtures', () => {
   it('exposes Hungarian Dance as the built-in demo piece', () => {
@@ -259,6 +287,32 @@ describe('Guitar demo fixtures', () => {
     expect(timingMap.notes.filter((note) => note.isTabMirror)).toHaveLength(playable.length)
     expect(playable.every((note) => note.string != null && note.fret != null)).toBe(true)
   })
+
+  it('can run local OMR from the guitar demo PDF alone', async () => {
+    await configureNodePdfAnalysis()
+    const pdfData = new Uint8Array(readFileSync(fixturePath(GUITAR_FIXTURE_PATHS.pdf)))
+
+    const result = await runPdfOmrPipeline(
+      { data: pdfData, isEvalSupported: false },
+      { instrumentId: INSTRUMENT_IDS.GUITAR, title: 'Guitar Demo PDF OMR' },
+    )
+    const timingMap = parseMusicXml(result.musicXml, 'guitar-demo-pdf-omr.musicxml')
+    const playable = timingMap.notes.filter(
+      (note) => !note.isRest && !note.isTabMirror && note.midi != null,
+    )
+
+    expect(result.noteCount).toBe(28)
+    expect(result.measureCount).toBe(7)
+    expect(result.diagnostics.failureReasons).not.toContain('low-confidence')
+    expect(result.diagnostics.difficulty.tooDifficult).toBe(false)
+    expect(result.diagnostics.tablature).toMatchObject({
+      tabStaves: 2,
+      tabNotes: 28,
+      tabPositionalMeasures: 7,
+    })
+    expect(playable).toHaveLength(28)
+    expect(playable.every((note) => note.string != null && note.fret != null)).toBe(true)
+  }, 30_000)
 
   it('auto-setup follows notation rows, not paired TAB rows', async () => {
     const pdfPath = fixturePath(GUITAR_FIXTURE_PATHS.pdf)
