@@ -74,7 +74,7 @@ function pickPrimaryMidi(notes = [], detectedMidis = []) {
 }
 
 /**
- * Process one live audio buffer tick. Returns V1-compatible frame fields plus V2 metadata.
+ * Process one live audio buffer tick. Returns signal-diagnostic frame fields plus V2 metadata.
  */
 export function processMicEngineV2Tick({
   buffer,
@@ -83,6 +83,7 @@ export function processMicEngineV2Tick({
   noiseFloor = null,
   state,
   centsTolerance = 35,
+  gateOptions = null,
   timeMs = 0,
   stableFrameThreshold = MIC_ENGINE_V2_LIVE_DEFAULTS.stableFrameThreshold,
   peakConfidenceThreshold = MIC_ENGINE_V2_LIVE_DEFAULTS.peakConfidenceThreshold,
@@ -94,25 +95,26 @@ export function processMicEngineV2Tick({
     runtimeState.v2UnavailableReason = 'missing-buffer'
     return {
       state: runtimeState,
-      v1Frame: null,
+      signalFrame: null,
       frame: null,
       stableMidi: null,
       stableMidis: [],
       usedV2: false,
-      usedV1Fallback: false,
     }
   }
 
-  const v1Frame = analyzeMicFrame(buffer, sampleRate, noiseFloor, { centsTolerance })
-  if (!v1Frame) {
+  const signalFrame = analyzeMicFrame(buffer, sampleRate, noiseFloor, {
+    centsTolerance,
+    gateOptions,
+  })
+  if (!signalFrame) {
     return {
       state: runtimeState,
-      v1Frame: null,
+      signalFrame: null,
       frame: null,
       stableMidi: null,
       stableMidis: [],
       usedV2: false,
-      usedV1Fallback: false,
     }
   }
 
@@ -151,11 +153,11 @@ export function processMicEngineV2Tick({
   )
   const stableMidis = stableTracks.map((track) => track.midi)
 
-  const primaryMidi = pickPrimaryMidi(v2Notes, detectedMidis) ?? v1Frame.midi
+  const primaryMidi = pickPrimaryMidi(v2Notes, detectedMidis) ?? signalFrame.midi
   const frame = {
-    ...v1Frame,
+    ...signalFrame,
     midi: primaryMidi,
-    clarity: usedV2 && meanConfidence > 0 ? meanConfidence : v1Frame.clarity,
+    clarity: usedV2 && meanConfidence > 0 ? meanConfidence : signalFrame.clarity,
     v2DetectedMidis: detectedMidis,
     v2Notes,
     v2MeanConfidence: meanConfidence,
@@ -164,19 +166,11 @@ export function processMicEngineV2Tick({
   }
 
   let stableMidi = null
-  let usedV1Fallback = false
 
   if (expectedMidis.length === 1) {
     const expected = expectedMidis[0]
     if (stableMidis.some((midi) => matchesAnyExpected(midi, [expected], { micCentsTolerance: centsTolerance }))) {
       stableMidi = expected
-    } else if (
-      v1Frame.midi != null &&
-      v1Frame.gateOpen &&
-      matchesAnyExpected(v1Frame.midi, [expected], { micCentsTolerance: centsTolerance })
-    ) {
-      stableMidi = v1Frame.midi
-      usedV1Fallback = true
     }
   }
 
@@ -190,11 +184,10 @@ export function processMicEngineV2Tick({
 
   return {
     state: runtimeState,
-    v1Frame,
+    signalFrame,
     frame,
     stableMidi,
     stableMidis: stableChordMidis,
     usedV2,
-    usedV1Fallback,
   }
 }

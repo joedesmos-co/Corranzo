@@ -1,14 +1,13 @@
 /**
  * Mic Engine V2 — runtime feature flag (Wait For You integration).
  *
- * Dev default: V2 on. Explicit opt-out via localStorage/global/override false → V1.
- * Production default: V1 on. Explicit opt-in via localStorage/global/override true → V2.
+ * V2 is now the only live Wait For You mic engine. The old flag identifiers are
+ * kept as compatibility no-ops so saved QA/dev settings do not break startup.
  */
 
 export const MIC_ENGINE_V2_FLAG = 'micEngineV2'
 
 export const MIC_ENGINE_MODE = {
-  V1: 'v1-monophonic',
   V2: 'v2-score-informed',
 }
 
@@ -43,19 +42,13 @@ export function decideMicEngineV2Enabled({
   storageValue = null,
   devDefault = false,
 } = {}) {
-  const explicit = resolveFlagOverride(override)
-  if (explicit !== null) {
-    return explicit
-  }
-  const global = resolveFlagOverride(globalValue)
-  if (global !== null) {
-    return global
-  }
-  const stored = resolveFlagOverride(storageValue)
-  if (stored !== null) {
-    return stored
-  }
-  return devDefault
+  // Read arguments deliberately to preserve the public signature while making
+  // false/opt-out values harmless. V2 is the production path.
+  void override
+  void globalValue
+  void storageValue
+  void devDefault
+  return true
 }
 
 function readGlobalFlag() {
@@ -84,5 +77,6 @@ export function isMicEngineV2Enabled(override = null) {
 }
 
 export function resolveMicEngineMode(override = null) {
-  return isMicEngineV2Enabled(override) ? MIC_ENGINE_MODE.V2 : MIC_ENGINE_MODE.V1
+  void override
+  return MIC_ENGINE_MODE.V2
 }

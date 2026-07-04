@@ -8,6 +8,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   evaluateMicNoteInput,
+  evaluateMicScoreInformedInput,
   MATCH_OUTCOME,
 } from '../src/features/practice/waitForYouNoteMatch.js'
 import {
@@ -35,14 +36,17 @@ function runMicFrames(checkpoint, frames) {
       resetMatchConfirmState(confirmState)
       continue
     }
-    const preview = evaluateMicNoteInput(checkpoint, frame.midi, settings)
+    const detectedMidis = frame.v2DetectedMidis ?? []
+    const preview = detectedMidis.length
+      ? evaluateMicScoreInformedInput(checkpoint, detectedMidis, settings)
+      : evaluateMicNoteInput(checkpoint, frame.midi, settings)
     if (preview.outcome === MATCH_OUTCOME.WRONG) {
       resetMatchConfirmState(confirmState)
       continue
     }
-    if (preview.outcome === MATCH_OUTCOME.COMPLETE) {
+    if (preview.outcome === MATCH_OUTCOME.COMPLETE && detectedMidis.length) {
       const confident = frameConfidentForMatch(frame)
-      if (confirmConfidentMatch(confirmState, `${checkpoint.id}:${frame.midi}`, confident)) {
+      if (confirmConfidentMatch(confirmState, `${checkpoint.id}:v2:${detectedMidis.join(',')}`, confident)) {
         resetMatchConfirmState(confirmState)
         advances += 1
         correctLatched = true
@@ -55,7 +59,8 @@ function runMicFrames(checkpoint, frames) {
 }
 
 const C4 = { id: 'cp-c4', expectedMidi: 60 }
-const goodFrame = (midi) => ({ midi, gateOpen: true, clarity: 0.9 })
+const goodFrame = (midi) => ({ midi, v2DetectedMidis: [midi], gateOpen: true, clarity: 0.9 })
+const monophonicOnlyFrame = (midi) => ({ midi, v2DetectedMidis: [], gateOpen: true, clarity: 0.9 })
 
 describe('microphone correct note advances Wait For You', () => {
   it('advances once the correct note is heard confidently for enough frames', () => {
@@ -91,6 +96,13 @@ describe('microphone correct note advances Wait For You', () => {
   it('does not double-advance from a continuously held correct note', () => {
     const frames = Array.from({ length: 40 }, () => goodFrame(60))
     expect(runMicFrames(C4, frames)).toBe(1)
+  })
+
+  it('does not advance from monophonic-only diagnostic pitch without V2 detection', () => {
+    const frames = Array.from({ length: MIC_MATCH_CONFIRM_FRAMES * 3 }, () =>
+      monophonicOnlyFrame(60),
+    )
+    expect(runMicFrames(C4, frames)).toBe(0)
   })
 
   it('resets confidence if a wrong note interrupts before the window completes', () => {

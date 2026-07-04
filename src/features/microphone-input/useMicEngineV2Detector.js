@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef } from 'react'
 import { analyzeMicFrame, createMicFrameAnalyzer } from './micFrameAnalysis.js'
 import { getMicInstrumentProfile } from './micInstrumentProfiles.js'
 import {
-  applyMicCalibrationToStabilizer,
   createMicCalibration,
   finalizeMicCalibration,
   forceMicCalibrationTimeout,
@@ -11,7 +10,6 @@ import {
   pushCalibrationSample,
   shouldAcceptCalibrationSample,
 } from './micCalibration.js'
-import { createNoteStabilizer, pushStableNote, resetNoteStabilizer } from './noteStabilizer.js'
 import {
   createMicEngineV2RuntimeState,
   processMicEngineV2Tick,
@@ -22,8 +20,7 @@ const UI_FRAME_INTERVAL = 3
 const CALIBRATION_FRAMES = 45
 
 /**
- * Live Mic Engine V2 detector — score-informed polyphony with V1 fallback.
- * API mirrors usePitchDetector for Wait For You integration.
+ * Live Mic Engine V2 detector — score-informed note/chord detection.
  */
 export default function useMicEngineV2Detector({
   enabled,
@@ -40,11 +37,11 @@ export default function useMicEngineV2Detector({
   calibrationKey = 0,
   stableFrameThreshold,
   instrumentId = null,
+  analysisKey = '',
 }) {
   const profile = useMemo(() => getMicInstrumentProfile(instrumentId), [instrumentId])
   const profileRef = useRef(profile)
   profileRef.current = profile
-  const stabilizerRef = useRef(createNoteStabilizer(profile.stabilizer))
   const analyzerRef = useRef(createMicFrameAnalyzer())
   const v2StateRef = useRef(createMicEngineV2RuntimeState())
   const calibrationRef = useRef(null)
@@ -84,16 +81,23 @@ export default function useMicEngineV2Detector({
     const result = finalizeMicCalibration(calibration)
     calibrationResultRef.current = result
     analyzerRef.current.noiseFloor.floor = result.noiseFloor
-    applyMicCalibrationToStabilizer(stabilizerRef.current, result)
     onCalibrationRef.current?.(result)
   }
 
-  useEffect(() => {
-    expectedMidisRef.current = expectedMidis ?? []
-  }, [expectedMidis])
+  const expectedMidisKey = useMemo(
+    () => (expectedMidis ?? []).join(','),
+    [expectedMidis],
+  )
 
   useEffect(() => {
-    stabilizerRef.current = createNoteStabilizer(profile.stabilizer)
+    expectedMidisRef.current = expectedMidis ?? []
+  }, [expectedMidis, expectedMidisKey])
+
+  useEffect(() => {
+    resetMicEngineV2RuntimeState(v2StateRef.current)
+  }, [analysisKey, expectedMidisKey, stableFrameThreshold])
+
+  useEffect(() => {
     analyzerRef.current = createMicFrameAnalyzer()
     resetMicEngineV2RuntimeState(v2StateRef.current)
     calibrationRef.current = createMicCalibration({ frames: CALIBRATION_FRAMES })
@@ -157,6 +161,7 @@ export default function useMicEngineV2Detector({
               noiseFloor: analyzerRef.current.noiseFloor,
               state: v2StateRef.current,
               centsTolerance,
+              gateOptions: profileRef.current.gate,
               timeMs: performance.now(),
               stableFrameThreshold,
             })
@@ -164,39 +169,22 @@ export default function useMicEngineV2Detector({
             uiFrameSkipRef.current += 1
             if (onFrameRef.current && uiFrameSkipRef.current >= UI_FRAME_INTERVAL) {
               uiFrameSkipRef.current = 0
-              const stabilizer = stabilizerRef.current
-              const stabilizerPending =
-                stabilizer.candidateMidi != null &&
-                stabilizer.stableCount > 0 &&
-                stabilizer.stableCount < stabilizer.holdFrames
               onFrameRef.current({
                 ...(tickResult.frame ?? previewFrame),
-                stabilizerPending,
+                stabilizerPending: false,
                 calibrating: false,
                 calibrationStatus:
                   calibrationResultRef.current?.status ?? MIC_CALIBRATION_STATUS.READY,
                 calibration: calibrationResultRef.current,
                 micEngineMode: 'v2-score-informed',
-                usedV1Fallback: tickResult.usedV1Fallback,
               })
             }
 
             if (onStableChordRef.current && tickResult.stableMidis?.length > 1) {
               onStableChordRef.current(tickResult.stableMidis, tickResult.frame)
             } else if (onStableMidiRef.current) {
-              let stableMidi = tickResult.stableMidi
-              if (stableMidi == null && expectedMidisRef.current.length <= 1) {
-                stableMidi = pushStableNote(stabilizerRef.current, {
-                  midi: previewFrame.midi,
-                  clarity: previewFrame.clarity,
-                  rms: previewFrame.rms,
-                })
-                if (stableMidi != null) {
-                  tickResult.usedV1Fallback = true
-                }
-              }
-              if (stableMidi != null) {
-                onStableMidiRef.current(stableMidi, tickResult.frame ?? previewFrame)
+              if (tickResult.stableMidi != null) {
+                onStableMidiRef.current(tickResult.stableMidi, tickResult.frame ?? previewFrame)
               }
             }
           } else if (previewFrame) {
@@ -232,7 +220,6 @@ export default function useMicEngineV2Detector({
         cancelAnimationFrame(rafRef.current)
         rafRef.current = null
       }
-      resetNoteStabilizer(stabilizerRef.current)
       resetMicEngineV2RuntimeState(v2StateRef.current)
     }
   }, [
@@ -244,11 +231,11 @@ export default function useMicEngineV2Detector({
     calibrationKey,
     stableFrameThreshold,
     profile,
+    analysisKey,
   ])
 
   return {
     retryCalibration: () => {
-      stabilizerRef.current = createNoteStabilizer(profileRef.current.stabilizer)
       analyzerRef.current = createMicFrameAnalyzer()
       resetMicEngineV2RuntimeState(v2StateRef.current)
       calibrationRef.current = createMicCalibration({ frames: CALIBRATION_FRAMES })

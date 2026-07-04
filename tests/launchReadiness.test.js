@@ -102,7 +102,7 @@ describe('launch readiness fixes', () => {
     const midi = readSrc('features', 'practice', 'useWaitForYouMidiInput.js')
     const guidance = readSrc('features', 'practice', 'useWaitForYouGuidance.js')
     const session = readSrc('features', 'practice', 'usePracticeSession.js')
-    const pitch = readSrc('features', 'microphone-input', 'usePitchDetector.js')
+    const detector = readSrc('features', 'microphone-input', 'useMicEngineV2Detector.js')
 
     expect(mic).toMatch(/if \(!active\) \{[\s\S]*resetFeedback\(\)/)
     expect(midi).toMatch(/if \(!active\) \{[\s\S]*resetFeedback\(\)/)
@@ -113,8 +113,8 @@ describe('launch readiness fixes', () => {
     expect(session).toMatch(
       /micCaptureActive[\s\S]*isWaitForYou[\s\S]*WFY_INPUT_SOURCE\.MICROPHONE/,
     )
-    expect(pitch).toMatch(/if \(!enabled\)[\s\S]*cancelAnimationFrame/)
-    expect(pitch).toMatch(/resetNoteStabilizer\(stabilizerRef\.current\)/)
+    expect(detector).toMatch(/if \(!enabled\)[\s\S]*cancelAnimationFrame/)
+    expect(detector).toMatch(/resetMicEngineV2RuntimeState\(v2StateRef\.current\)/)
     expect(mic).toContain('resolveMicDiagnostic')
   })
 

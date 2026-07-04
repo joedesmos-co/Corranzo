@@ -124,9 +124,11 @@ describe('mic diagnostics are inspectable in any build', () => {
   })
 
   it('threads the selected instrument into the detectors', () => {
-    const detector = readSrc('features', 'microphone-input', 'usePitchDetector.js')
+    const detector = readSrc('features', 'microphone-input', 'useMicEngineV2Detector.js')
+    const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
     expect(detector).toContain('getMicInstrumentProfile')
     expect(detector).toContain('gateOptions:')
-    expect(hook).toContain('instrumentId')
+    expect(mic).toContain('instrumentId')
+    expect(mic).toContain('analysisKey:')
   })
 })

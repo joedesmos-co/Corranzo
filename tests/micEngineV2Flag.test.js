@@ -9,33 +9,38 @@ import {
 } from '../src/features/microphone-input/micEngineFlag.js'
 
 describe('micEngineFlag', () => {
-  it('defaults V2 on in dev when no sources are set', () => {
+  it('always enables V2 when no sources are set', () => {
     expect(decideMicEngineV2Enabled({ devDefault: true })).toBe(true)
     expect(decideMicEngineV2Enabled({ devDefault: true, globalValue: null, storageValue: null })).toBe(
       true,
     )
+    expect(decideMicEngineV2Enabled({ devDefault: false })).toBe(true)
   })
 
-  it('defaults V2 off in production when no sources are set', () => {
-    expect(decideMicEngineV2Enabled({ devDefault: false })).toBe(false)
-  })
-
-  it('explicit storage false opts out of dev default V2', () => {
+  it('ignores explicit false legacy opt-outs because V2 is the only live engine', () => {
     expect(
       decideMicEngineV2Enabled({
         devDefault: true,
         storageValue: 'false',
       }),
-    ).toBe(false)
+    ).toBe(true)
     expect(
       decideMicEngineV2Enabled({
         devDefault: true,
         globalValue: false,
       }),
-    ).toBe(false)
+    ).toBe(true)
+    expect(
+      decideMicEngineV2Enabled({
+        override: false,
+        globalValue: false,
+        storageValue: false,
+        devDefault: false,
+      }),
+    ).toBe(true)
   })
 
-  it('respects explicit override before global or storage', () => {
+  it('keeps explicit true values harmlessly enabled', () => {
     expect(
       decideMicEngineV2Enabled({
         override: true,
@@ -44,17 +49,6 @@ describe('micEngineFlag', () => {
         devDefault: false,
       }),
     ).toBe(true)
-    expect(
-      decideMicEngineV2Enabled({
-        override: false,
-        globalValue: true,
-        storageValue: true,
-        devDefault: true,
-      }),
-    ).toBe(false)
-  })
-
-  it('falls back global then storage before dev default', () => {
     expect(
       decideMicEngineV2Enabled({
         devDefault: false,
@@ -83,7 +77,9 @@ describe('micEngineFlag', () => {
   })
 
   it('honors explicit override via isMicEngineV2Enabled', () => {
-    expect(isMicEngineV2Enabled(false)).toBe(false)
+    expect(isMicEngineV2Enabled(false)).toBe(true)
     expect(isMicEngineV2Enabled(true)).toBe(true)
+    expect(MIC_ENGINE_MODE.V2).toBe('v2-score-informed')
+    expect(MIC_ENGINE_MODE.V1).toBeUndefined()
   })
 })

@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { synthSimultaneousChord } from '../src/features/microphone-input/micSyntheticChordClips.js'
+import { midiToFrequency, synthSine } from '../src/features/microphone-input/micSyntheticClips.js'
 import {
   createMicEngineV2RuntimeState,
   processMicEngineV2Tick,
@@ -29,15 +30,14 @@ function synthAttackWindow(midis, seconds = 1.2) {
 }
 
 describe('Wait For You mic engine V2 wiring', () => {
-  it('uses V1 pitch detector when the flag is off', () => {
+  it('uses V2 as the only live WFY mic detector', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
-    expect(mic).toContain('usePitchDetector({')
-    expect(mic).toContain('enabled: useV1Detector')
     expect(mic).toContain('enabled: useV2Detector')
     expect(mic).toMatch(/useV2Detector = matchingEnabled && micEngineV2Active/)
-    expect(mic).toMatch(/useV1Detector = detectEnabled && !useV2Detector/)
+    expect(mic).not.toContain('usePitchDetector({')
+    expect(mic).not.toContain('useV1Detector')
     expect(mic).toContain('handleV2RuntimeError')
-    expect(mic).toContain('v2SessionFallback')
+    expect(mic).not.toContain('v2SessionFallback')
   })
 
   it('routes chord checkpoints to V2 polyphonic mode when flag is on', () => {
@@ -55,10 +55,27 @@ describe('Wait For You mic engine V2 wiring', () => {
     expect(hook).toContain('onV2RuntimeError')
   })
 
+  it('resets V2 note tracks when the checkpoint analysis key changes', () => {
+    const hook = readSrc('features', 'microphone-input', 'useMicEngineV2Detector.js')
+    const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
+    expect(hook).toContain('analysisKey')
+    expect(hook).toMatch(/analysisKey[\s\S]*expectedMidisKey[\s\S]*stableFrameThreshold/)
+    expect(mic).toContain("analysisKey: currentCheckpoint?.id ?? ''")
+  })
+
   it('resets WFY mic feedback when leaving active mode', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
     expect(mic).toMatch(/if \(!active\) \{[\s\S]*resetFeedback\(\)/)
     expect(mic).toContain('lastStableChordKeyRef.current = \'\'')
+  })
+
+  it('latches complete mic matches synchronously before advancing', () => {
+    const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
+    const latchIndex = mic.indexOf('feedbackOutcomeRef.current = feedback.outcome')
+    const advanceIndex = mic.indexOf('onPlayerInputMatched()')
+    expect(latchIndex).toBeGreaterThan(-1)
+    expect(advanceIndex).toBeGreaterThan(latchIndex)
+    expect(mic).toMatch(/feedbackOutcomeRef\.current === WFY_INPUT_OUTCOME\.CORRECT[\s\S]*return/)
   })
 })
 
@@ -113,7 +130,7 @@ describe('processMicEngineV2Tick', () => {
     expect(last.stableMidis.length).toBe(3)
   })
 
-  it('falls back to V1 for a single-note checkpoint when V2 track is empty', () => {
+  it('does not fall back to monophonic advancement when the V2 track is not stable', () => {
     const buffer = synthAttackWindow([60])
     const state = createMicEngineV2RuntimeState()
     const result = processMicEngineV2Tick({
@@ -123,10 +140,65 @@ describe('processMicEngineV2Tick', () => {
       state,
       centsTolerance: 35,
       stableFrameThreshold: 99,
+      peakConfidenceThreshold: 0.99,
     })
 
     expect(result.usedV2).toBe(true)
-    expect(result.stableMidi != null || result.v1Frame?.midi != null).toBe(true)
+    expect(result.signalFrame?.midi).toBe(60)
+    expect(result.stableMidi).toBeNull()
+    expect(result).not.toHaveProperty('usedV1Fallback')
+  })
+
+  it('threads instrument gate options into V2 signal diagnostics', () => {
+    const buffer = synthSine(261.63, SAMPLE_RATE, 2048 / SAMPLE_RATE, 0.045)
+    const state = createMicEngineV2RuntimeState()
+
+    const strict = processMicEngineV2Tick({
+      buffer,
+      sampleRate: SAMPLE_RATE,
+      expectedMidis: [60],
+      state,
+      gateOptions: { absoluteMin: 0.05, floorMultiplier: 2.8 },
+    })
+    resetMicEngineV2RuntimeState(state)
+    const forgiving = processMicEngineV2Tick({
+      buffer,
+      sampleRate: SAMPLE_RATE,
+      expectedMidis: [60],
+      state,
+      gateOptions: { absoluteMin: 0.005, floorMultiplier: 1 },
+    })
+
+    expect(strict.frame?.gateOpen).toBe(false)
+    expect(forgiving.frame?.gateOpen).toBe(true)
+  })
+
+  it('does not advance a wrong note near the target', () => {
+    const samples = synthSine(midiToFrequency(62), SAMPLE_RATE, 0.5, 0.35)
+    const state = createMicEngineV2RuntimeState()
+    let stableMidi = null
+    const detectedMidis = new Set()
+
+    for (let end = 2048; end <= samples.length; end += Math.round(SAMPLE_RATE / 60)) {
+      const buffer = new Float32Array(samples.subarray(end - 2048, end))
+      const result = processMicEngineV2Tick({
+        buffer,
+        sampleRate: SAMPLE_RATE,
+        expectedMidis: [60],
+        state,
+        timeMs: end / SAMPLE_RATE * 1000,
+        stableFrameThreshold: 2,
+      })
+      for (const midi of result.frame?.v2DetectedMidis ?? []) {
+        detectedMidis.add(midi)
+      }
+      if (result.stableMidi != null) {
+        stableMidi = result.stableMidi
+      }
+    }
+
+    expect(stableMidi).toBeNull()
+    expect([...detectedMidis]).toEqual([])
   })
 
   it('marks V2 unavailable on missing buffer and skips detection', () => {
@@ -160,5 +232,37 @@ describe('processMicEngineV2Tick', () => {
     expect(state.perNoteTracks.size).toBe(0)
     expect(state.lastDetectedMidis).toEqual([])
     expect(state.v2Unavailable).toBe(false)
+  })
+
+  it('requires fresh V2 frames after a checkpoint reset for repeated same-note targets', () => {
+    const buffer = synthAttackWindow([60])
+    const state = createMicEngineV2RuntimeState()
+    let firstCheckpoint = null
+
+    for (let frame = 0; frame < 3; frame += 1) {
+      firstCheckpoint = processMicEngineV2Tick({
+        buffer,
+        sampleRate: SAMPLE_RATE,
+        expectedMidis: [60],
+        state,
+        timeMs: frame * 20,
+        stableFrameThreshold: 2,
+        peakConfidenceThreshold: 0.99,
+      })
+    }
+    expect(firstCheckpoint.stableMidi).toBe(60)
+
+    resetMicEngineV2RuntimeState(state)
+    const nextCheckpointFirstFrame = processMicEngineV2Tick({
+      buffer,
+      sampleRate: SAMPLE_RATE,
+      expectedMidis: [60],
+      state,
+      timeMs: 100,
+      stableFrameThreshold: 2,
+      peakConfidenceThreshold: 0.99,
+    })
+
+    expect(nextCheckpointFirstFrame.stableMidi).toBeNull()
   })
 })

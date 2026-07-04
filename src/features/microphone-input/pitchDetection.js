@@ -17,9 +17,18 @@ export function detectPitchAutocorrelation(samples, sampleRate) {
   }
 
   const size = samples.length
+  let mean = 0
+  for (let index = 0; index < size; index += 1) {
+    mean += samples[index]
+  }
+  mean /= size
+
+  // Center the window before autocorrelation. A DC-offset or flat/clipped input
+  // has high raw correlation at arbitrary periods but no musical periodicity.
   let rms = 0
   for (let index = 0; index < size; index += 1) {
-    rms += samples[index] * samples[index]
+    const centered = samples[index] - mean
+    rms += centered * centered
   }
   rms = Math.sqrt(rms / size)
   if (rms < 0.006) {
@@ -39,7 +48,7 @@ export function detectPitchAutocorrelation(samples, sampleRate) {
     let correlation = 0
     const window = size - period
     for (let index = 0; index < window; index += 1) {
-      correlation += samples[index] * samples[index + period]
+      correlation += (samples[index] - mean) * (samples[index + period] - mean)
     }
     correlation /= window
     if (correlation > bestCorrelation) {
@@ -59,7 +68,7 @@ export function detectPitchAutocorrelation(samples, sampleRate) {
     let correlation = 0
     const window = size - period
     for (let index = 0; index < window; index += 1) {
-      correlation += samples[index] * samples[index + period]
+      correlation += (samples[index] - mean) * (samples[index + period] - mean)
     }
     return correlation / window
   }

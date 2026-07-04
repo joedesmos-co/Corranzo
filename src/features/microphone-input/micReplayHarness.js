@@ -12,7 +12,7 @@ import { getMicInstrumentProfile } from './micInstrumentProfiles.js'
 /** Matches live AnalyserNode configuration in useMicrophoneCapture. */
 export const MIC_REPLAY_FFT_SIZE = 2048
 
-/** Approximate browser rAF cadence used by usePitchDetector. */
+/** Approximate browser rAF cadence used by the live mic detector. */
 export const MIC_REPLAY_FRAME_HOP_MS = 1000 / 60
 
 export const MIC_REPLAY_CALIBRATION_FRAMES = 45

@@ -102,6 +102,23 @@ describe('pitch detection', () => {
     expect(note).toBeNull()
   })
 
+  it('rejects a flat DC-offset signal instead of inventing a pitch', () => {
+    const offset = new Float32Array(2048).fill(0.05)
+    expect(detectPitchAutocorrelation(offset, SAMPLE_RATE)).toBeNull()
+  })
+
+  it('still detects a real note when the input has DC offset', () => {
+    const note = synthSine(261.63, 0.08, 2048 / SAMPLE_RATE)
+    for (let index = 0; index < note.length; index += 1) {
+      note[index] += 0.03
+    }
+    const detected = pitchToMidiNote(detectPitchAutocorrelation(note, SAMPLE_RATE), {
+      minClarity: 0.12,
+      centsTolerance: 35,
+    })
+    expect(detected?.midi).toBe(60)
+  })
+
   it('analyzeMicFrame detects pitch on a steady analyser-sized window', () => {
     const window = synthSine(261.63, 0.35, 2048 / SAMPLE_RATE)
     const analyzer = createMicFrameAnalyzer()

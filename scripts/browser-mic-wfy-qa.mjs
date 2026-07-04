@@ -419,8 +419,8 @@ async function main() {
     }
 
     const micDebugDefault = await page.evaluate(() => globalThis.__SCOREFLOW_MIC_DEBUG__ ?? null)
-    if (micDebugDefault?.engineMode === 'v1-monophonic' && micDebugDefault?.v2Enabled === false) {
-      pass('production build keeps V1 default when flag unset', micDebugDefault.engineMode)
+    if (micDebugDefault?.engineMode === 'v2-score-informed' && micDebugDefault?.v2Enabled === true) {
+      pass('production build uses V2 mic engine when flag unset', micDebugDefault.engineMode)
     } else if (micDebugDefault) {
       note(`Mic engine debug: ${JSON.stringify(micDebugDefault)}`)
     } else {
@@ -826,7 +826,7 @@ async function main() {
       }
     }
 
-    // ── 7. Reload persistence — explicit opt-out restores V1 ──────────────────
+    // ── 7. Reload persistence — legacy opt-out is ignored (V2-only) ───────────
     {
       const { browser, page } = await openV2WfyPage(launchBrowser, CLIPS.roomQuiet, {
         devDefault: v2DevDefault,
@@ -844,12 +844,12 @@ async function main() {
         await sleep(2000)
         const dbg = await readMicDebug(page)
         v2Scenario.reloadOptOut = dbg
-        if (dbg?.engineMode === 'v1-monophonic' && dbg?.v2Enabled === false) {
-          pass('V2 opt-out: reload with flag=false restores V1', dbg.engineMode)
+        if (dbg?.engineMode === 'v2-score-informed' && dbg?.v2Enabled === true) {
+          pass('V2-only: reload ignores legacy flag=false opt-out', dbg.engineMode)
         } else if (dbg) {
-          note(`V2 opt-out after reload: ${JSON.stringify(dbg)}`)
+          note(`V2-only reload after legacy opt-out: ${JSON.stringify(dbg)}`)
         } else {
-          note('V2 opt-out: debug hook not exposed after reload (production build?)')
+          note('V2-only reload: debug hook not exposed after reload (production build?)')
         }
       } finally {
         await browser.close()

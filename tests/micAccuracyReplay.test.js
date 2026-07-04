@@ -10,6 +10,12 @@ import {
   MIC_REPLAY_FFT_SIZE,
   frameHopSamples,
 } from '../src/features/microphone-input/micReplayHarness.js'
+import { createMicFrameAnalyzer } from '../src/features/microphone-input/micFrameAnalysis.js'
+import { getMicInstrumentProfile } from '../src/features/microphone-input/micInstrumentProfiles.js'
+import {
+  createMicEngineV2RuntimeState,
+  processMicEngineV2Tick,
+} from '../src/features/microphone-input/v2/micEngineV2Live.js'
 import {
   evaluateLabeledClip,
   formatMicAccuracyReportMarkdown,
@@ -30,6 +36,45 @@ const manifestPath = join(root, 'benchmarks/mic-accuracy/manifest.json')
 
 const SAMPLE_RATE = 44100
 const settings = normalizeMatchSettings({})
+
+function replayV2SingleNote(samples, sampleRate, expectedMidi, instrumentId = null) {
+  const state = createMicEngineV2RuntimeState()
+  const analyzer = createMicFrameAnalyzer()
+  const profile = getMicInstrumentProfile(instrumentId)
+  const hop = frameHopSamples(sampleRate)
+  let stableMidi = null
+  let maxConfidence = 0
+  const detectedMidis = new Set()
+
+  for (let end = MIC_REPLAY_FFT_SIZE; end <= samples.length; end += hop) {
+    const buffer = new Float32Array(samples.subarray(end - MIC_REPLAY_FFT_SIZE, end))
+    const result = processMicEngineV2Tick({
+      buffer,
+      sampleRate,
+      expectedMidis: [expectedMidi],
+      noiseFloor: analyzer.noiseFloor,
+      state,
+      centsTolerance: settings.micCentsTolerance,
+      gateOptions: profile.gate,
+      timeMs: ((end - MIC_REPLAY_FFT_SIZE) / sampleRate) * 1000,
+      stableFrameThreshold: 2,
+    })
+    maxConfidence = Math.max(maxConfidence, result.frame?.v2MeanConfidence ?? 0)
+    for (const midi of result.frame?.v2DetectedMidis ?? []) {
+      detectedMidis.add(midi)
+    }
+    if (result.stableMidi != null) {
+      stableMidi = result.stableMidi
+      break
+    }
+  }
+
+  return {
+    stableMidi,
+    maxConfidence,
+    detectedMidis: [...detectedMidis],
+  }
+}
 
 describe('mic replay harness', () => {
   it('matches live analyser frame size and hop cadence', () => {
@@ -167,6 +212,27 @@ describe('mic accuracy manifest', () => {
     expect(summary.hits).toBeGreaterThanOrEqual(2)
   })
 
+  it('replays real-file note clips through the live V2 single-note path', () => {
+    const manifest = loadMicAccuracyManifest(manifestPath)
+    const noteClips = manifest.clips.filter(
+      (clip) => clip.file && !clip.synthetic && clip.label === 'note',
+    )
+    expect(noteClips.length).toBeGreaterThanOrEqual(3)
+
+    for (const clip of noteClips) {
+      const audio = resolveMicAccuracyClipAudio(clip, manifest, SAMPLE_RATE)
+      expect(audio.missingFile).toBe(false)
+      const wav = readWavPcm(audio.filePath)
+      const samples = sliceClipSamples(wav.samples, wav.sampleRate, {
+        startMs: clip.startMs,
+        endMs: clip.endMs,
+      })
+      const replay = replayV2SingleNote(samples, wav.sampleRate, clip.expectedMidi, clip.instrument)
+      expect(replay.stableMidi, clip.id).toBe(clip.expectedMidi)
+      expect(replay.detectedMidis, clip.id).toContain(clip.expectedMidi)
+    }
+  })
+
   it('covers piano and guitar missed-note regression fixtures without false negatives', () => {
     const manifest = loadMicAccuracyManifest(manifestPath)
     const regressionIds = new Set([
@@ -197,6 +263,46 @@ describe('mic accuracy manifest', () => {
     expect(summary.hitRate).toBe(1)
     expect(summary.falseNegativeRate).toBe(0)
     expect(summary.falseNegativeCauses).toEqual({})
+  })
+
+  it('covers piano and guitar regression fixtures through the live V2 single-note path', () => {
+    const manifest = loadMicAccuracyManifest(manifestPath)
+    const regressionIds = new Set([
+      'synth-a4-clean',
+      'synth-digital-piano-speaker-c4',
+      'synth-piano-quiet-c4',
+      'synth-piano-loud-e4',
+      'synth-guitar-open-e2',
+      'synth-guitar-open-a2',
+      'synth-guitar-fretted-c4',
+      'synth-electric-clean-a3',
+      'synth-electric-distorted-e2',
+      'synth-guitar-quiet-e3',
+    ])
+    const clips = manifest.clips.filter((clip) => regressionIds.has(clip.id))
+    expect(clips).toHaveLength(regressionIds.size)
+
+    for (const clip of clips) {
+      const samples = renderSyntheticClip(clip.synthetic, SAMPLE_RATE)
+      const replay = replayV2SingleNote(samples, SAMPLE_RATE, clip.expectedMidi, clip.instrument)
+      expect(replay.stableMidi, clip.id).toBe(clip.expectedMidi)
+      expect(replay.detectedMidis, clip.id).toContain(clip.expectedMidi)
+      expect(replay.maxConfidence, clip.id).toBeGreaterThan(0.28)
+    }
+  })
+
+  it('keeps the live V2 single-note path quiet on silence and noise controls', () => {
+    const manifest = loadMicAccuracyManifest(manifestPath)
+    const rejectIds = new Set(['synth-silence', 'synth-noise'])
+    const clips = manifest.clips.filter((clip) => rejectIds.has(clip.id))
+    expect(clips).toHaveLength(rejectIds.size)
+
+    for (const clip of clips) {
+      const samples = renderSyntheticClip(clip.synthetic, SAMPLE_RATE)
+      const replay = replayV2SingleNote(samples, SAMPLE_RATE, 60, clip.instrument)
+      expect(replay.stableMidi, clip.id).toBeNull()
+      expect(replay.detectedMidis, clip.id).toEqual([])
+    }
   })
 
   it('skips missing file placeholders without counting them as misses', () => {

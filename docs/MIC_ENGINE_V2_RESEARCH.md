@@ -38,7 +38,7 @@ WFY continues to call the same matching layer (`waitForYouNoteMatch.js`); a thin
 
 ---
 
-## Current state (V1)
+## Previous state (retired live V1)
 
 | Layer | Module | Role |
 |-------|--------|------|
@@ -46,7 +46,7 @@ WFY continues to call the same matching layer (`waitForYouNoteMatch.js`); a thin
 | Calibration | `micCalibration.js` | Noise floor, gate, stabilizer thresholds |
 | Frame analysis | `micFrameAnalysis.js` | High-pass (gate only), autocorrelation pitch |
 | Stabilization | `noteStabilizer.js` | Hold frames, attack skip, octave reject |
-| Loop | `usePitchDetector.js` | rAF ~60 Hz, calibration → frames → stable note |
+| Loop | retired live pitch hook | rAF ~60 Hz, calibration → frames → stable note |
 | WFY bridge | `useWaitForYouMicInput.js` | Single `onStableMidi`, chord collection workaround |
 | Measurement | `micReplayHarness.js`, `benchmarks/mic-accuracy/` | Offline replay, labeled WAV fixtures |
 
@@ -244,7 +244,7 @@ Desktop: `blindWeight` higher. iPad: rely more on score-informed + lighter blind
 │  Layer 6 — WFY adapter (only integration surface)          │
 │  • MicEngineV2 → MicNoteEvent[] / chord snapshots            │
 │  • Feeds waitForYouNoteMatch (replace collection hack)     │
-│  • useWaitForYouMicInput: swap usePitchDetector → useMicV2   │
+│  • useWaitForYouMicInput uses useMicEngineV2Detector    │
 └─────────────────────────────────────────────────────────────┘
 ```
 

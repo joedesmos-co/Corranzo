@@ -29,11 +29,7 @@ import {
   pushMicDebugFrame,
   serializeMicDebugFrames,
 } from '../microphone-input/micDebugExport.js'
-import {
-  isMicEngineV2Enabled,
-} from '../microphone-input/micEngineFlag.js'
 import useMicEngineV2Detector from '../microphone-input/useMicEngineV2Detector.js'
-import usePitchDetector from '../microphone-input/usePitchDetector.js'
 import {
   confirmConfidentMatch as pushMatchConfirm,
   createMatchConfirmState,
@@ -88,7 +84,6 @@ function micFrameRejectReason({
   frame,
   matchingEnabled,
   expectedMidis,
-  isMicV2Polyphonic,
 }) {
   if (frame.calibrating) {
     return 'calibrating'
@@ -99,11 +94,11 @@ function micFrameRejectReason({
   if (!expectedMidis?.length) {
     return 'no-expected-midi'
   }
-  if (isMicV2Polyphonic && frame.v2Active && !frame.v2DetectedMidis?.length) {
-    return 'v2-below-threshold'
-  }
   if (!frame.gateOpen) {
     return 'noise-gate-closed'
+  }
+  if (frame.v2Active && !frame.v2DetectedMidis?.length) {
+    return 'v2-below-threshold'
   }
   if (frame.midi == null) {
     return 'no-midi-detected'
@@ -122,7 +117,6 @@ export default function useWaitForYouMicInput({
   onPlayerInputMatched,
   onWrongNote = null,
   microphone,
-  micEngineV2Override = null,
   instrumentId = null,
 }) {
   const [inputFeedback, setInputFeedback] = useState(() =>
@@ -137,20 +131,17 @@ export default function useWaitForYouMicInput({
   const lastStableChordKeyRef = useRef('')
   const matchConfirmRef = useRef(createMatchConfirmState())
   const debugFramesRef = useRef([])
-  const micEngineV2EnabledRef = useRef(false)
-  const v2SessionFallbackRef = useRef(false)
-  const [v2SessionFallback, setV2SessionFallback] = useState(false)
+  const [v2RuntimeError, setV2RuntimeError] = useState(null)
 
   const detectEnabled = Boolean(active && microphone?.isListening)
   const micCentsTolerance = matchSettings?.micCentsTolerance ?? 30
   const expectedMidis = getExpectedMidis(currentCheckpoint)
-  const micEngineV2Enabled = isMicEngineV2Enabled(micEngineV2Override)
-  const micEngineV2Active = micEngineV2Enabled && !v2SessionFallback
-  const micEngineMode = micEngineV2Active ? 'v2-score-informed' : 'v1-monophonic'
+  const micEngineV2Enabled = true
+  const micEngineV2Active = !v2RuntimeError
+  const micEngineMode = 'v2-score-informed'
   const chordTargets = getMicChordMatchTargets(currentCheckpoint, matchSettings)
 
   const isMicV2Polyphonic =
-    micEngineV2Active &&
     expectedMidis.length > 1 &&
     chordTargets.mode === MIC_CHORD_MODES.ANY_TONE
 
@@ -165,7 +156,6 @@ export default function useWaitForYouMicInput({
     currentCheckpoint?.kind === CHECKPOINT_KIND.NOTE
 
   const useV2Detector = matchingEnabled && micEngineV2Active
-  const useV1Detector = detectEnabled && !useV2Detector
 
   const resetMatchConfirm = useCallback(() => {
     resetMatchConfirmState(matchConfirmRef.current)
@@ -192,27 +182,18 @@ export default function useWaitForYouMicInput({
 
   useEffect(() => {
     resetFeedback()
-  }, [currentCheckpoint?.id, matchSettings, resetFeedback, micEngineV2Enabled])
+  }, [currentCheckpoint?.id, matchSettings, resetFeedback])
 
   useEffect(() => {
     if (!active) {
       resetFeedback()
-      v2SessionFallbackRef.current = false
-      setV2SessionFallback(false)
+      setV2RuntimeError(null)
     }
   }, [active, resetFeedback])
 
   useEffect(() => {
     feedbackOutcomeRef.current = inputFeedback.outcome
   }, [inputFeedback.outcome])
-
-  useEffect(() => {
-    micEngineV2EnabledRef.current = micEngineV2Enabled
-  }, [micEngineV2Enabled])
-
-  useEffect(() => {
-    v2SessionFallbackRef.current = v2SessionFallback
-  }, [v2SessionFallback])
 
   useEffect(() => {
     // Always publish a stable diagnostics object so the real "too quiet" issue
@@ -223,7 +204,7 @@ export default function useWaitForYouMicInput({
       engineMode: micEngineMode,
       v2Enabled: micEngineV2Enabled,
       v2Active: micEngineV2Active,
-      v2SessionFallback,
+      v2RuntimeError,
       isMicV2Polyphonic,
       expectedMidis: [...expectedMidis],
       instrumentId: instrumentId ?? null,
@@ -238,7 +219,7 @@ export default function useWaitForYouMicInput({
     micEngineMode,
     micEngineV2Enabled,
     micEngineV2Active,
-    v2SessionFallback,
+    v2RuntimeError,
     isMicV2Polyphonic,
     expectedMidis,
     instrumentId,
@@ -257,18 +238,17 @@ export default function useWaitForYouMicInput({
 
   const handleV2RuntimeError = useCallback(
     (error) => {
-      if (v2SessionFallbackRef.current) {
+      const reason = error?.message ?? String(error)
+      if (v2RuntimeError === reason) {
         return
       }
-      const reason = error?.message ?? String(error)
-      v2SessionFallbackRef.current = true
-      setV2SessionFallback(true)
+      setV2RuntimeError(reason)
       if (import.meta.env?.DEV) {
-        console.warn('[Mic Engine V2] Falling back to V1 for this session:', reason)
+        console.warn('[Mic Engine V2] Runtime error:', reason)
       }
-      reportMicDebug({ v2SessionFallback: true, v2FallbackReason: reason, v2Active: false })
+      reportMicDebug({ v2RuntimeError: reason, v2Active: false })
     },
-    [reportMicDebug],
+    [reportMicDebug, v2RuntimeError],
   )
 
   useEffect(() => {
@@ -327,6 +307,7 @@ export default function useWaitForYouMicInput({
         feedback.message = `Heard ${feedback.playedLabel ?? 'note'} — correct`
       }
 
+      feedbackOutcomeRef.current = feedback.outcome
       setInputFeedback({
         ...feedback,
         micChordMode: isMicChordCollection || isMicV2Polyphonic,
@@ -397,15 +378,15 @@ export default function useWaitForYouMicInput({
         frame,
         matchingEnabled,
         expectedMidis,
-        isMicV2Polyphonic,
       })
+      const debugRejectReason = wrongPitch ? 'wrong-note' : rejectReason
       const debugFrame = createMicDebugFrameRecord({
         frame,
         expectedMidis,
         instrumentId,
         inputSource: 'microphone',
         captureSettings: microphone?.captureSettings ?? null,
-        rejectReason,
+        rejectReason: debugRejectReason,
         timestampMs:
           typeof performance !== 'undefined' && performance.now
             ? performance.now()
@@ -443,8 +424,7 @@ export default function useWaitForYouMicInput({
           v2MeanConfidence: frame.v2MeanConfidence ?? null,
           v2DetectedMidis: frame.v2DetectedMidis ? [...frame.v2DetectedMidis] : [],
           v2Notes: summarizeV2Notes(frame.v2Notes ?? []),
-          usedV1Fallback: Boolean(frame.usedV1Fallback),
-          rejectReason: rejectReason,
+          rejectReason: debugRejectReason,
         },
         lastFrames: [...debugFramesRef.current],
         exportLastFrames: exportDebugFrames,
@@ -459,7 +439,6 @@ export default function useWaitForYouMicInput({
           v2MeanConfidence: frame.v2MeanConfidence ?? null,
           lastV2Notes: summarizeV2Notes(frame.v2Notes ?? []),
           v2Active: Boolean(frame.v2Active),
-          usedV1Fallback: Boolean(frame.usedV1Fallback),
         })
       } else if (frame.midi != null && frame.gateOpen) {
         reportMicDebug({
@@ -474,7 +453,7 @@ export default function useWaitForYouMicInput({
         return
       }
 
-      if (isMicV2Polyphonic && frame.v2DetectedMidis?.length) {
+      if (isMicV2Polyphonic && frame.gateOpen && frame.v2DetectedMidis?.length) {
         const preview = evaluateMicMatch(null, frame.v2DetectedMidis)
         if (!preview || feedbackOutcomeRef.current === WFY_INPUT_OUTCOME.CORRECT) {
           return
@@ -517,12 +496,42 @@ export default function useWaitForYouMicInput({
         return
       }
 
-      const preview = evaluateMicMatch(frame.midi)
-      if (!preview) {
+      const v2Preview = frame.v2DetectedMidis?.length
+        ? evaluateMicMatch(null, frame.v2DetectedMidis)
+        : null
+
+      if (v2Preview?.outcome === MATCH_OUTCOME.COMPLETE && !isMicChordCollection) {
+        const key = `${currentCheckpoint.id}:v2:${[...frame.v2DetectedMidis]
+          .sort((left, right) => left - right)
+          .join(',')}`
+        if (confirmConfidentMatch(key, frameConfidentForMatch(frame))) {
+          resetMatchConfirm()
+          setLastHeardMidi(frame.v2DetectedMidis[0] ?? frame.midi)
+          applyMatchResult(v2Preview)
+          return
+        }
+      } else if (v2Preview) {
+        resetMatchConfirm()
+      }
+
+      if (
+        v2Preview?.outcome === MATCH_OUTCOME.CHORD_PROGRESS ||
+        v2Preview?.outcome === MATCH_OUTCOME.COMPLETE
+      ) {
+        setInputFeedback({
+          ...micFeedbackFromResult(v2Preview),
+          outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
+          micEngineMode,
+        })
         return
       }
 
-      if (preview.outcome === MATCH_OUTCOME.WRONG) {
+      const monophonicPreview = evaluateMicMatch(frame.midi)
+      if (!monophonicPreview) {
+        return
+      }
+
+      if (monophonicPreview.outcome === MATCH_OUTCOME.WRONG) {
         resetMatchConfirm()
         setInputFeedback({
           outcome: WFY_INPUT_OUTCOME.IDLE,
@@ -535,15 +544,14 @@ export default function useWaitForYouMicInput({
         return
       }
 
-      // Single expected note heard correctly: once it's clearly and steadily
-      // heard, advance on our own — no discrete stabilizer note-on or Continue
-      // press required. Chord-collection mode keeps its sequential flow.
-      if (preview.outcome === MATCH_OUTCOME.COMPLETE && !isMicChordCollection) {
+      // Legacy chord-collection mode keeps its sequential flow when it is used
+      // by non-simultaneous chord settings. Normal note advancement is V2-only.
+      if (monophonicPreview.outcome === MATCH_OUTCOME.COMPLETE && isMicChordCollection) {
         const confident = frameConfidentForMatch(frame)
         if (confirmConfidentMatch(`${currentCheckpoint.id}:${frame.midi}`, confident)) {
           resetMatchConfirm()
           setLastHeardMidi(frame.midi)
-          applyMatchResult(preview)
+          applyMatchResult(monophonicPreview)
           return
         }
       } else {
@@ -551,11 +559,11 @@ export default function useWaitForYouMicInput({
       }
 
       if (
-        preview.outcome === MATCH_OUTCOME.CHORD_PROGRESS ||
-        preview.outcome === MATCH_OUTCOME.COMPLETE
+        monophonicPreview.outcome === MATCH_OUTCOME.CHORD_PROGRESS ||
+        monophonicPreview.outcome === MATCH_OUTCOME.COMPLETE
       ) {
         setInputFeedback({
-          ...micFeedbackFromResult(preview),
+          ...micFeedbackFromResult(monophonicPreview),
           outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
           micEngineMode,
         })
@@ -583,6 +591,12 @@ export default function useWaitForYouMicInput({
   const handleStableMidi = useCallback(
     (midi) => {
       if (!currentCheckpoint || !matchSettings) {
+        return
+      }
+      if (
+        feedbackOutcomeRef.current === WFY_INPUT_OUTCOME.CORRECT ||
+        feedbackOutcomeRef.current === WFY_INPUT_OUTCOME.WRONG
+      ) {
         return
       }
 
@@ -613,19 +627,6 @@ export default function useWaitForYouMicInput({
     [currentCheckpoint, matchSettings, isMicV2Polyphonic, evaluateMicMatch, applyMatchResult],
   )
 
-  usePitchDetector({
-    enabled: useV1Detector,
-    analyserRef: microphone?.analyser,
-    getTimeDomainBuffer: microphone?.getTimeDomainBuffer,
-    sampleRate: microphone?.sampleRate ?? 44100,
-    centsTolerance: micCentsTolerance,
-    onFrame: handleFrame,
-    onStableMidi: matchingEnabled ? handleStableMidi : undefined,
-    onCalibration: setCalibration,
-    calibrationKey,
-    instrumentId,
-  })
-
   useMicEngineV2Detector({
     enabled: useV2Detector,
     expectedMidis,
@@ -641,6 +642,7 @@ export default function useWaitForYouMicInput({
     calibrationKey,
     stableFrameThreshold: matchSettings?.micChordStableHitsRequired ?? 2,
     instrumentId,
+    analysisKey: currentCheckpoint?.id ?? '',
   })
 
   return {
@@ -661,7 +663,7 @@ export default function useWaitForYouMicInput({
     micEngineMode,
     micEngineV2Enabled,
     micEngineV2Active,
-    v2SessionFallback,
+    v2RuntimeError,
     exportDebugFrames,
   }
 }
