@@ -1,0 +1,599 @@
+#!/usr/bin/env node
+import { mkdir, writeFile } from 'node:fs/promises'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dir = dirname(fileURLToPath(import.meta.url))
+const root = join(__dir, '..')
+const outRoot = join(root, 'public', 'fixtures', 'practice-library')
+
+const DIVISIONS = 4
+const QUARTER_TICKS = 480
+const PIANO_CHANNEL = 0
+const GUITAR_CHANNEL = 0
+const VELOCITY = 84
+const STEP_TO_SEMITONE = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }
+const TYPE_BY_BEATS = new Map([
+  [0.5, 'eighth'],
+  [1, 'quarter'],
+  [2, 'half'],
+  [4, 'whole'],
+])
+
+const PIANO_PIECES = [
+  {
+    id: 'piano-ode-to-joy',
+    title: 'Ode to Joy',
+    subtitle: 'Beginner melody excerpt',
+    composer: 'Ludwig van Beethoven',
+    tempo: 92,
+    notes: q(['E4', 'E4', 'F4', 'G4', 'G4', 'F4', 'E4', 'D4', 'C4', 'C4', 'D4', 'E4', 'E4', 'D4', 'D4', null]),
+  },
+  {
+    id: 'piano-twinkle-twinkle',
+    title: 'Twinkle Twinkle Little Star',
+    subtitle: 'Beginner five-finger melody',
+    composer: 'Traditional French melody',
+    tempo: 96,
+    notes: [
+      ...q(['C4', 'C4', 'G4', 'G4', 'A4', 'A4']), n('G4', 2),
+      ...q(['F4', 'F4', 'E4', 'E4', 'D4', 'D4']), n('C4', 2),
+      ...q(['G4', 'G4', 'F4', 'F4', 'E4', 'E4']), n('D4', 2),
+      ...q(['G4', 'G4', 'F4', 'F4', 'E4', 'E4']), n('D4', 2),
+      ...q(['C4', 'C4', 'G4', 'G4', 'A4', 'A4']), n('G4', 2),
+      ...q(['F4', 'F4', 'E4', 'E4', 'D4', 'D4']), n('C4', 2),
+    ],
+  },
+  {
+    id: 'piano-mary-had-a-little-lamb',
+    title: 'Mary Had a Little Lamb',
+    subtitle: 'Beginner stepwise melody',
+    composer: 'Traditional',
+    tempo: 100,
+    notes: [
+      ...q(['E4', 'D4', 'C4', 'D4', 'E4', 'E4']), n('E4', 2),
+      ...q(['D4', 'D4']), n('D4', 2), ...q(['E4', 'G4']), n('G4', 2),
+      ...q(['E4', 'D4', 'C4', 'D4', 'E4', 'E4', 'E4', 'E4']),
+      ...q(['D4', 'D4', 'E4', 'D4']), n('C4', 2), r(2),
+    ],
+  },
+  {
+    id: 'piano-gymnopedie-no1-excerpt',
+    title: 'Gymnopedie No. 1 excerpt',
+    subtitle: 'Intermediate lyrical pulse',
+    composer: 'Erik Satie',
+    tempo: 72,
+    notes: [
+      ...q(['D4', 'A4', 'F4', 'A4', 'E4', 'A4', 'F4', 'A4']),
+      ...q(['D4', 'A4', 'F4', 'A4', 'E4', 'A4', 'F4', 'A4']),
+      ...q(['C4', 'G4', 'E4', 'G4', 'D4', 'G4', 'E4', 'G4']),
+      ...q(['C4', 'G4', 'E4', 'G4', 'D4', 'G4', 'E4', 'G4']),
+    ],
+  },
+  {
+    id: 'piano-fur-elise-excerpt',
+    title: 'Fur Elise excerpt',
+    subtitle: 'Advanced chromatic neighbor tones',
+    composer: 'Ludwig van Beethoven',
+    tempo: 88,
+    notes: [
+      ...e(['E5', 'D#5', 'E5', 'D#5', 'E5', 'B4', 'D5', 'C5']),
+      n('A4', 2), ...q(['C4', 'E4']),
+      n('A4', 2), ...q(['B4', 'E4']),
+      ...e(['G#4', 'B4', 'C5', 'E4', 'E5', 'D#5', 'E5', 'D#5']),
+      ...e(['E5', 'B4', 'D5', 'C5']), n('A4', 2),
+      ...q(['C4', 'E4']), n('A4', 2),
+      ...q(['B4', 'C5', 'B4', 'A4']),
+      n('A4', 2), r(2),
+    ],
+  },
+]
+
+const GUITAR_PIECES = [
+  {
+    id: 'guitar-amazing-grace',
+    title: 'Amazing Grace',
+    subtitle: 'Beginner open-position hymn',
+    composer: 'Traditional',
+    tempo: 78,
+    notes: guitarNotes([
+      ['G3', 1, 3, 0], ['C4', 1, 2, 1], ['E4', 1, 1, 0], ['C4', 1, 2, 1],
+      ['E4', 1, 1, 0], ['D4', 1, 2, 3], ['C4', 2, 2, 1],
+      ['G3', 1, 3, 0], ['C4', 1, 2, 1], ['E4', 1, 1, 0], ['C4', 1, 2, 1],
+      ['E4', 1, 1, 0], ['D4', 1, 2, 3], ['C4', 2, 2, 1],
+    ]),
+  },
+  {
+    id: 'guitar-when-the-saints',
+    title: 'When the Saints Go Marching In',
+    subtitle: 'Beginner first-position rhythm',
+    composer: 'Traditional',
+    tempo: 96,
+    notes: guitarNotes([
+      ['C4', 1, 2, 1], ['E4', 1, 1, 0], ['F4', 1, 1, 1], ['G4', 1, 1, 3],
+      ['C4', 1, 2, 1], ['E4', 1, 1, 0], ['F4', 1, 1, 1], ['G4', 1, 1, 3],
+      ['C4', 1, 2, 1], ['E4', 1, 1, 0], ['F4', 1, 1, 1], ['G4', 1, 1, 3],
+      ['E4', 1, 1, 0], ['C4', 1, 2, 1], ['E4', 1, 1, 0], ['D4', 1, 2, 3],
+      ['D4', 2, 2, 3], ['C4', 2, 2, 1],
+    ]),
+  },
+  {
+    id: 'guitar-greensleeves',
+    title: 'Greensleeves',
+    subtitle: 'Intermediate minor melody',
+    composer: 'Traditional English ballad',
+    tempo: 82,
+    notes: guitarNotes([
+      ['A3', 1, 3, 2], ['C4', 1, 2, 1], ['D4', 1, 2, 3], ['E4', 1, 1, 0],
+      ['F4', 1, 1, 1], ['E4', 1, 1, 0], ['D4', 1, 2, 3], ['B3', 1, 2, 0],
+      ['G3', 1, 3, 0], ['B3', 1, 2, 0], ['C4', 1, 2, 1], ['D4', 1, 2, 3],
+      ['E4', 1, 1, 0], ['D4', 1, 2, 3], ['C4', 1, 2, 1], ['A3', 1, 3, 2],
+      ['A3', 2, 3, 2], ['G3', 2, 3, 0],
+    ]),
+  },
+  {
+    id: 'guitar-scarborough-fair',
+    title: 'Scarborough Fair',
+    subtitle: 'Intermediate modal phrasing',
+    composer: 'Traditional English ballad',
+    tempo: 76,
+    notes: guitarNotes([
+      ['D4', 1, 2, 3], ['D4', 1, 2, 3], ['A3', 1, 3, 2], ['A3', 1, 3, 2],
+      ['E4', 1, 1, 0], ['E4', 1, 1, 0], ['D4', 2, 2, 3],
+      ['D4', 1, 2, 3], ['E4', 1, 1, 0], ['F4', 1, 1, 1], ['E4', 1, 1, 0],
+      ['D4', 1, 2, 3], ['A3', 1, 3, 2], ['C4', 1, 2, 1], ['D4', 1, 2, 3],
+      ['E4', 2, 1, 0], ['D4', 2, 2, 3],
+    ]),
+  },
+  {
+    id: 'guitar-spanish-romance-intro',
+    title: 'Spanish Romance intro',
+    subtitle: 'Intermediate arpeggio-style TAB',
+    composer: 'Traditional / anonymous',
+    tempo: 88,
+    notes: guitarNotes([
+      ['E4', 0.5, 1, 0], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
+      ['E4', 0.5, 1, 0], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
+      ['F4', 0.5, 1, 1], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
+      ['F4', 0.5, 1, 1], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
+      ['G4', 0.5, 1, 3], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
+      ['G4', 0.5, 1, 3], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
+      ['E4', 0.5, 1, 0], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
+      ['E4', 0.5, 1, 0], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
+    ]),
+  },
+  {
+    id: 'guitar-carulli-style-etude',
+    title: 'Carulli-style Etude',
+    subtitle: 'Advanced position changes in a short study',
+    composer: 'Corranzo public-domain study after classical guitar patterns',
+    tempo: 104,
+    notes: guitarNotes([
+      ['C4', 1, 2, 1], ['E4', 1, 1, 0], ['G4', 1, 1, 3], ['E4', 1, 1, 0],
+      ['D4', 1, 2, 3], ['F4', 1, 1, 1], ['A4', 1, 1, 5], ['F4', 1, 1, 1],
+      ['E4', 1, 1, 0], ['G4', 1, 1, 3], ['A4', 1, 1, 5], ['G4', 1, 1, 3],
+      ['F4', 1, 1, 1], ['A4', 1, 1, 5], ['G4', 1, 1, 3], ['F4', 1, 1, 1],
+      ['E4', 1, 1, 0], ['G4', 1, 1, 3], ['F4', 1, 1, 1], ['E4', 1, 1, 0],
+      ['D4', 1, 2, 3], ['F4', 1, 1, 1], ['E4', 1, 1, 0], ['C4', 1, 2, 1],
+    ]),
+  },
+]
+
+function n(pitch, beats = 1) {
+  return { pitch, beats }
+}
+
+function r(beats = 1) {
+  return { rest: true, beats }
+}
+
+function q(pitches) {
+  return pitches.map((pitch) => (pitch ? n(pitch, 1) : r(1)))
+}
+
+function e(pitches) {
+  return pitches.map((pitch) => n(pitch, 0.5))
+}
+
+function guitarNotes(rows) {
+  return rows.map(([pitch, beats, string, fret]) => ({ pitch, beats, string, fret }))
+}
+
+function parsePitch(pitch) {
+  const match = /^([A-G])([#b]?)(-?\d+)$/.exec(pitch)
+  if (!match) {
+    throw new Error(`Invalid pitch: ${pitch}`)
+  }
+  const [, step, accidental, octaveText] = match
+  const alter = accidental === '#' ? 1 : accidental === 'b' ? -1 : 0
+  return { step, alter, octave: Number(octaveText) }
+}
+
+function midiForPitch(pitch) {
+  const parsed = parsePitch(pitch)
+  return (parsed.octave + 1) * 12 + STEP_TO_SEMITONE[parsed.step] + parsed.alter
+}
+
+function durationDivisions(beats) {
+  return Math.round(Number(beats) * DIVISIONS)
+}
+
+function typeForBeats(beats) {
+  return TYPE_BY_BEATS.get(Number(beats)) ?? 'quarter'
+}
+
+function groupMeasures(notes) {
+  const measures = []
+  let current = []
+  let total = 0
+  for (const note of notes) {
+    const beats = Number(note.beats)
+    if (total + beats > 4) {
+      if (total < 4) {
+        current.push(r(4 - total))
+      }
+      measures.push(current)
+      current = []
+      total = 0
+    }
+    current.push(note)
+    total += beats
+    if (total === 4) {
+      measures.push(current)
+      current = []
+      total = 0
+    }
+  }
+  if (current.length > 0) {
+    if (total < 4) {
+      current.push(r(4 - total))
+    }
+    measures.push(current)
+  }
+  return measures
+}
+
+function pitchXml(pitch) {
+  const parsed = parsePitch(pitch)
+  const alter = parsed.alter ? `<alter>${parsed.alter}</alter>` : ''
+  return `<pitch><step>${parsed.step}</step>${alter}<octave>${parsed.octave}</octave></pitch>`
+}
+
+function noteXml(note, { staff = null, tabMirror = false } = {}) {
+  const staffTag = staff ? `<staff>${staff}</staff>` : ''
+  if (note.rest) {
+    return `<note><rest/><duration>${durationDivisions(note.beats)}</duration><voice>1</voice><type>${typeForBeats(note.beats)}</type>${staffTag}</note>`
+  }
+  const technical = tabMirror
+    ? `<notations><technical><string>${note.string}</string><fret>${note.fret}</fret></technical></notations>`
+    : ''
+  return [
+    '<note>',
+    pitchXml(note.pitch),
+    `<duration>${durationDivisions(note.beats)}</duration>`,
+    '<voice>1</voice>',
+    `<type>${typeForBeats(note.beats)}</type>`,
+    staffTag,
+    technical,
+    '</note>',
+  ].join('')
+}
+
+function buildPianoMusicXml(piece) {
+  const measures = groupMeasures(piece.notes)
+  return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1">
+  <work><work-title>${escapeXml(piece.title)}</work-title></work>
+  <movement-title>${escapeXml(piece.title)} - ${escapeXml(piece.subtitle)}</movement-title>
+  <identification>
+    <creator type="composer">${escapeXml(piece.composer)}</creator>
+    <rights>Public domain source material; short deterministic Corranzo practice fixture.</rights>
+    <encoding><software>Corranzo practice library fixture generator</software></encoding>
+  </identification>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Piano</part-name>
+      <score-instrument id="P1-I1"><instrument-name>Piano</instrument-name></score-instrument>
+      <midi-instrument id="P1-I1"><midi-channel>1</midi-channel><midi-program>1</midi-program></midi-instrument>
+    </score-part>
+  </part-list>
+  <part id="P1">
+${measures.map((measure, index) => {
+  const attrs = index === 0
+    ? `
+      <attributes>
+        <divisions>${DIVISIONS}</divisions>
+        <key><fifths>0</fifths></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <direction placement="above">
+        <direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>${piece.tempo}</per-minute></metronome></direction-type>
+        <sound tempo="${piece.tempo}"/>
+      </direction>`
+    : ''
+  return `    <measure number="${index + 1}">${attrs}
+      ${measure.map((note) => noteXml(note)).join('\n      ')}
+      ${index === measures.length - 1 ? '<barline location="right"><bar-style>light-heavy</bar-style></barline>' : ''}
+    </measure>`
+}).join('\n')}
+  </part>
+</score-partwise>
+`
+}
+
+function buildGuitarMusicXml(piece) {
+  const measures = groupMeasures(piece.notes)
+  return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1">
+  <work><work-title>${escapeXml(piece.title)}</work-title></work>
+  <movement-title>${escapeXml(piece.title)} - ${escapeXml(piece.subtitle)}</movement-title>
+  <identification>
+    <creator type="composer">${escapeXml(piece.composer)}</creator>
+    <rights>Public domain source material; short deterministic Corranzo guitar fixture.</rights>
+    <encoding><software>Corranzo practice library fixture generator</software></encoding>
+  </identification>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Guitar</part-name>
+      <score-instrument id="P1-I1"><instrument-name>Acoustic Guitar</instrument-name></score-instrument>
+      <midi-instrument id="P1-I1"><midi-channel>1</midi-channel><midi-program>25</midi-program></midi-instrument>
+    </score-part>
+  </part-list>
+  <part id="P1">
+${measures.map((measure, index) => {
+  const totalDuration = measure.reduce((sum, note) => sum + durationDivisions(note.beats), 0)
+  const attrs = index === 0
+    ? `
+      <attributes>
+        <divisions>${DIVISIONS}</divisions>
+        <key><fifths>0</fifths></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <staves>2</staves>
+        <clef number="1"><sign>G</sign><line>2</line></clef>
+        <clef number="2"><sign>TAB</sign><line>5</line></clef>
+        <staff-details number="2">
+          <staff-lines>6</staff-lines>
+          <staff-tuning line="1"><tuning-step>E</tuning-step><tuning-octave>2</tuning-octave></staff-tuning>
+          <staff-tuning line="2"><tuning-step>A</tuning-step><tuning-octave>2</tuning-octave></staff-tuning>
+          <staff-tuning line="3"><tuning-step>D</tuning-step><tuning-octave>3</tuning-octave></staff-tuning>
+          <staff-tuning line="4"><tuning-step>G</tuning-step><tuning-octave>3</tuning-octave></staff-tuning>
+          <staff-tuning line="5"><tuning-step>B</tuning-step><tuning-octave>3</tuning-octave></staff-tuning>
+          <staff-tuning line="6"><tuning-step>E</tuning-step><tuning-octave>4</tuning-octave></staff-tuning>
+        </staff-details>
+      </attributes>
+      <direction placement="above">
+        <direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>${piece.tempo}</per-minute></metronome></direction-type>
+        <sound tempo="${piece.tempo}"/>
+      </direction>`
+    : ''
+  return `    <measure number="${index + 1}">${attrs}
+      ${measure.map((note) => noteXml(note, { staff: 1 })).join('\n      ')}
+      <backup><duration>${totalDuration}</duration></backup>
+      ${measure.map((note) => note.rest ? noteXml(note, { staff: 2 }) : noteXml(note, { staff: 2, tabMirror: true })).join('\n      ')}
+      ${index === measures.length - 1 ? '<barline location="right"><bar-style>light-heavy</bar-style></barline>' : ''}
+    </measure>`
+}).join('\n')}
+  </part>
+</score-partwise>
+`
+}
+
+function buildMidi(piece, channel, program) {
+  const events = []
+  const push = (delta, ...bytes) => events.push(...varLen(delta), ...bytes)
+  push(0, 0xff, 0x51, 0x03, ...intBytes(Math.round(60_000_000 / piece.tempo), 3))
+  push(0, 0xc0 | channel, program)
+  for (const note of piece.notes) {
+    const ticks = Math.round(note.beats * QUARTER_TICKS)
+    if (note.rest) {
+      push(ticks, 0xff, 0x01, 0x00)
+      continue
+    }
+    const midi = midiForPitch(note.pitch)
+    push(0, 0x90 | channel, midi, VELOCITY)
+    push(ticks, 0x80 | channel, midi, 0)
+  }
+  push(0, 0xff, 0x2f, 0x00)
+  const header = [...ascii('MThd'), ...intBytes(6, 4), ...intBytes(0, 2), ...intBytes(1, 2), ...intBytes(QUARTER_TICKS, 2)]
+  const track = [...ascii('MTrk'), ...intBytes(events.length, 4), ...events]
+  return Buffer.from([...header, ...track])
+}
+
+function buildPdf(piece, instrument) {
+  const width = 612
+  const height = 792
+  const ops = []
+  const text = (x, y, size, value) => {
+    ops.push(`BT /F1 ${size} Tf ${x} ${y} Td (${pdfEscape(value)}) Tj ET`)
+  }
+  const line = (x1, y1, x2, y2, w = 0.8, gray = 0) => {
+    if (gray > 0) {
+      ops.push(`q ${gray} G ${w} w ${x1} ${y1} m ${x2} ${y2} l S Q`)
+      return
+    }
+    ops.push(`${w} w ${x1} ${y1} m ${x2} ${y2} l S`)
+  }
+  const circle = (x, y) => {
+    ops.push(`q 1 0 0 1 ${x} ${y} cm 5 0 m 5 2.8 2.8 5 0 5 c -2.8 5 -5 2.8 -5 0 c -5 -2.8 -2.8 -5 0 -5 c 2.8 -5 5 -2.8 5 0 c f Q`)
+  }
+
+  text(54, 748, 20, piece.title)
+  text(54, 726, 11, `${piece.composer} - public domain practice fixture`)
+  text(54, 710, 10, `${instrument} - ${piece.subtitle} - Tempo quarter = ${piece.tempo}`)
+
+  if (instrument === 'Guitar') {
+    drawGuitarSystems({ piece, text, line, circle })
+  } else {
+    drawPianoSystems({ piece, text, line, circle })
+  }
+
+  text(54, 96, 10, 'Generated deterministically for Corranzo Practice Library.')
+  const stream = ops.join('\n')
+  const objects = [
+    '<< /Type /Catalog /Pages 2 0 R >>',
+    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+    `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${width} ${height}] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>`,
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+    `<< /Length ${Buffer.byteLength(stream)} >>\nstream\n${stream}\nendstream`,
+  ]
+  let pdf = '%PDF-1.4\n'
+  const offsets = [0]
+  objects.forEach((object, index) => {
+    offsets.push(Buffer.byteLength(pdf))
+    pdf += `${index + 1} 0 obj\n${object}\nendobj\n`
+  })
+  const xref = Buffer.byteLength(pdf)
+  pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`
+  for (let i = 1; i < offsets.length; i += 1) {
+    pdf += `${String(offsets[i]).padStart(10, '0')} 00000 n \n`
+  }
+  pdf += `trailer << /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`
+  return Buffer.from(pdf)
+}
+
+function drawPianoSystems({ piece, text, line, circle }) {
+  const measures = groupMeasures(piece.notes)
+  const startX = 74
+  const measureWidth = 106
+  const systems = [620, 490, 360, 230]
+  let measureIndex = 0
+  for (const y of systems) {
+    if (measureIndex >= measures.length) break
+    const count = Math.min(4, measures.length - measureIndex)
+    text(38, y + 18, 10, 'Staff')
+    for (let i = 0; i < 5; i += 1) {
+      line(startX, y - i * 8, startX + measureWidth * count, y - i * 8)
+    }
+    for (let measure = 0; measure <= count; measure += 1) {
+      const x = startX + measure * measureWidth
+      line(x, y + 2, x, y - 34)
+    }
+    for (let local = 0; local < count; local += 1) {
+      const measure = measures[measureIndex + local]
+      const mx = startX + local * measureWidth
+      text(mx + 4, y + 10, 8, String(measureIndex + local + 1))
+      let beat = 0
+      for (const note of measure) {
+        const x = mx + 16 + beat * 22
+        if (note.rest) {
+          text(x - 2, y - 18, 10, 'r')
+        } else {
+          circle(x, y - staffOffset(parsePitch(note.pitch).step))
+          line(x + 5, y - staffOffset(parsePitch(note.pitch).step), x + 5, y - staffOffset(parsePitch(note.pitch).step) + 25, 0.35, 0.65)
+        }
+        beat += note.beats
+      }
+    }
+    measureIndex += count
+  }
+}
+
+function drawGuitarSystems({ piece, text, line, circle }) {
+  const measures = groupMeasures(piece.notes)
+  const startX = 74
+  const measureWidth = 106
+  const systems = [620, 450, 280]
+  let measureIndex = 0
+  for (const y of systems) {
+    if (measureIndex >= measures.length) break
+    const count = Math.min(4, measures.length - measureIndex)
+    text(38, y + 18, 10, 'Staff')
+    for (let i = 0; i < 5; i += 1) {
+      line(startX, y - i * 8, startX + measureWidth * count, y - i * 8)
+    }
+    text(38, y - 74, 10, 'TAB')
+    for (let i = 0; i < 6; i += 1) {
+      line(startX, y - 84 - i * 8, startX + measureWidth * count, y - 84 - i * 8)
+    }
+    for (let measure = 0; measure <= count; measure += 1) {
+      const x = startX + measure * measureWidth
+      line(x, y + 2, x, y - 34)
+      line(x, y - 82, x, y - 124)
+    }
+    for (let local = 0; local < count; local += 1) {
+      const measure = measures[measureIndex + local]
+      const mx = startX + local * measureWidth
+      text(mx + 4, y + 10, 8, String(measureIndex + local + 1))
+      let beat = 0
+      for (const note of measure) {
+        const x = mx + 16 + beat * 22
+        if (!note.rest) {
+          circle(x, y - staffOffset(parsePitch(note.pitch).step))
+          line(x + 5, y - staffOffset(parsePitch(note.pitch).step), x + 5, y - staffOffset(parsePitch(note.pitch).step) + 25, 0.35, 0.65)
+          const tabY = y - 84 - (note.string - 1) * 8
+          text(x - 3, tabY - 3, 10, String(note.fret))
+        }
+        beat += note.beats
+      }
+    }
+    measureIndex += count
+  }
+}
+
+function staffOffset(step) {
+  return { C: 32, D: 28, E: 24, F: 20, G: 16, A: 12, B: 8 }[step] ?? 24
+}
+
+function varLen(value) {
+  let buffer = value & 0x7f
+  const bytes = []
+  while ((value >>= 7)) {
+    buffer <<= 8
+    buffer |= (value & 0x7f) | 0x80
+  }
+  while (true) {
+    bytes.push(buffer & 0xff)
+    if (buffer & 0x80) {
+      buffer >>= 8
+    } else {
+      break
+    }
+  }
+  return bytes
+}
+
+function intBytes(value, length) {
+  return Array.from({ length }, (_, index) => (value >> ((length - index - 1) * 8)) & 0xff)
+}
+
+function ascii(value) {
+  return [...value].map((char) => char.charCodeAt(0))
+}
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+function pdfEscape(value) {
+  return String(value).replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)')
+}
+
+async function writePiece(piece, instrument) {
+  const dir = join(outRoot, piece.id)
+  await mkdir(dir, { recursive: true })
+  const musicXml = instrument === 'Guitar' ? buildGuitarMusicXml(piece) : buildPianoMusicXml(piece)
+  const midi = buildMidi(piece, instrument === 'Guitar' ? GUITAR_CHANNEL : PIANO_CHANNEL, instrument === 'Guitar' ? 24 : 0)
+  const pdf = buildPdf(piece, instrument)
+  await Promise.all([
+    writeFile(join(dir, `${piece.id}.musicxml`), musicXml),
+    writeFile(join(dir, `${piece.id}.mid`), midi),
+    writeFile(join(dir, `${piece.id}.pdf`), pdf),
+  ])
+}
+
+await mkdir(outRoot, { recursive: true })
+for (const piece of PIANO_PIECES) {
+  await writePiece(piece, 'Piano')
+}
+for (const piece of GUITAR_PIECES) {
+  await writePiece(piece, 'Guitar')
+}
+
+console.log(`Wrote ${PIANO_PIECES.length + GUITAR_PIECES.length} practice library fixtures to ${outRoot}`)

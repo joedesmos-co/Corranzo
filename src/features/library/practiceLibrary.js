@@ -1,5 +1,5 @@
-import { INSTRUMENT_IDS, getInstrument, normalizeInstrumentId } from '../instruments/instruments.js'
-import { DEMO_PIECE, GUITAR_DEMO_PIECE } from '../../dev/fixturePaths.js'
+import { getInstrument, normalizeInstrumentId } from '../instruments/instruments.js'
+import { PRACTICE_LIBRARY_FIXTURES } from '../../dev/fixturePaths.js'
 
 export const LIBRARY_TABS = {
   PRACTICE: 'practice',
@@ -14,22 +14,19 @@ export const DIFFICULTY_FILTERS = [
 ]
 
 export const BUILT_IN_PRACTICE_PIECES = [
-  {
-    ...DEMO_PIECE,
-    instrumentId: INSTRUMENT_IDS.PIANO,
-    instrument: getInstrument(INSTRUMENT_IDS.PIANO).label,
-    difficulty: 'Advanced',
-    approxDuration: '3 min',
-    teaches: 'Dense score reading, phrase flow, and confident page-follow practice.',
-  },
-  {
-    ...GUITAR_DEMO_PIECE,
-    instrumentId: INSTRUMENT_IDS.GUITAR,
-    instrument: getInstrument(INSTRUMENT_IDS.GUITAR).label,
-    difficulty: 'Beginner',
-    approxDuration: '1 min',
-    teaches: 'First-position melody reading with matching TAB string and fret positions.',
-  },
+  ...PRACTICE_LIBRARY_FIXTURES.map((piece) => ({
+    id: piece.id,
+    title: piece.title,
+    subtitle: piece.subtitle,
+    attribution: piece.attribution,
+    measureCount: piece.measureCount,
+    pageCount: piece.pageCount,
+    instrumentId: piece.instrumentId,
+    instrument: getInstrument(piece.instrumentId).label,
+    difficulty: piece.difficulty,
+    approxDuration: piece.approxDuration,
+    teaches: piece.teaches,
+  })),
 ]
 
 export function getBuiltInPracticePieces({

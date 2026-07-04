@@ -33,9 +33,9 @@ export function buildPracticeGuidance({
 
   if (timingReady) {
     if (isDemoPiece) {
-      steps.push('Press Play (Space) to hear the minuet and watch the cursor on the score.')
+      steps.push('Press Play (Space) to hear the piece and watch the cursor on the score.')
       steps.push('Switch to Wait For You, then pick MIDI or microphone to play along.')
-      steps.push('Mute left or right hand under Tracks / hands to focus on one hand.')
+      steps.push('Open Visual view when you want larger note targets for focused practice.')
     } else {
       steps.push(
         'The score cursor may need a quick setup pass — mark a few measures if it looks off.',

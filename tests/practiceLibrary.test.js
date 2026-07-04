@@ -20,6 +20,7 @@ function readSrc(...parts) {
 
 describe('practice library pieces', () => {
   it('ships the current Piano and Guitar demos as built-in practice pieces', () => {
+    expect(BUILT_IN_PRACTICE_PIECES).toHaveLength(14)
     expect(BUILT_IN_PRACTICE_PIECES).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -48,8 +49,24 @@ describe('practice library pieces', () => {
     const pianoPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.PIANO })
     const guitarPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.GUITAR })
 
-    expect(pianoPieces.map((piece) => piece.title)).toEqual(['Hungarian Dance No. 5'])
-    expect(guitarPieces.map((piece) => piece.title)).toEqual(['Ode to Joy'])
+    expect(pianoPieces.map((piece) => piece.title)).toEqual([
+      'Ode to Joy',
+      'Twinkle Twinkle Little Star',
+      'Mary Had a Little Lamb',
+      'Minuet in G',
+      'Gymnopedie No. 1 excerpt',
+      'Hungarian Dance No. 5',
+      'Fur Elise excerpt',
+    ])
+    expect(guitarPieces.map((piece) => piece.title)).toEqual([
+      'Ode to Joy',
+      'Amazing Grace',
+      'When the Saints Go Marching In',
+      'Greensleeves',
+      'Scarborough Fair',
+      'Spanish Romance intro',
+      'Carulli-style Etude',
+    ])
     expect(pianoPieces.every((piece) => piece.instrumentId === INSTRUMENT_IDS.PIANO)).toBe(true)
     expect(guitarPieces.every((piece) => piece.instrumentId === INSTRUMENT_IDS.GUITAR)).toBe(true)
   })
@@ -59,20 +76,24 @@ describe('practice library pieces', () => {
       getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.GUITAR }),
     )
 
-    expect(groups).toEqual([
-      {
-        difficulty: 'Beginner',
-        pieces: [expect.objectContaining({ title: 'Ode to Joy' })],
-      },
+    expect(groups.map((group) => [group.difficulty, group.pieces.length])).toEqual([
+      ['Beginner', 3],
+      ['Intermediate', 3],
+      ['Advanced', 1],
     ])
+    expect(groups[0].pieces.map((piece) => piece.title)).toContain('Ode to Joy')
+    expect(groups[2].pieces[0].title).toBe('Carulli-style Etude')
   })
 
   it('filters library cards by searchable metadata', () => {
     const guitarPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.GUITAR })
     const pianoPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.PIANO })
 
-    expect(filterLibraryItems(guitarPieces, 'first-position').map((piece) => piece.title)).toEqual([
-      'Ode to Joy',
+    expect(filterLibraryItems(guitarPieces, 'arpeggio').map((piece) => piece.title)).toEqual([
+      'Spanish Romance intro',
+    ])
+    expect(filterLibraryItems(pianoPieces, 'chromatic').map((piece) => piece.title)).toEqual([
+      'Fur Elise excerpt',
     ])
     expect(filterLibraryItems(pianoPieces, 'guitar')).toEqual([])
   })
@@ -138,6 +159,7 @@ describe('library tab shell', () => {
     expect(library).toContain('MultiFileUpload')
     expect(library).toContain('PdfOmrPlaybackPanel')
     expect(library).toContain('Upload one file at a time')
+    expect(library).toContain('onLoadSampleFixtures?.(piece.id)')
   })
 
   it('orders My Uploads as add-files first and user uploads second', () => {

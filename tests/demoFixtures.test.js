@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import JSZip from 'jszip'
+import { Midi } from '@tonejs/midi'
 import {
   DEMO_PIECE,
   FIXTURE_FILENAMES,
@@ -10,9 +11,11 @@ import {
   GUITAR_DEMO_PIECE,
   GUITAR_FIXTURE_FILENAMES,
   GUITAR_FIXTURE_PATHS,
+  PRACTICE_LIBRARY_FIXTURES,
   getDemoPieceForInstrument,
   getFixtureFilenamesForInstrument,
   getFixturePathsForInstrument,
+  getPracticeLibraryFixture,
 } from '../src/dev/fixturePaths.js'
 import { INSTRUMENT_IDS } from '../src/features/instruments/instruments.js'
 import { isDemoFixtureFileSet } from '../src/features/demo/demoBundledAnchors.js'
@@ -42,7 +45,7 @@ function fixturePath(urlPath) {
   return join(publicRoot, urlPath.replace(/^\//, ''))
 }
 
-async function loadMxlTimingMap(path) {
+async function loadMxlTimingMap(path, fileName = 'score.mxl') {
   const zip = await JSZip.loadAsync(readFileSync(path))
   const container = zip.file('META-INF/container.xml')
   let rootPath = null
@@ -56,7 +59,7 @@ async function loadMxlTimingMap(path) {
     )
   }
   const xml = await zip.file(rootPath).async('string')
-  return parseMusicXml(xml, 'hungarian-dance-no5.mxl')
+  return parseMusicXml(xml, fileName)
 }
 
 async function rasterizePdfPages(pdfPath) {
@@ -101,6 +104,47 @@ beforeAll(() => {
 afterAll(() => {
   setPdfjsLoader(null)
   setPdfAnalysisCanvasFactory(null)
+})
+
+describe('Practice library fixture catalog', () => {
+  it('ships PDF, MusicXML/MXL, and MIDI for every built-in practice card', async () => {
+    expect(PRACTICE_LIBRARY_FIXTURES).toHaveLength(14)
+
+    for (const fixture of PRACTICE_LIBRARY_FIXTURES) {
+      expect(existsSync(fixturePath(fixture.paths.pdf)), `${fixture.id} pdf`).toBe(true)
+      expect(existsSync(fixturePath(fixture.paths.midi)), `${fixture.id} midi`).toBe(true)
+      expect(existsSync(fixturePath(fixture.paths.musicXml)), `${fixture.id} musicxml`).toBe(true)
+
+      const musicXmlPath = fixturePath(fixture.paths.musicXml)
+      const midi = new Midi(readFileSync(fixturePath(fixture.paths.midi)))
+      const timingMap = fixture.paths.musicXml.endsWith('.mxl')
+        ? await loadMxlTimingMap(musicXmlPath, fixture.fileNames.musicXml)
+        : parseMusicXml(readFileSync(musicXmlPath, 'utf8'), fixture.fileNames.musicXml)
+      const playable = timingMap.notes.filter((note) => !note.isRest && !note.isTabMirror)
+
+      expect(playable.length, fixture.id).toBeGreaterThan(0)
+      expect(midi.tracks.reduce((sum, track) => sum + track.notes.length, 0), fixture.id).toBeGreaterThan(0)
+      expect(timingMap.durationSeconds, fixture.id).toBeGreaterThan(0)
+      if (fixture.instrumentId === INSTRUMENT_IDS.GUITAR) {
+        expect(timingMap.notation.suggestedInstrumentId, fixture.id).toBe('guitar')
+        expect(timingMap.notation.hasTabStaff, fixture.id).toBe(true)
+        expect(playable.every((note) => note.string != null && note.fret != null), fixture.id).toBe(true)
+        expect(Math.max(...playable.map((note) => note.fret ?? 0)), fixture.id).toBeLessThanOrEqual(6)
+      }
+    }
+  }, 30_000)
+
+  it('resolves clicked practice cards to their own fixture bundle', () => {
+    const twinkle = getPracticeLibraryFixture('piano-twinkle-twinkle', INSTRUMENT_IDS.PIANO)
+    const greensleeves = getPracticeLibraryFixture('guitar-greensleeves', INSTRUMENT_IDS.GUITAR)
+
+    expect(twinkle.title).toBe('Twinkle Twinkle Little Star')
+    expect(twinkle.paths.pdf).toContain('/practice-library/piano-twinkle-twinkle/')
+    expect(greensleeves.title).toBe('Greensleeves')
+    expect(greensleeves.paths.musicXml).toContain('/practice-library/guitar-greensleeves/')
+    expect(getPracticeLibraryFixture(null, INSTRUMENT_IDS.PIANO).id).toBe(DEMO_PIECE.id)
+    expect(getPracticeLibraryFixture(null, INSTRUMENT_IDS.GUITAR).id).toBe(GUITAR_DEMO_PIECE.id)
+  })
 })
 
 describe('Hungarian Dance demo fixtures', () => {
@@ -287,6 +331,8 @@ describe('Guitar demo fixtures', () => {
     expect(timingMap.parts[0].tuning).toEqual([64, 59, 55, 50, 45, 40])
     expect(timingMap.notes.filter((note) => note.isTabMirror)).toHaveLength(playable.length)
     expect(playable.every((note) => note.string != null && note.fret != null)).toBe(true)
+    expect(timingMap.measures.every((measure) => measure.engravedWidth === 126)).toBe(true)
+    expect(playable.slice(0, 4).map((note) => note.defaultX)).toEqual([20, 47, 74, 101])
   })
 
   it('can run local OMR from the guitar demo PDF alone', async () => {
@@ -344,9 +390,20 @@ describe('Guitar demo fixtures', () => {
       notationResult.preview.supplementalMeasureAnchors.find(
         (item) => item.measureNumber === measureNumber,
       )
+    const firstPlayable = timingMap.notes.find(
+      (note) => note.measureNumber === 1 && !note.isRest && !note.isTabMirror,
+    )
+    const firstMeasure = timingMap.measures.find((measure) => measure.number === 1)
+    const expectedFirstLead = firstPlayable.defaultX / firstMeasure.engravedWidth
+    const leadFraction = (anchor) =>
+      (anchor.x - anchor.meta.measureStartX) /
+      (anchor.meta.playableEndX - anchor.meta.measureStartX)
+
     expect(notationAnchor(1).y).toBeCloseTo(notationAnchor(4).y, 3)
     expect(notationAnchor(5).y).toBeCloseTo(notationAnchor(7).y, 3)
     expect(notationAnchor(5).y).toBeGreaterThan(notationAnchor(1).y + 0.1)
+    expect(notationAnchor(1).meta.xSource).toBe('default-x+barline')
+    expect(leadFraction(notationAnchor(1))).toBeCloseTo(expectedFirstLead, 3)
 
     const tabResult = await analyzeSemiAutoScoreSetup({
       pdfSource: 'guitar-demo-fixture',
@@ -374,6 +431,8 @@ describe('Guitar demo fixtures', () => {
     expect(tabAnchor(5).y).toBeCloseTo(tabAnchor(7).y, 3)
     expect(tabAnchor(1).y).toBeGreaterThan(notationAnchor(1).y + 0.03)
     expect(tabAnchor(5).y).toBeGreaterThan(notationAnchor(5).y + 0.03)
+    expect(tabAnchor(1).meta.xSource).toBe('default-x+barline')
+    expect(leadFraction(tabAnchor(1))).toBeCloseTo(expectedFirstLead, 3)
   }, 60_000)
 
   it('does not route the Guitar demo through Piano bundled anchors', () => {

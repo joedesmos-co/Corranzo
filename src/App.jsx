@@ -627,7 +627,7 @@ export default function App() {
     resetPdfViewerRuntime,
   ])
 
-  const handleLoadSampleFixtures = useCallback(async () => {
+  const handleLoadSampleFixtures = useCallback(async (pieceId = null) => {
     if (!isDemoSampleEnabled()) {
       return
     }
@@ -635,7 +635,7 @@ export default function App() {
     setSampleLoadState({ loading: true, error: null })
 
     try {
-      const { pdfFile, midiFile, musicXmlFile, meta } = await fetchSampleFixtureFiles(instrumentId)
+      const { pdfFile, midiFile, musicXmlFile, meta } = await fetchSampleFixtureFiles(instrumentId, pieceId)
 
       const pdfData = await pdfFile.arrayBuffer()
       setPdfBuffer(pdfData.slice(0))

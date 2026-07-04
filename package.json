@@ -21,6 +21,7 @@
     "omr:analyze-notes": "node scripts/analyze-omr-note-matching.mjs",
     "omr:probe-noteheads": "node scripts/probe-omr-notehead-detection.mjs",
     "fixtures": "node scripts/build-demo-fixtures.mjs",
+    "fixtures:practice-library": "node scripts/generate-practice-library-fixtures.mjs",
     "fixtures:anchors": "node scripts/generate-demo-anchors.mjs",
     "fixtures:minimal": "node scripts/generate-fixtures.mjs",
     "benchmark:alignment": "node scripts/benchmark-alignment-corpus.mjs --ci-only --json /tmp/alignment-benchmark.json",

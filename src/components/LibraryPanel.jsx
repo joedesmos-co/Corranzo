@@ -239,7 +239,7 @@ export default function LibraryPanel({
                             type="button"
                             className="practice-piece-card__button"
                             disabled={sampleLoadLoading || !onLoadSampleFixtures}
-                            onClick={onLoadSampleFixtures}
+                            onClick={() => onLoadSampleFixtures?.(piece.id)}
                             aria-label={`Start practice: ${piece.title}`}
                           >
                             {sampleLoadLoading ? 'Opening...' : 'Start Practice'}
@@ -253,7 +253,7 @@ export default function LibraryPanel({
                               type="button"
                               className="practice-piece-card__retry"
                               disabled={sampleLoadLoading || !onLoadSampleFixtures}
-                              onClick={onLoadSampleFixtures}
+                              onClick={() => onLoadSampleFixtures?.(piece.id)}
                             >
                               Retry
                             </button>

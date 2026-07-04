@@ -89,3 +89,224 @@ export const MINUET_FIXTURE_FILENAMES = {
   midi: 'Minuet in G.mid',
   musicXml: 'Minuet in G.musicxml',
 }
+
+function generatedPracticePaths(id) {
+  return {
+    pdf: `/fixtures/practice-library/${id}/${id}.pdf`,
+    midi: `/fixtures/practice-library/${id}/${id}.mid`,
+    musicXml: `/fixtures/practice-library/${id}/${id}.musicxml`,
+  }
+}
+
+function generatedPracticeFilenames(title, instrumentLabel) {
+  return {
+    pdf: `${title} - ${instrumentLabel}.pdf`,
+    midi: `${title} - ${instrumentLabel}.mid`,
+    musicXml: `${title} - ${instrumentLabel}.musicxml`,
+  }
+}
+
+function practiceFixture({
+  id,
+  title,
+  subtitle,
+  attribution,
+  instrumentId,
+  difficulty,
+  approxDuration,
+  teaches,
+  measureCount,
+  pageCount = 1,
+  paths = generatedPracticePaths(id),
+  fileNames = generatedPracticeFilenames(title, instrumentId === INSTRUMENT_IDS.GUITAR ? 'Guitar' : 'Piano'),
+}) {
+  return {
+    id,
+    title,
+    subtitle,
+    attribution,
+    instrumentId,
+    difficulty,
+    approxDuration,
+    teaches,
+    measureCount,
+    pageCount,
+    paths,
+    fileNames,
+  }
+}
+
+export const PRACTICE_LIBRARY_FIXTURES = [
+  practiceFixture({
+    id: 'piano-ode-to-joy',
+    title: 'Ode to Joy',
+    subtitle: 'Beginner right-hand melody (public domain)',
+    attribution: 'Ludwig van Beethoven',
+    instrumentId: INSTRUMENT_IDS.PIANO,
+    difficulty: 'Beginner',
+    approxDuration: '40s',
+    teaches: 'Five-finger melody shape, steady quarter notes, and first score-follow practice.',
+    measureCount: 4,
+  }),
+  practiceFixture({
+    id: 'piano-twinkle-twinkle',
+    title: 'Twinkle Twinkle Little Star',
+    subtitle: 'Beginner five-finger melody (public domain)',
+    attribution: 'Traditional French melody',
+    instrumentId: INSTRUMENT_IDS.PIANO,
+    difficulty: 'Beginner',
+    approxDuration: '45s',
+    teaches: 'Repeated notes, simple phrase endings, and even hand motion.',
+    measureCount: 12,
+  }),
+  practiceFixture({
+    id: 'piano-mary-had-a-little-lamb',
+    title: 'Mary Had a Little Lamb',
+    subtitle: 'Beginner stepwise melody (public domain)',
+    attribution: 'Traditional',
+    instrumentId: INSTRUMENT_IDS.PIANO,
+    difficulty: 'Beginner',
+    approxDuration: '30s',
+    teaches: 'Stepwise reading, repeated tones, and short phrase memory.',
+    measureCount: 8,
+  }),
+  practiceFixture({
+    id: 'demo-minuet-in-g',
+    title: 'Minuet in G',
+    subtitle: 'Intermediate baroque minuet excerpt (public domain)',
+    attribution: 'Christian Petzold / J.S. Bach Notebook',
+    instrumentId: INSTRUMENT_IDS.PIANO,
+    difficulty: 'Intermediate',
+    approxDuration: '1 min',
+    teaches: 'Minuet pulse, phrase balance, and score-follow setup on a classical page.',
+    measureCount: 32,
+    paths: MINUET_FIXTURE_PATHS,
+    fileNames: MINUET_FIXTURE_FILENAMES,
+  }),
+  practiceFixture({
+    id: 'piano-gymnopedie-no1-excerpt',
+    title: 'Gymnopedie No. 1 excerpt',
+    subtitle: 'Intermediate lyrical pulse (public domain)',
+    attribution: 'Erik Satie',
+    instrumentId: INSTRUMENT_IDS.PIANO,
+    difficulty: 'Intermediate',
+    approxDuration: '55s',
+    teaches: 'Calm tempo control, repeated accompaniment shapes, and legato listening.',
+    measureCount: 8,
+  }),
+  practiceFixture({
+    ...DEMO_PIECE,
+    instrumentId: INSTRUMENT_IDS.PIANO,
+    difficulty: 'Advanced',
+    approxDuration: '3 min',
+    teaches: 'Dense score reading, phrase flow, and confident page-follow practice.',
+    paths: FIXTURE_PATHS,
+    fileNames: FIXTURE_FILENAMES,
+  }),
+  practiceFixture({
+    id: 'piano-fur-elise-excerpt',
+    title: 'Fur Elise excerpt',
+    subtitle: 'Advanced chromatic excerpt (public domain)',
+    attribution: 'Ludwig van Beethoven',
+    instrumentId: INSTRUMENT_IDS.PIANO,
+    difficulty: 'Advanced',
+    approxDuration: '35s',
+    teaches: 'Chromatic neighbor tones, light finger motion, and careful note targeting.',
+    measureCount: 8,
+  }),
+  practiceFixture({
+    ...GUITAR_DEMO_PIECE,
+    instrumentId: INSTRUMENT_IDS.GUITAR,
+    difficulty: 'Beginner',
+    approxDuration: '1 min',
+    teaches: 'First-position melody reading with matching TAB string and fret positions.',
+    paths: GUITAR_FIXTURE_PATHS,
+    fileNames: GUITAR_FIXTURE_FILENAMES,
+  }),
+  practiceFixture({
+    id: 'guitar-amazing-grace',
+    title: 'Amazing Grace',
+    subtitle: 'Beginner open-position hymn (public domain)',
+    attribution: 'Traditional',
+    instrumentId: INSTRUMENT_IDS.GUITAR,
+    difficulty: 'Beginner',
+    approxDuration: '45s',
+    teaches: 'Open-position melody, simple string changes, and TAB-to-notation pairing.',
+    measureCount: 4,
+  }),
+  practiceFixture({
+    id: 'guitar-when-the-saints',
+    title: 'When the Saints Go Marching In',
+    subtitle: 'Beginner first-position tune (public domain)',
+    attribution: 'Traditional',
+    instrumentId: INSTRUMENT_IDS.GUITAR,
+    difficulty: 'Beginner',
+    approxDuration: '40s',
+    teaches: 'Steady quarter-note rhythm, first-position frets, and repeated melodic patterns.',
+    measureCount: 5,
+  }),
+  practiceFixture({
+    id: 'guitar-greensleeves',
+    title: 'Greensleeves',
+    subtitle: 'Intermediate minor melody (public domain)',
+    attribution: 'Traditional English ballad',
+    instrumentId: INSTRUMENT_IDS.GUITAR,
+    difficulty: 'Intermediate',
+    approxDuration: '55s',
+    teaches: 'Minor-mode phrasing, string crossing, and longer TAB-guided lines.',
+    measureCount: 5,
+  }),
+  practiceFixture({
+    id: 'guitar-scarborough-fair',
+    title: 'Scarborough Fair',
+    subtitle: 'Intermediate modal melody (public domain)',
+    attribution: 'Traditional English ballad',
+    instrumentId: INSTRUMENT_IDS.GUITAR,
+    difficulty: 'Intermediate',
+    approxDuration: '55s',
+    teaches: 'Modal phrasing, repeated notes, and clean visual target changes.',
+    measureCount: 5,
+  }),
+  practiceFixture({
+    id: 'guitar-spanish-romance-intro',
+    title: 'Spanish Romance intro',
+    subtitle: 'Intermediate arpeggio-style excerpt (public domain)',
+    attribution: 'Traditional / anonymous',
+    instrumentId: INSTRUMENT_IDS.GUITAR,
+    difficulty: 'Intermediate',
+    approxDuration: '45s',
+    teaches: 'Open-string arpeggio feel, TAB tracking, and even eighth notes.',
+    measureCount: 4,
+  }),
+  practiceFixture({
+    id: 'guitar-carulli-style-etude',
+    title: 'Carulli-style Etude',
+    subtitle: 'Advanced short classical study (public domain fixture)',
+    attribution: 'Corranzo CC0 study after classical guitar patterns',
+    instrumentId: INSTRUMENT_IDS.GUITAR,
+    difficulty: 'Advanced',
+    approxDuration: '35s',
+    teaches: 'Position shifts, wider fret targets, and classical-study sequencing.',
+    measureCount: 6,
+  }),
+]
+
+export function getPracticeLibraryFixture(pieceId, instrumentId = DEFAULT_INSTRUMENT_ID) {
+  const normalizedInstrument = normalizeInstrumentId(instrumentId)
+  if (pieceId) {
+    const exact = PRACTICE_LIBRARY_FIXTURES.find(
+      (piece) => piece.id === pieceId && piece.instrumentId === normalizedInstrument,
+    )
+    if (exact) {
+      return exact
+    }
+  }
+  const demo = getDemoPieceForInstrument(normalizedInstrument)
+  return (
+    PRACTICE_LIBRARY_FIXTURES.find(
+      (piece) => piece.id === demo.id && piece.instrumentId === normalizedInstrument,
+    ) ??
+    PRACTICE_LIBRARY_FIXTURES.find((piece) => piece.instrumentId === normalizedInstrument) ??
+    PRACTICE_LIBRARY_FIXTURES[0]
+  )
+}

@@ -12,6 +12,9 @@ const DIVISIONS = 4
 const QUARTER_TICKS = 480
 const CHANNEL = 0
 const VELOCITY = 84
+const MEASURE_WIDTH = 126
+const FIRST_NOTE_OFFSET_X = 20
+const NOTE_SPACING_X = 27
 
 const NOTES = [
   ['E', 4, 1, 0],
@@ -50,13 +53,14 @@ function midiFor(step, octave) {
   return (octave + 1) * 12 + STEP_TO_SEMITONE[step]
 }
 
-function noteXml([step, octave, stringNumber, fret], { staff, tabMirror = false }) {
+function noteXml([step, octave, stringNumber, fret], { staff, tabMirror = false, defaultX = null }) {
   const staffTag = `<staff>${staff}</staff>`
+  const layoutAttr = Number.isFinite(defaultX) ? ` default-x="${defaultX}"` : ''
   const technical = tabMirror
     ? `<notations><technical><string>${stringNumber}</string><fret>${fret}</fret></technical></notations>`
     : ''
   return [
-    '<note>',
+    `<note${layoutAttr}>`,
     `<pitch><step>${step}</step><octave>${octave}</octave></pitch>`,
     `<duration>${DIVISIONS}</duration>`,
     '<voice>1</voice>',
@@ -97,11 +101,11 @@ function buildMusicXml() {
       </direction>`
         : ''
     measures.push(`
-    <measure number="${measureIndex + 1}">
+    <measure number="${measureIndex + 1}" width="${MEASURE_WIDTH}">
       ${attrs}
-      ${measureNotes.map((note) => noteXml(note, { staff: 1 })).join('\n      ')}
+      ${measureNotes.map((note, beat) => noteXml(note, { staff: 1, defaultX: FIRST_NOTE_OFFSET_X + beat * NOTE_SPACING_X })).join('\n      ')}
       <backup><duration>${DIVISIONS * measureNotes.length}</duration></backup>
-      ${measureNotes.map((note) => noteXml(note, { staff: 2, tabMirror: true })).join('\n      ')}
+      ${measureNotes.map((note, beat) => noteXml(note, { staff: 2, tabMirror: true, defaultX: FIRST_NOTE_OFFSET_X + beat * NOTE_SPACING_X })).join('\n      ')}
       ${measureIndex === Math.ceil(NOTES.length / 4) - 1 ? '<barline location="right"><bar-style>light-heavy</bar-style></barline>' : ''}
     </measure>`)
   }
@@ -201,7 +205,6 @@ function buildPdf() {
   text(54, 710, 10, 'Standard notation with tablature · Tempo quarter = 84 · Duration about 20 seconds')
 
   const systems = [620, 470]
-  const measureWidth = 126
   const startX = 74
   let noteIndex = 0
   const totalMeasures = Math.ceil(NOTES.length / 4)
@@ -213,21 +216,21 @@ function buildPdf() {
     }
     const y = systems[systemIndex]
     text(38, y + 18, 10, systemIndex === 0 ? 'Staff' : 'Staff')
-    for (let i = 0; i < 5; i += 1) line(startX, y - i * 8, startX + measureWidth * measureCount, y - i * 8)
+    for (let i = 0; i < 5; i += 1) line(startX, y - i * 8, startX + MEASURE_WIDTH * measureCount, y - i * 8)
     text(38, y - 74, 10, 'TAB')
-    for (let i = 0; i < 6; i += 1) line(startX, y - 84 - i * 8, startX + measureWidth * measureCount, y - 84 - i * 8)
+    for (let i = 0; i < 6; i += 1) line(startX, y - 84 - i * 8, startX + MEASURE_WIDTH * measureCount, y - 84 - i * 8)
     for (let measure = 0; measure <= measureCount; measure += 1) {
-      const x = startX + measure * measureWidth
+      const x = startX + measure * MEASURE_WIDTH
       line(x, y + 2, x, y - 34)
       line(x, y - 82, x, y - 124)
     }
     for (let measure = 0; measure < measureCount; measure += 1) {
-      const mx = startX + measure * measureWidth
+      const mx = startX + measure * MEASURE_WIDTH
       text(mx + 4, y + 10, 8, String(measureStart + measure + 1))
       for (let beat = 0; beat < 4; beat += 1) {
         const note = NOTES[noteIndex]
         if (!note) break
-        const x = mx + 20 + beat * 27
+        const x = mx + FIRST_NOTE_OFFSET_X + beat * NOTE_SPACING_X
         const staffY = y - staffOffset(note[0])
         circle(x, staffY)
         line(x + 6, staffY, x + 6, staffY + 28, 0.35, 0.68)

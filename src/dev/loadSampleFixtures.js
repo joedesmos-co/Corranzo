@@ -2,6 +2,7 @@ import {
   getDemoPieceForInstrument,
   getFixtureFilenamesForInstrument,
   getFixturePathsForInstrument,
+  getPracticeLibraryFixture,
 } from './fixturePaths.js'
 import { withTimeout } from '../utils/asyncWithTimeout.js'
 
@@ -17,12 +18,13 @@ async function fetchAsFile(url, fileName, type) {
 }
 
 /**
- * Loads the bundled demo piece for the active instrument — same shape as user uploads.
+ * Loads a bundled practice piece for the active instrument — same shape as user uploads.
  */
-export async function fetchSampleFixtureFiles(instrumentId) {
-  const paths = getFixturePathsForInstrument(instrumentId)
-  const fileNames = getFixtureFilenamesForInstrument(instrumentId)
-  const meta = getDemoPieceForInstrument(instrumentId)
+export async function fetchSampleFixtureFiles(instrumentId, pieceId = null) {
+  const fixture = pieceId ? getPracticeLibraryFixture(pieceId, instrumentId) : null
+  const paths = fixture?.paths ?? getFixturePathsForInstrument(instrumentId)
+  const fileNames = fixture?.fileNames ?? getFixtureFilenamesForInstrument(instrumentId)
+  const meta = fixture ?? getDemoPieceForInstrument(instrumentId)
   return withTimeout(
     Promise.all([
       fetchAsFile(paths.pdf, fileNames.pdf, 'application/pdf'),
