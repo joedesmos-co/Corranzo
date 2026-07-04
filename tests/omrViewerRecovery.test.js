@@ -31,10 +31,12 @@ describe('OMR viewer recovery', () => {
     expect(omrPanel).toMatch(/accepted\?\.ok === false/)
   })
 
-  it('remounts the library PDF viewer with a runtime revision after OMR cleanup', () => {
-    expect(app).toMatch(/pdfViewerRevision/)
-    expect(app).toMatch(/setPdfViewerRevision\(\(revision\) => revision \+ 1\)/)
-    expect(app).toMatch(/key=\{`library-pdf-\$\{pdfViewerRevision\}-\$\{pdfFile \?\? 'empty'\}`\}/)
+  it('keeps Library picker-only while OMR cleanup clears PDF runtime state', () => {
+    expect(app).toMatch(/const resetPdfViewerRuntime = useCallback/)
+    expect(app).toMatch(/clearWarmPages\(\)[\s\S]*setPracticePdfReady\(false\)/)
+    expect(app).toContain('uploadedPieces={uploadedPracticePieces}')
+    expect(app).not.toMatch(/pdfViewerRevision/)
+    expect(app).not.toMatch(/library-pdf-/)
   })
 
   it('keeps App in charge of old PDF blob URL revocation during refreshes', () => {

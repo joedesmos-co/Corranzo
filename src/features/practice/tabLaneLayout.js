@@ -130,3 +130,13 @@ export function buildTargetPositions(targetGroup, positions = null) {
   }
   return result
 }
+
+/**
+ * Fretboard markers are physical finger placements. Open strings are still
+ * valid TAB targets, but they do not get a fret dot on the fretboard strip.
+ */
+export function buildFretboardTargetPositions(targetGroup, positions = null) {
+  return buildTargetPositions(targetGroup, positions).filter(
+    (position) => Number(position.fret) > 0,
+  )
+}

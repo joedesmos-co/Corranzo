@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest'
 import {
   FRET_DISC_RADIUS,
   TAB_LINE_GAP,
+  buildFretboardTargetPositions,
   buildTabGeometry,
   buildTabLaneNotes,
   buildTargetPositions,
@@ -121,6 +122,23 @@ describe('buildTargetPositions', () => {
     const targets = buildTargetPositions(targetGroup, positions)
     expect(targets).toEqual([
       { string: 1, fret: 0, midi: 64, label: 'E4' },
+      { string: 5, fret: 3, midi: 48, label: 'C3' },
+    ])
+  })
+
+  it('keeps open-string TAB targets but removes open strings from fretboard markers', () => {
+    const targetGroup = {
+      notes: [
+        { id: 'open', midi: 64, label: 'E4', string: 1, fret: 0 },
+        { id: 'fretted', midi: 48, label: 'C3', string: 5, fret: 3 },
+      ],
+    }
+
+    expect(buildTargetPositions(targetGroup)).toEqual([
+      { string: 1, fret: 0, midi: 64, label: 'E4' },
+      { string: 5, fret: 3, midi: 48, label: 'C3' },
+    ])
+    expect(buildFretboardTargetPositions(targetGroup)).toEqual([
       { string: 5, fret: 3, midi: 48, label: 'C3' },
     ])
   })

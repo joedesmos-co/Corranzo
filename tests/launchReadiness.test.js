@@ -18,11 +18,12 @@ describe('launch readiness fixes', () => {
     expect(museScoreBlock).not.toMatch(/MUSESCORE_PLANNED_MESSAGE[\s\S]*return notices/)
   })
 
-  it('skips misleading sound-file hint when MIDI is already loaded', () => {
+  it('opens uploaded cards without misleading sound-file hint copy', () => {
     const app = readSrc('App.jsx')
 
-    expect(app).toMatch(/message: midiSource[\s\S]*Opened Practice\./)
-    expect(app).toContain('Add a sound file anytime for backing audio')
+    expect(app).toMatch(/const handleOpenUploadedPiece = useCallback/)
+    expect(app).toMatch(/setLibraryFeedback\(\{ type: 'info', message: 'Opened Practice\.' \}\)/)
+    expect(app).not.toContain('Add a sound file anytime for backing audio')
   })
 
   it('aligns Progress naming and explains both stat sources', () => {

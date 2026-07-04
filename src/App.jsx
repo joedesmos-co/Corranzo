@@ -8,7 +8,6 @@ import SessionRestoreBanner from './components/SessionRestoreBanner.jsx'
 import SessionRestoreOverlay from './components/SessionRestoreOverlay.jsx'
 import GuidedTutorial from './components/onboarding/GuidedTutorial.jsx'
 import useRestoreUploadGate from './features/import/useRestoreUploadGate.js'
-import PdfViewer from './components/PdfViewer.jsx'
 import PracticeView from './components/practice/PracticeView.jsx'
 import { PracticeSessionProvider } from './context/PracticeSessionContext.jsx'
 import { ProfileStatsProvider } from './context/ProfileStatsContext.jsx'
@@ -60,9 +59,8 @@ import { getHomeNavigationTarget } from './features/navigation/goHome.js'
 import { warmupAllInstrumentSamplesOnIdle } from './features/playback/instrumentSampleWarmup.js'
 import { useInstrument } from './context/instrumentContext.js'
 import { DEFAULT_INSTRUMENT_ID, normalizeInstrumentId } from './features/instruments/instruments.js'
-import { LIBRARY_TABS } from './features/library/practiceLibrary.js'
+import { LIBRARY_TABS, buildUploadedPracticePieces } from './features/library/practiceLibrary.js'
 import {
-  bundleHasActiveFile,
   createEmptyInstrumentBundle,
   createInstrumentBundleStore,
   snapshotInstrumentBundle,
@@ -136,7 +134,6 @@ export default function App() {
   const [fileHelpSignal, setFileHelpSignal] = useState(0)
   const [pdfSoftWarning, setPdfSoftWarning] = useState(null)
   const [practicePdfReady, setPracticePdfReady] = useState(false)
-  const [pdfViewerRevision, setPdfViewerRevision] = useState(0)
   const activeViewRef = useRef(activeView)
   const activeDemoPiece = useMemo(
     () => getDemoPieceForInstrument(instrumentId),
@@ -144,17 +141,14 @@ export default function App() {
   )
 
   const {
-    sidebarOpen,
     paperTheme,
     setSidebarOpen,
-    toggleSidebar,
     togglePaperTheme,
   } = useWorkspacePreferences()
 
   const resetPdfViewerRuntime = useCallback(() => {
     clearWarmPages()
     setPracticePdfReady(false)
-    setPdfViewerRevision((revision) => revision + 1)
   }, [])
 
   // Live mirror of the currently selected instrument's active bundle. Kept in a
@@ -957,6 +951,50 @@ export default function App() {
     musicXmlSource,
   })
   const sessionFilesReady = practiceReady
+  const uploadedPracticePieces = useMemo(
+    () =>
+      buildUploadedPracticePieces(getInstrumentSessionBundles(), {
+        activeInstrumentId: instrumentId,
+      }),
+    [
+      getInstrumentSessionBundles,
+      instrumentId,
+      pdfFile,
+      pdfBuffer,
+      pdfMeta,
+      fileName,
+      midiSource,
+      musicXmlSource,
+      pageNumber,
+      initialPracticePrefs,
+      pdfSoftWarning,
+      demoPieceActive,
+    ],
+  )
+
+  const handleOpenUploadedPiece = useCallback((targetInstrumentId) => {
+    const targetInstrument = normalizeInstrumentId(targetInstrumentId)
+    const currentInstrument = normalizeInstrumentId(activeInstrumentRef.current)
+    const store = instrumentBundleStoreRef.current
+
+    if (targetInstrument !== currentInstrument) {
+      store.set(currentInstrument, snapshotInstrumentBundle(liveBundleRef.current))
+      const targetBundle = store.get(targetInstrument)
+      if (!targetBundle?.pdfFile) {
+        setLibraryFeedback({
+          type: 'error',
+          message: 'That uploaded piece is no longer available. Add the files again to practice it.',
+        })
+        return
+      }
+      activeInstrumentRef.current = targetInstrument
+      applyInstrumentBundle(targetBundle)
+      setInstrumentId(targetInstrument)
+    }
+
+    setLibraryFeedback({ type: 'info', message: 'Opened Practice.' })
+    navigateToView('practice')
+  }, [applyInstrumentBundle, navigateToView, setInstrumentId])
 
   useEffect(() => {
     if (activeView !== 'practice' || !pdfFile) {
@@ -1235,20 +1273,12 @@ export default function App() {
       )}
 
       {showLibraryWorkspace && (
-        <main
-          className={
-            libraryTab === LIBRARY_TABS.PRACTICE
-              ? 'library-main'
-              : `main-layout${sidebarOpen ? '' : ' main-layout--sidebar-hidden'}${pdfFile ? '' : ' main-layout--empty-score'}`
-          }
-        >
+        <main className="library-main">
           <LibraryPanel
             className={
               libraryTab === LIBRARY_TABS.PRACTICE
                 ? 'library-panel--practice-library'
-                : sidebarOpen
-                  ? ''
-                  : 'library-panel--hidden'
+                : 'library-panel--uploads-library'
             }
             activeTab={libraryTab}
             onTabChange={setLibraryTab}
@@ -1258,15 +1288,8 @@ export default function App() {
             musicXmlFileName={musicXmlSource?.fileName}
             musicXmlSource={musicXmlSource}
             uploadsDisabled={isRestoring}
-            onOpenPractice={() => {
-              navigateToView('practice')
-              setLibraryFeedback({
-                type: 'info',
-                message: midiSource
-                  ? 'Opened Practice.'
-                  : 'Opened Practice. Add a sound file anytime for backing audio.',
-              })
-            }}
+            uploadedPieces={uploadedPracticePieces}
+            onOpenUploadedPiece={handleOpenUploadedPiece}
             onClassifiedUpload={gatedClassifiedUpload}
             onFileSelect={wrapUpload('pdf', handleFileSelect)}
             onMidiSelect={wrapUpload('midi', handleMidiSelect)}
@@ -1287,25 +1310,6 @@ export default function App() {
             showDemo={!demoCardHidden && isDemoSampleEnabled() && restoreGateOpen}
             fileHelpSignal={fileHelpSignal}
           />
-          {libraryTab === LIBRARY_TABS.UPLOADS && (
-            <div className="main-layout__score">
-              <PdfViewer
-                key={`library-pdf-${pdfViewerRevision}-${pdfFile ?? 'empty'}`}
-                file={pdfFile}
-                fileName={fileName}
-                pdfMeta={pdfMeta}
-                pageNumber={pageNumber}
-                numPages={numPages}
-                paperTheme={paperTheme}
-                sidebarOpen={sidebarOpen}
-                onDocumentLoadSuccess={handleDocumentLoadSuccess}
-                onPrevPage={handlePrevPage}
-                onNextPage={handleNextPage}
-                onToggleSidebar={toggleSidebar}
-                onTogglePaper={togglePaperTheme}
-              />
-            </div>
-          )}
         </main>
       )}
 

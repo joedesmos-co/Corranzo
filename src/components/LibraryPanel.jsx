@@ -16,6 +16,7 @@ import { getInstrument } from '../features/instruments/instruments.js'
 import {
   DIFFICULTY_FILTERS,
   LIBRARY_TABS,
+  filterLibraryItems,
   getBuiltInPracticePieces,
   groupPracticePiecesByDifficulty,
 } from '../features/library/practiceLibrary.js'
@@ -48,7 +49,8 @@ export default function LibraryPanel({
   onClassifiedUpload = null,
   onImportFeedback,
   onLoadSampleFixtures,
-  onOpenPractice,
+  uploadedPieces = [],
+  onOpenUploadedPiece = null,
   pdfSource = null,
   pdfFileUrl = null,
   onOmrGenerated = null,
@@ -59,19 +61,28 @@ export default function LibraryPanel({
   fileHelpSignal = 0,
 }) {
   const [difficultyFilter, setDifficultyFilter] = useState('all')
+  const [practiceSearch, setPracticeSearch] = useState('')
+  const [uploadsSearch, setUploadsSearch] = useState('')
   const hasPdf = Boolean(pdfFileUrl || pdfSource || fileName)
   const hasMusicXml = isLibraryScoreTimingReady(musicXmlSource)
   const hasMidi = Boolean(midiFileName)
-  const canOpenPractice = hasPdf && hasMusicXml
   const showOmrPanel = shouldShowLibraryOmrPanel({ hasPdf, musicXmlSource })
   const activeInstrument = getInstrument(instrumentId)
-  const practicePieces = useMemo(
-    () => getBuiltInPracticePieces({ instrumentId, difficulty: difficultyFilter }),
-    [instrumentId, difficultyFilter],
+  const visiblePracticePieces = useMemo(
+    () =>
+      filterLibraryItems(
+        getBuiltInPracticePieces({ instrumentId, difficulty: difficultyFilter }),
+        practiceSearch,
+      ),
+    [instrumentId, difficultyFilter, practiceSearch],
   )
   const practiceGroups = useMemo(
-    () => groupPracticePiecesByDifficulty(practicePieces),
-    [practicePieces],
+    () => groupPracticePiecesByDifficulty(visiblePracticePieces),
+    [visiblePracticePieces],
+  )
+  const visibleUploadedPieces = useMemo(
+    () => filterLibraryItems(uploadedPieces, uploadsSearch),
+    [uploadedPieces, uploadsSearch],
   )
   const selectedTab = activeTab === LIBRARY_TABS.UPLOADS ? LIBRARY_TABS.UPLOADS : LIBRARY_TABS.PRACTICE
   const selectTab = (tab) => {
@@ -80,6 +91,7 @@ export default function LibraryPanel({
 
   useEffect(() => {
     setDifficultyFilter('all')
+    setPracticeSearch('')
   }, [instrumentId])
 
   function reportReject(kind) {
@@ -172,18 +184,30 @@ export default function LibraryPanel({
                 Practice Library
               </h2>
             </div>
-            <div className="practice-library__filters" aria-label="Difficulty filter">
-              {DIFFICULTY_FILTERS.map((filter) => (
-                <button
-                  key={filter.id}
-                  type="button"
-                  className={`practice-library__filter${difficultyFilter === filter.id ? ' practice-library__filter--active' : ''}`}
-                  aria-pressed={difficultyFilter === filter.id}
-                  onClick={() => setDifficultyFilter(filter.id)}
-                >
-                  {filter.label}
-                </button>
-              ))}
+            <div className="practice-library__tools">
+              <label className="library-search">
+                <span className="library-search__label">Search</span>
+                <input
+                  className="library-search__input"
+                  type="search"
+                  value={practiceSearch}
+                  onChange={(event) => setPracticeSearch(event.target.value)}
+                  placeholder={`Search ${activeInstrument.label} pieces`}
+                />
+              </label>
+              <div className="practice-library__filters" aria-label="Difficulty filter">
+                {DIFFICULTY_FILTERS.map((filter) => (
+                  <button
+                    key={filter.id}
+                    type="button"
+                    className={`practice-library__filter${difficultyFilter === filter.id ? ' practice-library__filter--active' : ''}`}
+                    aria-pressed={difficultyFilter === filter.id}
+                    onClick={() => setDifficultyFilter(filter.id)}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -236,191 +260,239 @@ export default function LibraryPanel({
             </div>
           ) : (
             <p className="practice-library__empty">
-              No built-in {activeInstrument.label} pieces match this difficulty yet.
+              No built-in {activeInstrument.label} pieces match this search.
             </p>
           )}
         </section>
       ) : (
-        <>
-      <section className="library-panel__uploads" aria-labelledby="library-uploads-heading">
-        <div className="library-panel__uploads-header">
-          <p className="practice-library__eyebrow">Your files</p>
-          <h2 id="library-uploads-heading" className="practice-library__title">
-            My Uploads
-          </h2>
-        </div>
+        <section className="library-panel__uploads" aria-labelledby="library-uploads-heading">
+          <div className="practice-library__header">
+            <div>
+              <p className="practice-library__eyebrow">Your files</p>
+              <h2 id="library-uploads-heading" className="practice-library__title">
+                My Uploads
+              </h2>
+            </div>
+            <label className="library-search">
+              <span className="library-search__label">Search</span>
+              <input
+                className="library-search__input"
+                type="search"
+                value={uploadsSearch}
+                onChange={(event) => setUploadsSearch(event.target.value)}
+                placeholder="Search uploads"
+              />
+            </label>
+          </div>
 
-        <MultiFileUpload
-          hasPdf={hasPdf}
-          hasMusicXml={hasMusicXml}
-          hasMidi={hasMidi}
-          onFileSelect={onFileSelect}
-          onMusicXmlSelect={onMusicXmlSelect}
-          onMidiSelect={onMidiSelect}
-          onClearMusicXml={onClearMusicXml}
-          onClearMidi={onClearMidi}
-          onClassifiedUpload={onClassifiedUpload}
-          disabled={uploadsDisabled}
-        />
-      </section>
-
-      {importFeedback?.message && (
-        <p
-          className={`library-panel__feedback library-panel__feedback--${importFeedback.type ?? 'info'}`}
-          role={importFeedback.type === 'error' ? 'alert' : 'status'}
-        >
-          {importFeedback.message}
-        </p>
-      )}
-
-      {showOmrPanel && (
-        <PdfOmrPlaybackPanel
-          key={`omr-panel-${fileName ?? 'score'}-${pdfFileUrl ?? 'no-url'}`}
-          pdfSource={pdfSource}
-          pdfFileUrl={pdfFileUrl}
-          pdfFileName={fileName}
-          disabled={uploadsDisabled}
-          onGenerated={onOmrGenerated}
-          onFeedback={onImportFeedback}
-        />
-      )}
-
-      <LibraryAccuracyGuide
-        hasPdf={hasPdf}
-        hasMusicXml={hasMusicXml}
-        openHelpSignal={fileHelpSignal}
-      />
-
-      {canOpenPractice && onOpenPractice ? (
-        <div className="library-panel__workflow library-panel__open-practice">
-          <p className="library-panel__workflow-lead">
-            Your score is ready.
-          </p>
-          <button type="button" className="upload-btn upload-btn--practice" onClick={onOpenPractice}>
-            Open Practice
-          </button>
-          {!hasMidi && (
-            <p className="library-panel__open-practice-text">Sound (MIDI) is optional.</p>
+          {uploadedPieces.length > 0 && visibleUploadedPieces.length === 0 && (
+            <p className="practice-library__empty">No uploaded pieces match this search.</p>
           )}
-        </div>
-      ) : showOmrPanel ? (
-        <p className="library-panel__workflow library-panel__workflow-next" role="status">
-          PDF-only playback is experimental. A timing file gives the most reliable Practice timing.
-        </p>
-      ) : null}
 
-      <details className="library-panel__advanced">
-        <summary className="library-panel__advanced-summary">Upload one file at a time</summary>
-
-      <div className="panel library-panel__upload-card">
-        <h2 className="panel__title practice-section__title--editorial">
-          <span className="panel__step-badge">1</span> Sheet music
-        </h2>
-        <p className="panel__hint">PDF — the score you read on screen.</p>
-
-        <label className={`upload-btn${uploadsDisabled ? ' upload-btn--disabled' : ''}`}>
-          Upload PDF
-          <input
-            type="file"
-            accept={ACCEPT_ATTRIBUTES.sheetMusic}
-            hidden
-            disabled={uploadsDisabled}
-            onChange={handlePdfChange}
-          />
-        </label>
-
-        {fileName ? (
-          <p className="library-panel__file" title={fileName}>
-            {fileName}
-          </p>
-        ) : (
-          <p className="library-panel__empty">Choose the score you want to read.</p>
-        )}
-      </div>
-
-      <div className="panel library-panel__upload-card library-panel__musicxml">
-        <h2 className="panel__title practice-section__title--editorial">
-          <span className="panel__step-badge">2</span> Timing file
-        </h2>
-        <p className="panel__hint">
-          Keeps Practice, loops, and Wait For You lined up with your score.
-        </p>
-
-        <label
-          className={`upload-btn upload-btn--musicxml${uploadsDisabled ? ' upload-btn--disabled' : ''}`}
-        >
-          Upload Timing File
-          <input
-            type="file"
-            accept={ACCEPT_ATTRIBUTES.scoreTiming}
-            hidden
-            disabled={uploadsDisabled}
-            onChange={handleScoreTimingChange}
-          />
-        </label>
-
-        {musicXmlFileName ? (
-          <div className="library-panel__loaded-file">
-            <p className="library-panel__file" title={musicXmlFileName}>
-              {musicXmlFileName}
-            </p>
-            {onClearMusicXml && (
-              <button
-                type="button"
-                className="library-panel__file-remove"
-                onClick={onClearMusicXml}
-                disabled={uploadsDisabled}
+          <div className="practice-library__grid library-panel__uploads-grid">
+            {visibleUploadedPieces.map((piece) => (
+              <article
+                className="practice-piece-card practice-piece-card--uploaded"
+                key={piece.id}
               >
-                Remove Timing File
-              </button>
-            )}
-          </div>
-        ) : (
-          <p className="library-panel__empty">Usually MusicXML or MXL from your notation app.</p>
-        )}
-      </div>
+                <div className="practice-piece-card__main">
+                  <p className="practice-piece-card__meta">
+                    {piece.instrument} - {piece.difficulty} - {piece.approxDuration}
+                  </p>
+                  <h4 className="practice-piece-card__title">{piece.title}</h4>
+                  <p className="practice-piece-card__subtitle">{piece.subtitle}</p>
+                  <p className="practice-piece-card__teaches">{piece.teaches}</p>
+                </div>
+                <div className="practice-piece-card__action">
+                  <button
+                    type="button"
+                    className="practice-piece-card__button"
+                    disabled={!onOpenUploadedPiece}
+                    onClick={() => onOpenUploadedPiece?.(piece.instrumentId)}
+                    aria-label={`Open Practice: ${piece.title}`}
+                  >
+                    Start Practice
+                  </button>
+                  <p className="practice-piece-card__credit">{piece.attribution}</p>
+                </div>
+              </article>
+            ))}
 
-      <div className="panel library-panel__upload-card library-panel__midi">
-        <h2 className="panel__title practice-section__title--editorial">
-          <span className="panel__step-badge">3</span> Sound <span className="panel__optional">(optional)</span>
-        </h2>
-        <p className="panel__hint">MIDI — backing audio in Practice.</p>
+            <article className="practice-piece-card practice-piece-card--add-files">
+              <div className="practice-piece-card__main">
+                <p className="practice-piece-card__meta">Add files</p>
+                <h4 className="practice-piece-card__title">Import a practice piece</h4>
+                <p className="practice-piece-card__teaches">
+                  Add PDF, timing, and optional sound files to save them here.
+                </p>
+              </div>
 
-        <label
-          className={`upload-btn upload-btn--midi${uploadsDisabled ? ' upload-btn--disabled' : ''}`}
-        >
-          Upload MIDI
-          <input
-            type="file"
-            accept={ACCEPT_ATTRIBUTES.soundFile}
-            hidden
-            disabled={uploadsDisabled}
-            onChange={handleMidiChange}
-          />
-        </label>
-
-        {midiFileName ? (
-          <div className="library-panel__loaded-file">
-            <p className="library-panel__file" title={midiFileName}>
-              {midiFileName}
-            </p>
-            {onClearMidi && (
-              <button
-                type="button"
-                className="library-panel__file-remove"
-                onClick={onClearMidi}
+              <MultiFileUpload
+                hasPdf={hasPdf}
+                hasMusicXml={hasMusicXml}
+                hasMidi={hasMidi}
+                onFileSelect={onFileSelect}
+                onMusicXmlSelect={onMusicXmlSelect}
+                onMidiSelect={onMidiSelect}
+                onClearMusicXml={onClearMusicXml}
+                onClearMidi={onClearMidi}
+                onClassifiedUpload={onClassifiedUpload}
                 disabled={uploadsDisabled}
-              >
-                Remove Sound File
-              </button>
-            )}
+              />
+
+              {importFeedback?.message && (
+                <p
+                  className={`library-panel__feedback library-panel__feedback--${importFeedback.type ?? 'info'}`}
+                  role={importFeedback.type === 'error' ? 'alert' : 'status'}
+                >
+                  {importFeedback.message}
+                </p>
+              )}
+
+              {showOmrPanel && (
+                <PdfOmrPlaybackPanel
+                  key={`omr-panel-${fileName ?? 'score'}-${pdfFileUrl ?? 'no-url'}`}
+                  pdfSource={pdfSource}
+                  pdfFileUrl={pdfFileUrl}
+                  pdfFileName={fileName}
+                  disabled={uploadsDisabled}
+                  onGenerated={onOmrGenerated}
+                  onFeedback={onImportFeedback}
+                />
+              )}
+
+              {showOmrPanel && (
+                <p className="library-panel__workflow library-panel__workflow-next" role="status">
+                  PDF-only playback is experimental. A timing file gives the most reliable Practice timing.
+                </p>
+              )}
+
+              <details className="library-panel__advanced">
+                <summary className="library-panel__advanced-summary">Upload one file at a time</summary>
+
+                <div className="panel library-panel__upload-card">
+                  <h2 className="panel__title practice-section__title--editorial">
+                    <span className="panel__step-badge">1</span> Sheet music
+                  </h2>
+                  <p className="panel__hint">PDF - the score you read on screen.</p>
+
+                  <label className={`upload-btn${uploadsDisabled ? ' upload-btn--disabled' : ''}`}>
+                    Upload PDF
+                    <input
+                      type="file"
+                      accept={ACCEPT_ATTRIBUTES.sheetMusic}
+                      hidden
+                      disabled={uploadsDisabled}
+                      onChange={handlePdfChange}
+                    />
+                  </label>
+
+                  {fileName ? (
+                    <p className="library-panel__file" title={fileName}>
+                      {fileName}
+                    </p>
+                  ) : (
+                    <p className="library-panel__empty">Choose the score you want to read.</p>
+                  )}
+                </div>
+
+                <div className="panel library-panel__upload-card library-panel__musicxml">
+                  <h2 className="panel__title practice-section__title--editorial">
+                    <span className="panel__step-badge">2</span> Timing file
+                  </h2>
+                  <p className="panel__hint">
+                    Keeps Practice, loops, and Wait For You lined up with your score.
+                  </p>
+
+                  <label
+                    className={`upload-btn upload-btn--musicxml${uploadsDisabled ? ' upload-btn--disabled' : ''}`}
+                  >
+                    Upload Timing File
+                    <input
+                      type="file"
+                      accept={ACCEPT_ATTRIBUTES.scoreTiming}
+                      hidden
+                      disabled={uploadsDisabled}
+                      onChange={handleScoreTimingChange}
+                    />
+                  </label>
+
+                  {musicXmlFileName ? (
+                    <div className="library-panel__loaded-file">
+                      <p className="library-panel__file" title={musicXmlFileName}>
+                        {musicXmlFileName}
+                      </p>
+                      {onClearMusicXml && (
+                        <button
+                          type="button"
+                          className="library-panel__file-remove"
+                          onClick={onClearMusicXml}
+                          disabled={uploadsDisabled}
+                        >
+                          Remove Timing File
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="library-panel__empty">Usually MusicXML or MXL from your notation app.</p>
+                  )}
+                </div>
+
+                <div className="panel library-panel__upload-card library-panel__midi">
+                  <h2 className="panel__title practice-section__title--editorial">
+                    <span className="panel__step-badge">3</span> Sound <span className="panel__optional">(optional)</span>
+                  </h2>
+                  <p className="panel__hint">MIDI - backing audio in Practice.</p>
+
+                  <label
+                    className={`upload-btn upload-btn--midi${uploadsDisabled ? ' upload-btn--disabled' : ''}`}
+                  >
+                    Upload MIDI
+                    <input
+                      type="file"
+                      accept={ACCEPT_ATTRIBUTES.soundFile}
+                      hidden
+                      disabled={uploadsDisabled}
+                      onChange={handleMidiChange}
+                    />
+                  </label>
+
+                  {midiFileName ? (
+                    <div className="library-panel__loaded-file">
+                      <p className="library-panel__file" title={midiFileName}>
+                        {midiFileName}
+                      </p>
+                      {onClearMidi && (
+                        <button
+                          type="button"
+                          className="library-panel__file-remove"
+                          onClick={onClearMidi}
+                          disabled={uploadsDisabled}
+                        >
+                          Remove Sound File
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="library-panel__empty">Add MIDI only if you want backing playback.</p>
+                  )}
+                </div>
+              </details>
+            </article>
           </div>
-        ) : (
-          <p className="library-panel__empty">Add MIDI only if you want backing playback.</p>
-        )}
-      </div>
-      </details>
-        </>
+
+          {uploadedPieces.length === 0 && (
+            <p className="practice-library__empty">
+              No uploads yet. Add files to create your first practice piece.
+            </p>
+          )}
+
+          <LibraryAccuracyGuide
+            hasPdf={hasPdf}
+            hasMusicXml={hasMusicXml}
+            openHelpSignal={fileHelpSignal}
+          />
+        </section>
       )}
     </aside>
   )

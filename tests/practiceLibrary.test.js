@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url'
 import {
   BUILT_IN_PRACTICE_PIECES,
   LIBRARY_TABS,
+  buildUploadedPracticePieces,
+  filterLibraryItems,
   getBuiltInPracticePieces,
   groupPracticePiecesByDifficulty,
 } from '../src/features/library/practiceLibrary.js'
@@ -64,6 +66,53 @@ describe('practice library pieces', () => {
       },
     ])
   })
+
+  it('filters library cards by searchable metadata', () => {
+    const guitarPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.GUITAR })
+    const pianoPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.PIANO })
+
+    expect(filterLibraryItems(guitarPieces, 'first-position').map((piece) => piece.title)).toEqual([
+      'Ode to Joy',
+    ])
+    expect(filterLibraryItems(pianoPieces, 'guitar')).toEqual([])
+  })
+
+  it('builds uploaded practice cards from instrument bundles and excludes demos', () => {
+    const pieces = buildUploadedPracticePieces(
+      {
+        [INSTRUMENT_IDS.PIANO]: {
+          pdfMeta: { fileName: 'Bach Prelude.pdf' },
+          musicXmlSource: {
+            fileName: 'bach.musicxml',
+            data: '<score-partwise />',
+            omrMeta: { durationSeconds: 64 },
+          },
+          midiSource: { fileName: 'bach.mid', data: new ArrayBuffer(1) },
+          demoPieceActive: false,
+        },
+        [INSTRUMENT_IDS.GUITAR]: {
+          pdfMeta: { fileName: 'Ode to Joy.pdf' },
+          musicXmlSource: { fileName: 'ode.musicxml', data: '<score-partwise />' },
+          demoPieceActive: true,
+        },
+      },
+      { activeInstrumentId: INSTRUMENT_IDS.PIANO },
+    )
+
+    expect(pieces).toEqual([
+      expect.objectContaining({
+        title: 'Bach Prelude',
+        instrument: 'Piano',
+        difficulty: 'Uploaded',
+        approxDuration: '1m 5s',
+        subtitle: 'Timing: bach.musicxml',
+        attribution: 'Sound: bach.mid',
+        ready: true,
+        isActive: true,
+      }),
+    ])
+    expect(filterLibraryItems(pieces, 'bach.mid')).toHaveLength(1)
+  })
 })
 
 describe('library tab shell', () => {
@@ -72,7 +121,9 @@ describe('library tab shell', () => {
 
     expect(LIBRARY_TABS.PRACTICE).toBe('practice')
     expect(app).toContain('useState(LIBRARY_TABS.PRACTICE)')
-    expect(app).toContain("className={\n            libraryTab === LIBRARY_TABS.PRACTICE")
+    expect(app).toContain('<main className="library-main">')
+    expect(app).toContain('uploadedPieces={uploadedPracticePieces}')
+    expect(app).toContain('onOpenUploadedPiece={handleOpenUploadedPiece}')
     expect(app).toContain('setLibraryTab(LIBRARY_TABS.UPLOADS)')
   })
 
@@ -81,6 +132,8 @@ describe('library tab shell', () => {
 
     expect(library).toContain('Practice Library')
     expect(library).toContain('My Uploads')
+    expect(library).toContain('Search uploads')
+    expect(library).toContain('Import a practice piece')
     expect(library).toContain('Start Practice')
     expect(library).toContain('MultiFileUpload')
     expect(library).toContain('PdfOmrPlaybackPanel')

@@ -600,6 +600,48 @@
   gap: var(--sf-space-xs);
 }
 
+.practice-library__tools {
+  display: grid;
+  justify-items: end;
+  gap: var(--sf-space-sm);
+}
+
+.library-search {
+  display: grid;
+  gap: var(--sf-space-xs);
+  width: min(100%, 280px);
+}
+
+.library-search__label {
+  color: var(--sf-text-muted);
+  font-family: var(--sf-font-mono);
+  font-size: var(--sf-font-micro);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.library-search__input {
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid var(--sf-border);
+  border-radius: var(--sf-radius-sm);
+  background: var(--sf-bg-panel);
+  color: var(--sf-text-primary);
+  font: inherit;
+  font-size: var(--sf-font-small);
+}
+
+.library-search__input:focus {
+  outline: none;
+}
+
+.library-search__input:focus-visible {
+  box-shadow: var(--sf-focus-ring);
+  border-color: var(--sf-border-strong);
+}
+
 .practice-library__filter {
   min-height: 34px;
   padding: 7px 10px;
@@ -692,6 +734,15 @@
   display: grid;
   gap: var(--sf-space-sm);
   text-align: right;
+}
+
+.practice-piece-card--add-files {
+  grid-template-columns: 1fr;
+  align-items: stretch;
+}
+
+.practice-piece-card--add-files .practice-piece-card__main {
+  max-width: 520px;
 }
 
 .practice-piece-card__button {
@@ -2780,6 +2831,12 @@
   .practice-library__header {
     grid-template-columns: 1fr;
     align-items: start;
+  }
+
+  .practice-library__tools,
+  .library-search {
+    width: 100%;
+    justify-items: stretch;
   }
 
   .practice-library__filters {

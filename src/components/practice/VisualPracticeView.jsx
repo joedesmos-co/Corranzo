@@ -13,7 +13,7 @@ import {
   selectVisualWindow,
 } from '../../features/practice/visualPracticeLane.js'
 import { detectStaves } from '../../features/practice/staffLaneLayout.js'
-import { buildTargetPositions } from '../../features/practice/tabLaneLayout.js'
+import { buildFretboardTargetPositions } from '../../features/practice/tabLaneLayout.js'
 import {
   getTabPositionsForTimingMap,
   resolveStringsForTimingMap,
@@ -312,7 +312,7 @@ const VisualFretboardStrip = memo(function VisualFretboardStrip({
   const stringCount = strings?.count ?? 6
   const targetKey = targetGroup?.id ?? ''
   const { fretWidthPercent, rows, fretCount } = useMemo(() => {
-    const targets = buildTargetPositions(targetGroup, tabPositions)
+    const targets = buildFretboardTargetPositions(targetGroup, tabPositions)
     const maxTargetFret = targets.reduce((max, target) => Math.max(max, target.fret), 0)
     const count = Math.max(STRIP_MIN_FRETS, maxTargetFret + 1)
     const widthPercent = 100 / (count + 1)
