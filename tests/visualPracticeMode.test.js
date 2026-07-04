@@ -440,6 +440,18 @@ describe('practice view integration', () => {
     expect(css).toContain('.staff-lane::after')
   })
 
+  it('guitar fretboard strip labels visual frets while open strings stay in headers and TAB', () => {
+    const view = readSrc('components', 'practice', 'VisualPracticeView.jsx')
+    const tabLane = readSrc('components', 'practice', 'TabVisualLane.jsx')
+
+    expect(view).toContain('buildFretboardDisplayFrets')
+    expect(view).toContain('displayFrets.map((fret)')
+    expect(view).toContain('describeTabPosition(position, strings)')
+    expect(view).not.toContain("fret === 0 ? 'open' : fret")
+    expect(view).not.toContain('visual-practice__fret-cell--nut')
+    expect(tabLane).toContain('{note.fret}')
+  })
+
   it('keyboard presses animate briefly (depress + glow fade under 200ms)', () => {
     const css = readSrc('styles', 'practice.css')
 

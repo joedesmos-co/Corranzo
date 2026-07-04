@@ -84,10 +84,6 @@ export default function LibraryPanel({
     () => filterLibraryItems(uploadedPieces, uploadsSearch),
     [uploadedPieces, uploadsSearch],
   )
-  const visibleUploadDemoPieces = useMemo(
-    () => filterLibraryItems(getBuiltInPracticePieces({ instrumentId }), uploadsSearch),
-    [instrumentId, uploadsSearch],
-  )
   const selectedTab = activeTab === LIBRARY_TABS.UPLOADS ? LIBRARY_TABS.UPLOADS : LIBRARY_TABS.PRACTICE
   const selectTab = (tab) => {
     onTabChange?.(tab)
@@ -489,53 +485,6 @@ export default function LibraryPanel({
             <p className="practice-library__empty">
               No uploads yet. Add files to create your first practice piece.
             </p>
-          )}
-
-          {visibleUploadDemoPieces.length > 0 && (
-            <section className="library-panel__demo-songs" aria-labelledby="library-demo-songs-heading">
-              <h3 id="library-demo-songs-heading" className="practice-library__group-title">
-                Demo Songs
-              </h3>
-              <div className="practice-library__grid library-panel__uploads-grid">
-                {visibleUploadDemoPieces.map((piece) => (
-                  <article className="practice-piece-card practice-piece-card--demo" key={piece.id}>
-                    <div className="practice-piece-card__main">
-                      <p className="practice-piece-card__meta">
-                        {piece.instrument} - {piece.difficulty} - {piece.approxDuration}
-                      </p>
-                      <h4 className="practice-piece-card__title">{piece.title}</h4>
-                      <p className="practice-piece-card__subtitle">{piece.subtitle}</p>
-                      <p className="practice-piece-card__teaches">{piece.teaches}</p>
-                    </div>
-                    <div className="practice-piece-card__action">
-                      <button
-                        type="button"
-                        className="practice-piece-card__button"
-                        disabled={sampleLoadLoading || !onLoadSampleFixtures}
-                        onClick={onLoadSampleFixtures}
-                        aria-label={`Start demo: ${piece.title}`}
-                      >
-                        {sampleLoadLoading ? 'Opening...' : 'Start Practice'}
-                      </button>
-                      <p className="practice-piece-card__credit">{piece.attribution}</p>
-                    </div>
-                    {sampleLoadError && (
-                      <div className="practice-piece-card__error-block" role="alert">
-                        <p className="practice-piece-card__error">{sampleLoadError}</p>
-                        <button
-                          type="button"
-                          className="practice-piece-card__retry"
-                          disabled={sampleLoadLoading || !onLoadSampleFixtures}
-                          onClick={onLoadSampleFixtures}
-                        >
-                          Retry
-                        </button>
-                      </div>
-                    )}
-                  </article>
-                ))}
-              </div>
-            </section>
           )}
 
           <LibraryAccuracyGuide

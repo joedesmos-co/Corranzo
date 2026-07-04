@@ -20,6 +20,9 @@ const TAB_MARGIN_GAPS = 2.5
 /** Fret-number disc radius, in SVG units. */
 export const FRET_DISC_RADIUS = 8.6
 
+export const FRETBOARD_DISPLAY_START_FRET = 1
+export const FRETBOARD_DISPLAY_MIN_END_FRET = 6
+
 const PITCH_CLASS_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
 function pitchClassName(midi) {
@@ -139,4 +142,25 @@ export function buildFretboardTargetPositions(targetGroup, positions = null) {
   return buildTargetPositions(targetGroup, positions).filter(
     (position) => Number(position.fret) > 0,
   )
+}
+
+/**
+ * Fretboard display columns are visual frets, not TAB values. Open strings are
+ * described in labels and shown as 0 in TAB, but the strip starts at fret 1.
+ */
+export function buildFretboardDisplayFrets(
+  targets = [],
+  {
+    startFret = FRETBOARD_DISPLAY_START_FRET,
+    minEndFret = FRETBOARD_DISPLAY_MIN_END_FRET,
+  } = {},
+) {
+  const start = Math.max(1, Math.round(Number(startFret) || FRETBOARD_DISPLAY_START_FRET))
+  const minEnd = Math.max(start, Math.round(Number(minEndFret) || FRETBOARD_DISPLAY_MIN_END_FRET))
+  const maxTargetFret = (targets ?? []).reduce((max, target) => {
+    const fret = Number(target?.fret)
+    return Number.isFinite(fret) && fret > 0 ? Math.max(max, Math.round(fret)) : max
+  }, 0)
+  const end = Math.max(minEnd, maxTargetFret)
+  return Array.from({ length: end - start + 1 }, (_, index) => start + index)
 }

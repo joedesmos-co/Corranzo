@@ -140,22 +140,33 @@ describe('library tab shell', () => {
     expect(library).toContain('Upload one file at a time')
   })
 
-  it('orders My Uploads as add-files first, user uploads second, demo songs separate', () => {
+  it('orders My Uploads as add-files first and user uploads second', () => {
     const library = readSrc('components', 'LibraryPanel.jsx')
     const addFilesIndex = library.indexOf('practice-piece-card practice-piece-card--add-files')
     const uploadedMapIndex = library.indexOf('visibleUploadedPieces.map')
-    const demoHeadingIndex = library.indexOf('Demo Songs')
-    const demoMapIndex = library.indexOf('visibleUploadDemoPieces.map')
 
     expect(addFilesIndex).toBeGreaterThan(-1)
     expect(uploadedMapIndex).toBeGreaterThan(-1)
-    expect(demoHeadingIndex).toBeGreaterThan(-1)
-    expect(demoMapIndex).toBeGreaterThan(-1)
     expect(addFilesIndex).toBeLessThan(uploadedMapIndex)
-    expect(uploadedMapIndex).toBeLessThan(demoHeadingIndex)
-    expect(demoHeadingIndex).toBeLessThan(demoMapIndex)
     expect(library).toContain('practice-piece-card practice-piece-card--uploaded')
-    expect(library).toContain('practice-piece-card practice-piece-card--demo')
+    expect(library).not.toContain('visibleUploadDemoPieces')
+    expect(library).not.toContain('practice-piece-card practice-piece-card--demo')
+    expect(library).not.toContain('Demo Songs')
+  })
+
+  it('keeps built-in demos in Practice Library and out of My Uploads', () => {
+    const library = readSrc('components', 'LibraryPanel.jsx')
+    const practiceSectionIndex = library.indexOf('selectedTab === LIBRARY_TABS.PRACTICE')
+    const uploadsSectionIndex = library.indexOf('library-panel__uploads')
+    const builtInIndex = library.indexOf('getBuiltInPracticePieces({ instrumentId, difficulty: difficultyFilter })')
+    const uploadedIndex = library.indexOf('visibleUploadedPieces.map')
+
+    expect(practiceSectionIndex).toBeGreaterThan(-1)
+    expect(uploadsSectionIndex).toBeGreaterThan(-1)
+    expect(builtInIndex).toBeGreaterThan(-1)
+    expect(uploadedIndex).toBeGreaterThan(-1)
+    expect(builtInIndex).toBeLessThan(uploadsSectionIndex)
+    expect(uploadedIndex).toBeGreaterThan(uploadsSectionIndex)
   })
 
   it('keeps uploaded cards readable with long filenames across responsive widths', () => {
@@ -164,7 +175,6 @@ describe('library tab shell', () => {
     expect(css).toMatch(
       /\.library-panel__uploads-grid\s*\{[^}]*minmax\(min\(100%,\s*340px\),\s*1fr\)/,
     )
-    expect(css).toMatch(/\.library-panel__demo-songs\s*\{[^}]*display:\s*grid/)
     expect(css).toMatch(
       /\.practice-piece-card\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*minmax\(132px,\s*148px\)/,
     )

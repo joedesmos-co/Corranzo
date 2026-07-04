@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest'
 import {
   FRET_DISC_RADIUS,
   TAB_LINE_GAP,
+  buildFretboardDisplayFrets,
   buildFretboardTargetPositions,
   buildTabGeometry,
   buildTabLaneNotes,
@@ -140,6 +141,20 @@ describe('buildTargetPositions', () => {
     ])
     expect(buildFretboardTargetPositions(targetGroup)).toEqual([
       { string: 5, fret: 3, midi: 48, label: 'C3' },
+    ])
+  })
+
+  it('shows fretboard display labels from 1 through 6 and widens for higher frets', () => {
+    expect(buildFretboardDisplayFrets([])).toEqual([1, 2, 3, 4, 5, 6])
+    expect(
+      buildFretboardDisplayFrets([
+        { string: 1, fret: 0, midi: 64, label: 'E4' },
+        { string: 2, fret: 1, midi: 60, label: 'C4' },
+        { string: 5, fret: 6, midi: 51, label: 'D#3' },
+      ]),
+    ).toEqual([1, 2, 3, 4, 5, 6])
+    expect(buildFretboardDisplayFrets([{ string: 6, fret: 8, midi: 48, label: 'C3' }])).toEqual([
+      1, 2, 3, 4, 5, 6, 7, 8,
     ])
   })
 })

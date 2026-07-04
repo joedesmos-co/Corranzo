@@ -13,7 +13,10 @@ import {
   selectVisualWindow,
 } from '../../features/practice/visualPracticeLane.js'
 import { detectStaves } from '../../features/practice/staffLaneLayout.js'
-import { buildFretboardTargetPositions } from '../../features/practice/tabLaneLayout.js'
+import {
+  buildFretboardDisplayFrets,
+  buildFretboardTargetPositions,
+} from '../../features/practice/tabLaneLayout.js'
 import {
   getTabPositionsForTimingMap,
   resolveStringsForTimingMap,
@@ -296,13 +299,10 @@ const VisualTargetHeader = memo(function VisualTargetHeader({
   )
 })
 
-/** Fret window the strip always shows, widened to include target frets. */
-const STRIP_MIN_FRETS = 5
-
 /**
  * Display-only fretboard segment highlighting the current target positions —
  * the guitar counterpart of the keyboard strip. Strings run top-down like
- * printed tab (string 1 highest); frets run left-to-right from the nut.
+ * printed tab (string 1 highest); frets run left-to-right from fret 1.
  */
 const VisualFretboardStrip = memo(function VisualFretboardStrip({
   targetGroup,
@@ -311,24 +311,23 @@ const VisualFretboardStrip = memo(function VisualFretboardStrip({
 }) {
   const stringCount = strings?.count ?? 6
   const targetKey = targetGroup?.id ?? ''
-  const { fretWidthPercent, rows, fretCount } = useMemo(() => {
+  const { fretWidthPercent, rows, displayFrets } = useMemo(() => {
     const targets = buildFretboardTargetPositions(targetGroup, tabPositions)
-    const maxTargetFret = targets.reduce((max, target) => Math.max(max, target.fret), 0)
-    const count = Math.max(STRIP_MIN_FRETS, maxTargetFret + 1)
-    const widthPercent = 100 / (count + 1)
+    const frets = buildFretboardDisplayFrets(targets)
+    const widthPercent = 100 / frets.length
     const targetsByKey = new Map(
       targets.map((target) => [`${target.string}:${target.fret}`, target]),
     )
     const builtRows = []
     for (let stringNumber = 1; stringNumber <= stringCount; stringNumber += 1) {
       const cells = []
-      for (let fret = 0; fret <= count; fret += 1) {
+      for (const fret of frets) {
         const target = targetsByKey.get(`${stringNumber}:${fret}`)
         cells.push({ fret, target: target ?? null })
       }
       builtRows.push({ stringNumber, cells })
     }
-    return { fretWidthPercent: widthPercent, rows: builtRows, fretCount: count }
+    return { fretWidthPercent: widthPercent, rows: builtRows, displayFrets: frets }
   }, [targetGroup, tabPositions, stringCount, targetKey])
 
   return (
@@ -340,13 +339,13 @@ const VisualFretboardStrip = memo(function VisualFretboardStrip({
               <div
                 key={cell.fret}
                 className={`visual-practice__fret-cell${
-                  cell.fret === 0 ? ' visual-practice__fret-cell--nut' : ''
-                }${cell.target ? ' visual-practice__fret-cell--target' : ''}`}
+                  cell.target ? ' visual-practice__fret-cell--target' : ''
+                }`}
                 style={{ width: `${fretWidthPercent}%` }}
               >
                 {cell.target && (
                   <span className="visual-practice__fret-dot">
-                    {cell.fret === 0 ? 'O' : cell.fret}
+                    {cell.fret}
                   </span>
                 )}
               </div>
@@ -355,13 +354,13 @@ const VisualFretboardStrip = memo(function VisualFretboardStrip({
         ))}
       </div>
       <div className="visual-practice__fret-numbers">
-        {Array.from({ length: fretCount + 1 }, (_, fret) => (
+        {displayFrets.map((fret) => (
           <span
             key={fret}
             className="visual-practice__fret-number"
             style={{ width: `${fretWidthPercent}%` }}
           >
-            {fret === 0 ? 'open' : fret}
+            {fret}
           </span>
         ))}
       </div>
