@@ -20,6 +20,63 @@ function createAudioContext() {
   return new AudioContextConstructor()
 }
 
+/**
+ * Instrument input is NOT speech. Chrome's default getUserMedia turns on
+ * echoCancellation / noiseSuppression / autoGainControl, all tuned for voice:
+ * the noise suppressor treats sustained musical tones as background noise and
+ * attenuates them, and AGC pumps steady notes — so a clearly-audible piano or
+ * guitar arrives at the AnalyserNode as tiny RMS and the gate reads "too quiet".
+ * We ask for raw input like a tuner/DAW would. These are advisory (not `exact`)
+ * so a browser that can't honour them simply ignores the hint.
+ */
+export const INSTRUMENT_AUDIO_CONSTRAINTS = {
+  echoCancellation: false,
+  noiseSuppression: false,
+  autoGainControl: false,
+  channelCount: 1,
+}
+
+/**
+ * Acquire a raw-input instrument stream, falling back to default constraints if
+ * (and only if) the browser rejects the raw-input hint. Permission / device
+ * errors propagate unchanged so the caller can surface the right message.
+ */
+export async function acquireInstrumentStream(mediaDevices) {
+  try {
+    return await mediaDevices.getUserMedia({
+      audio: { ...INSTRUMENT_AUDIO_CONSTRAINTS },
+      video: false,
+    })
+  } catch (error) {
+    const name = error?.name
+    if (
+      name === 'NotAllowedError' ||
+      name === 'NotFoundError' ||
+      name === 'SecurityError' ||
+      name === 'NotReadableError'
+    ) {
+      throw error
+    }
+    // OverconstrainedError / TypeError from an unsupported constraint shape:
+    // retry with plain defaults so the user still gets a working microphone.
+    return await mediaDevices.getUserMedia({ audio: true, video: false })
+  }
+}
+
+/** Read the constraints the browser actually applied (for diagnostics). */
+export function readCaptureSettings(stream) {
+  const track = stream?.getAudioTracks?.()[0] ?? null
+  const settings = track?.getSettings?.() ?? {}
+  return {
+    echoCancellation: settings.echoCancellation ?? null,
+    noiseSuppression: settings.noiseSuppression ?? null,
+    autoGainControl: settings.autoGainControl ?? null,
+    sampleRate: settings.sampleRate ?? null,
+    channelCount: settings.channelCount ?? null,
+    deviceId: settings.deviceId ?? null,
+  }
+}
+
 export default function useMicrophoneCapture({ active = false } = {}) {
   const streamRef = useRef(null)
   const contextRef = useRef(null)
@@ -38,6 +95,7 @@ export default function useMicrophoneCapture({ active = false } = {}) {
   const [errorMessage, setErrorMessage] = useState(null)
   const [isListening, setIsListening] = useState(false)
   const [sampleRate, setSampleRate] = useState(44100)
+  const [captureSettings, setCaptureSettings] = useState(null)
 
   const closeCurrentCapture = useCallback(() => {
     stopStream(streamRef.current)
@@ -53,6 +111,7 @@ export default function useMicrophoneCapture({ active = false } = {}) {
 
     setIsListening(false)
     setSampleRate(44100)
+    setCaptureSettings(null)
   }, [])
 
   const teardown = useCallback(() => {
@@ -75,14 +134,7 @@ export default function useMicrophoneCapture({ active = false } = {}) {
     let context = null
 
     try {
-      stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-        },
-        video: false,
-      })
+      stream = await acquireInstrumentStream(navigator.mediaDevices)
 
       if (requestTokenRef.current !== requestToken || !activeRef.current) {
         stopStream(stream)
@@ -116,6 +168,7 @@ export default function useMicrophoneCapture({ active = false } = {}) {
       setPermission(MIC_PERMISSION.GRANTED)
       setIsListening(true)
       setSampleRate(context.sampleRate)
+      setCaptureSettings(readCaptureSettings(stream))
       return true
     } catch (error) {
       stopStream(stream)
@@ -177,5 +230,6 @@ export default function useMicrophoneCapture({ active = false } = {}) {
     audioContext: contextRef,
     getTimeDomainBuffer: () => bufferRef.current,
     sampleRate,
+    captureSettings,
   }
 }

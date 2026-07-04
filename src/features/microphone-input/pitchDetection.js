@@ -1,7 +1,11 @@
 const MIN_MIDI = 21
 const MAX_MIDI = 108
 const A4_FREQUENCY = 440
-const MIN_CORRELATION = 0.011
+// Absolute autocorrelation only filters numerical dust. Pitch acceptance is
+// governed by normalized clarity below; measured quiet piano/guitar fixtures
+// have strong clarity (~0.99) but raw correlation around 0.002-0.004, while
+// white-noise controls stay below clarity threshold.
+const MIN_CORRELATION = 0.00012
 
 /**
  * Lightweight autocorrelation pitch estimate (monophonic).
@@ -68,7 +72,13 @@ export function detectPitchAutocorrelation(samples, sampleRate) {
   // plausible. Step down only while the shorter period remains nearly as strong
   // as the currently selected period.
   let selectedCorrelation = bestCorrelation
-  for (const divisor of [2, 3, 4]) {
+  // The strongest raw autocorrelation can land on a long subharmonic of a
+  // clean, sustained tone. Measured miss: a pure A4 frame alternated between
+  // MIDI 69 and MIDI 35 because the best period sometimes landed near 7x the
+  // true period. Check broader integer divisors, but only accept a shorter
+  // period when it remains nearly as strong as the selected one; harmonic-rich
+  // instrument fixtures still keep their fundamental.
+  for (const divisor of [2, 3, 4, 5, 6, 7, 8]) {
     const candidate = Math.floor(bestPeriod / divisor)
     if (candidate < minPeriod) {
       continue

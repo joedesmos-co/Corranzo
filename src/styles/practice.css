@@ -1122,11 +1122,113 @@
   color: #8fa3c7;
 }
 
+.wfy-input-source__option-label {
+  font-weight: 600;
+}
+
+.wfy-input-source__manual {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 0.74rem;
+  color: #9fb3d9;
+  cursor: pointer;
+}
+
+.wfy-input-source__manual input {
+  accent-color: #6d4aff;
+}
+
+.wfy-input-source__manual--selected {
+  color: #dbe6fb;
+}
+
+.mic-input-status__blocked {
+  margin: 6px 0 0;
+  font-size: 0.78rem;
+  color: #ffd7b0;
+}
+
 .wfy-input-source__accuracy-note {
   margin: 8px 0 0;
   font-size: 0.72rem;
   line-height: 1.45;
   color: #9fb3d9;
+}
+
+.wfy-input-source-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2600;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.wfy-input-source-modal__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 8, 16, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.wfy-input-source-modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(360px, 100%);
+  padding: 18px;
+  border-radius: 8px;
+  border: 1px solid #3a4f78;
+  background: #121c30;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+}
+
+.wfy-input-source-modal__dialog h2 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+  line-height: 1.25;
+  color: #f4f7fc;
+}
+
+.wfy-input-source-modal__actions {
+  display: grid;
+  gap: 8px;
+}
+
+.wfy-input-source-modal__btn {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #425a86;
+  background: #1b2a47;
+  color: #eef4ff;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.wfy-input-source-modal__btn:hover:not(:disabled) {
+  background: #24385d;
+}
+
+.wfy-input-source-modal__btn--primary {
+  border-color: rgba(87, 214, 147, 0.5);
+  background: #173c35;
+}
+
+.wfy-input-source-modal__btn--primary:hover:not(:disabled) {
+  background: #1e4e44;
+}
+
+.wfy-input-source-modal__btn--quiet {
+  background: transparent;
+  color: #c9d8f2;
+}
+
+.wfy-input-source-modal__btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .mic-input-status__grid {

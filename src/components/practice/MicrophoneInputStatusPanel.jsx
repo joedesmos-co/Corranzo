@@ -31,6 +31,27 @@ function calibrationLabel({ liveFrame, calibration }) {
   return MIC_CALIBRATION_STATUS_LABELS[MIC_CALIBRATION_STATUS.READY]
 }
 
+function downloadMicDebugJson(json) {
+  if (!json || typeof document === 'undefined') {
+    return
+  }
+  const blob = new Blob([json], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `scoreflow-mic-debug-${Date.now()}.json`
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
+}
+
+/**
+ * Simplified microphone panel. The main path is just a state line — permission
+ * and calibration start automatically when Microphone is chosen, so there is no
+ * "enable"/"test" button here. Test meter, access details and recovery controls
+ * live under a collapsed "Troubleshooting" disclosure.
+ */
 export default function MicrophoneInputStatusPanel({
   support,
   permission,
@@ -46,6 +67,7 @@ export default function MicrophoneInputStatusPanel({
   onRequestAccess,
   onDisable,
   onRetryCalibration,
+  onExportDebugFrames,
   compact = false,
 }) {
   const supported = support === MIC_SUPPORT.SUPPORTED
@@ -69,6 +91,8 @@ export default function MicrophoneInputStatusPanel({
     statusLine = calibrationReady ? 'Mic ready' : 'Mic listening'
   } else if (isGranted) {
     statusLine = 'Mic ready'
+  } else {
+    statusLine = 'Starting microphone…'
   }
 
   const detectedNote =
@@ -111,16 +135,6 @@ export default function MicrophoneInputStatusPanel({
         </p>
       )}
 
-      {isListening && calibrationFailed && onRetryCalibration && (
-        <button
-          type="button"
-          className="mic-input-status__btn mic-input-status__btn--retry"
-          onClick={onRetryCalibration}
-        >
-          Retry calibration
-        </button>
-      )}
-
       {heardLine && (
         <p
           className={`mic-input-status__heard${
@@ -146,17 +160,10 @@ export default function MicrophoneInputStatusPanel({
         </p>
       )}
 
-      {!compact && supported && (
-        <dl className="mic-input-status__grid">
-          <div>
-            <dt>Access</dt>
-            <dd>{MIC_PERMISSION_LABELS[permission] ?? permission}</dd>
-          </div>
-          <div>
-            <dt>Last confirmed</dt>
-            <dd>{lastHeardMidi != null ? midiToNoteLabel(lastHeardMidi) : '—'}</dd>
-          </div>
-        </dl>
+      {supported && !isGranted && permission === MIC_PERMISSION.DENIED && (
+        <p className="mic-input-status__blocked" role="status">
+          Microphone access is blocked. Allow it in your browser, or switch to MIDI above.
+        </p>
       )}
 
       {errorMessage && permission === MIC_PERMISSION.ERROR && (
@@ -165,43 +172,75 @@ export default function MicrophoneInputStatusPanel({
         </p>
       )}
 
-      <div className="mic-input-status__actions">
-        {supported && !isGranted && (
-          <button type="button" className="mic-input-status__btn" onClick={onRequestAccess}>
-            Enable microphone
-          </button>
-        )}
-        {supported && isGranted && (
-          <button type="button" className="mic-input-status__btn" onClick={onDisable}>
-            Stop microphone
-          </button>
-        )}
-      </div>
-
       {isChordCheckpoint && (
         <p className="mic-input-status__chord-note" role="note">
           {MIC_CHORD_MODE_HINTS[chordMicMode] ?? MIC_CHORD_MODE_HINTS[MIC_CHORD_MODES.ANY_TONE]}
         </p>
       )}
 
-      {compact && (
-        <details className="practice-input-details">
-          <summary>Test & details</summary>
-          {showIosSafari && (
-            <p className="mic-input-status__safari" role="note">
-              Mic input may be less steady on iPhone and iPad. Manual always works.
-            </p>
-          )}
-          <p className="mic-input-status__mvp-note">
-            Best for single notes. Use MIDI for chords played together.
+      <details className="practice-input-details mic-input-status__troubleshooting">
+        <summary>Troubleshooting</summary>
+
+        {showIosSafari && (
+          <p className="mic-input-status__safari" role="note">
+            Mic input may be less steady on iPhone and iPad. Manual always works.
           </p>
-          <MicTestPanel
-            liveFrame={liveFrame}
-            lastStableMidi={lastHeardMidi}
-            isListening={isListening}
-          />
-        </details>
-      )}
+        )}
+
+        <p className="mic-input-status__mvp-note">
+          Best for single notes. Use MIDI for chords played together.
+        </p>
+
+        {supported && (
+          <dl className="mic-input-status__grid">
+            <div>
+              <dt>Access</dt>
+              <dd>{MIC_PERMISSION_LABELS[permission] ?? permission}</dd>
+            </div>
+            <div>
+              <dt>Last confirmed</dt>
+              <dd>{lastHeardMidi != null ? midiToNoteLabel(lastHeardMidi) : '—'}</dd>
+            </div>
+          </dl>
+        )}
+
+        <MicTestPanel
+          liveFrame={liveFrame}
+          lastStableMidi={lastHeardMidi}
+          isListening={isListening}
+        />
+
+        <div className="mic-input-status__actions">
+          {supported && !isGranted && onRequestAccess && (
+            <button type="button" className="mic-input-status__btn" onClick={onRequestAccess}>
+              Enable microphone
+            </button>
+          )}
+          {isListening && calibrationFailed && onRetryCalibration && (
+            <button
+              type="button"
+              className="mic-input-status__btn mic-input-status__btn--retry"
+              onClick={onRetryCalibration}
+            >
+              Retry calibration
+            </button>
+          )}
+          {supported && isGranted && onDisable && (
+            <button type="button" className="mic-input-status__btn" onClick={onDisable}>
+              Stop microphone
+            </button>
+          )}
+          {onExportDebugFrames && (
+            <button
+              type="button"
+              className="mic-input-status__btn mic-input-status__btn--debug"
+              onClick={() => downloadMicDebugJson(onExportDebugFrames())}
+            >
+              Export mic debug JSON
+            </button>
+          )}
+        </div>
+      </details>
     </section>
   )
 }

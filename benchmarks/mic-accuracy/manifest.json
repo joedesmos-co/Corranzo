@@ -34,6 +34,105 @@
       "notes": "Harmonic-rich synthetic tone — not used for threshold tuning."
     },
     {
+      "id": "synth-digital-piano-speaker-c4",
+      "label": "note",
+      "expectedMidi": 60,
+      "expectedOnsetMs": 120,
+      "instrument": "piano",
+      "micDevice": "synthetic speaker",
+      "noiseCondition": "clean",
+      "synthetic": { "type": "speaker", "midi": 60, "seconds": 0.7, "amplitude": 0.34, "noise": 0.008, "seed": 31 },
+      "notes": "Digital piano through speakers: harmonic tone plus small room/speaker noise."
+    },
+    {
+      "id": "synth-piano-quiet-c4",
+      "label": "note",
+      "expectedMidi": 60,
+      "expectedOnsetMs": 120,
+      "instrument": "piano",
+      "micDevice": "synthetic speaker",
+      "noiseCondition": "quiet",
+      "synthetic": { "type": "speaker", "midi": 60, "seconds": 0.7, "amplitude": 0.09, "noise": 0.003, "seed": 32 },
+      "notes": "Quiet piano/speaker note: should still open the calibrated gate without accepting silence."
+    },
+    {
+      "id": "synth-piano-loud-e4",
+      "label": "note",
+      "expectedMidi": 64,
+      "expectedOnsetMs": 120,
+      "instrument": "piano",
+      "micDevice": "synthetic speaker",
+      "noiseCondition": "loud",
+      "synthetic": { "type": "speaker", "midi": 64, "seconds": 0.7, "amplitude": 0.55, "noise": 0.006, "seed": 33 },
+      "notes": "Loud digital piano speaker note: should not be rejected merely for strong level."
+    },
+    {
+      "id": "synth-guitar-open-e2",
+      "label": "note",
+      "expectedMidi": 40,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic acoustic guitar",
+      "noiseCondition": "clean",
+      "synthetic": { "type": "pluck", "midi": 40, "seconds": 0.9, "amplitude": 0.46, "decay": 2.4 },
+      "notes": "Open low E string: low, plucky, harmonic-rich guitar fixture."
+    },
+    {
+      "id": "synth-guitar-open-a2",
+      "label": "note",
+      "expectedMidi": 45,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic acoustic guitar",
+      "noiseCondition": "clean",
+      "synthetic": { "type": "pluck", "midi": 45, "seconds": 0.9, "amplitude": 0.44, "decay": 2.3 },
+      "notes": "Open A string: guitar open-string coverage."
+    },
+    {
+      "id": "synth-guitar-fretted-c4",
+      "label": "note",
+      "expectedMidi": 60,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic acoustic guitar",
+      "noiseCondition": "clean",
+      "synthetic": { "type": "pluck", "midi": 60, "seconds": 0.8, "amplitude": 0.38, "decay": 2.8 },
+      "notes": "Fretted mid-register guitar note."
+    },
+    {
+      "id": "synth-electric-clean-a3",
+      "label": "note",
+      "expectedMidi": 57,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic clean electric",
+      "noiseCondition": "clean",
+      "synthetic": { "type": "pluck", "midi": 57, "seconds": 0.8, "amplitude": 0.34, "decay": 1.7 },
+      "notes": "Clean electric guitar-like pluck with slower decay."
+    },
+    {
+      "id": "synth-electric-distorted-e2",
+      "label": "note",
+      "expectedMidi": 40,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic distorted electric",
+      "noiseCondition": "distorted",
+      "synthetic": { "type": "distorted", "midi": 40, "seconds": 0.8, "amplitude": 0.44, "drive": 4.5 },
+      "notes": "Distorted/amp-style low guitar note: harmonic-rich but periodic, not noise."
+    },
+    {
+      "id": "synth-guitar-quiet-e3",
+      "label": "note",
+      "expectedMidi": 52,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic acoustic guitar",
+      "noiseCondition": "quiet",
+      "synthetic": { "type": "pluck", "midi": 52, "seconds": 0.8, "amplitude": 0.16, "decay": 3.2 },
+      "notes": "Quiet fretted/open-style guitar note: decays quickly but should stabilize."
+    },
+    {
       "id": "synth-silence",
       "label": "silence",
       "expectedMidi": null,

@@ -83,6 +83,7 @@ async function main() {
 
     const replay = replayMicClip(audio.samples, audio.sampleRate, {
       centsTolerance: MIC_CENTS_TOLERANCE,
+      instrumentId: clip.instrument,
     })
     evaluations.push(
       evaluateLabeledClip(clip, replay, { centsTolerance: MIC_CENTS_TOLERANCE }),
@@ -96,10 +97,12 @@ async function main() {
     manifest: manifestPath,
     constantsTuned: true,
     tuningNotes: [
-      'pitchDetection MIN_CORRELATION 0.012 → 0.011 (real WAV autocorrelation cliff)',
+      'pitchDetection MIN_CORRELATION 0.011 → 0.00012 (quiet note raw-correlation floor; clarity still gates noise)',
+      'pitchDetection subharmonic correction checks divisors 2..8 (A4 long-period miss)',
       'micFrameAnalysis: pitch on raw buffer; high-pass for gate only',
       'micFrameAnalysis default centsTolerance 35 (matches WFY match settings)',
       'micReplayHarness: longer calibration prelude with room dither',
+      'micReplayHarness: instrumentId from manifest selects piano/guitar mic profile',
     ],
     summary,
   }

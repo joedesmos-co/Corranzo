@@ -1,5 +1,18 @@
 import { midiRegisterBucket } from './micAccuracyManifest.js'
 
+export const MIC_FALSE_NEGATIVE_CAUSE = {
+  GATE_CLOSED: 'gate-closed',
+  WRONG_OCTAVE: 'wrong-octave',
+  WRONG_PITCH: 'wrong-pitch',
+  CONFIDENCE_LOW: 'confidence-too-low',
+  CENTS_TOLERANCE_TOO_STRICT: 'cents-tolerance-too-strict',
+  STABILIZER_HOLD_TOO_STRICT: 'stabilizer-hold-too-strict',
+  ATTACK_SKIPPED_TOO_LONG: 'attack-skipped-too-long',
+  EXPECTED_NOTE_MISMATCH: 'expected-note-mismatch',
+  V2_CONFIDENCE_THRESHOLD_TOO_STRICT: 'v2-confidence-threshold-too-strict',
+  NO_PITCH_DETECTED: 'no-pitch-detected',
+}
+
 function mean(values) {
   if (!values.length) {
     return null
@@ -39,6 +52,128 @@ export function midiMatchesExpected(midi, expectedMidi, centsTolerance = 35) {
   return Math.abs(midi - expectedMidi) * 100 <= centsTolerance
 }
 
+function rawMidiMatchesExpected(frame, expectedMidi, centsTolerance) {
+  if (frame?.midiFloat == null || expectedMidi == null) {
+    return false
+  }
+  return Math.abs(frame.midiFloat - expectedMidi) * 100 <= centsTolerance
+}
+
+function midiSamePitchClass(midi, expectedMidi) {
+  if (midi == null || expectedMidi == null) {
+    return false
+  }
+  return Math.abs(Math.round(midi) - expectedMidi) % 12 === 0
+}
+
+function maxConsecutiveExpectedFrames(frames, expectedMidi, centsTolerance) {
+  let best = 0
+  let current = 0
+  for (const frame of frames) {
+    if (midiMatchesExpected(frame.midi, expectedMidi, centsTolerance)) {
+      current += 1
+      best = Math.max(best, current)
+    } else {
+      current = 0
+    }
+  }
+  return best
+}
+
+export function classifyMicFalseNegative(clip, replayResult, options = {}) {
+  if (clip.label !== 'note' || clip.expectedMidi == null) {
+    return null
+  }
+  if (clip.expectedMismatch) {
+    return MIC_FALSE_NEGATIVE_CAUSE.EXPECTED_NOTE_MISMATCH
+  }
+
+  const centsTolerance = clip.centsTolerance ?? options.centsTolerance ?? 35
+  const frames = replayResult?.frames ?? []
+  const stableDetections = replayResult?.stableDetections ?? []
+  if (
+    stableDetections.some((detection) =>
+      midiMatchesExpected(detection.midi, clip.expectedMidi, centsTolerance),
+    )
+  ) {
+    return null
+  }
+
+  const gateOpenFrames = frames.filter((frame) => frame.gateOpen)
+  if (!gateOpenFrames.length) {
+    return MIC_FALSE_NEGATIVE_CAUSE.GATE_CLOSED
+  }
+
+  const pitchFrames = frames.filter(
+    (frame) => frame.midi != null || frame.midiFloat != null || frame.frequency != null,
+  )
+  const v2Frames = frames.filter((frame) => frame.v2MeanConfidence != null)
+  if (
+    v2Frames.length &&
+    v2Frames.some((frame) => Number.isFinite(frame.v2MeanConfidence)) &&
+    v2Frames.every((frame) => !(frame.v2DetectedMidis ?? []).includes(clip.expectedMidi))
+  ) {
+    return MIC_FALSE_NEGATIVE_CAUSE.V2_CONFIDENCE_THRESHOLD_TOO_STRICT
+  }
+  if (!pitchFrames.length) {
+    return MIC_FALSE_NEGATIVE_CAUSE.NO_PITCH_DETECTED
+  }
+
+  const exactPitchFrames = pitchFrames.filter((frame) =>
+    midiMatchesExpected(frame.midi, clip.expectedMidi, centsTolerance),
+  )
+  const relaxedPitchFrames = pitchFrames.filter((frame) =>
+    rawMidiMatchesExpected(frame, clip.expectedMidi, centsTolerance * 2),
+  )
+
+  if (!exactPitchFrames.length) {
+    if (relaxedPitchFrames.length) {
+      return MIC_FALSE_NEGATIVE_CAUSE.CENTS_TOLERANCE_TOO_STRICT
+    }
+    if (
+      pitchFrames.some((frame) =>
+        midiSamePitchClass(frame.midi ?? frame.midiFloat, clip.expectedMidi),
+      )
+    ) {
+      return MIC_FALSE_NEGATIVE_CAUSE.WRONG_OCTAVE
+    }
+    return MIC_FALSE_NEGATIVE_CAUSE.WRONG_PITCH
+  }
+
+  const stabilizer = replayResult?.stabilizer ?? {}
+  const holdFrames = stabilizer.holdFrames ?? options.holdFrames ?? 6
+  const maxRun = maxConsecutiveExpectedFrames(frames, clip.expectedMidi, centsTolerance)
+  if (maxRun >= holdFrames) {
+    return MIC_FALSE_NEGATIVE_CAUSE.STABILIZER_HOLD_TOO_STRICT
+  }
+
+  const minClarity = stabilizer.minClarity ?? options.minClarity ?? 0.42
+  if (exactPitchFrames.every((frame) => (frame.clarity ?? 0) < minClarity)) {
+    return MIC_FALSE_NEGATIVE_CAUSE.CONFIDENCE_LOW
+  }
+
+  const firstExact = exactPitchFrames[0]
+  if (
+    clip.expectedOnsetMs != null &&
+    firstExact?.timeMs != null &&
+    firstExact.timeMs - clip.expectedOnsetMs > 180
+  ) {
+    return MIC_FALSE_NEGATIVE_CAUSE.ATTACK_SKIPPED_TOO_LONG
+  }
+
+  const wrongPitchFrames = pitchFrames.filter(
+    (frame) => !midiMatchesExpected(frame.midi, clip.expectedMidi, centsTolerance),
+  )
+  if (wrongPitchFrames.some((frame) => midiSamePitchClass(frame.midi, clip.expectedMidi))) {
+    return MIC_FALSE_NEGATIVE_CAUSE.WRONG_OCTAVE
+  }
+  if (wrongPitchFrames.length) {
+    return MIC_FALSE_NEGATIVE_CAUSE.WRONG_PITCH
+  }
+
+  return MIC_FALSE_NEGATIVE_CAUSE.STABILIZER_HOLD_TOO_STRICT
+}
+
 /**
  * Score one labeled clip against offline replay output.
  */
@@ -68,6 +203,7 @@ export function evaluateLabeledClip(clip, replayResult, options = {}) {
       latencyMs: null,
       firstPitchMs: null,
       frameCount: 0,
+      falseNegativeCause: null,
       missingFile: true,
     }
   }
@@ -97,6 +233,10 @@ export function evaluateLabeledClip(clip, replayResult, options = {}) {
   } else if (clip.label === 'silence' || clip.label === 'noise') {
     outcome = stableDetections.length > 0 ? 'false-positive' : 'correct-reject'
   }
+  const falseNegativeCause =
+    clip.label === 'note' && outcome === 'miss'
+      ? classifyMicFalseNegative(clip, replayResult, { centsTolerance })
+      : null
 
   const clarityValues = matching.map((detection) => detection.clarity).filter(Number.isFinite)
   const centsValues = matching.map((detection) => detection.centsOffset).filter(Number.isFinite)
@@ -141,6 +281,7 @@ export function evaluateLabeledClip(clip, replayResult, options = {}) {
     latencyMs,
     firstPitchMs: firstPitchFrame?.timeMs ?? null,
     frameCount: frames.length,
+    falseNegativeCause,
     missingFile: false,
   }
 }
@@ -171,6 +312,14 @@ export function summarizeMicAccuracy(evaluations) {
   const hits = noteClips.filter((entry) => entry.hit).length
   const misses = noteClips.filter((entry) => entry.falseNegative).length
   const falsePositives = rejectClips.filter((entry) => entry.falsePositive).length
+  const falseNegativeCauses = {}
+  for (const entry of noteClips) {
+    if (!entry.falseNegative || !entry.falseNegativeCause) {
+      continue
+    }
+    falseNegativeCauses[entry.falseNegativeCause] =
+      (falseNegativeCauses[entry.falseNegativeCause] ?? 0) + 1
+  }
 
   const realNoteClips = noteClips.filter((entry) => entry.source === 'file')
   const syntheticNoteClips = noteClips.filter((entry) => entry.source === 'synthetic')
@@ -184,6 +333,7 @@ export function summarizeMicAccuracy(evaluations) {
     hits,
     misses,
     falsePositives,
+    falseNegativeCauses,
     hitRate: noteClips.length ? hits / noteClips.length : null,
     falseNegativeRate: noteClips.length ? misses / noteClips.length : null,
     falsePositiveRate: rejectClips.length ? falsePositives / rejectClips.length : null,
@@ -270,6 +420,17 @@ export function formatMicAccuracyReportMarkdown(summary) {
   ]
 
   lines.push('', '## Tuning guidance', `- ${summary.tuningRecommendation}`)
+  lines.push('', '## False negative causes')
+  const causeEntries = Object.entries(summary.falseNegativeCauses ?? {}).sort(
+    (left, right) => right[1] - left[1],
+  )
+  if (causeEntries.length) {
+    for (const [cause, count] of causeEntries) {
+      lines.push(`- ${cause}: ${count}`)
+    }
+  } else {
+    lines.push('- none')
+  }
   lines.push('', '## Breakdowns', ...formatBreakdown('By register', summary.byRegister))
   lines.push(...formatBreakdown('By instrument', summary.byInstrument))
   lines.push(...formatBreakdown('By noise condition', summary.byNoiseCondition))
@@ -282,6 +443,7 @@ export function formatMicAccuracyReportMarkdown(summary) {
       clip.skipped ? 'skipped (missing file)' : null,
       clip.detectedMidi != null ? `detected ${clip.detectedMidi}` : null,
       clip.wrongMidi != null ? `wrong ${clip.wrongMidi}` : null,
+      clip.falseNegativeCause ? `cause ${clip.falseNegativeCause}` : null,
       clip.pitchFrameCount ? `${clip.pitchFrameCount} pitch frames` : null,
       clip.unstablePitchFrames ? `${clip.unstablePitchFrames} unstable frames` : null,
       clip.maxClarity != null ? `max clarity ${clip.maxClarity.toFixed(3)}` : null,

@@ -8,9 +8,15 @@ import {
   evaluateLabeledClip,
   summarizeMicAccuracy,
   formatMicAccuracyReportMarkdown,
+  MIC_FALSE_NEGATIVE_CAUSE,
 } from '../src/features/microphone-input/micAccuracyReport.js'
 import { MIC_SIGNAL_QUALITY, classifyMicSignalQuality } from '../src/features/microphone-input/micSignalQuality.js'
 import { createNoteStabilizer, resetNoteStabilizer } from '../src/features/microphone-input/noteStabilizer.js'
+import {
+  createMicDebugFrameRecord,
+  pushMicDebugFrame,
+  serializeMicDebugFrames,
+} from '../src/features/microphone-input/micDebugExport.js'
 
 describe('mic accuracy measurement helpers', () => {
   it('buckets MIDI into bass/mid/treble registers', () => {
@@ -83,9 +89,82 @@ describe('mic accuracy measurement helpers', () => {
     expect(summary.byInstrument.piano.hitRate).toBe(1)
     expect(summary.byNoiseCondition.clean.hitRate).toBe(1)
     expect(summary.byNoiseCondition.noisy.falsePositiveRate).toBe(0)
+    expect(summary.falseNegativeCauses).toEqual({})
     expect(summary.tuningRecommendation).toContain('do not tune')
     expect(formatMicAccuracyReportMarkdown(summary)).toContain('By register')
     expect(evaluations[0].unstablePitchFrames).toBe(1)
+  })
+
+  it('classifies false negative causes from replay frames', () => {
+    const wrongPitch = evaluateLabeledClip(
+      { id: 'a4', label: 'note', expectedMidi: 69 },
+      {
+        stableDetections: [],
+        stabilizer: { holdFrames: 3, minClarity: 0.42 },
+        frames: [
+          { timeMs: 0, midi: 35, midiFloat: 35.3, frequency: 62.8, gateOpen: true, clarity: 1 },
+          { timeMs: 16, midi: 69, midiFloat: 69.04, frequency: 441, gateOpen: true, clarity: 1 },
+          { timeMs: 33, midi: 35, midiFloat: 35.3, frequency: 62.8, gateOpen: true, clarity: 1 },
+        ],
+      },
+    )
+    expect(wrongPitch.falseNegativeCause).toBe(MIC_FALSE_NEGATIVE_CAUSE.WRONG_PITCH)
+
+    const gateClosed = evaluateLabeledClip(
+      { id: 'quiet', label: 'note', expectedMidi: 60 },
+      { stableDetections: [], frames: [{ timeMs: 0, midi: null, gateOpen: false }] },
+    )
+    expect(gateClosed.falseNegativeCause).toBe(MIC_FALSE_NEGATIVE_CAUSE.GATE_CLOSED)
+  })
+})
+
+describe('mic debug export', () => {
+  it('captures the fields needed to diagnose failed mic attempts', () => {
+    const record = createMicDebugFrameRecord({
+      frame: {
+        midi: 60,
+        frequency: 261.63,
+        centsOffset: -2,
+        rms: 0.04,
+        filteredRms: 0.039,
+        noiseFloor: 0.006,
+        gateOpen: true,
+        clarity: 0.91,
+        v2MeanConfidence: 0.7,
+        signalShape: 'sustained',
+      },
+      expectedMidis: [60],
+      instrumentId: 'piano',
+      inputSource: 'microphone',
+      captureSettings: { noiseSuppression: false },
+      rejectReason: null,
+      timestampMs: 123,
+    })
+
+    expect(record).toMatchObject({
+      expectedMidis: [60],
+      detectedMidi: 60,
+      detectedFrequency: 261.63,
+      centsOffset: -2,
+      rms: 0.04,
+      filteredRms: 0.039,
+      noiseFloor: 0.006,
+      gateOpen: true,
+      clarity: 0.91,
+      v2MeanConfidence: 0.7,
+      signalShape: 'sustained',
+      rejectReason: null,
+      instrumentId: 'piano',
+      inputSource: 'microphone',
+      captureSettings: { noiseSuppression: false },
+    })
+
+    const buffer = []
+    pushMicDebugFrame(buffer, record, 1)
+    pushMicDebugFrame(buffer, { ...record, detectedMidi: 64 }, 1)
+    expect(buffer).toHaveLength(1)
+    expect(buffer[0].detectedMidi).toBe(64)
+    expect(JSON.parse(serializeMicDebugFrames(buffer)).frames[0].detectedMidi).toBe(64)
   })
 })
 

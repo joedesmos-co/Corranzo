@@ -17,8 +17,8 @@ export const MIC_CALIBRATION_STATUS = {
 
 export const MIC_CALIBRATION_STATUS_LABELS = {
   [MIC_CALIBRATION_STATUS.IDLE]: 'Mic not calibrated',
-  [MIC_CALIBRATION_STATUS.MEASURING]: 'Calibrating… (stay quiet a moment)',
-  [MIC_CALIBRATION_STATUS.READY]: 'Mic ready',
+  [MIC_CALIBRATION_STATUS.MEASURING]: 'Stay quiet for a moment…',
+  [MIC_CALIBRATION_STATUS.READY]: 'Ready — play the highlighted note',
   [MIC_CALIBRATION_STATUS.ROOM_NOISY]: 'Room is noisy — play a bit louder or move closer',
   [MIC_CALIBRATION_STATUS.NO_INPUT]: 'No input detected — check the mic is unmuted',
 }
@@ -31,6 +31,12 @@ const ABS_MAX_GATE = 0.1
 const NOISY_FLOOR = 0.03
 const MODERATE_FLOOR = 0.012
 const CALIBRATION_LOUD_SAMPLE = 0.045
+// Once a baseline of room frames exists, a sample towering over the running
+// minimum is note / pluck / distortion bleed, not room noise — keep it out of
+// the floor estimate so calibration never over-raises the gate.
+const CALIBRATION_OUTLIER_RATIO = 4
+const CALIBRATION_OUTLIER_MARGIN = 0.006
+const CALIBRATION_MIN_BASELINE = 5
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value))
@@ -46,12 +52,15 @@ function percentile(sortedAscending, p) {
 
 /**
  * During calibration only accept quiet room samples — ignore note-like spikes.
+ * A confident pitch during "stay quiet" is the user playing early, not room
+ * noise, so it never counts toward the floor (previously it only counted
+ * against a sample when the gate also happened to be open).
  */
-export function shouldAcceptCalibrationSample({ rms, gateOpen, hasPitch } = {}) {
+export function shouldAcceptCalibrationSample({ rms, hasPitch } = {}) {
   if (!Number.isFinite(rms) || rms < 0) {
     return false
   }
-  if (hasPitch && gateOpen) {
+  if (hasPitch) {
     return false
   }
   return rms < CALIBRATION_LOUD_SAMPLE
@@ -65,6 +74,8 @@ export function createMicCalibration({ frames = 45 } = {}) {
     samples: [],
     frames: Math.max(8, Math.round(frames)),
     framesSeen: 0,
+    minSample: null,
+    rejectedOutliers: 0,
     done: false,
     timedOut: false,
   }
@@ -78,7 +89,20 @@ export function pushCalibrationSample(state, rms, { acceptSample = true } = {}) 
 
   state.framesSeen += 1
   if (acceptSample && Number.isFinite(rms) && rms >= 0) {
-    state.samples.push(rms)
+    // Reject a sample that towers over the running minimum once we have a
+    // baseline — that is transient bleed (a note, pluck, or distortion burst),
+    // not the room floor.
+    const baseline = state.minSample
+    const isOutlier =
+      state.samples.length >= CALIBRATION_MIN_BASELINE &&
+      baseline != null &&
+      rms > baseline * CALIBRATION_OUTLIER_RATIO + CALIBRATION_OUTLIER_MARGIN
+    if (isOutlier) {
+      state.rejectedOutliers += 1
+    } else {
+      state.samples.push(rms)
+      state.minSample = baseline == null ? rms : Math.min(baseline, rms)
+    }
   }
 
   if (state.framesSeen >= state.frames) {
@@ -120,11 +144,14 @@ export function finalizeMicCalibration(state) {
     }
   }
 
-  const noiseFloor = percentile(samples, 0.5)
+  // A low percentile (not the median) estimates the true room floor: it stays
+  // low even if a few louder-but-accepted frames slip in, so the derived gate
+  // is forgiving rather than inflated.
+  const noiseFloor = percentile(samples, 0.25)
   const loudness = percentile(samples, 0.95)
 
-  const gateThreshold = clamp(Math.max(noiseFloor * 3 + 0.004, ABS_MIN_GATE), ABS_MIN_GATE, ABS_MAX_GATE)
-  const recommendedMinRms = clamp(Math.max(noiseFloor * 2.2, 0.009), 0.009, 0.08)
+  const gateThreshold = clamp(Math.max(noiseFloor * 3 + 0.003, ABS_MIN_GATE), ABS_MIN_GATE, ABS_MAX_GATE)
+  const recommendedMinRms = clamp(Math.max(noiseFloor * 2, 0.008), 0.008, 0.06)
   const recommendedMinClarity =
     noiseFloor >= MODERATE_FLOOR ? 0.5 : noiseFloor >= 0.008 ? 0.47 : 0.44
 
@@ -149,6 +176,8 @@ export function finalizeMicCalibration(state) {
     recommendedMinRms,
     recommendedMinClarity,
     roomQuality,
+    sampleCount: samples.length,
+    rejectedOutliers: state?.rejectedOutliers ?? 0,
     status,
     ready: status === MIC_CALIBRATION_STATUS.READY || status === MIC_CALIBRATION_STATUS.ROOM_NOISY,
     timedOut: Boolean(state?.timedOut),

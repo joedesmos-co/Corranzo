@@ -7,6 +7,7 @@ import {
   shouldAcceptCalibrationSample,
 } from './micCalibration.js'
 import { createNoteStabilizer, pushStableNote } from './noteStabilizer.js'
+import { getMicInstrumentProfile } from './micInstrumentProfiles.js'
 
 /** Matches live AnalyserNode configuration in useMicrophoneCapture. */
 export const MIC_REPLAY_FFT_SIZE = 2048
@@ -42,6 +43,7 @@ export function replayMicSamples(samples, sampleRate, options = {}) {
     centsTolerance = 35,
     calibrationFrames = MIC_REPLAY_CALIBRATION_FRAMES,
     skipCalibration = false,
+    instrumentId = null,
   } = options
 
   if (!samples?.length || !sampleRate) {
@@ -50,14 +52,20 @@ export function replayMicSamples(samples, sampleRate, options = {}) {
       frameHopMs,
       fftSize,
       calibration: null,
+      stabilizer: null,
       frames: [],
       stableDetections: [],
     }
   }
 
+  // Instrument-aware knobs are opt-in: without an instrumentId the replay keeps
+  // exactly the previous defaults so existing benchmarks are unchanged.
+  const profile = instrumentId ? getMicInstrumentProfile(instrumentId) : null
+  const gateOptions = profile?.gate ?? null
+
   const hop = frameHopSamples(sampleRate, frameHopMs)
   const analyzer = createMicFrameAnalyzer()
-  const stabilizer = createNoteStabilizer()
+  const stabilizer = createNoteStabilizer(profile?.stabilizer)
   const calibration = skipCalibration ? null : createMicCalibration({ frames: calibrationFrames })
   let calibrationResult = null
 
@@ -70,6 +78,7 @@ export function replayMicSamples(samples, sampleRate, options = {}) {
     const frameBuffer = new Float32Array(window)
     const frame = analyzeMicFrame(frameBuffer, sampleRate, analyzer.noiseFloor, {
       centsTolerance,
+      gateOptions,
     })
 
     if (!frame) {
@@ -99,10 +108,17 @@ export function replayMicSamples(samples, sampleRate, options = {}) {
     frames.push({
       timeMs,
       midi: frame.midi,
+      frequency: frame.frequency ?? null,
+      midiFloat: frame.midiFloat ?? null,
       clarity: frame.clarity,
       centsOffset: frame.centsOffset,
       rms: frame.rms,
+      filteredRms: frame.filteredRms,
+      noiseFloor: frame.noiseFloor,
       gateOpen: frame.gateOpen,
+      signalShape: frame.signalShape,
+      signalQuality: frame.signalQuality,
+      spectralEnergy: frame.spectralEnergy,
     })
 
     const stableMidi = pushStableNote(stabilizer, {
@@ -118,6 +134,7 @@ export function replayMicSamples(samples, sampleRate, options = {}) {
         timeMs,
         clarity: frame.clarity,
         centsOffset: frame.centsOffset,
+        frequency: frame.frequency ?? null,
         rms: frame.rms,
       })
     }
@@ -128,6 +145,12 @@ export function replayMicSamples(samples, sampleRate, options = {}) {
     frameHopMs,
     fftSize,
     calibration: calibrationResult,
+    stabilizer: {
+      holdFrames: stabilizer.holdFrames,
+      minClarity: stabilizer.minClarity,
+      minRms: stabilizer.minRms,
+      attackFrames: stabilizer.attackFrames,
+    },
     frames,
     stableDetections,
   }

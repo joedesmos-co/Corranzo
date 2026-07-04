@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { createNoteStabilizer, pushStableNote, resetNoteStabilizer } from './noteStabilizer.js'
 import { analyzeMicFrame, createMicFrameAnalyzer } from './micFrameAnalysis.js'
+import { getMicInstrumentProfile } from './micInstrumentProfiles.js'
 import {
   applyMicCalibrationToStabilizer,
   createMicCalibration,
@@ -18,7 +19,8 @@ const CALIBRATION_FRAMES = 45
 /**
  * Poll AnalyserNode: quick auto-calibration, then live frame feedback + stable
  * MIDI note-ons. Calibration measures the room while the user is not yet
- * playing, then seeds the noise gate and stabilizer thresholds.
+ * playing, then seeds the noise gate and stabilizer thresholds. The selected
+ * instrument nudges the attack-skip and gate defaults (piano vs plucky guitar).
  */
 export default function usePitchDetector({
   enabled,
@@ -30,8 +32,12 @@ export default function usePitchDetector({
   onStableMidi,
   onCalibration,
   calibrationKey = 0,
+  instrumentId = null,
 }) {
-  const stabilizerRef = useRef(createNoteStabilizer())
+  const profile = useMemo(() => getMicInstrumentProfile(instrumentId), [instrumentId])
+  const profileRef = useRef(profile)
+  profileRef.current = profile
+  const stabilizerRef = useRef(createNoteStabilizer(profile.stabilizer))
   const analyzerRef = useRef(createMicFrameAnalyzer())
   const calibrationRef = useRef(null)
   const calibrationResultRef = useRef(null)
@@ -65,12 +71,12 @@ export default function usePitchDetector({
   }
 
   useEffect(() => {
-    resetNoteStabilizer(stabilizerRef.current)
+    stabilizerRef.current = createNoteStabilizer(profile.stabilizer)
     analyzerRef.current = createMicFrameAnalyzer()
     calibrationRef.current = createMicCalibration({ frames: CALIBRATION_FRAMES })
     calibrationResultRef.current = null
     calibrationStartedAtRef.current = performance.now()
-  }, [enabled, calibrationKey])
+  }, [enabled, calibrationKey, profile])
 
   useEffect(() => {
     if (!enabled) {
@@ -88,6 +94,7 @@ export default function usePitchDetector({
         analyser.getFloatTimeDomainData(buffer)
         const frame = analyzeMicFrame(buffer, sampleRate, analyzerRef.current.noiseFloor, {
           centsTolerance,
+          gateOptions: profileRef.current.gate,
         })
         if (frame) {
           const calibration = calibrationRef.current
@@ -158,11 +165,11 @@ export default function usePitchDetector({
       }
       resetNoteStabilizer(stabilizerRef.current)
     }
-  }, [enabled, analyserRef, getTimeDomainBuffer, sampleRate, centsTolerance, calibrationKey])
+  }, [enabled, analyserRef, getTimeDomainBuffer, sampleRate, centsTolerance, calibrationKey, profile])
 
   return {
     retryCalibration: () => {
-      resetNoteStabilizer(stabilizerRef.current)
+      stabilizerRef.current = createNoteStabilizer(profileRef.current.stabilizer)
       analyzerRef.current = createMicFrameAnalyzer()
       calibrationRef.current = createMicCalibration({ frames: CALIBRATION_FRAMES })
       calibrationResultRef.current = null

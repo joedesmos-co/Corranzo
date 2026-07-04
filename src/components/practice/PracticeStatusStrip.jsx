@@ -76,6 +76,10 @@ function inputStatus(session) {
     return null
   }
 
+  if (!session.wfyInputSourceSelectedThisSession) {
+    return { label: 'Choose input', tone: 'neutral' }
+  }
+
   if (session.wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE) {
     if (session.microphone.isListening) {
       return { label: 'Mic listening', tone: 'ready' }

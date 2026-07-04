@@ -15,11 +15,13 @@ describe('practice settings audit', () => {
     expect(WFY_MATCH_DEFAULTS.exactPitch).toBe(true)
   })
 
-  it('labels input sources in plain language', () => {
+  it('offers a beginner-simple Microphone / MIDI choice in plain language', () => {
     expect(WFY_INPUT_SOURCE_LABELS.manual).toBe('Continue button')
-    expect(readSrc('components', 'practice', 'WaitForYouInputSourceSelector.jsx')).toContain(
-      'Continue with',
-    )
+    const selector = readSrc('components', 'practice', 'WaitForYouInputSourceSelector.jsx')
+    expect(selector).toContain('Use Microphone')
+    expect(selector).toContain('Use MIDI')
+    // Manual stays available as a quiet fallback, not a primary setup button.
+    expect(selector).toContain('No device')
   })
 
   it('groups Advanced settings into files, playback, setup, and help', () => {

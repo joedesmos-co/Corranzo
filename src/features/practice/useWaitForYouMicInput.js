@@ -25,10 +25,21 @@ import { CHECKPOINT_KIND } from './waitForYouCheckpoints.js'
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 import { resolveMicDiagnostic, micDiagnosticLabel } from '../microphone-input/micDiagnosticState.js'
 import {
+  createMicDebugFrameRecord,
+  pushMicDebugFrame,
+  serializeMicDebugFrames,
+} from '../microphone-input/micDebugExport.js'
+import {
   isMicEngineV2Enabled,
 } from '../microphone-input/micEngineFlag.js'
 import useMicEngineV2Detector from '../microphone-input/useMicEngineV2Detector.js'
 import usePitchDetector from '../microphone-input/usePitchDetector.js'
+import {
+  confirmConfidentMatch as pushMatchConfirm,
+  createMatchConfirmState,
+  frameConfidentForMatch,
+  resetMatchConfirmState,
+} from './micMatchConfirm.js'
 
 function micFeedbackFromResult(result) {
   if (result.message) {
@@ -112,6 +123,7 @@ export default function useWaitForYouMicInput({
   onWrongNote = null,
   microphone,
   micEngineV2Override = null,
+  instrumentId = null,
 }) {
   const [inputFeedback, setInputFeedback] = useState(() =>
     idleFeedbackForCheckpoint(currentCheckpoint),
@@ -123,6 +135,8 @@ export default function useWaitForYouMicInput({
   const feedbackOutcomeRef = useRef(inputFeedback.outcome)
   const collectionStateRef = useRef(createMicChordCollectionState())
   const lastStableChordKeyRef = useRef('')
+  const matchConfirmRef = useRef(createMatchConfirmState())
+  const debugFramesRef = useRef([])
   const micEngineV2EnabledRef = useRef(false)
   const v2SessionFallbackRef = useRef(false)
   const [v2SessionFallback, setV2SessionFallback] = useState(false)
@@ -153,13 +167,28 @@ export default function useWaitForYouMicInput({
   const useV2Detector = matchingEnabled && micEngineV2Active
   const useV1Detector = detectEnabled && !useV2Detector
 
+  const resetMatchConfirm = useCallback(() => {
+    resetMatchConfirmState(matchConfirmRef.current)
+  }, [])
+
+  const confirmConfidentMatch = useCallback(
+    (key, confident) => pushMatchConfirm(matchConfirmRef.current, key, confident),
+    [],
+  )
+
+  const exportDebugFrames = useCallback(
+    () => serializeMicDebugFrames(debugFramesRef.current),
+    [],
+  )
+
   const resetFeedback = useCallback(() => {
     setInputFeedback(idleFeedbackForCheckpoint(currentCheckpoint))
     setLastHeardMidi(null)
     setLiveFrame(null)
     resetMicChordCollectionState(collectionStateRef.current)
     lastStableChordKeyRef.current = ''
-  }, [currentCheckpoint])
+    resetMatchConfirm()
+  }, [currentCheckpoint, resetMatchConfirm])
 
   useEffect(() => {
     resetFeedback()
@@ -186,17 +215,25 @@ export default function useWaitForYouMicInput({
   }, [v2SessionFallback])
 
   useEffect(() => {
-    if (import.meta.env?.DEV || micEngineV2Enabled) {
-      globalThis.__SCOREFLOW_MIC_DEBUG__ = {
-        ...(globalThis.__SCOREFLOW_MIC_DEBUG__ ?? {}),
-        engineMode: micEngineMode,
-        v2Enabled: micEngineV2Enabled,
-        v2Active: micEngineV2Active,
-        v2SessionFallback,
-        isMicV2Polyphonic,
-        expectedMidis: [...expectedMidis],
-      }
+    // Always publish a stable diagnostics object so the real "too quiet" issue
+    // can be inspected in any build via `window.SCOREFLOW_MIC_DEBUG.lastFrame`
+    // (kept in sync with the legacy `__SCOREFLOW_MIC_DEBUG__` name).
+    const next = {
+      ...(globalThis.__SCOREFLOW_MIC_DEBUG__ ?? {}),
+      engineMode: micEngineMode,
+      v2Enabled: micEngineV2Enabled,
+      v2Active: micEngineV2Active,
+      v2SessionFallback,
+      isMicV2Polyphonic,
+      expectedMidis: [...expectedMidis],
+      instrumentId: instrumentId ?? null,
+      inputSource: 'microphone',
+      captureSettings: microphone?.captureSettings ?? null,
+      exportLastFrames: exportDebugFrames,
+      copyLastFrames: () => [...debugFramesRef.current],
     }
+    globalThis.__SCOREFLOW_MIC_DEBUG__ = next
+    globalThis.SCOREFLOW_MIC_DEBUG = next
   }, [
     micEngineMode,
     micEngineV2Enabled,
@@ -204,15 +241,18 @@ export default function useWaitForYouMicInput({
     v2SessionFallback,
     isMicV2Polyphonic,
     expectedMidis,
+    instrumentId,
+    microphone?.captureSettings,
+    exportDebugFrames,
   ])
 
   const reportMicDebug = useCallback((patch) => {
-    if (import.meta.env?.DEV || micEngineV2EnabledRef.current) {
-      globalThis.__SCOREFLOW_MIC_DEBUG__ = {
-        ...(globalThis.__SCOREFLOW_MIC_DEBUG__ ?? {}),
-        ...patch,
-      }
+    const next = {
+      ...(globalThis.__SCOREFLOW_MIC_DEBUG__ ?? {}),
+      ...patch,
     }
+    globalThis.__SCOREFLOW_MIC_DEBUG__ = next
+    globalThis.SCOREFLOW_MIC_DEBUG = next
   }, [])
 
   const handleV2RuntimeError = useCallback(
@@ -353,14 +393,40 @@ export default function useWaitForYouMicInput({
           : frame.midi != null && frame.gateOpen
             ? [frame.midi]
             : []
+      const rejectReason = micFrameRejectReason({
+        frame,
+        matchingEnabled,
+        expectedMidis,
+        isMicV2Polyphonic,
+      })
+      const debugFrame = createMicDebugFrameRecord({
+        frame,
+        expectedMidis,
+        instrumentId,
+        inputSource: 'microphone',
+        captureSettings: microphone?.captureSettings ?? null,
+        rejectReason,
+        timestampMs:
+          typeof performance !== 'undefined' && performance.now
+            ? performance.now()
+            : Date.now(),
+      })
+      pushMicDebugFrame(debugFramesRef.current, debugFrame)
 
       reportMicDebug({
         lastFrame: {
+          ...debugFrame,
           rms: frame.rms ?? null,
           filteredRms: frame.filteredRms ?? null,
           level: frame.level ?? null,
           noiseFloor: frame.noiseFloor ?? null,
           gateOpen: Boolean(frame.gateOpen),
+          frequency: frame.frequency ?? null,
+          midiFloat: frame.midiFloat ?? null,
+          spectralEnergy: frame.spectralEnergy ?? null,
+          crestFactor: frame.crestFactor ?? null,
+          zeroCrossingRate: frame.zeroCrossingRate ?? null,
+          signalShape: frame.signalShape ?? null,
           midi: frame.midi ?? null,
           clarity: frame.clarity ?? null,
           signalQuality: frame.signalQuality ?? null,
@@ -368,20 +434,21 @@ export default function useWaitForYouMicInput({
           calibrationStatus: frame.calibrationStatus ?? null,
           calibrationNoiseFloor: frame.calibration?.noiseFloor ?? null,
           calibrationGateThreshold: frame.calibration?.gateThreshold ?? null,
+          calibrationRejectedOutliers: frame.calibration?.rejectedOutliers ?? null,
           expectedMidis: [...expectedMidis],
+          instrumentId: instrumentId ?? null,
+          inputSource: 'microphone',
           micEngineMode: frame.micEngineMode ?? micEngineMode,
           v2Active: Boolean(frame.v2Active),
           v2MeanConfidence: frame.v2MeanConfidence ?? null,
           v2DetectedMidis: frame.v2DetectedMidis ? [...frame.v2DetectedMidis] : [],
           v2Notes: summarizeV2Notes(frame.v2Notes ?? []),
           usedV1Fallback: Boolean(frame.usedV1Fallback),
-          rejectReason: micFrameRejectReason({
-            frame,
-            matchingEnabled,
-            expectedMidis,
-            isMicV2Polyphonic,
-          }),
+          rejectReason: rejectReason,
         },
+        lastFrames: [...debugFramesRef.current],
+        exportLastFrames: exportDebugFrames,
+        copyLastFrames: () => [...debugFramesRef.current],
         lastFrameDetectedMidis: frameDetectedMidis,
       })
 
@@ -409,10 +476,25 @@ export default function useWaitForYouMicInput({
 
       if (isMicV2Polyphonic && frame.v2DetectedMidis?.length) {
         const preview = evaluateMicMatch(null, frame.v2DetectedMidis)
+        if (!preview || feedbackOutcomeRef.current === WFY_INPUT_OUTCOME.CORRECT) {
+          return
+        }
+        if (preview.outcome === MATCH_OUTCOME.COMPLETE) {
+          // All expected tones heard together — confirm briefly, then advance.
+          const key = `${currentCheckpoint.id}:chord:${[...frame.v2DetectedMidis]
+            .sort((left, right) => left - right)
+            .join(',')}`
+          if (confirmConfidentMatch(key, true)) {
+            resetMatchConfirm()
+            applyMatchResult(preview)
+            return
+          }
+        } else {
+          resetMatchConfirm()
+        }
         if (
-          preview &&
-          (preview.outcome === MATCH_OUTCOME.CHORD_PROGRESS ||
-            preview.outcome === MATCH_OUTCOME.COMPLETE)
+          preview.outcome === MATCH_OUTCOME.CHORD_PROGRESS ||
+          preview.outcome === MATCH_OUTCOME.COMPLETE
         ) {
           setInputFeedback({
             ...micFeedbackFromResult(preview),
@@ -441,6 +523,7 @@ export default function useWaitForYouMicInput({
       }
 
       if (preview.outcome === MATCH_OUTCOME.WRONG) {
+        resetMatchConfirm()
         setInputFeedback({
           outcome: WFY_INPUT_OUTCOME.IDLE,
           message: `Hearing ${midiToNoteLabel(frame.midi)} — not in ${chordLabel(expectedMidis)}`,
@@ -450,6 +533,21 @@ export default function useWaitForYouMicInput({
           micEngineMode,
         })
         return
+      }
+
+      // Single expected note heard correctly: once it's clearly and steadily
+      // heard, advance on our own — no discrete stabilizer note-on or Continue
+      // press required. Chord-collection mode keeps its sequential flow.
+      if (preview.outcome === MATCH_OUTCOME.COMPLETE && !isMicChordCollection) {
+        const confident = frameConfidentForMatch(frame)
+        if (confirmConfidentMatch(`${currentCheckpoint.id}:${frame.midi}`, confident)) {
+          resetMatchConfirm()
+          setLastHeardMidi(frame.midi)
+          applyMatchResult(preview)
+          return
+        }
+      } else {
+        resetMatchConfirm()
       }
 
       if (
@@ -468,11 +566,17 @@ export default function useWaitForYouMicInput({
       currentCheckpoint,
       matchSettings,
       evaluateMicMatch,
+      applyMatchResult,
+      confirmConfidentMatch,
+      resetMatchConfirm,
       expectedMidis,
       isMicChordCollection,
       isMicV2Polyphonic,
       micEngineMode,
       reportMicDebug,
+      instrumentId,
+      microphone?.captureSettings,
+      exportDebugFrames,
     ],
   )
 
@@ -519,6 +623,7 @@ export default function useWaitForYouMicInput({
     onStableMidi: matchingEnabled ? handleStableMidi : undefined,
     onCalibration: setCalibration,
     calibrationKey,
+    instrumentId,
   })
 
   useMicEngineV2Detector({
@@ -535,6 +640,7 @@ export default function useWaitForYouMicInput({
     onV2RuntimeError: handleV2RuntimeError,
     calibrationKey,
     stableFrameThreshold: matchSettings?.micChordStableHitsRequired ?? 2,
+    instrumentId,
   })
 
   return {
@@ -556,5 +662,6 @@ export default function useWaitForYouMicInput({
     micEngineV2Enabled,
     micEngineV2Active,
     v2SessionFallback,
+    exportDebugFrames,
   }
 }

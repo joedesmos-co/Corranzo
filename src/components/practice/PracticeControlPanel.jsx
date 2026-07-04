@@ -15,6 +15,7 @@ import MidiInputStatusPanel from './MidiInputStatusPanel.jsx'
 import MidiDiagnosticsPanel from './MidiDiagnosticsPanel.jsx'
 import MicrophoneInputStatusPanel from './MicrophoneInputStatusPanel.jsx'
 import WaitForYouSection from './WaitForYouSection.jsx'
+import WaitForYouInputSourceModal from './WaitForYouInputSourceModal.jsx'
 import PracticeCollapsibleSection from './PracticeCollapsibleSection.jsx'
 import PracticeSetupPanel from './PracticeSetupPanel.jsx'
 import PracticeDiagnosticsPanel from './PracticeDiagnosticsPanel.jsx'
@@ -46,10 +47,12 @@ export default memo(function PracticeControlPanel({
     Boolean(scoreFollow?.experimentalOmrPlayback) && !scoreFollow?.canFollow
   const midiWaitForYouActive =
     session.isWaitForYou &&
+    session.wfyInputSourceReady &&
     session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     session.wfyInputSource === WFY_INPUT_SOURCE.MIDI
   const micWaitForYouActive =
     session.isWaitForYou &&
+    session.wfyInputSourceReady &&
     session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     session.wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE
 
@@ -82,6 +85,13 @@ export default memo(function PracticeControlPanel({
 
   return (
     <aside className="practice-control-panel" aria-label="Practice controls">
+      <WaitForYouInputSourceModal
+        open={session.showWfyInputSourceModal}
+        onChooseSource={session.setWfyInputSource}
+        midiAvailable={isWebMidiSupported()}
+        microphoneAvailable={isMicrophoneSupported()}
+      />
+
       <PracticeImportNotices
         warnings={visibleWarnings}
         guidance={[]}
@@ -115,7 +125,9 @@ export default memo(function PracticeControlPanel({
           currentCheckpoint={session.waitForYou.currentCheckpoint}
           checkpointIndex={session.waitForYou.checkpointIndex}
           totalCheckpoints={session.waitForYou.totalCheckpoints}
-          inputSource={session.wfyInputSource}
+          inputSource={
+            session.wfyInputSourceReady ? session.wfyInputSource : WFY_INPUT_SOURCE.MANUAL
+          }
           onInputSourceChange={session.setWfyInputSource}
           midiAvailable={isWebMidiSupported()}
           microphoneAvailable={isMicrophoneSupported()}
@@ -173,6 +185,7 @@ export default memo(function PracticeControlPanel({
             onRequestAccess={session.microphone.requestAccess}
             onDisable={session.microphone.disable}
             onRetryCalibration={session.waitForYouMic.retryCalibration}
+            onExportDebugFrames={session.waitForYouMic.exportDebugFrames}
             compact
           />
         )}

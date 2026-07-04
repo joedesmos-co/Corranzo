@@ -5,7 +5,7 @@ import { isWebMidiSupported } from '../midi-input/parseMidiMessage.js'
 import { WEB_MIDI_PERMISSION, WEB_MIDI_SUPPORT } from '../midi-input/webMidiConstants.js'
 import useMicrophoneCapture from '../microphone-input/useMicrophoneCapture.js'
 import { isMicrophoneSupported } from '../microphone-input/micEnvironment.js'
-import { WFY_INPUT_SOURCE } from '../microphone-input/micInputConstants.js'
+import { MIC_PERMISSION, MIC_SUPPORT, WFY_INPUT_SOURCE } from '../microphone-input/micInputConstants.js'
 import { idleFeedbackForCheckpoint } from './waitForYouInputFeedback.js'
 import useWaitForYouMicInput from './useWaitForYouMicInput.js'
 import useScorePlayback from '../playback/useScorePlayback.js'
@@ -24,6 +24,10 @@ import { WFY_CHECKPOINT_MODE } from './waitForYouCheckpointMode.js'
 import useWaitForYouMatchSettings from './useWaitForYouMatchSettings.js'
 import useWaitForYouReferencePlayback from './useWaitForYouReferencePlayback.js'
 import useWaitForYouGuidance from './useWaitForYouGuidance.js'
+import {
+  shouldShowWaitForYouInputSourceModal,
+  waitForYouInputSourceIsReady,
+} from './waitForYouInputSourceSession.js'
 import {
   resolveWfyDisplayStatus,
   labelForWfyDisplayStatus,
@@ -64,6 +68,7 @@ export default function usePracticeSession({
   )
   const matchSettingsState = useWaitForYouMatchSettings(prefs.matchSettings)
   const autoMidiRequestedRef = useRef(false)
+  const autoMicRequestedRef = useRef(false)
   const ensurePausedRef = useRef(() => {})
 
   const defaultWfyInputSource = isWebMidiSupported()
@@ -75,6 +80,8 @@ export default function usePracticeSession({
   const [wfyInputSource, setWfyInputSource] = useState(
     prefs.wfyInputSource ?? defaultWfyInputSource,
   )
+  const [wfyInputSourceSelectedThisSession, setWfyInputSourceSelectedThisSession] =
+    useState(false)
 
   const timing = useMusicXmlTiming(musicXmlSource, 0)
 
@@ -91,6 +98,15 @@ export default function usePracticeSession({
   const hasMidi = Boolean(midiSource?.data)
   const hasMusicXml = Boolean(musicXmlSource?.data)
   const isWaitForYou = practiceMode === PRACTICE_MODE.WAIT_FOR_YOU
+  const wfyInputSourceReady = waitForYouInputSourceIsReady({
+    checkpointMode,
+    sourceSelectedThisSession: wfyInputSourceSelectedThisSession,
+  })
+  const showWfyInputSourceModal = shouldShowWaitForYouInputSourceModal({
+    isWaitForYou,
+    checkpointMode,
+    sourceSelectedThisSession: wfyInputSourceSelectedThisSession,
+  })
 
   const sourcesRevision = useMemo(
     () => ({
@@ -224,6 +240,7 @@ export default function usePracticeSession({
   const micCaptureActive =
     practiceActive &&
     isWaitForYou &&
+    wfyInputSourceReady &&
     wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE
 
   const microphone = useMicrophoneCapture({ active: micCaptureActive })
@@ -232,6 +249,7 @@ export default function usePracticeSession({
     listen:
       practiceActive &&
       isWaitForYou &&
+      wfyInputSourceReady &&
       checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
       wfyInputSource === WFY_INPUT_SOURCE.MIDI,
   })
@@ -239,6 +257,7 @@ export default function usePracticeSession({
   const waitForYouMidi = useWaitForYouMidiInput({
     active:
       isWaitForYou &&
+      wfyInputSourceReady &&
       wfyInputSource === WFY_INPUT_SOURCE.MIDI &&
       !waitForYou.displayPhase,
     checkpointMode,
@@ -253,6 +272,7 @@ export default function usePracticeSession({
     active:
       isWaitForYou &&
       practiceActive &&
+      wfyInputSourceReady &&
       wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
       !waitForYou.displayPhase,
     checkpointMode,
@@ -261,6 +281,7 @@ export default function usePracticeSession({
     onPlayerInputMatched: handleWfyPlayerInputMatched,
     onWrongNote: handleWfyWrongNote,
     microphone,
+    instrumentId,
   })
 
   const handleWfyInputSourceChange = useCallback(
@@ -269,13 +290,27 @@ export default function usePracticeSession({
         microphone.disable()
       }
       setWfyInputSource(source)
+      setWfyInputSourceSelectedThisSession(true)
     },
     [microphone],
   )
 
   useEffect(() => {
+    if (!isWaitForYou) {
+      setWfyInputSourceSelectedThisSession(false)
+    }
+  }, [isWaitForYou])
+
+  useEffect(() => {
+    if (!(isWaitForYou && wfyInputSourceReady && wfyInputSource === WFY_INPUT_SOURCE.MIDI)) {
+      autoMidiRequestedRef.current = false
+    }
+  }, [isWaitForYou, wfyInputSourceReady, wfyInputSource])
+
+  useEffect(() => {
     const shouldAutoEnable =
       isWaitForYou &&
+      wfyInputSourceReady &&
       checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
       wfyInputSource === WFY_INPUT_SOURCE.MIDI &&
       webMidi.support === WEB_MIDI_SUPPORT.SUPPORTED &&
@@ -288,9 +323,55 @@ export default function usePracticeSession({
 
     autoMidiRequestedRef.current = true
     webMidi.requestAccess()
-  }, [isWaitForYou, checkpointMode, wfyInputSource, webMidi])
+  }, [isWaitForYou, wfyInputSourceReady, checkpointMode, wfyInputSource, webMidi])
+
+  // Choosing Microphone is the whole setup: request permission automatically so
+  // calibration starts on its own (no separate "enable mic" click in the main
+  // path). Re-armed whenever the user leaves mic mode so re-entry re-requests.
+  useEffect(() => {
+    if (!(isWaitForYou && wfyInputSourceReady && wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE)) {
+      autoMicRequestedRef.current = false
+    }
+  }, [isWaitForYou, wfyInputSourceReady, wfyInputSource])
+
+  useEffect(() => {
+    const shouldAutoRequest =
+      isWaitForYou &&
+      practiceActive &&
+      wfyInputSourceReady &&
+      checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
+      wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+      microphone.support === MIC_SUPPORT.SUPPORTED &&
+      (microphone.permission === MIC_PERMISSION.PROMPT ||
+        microphone.permission === MIC_PERMISSION.GRANTED) &&
+      !microphone.isListening &&
+      !autoMicRequestedRef.current
+
+    if (!shouldAutoRequest) {
+      return
+    }
+
+    autoMicRequestedRef.current = true
+    microphone.requestAccess()
+  }, [
+    isWaitForYou,
+    practiceActive,
+    wfyInputSourceReady,
+    checkpointMode,
+    wfyInputSource,
+    microphone,
+  ])
 
   const waitForYouInput = useMemo(() => {
+    if (!wfyInputSourceReady) {
+      return {
+        source: WFY_INPUT_SOURCE.MANUAL,
+        matchingEnabled: false,
+        inputFeedback: idleFeedbackForCheckpoint(waitForYou.currentCheckpoint),
+        feedbackOutcome: 'idle',
+        isChordCheckpoint: Boolean(waitForYou.currentCheckpoint?.isChord),
+      }
+    }
     if (wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE) {
       return {
         source: WFY_INPUT_SOURCE.MICROPHONE,
@@ -312,6 +393,7 @@ export default function usePracticeSession({
     }
   }, [
     wfyInputSource,
+    wfyInputSourceReady,
     waitForYouMic,
     waitForYouMidi,
     waitForYou.currentCheckpoint,
@@ -572,6 +654,9 @@ export default function usePracticeSession({
       waitForYouMic,
       waitForYouInput,
       wfyInputSource,
+      wfyInputSourceReady,
+      wfyInputSourceSelectedThisSession,
+      showWfyInputSourceModal,
       setWfyInputSource: handleWfyInputSourceChange,
       microphone,
       matchSettings: matchSettingsState.settings,
@@ -614,6 +699,9 @@ export default function usePracticeSession({
       waitForYouMic,
       waitForYouInput,
       wfyInputSource,
+      wfyInputSourceReady,
+      wfyInputSourceSelectedThisSession,
+      showWfyInputSourceModal,
       handleWfyInputSourceChange,
       microphone,
       matchSettingsState.settings,

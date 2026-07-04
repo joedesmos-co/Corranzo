@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { analyzeMicFrame, createMicFrameAnalyzer } from './micFrameAnalysis.js'
+import { getMicInstrumentProfile } from './micInstrumentProfiles.js'
 import {
   applyMicCalibrationToStabilizer,
   createMicCalibration,
@@ -38,8 +39,12 @@ export default function useMicEngineV2Detector({
   onV2RuntimeError,
   calibrationKey = 0,
   stableFrameThreshold,
+  instrumentId = null,
 }) {
-  const stabilizerRef = useRef(createNoteStabilizer())
+  const profile = useMemo(() => getMicInstrumentProfile(instrumentId), [instrumentId])
+  const profileRef = useRef(profile)
+  profileRef.current = profile
+  const stabilizerRef = useRef(createNoteStabilizer(profile.stabilizer))
   const analyzerRef = useRef(createMicFrameAnalyzer())
   const v2StateRef = useRef(createMicEngineV2RuntimeState())
   const calibrationRef = useRef(null)
@@ -88,14 +93,14 @@ export default function useMicEngineV2Detector({
   }, [expectedMidis])
 
   useEffect(() => {
-    resetNoteStabilizer(stabilizerRef.current)
+    stabilizerRef.current = createNoteStabilizer(profile.stabilizer)
     analyzerRef.current = createMicFrameAnalyzer()
     resetMicEngineV2RuntimeState(v2StateRef.current)
     calibrationRef.current = createMicCalibration({ frames: CALIBRATION_FRAMES })
     calibrationResultRef.current = null
     calibrationStartedAtRef.current = performance.now()
     v2ErroredRef.current = false
-  }, [enabled, calibrationKey])
+  }, [enabled, calibrationKey, profile])
 
   useEffect(() => {
     if (!enabled) {
@@ -118,6 +123,7 @@ export default function useMicEngineV2Detector({
           const calibrating = calibration != null && !calibration.done
           const previewFrame = analyzeMicFrame(buffer, sampleRate, analyzerRef.current.noiseFloor, {
             centsTolerance,
+            gateOptions: profileRef.current.gate,
           })
 
           if (calibrating && previewFrame) {
@@ -237,11 +243,12 @@ export default function useMicEngineV2Detector({
     centsTolerance,
     calibrationKey,
     stableFrameThreshold,
+    profile,
   ])
 
   return {
     retryCalibration: () => {
-      resetNoteStabilizer(stabilizerRef.current)
+      stabilizerRef.current = createNoteStabilizer(profileRef.current.stabilizer)
       analyzerRef.current = createMicFrameAnalyzer()
       resetMicEngineV2RuntimeState(v2StateRef.current)
       calibrationRef.current = createMicCalibration({ frames: CALIBRATION_FRAMES })

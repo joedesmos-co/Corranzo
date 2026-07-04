@@ -18,8 +18,19 @@ export const MIC_SIGNAL_QUALITY_LABELS = {
   [MIC_SIGNAL_QUALITY.GOOD]: 'Good signal — single notes should register well',
 }
 
+// A clearly audible frame: never call this "too quiet" even if the filtered
+// gate is closed (bright/percussive/distorted energy can slip under a gate
+// tuned on filtered RMS).
+const AUDIBLE_RMS = 0.02
+
 /**
  * User-facing mic signal guidance (not raw DSP jargon).
+ *
+ * "Too quiet" is reserved for input that is genuinely below the gate — a
+ * marginal signal. A strong signal that fails the filtered gate, or any frame
+ * whose shape reads as audible (sustained / percussive / distorted / noisy),
+ * is routed to shape-appropriate guidance instead, so a loud distorted guitar
+ * is never reported as silence.
  */
 export function classifyMicSignalQuality({
   rms = 0,
@@ -27,14 +38,20 @@ export function classifyMicSignalQuality({
   passesGate = false,
   hasPitch = false,
   stabilizerPending = false,
+  signalShape = null,
 }) {
-  if (rms < 0.0035) {
+  const audibleShape = signalShape != null && signalShape !== 'quiet'
+
+  if (rms < 0.0035 && !audibleShape) {
     return MIC_SIGNAL_QUALITY.SILENT
   }
-  if (!passesGate) {
+
+  // Only truly-marginal input (below gate AND not clearly audible) is "too quiet".
+  if (!passesGate && !(audibleShape && rms >= AUDIBLE_RMS)) {
     return MIC_SIGNAL_QUALITY.TOO_QUIET
   }
-  if (rms > 0.32) {
+
+  if (rms > 0.32 || signalShape === 'noisy') {
     return MIC_SIGNAL_QUALITY.TOO_NOISY
   }
   if (stabilizerPending) {

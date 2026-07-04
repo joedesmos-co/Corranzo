@@ -24,8 +24,21 @@ export function updateNoiseFloor(tracker, rms, isQuietFrame) {
   return tracker.floor
 }
 
-export function passesNoiseGate(rms, noiseFloor) {
+/** Default gate shape — reproduces the long-standing behavior. */
+export const DEFAULT_GATE_OPTIONS = { absoluteMin: 0.012, floorMultiplier: 2.8 }
+
+/**
+ * The level the (filtered) RMS must exceed to open the gate. Scales with the
+ * measured noise floor but never drops below an absolute audible minimum.
+ * Instrument profiles can nudge both knobs (e.g. plucky guitar a touch lower).
+ */
+export function gateOpenThreshold(noiseFloor, options = null) {
+  const { absoluteMin = DEFAULT_GATE_OPTIONS.absoluteMin, floorMultiplier = DEFAULT_GATE_OPTIONS.floorMultiplier } =
+    options ?? {}
   const floor = Math.max(MIN_FLOOR, noiseFloor ?? MIN_FLOOR)
-  const openThreshold = Math.max(0.012, floor * 2.8)
-  return rms >= openThreshold
+  return Math.max(absoluteMin, floor * floorMultiplier)
+}
+
+export function passesNoiseGate(rms, noiseFloor, options = null) {
+  return rms >= gateOpenThreshold(noiseFloor, options)
 }

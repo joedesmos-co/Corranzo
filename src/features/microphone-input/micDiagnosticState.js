@@ -25,7 +25,7 @@ export const MIC_DIAGNOSTIC_LABELS = {
   [MIC_DIAGNOSTIC.CHORD_UNSUPPORTED]: 'Mic hears one note at a time — use MIDI for chords together',
   [MIC_DIAGNOSTIC.LISTENING]: 'Listening…',
   [MIC_DIAGNOSTIC.GOOD]: 'Good signal — single notes should register well',
-  [MIC_DIAGNOSTIC.CALIBRATING]: 'Calibrating… (stay quiet a moment)',
+  [MIC_DIAGNOSTIC.CALIBRATING]: 'Stay quiet for a moment…',
 }
 
 /**

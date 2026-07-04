@@ -121,18 +121,21 @@ describe('mic accuracy manifest', () => {
       const samples = renderSyntheticClip(clip.synthetic, SAMPLE_RATE)
       const replay = replayMicClip(samples, SAMPLE_RATE, {
         centsTolerance: settings.micCentsTolerance,
+        instrumentId: clip.instrument,
       })
       evaluations.push(evaluateLabeledClip(clip, replay, { centsTolerance: settings.micCentsTolerance }))
     }
 
     const summary = summarizeMicAccuracy(evaluations)
     expect(summary.measuredClipCount).toBe(syntheticClips.length)
-    expect(summary.noteClipCount).toBe(2)
+    expect(summary.noteClipCount).toBeGreaterThanOrEqual(11)
     expect(summary.rejectClipCount).toBe(2)
-    expect(summary.hitRate).not.toBeNull()
+    expect(summary.hitRate).toBe(1)
     expect(summary.falsePositiveRate).toBe(0)
+    expect(summary.falseNegativeCauses).toEqual({})
     expect(summary.tuningRecommendation).toContain('do not tune')
     expect(formatMicAccuracyReportMarkdown(summary)).toContain('False negative rate')
+    expect(formatMicAccuracyReportMarkdown(summary)).toContain('False negative causes')
     expect(formatMicAccuracyReportMarkdown(summary)).toContain('Tuning guidance')
   })
 
@@ -153,6 +156,7 @@ describe('mic accuracy manifest', () => {
       })
       const replay = replayMicClip(samples, wav.sampleRate, {
         centsTolerance: settings.micCentsTolerance,
+        instrumentId: clip.instrument,
       })
       evaluations.push(evaluateLabeledClip(clip, replay, { centsTolerance: settings.micCentsTolerance }))
     }
@@ -161,6 +165,38 @@ describe('mic accuracy manifest', () => {
     expect(summary.realFileNoteClipCount).toBe(noteClips.length)
     expect(summary.realFileHitRate).toBeGreaterThanOrEqual(0.66)
     expect(summary.hits).toBeGreaterThanOrEqual(2)
+  })
+
+  it('covers piano and guitar missed-note regression fixtures without false negatives', () => {
+    const manifest = loadMicAccuracyManifest(manifestPath)
+    const regressionIds = new Set([
+      'synth-a4-clean',
+      'synth-digital-piano-speaker-c4',
+      'synth-piano-quiet-c4',
+      'synth-piano-loud-e4',
+      'synth-guitar-open-e2',
+      'synth-guitar-open-a2',
+      'synth-guitar-fretted-c4',
+      'synth-electric-clean-a3',
+      'synth-electric-distorted-e2',
+      'synth-guitar-quiet-e3',
+    ])
+    const clips = manifest.clips.filter((clip) => regressionIds.has(clip.id))
+    expect(clips).toHaveLength(regressionIds.size)
+
+    const evaluations = clips.map((clip) => {
+      const samples = renderSyntheticClip(clip.synthetic, SAMPLE_RATE)
+      const replay = replayMicClip(samples, SAMPLE_RATE, {
+        centsTolerance: settings.micCentsTolerance,
+        instrumentId: clip.instrument,
+      })
+      return evaluateLabeledClip(clip, replay, { centsTolerance: settings.micCentsTolerance })
+    })
+
+    const summary = summarizeMicAccuracy(evaluations)
+    expect(summary.hitRate).toBe(1)
+    expect(summary.falseNegativeRate).toBe(0)
+    expect(summary.falseNegativeCauses).toEqual({})
   })
 
   it('skips missing file placeholders without counting them as misses', () => {
