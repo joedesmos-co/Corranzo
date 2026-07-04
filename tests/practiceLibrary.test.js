@@ -133,10 +133,50 @@ describe('library tab shell', () => {
     expect(library).toContain('Practice Library')
     expect(library).toContain('My Uploads')
     expect(library).toContain('Search uploads')
-    expect(library).toContain('Import a practice piece')
+    expect(library).toContain('Upload your own piece')
     expect(library).toContain('Start Practice')
     expect(library).toContain('MultiFileUpload')
     expect(library).toContain('PdfOmrPlaybackPanel')
     expect(library).toContain('Upload one file at a time')
+  })
+
+  it('orders My Uploads as add-files first, user uploads second, demo songs separate', () => {
+    const library = readSrc('components', 'LibraryPanel.jsx')
+    const addFilesIndex = library.indexOf('practice-piece-card practice-piece-card--add-files')
+    const uploadedMapIndex = library.indexOf('visibleUploadedPieces.map')
+    const demoHeadingIndex = library.indexOf('Demo Songs')
+    const demoMapIndex = library.indexOf('visibleUploadDemoPieces.map')
+
+    expect(addFilesIndex).toBeGreaterThan(-1)
+    expect(uploadedMapIndex).toBeGreaterThan(-1)
+    expect(demoHeadingIndex).toBeGreaterThan(-1)
+    expect(demoMapIndex).toBeGreaterThan(-1)
+    expect(addFilesIndex).toBeLessThan(uploadedMapIndex)
+    expect(uploadedMapIndex).toBeLessThan(demoHeadingIndex)
+    expect(demoHeadingIndex).toBeLessThan(demoMapIndex)
+    expect(library).toContain('practice-piece-card practice-piece-card--uploaded')
+    expect(library).toContain('practice-piece-card practice-piece-card--demo')
+  })
+
+  it('keeps uploaded cards readable with long filenames across responsive widths', () => {
+    const css = readSrc('App.css')
+
+    expect(css).toMatch(
+      /\.library-panel__uploads-grid\s*\{[^}]*minmax\(min\(100%,\s*340px\),\s*1fr\)/,
+    )
+    expect(css).toMatch(/\.library-panel__demo-songs\s*\{[^}]*display:\s*grid/)
+    expect(css).toMatch(
+      /\.practice-piece-card\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*minmax\(132px,\s*148px\)/,
+    )
+    expect(css).toMatch(
+      /\.practice-piece-card__action\s*\{[^}]*max-width:\s*148px/,
+    )
+    expect(css).toMatch(
+      /\.practice-piece-card--uploaded \.practice-piece-card__subtitle,[\s\S]*text-overflow:\s*ellipsis[\s\S]*white-space:\s*nowrap/,
+    )
+    expect(css).toMatch(/\.practice-piece-card__button\s*\{[^}]*white-space:\s*nowrap/)
+    expect(css).toMatch(
+      /@media \(max-width: 800px\)[\s\S]*\.practice-piece-card__action\s*\{[^}]*max-width:\s*none/,
+    )
   })
 })

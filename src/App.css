@@ -686,14 +686,25 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: var(--sf-space-md);
+  align-items: stretch;
+}
+
+.library-panel__uploads-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+}
+
+.library-panel__demo-songs {
+  display: grid;
+  gap: var(--sf-space-md);
 }
 
 .practice-piece-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(132px, auto);
+  grid-template-columns: minmax(0, 1fr) minmax(132px, 148px);
   gap: var(--sf-space-md);
   align-items: center;
   min-width: 0;
+  overflow: hidden;
   padding: var(--sf-space-lg);
   border: 1px solid var(--sf-border);
   border-radius: var(--sf-radius-md);
@@ -702,6 +713,7 @@
 
 .practice-piece-card__main {
   min-width: 0;
+  overflow: hidden;
 }
 
 .practice-piece-card__meta,
@@ -716,24 +728,38 @@
 }
 
 .practice-piece-card__title {
+  min-width: 0;
   margin: var(--sf-space-xs) 0;
   color: var(--sf-text-primary);
   font-family: var(--sf-font-display);
   font-size: var(--sf-font-section);
   font-weight: 600;
   line-height: 1.25;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .practice-piece-card__teaches {
   margin-top: var(--sf-space-sm);
   color: var(--sf-text-body);
+  overflow-wrap: break-word;
 }
 
 .practice-piece-card__action {
   display: grid;
   gap: var(--sf-space-sm);
+  justify-self: end;
+  min-width: 132px;
+  max-width: 148px;
   text-align: right;
+}
+
+.practice-piece-card--uploaded .practice-piece-card__meta,
+.practice-piece-card--uploaded .practice-piece-card__subtitle,
+.practice-piece-card--uploaded .practice-piece-card__credit {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .practice-piece-card--add-files {
@@ -755,6 +781,7 @@
   color: #000000;
   font-size: var(--sf-font-small);
   font-weight: 700;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -2848,7 +2875,14 @@
   }
 
   .practice-piece-card__action {
+    justify-self: stretch;
+    min-width: 0;
+    max-width: none;
     text-align: left;
+  }
+
+  .practice-piece-card__button {
+    min-width: 0;
   }
 
   .main-layout__score {
