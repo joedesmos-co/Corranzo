@@ -260,6 +260,39 @@ describe('Guitar demo fixtures', () => {
     expect(playable.every((note) => note.string != null && note.fret != null)).toBe(true)
   })
 
+  it('auto-setup follows notation rows, not paired TAB rows', async () => {
+    const pdfPath = fixturePath(GUITAR_FIXTURE_PATHS.pdf)
+    const xml = readFileSync(fixturePath(GUITAR_FIXTURE_PATHS.musicXml), 'utf8')
+    const [pages, timingMap] = await Promise.all([
+      rasterizePdfPages(pdfPath),
+      Promise.resolve(parseMusicXml(xml, GUITAR_FIXTURE_FILENAMES.musicXml)),
+    ])
+
+    const result = await analyzeSemiAutoScoreSetup({
+      pdfSource: 'guitar-demo-fixture',
+      numPages: pages.length,
+      timingMap,
+      renderPage: renderPagesFromArray(pages),
+    })
+
+    expect(result.ok).toBe(true)
+    expect(result.preview.debugReport.pairedTabMirrorFilter).toMatchObject({
+      applied: true,
+      originalSystemCount: 4,
+      effectiveSystemCount: 2,
+    })
+    expect(result.preview.systemCount).toBe(2)
+    expect(result.preview.supplementalMeasureAnchors).toHaveLength(7)
+
+    const anchor = (measureNumber) =>
+      result.preview.supplementalMeasureAnchors.find(
+        (item) => item.measureNumber === measureNumber,
+      )
+    expect(anchor(1).y).toBeCloseTo(anchor(4).y, 3)
+    expect(anchor(5).y).toBeCloseTo(anchor(7).y, 3)
+    expect(anchor(5).y).toBeGreaterThan(anchor(1).y + 0.1)
+  }, 30_000)
+
   it('does not route the Guitar demo through Piano bundled anchors', () => {
     expect(
       isDemoFixtureFileSet(GUITAR_FIXTURE_FILENAMES.pdf, GUITAR_FIXTURE_FILENAMES.musicXml),

@@ -78,6 +78,7 @@ function getMeasureOnsets(timingMap, measureNumber, window) {
       (n) =>
         n.measureNumber === measureNumber &&
         !n.isRest &&
+        !n.isTabMirror &&
         n.performedSeconds >= window.startTimeSeconds - 0.001 &&
         n.performedSeconds <= window.endTimeSeconds + 0.001,
     )

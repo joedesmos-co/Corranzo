@@ -132,6 +132,120 @@ function medianOf(values) {
   return sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid]
 }
 
+const STAFF_LINE_COLLAPSE_EPSILON = 0.003
+
+function hasPairedTabMirrorNotes(timingMap) {
+  return Boolean(
+    timingMap?.notation?.hasStandardStaff &&
+      timingMap?.notation?.hasTabStaff &&
+      timingMap?.notes?.some((note) => note.isTabMirror),
+  )
+}
+
+function collapseDetectedLineCount(lineYs) {
+  if (!Array.isArray(lineYs) || lineYs.length === 0) {
+    return null
+  }
+  const sorted = [...lineYs]
+    .map(Number)
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right)
+  if (!sorted.length) {
+    return null
+  }
+
+  let count = 1
+  let last = sorted[0]
+  for (let index = 1; index < sorted.length; index += 1) {
+    if (sorted[index] - last > STAFF_LINE_COLLAPSE_EPSILON) {
+      count += 1
+    }
+    last = sorted[index]
+  }
+  return count
+}
+
+export function estimateSystemStaffLineCount(system) {
+  const stave = Array.isArray(system?.staves) && system.staves.length === 1
+    ? system.staves[0]
+    : null
+  const explicitLineCount =
+    collapseDetectedLineCount(stave?.lineYs) ??
+    collapseDetectedLineCount(stave?.detectedLineYs) ??
+    collapseDetectedLineCount(system?.lineYs) ??
+    collapseDetectedLineCount(system?.detectedLineYs)
+  if (explicitLineCount != null) {
+    return explicitLineCount
+  }
+
+  const rawLineCount = Number(stave?.lineCount ?? system?.lineCount)
+  if (!Number.isFinite(rawLineCount) || rawLineCount <= 0) {
+    return null
+  }
+  return rawLineCount > 8 ? Math.round(rawLineCount / 2) : Math.round(rawLineCount)
+}
+
+/**
+ * Mixed standard notation + TAB prints the same music twice: five-line notation
+ * rows and six-line TAB rows. For score-follow, keep the notation rows and let
+ * the paired TAB notes remain fingering metadata on the timing map.
+ */
+export function filterPairedTabMirrorSystemEntries(systemEntries, timingMap) {
+  if (!hasPairedTabMirrorNotes(timingMap) || !systemEntries?.length) {
+    return { entries: systemEntries ?? [], applied: false, removedCount: 0 }
+  }
+
+  const entriesByPage = new Map()
+  for (const entry of systemEntries) {
+    const page = entry.page ?? 1
+    const list = entriesByPage.get(page) ?? []
+    list.push(entry)
+    entriesByPage.set(page, list)
+  }
+
+  const filtered = []
+  let removedCount = 0
+
+  for (const pageEntries of entriesByPage.values()) {
+    const annotated = pageEntries.map((entry) => ({
+      entry,
+      staffLineCount: estimateSystemStaffLineCount(entry.system),
+    }))
+    const hasNotationRows = annotated.some(
+      ({ staffLineCount }) => staffLineCount != null && staffLineCount <= 5,
+    )
+    const hasTabRows = annotated.some(
+      ({ staffLineCount }) => staffLineCount != null && staffLineCount >= 6,
+    )
+
+    if (!hasNotationRows || !hasTabRows) {
+      filtered.push(...pageEntries)
+      continue
+    }
+
+    const notationRows = annotated
+      .filter(({ staffLineCount }) => staffLineCount == null || staffLineCount <= 5)
+      .map(({ entry }) => ({
+        ...entry,
+        pairedTabRowsSkipped: true,
+      }))
+
+    if (notationRows.length === 0) {
+      filtered.push(...pageEntries)
+      continue
+    }
+
+    removedCount += pageEntries.length - notationRows.length
+    filtered.push(...notationRows)
+  }
+
+  return {
+    entries: removedCount > 0 ? filtered : systemEntries,
+    applied: removedCount > 0,
+    removedCount,
+  }
+}
+
 /**
  * Structured, dev-only auto-setup debug report. Surfaces exactly why a mapping
  * landed where it did: detected systems + y positions, allocated measure ranges,
@@ -156,6 +270,7 @@ function buildAutoSetupDebugReport({
   layoutMismatch = null,
   layoutConfidence = null,
   allocationDiagnostics = null,
+  pairedTabMirrorFilter = null,
 }) {
   const lastAnchorByMeasure = new Map(proposedAnchors.map((a) => [a.measureNumber, a]))
   const systems = spans.map((span, index) => {
@@ -236,6 +351,7 @@ function buildAutoSetupDebugReport({
     detectedSystemCount: systemEntries.length,
     expectedSystemCount: expectedSystemCount ?? null,
     systemCountHint: systemCountHint ?? null,
+    pairedTabMirrorFilter,
     allocationDiagnostics,
     hintsUsed: {
       systemBreaks: hasSystemBreaks,
@@ -975,7 +1091,12 @@ export async function analyzeSemiAutoScoreSetup({
   // Reject impossible systems with an extremely tiny y-height (row-noise slivers,
   // e.g. residue from an imperfectly de-rotated page) so they never become anchors.
   await yieldForAnalysis()
-  const systemEntries = rejectTinySystems(detectedSystemEntries)
+  const unfilteredSystemEntries = rejectTinySystems(detectedSystemEntries)
+  const pairedTabMirrorFilter = filterPairedTabMirrorSystemEntries(
+    unfilteredSystemEntries,
+    timingMap,
+  )
+  const systemEntries = pairedTabMirrorFilter.entries
 
   // Truly last resort: not a single inked page yielded even one band. Only here
   // do we ask the user to mark system starts (concise fallback copy lives in UI).
@@ -1144,6 +1265,12 @@ export async function analyzeSemiAutoScoreSetup({
     layoutMismatch,
     layoutConfidence,
     allocationDiagnostics,
+    pairedTabMirrorFilter: {
+      applied: pairedTabMirrorFilter.applied,
+      removedCount: pairedTabMirrorFilter.removedCount,
+      originalSystemCount: unfilteredSystemEntries.length,
+      effectiveSystemCount: systemEntries.length,
+    },
   })
 
   return {

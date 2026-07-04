@@ -197,7 +197,7 @@ export function measureCursorOnsetAlignment({
   const timeline = getTimeline(timingMap)
   const notes = timeline
     .performedNotes()
-    .filter((note) => !note.isRest && note.midi != null)
+    .filter((note) => !note.isRest && note.midi != null && !note.isTabMirror)
 
   const errors = []
   let maxError = 0
@@ -286,7 +286,7 @@ export function measureLegacyCursorOnsetAlignment({
   const timeline = getTimeline(timingMap)
   const notes = timeline
     .performedNotes()
-    .filter((note) => !note.isRest && note.midi != null)
+    .filter((note) => !note.isRest && note.midi != null && !note.isTabMirror)
 
   const errors = []
   let maxError = 0

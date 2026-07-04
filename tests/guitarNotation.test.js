@@ -4,8 +4,10 @@
  */
 import { describe, expect, it } from 'vitest'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
+import { getMeasurePlaybackWindow } from '../src/features/musicxml/performedTimeline.js'
 import { buildScoreNoteSchedule } from '../src/features/playback/scorePlaybackSchedule.js'
 import { buildNoteCheckpoints } from '../src/features/practice/waitForYouCheckpoints.js'
+import { buildMeasureMusicalEvents } from '../src/features/score-follow/cursorMusicalProgress.js'
 import { straight4 } from './helpers/buildXml.js'
 
 function guitarNote(step, octave, duration, { string = null, fret = null, staff = null, voice = 1, chord = false } = {}) {
@@ -63,6 +65,27 @@ function guitarScore({ withTab = false, mirrored = false } = {}) {
   <part-list><score-part id="P1"><part-name>Classical Guitar</part-name></score-part></part-list>
   <part id="P1">
     <measure number="1">${attributesXml}<direction><sound tempo="120"/></direction>${standardNotes}${tabNotes}</measure>
+  </part>
+</score-partwise>`
+}
+
+function tabOnlyScore() {
+  const tabTuning = STANDARD_TUNING_DETAILS.replace('number="2"', 'number="1"')
+  const attributesXml =
+    `<attributes><divisions>1</divisions>` +
+    `<time><beats>4</beats><beat-type>4</beat-type></time>` +
+    `<clef><sign>TAB</sign><line>5</line></clef>${tabTuning}</attributes>`
+  const tabNotes =
+    guitarNote('E', 4, 1, { staff: 1, string: 1, fret: 0 }) +
+    guitarNote('F', 4, 1, { staff: 1, string: 1, fret: 1 }) +
+    guitarNote('G', 4, 1, { staff: 1, string: 1, fret: 3 }) +
+    guitarNote('C', 4, 1, { staff: 1, string: 2, fret: 1 })
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<score-partwise version="3.1">
+  <part-list><score-part id="P1"><part-name>Guitar TAB</part-name></score-part></part-list>
+  <part id="P1">
+    <measure number="1">${attributesXml}<direction><sound tempo="120"/></direction>${tabNotes}</measure>
   </part>
 </score-partwise>`
 }
@@ -129,6 +152,31 @@ describe('guitar MusicXML parsing', () => {
     const checkpoints = buildNoteCheckpoints(map)
     expect(checkpoints.length).toBe(4)
     expect(checkpoints.every((checkpoint) => !checkpoint.isChord)).toBe(true)
+  })
+
+  it('builds score-follow events from notation notes, not TAB mirrors', () => {
+    const map = parseMusicXml(guitarScore({ withTab: true, mirrored: true }), 'tab.musicxml')
+    const window = getMeasurePlaybackWindow(map, 1, 0)
+    const events = buildMeasureMusicalEvents(map, 1, window, 0.1, 0.9, {
+      includeMeasureEnd: false,
+    })
+    const noteEvents = events.filter((event) => event.kind === 'note' || event.kind === 'chord')
+
+    expect(noteEvents).toHaveLength(4)
+    expect(noteEvents.every((event) => event.kind === 'note')).toBe(true)
+  })
+
+  it('keeps TAB-only guitar scores playable', () => {
+    const map = parseMusicXml(tabOnlyScore(), 'tab-only.musicxml')
+    const notes = map.notes.filter((note) => !note.isRest && note.midi != null)
+
+    expect(map.notation.hasTabStaff).toBe(true)
+    expect(map.notation.hasStandardStaff).toBe(false)
+    expect(notes).toHaveLength(4)
+    expect(notes.every((note) => note.isTabMirror !== true)).toBe(true)
+    expect(notes.every((note) => note.string != null && note.fret != null)).toBe(true)
+    expect(buildScoreNoteSchedule(map)).toHaveLength(4)
+    expect(buildNoteCheckpoints(map)).toHaveLength(4)
   })
 })
 

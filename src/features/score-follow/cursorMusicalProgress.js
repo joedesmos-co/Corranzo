@@ -154,6 +154,7 @@ export function buildMeasureMusicalEvents(
       (note) =>
         note.measureNumber === measureNumber &&
         !note.isRest &&
+        !note.isTabMirror &&
         note.performedSeconds >= window.startTimeSeconds - 0.001 &&
         note.performedSeconds <= window.endTimeSeconds + 0.001,
     )
