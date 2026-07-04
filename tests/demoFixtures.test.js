@@ -125,6 +125,11 @@ describe('Practice library fixture catalog', () => {
       expect(playable.length, fixture.id).toBeGreaterThan(0)
       expect(midi.tracks.reduce((sum, track) => sum + track.notes.length, 0), fixture.id).toBeGreaterThan(0)
       expect(timingMap.durationSeconds, fixture.id).toBeGreaterThan(0)
+      if (fixture.paths.musicXml.includes('/practice-library/')) {
+        expect(timingMap.measures.every((measure) => measure.engravedWidth === 106), fixture.id).toBe(true)
+        const firstPlayable = playable.find((note) => note.measureNumber === 1)
+        expect(firstPlayable?.defaultX, fixture.id).toBe(16)
+      }
       if (fixture.instrumentId === INSTRUMENT_IDS.GUITAR) {
         expect(timingMap.notation.suggestedInstrumentId, fixture.id).toBe('guitar')
         expect(timingMap.notation.hasTabStaff, fixture.id).toBe(true)
@@ -145,6 +150,61 @@ describe('Practice library fixture catalog', () => {
     expect(getPracticeLibraryFixture(null, INSTRUMENT_IDS.PIANO).id).toBe(DEMO_PIECE.id)
     expect(getPracticeLibraryFixture(null, INSTRUMENT_IDS.GUITAR).id).toBe(GUITAR_DEMO_PIECE.id)
   })
+
+  it('auto-setup anchors practice library pieces at the first playable note, not the 30% fallback', async () => {
+    await configureNodePdfAnalysis()
+
+    const leadFraction = (anchor) =>
+      (anchor.x - anchor.meta.measureStartX) /
+      (anchor.meta.playableEndX - anchor.meta.measureStartX)
+
+    async function assertPracticeLibraryStart({ fixtureId, instrumentId, guitarScoreTarget = null }) {
+      const fixture = getPracticeLibraryFixture(fixtureId, instrumentId)
+      const pdfPath = fixturePath(fixture.paths.pdf)
+      const xml = readFileSync(fixturePath(fixture.paths.musicXml), 'utf8')
+      const [pages, timingMap] = await Promise.all([
+        rasterizePdfPages(pdfPath),
+        Promise.resolve(parseMusicXml(xml, fixture.fileNames.musicXml)),
+      ])
+      const firstPlayable = timingMap.notes.find(
+        (note) => note.measureNumber === 1 && !note.isRest && !note.isTabMirror,
+      )
+      const firstMeasure = timingMap.measures.find((measure) => measure.number === 1)
+      const expectedFirstLead = firstPlayable.defaultX / firstMeasure.engravedWidth
+
+      const result = await analyzeSemiAutoScoreSetup({
+        pdfSource: `${fixtureId}-practice-library`,
+        numPages: pages.length,
+        timingMap,
+        guitarScoreTarget,
+        renderPage: renderPagesFromArray(pages),
+      })
+
+      expect(result.ok, fixtureId).toBe(true)
+      const measureOne = result.preview.supplementalMeasureAnchors.find(
+        (item) => item.measureNumber === 1,
+      )
+      expect(measureOne?.meta?.xSource, fixtureId).toContain('default-x')
+      expect(measureOne?.meta?.xSource, fixtureId).not.toBe('estimated')
+      expect(leadFraction(measureOne), fixtureId).toBeCloseTo(expectedFirstLead, 3)
+      expect(leadFraction(measureOne), fixtureId).toBeLessThan(0.22)
+      expect(leadFraction(measureOne), fixtureId).not.toBeCloseTo(0.3, 2)
+    }
+
+    await assertPracticeLibraryStart({
+      fixtureId: 'piano-ode-to-joy',
+      instrumentId: INSTRUMENT_IDS.PIANO,
+    })
+    await assertPracticeLibraryStart({
+      fixtureId: 'guitar-amazing-grace',
+      instrumentId: INSTRUMENT_IDS.GUITAR,
+    })
+    await assertPracticeLibraryStart({
+      fixtureId: 'guitar-amazing-grace',
+      instrumentId: INSTRUMENT_IDS.GUITAR,
+      guitarScoreTarget: GUITAR_SCORE_TARGET.TAB,
+    })
+  }, 60_000)
 })
 
 describe('Hungarian Dance demo fixtures', () => {

@@ -1,6 +1,6 @@
 # OMR Engine V2 — Rollout Gate (Phase 5)
 
-**Generated:** 2026-07-04T20:56:42.115Z
+**Generated:** 2026-07-04T21:23:08.995Z
 **Status:** Diagnostic/planning only — no runtime OMR changes.
 
 ## Executive decision

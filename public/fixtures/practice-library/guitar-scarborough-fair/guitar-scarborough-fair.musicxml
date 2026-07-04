@@ -16,7 +16,7 @@
     </score-part>
   </part-list>
   <part id="P1">
-    <measure number="1">
+    <measure number="1" width="106">
       <attributes>
         <divisions>4</divisions>
         <key><fifths>0</fifths></key>
@@ -38,57 +38,57 @@
         <direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>76</per-minute></metronome></direction-type>
         <sound tempo="76"/>
       </direction>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
-      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
-      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+      <note default-x="16"><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+      <note default-x="38"><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+      <note default-x="60"><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+      <note default-x="82"><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
       <backup><duration>16</duration></backup>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
-      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>3</string><fret>2</fret></technical></notations></note>
-      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>3</string><fret>2</fret></technical></notations></note>
+      <note default-x="16"><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
+      <note default-x="38"><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
+      <note default-x="60"><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>3</string><fret>2</fret></technical></notations></note>
+      <note default-x="82"><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>3</string><fret>2</fret></technical></notations></note>
       
     </measure>
-    <measure number="2">
-      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
-      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note>
+    <measure number="2" width="106">
+      <note default-x="16"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+      <note default-x="38"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+      <note default-x="60"><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note>
       <backup><duration>16</duration></backup>
-      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>
-      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
+      <note default-x="16"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>
+      <note default-x="38"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>
+      <note default-x="60"><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
       
     </measure>
-    <measure number="3">
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
-      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
-      <note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
-      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+    <measure number="3" width="106">
+      <note default-x="16"><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+      <note default-x="38"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+      <note default-x="60"><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+      <note default-x="82"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
       <backup><duration>16</duration></backup>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
-      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>
-      <note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>1</string><fret>1</fret></technical></notations></note>
-      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>
+      <note default-x="16"><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
+      <note default-x="38"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>
+      <note default-x="60"><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>1</string><fret>1</fret></technical></notations></note>
+      <note default-x="82"><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>
       
     </measure>
-    <measure number="4">
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
-      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
-      <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+    <measure number="4" width="106">
+      <note default-x="16"><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+      <note default-x="38"><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+      <note default-x="60"><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+      <note default-x="82"><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
       <backup><duration>16</duration></backup>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
-      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>3</string><fret>2</fret></technical></notations></note>
-      <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>2</string><fret>1</fret></technical></notations></note>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
+      <note default-x="16"><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
+      <note default-x="38"><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>3</string><fret>2</fret></technical></notations></note>
+      <note default-x="60"><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>2</string><fret>1</fret></technical></notations></note>
+      <note default-x="82"><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
       
     </measure>
-    <measure number="5">
-      <note><pitch><step>E</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note>
+    <measure number="5" width="106">
+      <note default-x="16"><pitch><step>E</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note>
+      <note default-x="60"><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note>
       <backup><duration>16</duration></backup>
-      <note><pitch><step>E</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>2</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
+      <note default-x="16"><pitch><step>E</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>2</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>
+      <note default-x="60"><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
       <barline location="right"><bar-style>light-heavy</bar-style></barline>
     </measure>
   </part>

@@ -12,6 +12,11 @@ const QUARTER_TICKS = 480
 const PIANO_CHANNEL = 0
 const GUITAR_CHANNEL = 0
 const VELOCITY = 84
+// Shared MusicXML ↔ PDF layout (tenths). Keeps auto-setup off the 30% first-measure fallback.
+const MEASURE_WIDTH = 106
+const FIRST_NOTE_OFFSET_X = 16
+const NOTE_SPACING_X = 22
+const PDF_START_X = 74
 const STEP_TO_SEMITONE = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }
 const TYPE_BY_BEATS = new Map([
   [0.5, 'eighth'],
@@ -259,16 +264,21 @@ function pitchXml(pitch) {
   return `<pitch><step>${parsed.step}</step>${alter}<octave>${parsed.octave}</octave></pitch>`
 }
 
-function noteXml(note, { staff = null, tabMirror = false } = {}) {
+function noteDefaultXForBeat(beatOffset) {
+  return FIRST_NOTE_OFFSET_X + beatOffset * NOTE_SPACING_X
+}
+
+function noteXml(note, { staff = null, tabMirror = false, defaultX = null } = {}) {
   const staffTag = staff ? `<staff>${staff}</staff>` : ''
+  const layoutAttr = Number.isFinite(defaultX) ? ` default-x="${defaultX}"` : ''
   if (note.rest) {
-    return `<note><rest/><duration>${durationDivisions(note.beats)}</duration><voice>1</voice><type>${typeForBeats(note.beats)}</type>${staffTag}</note>`
+    return `<note${layoutAttr}><rest/><duration>${durationDivisions(note.beats)}</duration><voice>1</voice><type>${typeForBeats(note.beats)}</type>${staffTag}</note>`
   }
   const technical = tabMirror
     ? `<notations><technical><string>${note.string}</string><fret>${note.fret}</fret></technical></notations>`
     : ''
   return [
-    '<note>',
+    `<note${layoutAttr}>`,
     pitchXml(note.pitch),
     `<duration>${durationDivisions(note.beats)}</duration>`,
     '<voice>1</voice>',
@@ -277,6 +287,18 @@ function noteXml(note, { staff = null, tabMirror = false } = {}) {
     technical,
     '</note>',
   ].join('')
+}
+
+function measureNotesXml(measure, options = {}) {
+  let beat = 0
+  return measure
+    .map((note) => {
+      const defaultX = noteDefaultXForBeat(beat)
+      const xml = noteXml(note, { ...options, defaultX })
+      beat += note.beats
+      return xml
+    })
+    .join('\n      ')
 }
 
 function buildPianoMusicXml(piece) {
@@ -313,8 +335,8 @@ ${measures.map((measure, index) => {
         <sound tempo="${piece.tempo}"/>
       </direction>`
     : ''
-  return `    <measure number="${index + 1}">${attrs}
-      ${measure.map((note) => noteXml(note)).join('\n      ')}
+  return `    <measure number="${index + 1}" width="${MEASURE_WIDTH}">${attrs}
+      ${measureNotesXml(measure)}
       ${index === measures.length - 1 ? '<barline location="right"><bar-style>light-heavy</bar-style></barline>' : ''}
     </measure>`
 }).join('\n')}
@@ -369,10 +391,22 @@ ${measures.map((measure, index) => {
         <sound tempo="${piece.tempo}"/>
       </direction>`
     : ''
-  return `    <measure number="${index + 1}">${attrs}
-      ${measure.map((note) => noteXml(note, { staff: 1 })).join('\n      ')}
+  return `    <measure number="${index + 1}" width="${MEASURE_WIDTH}">${attrs}
+      ${measureNotesXml(measure, { staff: 1 })}
       <backup><duration>${totalDuration}</duration></backup>
-      ${measure.map((note) => note.rest ? noteXml(note, { staff: 2 }) : noteXml(note, { staff: 2, tabMirror: true })).join('\n      ')}
+      ${(() => {
+        let beat = 0
+        return measure
+          .map((note) => {
+            const defaultX = noteDefaultXForBeat(beat)
+            const xml = note.rest
+              ? noteXml(note, { staff: 2, defaultX })
+              : noteXml(note, { staff: 2, tabMirror: true, defaultX })
+            beat += note.beats
+            return xml
+          })
+          .join('\n      ')
+      })()}
       ${index === measures.length - 1 ? '<barline location="right"><bar-style>light-heavy</bar-style></barline>' : ''}
     </measure>`
 }).join('\n')}
@@ -456,8 +490,8 @@ function buildPdf(piece, instrument) {
 
 function drawPianoSystems({ piece, text, line, circle }) {
   const measures = groupMeasures(piece.notes)
-  const startX = 74
-  const measureWidth = 106
+  const startX = PDF_START_X
+  const measureWidth = MEASURE_WIDTH
   const systems = [620, 490, 360, 230]
   let measureIndex = 0
   for (const y of systems) {
@@ -477,7 +511,7 @@ function drawPianoSystems({ piece, text, line, circle }) {
       text(mx + 4, y + 10, 8, String(measureIndex + local + 1))
       let beat = 0
       for (const note of measure) {
-        const x = mx + 16 + beat * 22
+        const x = mx + noteDefaultXForBeat(beat)
         if (note.rest) {
           text(x - 2, y - 18, 10, 'r')
         } else {
@@ -493,8 +527,8 @@ function drawPianoSystems({ piece, text, line, circle }) {
 
 function drawGuitarSystems({ piece, text, line, circle }) {
   const measures = groupMeasures(piece.notes)
-  const startX = 74
-  const measureWidth = 106
+  const startX = PDF_START_X
+  const measureWidth = MEASURE_WIDTH
   const systems = [620, 450, 280]
   let measureIndex = 0
   for (const y of systems) {
@@ -519,7 +553,7 @@ function drawGuitarSystems({ piece, text, line, circle }) {
       text(mx + 4, y + 10, 8, String(measureIndex + local + 1))
       let beat = 0
       for (const note of measure) {
-        const x = mx + 16 + beat * 22
+        const x = mx + noteDefaultXForBeat(beat)
         if (!note.rest) {
           circle(x, y - staffOffset(parsePitch(note.pitch).step))
           line(x + 5, y - staffOffset(parsePitch(note.pitch).step), x + 5, y - staffOffset(parsePitch(note.pitch).step) + 25, 0.35, 0.65)
