@@ -44,6 +44,7 @@ import {
   systemStartsFromMusicXml,
   systemStartsFromSpans,
 } from './layoutAssessment.js'
+import { GUITAR_SCORE_TARGET } from './guitarScoreTarget.js'
 
 /** Sum of staves across MusicXML parts (e.g. 2 for piano). Default 1. */
 function getStavesPerSystem(timingMap) {
@@ -187,14 +188,28 @@ export function estimateSystemStaffLineCount(system) {
 
 /**
  * Mixed standard notation + TAB prints the same music twice: five-line notation
- * rows and six-line TAB rows. For score-follow, keep the notation rows and let
- * the paired TAB notes remain fingering metadata on the timing map.
+ * rows and six-line TAB rows. For score-follow, keep one visual target row per
+ * musical system and let paired TAB notes remain fingering metadata on the
+ * timing map.
  */
-export function filterPairedTabMirrorSystemEntries(systemEntries, timingMap) {
+export function filterPairedTabMirrorSystemEntries(
+  systemEntries,
+  timingMap,
+  { target = GUITAR_SCORE_TARGET.NOTATION } = {},
+) {
   if (!hasPairedTabMirrorNotes(timingMap) || !systemEntries?.length) {
-    return { entries: systemEntries ?? [], applied: false, removedCount: 0 }
+    return {
+      entries: systemEntries ?? [],
+      applied: false,
+      removedCount: 0,
+      target: null,
+    }
   }
 
+  const resolvedTarget =
+    target === GUITAR_SCORE_TARGET.TAB
+      ? GUITAR_SCORE_TARGET.TAB
+      : GUITAR_SCORE_TARGET.NOTATION
   const entriesByPage = new Map()
   for (const entry of systemEntries) {
     const page = entry.page ?? 1
@@ -223,26 +238,37 @@ export function filterPairedTabMirrorSystemEntries(systemEntries, timingMap) {
       continue
     }
 
-    const notationRows = annotated
-      .filter(({ staffLineCount }) => staffLineCount == null || staffLineCount <= 5)
-      .map(({ entry }) => ({
-        ...entry,
-        pairedTabRowsSkipped: true,
-      }))
+    const targetRows =
+      resolvedTarget === GUITAR_SCORE_TARGET.TAB
+        ? annotated
+            .filter(({ staffLineCount }) => staffLineCount != null && staffLineCount >= 6)
+            .map(({ entry }) => ({
+              ...entry,
+              pairedNotationRowsSkipped: true,
+              guitarScoreTarget: GUITAR_SCORE_TARGET.TAB,
+            }))
+        : annotated
+            .filter(({ staffLineCount }) => staffLineCount == null || staffLineCount <= 5)
+            .map(({ entry }) => ({
+              ...entry,
+              pairedTabRowsSkipped: true,
+              guitarScoreTarget: GUITAR_SCORE_TARGET.NOTATION,
+            }))
 
-    if (notationRows.length === 0) {
+    if (targetRows.length === 0) {
       filtered.push(...pageEntries)
       continue
     }
 
-    removedCount += pageEntries.length - notationRows.length
-    filtered.push(...notationRows)
+    removedCount += pageEntries.length - targetRows.length
+    filtered.push(...targetRows)
   }
 
   return {
     entries: removedCount > 0 ? filtered : systemEntries,
     applied: removedCount > 0,
     removedCount,
+    target: removedCount > 0 ? resolvedTarget : null,
   }
 }
 
@@ -972,6 +998,7 @@ export async function analyzeSemiAutoScoreSetup({
   pdfSource,
   numPages,
   timingMap,
+  guitarScoreTarget = GUITAR_SCORE_TARGET.NOTATION,
   onProgress,
   pageViewRotations = null,
   signal = null,
@@ -1095,6 +1122,7 @@ export async function analyzeSemiAutoScoreSetup({
   const pairedTabMirrorFilter = filterPairedTabMirrorSystemEntries(
     unfilteredSystemEntries,
     timingMap,
+    { target: guitarScoreTarget },
   )
   const systemEntries = pairedTabMirrorFilter.entries
 
@@ -1268,6 +1296,7 @@ export async function analyzeSemiAutoScoreSetup({
     pairedTabMirrorFilter: {
       applied: pairedTabMirrorFilter.applied,
       removedCount: pairedTabMirrorFilter.removedCount,
+      target: pairedTabMirrorFilter.target,
       originalSystemCount: unfilteredSystemEntries.length,
       effectiveSystemCount: systemEntries.length,
     },

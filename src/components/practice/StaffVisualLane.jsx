@@ -1,7 +1,10 @@
 import { memo, useEffect, useMemo, useRef } from 'react'
 import useElementSize from '../../hooks/useElementSize.js'
 import useStableElementSize from '../../hooks/useStableElementSize.js'
-import { VISUAL_LANE_DEFAULTS } from '../../features/practice/visualPracticeLane.js'
+import {
+  VISUAL_LANE_DEFAULTS,
+  resolveVisualPlayheadX,
+} from '../../features/practice/visualPracticeLane.js'
 import {
   NOTEHEAD_RX,
   NOTEHEAD_RY,
@@ -13,7 +16,6 @@ import {
 } from '../../features/practice/staffLaneLayout.js'
 
 const PX_PER_SECOND = VISUAL_LANE_DEFAULTS.pixelsPerSecond
-const NOW_LINE_FRACTION = VISUAL_LANE_DEFAULTS.nowLineFraction
 /** Staff scale bounds: large, learning-first staves. The lane fills its card
     height, which zooms the view in and naturally shows fewer measures. */
 const MIN_SCALE = 0.9
@@ -52,16 +54,24 @@ function supportsClefGlyphs() {
 /**
  * Scrolling staff renderer for Visual practice mode.
  *
- * Layout is a pure function of note time (x = seconds × px/s). The playhead
- * and staff lines live outside the scrolling group and never move; scrolling
- * is one SVG transform written by a requestAnimationFrame loop that reads the
- * playback engine's wall-clock-interpolated score time — the same source the
- * score-follow cursor uses — so motion is smooth and the playhead cannot
- * jitter against it.
+ * Layout is a pure function of note time (x = seconds × px/s). The staff
+ * lines stay static while one requestAnimationFrame loop moves the playhead
+ * and translates the note layer from the same frame time, keeping both locked
+ * to the playback engine's wall-clock-interpolated score time.
  */
-function StaffVisualLane({ visibleGroups, staves, getFrameTime, barlineTimes = [], timeSignature = null }) {
+function StaffVisualLane({
+  visibleGroups,
+  staves,
+  getFrameTime,
+  barlineTimes = [],
+  timeSignature = null,
+  durationSeconds = null,
+  loopRegion = null,
+}) {
   const containerRef = useRef(null)
   const scrollRef = useRef(null)
+  const playheadRef = useRef(null)
+  const playheadCapRef = useRef(null)
   const rawSize = useElementSize(containerRef)
   const size = useStableElementSize(rawSize)
 
@@ -72,7 +82,7 @@ function StaffVisualLane({ visibleGroups, staves, getFrameTime, barlineTimes = [
       ? Math.min(MAX_SCALE, Math.max(MIN_SCALE, size.height / geometry.height))
       : 1
   const viewWidth = size.width > 0 ? size.width / scale : 1200
-  const playheadX = viewWidth * NOW_LINE_FRACTION
+  const playheadX = resolveVisualPlayheadX({ frameTime: 0, viewWidth, durationSeconds, loopRegion })
   // Center the staff block; may go negative on short lanes, cropping only
   // the outer ledger margins symmetrically.
   const offsetY = (size.height > 0 ? size.height / scale - geometry.height : 0) / 2
@@ -101,22 +111,35 @@ function StaffVisualLane({ visibleGroups, staves, getFrameTime, barlineTimes = [
   const staffTopY = geometry.lines[0]
   const staffBottomY = geometry.lines[geometry.lines.length - 1]
 
-  // Scroll transform: written imperatively every animation frame; React never
-  // renders this attribute, so re-renders can't snap or rubber-band the lane.
-  const playheadXRef = useRef(playheadX)
+  // Per-frame motion: React lays out the SVG, then rAF updates only the
+  // attributes that depend on time.
+  const frameMetricsRef = useRef({ viewWidth, durationSeconds, loopRegion })
   useEffect(() => {
-    playheadXRef.current = playheadX
-  }, [playheadX])
+    frameMetricsRef.current = { viewWidth, durationSeconds, loopRegion }
+  }, [viewWidth, durationSeconds, loopRegion])
   useEffect(() => {
     let frame
     const step = () => {
       const el = scrollRef.current
+      const playheadEl = playheadRef.current
+      const capEl = playheadCapRef.current
+      const t = getFrameTime()
+      const livePlayheadX = resolveVisualPlayheadX({
+        frameTime: t,
+        ...frameMetricsRef.current,
+      })
       if (el) {
-        const t = getFrameTime()
         el.setAttribute(
           'transform',
-          `translate3d(${playheadXRef.current - t * PX_PER_SECOND}px, 0, 0)`,
+          `translate(${livePlayheadX - t * PX_PER_SECOND} 0)`,
         )
+      }
+      if (playheadEl) {
+        playheadEl.setAttribute('x1', String(livePlayheadX))
+        playheadEl.setAttribute('x2', String(livePlayheadX))
+      }
+      if (capEl) {
+        capEl.setAttribute('cx', String(livePlayheadX))
       }
       frame = requestAnimationFrame(step)
     }
@@ -264,8 +287,9 @@ function StaffVisualLane({ visibleGroups, staves, getFrameTime, barlineTimes = [
               ))}
           </g>
 
-          {/* Fixed playhead: outside the scrolling group, painted on top. */}
+          {/* Moving playhead: outside the scrolling group, painted on top. */}
           <line
+            ref={playheadRef}
             className="staff-lane__playhead"
             x1={playheadX}
             x2={playheadX}
@@ -274,6 +298,7 @@ function StaffVisualLane({ visibleGroups, staves, getFrameTime, barlineTimes = [
             vectorEffect="non-scaling-stroke"
           />
           <circle
+            ref={playheadCapRef}
             className="staff-lane__playhead-cap"
             cx={playheadX}
             cy={STAFF_LINE_GAP}

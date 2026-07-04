@@ -6,6 +6,8 @@ export default function PracticeScoreCursorSection({ scoreFollow, disabled = fal
   const setupPhase = scoreFollow.setupStatus?.phase
   const busy = scoreFollow.alignmentMode || scoreFollow.isSemiAutoAnalyzing
   const canToggle = !disabled && !busy
+  const targetPreference = scoreFollow.guitarScoreTarget
+  const showTargetPreference = Boolean(targetPreference?.selectable)
   const statusLabel = busy
     ? 'Setting up'
     : scoreFollow.enabled && scoreFollow.canFollow
@@ -42,6 +44,23 @@ export default function PracticeScoreCursorSection({ scoreFollow, disabled = fal
         />
         <span>Show cursor on score</span>
       </label>
+
+      {showTargetPreference && (
+        <div className="practice-score-cursor__target" aria-label="Guitar cursor target">
+          {targetPreference.options.map((option) => (
+            <button
+              key={option.target}
+              type="button"
+              className="practice-score-cursor__target-option"
+              aria-pressed={targetPreference.activeTarget === option.target}
+              disabled={!canToggle}
+              onClick={() => targetPreference.setTarget(option.target)}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       {setupPhase === 'failed' && (
         <p className="practice-section__hint practice-score-cursor__hint">

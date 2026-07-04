@@ -25,6 +25,8 @@ export const VISUAL_LANE_DEFAULTS = {
   pixelsPerSecond: 110,
   /** Now-line position as a fraction of the lane width. */
   nowLineFraction: 0.22,
+  /** Furthest right the Now bar travels during a piece/loop. */
+  nowLineEndFraction: 0.82,
 }
 
 export const VISUAL_GROUP_STATUS = {
@@ -133,6 +135,47 @@ export function resolveVisualFrameTime({
   }
   const normalizedCurrentTime = Number(currentTime)
   return Number.isFinite(normalizedCurrentTime) ? normalizedCurrentTime : 0
+}
+
+function clamp01(value) {
+  return Math.min(1, Math.max(0, value))
+}
+
+/**
+ * Moving Now-bar position for Visual Practice.
+ *
+ * The lane still uses absolute score seconds for note x-positions. Each frame
+ * the renderer translates notes by `playheadX - frameTime * pxPerSecond`, so a
+ * note at `frameTime` always sits exactly under the moving bar.
+ */
+export function resolveVisualPlayheadX({
+  frameTime = 0,
+  viewWidth = 0,
+  durationSeconds = null,
+  loopRegion = null,
+  startFraction = VISUAL_LANE_DEFAULTS.nowLineFraction,
+  endFraction = VISUAL_LANE_DEFAULTS.nowLineEndFraction,
+} = {}) {
+  const width = Number(viewWidth)
+  if (!Number.isFinite(width) || width <= 0) {
+    return 0
+  }
+
+  const startX = width * startFraction
+  const endX = width * Math.max(startFraction, endFraction)
+  const startTime = Number(loopRegion?.startTimeSeconds ?? 0)
+  const explicitEnd = Number(loopRegion?.endTimeSeconds)
+  const fallbackEnd = Number(durationSeconds)
+  const endTime = Number.isFinite(explicitEnd) ? explicitEnd : fallbackEnd
+  const spanSeconds = endTime - startTime
+
+  if (!Number.isFinite(spanSeconds) || spanSeconds <= 0) {
+    return startX
+  }
+
+  const time = Number(frameTime)
+  const progress = clamp01(((Number.isFinite(time) ? time : 0) - startTime) / spanSeconds)
+  return startX + (endX - startX) * progress
 }
 
 /**

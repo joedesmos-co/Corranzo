@@ -97,6 +97,15 @@ import {
   shouldClearStaleScanningUi,
   shouldSkipAutoSetupScan,
 } from './scoreFollowSetupState.js'
+import {
+  GUITAR_SCORE_TARGET,
+  buildGuitarScoreTargetStorageKey,
+  detectGuitarScoreTargetAvailability,
+  loadGuitarScoreTargetPreference,
+  normalizeGuitarScoreTarget,
+  saveGuitarScoreTargetPreference,
+  scopeScoreFollowIdentityForGuitarTarget,
+} from './guitarScoreTarget.js'
 
 function isEditableTarget(target) {
   if (!target || !(target instanceof HTMLElement)) {
@@ -152,9 +161,97 @@ export default function useScoreFollow({
     ? SCORE_FOLLOW_SETUP_READY_DEMO
     : SCORE_FOLLOW_SETUP_READY_USER
 
+  const guitarScoreTargetAvailability = useMemo(
+    () => detectGuitarScoreTargetAvailability(timingMap),
+    [timingMap],
+  )
+  const guitarScoreTargetStorageKey = useMemo(
+    () =>
+      buildGuitarScoreTargetStorageKey({
+        pdfFingerprint,
+        pdfFileName,
+        timingSourceId,
+      }),
+    [pdfFingerprint, pdfFileName, timingSourceId],
+  )
+  const [guitarScoreTargetPreferenceState, setGuitarScoreTargetPreferenceState] = useState(
+    () => ({
+      key: guitarScoreTargetStorageKey,
+      value: loadGuitarScoreTargetPreference(guitarScoreTargetStorageKey),
+    }),
+  )
+  const storedGuitarScoreTargetPreference =
+    guitarScoreTargetPreferenceState.key === guitarScoreTargetStorageKey
+      ? guitarScoreTargetPreferenceState.value
+      : loadGuitarScoreTargetPreference(guitarScoreTargetStorageKey)
+  const activeGuitarScoreTarget = useMemo(
+    () =>
+      normalizeGuitarScoreTarget(
+        storedGuitarScoreTargetPreference,
+        guitarScoreTargetAvailability,
+      ),
+    [storedGuitarScoreTargetPreference, guitarScoreTargetAvailability],
+  )
+  const scoreFollowStorageFingerprint = useMemo(
+    () =>
+      scopeScoreFollowIdentityForGuitarTarget(
+        pdfFingerprint,
+        guitarScoreTargetAvailability,
+        activeGuitarScoreTarget,
+      ),
+    [pdfFingerprint, guitarScoreTargetAvailability, activeGuitarScoreTarget],
+  )
+  const scoreFollowStorageFileName = useMemo(
+    () =>
+      scopeScoreFollowIdentityForGuitarTarget(
+        pdfFileName,
+        guitarScoreTargetAvailability,
+        activeGuitarScoreTarget,
+      ),
+    [pdfFileName, guitarScoreTargetAvailability, activeGuitarScoreTarget],
+  )
+  const setGuitarScoreTarget = useCallback(
+    (target) => {
+      const normalized = normalizeGuitarScoreTarget(target, guitarScoreTargetAvailability)
+      if (!normalized) {
+        return
+      }
+      setGuitarScoreTargetPreferenceState({
+        key: guitarScoreTargetStorageKey,
+        value: normalized,
+      })
+      saveGuitarScoreTargetPreference(guitarScoreTargetStorageKey, normalized)
+    },
+    [guitarScoreTargetAvailability, guitarScoreTargetStorageKey],
+  )
+  const guitarScoreTarget = useMemo(
+    () => ({
+      availability: guitarScoreTargetAvailability,
+      activeTarget: activeGuitarScoreTarget,
+      selectable: guitarScoreTargetAvailability.selectable,
+      options: guitarScoreTargetAvailability.options,
+      setTarget: setGuitarScoreTarget,
+    }),
+    [
+      guitarScoreTargetAvailability,
+      activeGuitarScoreTarget,
+      setGuitarScoreTarget,
+    ],
+  )
+
+  useEffect(() => {
+    if (guitarScoreTargetPreferenceState.key === guitarScoreTargetStorageKey) {
+      return
+    }
+    setGuitarScoreTargetPreferenceState({
+      key: guitarScoreTargetStorageKey,
+      value: loadGuitarScoreTargetPreference(guitarScoreTargetStorageKey),
+    })
+  }, [guitarScoreTargetPreferenceState.key, guitarScoreTargetStorageKey])
+
   const anchorsHook = useScoreFollowAnchors({
-    fingerprint: pdfFingerprint,
-    fileName: pdfFileName,
+    fingerprint: scoreFollowStorageFingerprint,
+    fileName: scoreFollowStorageFileName,
   })
   const {
     anchors,
@@ -220,8 +317,8 @@ export default function useScoreFollow({
   const systemStartStackRef = useRef([])
 
   const autoSetupKey = useMemo(
-    () => buildAutoSetupKey(pdfFingerprint, timingSourceId),
-    [pdfFingerprint, timingSourceId],
+    () => buildAutoSetupKey(scoreFollowStorageFingerprint, timingSourceId),
+    [scoreFollowStorageFingerprint, timingSourceId],
   )
 
   useEffect(() => {
@@ -770,6 +867,7 @@ export default function useScoreFollow({
           pdfSource,
           numPages,
           timingMap,
+          guitarScoreTarget: activeGuitarScoreTarget ?? GUITAR_SCORE_TARGET.NOTATION,
           // Only the user's explicit manual turns are forced; every other page
           // is auto-detected fresh so document reconciliation can run on it.
           pageViewRotations: manualPageRotationsRef.current,
@@ -1011,6 +1109,7 @@ export default function useScoreFollow({
       captureCalibrationSnapshot,
       autoSetupGateOpen,
       experimentalOmrPlayback,
+      activeGuitarScoreTarget,
     ],
   )
 
@@ -1033,6 +1132,9 @@ export default function useScoreFollow({
   }, [experimentalOmrPlayback])
 
   useEffect(() => {
+    autoSetupAbortRef.current?.abort(createSetupAbortError('Score-follow setup target changed.'))
+    autoSetupAbortRef.current = null
+    autoSetupInFlightRef.current = false
     autoSetupTriggerKeyRef.current = null
     demoBundledLoadRef.current = null
     demoBundledInFlightRef.current = false
@@ -1833,6 +1935,7 @@ export default function useScoreFollow({
       // Phase 5b: which anchor source is active + the promotion decision.
       anchorSource: anchorPromotion.activeSource,
       anchorPromotion,
+      guitarScoreTarget,
     }),
     [
       currentMeasure,
@@ -1845,6 +1948,7 @@ export default function useScoreFollow({
       autoSetupRuntimeDiagnostics,
       autoSetupRuntimeForDebug,
       anchorPromotion,
+      guitarScoreTarget,
       cursor,
       displayCursor,
       cursorMapping,
@@ -1910,6 +2014,7 @@ export default function useScoreFollow({
     followApproximateLabel: anchorTrust.label,
     experimentalOmrPlayback,
     autoSetupGateOpen,
+    guitarScoreTarget,
     // System-start fallback mode
     systemStartMode,
     systemStartMarks: displaySystemStartMarks,

@@ -1,7 +1,10 @@
 import { memo, useEffect, useMemo, useRef } from 'react'
 import useElementSize from '../../hooks/useElementSize.js'
 import useStableElementSize from '../../hooks/useStableElementSize.js'
-import { VISUAL_LANE_DEFAULTS } from '../../features/practice/visualPracticeLane.js'
+import {
+  VISUAL_LANE_DEFAULTS,
+  resolveVisualPlayheadX,
+} from '../../features/practice/visualPracticeLane.js'
 import {
   FRET_DISC_RADIUS,
   TAB_LINE_GAP,
@@ -10,7 +13,6 @@ import {
 } from '../../features/practice/tabLaneLayout.js'
 
 const PX_PER_SECOND = VISUAL_LANE_DEFAULTS.pixelsPerSecond
-const NOW_LINE_FRACTION = VISUAL_LANE_DEFAULTS.nowLineFraction
 const MIN_SCALE = 0.9
 const MAX_SCALE = 2.6
 /** Current-target discs render slightly larger for instant focus. */
@@ -22,11 +24,10 @@ const TAB_MASK_OVERDRAW_GAPS = 4
  * Scrolling tablature renderer for Visual practice mode (guitar).
  *
  * Same architecture as StaffVisualLane: layout is a pure function of note
- * time (x = seconds × px/s); string lines and the playhead are static; the
- * scrolling group is one SVG transform written by a requestAnimationFrame
- * loop reading the engine's wall-clock-interpolated score time. Only the
- * visualization differs — fret numbers on string lines instead of noteheads
- * on staff lines.
+ * time (x = seconds × px/s); string lines are static while one
+ * requestAnimationFrame loop moves the playhead and translates the note layer
+ * from the same frame time. Only the visualization differs — fret numbers on
+ * string lines instead of noteheads on staff lines.
  */
 function TabVisualLane({
   visibleGroups,
@@ -34,9 +35,13 @@ function TabVisualLane({
   tabPositions = null,
   getFrameTime,
   barlineTimes = [],
+  durationSeconds = null,
+  loopRegion = null,
 }) {
   const containerRef = useRef(null)
   const scrollRef = useRef(null)
+  const playheadRef = useRef(null)
+  const playheadCapRef = useRef(null)
   const rawSize = useElementSize(containerRef)
   const size = useStableElementSize(rawSize)
 
@@ -47,7 +52,7 @@ function TabVisualLane({
       ? Math.min(MAX_SCALE, Math.max(MIN_SCALE, size.height / geometry.height))
       : 1
   const viewWidth = size.width > 0 ? size.width / scale : 1200
-  const playheadX = viewWidth * NOW_LINE_FRACTION
+  const playheadX = resolveVisualPlayheadX({ frameTime: 0, viewWidth, durationSeconds, loopRegion })
   const offsetY = (size.height > 0 ? size.height / scale - geometry.height : 0) / 2
 
   const notes = useMemo(
@@ -71,22 +76,35 @@ function TabVisualLane({
   const topY = geometry.lines[0]
   const bottomY = geometry.lines[geometry.lines.length - 1]
 
-  // Scroll transform: written imperatively every animation frame (see
-  // StaffVisualLane) so React re-renders can't snap or rubber-band the lane.
-  const playheadXRef = useRef(playheadX)
+  // Per-frame motion mirrors StaffVisualLane: one rAF update keeps the moving
+  // playhead and scrolling notes synchronized without per-frame React renders.
+  const frameMetricsRef = useRef({ viewWidth, durationSeconds, loopRegion })
   useEffect(() => {
-    playheadXRef.current = playheadX
-  }, [playheadX])
+    frameMetricsRef.current = { viewWidth, durationSeconds, loopRegion }
+  }, [viewWidth, durationSeconds, loopRegion])
   useEffect(() => {
     let frame
     const step = () => {
       const el = scrollRef.current
+      const playheadEl = playheadRef.current
+      const capEl = playheadCapRef.current
+      const t = getFrameTime()
+      const livePlayheadX = resolveVisualPlayheadX({
+        frameTime: t,
+        ...frameMetricsRef.current,
+      })
       if (el) {
-        const t = getFrameTime()
         el.setAttribute(
           'transform',
-          `translate3d(${playheadXRef.current - t * PX_PER_SECOND}px, 0, 0)`,
+          `translate(${livePlayheadX - t * PX_PER_SECOND} 0)`,
         )
+      }
+      if (playheadEl) {
+        playheadEl.setAttribute('x1', String(livePlayheadX))
+        playheadEl.setAttribute('x2', String(livePlayheadX))
+      }
+      if (capEl) {
+        capEl.setAttribute('cx', String(livePlayheadX))
       }
       frame = requestAnimationFrame(step)
     }
@@ -170,8 +188,9 @@ function TabVisualLane({
             ))}
           </g>
 
-          {/* Fixed playhead, painted on top. */}
+          {/* Moving playhead, painted on top. */}
           <line
+            ref={playheadRef}
             className="tab-lane__playhead"
             x1={playheadX}
             x2={playheadX}
@@ -180,6 +199,7 @@ function TabVisualLane({
             vectorEffect="non-scaling-stroke"
           />
           <circle
+            ref={playheadCapRef}
             className="tab-lane__playhead-cap"
             cx={playheadX}
             cy={topY - TAB_LINE_GAP}

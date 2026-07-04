@@ -306,6 +306,7 @@ export function PracticeSessionProvider({
       wfyStatus: session.waitForYou.status,
       wfyCheckpoint: session.isWaitForYou ? session.waitForYou.currentCheckpoint : null,
       getScoreTime: session.playback.getScoreTime,
+      guitarScoreTarget: scoreFollow.guitarScoreTarget,
     }),
     [
       session.timing.timingMap,
@@ -316,6 +317,7 @@ export function PracticeSessionProvider({
       session.waitForYou.status,
       session.waitForYou.currentCheckpoint,
       session.playback.getScoreTime,
+      scoreFollow.guitarScoreTarget,
     ],
   )
 

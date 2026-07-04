@@ -68,9 +68,20 @@ function VisualPracticeView({ timingSourceKind = null }) {
   }, [timingMap])
 
   const currentTime = tick.practiceTime ?? 0
+  const visualDurationSeconds = useMemo(() => {
+    const candidates = [
+      tick.playbackDuration,
+      timingMap?.durationSeconds,
+      groups[groups.length - 1]?.timeSeconds,
+    ]
+    return candidates.find((value) => Number.isFinite(Number(value)) && Number(value) > 0) ?? null
+  }, [tick.playbackDuration, timingMap?.durationSeconds, groups])
   const isWaitForYou = visual.isWaitForYou
   const wfyStatus = visual.wfyStatus
   const wfyCheckpoint = visual.wfyCheckpoint
+  const visualGuitarScoreTarget = isFretboardLane
+    ? visual.guitarScoreTarget?.activeTarget ?? null
+    : null
   const waitForYouWaiting = isWaitForYou && wfyStatus === WFY_STATUS.WAITING
   const visualFrameTime = resolveVisualFrameTime({
     currentTime,
@@ -133,7 +144,11 @@ function VisualPracticeView({ timingSourceKind = null }) {
   const laneComplete = isWaitForYou && wfyStatus === WFY_STATUS.COMPLETE
 
   return (
-    <div className="visual-practice" aria-label="Visual practice">
+    <div
+      className="visual-practice"
+      aria-label="Visual practice"
+      data-guitar-score-target={visualGuitarScoreTarget ?? undefined}
+    >
       {isOmrTiming && (
         <details className="visual-practice__omr-details">
           <summary>About this piece’s notes</summary>
@@ -162,6 +177,8 @@ function VisualPracticeView({ timingSourceKind = null }) {
           tabPositions={tabPositions}
           getFrameTime={getFrameTime}
           barlineTimes={barlineTimes}
+          durationSeconds={visualDurationSeconds}
+          loopRegion={loopRegion}
         />
       ) : (
         <StaffVisualLane
@@ -170,6 +187,8 @@ function VisualPracticeView({ timingSourceKind = null }) {
           getFrameTime={getFrameTime}
           barlineTimes={barlineTimes}
           timeSignature={timeSignature}
+          durationSeconds={visualDurationSeconds}
+          loopRegion={loopRegion}
         />
       )}
 

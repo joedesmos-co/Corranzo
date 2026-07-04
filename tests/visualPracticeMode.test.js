@@ -27,6 +27,7 @@ import {
   isBlackKey,
   laneYForMidi,
   resolveVisualFrameTime,
+  resolveVisualPlayheadX,
   resolveVisualTarget,
   selectVisualWindow,
 } from '../src/features/practice/visualPracticeLane.js'
@@ -172,6 +173,26 @@ describe('visual practice lane', () => {
         waitForYouCheckpoint: liveCheckpoint,
       }),
     ).toBe(checkpoints[4].timeSeconds)
+  })
+
+  it('moves the visual playhead across the lane using piece or loop progress', () => {
+    expect(resolveVisualPlayheadX({ frameTime: 0, viewWidth: 1000, durationSeconds: 10 }))
+      .toBeCloseTo(220)
+    expect(resolveVisualPlayheadX({ frameTime: 5, viewWidth: 1000, durationSeconds: 10 }))
+      .toBeCloseTo(520)
+    expect(resolveVisualPlayheadX({ frameTime: 10, viewWidth: 1000, durationSeconds: 10 }))
+      .toBeCloseTo(820)
+
+    expect(
+      resolveVisualPlayheadX({
+        frameTime: 15,
+        viewWidth: 1000,
+        durationSeconds: 60,
+        loopRegion: { startTimeSeconds: 10, endTimeSeconds: 20 },
+      }),
+    ).toBeCloseTo(520)
+
+    expect(resolveVisualPlayheadX({ frameTime: 5, viewWidth: 1000 })).toBeCloseTo(220)
   })
 
   it('windows the lane and tags past/current/upcoming', () => {
@@ -362,23 +383,29 @@ describe('practice view integration', () => {
     expect(src).toContain('About this piece’s notes')
   })
 
-  it('StaffVisualLane keeps the playhead fixed and scrolls via one rAF transform', () => {
+  it('StaffVisualLane moves the playhead and scrolls via one rAF transform', () => {
     const src = readSrc('components', 'practice', 'StaffVisualLane.jsx')
 
     // rAF loop writes the scroll transform imperatively — no CSS transition,
-    // no per-frame React render.
+    // no per-frame React render. The playhead uses the same frame time as the
+    // note-layer transform so crossings stay synchronized.
     expect(src).toContain('requestAnimationFrame')
     expect(src).toContain("el.setAttribute(")
     expect(src).toContain('getFrameTime()')
-    expect(src).toMatch(/translate3d\(\$\{playheadXRef\.current - t \* PX_PER_SECOND\}px, 0, 0\)/)
+    expect(src).toContain('resolveVisualPlayheadX')
+    expect(src).toMatch(/translate\(\$\{livePlayheadX - t \* PX_PER_SECOND\} 0\)/)
+    expect(src).toContain("playheadEl.setAttribute('x1', String(livePlayheadX))")
+    expect(src).toContain("playheadEl.setAttribute('x2', String(livePlayheadX))")
+    expect(src).toContain("capEl.setAttribute('cx', String(livePlayheadX))")
 
-    // Playhead is a fixed vertical line outside the scrolling group (the
-    // scroll <g> closes before the playhead renders), with x1 === x2.
+    // Playhead is outside the scrolling group and painted on top, but its x
+    // coordinate is updated by the same rAF loop as the scroll layer.
     const scrollIndex = src.indexOf('staff-lane__scroll')
     const playheadIndex = src.indexOf('className="staff-lane__playhead"')
     expect(scrollIndex).toBeGreaterThan(-1)
     expect(playheadIndex).toBeGreaterThan(scrollIndex)
-    expect(src).toMatch(/x1=\{playheadX\}\s*\n\s*x2=\{playheadX\}/)
+    expect(src).toContain('ref={playheadRef}')
+    expect(src).toContain('ref={playheadCapRef}')
 
     // Staff notation elements: lines, clefs, noteheads, ledgers, sharps,
     // barlines, and a time signature.
@@ -429,15 +456,18 @@ describe('practice view integration', () => {
     expect(Math.max(...durations)).toBeLessThanOrEqual(200)
   })
 
-  it('lane scroll uses GPU-friendly transforms without changing timing constants', () => {
+  it('lane scroll uses SVG transforms without changing timing constants', () => {
     const staffLane = readSrc('components', 'practice', 'StaffVisualLane.jsx')
     const tabLane = readSrc('components', 'practice', 'TabVisualLane.jsx')
     const lane = readSrc('features', 'practice', 'visualPracticeLane.js')
 
-    expect(staffLane).toContain('translate3d(')
-    expect(tabLane).toContain('translate3d(')
+    expect(staffLane).toContain('translate(${livePlayheadX - t * PX_PER_SECOND} 0)')
+    expect(tabLane).toContain('translate(${livePlayheadX - t * PX_PER_SECOND} 0)')
+    expect(staffLane).toContain("playheadEl.setAttribute('x1', String(livePlayheadX))")
+    expect(tabLane).toContain("playheadEl.setAttribute('x1', String(livePlayheadX))")
     expect(lane).toContain('pixelsPerSecond: 110')
     expect(lane).toContain('nowLineFraction: 0.22')
+    expect(lane).toContain('nowLineEndFraction: 0.82')
   })
 
   it('improves note readability and honors reduced motion in visual practice', () => {
