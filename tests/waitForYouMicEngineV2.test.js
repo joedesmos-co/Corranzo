@@ -33,9 +33,13 @@ describe('Wait For You mic engine V2 wiring', () => {
   it('uses V2 as the only live WFY mic detector', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
     expect(mic).toContain('enabled: useV2Detector')
-    expect(mic).toMatch(/useV2Detector = matchingEnabled && micEngineV2Active/)
+    expect(mic).toMatch(/useV2Detector = detectEnabled && micEngineV2Active/)
+    expect(mic).not.toContain('onStableMidi')
+    expect(mic).toContain('micAttackLatch')
+    expect(mic).toContain('isMusicalMicFrame')
     expect(mic).not.toContain('usePitchDetector({')
     expect(mic).not.toContain('useV1Detector')
+    expect(mic).not.toContain('onStableChord:')
     expect(mic).toContain('handleV2RuntimeError')
     expect(mic).not.toContain('v2SessionFallback')
   })
@@ -43,7 +47,6 @@ describe('Wait For You mic engine V2 wiring', () => {
   it('routes chord checkpoints to V2 polyphonic mode when flag is on', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
     expect(mic).toContain('isMicV2Polyphonic')
-    expect(mic).toContain('onStableChord')
     expect(mic).toContain('evaluateMicScoreInformedInput')
     expect(mic).toMatch(/isMicChordCollection =[\s\S]*!isMicV2Polyphonic/)
   })

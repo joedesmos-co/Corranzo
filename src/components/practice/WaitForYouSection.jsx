@@ -81,6 +81,8 @@ export default function WaitForYouSection({
   onShowHint,
   onRestart,
   micListening = false,
+  micStatusLabel = null,
+  micCalibrating = false,
   onRequestMicAccess = null,
   noteTarget = null,
   noteTargetWrongPage = false,
@@ -215,12 +217,20 @@ export default function WaitForYouSection({
         </div>
       )}
 
-      {inputMatchingActive && (
-        <p className="wait-for-you__listening">
-          {inputSource === WFY_INPUT_SOURCE.MICROPHONE
-            ? 'Listening on mic'
-            : 'Listening on MIDI'}
+      {inputMatchingActive && inputSource === WFY_INPUT_SOURCE.MICROPHONE && (
+        <p
+          className={`wait-for-you__mic-calibration${
+            micCalibrating ? ' wait-for-you__mic-calibration--measuring' : ' wait-for-you__mic-calibration--ready'
+          }`}
+          role="status"
+          aria-live="polite"
+        >
+          {micStatusLabel ?? 'Listening on mic'}
         </p>
+      )}
+
+      {inputMatchingActive && inputSource === WFY_INPUT_SOURCE.MIDI && (
+        <p className="wait-for-you__listening">Listening on MIDI</p>
       )}
 
       {showMicOffNotice && (

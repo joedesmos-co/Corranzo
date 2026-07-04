@@ -142,6 +142,8 @@ export default memo(function PracticeControlPanel({
           referencePlaying={session.referencePlayback.isPlaying}
           referenceError={session.referencePlayback.error}
           micListening={session.microphone.isListening}
+          micStatusLabel={session.waitForYouMic.micStatusLabel}
+          micCalibrating={session.waitForYouMic.micCalibrating}
           onRequestMicAccess={session.microphone.requestAccess}
           showMatchSettings={false}
           compact

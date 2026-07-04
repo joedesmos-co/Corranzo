@@ -36,6 +36,16 @@ import {
   frameConfidentForMatch,
   resetMatchConfirmState,
 } from './micMatchConfirm.js'
+import {
+  canAcceptMicAttackMatch,
+  createMicAttackLatchState,
+  markMicAttackConsumed,
+  resetMicAttackLatch,
+  updateMicAttackRelease,
+} from './micAttackLatch.js'
+import { isMusicalMicFrame, micMusicalRejectReason } from './micMusicalAcceptance.js'
+import { MIC_CALIBRATION_STATUS } from '../microphone-input/micCalibration.js'
+import { MIC_CALIBRATION_STATUS_LABELS } from '../microphone-input/micCalibration.js'
 
 function micFeedbackFromResult(result) {
   if (result.message) {
@@ -85,8 +95,12 @@ function micFrameRejectReason({
   matchingEnabled,
   expectedMidis,
 }) {
-  if (frame.calibrating) {
+  if (frame.calibrating || frame.calibrationStatus === MIC_CALIBRATION_STATUS.MEASURING) {
     return 'calibrating'
+  }
+  const musicalReject = micMusicalRejectReason(frame)
+  if (musicalReject) {
+    return musicalReject
   }
   if (!matchingEnabled) {
     return 'matching-disabled'
@@ -130,6 +144,7 @@ export default function useWaitForYouMicInput({
   const collectionStateRef = useRef(createMicChordCollectionState())
   const lastStableChordKeyRef = useRef('')
   const matchConfirmRef = useRef(createMatchConfirmState())
+  const attackLatchRef = useRef(createMicAttackLatchState())
   const debugFramesRef = useRef([])
   const currentCheckpointRef = useRef(currentCheckpoint)
   currentCheckpointRef.current = currentCheckpoint
@@ -160,7 +175,8 @@ export default function useWaitForYouMicInput({
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     currentCheckpoint?.kind === CHECKPOINT_KIND.NOTE
 
-  const useV2Detector = matchingEnabled && micEngineV2Active
+  const useV2Detector = detectEnabled && micEngineV2Active
+  const micMatchingReady = matchingEnabled && micEngineV2Active && Boolean(calibration?.ready)
 
   const resetMatchConfirm = useCallback(() => {
     resetMatchConfirmState(matchConfirmRef.current)
@@ -186,6 +202,11 @@ export default function useWaitForYouMicInput({
   }, [resetMatchConfirm])
 
   useEffect(() => {
+    resetMatchConfirm()
+    lastStableChordKeyRef.current = ''
+  }, [currentCheckpoint?.id, resetMatchConfirm])
+
+  useEffect(() => {
     resetFeedback()
   }, [currentCheckpoint?.id, matchSettings, resetFeedback])
 
@@ -193,6 +214,7 @@ export default function useWaitForYouMicInput({
     if (!active) {
       resetFeedback()
       setV2RuntimeError(null)
+      resetMicAttackLatch(attackLatchRef.current)
     }
   }, [active, resetFeedback])
 
@@ -330,6 +352,7 @@ export default function useWaitForYouMicInput({
       }
 
       if (result.outcome === MATCH_OUTCOME.COMPLETE) {
+        markMicAttackConsumed(attackLatchRef.current)
         onPlayerInputMatched()
       }
     },
@@ -454,9 +477,22 @@ export default function useWaitForYouMicInput({
         })
       }
 
-      if (!matchingEnabled || !currentCheckpoint || !matchSettings) {
+      if (!micMatchingReady || !currentCheckpoint || !matchSettings) {
         return
       }
+
+      updateMicAttackRelease(attackLatchRef.current, Boolean(frame.gateOpen))
+      if (
+        frame.calibrating ||
+        frame.calibrationStatus === MIC_CALIBRATION_STATUS.MEASURING ||
+        !canAcceptMicAttackMatch(attackLatchRef.current)
+      ) {
+        resetMatchConfirm()
+        return
+      }
+
+      const frameConfident =
+        frameConfidentForMatch(frame) && isMusicalMicFrame(frame)
 
       if (isMicV2Polyphonic && frame.gateOpen && frame.v2DetectedMidis?.length) {
         const preview = evaluateMicMatch(null, frame.v2DetectedMidis)
@@ -468,7 +504,7 @@ export default function useWaitForYouMicInput({
           const key = `${currentCheckpoint.id}:chord:${[...frame.v2DetectedMidis]
             .sort((left, right) => left - right)
             .join(',')}`
-          if (confirmConfidentMatch(key, true)) {
+          if (confirmConfidentMatch(key, frameConfident)) {
             resetMatchConfirm()
             applyMatchResult(preview)
             return
@@ -509,7 +545,7 @@ export default function useWaitForYouMicInput({
         const key = `${currentCheckpoint.id}:v2:${[...frame.v2DetectedMidis]
           .sort((left, right) => left - right)
           .join(',')}`
-        if (confirmConfidentMatch(key, frameConfidentForMatch(frame))) {
+        if (confirmConfidentMatch(key, frameConfident)) {
           resetMatchConfirm()
           setLastHeardMidi(frame.v2DetectedMidis[0] ?? frame.midi)
           applyMatchResult(v2Preview)
@@ -552,7 +588,7 @@ export default function useWaitForYouMicInput({
       // Legacy chord-collection mode keeps its sequential flow when it is used
       // by non-simultaneous chord settings. Normal note advancement is V2-only.
       if (monophonicPreview.outcome === MATCH_OUTCOME.COMPLETE && isMicChordCollection) {
-        const confident = frameConfidentForMatch(frame)
+        const confident = frameConfident
         if (confirmConfidentMatch(`${currentCheckpoint.id}:${frame.midi}`, confident)) {
           resetMatchConfirm()
           setLastHeardMidi(frame.midi)
@@ -575,7 +611,7 @@ export default function useWaitForYouMicInput({
       }
     },
     [
-      matchingEnabled,
+      micMatchingReady,
       currentCheckpoint,
       matchSettings,
       evaluateMicMatch,
@@ -593,45 +629,6 @@ export default function useWaitForYouMicInput({
     ],
   )
 
-  const handleStableMidi = useCallback(
-    (midi) => {
-      if (!currentCheckpoint || !matchSettings) {
-        return
-      }
-      if (
-        feedbackOutcomeRef.current === WFY_INPUT_OUTCOME.CORRECT ||
-        feedbackOutcomeRef.current === WFY_INPUT_OUTCOME.WRONG
-      ) {
-        return
-      }
-
-      setLastHeardMidi(midi)
-
-      const result = evaluateMicMatch(midi)
-      applyMatchResult(result)
-    },
-    [currentCheckpoint, matchSettings, evaluateMicMatch, applyMatchResult],
-  )
-
-  const handleStableChord = useCallback(
-    (detectedMidis) => {
-      if (!currentCheckpoint || !matchSettings || !isMicV2Polyphonic) {
-        return
-      }
-
-      const key = [...detectedMidis].sort((left, right) => left - right).join(',')
-      if (key === lastStableChordKeyRef.current) {
-        return
-      }
-      lastStableChordKeyRef.current = key
-
-      setLastHeardMidi(detectedMidis[0] ?? null)
-      const result = evaluateMicMatch(null, detectedMidis)
-      applyMatchResult(result)
-    },
-    [currentCheckpoint, matchSettings, isMicV2Polyphonic, evaluateMicMatch, applyMatchResult],
-  )
-
   useMicEngineV2Detector({
     enabled: useV2Detector,
     expectedMidis,
@@ -640,8 +637,6 @@ export default function useWaitForYouMicInput({
     sampleRate: microphone?.sampleRate ?? 44100,
     centsTolerance: micCentsTolerance,
     onFrame: handleFrame,
-    onStableMidi: matchingEnabled ? handleStableMidi : undefined,
-    onStableChord: matchingEnabled && isMicV2Polyphonic ? handleStableChord : undefined,
     onCalibration: setCalibration,
     onV2RuntimeError: handleV2RuntimeError,
     calibrationKey,
@@ -650,14 +645,30 @@ export default function useWaitForYouMicInput({
     analysisKey: currentCheckpoint?.id ?? '',
   })
 
+  const micCalibrating = Boolean(
+    detectEnabled &&
+      (liveFrame?.calibrating ||
+        liveFrame?.calibrationStatus === MIC_CALIBRATION_STATUS.MEASURING ||
+        (!calibration && useV2Detector)),
+  )
+  const micStatusLabel = micCalibrating
+    ? MIC_CALIBRATION_STATUS_LABELS[MIC_CALIBRATION_STATUS.MEASURING]
+    : calibration?.status
+      ? MIC_CALIBRATION_STATUS_LABELS[calibration.status] ?? null
+      : detectEnabled
+        ? MIC_CALIBRATION_STATUS_LABELS[MIC_CALIBRATION_STATUS.READY]
+        : null
+
   return {
     matchingEnabled,
     inputFeedback,
     resetFeedback,
     lastHeardMidi,
     liveFrame,
-    calibration: detectEnabled ? calibration : null,
+    calibration: active && detectEnabled ? calibration : null,
     calibrationStatus: liveFrame?.calibrationStatus ?? calibration?.status ?? null,
+    micCalibrating,
+    micStatusLabel,
     retryCalibration,
     isChordCheckpoint: Boolean(currentCheckpoint?.isChord),
     isMicChordCollection,

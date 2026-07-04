@@ -415,6 +415,8 @@ export default function usePracticeSession({
     waitForYouMic.micEngineMode,
     waitForYouMic.micEngineV2Active,
     waitForYouMic.v2RuntimeError,
+    waitForYouMic.micStatusLabel,
+    waitForYouMic.micCalibrating,
     waitForYouMidi.inputFeedback,
     waitForYouMidi.matchingEnabled,
     waitForYouMidi.feedbackOutcome,

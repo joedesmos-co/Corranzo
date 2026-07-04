@@ -131,4 +131,17 @@ describe('mic diagnostics are inspectable in any build', () => {
     expect(mic).toContain('instrumentId')
     expect(mic).toContain('analysisKey:')
   })
+
+  it('shows mic calibration status in the main Wait For You panel', () => {
+    const wfy = readSrc('components', 'practice', 'WaitForYouSection.jsx')
+    const panel = readSrc('components', 'practice', 'PracticeControlPanel.jsx')
+    const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
+
+    expect(mic).toContain('micStatusLabel')
+    expect(mic).toMatch(/useV2Detector = detectEnabled && micEngineV2Active/)
+    expect(mic).toContain('MIC_CALIBRATION_STATUS_LABELS')
+    expect(panel).toContain('micStatusLabel={session.waitForYouMic.micStatusLabel}')
+    expect(wfy).toContain('wait-for-you__mic-calibration')
+    expect(wfy).toContain('{micStatusLabel ??')
+  })
 })
