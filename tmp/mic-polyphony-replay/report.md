@@ -12,7 +12,7 @@ Score-informed harmonic scoring improves chord detection on offline fixtures.
 | Per-note hit rate | 0.0% | 100.0% | 100.0 pp |
 | False positive rate | 0.0% | 0.0% | 0.0 pp |
 | Missed notes | 17 | 0 | — |
-| False positive notes | 0 | 0 | — |
+| False positive notes | 5 | 0 | — |
 | Mean confidence | — | 0.501 | — |
 
 ## V2 Phase 2 → Phase 2B
@@ -38,7 +38,7 @@ Clips: 9 measured · 0 skipped
 - Per-note hit rate: 0.0% (0 full chords; 17 missed notes total)
 - Partial chords: 0
 - False positive rate (silence/noise): 0.0%
-- False positive notes (on chord clips): 0
+- False positive notes (on chord clips): 5
 
 ## Quality
 - Mean confidence (matched): —
@@ -72,14 +72,14 @@ Clips: 9 measured · 0 skipped
 - Bass hit rate: 0.0%
 
 ## Per clip
-- **synth-dyad-c4-e4** (chord) → miss · expected [60, 64] · missed [60, 64]
-- **synth-c-major-triad** (chord) → miss · expected [60, 64, 67] · missed [60, 64, 67]
+- **synth-dyad-c4-e4** (chord) → miss · expected [60, 64] · missed [60, 64] · extra [36]
+- **synth-c-major-triad** (chord) → miss · expected [60, 64, 67] · missed [60, 64, 67] · extra [36]
 - **synth-g7-tetrad** (chord) → miss · expected [55, 59, 62, 65] · missed [55, 59, 62, 65]
-- **synth-rolled-c-major** (chord) → miss · expected [60, 64, 67] · missed [60, 64, 67]
+- **synth-rolled-c-major** (chord) → miss · expected [60, 64, 67] · missed [60, 64, 67] · extra [36]
 - **synth-silence** (silence) → correct-reject
 - **synth-noise** (noise) → correct-reject
-- **real-c-major-triad** (chord) → miss · expected [60, 64, 67] · missed [60, 64, 67]
-- **real-dyad-c4-g4** (chord) → miss · expected [60, 67] · missed [60, 67]
+- **real-c-major-triad** (chord) → miss · expected [60, 64, 67] · missed [60, 64, 67] · extra [36]
+- **real-dyad-c4-g4** (chord) → miss · expected [60, 67] · missed [60, 67] · extra [48]
 - **real-room-quiet** (silence) → correct-reject
 
 ## V2 score-informed prototype

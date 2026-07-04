@@ -131,11 +131,16 @@ export default function useWaitForYouMicInput({
   const lastStableChordKeyRef = useRef('')
   const matchConfirmRef = useRef(createMatchConfirmState())
   const debugFramesRef = useRef([])
+  const currentCheckpointRef = useRef(currentCheckpoint)
+  currentCheckpointRef.current = currentCheckpoint
   const [v2RuntimeError, setV2RuntimeError] = useState(null)
 
   const detectEnabled = Boolean(active && microphone?.isListening)
   const micCentsTolerance = matchSettings?.micCentsTolerance ?? 30
   const expectedMidis = getExpectedMidis(currentCheckpoint)
+  const expectedMidisKey =
+    currentCheckpoint?.expectedMidis?.join(',') ??
+    (currentCheckpoint?.expectedMidi != null ? String(currentCheckpoint.expectedMidi) : '')
   const micEngineV2Enabled = true
   const micEngineV2Active = !v2RuntimeError
   const micEngineMode = 'v2-score-informed'
@@ -172,13 +177,13 @@ export default function useWaitForYouMicInput({
   )
 
   const resetFeedback = useCallback(() => {
-    setInputFeedback(idleFeedbackForCheckpoint(currentCheckpoint))
+    setInputFeedback(idleFeedbackForCheckpoint(currentCheckpointRef.current))
     setLastHeardMidi(null)
     setLiveFrame(null)
     resetMicChordCollectionState(collectionStateRef.current)
     lastStableChordKeyRef.current = ''
     resetMatchConfirm()
-  }, [currentCheckpoint, resetMatchConfirm])
+  }, [resetMatchConfirm])
 
   useEffect(() => {
     resetFeedback()
@@ -264,7 +269,7 @@ export default function useWaitForYouMicInput({
         ? { ...previous, message: idleHint, micChordMode: true }
         : previous,
     )
-  }, [matchingEnabled, isMicChordCollection, currentCheckpoint?.id, expectedMidis])
+  }, [matchingEnabled, isMicChordCollection, currentCheckpoint?.id, expectedMidisKey])
 
   const retryCalibration = useCallback(() => {
     setCalibration(null)

@@ -5,6 +5,18 @@ import { buildGuidance } from './waitForYouGuidance.js'
 /** How long to wait (ms) with no progress before auto-revealing the target note. */
 export const WFY_HINT_TIMEOUT_MS = 5000
 
+export function feedbackTrackingKey(inputFeedback) {
+  if (!inputFeedback) {
+    return null
+  }
+  return [
+    inputFeedback.outcome,
+    inputFeedback.message ?? '',
+    inputFeedback.playedMidi ?? '',
+    inputFeedback.playedLabel ?? '',
+  ].join('|')
+}
+
 /**
  * Coordinates the Wait For You "practice assistant" state across input sources:
  * counts wrong attempts at the current target, reveals a hint after a timeout or
@@ -23,24 +35,25 @@ export default function useWaitForYouGuidance({
   tabPositions = null,
 }) {
   const checkpointId = currentCheckpoint?.id ?? null
+  const inputFeedbackKey = feedbackTrackingKey(inputFeedback)
   const [wrongAttempts, setWrongAttempts] = useState(0)
   const [timedOut, setTimedOut] = useState(false)
   const [hintRequested, setHintRequested] = useState(false)
   // Tracked-during-render values let us reset/advance state without setState in an
   // effect (the React-recommended "adjust state when a prop changes" pattern).
   const [trackedCheckpointId, setTrackedCheckpointId] = useState(checkpointId)
-  const [trackedFeedback, setTrackedFeedback] = useState(null)
+  const [trackedFeedbackKey, setTrackedFeedbackKey] = useState(inputFeedbackKey)
 
   if (checkpointId !== trackedCheckpointId) {
     // New target — forget everything about the previous one.
     setTrackedCheckpointId(checkpointId)
-    setTrackedFeedback(null)
+    setTrackedFeedbackKey(inputFeedbackKey)
     setWrongAttempts(0)
     setTimedOut(false)
     setHintRequested(false)
-  } else if (inputFeedback && inputFeedback !== trackedFeedback) {
+  } else if (inputFeedbackKey && inputFeedbackKey !== trackedFeedbackKey) {
     // A fresh input result: count a wrong attempt, or clear the slate on success.
-    setTrackedFeedback(inputFeedback)
+    setTrackedFeedbackKey(inputFeedbackKey)
     if (inputFeedback.outcome === WFY_INPUT_OUTCOME.WRONG) {
       setWrongAttempts((n) => n + 1)
       setTimedOut(false)
@@ -67,7 +80,7 @@ export default function useWaitForYouGuidance({
       setWrongAttempts(0)
       setTimedOut(false)
       setHintRequested(false)
-      setTrackedFeedback(null)
+      setTrackedFeedbackKey(null)
     }
   }, [active])
 

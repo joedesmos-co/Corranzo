@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-03T16:43:47.924Z",
+  "generatedAt": "2026-07-04T20:56:29.141Z",
   "manifest": "/Users/ryland/Documents/scoreflow/benchmarks/mic-polyphony/manifest.json",
   "constantsTuned": false,
   "runtimeMicChanged": false,
@@ -15,7 +15,7 @@
     "chordHitRate": 0,
     "perNoteHitRate": 0,
     "missedNoteCount": 17,
-    "falsePositiveNotes": 0,
+    "falsePositiveNotes": 5,
     "falsePositiveRate": 0,
     "meanConfidence": null,
     "meanLatencyMs": null,
@@ -151,11 +151,13 @@
           64
         ],
         "bassMissedMidis": [],
-        "falsePositiveMidis": [],
-        "falsePositive": false,
+        "falsePositiveMidis": [
+          36
+        ],
+        "falsePositive": true,
         "meanConfidence": null,
         "meanLatencyMs": null,
-        "detectionCount": 0,
+        "detectionCount": 1,
         "missingFile": false
       },
       {
@@ -184,11 +186,13 @@
           67
         ],
         "bassMissedMidis": [],
-        "falsePositiveMidis": [],
-        "falsePositive": false,
+        "falsePositiveMidis": [
+          36
+        ],
+        "falsePositive": true,
         "meanConfidence": null,
         "meanLatencyMs": null,
-        "detectionCount": 0,
+        "detectionCount": 1,
         "missingFile": false
       },
       {
@@ -255,11 +259,13 @@
           67
         ],
         "bassMissedMidis": [],
-        "falsePositiveMidis": [],
-        "falsePositive": false,
+        "falsePositiveMidis": [
+          36
+        ],
+        "falsePositive": true,
         "meanConfidence": null,
         "meanLatencyMs": null,
-        "detectionCount": 0,
+        "detectionCount": 1,
         "missingFile": false
       },
       {
@@ -334,11 +340,13 @@
           67
         ],
         "bassMissedMidis": [],
-        "falsePositiveMidis": [],
-        "falsePositive": false,
+        "falsePositiveMidis": [
+          36
+        ],
+        "falsePositive": true,
         "meanConfidence": null,
         "meanLatencyMs": null,
-        "detectionCount": 0,
+        "detectionCount": 1,
         "missingFile": false
       },
       {
@@ -365,11 +373,13 @@
           67
         ],
         "bassMissedMidis": [],
-        "falsePositiveMidis": [],
-        "falsePositive": false,
+        "falsePositiveMidis": [
+          48
+        ],
+        "falsePositive": true,
         "meanConfidence": null,
         "meanLatencyMs": null,
-        "detectionCount": 0,
+        "detectionCount": 1,
         "missingFile": false
       },
       {
@@ -811,7 +821,7 @@
       "v2": 0
     },
     "falsePositiveNotes": {
-      "v1": 0,
+      "v1": 5,
       "v2": 0
     },
     "meanConfidence": {

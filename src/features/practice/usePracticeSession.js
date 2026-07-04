@@ -362,12 +362,22 @@ export default function usePracticeSession({
     microphone,
   ])
 
+  const idleWfyInputFeedback = useMemo(
+    () => idleFeedbackForCheckpoint(waitForYou.currentCheckpoint),
+    [
+      waitForYou.currentCheckpoint?.id,
+      waitForYou.currentCheckpoint?.expectedMidi,
+      waitForYou.currentCheckpoint?.expectedMidis,
+      waitForYou.currentCheckpoint?.isChord,
+    ],
+  )
+
   const waitForYouInput = useMemo(() => {
     if (!wfyInputSourceReady) {
       return {
         source: WFY_INPUT_SOURCE.MANUAL,
         matchingEnabled: false,
-        inputFeedback: idleFeedbackForCheckpoint(waitForYou.currentCheckpoint),
+        inputFeedback: idleWfyInputFeedback,
         feedbackOutcome: 'idle',
         isChordCheckpoint: Boolean(waitForYou.currentCheckpoint?.isChord),
       }
@@ -387,16 +397,28 @@ export default function usePracticeSession({
     return {
       source: WFY_INPUT_SOURCE.MANUAL,
       matchingEnabled: false,
-      inputFeedback: idleFeedbackForCheckpoint(waitForYou.currentCheckpoint),
+      inputFeedback: idleWfyInputFeedback,
       feedbackOutcome: 'idle',
       isChordCheckpoint: Boolean(waitForYou.currentCheckpoint?.isChord),
     }
   }, [
     wfyInputSource,
     wfyInputSourceReady,
-    waitForYouMic,
-    waitForYouMidi,
-    waitForYou.currentCheckpoint,
+    idleWfyInputFeedback,
+    waitForYouMic.inputFeedback,
+    waitForYouMic.matchingEnabled,
+    waitForYouMic.feedbackOutcome,
+    waitForYouMic.lastHeardMidi,
+    waitForYouMic.liveFrame,
+    waitForYouMic.calibration,
+    waitForYouMic.calibrationStatus,
+    waitForYouMic.micEngineMode,
+    waitForYouMic.micEngineV2Active,
+    waitForYouMic.v2RuntimeError,
+    waitForYouMidi.inputFeedback,
+    waitForYouMidi.matchingEnabled,
+    waitForYouMidi.feedbackOutcome,
+    waitForYou.currentCheckpoint?.isChord,
   ])
 
   // Instrument interpretation for guidance copy: fretted instruments get

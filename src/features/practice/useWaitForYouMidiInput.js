@@ -28,6 +28,8 @@ export default function useWaitForYouMidiInput({
   webMidi,
 }) {
   const chordStateRef = useRef(createChordMatchState())
+  const currentCheckpointRef = useRef(currentCheckpoint)
+  currentCheckpointRef.current = currentCheckpoint
   const [inputFeedback, setInputFeedback] = useState(() =>
     idleFeedbackForCheckpoint(currentCheckpoint),
   )
@@ -39,9 +41,9 @@ export default function useWaitForYouMidiInput({
     webMidi?.isListening
 
   const resetFeedback = useCallback(() => {
-    setInputFeedback(idleFeedbackForCheckpoint(currentCheckpoint))
+    setInputFeedback(idleFeedbackForCheckpoint(currentCheckpointRef.current))
     resetChordMatchState(chordStateRef.current)
-  }, [currentCheckpoint])
+  }, [])
 
   useEffect(() => {
     resetFeedback()
