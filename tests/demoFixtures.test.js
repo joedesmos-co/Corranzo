@@ -108,7 +108,7 @@ afterAll(() => {
 
 describe('Practice library fixture catalog', () => {
   it('ships PDF, MusicXML/MXL, and MIDI for every built-in practice card', async () => {
-    expect(PRACTICE_LIBRARY_FIXTURES).toHaveLength(9)
+    expect(PRACTICE_LIBRARY_FIXTURES).toHaveLength(5)
 
     for (const fixture of PRACTICE_LIBRARY_FIXTURES) {
       expect(existsSync(fixturePath(fixture.paths.pdf)), `${fixture.id} pdf`).toBe(true)
@@ -141,12 +141,12 @@ describe('Practice library fixture catalog', () => {
 
   it('resolves clicked practice cards to their own fixture bundle', () => {
     const minuet = getPracticeLibraryFixture('demo-minuet-in-g', INSTRUMENT_IDS.PIANO)
-    const greensleeves = getPracticeLibraryFixture('guitar-greensleeves', INSTRUMENT_IDS.GUITAR)
+    const amazingGrace = getPracticeLibraryFixture('guitar-amazing-grace', INSTRUMENT_IDS.GUITAR)
 
     expect(minuet.title).toBe('Minuet in G')
     expect(minuet.paths.musicXml).toContain('/demo-minuet-in-g.musicxml')
-    expect(greensleeves.title).toBe('Greensleeves')
-    expect(greensleeves.paths.musicXml).toContain('/practice-library/guitar-greensleeves/')
+    expect(amazingGrace.title).toBe('Amazing Grace')
+    expect(amazingGrace.paths.musicXml).toContain('/practice-library/guitar-amazing-grace/')
     expect(getPracticeLibraryFixture(null, INSTRUMENT_IDS.PIANO).id).toBe(DEMO_PIECE.id)
     expect(getPracticeLibraryFixture(null, INSTRUMENT_IDS.GUITAR).id).toBe(GUITAR_DEMO_PIECE.id)
   })

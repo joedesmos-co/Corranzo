@@ -1,6 +1,7 @@
 import { buildNoteCheckpoints } from './waitForYouCheckpoints.js'
 import { getTimeline } from '../musicxml/timeline.js'
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
+import { buildVisualNoteMarkings } from './visualNotationMarkings.js'
 
 /**
  * Visual Practice lane model.
@@ -37,6 +38,8 @@ export const VISUAL_GROUP_STATUS = {
 
 /** Grace window: a group stays "current" this long after its onset. */
 const TARGET_EPSILON_SECONDS = 0.12
+/** Display-only WFY glide duration. Matching/timing clocks are unchanged. */
+export const WFY_VISUAL_MOVE_MS = 420
 
 /**
  * Build lane groups from the score timing map.
@@ -52,17 +55,37 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}
     const notes = [...(checkpoint.notes ?? [])]
       .filter((note) => note.midi != null)
       .sort((a, b) => b.midi - a.midi)
-      .map((note) => ({
-        id: note.id ?? null,
-        midi: note.midi,
-        label: note.label ?? midiToNoteLabel(note.midi),
-        staff: note.staff ?? null,
-        durationSeconds: note.durationSeconds ?? null,
-        // Fretted-instrument position when the score provides one; derived
-        // positions come from getTabPositionsForTimingMap via the note id.
-        string: note.string ?? null,
-        fret: note.fret ?? null,
-      }))
+      .map((note, noteIndex) => {
+        const visualNote = {
+          id: note.id ?? null,
+          visualNoteId: `${checkpoint.id}-n${noteIndex}`,
+          sourceNoteId: note.id ?? null,
+          partId: note.partId ?? null,
+          voice: note.voice ?? null,
+          midi: note.midi,
+          label: note.label ?? midiToNoteLabel(note.midi),
+          staff: note.staff ?? null,
+          measureNumber: note.measureNumber ?? checkpoint.measureNumber,
+          quarterTime: note.quarterTime ?? checkpoint.quarterTime ?? null,
+          timeSeconds: note.timeSeconds ?? checkpoint.timeSeconds,
+          durationSeconds: note.durationSeconds ?? null,
+          tieStart: Boolean(note.tieStart),
+          tieStop: Boolean(note.tieStop),
+          staccato: Boolean(note.staccato),
+          accent: Boolean(note.accent),
+          tenuto: Boolean(note.tenuto),
+          slurs: note.slurs ?? [],
+          guitarTechniques: note.guitarTechniques ?? [],
+          // Fretted-instrument position when the score provides one; derived
+          // positions come from getTabPositionsForTimingMap via the note id.
+          string: note.string ?? null,
+          fret: note.fret ?? null,
+        }
+        return {
+          ...visualNote,
+          markings: buildVisualNoteMarkings(visualNote, { groupId: checkpoint.id }),
+        }
+      })
 
     return {
       id: checkpoint.id,
@@ -143,6 +166,31 @@ function clamp01(value) {
   return Math.min(1, Math.max(0, value))
 }
 
+export function easeVisualPracticeMotion(progress) {
+  const t = clamp01(Number(progress))
+  return t * t * (3 - 2 * t)
+}
+
+export function resolveWfyDisplayFrameTime({
+  fromTime = 0,
+  toTime = 0,
+  elapsedMs = 0,
+  durationMs = WFY_VISUAL_MOVE_MS,
+} = {}) {
+  const from = Number(fromTime)
+  const to = Number(toTime)
+  if (!Number.isFinite(from) || !Number.isFinite(to)) {
+    return Number.isFinite(to) ? to : 0
+  }
+  const duration = Number(durationMs)
+  if (!Number.isFinite(duration) || duration <= 0) {
+    return to
+  }
+  const elapsed = Math.max(0, Number(elapsedMs) || 0)
+  const progress = easeVisualPracticeMotion(elapsed / duration)
+  return from + (to - from) * progress
+}
+
 /**
  * Moving Now-bar position for Visual Practice.
  *
@@ -178,6 +226,27 @@ export function resolveVisualPlayheadX({
   const time = Number(frameTime)
   const progress = clamp01(((Number.isFinite(time) ? time : 0) - startTime) / spanSeconds)
   return startX + (endX - startX) * progress
+}
+
+export function resolveVisualLaneTransform({
+  frameTime = 0,
+  viewWidth = 0,
+  durationSeconds = null,
+  loopRegion = null,
+  pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond,
+} = {}) {
+  const time = Number(frameTime)
+  const normalizedTime = Number.isFinite(time) ? time : 0
+  const playheadX = resolveVisualPlayheadX({
+    frameTime: normalizedTime,
+    viewWidth,
+    durationSeconds,
+    loopRegion,
+  })
+  return {
+    playheadX,
+    scrollX: playheadX - normalizedTime * pixelsPerSecond,
+  }
 }
 
 /**

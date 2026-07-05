@@ -3,6 +3,7 @@ import useElementSize from '../../hooks/useElementSize.js'
 import useStableElementSize from '../../hooks/useStableElementSize.js'
 import {
   VISUAL_LANE_DEFAULTS,
+  resolveVisualLaneTransform,
   resolveVisualPlayheadX,
 } from '../../features/practice/visualPracticeLane.js'
 import {
@@ -10,6 +11,7 @@ import {
   TAB_LINE_GAP,
   buildTabGeometry,
   buildTabLaneNotes,
+  buildTabLaneTechniqueMarkings,
 } from '../../features/practice/tabLaneLayout.js'
 
 const PX_PER_SECOND = VISUAL_LANE_DEFAULTS.pixelsPerSecond
@@ -55,14 +57,20 @@ function TabVisualLane({
   const playheadX = resolveVisualPlayheadX({ frameTime: 0, viewWidth, durationSeconds, loopRegion })
   const offsetY = (size.height > 0 ? size.height / scale - geometry.height : 0) / 2
 
-  const notes = useMemo(
-    () =>
-      buildTabLaneNotes(visibleGroups, geometry, {
+  const { notes, techniqueMarkings } = useMemo(() => {
+    const builtNotes = buildTabLaneNotes(visibleGroups, geometry, {
+      pixelsPerSecond: PX_PER_SECOND,
+      positions: tabPositions,
+    })
+    return {
+      notes: builtNotes,
+      techniqueMarkings: buildTabLaneTechniqueMarkings(visibleGroups, geometry, {
         pixelsPerSecond: PX_PER_SECOND,
         positions: tabPositions,
+        notes: builtNotes,
       }),
-    [visibleGroups, geometry, tabPositions],
-  )
+    }
+  }, [visibleGroups, geometry, tabPositions])
 
   const visibleBarlines = useMemo(() => {
     if (!visibleGroups.length || !barlineTimes.length) {
@@ -89,14 +97,14 @@ function TabVisualLane({
       const playheadEl = playheadRef.current
       const capEl = playheadCapRef.current
       const t = getFrameTime()
-      const livePlayheadX = resolveVisualPlayheadX({
+      const { playheadX: livePlayheadX, scrollX } = resolveVisualLaneTransform({
         frameTime: t,
         ...frameMetricsRef.current,
       })
       if (el) {
         el.setAttribute(
           'transform',
-          `translate(${livePlayheadX - t * PX_PER_SECOND} 0)`,
+          `translate(${scrollX} 0)`,
         )
       }
       if (playheadEl) {
@@ -149,6 +157,67 @@ function TabVisualLane({
                     {note.fret}
                   </text>
                 </g>
+              )
+            })}
+            {techniqueMarkings.map((marking) => {
+              const className = `tab-lane__technique tab-lane__technique--${marking.kind} tab-lane__note--${marking.status ?? 'upcoming'}`
+              if (marking.render === 'line') {
+                return (
+                  <g key={marking.id} className={className}>
+                    <line
+                      className="tab-lane__technique-line"
+                      x1={marking.x1}
+                      y1={marking.y1}
+                      x2={marking.x2}
+                      y2={marking.y2}
+                      vectorEffect="non-scaling-stroke"
+                    />
+                    <text
+                      className="tab-lane__technique-text"
+                      x={marking.textX}
+                      y={marking.textY}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fontSize={TAB_LINE_GAP * 0.88}
+                    >
+                      {marking.text}
+                    </text>
+                  </g>
+                )
+              }
+              if (marking.render === 'arc') {
+                return (
+                  <g key={marking.id} className={className}>
+                    <path
+                      className="tab-lane__technique-arc"
+                      d={marking.path}
+                      vectorEffect="non-scaling-stroke"
+                    />
+                    <text
+                      className="tab-lane__technique-text"
+                      x={marking.textX}
+                      y={marking.textY}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fontSize={TAB_LINE_GAP * 0.86}
+                    >
+                      {marking.text}
+                    </text>
+                  </g>
+                )
+              }
+              return (
+                <text
+                  key={marking.id}
+                  className={`tab-lane__technique-text ${className}`}
+                  x={marking.x}
+                  y={marking.y}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fontSize={TAB_LINE_GAP * 0.92}
+                >
+                  {marking.text}
+                </text>
               )
             })}
           </g>

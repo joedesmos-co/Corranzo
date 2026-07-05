@@ -1,4 +1,9 @@
 import { VISUAL_LANE_DEFAULTS } from './visualPracticeLane.js'
+import {
+  VISUAL_GUITAR_TECHNIQUE_SYMBOLS,
+  VISUAL_MARKING_KIND,
+  buildVisualSpanMarkings,
+} from './visualNotationMarkings.js'
 
 /**
  * Tablature-lane layout for Visual practice mode (fretted instruments).
@@ -22,6 +27,8 @@ export const FRET_DISC_RADIUS = 8.6
 
 export const FRETBOARD_DISPLAY_START_FRET = 1
 export const FRETBOARD_DISPLAY_MIN_END_FRET = 6
+const TECHNIQUE_TEXT_OFFSET_Y = TAB_LINE_GAP * 0.92
+const TECHNIQUE_ARC_OFFSET_Y = TAB_LINE_GAP * 0.7
 
 const PITCH_CLASS_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
@@ -101,6 +108,9 @@ export function buildTabLaneNotes(
         midi: note.midi,
         label: note.label,
         durationSeconds: note.durationSeconds ?? 0,
+        visualNoteId: note.visualNoteId ?? note.id ?? `${group.id}-${index}`,
+        sourceNoteId: note.sourceNoteId ?? note.id ?? null,
+        markings: note.markings ?? [],
       })
     }
   }
@@ -163,4 +173,105 @@ export function buildFretboardDisplayFrets(
   }, 0)
   const end = Math.max(minEnd, maxTargetFret)
   return Array.from({ length: end - start + 1 }, (_, index) => start + index)
+}
+
+function tabTechniqueStatus(start, end) {
+  if (start.status === 'current' || end.status === 'current') {
+    return 'current'
+  }
+  if (start.status === 'past' && end.status === 'past') {
+    return 'past'
+  }
+  return end.status ?? start.status ?? null
+}
+
+function tabArcPath(start, end) {
+  const x1 = start.x
+  const x2 = Math.max(x1 + TAB_LINE_GAP, end.x)
+  const yBase = Math.min(start.y, end.y) - TECHNIQUE_ARC_OFFSET_Y
+  const arch = Math.max(TAB_LINE_GAP * 0.8, Math.min(TAB_LINE_GAP * 1.8, (x2 - x1) * 0.16))
+  return `M ${x1} ${yBase} Q ${(x1 + x2) / 2} ${yBase - arch} ${x2} ${yBase}`
+}
+
+function slideSymbol(start, end) {
+  return end.y <= start.y ? '/' : '\\'
+}
+
+export function buildTabLaneTechniqueMarkings(
+  groups,
+  geometry,
+  {
+    pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond,
+    positions = null,
+    notes: prebuiltNotes = null,
+  } = {},
+) {
+  const notes = prebuiltNotes ?? buildTabLaneNotes(groups, geometry, { pixelsPerSecond, positions })
+  const notesById = new Map(notes.map((note) => [note.visualNoteId, note]))
+  const markings = []
+
+  for (const note of notes) {
+    for (const marking of note.markings ?? []) {
+      if (
+        marking.kind !== VISUAL_MARKING_KIND.BEND &&
+        marking.kind !== VISUAL_MARKING_KIND.VIBRATO
+      ) {
+        continue
+      }
+      markings.push({
+        ...marking,
+        id: `${marking.id}-tab-technique`,
+        render: 'text',
+        text: VISUAL_GUITAR_TECHNIQUE_SYMBOLS[marking.kind] ?? marking.symbol,
+        x: note.x,
+        y: note.y - TECHNIQUE_TEXT_OFFSET_Y,
+        status: note.status,
+      })
+    }
+  }
+
+  for (const span of buildVisualSpanMarkings(groups)) {
+    if (
+      span.kind !== VISUAL_MARKING_KIND.HAMMER_ON &&
+      span.kind !== VISUAL_MARKING_KIND.PULL_OFF &&
+      span.kind !== VISUAL_MARKING_KIND.SLIDE
+    ) {
+      continue
+    }
+    const start = notesById.get(span.fromNoteId)
+    const end = notesById.get(span.toNoteId)
+    if (!start || !end) {
+      continue
+    }
+    const status = span.status ?? tabTechniqueStatus(start, end)
+    if (span.kind === VISUAL_MARKING_KIND.SLIDE) {
+      const text = slideSymbol(start, end)
+      markings.push({
+        ...span,
+        id: `${span.id}-tab-slide-line`,
+        render: 'line',
+        x1: start.x + FRET_DISC_RADIUS * 0.85,
+        y1: start.y,
+        x2: end.x - FRET_DISC_RADIUS * 0.85,
+        y2: end.y,
+        text,
+        textX: (start.x + end.x) / 2,
+        textY: (start.y + end.y) / 2 - TAB_LINE_GAP * 0.45,
+        status,
+      })
+    } else {
+      markings.push({
+        ...span,
+        id: `${span.id}-tab-arc`,
+        render: 'arc',
+        path: tabArcPath(start, end),
+        text: VISUAL_GUITAR_TECHNIQUE_SYMBOLS[span.kind],
+        textX: (start.x + end.x) / 2,
+        textY: Math.min(start.y, end.y) - TECHNIQUE_TEXT_OFFSET_Y,
+        status,
+      })
+    }
+  }
+
+  return markings
 }

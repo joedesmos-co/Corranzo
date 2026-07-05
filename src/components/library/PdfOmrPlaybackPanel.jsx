@@ -22,6 +22,9 @@ function resetOmrPanelState(setters) {
 
 function formatOmrFailureMessage(error) {
   const rawMessage = error?.message ?? ''
+  if (/TAB staff lines were detected/i.test(rawMessage)) {
+    return rawMessage
+  }
   if (/too difficult|confidence|unsupported|failed/i.test(rawMessage)) {
     return 'We could not read enough of this PDF automatically. You can try again, or upload MusicXML/MXL for the most accurate timing.'
   }

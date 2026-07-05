@@ -7,6 +7,7 @@ import {
   numberOf,
   parseXmlOrdered,
   rootElement,
+  textOf,
 } from './xmlTree.js'
 import { quartersToSeconds } from './timingMath.js'
 import { buildPerformedMeasureTimeline } from './parseMeasureRepeats.js'
@@ -233,16 +234,86 @@ function readTieFlags(noteNode) {
 function readArticulations(noteNode) {
   const notations = findChild(noteNode, 'notations')
   if (!notations) {
-    return { staccato: false, accent: false }
+    return { staccato: false, accent: false, tenuto: false }
   }
   const articulations = findChild(notations, 'articulations')
   if (!articulations) {
-    return { staccato: false, accent: false }
+    return { staccato: false, accent: false, tenuto: false }
   }
   return {
     staccato: findChild(articulations, 'staccato') != null,
     accent: findChild(articulations, 'accent') != null,
+    tenuto: findChild(articulations, 'tenuto') != null,
   }
+}
+
+function readSlurs(noteNode) {
+  const notations = findChild(noteNode, 'notations')
+  if (!notations) {
+    return []
+  }
+  return findChildren(notations, 'slur')
+    .map((slurNode, index) => {
+      const type = attr(slurNode, 'type')
+      if (type !== 'start' && type !== 'stop') {
+        return null
+      }
+      return {
+        type,
+        number: attr(slurNode, 'number') ?? '1',
+        placement: attr(slurNode, 'placement') ?? null,
+        index,
+      }
+    })
+    .filter(Boolean)
+}
+
+function techniqueMarking(kind, node, index) {
+  return {
+    kind,
+    type: attr(node, 'type') ?? null,
+    number: attr(node, 'number') ?? '1',
+    text: textOf(node) ?? null,
+    index,
+  }
+}
+
+function readGuitarTechniques(noteNode) {
+  const notations = findChild(noteNode, 'notations')
+  if (!notations) {
+    return []
+  }
+  const technical = findChild(notations, 'technical')
+  const techniques = []
+
+  if (technical) {
+    findChildren(technical, 'hammer-on').forEach((node, index) => {
+      techniques.push(techniqueMarking('hammer-on', node, index))
+    })
+    findChildren(technical, 'pull-off').forEach((node, index) => {
+      techniques.push(techniqueMarking('pull-off', node, index))
+    })
+    if (findChild(technical, 'bend')) {
+      techniques.push({ kind: 'bend', type: null, number: '1', text: null, index: 0 })
+    }
+    findChildren(technical, 'other-technical').forEach((node, index) => {
+      const text = textOf(node)
+      if (text && /vib(?:rato)?/i.test(text)) {
+        techniques.push({ kind: 'vibrato', type: null, number: '1', text, index })
+      }
+    })
+  }
+
+  findChildren(notations, 'slide').forEach((node, index) => {
+    techniques.push(techniqueMarking('slide', node, index))
+  })
+
+  const ornaments = findChild(notations, 'ornaments')
+  if (ornaments && findChild(ornaments, 'wavy-line')) {
+    techniques.push({ kind: 'vibrato', type: null, number: '1', text: null, index: 0 })
+  }
+
+  return techniques
 }
 
 /**
@@ -519,10 +590,14 @@ function walkPart({
             const layout = readNoteLayoutOrdered(child)
             const midi = isRest ? null : pitchNodeToMidi(findChild(child, 'pitch'))
             const { tieStart, tieStop } = readTieFlags(child)
-            const { staccato, accent } = readArticulations(child)
+            const { staccato, accent, tenuto } = readArticulations(child)
+            const slurs = readSlurs(child)
+            const guitarTechniques = isRest ? [] : readGuitarTechniques(child)
             const technicalPosition = isRest ? null : readTechnicalPosition(child)
             notes.push({
               ...(technicalPosition ?? {}),
+              ...(slurs.length ? { slurs } : {}),
+              ...(guitarTechniques.length ? { guitarTechniques } : {}),
               id: `${partId}-m${measureNumber}-n${notes.length}`,
               partId,
               measureNumber,
@@ -538,6 +613,7 @@ function walkPart({
               tieStop,
               staccato,
               accent,
+              tenuto,
               voice: Number.isFinite(voice) && voice > 0 ? voice : 1,
               velocity: activeVelocity,
               ...layout,

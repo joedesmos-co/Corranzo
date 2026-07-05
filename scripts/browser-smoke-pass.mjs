@@ -96,6 +96,12 @@ async function selectInstrument(page, label) {
 async function loadDemo(page) {
   await page.getByRole('button', { name: 'Library', exact: true }).click().catch(() => {})
   await sleep(400)
+  const libraryStart = page.getByRole('button', { name: /Start practice:/i }).first()
+  if (await libraryStart.isVisible().catch(() => false)) {
+    await libraryStart.click()
+    await page.waitForTimeout(7000)
+    return
+  }
   let demo = page.getByRole('button', { name: /Try demo:/i }).first()
   if (!(await demo.isVisible().catch(() => false))) {
     await page.getByRole('button', { name: 'Practice', exact: true }).click().catch(() => {})
@@ -120,6 +126,23 @@ async function pdfCanvasVisible(page) {
   await canvas.waitFor({ state: 'visible', timeout: 20_000 })
   const box = await canvas.boundingBox()
   return Boolean(box && box.width > 20 && box.height > 20)
+}
+
+async function practiceLibraryCardsVisible(page) {
+  await page.getByRole('heading', { name: 'Practice Library' }).waitFor({
+    state: 'visible',
+    timeout: 10_000,
+  })
+  const cards = page.locator('.practice-piece-card').filter({
+    has: page.getByRole('button', { name: /Start practice:/i }),
+  })
+  return (await cards.count()) > 0
+}
+
+async function practiceScoreCanvasVisible(page) {
+  await page.getByRole('button', { name: 'Practice', exact: true }).click().catch(() => {})
+  await page.waitForTimeout(1200)
+  return pdfCanvasVisible(page)
 }
 
 async function checkOverflow(page) {
@@ -249,21 +272,29 @@ async function main() {
       await selectInstrument(page, 'Piano')
       await page.getByRole('button', { name: 'Library', exact: true }).click()
       await page.waitForTimeout(800)
-      const pianoPdf = await pdfCanvasVisible(page)
+      const pianoLibrary = await practiceLibraryCardsVisible(page).catch(() => false)
+      if (!pianoLibrary) {
+        await fail(`Piano Library cards after switch ${i + 1}`, 'Practice cards not visible')
+      }
+      const pianoPdf = await practiceScoreCanvasVisible(page).catch(() => false)
       if (!pianoPdf) {
-        await fail(`Piano PDF preview after switch ${i + 1}`, 'Canvas not visible')
+        await fail(`Piano Practice score after switch ${i + 1}`, 'Canvas not visible')
       }
 
       await selectInstrument(page, 'Guitar')
       await page.waitForTimeout(600)
       await page.getByRole('button', { name: 'Library', exact: true }).click()
       await page.waitForTimeout(800)
-      const guitarPdf = await pdfCanvasVisible(page)
+      const guitarLibrary = await practiceLibraryCardsVisible(page).catch(() => false)
+      if (!guitarLibrary) {
+        await fail(`Guitar Library cards after switch ${i + 1}`, 'Practice cards not visible')
+      }
+      const guitarPdf = await practiceScoreCanvasVisible(page).catch(() => false)
       if (!guitarPdf) {
-        await fail(`Guitar PDF preview after switch ${i + 1}`, 'Canvas not visible')
+        await fail(`Guitar Practice score after switch ${i + 1}`, 'Canvas not visible')
       }
     }
-    await pass('Repeated Piano ↔ Guitar switches keep PDF previews')
+    await pass('Repeated Piano ↔ Guitar switches keep Library cards and Practice scores')
 
     // Score / Visual views
     await page.getByRole('button', { name: 'Practice', exact: true }).click()
@@ -348,27 +379,23 @@ async function main() {
     // After reload, switching should still restore the other instrument bundle
     const other = restoredInstrument.toLowerCase().includes('guitar') ? 'Piano' : 'Guitar'
     await selectInstrument(page, other)
-    await page.getByRole('button', { name: 'Library', exact: true }).click()
-    await page.waitForTimeout(1200)
-    const otherHasPdf = await pdfCanvasVisible(page).catch(() => false)
+    const otherHasPdf = await practiceScoreCanvasVisible(page).catch(() => false)
     const otherEmpty = await page.getByText('No piece open yet').isVisible().catch(() => false)
     if (otherHasPdf) {
-      await pass(`Reload preserved ${other} bundle — PDF visible in Library`)
+      await pass(`Reload preserved ${other} bundle — score visible in Practice`)
     } else if (otherEmpty) {
       await pass(`Reload: ${other} empty (no prior bundle saved — acceptable on first run)`)
     } else {
       await fail(`Reload preserved ${other} bundle`, 'Neither PDF nor empty state detected')
     }
 
-    // Switch back to restored instrument — PDF still works
+    // Switch back to restored instrument — Practice score still works
     await selectInstrument(page, restoredInstrument.includes('Guitar') ? 'Guitar' : 'Piano')
     await page.waitForTimeout(600)
-    await page.getByRole('button', { name: 'Library', exact: true }).click()
-    await page.waitForTimeout(1000)
-    if (await pdfCanvasVisible(page).catch(() => false)) {
-      await pass('PDF preview still works after switching back post-reload')
+    if (await practiceScoreCanvasVisible(page).catch(() => false)) {
+      await pass('Practice score still works after switching back post-reload')
     } else {
-      await fail('PDF preview still works after switching back post-reload', 'Canvas missing')
+      await fail('Practice score still works after switching back post-reload', 'Canvas missing')
     }
 
     // Viewport overflow checks on Library + Practice

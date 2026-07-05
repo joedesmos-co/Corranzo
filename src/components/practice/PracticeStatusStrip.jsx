@@ -5,7 +5,10 @@ import {
 } from '../../features/score-follow/scoreFollowUserMessages.js'
 import { INSTRUMENT_STATUS, buildInstrumentStatusLabels } from '../../features/playback/instrumentVoiceStatus.js'
 import { getInstrument } from '../../features/instruments/instruments.js'
-import { WFY_INPUT_SOURCE } from '../../features/microphone-input/micInputConstants.js'
+import {
+  MIC_PERMISSION,
+  WFY_INPUT_SOURCE,
+} from '../../features/microphone-input/micInputConstants.js'
 import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
 
 function StatusChip({ label, tone = 'neutral' }) {
@@ -87,7 +90,13 @@ function inputStatus(session) {
     if (session.microphone.isGranted) {
       return { label: 'Mic ready', tone: 'ready' }
     }
-    return { label: 'Mic off', tone: 'neutral' }
+    if (session.microphone.permission === MIC_PERMISSION.DENIED) {
+      return { label: 'Mic blocked', tone: 'warning' }
+    }
+    if (session.microphone.permission === MIC_PERMISSION.ERROR) {
+      return { label: 'Mic error', tone: 'warning' }
+    }
+    return { label: 'Mic starting', tone: 'neutral' }
   }
 
   if (session.wfyInputSource === WFY_INPUT_SOURCE.MIDI) {

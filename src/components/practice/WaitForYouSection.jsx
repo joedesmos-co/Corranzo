@@ -4,7 +4,10 @@ import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpoin
 import { getExpectedMidis } from '../../features/practice/waitForYouNoteMatch.js'
 import { WFY_INPUT_OUTCOME } from '../../features/practice/waitForYouInputFeedback.js'
 import { midiToNoteLabel } from '../../features/midi-input/midiNoteLabel.js'
-import { WFY_INPUT_SOURCE } from '../../features/microphone-input/micInputConstants.js'
+import {
+  MIC_PERMISSION,
+  WFY_INPUT_SOURCE,
+} from '../../features/microphone-input/micInputConstants.js'
 import WaitForYouMatchSettingsPanel from './WaitForYouMatchSettingsPanel.jsx'
 import WaitForYouInputSourceSelector from './WaitForYouInputSourceSelector.jsx'
 import PracticeHelpTip from './PracticeHelpTip.jsx'
@@ -81,6 +84,7 @@ export default function WaitForYouSection({
   onShowHint,
   onRestart,
   micListening = false,
+  micPermission = null,
   micStatusLabel = null,
   micCalibrating = false,
   onRequestMicAccess = null,
@@ -120,6 +124,8 @@ export default function WaitForYouSection({
     inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
     status === WFY_STATUS.WAITING &&
     !micListening
+  const micAccessBlocked = micPermission === MIC_PERMISSION.DENIED
+  const micAccessError = micPermission === MIC_PERMISSION.ERROR
   const currentStatusMessage = statusMessage(
     status,
     currentCheckpoint,
@@ -228,10 +234,16 @@ export default function WaitForYouSection({
 
       {showMicOffNotice && (
         <div className="wait-for-you__mic-off" role="status" aria-live="polite">
-          <p>Microphone is off. Turn it on so Wait For You can hear you.</p>
-          {onRequestMicAccess && (
+          <p>
+            {micAccessBlocked
+              ? 'Microphone access is blocked. Allow it in your browser, or change input.'
+              : micAccessError
+                ? 'Microphone did not start. Check your input device, or change input.'
+                : 'Starting microphone... allow access, then stay quiet for a moment.'}
+          </p>
+          {onRequestMicAccess && !micAccessBlocked && (
             <button type="button" className="wait-for-you__btn" onClick={onRequestMicAccess}>
-              Enable microphone
+              Start microphone
             </button>
           )}
         </div>

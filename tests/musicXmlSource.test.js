@@ -61,6 +61,7 @@ describe('musicXmlSource', () => {
       omrMeta: {
         warnings: [
           'TAB notes detected — rhythm is approximate. Playback uses even spacing within each measure.',
+          'Dense TAB notes were compressed to a safe timing grid. Rhythm remains approximate.',
           'Tempo defaulted to 120 BPM.',
         ],
       },
@@ -70,6 +71,10 @@ describe('musicXmlSource', () => {
       expect.objectContaining({
         strength: 'strong',
         message: expect.stringContaining('TAB notes detected'),
+      }),
+      expect.objectContaining({
+        strength: 'strong',
+        message: expect.stringContaining('Dense TAB notes'),
       }),
       expect.objectContaining({
         strength: 'mild',

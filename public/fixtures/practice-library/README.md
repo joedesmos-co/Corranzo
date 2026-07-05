@@ -1,6 +1,10 @@
 # Practice Library fixtures
 
-Short built-in practice pieces for Corranzo. Each generated fixture has:
+Short built-in practice pieces for Corranzo. Keep this folder intentionally small:
+only include public-domain material that has aligned PDF, MusicXML, and MIDI and is
+good enough to appear in the visible Practice Library.
+
+Each generated helper score has:
 
 - PDF score
 - MusicXML timing
@@ -14,7 +18,10 @@ npm run fixtures:practice-library
 
 ## Source status
 
-The melodies are public-domain traditional works or public-domain classical excerpts. The Carulli-style etude is a short Corranzo-generated study dedicated to the public domain (CC0) and uses only generic classical guitar patterns.
+The visible Practice Library uses public-domain traditional works or public-domain
+classical excerpts only. Generated helper scores are limited to simple beginner
+guitar melodies with hand-checked notation/TAB alignment. Do not add synthetic
+"style" studies or generated piano sketches to the built-in catalog.
 
 Existing non-generated built-ins remain in their original fixture folders:
 

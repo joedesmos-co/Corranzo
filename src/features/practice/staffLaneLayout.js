@@ -1,4 +1,8 @@
 import { VISUAL_LANE_DEFAULTS } from './visualPracticeLane.js'
+import {
+  VISUAL_MARKING_KIND,
+  buildVisualSpanMarkings,
+} from './visualNotationMarkings.js'
 
 /**
  * Staff-lane layout for Visual practice mode.
@@ -184,6 +188,10 @@ export const NOTEHEAD_RY = 5.2
 export const STEM_LENGTH_GAPS = 3.2
 /** Whole-note-style durations render without a stem. */
 export const STEMLESS_MIN_SECONDS = 2.0
+const ARTICULATION_OFFSET_Y = STAFF_LINE_GAP * 1.15
+const ARTICULATION_STACK_GAP = STAFF_LINE_GAP * 0.62
+const TIE_VERTICAL_OFFSET = STAFF_LINE_GAP * 0.88
+const SLUR_VERTICAL_OFFSET = STAFF_LINE_GAP * 1.35
 
 /**
  * Flatten visual lane groups into positioned staff notes.
@@ -218,6 +226,9 @@ export function buildStaffLaneNotes(
           durationSeconds: note.durationSeconds ?? 0,
           midi: note.midi,
           label: note.label,
+          visualNoteId: note.visualNoteId ?? note.id ?? `${group.id}-${i}`,
+          sourceNoteId: note.sourceNoteId ?? note.id ?? null,
+          markings: note.markings ?? [],
         }
       })
 
@@ -307,4 +318,118 @@ export function buildStaffLaneStems(
     })
   }
   return stems
+}
+
+function staffSpanStatus(start, end) {
+  if (start.status === 'current' || end.status === 'current') {
+    return 'current'
+  }
+  if (start.status === 'past' && end.status === 'past') {
+    return 'past'
+  }
+  return end.status ?? start.status ?? null
+}
+
+function staffSpanPath(start, end, kind) {
+  const x1 = start.x + start.xOffset + NOTEHEAD_RX * 0.9
+  const x2 = Math.max(x1 + STAFF_LINE_GAP, end.x + end.xOffset - NOTEHEAD_RX * 0.9)
+  const midX = (x1 + x2) / 2
+  const span = Math.max(STAFF_LINE_GAP, x2 - x1)
+  const arch = Math.max(STAFF_LINE_GAP * 0.9, Math.min(STAFF_LINE_GAP * 2.4, span * 0.16))
+
+  if (kind === VISUAL_MARKING_KIND.SLUR) {
+    const y1 = Math.min(start.y, end.y) - SLUR_VERTICAL_OFFSET
+    const y2 = Math.min(start.y, end.y) - SLUR_VERTICAL_OFFSET
+    return `M ${x1} ${y1} Q ${midX} ${Math.min(y1, y2) - arch} ${x2} ${y2}`
+  }
+
+  const y1 = Math.max(start.y, end.y) + TIE_VERTICAL_OFFSET
+  const y2 = Math.max(start.y, end.y) + TIE_VERTICAL_OFFSET
+  return `M ${x1} ${y1} Q ${midX} ${Math.max(y1, y2) + arch} ${x2} ${y2}`
+}
+
+function buildStaffNoteMarkingGeometry(notes) {
+  const markings = []
+  for (const note of notes ?? []) {
+    const visualMarkings = (note.markings ?? []).filter((marking) =>
+      [
+        VISUAL_MARKING_KIND.STACCATO,
+        VISUAL_MARKING_KIND.ACCENT,
+        VISUAL_MARKING_KIND.TENUTO,
+      ].includes(marking.kind),
+    )
+    visualMarkings.forEach((marking, index) => {
+      const y = note.y - ARTICULATION_OFFSET_Y - index * ARTICULATION_STACK_GAP
+      const x = note.x + note.xOffset
+      if (marking.kind === VISUAL_MARKING_KIND.STACCATO) {
+        markings.push({
+          ...marking,
+          id: `${marking.id}-staff-dot`,
+          shape: 'dot',
+          x,
+          y,
+          r: 2.2,
+          status: note.status,
+        })
+      } else if (marking.kind === VISUAL_MARKING_KIND.ACCENT) {
+        markings.push({
+          ...marking,
+          id: `${marking.id}-staff-accent`,
+          shape: 'text',
+          text: '>',
+          x,
+          y,
+          fontSize: STAFF_LINE_GAP * 1.35,
+          status: note.status,
+        })
+      } else if (marking.kind === VISUAL_MARKING_KIND.TENUTO) {
+        markings.push({
+          ...marking,
+          id: `${marking.id}-staff-tenuto`,
+          shape: 'line',
+          x1: x - NOTEHEAD_RX * 0.8,
+          x2: x + NOTEHEAD_RX * 0.8,
+          y1: y,
+          y2: y,
+          status: note.status,
+        })
+      }
+    })
+  }
+  return markings
+}
+
+export function buildStaffLaneNotationMarkings(
+  groups,
+  geometry,
+  {
+    pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond,
+    notes: prebuiltNotes = null,
+  } = {},
+) {
+  const notes = prebuiltNotes ?? buildStaffLaneNotes(groups, geometry, { pixelsPerSecond })
+  const notesById = new Map(notes.map((note) => [note.visualNoteId, note]))
+
+  const spanMarkings = buildVisualSpanMarkings(groups)
+    .filter((marking) =>
+      marking.kind === VISUAL_MARKING_KIND.TIE || marking.kind === VISUAL_MARKING_KIND.SLUR,
+    )
+    .map((marking) => {
+      const start = notesById.get(marking.fromNoteId)
+      const end = notesById.get(marking.toNoteId)
+      if (!start || !end) {
+        return null
+      }
+      return {
+        ...marking,
+        path: staffSpanPath(start, end, marking.kind),
+        status: marking.status ?? staffSpanStatus(start, end),
+      }
+    })
+    .filter(Boolean)
+
+  return {
+    noteMarkings: buildStaffNoteMarkingGeometry(notes),
+    spanMarkings,
+  }
 }

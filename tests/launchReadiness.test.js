@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const readSrc = (...parts) => readFileSync(join(root, 'src', ...parts), 'utf8')
+const readRoot = (...parts) => readFileSync(join(root, ...parts), 'utf8')
 
 describe('launch readiness fixes', () => {
   it('does not abort batch upload when a MuseScore file is present', () => {
@@ -123,5 +124,23 @@ describe('launch readiness fixes', () => {
 
     expect(manual).toContain('setSessionInstrumentId(instrumentId)')
     expect(manual).toContain('instrumentId: pendingSave.instrumentId')
+  })
+
+  it('keeps browser smoke QA aligned with the card-first Library flow', () => {
+    const smoke = readRoot('scripts', 'browser-smoke-pass.mjs')
+
+    expect(smoke).toContain('practiceLibraryCardsVisible')
+    expect(smoke).toContain('practiceScoreCanvasVisible')
+    expect(smoke).toContain('score visible in Practice')
+    expect(smoke).not.toContain('PDF visible in Library')
+  })
+
+  it('keeps mic browser QA aligned with first-time WFY input setup', () => {
+    const micQa = readRoot('scripts', 'browser-mic-wfy-qa.mjs')
+
+    expect(micQa).toContain("getByRole('dialog', { name: 'How do you want to play?' })")
+    expect(micQa).toContain("getByRole('radiogroup', { name: 'Wait For You input source' })")
+    expect(micQa).toContain("locator('.wait-for-you__mic-calibration, .wait-for-you__mic-off')")
+    expect(micQa).toContain("openWfyMicPractice(page, { chooseInput: false })")
   })
 })

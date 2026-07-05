@@ -3,6 +3,7 @@ import useElementSize from '../../hooks/useElementSize.js'
 import useStableElementSize from '../../hooks/useStableElementSize.js'
 import {
   VISUAL_LANE_DEFAULTS,
+  resolveVisualLaneTransform,
   resolveVisualPlayheadX,
 } from '../../features/practice/visualPracticeLane.js'
 import {
@@ -12,6 +13,7 @@ import {
   STAFF_LINE_GAP,
   buildStaffGeometry,
   buildStaffLaneNotes,
+  buildStaffLaneNotationMarkings,
   buildStaffLaneStems,
 } from '../../features/practice/staffLaneLayout.js'
 
@@ -87,7 +89,7 @@ function StaffVisualLane({
   // the outer ledger margins symmetrically.
   const offsetY = (size.height > 0 ? size.height / scale - geometry.height : 0) / 2
 
-  const { notes, stems } = useMemo(() => {
+  const { notes, stems, noteMarkings, spanMarkings } = useMemo(() => {
     const builtNotes = buildStaffLaneNotes(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
     })
@@ -95,7 +97,11 @@ function StaffVisualLane({
       pixelsPerSecond: PX_PER_SECOND,
       notes: builtNotes,
     })
-    return { notes: builtNotes, stems: builtStems }
+    const markings = buildStaffLaneNotationMarkings(visibleGroups, geometry, {
+      pixelsPerSecond: PX_PER_SECOND,
+      notes: builtNotes,
+    })
+    return { notes: builtNotes, stems: builtStems, ...markings }
   }, [visibleGroups, geometry])
 
   // Barlines within the visible groups' span (deterministic x, like notes).
@@ -124,14 +130,14 @@ function StaffVisualLane({
       const playheadEl = playheadRef.current
       const capEl = playheadCapRef.current
       const t = getFrameTime()
-      const livePlayheadX = resolveVisualPlayheadX({
+      const { playheadX: livePlayheadX, scrollX } = resolveVisualLaneTransform({
         frameTime: t,
         ...frameMetricsRef.current,
       })
       if (el) {
         el.setAttribute(
           'transform',
-          `translate(${livePlayheadX - t * PX_PER_SECOND} 0)`,
+          `translate(${scrollX} 0)`,
         )
       }
       if (playheadEl) {
@@ -179,6 +185,14 @@ function StaffVisualLane({
                 y2={stem.y2}
               />
             ))}
+            {spanMarkings.map((marking) => (
+              <path
+                key={marking.id}
+                className={`staff-lane__span-mark staff-lane__span-mark--${marking.kind} staff-lane__note--${marking.status ?? 'upcoming'}`}
+                d={marking.path}
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
             {notes.map((note) => (
               <g
                 key={note.id}
@@ -217,6 +231,46 @@ function StaffVisualLane({
                 />
               </g>
             ))}
+            {noteMarkings.map((marking) => {
+              const className = `staff-lane__articulation staff-lane__articulation--${marking.kind} staff-lane__note--${marking.status ?? 'upcoming'}`
+              if (marking.shape === 'dot') {
+                return (
+                  <circle
+                    key={marking.id}
+                    className={className}
+                    cx={marking.x}
+                    cy={marking.y}
+                    r={marking.r}
+                  />
+                )
+              }
+              if (marking.shape === 'line') {
+                return (
+                  <line
+                    key={marking.id}
+                    className={className}
+                    x1={marking.x1}
+                    x2={marking.x2}
+                    y1={marking.y1}
+                    y2={marking.y2}
+                    vectorEffect="non-scaling-stroke"
+                  />
+                )
+              }
+              return (
+                <text
+                  key={marking.id}
+                  className={className}
+                  x={marking.x}
+                  y={marking.y}
+                  fontSize={marking.fontSize}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                >
+                  {marking.text}
+                </text>
+              )
+            })}
           </g>
 
           {/* Static layer: staff lines + clefs (never moves). The mask hides

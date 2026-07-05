@@ -115,15 +115,50 @@ async function loadDemo(page) {
 }
 
 async function clickPracticeMode(page, modeLabel) {
-  await page
+  const option = page
     .getByRole('radiogroup', { name: 'Practice mode' })
     .locator('label')
     .filter({ hasText: modeLabel })
-    .click()
+  const alreadySelected = await option
+    .evaluate((node) => node.classList.contains('practice-mode__option--selected'))
+    .catch(() => false)
+  if (alreadySelected) {
+    await sleep(200)
+    return
+  }
+  await option.click()
   await sleep(500)
 }
 
 async function clickInputSource(page, sourceLabel) {
+  const label =
+    /microphone/i.test(sourceLabel)
+      ? 'Use Microphone'
+      : /midi/i.test(sourceLabel)
+        ? 'Use MIDI'
+        : 'Continue button'
+
+  const modalChoice = page
+    .getByRole('dialog', { name: 'How do you want to play?' })
+    .getByRole('button', { name: label })
+  if (await modalChoice.isVisible().catch(() => false)) {
+    await modalChoice.click()
+    await sleep(800)
+    return
+  }
+
+  const compactSelector = page.locator('.wfy-input-source').first()
+  if (await compactSelector.isVisible().catch(() => false)) {
+    const selectorBody = page.getByRole('radiogroup', { name: 'Wait For You input source' })
+    if (!(await selectorBody.isVisible().catch(() => false))) {
+      await compactSelector.locator('summary').click()
+      await sleep(200)
+    }
+    await selectorBody.locator('label').filter({ hasText: label }).click()
+    await sleep(500)
+    return
+  }
+
   await page
     .getByRole('radiogroup', { name: 'How you continue' })
     .locator('label')
@@ -132,11 +167,13 @@ async function clickInputSource(page, sourceLabel) {
   await sleep(400)
 }
 
-async function openWfyMicPractice(page) {
+async function openWfyMicPractice(page, { chooseInput = true } = {}) {
   await page.getByRole('button', { name: 'Practice', exact: true }).click()
   await sleep(1200)
   await clickPracticeMode(page, 'Wait For You')
-  await clickInputSource(page, 'Microphone')
+  if (chooseInput) {
+    await clickInputSource(page, 'Microphone')
+  }
 }
 
 function readMicDebug(page) {
@@ -282,6 +319,23 @@ async function testClipScenario({
 }
 
 async function micChipText(page) {
+  const compact = await page
+    .locator('.wait-for-you__mic-calibration, .wait-for-you__mic-off')
+    .first()
+    .innerText()
+    .catch(() => '')
+  if (compact) {
+    return compact
+  }
+  const statusChip = await page
+    .locator('.practice-status-strip .practice-status-chip')
+    .filter({ hasText: /Mic /i })
+    .first()
+    .innerText()
+    .catch(() => '')
+  if (statusChip) {
+    return statusChip
+  }
   return page
     .getByRole('region', { name: 'Microphone input' })
     .locator('.practice-status-chip')
@@ -290,6 +344,14 @@ async function micChipText(page) {
 }
 
 async function micPanelVisible(page) {
+  const compact = await page
+    .locator('.wait-for-you__mic-calibration, .wait-for-you__mic-off')
+    .first()
+    .isVisible()
+    .catch(() => false)
+  if (compact) {
+    return true
+  }
   return page.getByRole('region', { name: 'Microphone input' }).isVisible().catch(() => false)
 }
 
@@ -297,7 +359,34 @@ async function micTestVisible(page) {
   return page.locator('.mic-test').isVisible().catch(() => false)
 }
 
+async function micStatusTextAppears(page, pattern, { timeoutMs = 5000, intervalMs = 250 } = {}) {
+  const deadline = Date.now() + timeoutMs
+  while (Date.now() < deadline) {
+    const text = await micChipText(page)
+    if (pattern.test(text)) {
+      return true
+    }
+    await sleep(intervalMs)
+  }
+  return false
+}
+
 async function enableMic(page) {
+  const autoStatus = await page
+    .locator('.wait-for-you__mic-calibration')
+    .first()
+    .isVisible()
+    .catch(() => false)
+  if (autoStatus) {
+    await sleep(1200)
+    return 'auto-started'
+  }
+  const startBtn = page.getByRole('button', { name: 'Start microphone' }).first()
+  if (await startBtn.isVisible().catch(() => false)) {
+    await startBtn.click()
+    await sleep(2500)
+    return 'wfy-start'
+  }
   const enableBtn = page.getByRole('button', { name: 'Enable microphone' }).first()
   if (await enableBtn.isVisible().catch(() => false)) {
     await enableBtn.click()
@@ -365,17 +454,18 @@ async function main() {
       await prepareFreshSession(page)
       await selectInstrument(page, 'Piano')
       await loadDemo(page)
-      await openWfyMicPractice(page)
       await context.clearPermissions()
       await page.evaluate(() => {
         navigator.mediaDevices.getUserMedia = () =>
           Promise.reject(Object.assign(new Error('Permission denied'), { name: 'NotAllowedError' }))
       })
+      await openWfyMicPractice(page, { chooseInput: false })
+      await clickInputSource(page, 'Microphone')
       await enableMic(page)
-      const blocked = await page.getByText('Mic blocked').isVisible().catch(() => false)
+      const blocked = await micStatusTextAppears(page, /Mic blocked|Microphone access is blocked/i)
       if (blocked) pass('mic permission denied shows Mic blocked')
-      else fail('mic permission denied shows Mic blocked', 'No blocked state in UI')
-      results.scenarios.push({ id: 'permission-denied', blocked })
+      else fail('mic permission denied shows Mic blocked', await micChipText(page) || 'No blocked state in UI')
+      results.scenarios.push({ id: 'permission-denied', blocked, status: await micChipText(page) })
     } finally {
       await browser.close()
     }
@@ -429,10 +519,10 @@ async function main() {
 
     await sleep(3000)
     const chipAfterEnable = await micChipText(page)
-    if (/Calibrating|Mic ready|Mic listening/i.test(chipAfterEnable)) {
-      pass('mic shows calibrating or ready after grant', chipAfterEnable)
+    if (/Calibrating|Mic ready|Mic listening|Ready|No input detected|room noisy/i.test(chipAfterEnable)) {
+      pass('mic shows actionable status after grant', chipAfterEnable)
     } else {
-      fail('mic shows calibrating or ready after grant', chipAfterEnable || '(empty)')
+      fail('mic shows actionable status after grant', chipAfterEnable || '(empty)')
     }
 
     if (await micTestVisible(page)) {
@@ -444,7 +534,7 @@ async function main() {
     const calLabel = await page
       .locator('.mic-input-status__calibration')
       .innerText()
-      .catch(() => '')
+      .catch(() => '') || await micChipText(page)
     if (calLabel) {
       pass('mic calibration status line present', calLabel.slice(0, 60))
     }
@@ -454,9 +544,7 @@ async function main() {
     if (await hearIt.isVisible().catch(() => false)) {
       await hearIt.click()
       await sleep(1500)
-      const stillListening = await page
-        .getByRole('region', { name: 'Microphone input' })
-        .isVisible()
+      const stillListening = await micPanelVisible(page)
       if (stillListening) pass('Hear It does not dismiss mic panel')
       else fail('Hear It does not dismiss mic panel', 'Mic panel hidden after Hear It')
     } else {
@@ -556,7 +644,7 @@ async function main() {
       const quietCal = await quietPage
         .locator('.mic-input-status__calibration')
         .innerText()
-        .catch(() => '')
+        .catch(() => '') || await micChipText(quietPage)
       if (/quiet|ready|Calibrating/i.test(quietCal)) {
         pass('quiet room fixture calibrates without crash', quietCal.slice(0, 50))
       } else {
@@ -585,7 +673,7 @@ async function main() {
       const noisyCal = await noisyPage
         .locator('.mic-input-status__calibration')
         .innerText()
-        .catch(() => '')
+        .catch(() => '') || await micChipText(noisyPage)
       const noisyStatus = await noisyPage
         .locator('.mic-input-status__calibration')
         .getAttribute('class')

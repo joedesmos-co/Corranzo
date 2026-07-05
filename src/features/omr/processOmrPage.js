@@ -45,6 +45,7 @@ import {
   resolveGuitarSystemRoles,
   systemsContainTablature,
   TAB_APPROXIMATE_RHYTHM_WARNING,
+  TAB_COMPRESSED_TIMING_WARNING,
 } from './detectTabNotation.js'
 
 function measureGridEntriesForSystem(
@@ -228,6 +229,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       tabNotes: 0,
       tabPositionalMeasures: 0,
       tabApproximateRhythmMeasures: 0,
+      tabCompressedTimingMeasures: 0,
       tabEmptyMeasures: 0,
       attachedPositions: 0,
       tabOnly: true,
@@ -325,6 +327,12 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           notes += noteCount
           tabDiagnostics.tabPositionalMeasures += 1
           tabDiagnostics.tabApproximateRhythmMeasures += 1
+          if (tabTiming.timingModel?.compressed) {
+            tabDiagnostics.tabCompressedTimingMeasures += 1
+            if (!tabDiagnostics.warnings.includes(TAB_COMPRESSED_TIMING_WARNING)) {
+              tabDiagnostics.warnings.push(TAB_COMPRESSED_TIMING_WARNING)
+            }
+          }
           if (!noteCount) {
             tabDiagnostics.tabEmptyMeasures += 1
           }

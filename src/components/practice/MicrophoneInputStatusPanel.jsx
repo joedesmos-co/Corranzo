@@ -78,7 +78,7 @@ export default function MicrophoneInputStatusPanel({
     calibration?.status === MIC_CALIBRATION_STATUS.ROOM_NOISY
   const calibrationReady = calibration?.status === MIC_CALIBRATION_STATUS.READY
 
-  let statusLine = 'Mic off'
+  let statusLine = 'Starting microphone...'
   if (!supported) {
     statusLine = 'Mic unavailable'
   } else if (permission === MIC_PERMISSION.DENIED) {
@@ -92,7 +92,7 @@ export default function MicrophoneInputStatusPanel({
   } else if (isGranted) {
     statusLine = 'Mic ready'
   } else {
-    statusLine = 'Starting microphone…'
+    statusLine = 'Starting microphone...'
   }
 
   const detectedNote =

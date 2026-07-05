@@ -23,7 +23,7 @@ export const MIC_DIAGNOSTIC_LABELS = {
   [MIC_DIAGNOSTIC.UNCLEAR_PITCH]: 'Unclear pitch — play one clear note at a time',
   [MIC_DIAGNOSTIC.UNSTABLE]: 'Pitch detected but not stable yet — hold the note',
   [MIC_DIAGNOSTIC.WRONG_PITCH]: 'Wrong note — check the expected pitch',
-  [MIC_DIAGNOSTIC.CHORD_UNSUPPORTED]: 'Mic hears one note at a time — use MIDI for chords together',
+  [MIC_DIAGNOSTIC.CHORD_UNSUPPORTED]: 'Chord sequence — play one tone at a time',
   [MIC_DIAGNOSTIC.QUIET_PRACTICE_HELP]: 'Soft note detected — move closer for quiet practice',
   [MIC_DIAGNOSTIC.LISTENING]: 'Listening…',
   [MIC_DIAGNOSTIC.GOOD]: 'Good signal — single notes should register well',

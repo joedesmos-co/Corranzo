@@ -49,7 +49,8 @@ describe('mic diagnostic state', () => {
   })
 
   it('returns readable labels', () => {
-    expect(micDiagnosticLabel(MIC_DIAGNOSTIC.CHORD_UNSUPPORTED)).toContain('one note at a time')
+    expect(micDiagnosticLabel(MIC_DIAGNOSTIC.CHORD_UNSUPPORTED)).toContain('Chord sequence')
+    expect(micDiagnosticLabel(MIC_DIAGNOSTIC.CHORD_UNSUPPORTED)).toContain('one tone at a time')
     expect(micDiagnosticLabel(MIC_DIAGNOSTIC.UNSTABLE)).toContain('stable')
     expect(micDiagnosticLabel(MIC_DIAGNOSTIC.QUIET_PRACTICE_HELP)).toContain('move closer')
   })

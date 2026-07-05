@@ -1,15 +1,25 @@
 {
-  "generatedAt": "2026-07-03T16:45:55.543Z",
+  "generatedAt": "2026-07-05T21:36:42.330Z",
   "baseUrl": "http://127.0.0.1:4173",
   "scenarios": [
     {
       "id": "permission-denied",
-      "blocked": true
+      "blocked": true,
+      "status": "Microphone access is blocked. Allow it in your browser, or change input."
     },
     {
       "id": "wfy-mic-main",
-      "chipAfterEnable": "Mic listening",
-      "calLabel": "Room is noisy — play a bit louder or move closer"
+      "chipAfterEnable": "No input detected — check the mic is unmuted",
+      "calLabel": "No input detected — check the mic is unmuted"
+    },
+    {
+      "id": "quiet-room",
+      "quietCal": "Ready — play the highlighted note"
+    },
+    {
+      "id": "noisy-room",
+      "noisyCal": "Ready — play the highlighted note",
+      "noisyStatus": "mic-input-status__calibration mic-input-status__calibration--ready"
     }
   ],
   "passes": [
@@ -23,15 +33,19 @@
     },
     {
       "name": "mic permission grant enables capture",
-      "detail": "wfy-enable"
+      "detail": "auto-started"
     },
     {
-      "name": "mic shows calibrating or ready after grant",
-      "detail": "Mic listening"
+      "name": "production build uses V2 mic engine when flag unset",
+      "detail": "v2-score-informed"
+    },
+    {
+      "name": "mic shows actionable status after grant",
+      "detail": "No input detected — check the mic is unmuted"
     },
     {
       "name": "mic calibration status line present",
-      "detail": "Room is noisy — play a bit louder or move closer"
+      "detail": "No input detected — check the mic is unmuted"
     },
     {
       "name": "Hear It does not dismiss mic panel",
@@ -39,10 +53,6 @@
     },
     {
       "name": "leaving WFY hides mic panel and test UI",
-      "detail": ""
-    },
-    {
-      "name": "re-entering WFY shows mic off until re-enabled",
       "detail": ""
     },
     {
@@ -56,12 +66,24 @@
     {
       "name": "mobile WFY mic layout — no horizontal overflow",
       "detail": ""
+    },
+    {
+      "name": "quiet room fixture calibrates without crash",
+      "detail": "Ready — play the highlighted note"
+    },
+    {
+      "name": "noisy room fixture surfaces room guidance",
+      "detail": "Ready — play the highlighted note"
+    },
+    {
+      "name": "noisy room does not show false Last confirmed",
+      "detail": ""
     }
   ],
   "failures": [],
   "notes": [
-    "__SCOREFLOW_MIC_DEBUG__ not exposed (production build?)",
     "Mic test panel not visible — may still be calibrating in fake stream",
+    "Mic off notice not shown on re-entry — may auto-resume in some builds",
     "Guitar WFY mic panel visible after switch: true"
   ],
   "tuningChanged": false

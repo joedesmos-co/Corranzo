@@ -64,6 +64,10 @@ describe('OMR viewer recovery', () => {
     expect(omrPanel).toMatch(/resetInFinally && activeRunRef\.current === runId/)
   })
 
+  it('keeps TAB extraction failures specific instead of replacing them with generic PDF copy', () => {
+    expect(omrPanel).toMatch(/TAB staff lines were detected[\s\S]*return rawMessage/)
+  })
+
   it('uses friendly PDF timing copy and exposes cursor retry', () => {
     expect(omrPanel).toContain(
       'Upload MusicXML/MXL anytime for the most accurate timing.',

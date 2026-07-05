@@ -9,9 +9,11 @@ import {
   buildKeyboardKeys,
   buildVisualLaneGroups,
   computeKeyboardRange,
+  resolveWfyDisplayFrameTime,
   resolveVisualFrameTime,
   resolveVisualTarget,
   selectVisualWindow,
+  WFY_VISUAL_MOVE_MS,
 } from '../../features/practice/visualPracticeLane.js'
 import { detectStaves } from '../../features/practice/staffLaneLayout.js'
 import {
@@ -232,12 +234,6 @@ function VisualPracticeView({ timingSourceKind = null }) {
 
 export default memo(VisualPracticeView)
 
-const WFY_VISUAL_MOVE_MS = 420
-
-function easeOutCubic(t) {
-  return 1 - (1 - t) ** 3
-}
-
 function useSmoothWfyFrameTime({ rawFrameTime, waiting, checkpointId }) {
   const animationRef = useRef({
     from: rawFrameTime,
@@ -282,9 +278,12 @@ function useSmoothWfyFrameTime({ rawFrameTime, waiting, checkpointId }) {
     const animation = animationRef.current
     const now = typeof performance !== 'undefined' ? performance.now() : Date.now()
     const elapsed = Math.max(0, now - animation.startedAt)
-    const progress = Math.min(1, elapsed / WFY_VISUAL_MOVE_MS)
-    const eased = easeOutCubic(progress)
-    const next = animation.from + (animation.to - animation.from) * eased
+    const next = resolveWfyDisplayFrameTime({
+      fromTime: animation.from,
+      toTime: animation.to,
+      elapsedMs: elapsed,
+      durationMs: WFY_VISUAL_MOVE_MS,
+    })
     displayRef.current = next
     return next
   }, [])

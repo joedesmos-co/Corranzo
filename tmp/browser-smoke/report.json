@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-03T16:44:06.684Z",
+  "generatedAt": "2026-07-05T21:30:13.213Z",
   "baseUrl": "http://127.0.0.1:4173",
   "checks": [
     {
@@ -66,15 +66,15 @@
     "Piano Play clicked without crash",
     "Guitar shows empty practice after Piano load",
     "Guitar Play clicked without crash",
-    "Repeated Piano ↔ Guitar switches keep PDF previews",
+    "Repeated Piano ↔ Guitar switches keep Library cards and Practice scores",
     "Visual view renders",
     "Score view renders",
     "Wait For You section visible",
     "Hear It control deferred until checkpoint (Wait For You mode enabled)",
     "Progress instrument filters switch",
     "Reload restored active instrument (Guitar)",
-    "Reload preserved Piano bundle — PDF visible in Library",
-    "PDF preview still works after switching back post-reload",
+    "Reload preserved Piano bundle — score visible in Practice",
+    "Practice score still works after switching back post-reload",
     "No horizontal overflow on desktop/iPad/mobile",
     "No console errors",
     "No uncaught page errors"

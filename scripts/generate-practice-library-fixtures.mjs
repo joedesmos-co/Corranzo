@@ -58,66 +58,6 @@ const GUITAR_PIECES = [
       ['D4', 2, 2, 3], ['C4', 2, 2, 1],
     ]),
   },
-  {
-    id: 'guitar-greensleeves',
-    title: 'Greensleeves',
-    subtitle: 'Intermediate minor melody',
-    composer: 'Traditional English ballad',
-    tempo: 82,
-    notes: guitarNotes([
-      ['A3', 1, 3, 2], ['C4', 1, 2, 1], ['D4', 1, 2, 3], ['E4', 1, 1, 0],
-      ['F4', 1, 1, 1], ['E4', 1, 1, 0], ['D4', 1, 2, 3], ['B3', 1, 2, 0],
-      ['G3', 1, 3, 0], ['B3', 1, 2, 0], ['C4', 1, 2, 1], ['D4', 1, 2, 3],
-      ['E4', 1, 1, 0], ['D4', 1, 2, 3], ['C4', 1, 2, 1], ['A3', 1, 3, 2],
-      ['A3', 2, 3, 2], ['G3', 2, 3, 0],
-    ]),
-  },
-  {
-    id: 'guitar-scarborough-fair',
-    title: 'Scarborough Fair',
-    subtitle: 'Intermediate modal phrasing',
-    composer: 'Traditional English ballad',
-    tempo: 76,
-    notes: guitarNotes([
-      ['D4', 1, 2, 3], ['D4', 1, 2, 3], ['A3', 1, 3, 2], ['A3', 1, 3, 2],
-      ['E4', 1, 1, 0], ['E4', 1, 1, 0], ['D4', 2, 2, 3],
-      ['D4', 1, 2, 3], ['E4', 1, 1, 0], ['F4', 1, 1, 1], ['E4', 1, 1, 0],
-      ['D4', 1, 2, 3], ['A3', 1, 3, 2], ['C4', 1, 2, 1], ['D4', 1, 2, 3],
-      ['E4', 2, 1, 0], ['D4', 2, 2, 3],
-    ]),
-  },
-  {
-    id: 'guitar-spanish-romance-intro',
-    title: 'Spanish Romance intro',
-    subtitle: 'Intermediate arpeggio-style TAB',
-    composer: 'Traditional / anonymous',
-    tempo: 88,
-    notes: guitarNotes([
-      ['E4', 0.5, 1, 0], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
-      ['E4', 0.5, 1, 0], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
-      ['F4', 0.5, 1, 1], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
-      ['F4', 0.5, 1, 1], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
-      ['G4', 0.5, 1, 3], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
-      ['G4', 0.5, 1, 3], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
-      ['E4', 0.5, 1, 0], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
-      ['E4', 0.5, 1, 0], ['B3', 0.5, 2, 0], ['G3', 0.5, 3, 0], ['B3', 0.5, 2, 0],
-    ]),
-  },
-  {
-    id: 'guitar-carulli-style-etude',
-    title: 'Carulli-style Etude',
-    subtitle: 'Advanced position changes in a short study',
-    composer: 'Corranzo public-domain study after classical guitar patterns',
-    tempo: 104,
-    notes: guitarNotes([
-      ['C4', 1, 2, 1], ['E4', 1, 1, 0], ['G4', 1, 1, 3], ['E4', 1, 1, 0],
-      ['D4', 1, 2, 3], ['F4', 1, 1, 1], ['A4', 1, 1, 5], ['F4', 1, 1, 1],
-      ['E4', 1, 1, 0], ['G4', 1, 1, 3], ['A4', 1, 1, 5], ['G4', 1, 1, 3],
-      ['F4', 1, 1, 1], ['A4', 1, 1, 5], ['G4', 1, 1, 3], ['F4', 1, 1, 1],
-      ['E4', 1, 1, 0], ['G4', 1, 1, 3], ['F4', 1, 1, 1], ['E4', 1, 1, 0],
-      ['D4', 1, 2, 3], ['F4', 1, 1, 1], ['E4', 1, 1, 0], ['C4', 1, 2, 1],
-    ]),
-  },
 ]
 
 function n(pitch, beats = 1) {
@@ -246,8 +186,8 @@ function buildPianoMusicXml(piece) {
   <movement-title>${escapeXml(piece.title)} - ${escapeXml(piece.subtitle)}</movement-title>
   <identification>
     <creator type="composer">${escapeXml(piece.composer)}</creator>
-    <rights>Public domain source material; short deterministic Corranzo practice fixture.</rights>
-    <encoding><software>Corranzo practice library fixture generator</software></encoding>
+    <rights>Public domain source material; Corranzo beginner practice arrangement.</rights>
+    <encoding><software>Corranzo Practice Library</software></encoding>
   </identification>
   <part-list>
     <score-part id="P1">
@@ -290,8 +230,8 @@ function buildGuitarMusicXml(piece) {
   <movement-title>${escapeXml(piece.title)} - ${escapeXml(piece.subtitle)}</movement-title>
   <identification>
     <creator type="composer">${escapeXml(piece.composer)}</creator>
-    <rights>Public domain source material; short deterministic Corranzo guitar fixture.</rights>
-    <encoding><software>Corranzo practice library fixture generator</software></encoding>
+    <rights>Public domain source material; Corranzo beginner guitar practice arrangement.</rights>
+    <encoding><software>Corranzo Practice Library</software></encoding>
   </identification>
   <part-list>
     <score-part id="P1">
@@ -391,7 +331,7 @@ function buildPdf(piece, instrument) {
   }
 
   text(54, 748, 20, piece.title)
-  text(54, 726, 11, `${piece.composer} - public domain practice fixture`)
+  text(54, 726, 11, `${piece.composer} - public-domain practice score`)
   text(54, 710, 10, `${instrument} - ${piece.subtitle} - Tempo quarter = ${piece.tempo}`)
 
   if (instrument === 'Guitar') {
@@ -400,7 +340,7 @@ function buildPdf(piece, instrument) {
     drawPianoSystems({ piece, text, line, circle })
   }
 
-  text(54, 96, 10, 'Generated deterministically for Corranzo Practice Library.')
+  text(54, 96, 10, 'Corranzo Practice Library - public-domain melody with aligned MusicXML and MIDI.')
   const stream = ops.join('\n')
   const objects = [
     '<< /Type /Catalog /Pages 2 0 R >>',

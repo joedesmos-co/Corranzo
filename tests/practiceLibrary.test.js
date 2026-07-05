@@ -20,7 +20,7 @@ function readSrc(...parts) {
 
 describe('practice library pieces', () => {
   it('ships the current Piano and Guitar demos as built-in practice pieces', () => {
-    expect(BUILT_IN_PRACTICE_PIECES).toHaveLength(9)
+    expect(BUILT_IN_PRACTICE_PIECES).toHaveLength(5)
     expect(BUILT_IN_PRACTICE_PIECES).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -57,10 +57,6 @@ describe('practice library pieces', () => {
       'Ode to Joy',
       'Amazing Grace',
       'When the Saints Go Marching In',
-      'Greensleeves',
-      'Scarborough Fair',
-      'Spanish Romance intro',
-      'Carulli-style Etude',
     ])
     expect(pianoPieces.every((piece) => piece.instrumentId === INSTRUMENT_IDS.PIANO)).toBe(true)
     expect(guitarPieces.every((piece) => piece.instrumentId === INSTRUMENT_IDS.GUITAR)).toBe(true)
@@ -73,19 +69,39 @@ describe('practice library pieces', () => {
 
     expect(groups.map((group) => [group.difficulty, group.pieces.length])).toEqual([
       ['Beginner', 3],
-      ['Intermediate', 3],
-      ['Advanced', 1],
     ])
     expect(groups[0].pieces.map((piece) => piece.title)).toContain('Ode to Joy')
-    expect(groups[2].pieces[0].title).toBe('Carulli-style Etude')
+    expect(groups.some((group) => group.difficulty === 'Intermediate')).toBe(false)
+    expect(groups.some((group) => group.difficulty === 'Advanced')).toBe(false)
+  })
+
+  it('keeps the visible built-in catalog curated and public-domain only', () => {
+    const searchableText = BUILT_IN_PRACTICE_PIECES.map((piece) =>
+      [piece.id, piece.title, piece.subtitle, piece.attribution, piece.teaches].join(' ').toLowerCase(),
+    )
+
+    expect(BUILT_IN_PRACTICE_PIECES.map((piece) => piece.id)).not.toEqual(
+      expect.arrayContaining([
+        'guitar-greensleeves',
+        'guitar-scarborough-fair',
+        'guitar-spanish-romance-intro',
+        'guitar-carulli-style-etude',
+        'piano-fur-elise-excerpt',
+        'piano-gymnopedie-no1-excerpt',
+        'piano-mary-had-a-little-lamb',
+        'piano-ode-to-joy',
+        'piano-twinkle-twinkle',
+      ]),
+    )
+    expect(searchableText.some((text) => /\bfixture\b|generated|cc0|style study/.test(text))).toBe(false)
   })
 
   it('filters library cards by searchable metadata', () => {
     const guitarPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.GUITAR })
     const pianoPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.PIANO })
 
-    expect(filterLibraryItems(guitarPieces, 'arpeggio').map((piece) => piece.title)).toEqual([
-      'Spanish Romance intro',
+    expect(filterLibraryItems(guitarPieces, 'phrasing').map((piece) => piece.title)).toEqual([
+      'Amazing Grace',
     ])
     expect(filterLibraryItems(pianoPieces, 'minuet').map((piece) => piece.title)).toEqual([
       'Minuet in G',

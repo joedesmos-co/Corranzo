@@ -22,12 +22,16 @@ import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
 export const TAB_CLEF_GLYPHS = new Set(['\uE06D', '\uE06E'])
 export const TAB_APPROXIMATE_RHYTHM_WARNING =
   'TAB notes detected — rhythm is approximate. Playback uses even spacing within each measure.'
+export const TAB_COMPRESSED_TIMING_WARNING =
+  'Dense TAB notes were compressed to a safe timing grid. Rhythm remains approximate.'
 export const TAB_REPEAT_CODA_WARNING =
   'Repeat/coda markings were detected but not fully expanded. Playback follows the written measure order.'
 export const TAB_CAPO_UNSUPPORTED_WARNING =
   'Capo marking detected — playback sounds at written TAB pitch; capo transposition is not applied.'
 export const TAB_TEMPO_TEXT_WARNING =
   'Tempo change text was detected but not interpreted. Playback keeps one steady tempo.'
+export const TAB_NO_USABLE_NOTES_MESSAGE =
+  'TAB staff lines were detected, but Corranzo could not read enough fret digits or barlines for playback. Try a cleaner digital TAB PDF or upload MusicXML/MXL for accurate timing.'
 
 const DIGIT_RE = /^[0-9]$/
 const STAFF_LINE_COLLAPSE_EPSILON = 0.003

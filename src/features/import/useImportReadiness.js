@@ -6,7 +6,7 @@ import { buildPracticeGuidance } from './practiceGuidance.js'
 import { buildLibraryAccuracyWarnings } from './accuracyGuide.js'
 
 function omrWarningStrength(message) {
-  return /TAB notes detected|Repeat\/coda|Capo marking/i.test(message)
+  return /TAB notes detected|Dense TAB notes|Repeat\/coda|Capo marking/i.test(message)
     ? 'strong'
     : 'mild'
 }

@@ -17,7 +17,9 @@ import { fileURLToPath } from 'node:url'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import { buildNoteCheckpoints } from '../src/features/practice/waitForYouCheckpoints.js'
 import {
+  VISUAL_LANE_DEFAULTS,
   VISUAL_GROUP_STATUS,
+  WFY_VISUAL_MOVE_MS,
   buildBarlineTimes,
   buildKeyboardKeys,
   buildVisualLaneGroups,
@@ -26,7 +28,9 @@ import {
   findVisualTargetIndex,
   isBlackKey,
   laneYForMidi,
+  resolveWfyDisplayFrameTime,
   resolveVisualFrameTime,
+  resolveVisualLaneTransform,
   resolveVisualPlayheadX,
   resolveVisualTarget,
   selectVisualWindow,
@@ -175,6 +179,73 @@ describe('visual practice lane', () => {
     ).toBe(checkpoints[4].timeSeconds)
   })
 
+  it('keeps the waiting WFY target directly under the visual playhead', () => {
+    const timingMap = parseMusicXml(F.straight4())
+    const groups = buildVisualLaneGroups(timingMap)
+    const checkpoints = buildNoteCheckpoints(timingMap)
+    const liveCheckpoint = checkpoints[6]
+
+    const visualTime = resolveVisualFrameTime({
+      currentTime: checkpoints[1].timeSeconds,
+      waitForYouWaiting: true,
+      waitForYouCheckpoint: liveCheckpoint,
+    })
+    const target = resolveVisualTarget(groups, {
+      currentTime: checkpoints[1].timeSeconds,
+      waitForYouCheckpoint: liveCheckpoint,
+    })
+    const transform = resolveVisualLaneTransform({
+      frameTime: visualTime,
+      viewWidth: 1000,
+      durationSeconds: timingMap.durationSeconds,
+    })
+    const targetScreenX =
+      target.group.timeSeconds * VISUAL_LANE_DEFAULTS.pixelsPerSecond + transform.scrollX
+
+    expect(target.group.id).toBe(liveCheckpoint.id)
+    expect(visualTime).toBe(liveCheckpoint.timeSeconds)
+    expect(targetScreenX).toBeCloseTo(transform.playheadX, 6)
+  })
+
+  it('eases WFY visual movement through intermediate positions instead of teleporting', () => {
+    const fromTime = 0.5
+    const toTime = 3
+    const start = resolveWfyDisplayFrameTime({ fromTime, toTime, elapsedMs: 0 })
+    const midway = resolveWfyDisplayFrameTime({
+      fromTime,
+      toTime,
+      elapsedMs: WFY_VISUAL_MOVE_MS / 2,
+    })
+    const end = resolveWfyDisplayFrameTime({
+      fromTime,
+      toTime,
+      elapsedMs: WFY_VISUAL_MOVE_MS,
+    })
+
+    expect(start).toBe(fromTime)
+    expect(midway).toBeGreaterThan(fromTime)
+    expect(midway).toBeLessThan(toTime)
+    expect(end).toBe(toTime)
+
+    const midTransform = resolveVisualLaneTransform({
+      frameTime: midway,
+      viewWidth: 1000,
+      durationSeconds: 8,
+    })
+    const endTransform = resolveVisualLaneTransform({
+      frameTime: end,
+      viewWidth: 1000,
+      durationSeconds: 8,
+    })
+    const midTargetScreenX =
+      toTime * VISUAL_LANE_DEFAULTS.pixelsPerSecond + midTransform.scrollX
+    const endTargetScreenX =
+      toTime * VISUAL_LANE_DEFAULTS.pixelsPerSecond + endTransform.scrollX
+
+    expect(midTargetScreenX).toBeGreaterThan(midTransform.playheadX)
+    expect(endTargetScreenX).toBeCloseTo(endTransform.playheadX, 6)
+  })
+
   it('moves the visual playhead across the lane using piece or loop progress', () => {
     expect(resolveVisualPlayheadX({ frameTime: 0, viewWidth: 1000, durationSeconds: 10 }))
       .toBeCloseTo(220)
@@ -193,6 +264,14 @@ describe('visual practice lane', () => {
     ).toBeCloseTo(520)
 
     expect(resolveVisualPlayheadX({ frameTime: 5, viewWidth: 1000 })).toBeCloseTo(220)
+
+    const transform = resolveVisualLaneTransform({
+      frameTime: 5,
+      viewWidth: 1000,
+      durationSeconds: 10,
+    })
+    expect(transform.playheadX).toBeCloseTo(520)
+    expect(transform.scrollX).toBeCloseTo(520 - 5 * VISUAL_LANE_DEFAULTS.pixelsPerSecond)
   })
 
   it('windows the lane and tags past/current/upcoming', () => {
@@ -396,7 +475,9 @@ describe('practice view integration', () => {
     expect(src).toContain("el.setAttribute(")
     expect(src).toContain('getFrameTime()')
     expect(src).toContain('resolveVisualPlayheadX')
-    expect(src).toMatch(/translate\(\$\{livePlayheadX - t \* PX_PER_SECOND\} 0\)/)
+    expect(src).toContain('resolveVisualLaneTransform')
+    expect(src).toContain('scrollX')
+    expect(src).toContain('translate(${scrollX} 0)')
     expect(src).toContain("playheadEl.setAttribute('x1', String(livePlayheadX))")
     expect(src).toContain("playheadEl.setAttribute('x2', String(livePlayheadX))")
     expect(src).toContain("capEl.setAttribute('cx', String(livePlayheadX))")
@@ -476,8 +557,10 @@ describe('practice view integration', () => {
     const tabLane = readSrc('components', 'practice', 'TabVisualLane.jsx')
     const lane = readSrc('features', 'practice', 'visualPracticeLane.js')
 
-    expect(staffLane).toContain('translate(${livePlayheadX - t * PX_PER_SECOND} 0)')
-    expect(tabLane).toContain('translate(${livePlayheadX - t * PX_PER_SECOND} 0)')
+    expect(staffLane).toContain('resolveVisualLaneTransform')
+    expect(tabLane).toContain('resolveVisualLaneTransform')
+    expect(staffLane).toContain('translate(${scrollX} 0)')
+    expect(tabLane).toContain('translate(${scrollX} 0)')
     expect(staffLane).toContain("playheadEl.setAttribute('x1', String(livePlayheadX))")
     expect(tabLane).toContain("playheadEl.setAttribute('x1', String(livePlayheadX))")
     expect(lane).toContain('pixelsPerSecond: 110')
@@ -491,6 +574,10 @@ describe('practice view integration', () => {
     expect(css).toContain('.staff-lane__scroll')
     expect(css).toContain('@media (prefers-reduced-motion: reduce)')
     expect(css).toMatch(/\.staff-lane__note[\s\S]*transition:/)
+    expect(css).toContain('flex: 1 1 clamp(220px, 44vh, 390px)')
+    expect(css).toContain('overflow-wrap: anywhere')
+    expect(css).toContain('paint-order: stroke fill')
+    expect(css).toContain('@media (min-width: 901px) and (max-width: 1180px)')
   })
 
   it('staff lane styles express upcoming/current/played states without the old block lane', () => {

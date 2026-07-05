@@ -5,7 +5,7 @@ export default function MicTestPanel({ liveFrame, lastStableMidi, isListening })
   if (!isListening) {
     return (
       <div className="mic-test mic-test--idle">
-        <p className="mic-test__hint">Enable the microphone above, then play single notes to test.</p>
+        <p className="mic-test__hint">Start the microphone, then play one clear note to test.</p>
       </div>
     )
   }
@@ -32,7 +32,7 @@ export default function MicTestPanel({ liveFrame, lastStableMidi, isListening })
     <div className="mic-test" aria-label="Microphone test">
       <p className="mic-test__title">Mic test</p>
       <p className="mic-test__hint">
-        Play one note at a time. Microphone mode is less reliable than a MIDI keyboard.
+        Play one clear note at a time.
       </p>
 
       <div className="mic-test__meter-row">

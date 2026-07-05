@@ -5003,6 +5003,7 @@
   border: 1px solid var(--sf-border);
   border-radius: var(--sf-radius-lg);
   background: var(--sf-bg-panel);
+  min-width: 0;
 }
 
 .visual-practice__target--waiting {
@@ -5026,6 +5027,7 @@
   letter-spacing: 0.01em;
   color: var(--sf-text-primary);
   font-weight: 650;
+  overflow-wrap: anywhere;
 }
 
 .visual-practice__target-meta {
@@ -5040,8 +5042,8 @@
   /* Shrinkable so the target callout and keyboard strip always stay visible
      in short viewports (mobile) instead of being clipped — but tall enough
      that a grand staff at minimum zoom keeps both staves readable. */
-  flex: 1 1 220px;
-  min-height: 168px;
+  flex: 1 1 clamp(220px, 44vh, 390px);
+  min-height: 190px;
   border: 1px solid var(--sf-border);
   border-radius: var(--sf-radius-lg);
   background: var(--sf-bg-panel);
@@ -5067,6 +5069,7 @@
 
 .staff-lane__svg {
   display: block;
+  shape-rendering: geometricPrecision;
 }
 
 .staff-lane__mask {
@@ -5081,6 +5084,7 @@
 .staff-lane__barline {
   stroke: var(--sf-border-strong);
   stroke-width: 1;
+  opacity: 0.8;
 }
 
 .staff-lane__timesig text {
@@ -5121,6 +5125,9 @@
 
 .staff-lane__sharp {
   fill: currentColor;
+  paint-order: stroke fill;
+  stroke: var(--sf-bg-panel);
+  stroke-width: 2.4;
   user-select: none;
 }
 
@@ -5132,6 +5139,31 @@
   stroke: currentColor;
   stroke-width: 1.6;
   stroke-linecap: round;
+}
+
+.staff-lane__span-mark {
+  color: var(--vp-upcoming, #b4b4bb);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.45;
+  opacity: 0.86;
+}
+
+.staff-lane__span-mark--slur {
+  stroke-width: 1.25;
+  opacity: 0.74;
+}
+
+.staff-lane__articulation {
+  color: var(--vp-upcoming, #b4b4bb);
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.55;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  user-select: none;
 }
 
 .staff-lane__head--hollow {
@@ -5167,8 +5199,8 @@
       status palette as the staff lane; only the visualization differs. ── */
 .tab-lane {
   position: relative;
-  flex: 1 1 220px;
-  min-height: 168px;
+  flex: 1 1 clamp(220px, 44vh, 390px);
+  min-height: 190px;
   border: 1px solid var(--sf-border);
   border-radius: var(--sf-radius-lg);
   background: var(--sf-bg-panel);
@@ -5188,6 +5220,7 @@
 
 .tab-lane__svg {
   display: block;
+  shape-rendering: geometricPrecision;
 }
 
 .tab-lane__mask {
@@ -5207,6 +5240,7 @@
 .tab-lane__barline {
   stroke: var(--sf-border-strong);
   stroke-width: 1;
+  opacity: 0.8;
 }
 
 .tab-lane__string-label {
@@ -5249,7 +5283,34 @@
   font-weight: 700;
   font-size: 11px;
   font-variant-numeric: tabular-nums;
+  paint-order: stroke fill;
+  stroke: var(--sf-bg-panel-inset);
+  stroke-width: 1.25;
+  stroke-linejoin: round;
   user-select: none;
+}
+
+.tab-lane__technique {
+  color: var(--vp-upcoming, #b4b4bb);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  user-select: none;
+}
+
+.tab-lane__technique-text {
+  fill: currentColor;
+  paint-order: stroke fill;
+  stroke: var(--sf-bg-panel);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+
+.tab-lane__technique-line,
+.tab-lane__technique-arc {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.55;
 }
 
 .tab-lane__note--current {
@@ -5280,7 +5341,7 @@
 
 .visual-practice__fret-string {
   display: flex;
-  height: 18px;
+  height: 20px;
   position: relative;
 }
 
@@ -5306,14 +5367,14 @@
 .visual-practice__fret-dot {
   position: relative;
   z-index: 1;
-  min-width: 15px;
-  height: 15px;
+  min-width: 17px;
+  height: 17px;
   border-radius: 50%;
   background: var(--vp-accent, #6ee7b7);
   color: #0f172a;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  line-height: 15px;
+  line-height: 17px;
   text-align: center;
   box-shadow: 0 0 6px var(--vp-accent-glow, rgba(110, 231, 183, 0.65));
 }
@@ -5569,6 +5630,17 @@
 
   .visual-practice__legend-item {
     font-size: var(--sf-font-micro);
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1180px) {
+  .staff-lane,
+  .tab-lane {
+    min-height: 220px;
+  }
+
+  .visual-practice__keyboard {
+    height: 104px;
   }
 }
 

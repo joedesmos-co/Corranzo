@@ -39,7 +39,10 @@ import {
   DEFAULT_MIN_STACK_NOTES as PHANTOM_COLUMN_MIN_STACK_NOTES,
 } from './phantomColumnSimulation.js'
 import { applyTerminalSameClefChordQuarterDurations } from './processVectorOmrPage.js'
-import { TAB_APPROXIMATE_RHYTHM_WARNING } from './detectTabNotation.js'
+import {
+  TAB_APPROXIMATE_RHYTHM_WARNING,
+  TAB_NO_USABLE_NOTES_MESSAGE,
+} from './detectTabNotation.js'
 import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
 import {
   OMR_DEFAULT_TEMPO,
@@ -163,6 +166,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       tabNotes: 0,
       tabPositionalMeasures: 0,
       tabApproximateRhythmMeasures: 0,
+      tabCompressedTimingMeasures: 0,
       tabEmptyMeasures: 0,
       attachedPositions: 0,
       tabOnly: false,
@@ -328,6 +332,8 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       diagnostics.tablature.tabPositionalMeasures += pageTab.tabPositionalMeasures ?? 0
       diagnostics.tablature.tabApproximateRhythmMeasures +=
         pageTab.tabApproximateRhythmMeasures ?? 0
+      diagnostics.tablature.tabCompressedTimingMeasures +=
+        pageTab.tabCompressedTimingMeasures ?? 0
       diagnostics.tablature.tabEmptyMeasures += pageTab.tabEmptyMeasures ?? 0
       diagnostics.tablature.attachedPositions += pageTab.attachedPositions ?? 0
       diagnostics.tablature.tabOnly ||= Boolean(pageTab.tabOnly)
@@ -380,6 +386,16 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       assessment.message ??
         `No staff systems detected. Try a cleaner digital ${instrument.label.toLowerCase()} PDF.`,
     )
+  }
+
+  if (!measureRhythms.length && diagnostics.tablature.tabOnly && diagnostics.tablature.tabStaves > 0) {
+    const error = new Error(TAB_NO_USABLE_NOTES_MESSAGE)
+    error.code = OMR_FAILURE_REASON.NO_NOTES
+    error.diagnostics = {
+      ...diagnostics,
+      preprocessLog,
+    }
+    throw error
   }
 
   if (!measureRhythms.length) {

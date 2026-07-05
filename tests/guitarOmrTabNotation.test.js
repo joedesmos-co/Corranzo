@@ -8,6 +8,8 @@ import {
   systemsContainTablature,
   TAB_APPROXIMATE_RHYTHM_WARNING,
   TAB_CAPO_UNSUPPORTED_WARNING,
+  TAB_COMPRESSED_TIMING_WARNING,
+  TAB_NO_USABLE_NOTES_MESSAGE,
   TAB_REPEAT_CODA_WARNING,
   TAB_TEMPO_TEXT_WARNING,
 } from '../src/features/omr/detectTabNotation.js'
@@ -522,6 +524,44 @@ describe('guitar OMR tablature detection', () => {
     expect(confidence).toBeLessThan(0.55)
   })
 
+  it('warns when dense TAB-only playback is compressed to the safe timing grid', async () => {
+    const page = makeWhitePage()
+    const tabStaff = drawStaff(page, 100, 6)
+    for (const x of [100, 900]) {
+      drawVertical(page, x, tabStaff.top, tabStaff.bottom)
+    }
+
+    const pageText = Array.from({ length: 20 }, (_, index) =>
+      tabTextItem(page, {
+        text: String(index % 5),
+        x: 120 + index * 39,
+        y: tabStaff.top + (index % 6) * 10,
+      }),
+    )
+
+    const result = await runPdfOmrPipeline('synthetic-dense-tab-only', {
+      renderPage: async () => page,
+      extractPageText: async () => pageText,
+      numPages: 1,
+      instrumentId: 'guitar',
+      title: 'Synthetic dense TAB-only',
+    })
+
+    expect(result.warnings).toEqual(
+      expect.arrayContaining([
+        TAB_APPROXIMATE_RHYTHM_WARNING,
+        TAB_COMPRESSED_TIMING_WARNING,
+      ]),
+    )
+    expect(result.diagnostics.tablature).toEqual(
+      expect.objectContaining({
+        tabOnly: true,
+        rhythmApproximate: true,
+        tabCompressedTimingMeasures: 1,
+      }),
+    )
+  })
+
   it('marks TAB-only page analysis as approximate and warns about repeat/capo text', () => {
     const page = makeWhitePage()
     const tabStaff = drawStaff(page, 100, 6)
@@ -602,5 +642,29 @@ describe('guitar OMR tablature detection', () => {
       }),
     )
     expect(result.musicXml).toContain('TAB notes detected')
+  })
+
+  it('rejects TAB staff lines without readable frets using a TAB-specific message', async () => {
+    const page = makeWhitePage()
+    const tabStaff = drawStaff(page, 100, 6)
+    for (const x of [100, 300, 500]) {
+      drawVertical(page, x, tabStaff.top, tabStaff.bottom)
+    }
+
+    const pageText = [
+      tabTextItem(page, { text: 'Capo 2', x: 120, y: tabStaff.top - 34, width: 48 }),
+      tabTextItem(page, { text: 'G7', x: 160, y: tabStaff.bottom, width: 18 }),
+      tabTextItem(page, { text: 'lyrics only', x: 210, y: tabStaff.bottom + 32, width: 80 }),
+    ]
+
+    await expect(
+      runPdfOmrPipeline('synthetic-tab-no-frets', {
+        renderPage: async () => page,
+        extractPageText: async () => pageText,
+        numPages: 1,
+        instrumentId: 'guitar',
+        title: 'Synthetic TAB with no readable frets',
+      }),
+    ).rejects.toThrow(TAB_NO_USABLE_NOTES_MESSAGE)
   })
 })
