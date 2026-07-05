@@ -59,10 +59,12 @@ export function buildOmrDiagnostics({
       systemIndex: system.systemIndex,
       confidence: system.confidence,
       measureCount: system.measures?.length ?? 0,
-      measures: (system.measures ?? []).map((measure) => ({
+        measures: (system.measures ?? []).map((measure) => ({
         measureNumber: measure.measureNumber,
         confidence: measure.confidence,
         uncertain: Boolean(measure.uncertain),
+        rhythmApproximate: Boolean(measure.rhythmApproximate),
+        timingModel: measure.timingModel ?? null,
         detectedNoteheads: measure.vectorNoteCount ?? measure.vectorNoteMatching?.detectedNoteheads ?? 0,
         emittedNoteheads: measure.vectorNoteMatching?.emittedNoteheads ?? 0,
         dedupedDuringGrouping: measure.vectorNoteMatching?.dedupedDuringGrouping ?? 0,

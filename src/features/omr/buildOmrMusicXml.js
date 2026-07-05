@@ -5,6 +5,7 @@ import {
 } from './omrConstants.js'
 import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
 import { OMR_DISCLAIMER } from './omrMusicalConstants.js'
+import { TAB_APPROXIMATE_RHYTHM_WARNING } from './detectTabNotation.js'
 import { shouldEmitKeySignature } from './detectOmrKeySignature.js'
 import { shouldEmitTempo } from './parseOmrTempoMarking.js'
 import { shouldEmitRepeat, shouldEmitEnding } from './detectOmrRepeatBarline.js'
@@ -186,6 +187,7 @@ export function buildOmrMusicXml({
     : ''
 
   let measuresXml = ''
+  let emittedTabApproximateWarning = false
   for (const measure of sortedMeasures) {
     let inner = ''
     if (measure.measureNumber === sortedMeasures[0].measureNumber) {
@@ -198,6 +200,10 @@ export function buildOmrMusicXml({
         `<clef><sign>G</sign><line>2</line>${clefOctaveXml}</clef></attributes>`
       if (includeDisclaimer) {
         inner += `<direction><words>${escapeXml(OMR_DISCLAIMER)}</words></direction>`
+      }
+      if (measure.rhythmApproximate && !emittedTabApproximateWarning) {
+        inner += `<direction><words>${escapeXml(TAB_APPROXIMATE_RHYTHM_WARNING)}</words></direction>`
+        emittedTabApproximateWarning = true
       }
       if (emitTempo) {
         inner += `<direction><sound tempo="${tempo.bpm}"/></direction>`

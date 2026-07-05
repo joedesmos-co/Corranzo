@@ -470,6 +470,7 @@ export default function App() {
     noteCount,
     measureCount,
     measureGrid,
+    warnings = [],
     sourcePdfFileName = null,
     sourcePdfFileUrl = null,
     sourceInstrumentId = null,
@@ -566,6 +567,10 @@ export default function App() {
       pdfFingerprint,
       pdfFileName: stablePdfMeta.fileName,
       createdAt: new Date().toISOString(),
+    }
+    const omrWarnings = [...new Set((warnings ?? []).filter(Boolean))].slice(0, 8)
+    if (omrWarnings.length) {
+      omrMeta.warnings = omrWarnings
     }
     const normalizedMeasureGrid = normalizeOmrMeasureGridMetadata(measureGrid)
     if (normalizedMeasureGrid) {

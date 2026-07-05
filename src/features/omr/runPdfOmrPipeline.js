@@ -39,6 +39,7 @@ import {
   DEFAULT_MIN_STACK_NOTES as PHANTOM_COLUMN_MIN_STACK_NOTES,
 } from './phantomColumnSimulation.js'
 import { applyTerminalSameClefChordQuarterDurations } from './processVectorOmrPage.js'
+import { TAB_APPROXIMATE_RHYTHM_WARNING } from './detectTabNotation.js'
 import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
 import {
   OMR_DEFAULT_TEMPO,
@@ -54,6 +55,14 @@ import {
 } from './normalizeStaffLineGaps.js'
 
 const DEFAULT_MAX_PAGES = 24
+
+function pushUnique(target, values = []) {
+  for (const value of values) {
+    if (value && !target.includes(value)) {
+      target.push(value)
+    }
+  }
+}
 
 function throwIfCancelled(signal) {
   if (signal?.aborted) {
@@ -153,7 +162,14 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       tabStaves: 0,
       tabNotes: 0,
       tabPositionalMeasures: 0,
+      tabApproximateRhythmMeasures: 0,
+      tabEmptyMeasures: 0,
       attachedPositions: 0,
+      tabOnly: false,
+      rhythmApproximate: false,
+      unsupportedMarkers: [],
+      capoText: null,
+      warnings: [],
     },
   }
   const orphanDiagnosticsPages = []
@@ -310,7 +326,17 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       diagnostics.tablature.tabStaves += pageTab.tabStaves ?? 0
       diagnostics.tablature.tabNotes += pageTab.tabNotes ?? 0
       diagnostics.tablature.tabPositionalMeasures += pageTab.tabPositionalMeasures ?? 0
+      diagnostics.tablature.tabApproximateRhythmMeasures +=
+        pageTab.tabApproximateRhythmMeasures ?? 0
+      diagnostics.tablature.tabEmptyMeasures += pageTab.tabEmptyMeasures ?? 0
       diagnostics.tablature.attachedPositions += pageTab.attachedPositions ?? 0
+      diagnostics.tablature.tabOnly ||= Boolean(pageTab.tabOnly)
+      diagnostics.tablature.rhythmApproximate ||= Boolean(pageTab.rhythmApproximate)
+      if (!diagnostics.tablature.capoText && pageTab.capoText) {
+        diagnostics.tablature.capoText = pageTab.capoText
+      }
+      pushUnique(diagnostics.tablature.unsupportedMarkers, pageTab.unsupportedMarkers)
+      pushUnique(diagnostics.tablature.warnings, pageTab.warnings)
     }
 
     const pageOrphans = pageResult.orphanDiagnostics
@@ -624,6 +650,10 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   )
 
   const warnings = [...(richDiagnostics.warnings ?? [])]
+  if (diagnostics.tablature.rhythmApproximate) {
+    pushUnique(warnings, [TAB_APPROXIMATE_RHYTHM_WARNING])
+    pushUnique(warnings, diagnostics.tablature.warnings)
+  }
   if (layoutConsistency.warning) {
     warnings.push(layoutConsistency.warning)
   }

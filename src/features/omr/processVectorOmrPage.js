@@ -77,6 +77,9 @@ export function textGlyphsToImage(pageText, imageData) {
       const textX = item.x + charWidth * (index + 0.5)
       glyphs.push({
         text: text[index],
+        sourceText: text,
+        sourceIndex: index,
+        sourceLength: text.length,
         x: textX * scaleX,
         y: imageData.height - item.y * scaleY,
         width: charWidth * scaleX,

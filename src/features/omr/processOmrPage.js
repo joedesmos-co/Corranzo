@@ -39,10 +39,12 @@ import {
   attachTabPositionsToEvents,
   buildTabMeasureEvents,
   classifySystemStaves,
+  detectTabTextAnnotations,
   extractTabDigitNotes,
   groupTabNotesByMeasure,
   resolveGuitarSystemRoles,
   systemsContainTablature,
+  TAB_APPROXIMATE_RHYTHM_WARNING,
 } from './detectTabNotation.js'
 
 function measureGridEntriesForSystem(
@@ -79,6 +81,25 @@ function measureGridEntriesForSystem(
       }
     })
     .filter(Boolean)
+}
+
+function tabMeasureBoxesForOutput(measureBoxes, byMeasure) {
+  if (!measureBoxes?.length) {
+    return []
+  }
+  let lastNotedIndex = -1
+  measureBoxes.forEach((box, index) => {
+    if (byMeasure.get(box.measureNumber)?.length) {
+      lastNotedIndex = index
+    }
+  })
+  if (lastNotedIndex < 0) {
+    return []
+  }
+  // Interior no-fret bars are real rests and must preserve numbering. Trailing
+  // no-fret spans are ambiguous in TAB-only PDFs because the right content edge
+  // is often used as a synthetic boundary; emitting them invents silent bars.
+  return measureBoxes.slice(0, lastNotedIndex + 1)
 }
 
 /**
@@ -201,7 +222,20 @@ export function processOmrPageAnalysis(imageData, options = {}) {
   ) {
     const positionedGlyphs = textGlyphsToImage(pageText, imageData)
     const beats = inheritedTimeSignature?.beats ?? 4
-    const tabDiagnostics = { tabStaves: 0, tabNotes: 0, tabPositionalMeasures: 0, attachedPositions: 0 }
+    const tabAnnotations = detectTabTextAnnotations(pageText)
+    const tabDiagnostics = {
+      tabStaves: 0,
+      tabNotes: 0,
+      tabPositionalMeasures: 0,
+      tabApproximateRhythmMeasures: 0,
+      tabEmptyMeasures: 0,
+      attachedPositions: 0,
+      tabOnly: true,
+      rhythmApproximate: true,
+      unsupportedMarkers: tabAnnotations.unsupportedMarkers,
+      capoText: tabAnnotations.capoText,
+      warnings: [TAB_APPROXIMATE_RHYTHM_WARNING, ...tabAnnotations.warnings],
+    }
     let tabMeasureCounter = measureNumberStart
 
     for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
@@ -225,22 +259,17 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         )
         tabDiagnostics.tabNotes += tabNotes.length
         const byMeasure = groupTabNotesByMeasure(tabNotes)
+        const outputMeasureBoxes = tabMeasureBoxesForOutput(measureBoxes, byMeasure)
 
-        // Emit through the system's LAST digit-bearing bar. Interior bars
-        // without digits are real silent bars and must consume a measure
-        // number — skipping them compressed the numbering, shifting every
-        // later measure left of its PDF barline (grid, MusicXML, cursor).
-        // Bars after the last digits stay skipped: a trailing span is usually
-        // the gap between the final barline and the content edge (short
-        // system), not an engraved bar.
-        let lastNotedIndex = -1
-        measureBoxes.forEach((box, index) => {
-          if (byMeasure.get(box.measureNumber)?.length) {
-            lastNotedIndex = index
-          }
-        })
+        if (!outputMeasureBoxes.length) {
+          continue
+        }
 
-        for (const measureBox of measureBoxes.slice(0, lastNotedIndex + 1)) {
+        // TAB-only output follows the detected measure boxes in written order.
+        // Empty bars are meaningful in TAB books, including tail bars before a
+        // system break, so they are emitted as full-measure rests instead of
+        // being compressed away.
+        for (const measureBox of outputMeasureBoxes) {
           const measureNotes = byMeasure.get(measureBox.measureNumber)
           const outputMeasureNumber = tabMeasureCounter
           tabMeasureCounter += 1
@@ -248,7 +277,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
             ...measureBox,
             measureNumber: outputMeasureNumber,
           }
-          const { events } = measureNotes?.length
+          const tabTiming = measureNotes?.length
             ? buildTabMeasureEvents(measureNotes, { beats })
             : {
                 events: [
@@ -259,9 +288,18 @@ export function processOmrPageAnalysis(imageData, options = {}) {
                     durationDivisions: beats * OMR_DIVISIONS_PER_QUARTER,
                     durationType: beats === 3 ? 'half' : 'whole',
                     dotted: beats === 3,
+                    rhythmApproximate: true,
                   },
                 ],
+                rhythmApproximate: true,
+                timingModel: {
+                  kind: 'tab-approximate-even',
+                  approximate: true,
+                  maxOnsets: 0,
+                  coalesced: false,
+                },
               }
+          const { events } = tabTiming
           const noteCount = events.reduce((sum, event) => sum + (event.notes?.length ?? 0), 0)
           const measureRecord = {
             measureNumber: outputMeasureNumber,
@@ -273,7 +311,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
             // detection, so it does not count into `uncertainMeasures`.
             uncertain: false,
             rhythmApproximate: true,
-            confidence: 0.6,
+            timingModel: tabTiming.timingModel,
+            confidence: 0.5,
             vectorNoteCount: noteCount,
           }
           emittedMeasureBoxes.push(emittedMeasureBox)
@@ -281,6 +320,10 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           measureRhythms.push(measureRecord)
           notes += noteCount
           tabDiagnostics.tabPositionalMeasures += 1
+          tabDiagnostics.tabApproximateRhythmMeasures += 1
+          if (!noteCount) {
+            tabDiagnostics.tabEmptyMeasures += 1
+          }
         }
       }
 

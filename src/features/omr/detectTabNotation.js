@@ -20,9 +20,18 @@ import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
 
 /** SMuFL tablature clefs: 6-string and 4-string. */
 export const TAB_CLEF_GLYPHS = new Set(['\uE06D', '\uE06E'])
+export const TAB_APPROXIMATE_RHYTHM_WARNING =
+  'TAB notes detected — rhythm is approximate. Playback uses even spacing within each measure.'
+export const TAB_REPEAT_CODA_WARNING =
+  'Repeat/coda markings were detected but not fully expanded. Playback follows the written measure order.'
+export const TAB_CAPO_UNSUPPORTED_WARNING =
+  'Capo marking detected — generated playback does not transpose for capo.'
+export const TAB_TEMPO_TEXT_WARNING =
+  'Tempo change text was detected but not interpreted. Playback keeps one steady tempo.'
 
 const DIGIT_RE = /^[0-9]$/
 const STAFF_LINE_COLLAPSE_EPSILON = 0.003
+const TAB_SOURCE_TEXT_RE = /^[\d\s\-–—|/\\]+$/
 
 /**
  * Split a detected system's staves into notation vs tablature staves.
@@ -217,6 +226,41 @@ export function stringForY(yNorm, lineYs, { maxDistanceFactor = 0.75 } = {}) {
   return best
 }
 
+function tabLineGap(lineYs) {
+  if (!lineYs?.length || lineYs.length < 2) {
+    return 0.01
+  }
+  return (lineYs[lineYs.length - 1] - lineYs[0]) / (lineYs.length - 1)
+}
+
+function sourceTextLooksLikeTabDigits(glyph) {
+  const sourceText = glyph.sourceText
+  if (typeof sourceText !== 'string' || sourceText.length === 0) {
+    return true
+  }
+  return TAB_SOURCE_TEXT_RE.test(sourceText)
+}
+
+function glyphSizeLooksLikeFretDigit(glyph, tabStave, imageData) {
+  const gapPx = tabLineGap(tabStave?.lineYs) * imageData.height
+  if (!Number.isFinite(gapPx) || gapPx <= 0) {
+    return true
+  }
+  const height = Number(glyph.height ?? gapPx)
+  const width = Number(glyph.width ?? gapPx * 0.6)
+  // Large page watermarks can cross a string line and contain digits; fret
+  // digits are roughly staff-gap sized, not several string gaps tall.
+  return height <= gapPx * 2.2 && width <= gapPx * 1.8
+}
+
+function isLikelyTabFretGlyph(glyph, tabStave, imageData) {
+  return (
+    DIGIT_RE.test(glyph.text ?? '') &&
+    sourceTextLooksLikeTabDigits(glyph) &&
+    glyphSizeLooksLikeFretDigit(glyph, tabStave, imageData)
+  )
+}
+
 /**
  * Extract fret digits on one TAB staff into tab notes.
  *
@@ -237,7 +281,7 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
   // Digit glyphs inside the staff band, tagged with their string line.
   const digits = []
   for (const glyph of glyphs) {
-    if (!DIGIT_RE.test(glyph.text ?? '')) {
+    if (!isLikelyTabFretGlyph(glyph, tabStave, imageData)) {
       continue
     }
     const string = stringForY(glyph.y / imageData.height, tabStave.lineYs)
@@ -334,6 +378,75 @@ function positionWithinBox(box, xNorm) {
 
 /** Same-onset grouping tolerance as a fraction of the measure width. */
 const CHORD_X_EPSILON = 0.045
+const TAB_MAX_ONSETS_PER_4_4 = 8
+
+function durationTypeForTabDuration(durationDivisions) {
+  if (durationDivisions >= OMR_DIVISIONS_PER_QUARTER) {
+    return 'quarter'
+  }
+  if (durationDivisions >= OMR_DIVISIONS_PER_QUARTER / 2) {
+    return 'eighth'
+  }
+  return '16th'
+}
+
+function buildTabTimingBuckets(groups, { beats = 4 } = {}) {
+  const totalDivisions = beats * OMR_DIVISIONS_PER_QUARTER
+  if (!groups.length) {
+    return {
+      buckets: [],
+      timingModel: {
+        kind: 'tab-approximate-even',
+        approximate: true,
+        maxOnsets: 0,
+        coalesced: false,
+      },
+    }
+  }
+
+  const maxOnsets = Math.max(
+    1,
+    Math.min(beats * 2, TAB_MAX_ONSETS_PER_4_4, totalDivisions),
+  )
+  const slotCount = groups.length <= beats ? beats : maxOnsets
+  const buckets = Array.from({ length: slotCount }, (_, slot) => ({
+    slot,
+    positionInMeasure: slotCount > 1 ? slot / (slotCount - 1) : 0,
+    notes: [],
+    x: null,
+  }))
+
+  for (const group of groups) {
+    const slot = Math.min(
+      slotCount - 1,
+      Math.max(0, Math.round(group.positionInMeasure * (slotCount - 1))),
+    )
+    const bucket = buckets[slot]
+    bucket.notes.push(...group.notes)
+    bucket.x = bucket.x == null ? group.notes[0]?.x ?? null : bucket.x
+    bucket.positionInMeasure = Math.min(bucket.positionInMeasure, group.positionInMeasure)
+  }
+
+  const usedBuckets = buckets.filter((bucket) => bucket.notes.length > 0)
+  const durationDivisions = Math.max(1, Math.round(totalDivisions / slotCount))
+  return {
+    buckets: usedBuckets.map((bucket) => ({
+      ...bucket,
+      startDivision: Math.min(
+        totalDivisions - durationDivisions,
+        Math.round(bucket.slot * durationDivisions),
+      ),
+      durationDivisions,
+    })),
+    timingModel: {
+      kind: 'tab-approximate-even',
+      approximate: true,
+      maxOnsets,
+      slotCount,
+      coalesced: groups.length > usedBuckets.length,
+    },
+  }
+}
 
 /**
  * Assemble tab notes for one measure into positional note events (chords share
@@ -343,7 +456,17 @@ const CHORD_X_EPSILON = 0.045
  */
 export function buildTabMeasureEvents(measureNotes, { beats = 4 } = {}) {
   if (!measureNotes?.length) {
-    return { events: [], uncertain: true }
+    return {
+      events: [],
+      uncertain: true,
+      rhythmApproximate: true,
+      timingModel: {
+        kind: 'tab-approximate-even',
+        approximate: true,
+        maxOnsets: 0,
+        coalesced: false,
+      },
+    }
   }
 
   const sorted = [...measureNotes].sort((left, right) => left.positionInMeasure - right.positionInMeasure)
@@ -357,26 +480,19 @@ export function buildTabMeasureEvents(measureNotes, { beats = 4 } = {}) {
     groups.push({ positionInMeasure: note.positionInMeasure, notes: [note] })
   }
 
-  const slotsPerMeasure = beats
-  const usedSlots = new Set()
+  const { buckets, timingModel } = buildTabTimingBuckets(groups, { beats })
   const events = []
-  for (const group of groups) {
-    let slot = Math.min(
-      slotsPerMeasure - 1,
-      Math.round(group.positionInMeasure * slotsPerMeasure),
-    )
-    while (usedSlots.has(slot) && slot < slotsPerMeasure - 1) {
-      slot += 1 // keep distinct onsets distinct when they round together
-    }
-    usedSlots.add(slot)
+  for (const bucket of buckets) {
     events.push({
       type: 'note',
-      startDivision: slot * OMR_DIVISIONS_PER_QUARTER,
-      durationDivisions: OMR_DIVISIONS_PER_QUARTER,
-      durationType: 'quarter',
+      startDivision: bucket.startDivision,
+      durationDivisions: bucket.durationDivisions,
+      durationType: durationTypeForTabDuration(bucket.durationDivisions),
       dotted: false,
-      cx: group.notes[0].x,
-      notes: group.notes.map((note) => ({
+      rhythmApproximate: true,
+      timingModel,
+      cx: bucket.x ?? bucket.notes[0]?.x ?? 0,
+      notes: bucket.notes.map((note) => ({
         midi: note.midi,
         string: note.string,
         fret: note.fret,
@@ -387,7 +503,12 @@ export function buildTabMeasureEvents(measureNotes, { beats = 4 } = {}) {
     })
   }
 
-  return { events: mergeTabEventsWithSameStart(events), uncertain: true }
+  return {
+    events: mergeTabEventsWithSameStart(events),
+    uncertain: true,
+    rhythmApproximate: true,
+    timingModel,
+  }
 }
 
 function mergeTabEventsWithSameStart(events) {
@@ -401,6 +522,57 @@ function mergeTabEventsWithSameStart(events) {
     merged.push({ ...event, notes: [...(event.notes ?? [])] })
   }
   return merged
+}
+
+function unique(values) {
+  return [...new Set(values.filter(Boolean))]
+}
+
+function compactWhitespace(value) {
+  return String(value ?? '').replace(/\s+/g, ' ').trim()
+}
+
+export function detectTabTextAnnotations(pageText = []) {
+  const text = compactWhitespace(
+    pageText
+      .map((item) => item?.text ?? '')
+      .filter(Boolean)
+      .join(' '),
+  )
+  const lower = text.toLowerCase()
+  const markers = []
+  const warnings = []
+
+  const capoMatch = text.match(/\bcapo\b(?:\s*(?:on|at|fret))?\s*([0-9ivx]+)?/i)
+  const capoText = capoMatch ? compactWhitespace(capoMatch[0]) : null
+  if (capoText) {
+    markers.push('capo')
+    warnings.push(capoText ? `${TAB_CAPO_UNSUPPORTED_WARNING} (${capoText})` : TAB_CAPO_UNSUPPORTED_WARNING)
+  }
+
+  const hasDsCoda =
+    /\bd\.?\s*s\.?(?:\s+al)?\s+coda\b/i.test(text) ||
+    /\bd\.?\s*s\.?\b/i.test(text)
+  const hasCoda = /\bcoda\b/i.test(text)
+  const hasVoltaText =
+    /(?:\b(?:1st|2nd|3rd)\b|\b[123]\.)\s*(?:time|ending)?/i.test(text)
+  if (hasDsCoda || hasCoda || hasVoltaText) {
+    if (hasDsCoda) markers.push('d-s-coda')
+    if (hasCoda) markers.push('coda')
+    if (hasVoltaText) markers.push('repeat-ending')
+    warnings.push(TAB_REPEAT_CODA_WARNING)
+  }
+
+  if (/\brit\.|\britard|\brall\./i.test(lower)) {
+    markers.push('tempo-text')
+    warnings.push(TAB_TEMPO_TEXT_WARNING)
+  }
+
+  return {
+    capoText,
+    unsupportedMarkers: unique(markers),
+    warnings: unique(warnings),
+  }
 }
 
 /**

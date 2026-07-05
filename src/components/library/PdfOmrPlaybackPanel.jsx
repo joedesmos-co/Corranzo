@@ -189,6 +189,7 @@ export default function PdfOmrPlaybackPanel({
         noteCount: result.noteCount,
         measureCount: result.measureCount,
         diagnostics: result.diagnostics,
+        warnings: result.warnings ?? [],
         measureGrid: result.measureGrid,
         sourcePdfFileName: pdfFileName ?? null,
         sourcePdfFileUrl: pdfFileUrl ?? null,
@@ -221,8 +222,11 @@ export default function PdfOmrPlaybackPanel({
         result.overallConfidence != null
           ? ` · ${Math.round(result.overallConfidence * 100)}% confidence`
           : ''
+      const tabApproximateHint = result.diagnostics?.tablature?.rhythmApproximate
+        ? ' · TAB rhythm approximate'
+        : ''
       setSummary(
-        `${result.noteCount} notes · ${result.measureCount} measures${uncertainHint}${confidenceHint}`,
+        `${result.noteCount} notes · ${result.measureCount} measures${uncertainHint}${confidenceHint}${tabApproximateHint}`,
       )
       setError(null)
       setIsGenerating(false)

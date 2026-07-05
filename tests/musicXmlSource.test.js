@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { buildOmrMusicXml } from '../src/features/omr/buildOmrMusicXml.js'
+import { buildOmrGeneratedWarnings } from '../src/features/import/useImportReadiness.js'
 import {
   clearOmrGeneratedPlaybackSource,
   cloneMusicXmlSource,
@@ -52,6 +53,29 @@ describe('musicXmlSource', () => {
     expect(source.source).toBe('omr')
     expect(source.data.byteLength).toBeGreaterThan(0)
     expect(new TextDecoder().decode(source.data)).toBe(xml)
+  })
+
+  it('surfaces TAB-only OMR warnings strongly in Practice notices', () => {
+    const warnings = buildOmrGeneratedWarnings({
+      source: 'omr',
+      omrMeta: {
+        warnings: [
+          'TAB notes detected — rhythm is approximate. Playback uses even spacing within each measure.',
+          'Tempo defaulted to 120 BPM.',
+        ],
+      },
+    })
+
+    expect(warnings).toEqual([
+      expect.objectContaining({
+        strength: 'strong',
+        message: expect.stringContaining('TAB notes detected'),
+      }),
+      expect.objectContaining({
+        strength: 'mild',
+        message: 'Tempo defaulted to 120 BPM.',
+      }),
+    ])
   })
 
   it('detects unusable detached buffers safely', () => {

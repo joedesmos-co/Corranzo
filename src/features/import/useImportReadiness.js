@@ -5,6 +5,25 @@ import { buildFilePairWarnings } from './filePairWarnings.js'
 import { buildPracticeGuidance } from './practiceGuidance.js'
 import { buildLibraryAccuracyWarnings } from './accuracyGuide.js'
 
+function omrWarningStrength(message) {
+  return /TAB notes detected|Repeat\/coda|Capo marking/i.test(message)
+    ? 'strong'
+    : 'mild'
+}
+
+export function buildOmrGeneratedWarnings(musicXmlSource) {
+  if (musicXmlSource?.source !== 'omr') {
+    return []
+  }
+  return (musicXmlSource.omrMeta?.warnings ?? [])
+    .filter(Boolean)
+    .map((message, index) => ({
+      id: `omr-generated-${index}`,
+      strength: omrWarningStrength(message),
+      message,
+    }))
+}
+
 /**
  * Combine per-file and cross-file import warnings plus next-step guidance.
  */
@@ -21,6 +40,7 @@ export default function useImportReadiness({
   midiLoading,
   alignmentDiagnostics,
   pdfSoftWarning,
+  musicXmlSource = null,
   isDemoPiece = false,
 }) {
   return useMemo(() => {
@@ -47,6 +67,7 @@ export default function useImportReadiness({
 
     if (timingReady) {
       warnings.push(...analyzeMusicXmlImport(timingMap))
+      warnings.push(...buildOmrGeneratedWarnings(musicXmlSource))
     }
 
     if (midiError) {
@@ -95,6 +116,7 @@ export default function useImportReadiness({
     midiLoading,
     alignmentDiagnostics,
     pdfSoftWarning,
+    musicXmlSource,
     isDemoPiece,
   ])
 }

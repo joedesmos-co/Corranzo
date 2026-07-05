@@ -2,11 +2,17 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import {
   buildTabMeasureEvents,
   classifySystemStaves,
+  detectTabTextAnnotations,
   extractTabDigitNotes,
   resolveGuitarSystemRoles,
   systemsContainTablature,
+  TAB_APPROXIMATE_RHYTHM_WARNING,
+  TAB_CAPO_UNSUPPORTED_WARNING,
+  TAB_REPEAT_CODA_WARNING,
+  TAB_TEMPO_TEXT_WARNING,
 } from '../src/features/omr/detectTabNotation.js'
 import { processOmrPageAnalysis } from '../src/features/omr/processOmrPage.js'
+import { runPdfOmrPipeline } from '../src/features/omr/runPdfOmrPipeline.js'
 import { getInstrument } from '../src/features/instruments/instruments.js'
 import {
   OMR_DIAGNOSTIC_FLAG,
@@ -46,6 +52,19 @@ function drawStaff(page, top, lineCount, { x0 = 100, x1 = 900, gap = 10 } = {}) 
     drawHorizontal(page, top + line * gap, x0, x1)
   }
   return { top, bottom: top + (lineCount - 1) * gap }
+}
+
+function tabTextItem(page, { text, x, y, width = 8, height = 10, fontName = 'TabDigit' }) {
+  return {
+    text,
+    x,
+    y: page.height - y,
+    width,
+    height,
+    fontName,
+    pageWidth: page.width,
+    pageHeight: page.height,
+  }
 }
 
 describe('guitar OMR tablature detection', () => {
@@ -129,6 +148,49 @@ describe('guitar OMR tablature detection', () => {
 
     expect(notes.map((note) => note.fret)).toEqual([0, 1])
     expect(notes.every((note) => note.measureNumber === 1)).toBe(true)
+  })
+
+  it('rejects chord symbols, lyric numbers, and watermark digits as TAB frets', () => {
+    const tabStave = {
+      lineYs: [0.2, 0.22, 0.24, 0.26, 0.28, 0.3],
+    }
+    const imageData = { width: 1000, height: 1000 }
+    const y = tabStave.lineYs[2] * imageData.height
+
+    const notes = extractTabDigitNotes(
+      [
+        { text: '3', sourceText: '3', x: 160, y, width: 8, height: 12 },
+        { text: '7', sourceText: 'G7', x: 260, y, width: 8, height: 12 },
+        { text: '4', sourceText: 'lyric 4', x: 360, y, width: 8, height: 12 },
+        { text: '2', sourceText: '2024', x: 460, y, width: 44, height: 90 },
+      ],
+      tabStave,
+      [{ measureNumber: 1, x0: 0.1, playableX0: 0.1, x1: 0.6 }],
+      imageData,
+    )
+
+    expect(notes.map((note) => note.fret)).toEqual([3])
+  })
+
+  it('detects unsupported TAB-only text annotations without applying them silently', () => {
+    const annotations = detectTabTextAnnotations([
+      { text: 'Capo 2' },
+      { text: 'D.S. al Coda' },
+      { text: '1.' },
+      { text: 'rit.' },
+    ])
+
+    expect(annotations.capoText).toBe('Capo 2')
+    expect(annotations.unsupportedMarkers).toEqual(
+      expect.arrayContaining(['capo', 'd-s-coda', 'coda', 'repeat-ending', 'tempo-text']),
+    )
+    expect(annotations.warnings).toEqual(
+      expect.arrayContaining([
+        `${TAB_CAPO_UNSUPPORTED_WARNING} (Capo 2)`,
+        TAB_REPEAT_CODA_WARNING,
+        TAB_TEMPO_TEXT_WARNING,
+      ]),
+    )
   })
 
   it('reads a paired notation-over-TAB system from the notation measure boxes', () => {
@@ -308,6 +370,51 @@ describe('guitar OMR tablature detection', () => {
     )
   })
 
+  it('preserves interior empty TAB measures without inventing trailing padding bars', () => {
+    const page = makeWhitePage()
+    const tabStaff = drawStaff(page, 100, 6)
+    for (const x of [100, 300, 500, 700, 900]) {
+      drawVertical(page, x, tabStaff.top, tabStaff.bottom)
+    }
+
+    const pageText = [
+      tabTextItem(page, {
+        text: '3',
+        x: 200,
+        y: tabStaff.bottom,
+      }),
+      tabTextItem(page, {
+        text: '5',
+        x: 600,
+        y: tabStaff.bottom,
+      }),
+    ]
+
+    const result = processOmrPageAnalysis(page, {
+      page: 1,
+      measureNumberStart: 1,
+      pageText,
+      stavesPerSystem: 1,
+      instrument: getInstrument('guitar'),
+      timeSignature: { beats: 4, beatType: 4, confidence: 0 },
+    })
+
+    expect(result.measureRhythms.map((measure) => measure.measureNumber)).toEqual([1, 2, 3])
+    expect(result.measureRhythms[1].events).toEqual([
+      expect.objectContaining({ type: 'rest', startDivision: 0, durationDivisions: 16 }),
+    ])
+    expect(result.measureRhythms[2].events[0].notes[0]).toEqual(
+      expect.objectContaining({ fret: 5 }),
+    )
+    expect(result.tabDiagnostics).toEqual(
+      expect.objectContaining({
+        rhythmApproximate: true,
+        tabApproximateRhythmMeasures: 3,
+        tabEmptyMeasures: 1,
+      }),
+    )
+  })
+
   it('merges TAB notes that quantize to the same onset into one chord event', () => {
     const { events } = buildTabMeasureEvents([
       { string: 1, fret: 0, midi: 64, x: 80, positionInMeasure: 0.86 },
@@ -324,5 +431,110 @@ describe('guitar OMR tablature detection', () => {
         ],
       }),
     )
+  })
+
+  it('uses bounded even timing for dense TAB-only measures', () => {
+    const measureNotes = Array.from({ length: 12 }, (_, index) => ({
+      string: (index % 6) + 1,
+      fret: index % 5,
+      midi: 52 + index,
+      x: 80 + index * 16,
+      positionInMeasure: index / 11,
+    }))
+
+    const { events, rhythmApproximate, timingModel } = buildTabMeasureEvents(measureNotes)
+
+    expect(rhythmApproximate).toBe(true)
+    expect(timingModel).toEqual(
+      expect.objectContaining({
+        kind: 'tab-approximate-even',
+        maxOnsets: 8,
+        coalesced: true,
+      }),
+    )
+    expect(events.length).toBeLessThanOrEqual(8)
+    expect(events.every((event) => event.durationDivisions >= 2)).toBe(true)
+  })
+
+  it('marks TAB-only page analysis as approximate and warns about repeat/capo text', () => {
+    const page = makeWhitePage()
+    const tabStaff = drawStaff(page, 100, 6)
+    for (const x of [100, 300, 500]) {
+      drawVertical(page, x, tabStaff.top, tabStaff.bottom)
+    }
+
+    const pageText = [
+      tabTextItem(page, { text: 'Capo 3', x: 120, y: tabStaff.top - 36, width: 48 }),
+      tabTextItem(page, { text: 'D.S. al Coda', x: 520, y: tabStaff.top - 36, width: 96 }),
+      tabTextItem(page, { text: 'G7', x: 155, y: tabStaff.bottom, width: 18 }),
+      tabTextItem(page, { text: 'lyric 4', x: 190, y: tabStaff.bottom, width: 54 }),
+      tabTextItem(page, { text: '2024', x: 220, y: tabStaff.bottom, width: 140, height: 90 }),
+      tabTextItem(page, { text: '3', x: 210, y: tabStaff.bottom }),
+    ]
+
+    const result = processOmrPageAnalysis(page, {
+      page: 1,
+      measureNumberStart: 1,
+      pageText,
+      stavesPerSystem: 1,
+      instrument: getInstrument('guitar'),
+      timeSignature: { beats: 4, beatType: 4, confidence: 0 },
+    })
+
+    const playableNotes = result.measureRhythms.flatMap((measure) =>
+      measure.events.flatMap((event) => event.notes ?? []),
+    )
+    expect(playableNotes.map((note) => note.fret)).toEqual([3])
+    expect(result.measureRhythms.every((measure) => measure.rhythmApproximate)).toBe(true)
+    expect(result.tabDiagnostics.warnings).toEqual(
+      expect.arrayContaining([
+        TAB_APPROXIMATE_RHYTHM_WARNING,
+        `${TAB_CAPO_UNSUPPORTED_WARNING} (Capo 3)`,
+        TAB_REPEAT_CODA_WARNING,
+      ]),
+    )
+    expect(result.tabDiagnostics.unsupportedMarkers).toEqual(
+      expect.arrayContaining(['capo', 'd-s-coda', 'coda']),
+    )
+  })
+
+  it('returns honest full-pipeline warnings for TAB-only approximate timing', async () => {
+    const page = makeWhitePage()
+    const tabStaff = drawStaff(page, 100, 6)
+    for (const x of [100, 300, 500]) {
+      drawVertical(page, x, tabStaff.top, tabStaff.bottom)
+    }
+
+    const pageText = [
+      tabTextItem(page, { text: 'Capo 5', x: 110, y: tabStaff.top - 34, width: 48 }),
+      tabTextItem(page, { text: '1.', x: 320, y: tabStaff.top - 34, width: 18 }),
+      tabTextItem(page, { text: '0', x: 200, y: tabStaff.bottom }),
+    ]
+
+    const result = await runPdfOmrPipeline('synthetic-tab-only', {
+      renderPage: async () => page,
+      extractPageText: async () => pageText,
+      numPages: 1,
+      instrumentId: 'guitar',
+      title: 'Synthetic TAB-only',
+    })
+
+    expect(result.warnings).toEqual(
+      expect.arrayContaining([
+        TAB_APPROXIMATE_RHYTHM_WARNING,
+        `${TAB_CAPO_UNSUPPORTED_WARNING} (Capo 5)`,
+        TAB_REPEAT_CODA_WARNING,
+      ]),
+    )
+    expect(result.overallConfidence).toBeGreaterThanOrEqual(0.42)
+    expect(result.overallConfidence).toBeLessThan(0.65)
+    expect(result.diagnostics.tablature).toEqual(
+      expect.objectContaining({
+        tabOnly: true,
+        rhythmApproximate: true,
+        tabApproximateRhythmMeasures: 1,
+      }),
+    )
+    expect(result.musicXml).toContain('TAB notes detected')
   })
 })

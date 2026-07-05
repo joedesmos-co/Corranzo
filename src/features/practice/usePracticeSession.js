@@ -157,6 +157,7 @@ export default function usePracticeSession({
     midiLoading: playback.isLoading,
     alignmentDiagnostics: alignment.diagnostics,
     pdfSoftWarning,
+    musicXmlSource,
     isDemoPiece,
   })
 
