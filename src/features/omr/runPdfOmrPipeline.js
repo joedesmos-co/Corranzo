@@ -526,6 +526,9 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   }
   for (let index = 0; index < measureRhythms.length; index += 1) {
     const measure = measureRhythms[index]
+    if (measure.rhythmApproximate) {
+      continue
+    }
     const beforeEvents = measure.events ?? []
     const adjustedEvents = applyTerminalSameClefChordQuarterDurations(
       beforeEvents,

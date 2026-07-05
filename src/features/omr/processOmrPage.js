@@ -295,9 +295,13 @@ export function processOmrPageAnalysis(imageData, options = {}) {
                 timingModel: {
                   kind: 'tab-approximate-even',
                   approximate: true,
+                  groupCount: 0,
+                  eventCount: 0,
                   maxOnsets: 0,
                   coalesced: false,
+                  compressed: false,
                 },
+                confidence: 0.52,
               }
           const { events } = tabTiming
           const noteCount = events.reduce((sum, event) => sum + (event.notes?.length ?? 0), 0)
@@ -312,7 +316,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
             uncertain: false,
             rhythmApproximate: true,
             timingModel: tabTiming.timingModel,
-            confidence: 0.5,
+            confidence: tabTiming.confidence ?? 0.5,
             vectorNoteCount: noteCount,
           }
           emittedMeasureBoxes.push(emittedMeasureBox)

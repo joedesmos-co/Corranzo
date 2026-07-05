@@ -25,7 +25,7 @@ export const TAB_APPROXIMATE_RHYTHM_WARNING =
 export const TAB_REPEAT_CODA_WARNING =
   'Repeat/coda markings were detected but not fully expanded. Playback follows the written measure order.'
 export const TAB_CAPO_UNSUPPORTED_WARNING =
-  'Capo marking detected — generated playback does not transpose for capo.'
+  'Capo marking detected — playback sounds at written TAB pitch; capo transposition is not applied.'
 export const TAB_TEMPO_TEXT_WARNING =
   'Tempo change text was detected but not interpreted. Playback keeps one steady tempo.'
 
@@ -378,9 +378,17 @@ function positionWithinBox(box, xNorm) {
 
 /** Same-onset grouping tolerance as a fraction of the measure width. */
 const CHORD_X_EPSILON = 0.045
-const TAB_MAX_ONSETS_PER_4_4 = 8
+const DUPLICATE_TAB_NOTE_EPSILON = 0.012
+const TAB_MAX_SUBDIVISIONS_PER_BEAT = 4
+const TAB_MAX_ONSETS_PER_4_4 = 16
 
 function durationTypeForTabDuration(durationDivisions) {
+  if (durationDivisions >= OMR_DIVISIONS_PER_QUARTER * 4) {
+    return 'whole'
+  }
+  if (durationDivisions >= OMR_DIVISIONS_PER_QUARTER * 2) {
+    return 'half'
+  }
   if (durationDivisions >= OMR_DIVISIONS_PER_QUARTER) {
     return 'quarter'
   }
@@ -388,6 +396,34 @@ function durationTypeForTabDuration(durationDivisions) {
     return 'eighth'
   }
   return '16th'
+}
+
+function tabMaxOnsetsForMeasure(beats, totalDivisions) {
+  return Math.max(
+    1,
+    Math.min(
+      Math.round(beats * TAB_MAX_SUBDIVISIONS_PER_BEAT),
+      TAB_MAX_ONSETS_PER_4_4,
+      totalDivisions,
+    ),
+  )
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value))
+}
+
+function assignMonotonicSlots(groups, slotCount) {
+  let previousSlot = -1
+  return groups.map((group, index) => {
+    const remainingAfter = groups.length - index - 1
+    const desired = Math.round(group.positionInMeasure * (slotCount - 1))
+    const minSlot = previousSlot + 1
+    const maxSlot = Math.max(minSlot, slotCount - 1 - remainingAfter)
+    const slot = clamp(desired, minSlot, maxSlot)
+    previousSlot = slot
+    return slot
+  })
 }
 
 function buildTabTimingBuckets(groups, { beats = 4 } = {}) {
@@ -398,16 +434,17 @@ function buildTabTimingBuckets(groups, { beats = 4 } = {}) {
       timingModel: {
         kind: 'tab-approximate-even',
         approximate: true,
+        groupCount: 0,
+        eventCount: 0,
         maxOnsets: 0,
         coalesced: false,
+        compressed: false,
       },
     }
   }
 
-  const maxOnsets = Math.max(
-    1,
-    Math.min(beats * 2, TAB_MAX_ONSETS_PER_4_4, totalDivisions),
-  )
+  const maxOnsets = tabMaxOnsetsForMeasure(beats, totalDivisions)
+  const compressed = groups.length > maxOnsets
   const slotCount = groups.length <= beats ? beats : maxOnsets
   const buckets = Array.from({ length: slotCount }, (_, slot) => ({
     slot,
@@ -416,43 +453,88 @@ function buildTabTimingBuckets(groups, { beats = 4 } = {}) {
     x: null,
   }))
 
-  for (const group of groups) {
-    const slot = Math.min(
-      slotCount - 1,
-      Math.max(0, Math.round(group.positionInMeasure * (slotCount - 1))),
-    )
+  const slots = compressed
+    ? groups.map((group) =>
+        Math.min(
+          slotCount - 1,
+          Math.max(0, Math.round(group.positionInMeasure * (slotCount - 1))),
+        ),
+      )
+    : assignMonotonicSlots(groups, slotCount)
+
+  groups.forEach((group, index) => {
+    const slot = slots[index]
     const bucket = buckets[slot]
     bucket.notes.push(...group.notes)
     bucket.x = bucket.x == null ? group.notes[0]?.x ?? null : bucket.x
     bucket.positionInMeasure = Math.min(bucket.positionInMeasure, group.positionInMeasure)
-  }
+  })
 
   const usedBuckets = buckets.filter((bucket) => bucket.notes.length > 0)
-  const durationDivisions = Math.max(1, Math.round(totalDivisions / slotCount))
+  const slotDuration = Math.max(1, Math.round(totalDivisions / slotCount))
   return {
-    buckets: usedBuckets.map((bucket) => ({
-      ...bucket,
-      startDivision: Math.min(
-        totalDivisions - durationDivisions,
-        Math.round(bucket.slot * durationDivisions),
-      ),
-      durationDivisions,
-    })),
+    buckets: usedBuckets.map((bucket, index) => {
+      const startDivision = Math.min(
+        totalDivisions - 1,
+        Math.round(bucket.slot * slotDuration),
+      )
+      const next = usedBuckets[index + 1]
+      const nextStart = next
+        ? Math.min(totalDivisions, Math.round(next.slot * slotDuration))
+        : totalDivisions
+      return {
+        ...bucket,
+        startDivision,
+        durationDivisions: Math.max(1, nextStart - startDivision),
+      }
+    }),
     timingModel: {
       kind: 'tab-approximate-even',
       approximate: true,
+      groupCount: groups.length,
+      eventCount: usedBuckets.length,
       maxOnsets,
       slotCount,
       coalesced: groups.length > usedBuckets.length,
+      compressed,
     },
   }
 }
 
+function groupContainsString(group, string) {
+  return group.notes.some((note) => note.string === string)
+}
+
+function hasDuplicateTabNote(group, note) {
+  return group.notes.some(
+    (existing) =>
+      existing.string === note.string &&
+      existing.fret === note.fret &&
+      Math.abs(existing.positionInMeasure - note.positionInMeasure) <= DUPLICATE_TAB_NOTE_EPSILON,
+  )
+}
+
+function averagePosition(notes) {
+  return notes.reduce((sum, note) => sum + note.positionInMeasure, 0) / notes.length
+}
+
+function tabTimingConfidence(timingModel, noteCount) {
+  if (!noteCount) {
+    return 0.52
+  }
+  let confidence = 0.6
+  if (timingModel?.compressed) {
+    confidence -= 0.1
+  } else if (timingModel?.coalesced) {
+    confidence -= 0.04
+  }
+  return Math.max(0.42, Math.min(0.62, confidence))
+}
+
 /**
- * Assemble tab notes for one measure into positional note events (chords share
- * an onset). Durations are quarter-note placeholders on the beat-slot grid —
- * rhythm from tablature alone is inherently approximate, so measures built
- * this way are flagged `uncertain`.
+ * Assemble tab notes for one measure into positional note events. Chord stacks
+ * share an onset; repeated notes on the same string remain separate when their
+ * x positions differ. Rhythm from TAB alone stays approximate.
  */
 export function buildTabMeasureEvents(measureNotes, { beats = 4 } = {}) {
   if (!measureNotes?.length) {
@@ -463,9 +545,13 @@ export function buildTabMeasureEvents(measureNotes, { beats = 4 } = {}) {
       timingModel: {
         kind: 'tab-approximate-even',
         approximate: true,
+        groupCount: 0,
+        eventCount: 0,
         maxOnsets: 0,
         coalesced: false,
+        compressed: false,
       },
+      confidence: 0.52,
     }
   }
 
@@ -473,8 +559,16 @@ export function buildTabMeasureEvents(measureNotes, { beats = 4 } = {}) {
   const groups = []
   for (const note of sorted) {
     const last = groups[groups.length - 1]
-    if (last && note.positionInMeasure - last.positionInMeasure <= CHORD_X_EPSILON) {
+    if (last && hasDuplicateTabNote(last, note)) {
+      continue
+    }
+    if (
+      last &&
+      note.positionInMeasure - last.positionInMeasure <= CHORD_X_EPSILON &&
+      !groupContainsString(last, note.string)
+    ) {
       last.notes.push(note)
+      last.positionInMeasure = averagePosition(last.notes)
       continue
     }
     groups.push({ positionInMeasure: note.positionInMeasure, notes: [note] })
@@ -508,6 +602,7 @@ export function buildTabMeasureEvents(measureNotes, { beats = 4 } = {}) {
     uncertain: true,
     rhythmApproximate: true,
     timingModel,
+    confidence: tabTimingConfidence(timingModel, measureNotes.length),
   }
 }
 

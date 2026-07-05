@@ -172,6 +172,29 @@ describe('guitar OMR tablature detection', () => {
     expect(notes.map((note) => note.fret)).toEqual([3])
   })
 
+  it('clusters adjacent TAB digits on one string into multi-digit frets', () => {
+    const tabStave = {
+      lineYs: [0.2, 0.22, 0.24, 0.26, 0.28, 0.3],
+    }
+    const imageData = { width: 1000, height: 1000 }
+    const y = tabStave.lineYs[0] * imageData.height
+
+    const notes = extractTabDigitNotes(
+      [
+        { text: '1', sourceText: '10', x: 160, y, width: 8, height: 12 },
+        { text: '0', sourceText: '10', x: 168, y, width: 8, height: 12 },
+        { text: '3', sourceText: '3', x: 260, y, width: 8, height: 12 },
+      ],
+      tabStave,
+      [{ measureNumber: 1, x0: 0.1, playableX0: 0.1, x1: 0.4 }],
+      imageData,
+    )
+
+    expect(notes.map((note) => note.fret)).toEqual([10, 3])
+    expect(notes[0]).toEqual(expect.objectContaining({ string: 1, midi: 74 }))
+  })
+
+
   it('detects unsupported TAB-only text annotations without applying them silently', () => {
     const annotations = detectTabTextAnnotations([
       { text: 'Capo 2' },
@@ -418,7 +441,7 @@ describe('guitar OMR tablature detection', () => {
   it('merges TAB notes that quantize to the same onset into one chord event', () => {
     const { events } = buildTabMeasureEvents([
       { string: 1, fret: 0, midi: 64, x: 80, positionInMeasure: 0.86 },
-      { string: 2, fret: 1, midi: 60, x: 84, positionInMeasure: 0.94 },
+      { string: 2, fret: 1, midi: 60, x: 84, positionInMeasure: 0.89 },
     ])
 
     expect(events).toHaveLength(1)
@@ -429,6 +452,23 @@ describe('guitar OMR tablature detection', () => {
           expect.objectContaining({ string: 1, fret: 0 }),
           expect.objectContaining({ string: 2, fret: 1 }),
         ],
+      }),
+    )
+  })
+
+  it('keeps repeated notes on the same string separate when x positions differ', () => {
+    const { events, timingModel } = buildTabMeasureEvents([
+      { string: 3, fret: 2, midi: 57, x: 100, positionInMeasure: 0.1 },
+      { string: 3, fret: 2, midi: 57, x: 124, positionInMeasure: 0.13 },
+    ])
+
+    expect(events).toHaveLength(2)
+    expect(events.map((event) => event.startDivision)).toEqual([0, 4])
+    expect(timingModel).toEqual(
+      expect.objectContaining({
+        groupCount: 2,
+        eventCount: 2,
+        coalesced: false,
       }),
     )
   })
@@ -448,12 +488,38 @@ describe('guitar OMR tablature detection', () => {
     expect(timingModel).toEqual(
       expect.objectContaining({
         kind: 'tab-approximate-even',
-        maxOnsets: 8,
+        maxOnsets: 16,
+        groupCount: 12,
+        eventCount: 12,
+        coalesced: false,
+        compressed: false,
+      }),
+    )
+    expect(events).toHaveLength(12)
+    expect(events.every((event) => event.durationDivisions >= 1)).toBe(true)
+  })
+
+  it('compresses only over-dense TAB measures beyond the safe sixteenth grid', () => {
+    const measureNotes = Array.from({ length: 20 }, (_, index) => ({
+      string: (index % 6) + 1,
+      fret: index % 5,
+      midi: 52 + index,
+      x: 80 + index * 12,
+      positionInMeasure: index / 19,
+    }))
+
+    const { events, timingModel, confidence } = buildTabMeasureEvents(measureNotes)
+
+    expect(events.length).toBeLessThanOrEqual(16)
+    expect(timingModel).toEqual(
+      expect.objectContaining({
+        maxOnsets: 16,
+        groupCount: 20,
+        compressed: true,
         coalesced: true,
       }),
     )
-    expect(events.length).toBeLessThanOrEqual(8)
-    expect(events.every((event) => event.durationDivisions >= 2)).toBe(true)
+    expect(confidence).toBeLessThan(0.55)
   })
 
   it('marks TAB-only page analysis as approximate and warns about repeat/capo text', () => {
