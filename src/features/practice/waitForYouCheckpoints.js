@@ -49,13 +49,71 @@ function uniqueMidis(notes) {
   const seen = new Set()
   const midis = []
   for (const note of notes) {
-    if (note.midi == null || seen.has(note.midi)) {
-      continue
+    const candidates =
+      note.expectedMidis?.length > 0
+        ? note.expectedMidis
+        : note.midi != null
+          ? [note.midi]
+          : []
+    for (const midi of candidates) {
+      if (seen.has(midi)) {
+        continue
+      }
+      seen.add(midi)
+      midis.push(midi)
     }
-    seen.add(note.midi)
-    midis.push(note.midi)
   }
   return midis
+}
+
+function noteCheckpointLabel(note) {
+  if (note.chordSymbol) {
+    return note.chordSymbol
+  }
+  return note.label
+}
+
+function sameTieVoice(left, right) {
+  return (
+    left.partId === right.partId &&
+    left.voice === right.voice &&
+    left.midi === right.midi
+  )
+}
+
+/** Fold tied continuations into their attack note so WFY/visual keep one target. */
+function mergeTiedContinuations(notes) {
+  const sorted = [...notes].sort(
+    (left, right) =>
+      left.timeSeconds - right.timeSeconds ||
+      left.quarterTime - right.quarterTime ||
+      left.voice - right.voice,
+  )
+  const merged = []
+
+  for (const note of sorted) {
+    if (note.suppressPlaybackAttack) {
+      const head = [...merged]
+        .reverse()
+        .find(
+          (candidate) =>
+            candidate.tieStart &&
+            sameTieVoice(candidate, note) &&
+            !candidate.suppressPlaybackAttack,
+        )
+      if (head) {
+        head.durationQuarters += note.durationQuarters
+        if (Number.isFinite(head.durationSeconds) && Number.isFinite(note.durationSeconds)) {
+          head.durationSeconds += note.durationSeconds
+        }
+        head.tieStop = Boolean(head.tieStop || note.tieStop)
+        continue
+      }
+    }
+    merged.push({ ...note })
+  }
+
+  return merged
 }
 
 /**
@@ -114,13 +172,17 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null, options = {})
   notes = filterNotesForPracticeScope(notes, options.practiceScope, timingMap)
   notes = filterByLoopRegion(notes, loopRegion)
 
+  notes = mergeTiedContinuations(notes)
+
   const groups = groupNotesByTime(notes)
 
   return groups.map((group, index) => {
     const midis = uniqueMidis(group.notes)
-    const labels = group.notes.map((note) => note.label).join(' + ')
+    const labels = group.notes.map((note) => noteCheckpointLabel(note)).join(' + ')
     const beatAtTime = timingMap ? getBeatAtTime(timingMap, group.timeSeconds) : null
     const measureNumber = group.notes[0].measureNumber
+    const chordSymbol =
+      group.notes.length === 1 ? group.notes[0].chordSymbol ?? null : null
 
     return {
       id: `note-m${measureNumber}-t${group.timeSeconds.toFixed(3)}-${index}`,
@@ -132,6 +194,7 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null, options = {})
       quarterTime: group.notes[0].quarterTime,
       repeatPass: group.notes[0].repeatPass ?? beatAtTime?.repeatPass ?? 1,
       label: labels,
+      chordSymbol,
       expectedMidi: midis[0],
       expectedMidis: midis,
       isChord: midis.length > 1,

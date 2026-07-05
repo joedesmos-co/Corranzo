@@ -27,7 +27,10 @@ export function chordLabel(midis) {
   return (midis ?? []).map((m) => midiToNoteLabel(m)).join(' + ')
 }
 
-export function expectedLabelFor(expectedMidis) {
+export function expectedLabelFor(expectedMidis, checkpoint = null) {
+  if (checkpoint?.chordSymbol) {
+    return checkpoint.chordSymbol
+  }
   if (!expectedMidis?.length) return null
   return expectedMidis.length > 1 ? chordLabel(expectedMidis) : midiToNoteLabel(expectedMidis[0])
 }
@@ -146,7 +149,7 @@ export function buildGuidance({
 }) {
   const expectedMidis = getExpectedMidis(checkpoint)
   const isChord = expectedMidis.length > 1
-  const expectedLabel = expectedLabelFor(expectedMidis)
+  const expectedLabel = expectedLabelFor(expectedMidis, checkpoint)
   const outcome = inputFeedback?.outcome ?? WFY_INPUT_OUTCOME.IDLE
   const playedLabel = inputFeedback?.playedLabel ?? null
 
@@ -252,8 +255,12 @@ export function buildGuidance({
     primary: matchingActive
       ? isChord
         ? chordAsSequence
-          ? `Chord practice sequence: ${expectedLabel}`
-          : `Play the chord: ${expectedLabel}`
+          ? checkpoint?.chordSymbol
+            ? `Play ${checkpoint.chordSymbol} chord tones one at a time`
+            : `Chord practice sequence: ${expectedLabel}`
+          : checkpoint?.chordSymbol
+            ? `Play the ${checkpoint.chordSymbol} chord`
+            : `Play the chord: ${expectedLabel}`
         : `Play ${expectedLabel}`
       : `Play ${expectedLabel}, or tap Continue`,
   }

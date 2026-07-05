@@ -96,7 +96,7 @@ describe('controls are contextual, not always-on', () => {
     const selector = readSrc('components', 'practice', 'WaitForYouInputSourceSelector.jsx')
     expect(selector).toContain('<details className="wfy-input-source wfy-input-source--compact"')
     expect(selector).toContain('wfy-input-source__summary')
-    expect(selector).toContain('WFY_INPUT_SOURCE_LABELS[inputSource]')
+    expect(selector).toContain('wfyInputSourceLabel(inputSource, instrumentId)')
     expect(selector).toContain('Input: {currentLabel}')
     expect(selector).toContain('wfy-input-source__change')
     expect(selector).not.toContain("How you'll play")

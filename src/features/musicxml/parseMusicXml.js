@@ -12,6 +12,10 @@ import {
 import { quartersToSeconds } from './timingMath.js'
 import { buildPerformedMeasureTimeline } from './parseMeasureRepeats.js'
 import { applyTieSustainToNotes } from './mergeTiedNotesForPlayback.js'
+import {
+  analyzeChordSheetScore,
+  buildChordSheetNoteEvents,
+} from './chordSymbolSheet.js'
 import { DEFAULT_MUSICXML_VELOCITY, dynamicsFromDirection } from './dynamicsMap.js'
 
 const DEFAULT_BPM = 120
@@ -229,6 +233,37 @@ function readTieFlags(noteNode) {
     }
   }
   return { tieStart, tieStop }
+}
+
+function readHarmonySymbol(harmonyNode) {
+  const root = findChild(harmonyNode, 'root')
+  if (!root) {
+    return null
+  }
+  const rootStep = childText(root, 'root-step')
+  if (!rootStep) {
+    return null
+  }
+  const rootAlter = numberOf(childText(root, 'root-alter'), 0)
+  const kindNode = findChild(harmonyNode, 'kind')
+  const kindText = kindNode
+    ? String(attr(kindNode, 'text') ?? childText(kindNode, '') ?? '').trim()
+    : ''
+  const bass = findChild(harmonyNode, 'bass')
+  const bassStep = bass ? childText(bass, 'bass-step') : null
+  let symbol = String(rootStep)
+  if (rootAlter === 1) {
+    symbol += '#'
+  } else if (rootAlter === -1) {
+    symbol += 'b'
+  }
+  if (kindText) {
+    symbol += kindText.replace(/\s+/g, '')
+  }
+  if (bassStep) {
+    symbol += `/${bassStep}`
+  }
+  return symbol
 }
 
 function readArticulations(noteNode) {
@@ -460,6 +495,7 @@ function walkPart({
   timeSignatureEvents,
   notes,
   rawTimingEvents,
+  harmonyEvents,
   partNotation = null,
 }) {
   const measureNodes = findChildren(partNode, 'measure')
@@ -573,6 +609,19 @@ function walkPart({
           cursorDivisions += duration
           maxCursorDivisions = Math.max(maxCursorDivisions, cursorDivisions)
           lastNoteStartDivisions = cursorDivisions
+          break
+        }
+
+        case 'harmony': {
+          const symbol = readHarmonySymbol(child)
+          if (symbol) {
+            harmonyEvents.push({
+              partId,
+              measureNumber,
+              quarterTime: measureStartQuarters + cursorDivisions / divisions,
+              symbol,
+            })
+          }
           break
         }
 
@@ -716,6 +765,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const timeSignatureEvents = []
   const notes = []
   const rawTimingEvents = []
+  const harmonyEvents = []
   const partNotationById = new Map()
 
   const notationForPart = (partId) => {
@@ -739,6 +789,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     timeSignatureEvents,
     notes,
     rawTimingEvents,
+    harmonyEvents,
     partNotation: notationForPart(primaryId),
   })
 
@@ -753,6 +804,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       timeSignatureEvents,
       notes,
       rawTimingEvents,
+      harmonyEvents,
       partNotation: notationForPart(partId),
     })
   })
@@ -851,6 +903,40 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     note.timeSeconds = toSeconds(note.quarterTime)
     note.durationSeconds = toSeconds(note.quarterTime + note.durationQuarters) - note.timeSeconds
   }
+
+  for (const event of harmonyEvents) {
+    event.timeSeconds = toSeconds(event.quarterTime)
+  }
+
+  const chordSheetAnalysis = analyzeChordSheetScore({
+    harmonyEvents,
+    notes,
+    measures,
+  })
+  if (chordSheetAnalysis.isChordSheet) {
+    const pitchedCount = notes.filter(
+      (note) => !note.isRest && note.midi != null && !note.isTabMirror && !note.isChordSheetEvent,
+    ).length
+    const chordNotes = buildChordSheetNoteEvents({
+      harmonyEvents,
+      measures,
+      defaultBpm: tempoChanges[0]?.bpm ?? DEFAULT_BPM,
+    })
+    if (chordNotes.length > 0 && pitchedCount <= chordNotes.length) {
+      notes.push(...chordNotes)
+      for (const note of chordNotes) {
+        rawTimingEvents.push({
+          type: 'note-on',
+          quarterTime: note.quarterTime,
+          measureNumber: note.measureNumber,
+          midi: note.midi,
+          label: note.label,
+          voice: note.voice,
+        })
+      }
+    }
+  }
+
   notes.sort((a, b) => a.timeSeconds - b.timeSeconds || a.quarterTime - b.quarterTime)
 
   // --- Timing events (debug/diagnostics stream) ---
@@ -931,6 +1017,13 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     timeSignatures,
     notes,
     timingEvents,
+    harmonyEvents,
+    chordSheet: chordSheetAnalysis.isChordSheet
+      ? {
+          isChordSheet: true,
+          warnings: chordSheetAnalysis.warnings,
+        }
+      : null,
     parts: partNodes.map((partNode, index) => {
       const id = attr(partNode, 'id') ?? `P${index + 1}`
       const info = partNotationById.get(id)

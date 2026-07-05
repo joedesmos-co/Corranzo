@@ -4,11 +4,10 @@ import { analyzeMidiImport } from './midiImportWarnings.js'
 import { buildFilePairWarnings } from './filePairWarnings.js'
 import { buildPracticeGuidance } from './practiceGuidance.js'
 import { buildLibraryAccuracyWarnings } from './accuracyGuide.js'
+import { isApproximationImportMessage } from './importWarningCategories.js'
 
 function omrWarningStrength(message) {
-  return /TAB notes detected|Dense TAB notes|Repeat\/coda|Capo marking/i.test(message)
-    ? 'strong'
-    : 'mild'
+  return isApproximationImportMessage(message) ? 'mild' : 'strong'
 }
 
 export function buildOmrGeneratedWarnings(musicXmlSource) {
@@ -68,6 +67,13 @@ export default function useImportReadiness({
     if (timingReady) {
       warnings.push(...analyzeMusicXmlImport(timingMap))
       warnings.push(...buildOmrGeneratedWarnings(musicXmlSource))
+      for (const message of timingMap?.chordSheet?.warnings ?? []) {
+        warnings.push({
+          id: `chord-sheet-${warnings.length}`,
+          strength: 'mild',
+          message,
+        })
+      }
     }
 
     if (midiError) {

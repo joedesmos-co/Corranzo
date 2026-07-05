@@ -53,13 +53,14 @@ describe('Wait For You input-source modal wiring', () => {
   const session = readSrc('features', 'practice', 'usePracticeSession.js')
   const panel = readSrc('components', 'practice', 'PracticeControlPanel.jsx')
   const modal = readSrc('components', 'practice', 'WaitForYouInputSourceModal.jsx')
+  const options = readSrc('features', 'practice', 'wfyInputSourceOptions.js')
   const section = readSrc('components', 'practice', 'WaitForYouSection.jsx')
 
   it('renders the required modal title and choices', () => {
     expect(modal).toContain('How do you want to play?')
-    expect(modal).toContain('Use Microphone')
-    expect(modal).toContain('Use MIDI Keyboard')
-    expect(modal).toContain('Continue button')
+    expect(modal).toContain('buildWfyInputModalActions')
+    expect(modal).toContain('instrumentId')
+    expect(modal).toContain('onChooseSource(action.id)')
     expect(modal).toContain('role="dialog"')
     expect(modal).toContain('aria-modal="true"')
   })
@@ -73,7 +74,8 @@ describe('Wait For You input-source modal wiring', () => {
   })
 
   it('choosing Microphone closes the modal and starts mic calibration', () => {
-    expect(modal).toContain('onChooseSource(WFY_INPUT_SOURCE.MICROPHONE)')
+    expect(options).toContain('WFY_INPUT_SOURCE.MICROPHONE')
+    expect(modal).toContain('onChooseSource(action.id)')
     expect(session).toContain('setWfyInputSourceSelectedThisSession(true)')
     expect(session).toContain('showWfyInputSourceModal')
     expect(session).toMatch(
@@ -82,7 +84,7 @@ describe('Wait For You input-source modal wiring', () => {
   })
 
   it('choosing MIDI closes the modal and starts/listens MIDI', () => {
-    expect(modal).toContain('onChooseSource(WFY_INPUT_SOURCE.MIDI)')
+    expect(options).toContain('WFY_INPUT_SOURCE.MIDI')
     expect(session).toMatch(
       /listen:[\s\S]*wfyInputSourceReady[\s\S]*WFY_INPUT_SOURCE\.MIDI/,
     )
@@ -92,7 +94,7 @@ describe('Wait For You input-source modal wiring', () => {
   })
 
   it('choosing Continue closes the modal and keeps manual Continue available', () => {
-    expect(modal).toContain('onChooseSource(WFY_INPUT_SOURCE.MANUAL)')
+    expect(options).toContain('WFY_INPUT_SOURCE.MANUAL')
     expect(session).toContain('source: WFY_INPUT_SOURCE.MANUAL')
     expect(section).toContain('Pauses at each note in your loop until you play it or tap Continue.')
     expect(section).toContain('className="wait-for-you__btn wait-for-you__btn--primary"')
@@ -103,6 +105,7 @@ describe('Wait For You input-source modal wiring', () => {
     expect(panel).toContain('<WaitForYouSection')
     expect(panel).toContain('onInputSourceChange={session.setWfyInputSource}')
     expect(panel).toContain('onChooseSource={session.setWfyInputSource}')
+    expect(panel).toContain('instrumentId={session.instrumentId}')
   })
 
   it('resets source-choice state after leaving WFY', () => {

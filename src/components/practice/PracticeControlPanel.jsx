@@ -65,12 +65,6 @@ export default memo(function PracticeControlPanel({
       message: scoreFollow.anchorStorageWarning,
     })
   }
-  const visibleWarnings = importWarnings.filter(
-    (warning) => warning.strength === 'strong',
-  )
-  const detailWarnings = importWarnings.filter(
-    (warning) => warning.strength !== 'strong',
-  )
 
   const filesBlock = (
     <PracticeFilesSummary
@@ -89,14 +83,12 @@ export default memo(function PracticeControlPanel({
       <WaitForYouInputSourceModal
         open={session.showWfyInputSourceModal}
         onChooseSource={session.setWfyInputSource}
+        instrumentId={session.instrumentId}
         midiAvailable={isWebMidiSupported()}
         microphoneAvailable={isMicrophoneSupported()}
       />
 
-      <PracticeImportNotices
-        warnings={visibleWarnings}
-        guidance={[]}
-      />
+      <PracticeImportNotices warnings={importWarnings} guidance={[]} />
 
       <div className="practice-control-panel__primary practice-control-panel__primary--focus">
         <PracticeTransportTick />
@@ -138,6 +130,7 @@ export default memo(function PracticeControlPanel({
             session.wfyInputSourceReady ? session.wfyInputSource : WFY_INPUT_SOURCE.MANUAL
           }
           onInputSourceChange={session.setWfyInputSource}
+          instrumentId={session.instrumentId}
           midiAvailable={isWebMidiSupported()}
           microphoneAvailable={isMicrophoneSupported()}
           inputMatchingActive={session.waitForYouInput.matchingEnabled}
@@ -196,7 +189,7 @@ export default memo(function PracticeControlPanel({
               <h4 className="practice-more__group-title">Files</h4>
               {filesReady ? filesBlock : null}
               <PracticeImportNotices
-                warnings={detailWarnings}
+                warnings={[]}
                 guidance={session.importReadiness?.guidance ?? []}
                 maxGuidance={2}
               />

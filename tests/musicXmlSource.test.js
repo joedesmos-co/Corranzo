@@ -55,7 +55,7 @@ describe('musicXmlSource', () => {
     expect(new TextDecoder().decode(source.data)).toBe(xml)
   })
 
-  it('surfaces TAB-only OMR warnings strongly in Practice notices', () => {
+  it('surfaces TAB-only OMR warnings in Practice import notes', () => {
     const warnings = buildOmrGeneratedWarnings({
       source: 'omr',
       omrMeta: {
@@ -69,15 +69,15 @@ describe('musicXmlSource', () => {
 
     expect(warnings).toEqual([
       expect.objectContaining({
-        strength: 'strong',
+        strength: 'mild',
         message: expect.stringContaining('TAB notes detected'),
       }),
       expect.objectContaining({
-        strength: 'strong',
+        strength: 'mild',
         message: expect.stringContaining('Dense TAB notes'),
       }),
       expect.objectContaining({
-        strength: 'mild',
+        strength: 'strong',
         message: 'Tempo defaulted to 120 BPM.',
       }),
     ])

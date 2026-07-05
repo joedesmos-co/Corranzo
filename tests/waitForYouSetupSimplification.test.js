@@ -36,12 +36,13 @@ describe('mic capture asks for raw instrument input', () => {
 })
 
 describe('choosing Microphone or MIDI is the whole setup', () => {
-  it('offers two clear choices plus a quiet manual fallback', () => {
+  it('offers clear input choices including manual Continue', () => {
     const selector = readSrc('components', 'practice', 'WaitForYouInputSourceSelector.jsx')
+    const options = readSrc('features', 'practice', 'wfyInputSourceOptions.js')
     expect(selector).toContain('role="radiogroup"')
-    expect(selector).toContain('Use Microphone')
-    expect(selector).toContain('Use MIDI')
-    expect(selector).toContain('No device')
+    expect(options).toContain('Use Microphone')
+    expect(options).toContain('Use Continue button')
+    expect(options).toContain('buildWfyInputSelectorOptions')
   })
 
   it('auto-requests the microphone so calibration starts on its own', () => {

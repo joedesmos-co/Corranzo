@@ -167,6 +167,23 @@ async function clickInputSource(page, sourceLabel) {
   await sleep(400)
 }
 
+async function dismissWfyInputModalIfOpen(page, sourceLabel = 'Microphone') {
+  const dialog = page.getByRole('dialog', { name: 'How do you want to play?' })
+  if (await dialog.isVisible().catch(() => false)) {
+    await clickInputSource(page, sourceLabel)
+  }
+}
+
+async function ensurePracticeView(page) {
+  await dismissWfyInputModalIfOpen(page)
+  if (await page.locator('.practice-workspace').isVisible().catch(() => false)) {
+    return
+  }
+  await page.getByRole('button', { name: 'Practice', exact: true }).click()
+  await sleep(800)
+  await dismissWfyInputModalIfOpen(page)
+}
+
 async function openWfyMicPractice(page, { chooseInput = true } = {}) {
   await page.getByRole('button', { name: 'Practice', exact: true }).click()
   await sleep(1200)
@@ -584,9 +601,8 @@ async function main() {
     const guitarEmpty = await page.getByText('No piece open yet').isVisible().catch(() => false)
     if (guitarEmpty) {
       await loadDemo(page)
-      await page.getByRole('button', { name: 'Practice', exact: true }).click()
-      await sleep(800)
     }
+    await ensurePracticeView(page)
     await clickPracticeMode(page, 'Wait For You')
     await clickInputSource(page, 'Microphone')
     await sleep(400)

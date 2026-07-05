@@ -89,7 +89,7 @@ function guitarTechniqueScore() {
 }
 
 describe('visual notation marking model', () => {
-  it('normalizes ties, slurs, staccato, accent, and tenuto without changing checkpoints', () => {
+  it('normalizes ties, slurs, staccato, accent, and tenuto in visual groups', () => {
     const timingMap = parseMusicXml(staffMarkingScore(), 'staff-markings.musicxml')
     const groups = buildVisualLaneGroups(timingMap)
     const checkpoints = buildNoteCheckpoints(timingMap)
@@ -99,6 +99,7 @@ describe('visual notation marking model', () => {
     )
 
     expect(groups.map((group) => group.id)).toEqual(checkpoints.map((checkpoint) => checkpoint.id))
+    expect(checkpoints).toHaveLength(4)
     expect(spans.map((span) => span.kind)).toEqual(
       expect.arrayContaining([VISUAL_MARKING_KIND.TIE, VISUAL_MARKING_KIND.SLUR]),
     )

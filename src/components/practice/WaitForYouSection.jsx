@@ -83,6 +83,7 @@ export default function WaitForYouSection({
   onSkip,
   onShowHint,
   onRestart,
+  instrumentId = null,
   micListening = false,
   micPermission = null,
   micStatusLabel = null,
@@ -175,6 +176,7 @@ export default function WaitForYouSection({
         checkpointMode={checkpointMode}
         inputSource={inputSource}
         onInputSourceChange={onInputSourceChange}
+        instrumentId={instrumentId}
         midiAvailable={midiAvailable}
         microphoneAvailable={microphoneAvailable}
         disabled={structurallyDone}

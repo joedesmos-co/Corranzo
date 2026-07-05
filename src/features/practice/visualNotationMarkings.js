@@ -208,6 +208,17 @@ export function buildVisualSpanMarkings(groups) {
   for (const ref of orderedNoteRefs(groups)) {
     const note = ref.note
 
+    if (note.tieStart && note.tieStop && Number(note.durationSeconds) > 0) {
+      spans.push(
+        makeSpan(VISUAL_MARKING_KIND.TIE, ref, {
+          ...ref,
+          noteId: `${ref.noteId}-tie-sustain`,
+          timeSeconds: ref.timeSeconds + note.durationSeconds,
+        }),
+      )
+      continue
+    }
+
     if (note.tieStop) {
       const span = closeOpenSpan(openTies, tieKey(note), ref, VISUAL_MARKING_KIND.TIE)
       if (span) {

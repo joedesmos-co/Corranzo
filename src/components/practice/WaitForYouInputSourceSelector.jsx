@@ -1,8 +1,8 @@
-import {
-  WFY_INPUT_SOURCE,
-  WFY_INPUT_SOURCE_LABELS,
-} from '../../features/microphone-input/micInputConstants.js'
 import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
+import {
+  buildWfyInputSelectorOptions,
+  wfyInputSourceLabel,
+} from '../../features/practice/wfyInputSourceOptions.js'
 
 /**
  * Beginner-simple input chooser: Microphone or MIDI,
@@ -18,6 +18,7 @@ export default function WaitForYouInputSourceSelector({
   checkpointMode,
   inputSource,
   onInputSourceChange,
+  instrumentId = null,
   midiAvailable,
   microphoneAvailable,
   disabled = false,
@@ -26,23 +27,13 @@ export default function WaitForYouInputSourceSelector({
     return null
   }
 
-  const primaryOptions = [
-    {
-      id: WFY_INPUT_SOURCE.MICROPHONE,
-      label: 'Use Microphone',
-      hint: 'Acoustic or electric instruments',
-      available: microphoneAvailable,
-    },
-    {
-      id: WFY_INPUT_SOURCE.MIDI,
-      label: 'Use MIDI',
-      hint: 'Keyboards & digital pianos',
-      available: midiAvailable,
-    },
-  ]
+  const options = buildWfyInputSelectorOptions({
+    instrumentId,
+    midiAvailable,
+    microphoneAvailable,
+  })
 
-  const currentLabel =
-    WFY_INPUT_SOURCE_LABELS[inputSource] ?? WFY_INPUT_SOURCE_LABELS[WFY_INPUT_SOURCE.MANUAL]
+  const currentLabel = wfyInputSourceLabel(inputSource, instrumentId)
 
   return (
     <details className="wfy-input-source wfy-input-source--compact" data-tour-id="practice-input-source">
@@ -57,7 +48,7 @@ export default function WaitForYouInputSourceSelector({
         aria-label="Wait For You input source"
       >
         <div className="wfy-input-source__options">
-          {primaryOptions.map((option) => (
+          {options.map((option) => (
             <label
               key={option.id}
               className={`wfy-input-source__option${
@@ -80,23 +71,6 @@ export default function WaitForYouInputSourceSelector({
             </label>
           ))}
         </div>
-
-        <label
-          className={`wfy-input-source__manual${
-            inputSource === WFY_INPUT_SOURCE.MANUAL ? ' wfy-input-source__manual--selected' : ''
-          }`}
-          title="No device needed"
-        >
-          <input
-            type="radio"
-            name="wfy-input-source"
-            value={WFY_INPUT_SOURCE.MANUAL}
-            checked={inputSource === WFY_INPUT_SOURCE.MANUAL}
-            disabled={disabled}
-            onChange={() => onInputSourceChange(WFY_INPUT_SOURCE.MANUAL)}
-          />
-          <span>No device — use the {WFY_INPUT_SOURCE_LABELS[WFY_INPUT_SOURCE.MANUAL]}</span>
-        </label>
       </div>
     </details>
   )

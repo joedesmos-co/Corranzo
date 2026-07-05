@@ -416,7 +416,13 @@ export function buildStaffLaneNotationMarkings(
     )
     .map((marking) => {
       const start = notesById.get(marking.fromNoteId)
-      const end = notesById.get(marking.toNoteId)
+      let end = notesById.get(marking.toNoteId)
+      if (start && !end && marking.toTimeSeconds > marking.fromTimeSeconds) {
+        end = {
+          ...start,
+          x: start.x + (marking.toTimeSeconds - marking.fromTimeSeconds) * pixelsPerSecond,
+        }
+      }
       if (!start || !end) {
         return null
       }

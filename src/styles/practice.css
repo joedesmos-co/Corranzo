@@ -2697,6 +2697,55 @@
   color: #e8d4b8;
 }
 
+.practice-import-notices__disclosure {
+  margin: 0;
+}
+
+.practice-import-notices__disclosure-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--sf-border);
+  background: var(--sf-bg-panel-inset);
+  color: var(--sf-text-muted);
+  font-size: var(--sf-font-sidebar-min);
+  cursor: pointer;
+  list-style: none;
+}
+
+.practice-import-notices__disclosure-summary::-webkit-details-marker {
+  display: none;
+}
+
+.practice-import-notices__disclosure-label {
+  font-weight: 650;
+  color: var(--sf-text-secondary);
+}
+
+.practice-import-notices__disclosure-count {
+  min-width: 1.4rem;
+  padding: 1px 7px;
+  border: 1px solid var(--sf-border);
+  background: var(--sf-bg-panel);
+  color: var(--sf-text-muted);
+  font-family: var(--sf-font-mono);
+  font-size: var(--sf-font-sidebar-min);
+  text-align: center;
+}
+
+.practice-import-notices__warnings--disclosure {
+  margin-top: 8px;
+}
+
+.practice-import-notices__warnings--disclosure .practice-import-notices__warning {
+  padding: 6px 8px;
+  font-size: var(--sf-font-sidebar-min);
+  line-height: 1.35;
+}
+
 .upload-btn--musicxml {
   background: var(--sf-bg-panel);
   color: var(--sf-text-primary);
