@@ -64,6 +64,14 @@ describe('Wait For You input-source modal wiring', () => {
     expect(modal).toContain('aria-modal="true"')
   })
 
+  it('portals backdrop and dialog together to document.body', () => {
+    expect(modal).toContain('createPortal')
+    expect(modal).toContain('document.body')
+    expect(modal).toContain('wfy-input-source-modal__scrim')
+    expect(modal).toContain('wfy-input-source-modal__dialog')
+    expect(modal).toMatch(/if \(!open\) \{\s*return null\s*\}/)
+  })
+
   it('choosing Microphone closes the modal and starts mic calibration', () => {
     expect(modal).toContain('onChooseSource(WFY_INPUT_SOURCE.MICROPHONE)')
     expect(session).toContain('setWfyInputSourceSelectedThisSession(true)')

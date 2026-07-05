@@ -1228,6 +1228,10 @@
   display: grid;
   place-items: center;
   padding: 20px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .wfy-input-source-modal__scrim {
@@ -1235,12 +1239,14 @@
   inset: 0;
   background: rgba(4, 8, 16, 0.72);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .wfy-input-source-modal__dialog {
   position: relative;
   z-index: 1;
-  width: min(360px, 100%);
+  width: min(360px, calc(100vw - 40px));
+  max-width: 100%;
   padding: 18px;
   border-radius: 8px;
   border: 1px solid #3a4f78;

@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { WFY_INPUT_SOURCE } from '../../features/microphone-input/micInputConstants.js'
 
 export default function WaitForYouInputSourceModal({
@@ -6,14 +8,28 @@ export default function WaitForYouInputSourceModal({
   midiAvailable = false,
   microphoneAvailable = false,
 }) {
+  const dialogRef = useRef(null)
+
+  useEffect(() => {
+    if (!open) {
+      return undefined
+    }
+
+    const enabledButton = dialogRef.current?.querySelector('button:not(:disabled)')
+    enabledButton?.focus()
+
+    return undefined
+  }, [open])
+
   if (!open) {
     return null
   }
 
-  return (
+  return createPortal(
     <div className="wfy-input-source-modal">
-      <div className="wfy-input-source-modal__scrim" />
+      <div className="wfy-input-source-modal__scrim" aria-hidden="true" />
       <section
+        ref={dialogRef}
         className="wfy-input-source-modal__dialog"
         role="dialog"
         aria-modal="true"
@@ -46,6 +62,7 @@ export default function WaitForYouInputSourceModal({
           </button>
         </div>
       </section>
-    </div>
+    </div>,
+    document.body,
   )
 }
