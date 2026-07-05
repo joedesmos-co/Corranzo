@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
@@ -54,6 +54,33 @@ describe('library session persistence', () => {
     const hook = readSrc('hooks', 'useSessionPersistence.js')
     expect(hook).toContain('practicePrefsRef?.current ?? null')
     expect(hook).not.toMatch(/practicePrefs,\n/)
+  })
+
+  it('every mountedRef re-arms to true on effect setup (StrictMode stuck-restore regression)', () => {
+    // StrictMode dev runs setup→cleanup→setup on the same fiber. A hook whose
+    // effect only sets mountedRef.current = false in cleanup leaves the ref
+    // false on the second setup, so async continuations bail forever. In
+    // useSessionPersistence this froze the "Restoring your last session"
+    // overlay permanently; in useWebMidiInput it muted all MIDI input.
+    const srcRoot = join(__dir, '..', 'src')
+    const files = readdirSync(srcRoot, { recursive: true })
+      .filter((name) => /\.(js|jsx)$/.test(name))
+      .map((name) => join(srcRoot, name))
+    const offenders = []
+    let checked = 0
+    for (const file of files) {
+      const text = readFileSync(file, 'utf8')
+      if (!text.includes('mountedRef.current = false')) {
+        continue
+      }
+      checked += 1
+      if (!text.includes('mountedRef.current = true')) {
+        offenders.push(file.slice(srcRoot.length + 1))
+      }
+    }
+    // Guard the guard: the scan must actually find the known hooks.
+    expect(checked).toBeGreaterThanOrEqual(6)
+    expect(offenders).toEqual([])
   })
 
   it('new PDF and timing imports reset practice time in App', () => {

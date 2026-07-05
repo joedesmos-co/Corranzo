@@ -34,6 +34,7 @@ import {
   confirmConfidentMatch as pushMatchConfirm,
   createMatchConfirmState,
   frameConfidentForMatch,
+  frameCorroboratesSingleNote,
   resetMatchConfirmState,
 } from './micMatchConfirm.js'
 import {
@@ -183,7 +184,8 @@ export default function useWaitForYouMicInput({
   }, [])
 
   const confirmConfidentMatch = useCallback(
-    (key, confident) => pushMatchConfirm(matchConfirmRef.current, key, confident),
+    (key, confident, options) =>
+      pushMatchConfirm(matchConfirmRef.current, key, confident, options),
     [],
   )
 
@@ -213,10 +215,18 @@ export default function useWaitForYouMicInput({
   useEffect(() => {
     if (!active) {
       resetFeedback()
-      setV2RuntimeError(null)
       resetMicAttackLatch(attackLatchRef.current)
     }
   }, [active, resetFeedback])
+
+  useEffect(() => {
+    // A V2 runtime error describes the current detector run. Once detection
+    // stops (WFY exited OR mic stopped), drop it so the next run starts fresh
+    // instead of mic matching staying dead until WFY is fully re-entered.
+    if (!detectEnabled) {
+      setV2RuntimeError(null)
+    }
+  }, [detectEnabled])
 
   useEffect(() => {
     feedbackOutcomeRef.current = inputFeedback.outcome
@@ -297,6 +307,10 @@ export default function useWaitForYouMicInput({
     setCalibration(null)
     setCalibrationKey((value) => value + 1)
     lastStableChordKeyRef.current = ''
+    // A V2 runtime error otherwise pins micMatchingReady=false for the whole
+    // session; retrying calibration is the user's recovery action, so give the
+    // detector a fresh chance instead of staying dead until WFY is re-entered.
+    setV2RuntimeError(null)
   }, [])
 
   const evaluateMicMatch = useCallback(
@@ -545,7 +559,13 @@ export default function useWaitForYouMicInput({
         const key = `${currentCheckpoint.id}:v2:${[...frame.v2DetectedMidis]
           .sort((left, right) => left - right)
           .join(',')}`
-        if (confirmConfidentMatch(key, frameConfident)) {
+        const pitchCents = frame.midiFloat != null ? frame.midiFloat * 100 : null
+        const corroborated =
+          expectedMidis.length !== 1 ||
+          frameCorroboratesSingleNote(frame, expectedMidis[0], {
+            centsTolerance: micCentsTolerance,
+          })
+        if (confirmConfidentMatch(key, frameConfident && corroborated, { pitchCents })) {
           resetMatchConfirm()
           setLastHeardMidi(frame.v2DetectedMidis[0] ?? frame.midi)
           applyMatchResult(v2Preview)
@@ -589,7 +609,8 @@ export default function useWaitForYouMicInput({
       // by non-simultaneous chord settings. Normal note advancement is V2-only.
       if (monophonicPreview.outcome === MATCH_OUTCOME.COMPLETE && isMicChordCollection) {
         const confident = frameConfident
-        if (confirmConfidentMatch(`${currentCheckpoint.id}:${frame.midi}`, confident)) {
+        const pitchCents = frame.midiFloat != null ? frame.midiFloat * 100 : null
+        if (confirmConfidentMatch(`${currentCheckpoint.id}:${frame.midi}`, confident, { pitchCents })) {
           resetMatchConfirm()
           setLastHeardMidi(frame.midi)
           applyMatchResult(monophonicPreview)

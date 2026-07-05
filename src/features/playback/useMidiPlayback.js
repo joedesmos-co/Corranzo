@@ -16,6 +16,9 @@ export default function useMidiPlayback(midiSource) {
   const [instrumentStatus, setInstrumentStatus] = useState(null)
 
   useEffect(() => {
+    // Re-arm on setup — StrictMode dev re-runs effects on the same fiber, and a
+    // cleanup-only ref would stay false, dropping every engine time update.
+    mountedRef.current = true
     const engine = new MidiPlaybackEngine()
     engine.onTimeUpdate = (time, total) => {
       if (!mountedRef.current) {

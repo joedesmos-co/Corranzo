@@ -72,6 +72,19 @@ describe('Wait For You mic engine V2 wiring', () => {
     expect(mic).toContain('lastStableChordKeyRef.current = \'\'')
   })
 
+  it('recovers from a V2 runtime error without leaving WFY (stuck-mic regression)', () => {
+    // A runtime error used to pin micMatchingReady=false until the user exited
+    // WFY entirely. It must clear on the user recovery actions: retrying
+    // calibration and stopping/restarting detection (mic toggle or WFY exit).
+    const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
+    expect(mic).toMatch(
+      /const retryCalibration = useCallback\(\(\) => \{[\s\S]*?setV2RuntimeError\(null\)[\s\S]*?\}, \[\]\)/,
+    )
+    expect(mic).toMatch(
+      /if \(!detectEnabled\) \{\s*setV2RuntimeError\(null\)\s*\}\s*\}, \[detectEnabled\]\)/,
+    )
+  })
+
   it('latches complete mic matches synchronously before advancing', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
     const latchIndex = mic.indexOf('feedbackOutcomeRef.current = feedback.outcome')
@@ -106,6 +119,34 @@ describe('evaluateMicScoreInformedInput', () => {
   it('marks wrong when no expected tones match', () => {
     const result = evaluateMicScoreInformedInput(triadCheckpoint, [72], settings)
     expect(result.outcome).toBe(MATCH_OUTCOME.WRONG)
+  })
+
+  it('bass mode completes on the bass tone alone (stuck-state regression)', () => {
+    // "Bass tone only" promises the chord advances from just the lowest tone.
+    // The V2 evaluator used to demand every tone simultaneously, so the mode
+    // could never advance and the player was stuck.
+    const bassSettings = normalizeMatchSettings({ micChordMode: MIC_CHORD_MODES.BASS })
+    const result = evaluateMicScoreInformedInput(triadCheckpoint, [60], bassSettings)
+    expect(result.outcome).toBe(MATCH_OUTCOME.COMPLETE)
+    expect(result.isChord).toBe(true)
+  })
+
+  it('bass mode does not complete on a non-bass chord tone', () => {
+    const bassSettings = normalizeMatchSettings({ micChordMode: MIC_CHORD_MODES.BASS })
+    const result = evaluateMicScoreInformedInput(triadCheckpoint, [64], bassSettings)
+    expect(result.outcome).not.toBe(MATCH_OUTCOME.COMPLETE)
+  })
+
+  it('top mode completes on the top tone alone', () => {
+    const topSettings = normalizeMatchSettings({ micChordMode: MIC_CHORD_MODES.TOP })
+    const result = evaluateMicScoreInformedInput(triadCheckpoint, [67], topSettings)
+    expect(result.outcome).toBe(MATCH_OUTCOME.COMPLETE)
+  })
+
+  it('any-tone mode still requires every chord tone', () => {
+    const result = evaluateMicScoreInformedInput(triadCheckpoint, [60], settings)
+    expect(result.outcome).toBe(MATCH_OUTCOME.CHORD_PROGRESS)
+    expect(result.matchedCount).toBe(1)
   })
 })
 

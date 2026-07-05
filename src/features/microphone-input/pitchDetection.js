@@ -1,6 +1,15 @@
 const MIN_MIDI = 21
 const MAX_MIDI = 108
 const A4_FREQUENCY = 440
+
+/**
+ * Frequency band the autocorrelation tracker can actually resolve. Outside it
+ * the search window cannot contain the true period: sub-55 Hz fundamentals
+ * degenerate to a period pinned at the search bound (a fake ~1.4 kHz pitch
+ * with high clarity), so estimates there must not be treated as evidence.
+ */
+export const MIC_AC_MIN_TRACKED_HZ = 55
+export const MIC_AC_MAX_TRACKED_HZ = 1400
 // Absolute autocorrelation only filters numerical dust. Pitch acceptance is
 // governed by normalized clarity below; measured quiet piano/guitar fixtures
 // have strong clarity (~0.99) but raw correlation around 0.002-0.004, while

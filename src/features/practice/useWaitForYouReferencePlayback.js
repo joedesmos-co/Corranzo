@@ -40,6 +40,9 @@ export default function useWaitForYouReferencePlayback({ onBeforePlay, instrumen
   const playbackGenerationRef = useRef(0)
 
   useEffect(() => {
+    // Re-arm on setup — StrictMode dev re-runs effects on the same fiber, and a
+    // cleanup-only ref would stay false, leaving Hear It stuck in isPlaying.
+    mountedRef.current = true
     return () => {
       mountedRef.current = false
       playbackGenerationRef.current += 1

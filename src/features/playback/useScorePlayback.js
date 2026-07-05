@@ -41,6 +41,9 @@ export default function useScorePlayback({
   const [instrumentStatus, setInstrumentStatus] = useState(null)
 
   useEffect(() => {
+    // Re-arm on setup — StrictMode dev re-runs effects on the same fiber, and a
+    // cleanup-only ref would stay false, dropping every engine time update.
+    mountedRef.current = true
     const engine = new ScorePlaybackEngine()
     let lastTimeEmit = 0
     let pendingTime = null

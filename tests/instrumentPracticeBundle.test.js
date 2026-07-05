@@ -8,6 +8,9 @@
  * store and a faithful simulation of the App switch/upload flow.
  */
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import {
   bundleHasActiveFile,
   createEmptyInstrumentBundle,
@@ -15,6 +18,9 @@ import {
   snapshotInstrumentBundle,
 } from '../src/features/instruments/instrumentPracticeBundle.js'
 import { DEFAULT_INSTRUMENT_ID } from '../src/features/instruments/instruments.js'
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..')
+const readSrc = (...parts) => readFileSync(join(root, 'src', ...parts), 'utf8')
 
 function makeBundle(overrides = {}) {
   return snapshotInstrumentBundle({
@@ -171,6 +177,18 @@ describe('instrument switch state separation', () => {
     harness.switchTo('guitar')
     expect(harness.live.practicePrefs.practiceTime).toBe(99)
     expect(harness.live.practicePrefs.loopRegion).toEqual({ start: 8, end: 16 })
+  })
+
+  it('applying a bundle remounts the practice session so prefs rehydrate', () => {
+    // practiceMode / checkpointMode / wfyInputSource / loop / scrub time are
+    // mount-time state inside usePracticeSession. Without a remount keyed on
+    // the bundle epoch, switching instruments leaked the previous instrument's
+    // WFY mode and input source into the incoming one.
+    const app = readSrc('App.jsx')
+    expect(app).toMatch(
+      /const applyInstrumentBundle = useCallback\(\(bundle\) => \{[\s\S]*?setPracticeSessionEpoch\(\(value\) => value \+ 1\)[\s\S]*?\}, \[resetPdfViewerRuntime\]\)/,
+    )
+    expect(app).toMatch(/<PracticeSessionProvider\s+key=\{practiceSessionEpoch\}/)
   })
 
   it('legacy session (no instrumentId) restores onto Piano', () => {

@@ -1,19 +1,49 @@
 import { MIC_SIGNAL_SHAPE } from '../microphone-input/micSignalShape.js'
 
-function hasInstrumentLikeHarmonicDecay(v2Notes = []) {
+/**
+ * Upper-partial energy cap: (h4+h5+h6) / (h1+h2). Measured on the benchmark
+ * fixtures, real piano/guitar/distorted notes stay ≤ 0.39 while droney voiced
+ * speech (formant resonance) measures ≥ 0.52.
+ */
+export const MIC_HARMONIC_HIGH_LOW_MAX = 0.45
+
+function hasInstrumentLikeHarmonicProfile(v2Notes = []) {
   const note = v2Notes.find((entry) => entry?.detected)
   const magnitudes = note?.harmonicMagnitudes
   if (!Array.isArray(magnitudes) || magnitudes.length < 2) {
     return true
   }
   const fundamental = magnitudes[0] ?? 0
-  const secondHarmonic = magnitudes[1] ?? 0
   if (!(fundamental > 0)) {
     return false
   }
-  // Voiced speech boosts lower formants so the 2nd partial rivals the fundamental.
-  // A played instrument tone keeps upper harmonics well below the fundamental.
-  return secondHarmonic / fundamental <= 0.15
+
+  // A played note anchors its spectrum on the fundamental: real piano/guitar
+  // fixtures measure h2/h1 ≈ 0.5 with a smooth decay above it. Formant-filtered
+  // voice instead puts a resonance peak on an upper partial…
+  //
+  // Bass strings radiate a weak fundamental with the 2nd partial strongest, so
+  // bass notes may also anchor on h2. That stays voice-safe: a vocal formant
+  // (~700 Hz) only lands on h2 when f0 is 300-400 Hz — never a bass pitch —
+  // while bass-range voices peak on h3+ or fail the high/low cap below.
+  let strongestIndex = 0
+  for (let index = 1; index < magnitudes.length; index += 1) {
+    if ((magnitudes[index] ?? 0) > (magnitudes[strongestIndex] ?? 0)) {
+      strongestIndex = index
+    }
+  }
+  const strongestAllowed = note?.isBass ? strongestIndex <= 1 : strongestIndex === 0
+  if (!strongestAllowed) {
+    return false
+  }
+
+  // …or piles disproportionate energy into partials 4-6 relative to 1-2.
+  const lowEnergy = fundamental + (magnitudes[1] ?? 0)
+  let highEnergy = 0
+  for (let index = 3; index < magnitudes.length; index += 1) {
+    highEnergy += magnitudes[index] ?? 0
+  }
+  return lowEnergy > 0 && highEnergy / lowEnergy <= MIC_HARMONIC_HIGH_LOW_MAX
 }
 
 /**
@@ -34,7 +64,7 @@ export function isMusicalMicFrame(frame) {
     if (!(frame.v2DetectedMidis?.length > 0)) {
       return false
     }
-    if (!hasInstrumentLikeHarmonicDecay(frame.v2Notes ?? [])) {
+    if (!hasInstrumentLikeHarmonicProfile(frame.v2Notes ?? [])) {
       return false
     }
   }

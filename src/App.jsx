@@ -121,6 +121,10 @@ export default function App() {
   const [pdfBuffer, setPdfBuffer] = useState(null)
   const [pdfMeta, setPdfMeta] = useState(null)
   const [initialPracticePrefs, setInitialPracticePrefs] = useState(null)
+  // Bumped every time an instrument bundle is applied so the practice session
+  // subtree remounts and re-reads the incoming instrument's prefs (practice
+  // mode, WFY input source, loop, scrub time are all mount-time state).
+  const [practiceSessionEpoch, setPracticeSessionEpoch] = useState(0)
   const [showWelcome, setShowWelcome] = useState(() => !isOnboardingDismissed())
   const [guidedTutorialOpen, setGuidedTutorialOpen] = useState(() =>
     shouldOpenGuidedTutorial({ completed: isGuidedTutorialCompleted() }),
@@ -212,6 +216,7 @@ export default function App() {
     setAutoOmrRequest(null)
     practicePrefsRef.current = next.practicePrefs ?? null
     setInitialPracticePrefs(next.practicePrefs ?? null)
+    setPracticeSessionEpoch((value) => value + 1)
     resetPdfViewerRuntime()
   }, [resetPdfViewerRuntime])
 
@@ -1257,6 +1262,7 @@ export default function App() {
 
     return (
       <PracticeSessionProvider
+        key={practiceSessionEpoch}
         activeView="practice"
         midiSource={midiSource}
         musicXmlSource={musicXmlSource}

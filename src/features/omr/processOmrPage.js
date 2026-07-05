@@ -21,6 +21,7 @@ import {
 } from './buildOmrDiagnostics.js'
 import { estimatePageScanQuality } from './preprocessOmrPageImage.js'
 import { OMR_PIANO_STAVES_PER_SYSTEM } from './omrConstants.js'
+import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
 import { assertPixelViewReadable } from './omrPixelBuffer.js'
 import { omrDebugStep } from './omrDebug.js'
 import {
@@ -225,18 +226,42 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         tabDiagnostics.tabNotes += tabNotes.length
         const byMeasure = groupTabNotesByMeasure(tabNotes)
 
-        for (const measureBox of measureBoxes) {
-          const measureNotes = byMeasure.get(measureBox.measureNumber)
-          if (!measureNotes?.length) {
-            continue
+        // Emit through the system's LAST digit-bearing bar. Interior bars
+        // without digits are real silent bars and must consume a measure
+        // number — skipping them compressed the numbering, shifting every
+        // later measure left of its PDF barline (grid, MusicXML, cursor).
+        // Bars after the last digits stay skipped: a trailing span is usually
+        // the gap between the final barline and the content edge (short
+        // system), not an engraved bar.
+        let lastNotedIndex = -1
+        measureBoxes.forEach((box, index) => {
+          if (byMeasure.get(box.measureNumber)?.length) {
+            lastNotedIndex = index
           }
+        })
+
+        for (const measureBox of measureBoxes.slice(0, lastNotedIndex + 1)) {
+          const measureNotes = byMeasure.get(measureBox.measureNumber)
           const outputMeasureNumber = tabMeasureCounter
           tabMeasureCounter += 1
           const emittedMeasureBox = {
             ...measureBox,
             measureNumber: outputMeasureNumber,
           }
-          const { events } = buildTabMeasureEvents(measureNotes, { beats })
+          const { events } = measureNotes?.length
+            ? buildTabMeasureEvents(measureNotes, { beats })
+            : {
+                events: [
+                  {
+                    // A printed TAB bar with no fret digits is a silent bar.
+                    type: 'rest',
+                    startDivision: 0,
+                    durationDivisions: beats * OMR_DIVISIONS_PER_QUARTER,
+                    durationType: beats === 3 ? 'half' : 'whole',
+                    dotted: beats === 3,
+                  },
+                ],
+              }
           const noteCount = events.reduce((sum, event) => sum + (event.notes?.length ?? 0), 0)
           const measureRecord = {
             measureNumber: outputMeasureNumber,

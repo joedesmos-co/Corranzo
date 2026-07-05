@@ -63,6 +63,9 @@ export default function useWebMidiInput({ listen = false }) {
   }, [])
 
   useEffect(() => {
+    // Re-arm on setup — StrictMode dev re-runs effects on the same fiber, and a
+    // cleanup-only ref would stay false, muting every MIDI message and device sync.
+    mountedRef.current = true
     return () => {
       mountedRef.current = false
       requestGenerationRef.current += 1

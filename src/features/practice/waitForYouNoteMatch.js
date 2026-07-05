@@ -396,6 +396,10 @@ export function evaluateMicNoteInputWithBuffer(checkpoint, playedMidi, bufferSta
 
 /**
  * Mic Engine V2 — simultaneous score-informed chord/single-note evaluation.
+ *
+ * Completion follows the mic chord mode: any-tone requires every chord tone
+ * heard together; bass/top modes complete from their single required tone
+ * (matching what those settings promise the player).
  */
 export function evaluateMicScoreInformedInput(checkpoint, detectedMidis = [], settings) {
   const expected = getExpectedMidis(checkpoint)
@@ -422,7 +426,11 @@ export function evaluateMicScoreInformedInput(checkpoint, detectedMidis = [], se
     }
   }
 
-  if (matchedIndices.size === fullExpected.length) {
+  const requiredMatched = targets.expected.every((requiredMidi) =>
+    (detectedMidis ?? []).some((midi) => pitchMatches(midi, requiredMidi, settings ?? {})),
+  )
+
+  if (requiredMatched) {
     return {
       outcome: MATCH_OUTCOME.COMPLETE,
       expected: fullExpected,

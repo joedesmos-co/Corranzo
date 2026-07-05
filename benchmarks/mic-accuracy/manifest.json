@@ -133,6 +133,48 @@
       "notes": "Quiet fretted/open-style guitar note: decays quickly but should stabilize."
     },
     {
+      "id": "synth-piano-low-c2",
+      "label": "note",
+      "expectedMidi": 36,
+      "expectedOnsetMs": 120,
+      "instrument": "piano",
+      "micDevice": "synthetic",
+      "noiseCondition": "clean",
+      "synthetic": {
+        "type": "harmonic",
+        "midi": 36,
+        "seconds": 1.0,
+        "harmonics": [
+          { "multiple": 1, "amplitude": 0.09 },
+          { "multiple": 2, "amplitude": 0.28 },
+          { "multiple": 3, "amplitude": 0.2 },
+          { "multiple": 4, "amplitude": 0.11 }
+        ]
+      },
+      "notes": "Low piano C2 with realistic weak fundamental — bass register coverage."
+    },
+    {
+      "id": "synth-piano-low-a1",
+      "label": "note",
+      "expectedMidi": 33,
+      "expectedOnsetMs": 120,
+      "instrument": "piano",
+      "micDevice": "synthetic",
+      "noiseCondition": "clean",
+      "synthetic": {
+        "type": "harmonic",
+        "midi": 33,
+        "seconds": 1.0,
+        "harmonics": [
+          { "multiple": 1, "amplitude": 0.08 },
+          { "multiple": 2, "amplitude": 0.26 },
+          { "multiple": 3, "amplitude": 0.19 },
+          { "multiple": 4, "amplitude": 0.1 }
+        ]
+      },
+      "notes": "Low piano A1 at the bottom of the autocorrelation band (55 Hz) — deep-bass coverage."
+    },
+    {
       "id": "synth-silence",
       "label": "silence",
       "expectedMidi": null,

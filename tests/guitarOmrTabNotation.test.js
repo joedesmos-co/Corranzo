@@ -3,6 +3,7 @@ import {
   buildTabMeasureEvents,
   classifySystemStaves,
   extractTabDigitNotes,
+  resolveGuitarSystemRoles,
   systemsContainTablature,
 } from '../src/features/omr/detectTabNotation.js'
 import { processOmrPageAnalysis } from '../src/features/omr/processOmrPage.js'
@@ -205,6 +206,106 @@ describe('guitar OMR tablature detection', () => {
     expect(result.measureGrid.map((measure) => measure.measureNumber)).toEqual([1, 2, 3, 4])
     expect(result.nextMeasureNumber).toBe(5)
     expect(result.stats.measures).toBe(4)
+  })
+
+  it('pairs a spacious notation-over-TAB layout when barline structure matches', () => {
+    // Section text or airy engraving can push the notation→TAB gap past the
+    // proximity bound. Both bands engraving the same barlines is the evidence
+    // they are one system — an unpaired TAB band would double-count measures.
+    const fiveLines = [0.1, 0.112, 0.124, 0.136, 0.148]
+    const sixLines = [0.36, 0.372, 0.384, 0.396, 0.408, 0.42]
+    const notation = {
+      y0: 0.1,
+      y1: 0.148,
+      lineCount: 5,
+      detectedLineYs: fiveLines,
+      lineYs: fiveLines,
+      barlineCount: 5,
+    }
+    const tab = {
+      y0: 0.36,
+      y1: 0.42,
+      lineCount: 6,
+      detectedLineYs: sixLines,
+      lineYs: sixLines,
+      barlineCount: 5,
+    }
+
+    // Gap (0.212) far exceeds 2.4 × notation height (0.115) — only the
+    // matching barline structure can pair these bands.
+    const roles = resolveGuitarSystemRoles([notation, tab], { stringCount: 6 })
+    expect(roles[0].kind).toBe('notation')
+    expect(roles[1]).toEqual(
+      expect.objectContaining({ kind: 'tab', pairedWithIndex: 0 }),
+    )
+
+    // Same spacious layout with disagreeing barlines stays honest TAB-only.
+    const unrelatedTab = { ...tab, barlineCount: 3 }
+    const unpaired = resolveGuitarSystemRoles([notation, unrelatedTab], { stringCount: 6 })
+    expect(unpaired[1]).toEqual(
+      expect.objectContaining({ kind: 'tab', pairedWithIndex: null }),
+    )
+
+    // Close layouts keep pairing on proximity alone (no barline data needed).
+    const closeTab = {
+      ...tab,
+      y0: 0.2,
+      y1: 0.26,
+      detectedLineYs: sixLines.map((y) => y - 0.16),
+      lineYs: sixLines.map((y) => y - 0.16),
+      barlineCount: 0,
+    }
+    const proximityRoles = resolveGuitarSystemRoles([notation, closeTab], { stringCount: 6 })
+    expect(proximityRoles[1]).toEqual(
+      expect.objectContaining({ kind: 'tab', pairedWithIndex: 0 }),
+    )
+  })
+
+  it('keeps barline numbering when a TAB bar has no fret digits', () => {
+    const page = makeWhitePage()
+    const tabStaff = drawStaff(page, 100, 6)
+    for (const x of [100, 300, 500, 700, 900]) {
+      drawVertical(page, x, tabStaff.top, tabStaff.bottom)
+    }
+
+    // Digits in bars 1, 2, and 4 — bar 3 (x 500–700) is intentionally silent.
+    const pageText = [
+      { digit: '0', x: 200 },
+      { digit: '2', x: 400 },
+      { digit: '3', x: 800 },
+    ].map(({ digit, x }) => ({
+      text: digit,
+      x,
+      y: page.height - tabStaff.bottom,
+      width: 8,
+      height: 10,
+      fontName: 'TabDigit',
+      pageWidth: page.width,
+      pageHeight: page.height,
+    }))
+
+    const result = processOmrPageAnalysis(page, {
+      page: 1,
+      measureNumberStart: 1,
+      pageText,
+      stavesPerSystem: 1,
+      instrument: getInstrument('guitar'),
+      timeSignature: { beats: 4, beatType: 4, confidence: 0 },
+    })
+
+    expect(result.source).toBe('tab-vector')
+    // The silent bar keeps its number; later bars must not shift left.
+    expect(result.measureRhythms.map((measure) => measure.measureNumber)).toEqual([1, 2, 3, 4])
+    expect(result.nextMeasureNumber).toBe(5)
+
+    const silentBar = result.measureRhythms[2]
+    expect(silentBar.events).toEqual([
+      expect.objectContaining({ type: 'rest', startDivision: 0, durationDivisions: 16 }),
+    ])
+    const lastBar = result.measureRhythms[3]
+    expect(lastBar.events[0].notes[0]).toEqual(
+      expect.objectContaining({ fret: 3 }),
+    )
   })
 
   it('merges TAB notes that quantize to the same onset into one chord event', () => {

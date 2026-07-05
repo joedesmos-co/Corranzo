@@ -47,6 +47,16 @@ const ACTION_TO_TRUST = {
  *   @param {string|null} [pageLayout.layoutConfidence] LAYOUT_CONFIDENCE.*
  *   @param {Array} pageLayout.systems  [{ systemIndex, page, y, startX, endX, barlineXs[] }]
  * @returns {{ trust, action, anchors[], coverage }}
+ *
+ * GEOMETRY CONTRACT: `startX`/`barlineXs` must be PLAYABLE-START positions
+ * (beat 1), not raw engraved barlines. Both current callers satisfy this — the
+ * fixtures rebuild geometry from calibrated anchors, and the runtime
+ * diagnostics path seeds `startX` from the system's first live anchor. The
+ * generator passes positions through to `playableStartX`/`x` unchanged, so
+ * feeding true left-barline x here would park the cursor on the clef/key
+ * margin. If detected raw barlines are ever retained for this path, add a
+ * beat-1 lead (see semiAutoScoreAlignment's system-start-width heuristic)
+ * before emitting anchors.
  */
 export function generateAnchorsFromLayout(reconciliation, pageLayout = {}) {
   const decision = decideFollowAction({

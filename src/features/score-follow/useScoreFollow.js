@@ -326,6 +326,9 @@ export default function useScoreFollow({
   }, [manualPageRotations])
 
   useEffect(() => {
+    // Re-arm on setup — StrictMode dev re-runs effects on the same fiber, and a
+    // cleanup-only ref would stay false, abandoning auto-setup after every await.
+    mountedRef.current = true
     return () => {
       mountedRef.current = false
       autoSetupAbortRef.current?.abort(createSetupAbortError())

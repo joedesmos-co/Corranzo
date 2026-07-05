@@ -130,7 +130,16 @@ export function resolveGuitarSystemRoles(systems, { stringCount = 6 } = {}) {
       const previousIsNotation = previousRoles.tabStaves.length === 0
       const previousHeight = Math.max(0.01, (previous.y1 ?? 0) - (previous.y0 ?? 0))
       const gap = (system.y0 ?? 0) - (previous.y1 ?? 0)
-      if (previousIsNotation && gap >= 0 && gap <= previousHeight * 2.4) {
+      const proximityPairs = gap >= 0 && gap <= previousHeight * 2.4
+      // Paired bands engrave the same measures, so their barline structure
+      // matches. Count agreement rescues pairing on spacious layouts (section
+      // text between bands pushes the gap past the proximity bound) — a missed
+      // pair is worse than a false one because both bands then emit measures,
+      // double-counting the system.
+      const structurePairs =
+        (system.barlineCount ?? 0) >= 2 &&
+        system.barlineCount === previous.barlineCount
+      if (previousIsNotation && (proximityPairs || structurePairs)) {
         return { kind: 'tab', pairedWithIndex: index - 1, tabStave: tabStaves[0] }
       }
     }

@@ -67,6 +67,10 @@ export default function useSessionPersistence({
   const mountedRef = useRef(true)
 
   useEffect(() => {
+    // Must re-arm on every effect setup: StrictMode dev runs setup→cleanup→setup
+    // on the SAME fiber (refs persist), so a cleanup-only ref stays false and the
+    // in-flight restore silently bails after its await — overlay stuck forever.
+    mountedRef.current = true
     return () => {
       mountedRef.current = false
     }
