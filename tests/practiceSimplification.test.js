@@ -50,9 +50,11 @@ describe('Practice page simplification', () => {
     expect(playbackSettings).toMatch(/showMetronomeDetails = true/)
     expect(transportTick).toMatch(/mappingWarning=\{stable\.isDemoPiece \? null : stable\.playback\.mappingWarning\}/)
     expect(transportTick).toContain('waitForYouActive={stable.waitForYou.active}')
-    expect(transport).toContain('practice-transport__wfy-primary')
-    expect(transport).toContain('Paused for your input — play the note below or tap Continue.')
-    expect(transport).toContain('onClick={onWaitForYouContinue}')
+    // Simplification pass: during Wait For You the transport shows only the
+    // status chip — the single Continue lives in the Wait For You section.
+    expect(transport).toContain('Wait For You active')
+    expect(transport).toContain('{!waitForYouActive && (')
+    expect(transport).not.toContain('onWaitForYouContinue')
   })
 
   it('keeps the first Practice action path above stats and status', () => {

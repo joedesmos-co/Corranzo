@@ -130,10 +130,13 @@ export default function WaitForYouSection({
       (noteTarget.approximate || (noteTarget.confidence != null && noteTarget.confidence < 0.7)),
   )
   const statusModifier = statusClassName(displayStatus, status)
-  const primaryActionDisabled =
-    status === WFY_STATUS.COMPLETE ||
-    status === WFY_STATUS.NO_CHECKPOINTS ||
-    displayStatus === WFY_DISPLAY_STATUS.CONTINUING
+  // "Structurally done" states (finished / nothing to practice) hide the
+  // action buttons entirely instead of stacking disabled ones — only Restart
+  // stays. Transient states (Continuing, reference playing) keep buttons
+  // visible-but-disabled so the row doesn't flicker between checkpoints.
+  const structurallyDone =
+    status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS
+  const primaryActionDisabled = displayStatus === WFY_DISPLAY_STATUS.CONTINUING
   const primaryActionCopy =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE
       ? 'Play the highlighted note, or tap Continue.'
@@ -166,20 +169,22 @@ export default function WaitForYouSection({
         onInputSourceChange={onInputSourceChange}
         midiAvailable={midiAvailable}
         microphoneAvailable={microphoneAvailable}
-        disabled={status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS}
+        disabled={structurallyDone}
       />
 
-      <div className="wait-for-you__primary-action">
-        <p>{primaryActionCopy}</p>
-        <button
-          type="button"
-          className="wait-for-you__btn wait-for-you__btn--primary"
-          disabled={primaryActionDisabled}
-          onClick={onMarkCorrect}
-        >
-          Continue
-        </button>
-      </div>
+      {!structurallyDone && (
+        <div className="wait-for-you__primary-action">
+          <p>{primaryActionCopy}</p>
+          <button
+            type="button"
+            className="wait-for-you__btn wait-for-you__btn--primary"
+            disabled={primaryActionDisabled}
+            onClick={onMarkCorrect}
+          >
+            Continue
+          </button>
+        </div>
+      )}
 
       {showMatchSettings && matchSettings && (
         <WaitForYouMatchSettingsPanel
@@ -188,7 +193,7 @@ export default function WaitForYouSection({
           rawSettings={rawMatchSettings}
           onUpdateSetting={onMatchSettingChange}
           onResetSettings={onResetMatchSettings}
-          disabled={status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS}
+          disabled={structurallyDone}
         />
       )}
 
@@ -339,57 +344,45 @@ export default function WaitForYouSection({
         </div>
       )}
 
-      <div className="wait-for-you__actions">
-        {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && currentCheckpoint && (
-          <button
-            type="button"
-            className="wait-for-you__btn"
-          disabled={
-            referencePlaying ||
-            status === WFY_STATUS.COMPLETE ||
-            status === WFY_STATUS.NO_CHECKPOINTS ||
-            displayStatus === WFY_DISPLAY_STATUS.CONTINUING ||
-            getExpectedMidis(currentCheckpoint).length === 0
-          }
-            onClick={() => onPlayReference(currentCheckpoint)}
-          >
-            {referencePlaying ? 'Playing…' : 'Hear it'}
-          </button>
-        )}
-        {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && onShowHint && (
-          <button
-            type="button"
-            className="wait-for-you__btn"
-            disabled={status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS}
-            onClick={onShowHint}
-          >
-            Show hint
-          </button>
-        )}
-        {onSkip && (
-          <button
-            type="button"
-            className="wait-for-you__btn"
-            disabled={
-              status === WFY_STATUS.COMPLETE ||
-              status === WFY_STATUS.NO_CHECKPOINTS ||
-              displayStatus === WFY_DISPLAY_STATUS.CONTINUING
-            }
-            onClick={onSkip}
-            title="Skip this note/chord"
-          >
-            Skip
-          </button>
-        )}
-        <button
-          type="button"
-          className="wait-for-you__btn"
-          disabled={totalCheckpoints === 0}
-          onClick={onRestart}
-        >
-          Restart
-        </button>
-      </div>
+      {status !== WFY_STATUS.NO_CHECKPOINTS && (
+        <div className="wait-for-you__actions">
+          {!structurallyDone && checkpointMode === WFY_CHECKPOINT_MODE.NOTE && currentCheckpoint && (
+            <button
+              type="button"
+              className="wait-for-you__btn"
+              disabled={
+                referencePlaying ||
+                displayStatus === WFY_DISPLAY_STATUS.CONTINUING ||
+                getExpectedMidis(currentCheckpoint).length === 0
+              }
+              onClick={() => onPlayReference(currentCheckpoint)}
+            >
+              {referencePlaying ? 'Playing…' : 'Hear it'}
+            </button>
+          )}
+          {!structurallyDone && checkpointMode === WFY_CHECKPOINT_MODE.NOTE && onShowHint && (
+            <button type="button" className="wait-for-you__btn" onClick={onShowHint}>
+              Show hint
+            </button>
+          )}
+          {!structurallyDone && onSkip && (
+            <button
+              type="button"
+              className="wait-for-you__btn"
+              disabled={displayStatus === WFY_DISPLAY_STATUS.CONTINUING}
+              onClick={onSkip}
+              title="Skip this note/chord"
+            >
+              Skip
+            </button>
+          )}
+          {totalCheckpoints > 0 && (
+            <button type="button" className="wait-for-you__btn" onClick={onRestart}>
+              Restart
+            </button>
+          )}
+        </div>
+      )}
     </section>
   )
 }

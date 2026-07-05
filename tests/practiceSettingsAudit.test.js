@@ -66,8 +66,10 @@ describe('practice settings audit', () => {
     const mode = readSrc('components', 'practice', 'PracticeModeSection.jsx')
     const transport = readSrc('components', 'practice', 'PracticeTransportSection.jsx')
 
-    expect(mode).toContain('Add a timing file in Library to enable practice.')
+    // The actionable copy lives in the transport only; Mode hides entirely
+    // until a timing file exists instead of repeating the same hint.
     expect(transport).toContain('Add a timing file in Library to enable practice.')
+    expect(mode).toMatch(/if \(!hasMusicXml\) \{\s*return null/)
     expect(mode).not.toContain('Timing file required.')
   })
 })

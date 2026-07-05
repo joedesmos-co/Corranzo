@@ -203,11 +203,18 @@ export default memo(function PracticeControlPanel({
       <PracticeStatusStrip session={session} scoreFollow={scoreFollow} />
 
       {practicePiece?.id && (
-        <PracticeStatsCard
-          pieceId={practicePiece.id}
-          liveSession={practiceStats?.liveSession ?? null}
-          compact
-        />
+        <PracticeCollapsibleSection
+          title="Session stats"
+          summary="Saved locally"
+          ariaLabel="Practice stats"
+        >
+          <PracticeStatsCard
+            pieceId={practicePiece.id}
+            liveSession={practiceStats?.liveSession ?? null}
+            compact
+            showHeader={false}
+          />
+        </PracticeCollapsibleSection>
       )}
 
       <div className="practice-control-panel__footer">

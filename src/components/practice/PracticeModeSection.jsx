@@ -15,6 +15,12 @@ export default function PracticeModeSection({
   waitForYouDisabledReason = '',
   compact = false,
 }) {
+  // Without a timing file there is no mode to pick; the Play section already
+  // shows the "add a timing file" guidance, so don't repeat it here.
+  if (!hasMusicXml) {
+    return null
+  }
+
   return (
     <section
       className={`practice-section practice-mode${compact ? ' practice-section--compact' : ''}`}
@@ -28,36 +34,30 @@ export default function PracticeModeSection({
         </PracticeHelpTip>
       </h3>
 
-      {!hasMusicXml ? (
-        <p className="practice-section__hint practice-empty-state">
-          Add a timing file in Library to enable practice.
-        </p>
-      ) : (
-        <div className="practice-mode__options" role="radiogroup" aria-label="Practice mode">
-          {Object.values(PRACTICE_MODE).map((mode) => (
-            <label
-              key={mode}
-              className={`practice-mode__option${
-                practiceMode === mode ? ' practice-mode__option--selected' : ''
-              }`}
-            >
-              <input
-                type="radio"
-                name="practice-mode"
-                value={mode}
-                checked={practiceMode === mode}
-                disabled={
-                  disabled ||
-                  (mode === PRACTICE_MODE.WAIT_FOR_YOU && waitForYouDisabled)
-                }
-                onChange={() => onPracticeModeChange(mode)}
-              />
-              <span>{MODE_LABELS[mode]}</span>
-            </label>
-          ))}
-        </div>
-      )}
-      {hasMusicXml && waitForYouDisabled && waitForYouDisabledReason && (
+      <div className="practice-mode__options" role="radiogroup" aria-label="Practice mode">
+        {Object.values(PRACTICE_MODE).map((mode) => (
+          <label
+            key={mode}
+            className={`practice-mode__option${
+              practiceMode === mode ? ' practice-mode__option--selected' : ''
+            }`}
+          >
+            <input
+              type="radio"
+              name="practice-mode"
+              value={mode}
+              checked={practiceMode === mode}
+              disabled={
+                disabled ||
+                (mode === PRACTICE_MODE.WAIT_FOR_YOU && waitForYouDisabled)
+              }
+              onChange={() => onPracticeModeChange(mode)}
+            />
+            <span>{MODE_LABELS[mode]}</span>
+          </label>
+        ))}
+      </div>
+      {waitForYouDisabled && waitForYouDisabledReason && (
         <p className="practice-section__hint practice-empty-state">
           {waitForYouDisabledReason}
         </p>

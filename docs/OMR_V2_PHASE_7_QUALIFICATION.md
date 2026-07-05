@@ -1,6 +1,6 @@
 # OMR Engine V2 — Phase 7 Duration-Coupled Lane Qualification
 
-**Generated:** 2026-07-05T00:13:06.183Z
+**Generated:** 2026-07-05T01:21:55.639Z
 **Status:** Diagnostic only — no runtime promotion.
 
 ## Executive verdict

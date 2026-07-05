@@ -8,6 +8,11 @@ export default function PracticeScoreCursorSection({ scoreFollow, disabled = fal
   const canToggle = !disabled && !busy
   const targetPreference = scoreFollow.guitarScoreTarget
   const showTargetPreference = Boolean(targetPreference?.selectable)
+  const activeTargetLabel = showTargetPreference
+    ? targetPreference.options.find(
+        (option) => option.target === targetPreference.activeTarget,
+      )?.label
+    : null
   const statusLabel = busy
     ? 'Setting up'
     : scoreFollow.enabled && scoreFollow.canFollow
@@ -15,6 +20,9 @@ export default function PracticeScoreCursorSection({ scoreFollow, disabled = fal
       : scoreFollow.enabled
         ? 'Ready'
         : 'Off'
+  const chipLabel = activeTargetLabel
+    ? `${statusLabel} · ${activeTargetLabel}`
+    : statusLabel
 
   return (
     <section
@@ -22,45 +30,47 @@ export default function PracticeScoreCursorSection({ scoreFollow, disabled = fal
       aria-label="Score cursor"
       data-tour-id="score-cursor"
     >
-      <div className="practice-section__header-row">
-        <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">
-          Cursor
-        </h3>
-        <span
-          className={`practice-status-chip${
-            scoreFollow.enabled && scoreFollow.canFollow ? ' practice-status-chip--ready' : ''
-          }`}
-        >
-          {statusLabel}
-        </span>
-      </div>
+      <details className="practice-score-cursor__details">
+        <summary className="practice-score-cursor__summary">
+          <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">
+            Cursor
+          </h3>
+          <span
+            className={`practice-status-chip${
+              scoreFollow.enabled && scoreFollow.canFollow ? ' practice-status-chip--ready' : ''
+            }`}
+          >
+            {chipLabel}
+          </span>
+        </summary>
 
-      <label className="practice-score-cursor__toggle">
-        <input
-          type="checkbox"
-          checked={Boolean(scoreFollow.enabled)}
-          disabled={!canToggle}
-          onChange={(event) => scoreFollow.setEnabled(event.target.checked)}
-        />
-        <span>Show cursor on score</span>
-      </label>
+        <label className="practice-score-cursor__toggle">
+          <input
+            type="checkbox"
+            checked={Boolean(scoreFollow.enabled)}
+            disabled={!canToggle}
+            onChange={(event) => scoreFollow.setEnabled(event.target.checked)}
+          />
+          <span>Show cursor on score</span>
+        </label>
 
-      {showTargetPreference && (
-        <div className="practice-score-cursor__target" aria-label="Guitar cursor target">
-          {targetPreference.options.map((option) => (
-            <button
-              key={option.target}
-              type="button"
-              className="practice-score-cursor__target-option"
-              aria-pressed={targetPreference.activeTarget === option.target}
-              disabled={!canToggle}
-              onClick={() => targetPreference.setTarget(option.target)}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-      )}
+        {showTargetPreference && (
+          <div className="practice-score-cursor__target" aria-label="Guitar cursor target">
+            {targetPreference.options.map((option) => (
+              <button
+                key={option.target}
+                type="button"
+                className="practice-score-cursor__target-option"
+                aria-pressed={targetPreference.activeTarget === option.target}
+                disabled={!canToggle}
+                onClick={() => targetPreference.setTarget(option.target)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </details>
 
       {setupPhase === 'failed' && (
         <p className="practice-section__hint practice-score-cursor__hint">

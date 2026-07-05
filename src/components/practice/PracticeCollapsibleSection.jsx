@@ -6,6 +6,7 @@ export default function PracticeCollapsibleSection({
   defaultOpen = false,
   onOpenChange,
   dataTourId = null,
+  ariaLabel = null,
   children,
 }) {
   const [open, setOpen] = useState(defaultOpen)
@@ -27,6 +28,7 @@ export default function PracticeCollapsibleSection({
     <section
       className={`practice-section practice-section--collapsible${open ? ' practice-section--collapsible-open' : ''}`}
       data-tour-id={dataTourId ?? undefined}
+      aria-label={ariaLabel ?? undefined}
     >
       <button
         type="button"

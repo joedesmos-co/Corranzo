@@ -22,8 +22,6 @@ export default function PracticeTransportSection({
   metronomeDisplay,
   mappingWarning,
   waitForYouActive = false,
-  waitForYouContinueDisabled = false,
-  onWaitForYouContinue,
   onPlaybackRateChange,
   onMetronomeEnabledChange,
   onMetronomeLevelChange,
@@ -88,19 +86,10 @@ export default function PracticeTransportSection({
             showMetronomeDetails={false}
           />
 
-          {waitForYouActive ? (
-            <div className="practice-transport__wfy-primary">
-              <p>Paused for your input — play the note below or tap Continue.</p>
-              <button
-                type="button"
-                className="midi-transport__btn midi-transport__btn--primary midi-transport__btn--text"
-                disabled={waitForYouContinueDisabled}
-                onClick={onWaitForYouContinue}
-              >
-                Continue
-              </button>
-            </div>
-          ) : (
+          {/* In Wait For You, the one primary action (Continue) lives in the
+              Wait For You section next to the note target — the transport only
+              shows the status chip above, never a second Continue button. */}
+          {!waitForYouActive && (
             <MidiTransportControls
               disabled={disabled || isLoading}
               playDisabled={playDisabled || isLoading}

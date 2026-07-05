@@ -42,6 +42,7 @@ export default function PracticeStatsCard({
   pieceId = null,
   liveSession = null,
   compact = false,
+  showHeader = true,
 }) {
   const { stats } = useProfileStats()
   const pieceStats = pieceId ? stats.pieces?.[pieceId] : null
@@ -63,13 +64,17 @@ export default function PracticeStatsCard({
 
   return (
     <section
-      className={`practice-stats-card${compact ? ' practice-stats-card--compact' : ''}`}
+      className={`practice-stats-card${compact ? ' practice-stats-card--compact' : ''}${
+        showHeader ? '' : ' practice-stats-card--flat'
+      }`}
       aria-label="Practice stats"
     >
-      <div className="practice-stats-card__header">
-        <h3 className="practice-stats-card__title">Session stats</h3>
-        <span className="practice-stats-card__hint">Saved locally</span>
-      </div>
+      {showHeader && (
+        <div className="practice-stats-card__header">
+          <h3 className="practice-stats-card__title">Session stats</h3>
+          <span className="practice-stats-card__hint">Saved locally</span>
+        </div>
+      )}
       <div className="practice-stats-card__grid">
         <StatRow label="Time practiced" value={formatDuration(practiceSeconds)} />
         <StatRow label="Measures visited" value={measuresPlayed} />
