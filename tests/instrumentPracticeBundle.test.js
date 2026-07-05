@@ -104,10 +104,23 @@ describe('instrument practice bundle', () => {
       'guitar.pdf',
       'piano.pdf',
     ])
+    expect(store.get('guitar')?.instrumentId).toBe('guitar')
+    expect(store.get('piano')?.instrumentId).toBe('piano')
     expect(store.entries().map(([instrumentId]) => instrumentId).sort()).toEqual([
       'guitar',
       'piano',
     ])
+  })
+
+  it('clearing one uploaded instrument bundle leaves the other bundle intact', () => {
+    const store = createInstrumentBundleStore()
+    store.set('piano', makeBundle({ fileName: 'piano-upload.pdf' }))
+    store.set('guitar', makeBundle({ fileName: 'guitar-upload.pdf' }))
+
+    store.clear('guitar')
+
+    expect(store.get('guitar')).toBeNull()
+    expect(store.get('piano')?.fileName).toBe('piano-upload.pdf')
   })
 })
 

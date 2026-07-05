@@ -790,6 +790,29 @@
   cursor: wait;
 }
 
+.practice-piece-card__remove {
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid var(--sf-border);
+  border-radius: var(--sf-radius-sm);
+  background: transparent;
+  color: var(--sf-text-secondary);
+  font-size: var(--sf-font-caption);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.practice-piece-card__remove:hover:not(:disabled),
+.practice-piece-card__remove:focus-visible {
+  border-color: #a85555;
+  color: #ffd6d6;
+}
+
+.practice-piece-card__remove:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .practice-piece-card__error-block {
   grid-column: 1 / -1;
   display: grid;

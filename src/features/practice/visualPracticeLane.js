@@ -43,8 +43,10 @@ const TARGET_EPSILON_SECONDS = 0.12
  * Each group = one Wait For You note checkpoint (chord notes stacked,
  * sorted high pitch first so stacking reads top-down like a staff).
  */
-export function buildVisualLaneGroups(timingMap, loopRegion = null) {
-  const checkpoints = buildNoteCheckpoints(timingMap, loopRegion)
+export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}) {
+  const checkpoints = buildNoteCheckpoints(timingMap, loopRegion, {
+    practiceScope: options.practiceScope,
+  })
 
   return checkpoints.map((checkpoint) => {
     const notes = [...(checkpoint.notes ?? [])]

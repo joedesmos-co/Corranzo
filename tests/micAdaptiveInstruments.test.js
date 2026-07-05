@@ -19,6 +19,8 @@ import {
 import {
   gateOpenThreshold,
   passesNoiseGate,
+  passesSoftMusicalGate,
+  softGateOpenThreshold,
 } from '../src/features/microphone-input/micNoiseGate.js'
 import {
   createMicCalibration,
@@ -182,6 +184,17 @@ describe('adaptive noise gate', () => {
   it('opens a touch sooner for the plucky guitar profile', () => {
     const guitar = getMicInstrumentProfile('guitar')
     expect(gateOpenThreshold(0.006, guitar.gate)).toBeLessThan(gateOpenThreshold(0.006))
+  })
+
+  it('keeps quiet-practice soft gating separate from the normal noise gate', () => {
+    const floor = 0.006
+    const quietNoteRms = 0.012
+
+    expect(quietNoteRms).toBeLessThan(gateOpenThreshold(floor))
+    expect(passesNoiseGate(quietNoteRms, floor)).toBe(false)
+    expect(softGateOpenThreshold(floor)).toBeLessThan(gateOpenThreshold(floor))
+    expect(passesSoftMusicalGate(quietNoteRms, floor)).toBe(true)
+    expect(passesSoftMusicalGate(0.0065, floor)).toBe(false)
   })
 })
 

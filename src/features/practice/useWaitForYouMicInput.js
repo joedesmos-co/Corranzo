@@ -79,6 +79,7 @@ function micFeedbackFromResult(result) {
     expectedMidis: result.expected,
     matchedIndices: result.matchedIndices,
     isChord: result.isChord,
+    chordAsSequence: Boolean(result.isChord),
   })
 }
 
@@ -110,6 +111,9 @@ function micFrameRejectReason({
     return 'no-expected-midi'
   }
   if (!frame.gateOpen) {
+    if (frame.v2DetectedMidis?.length) {
+      return 'soft-note-below-gate'
+    }
     return 'noise-gate-closed'
   }
   if (frame.v2Active && !frame.v2DetectedMidis?.length) {
@@ -135,7 +139,7 @@ export default function useWaitForYouMicInput({
   instrumentId = null,
 }) {
   const [inputFeedback, setInputFeedback] = useState(() =>
-    idleFeedbackForCheckpoint(currentCheckpoint),
+    idleFeedbackForCheckpoint(currentCheckpoint, { chordAsSequence: true }),
   )
   const [lastHeardMidi, setLastHeardMidi] = useState(null)
   const [liveFrame, setLiveFrame] = useState(null)
@@ -147,6 +151,7 @@ export default function useWaitForYouMicInput({
   const matchConfirmRef = useRef(createMatchConfirmState())
   const attackLatchRef = useRef(createMicAttackLatchState())
   const debugFramesRef = useRef([])
+  const quietRejectedFramesRef = useRef(0)
   const currentCheckpointRef = useRef(currentCheckpoint)
   currentCheckpointRef.current = currentCheckpoint
   const [v2RuntimeError, setV2RuntimeError] = useState(null)
@@ -162,12 +167,9 @@ export default function useWaitForYouMicInput({
   const micEngineMode = 'v2-score-informed'
   const chordTargets = getMicChordMatchTargets(currentCheckpoint, matchSettings)
 
-  const isMicV2Polyphonic =
-    expectedMidis.length > 1 &&
-    chordTargets.mode === MIC_CHORD_MODES.ANY_TONE
+  const isMicV2Polyphonic = false
 
   const isMicChordCollection =
-    !isMicV2Polyphonic &&
     expectedMidis.length > 1 &&
     chordTargets.mode === MIC_CHORD_MODES.ANY_TONE
 
@@ -195,11 +197,12 @@ export default function useWaitForYouMicInput({
   )
 
   const resetFeedback = useCallback(() => {
-    setInputFeedback(idleFeedbackForCheckpoint(currentCheckpointRef.current))
+    setInputFeedback(idleFeedbackForCheckpoint(currentCheckpointRef.current, { chordAsSequence: true }))
     setLastHeardMidi(null)
     setLiveFrame(null)
     resetMicChordCollectionState(collectionStateRef.current)
     lastStableChordKeyRef.current = ''
+    quietRejectedFramesRef.current = 0
     resetMatchConfirm()
   }, [resetMatchConfirm])
 
@@ -387,6 +390,18 @@ export default function useWaitForYouMicInput({
         frame.gateOpen &&
         matchingEnabled &&
         evaluateMicMatch(frame.midi)?.outcome === MATCH_OUTCOME.WRONG
+      const quietNoteRejected =
+        matchingEnabled &&
+        !frame.gateOpen &&
+        expectedMidis.length > 0 &&
+        frame.v2DetectedMidis?.some((midi) => expectedMidis.includes(midi)) &&
+        (frame.filteredRms ?? 0) > (frame.noiseFloor ?? 0)
+
+      if (quietNoteRejected) {
+        quietRejectedFramesRef.current += 1
+      } else if (frame.gateOpen || !frame.v2DetectedMidis?.length) {
+        quietRejectedFramesRef.current = 0
+      }
 
       const diagnostic = resolveMicDiagnostic({
         calibrating: frame.calibrating,
@@ -394,6 +409,7 @@ export default function useWaitForYouMicInput({
         signalQuality: frame.signalQuality,
         stabilizerPending: frame.stabilizerPending,
         wrongPitch,
+        quietNoteRejected: quietRejectedFramesRef.current >= 6,
         chordUnsupported:
           matchingEnabled &&
           isMicChordCollection &&
@@ -466,6 +482,15 @@ export default function useWaitForYouMicInput({
           v2MeanConfidence: frame.v2MeanConfidence ?? null,
           v2DetectedMidis: frame.v2DetectedMidis ? [...frame.v2DetectedMidis] : [],
           v2Notes: summarizeV2Notes(frame.v2Notes ?? []),
+          gateThreshold: frame.gateThreshold ?? null,
+          rawGateOpen: Boolean(frame.rawGateOpen ?? frame.gateOpen),
+          softGateOpen: Boolean(frame.softGateOpen),
+          softGateThreshold: frame.softGateThreshold ?? null,
+          softGateEvidence: Boolean(frame.softGateEvidence),
+          quietNoteRejected,
+          quietRejectedFrames: quietRejectedFramesRef.current,
+          harmonicProfile: debugFrame.harmonicProfile,
+          electricGuitarSignal: debugFrame.electricGuitarSignal,
           rejectReason: debugRejectReason,
         },
         lastFrames: [...debugFramesRef.current],

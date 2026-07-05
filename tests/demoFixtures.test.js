@@ -108,7 +108,7 @@ afterAll(() => {
 
 describe('Practice library fixture catalog', () => {
   it('ships PDF, MusicXML/MXL, and MIDI for every built-in practice card', async () => {
-    expect(PRACTICE_LIBRARY_FIXTURES).toHaveLength(14)
+    expect(PRACTICE_LIBRARY_FIXTURES).toHaveLength(9)
 
     for (const fixture of PRACTICE_LIBRARY_FIXTURES) {
       expect(existsSync(fixturePath(fixture.paths.pdf)), `${fixture.id} pdf`).toBe(true)
@@ -140,18 +140,18 @@ describe('Practice library fixture catalog', () => {
   }, 30_000)
 
   it('resolves clicked practice cards to their own fixture bundle', () => {
-    const twinkle = getPracticeLibraryFixture('piano-twinkle-twinkle', INSTRUMENT_IDS.PIANO)
+    const minuet = getPracticeLibraryFixture('demo-minuet-in-g', INSTRUMENT_IDS.PIANO)
     const greensleeves = getPracticeLibraryFixture('guitar-greensleeves', INSTRUMENT_IDS.GUITAR)
 
-    expect(twinkle.title).toBe('Twinkle Twinkle Little Star')
-    expect(twinkle.paths.pdf).toContain('/practice-library/piano-twinkle-twinkle/')
+    expect(minuet.title).toBe('Minuet in G')
+    expect(minuet.paths.musicXml).toContain('/demo-minuet-in-g.musicxml')
     expect(greensleeves.title).toBe('Greensleeves')
     expect(greensleeves.paths.musicXml).toContain('/practice-library/guitar-greensleeves/')
     expect(getPracticeLibraryFixture(null, INSTRUMENT_IDS.PIANO).id).toBe(DEMO_PIECE.id)
     expect(getPracticeLibraryFixture(null, INSTRUMENT_IDS.GUITAR).id).toBe(GUITAR_DEMO_PIECE.id)
   })
 
-  it('auto-setup anchors practice library pieces at the first playable note, not the 30% fallback', async () => {
+  it('auto-setup anchors generated guitar practice library pieces at the first playable note, not the 30% fallback', async () => {
     await configureNodePdfAnalysis()
 
     const leadFraction = (anchor) =>
@@ -191,10 +191,6 @@ describe('Practice library fixture catalog', () => {
       expect(leadFraction(measureOne), fixtureId).not.toBeCloseTo(0.3, 2)
     }
 
-    await assertPracticeLibraryStart({
-      fixtureId: 'piano-ode-to-joy',
-      instrumentId: INSTRUMENT_IDS.PIANO,
-    })
     await assertPracticeLibraryStart({
       fixtureId: 'guitar-amazing-grace',
       instrumentId: INSTRUMENT_IDS.GUITAR,

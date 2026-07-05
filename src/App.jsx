@@ -76,6 +76,7 @@ import { clearWarmPages } from './features/pdf/pdfPagePerf.js'
 import { buildPdfFingerprint } from './features/score-follow/scoreFollowStorage.js'
 import {
   buildSessionMeta,
+  clearSessionStorage,
   saveSessionFiles,
   saveSessionMeta,
 } from './features/session/sessionPersistence.js'
@@ -125,6 +126,7 @@ export default function App() {
   // subtree remounts and re-reads the incoming instrument's prefs (practice
   // mode, WFY input source, loop, scrub time are all mount-time state).
   const [practiceSessionEpoch, setPracticeSessionEpoch] = useState(0)
+  const [instrumentBundleRevision, setInstrumentBundleRevision] = useState(0)
   const [showWelcome, setShowWelcome] = useState(() => !isOnboardingDismissed())
   const [guidedTutorialOpen, setGuidedTutorialOpen] = useState(() =>
     shouldOpenGuidedTutorial({ completed: isGuidedTutorialCompleted() }),
@@ -185,6 +187,7 @@ export default function App() {
   const liveBundleRef = useRef(null)
   liveBundleRef.current = {
     pdfFile,
+    instrumentId: activeInstrumentRef.current,
     pdfBuffer,
     pdfMeta,
     fileName,
@@ -585,6 +588,22 @@ export default function App() {
     })
     navigateToView('practice')
 
+    const activeBundleForPersistence = snapshotInstrumentBundle({
+      ...currentBundle,
+      instrumentId: currentInstrument,
+      pdfFile: nextPdfFile,
+      pdfBuffer: nextPdfBuffer,
+      pdfMeta: stablePdfMeta,
+      fileName: stablePdfMeta.fileName,
+      pageNumber,
+      midiSource,
+      musicXmlSource: nextMusicXmlSource,
+      practicePrefs: practicePrefsRef.current,
+      demoPieceActive: false,
+    })
+    const persistedInstrumentBundles = Object.fromEntries(instrumentBundleStoreRef.current.entries())
+    persistedInstrumentBundles[currentInstrument] = activeBundleForPersistence
+
     const sessionMeta = buildSessionMeta({
       pdfMeta: stablePdfMeta,
       midiSource,
@@ -593,6 +612,7 @@ export default function App() {
       pageNumber,
       practicePrefs: practicePrefsRef.current,
       instrumentId: currentInstrument,
+      instrumentBundles: persistedInstrumentBundles,
     })
     saveSessionMeta(sessionMeta)
     try {
@@ -600,6 +620,18 @@ export default function App() {
         pdf: nextPdfBuffer ? { data: nextPdfBuffer.slice(0) } : null,
         midi: midiSource?.data ? { data: midiSource.data.slice(0) } : null,
         musicXml: nextMusicXmlSource.data ? { data: nextMusicXmlSource.data.slice(0) } : null,
+        instrumentFiles: Object.fromEntries(
+          Object.entries(persistedInstrumentBundles).map(([bundleInstrumentId, bundle]) => [
+            bundleInstrumentId,
+            {
+              pdf: bundle.pdfBuffer ? { data: bundle.pdfBuffer.slice(0) } : null,
+              midi: bundle.midiSource?.data ? { data: bundle.midiSource.data.slice(0) } : null,
+              musicXml: bundle.musicXmlSource?.data
+                ? { data: bundle.musicXmlSource.data.slice(0) }
+                : null,
+            },
+          ]),
+        ),
       })
     } catch (error) {
       logAppViewDebug('omr-generated:save-files-error', {
@@ -1034,6 +1066,7 @@ export default function App() {
       initialPracticePrefs,
       pdfSoftWarning,
       demoPieceActive,
+      instrumentBundleRevision,
     ],
   )
 
@@ -1060,6 +1093,122 @@ export default function App() {
     setLibraryFeedback({ type: 'info', message: 'Opened Practice.' })
     navigateToView('practice')
   }, [applyInstrumentBundle, navigateToView, setInstrumentId])
+
+  const persistUploadBundlesNow = useCallback(async ({
+    activeBundle,
+    activeInstrument,
+    instrumentBundles,
+    activeViewOverride = activeView,
+  }) => {
+    const bundleEntries = Object.entries(instrumentBundles ?? {})
+      .filter(([, bundle]) => Boolean(bundle?.pdfMeta?.fileName && bundle?.pdfBuffer))
+      .map(([bundleInstrumentId, bundle]) => [
+        normalizeInstrumentId(bundleInstrumentId),
+        {
+          ...snapshotInstrumentBundle(bundle),
+          instrumentId: normalizeInstrumentId(bundleInstrumentId),
+        },
+      ])
+    const normalizedBundles = Object.fromEntries(bundleEntries)
+    const hasActiveBundle = Boolean(activeBundle?.pdfMeta?.fileName && activeBundle?.pdfBuffer)
+
+    if (!hasActiveBundle && bundleEntries.length === 0) {
+      await clearSessionStorage()
+      return
+    }
+
+    saveSessionMeta(
+      buildSessionMeta({
+        pdfMeta: hasActiveBundle ? activeBundle.pdfMeta : null,
+        midiSource: hasActiveBundle ? activeBundle.midiSource : null,
+        musicXmlSource: hasActiveBundle ? activeBundle.musicXmlSource : null,
+        activeView: activeViewOverride,
+        pageNumber: hasActiveBundle ? activeBundle.pageNumber : 1,
+        practicePrefs: hasActiveBundle ? activeBundle.practicePrefs : null,
+        instrumentId: activeInstrument,
+        instrumentBundles: normalizedBundles,
+      }),
+    )
+
+    try {
+      await saveSessionFiles({
+        pdf: hasActiveBundle ? { data: activeBundle.pdfBuffer.slice(0) } : null,
+        midi: hasActiveBundle && activeBundle.midiSource?.data
+          ? { data: activeBundle.midiSource.data.slice(0) }
+          : null,
+        musicXml: hasActiveBundle && activeBundle.musicXmlSource?.data
+          ? { data: activeBundle.musicXmlSource.data.slice(0) }
+          : null,
+        instrumentFiles: Object.fromEntries(
+          Object.entries(normalizedBundles).map(([bundleInstrumentId, bundle]) => [
+            bundleInstrumentId,
+            {
+              pdf: bundle.pdfBuffer ? { data: bundle.pdfBuffer.slice(0) } : null,
+              midi: bundle.midiSource?.data ? { data: bundle.midiSource.data.slice(0) } : null,
+              musicXml: bundle.musicXmlSource?.data
+                ? { data: bundle.musicXmlSource.data.slice(0) }
+                : null,
+            },
+          ]),
+        ),
+      })
+    } catch (error) {
+      logAppViewDebug('delete-upload:save-files-error', {
+        message: error instanceof Error ? error.message : String(error),
+      })
+    }
+  }, [activeView])
+
+  const handleDeleteUploadedPiece = useCallback((piece) => {
+    const targetInstrument = normalizeInstrumentId(piece?.instrumentId)
+    const currentInstrument = normalizeInstrumentId(activeInstrumentRef.current)
+    const store = instrumentBundleStoreRef.current
+    const activeBundle = {
+      ...snapshotInstrumentBundle(liveBundleRef.current),
+      instrumentId: currentInstrument,
+    }
+    const deletingActive = targetInstrument === currentInstrument
+    const storedBundle = deletingActive ? activeBundle : store.get(targetInstrument)
+
+    if (!storedBundle?.pdfMeta?.fileName) {
+      setLibraryFeedback({
+        type: 'info',
+        message: 'That upload was already removed.',
+      })
+      setInstrumentBundleRevision((value) => value + 1)
+      return
+    }
+
+    if (storedBundle.pdfFile) {
+      URL.revokeObjectURL(storedBundle.pdfFile)
+    }
+    store.clear(targetInstrument)
+
+    const remainingBundles = Object.fromEntries(store.entries())
+    if (!deletingActive && activeBundle.pdfFile && activeBundle.pdfBuffer) {
+      remainingBundles[currentInstrument] = activeBundle
+    }
+
+    if (deletingActive) {
+      applyInstrumentBundle(createEmptyInstrumentBundle())
+      setLibraryTab(LIBRARY_TABS.UPLOADS)
+      setSidebarOpen(true)
+      navigateToView('library')
+    }
+
+    setInstrumentBundleRevision((value) => value + 1)
+    setLibraryFeedback({
+      type: 'success',
+      message: `Removed ${piece?.title ?? 'uploaded piece'} from My Uploads.`,
+    })
+
+    persistUploadBundlesNow({
+      activeBundle: deletingActive ? createEmptyInstrumentBundle() : activeBundle,
+      activeInstrument: currentInstrument,
+      instrumentBundles: remainingBundles,
+      activeViewOverride: deletingActive ? 'library' : activeViewRef.current,
+    })
+  }, [applyInstrumentBundle, navigateToView, persistUploadBundlesNow, setSidebarOpen])
 
   useEffect(() => {
     if (activeView !== 'practice' || !pdfFile) {
@@ -1356,6 +1505,7 @@ export default function App() {
             uploadsDisabled={isRestoring}
             uploadedPieces={uploadedPracticePieces}
             onOpenUploadedPiece={handleOpenUploadedPiece}
+            onDeleteUploadedPiece={handleDeleteUploadedPiece}
             onClassifiedUpload={gatedClassifiedUpload}
             onFileSelect={wrapUpload('pdf', handleFileSelect)}
             onMidiSelect={wrapUpload('midi', handleMidiSelect)}

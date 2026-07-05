@@ -25,74 +25,10 @@ const TYPE_BY_BEATS = new Map([
   [4, 'whole'],
 ])
 
-const PIANO_PIECES = [
-  {
-    id: 'piano-ode-to-joy',
-    title: 'Ode to Joy',
-    subtitle: 'Beginner melody excerpt',
-    composer: 'Ludwig van Beethoven',
-    tempo: 92,
-    notes: q(['E4', 'E4', 'F4', 'G4', 'G4', 'F4', 'E4', 'D4', 'C4', 'C4', 'D4', 'E4', 'E4', 'D4', 'D4', null]),
-  },
-  {
-    id: 'piano-twinkle-twinkle',
-    title: 'Twinkle Twinkle Little Star',
-    subtitle: 'Beginner five-finger melody',
-    composer: 'Traditional French melody',
-    tempo: 96,
-    notes: [
-      ...q(['C4', 'C4', 'G4', 'G4', 'A4', 'A4']), n('G4', 2),
-      ...q(['F4', 'F4', 'E4', 'E4', 'D4', 'D4']), n('C4', 2),
-      ...q(['G4', 'G4', 'F4', 'F4', 'E4', 'E4']), n('D4', 2),
-      ...q(['G4', 'G4', 'F4', 'F4', 'E4', 'E4']), n('D4', 2),
-      ...q(['C4', 'C4', 'G4', 'G4', 'A4', 'A4']), n('G4', 2),
-      ...q(['F4', 'F4', 'E4', 'E4', 'D4', 'D4']), n('C4', 2),
-    ],
-  },
-  {
-    id: 'piano-mary-had-a-little-lamb',
-    title: 'Mary Had a Little Lamb',
-    subtitle: 'Beginner stepwise melody',
-    composer: 'Traditional',
-    tempo: 100,
-    notes: [
-      ...q(['E4', 'D4', 'C4', 'D4', 'E4', 'E4']), n('E4', 2),
-      ...q(['D4', 'D4']), n('D4', 2), ...q(['E4', 'G4']), n('G4', 2),
-      ...q(['E4', 'D4', 'C4', 'D4', 'E4', 'E4', 'E4', 'E4']),
-      ...q(['D4', 'D4', 'E4', 'D4']), n('C4', 2), r(2),
-    ],
-  },
-  {
-    id: 'piano-gymnopedie-no1-excerpt',
-    title: 'Gymnopedie No. 1 excerpt',
-    subtitle: 'Intermediate lyrical pulse',
-    composer: 'Erik Satie',
-    tempo: 72,
-    notes: [
-      ...q(['D4', 'A4', 'F4', 'A4', 'E4', 'A4', 'F4', 'A4']),
-      ...q(['D4', 'A4', 'F4', 'A4', 'E4', 'A4', 'F4', 'A4']),
-      ...q(['C4', 'G4', 'E4', 'G4', 'D4', 'G4', 'E4', 'G4']),
-      ...q(['C4', 'G4', 'E4', 'G4', 'D4', 'G4', 'E4', 'G4']),
-    ],
-  },
-  {
-    id: 'piano-fur-elise-excerpt',
-    title: 'Fur Elise excerpt',
-    subtitle: 'Advanced chromatic neighbor tones',
-    composer: 'Ludwig van Beethoven',
-    tempo: 88,
-    notes: [
-      ...e(['E5', 'D#5', 'E5', 'D#5', 'E5', 'B4', 'D5', 'C5']),
-      n('A4', 2), ...q(['C4', 'E4']),
-      n('A4', 2), ...q(['B4', 'E4']),
-      ...e(['G#4', 'B4', 'C5', 'E4', 'E5', 'D#5', 'E5', 'D#5']),
-      ...e(['E5', 'B4', 'D5', 'C5']), n('A4', 2),
-      ...q(['C4', 'E4']), n('A4', 2),
-      ...q(['B4', 'C5', 'B4', 'A4']),
-      n('A4', 2), r(2),
-    ],
-  },
-]
+// Piano library cards use curated public-domain score fixtures instead of the
+// generated single-staff sketches; the sketches looked like notation practice
+// data, not music a pianist should be asked to read.
+const PIANO_PIECES = []
 
 const GUITAR_PIECES = [
   {

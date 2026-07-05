@@ -37,6 +37,11 @@ import { savePracticePrefs, loadPracticePrefs } from '../session/practicePrefsSt
 import { quantizePracticeTime } from '../../context/PracticeTickContext.jsx'
 import { getInstrument } from '../instruments/instruments.js'
 import {
+  PRACTICE_SCOPE,
+  normalizePracticeScope,
+  practiceScopeAppliesToTimingMap,
+} from './practiceScope.js'
+import {
   getTabPositionsForTimingMap,
   resolveStringsForTimingMap,
 } from '../instruments/timingMapTabPositions.js'
@@ -57,9 +62,13 @@ export default function usePracticeSession({
   instrumentId = null,
 }) {
   const prefs = initialPracticePrefs ?? loadPracticePrefs() ?? {}
+  const selectedInstrument = useMemo(() => getInstrument(instrumentId), [instrumentId])
 
   const [practiceMode, setPracticeMode] = useState(
     prefs.practiceMode ?? PRACTICE_MODE.NORMAL,
+  )
+  const [practiceScope, setPracticeScopeState] = useState(
+    normalizePracticeScope(prefs.practiceScope),
   )
   const [checkpointMode, setCheckpointMode] = useState(
     prefs.checkpointMode === WFY_CHECKPOINT_MODE.BEAT
@@ -84,6 +93,13 @@ export default function usePracticeSession({
     useState(false)
 
   const timing = useMusicXmlTiming(musicXmlSource, 0)
+  const practiceScopeAvailable = practiceScopeAppliesToTimingMap(
+    timing.timingMap,
+    selectedInstrument.id,
+  )
+  const effectivePracticeScope = practiceScopeAvailable
+    ? practiceScope
+    : PRACTICE_SCOPE.BOTH_HANDS
 
   const alignment = useAlignmentDiagnostics(midiSource, timing.timingMap)
 
@@ -174,7 +190,12 @@ export default function usePracticeSession({
     playback.seek(0)
     clock.syncManualTimeToMidi(0)
     clock.setManualTime(0)
+    setPracticeScopeState(PRACTICE_SCOPE.BOTH_HANDS)
   }, [sourcesRevision]) // eslint-disable-line react-hooks/exhaustive-deps -- new score files → start at 0
+
+  const setPracticeScope = useCallback((scope) => {
+    setPracticeScopeState(normalizePracticeScope(scope))
+  }, [])
 
   const seekToPracticeTime = useCallback(
     (seconds, options = {}) => {
@@ -217,6 +238,7 @@ export default function usePracticeSession({
     onEnsurePaused: ensurePaused,
     practiceTime: clock.practiceTime,
     onCheckpointCompleted: onWfyCheckpointCompleted,
+    practiceScope: effectivePracticeScope,
   })
 
   const wfyAdvanceRef = useRef(waitForYou.onPlayerInputMatched)
@@ -363,8 +385,14 @@ export default function usePracticeSession({
   ])
 
   const idleWfyInputFeedback = useMemo(
-    () => idleFeedbackForCheckpoint(waitForYou.currentCheckpoint),
+    () =>
+      idleFeedbackForCheckpoint(waitForYou.currentCheckpoint, {
+        chordAsSequence:
+          wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+          Boolean(waitForYou.currentCheckpoint?.isChord),
+      }),
     [
+      wfyInputSource,
       waitForYou.currentCheckpoint?.id,
       waitForYou.currentCheckpoint?.expectedMidi,
       waitForYou.currentCheckpoint?.expectedMidis,
@@ -426,7 +454,7 @@ export default function usePracticeSession({
   // Instrument interpretation for guidance copy: fretted instruments get
   // position phrases ("fret 2 · D string"); keyboard instruments keep the
   // long-standing hand hints. The checkpoint engine itself stays generic.
-  const guidanceInstrument = useMemo(() => getInstrument(instrumentId), [instrumentId])
+  const guidanceInstrument = selectedInstrument
   const guidanceStrings = useMemo(
     () => resolveStringsForTimingMap(timing.timingMap, guidanceInstrument),
     [timing.timingMap, guidanceInstrument],
@@ -448,6 +476,9 @@ export default function usePracticeSession({
     instrument: guidanceInstrument,
     strings: guidanceStrings,
     tabPositions: guidanceTabPositions,
+    chordAsSequence:
+      waitForYouInput.source === WFY_INPUT_SOURCE.MICROPHONE &&
+      Boolean(waitForYou.currentCheckpoint?.isChord),
   })
 
   const waitForYouRef = useRef(waitForYou)
@@ -545,6 +576,7 @@ export default function usePracticeSession({
   const practicePrefsSnapshot = useMemo(
     () => ({
       practiceMode,
+      practiceScope,
       checkpointMode,
       wfyInputSource,
       practiceTime: clock.practiceTime,
@@ -560,6 +592,7 @@ export default function usePracticeSession({
     }),
     [
       practiceMode,
+      practiceScope,
       checkpointMode,
       wfyInputSource,
       practiceTimeForSnapshotDeps,
@@ -580,6 +613,7 @@ export default function usePracticeSession({
     savePracticePrefs(practicePrefsSnapshotRef.current)
   }, [
     practiceMode,
+    practiceScope,
     checkpointMode,
     wfyInputSource,
     loop.snapMode,
@@ -657,6 +691,10 @@ export default function usePracticeSession({
       practicePrefsSnapshot,
       practiceMode,
       setPracticeMode: handlePracticeModeChange,
+      practiceScope: effectivePracticeScope,
+      rawPracticeScope: practiceScope,
+      practiceScopeAvailable,
+      setPracticeScope,
       isWaitForYou,
       hasMidi,
       hasMusicXml,
@@ -703,6 +741,10 @@ export default function usePracticeSession({
     [
       practicePrefsSnapshot,
       practiceMode,
+      effectivePracticeScope,
+      practiceScope,
+      practiceScopeAvailable,
+      setPracticeScope,
       handlePracticeModeChange,
       isWaitForYou,
       hasMidi,

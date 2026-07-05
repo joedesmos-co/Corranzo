@@ -236,6 +236,14 @@ describe('Wait For You stabilization — chord checkpoint display', () => {
     const feedback = idleFeedbackForCheckpoint(noteCheckpoint([D_SHARP5, F_SHARP5]))
     expect(feedback.message).toBe('Play D#5 + F#5 together')
   })
+
+  it('labels microphone chord checkpoints as a sequence', () => {
+    const feedback = idleFeedbackForCheckpoint(noteCheckpoint([D_SHARP5, F_SHARP5]), {
+      chordAsSequence: true,
+    })
+    expect(feedback.message).toBe('Chord practice sequence: play D#5 + F#5 one at a time')
+    expect(feedback.message).not.toContain('together')
+  })
 })
 
 describe('Wait For You stabilization — marker offset', () => {

@@ -1,4 +1,9 @@
-import { getInstrument, normalizeInstrumentId } from '../instruments/instruments.js'
+import {
+  DEFAULT_INSTRUMENT_ID,
+  getInstrument,
+  isSupportedInstrumentId,
+  normalizeInstrumentId,
+} from '../instruments/instruments.js'
 import { PRACTICE_LIBRARY_FIXTURES } from '../../dev/fixturePaths.js'
 
 export const LIBRARY_TABS = {
@@ -72,13 +77,25 @@ function formatApproxDuration(seconds) {
 }
 
 export function buildUploadedPracticePieces(bundles = {}, { activeInstrumentId = null } = {}) {
+  const activeInstrument = activeInstrumentId ? normalizeInstrumentId(activeInstrumentId) : null
   return Object.entries(bundles)
     .map(([instrumentId, bundle]) => {
-      const normalizedInstrument = normalizeInstrumentId(instrumentId)
+      const hasExplicitInstrument = Boolean(bundle?.instrumentId)
+      const keyIsSupported = isSupportedInstrumentId(instrumentId)
+      const normalizedInstrument = normalizeInstrumentId(
+        hasExplicitInstrument ? bundle.instrumentId : instrumentId,
+      )
+      if (activeInstrument && normalizedInstrument !== activeInstrument) {
+        return null
+      }
       if (!bundle?.pdfMeta?.fileName || bundle.demoPieceActive) {
         return null
       }
       const instrument = getInstrument(normalizedInstrument)
+      const legacyInstrument = !hasExplicitInstrument && !keyIsSupported
+      const instrumentLabel = legacyInstrument
+        ? `${getInstrument(DEFAULT_INSTRUMENT_ID).label} (legacy upload)`
+        : instrument.label
       const hasTiming = Boolean(bundle.musicXmlSource?.data)
       const hasMidi = Boolean(bundle.midiSource?.data)
       const approxDuration = formatApproxDuration(bundle.musicXmlSource?.omrMeta?.durationSeconds)
@@ -92,7 +109,8 @@ export function buildUploadedPracticePieces(bundles = {}, { activeInstrumentId =
       return {
         id: `upload:${normalizedInstrument}:${bundle.pdfMeta.fileName}`,
         instrumentId: normalizedInstrument,
-        instrument: instrument.label,
+        instrument: instrumentLabel,
+        legacyInstrument,
         title,
         difficulty: 'Uploaded',
         approxDuration: approxDuration ?? (hasTiming ? 'Timing ready' : 'Needs timing'),

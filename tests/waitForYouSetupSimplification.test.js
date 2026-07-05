@@ -98,6 +98,7 @@ describe('advanced mic controls collapse under Troubleshooting', () => {
 
 describe('mic diagnostics are inspectable in any build', () => {
   const hook = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
+  const debugExport = readSrc('features', 'microphone-input', 'micDebugExport.js')
 
   it('publishes a stable window.SCOREFLOW_MIC_DEBUG object', () => {
     expect(hook).toContain('globalThis.SCOREFLOW_MIC_DEBUG')
@@ -118,8 +119,21 @@ describe('mic diagnostics are inspectable in any build', () => {
       'expectedMidis:',
       'instrumentId:',
       'inputSource:',
+      'harmonicProfile:',
+      'electricGuitarSignal:',
     ]) {
       expect(hook).toContain(field)
+    }
+
+    for (const field of [
+      'detectedMidis:',
+      'v2MeanConfidence:',
+      'cleanLikely:',
+      'distortedLikely:',
+      'harmonicProfile',
+      'electricGuitarSignal',
+    ]) {
+      expect(debugExport).toContain(field)
     }
   })
 

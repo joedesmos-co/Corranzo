@@ -44,11 +44,12 @@ describe('Wait For You mic engine V2 wiring', () => {
     expect(mic).not.toContain('v2SessionFallback')
   })
 
-  it('routes chord checkpoints to V2 polyphonic mode when flag is on', () => {
+  it('keeps live microphone chord advancement on sequential collection', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
-    expect(mic).toContain('isMicV2Polyphonic')
+    expect(mic).toContain('const isMicV2Polyphonic = false')
     expect(mic).toContain('evaluateMicScoreInformedInput')
     expect(mic).toMatch(/isMicChordCollection =[\s\S]*!isMicV2Polyphonic/)
+    expect(mic).toContain('idleFeedbackForCheckpoint(currentCheckpoint, { chordAsSequence: true })')
   })
 
   it('clears V2 runtime state when the detector disables', () => {
@@ -213,7 +214,8 @@ describe('processMicEngineV2Tick', () => {
       gateOptions: { absoluteMin: 0.005, floorMultiplier: 1 },
     })
 
-    expect(strict.frame?.gateOpen).toBe(false)
+    expect(strict.frame?.rawGateOpen).toBe(false)
+    expect(strict.frame?.softGateOpen).toBe(true)
     expect(forgiving.frame?.gateOpen).toBe(true)
   })
 

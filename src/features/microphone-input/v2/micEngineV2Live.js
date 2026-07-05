@@ -4,6 +4,11 @@
  */
 
 import { analyzeMicFrame } from '../micFrameAnalysis.js'
+import {
+  passesSoftMusicalGate,
+  softGateOpenThreshold,
+} from '../micNoiseGate.js'
+import { MIC_SIGNAL_QUALITY } from '../micSignalQuality.js'
 import { matchesAnyExpected } from '../../practice/midiPitchMatch.js'
 import { aggregateScoreInformedTracks } from './micScoreInformedAggregation.js'
 import {
@@ -15,6 +20,8 @@ import { DEFAULT_FFT_SIZE, hannWindow } from './micSpectralAnalysis.js'
 export const MIC_ENGINE_V2_LIVE_DEFAULTS = {
   stableFrameThreshold: SCORE_INFORMED_DEFAULTS.stableFrameThreshold,
   peakConfidenceThreshold: 0.26,
+  softGateMinConfidence: 0.55,
+  softGateMinRatio: 2.2,
 }
 
 export function createMicEngineV2RuntimeState() {
@@ -73,6 +80,19 @@ function pickPrimaryMidi(notes = [], detectedMidis = []) {
   return ranked[0]?.midi ?? detectedMidis[0] ?? null
 }
 
+function hasSoftGateEvidence(notes = [], detectedMidis = [], options = {}) {
+  const {
+    minConfidence = MIC_ENGINE_V2_LIVE_DEFAULTS.softGateMinConfidence,
+    minRatio = MIC_ENGINE_V2_LIVE_DEFAULTS.softGateMinRatio,
+  } = options
+  const detectedSet = new Set(detectedMidis)
+  return notes.some((note) =>
+    detectedSet.has(note.midi) &&
+      (note.confidence ?? 0) >= minConfidence &&
+      (note.ratio ?? 0) >= minRatio,
+  )
+}
+
 /**
  * Process one live audio buffer tick. Returns signal-diagnostic frame fields plus V2 metadata.
  */
@@ -84,9 +104,12 @@ export function processMicEngineV2Tick({
   state,
   centsTolerance = 35,
   gateOptions = null,
+  softGateOptions = null,
   timeMs = 0,
   stableFrameThreshold = MIC_ENGINE_V2_LIVE_DEFAULTS.stableFrameThreshold,
   peakConfidenceThreshold = MIC_ENGINE_V2_LIVE_DEFAULTS.peakConfidenceThreshold,
+  softGateMinConfidence = MIC_ENGINE_V2_LIVE_DEFAULTS.softGateMinConfidence,
+  softGateMinRatio = MIC_ENGINE_V2_LIVE_DEFAULTS.softGateMinRatio,
 } = {}) {
   const runtimeState = state ?? createMicEngineV2RuntimeState()
 
@@ -154,10 +177,31 @@ export function processMicEngineV2Tick({
   const stableMidis = stableTracks.map((track) => track.midi)
 
   const primaryMidi = pickPrimaryMidi(v2Notes, detectedMidis) ?? signalFrame.midi
+  const rawGateOpen = Boolean(signalFrame.gateOpen)
+  const softGateThreshold = softGateOpenThreshold(signalFrame.noiseFloor, softGateOptions)
+  const softGateEvidence = expectedMidis.length > 0 &&
+    detectedMidis.length > 0 &&
+    hasSoftGateEvidence(v2Notes, detectedMidis, {
+      minConfidence: softGateMinConfidence,
+      minRatio: softGateMinRatio,
+    })
+  const softGateOpen = !rawGateOpen &&
+    softGateEvidence &&
+    passesSoftMusicalGate(signalFrame.filteredRms, signalFrame.noiseFloor, softGateOptions)
+  const effectiveGateOpen = rawGateOpen || softGateOpen
+  const signalQuality = softGateOpen && signalFrame.signalQuality === MIC_SIGNAL_QUALITY.TOO_QUIET
+    ? MIC_SIGNAL_QUALITY.GOOD
+    : signalFrame.signalQuality
   const frame = {
     ...signalFrame,
+    gateOpen: effectiveGateOpen,
+    rawGateOpen,
+    softGateOpen,
+    softGateThreshold,
+    softGateEvidence,
     midi: primaryMidi,
     clarity: usedV2 && meanConfidence > 0 ? meanConfidence : signalFrame.clarity,
+    signalQuality,
     v2DetectedMidis: detectedMidis,
     v2Notes,
     v2MeanConfidence: meanConfidence,

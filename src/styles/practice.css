@@ -779,6 +779,37 @@
   accent-color: #6d4aff;
 }
 
+.practice-scope__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.practice-scope__option {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid #2e4268;
+  border-radius: 8px;
+  color: #dce7f6;
+  background: rgba(20, 32, 56, 0.42);
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+
+.practice-scope__option--selected {
+  border-color: rgba(110, 231, 183, 0.48);
+  background: rgba(110, 231, 183, 0.12);
+  color: #edfdf6;
+  font-weight: 600;
+}
+
+.practice-scope__option input {
+  accent-color: #48b878;
+}
+
 /* Wait For You */
 
 .wait-for-you__header {
@@ -1055,19 +1086,18 @@
 }
 
 .wfy-input-source {
-  margin-bottom: 12px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: rgba(20, 32, 56, 0.55);
-  border: 1px solid #2e4268;
+  margin: 0;
+  padding: 0;
 }
 
 .wfy-input-source__summary {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   cursor: pointer;
   list-style: none;
+  color: #9fb3d9;
+  font-size: 0.76rem;
 }
 
 .wfy-input-source__summary::-webkit-details-marker {
@@ -1075,24 +1105,37 @@
 }
 
 .wfy-input-source__summary::after {
+  content: '';
+}
+
+.wfy-input-source__summary::before {
   content: '▸';
   color: #8fa3c7;
   font-size: var(--sf-font-caption);
 }
 
-.wfy-input-source[open] > .wfy-input-source__summary::after {
+.wfy-input-source[open] > .wfy-input-source__summary::before {
   content: '▾';
 }
 
 .wfy-input-source__current {
-  margin-left: auto;
   font-size: 0.78rem;
   font-weight: 600;
   color: #e8eef8;
 }
 
+.wfy-input-source__change {
+  color: #9fb3d9;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .wfy-input-source__body {
   margin-top: 8px;
+  padding: 8px;
+  border: 1px solid #2e4268;
+  border-radius: 8px;
+  background: rgba(20, 32, 56, 0.55);
 }
 
 .wfy-input-source__label {
@@ -4055,6 +4098,47 @@
   outline-offset: 1px;
 }
 
+.practice-scope__options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--sf-border);
+  border-radius: var(--sf-radius-md);
+  background: var(--sf-bg-panel-inset);
+}
+
+.practice-scope__option {
+  position: relative;
+  justify-content: center;
+  min-height: 34px;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--sf-radius-sm);
+  background: transparent;
+  color: var(--sf-text-muted);
+  font-size: var(--sf-font-sidebar-min);
+  text-align: center;
+}
+
+.practice-scope__option--selected {
+  background: var(--sf-bg-panel);
+  border-color: var(--sf-border-strong);
+  color: var(--sf-text-primary);
+  font-weight: 600;
+}
+
+.practice-scope__option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.practice-scope__option:has(input:focus-visible) {
+  outline: 2px solid var(--sf-border-focus);
+  outline-offset: 1px;
+}
+
 .practice-loop-compact {
   gap: 7px;
 }
@@ -4165,11 +4249,12 @@
 
 .wfy-input-source {
   margin: 0;
-  padding: 8px;
+  padding: 0;
 }
 
-.wfy-input-source__label {
-  margin: 0;
+.wfy-input-source__summary {
+  width: fit-content;
+  max-width: 100%;
 }
 
 .wfy-input-source__options {
@@ -4220,22 +4305,6 @@
   align-items: center;
   gap: 6px;
   font-size: 0.75rem;
-}
-
-.wait-for-you__primary-action {
-  display: grid;
-  gap: 8px;
-  padding: 10px;
-  border: 1px solid rgba(72, 180, 120, 0.26);
-  border-radius: var(--sf-radius-md);
-  background: rgba(72, 180, 120, 0.08);
-}
-
-.wait-for-you__primary-action p {
-  margin: 0;
-  color: var(--sf-text-secondary);
-  font-size: var(--sf-font-sidebar-min);
-  line-height: 1.4;
 }
 
 .wait-for-you__status,
@@ -4402,6 +4471,7 @@
   }
 
   .practice-transport,
+  .practice-control-panel__primary > .practice-scope,
   .practice-control-panel__primary > .wait-for-you,
   .practice-control-panel__primary > .midi-input-status,
   .practice-control-panel__primary > .mic-input-status,
@@ -4465,7 +4535,8 @@
     min-height: 48px;
   }
 
-  .practice-mode__option {
+  .practice-mode__option,
+  .practice-scope__option {
     min-height: 44px;
     padding: 8px 0;
   }
@@ -4524,6 +4595,7 @@
   }
 
   .practice-transport,
+  .practice-control-panel__primary > .practice-scope,
   .practice-control-panel__primary > .wait-for-you,
   .practice-control-panel__primary > .midi-input-status,
   .practice-control-panel__primary > .mic-input-status,
@@ -4531,7 +4603,8 @@
     grid-column: 1 / -1;
   }
 
-  .practice-mode__option {
+  .practice-mode__option,
+  .practice-scope__option {
     min-height: 44px;
     padding: 8px 5px;
   }
@@ -4552,6 +4625,7 @@
   }
 
   .practice-transport,
+  .practice-control-panel__primary > .practice-scope,
   .practice-control-panel__primary > .wait-for-you,
   .practice-control-panel__primary > .midi-input-status,
   .practice-control-panel__primary > .mic-input-status,

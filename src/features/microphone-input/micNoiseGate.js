@@ -28,6 +28,17 @@ export function updateNoiseFloor(tracker, rms, isQuietFrame) {
 export const DEFAULT_GATE_OPTIONS = { absoluteMin: 0.012, floorMultiplier: 2.8 }
 
 /**
+ * Secondary score-informed gate for quiet practice. This is deliberately not a
+ * blanket lower gate: callers should only use it after independent pitch / V2
+ * evidence says the expected musical note is present.
+ */
+export const DEFAULT_SOFT_GATE_OPTIONS = {
+  absoluteMin: 0.0075,
+  floorMultiplier: 1.55,
+  floorMargin: 0.0015,
+}
+
+/**
  * The level the (filtered) RMS must exceed to open the gate. Scales with the
  * measured noise floor but never drops below an absolute audible minimum.
  * Instrument profiles can nudge both knobs (e.g. plucky guitar a touch lower).
@@ -41,4 +52,18 @@ export function gateOpenThreshold(noiseFloor, options = null) {
 
 export function passesNoiseGate(rms, noiseFloor, options = null) {
   return rms >= gateOpenThreshold(noiseFloor, options)
+}
+
+export function softGateOpenThreshold(noiseFloor, options = null) {
+  const {
+    absoluteMin = DEFAULT_SOFT_GATE_OPTIONS.absoluteMin,
+    floorMultiplier = DEFAULT_SOFT_GATE_OPTIONS.floorMultiplier,
+    floorMargin = DEFAULT_SOFT_GATE_OPTIONS.floorMargin,
+  } = options ?? {}
+  const floor = Math.max(MIN_FLOOR, noiseFloor ?? MIN_FLOOR)
+  return Math.max(absoluteMin, floor * floorMultiplier, floor + floorMargin)
+}
+
+export function passesSoftMusicalGate(rms, noiseFloor, options = null) {
+  return rms >= softGateOpenThreshold(noiseFloor, options)
 }

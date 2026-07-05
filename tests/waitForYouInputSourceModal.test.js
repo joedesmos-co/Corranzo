@@ -86,7 +86,7 @@ describe('Wait For You input-source modal wiring', () => {
   it('choosing Continue closes the modal and keeps manual Continue available', () => {
     expect(modal).toContain('onChooseSource(WFY_INPUT_SOURCE.MANUAL)')
     expect(session).toContain('source: WFY_INPUT_SOURCE.MANUAL')
-    expect(section).toContain('Play the highlighted note, or tap Continue.')
+    expect(section).toContain('Pauses at each note in your loop until you play it or tap Continue.')
     expect(section).toContain('className="wait-for-you__btn wait-for-you__btn--primary"')
   })
 

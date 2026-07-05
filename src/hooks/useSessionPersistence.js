@@ -112,8 +112,12 @@ export default function useSessionPersistence({
       if (!mountedRef.current) return
       const result = validateRestoredSession(loaded.meta, files)
       const instrumentBundles = validateRestoredInstrumentBundles(loaded.meta, files)
+      const bundleOnlyRestore = !result.ok || !result.pdfMeta
+      const fallbackBundleEntry = bundleOnlyRestore
+        ? Object.entries(instrumentBundles)[0] ?? null
+        : null
 
-      if (!result.ok || !result.pdfMeta) {
+      if (bundleOnlyRestore && !fallbackBundleEntry) {
         if (!mountedRef.current) return
         setRestoreStatus(RESTORE_STATUS.FAILED)
         setRestoreMessage(
@@ -122,19 +126,35 @@ export default function useSessionPersistence({
         return
       }
 
+      const [fallbackInstrumentId, fallbackBundle] = fallbackBundleEntry ?? []
       await withTimeout(
-        onRestore({
-          pdfFile: result.pdfFile,
-          pdfMeta: result.pdfMeta,
-          midiSource: result.midiSource,
-          musicXmlSource: result.musicXmlSource,
-          activeView: loaded.meta.activeView ?? 'library',
-          pageNumber: loaded.meta.pageNumber ?? 1,
-          practicePrefs: loaded.meta.practicePrefs ?? null,
-          instrumentId: loaded.meta.instrumentId ?? null,
-          instrumentBundles,
-          issues: result.issues ?? [],
-        }),
+        onRestore(
+          bundleOnlyRestore
+            ? {
+                pdfFile: fallbackBundle.pdfFile,
+                pdfMeta: fallbackBundle.pdfMeta,
+                midiSource: fallbackBundle.midiSource,
+                musicXmlSource: fallbackBundle.musicXmlSource,
+                activeView: 'library',
+                pageNumber: fallbackBundle.pageNumber ?? 1,
+                practicePrefs: fallbackBundle.practicePrefs ?? null,
+                instrumentId: fallbackInstrumentId,
+                instrumentBundles,
+                issues: fallbackBundle.issues ?? [],
+              }
+            : {
+                pdfFile: result.pdfFile,
+                pdfMeta: result.pdfMeta,
+                midiSource: result.midiSource,
+                musicXmlSource: result.musicXmlSource,
+                activeView: loaded.meta.activeView ?? 'library',
+                pageNumber: loaded.meta.pageNumber ?? 1,
+                practicePrefs: loaded.meta.practicePrefs ?? null,
+                instrumentId: loaded.meta.instrumentId ?? null,
+                instrumentBundles,
+                issues: result.issues ?? [],
+              },
+        ),
         RESTORE_TIMEOUT_MS,
         'Restoring files timed out. Skip restore or clear the saved session.',
       )

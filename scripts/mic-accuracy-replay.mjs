@@ -103,6 +103,7 @@ async function main() {
       'micFrameAnalysis default centsTolerance 35 (matches WFY match settings)',
       'micReplayHarness: longer calibration prelude with room dither',
       'micReplayHarness: instrumentId from manifest selects piano/guitar mic profile',
+      'Mic Engine V2 live path adds score-informed soft gate for quiet notes clearly above room noise',
     ],
     summary,
   }

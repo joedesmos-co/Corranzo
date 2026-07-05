@@ -20,7 +20,7 @@ function readSrc(...parts) {
 
 describe('practice library pieces', () => {
   it('ships the current Piano and Guitar demos as built-in practice pieces', () => {
-    expect(BUILT_IN_PRACTICE_PIECES).toHaveLength(14)
+    expect(BUILT_IN_PRACTICE_PIECES).toHaveLength(9)
     expect(BUILT_IN_PRACTICE_PIECES).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -50,13 +50,8 @@ describe('practice library pieces', () => {
     const guitarPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.GUITAR })
 
     expect(pianoPieces.map((piece) => piece.title)).toEqual([
-      'Ode to Joy',
-      'Twinkle Twinkle Little Star',
-      'Mary Had a Little Lamb',
       'Minuet in G',
-      'Gymnopedie No. 1 excerpt',
       'Hungarian Dance No. 5',
-      'Fur Elise excerpt',
     ])
     expect(guitarPieces.map((piece) => piece.title)).toEqual([
       'Ode to Joy',
@@ -92,38 +87,56 @@ describe('practice library pieces', () => {
     expect(filterLibraryItems(guitarPieces, 'arpeggio').map((piece) => piece.title)).toEqual([
       'Spanish Romance intro',
     ])
-    expect(filterLibraryItems(pianoPieces, 'chromatic').map((piece) => piece.title)).toEqual([
-      'Fur Elise excerpt',
+    expect(filterLibraryItems(pianoPieces, 'minuet').map((piece) => piece.title)).toEqual([
+      'Minuet in G',
     ])
     expect(filterLibraryItems(pianoPieces, 'guitar')).toEqual([])
   })
 
   it('builds uploaded practice cards from instrument bundles and excludes demos', () => {
-    const pieces = buildUploadedPracticePieces(
-      {
-        [INSTRUMENT_IDS.PIANO]: {
-          pdfMeta: { fileName: 'Bach Prelude.pdf' },
-          musicXmlSource: {
-            fileName: 'bach.musicxml',
-            data: '<score-partwise />',
-            omrMeta: { durationSeconds: 64 },
-          },
-          midiSource: { fileName: 'bach.mid', data: new ArrayBuffer(1) },
-          demoPieceActive: false,
+    const bundles = {
+      [INSTRUMENT_IDS.PIANO]: {
+        instrumentId: INSTRUMENT_IDS.PIANO,
+        pdfMeta: { fileName: 'Bach Prelude.pdf' },
+        musicXmlSource: {
+          fileName: 'bach.musicxml',
+          data: '<score-partwise />',
+          omrMeta: { durationSeconds: 64 },
         },
-        [INSTRUMENT_IDS.GUITAR]: {
-          pdfMeta: { fileName: 'Ode to Joy.pdf' },
-          musicXmlSource: { fileName: 'ode.musicxml', data: '<score-partwise />' },
-          demoPieceActive: true,
-        },
+        midiSource: { fileName: 'bach.mid', data: new ArrayBuffer(1) },
+        demoPieceActive: false,
       },
-      { activeInstrumentId: INSTRUMENT_IDS.PIANO },
-    )
+      [INSTRUMENT_IDS.GUITAR]: {
+        instrumentId: INSTRUMENT_IDS.GUITAR,
+        pdfMeta: { fileName: 'Etude in E.pdf' },
+        musicXmlSource: { fileName: 'etude.musicxml', data: '<score-partwise />' },
+        demoPieceActive: false,
+      },
+      'legacy-upload': {
+        pdfMeta: { fileName: 'Old Piano Upload.pdf' },
+        musicXmlSource: { fileName: 'old.musicxml', data: '<score-partwise />' },
+        demoPieceActive: false,
+      },
+      demo: {
+        instrumentId: INSTRUMENT_IDS.PIANO,
+        pdfMeta: { fileName: 'Demo.pdf' },
+        musicXmlSource: { fileName: 'demo.musicxml', data: '<score-partwise />' },
+        demoPieceActive: true,
+      },
+    }
 
-    expect(pieces).toEqual([
+    const pianoPieces = buildUploadedPracticePieces(bundles, {
+      activeInstrumentId: INSTRUMENT_IDS.PIANO,
+    })
+    const guitarPieces = buildUploadedPracticePieces(bundles, {
+      activeInstrumentId: INSTRUMENT_IDS.GUITAR,
+    })
+
+    expect(pianoPieces).toEqual([
       expect.objectContaining({
         title: 'Bach Prelude',
         instrument: 'Piano',
+        instrumentId: INSTRUMENT_IDS.PIANO,
         difficulty: 'Uploaded',
         approxDuration: '1m 5s',
         subtitle: 'Timing: bach.musicxml',
@@ -131,8 +144,18 @@ describe('practice library pieces', () => {
         ready: true,
         isActive: true,
       }),
+      expect.objectContaining({
+        title: 'Old Piano Upload',
+        instrumentId: INSTRUMENT_IDS.PIANO,
+        instrument: 'Piano (legacy upload)',
+        legacyInstrument: true,
+      }),
     ])
-    expect(filterLibraryItems(pieces, 'bach.mid')).toHaveLength(1)
+    expect(pianoPieces.map((piece) => piece.title)).not.toContain('Etude in E')
+    expect(guitarPieces.map((piece) => piece.title)).toEqual(['Etude in E'])
+    expect(guitarPieces[0].instrumentId).toBe(INSTRUMENT_IDS.GUITAR)
+    expect(filterLibraryItems(pianoPieces, 'bach.mid')).toHaveLength(1)
+    expect(filterLibraryItems(guitarPieces, 'bach')).toEqual([])
   })
 })
 
@@ -150,12 +173,17 @@ describe('library tab shell', () => {
 
   it('keeps uploads and OMR controls inside the My Uploads panel', () => {
     const library = readSrc('components', 'LibraryPanel.jsx')
+    const app = readSrc('App.jsx')
 
     expect(library).toContain('Practice Library')
     expect(library).toContain('My Uploads')
     expect(library).toContain('Search uploads')
     expect(library).toContain('Upload your own piece')
     expect(library).toContain('Start Practice')
+    expect(library).toContain('onDeleteUploadedPiece')
+    expect(library).toContain('window.confirm')
+    expect(library).toContain('className="practice-piece-card__remove"')
+    expect(app).toContain('onDeleteUploadedPiece={handleDeleteUploadedPiece}')
     expect(library).toContain('MultiFileUpload')
     expect(library).toContain('PdfOmrPlaybackPanel')
     expect(library).toContain('Upload one file at a time')
@@ -174,6 +202,39 @@ describe('library tab shell', () => {
     expect(library).not.toContain('visibleUploadDemoPieces')
     expect(library).not.toContain('practice-piece-card practice-piece-card--demo')
     expect(library).not.toContain('Demo Songs')
+  })
+
+  it('keeps delete scoped to uploaded pieces and preserves built-in practice cards', () => {
+    const library = readSrc('components', 'LibraryPanel.jsx')
+    const practiceSectionIndex = library.indexOf('selectedTab === LIBRARY_TABS.PRACTICE')
+    const uploadsSectionIndex = library.indexOf('library-panel__uploads')
+    const removeIndex = library.indexOf('practice-piece-card__remove')
+
+    expect(removeIndex).toBeGreaterThan(uploadsSectionIndex)
+    expect(removeIndex).toBeGreaterThan(practiceSectionIndex)
+    expect(library).toContain('This will not affect built-in Practice Library pieces.')
+  })
+
+  it('deleting the active uploaded piece clears Practice and returns to Library safely', () => {
+    const app = readSrc('App.jsx')
+
+    expect(app).toContain('const handleDeleteUploadedPiece = useCallback')
+    expect(app).toContain('store.clear(targetInstrument)')
+    expect(app).toContain('URL.revokeObjectURL(storedBundle.pdfFile)')
+    expect(app).toMatch(
+      /if \(deletingActive\) \{[\s\S]*applyInstrumentBundle\(createEmptyInstrumentBundle\(\)\)[\s\S]*setLibraryTab\(LIBRARY_TABS\.UPLOADS\)[\s\S]*navigateToView\('library'\)/,
+    )
+    expect(app).toContain('persistUploadBundlesNow')
+    expect(app).toContain('clearSessionStorage()')
+  })
+
+  it('keeps instrument-scoped uploads when generated timing is saved', () => {
+    const app = readSrc('App.jsx')
+
+    expect(app).toContain('const activeBundleForPersistence = snapshotInstrumentBundle')
+    expect(app).toContain('persistedInstrumentBundles[currentInstrument] = activeBundleForPersistence')
+    expect(app).toContain('instrumentBundles: persistedInstrumentBundles')
+    expect(app).toContain('instrumentFiles: Object.fromEntries')
   })
 
   it('keeps built-in demos in Practice Library and out of My Uploads', () => {

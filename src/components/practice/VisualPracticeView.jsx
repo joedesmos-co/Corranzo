@@ -3,6 +3,7 @@ import { usePracticeVisualSession } from '../../context/PracticeSessionContext.j
 import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
 import { useInstrument } from '../../context/instrumentContext.js'
 import { WFY_STATUS } from '../../features/practice/waitForYouEngine.js'
+import { WFY_INPUT_SOURCE } from '../../features/microphone-input/micInputConstants.js'
 import {
   buildBarlineTimes,
   buildKeyboardKeys,
@@ -46,8 +47,8 @@ function VisualPracticeView({ timingSourceKind = null }) {
   const loopRegion = visual.loopRegion
 
   const groups = useMemo(
-    () => buildVisualLaneGroups(timingMap, loopRegion),
-    [timingMap, loopRegion],
+    () => buildVisualLaneGroups(timingMap, loopRegion, { practiceScope: visual.practiceScope }),
+    [timingMap, loopRegion, visual.practiceScope],
   )
   const laneKind = instrument.visualPractice.kind
   const isFretboardLane = laneKind === 'fretboard'
@@ -91,6 +92,11 @@ function VisualPracticeView({ timingSourceKind = null }) {
     waitForYouWaiting,
     waitForYouCheckpoint: wfyCheckpoint,
   })
+  const getSmoothVisualFrameTime = useSmoothWfyFrameTime({
+    rawFrameTime: visualFrameTime,
+    waiting: waitForYouWaiting,
+    checkpointId: wfyCheckpoint?.id ?? null,
+  })
 
   const { index: targetIndex, group: targetGroup } = useMemo(
     () => resolveVisualTarget(groups, { currentTime, waitForYouCheckpoint: wfyCheckpoint }),
@@ -110,17 +116,16 @@ function VisualPracticeView({ timingSourceKind = null }) {
   // interpolated score time while playing (same source as the score-follow
   // cursor), the practice clock otherwise (paused / Wait For You / scrub).
   const getScoreTime = visual.getScoreTime
-  const frameStateRef = useRef({ isPlaying: false, practiceTime: 0 })
+  const frameStateRef = useRef({ isPlaying: false })
   useEffect(() => {
     frameStateRef.current = {
       isPlaying: tick.playbackIsPlaying,
-      practiceTime: visualFrameTime,
     }
-  }, [tick.playbackIsPlaying, visualFrameTime])
+  }, [tick.playbackIsPlaying])
   const getFrameTime = useCallback(() => {
     const state = frameStateRef.current
-    return state.isPlaying && getScoreTime ? getScoreTime() : state.practiceTime
-  }, [getScoreTime])
+    return state.isPlaying && getScoreTime ? getScoreTime() : getSmoothVisualFrameTime()
+  }, [getScoreTime, getSmoothVisualFrameTime])
 
   const targetMidisKey = targetGroup?.midis?.join(',') ?? ''
   const keyboardKeys = useMemo(
@@ -169,6 +174,11 @@ function VisualPracticeView({ timingSourceKind = null }) {
         isWaitForYou={isWaitForYou}
         waiting={waitForYouWaiting}
         complete={laneComplete}
+        micChordSequence={
+          isWaitForYou &&
+          visual.wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+          Boolean(targetGroup?.isChord)
+        }
         strings={laneStrings}
         tabPositions={tabPositions}
       />
@@ -222,6 +232,66 @@ function VisualPracticeView({ timingSourceKind = null }) {
 
 export default memo(VisualPracticeView)
 
+const WFY_VISUAL_MOVE_MS = 420
+
+function easeOutCubic(t) {
+  return 1 - (1 - t) ** 3
+}
+
+function useSmoothWfyFrameTime({ rawFrameTime, waiting, checkpointId }) {
+  const animationRef = useRef({
+    from: rawFrameTime,
+    to: rawFrameTime,
+    startedAt: 0,
+    checkpointId,
+  })
+  const displayRef = useRef(rawFrameTime)
+  const latestRef = useRef({ rawFrameTime, waiting })
+  latestRef.current = { rawFrameTime, waiting }
+
+  useEffect(() => {
+    if (!waiting) {
+      animationRef.current = {
+        from: rawFrameTime,
+        to: rawFrameTime,
+        startedAt: 0,
+        checkpointId,
+      }
+      displayRef.current = rawFrameTime
+      return
+    }
+    if (
+      checkpointId !== animationRef.current.checkpointId ||
+      Math.abs(rawFrameTime - animationRef.current.to) > 0.001
+    ) {
+      animationRef.current = {
+        from: displayRef.current,
+        to: rawFrameTime,
+        startedAt: typeof performance !== 'undefined' ? performance.now() : Date.now(),
+        checkpointId,
+      }
+    }
+  }, [rawFrameTime, waiting, checkpointId])
+
+  const getSmoothedTime = useCallback(() => {
+    const latest = latestRef.current
+    if (!latest.waiting) {
+      displayRef.current = latest.rawFrameTime
+      return latest.rawFrameTime
+    }
+    const animation = animationRef.current
+    const now = typeof performance !== 'undefined' ? performance.now() : Date.now()
+    const elapsed = Math.max(0, now - animation.startedAt)
+    const progress = Math.min(1, elapsed / WFY_VISUAL_MOVE_MS)
+    const eased = easeOutCubic(progress)
+    const next = animation.from + (animation.to - animation.from) * eased
+    displayRef.current = next
+    return next
+  }, [])
+
+  return getSmoothedTime
+}
+
 /**
  * Instrument-aware note callout: piano shows pitch labels; fretted
  * instruments append the position ("E3 · fret 2 · D string").
@@ -250,6 +320,7 @@ const VisualTargetHeader = memo(function VisualTargetHeader({
   isWaitForYou,
   waiting,
   complete,
+  micChordSequence = false,
   strings = null,
   tabPositions = null,
 }) {
@@ -289,7 +360,7 @@ const VisualTargetHeader = memo(function VisualTargetHeader({
       </span>
       <strong className="visual-practice__target-notes">
         {describeTargetNotes(targetGroup, strings, tabPositions)}
-        {targetGroup.isChord ? ' (together)' : ''}
+        {targetGroup.isChord ? (micChordSequence ? ' (one at a time)' : ' (together)') : ''}
       </strong>
       <span className="visual-practice__target-meta">
         {position} · {Math.min(targetIndex + 1, totalGroups)} of {totalGroups}

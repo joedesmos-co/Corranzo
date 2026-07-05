@@ -21,6 +21,7 @@ export function buildInputFeedback({
   expectedMidis,
   matchedIndices,
   isChord,
+  chordAsSequence = false,
 }) {
   if (!expectedMidis?.length) {
     return {
@@ -77,7 +78,9 @@ export function buildInputFeedback({
   if (outcome === WFY_INPUT_OUTCOME.CHORD_WAITING) {
     return {
       outcome,
-      message: `Waiting for chord — play ${formatExpectedChord(expectedMidis)} within the time window`,
+      message: chordAsSequence
+        ? `Chord practice sequence — play ${formatExpectedChord(expectedMidis)} one at a time`
+        : `Waiting for chord — play ${formatExpectedChord(expectedMidis)} within the time window`,
       tone: 'waiting',
       matchedCount,
       total,
@@ -87,13 +90,15 @@ export function buildInputFeedback({
   return {
     outcome: WFY_INPUT_OUTCOME.IDLE,
     message: isChord
-      ? `Play ${formatExpectedChord(expectedMidis)} together`
+      ? chordAsSequence
+        ? `Chord practice sequence: play ${formatExpectedChord(expectedMidis)} one at a time`
+        : `Play ${formatExpectedChord(expectedMidis)} together`
       : `Play ${midiToNoteLabel(expectedMidis[0])}`,
     tone: 'neutral',
   }
 }
 
-export function idleFeedbackForCheckpoint(checkpoint) {
+export function idleFeedbackForCheckpoint(checkpoint, options = {}) {
   const expectedMidis = checkpoint?.expectedMidis?.length
     ? checkpoint.expectedMidis
     : checkpoint?.expectedMidi != null
@@ -105,5 +110,6 @@ export function idleFeedbackForCheckpoint(checkpoint) {
     expectedMidis,
     matchedIndices: new Set(),
     isChord: Boolean(checkpoint?.isChord),
+    chordAsSequence: Boolean(options.chordAsSequence),
   })
 }

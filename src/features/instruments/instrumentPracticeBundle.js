@@ -17,6 +17,7 @@ import { normalizeInstrumentId } from './instruments.js'
 /** An empty bundle — the instrument's Practice starts from the empty state. */
 export function createEmptyInstrumentBundle() {
   return {
+    instrumentId: null,
     pdfFile: null,
     pdfBuffer: null,
     pdfMeta: null,
@@ -38,6 +39,7 @@ export function createEmptyInstrumentBundle() {
  */
 export function snapshotInstrumentBundle(state = {}) {
   return {
+    instrumentId: state.instrumentId ? normalizeInstrumentId(state.instrumentId) : null,
     pdfFile: state.pdfFile ?? null,
     pdfBuffer: state.pdfBuffer ?? null,
     pdfMeta: state.pdfMeta ?? null,
@@ -71,7 +73,10 @@ export function createInstrumentBundleStore() {
 
   function set(instrumentId, bundle) {
     const key = normalizeInstrumentId(instrumentId)
-    bundles.set(key, snapshotInstrumentBundle(bundle))
+    bundles.set(key, {
+      ...snapshotInstrumentBundle(bundle),
+      instrumentId: key,
+    })
   }
 
   function clear(instrumentId) {

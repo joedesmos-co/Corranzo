@@ -6,6 +6,7 @@ import PracticeImportNotices from './PracticeImportNotices.jsx'
 import PracticeTransportTick from './PracticeTransportTick.jsx'
 import PracticePositionTick from './PracticePositionTick.jsx'
 import PracticeModeSection from './PracticeModeSection.jsx'
+import PracticeScopeSection from './PracticeScopeSection.jsx'
 import PracticeLoopCompactSection from './PracticeLoopCompactSection.jsx'
 import PracticeTracksCompactSection from './PracticeTracksCompactSection.jsx'
 import { isWebMidiSupported } from '../../features/midi-input/parseMidiMessage.js'
@@ -114,6 +115,14 @@ export default memo(function PracticeControlPanel({
           compact
         />
 
+        <PracticeScopeSection
+          visible={session.practiceScopeAvailable}
+          practiceScope={session.rawPracticeScope}
+          onPracticeScopeChange={session.setPracticeScope}
+          disabled={session.timingDisabled}
+          compact
+        />
+
         <WaitForYouSection
           active={session.waitForYou.active}
           status={session.waitForYou.status}
@@ -148,49 +157,6 @@ export default memo(function PracticeControlPanel({
           showMatchSettings={false}
           compact
         />
-
-        {midiWaitForYouActive && (
-          <MidiInputStatusPanel
-            support={session.webMidi.support}
-            permission={session.webMidi.permission}
-            devices={session.webMidi.devices}
-            lastNote={session.webMidi.lastNote}
-            errorMessage={session.webMidi.errorMessage}
-            isGranted={session.webMidi.isGranted}
-            deviceStatusLabel={session.webMidi.statusLabel}
-            activeDeviceId={session.webMidi.activeDeviceId}
-            onSelectDevice={session.webMidi.selectDevice}
-            onRequestAccess={session.webMidi.requestAccess}
-            onRefreshDevices={session.webMidi.refreshDevices}
-            listenHint={
-              session.waitForYouInput.matchingEnabled
-                ? 'Listening for your notes'
-                : 'Enable MIDI to match notes automatically.'
-            }
-            compact
-          />
-        )}
-
-        {micWaitForYouActive && (
-          <MicrophoneInputStatusPanel
-            support={session.microphone.support}
-            permission={session.microphone.permission}
-            errorMessage={session.microphone.errorMessage}
-            isGranted={session.microphone.isGranted}
-            isListening={session.microphone.isListening}
-            lastHeardMidi={session.waitForYouMic.lastHeardMidi}
-            liveFrame={session.waitForYouMic.liveFrame}
-            calibration={session.waitForYouMic.calibration}
-            inputFeedback={session.waitForYouMic.inputFeedback}
-            isChordCheckpoint={session.waitForYouMic.isChordCheckpoint}
-            chordMicMode={session.waitForYouMic.chordMicMode}
-            onRequestAccess={session.microphone.requestAccess}
-            onDisable={session.microphone.disable}
-            onRetryCalibration={session.waitForYouMic.retryCalibration}
-            onExportDebugFrames={session.waitForYouMic.exportDebugFrames}
-            compact
-          />
-        )}
 
         <PracticeScoreCursorSection
           scoreFollow={scoreFollow}
@@ -249,6 +215,47 @@ export default memo(function PracticeControlPanel({
                 session={session}
                 scoreFollow={scoreFollow}
               />
+              {midiWaitForYouActive && (
+                <MidiInputStatusPanel
+                  support={session.webMidi.support}
+                  permission={session.webMidi.permission}
+                  devices={session.webMidi.devices}
+                  lastNote={session.webMidi.lastNote}
+                  errorMessage={session.webMidi.errorMessage}
+                  isGranted={session.webMidi.isGranted}
+                  deviceStatusLabel={session.webMidi.statusLabel}
+                  activeDeviceId={session.webMidi.activeDeviceId}
+                  onSelectDevice={session.webMidi.selectDevice}
+                  onRequestAccess={session.webMidi.requestAccess}
+                  onRefreshDevices={session.webMidi.refreshDevices}
+                  listenHint={
+                    session.waitForYouInput.matchingEnabled
+                      ? 'Listening for your notes'
+                      : 'Enable MIDI to match notes automatically.'
+                  }
+                  compact
+                />
+              )}
+              {micWaitForYouActive && (
+                <MicrophoneInputStatusPanel
+                  support={session.microphone.support}
+                  permission={session.microphone.permission}
+                  errorMessage={session.microphone.errorMessage}
+                  isGranted={session.microphone.isGranted}
+                  isListening={session.microphone.isListening}
+                  lastHeardMidi={session.waitForYouMic.lastHeardMidi}
+                  liveFrame={session.waitForYouMic.liveFrame}
+                  calibration={session.waitForYouMic.calibration}
+                  inputFeedback={session.waitForYouMic.inputFeedback}
+                  isChordCheckpoint={session.waitForYouMic.isChordCheckpoint}
+                  chordMicMode={session.waitForYouMic.chordMicMode}
+                  onRequestAccess={session.microphone.requestAccess}
+                  onDisable={session.microphone.disable}
+                  onRetryCalibration={session.waitForYouMic.retryCalibration}
+                  onExportDebugFrames={session.waitForYouMic.exportDebugFrames}
+                  compact
+                />
+              )}
               {session.webMidi.isGranted && midiWaitForYouActive && (
                 <MidiDiagnosticsPanel
                   statusLabel={session.webMidi.statusLabel}

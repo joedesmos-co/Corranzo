@@ -42,10 +42,15 @@ describe('mic diagnostic state', () => {
     expect(resolveMicDiagnostic({ chordUnsupported: true })).toBe(
       MIC_DIAGNOSTIC.CHORD_UNSUPPORTED,
     )
+
+    expect(resolveMicDiagnostic({ quietNoteRejected: true })).toBe(
+      MIC_DIAGNOSTIC.QUIET_PRACTICE_HELP,
+    )
   })
 
   it('returns readable labels', () => {
     expect(micDiagnosticLabel(MIC_DIAGNOSTIC.CHORD_UNSUPPORTED)).toContain('one note at a time')
     expect(micDiagnosticLabel(MIC_DIAGNOSTIC.UNSTABLE)).toContain('stable')
+    expect(micDiagnosticLabel(MIC_DIAGNOSTIC.QUIET_PRACTICE_HELP)).toContain('move closer')
   })
 })

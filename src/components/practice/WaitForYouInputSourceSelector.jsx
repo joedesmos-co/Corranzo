@@ -5,7 +5,7 @@ import {
 import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
 
 /**
- * Beginner-simple input chooser: two clear ways to play (Microphone or MIDI),
+ * Beginner-simple input chooser: Microphone or MIDI,
  * with a quiet "no device" fallback that keeps the Continue button flow. Picking
  * Microphone or MIDI is all the setup there is — permission + calibration /
  * connection start automatically downstream.
@@ -45,16 +45,16 @@ export default function WaitForYouInputSourceSelector({
     WFY_INPUT_SOURCE_LABELS[inputSource] ?? WFY_INPUT_SOURCE_LABELS[WFY_INPUT_SOURCE.MANUAL]
 
   return (
-    <details className="wfy-input-source" data-tour-id="practice-input-source">
+    <details className="wfy-input-source wfy-input-source--compact" data-tour-id="practice-input-source">
       <summary className="wfy-input-source__summary">
-        <span className="wfy-input-source__label">How you'll play</span>
-        <span className="wfy-input-source__current">{currentLabel}</span>
+        <span className="wfy-input-source__current">Input: {currentLabel}</span>
+        <span className="wfy-input-source__change">Change</span>
       </summary>
 
       <div
         className="wfy-input-source__body"
         role="radiogroup"
-        aria-label="How you'll play"
+        aria-label="Wait For You input source"
       >
         <div className="wfy-input-source__options">
           {primaryOptions.map((option) => (

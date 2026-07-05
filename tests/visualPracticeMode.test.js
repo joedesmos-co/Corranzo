@@ -356,10 +356,11 @@ describe('practice view integration', () => {
   it('VisualPracticeView consumes the shared note schedule and session state', () => {
     const src = readSrc('components', 'practice', 'VisualPracticeView.jsx')
 
-    expect(src).toContain('buildVisualLaneGroups(timingMap, loopRegion)')
+    expect(src).toContain('buildVisualLaneGroups(timingMap, loopRegion, { practiceScope: visual.practiceScope })')
     expect(src).toContain('usePracticeVisualSession')
     expect(src).toContain('visual.timingMap')
     expect(src).toContain('visual.loopRegion')
+    expect(src).toContain('visual.practiceScope')
     expect(src).toContain('usePracticeTick')
     expect(src).toContain('visual.wfyCheckpoint')
     expect(src).toContain('WFY_STATUS.WAITING')
@@ -372,6 +373,8 @@ describe('practice view integration', () => {
 
     // Frame time comes from the engine's interpolated clock while playing.
     expect(src).toContain('visual.getScoreTime')
+    expect(src).toContain('useSmoothWfyFrameTime')
+    expect(src).toContain('WFY_VISUAL_MOVE_MS')
 
     // Gentle guidance for missing timing and OMR-derived notes. The OMR note
     // stays collapsed inside a details fold during normal use.

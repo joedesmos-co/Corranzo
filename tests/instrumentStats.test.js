@@ -177,6 +177,7 @@ describe('session persistence meta — instrument recording', () => {
       instrumentId: 'guitar',
       instrumentBundles: {
         piano: {
+          instrumentId: 'piano',
           pdfMeta: { fileName: 'piano.pdf', size: 10 },
           pdfBuffer: new ArrayBuffer(10),
           midiSource: { fileName: 'piano.mid', data: new ArrayBuffer(3) },
@@ -185,6 +186,7 @@ describe('session persistence meta — instrument recording', () => {
           practicePrefs: { practiceTime: 99 },
         },
         guitar: {
+          instrumentId: 'guitar',
           pdfMeta: { fileName: 'guitar.pdf', size: 8 },
           pdfBuffer: new ArrayBuffer(8),
           midiSource: { fileName: 'guitar.mid', data: new ArrayBuffer(4) },
@@ -195,10 +197,12 @@ describe('session persistence meta — instrument recording', () => {
       },
     })
 
+    expect(meta.instrumentBundles.piano.instrumentId).toBe('piano')
     expect(meta.instrumentBundles.piano.pdfMeta.fileName).toBe('piano.pdf')
     expect(meta.instrumentBundles.piano.midiFileName).toBe('piano.mid')
     expect(meta.instrumentBundles.piano.musicXmlFileName).toBe('piano.musicxml')
     expect(meta.instrumentBundles.piano.pageNumber).toBe(4)
+    expect(meta.instrumentBundles.guitar.instrumentId).toBe('guitar')
     expect(meta.instrumentBundles.guitar.practicePrefs).toEqual({ practiceTime: 12 })
   })
 

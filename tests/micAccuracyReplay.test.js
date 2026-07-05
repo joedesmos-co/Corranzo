@@ -239,6 +239,7 @@ describe('mic accuracy manifest', () => {
       'synth-a4-clean',
       'synth-digital-piano-speaker-c4',
       'synth-piano-quiet-c4',
+      'synth-piano-soft-c4',
       'synth-piano-loud-e4',
       'synth-guitar-open-e2',
       'synth-guitar-open-a2',
@@ -246,6 +247,8 @@ describe('mic accuracy manifest', () => {
       'synth-electric-clean-a3',
       'synth-electric-distorted-e2',
       'synth-guitar-quiet-e3',
+      'synth-guitar-soft-e3',
+      'synth-electric-soft-e3',
     ])
     const clips = manifest.clips.filter((clip) => regressionIds.has(clip.id))
     expect(clips).toHaveLength(regressionIds.size)
@@ -271,6 +274,7 @@ describe('mic accuracy manifest', () => {
       'synth-a4-clean',
       'synth-digital-piano-speaker-c4',
       'synth-piano-quiet-c4',
+      'synth-piano-soft-c4',
       'synth-piano-loud-e4',
       'synth-guitar-open-e2',
       'synth-guitar-open-a2',
@@ -278,6 +282,8 @@ describe('mic accuracy manifest', () => {
       'synth-electric-clean-a3',
       'synth-electric-distorted-e2',
       'synth-guitar-quiet-e3',
+      'synth-guitar-soft-e3',
+      'synth-electric-soft-e3',
     ])
     const clips = manifest.clips.filter((clip) => regressionIds.has(clip.id))
     expect(clips).toHaveLength(regressionIds.size)

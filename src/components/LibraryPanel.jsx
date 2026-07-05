@@ -51,6 +51,7 @@ export default function LibraryPanel({
   onLoadSampleFixtures,
   uploadedPieces = [],
   onOpenUploadedPiece = null,
+  onDeleteUploadedPiece = null,
   pdfSource = null,
   pdfFileUrl = null,
   onOmrGenerated = null,
@@ -150,6 +151,18 @@ export default function LibraryPanel({
     }
     onMusicXmlSelect(file)
     event.target.value = ''
+  }
+
+  function handleDeleteUploadedPiece(piece) {
+    if (!onDeleteUploadedPiece) {
+      return
+    }
+    const confirmed = window.confirm(
+      `Remove "${piece.title}" from My Uploads? This will not affect built-in Practice Library pieces.`,
+    )
+    if (confirmed) {
+      onDeleteUploadedPiece(piece)
+    }
   }
 
   return (
@@ -483,6 +496,15 @@ export default function LibraryPanel({
                     aria-label={`Open Practice: ${piece.title}`}
                   >
                     Start Practice
+                  </button>
+                  <button
+                    type="button"
+                    className="practice-piece-card__remove"
+                    disabled={!onDeleteUploadedPiece}
+                    onClick={() => handleDeleteUploadedPiece(piece)}
+                    aria-label={`Remove upload: ${piece.title}`}
+                  >
+                    Remove
                   </button>
                   <p className="practice-piece-card__credit">{piece.attribution}</p>
                 </div>

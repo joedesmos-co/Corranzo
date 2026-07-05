@@ -10,6 +10,7 @@ export const MIC_DIAGNOSTIC = {
   UNSTABLE: 'unstable',
   WRONG_PITCH: 'wrong-pitch',
   CHORD_UNSUPPORTED: 'chord-unsupported',
+  QUIET_PRACTICE_HELP: 'quiet-practice-help',
   LISTENING: 'listening',
   GOOD: 'good',
   CALIBRATING: 'calibrating',
@@ -23,6 +24,7 @@ export const MIC_DIAGNOSTIC_LABELS = {
   [MIC_DIAGNOSTIC.UNSTABLE]: 'Pitch detected but not stable yet — hold the note',
   [MIC_DIAGNOSTIC.WRONG_PITCH]: 'Wrong note — check the expected pitch',
   [MIC_DIAGNOSTIC.CHORD_UNSUPPORTED]: 'Mic hears one note at a time — use MIDI for chords together',
+  [MIC_DIAGNOSTIC.QUIET_PRACTICE_HELP]: 'Soft note detected — move closer for quiet practice',
   [MIC_DIAGNOSTIC.LISTENING]: 'Listening…',
   [MIC_DIAGNOSTIC.GOOD]: 'Good signal — single notes should register well',
   [MIC_DIAGNOSTIC.CALIBRATING]: 'Stay quiet for a moment…',
@@ -39,6 +41,7 @@ export function resolveMicDiagnostic({
   stabilizerPending = false,
   wrongPitch = false,
   chordUnsupported = false,
+  quietNoteRejected = false,
 } = {}) {
   if (chordUnsupported) {
     return MIC_DIAGNOSTIC.CHORD_UNSUPPORTED
@@ -51,6 +54,9 @@ export function resolveMicDiagnostic({
   }
   if (wrongPitch) {
     return MIC_DIAGNOSTIC.WRONG_PITCH
+  }
+  if (quietNoteRejected) {
+    return MIC_DIAGNOSTIC.QUIET_PRACTICE_HELP
   }
   if (signalQuality === MIC_SIGNAL_QUALITY.SILENT && calibrationStatus === MIC_CALIBRATION_STATUS.NO_INPUT) {
     return MIC_DIAGNOSTIC.NO_INPUT

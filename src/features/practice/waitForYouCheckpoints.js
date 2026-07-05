@@ -2,6 +2,7 @@ import { getBeatAtTime } from '../musicxml/timingQuery.js'
 import { getTimeline } from '../musicxml/timeline.js'
 import { usesPerformedTimeline } from '../musicxml/performedTimeline.js'
 import { alignChordScoreTime } from '../playback/pianoVoiceMix.js'
+import { filterNotesForPracticeScope } from './practiceScope.js'
 
 export const CHECKPOINT_KIND = {
   BEAT: 'beat',
@@ -91,7 +92,7 @@ export function buildBeatCheckpoints(timingMap, loopRegion = null) {
 /**
  * Build note-level checkpoints; chords at the same time become one checkpoint.
  */
-export function buildNoteCheckpoints(timingMap, loopRegion = null) {
+export function buildNoteCheckpoints(timingMap, loopRegion = null, options = {}) {
   if (!timingMap?.notes?.length) {
     return []
   }
@@ -110,6 +111,7 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null) {
   let notes = sourceNotes.filter(
     (note) => !note.isRest && note.midi != null && !note.isTabMirror,
   )
+  notes = filterNotesForPracticeScope(notes, options.practiceScope, timingMap)
   notes = filterByLoopRegion(notes, loopRegion)
 
   const groups = groupNotesByTime(notes)
@@ -138,9 +140,9 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null) {
   })
 }
 
-export function buildCheckpoints(timingMap, loopRegion, mode) {
+export function buildCheckpoints(timingMap, loopRegion, mode, options = {}) {
   if (mode === 'note') {
-    return buildNoteCheckpoints(timingMap, loopRegion)
+    return buildNoteCheckpoints(timingMap, loopRegion, options)
   }
   return buildBeatCheckpoints(timingMap, loopRegion)
 }

@@ -169,6 +169,7 @@ export function PracticeSessionProvider({
     onPracticePrefsChangeRef.current?.(practicePrefsSnapshotRef.current)
   }, [
     session.practiceMode,
+    session.rawPracticeScope,
     session.checkpointMode,
     session.wfyInputSource,
     session.loop.snapMode,
@@ -302,6 +303,8 @@ export function PracticeSessionProvider({
       timingLoading: session.timing.isLoading,
       loopRegion:
         session.isWaitForYou || session.loop.enabled ? session.loop.region : null,
+      practiceScope: session.practiceScope,
+      wfyInputSource: session.wfyInputSource,
       isWaitForYou: session.isWaitForYou,
       wfyStatus: session.waitForYou.status,
       wfyCheckpoint: session.isWaitForYou ? session.waitForYou.currentCheckpoint : null,
@@ -314,6 +317,8 @@ export function PracticeSessionProvider({
       session.isWaitForYou,
       session.loop.enabled,
       session.loop.region,
+      session.practiceScope,
+      session.wfyInputSource,
       session.waitForYou.status,
       session.waitForYou.currentCheckpoint,
       session.playback.getScoreTime,

@@ -20,6 +20,7 @@ import {
   processMicEngineV2Tick,
 } from '../src/features/microphone-input/v2/micEngineV2Live.js'
 import { createMicFrameAnalyzer } from '../src/features/microphone-input/micFrameAnalysis.js'
+import { getMicInstrumentProfile } from '../src/features/microphone-input/micInstrumentProfiles.js'
 import {
   confirmConfidentMatch,
   createMatchConfirmState,
@@ -48,13 +49,19 @@ const FFT = 2048
 const HOP = Math.round(SAMPLE_RATE / 60)
 
 /** Mirrors useWaitForYouMicInput.handleFrame single-note V2 advance decision. */
-function runLiveAdvanceGate(samples, sampleRate, expectedMidi) {
+function runLiveAdvanceGateTrace(samples, sampleRate, expectedMidi, { instrumentId = null } = {}) {
   const v2State = createMicEngineV2RuntimeState()
   const analyzer = createMicFrameAnalyzer()
+  const profile = instrumentId ? getMicInstrumentProfile(instrumentId) : null
   const confirm = createMatchConfirmState()
   const latch = createMicAttackLatchState()
   const checkpoint = { id: 'gate', expectedMidi }
   let advances = 0
+  let rawGateOpenFrames = 0
+  let softGateOpenFrames = 0
+  let v2DetectedFrames = 0
+  let musicalFrames = 0
+  const rejectReasons = {}
 
   for (let end = FFT; end <= samples.length; end += HOP) {
     const tick = processMicEngineV2Tick({
@@ -64,12 +71,36 @@ function runLiveAdvanceGate(samples, sampleRate, expectedMidi) {
       noiseFloor: analyzer.noiseFloor,
       state: v2State,
       centsTolerance: settings.micCentsTolerance,
+      gateOptions: profile?.gate ?? null,
       timeMs: (end / sampleRate) * 1000,
     })
     const frame = tick.frame
     if (!frame) {
       continue
     }
+    if (frame.rawGateOpen) {
+      rawGateOpenFrames += 1
+    }
+    if (frame.softGateOpen) {
+      softGateOpenFrames += 1
+    }
+    if (frame.v2DetectedMidis?.includes(expectedMidi)) {
+      v2DetectedFrames += 1
+    }
+    if (isMusicalMicFrame(frame)) {
+      musicalFrames += 1
+    }
+    const rejectReason = !frame.gateOpen
+      ? frame.v2DetectedMidis?.includes(expectedMidi)
+        ? 'soft-note-below-gate'
+        : 'noise-gate-closed'
+      : !frame.v2DetectedMidis?.includes(expectedMidi)
+        ? 'v2-below-threshold'
+        : !isMusicalMicFrame(frame)
+          ? 'non-musical'
+          : 'ok'
+    rejectReasons[rejectReason] = (rejectReasons[rejectReason] ?? 0) + 1
+
     updateMicAttackRelease(latch, Boolean(frame.gateOpen))
     if (!canAcceptMicAttackMatch(latch)) {
       resetMatchConfirmState(confirm)
@@ -96,7 +127,18 @@ function runLiveAdvanceGate(samples, sampleRate, expectedMidi) {
       advances += 1
     }
   }
-  return advances
+  return {
+    advances,
+    rawGateOpenFrames,
+    softGateOpenFrames,
+    v2DetectedFrames,
+    musicalFrames,
+    rejectReasons,
+  }
+}
+
+function runLiveAdvanceGate(samples, sampleRate, expectedMidi, options = {}) {
+  return runLiveAdvanceGateTrace(samples, sampleRate, expectedMidi, options).advances
 }
 
 function loadWav(relativePath) {
@@ -181,6 +223,56 @@ describe('WFY live mic gate — real note fixtures advance exactly once', () => 
     }
     expect(runLiveAdvanceGate(out, SAMPLE_RATE, 55)).toBe(1)
   })
+
+  it('quiet piano above the room floor advances via the score-informed soft gate', () => {
+    const samples = renderSyntheticClip(
+      { type: 'speaker', midi: 60, seconds: 0.7, amplitude: 0.024, noise: 0.003, seed: 42 },
+      SAMPLE_RATE,
+    )
+    const trace = runLiveAdvanceGateTrace(samples, SAMPLE_RATE, 60, { instrumentId: 'piano' })
+
+    expect(trace.advances).toBe(1)
+    expect(trace.rawGateOpenFrames).toBe(0)
+    expect(trace.softGateOpenFrames).toBeGreaterThan(0)
+    expect(trace.v2DetectedFrames).toBeGreaterThan(0)
+  })
+
+  it('quiet acoustic guitar above the room floor advances without opening silence/noise', () => {
+    const samples = renderSyntheticClip(
+      { type: 'pluck', midi: 52, seconds: 0.8, amplitude: 0.045, decay: 3.2 },
+      SAMPLE_RATE,
+    )
+    const trace = runLiveAdvanceGateTrace(samples, SAMPLE_RATE, 52, { instrumentId: 'guitar' })
+
+    expect(trace.advances).toBe(1)
+    expect(trace.softGateOpenFrames).toBeGreaterThan(0)
+    expect(trace.musicalFrames).toBeGreaterThanOrEqual(3)
+  })
+
+  it('quiet electric-style guitar above the room floor advances via the soft gate', () => {
+    const samples = renderSyntheticClip(
+      { type: 'distorted', midi: 52, seconds: 0.8, amplitude: 0.018, drive: 4.5 },
+      SAMPLE_RATE,
+    )
+    const trace = runLiveAdvanceGateTrace(samples, SAMPLE_RATE, 52, { instrumentId: 'guitar' })
+
+    expect(trace.advances).toBe(1)
+    expect(trace.rawGateOpenFrames).toBe(0)
+    expect(trace.softGateOpenFrames).toBeGreaterThan(0)
+  })
+
+  it('near-floor piano tone still does not advance when it is not clearly above room noise', () => {
+    const samples = renderSyntheticClip(
+      { type: 'speaker', midi: 60, seconds: 0.7, amplitude: 0.012, noise: 0.003, seed: 42 },
+      SAMPLE_RATE,
+    )
+    const trace = runLiveAdvanceGateTrace(samples, SAMPLE_RATE, 60, { instrumentId: 'piano' })
+
+    expect(trace.advances).toBe(0)
+    expect(trace.softGateOpenFrames).toBe(0)
+    expect(trace.v2DetectedFrames).toBeGreaterThan(0)
+    expect(trace.rejectReasons['soft-note-below-gate']).toBeGreaterThan(0)
+  })
 })
 
 describe('WFY live mic gate — non-notes never advance', () => {
@@ -258,6 +350,17 @@ describe('WFY live mic gate — non-notes never advance', () => {
 })
 
 describe('WFY live mic gate — sustain and re-attack behavior', () => {
+  it('one sustained soft note advances once only', () => {
+    const sustained = renderSyntheticClip(
+      { type: 'speaker', midi: 60, seconds: 2, amplitude: 0.024, noise: 0.003, seed: 45 },
+      SAMPLE_RATE,
+    )
+    const trace = runLiveAdvanceGateTrace(sustained, SAMPLE_RATE, 60, { instrumentId: 'piano' })
+
+    expect(trace.advances).toBe(1)
+    expect(trace.softGateOpenFrames).toBeGreaterThan(0)
+  })
+
   it('one long sustained note advances only the first of two same-pitch checkpoints', () => {
     // 2s sustained C4 with no release: the attack latch must hold the second
     // checkpoint until the player actually releases.

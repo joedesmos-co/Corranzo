@@ -2,6 +2,7 @@ import { noteHasLayout } from '../musicxml/readNoteLayout.js'
 import { clamp, lerp } from '../score-follow/scoreFollowEasing.js'
 import { resolveScoreFollowCursor } from '../score-follow/resolveScoreFollowCursor.js'
 import { CHECKPOINT_KIND } from './waitForYouCheckpoints.js'
+import { resolveNotePracticeHand } from './practiceScope.js'
 import {
   buildMeasureAnchorGeometry,
   getMeasureLayoutExtents,
@@ -38,6 +39,13 @@ const HIGHLIGHT_SOURCES = new Set([
   NOTE_TARGET_SOURCE.DIRECT_GEOMETRY,
   NOTE_TARGET_SOURCE.MUSICXML_LAYOUT,
 ])
+
+function shouldPreserveGrandStaffBand(notes, timingMap) {
+  if ((timingMap?.stavesPerSystem ?? 1) < 2) {
+    return false
+  }
+  return notes.some((note) => resolveNotePracticeHand(note, timingMap) != null)
+}
 
 function finite(value) {
   return Number.isFinite(value)
@@ -279,12 +287,15 @@ export function resolveNoteTargetPosition({
     return { visible: false, reason: 'no-geometry' }
   }
 
+  const preserveGrandStaffBand = shouldPreserveGrandStaffBand(notes, timingMap)
   if (sharedCursor.cursor?.visible) {
     geometry.page = sharedCursor.cursor.page
-    geometry.yCenter = sharedCursor.cursor.y
-    geometry.yTop = clamp(sharedCursor.cursor.y - 0.04, 0.06, 0.94)
-    geometry.yBottom = clamp(sharedCursor.cursor.y + 0.04, 0.06, 0.94)
-    geometry.staffSplitY = sharedCursor.cursor.y
+    if (!preserveGrandStaffBand) {
+      geometry.yCenter = sharedCursor.cursor.y
+      geometry.yTop = clamp(sharedCursor.cursor.y - 0.04, 0.06, 0.94)
+      geometry.yBottom = clamp(sharedCursor.cursor.y + 0.04, 0.06, 0.94)
+      geometry.staffSplitY = sharedCursor.cursor.y
+    }
     if (sharedCursor.confidence === 'exact') {
       geometry.placement = 'exact-anchor'
     }

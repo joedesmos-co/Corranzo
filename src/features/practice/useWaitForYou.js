@@ -30,20 +30,21 @@ export default function useWaitForYou({
   onEnsurePaused,
   practiceTime,
   onCheckpointCompleted = null,
+  practiceScope = null,
 }) {
   const active = practiceMode === PRACTICE_MODE.WAIT_FOR_YOU
   const wasActiveRef = useRef(false)
   const checkpointsKeyRef = useRef('')
 
   const checkpoints = useMemo(
-    () => buildCheckpoints(timingMap, loopRegion, checkpointMode),
-    [timingMap, loopRegion, checkpointMode],
+    () => buildCheckpoints(timingMap, loopRegion, checkpointMode, { practiceScope }),
+    [timingMap, loopRegion, checkpointMode, practiceScope],
   )
 
   const checkpointsKey = useMemo(
     () =>
-      `${checkpointMode}:${checkpoints.length > 0 ? `${checkpoints[0].id}-${checkpoints[checkpoints.length - 1].id}` : 'empty'}`,
-    [checkpointMode, checkpoints],
+      `${checkpointMode}:${practiceScope ?? 'all'}:${checkpoints.length > 0 ? `${checkpoints[0].id}-${checkpoints[checkpoints.length - 1].id}` : 'empty'}`,
+    [checkpointMode, practiceScope, checkpoints],
   )
 
   const [checkpointIndex, setCheckpointIndex] = useState(0)

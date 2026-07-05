@@ -113,7 +113,8 @@ export default function WaitForYouSection({
   const showMicInputHint =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
-    status === WFY_STATUS.WAITING
+    status === WFY_STATUS.WAITING &&
+    getExpectedMidis(currentCheckpoint).length > 1
   const showMicOffNotice =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
@@ -137,10 +138,11 @@ export default function WaitForYouSection({
   const structurallyDone =
     status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS
   const primaryActionDisabled = displayStatus === WFY_DISPLAY_STATUS.CONTINUING
-  const primaryActionCopy =
-    checkpointMode === WFY_CHECKPOINT_MODE.NOTE
-      ? 'Play the highlighted note, or tap Continue.'
-      : 'Tap Continue to move to the next step.'
+  const expectedMidis = currentCheckpoint ? getExpectedMidis(currentCheckpoint) : []
+  const micChordSequence =
+    checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
+    inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+    expectedMidis.length > 1
 
   return (
     <section className={sectionClass} aria-label="Wait For You">
@@ -171,20 +173,6 @@ export default function WaitForYouSection({
         microphoneAvailable={microphoneAvailable}
         disabled={structurallyDone}
       />
-
-      {!structurallyDone && (
-        <div className="wait-for-you__primary-action">
-          <p>{primaryActionCopy}</p>
-          <button
-            type="button"
-            className="wait-for-you__btn wait-for-you__btn--primary"
-            disabled={primaryActionDisabled}
-            onClick={onMarkCorrect}
-          >
-            Continue
-          </button>
-        </div>
-      )}
 
       {showMatchSettings && matchSettings && (
         <WaitForYouMatchSettingsPanel
@@ -251,7 +239,7 @@ export default function WaitForYouSection({
 
       {showMicInputHint && (
         <p className="wait-for-you__mic-chord-hint" role="status">
-          Microphone hears one note at a time. Use MIDI for chords played together.
+          Chord practice sequence: play one chord tone at a time. Use MIDI for chords together.
         </p>
       )}
 
@@ -330,10 +318,14 @@ export default function WaitForYouSection({
           {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && (
             <p className="wait-for-you__now-notes">
               <span className="wait-for-you__now-notes-label">
-                {getExpectedMidis(currentCheckpoint).length > 1 ? 'Play together' : 'Play'}
+                {micChordSequence
+                  ? 'Chord practice sequence'
+                  : expectedMidis.length > 1
+                    ? 'Play together'
+                    : 'Play'}
               </span>
               <span className="wait-for-you__note-chips">
-                {getExpectedMidis(currentCheckpoint).map((midi) => (
+                {expectedMidis.map((midi) => (
                   <span key={midi} className="wait-for-you__note-chip">
                     {midiToNoteLabel(midi)}
                   </span>
@@ -346,6 +338,16 @@ export default function WaitForYouSection({
 
       {status !== WFY_STATUS.NO_CHECKPOINTS && (
         <div className="wait-for-you__actions">
+          {!structurallyDone && (
+            <button
+              type="button"
+              className="wait-for-you__btn wait-for-you__btn--primary"
+              disabled={primaryActionDisabled}
+              onClick={onMarkCorrect}
+            >
+              Continue
+            </button>
+          )}
           {!structurallyDone && checkpointMode === WFY_CHECKPOINT_MODE.NOTE && currentCheckpoint && (
             <button
               type="button"
@@ -353,7 +355,7 @@ export default function WaitForYouSection({
               disabled={
                 referencePlaying ||
                 displayStatus === WFY_DISPLAY_STATUS.CONTINUING ||
-                getExpectedMidis(currentCheckpoint).length === 0
+                expectedMidis.length === 0
               }
               onClick={() => onPlayReference(currentCheckpoint)}
             >

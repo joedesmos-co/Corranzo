@@ -1,4 +1,5 @@
 import { WFY_MATCH_DEFAULTS } from '../practice/waitForYouMatchSettings.js'
+import { PRACTICE_SCOPE } from '../practice/practiceScope.js'
 
 const PREFS_KEY = 'scoreflow-practice-prefs-v1'
 const ONBOARDING_KEY = 'scoreflow-onboarding-v1'
@@ -28,7 +29,7 @@ export function savePracticePrefs(prefs) {
 /** Reset scrub position when the open score or timing file changes in Library. */
 export function resetPracticeTimePrefs(existing = null) {
   const base = existing ?? loadPracticePrefs() ?? {}
-  return { ...base, practiceTime: 0 }
+  return { ...base, practiceTime: 0, practiceScope: PRACTICE_SCOPE.BOTH_HANDS }
 }
 
 export function loadMatchSettingsFromPrefs() {

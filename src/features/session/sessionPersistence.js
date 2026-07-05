@@ -271,6 +271,7 @@ export function validateRestoredSession(meta, files) {
 
 export function buildSessionBundleMeta(bundle = {}) {
   return {
+    instrumentId: bundle.instrumentId ? normalizeInstrumentId(bundle.instrumentId) : null,
     pdfMeta: bundle.pdfMeta ?? null,
     midiFileName: bundle.midiSource?.fileName ?? null,
     midiSize: bundle.midiSource?.data?.byteLength ?? null,
@@ -322,6 +323,7 @@ export function validateRestoredInstrumentBundles(meta, files) {
       continue
     }
     restored[instrumentId] = {
+      instrumentId,
       pdfFile: result.pdfFile,
       pdfMeta: result.pdfMeta,
       midiSource: result.midiSource,

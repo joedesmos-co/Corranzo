@@ -97,6 +97,7 @@ export function buildEscalatingHint({
   instrument = null,
   strings = null,
   tabPositions = null,
+  chordAsSequence = false,
 }) {
   if (!expectedMidis?.length || wrongAttempts <= 0) return null
   const isChord = expectedMidis.length > 1
@@ -105,17 +106,26 @@ export function buildEscalatingHint({
   if (wrongAttempts === 2) return `Expected ${label}.`
   const position = positionHintForCheckpoint(checkpoint, { strings, tabPositions })
   if (position) {
+    if (isChord && chordAsSequence) {
+      return `Play ${label} one at a time (${position}).`
+    }
     return isChord ? `Play ${label} together (${position}).` : `Play ${label} (${position}).`
   }
   const hand = staffHandHint(checkpoint, instrument)
+  if (isChord && chordAsSequence) {
+    return `Play ${label} one at a time${hand ? ` with your ${hand}` : ''}.`
+  }
   if (isChord) return `Play ${label} together${hand ? ` with your ${hand}` : ''}.`
   return `Play ${label}${hand ? ` with your ${hand}` : ''}.`
 }
 
 /** Plain "play this" hint used on timeout or when the player asks for help. */
-export function buildTargetHint({ expectedMidis }) {
+export function buildTargetHint({ expectedMidis, chordAsSequence = false }) {
   const label = expectedLabelFor(expectedMidis)
-  return label ? `Play ${label}` : null
+  if (!label) return null
+  return chordAsSequence && expectedMidis.length > 1
+    ? `Chord practice sequence: ${label}`
+    : `Play ${label}`
 }
 
 /**
@@ -132,6 +142,7 @@ export function buildGuidance({
   instrument = null,
   strings = null,
   tabPositions = null,
+  chordAsSequence = false,
 }) {
   const expectedMidis = getExpectedMidis(checkpoint)
   const isChord = expectedMidis.length > 1
@@ -161,7 +172,7 @@ export function buildGuidance({
       ...base,
       state: WFY_GUIDANCE.CORRECT,
       tone: 'success',
-      primary: isChord ? 'Chord — nice!' : 'Correct!',
+      primary: isChord ? (chordAsSequence ? 'Sequence complete — nice!' : 'Chord — nice!') : 'Correct!',
     }
   }
 
@@ -179,6 +190,7 @@ export function buildGuidance({
         instrument,
         strings,
         tabPositions,
+        chordAsSequence,
       }),
       // After enough wrong tries, surface the target on the score too.
       showTarget: wrongAttempts >= HINT_AFTER_WRONG_ATTEMPTS,
@@ -190,7 +202,11 @@ export function buildGuidance({
     const missing =
       inputFeedback?.remainingLabels ??
       missingLabels(expectedMidis, inputFeedback?.matchedIndices)
-    let primary = missing.length ? `Still need ${missing.join(', ')}` : 'Almost — hold the chord'
+    let primary = missing.length
+      ? `Still need ${missing.join(', ')}`
+      : chordAsSequence
+        ? 'Sequence almost complete'
+        : 'Almost — hold the chord'
     if (heard.length && missing.length) {
       primary = `Heard ${heard.join(' + ')} — still need ${missing.join(', ')}`
     } else if (heard.length && !missing.length) {
@@ -212,7 +228,7 @@ export function buildGuidance({
       ...base,
       state: WFY_GUIDANCE.HINT,
       tone: 'hint',
-      primary: buildTargetHint({ expectedMidis }),
+      primary: buildTargetHint({ expectedMidis, chordAsSequence }),
       hint:
         buildEscalatingHint({
           expectedMidis,
@@ -221,6 +237,7 @@ export function buildGuidance({
           instrument,
           strings,
           tabPositions,
+          chordAsSequence,
         }) ??
         positionHintForCheckpoint(checkpoint, { strings, tabPositions }) ??
         (timedOut ? 'Take your time — here is the note.' : null),
@@ -234,7 +251,9 @@ export function buildGuidance({
     tone: 'neutral',
     primary: matchingActive
       ? isChord
-        ? `Play the chord: ${expectedLabel}`
+        ? chordAsSequence
+          ? `Chord practice sequence: ${expectedLabel}`
+          : `Play the chord: ${expectedLabel}`
         : `Play ${expectedLabel}`
       : `Play ${expectedLabel}, or tap Continue`,
   }

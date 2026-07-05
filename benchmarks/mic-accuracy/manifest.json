@@ -56,6 +56,17 @@
       "notes": "Quiet piano/speaker note: should still open the calibrated gate without accepting silence."
     },
     {
+      "id": "synth-piano-soft-c4",
+      "label": "note",
+      "expectedMidi": 60,
+      "expectedOnsetMs": 120,
+      "instrument": "piano",
+      "micDevice": "synthetic speaker",
+      "noiseCondition": "quiet",
+      "synthetic": { "type": "speaker", "midi": 60, "seconds": 0.7, "amplitude": 0.024, "noise": 0.003, "seed": 42 },
+      "notes": "Soft piano/speaker note above the room floor: live WFY should accept via score-informed soft gate."
+    },
+    {
       "id": "synth-piano-loud-e4",
       "label": "note",
       "expectedMidi": 64,
@@ -131,6 +142,28 @@
       "noiseCondition": "quiet",
       "synthetic": { "type": "pluck", "midi": 52, "seconds": 0.8, "amplitude": 0.16, "decay": 3.2 },
       "notes": "Quiet fretted/open-style guitar note: decays quickly but should stabilize."
+    },
+    {
+      "id": "synth-guitar-soft-e3",
+      "label": "note",
+      "expectedMidi": 52,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic acoustic guitar",
+      "noiseCondition": "quiet",
+      "synthetic": { "type": "pluck", "midi": 52, "seconds": 0.8, "amplitude": 0.045, "decay": 3.2 },
+      "notes": "Soft acoustic-guitar-style pluck above the room floor: should advance without admitting silence/noise."
+    },
+    {
+      "id": "synth-electric-soft-e3",
+      "label": "note",
+      "expectedMidi": 52,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic soft electric",
+      "noiseCondition": "quiet",
+      "synthetic": { "type": "distorted", "midi": 52, "seconds": 0.8, "amplitude": 0.018, "drive": 4.5 },
+      "notes": "Soft electric-style harmonic-rich note above the room floor: should advance via score-informed soft gate."
     },
     {
       "id": "synth-piano-low-c2",

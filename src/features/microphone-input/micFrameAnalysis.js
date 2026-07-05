@@ -5,6 +5,7 @@ import {
 } from './pitchDetection.js'
 import {
   createNoiseFloorTracker,
+  gateOpenThreshold,
   passesNoiseGate,
   updateNoiseFloor,
 } from './micNoiseGate.js'
@@ -91,6 +92,7 @@ export function analyzeMicFrame(samples, sampleRate, noiseFloorTracker, options 
 
   const isQuietFrame = !hasPitch && filteredRms < (noiseFloorTracker?.floor ?? 0.006) * 4
   const noiseFloor = updateNoiseFloor(noiseFloorTracker, filteredRms, isQuietFrame)
+  const gateThreshold = gateOpenThreshold(noiseFloor, gateOptions)
   const gateOpen = passesNoiseGate(filteredRms, noiseFloor, gateOptions)
 
   const signalShape = classifyMicSignalShape({
@@ -118,7 +120,9 @@ export function analyzeMicFrame(samples, sampleRate, noiseFloorTracker, options 
     filteredRms,
     level,
     noiseFloor,
+    gateThreshold,
     gateOpen,
+    rawGateOpen: gateOpen,
     peak,
     crestFactor,
     zeroCrossingRate,

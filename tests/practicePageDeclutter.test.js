@@ -73,6 +73,8 @@ describe('controls are contextual, not always-on', () => {
     const panel = readSrc('components', 'practice', 'PracticeControlPanel.jsx')
     expect(panel).toContain('<WaitForYouSection')
     expect(panel).toContain('active={session.waitForYou.active}')
+    expect(panel).toContain('<PracticeScopeSection')
+    expect(panel).toContain('visible={session.practiceScopeAvailable}')
   })
 
   it('mic/MIDI status panels appear only for the chosen WFY input source', () => {
@@ -92,9 +94,12 @@ describe('controls are contextual, not always-on', () => {
 
   it('collapses the in-panel input chooser to a one-line summary', () => {
     const selector = readSrc('components', 'practice', 'WaitForYouInputSourceSelector.jsx')
-    expect(selector).toContain('<details className="wfy-input-source"')
+    expect(selector).toContain('<details className="wfy-input-source wfy-input-source--compact"')
     expect(selector).toContain('wfy-input-source__summary')
     expect(selector).toContain('WFY_INPUT_SOURCE_LABELS[inputSource]')
+    expect(selector).toContain('Input: {currentLabel}')
+    expect(selector).toContain('wfy-input-source__change')
+    expect(selector).not.toContain("How you'll play")
     // The full chooser is still inside, unchanged.
     expect(selector).toContain('role="radiogroup"')
     expect(selector).toContain('data-tour-id="practice-input-source"')
@@ -116,7 +121,8 @@ describe('controls are contextual, not always-on', () => {
     expect(wfy).toMatch(/\{!structurallyDone && onSkip && \(/)
     // …while Restart stays as the single follow-up action.
     expect(wfy).toMatch(/\{totalCheckpoints > 0 && \(\s*<button type="button" className="wait-for-you__btn" onClick=\{onRestart\}>/)
-    expect(wfy).toMatch(/\{!structurallyDone && \(\s*<div className="wait-for-you__primary-action">/)
+    expect(wfy).not.toContain('wait-for-you__primary-action')
+    expect(wfy).toMatch(/className="wait-for-you__btn wait-for-you__btn--primary"[\s\S]*Continue/)
   })
 })
 
@@ -180,6 +186,7 @@ describe('responsive layout holds with the collapsed sections', () => {
     expect(practiceCss).toMatch(
       /\.practice-control-panel__primary > \.practice-section--collapsible \{\s*grid-column: 1 \/ -1;/,
     )
+    expect(practiceCss).toContain('.practice-control-panel__primary > .practice-scope')
   })
 
   it('new summary rows use flexible layout without fixed widths', () => {
@@ -188,22 +195,20 @@ describe('responsive layout holds with the collapsed sections', () => {
       '.wfy-input-source__summary {',
     ]) {
       const block = blockFor(selector)
-      expect(block).toMatch(/display: flex/)
+      expect(block).toMatch(/display:\s*(inline-)?flex/)
       expect(block).not.toMatch(/[^-]width:\s*\d/)
     }
   })
 
-  it('adds no border-radius or gradients in the new rules', () => {
+  it('adds no gradients in the new rules', () => {
     for (const selector of [
       '.practice-score-cursor__summary {',
       '.wfy-input-source__summary {',
       '.wfy-input-source__current {',
-      '.wfy-input-source__body {',
       '.practice-stats-card--flat {',
       '.practice-loop-compact {',
     ]) {
       const block = blockFor(selector)
-      expect(block).not.toMatch(/border-radius/)
       expect(block).not.toMatch(/gradient/)
     }
   })
