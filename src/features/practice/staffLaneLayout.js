@@ -3,6 +3,7 @@ import {
   VISUAL_MARKING_KIND,
   buildVisualSpanMarkings,
 } from './visualNotationMarkings.js'
+import { isFiniteMidi, sanitizeVisualDurationSeconds } from './visualNoteSanitize.js'
 
 /**
  * Staff-lane layout for Visual practice mode.
@@ -207,10 +208,11 @@ export function buildStaffLaneNotes(
     const x = group.timeSeconds * pixelsPerSecond
 
     const laid = (group.notes ?? [])
-      .filter((note) => note.midi != null)
+      .filter((note) => isFiniteMidi(note.midi))
       .map((note, i) => {
         const staffKind = resolveStaffKind(note)
         const { y, sharp, ledgerLines } = staffYForNote(note.midi, staffKind, geometry)
+        const durationSeconds = sanitizeVisualDurationSeconds(note.durationSeconds, 0)
         return {
           id: `${group.id}-${note.midi}-${i}`,
           groupId: group.id,
@@ -222,8 +224,8 @@ export function buildStaffLaneNotes(
           sharp,
           ledgerLines,
           diatonic: midiToDiatonic(note.midi).diatonic,
-          hollow: (note.durationSeconds ?? 0) >= HOLLOW_NOTE_MIN_SECONDS,
-          durationSeconds: note.durationSeconds ?? 0,
+          hollow: durationSeconds >= HOLLOW_NOTE_MIN_SECONDS,
+          durationSeconds,
           midi: note.midi,
           label: note.label,
           visualNoteId: note.visualNoteId ?? note.id ?? `${group.id}-${i}`,

@@ -3,6 +3,8 @@ import { missingLabels, chordLabel } from '../src/features/practice/waitForYouLa
 import { getExpectedMidis } from '../src/features/practice/waitForYouNoteMatch.js'
 import { evaluateMicChordCollection } from '../src/features/practice/waitForYouMicChordCollection.js'
 import { buildGuidance } from '../src/features/practice/waitForYouGuidance.js'
+import { resolveWfyDisplayStatus } from '../src/features/practice/waitForYouDisplayStatus.js'
+import { WFY_GUIDANCE } from '../src/features/practice/waitForYouGuidanceConstants.js'
 
 describe('waitForYou module graph', () => {
   it('has no circular-import TDZ on label + match helpers', () => {
@@ -23,5 +25,12 @@ describe('waitForYou module graph', () => {
         inputFeedback: { outcome: 'idle' },
       }).primary,
     ).toContain('C4')
+    expect(
+      resolveWfyDisplayStatus({
+        active: true,
+        engineStatus: 'waiting',
+        guidance: { state: WFY_GUIDANCE.WRONG },
+      }),
+    ).toBe('missed')
   })
 })

@@ -13,6 +13,9 @@ import { missingLabels, chordLabel } from '../src/features/practice/waitForYouLa
 import { buildScoreNoteSchedule } from '../src/features/playback/scorePlaybackSchedule.js'
 import { normalizeMatchSettings } from '../src/features/practice/waitForYouMatchSettings.js'
 import { WFY_INPUT_OUTCOME } from '../src/features/practice/waitForYouInputFeedback.js'
+import { buildStaffLaneNotes, buildStaffLaneNotationMarkings, detectStaves, buildStaffGeometry } from '../src/features/practice/staffLaneLayout.js'
+import { buildVisualSpanMarkings } from '../src/features/practice/visualNotationMarkings.js'
+import { playReferenceMidis } from '../src/features/practice/referenceNotePlayer.js'
 
 const settings = normalizeMatchSettings({})
 
@@ -207,5 +210,86 @@ describe('WFY advance crash regression (guitar notation+TAB)', () => {
       waitForYouCheckpoint: second,
     })
     expect(nextTarget.group?.id).toBe(second.id)
+  })
+
+  it('piano visual lane advance path does not throw on malformed notes', () => {
+    const timingMap = {
+      durationSeconds: 8,
+      measures: [{ number: 1, beats: 4, beatType: 4, timeSeconds: 0 }],
+      notes: [
+        {
+          id: 'p1',
+          midi: 60,
+          timeSeconds: 0,
+          durationSeconds: 0.5,
+          measureNumber: 1,
+          staff: 1,
+        },
+        {
+          id: 'p2',
+          midi: Number.NaN,
+          timeSeconds: 0.5,
+          durationSeconds: NaN,
+          measureNumber: 1,
+          staff: 1,
+          tieStart: true,
+          slurs: [{ type: 'start', number: '1' }],
+          guitarTechniques: [{ kind: 'hammer-on', type: 'start', number: '1' }],
+        },
+        {
+          id: 'p3',
+          midi: 62,
+          timeSeconds: 1,
+          durationSeconds: -0.2,
+          measureNumber: 1,
+          staff: 1,
+          tieStop: true,
+          slurs: [{ type: 'stop', number: '1' }],
+        },
+      ],
+      harmonyEvents: [],
+    }
+    const groups = buildVisualLaneGroups(timingMap, null, { instrumentId: 'piano' })
+    expect(groups.length).toBeGreaterThan(0)
+    const staves = detectStaves(groups)
+    const geometry = buildStaffGeometry(staves)
+    const window = selectVisualWindow(groups, 0, 0)
+    expect(() => buildStaffLaneNotes(window, geometry)).not.toThrow()
+    const notes = buildStaffLaneNotes(window, geometry)
+    expect(() => buildStaffLaneNotationMarkings(window, geometry, { notes })).not.toThrow()
+    expect(() => buildVisualSpanMarkings(window)).not.toThrow()
+    for (const note of notes) {
+      expect(Number.isFinite(note.midi)).toBe(true)
+    }
+  })
+
+  it('malformed TAB fret notes and markings do not crash tab lane builders', () => {
+    const timingMap = wetHandsLikeTimingMap()
+    const groups = buildVisualLaneGroups(timingMap, null, { instrumentId: 'guitar' })
+    const malformedGroup = {
+      ...groups[0],
+      notes: [
+        ...(groups[0].notes ?? []),
+        {
+          visualNoteId: 'bad-note',
+          midi: Number.NaN,
+          durationSeconds: NaN,
+          string: 99,
+          fret: Number.NaN,
+          guitarTechniques: [{ kind: 'not-real', type: 'start' }],
+        },
+      ],
+    }
+    const geometry = buildTabGeometry({ count: 6, tuning: [64, 59, 55, 50, 45, 40] })
+    expect(() => buildTabLaneNotes([malformedGroup], geometry)).not.toThrow()
+    expect(() =>
+      buildTabLaneTechniqueMarkings([malformedGroup], geometry, {
+        notes: buildTabLaneNotes([malformedGroup], geometry),
+      }),
+    ).not.toThrow()
+  })
+
+  it('reference playback rejects invalid midis without throwing synchronously', async () => {
+    await expect(playReferenceMidis([Number.NaN, 999], 0.5, { instrumentId: 'piano' })).resolves.toBeUndefined()
   })
 })

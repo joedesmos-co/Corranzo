@@ -136,21 +136,29 @@ export default function useWaitForYou({
       consumedCheckpointIdRef.current = checkpoint?.id ?? null
 
       const runAdvance = () => {
-        clearAdvanceTimer()
-        setDisplayPhase(null)
-        const nextIndex = getNextCheckpointIndex(checkpointIndex, checkpoints.length)
-        if (nextIndex >= checkpoints.length) {
-          setCheckpointIndex(checkpoints.length)
-          onEnsurePaused()
-          onCheckpointCompleted?.({ completed: true, loopCompleted: true })
-          return
+        try {
+          clearAdvanceTimer()
+          setDisplayPhase(null)
+          const nextIndex = getNextCheckpointIndex(checkpointIndex, checkpoints.length)
+          if (nextIndex >= checkpoints.length) {
+            setCheckpointIndex(checkpoints.length)
+            onEnsurePaused()
+            onCheckpointCompleted?.({ completed: true, loopCompleted: true })
+            return
+          }
+          onCheckpointCompleted?.({ completed: false, loopCompleted: false })
+          goToCheckpoint(nextIndex)
+        } catch (error) {
+          if (import.meta.env?.DEV) {
+            console.error('[Practice] WFY checkpoint advance failed:', error)
+          }
         }
-        onCheckpointCompleted?.({ completed: false, loopCompleted: false })
-        goToCheckpoint(nextIndex)
       }
 
       if (immediate) {
-        runAdvance()
+        // Defer out of mic/audio callback stacks so flushSync + lane rebuild
+        // cannot re-enter the detector or blow the React render budget.
+        queueMicrotask(runAdvance)
         return
       }
 

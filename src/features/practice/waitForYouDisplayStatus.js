@@ -1,6 +1,6 @@
 import { WFY_STATUS } from './waitForYouEngine.js'
 import { WFY_INPUT_OUTCOME } from './waitForYouInputFeedback.js'
-import { WFY_GUIDANCE } from './waitForYouGuidance.js'
+import { WFY_GUIDANCE } from './waitForYouGuidanceConstants.js'
 
 export const WFY_DISPLAY_STATUS = {
   INACTIVE: 'inactive',

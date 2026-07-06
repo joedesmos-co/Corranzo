@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { WFY_INPUT_OUTCOME } from './waitForYouInputFeedback.js'
 import { buildGuidance } from './waitForYouGuidance.js'
 
@@ -41,30 +41,36 @@ export default function useWaitForYouGuidance({
   const [wrongAttempts, setWrongAttempts] = useState(0)
   const [timedOut, setTimedOut] = useState(false)
   const [hintRequested, setHintRequested] = useState(false)
-  // Tracked-during-render values let us reset/advance state without setState in an
-  // effect (the React-recommended "adjust state when a prop changes" pattern).
   const [trackedCheckpointId, setTrackedCheckpointId] = useState(checkpointId)
   const [trackedFeedbackKey, setTrackedFeedbackKey] = useState(inputFeedbackKey)
 
-  if (checkpointId !== trackedCheckpointId) {
-    // New target — forget everything about the previous one.
-    setTrackedCheckpointId(checkpointId)
-    setTrackedFeedbackKey(inputFeedbackKey)
-    setWrongAttempts(0)
-    setTimedOut(false)
-    setHintRequested(false)
-  } else if (inputFeedbackKey && inputFeedbackKey !== trackedFeedbackKey) {
-    // A fresh input result: count a wrong attempt, or clear the slate on success.
-    setTrackedFeedbackKey(inputFeedbackKey)
-    if (inputFeedback.outcome === WFY_INPUT_OUTCOME.WRONG) {
-      setWrongAttempts((n) => n + 1)
-      setTimedOut(false)
-    } else if (inputFeedback.outcome === WFY_INPUT_OUTCOME.CORRECT) {
+  useLayoutEffect(() => {
+    if (checkpointId !== trackedCheckpointId) {
+      setTrackedCheckpointId(checkpointId)
+      setTrackedFeedbackKey(inputFeedbackKey)
       setWrongAttempts(0)
       setTimedOut(false)
       setHintRequested(false)
+      return
     }
-  }
+    if (inputFeedbackKey && inputFeedbackKey !== trackedFeedbackKey) {
+      setTrackedFeedbackKey(inputFeedbackKey)
+      if (inputFeedback.outcome === WFY_INPUT_OUTCOME.WRONG) {
+        setWrongAttempts((n) => n + 1)
+        setTimedOut(false)
+      } else if (inputFeedback.outcome === WFY_INPUT_OUTCOME.CORRECT) {
+        setWrongAttempts(0)
+        setTimedOut(false)
+        setHintRequested(false)
+      }
+    }
+  }, [
+    checkpointId,
+    trackedCheckpointId,
+    inputFeedbackKey,
+    trackedFeedbackKey,
+    inputFeedback?.outcome,
+  ])
 
   // Reveal the target if the player stalls. The timer restarts on a new target and
   // on each wrong attempt (they are clearly trying), but NOT on every idle mic

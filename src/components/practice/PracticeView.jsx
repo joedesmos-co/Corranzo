@@ -29,6 +29,8 @@ export default function PracticeView({
   onGoToPage,
   onTogglePaper,
   timingSourceKind = null,
+  onReloadPractice = null,
+  onReturnToLibrary = null,
 }) {
   const { session, scoreFollow, waitForYouNoteTarget } = usePracticeSessionContext()
   const practiceErrorResetKey = [
@@ -108,7 +110,11 @@ export default function PracticeView({
         </div>
       ) : (
         <PracticeWorkspaceLayout>
-          <PracticeErrorBoundary resetKey={practiceErrorResetKey}>
+          <PracticeErrorBoundary
+            resetKey={practiceErrorResetKey}
+            onReloadPractice={onReloadPractice}
+            onReturnToLibrary={onReturnToLibrary}
+          >
             {!isVisualView && (
               <PracticePageFollowController
                 scrollContainerRef={pdfScrollRef}
@@ -144,12 +150,12 @@ export default function PracticeView({
                 </div>
               )}
             </div>
+            <PracticeControlPanel
+              pdfFileName={fileName || null}
+              pdfPageNumber={pageNumber}
+              waitForYouNoteTarget={waitForYouNoteTarget}
+            />
           </PracticeErrorBoundary>
-          <PracticeControlPanel
-            pdfFileName={fileName || null}
-            pdfPageNumber={pageNumber}
-            waitForYouNoteTarget={waitForYouNoteTarget}
-          />
         </PracticeWorkspaceLayout>
       )}
     </main>

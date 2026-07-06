@@ -6,6 +6,8 @@
  * checkpoints; consumers use them only for SVG decoration.
  */
 
+import { isFiniteMidi, sanitizeVisualDurationSeconds } from './visualNoteSanitize.js'
+
 export const VISUAL_MARKING_KIND = {
   TIE: 'tie',
   SLUR: 'slur',
@@ -121,7 +123,7 @@ function orderedNoteRefs(groups) {
   for (const group of groups ?? []) {
     const notes = group.notes ?? []
     notes.forEach((note, noteIndex) => {
-      if (note?.midi == null) {
+      if (!isFiniteMidi(note?.midi)) {
         return
       }
       refs.push({
@@ -208,12 +210,12 @@ export function buildVisualSpanMarkings(groups) {
   for (const ref of orderedNoteRefs(groups)) {
     const note = ref.note
 
-    if (note.tieStart && note.tieStop && Number(note.durationSeconds) > 0) {
+    if (note.tieStart && note.tieStop && sanitizeVisualDurationSeconds(note.durationSeconds, 0) > 0) {
       spans.push(
         makeSpan(VISUAL_MARKING_KIND.TIE, ref, {
           ...ref,
           noteId: `${ref.noteId}-tie-sustain`,
-          timeSeconds: ref.timeSeconds + note.durationSeconds,
+          timeSeconds: ref.timeSeconds + sanitizeVisualDurationSeconds(note.durationSeconds, 0),
         }),
       )
       continue

@@ -4,6 +4,7 @@ import {
   VISUAL_MARKING_KIND,
   buildVisualSpanMarkings,
 } from './visualNotationMarkings.js'
+import { isFiniteMidi, sanitizeVisualDurationSeconds } from './visualNoteSanitize.js'
 
 /**
  * Tablature-lane layout for Visual practice mode (fretted instruments).
@@ -85,7 +86,7 @@ export function buildTabLaneNotes(
     const x = group.timeSeconds * pixelsPerSecond
     for (let index = 0; index < (group.notes?.length ?? 0); index += 1) {
       const note = group.notes[index]
-      if (note.midi == null) {
+      if (!isFiniteMidi(note.midi)) {
         continue
       }
       const explicit =
@@ -107,7 +108,7 @@ export function buildTabLaneNotes(
         fret: position.fret,
         midi: note.midi,
         label: note.label,
-        durationSeconds: note.durationSeconds ?? 0,
+        durationSeconds: sanitizeVisualDurationSeconds(note.durationSeconds, 0),
         visualNoteId: note.visualNoteId ?? note.id ?? `${group.id}-${index}`,
         sourceNoteId: note.sourceNoteId ?? note.id ?? null,
         markings: note.markings ?? [],
@@ -156,7 +157,7 @@ export function buildTargetPositions(targetGroup, positions = null) {
   }
   const result = []
   for (const note of targetGroup.notes) {
-    if (note.midi == null) {
+    if (!isFiniteMidi(note.midi)) {
       continue
     }
     const explicit =

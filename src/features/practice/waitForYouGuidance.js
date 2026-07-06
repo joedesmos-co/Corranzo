@@ -3,8 +3,10 @@ import { WFY_INPUT_OUTCOME } from './waitForYouInputFeedback.js'
 import { getExpectedMidis } from './waitForYouNoteMatch.js'
 import { chordLabel, missingLabels } from './waitForYouLabels.js'
 import { describeTabPosition } from '../instruments/fretboard.js'
+import { HINT_AFTER_WRONG_ATTEMPTS, WFY_GUIDANCE } from './waitForYouGuidanceConstants.js'
 
 export { chordLabel, missingLabels } from './waitForYouLabels.js'
+export { HINT_AFTER_WRONG_ATTEMPTS, WFY_GUIDANCE } from './waitForYouGuidanceConstants.js'
 
 /**
  * Wait For You guidance layer (pure). Turns the current checkpoint + the latest
@@ -12,19 +14,6 @@ export { chordLabel, missingLabels } from './waitForYouLabels.js'
  * hint request) into a single "what should I tell the player" object the UI can
  * render directly. Keeps all the assistant wording in one tested place.
  */
-
-export const WFY_GUIDANCE = {
-  IDLE: 'idle',
-  WAITING: 'waiting',
-  CORRECT: 'correct',
-  WRONG: 'wrong',
-  PARTIAL: 'partial',
-  HINT: 'hint',
-  COMPLETE: 'complete',
-}
-
-/** Number of wrong attempts at which the cursor target is revealed automatically. */
-export const HINT_AFTER_WRONG_ATTEMPTS = 2
 
 export function expectedLabelFor(expectedMidis, checkpoint = null) {
   if (checkpoint?.displayLabel) {

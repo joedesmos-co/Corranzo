@@ -1,8 +1,8 @@
 import { memo, useEffect, useMemo, useRef } from 'react'
 import useElementSize from '../../hooks/useElementSize.js'
 import useStableElementSize from '../../hooks/useStableElementSize.js'
+import { VISUAL_LANE_DEFAULTS } from '../../features/practice/visualLaneConstants.js'
 import {
-  VISUAL_LANE_DEFAULTS,
   resolveVisualLaneTransform,
   resolveVisualPlayheadX,
 } from '../../features/practice/visualPracticeLane.js'

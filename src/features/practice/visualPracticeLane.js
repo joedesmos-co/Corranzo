@@ -4,6 +4,7 @@ import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 import { enrichGuitarChordCheckpoint } from './guitarChordShapeCheckpoint.js'
 import { buildVisualNoteMarkings } from './visualNotationMarkings.js'
 import { VISUAL_LANE_DEFAULTS, WFY_VISUAL_MOVE_MS } from './visualLaneConstants.js'
+import { isFiniteMidi, sanitizeVisualDurationSeconds } from './visualNoteSanitize.js'
 
 export { VISUAL_LANE_DEFAULTS, WFY_VISUAL_MOVE_MS } from './visualLaneConstants.js'
 
@@ -15,10 +16,6 @@ export const VISUAL_GROUP_STATUS = {
 
 /** Grace window: a group stays "current" this long after its onset. */
 const TARGET_EPSILON_SECONDS = 0.12
-
-function isFiniteMidi(midi) {
-  return Number.isFinite(midi)
-}
 
 /**
  * Build lane groups from the score timing map.
@@ -52,7 +49,7 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}
           measureNumber: note.measureNumber ?? checkpoint.measureNumber,
           quarterTime: note.quarterTime ?? checkpoint.quarterTime ?? null,
           timeSeconds: note.timeSeconds ?? checkpoint.timeSeconds,
-          durationSeconds: note.durationSeconds ?? null,
+          durationSeconds: sanitizeVisualDurationSeconds(note.durationSeconds, null),
           tieStart: Boolean(note.tieStart),
           tieStop: Boolean(note.tieStop),
           staccato: Boolean(note.staccato),

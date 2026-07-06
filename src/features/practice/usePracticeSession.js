@@ -204,17 +204,31 @@ export default function usePracticeSession({
       if (!hasMusicXml) {
         return
       }
+      const safeSeconds = Number.isFinite(seconds) ? seconds : 0
       // Paused scrub uses manualTime for practiceTime; flush so the score-follow
       // cursor and page follow see the new position in the same frame as the bar.
       const setPracticeTime = () => {
-        clock.setManualTime(seconds)
+        clock.setManualTime(safeSeconds)
       }
-      if (options.sync === false) {
+      try {
+        if (options.sync === false) {
+          setPracticeTime()
+        } else {
+          flushSync(setPracticeTime)
+        }
+      } catch (error) {
+        if (import.meta.env?.DEV) {
+          console.error('[Practice] Failed to sync practice clock on seek:', error)
+        }
         setPracticeTime()
-      } else {
-        flushSync(setPracticeTime)
       }
-      playback.seek(seconds)
+      try {
+        playback.seek(safeSeconds)
+      } catch (error) {
+        if (import.meta.env?.DEV) {
+          console.error('[Practice] Playback seek failed (practice position still updated):', error)
+        }
+      }
     },
     [hasMusicXml, playback, clock.setManualTime],
   )
@@ -254,7 +268,15 @@ export default function usePracticeSession({
 
   const handleWfyPlayerInputMatched = useCallback(() => {
     onRecordWfyEventRef.current?.('correct')
-    wfyAdvanceRef.current()
+    queueMicrotask(() => {
+      try {
+        wfyAdvanceRef.current()
+      } catch (error) {
+        if (import.meta.env?.DEV) {
+          console.error('[Practice] WFY mic advance callback failed:', error)
+        }
+      }
+    })
   }, [])
 
   const handleWfyWrongNote = useCallback(() => {

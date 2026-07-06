@@ -1449,6 +1449,8 @@ export default function App() {
           onGoToPage={handleGoToPage}
           onTogglePaper={togglePaperTheme}
           timingSourceKind={musicXmlSource?.source ?? null}
+          onReloadPractice={() => setPracticeSessionEpoch((epoch) => epoch + 1)}
+          onReturnToLibrary={() => navigateToView('library')}
         />
       </PracticeSessionProvider>
     )
