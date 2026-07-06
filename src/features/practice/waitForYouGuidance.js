@@ -28,6 +28,9 @@ export function chordLabel(midis) {
 }
 
 export function expectedLabelFor(expectedMidis, checkpoint = null) {
+  if (checkpoint?.displayLabel) {
+    return checkpoint.displayLabel
+  }
   if (checkpoint?.chordSymbol) {
     return checkpoint.chordSymbol
   }
@@ -101,10 +104,19 @@ export function buildEscalatingHint({
   strings = null,
   tabPositions = null,
   chordAsSequence = false,
+  guitarChordShapeMode = false,
 }) {
   if (!expectedMidis?.length || wrongAttempts <= 0) return null
   const isChord = expectedMidis.length > 1
-  const label = expectedLabelFor(expectedMidis)
+  const label = expectedLabelFor(expectedMidis, checkpoint)
+  if (guitarChordShapeMode) {
+    if (wrongAttempts === 1) return 'Not quite — strum the highlighted shape again.'
+    if (wrongAttempts === 2) return checkpoint?.displayLabel ?? 'Play this shape.'
+    const position = positionHintForCheckpoint(checkpoint, { strings, tabPositions })
+    return position
+      ? `${checkpoint?.displayLabel ?? 'Play this shape'} (${position.replace(/ \+ /g, ', ')})`
+      : checkpoint?.displayLabel ?? 'Play this shape.'
+  }
   if (wrongAttempts === 1) return 'Not quite — try again.'
   if (wrongAttempts === 2) return `Expected ${label}.`
   const position = positionHintForCheckpoint(checkpoint, { strings, tabPositions })
@@ -123,8 +135,11 @@ export function buildEscalatingHint({
 }
 
 /** Plain "play this" hint used on timeout or when the player asks for help. */
-export function buildTargetHint({ expectedMidis, chordAsSequence = false }) {
-  const label = expectedLabelFor(expectedMidis)
+export function buildTargetHint({ expectedMidis, chordAsSequence = false, checkpoint = null, guitarChordShapeMode = false }) {
+  if (guitarChordShapeMode) {
+    return checkpoint?.displayLabel ?? 'Play this shape'
+  }
+  const label = expectedLabelFor(expectedMidis, checkpoint)
   if (!label) return null
   return chordAsSequence && expectedMidis.length > 1
     ? `Chord practice sequence: ${label}`
@@ -146,6 +161,7 @@ export function buildGuidance({
   strings = null,
   tabPositions = null,
   chordAsSequence = false,
+  guitarChordShapeMode = false,
 }) {
   const expectedMidis = getExpectedMidis(checkpoint)
   const isChord = expectedMidis.length > 1
@@ -175,7 +191,7 @@ export function buildGuidance({
       ...base,
       state: WFY_GUIDANCE.CORRECT,
       tone: 'success',
-      primary: isChord ? (chordAsSequence ? 'Sequence complete — nice!' : 'Chord — nice!') : 'Correct!',
+      primary: isChord ? (chordAsSequence ? 'Sequence complete — nice!' : guitarChordShapeMode ? 'Chord shape — nice!' : 'Chord — nice!') : 'Correct!',
     }
   }
 
@@ -194,6 +210,7 @@ export function buildGuidance({
         strings,
         tabPositions,
         chordAsSequence,
+        guitarChordShapeMode,
       }),
       // After enough wrong tries, surface the target on the score too.
       showTarget: wrongAttempts >= HINT_AFTER_WRONG_ATTEMPTS,
@@ -206,11 +223,15 @@ export function buildGuidance({
       inputFeedback?.remainingLabels ??
       missingLabels(expectedMidis, inputFeedback?.matchedIndices)
     let primary = missing.length
-      ? `Still need ${missing.join(', ')}`
+      ? guitarChordShapeMode
+        ? `Heard part of the shape — need ${Math.max(1, (checkpoint?.minimumChordTonesRequired ?? 2) - (inputFeedback?.matchedCount ?? heard.length))} more tone(s)`
+        : `Still need ${missing.join(', ')}`
       : chordAsSequence
         ? 'Sequence almost complete'
-        : 'Almost — hold the chord'
-    if (heard.length && missing.length) {
+        : guitarChordShapeMode
+          ? 'Almost — keep strumming the shape'
+          : 'Almost — hold the chord'
+    if (heard.length && missing.length && !guitarChordShapeMode) {
       primary = `Heard ${heard.join(' + ')} — still need ${missing.join(', ')}`
     } else if (heard.length && !missing.length) {
       primary = `Heard ${heard.join(' + ')}`
@@ -231,7 +252,7 @@ export function buildGuidance({
       ...base,
       state: WFY_GUIDANCE.HINT,
       tone: 'hint',
-      primary: buildTargetHint({ expectedMidis, chordAsSequence }),
+      primary: buildTargetHint({ expectedMidis, chordAsSequence, checkpoint, guitarChordShapeMode }),
       hint:
         buildEscalatingHint({
           expectedMidis,
@@ -254,13 +275,15 @@ export function buildGuidance({
     tone: 'neutral',
     primary: matchingActive
       ? isChord
-        ? chordAsSequence
-          ? checkpoint?.chordSymbol
-            ? `Play ${checkpoint.chordSymbol} chord tones one at a time`
-            : `Chord practice sequence: ${expectedLabel}`
-          : checkpoint?.chordSymbol
-            ? `Play the ${checkpoint.chordSymbol} chord`
-            : `Play the chord: ${expectedLabel}`
+        ? guitarChordShapeMode
+          ? checkpoint?.displayLabel ?? 'Play this shape'
+          : chordAsSequence
+            ? checkpoint?.chordSymbol
+              ? `Play ${checkpoint.chordSymbol} chord tones one at a time`
+              : `Chord practice sequence: ${expectedLabel}`
+            : checkpoint?.chordSymbol
+              ? `Play the ${checkpoint.chordSymbol} chord`
+              : `Play the chord: ${expectedLabel}`
         : `Play ${expectedLabel}`
       : `Play ${expectedLabel}, or tap Continue`,
   }

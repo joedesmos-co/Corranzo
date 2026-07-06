@@ -58,11 +58,23 @@ describe('Wait For You input-source modal wiring', () => {
 
   it('renders the required modal title and choices', () => {
     expect(modal).toContain('How do you want to play?')
-    expect(modal).toContain('buildWfyInputModalActions')
+    expect(modal).toContain('buildWfyInputModalLayout')
     expect(modal).toContain('instrumentId')
     expect(modal).toContain('onChooseSource(action.id)')
+    expect(modal).toContain('onChooseSource(layout.fallbackLink.id)')
     expect(modal).toContain('role="dialog"')
     expect(modal).toContain('aria-modal="true"')
+  })
+
+  it('guitar modal shows Microphone only, practice-without-mic link, and More options for MIDI', () => {
+    expect(modal).toContain("layout.layout === 'guitar'")
+    expect(modal).toContain('layout.fallbackLink.label')
+    expect(modal).toContain('More options')
+    expect(modal).toContain('wfy-input-source-modal__link')
+    expect(modal).toContain('wfy-input-source-modal__advanced')
+    expect(options).toContain('buildWfyInputModalLayout')
+    expect(options).toContain("layout: 'guitar'")
+    expect(options).toContain('Practice without mic')
   })
 
   it('portals backdrop and dialog together to document.body', () => {

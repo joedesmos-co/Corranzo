@@ -7,10 +7,64 @@ import { MIC_SIGNAL_SHAPE } from '../microphone-input/micSignalShape.js'
  */
 export const MIC_HARMONIC_HIGH_LOW_MAX = 0.45
 
-function hasInstrumentLikeHarmonicProfile(v2Notes = []) {
+/** Partials after the peak must decay — formant speech piles energy on h4+. */
+function harmonicDecayAfterStrongest(magnitudes, strongestIndex) {
+  const peak = magnitudes[strongestIndex] ?? 0
+  if (!(peak > 0)) {
+    return false
+  }
+  for (let index = strongestIndex + 1; index < magnitudes.length; index += 1) {
+    if ((magnitudes[index] ?? 0) > peak * 0.85) {
+      return false
+    }
+  }
+  return true
+}
+
+/**
+ * Amp / speaker coloration and distorted electric can anchor on h2 or h3 with
+ * a smooth harmonic decay. Voice formants peak on h4+ or break the decay shape.
+ */
+function hasElectricHarmonicRichProfile(note, frame) {
+  const magnitudes = note?.harmonicMagnitudes
+  if (!Array.isArray(magnitudes) || magnitudes.length < 3 || !note?.detected) {
+    return false
+  }
+
+  const shape = frame?.signalShape
+  if (shape === MIC_SIGNAL_SHAPE.NOISY || shape === MIC_SIGNAL_SHAPE.QUIET) {
+    return false
+  }
+  if ((frame?.zeroCrossingRate ?? 0) >= 0.18) {
+    return false
+  }
+
+  let strongestIndex = 0
+  for (let index = 1; index < magnitudes.length; index += 1) {
+    if ((magnitudes[index] ?? 0) > (magnitudes[strongestIndex] ?? 0)) {
+      strongestIndex = index
+    }
+  }
+  if (strongestIndex > 2) {
+    return false
+  }
+  if (!harmonicDecayAfterStrongest(magnitudes, strongestIndex)) {
+    return false
+  }
+
+  const v2Confidence = frame?.v2MeanConfidence ?? 0
+  const distortedLike =
+    shape === MIC_SIGNAL_SHAPE.DISTORTED || (frame?.spectralEnergy ?? 0) >= 0.1
+  return strongestIndex >= 1 && (distortedLike || v2Confidence >= 0.35)
+}
+
+function hasInstrumentLikeHarmonicProfile(v2Notes = [], frame = null) {
   const note = v2Notes.find((entry) => entry?.detected)
   const magnitudes = note?.harmonicMagnitudes
   if (!Array.isArray(magnitudes) || magnitudes.length < 2) {
+    return true
+  }
+  if (hasElectricHarmonicRichProfile(note, frame)) {
     return true
   }
   const fundamental = magnitudes[0] ?? 0
@@ -64,7 +118,7 @@ export function isMusicalMicFrame(frame) {
     if (!(frame.v2DetectedMidis?.length > 0)) {
       return false
     }
-    if (!hasInstrumentLikeHarmonicProfile(frame.v2Notes ?? [])) {
+    if (!hasInstrumentLikeHarmonicProfile(frame.v2Notes ?? [], frame)) {
       return false
     }
   }

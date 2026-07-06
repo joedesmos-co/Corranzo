@@ -42,6 +42,7 @@ import {
   detectTabTextAnnotations,
   extractTabDigitNotes,
   groupTabNotesByMeasure,
+  NOTATION_TAB_PAIRING_LOW_CONFIDENCE_MESSAGE,
   resolveGuitarSystemRoles,
   systemsContainTablature,
   TAB_APPROXIMATE_RHYTHM_WARNING,
@@ -417,7 +418,18 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     // x-proximity. Pitch and rhythm keep coming from the notation staff.
     let tabDiagnostics = null
     if (tabCapable && systemRoles) {
-      tabDiagnostics = { tabStaves: 0, tabNotes: 0, tabPositionalMeasures: 0, attachedPositions: 0 }
+      tabDiagnostics = {
+        tabStaves: 0,
+        tabNotes: 0,
+        tabPositionalMeasures: 0,
+        attachedPositions: 0,
+        pairedNotes: 0,
+        unpairedNotationNotes: 0,
+        unusedTabDigits: 0,
+        lowConfidenceMeasures: 0,
+        pairingConfidence: 1,
+        warnings: [],
+      }
       const positionedGlyphs = textGlyphsToImage(pageText, imageData)
       for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
         const role = systemRoles[systemIndex]
@@ -444,10 +456,28 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           if (!measureNotes?.length) {
             continue
           }
-          const attached = attachTabPositionsToEvents(measureRecord.events, measureNotes)
+          const attached = attachTabPositionsToEvents(measureRecord.events, measureNotes, {
+            beats: inheritedTimeSignature?.beats ?? 4,
+            beatType: inheritedTimeSignature?.beatType ?? 4,
+            writtenOctaveOffset: instrument?.notation?.writtenOctaveOffset ?? -1,
+          })
           measureRecord.events = attached.events
           tabDiagnostics.attachedPositions += attached.attachedCount
+          tabDiagnostics.pairedNotes += attached.pairingDiagnostics?.pairedNotes ?? attached.attachedCount
+          tabDiagnostics.unpairedNotationNotes +=
+            attached.pairingDiagnostics?.unpairedNotationNotes ?? 0
+          tabDiagnostics.unusedTabDigits += attached.pairingDiagnostics?.unusedTabDigits ?? 0
+          if (attached.lowConfidence) {
+            tabDiagnostics.lowConfidenceMeasures += 1
+          }
+          tabDiagnostics.pairingConfidence = Math.min(
+            tabDiagnostics.pairingConfidence,
+            attached.pairingDiagnostics?.measureConfidence ?? 1,
+          )
         }
+      }
+      if (tabDiagnostics.lowConfidenceMeasures > 0) {
+        tabDiagnostics.warnings.push(NOTATION_TAB_PAIRING_LOW_CONFIDENCE_MESSAGE)
       }
     }
 

@@ -45,8 +45,9 @@ function usage() {
     '  --json <report.json>         Write machine-readable report.',
     '  --text <report.txt>          Write text summary.',
     '  --save-generated <out.xml>   Save generated OMR MusicXML when --pdf is used.',
-    '  --max-pages <n>              Limit PDF pages for OMR, default 24.',
-    '  --no-preprocess             Disable OMR preprocessing for A/B debugging.',
+  '  --max-pages <n>              Limit PDF pages for OMR, default 24.',
+  '  --instrument <id>            Instrument id for OMR (e.g. guitar, piano). Default: piano.',
+  '  --no-preprocess             Disable OMR preprocessing for A/B debugging.',
   ].join('\n')
 }
 
@@ -92,7 +93,7 @@ function requireExisting(path, label) {
   }
 }
 
-async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages }) {
+async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, instrumentId = null }) {
   const rendered = await renderPdfToPages(pdfPath, { rootDir: ROOT })
   const extractPageText = await makePdfTextExtractor(pdfPath)
   return runPdfOmrPipeline(pdfPath, {
@@ -101,6 +102,7 @@ async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages }) {
     numPages: rendered.numPages,
     maxPages,
     preprocessPages,
+    instrumentId,
     title: basename(pdfPath).replace(/\.pdf$/i, ''),
   })
 }
@@ -142,6 +144,7 @@ async function main() {
   const textPath = argValue(args, '--text')
   const saveGeneratedPath = argValue(args, '--save-generated')
   const maxPages = Math.max(1, Number(argValue(args, '--max-pages') ?? 24))
+  const instrumentId = argValue(args, '--instrument')
   const preprocessPages = !hasFlag(args, '--no-preprocess')
 
   requireExisting(truthPath, 'ground-truth MusicXML/MXL')
@@ -167,7 +170,7 @@ async function main() {
     generatedMusicXml = await readScoreXml(generatedPath)
   } else {
     console.error(`Running experimental OMR: ${pdfPath}`)
-    omrResult = await generateOmrFromPdf(pdfPath, { maxPages, preprocessPages })
+    omrResult = await generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, instrumentId })
     generatedMusicXml = omrResult.musicXml
     generatedOmrDiagnostics = omrResult.diagnostics
     if (saveGeneratedPath) {
@@ -190,6 +193,7 @@ async function main() {
       generatedPath: generatedPath ?? null,
       truthPath,
       maxPages: pdfPath ? maxPages : null,
+      instrumentId: pdfPath ? instrumentId ?? 'piano' : null,
       preprocessPages: pdfPath ? preprocessPages : null,
       omrNoteCount: omrResult?.noteCount ?? null,
       omrMeasureCount: omrResult?.measureCount ?? null,

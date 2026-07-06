@@ -57,8 +57,16 @@ function classifyElectricGuitarSignal(frame, harmonicProfile) {
   const shape = frame?.signalShape ?? null
   const highLowRatio = harmonicProfile?.highLowRatio ?? null
   const h2OverH1 = harmonicProfile?.h2OverH1 ?? null
+  const strongestPartial = harmonicProfile?.strongestPartial ?? null
   const gateOpen = Boolean(frame?.gateOpen)
   const detectedMidis = Array.isArray(frame?.v2DetectedMidis) ? frame.v2DetectedMidis : []
+  const ampColorationLikely =
+    gateOpen &&
+    detectedMidis.length > 0 &&
+    strongestPartial != null &&
+    strongestPartial >= 2 &&
+    strongestPartial <= 3 &&
+    (shape === 'sustained' || shape === 'distorted' || shape === 'percussive')
 
   return {
     cleanLikely:
@@ -69,6 +77,10 @@ function classifyElectricGuitarSignal(frame, harmonicProfile) {
     distortedLikely:
       gateOpen &&
       (shape === 'distorted' || (highLowRatio != null && highLowRatio >= 0.28)),
+    ampColorationLikely,
+    strongestPartial,
+    h2OverH1,
+    highLowRatio,
     signalShape: shape,
     gateOpen,
     detectedMidis: [...detectedMidis],

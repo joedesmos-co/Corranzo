@@ -119,7 +119,8 @@ export default function WaitForYouSection({
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
     status === WFY_STATUS.WAITING &&
-    getExpectedMidis(currentCheckpoint).length > 1
+    getExpectedMidis(currentCheckpoint).length > 1 &&
+    !isGuitarChordShape
   const showMicOffNotice =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
@@ -146,10 +147,12 @@ export default function WaitForYouSection({
     status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS
   const primaryActionDisabled = displayStatus === WFY_DISPLAY_STATUS.CONTINUING
   const expectedMidis = currentCheckpoint ? getExpectedMidis(currentCheckpoint) : []
+  const isGuitarChordShape = Boolean(currentCheckpoint?.isGuitarChordShape)
   const micChordSequence =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
-    expectedMidis.length > 1
+    expectedMidis.length > 1 &&
+    !isGuitarChordShape
 
   return (
     <section className={sectionClass} aria-label="Wait For You">
@@ -332,18 +335,26 @@ export default function WaitForYouSection({
           {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && (
             <p className="wait-for-you__now-notes">
               <span className="wait-for-you__now-notes-label">
-                {micChordSequence
-                  ? 'Chord practice sequence'
-                  : expectedMidis.length > 1
-                    ? 'Play together'
-                    : 'Play'}
+                {isGuitarChordShape
+                  ? 'Play shape'
+                  : micChordSequence
+                    ? 'Chord practice sequence'
+                    : expectedMidis.length > 1
+                      ? 'Play together'
+                      : 'Play'}
               </span>
               <span className="wait-for-you__note-chips">
-                {expectedMidis.map((midi) => (
-                  <span key={midi} className="wait-for-you__note-chip">
-                    {midiToNoteLabel(midi)}
+                {isGuitarChordShape ? (
+                  <span className="wait-for-you__note-chip wait-for-you__note-chip--shape">
+                    {currentCheckpoint.displayLabel ?? guidance?.expectedLabel ?? 'Chord shape'}
                   </span>
-                ))}
+                ) : (
+                  expectedMidis.map((midi) => (
+                    <span key={midi} className="wait-for-you__note-chip">
+                      {midiToNoteLabel(midi)}
+                    </span>
+                  ))
+                )}
               </span>
             </p>
           )}

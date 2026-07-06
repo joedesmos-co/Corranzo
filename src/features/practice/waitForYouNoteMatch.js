@@ -17,6 +17,10 @@ import {
   MIC_CHORD_MATCH_WRONG,
   resolveMicChordCollectionWindowMs,
 } from './waitForYouMicChordCollection.js'
+import { minimumGuitarChordTonesRequired } from './guitarChordShapeCheckpoint.js'
+
+/** Short window for guitar strum/pick partial chord-tone detection. */
+export const GUITAR_CHORD_SHAPE_WINDOW_MS = 900
 
 export const MATCH_OUTCOME = {
   NO_EXPECTED: 'no-expected',
@@ -394,6 +398,92 @@ export function evaluateMicNoteInputWithBuffer(checkpoint, playedMidi, bufferSta
   return { ...result, outcome: MATCH_OUTCOME.CHORD_PROGRESS }
 }
 
+export function createGuitarChordShapeBufferState() {
+  return {
+    heardMidis: new Set(),
+    windowStartMs: null,
+  }
+}
+
+export function resetGuitarChordShapeBufferState(state) {
+  if (!state) {
+    return
+  }
+  state.heardMidis.clear()
+  state.windowStartMs = null
+}
+
+/**
+ * Guitar mic: accumulate expected chord tones across a short strum window.
+ * Completes when enough tones are heard — not every tone one-at-a-time.
+ */
+export function evaluateGuitarChordShapeMicInput(
+  checkpoint,
+  detectedMidis = [],
+  bufferState = null,
+  settings = {},
+) {
+  const expected = getExpectedMidis(checkpoint)
+  const required =
+    checkpoint?.minimumChordTonesRequired ??
+    minimumGuitarChordTonesRequired(expected.length)
+  const windowMs = Number(settings.guitarChordShapeWindowMs) || GUITAR_CHORD_SHAPE_WINDOW_MS
+  const now = Date.now()
+
+  if (bufferState) {
+    if (bufferState.windowStartMs == null) {
+      bufferState.windowStartMs = now
+    } else if (now - bufferState.windowStartMs > windowMs) {
+      bufferState.heardMidis.clear()
+      bufferState.windowStartMs = now
+    }
+    for (const detected of detectedMidis ?? []) {
+      for (const expectedMidi of expected) {
+        if (pitchMatches(detected, expectedMidi, settings ?? {})) {
+          bufferState.heardMidis.add(expectedMidi)
+        }
+      }
+    }
+  }
+
+  const matchedIndices = new Set()
+  for (let index = 0; index < expected.length; index += 1) {
+    const expectedMidi = expected[index]
+    const heardInFrame = (detectedMidis ?? []).some((midi) =>
+      pitchMatches(midi, expectedMidi, settings ?? {}),
+    )
+    const heardInBuffer = bufferState?.heardMidis?.has(expectedMidi)
+    if (heardInFrame || heardInBuffer) {
+      matchedIndices.add(index)
+    }
+  }
+
+  const matchedCount = matchedIndices.size
+  const base = {
+    expected,
+    matchedIndices,
+    isChord: true,
+    playedMidi: detectedMidis?.[0] ?? null,
+    micEngineMode: 'guitar-chord-shape',
+    detectedMidis: [...(detectedMidis ?? [])],
+    matchedCount,
+    totalExpected: expected.length,
+    requiredTones: required,
+    isGuitarChordShape: true,
+  }
+
+  if (matchedCount >= required) {
+    if (bufferState) {
+      resetGuitarChordShapeBufferState(bufferState)
+    }
+    return { ...base, outcome: MATCH_OUTCOME.COMPLETE }
+  }
+  if (matchedCount > 0) {
+    return { ...base, outcome: MATCH_OUTCOME.CHORD_PROGRESS }
+  }
+  return { ...base, outcome: MATCH_OUTCOME.WRONG }
+}
+
 /**
  * Mic Engine V2 — simultaneous score-informed chord/single-note evaluation.
  *
@@ -402,6 +492,9 @@ export function evaluateMicNoteInputWithBuffer(checkpoint, playedMidi, bufferSta
  * (matching what those settings promise the player).
  */
 export function evaluateMicScoreInformedInput(checkpoint, detectedMidis = [], settings) {
+  if (checkpoint?.isGuitarChordShape) {
+    return evaluateGuitarChordShapeMicInput(checkpoint, detectedMidis, null, settings)
+  }
   const expected = getExpectedMidis(checkpoint)
   const targets = getMicChordMatchTargets(checkpoint, settings)
   const fullExpected = targets.fullExpected ?? expected

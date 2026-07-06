@@ -34,6 +34,7 @@ export default function useWaitForYouGuidance({
   strings = null,
   tabPositions = null,
   chordAsSequence = false,
+  guitarChordShapeMode = false,
 }) {
   const checkpointId = currentCheckpoint?.id ?? null
   const inputFeedbackKey = feedbackTrackingKey(inputFeedback)
@@ -101,8 +102,9 @@ export default function useWaitForYouGuidance({
         strings,
         tabPositions,
         chordAsSequence,
+        guitarChordShapeMode,
       }),
-    [currentCheckpoint, inputFeedback, wrongAttempts, timedOut, hintRequested, complete, matchingActive, instrument, strings, tabPositions, chordAsSequence],
+    [currentCheckpoint, inputFeedback, wrongAttempts, timedOut, hintRequested, complete, matchingActive, instrument, strings, tabPositions, chordAsSequence, guitarChordShapeMode],
   )
 
   return { guidance, wrongAttempts, timedOut, hintRequested, requestHint }

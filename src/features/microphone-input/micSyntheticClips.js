@@ -173,6 +173,54 @@ export function synthSpeech(sampleRate, seconds = 1.6, options = {}) {
   return out
 }
 
+const ELECTRIC_AMP_H2_HARMONICS = [
+  { multiple: 1, amplitude: 0.08 },
+  { multiple: 2, amplitude: 0.32 },
+  { multiple: 3, amplitude: 0.18 },
+  { multiple: 4, amplitude: 0.08 },
+]
+
+const ELECTRIC_AMP_H3_HARMONICS = [
+  { multiple: 1, amplitude: 0.06 },
+  { multiple: 2, amplitude: 0.14 },
+  { multiple: 3, amplitude: 0.35 },
+  { multiple: 4, amplitude: 0.12 },
+]
+
+const ELECTRIC_CLEAN_SUSTAIN_HARMONICS = [
+  { multiple: 1, amplitude: 0.35 },
+  { multiple: 2, amplitude: 0.22 },
+  { multiple: 3, amplitude: 0.12 },
+  { multiple: 4, amplitude: 0.06 },
+]
+
+/**
+ * Clean electric through an amp/speaker: weak fundamental with h2 or h3
+ * dominating — the mic path that fails when treated like acoustic guitar.
+ */
+export function synthElectricAmp(fundamental, sampleRate, seconds = 0.8, options = {}) {
+  const {
+    amplitude = 0.34,
+    noise = 0.008,
+    seed = 77,
+    profile = 'h2-strong',
+    harmonics = profile === 'h3-strong' ? ELECTRIC_AMP_H3_HARMONICS : ELECTRIC_AMP_H2_HARMONICS,
+  } = options
+  return synthSpeaker(fundamental, sampleRate, seconds, { amplitude, noise, seed, harmonics })
+}
+
+/** Sustained clean electric tone (neck pickup / clean channel). */
+export function synthElectricClean(fundamental, sampleRate, seconds = 0.8, options = {}) {
+  const { amplitude = 0.3, harmonics = ELECTRIC_CLEAN_SUSTAIN_HARMONICS } = options
+  const tone = synthHarmonicTone(fundamental, harmonics, sampleRate, seconds)
+  const totalAmplitude = harmonics.reduce((sum, part) => sum + part.amplitude, 0) || 1
+  const out = new Float32Array(tone.length)
+  for (let index = 0; index < tone.length; index += 1) {
+    out[index] = (tone[index] * amplitude) / totalAmplitude
+  }
+  return out
+}
+
 /**
  * Digital piano played back through speakers: a sustained harmonic tone with a
  * small broadband noise bed (cabinet / room coloration).
@@ -224,6 +272,14 @@ export function renderSyntheticClip(spec, sampleRate = 44100) {
     case 'speaker': {
       const fundamental = spec.frequency ?? midiToFrequency(spec.midi ?? 60)
       return synthSpeaker(fundamental, sampleRate, seconds, spec)
+    }
+    case 'electric-amp': {
+      const fundamental = spec.frequency ?? midiToFrequency(spec.midi ?? 57)
+      return synthElectricAmp(fundamental, sampleRate, seconds, spec)
+    }
+    case 'electric-clean': {
+      const fundamental = spec.frequency ?? midiToFrequency(spec.midi ?? 57)
+      return synthElectricClean(fundamental, sampleRate, seconds, spec)
     }
     case 'silence':
       return synthSilence(sampleRate, seconds)

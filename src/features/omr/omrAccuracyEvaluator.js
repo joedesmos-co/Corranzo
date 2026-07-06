@@ -76,10 +76,10 @@ function measureByNumber(timingMap) {
   return new Map((timingMap?.measures ?? []).map((measure) => [measure.number, measure]))
 }
 
-export function normalizeTimingMapNotes(timingMap) {
+export function normalizeTimingMapNotes(timingMap, { excludeTabMirrors = true } = {}) {
   const measures = measureByNumber(timingMap)
   return (timingMap?.notes ?? [])
-    .filter((note) => !note.isRest && note.midi != null)
+    .filter((note) => !note.isRest && note.midi != null && !(excludeTabMirrors && note.isTabMirror))
     .map((note, index) => {
       const measure = measures.get(note.measureNumber)
       const measureStart = measure?.startQuarters ?? 0
@@ -98,6 +98,8 @@ export function normalizeTimingMapNotes(timingMap) {
         label: note.label ?? noteLabel(note.midi),
         voice: note.voice ?? null,
         isChord: Boolean(note.isChord),
+        string: note.string ?? null,
+        fret: note.fret ?? null,
       }
     })
     .sort(

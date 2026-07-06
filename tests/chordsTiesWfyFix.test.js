@@ -19,6 +19,7 @@ import { buildOmrGeneratedWarnings } from '../src/features/import/useImportReadi
 import { buildNoteCheckpoints } from '../src/features/practice/waitForYouCheckpoints.js'
 import {
   buildWfyInputModalActions,
+  buildWfyInputModalLayout,
   buildWfyInputSelectorOptions,
   wfyInputSourceLabel,
 } from '../src/features/practice/wfyInputSourceOptions.js'
@@ -83,31 +84,42 @@ describe('guitar-specific WFY input setup', () => {
     expect(wfyInputSourceLabel(WFY_INPUT_SOURCE.MIDI, INSTRUMENT_IDS.PIANO)).toBe('MIDI keyboard')
   })
 
-  it('orders guitar modal actions as Microphone, Continue, optional MIDI device', () => {
+  it('shows only Microphone up front for guitar; manual link and MIDI in More options', () => {
+    const layout = buildWfyInputModalLayout({
+      instrumentId: INSTRUMENT_IDS.GUITAR,
+      midiAvailable: true,
+      microphoneAvailable: true,
+    })
+    expect(layout.layout).toBe('guitar')
+    expect(layout.primaryActions.map((action) => action.label)).toEqual(['Use Microphone'])
+    expect(layout.fallbackLink?.label).toBe('Practice without mic')
+    expect(layout.fallbackLink?.id).toBe(WFY_INPUT_SOURCE.MANUAL)
+    expect(layout.advancedActions.map((action) => action.label)).toEqual(['Use MIDI device'])
+  })
+
+  it('keeps piano modal with Microphone, Continue, and MIDI keyboard when available', () => {
+    const layout = buildWfyInputModalLayout({
+      instrumentId: INSTRUMENT_IDS.PIANO,
+      midiAvailable: true,
+      microphoneAvailable: true,
+    })
+    expect(layout.layout).toBe('standard')
+    expect(layout.primaryActions.map((action) => action.label)).toEqual([
+      'Use Microphone',
+      'Continue button',
+      'Use MIDI Keyboard',
+    ])
+    expect(layout.fallbackLink).toBeNull()
+    expect(layout.advancedActions).toEqual([])
+  })
+
+  it('legacy buildWfyInputModalActions still exposes guitar Microphone primary only', () => {
     const actions = buildWfyInputModalActions({
       instrumentId: INSTRUMENT_IDS.GUITAR,
       midiAvailable: true,
       microphoneAvailable: true,
     })
-    expect(actions.map((action) => action.label)).toEqual([
-      'Use Microphone',
-      'Use Continue button',
-      'Use MIDI device',
-    ])
-    expect(actions.some((action) => action.label.includes('Keyboard'))).toBe(false)
-  })
-
-  it('keeps piano modal with MIDI keyboard when available', () => {
-    const actions = buildWfyInputModalActions({
-      instrumentId: INSTRUMENT_IDS.PIANO,
-      midiAvailable: true,
-      microphoneAvailable: true,
-    })
-    expect(actions.map((action) => action.label)).toEqual([
-      'Use Microphone',
-      'Continue button',
-      'Use MIDI Keyboard',
-    ])
+    expect(actions.map((action) => action.label)).toEqual(['Use Microphone'])
   })
 
   it('does not duplicate Continue below MIDI in the guitar selector', () => {

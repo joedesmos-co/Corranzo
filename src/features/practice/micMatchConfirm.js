@@ -87,7 +87,31 @@ export function confirmConfidentMatch(
 
 /** A single-note frame is confident when the gate is open and pitch is clear. */
 export function frameConfidentForMatch(frame, { minClarity = MIC_MATCH_MIN_CLARITY } = {}) {
-  return Boolean(frame?.gateOpen) && (frame?.clarity ?? 0) >= minClarity
+  if (!frame?.gateOpen) {
+    return false
+  }
+  if ((frame?.clarity ?? 0) >= minClarity) {
+    return true
+  }
+  // Weak-fundamental bass / amp-colored electric: score-informed V2 can lock the
+  // expected note while autocorrelation clarity stays below the confirm bar.
+  if (frame?.v2Active) {
+    const note = frame.v2Notes?.find((entry) => entry?.detected)
+    const magnitudes = note?.harmonicMagnitudes
+    const fundamental = magnitudes?.[0] ?? 0
+    const second = magnitudes?.[1] ?? 0
+    if (
+      note?.isBass &&
+      (note.confidence ?? 0) >= 0.35 &&
+      (note.ratio ?? 0) >= 1.35 &&
+      (note.harmonicSupport ?? 0) >= 1.2 &&
+      fundamental > 0 &&
+      second >= fundamental * 1.5
+    ) {
+      return true
+    }
+  }
+  return false
 }
 
 /** Extra slack over the match tolerance before contradicting the V2 detector. */

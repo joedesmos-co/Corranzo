@@ -119,6 +119,33 @@ export function buildTabLaneNotes(
   return notes
 }
 
+/** Vertical band behind a current guitar chord shape (multi-string stack). */
+export function buildTabChordShapeOverlays(notes = []) {
+  const byGroup = new Map()
+  for (const note of notes) {
+    if (note.status !== 'current') {
+      continue
+    }
+    const list = byGroup.get(note.groupId) ?? []
+    list.push(note)
+    byGroup.set(note.groupId, list)
+  }
+  const overlays = []
+  for (const [groupId, groupNotes] of byGroup.entries()) {
+    if (groupNotes.length < 2) {
+      continue
+    }
+    overlays.push({
+      id: `${groupId}-shape`,
+      x: groupNotes[0].x,
+      minY: Math.min(...groupNotes.map((note) => note.y)),
+      maxY: Math.max(...groupNotes.map((note) => note.y)),
+      width: FRET_DISC_RADIUS * 2.4,
+    })
+  }
+  return overlays
+}
+
 /**
  * Strings + frets for the target strip under the lane: which (string, fret)
  * positions the player should form right now.

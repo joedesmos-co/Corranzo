@@ -9,55 +9,92 @@ export function wfyInputSourceLabel(source, instrumentId = INSTRUMENT_IDS.PIANO)
     case WFY_INPUT_SOURCE.MIDI:
       return isGuitar ? 'MIDI device' : 'MIDI keyboard'
     case WFY_INPUT_SOURCE.MANUAL:
-      return 'Continue button'
+      return isGuitar ? 'Continue button' : 'Continue button'
     default:
       return 'Continue button'
   }
 }
 
 /**
- * Modal actions for first-time WFY input setup. Guitar omits "keyboard" wording
- * and lists Continue before optional MIDI.
+ * First-time WFY modal layout. Guitar shows only Microphone up front; manual
+ * continue is a text link and MIDI sits behind More options. Piano keeps the
+ * three-button chooser when MIDI is available.
  */
-export function buildWfyInputModalActions({
+export function buildWfyInputModalLayout({
   instrumentId = INSTRUMENT_IDS.PIANO,
   midiAvailable = false,
   microphoneAvailable = false,
 } = {}) {
   const isGuitar = instrumentId === INSTRUMENT_IDS.GUITAR
-  const actions = [
+
+  if (isGuitar) {
+    return {
+      layout: 'guitar',
+      primaryActions: [
+        {
+          id: WFY_INPUT_SOURCE.MICROPHONE,
+          label: 'Use Microphone',
+          disabled: !microphoneAvailable,
+        },
+      ],
+      fallbackLink: {
+        id: WFY_INPUT_SOURCE.MANUAL,
+        label: 'Practice without mic',
+      },
+      advancedActions: midiAvailable
+        ? [
+            {
+              id: WFY_INPUT_SOURCE.MIDI,
+              label: 'Use MIDI device',
+            },
+          ]
+        : [],
+    }
+  }
+
+  const primaryActions = [
     {
       id: WFY_INPUT_SOURCE.MICROPHONE,
       label: 'Use Microphone',
       primary: true,
-      quiet: false,
       disabled: !microphoneAvailable,
     },
     {
       id: WFY_INPUT_SOURCE.MANUAL,
-      label: isGuitar ? 'Use Continue button' : 'Continue button',
+      label: 'Continue button',
       primary: false,
-      quiet: isGuitar,
       disabled: false,
     },
   ]
 
   if (midiAvailable) {
-    actions.push({
+    primaryActions.push({
       id: WFY_INPUT_SOURCE.MIDI,
-      label: isGuitar ? 'Use MIDI device' : 'Use MIDI Keyboard',
+      label: 'Use MIDI Keyboard',
       primary: false,
-      quiet: false,
       disabled: false,
     })
   }
 
-  return actions
+  return {
+    layout: 'standard',
+    primaryActions,
+    fallbackLink: null,
+    advancedActions: [],
+  }
+}
+
+/** @deprecated Prefer buildWfyInputModalLayout — flat list for legacy callers. */
+export function buildWfyInputModalActions(options = {}) {
+  const layout = buildWfyInputModalLayout(options)
+  if (layout.layout === 'guitar') {
+    return layout.primaryActions.map((action) => ({ ...action, primary: true, quiet: false }))
+  }
+  return layout.primaryActions
 }
 
 /**
  * In-panel selector options. Guitar keeps Mic + Continue primary; MIDI is optional.
- * Manual is not duplicated below the MIDI row.
  */
 export function buildWfyInputSelectorOptions({
   instrumentId = INSTRUMENT_IDS.PIANO,

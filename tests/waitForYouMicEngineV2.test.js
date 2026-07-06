@@ -48,8 +48,9 @@ describe('Wait For You mic engine V2 wiring', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
     expect(mic).toContain('const isMicV2Polyphonic = false')
     expect(mic).toContain('evaluateMicScoreInformedInput')
-    expect(mic).toMatch(/isMicChordCollection =[\s\S]*!isMicV2Polyphonic/)
-    expect(mic).toContain('idleFeedbackForCheckpoint(currentCheckpoint, { chordAsSequence: true })')
+    expect(mic).toMatch(/isMicChordCollection =[\s\S]*!isGuitarChordShape/)
+    expect(mic).toContain('function micUsesChordSequence(checkpoint)')
+    expect(mic).toContain('chordAsSequence: micUsesChordSequence(currentCheckpoint)')
   })
 
   it('clears V2 runtime state when the detector disables', () => {

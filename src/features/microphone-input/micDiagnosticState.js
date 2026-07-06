@@ -11,6 +11,7 @@ export const MIC_DIAGNOSTIC = {
   WRONG_PITCH: 'wrong-pitch',
   CHORD_UNSUPPORTED: 'chord-unsupported',
   QUIET_PRACTICE_HELP: 'quiet-practice-help',
+  ELECTRIC_GUITAR_HELP: 'electric-guitar-help',
   LISTENING: 'listening',
   GOOD: 'good',
   CALIBRATING: 'calibrating',
@@ -25,6 +26,8 @@ export const MIC_DIAGNOSTIC_LABELS = {
   [MIC_DIAGNOSTIC.WRONG_PITCH]: 'Wrong note — check the expected pitch',
   [MIC_DIAGNOSTIC.CHORD_UNSUPPORTED]: 'Chord sequence — play one tone at a time',
   [MIC_DIAGNOSTIC.QUIET_PRACTICE_HELP]: 'Soft note detected — move closer for quiet practice',
+  [MIC_DIAGNOSTIC.ELECTRIC_GUITAR_HELP]:
+    'Electric guitar detected — try clean tone or move amp closer',
   [MIC_DIAGNOSTIC.LISTENING]: 'Listening…',
   [MIC_DIAGNOSTIC.GOOD]: 'Good signal — single notes should register well',
   [MIC_DIAGNOSTIC.CALIBRATING]: 'Stay quiet for a moment…',
@@ -42,6 +45,7 @@ export function resolveMicDiagnostic({
   wrongPitch = false,
   chordUnsupported = false,
   quietNoteRejected = false,
+  electricGuitarUnconfirmed = false,
 } = {}) {
   if (chordUnsupported) {
     return MIC_DIAGNOSTIC.CHORD_UNSUPPORTED
@@ -54,6 +58,9 @@ export function resolveMicDiagnostic({
   }
   if (wrongPitch) {
     return MIC_DIAGNOSTIC.WRONG_PITCH
+  }
+  if (electricGuitarUnconfirmed) {
+    return MIC_DIAGNOSTIC.ELECTRIC_GUITAR_HELP
   }
   if (quietNoteRejected) {
     return MIC_DIAGNOSTIC.QUIET_PRACTICE_HELP

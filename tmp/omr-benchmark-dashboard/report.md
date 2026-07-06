@@ -1,13 +1,13 @@
 # OMR benchmark dashboard
 
-Generated: 2026-07-05T23:50:58.579Z
-Fixtures: 5
-Overall: PASS
-Largest remaining error bucket: chord = 8346 (32%)
+Generated: 2026-07-06T00:22:57.769Z
+Fixtures: 6
+Overall: FAIL
+Largest remaining error bucket: chord = 8549 (32%)
 
 ## Status
 - pass: 3
-- fail: 0
+- fail: 1
 - rejected: 0
 - skipped: 2
 - error: 0
@@ -196,6 +196,88 @@ Largest remaining error bucket: chord = 8346 (32%)
   IR voice budget: 0 overflow measure(s), 0 overflow event(s), 0 underfill measure(s)
   IR duration split: 20 node(s) sounding≠written; 53 tie; 1 gap-to-next
   IR ↔ runtime parity: noteheads ok, rests ok
+
+### Wet Hands (Minecraft) — notation + TAB guitar (`fail`)
+- PDF: `/Users/ryland/Downloads/wet-hands-minecraft.pdf`
+- Truth: `/Users/ryland/Downloads/wet-hands-minecraft.mxl`
+  pitch 2% | duration 31% | onset 20% | chord 35% | F1 51%
+  measureΔ 19 | noteΔ -21 | wrongPitch 104 | wrongDuration 40 | wrongOnset 64 | chordMismatch 203
+  top error category: Measure allocation (measure-allocation)
+  top duration error category: beamed-subdivision (38 sampled)
+  top pitch error category: other (80 sampled)
+  - Primary: Measure allocation (measure-allocation, confidence 1)
+  - Source scores: measure-allocation=1, pitch-mapping=0.9064, rhythm-inference=0.6028, notehead-detection=0.5859, chord-grouping=0.5819
+  - Pitch errors (104): other=80, ±2-diatonic=10, ±1-accidental=9, ±octave=5
+  - Duration errors (40): beamed-subdivision=38, onset-coupled=2
+  - Detection: chord-grouping=203, missing-notes=114, extra-notes=93
+  - Error buckets: extra/missing-notes=207, chord=203, pitch=104, onset=64, duration=40, rests=20, slurs=15, accidentals=9, ties=1
+  - Largest remaining error bucket: extra/missing-notes = 207 (31%)
+  Rhythm/voice attribution (V2 Phase 1):
+  - chord-grouping-symptom: 187
+  - pitch-grouping-symptom: 86
+  - onset-phase-shift: 64
+  - onset-coupled-duration: 2
+  - chord symptom coupled share: 100%
+  Written vs sounding duration (V2 Phase 3):
+  - serialization-artifact: 25
+  - written-duration-wrong: 13
+  - onset-coupled-duration: 2
+  - Dominant: serialization-artifact (25)
+  - Hotspot duration traces:
+    - m2: 4 wrong durations (written-duration-wrong=1, serialization-artifact=3)
+    - m3: 1 wrong durations (serialization-artifact=1)
+    - m4: 2 wrong durations (serialization-artifact=2)
+    - m5: 1 wrong durations (serialization-artifact=1)
+    - m7: 1 wrong durations (written-duration-wrong=1)
+    - m9: 1 wrong durations (serialization-artifact=1)
+    - m11: 1 wrong durations (serialization-artifact=1)
+    - m12: 2 wrong durations (written-duration-wrong=2)
+    - m13: 1 wrong durations (serialization-artifact=1)
+    - m14: 2 wrong durations (serialization-artifact=2)
+    - m16: 1 wrong durations (written-duration-wrong=1)
+    - m17: 2 wrong durations (written-duration-wrong=1, serialization-artifact=1)
+    - m18: 5 wrong durations (written-duration-wrong=1, onset-coupled-duration=1, serialization-artifact=3)
+    - m19: 4 wrong durations (written-duration-wrong=2, serialization-artifact=2)
+    - m20: 3 wrong durations (written-duration-wrong=2, serialization-artifact=1)
+    - m22: 1 wrong durations (written-duration-wrong=1)
+    - m23: 2 wrong durations (onset-coupled-duration=1, serialization-artifact=1)
+    - m24: 1 wrong durations (serialization-artifact=1)
+    - m25: 1 wrong durations (serialization-artifact=1)
+    - m26: 1 wrong durations (written-duration-wrong=1)
+    - m27: 1 wrong durations (serialization-artifact=1)
+    - m28: 1 wrong durations (serialization-artifact=1)
+    - m29: 1 wrong durations (serialization-artifact=1)
+  Tie/sustain constraints (V2 Phase 4):
+  - tie-start-without-continuation: 2
+  - slur-like-arc-pitch-differs: 1
+  - Dominant: tie-start-without-continuation (2)
+  - Tie glyphs: detected 15, applied 14, slur-like rejected 1, unresolved 0
+
+### Rhythm shadow solver (V2 Phase 2 — diagnostic only)
+
+- Status: **shadow-no-qualifying-measures**
+- Promoted: **no**
+- Constraints: **phase-2c**
+- Note: No measures passed Phase 2C preservation + truth gates — shadow identical to runtime.
+- Solver: 2 accepted / 25 candidates / 25 rejected
+- Shadow XML identical to runtime (no qualifying measures)
+- Runtime vs shadow: wrongOnset 64 → 64 (Δ 0), wrongDuration 40 → 40 (Δ 0), chord 203 → 203 (Δ 0)
+- Rejected candidates: m1:duration-changed, m2:duration-changed, m3:duration-changed, m4:duration-changed, m5:duration-changed, m12:constraints-failed, m13:duration-changed, m15:duration-changed+chord-split…
+
+### Voice serialization shadow (V2 Phase 7 — diagnostic only)
+
+- Status: **shadow-improved**
+- Promoted: **no**
+- Constraints: **phase-7-duration-coupled**
+- Solver: 7 structurally applied (5 duration-coupled) / 2 truth-approved / 25 candidates
+- Runtime vs shadow: wrongOnset 64 → 57 (Δ -7), wrongDuration 40 → 37 (Δ -3), chord 203 → 203 (Δ 0)
+- Accepted measures: m5:accompaniment-adaptive-phase-coupled, m22:accompaniment-minus-3-coupled
+- Rejected measures: m2:constraints-failed, m3:no-improvement, m12:constraints-failed, m13:no-improvement, m15:constraints-failed, m18:constraints-failed, m20:no-improvement, m21:constraints-failed…
+  ScoreGraph IR (observation): 499 nodes, 798 edges across 51 measures; geometry bridge 100%
+  IR voice budget: 0 overflow measure(s), 0 overflow event(s), 2 underfill measure(s)
+  IR duration split: 10 node(s) sounding≠written; 95 tie; 16 gap-to-next
+  IR ↔ runtime parity: noteheads ok, rests ok
+- reasons: pitchAccuracy: 0.0224 (need ≥0.15); durationAccuracy: 0.3094 (need ≥0.35)
 
 ### La Campanella (Grandes études de Paganini No. 3) (`skipped`)
 - PDF: `/Users/ryland/Downloads/la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.pdf`
@@ -556,40 +638,46 @@ Largest remaining error bucket: chord = 8346 (32%)
   IR ↔ runtime parity: noteheads ok, rests ok
 
 ## Top error categories (across fixtures)
-- measure-allocation: 3
+- measure-allocation: 4
 - rhythm-inference: 2
 
 ## Aggregated duration error histogram
-- beamed-subdivision: 616
-- onset-coupled: 221
+- beamed-subdivision: 654
+- onset-coupled: 223
 - too-short: 29
 - too-long: 13
 
 ## Aggregated pitch error histogram
-- other: 2179
-- ±1-accidental: 450
-- ±2-diatonic: 367
-- ±octave: 338
+- other: 2259
+- ±1-accidental: 459
+- ±2-diatonic: 377
+- ±octave: 343
 - ±octave-other: 13
 
 ## Error buckets (across fixtures)
 Buckets: pitch, duration, onset, chord, ties, slurs, tuplets, accidentals, rests, extra/missing notes
-- chord: 8346
-- extra/missing-notes: 7186
-- pitch: 3347
-- slurs: 2662
-- onset: 2375
-- duration: 879
-- rests: 636
-- ties: 477
-- accidentals: 450
-- **Largest remaining error bucket: chord = 8346 (32% of counted errors)**
+- chord: 8549
+- extra/missing-notes: 7393
+- pitch: 3451
+- slurs: 2677
+- onset: 2439
+- duration: 919
+- rests: 656
+- ties: 478
+- accidentals: 459
+- **Largest remaining error bucket: chord = 8549 (32% of counted errors)**
 
 ## Tier breakdown
 - clean: 1 fixture(s) (pass=1)
 - dense: 1 fixture(s) (pass=1)
 - extreme: 2 fixture(s) (skipped=2)
+- guitar: 1 fixture(s) (fail=1)
+  failing: wet-hands-guitar
 - simple: 1 fixture(s) (pass=1)
+
+## Failure clusters
+- fail | source=measure-allocation | duration=beamed-subdivision | pitch=other: wet-hands-guitar
+  reasons: pitchAccuracy: 0.0224 (need ≥0.15); durationAccuracy: 0.3094 (need ≥0.35)
 
 ## V2 rollout gate
 V2 rollout gate (Phase 5):

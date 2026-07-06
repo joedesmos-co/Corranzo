@@ -40,6 +40,7 @@ import {
 } from './phantomColumnSimulation.js'
 import { applyTerminalSameClefChordQuarterDurations } from './processVectorOmrPage.js'
 import {
+  NOTATION_TAB_PAIRING_LOW_CONFIDENCE_MESSAGE,
   TAB_APPROXIMATE_RHYTHM_WARNING,
   TAB_NO_USABLE_NOTES_MESSAGE,
 } from './detectTabNotation.js'
@@ -169,6 +170,11 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       tabCompressedTimingMeasures: 0,
       tabEmptyMeasures: 0,
       attachedPositions: 0,
+      pairedNotes: 0,
+      unpairedNotationNotes: 0,
+      unusedTabDigits: 0,
+      lowConfidenceMeasures: 0,
+      pairingConfidence: 1,
       tabOnly: false,
       rhythmApproximate: false,
       unsupportedMarkers: [],
@@ -336,6 +342,16 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
         pageTab.tabCompressedTimingMeasures ?? 0
       diagnostics.tablature.tabEmptyMeasures += pageTab.tabEmptyMeasures ?? 0
       diagnostics.tablature.attachedPositions += pageTab.attachedPositions ?? 0
+      diagnostics.tablature.pairedNotes += pageTab.pairedNotes ?? 0
+      diagnostics.tablature.unpairedNotationNotes += pageTab.unpairedNotationNotes ?? 0
+      diagnostics.tablature.unusedTabDigits += pageTab.unusedTabDigits ?? 0
+      diagnostics.tablature.lowConfidenceMeasures += pageTab.lowConfidenceMeasures ?? 0
+      if (Number.isFinite(pageTab.pairingConfidence)) {
+        diagnostics.tablature.pairingConfidence = Math.min(
+          diagnostics.tablature.pairingConfidence ?? 1,
+          pageTab.pairingConfidence,
+        )
+      }
       diagnostics.tablature.tabOnly ||= Boolean(pageTab.tabOnly)
       diagnostics.tablature.rhythmApproximate ||= Boolean(pageTab.rhythmApproximate)
       if (!diagnostics.tablature.capoText && pageTab.capoText) {
@@ -672,6 +688,13 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   if (diagnostics.tablature.rhythmApproximate) {
     pushUnique(warnings, [TAB_APPROXIMATE_RHYTHM_WARNING])
     pushUnique(warnings, diagnostics.tablature.warnings)
+  } else if (diagnostics.tablature.warnings?.length) {
+    pushUnique(warnings, diagnostics.tablature.warnings)
+  } else if (
+    diagnostics.tablature.attachedPositions > 0 &&
+    (diagnostics.tablature.pairingConfidence ?? 1) < 0.55
+  ) {
+    pushUnique(warnings, [NOTATION_TAB_PAIRING_LOW_CONFIDENCE_MESSAGE])
   }
   if (layoutConsistency.warning) {
     warnings.push(layoutConsistency.warning)

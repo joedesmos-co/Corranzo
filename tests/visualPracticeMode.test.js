@@ -435,7 +435,10 @@ describe('practice view integration', () => {
   it('VisualPracticeView consumes the shared note schedule and session state', () => {
     const src = readSrc('components', 'practice', 'VisualPracticeView.jsx')
 
-    expect(src).toContain('buildVisualLaneGroups(timingMap, loopRegion, { practiceScope: visual.practiceScope })')
+    expect(src).toContain('buildVisualLaneGroups(timingMap, loopRegion, {')
+    expect(src).toContain('practiceScope: visual.practiceScope')
+    expect(src).toContain('instrumentId: instrument.id')
+    expect(src).toContain('tabPositions')
     expect(src).toContain('usePracticeVisualSession')
     expect(src).toContain('visual.timingMap')
     expect(src).toContain('visual.loopRegion')

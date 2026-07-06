@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-05T23:50:58.579Z",
+  "generatedAt": "2026-07-06T00:22:57.769Z",
   "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
   "phase": 3,
   "fixtures": [
@@ -2121,6 +2121,657 @@
               "pitchDeltaSemitones": 0,
               "truthLabel": "G4",
               "generatedLabel": "G4"
+            }
+          ]
+        }
+      ],
+      "tieChains": null
+    },
+    {
+      "fixtureId": "wet-hands-guitar",
+      "label": "Wet Hands (Minecraft) — notation + TAB guitar",
+      "phase": 3,
+      "totalWrongDurations": 40,
+      "legacyDurationHistogram": {
+        "too-short": 0,
+        "too-long": 0,
+        "beamed-subdivision": 38,
+        "bass-sustain": 0,
+        "melody-accompaniment": 0,
+        "rest-gap": 0,
+        "tie-sustain": 0,
+        "onset-coupled": 2,
+        "other": 0
+      },
+      "writtenSoundingHistogram": {
+        "written-duration-wrong": 13,
+        "sounding-release-wrong": 0,
+        "onset-coupled-duration": 2,
+        "tie-sustain-related": 0,
+        "serialization-artifact": 25
+      },
+      "dominantClass": {
+        "bucket": "serialization-artifact",
+        "count": 25
+      },
+      "hotspotMeasures": [],
+      "hotspotTraces": [
+        {
+          "measureNumber": 2,
+          "wrongDurationCount": 4,
+          "histogram": {
+            "written-duration-wrong": 1,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 3
+          },
+          "samples": [
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": -17,
+              "truthLabel": "A2",
+              "generatedLabel": "E1"
+            },
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 1.5,
+              "pitchDeltaSemitones": -9,
+              "truthLabel": "E3",
+              "generatedLabel": "G2"
+            },
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 3,
+              "truthLabel": "B3",
+              "generatedLabel": "D4"
+            },
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": -9,
+              "truthLabel": "E3",
+              "generatedLabel": "G2"
+            }
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.25,
+              "durationDiffQuarters": 0.75,
+              "pitchDeltaSemitones": -18,
+              "truthLabel": "C#4",
+              "generatedLabel": "G2"
+            }
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "wrongDurationCount": 2,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 2
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.75,
+              "durationDiffQuarters": 0.75,
+              "pitchDeltaSemitones": -13,
+              "truthLabel": "A3",
+              "generatedLabel": "G#2"
+            },
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": -8,
+              "truthLabel": "E3",
+              "generatedLabel": "G#2"
+            }
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.75,
+              "durationDiffQuarters": 0.75,
+              "pitchDeltaSemitones": -14,
+              "truthLabel": "C#4",
+              "generatedLabel": "B2"
+            }
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 1,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 0
+          },
+          "samples": [
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 3.5,
+              "pitchDeltaSemitones": 17,
+              "truthLabel": "F#4",
+              "generatedLabel": "B5"
+            }
+          ]
+        },
+        {
+          "measureNumber": 9,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 3.5,
+              "pitchDeltaSemitones": 17,
+              "truthLabel": "F#4",
+              "generatedLabel": "B5"
+            }
+          ]
+        },
+        {
+          "measureNumber": 11,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 3.5,
+              "pitchDeltaSemitones": 36,
+              "truthLabel": "B2",
+              "generatedLabel": "B5"
+            }
+          ]
+        },
+        {
+          "measureNumber": 12,
+          "wrongDurationCount": 2,
+          "histogram": {
+            "written-duration-wrong": 2,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 0
+          },
+          "samples": [
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": -1,
+              "truthLabel": "G4",
+              "generatedLabel": "F#4"
+            },
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 1.25,
+              "pitchDeltaSemitones": 3,
+              "truthLabel": "D3",
+              "generatedLabel": "F3"
+            }
+          ]
+        },
+        {
+          "measureNumber": 13,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.25,
+              "durationDiffQuarters": 0.75,
+              "pitchDeltaSemitones": 2,
+              "truthLabel": "A3",
+              "generatedLabel": "B3"
+            }
+          ]
+        },
+        {
+          "measureNumber": 14,
+          "wrongDurationCount": 2,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 2
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 35,
+              "truthLabel": "A3",
+              "generatedLabel": "G#6"
+            },
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 1.25,
+              "pitchDeltaSemitones": 17,
+              "truthLabel": "C#4",
+              "generatedLabel": "F#5"
+            }
+          ]
+        },
+        {
+          "measureNumber": 16,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 1,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 0
+          },
+          "samples": [
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 3.5,
+              "pitchDeltaSemitones": -5,
+              "truthLabel": "A2",
+              "generatedLabel": "E2"
+            }
+          ]
+        },
+        {
+          "measureNumber": 17,
+          "wrongDurationCount": 2,
+          "histogram": {
+            "written-duration-wrong": 1,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 3,
+              "truthLabel": "A2",
+              "generatedLabel": "C3"
+            },
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": -4,
+              "truthLabel": "E3",
+              "generatedLabel": "C3"
+            }
+          ]
+        },
+        {
+          "measureNumber": 18,
+          "wrongDurationCount": 5,
+          "histogram": {
+            "written-duration-wrong": 1,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 1,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 3
+          },
+          "samples": [
+            {
+              "bucket": "onset-coupled-duration",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 1,
+              "pitchDeltaSemitones": 1,
+              "truthLabel": "G#4",
+              "generatedLabel": "A4"
+            },
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.75,
+              "durationDiffQuarters": 1,
+              "pitchDeltaSemitones": -12,
+              "truthLabel": "E3",
+              "generatedLabel": "E2"
+            },
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 1,
+              "pitchDeltaSemitones": 24,
+              "truthLabel": "A3",
+              "generatedLabel": "A5"
+            },
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.75,
+              "pitchDeltaSemitones": 17,
+              "truthLabel": "C#4",
+              "generatedLabel": "F#5"
+            },
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.75,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": -2,
+              "truthLabel": "E3",
+              "generatedLabel": "D3"
+            }
+          ]
+        },
+        {
+          "measureNumber": 19,
+          "wrongDurationCount": 4,
+          "histogram": {
+            "written-duration-wrong": 2,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 2
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": -2,
+              "truthLabel": "A3",
+              "generatedLabel": "G3"
+            },
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": -2,
+              "truthLabel": "C#4",
+              "generatedLabel": "B3"
+            },
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": -30,
+              "truthLabel": "C#4",
+              "generatedLabel": "G1"
+            },
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": -17,
+              "truthLabel": "A3",
+              "generatedLabel": "E2"
+            }
+          ]
+        },
+        {
+          "measureNumber": 20,
+          "wrongDurationCount": 3,
+          "histogram": {
+            "written-duration-wrong": 2,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 3,
+              "truthLabel": "A2",
+              "generatedLabel": "C3"
+            },
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": -4,
+              "truthLabel": "E3",
+              "generatedLabel": "C3"
+            },
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 1.5,
+              "pitchDeltaSemitones": 8,
+              "truthLabel": "C#4",
+              "generatedLabel": "A4"
+            }
+          ]
+        },
+        {
+          "measureNumber": 22,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 1,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 0
+          },
+          "samples": [
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 9,
+              "truthLabel": "A3",
+              "generatedLabel": "F#4"
+            }
+          ]
+        },
+        {
+          "measureNumber": 23,
+          "wrongDurationCount": 2,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 1,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 0.75,
+              "pitchDeltaSemitones": -3,
+              "truthLabel": "D3",
+              "generatedLabel": "B2"
+            },
+            {
+              "bucket": "onset-coupled-duration",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 1.5,
+              "pitchDeltaSemitones": 0,
+              "truthLabel": "F#3",
+              "generatedLabel": "F#3"
+            }
+          ]
+        },
+        {
+          "measureNumber": 24,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 1.25,
+              "pitchDeltaSemitones": -3,
+              "truthLabel": "D3",
+              "generatedLabel": "B2"
+            }
+          ]
+        },
+        {
+          "measureNumber": 25,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.75,
+              "durationDiffQuarters": 0.75,
+              "pitchDeltaSemitones": -7,
+              "truthLabel": "F#3",
+              "generatedLabel": "B2"
+            }
+          ]
+        },
+        {
+          "measureNumber": 26,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 1,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 0
+          },
+          "samples": [
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 15,
+              "truthLabel": "A3",
+              "generatedLabel": "C5"
+            }
+          ]
+        },
+        {
+          "measureNumber": 27,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 3.5,
+              "pitchDeltaSemitones": 31,
+              "truthLabel": "E3",
+              "generatedLabel": "B5"
+            }
+          ]
+        },
+        {
+          "measureNumber": 28,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 3.5,
+              "pitchDeltaSemitones": 31,
+              "truthLabel": "E3",
+              "generatedLabel": "B5"
+            }
+          ]
+        },
+        {
+          "measureNumber": 29,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 1
+          },
+          "samples": [
+            {
+              "bucket": "serialization-artifact",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 3.5,
+              "pitchDeltaSemitones": 31,
+              "truthLabel": "E3",
+              "generatedLabel": "B5"
             }
           ]
         }

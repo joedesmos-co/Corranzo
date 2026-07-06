@@ -48,10 +48,6 @@ function VisualPracticeView({ timingSourceKind = null }) {
   const timingLoading = visual.timingLoading
   const loopRegion = visual.loopRegion
 
-  const groups = useMemo(
-    () => buildVisualLaneGroups(timingMap, loopRegion, { practiceScope: visual.practiceScope }),
-    [timingMap, loopRegion, visual.practiceScope],
-  )
   const laneKind = instrument.visualPractice.kind
   const isFretboardLane = laneKind === 'fretboard'
   const laneStrings = useMemo(
@@ -61,6 +57,16 @@ function VisualPracticeView({ timingSourceKind = null }) {
   const tabPositions = useMemo(
     () => (isFretboardLane && timingMap ? getTabPositionsForTimingMap(timingMap, instrument) : null),
     [isFretboardLane, timingMap, instrument],
+  )
+
+  const groups = useMemo(
+    () =>
+      buildVisualLaneGroups(timingMap, loopRegion, {
+        practiceScope: visual.practiceScope,
+        instrumentId: instrument.id,
+        tabPositions,
+      }),
+    [timingMap, loopRegion, visual.practiceScope, instrument.id, tabPositions],
   )
   const staves = useMemo(() => detectStaves(groups), [groups])
   // Keyboard shows a focused octave window (not the piece's full extremes).
@@ -179,7 +185,8 @@ function VisualPracticeView({ timingSourceKind = null }) {
         micChordSequence={
           isWaitForYou &&
           visual.wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
-          Boolean(targetGroup?.isChord)
+          Boolean(targetGroup?.isChord) &&
+          !Boolean(targetGroup?.isGuitarChordShape)
         }
         strings={laneStrings}
         tabPositions={tabPositions}
@@ -296,6 +303,9 @@ function useSmoothWfyFrameTime({ rawFrameTime, waiting, checkpointId }) {
  * instruments append the position ("E3 · fret 2 · D string").
  */
 function describeTargetNotes(targetGroup, strings, tabPositions) {
+  if (targetGroup?.isGuitarChordShape) {
+    return targetGroup.displayLabel ?? 'Play this shape'
+  }
   const notes = targetGroup?.notes ?? []
   if (!strings) {
     return notes.map((note) => note.label).join(' + ')
@@ -359,7 +369,13 @@ const VisualTargetHeader = memo(function VisualTargetHeader({
       </span>
       <strong className="visual-practice__target-notes">
         {describeTargetNotes(targetGroup, strings, tabPositions)}
-        {targetGroup.isChord ? (micChordSequence ? ' (one at a time)' : ' (together)') : ''}
+        {targetGroup.isGuitarChordShape
+          ? ''
+          : targetGroup.isChord
+            ? micChordSequence
+              ? ' (one at a time)'
+              : ' (together)'
+            : ''}
       </strong>
       <span className="visual-practice__target-meta">
         {position} · {Math.min(targetIndex + 1, totalGroups)} of {totalGroups}

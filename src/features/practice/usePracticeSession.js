@@ -45,6 +45,7 @@ import {
   getTabPositionsForTimingMap,
   resolveStringsForTimingMap,
 } from '../instruments/timingMapTabPositions.js'
+import { enrichGuitarChordCheckpoint } from './guitarChordShapeCheckpoint.js'
 
 /**
  * Wires playback, timing, navigation, loop, and Wait For You hooks for the Practice view.
@@ -260,6 +261,29 @@ export default function usePracticeSession({
     onRecordWfyEventRef.current?.('missed')
   }, [])
 
+  const guidanceInstrument = selectedInstrument
+  const guidanceStrings = useMemo(
+    () => resolveStringsForTimingMap(timing.timingMap, guidanceInstrument),
+    [timing.timingMap, guidanceInstrument],
+  )
+  const guidanceTabPositions = useMemo(
+    () =>
+      guidanceStrings && timing.timingMap
+        ? getTabPositionsForTimingMap(timing.timingMap, guidanceInstrument)
+        : null,
+    [guidanceStrings, timing.timingMap, guidanceInstrument],
+  )
+  const enrichedWfyCheckpoint = useMemo(
+    () =>
+      waitForYou.currentCheckpoint
+        ? enrichGuitarChordCheckpoint(waitForYou.currentCheckpoint, {
+            instrumentId,
+            tabPositions: guidanceTabPositions,
+          })
+        : null,
+    [waitForYou.currentCheckpoint, instrumentId, guidanceTabPositions],
+  )
+
   const micCaptureActive =
     practiceActive &&
     isWaitForYou &&
@@ -284,7 +308,7 @@ export default function usePracticeSession({
       wfyInputSource === WFY_INPUT_SOURCE.MIDI &&
       !waitForYou.displayPhase,
     checkpointMode,
-    currentCheckpoint: waitForYou.currentCheckpoint,
+    currentCheckpoint: enrichedWfyCheckpoint ?? waitForYou.currentCheckpoint,
     matchSettings: matchSettingsState.settings,
     onPlayerInputMatched: handleWfyPlayerInputMatched,
     onWrongNote: handleWfyWrongNote,
@@ -299,7 +323,7 @@ export default function usePracticeSession({
       wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
       !waitForYou.displayPhase,
     checkpointMode,
-    currentCheckpoint: waitForYou.currentCheckpoint,
+    currentCheckpoint: enrichedWfyCheckpoint ?? waitForYou.currentCheckpoint,
     matchSettings: matchSettingsState.settings,
     onPlayerInputMatched: handleWfyPlayerInputMatched,
     onWrongNote: handleWfyWrongNote,
@@ -387,10 +411,11 @@ export default function usePracticeSession({
 
   const idleWfyInputFeedback = useMemo(
     () =>
-      idleFeedbackForCheckpoint(waitForYou.currentCheckpoint, {
+      idleFeedbackForCheckpoint(enrichedWfyCheckpoint ?? waitForYou.currentCheckpoint, {
         chordAsSequence:
           wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
-          Boolean(waitForYou.currentCheckpoint?.isChord),
+          Boolean(waitForYou.currentCheckpoint?.isChord) &&
+          !Boolean(enrichedWfyCheckpoint?.isGuitarChordShape),
       }),
     [
       wfyInputSource,
@@ -398,6 +423,8 @@ export default function usePracticeSession({
       waitForYou.currentCheckpoint?.expectedMidi,
       waitForYou.currentCheckpoint?.expectedMidis,
       waitForYou.currentCheckpoint?.isChord,
+      enrichedWfyCheckpoint?.isGuitarChordShape,
+      enrichedWfyCheckpoint?.displayLabel,
     ],
   )
 
@@ -455,22 +482,9 @@ export default function usePracticeSession({
   // Instrument interpretation for guidance copy: fretted instruments get
   // position phrases ("fret 2 · D string"); keyboard instruments keep the
   // long-standing hand hints. The checkpoint engine itself stays generic.
-  const guidanceInstrument = selectedInstrument
-  const guidanceStrings = useMemo(
-    () => resolveStringsForTimingMap(timing.timingMap, guidanceInstrument),
-    [timing.timingMap, guidanceInstrument],
-  )
-  const guidanceTabPositions = useMemo(
-    () =>
-      guidanceStrings && timing.timingMap
-        ? getTabPositionsForTimingMap(timing.timingMap, guidanceInstrument)
-        : null,
-    [guidanceStrings, timing.timingMap, guidanceInstrument],
-  )
-
   const waitForYouGuidance = useWaitForYouGuidance({
     active: isWaitForYou,
-    currentCheckpoint: waitForYou.currentCheckpoint,
+    currentCheckpoint: enrichedWfyCheckpoint ?? waitForYou.currentCheckpoint,
     inputFeedback: waitForYouInput.inputFeedback,
     matchingActive: Boolean(waitForYouInput.matchingEnabled),
     complete: waitForYou.isComplete,
@@ -479,7 +493,9 @@ export default function usePracticeSession({
     tabPositions: guidanceTabPositions,
     chordAsSequence:
       waitForYouInput.source === WFY_INPUT_SOURCE.MICROPHONE &&
-      Boolean(waitForYou.currentCheckpoint?.isChord),
+      Boolean(waitForYou.currentCheckpoint?.isChord) &&
+      !Boolean(enrichedWfyCheckpoint?.isGuitarChordShape),
+    guitarChordShapeMode: Boolean(enrichedWfyCheckpoint?.isGuitarChordShape),
   })
 
   const waitForYouRef = useRef(waitForYou)
@@ -655,6 +671,7 @@ export default function usePracticeSession({
     })
     return {
       ...waitForYou,
+      enrichedCheckpoint: enrichedWfyCheckpoint,
       displayStatus,
       displayLabel: labelForWfyDisplayStatus(displayStatus),
       markCorrectAndContinue: markCorrectFromUser,
@@ -667,6 +684,7 @@ export default function usePracticeSession({
     waitForYou,
     waitForYouInput.inputFeedback,
     waitForYouGuidance,
+    enrichedWfyCheckpoint,
     onRecordWfyEvent,
   ])
 

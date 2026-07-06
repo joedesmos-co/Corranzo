@@ -1,6 +1,7 @@
 import { buildNoteCheckpoints } from './waitForYouCheckpoints.js'
 import { getTimeline } from '../musicxml/timeline.js'
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
+import { enrichGuitarChordCheckpoint } from './guitarChordShapeCheckpoint.js'
 import { buildVisualNoteMarkings } from './visualNotationMarkings.js'
 
 /**
@@ -49,7 +50,12 @@ export const WFY_VISUAL_MOVE_MS = 420
 export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}) {
   const checkpoints = buildNoteCheckpoints(timingMap, loopRegion, {
     practiceScope: options.practiceScope,
-  })
+  }).map((checkpoint) =>
+    enrichGuitarChordCheckpoint(checkpoint, {
+      instrumentId: options.instrumentId ?? null,
+      tabPositions: options.tabPositions ?? null,
+    }),
+  )
 
   return checkpoints.map((checkpoint) => {
     const notes = [...(checkpoint.notes ?? [])]
@@ -94,6 +100,9 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}
       measureNumber: checkpoint.measureNumber,
       beat: checkpoint.beat,
       isChord: checkpoint.isChord,
+      isGuitarChordShape: Boolean(checkpoint.isGuitarChordShape),
+      displayLabel: checkpoint.displayLabel ?? null,
+      guitarChordShape: checkpoint.guitarChordShape ?? null,
       label: checkpoint.label,
       midis: checkpoint.expectedMidis ?? [],
       notes,

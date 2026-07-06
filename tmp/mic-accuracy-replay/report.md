@@ -1,22 +1,22 @@
 # Microphone accuracy replay report
 
-Clips: 23 measured · 0 skipped (missing files)
+Clips: 28 measured · 0 skipped (missing files)
 
 ## Detection rates
-- Hit rate: 100.0% (19/19 note clips)
-- False negative rate: 0.0% (0/19)
+- Hit rate: 100.0% (24/24 note clips)
+- False negative rate: 0.0% (0/24)
 - False positive rate: 0.0% (0/4 silence/noise clips)
 
 ## Quality (matched note clips)
-- Mean clarity: 0.982
-- Mean |cents error|: 7.5
-- Mean stabilizer latency: -18 ms
-- Mean pitch frames / clip: 39.3
+- Mean clarity: 0.986
+- Mean |cents error|: 6.5
+- Mean stabilizer latency: -21 ms
+- Mean pitch frames / clip: 41.1
 - Mean unstable pitch frames / clip: 0.0
 
 ## Fixture mix
 - Real-file note clips: 3 (hit rate 100.0%)
-- Synthetic note clips: 16 (hit rate 100.0%)
+- Synthetic note clips: 21 (hit rate 100.0%)
 
 ## Tuning guidance
 - Real WAV fixtures present — compare before/after when tuning constants.
@@ -27,19 +27,19 @@ Clips: 23 measured · 0 skipped (missing files)
 ## Breakdowns
 ### By register
 - **bass** (5 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.996, mean |cents| 3.0, mean latency -28 ms
-- **mid** (14 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.977, mean |cents| 9.2, mean latency -14 ms
+- **mid** (19 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.983, mean |cents| 7.5, mean latency -19 ms
 ### By instrument
-- **guitar** (9 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.980, mean |cents| 6.5, mean latency -11 ms
+- **guitar** (14 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.986, mean |cents| 5.1, mean latency -19 ms
 - **piano** (14 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.985, mean |cents| 8.5, mean latency -23 ms
 ### By noise condition
-- **clean** (14 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.990, mean |cents| 9.9, mean latency -14 ms
-- **distorted** (1 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.996, mean |cents| 0.5, mean latency -17 ms
-- **loud** (1 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.998, mean |cents| 2.7, mean latency -37 ms
+- **clean** (17 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.992, mean |cents| 8.4, mean latency -18 ms
+- **distorted** (2 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.996, mean |cents| 1.6, mean latency -25 ms
+- **loud** (2 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.998, mean |cents| 2.7, mean latency -35 ms
 - **noisy** (2 clips): hit —, false negative —, false positive 0.0%, mean clarity —, mean |cents| —, mean latency — ms
 - **quiet** (5 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.959, mean |cents| 4.3, mean latency -21 ms
 ### By source
 - **file** (5 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.966, mean |cents| 27.0, mean latency 42 ms
-- **synthetic** (18 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.985, mean |cents| 3.9, mean latency -29 ms
+- **synthetic** (23 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.988, mean |cents| 3.6, mean latency -30 ms
 
 ## Per clip
 - **synth-a4-clean** (note) → hit · detected 69 · 34 pitch frames · max clarity 1.000 · clarity 1.000 · latency -37 ms · first pitch 0 ms
@@ -56,6 +56,11 @@ Clips: 23 measured · 0 skipped (missing files)
 - **synth-guitar-quiet-e3** (note) → hit · detected 52 · 32 pitch frames · max clarity 1.000 · clarity 0.991 · latency -33 ms · first pitch 0 ms
 - **synth-guitar-soft-e3** (note) → hit · detected 52 · 8 pitch frames · max clarity 0.966 · clarity 0.947 · latency -17 ms · first pitch 0 ms
 - **synth-electric-soft-e3** (note) → hit · detected 52 · 46 pitch frames · max clarity 0.958 · clarity 0.958 · latency -17 ms · first pitch 0 ms
+- **synth-electric-amp-h2-a3** (note) → hit · detected 57 · 52 pitch frames · max clarity 1.000 · clarity 0.997 · latency -33 ms · first pitch 0 ms
+- **synth-electric-amp-h3-e3** (note) → hit · detected 52 · 52 pitch frames · max clarity 1.000 · clarity 0.996 · latency -33 ms · first pitch 0 ms
+- **synth-electric-clean-sustain-a3** (note) → hit · detected 57 · 52 pitch frames · max clarity 1.000 · clarity 1.000 · latency -33 ms · first pitch 0 ms
+- **synth-electric-loud-distorted-e3** (note) → hit · detected 52 · 46 pitch frames · max clarity 1.000 · clarity 0.998 · latency -33 ms · first pitch 0 ms
+- **synth-electric-wrong-g3** (note) → hit · detected 55 · 46 pitch frames · max clarity 1.000 · clarity 1.000 · latency -33 ms · first pitch 0 ms
 - **synth-piano-low-c2** (note) → hit · detected 36 · 58 pitch frames · max clarity 1.000 · clarity 0.994 · latency -37 ms · first pitch 0 ms
 - **synth-piano-low-a1** (note) → hit · detected 33 · 58 pitch frames · max clarity 1.000 · clarity 1.000 · latency -37 ms · first pitch 0 ms
 - **synth-silence** (silence) → correct-reject

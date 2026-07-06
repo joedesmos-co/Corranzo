@@ -675,69 +675,12 @@ export function detectTabTextAnnotations(pageText = []) {
 }
 
 /**
- * Attach TAB positions to measure events produced by the notation-staff path
- * (mixed notation+TAB systems). Events pair with tab onsets by x proximity;
- * within a pair, notes map high-to-high (string 1 = highest pitch).
- * Mutates nothing — returns a new events array; unmatched events pass through.
+ * Attach TAB positions to notation events (mixed notation+TAB systems).
+ * Delegates to the multi-heuristic pairing engine in pairNotationTabEvents.js.
  */
-export function attachTabPositionsToEvents(events, tabNotes, { xTolerance = 18 } = {}) {
-  if (!events?.length || !tabNotes?.length) {
-    return { events: events ?? [], attachedCount: 0 }
-  }
-
-  // Group tab notes into onsets by x.
-  const onsets = []
-  const sorted = [...tabNotes].sort((left, right) => left.x - right.x)
-  for (const note of sorted) {
-    const last = onsets[onsets.length - 1]
-    if (last && Math.abs(note.x - last.x) <= xTolerance * 0.6) {
-      last.notes.push(note)
-      continue
-    }
-    onsets.push({ x: note.x, notes: [note], used: false })
-  }
-
-  let attachedCount = 0
-  const nextEvents = events.map((event) => {
-    if (event.type !== 'note' || !event.notes?.length) {
-      return event
-    }
-    const eventX = event.cx ?? event.notes[0]?.cx ?? null
-    if (eventX == null) {
-      return event
-    }
-    let best = null
-    for (const onset of onsets) {
-      if (onset.used) {
-        continue
-      }
-      const distance = Math.abs(onset.x - eventX)
-      if (distance <= xTolerance && (!best || distance < Math.abs(best.x - eventX))) {
-        best = onset
-      }
-    }
-    if (!best) {
-      return event
-    }
-    best.used = true
-
-    // Highest pitch ↔ string 1 (lowest string number).
-    const byPitchDesc = [...event.notes].sort((left, right) => (right.midi ?? 0) - (left.midi ?? 0))
-    const byStringAsc = [...best.notes].sort((left, right) => left.string - right.string)
-    const positionByNote = new Map()
-    for (let index = 0; index < byPitchDesc.length && index < byStringAsc.length; index += 1) {
-      positionByNote.set(byPitchDesc[index], byStringAsc[index])
-      attachedCount += 1
-    }
-
-    return {
-      ...event,
-      notes: event.notes.map((note) => {
-        const position = positionByNote.get(note)
-        return position ? { ...note, string: position.string, fret: position.fret } : note
-      }),
-    }
-  })
-
-  return { events: nextEvents, attachedCount }
-}
+export {
+  attachTabPositionsToEvents,
+  NOTATION_TAB_PAIRING_LOW_CONFIDENCE_MESSAGE,
+  pairNotationTabEvents,
+  pairNotationTabInMeasure,
+} from './pairNotationTabEvents.js'

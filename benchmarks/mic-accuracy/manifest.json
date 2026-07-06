@@ -166,6 +166,61 @@
       "notes": "Soft electric-style harmonic-rich note above the room floor: should advance via score-informed soft gate."
     },
     {
+      "id": "synth-electric-amp-h2-a3",
+      "label": "note",
+      "expectedMidi": 57,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic amp electric",
+      "noiseCondition": "clean",
+      "synthetic": { "type": "electric-amp", "midi": 57, "seconds": 0.9, "profile": "h2-strong", "amplitude": 0.34 },
+      "notes": "Clean electric through amp/speaker with h2-strong coloration — weak fundamental mic path."
+    },
+    {
+      "id": "synth-electric-amp-h3-e3",
+      "label": "note",
+      "expectedMidi": 52,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic amp electric",
+      "noiseCondition": "distorted",
+      "synthetic": { "type": "electric-amp", "midi": 52, "seconds": 0.9, "profile": "h3-strong", "amplitude": 0.34 },
+      "notes": "Amp-colored electric with h3-strong partial — must not be rejected as speech formants."
+    },
+    {
+      "id": "synth-electric-clean-sustain-a3",
+      "label": "note",
+      "expectedMidi": 57,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic clean electric",
+      "noiseCondition": "clean",
+      "synthetic": { "type": "electric-clean", "midi": 57, "seconds": 0.9, "amplitude": 0.3 },
+      "notes": "Sustained clean electric single note."
+    },
+    {
+      "id": "synth-electric-loud-distorted-e3",
+      "label": "note",
+      "expectedMidi": 52,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic distorted electric",
+      "noiseCondition": "loud",
+      "synthetic": { "type": "distorted", "midi": 52, "seconds": 0.8, "amplitude": 0.55, "drive": 5 },
+      "notes": "Loud distorted electric — harmonic-rich periodic tone, not noise."
+    },
+    {
+      "id": "synth-electric-wrong-g3",
+      "label": "note",
+      "expectedMidi": 55,
+      "expectedOnsetMs": 100,
+      "instrument": "guitar",
+      "micDevice": "synthetic distorted electric",
+      "noiseCondition": "clean",
+      "synthetic": { "type": "distorted", "midi": 55, "seconds": 0.8, "amplitude": 0.44, "drive": 4.5 },
+      "notes": "Wrong-note control for electric — detected G3 must not satisfy A3 target."
+    },
+    {
       "id": "synth-piano-low-c2",
       "label": "note",
       "expectedMidi": 36,

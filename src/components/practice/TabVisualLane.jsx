@@ -12,6 +12,7 @@ import {
   buildTabGeometry,
   buildTabLaneNotes,
   buildTabLaneTechniqueMarkings,
+  buildTabChordShapeOverlays,
 } from '../../features/practice/tabLaneLayout.js'
 
 const PX_PER_SECOND = VISUAL_LANE_DEFAULTS.pixelsPerSecond
@@ -57,7 +58,7 @@ function TabVisualLane({
   const playheadX = resolveVisualPlayheadX({ frameTime: 0, viewWidth, durationSeconds, loopRegion })
   const offsetY = (size.height > 0 ? size.height / scale - geometry.height : 0) / 2
 
-  const { notes, techniqueMarkings } = useMemo(() => {
+  const { notes, techniqueMarkings, chordShapeOverlays } = useMemo(() => {
     const builtNotes = buildTabLaneNotes(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
       positions: tabPositions,
@@ -69,6 +70,7 @@ function TabVisualLane({
         positions: tabPositions,
         notes: builtNotes,
       }),
+      chordShapeOverlays: buildTabChordShapeOverlays(builtNotes),
     }
   }, [visibleGroups, geometry, tabPositions])
 
@@ -135,6 +137,16 @@ function TabVisualLane({
                 y1={topY}
                 y2={bottomY}
                 vectorEffect="non-scaling-stroke"
+              />
+            ))}
+            {chordShapeOverlays.map((overlay) => (
+              <rect
+                key={overlay.id}
+                className="tab-lane__chord-shape"
+                x={overlay.x - overlay.width / 2}
+                y={overlay.minY - FRET_DISC_RADIUS * 1.1}
+                width={overlay.width}
+                height={overlay.maxY - overlay.minY + FRET_DISC_RADIUS * 2.2}
               />
             ))}
             {notes.map((note) => {

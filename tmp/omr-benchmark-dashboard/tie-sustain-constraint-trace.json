@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-05T23:50:58.579Z",
+  "generatedAt": "2026-07-06T00:22:57.769Z",
   "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
   "phase": 4,
   "fixtures": [
@@ -2756,6 +2756,74 @@
         "falseTiesApplied": 0,
         "clean": true
       }
+    },
+    {
+      "fixtureId": "wet-hands-guitar",
+      "label": "Wet Hands (Minecraft) — notation + TAB guitar",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 0,
+        "tie-start-without-continuation": 2,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 0,
+        "written-correct-sustain-wrong": 0,
+        "slur-like-arc-pitch-differs": 1
+      },
+      "dominantConstraint": {
+        "bucket": "tie-start-without-continuation",
+        "count": 2
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 15,
+        "appliedTieCount": 14,
+        "slurLikeArcPitchDiffers": 1,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [],
+      "brokenContinuations": {
+        "startWithoutContinuation": [
+          {
+            "measureNumber": 21,
+            "midi": 43,
+            "label": "G2",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 22,
+              "midi": 43,
+              "label": "G2",
+              "onsetQuarters": 0,
+              "durationQuarters": 0.5,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 21,
+            "midi": 55,
+            "label": "G3",
+            "onsetQuarters": 1.5,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 22,
+              "midi": 55,
+              "label": "G3",
+              "onsetQuarters": 2,
+              "durationQuarters": 0.5,
+              "voice": 1,
+              "partId": "P1"
+            }
+          }
+        ],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [],
+      "tieChainTraces": null,
+      "falseTieGuard": null
     },
     {
       "fixtureId": "campanella-grandes",

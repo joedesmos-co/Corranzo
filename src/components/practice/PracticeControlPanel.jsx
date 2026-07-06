@@ -123,7 +123,7 @@ export default memo(function PracticeControlPanel({
           checkpointMode={session.checkpointMode}
           noteTarget={waitForYouNoteTarget?.target ?? null}
           noteTargetWrongPage={waitForYouNoteTarget?.wrongPage ?? false}
-          currentCheckpoint={session.waitForYou.currentCheckpoint}
+          currentCheckpoint={session.waitForYou.enrichedCheckpoint ?? session.waitForYou.currentCheckpoint}
           checkpointIndex={session.waitForYou.checkpointIndex}
           totalCheckpoints={session.waitForYou.totalCheckpoints}
           inputSource={

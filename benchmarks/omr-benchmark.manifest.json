@@ -77,6 +77,32 @@
       }
     },
     {
+      "id": "wet-hands-guitar",
+      "label": "Wet Hands (Minecraft) — notation + TAB guitar",
+      "tier": "guitar",
+      "optional": true,
+      "pdf": "wet-hands-minecraft.pdf",
+      "truth": "wet-hands-minecraft.mxl",
+      "pdfLegacyPath": "~/Downloads/wet-hands-minecraft.pdf",
+      "truthLegacyPath": "~/Downloads/wet-hands-minecraft.mxl",
+      "checksums": {
+        "pdf": "sha256:ed4e6543a94562191ed976ddd54342be991747ccf738c4fc46fea43d75dc2804",
+        "truth": "sha256:a370bb56fe97c8713de600a2a16f840aba690277a33867521cc3c371bc084e66"
+      },
+      "instrumentId": "guitar",
+      "maxPages": 4,
+      "thresholds": {
+        "pitchAccuracy": 0.15,
+        "durationAccuracy": 0.35,
+        "onsetAccuracy": 0.2,
+        "chordGroupingAccuracy": 0.25,
+        "noteDetectionF1": 0.45,
+        "maxMeasureCountDiff": 20,
+        "maxNoteCountDiff": 80
+      },
+      "notes": "Notation+TAB guitar regression fixture. Optional — skipped unless files are present locally. Thresholds are regression floors for the pairing sprint, not product targets."
+    },
+    {
       "id": "campanella-grandes",
       "label": "La Campanella (Grandes études de Paganini No. 3)",
       "tier": "extreme",

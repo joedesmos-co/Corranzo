@@ -3,6 +3,7 @@ import { getTimeline } from '../musicxml/timeline.js'
 import { usesPerformedTimeline } from '../musicxml/performedTimeline.js'
 import { alignChordScoreTime } from '../playback/pianoVoiceMix.js'
 import { filterNotesForPracticeScope } from './practiceScope.js'
+import { resolveGroupChordSymbol } from './guitarChordShapeCheckpoint.js'
 
 export const CHECKPOINT_KIND = {
   BEAT: 'beat',
@@ -175,14 +176,13 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null, options = {})
   notes = mergeTiedContinuations(notes)
 
   const groups = groupNotesByTime(notes)
+  const harmonyEvents = options.harmonyEvents ?? timingMap?.harmonyEvents ?? []
 
   return groups.map((group, index) => {
     const midis = uniqueMidis(group.notes)
-    const labels = group.notes.map((note) => noteCheckpointLabel(note)).join(' + ')
+    const chordSymbol = resolveGroupChordSymbol(group, harmonyEvents)
     const beatAtTime = timingMap ? getBeatAtTime(timingMap, group.timeSeconds) : null
     const measureNumber = group.notes[0].measureNumber
-    const chordSymbol =
-      group.notes.length === 1 ? group.notes[0].chordSymbol ?? null : null
 
     return {
       id: `note-m${measureNumber}-t${group.timeSeconds.toFixed(3)}-${index}`,
@@ -193,7 +193,7 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null, options = {})
       timeSeconds: group.timeSeconds,
       quarterTime: group.notes[0].quarterTime,
       repeatPass: group.notes[0].repeatPass ?? beatAtTime?.repeatPass ?? 1,
-      label: labels,
+      label: chordSymbol && midis.length > 1 ? chordSymbol : group.notes.map((note) => noteCheckpointLabel(note)).join(' + '),
       chordSymbol,
       expectedMidi: midis[0],
       expectedMidis: midis,

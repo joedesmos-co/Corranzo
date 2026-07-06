@@ -10,6 +10,9 @@ import {
   evaluateMicNoteInput,
   evaluateMicNoteInputWithBuffer,
   evaluateMicScoreInformedInput,
+  evaluateGuitarChordShapeMicInput,
+  createGuitarChordShapeBufferState,
+  resetGuitarChordShapeBufferState,
   getExpectedMidis,
   getMicChordMatchTargets,
   MATCH_OUTCOME,
@@ -41,14 +44,52 @@ import {
   canAcceptMicAttackMatch,
   createMicAttackLatchState,
   markMicAttackConsumed,
+  rearmMicAttackLatch,
   resetMicAttackLatch,
+  shouldRearmMicAttack,
   updateMicAttackRelease,
 } from './micAttackLatch.js'
 import { isMusicalMicFrame, micMusicalRejectReason } from './micMusicalAcceptance.js'
 import { MIC_CALIBRATION_STATUS } from '../microphone-input/micCalibration.js'
 import { MIC_CALIBRATION_STATUS_LABELS } from '../microphone-input/micCalibration.js'
 
-function micFeedbackFromResult(result) {
+function micUsesChordSequence(checkpoint) {
+  return Boolean(checkpoint?.isChord) && !checkpoint?.isGuitarChordShape
+}
+
+function micFeedbackFromResult(result, checkpoint = null) {
+  if (result?.isGuitarChordShape) {
+    const matchedCount = result.matchedCount ?? result.matchedIndices?.size ?? 0
+    const required = result.requiredTones ?? matchedCount
+    const total = result.totalExpected ?? result.expected?.length ?? 0
+    if (result.outcome === MATCH_OUTCOME.COMPLETE) {
+      return {
+        outcome: WFY_INPUT_OUTCOME.CORRECT,
+        message: 'Chord shape matched',
+        tone: 'success',
+        playedMidi: result.playedMidi,
+        matchedIndices: result.matchedIndices,
+      }
+    }
+    if (result.outcome === MATCH_OUTCOME.CHORD_PROGRESS) {
+      return {
+        outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
+        message: `Heard ${matchedCount} of ${required} chord tones — keep strumming the shape`,
+        tone: 'partial',
+        matchedCount,
+        total,
+        matchedIndices: result.matchedIndices,
+      }
+    }
+    if (result.outcome === MATCH_OUTCOME.WRONG) {
+      return {
+        outcome: WFY_INPUT_OUTCOME.WRONG,
+        message: 'Missed / late',
+        tone: 'error',
+        playedMidi: result.playedMidi,
+      }
+    }
+  }
   if (result.message) {
     const feedbackOutcome = toFeedbackOutcome(
       result.outcome,
@@ -79,7 +120,7 @@ function micFeedbackFromResult(result) {
     expectedMidis: result.expected,
     matchedIndices: result.matchedIndices,
     isChord: result.isChord,
-    chordAsSequence: Boolean(result.isChord),
+    chordAsSequence: micUsesChordSequence(checkpoint ?? { isChord: result.isChord }),
   })
 }
 
@@ -139,7 +180,9 @@ export default function useWaitForYouMicInput({
   instrumentId = null,
 }) {
   const [inputFeedback, setInputFeedback] = useState(() =>
-    idleFeedbackForCheckpoint(currentCheckpoint, { chordAsSequence: true }),
+    idleFeedbackForCheckpoint(currentCheckpoint, {
+      chordAsSequence: micUsesChordSequence(currentCheckpoint),
+    }),
   )
   const [lastHeardMidi, setLastHeardMidi] = useState(null)
   const [liveFrame, setLiveFrame] = useState(null)
@@ -147,11 +190,13 @@ export default function useWaitForYouMicInput({
   const [calibrationKey, setCalibrationKey] = useState(0)
   const feedbackOutcomeRef = useRef(inputFeedback.outcome)
   const collectionStateRef = useRef(createMicChordCollectionState())
+  const guitarChordShapeBufferRef = useRef(createGuitarChordShapeBufferState())
   const lastStableChordKeyRef = useRef('')
   const matchConfirmRef = useRef(createMatchConfirmState())
   const attackLatchRef = useRef(createMicAttackLatchState())
   const debugFramesRef = useRef([])
   const quietRejectedFramesRef = useRef(0)
+  const electricUnconfirmedFramesRef = useRef(0)
   const currentCheckpointRef = useRef(currentCheckpoint)
   currentCheckpointRef.current = currentCheckpoint
   const [v2RuntimeError, setV2RuntimeError] = useState(null)
@@ -166,10 +211,12 @@ export default function useWaitForYouMicInput({
   const micEngineV2Active = !v2RuntimeError
   const micEngineMode = 'v2-score-informed'
   const chordTargets = getMicChordMatchTargets(currentCheckpoint, matchSettings)
+  const isGuitarChordShape = Boolean(currentCheckpoint?.isGuitarChordShape)
 
   const isMicV2Polyphonic = false
 
   const isMicChordCollection =
+    !isGuitarChordShape &&
     expectedMidis.length > 1 &&
     chordTargets.mode === MIC_CHORD_MODES.ANY_TONE
 
@@ -197,10 +244,15 @@ export default function useWaitForYouMicInput({
   )
 
   const resetFeedback = useCallback(() => {
-    setInputFeedback(idleFeedbackForCheckpoint(currentCheckpointRef.current, { chordAsSequence: true }))
+    setInputFeedback(
+      idleFeedbackForCheckpoint(currentCheckpointRef.current, {
+        chordAsSequence: micUsesChordSequence(currentCheckpointRef.current),
+      }),
+    )
     setLastHeardMidi(null)
     setLiveFrame(null)
     resetMicChordCollectionState(collectionStateRef.current)
+    resetGuitarChordShapeBufferState(guitarChordShapeBufferRef.current)
     lastStableChordKeyRef.current = ''
     quietRejectedFramesRef.current = 0
     resetMatchConfirm()
@@ -322,6 +374,14 @@ export default function useWaitForYouMicInput({
         return null
       }
       if (detectedMidis?.length) {
+        if (currentCheckpoint?.isGuitarChordShape) {
+          return evaluateGuitarChordShapeMicInput(
+            currentCheckpoint,
+            detectedMidis,
+            guitarChordShapeBufferRef.current,
+            matchSettings,
+          )
+        }
         return evaluateMicScoreInformedInput(currentCheckpoint, detectedMidis, matchSettings)
       }
       if (isMicChordCollection) {
@@ -343,11 +403,15 @@ export default function useWaitForYouMicInput({
         return
       }
 
-      const feedback = micFeedbackFromResult(result)
+      const feedback = micFeedbackFromResult(result, currentCheckpoint)
 
-      if (feedback.outcome === WFY_INPUT_OUTCOME.CORRECT && result.isChord) {
+      if (
+        feedback.outcome === WFY_INPUT_OUTCOME.CORRECT &&
+        result.isChord &&
+        !result.isGuitarChordShape
+      ) {
         feedback.message = `Heard ${chordLabel(result.expected)} — all tones matched.`
-      } else if (feedback.outcome === WFY_INPUT_OUTCOME.CORRECT) {
+      } else if (feedback.outcome === WFY_INPUT_OUTCOME.CORRECT && !result.isGuitarChordShape) {
         feedback.message = `Heard ${feedback.playedLabel ?? 'note'} — correct`
       }
 
@@ -369,7 +433,9 @@ export default function useWaitForYouMicInput({
       }
 
       if (result.outcome === MATCH_OUTCOME.COMPLETE) {
-        markMicAttackConsumed(attackLatchRef.current)
+        markMicAttackConsumed(attackLatchRef.current, {
+          consumedMidis: result.expected ?? [],
+        })
         onPlayerInputMatched()
       }
     },
@@ -403,6 +469,50 @@ export default function useWaitForYouMicInput({
         quietRejectedFramesRef.current = 0
       }
 
+      const rejectReason = micFrameRejectReason({
+        frame,
+        matchingEnabled,
+        expectedMidis,
+      })
+      const debugRejectReason = wrongPitch ? 'wrong-note' : rejectReason
+      const debugFrame = createMicDebugFrameRecord({
+        frame,
+        expectedMidis,
+        instrumentId,
+        inputSource: 'microphone',
+        captureSettings: microphone?.captureSettings ?? null,
+        rejectReason: debugRejectReason,
+        timestampMs:
+          typeof performance !== 'undefined' && performance.now
+            ? performance.now()
+            : Date.now(),
+      })
+      const electricSignal = debugFrame.electricGuitarSignal
+      const hearsExpectedNote =
+        matchingEnabled &&
+        expectedMidis.length > 0 &&
+        frame.v2DetectedMidis?.some((midi) => expectedMidis.includes(midi))
+      const electricEvidence =
+        instrumentId === 'guitar' &&
+        (electricSignal?.cleanLikely ||
+          electricSignal?.distortedLikely ||
+          electricSignal?.ampColorationLikely) &&
+        (hearsExpectedNote || (frame.gateOpen && electricSignal?.detectedMidis?.length))
+      const electricBlocked =
+        electricEvidence &&
+        !wrongPitch &&
+        (rejectReason === 'non-musical-formant-harmonics' ||
+          rejectReason === 'soft-note-below-gate' ||
+          rejectReason === 'v2-below-threshold' ||
+          (frame.gateOpen &&
+            hearsExpectedNote &&
+            !isMusicalMicFrame(frame)))
+      if (electricBlocked) {
+        electricUnconfirmedFramesRef.current += 1
+      } else if (frame.gateOpen || !electricEvidence) {
+        electricUnconfirmedFramesRef.current = 0
+      }
+
       const diagnostic = resolveMicDiagnostic({
         calibrating: frame.calibrating,
         calibrationStatus: frame.calibrationStatus,
@@ -410,6 +520,7 @@ export default function useWaitForYouMicInput({
         stabilizerPending: frame.stabilizerPending,
         wrongPitch,
         quietNoteRejected: quietRejectedFramesRef.current >= 6,
+        electricGuitarUnconfirmed: electricUnconfirmedFramesRef.current >= 6,
         chordUnsupported:
           matchingEnabled &&
           isMicChordCollection &&
@@ -432,24 +543,6 @@ export default function useWaitForYouMicInput({
           : frame.midi != null && frame.gateOpen
             ? [frame.midi]
             : []
-      const rejectReason = micFrameRejectReason({
-        frame,
-        matchingEnabled,
-        expectedMidis,
-      })
-      const debugRejectReason = wrongPitch ? 'wrong-note' : rejectReason
-      const debugFrame = createMicDebugFrameRecord({
-        frame,
-        expectedMidis,
-        instrumentId,
-        inputSource: 'microphone',
-        captureSettings: microphone?.captureSettings ?? null,
-        rejectReason: debugRejectReason,
-        timestampMs:
-          typeof performance !== 'undefined' && performance.now
-            ? performance.now()
-            : Date.now(),
-      })
       pushMicDebugFrame(debugFramesRef.current, debugFrame)
 
       reportMicDebug({
@@ -520,14 +613,26 @@ export default function useWaitForYouMicInput({
         return
       }
 
-      updateMicAttackRelease(attackLatchRef.current, Boolean(frame.gateOpen))
+      updateMicAttackRelease(attackLatchRef.current, Boolean(frame.gateOpen), {
+        rms: frame.filteredRms ?? frame.rms ?? null,
+      })
       if (
         frame.calibrating ||
-        frame.calibrationStatus === MIC_CALIBRATION_STATUS.MEASURING ||
-        !canAcceptMicAttackMatch(attackLatchRef.current)
+        frame.calibrationStatus === MIC_CALIBRATION_STATUS.MEASURING
       ) {
         resetMatchConfirm()
         return
+      }
+      if (!canAcceptMicAttackMatch(attackLatchRef.current)) {
+        // A ringing previous note (piano sustain, open guitar string) keeps the
+        // gate open, so waiting for a full release would block the player's
+        // next note. Rearm on clear new-attack evidence instead.
+        if (shouldRearmMicAttack(attackLatchRef.current, frame, { expectedMidis })) {
+          rearmMicAttackLatch(attackLatchRef.current)
+        } else {
+          resetMatchConfirm()
+          return
+        }
       }
 
       const frameConfident =
@@ -556,7 +661,7 @@ export default function useWaitForYouMicInput({
           preview.outcome === MATCH_OUTCOME.COMPLETE
         ) {
           setInputFeedback({
-            ...micFeedbackFromResult(preview),
+            ...micFeedbackFromResult(preview, currentCheckpoint),
             outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
             micEngineMode,
           })
@@ -605,7 +710,7 @@ export default function useWaitForYouMicInput({
         v2Preview?.outcome === MATCH_OUTCOME.COMPLETE
       ) {
         setInputFeedback({
-          ...micFeedbackFromResult(v2Preview),
+          ...micFeedbackFromResult(v2Preview, currentCheckpoint),
           outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
           micEngineMode,
         })
@@ -650,7 +755,7 @@ export default function useWaitForYouMicInput({
         monophonicPreview.outcome === MATCH_OUTCOME.COMPLETE
       ) {
         setInputFeedback({
-          ...micFeedbackFromResult(monophonicPreview),
+          ...micFeedbackFromResult(monophonicPreview, currentCheckpoint),
           outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
           micEngineMode,
         })
