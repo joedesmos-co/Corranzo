@@ -559,6 +559,7 @@ describe('practice view integration', () => {
     const staffLane = readSrc('components', 'practice', 'StaffVisualLane.jsx')
     const tabLane = readSrc('components', 'practice', 'TabVisualLane.jsx')
     const lane = readSrc('features', 'practice', 'visualPracticeLane.js')
+    const laneConstants = readSrc('features', 'practice', 'visualLaneConstants.js')
 
     expect(staffLane).toContain('resolveVisualLaneTransform')
     expect(tabLane).toContain('resolveVisualLaneTransform')
@@ -566,9 +567,10 @@ describe('practice view integration', () => {
     expect(tabLane).toContain('translate(${scrollX} 0)')
     expect(staffLane).toContain("playheadEl.setAttribute('x1', String(livePlayheadX))")
     expect(tabLane).toContain("playheadEl.setAttribute('x1', String(livePlayheadX))")
-    expect(lane).toContain('pixelsPerSecond: 110')
-    expect(lane).toContain('nowLineFraction: 0.22')
-    expect(lane).toContain('nowLineEndFraction: 0.82')
+    expect(lane).toContain('visualLaneConstants.js')
+    expect(laneConstants).toContain('pixelsPerSecond: 110')
+    expect(laneConstants).toContain('nowLineFraction: 0.22')
+    expect(laneConstants).toContain('nowLineEndFraction: 0.82')
   })
 
   it('improves note readability and honors reduced motion in visual practice', () => {

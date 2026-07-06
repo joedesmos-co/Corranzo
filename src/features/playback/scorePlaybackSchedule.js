@@ -2,6 +2,10 @@ import { getTimeline } from '../musicxml/timeline.js'
 import { getTempoAtTime } from '../musicxml/timingQuery.js'
 import { parseMidiFile } from './parseMidiFile.js'
 import {
+  isPlayableTimingNote,
+  sanitizePlaybackDurationSeconds,
+} from './sanitizePlaybackNote.js'
+import {
   mapMidiEventsToPerformedTimeline,
   MIDI_MAP_METHOD,
 } from './midiToPerformedMapping.js'
@@ -24,19 +28,17 @@ export function buildScoreNoteSchedule(timingMap, { rate = 1 } = {}) {
 
   return getTimeline(timingMap)
     .performedNotes()
-    .filter(
-      (note) =>
-        // TAB-staff mirrors duplicate standard-staff notes in mixed guitar
-        // scores; each played note sounds once. Piano never sets isTabMirror.
-        !note.isRest && note.midi != null && !note.suppressPlaybackAttack && !note.isTabMirror,
-    )
+    .filter(isPlayableTimingNote)
     .map((note) => {
-      const writtenDurationSeconds = Math.max(note.durationSeconds, 0.03)
+      const writtenDurationSeconds = sanitizePlaybackDurationSeconds(note.durationSeconds)
       return {
         type: 'note',
         scoreTimeSeconds: note.performedSeconds,
         writtenDurationSeconds,
-        baseDurationSeconds: playbackDurationSecondsForNote(note),
+        baseDurationSeconds: playbackDurationSecondsForNote({
+          ...note,
+          durationSeconds: writtenDurationSeconds,
+        }),
         staccato: Boolean(note.staccato),
         accent: Boolean(note.accent),
         midi: note.midi,

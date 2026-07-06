@@ -1,7 +1,10 @@
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 import { WFY_INPUT_OUTCOME } from './waitForYouInputFeedback.js'
 import { getExpectedMidis } from './waitForYouNoteMatch.js'
+import { chordLabel, missingLabels } from './waitForYouLabels.js'
 import { describeTabPosition } from '../instruments/fretboard.js'
+
+export { chordLabel, missingLabels } from './waitForYouLabels.js'
 
 /**
  * Wait For You guidance layer (pure). Turns the current checkpoint + the latest
@@ -23,10 +26,6 @@ export const WFY_GUIDANCE = {
 /** Number of wrong attempts at which the cursor target is revealed automatically. */
 export const HINT_AFTER_WRONG_ATTEMPTS = 2
 
-export function chordLabel(midis) {
-  return (midis ?? []).map((m) => midiToNoteLabel(m)).join(' + ')
-}
-
 export function expectedLabelFor(expectedMidis, checkpoint = null) {
   if (checkpoint?.displayLabel) {
     return checkpoint.displayLabel
@@ -36,15 +35,6 @@ export function expectedLabelFor(expectedMidis, checkpoint = null) {
   }
   if (!expectedMidis?.length) return null
   return expectedMidis.length > 1 ? chordLabel(expectedMidis) : midiToNoteLabel(expectedMidis[0])
-}
-
-/** Labels of expected notes not yet matched (for chord "missing" feedback). */
-export function missingLabels(expectedMidis, matchedIndices) {
-  if (!expectedMidis?.length) return []
-  return expectedMidis
-    .map((midi, index) => ({ midi, index }))
-    .filter(({ index }) => !(matchedIndices && matchedIndices.has(index)))
-    .map(({ midi }) => midiToNoteLabel(midi))
 }
 
 /**

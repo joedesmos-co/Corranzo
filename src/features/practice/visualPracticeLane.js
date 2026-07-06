@@ -3,33 +3,9 @@ import { getTimeline } from '../musicxml/timeline.js'
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 import { enrichGuitarChordCheckpoint } from './guitarChordShapeCheckpoint.js'
 import { buildVisualNoteMarkings } from './visualNotationMarkings.js'
+import { VISUAL_LANE_DEFAULTS, WFY_VISUAL_MOVE_MS } from './visualLaneConstants.js'
 
-/**
- * Visual Practice lane model.
- *
- * Pure selectors that turn the existing timing map / Wait For You note
- * checkpoints into a beginner-friendly "note lane": time-ordered groups
- * (chords stacked), a current target, and a keyboard highlight strip.
- *
- * No new timing math — groups reuse buildNoteCheckpoints() so Visual mode
- * and Wait For You always agree on what counts as "one thing to play"
- * (same ids, same chord grouping, same loop-region filtering).
- */
-
-export const VISUAL_LANE_DEFAULTS = {
-  /** Seconds of already-played notes kept visible behind the now line. */
-  lookBehindSeconds: 3,
-  /** Seconds of upcoming notes rendered ahead of the now line. Generous so
-      wide/short lanes (scaled-down staves) never pop notes in at the edge. */
-  lookAheadSeconds: 12,
-  /** Horizontal scale: seconds → staff units. Beginner pacing — roughly a
-      few measures visible at typical staff zoom. */
-  pixelsPerSecond: 110,
-  /** Now-line position as a fraction of the lane width. */
-  nowLineFraction: 0.22,
-  /** Furthest right the Now bar travels during a piece/loop. */
-  nowLineEndFraction: 0.82,
-}
+export { VISUAL_LANE_DEFAULTS, WFY_VISUAL_MOVE_MS } from './visualLaneConstants.js'
 
 export const VISUAL_GROUP_STATUS = {
   PAST: 'past',
@@ -39,8 +15,10 @@ export const VISUAL_GROUP_STATUS = {
 
 /** Grace window: a group stays "current" this long after its onset. */
 const TARGET_EPSILON_SECONDS = 0.12
-/** Display-only WFY glide duration. Matching/timing clocks are unchanged. */
-export const WFY_VISUAL_MOVE_MS = 420
+
+function isFiniteMidi(midi) {
+  return Number.isFinite(midi)
+}
 
 /**
  * Build lane groups from the score timing map.
@@ -59,7 +37,7 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}
 
   return checkpoints.map((checkpoint) => {
     const notes = [...(checkpoint.notes ?? [])]
-      .filter((note) => note.midi != null)
+      .filter((note) => isFiniteMidi(note.midi))
       .sort((a, b) => b.midi - a.midi)
       .map((note, noteIndex) => {
         const visualNote = {

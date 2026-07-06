@@ -1,5 +1,6 @@
 import * as Tone from 'tone'
 import { startToneFromUserGesture } from '../audio/toneAudioUnlock.js'
+import { isFiniteMidi } from '../playback/sanitizePlaybackNote.js'
 import { getInstrument, normalizeInstrumentId } from '../instruments/instruments.js'
 import {
   loadInstrumentVoiceModule,
@@ -87,7 +88,8 @@ export function releaseReferenceVoices(time) {
  * Play reference pitch(es) for a checkpoint using Tone.js.
  */
 export async function playReferenceMidis(midis, durationSeconds = 0.55, options = {}) {
-  if (!midis?.length) {
+  const playableMidis = (midis ?? []).filter(isFiniteMidi)
+  if (!playableMidis.length) {
     return
   }
 
@@ -100,12 +102,13 @@ export async function playReferenceMidis(midis, durationSeconds = 0.55, options 
   ])
 
   const velocity = mapPlaybackVelocity(REFERENCE_VELOCITY_INPUT)
-  const names = midis.map((midi) => midiToNoteName(midi))
+  const names = playableMidis.map((midi) => midiToNoteName(midi))
+  const safeDuration = Number.isFinite(durationSeconds) && durationSeconds > 0 ? durationSeconds : 0.55
   const now = Tone.now()
   entry.instrument.releaseAll?.(now)
   names.forEach((name) => {
     entry.instrument.triggerAttack(name, now, velocity)
-    entry.instrument.triggerRelease(name, now + durationSeconds)
+    entry.instrument.triggerRelease(name, now + safeDuration)
   })
 }
 

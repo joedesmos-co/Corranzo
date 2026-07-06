@@ -11,6 +11,7 @@ import {
 import { METRONOME_COUNT_IN, METRONOME_SUBDIVISION } from './metronomeConstants.js'
 import { createMetronomeVoice, metronomeLevelToDb } from './metronomeVoice.js'
 import { alignChordScoreTime } from './pianoVoiceMix.js'
+import { isFiniteMidi, sanitizePlaybackDurationSeconds } from './sanitizePlaybackNote.js'
 import { mapPlaybackVelocity } from './pianoVelocity.js'
 import { createInstrumentVoiceResolver } from './instrumentVoiceResolver.js'
 import { DEFAULT_INSTRUMENT_ID } from '../instruments/instruments.js'
@@ -43,6 +44,9 @@ function restoreOutputGain(gain, now, target) {
 }
 
 function midiNumberToName(midi) {
+  if (!isFiniteMidi(midi)) {
+    return null
+  }
   const octave = Math.floor(midi / 12) - 1
   return `${MIDI_NAMES[((midi % 12) + 12) % 12]}${octave}`
 }
@@ -580,7 +584,11 @@ export class ScorePlaybackEngine {
         }
 
         const name = event.name ?? midiNumberToName(event.midi)
+        if (!name) {
+          continue
+        }
         const velocity = softenVelocity(event.velocity ?? 0.75)
+        duration = sanitizePlaybackDurationSeconds(duration)
         this.voice.triggerAttackRelease(name, duration, at, velocity)
         this.scheduledEvents.add(event)
         continue

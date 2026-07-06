@@ -1,4 +1,4 @@
-import { VISUAL_LANE_DEFAULTS } from './visualPracticeLane.js'
+import { VISUAL_LANE_DEFAULTS } from './visualLaneConstants.js'
 import {
   VISUAL_GUITAR_TECHNIQUE_SYMBOLS,
   VISUAL_MARKING_KIND,

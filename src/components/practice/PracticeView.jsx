@@ -13,6 +13,7 @@ import PdfViewer from '../PdfViewer.jsx'
 import PracticeControlPanel from './PracticeControlPanel.jsx'
 import ScoreFollowSetupStatus from './ScoreFollowSetupStatus.jsx'
 import VisualPracticeView from './VisualPracticeView.jsx'
+import PracticeErrorBoundary from './PracticeErrorBoundary.jsx'
 import '../../styles/practice.css'
 
 export default function PracticeView({
@@ -30,6 +31,11 @@ export default function PracticeView({
   timingSourceKind = null,
 }) {
   const { session, scoreFollow, waitForYouNoteTarget } = usePracticeSessionContext()
+  const practiceErrorResetKey = [
+    session.waitForYou.currentCheckpoint?.id ?? 'none',
+    session.waitForYou.checkpointIndex,
+    session.sources?.timingFileName ?? '',
+  ].join(':')
   const pdfActionsRef = useRef(null)
   const pdfScrollRef = useRef(null)
   const sessionRef = useRef(session)
@@ -102,41 +108,43 @@ export default function PracticeView({
         </div>
       ) : (
         <PracticeWorkspaceLayout>
-          {!isVisualView && (
-            <PracticePageFollowController
-              scrollContainerRef={pdfScrollRef}
-              pageNumber={pageNumber}
-              numPages={numPages}
-              onGoToPage={handleGoToPage}
-              onPrevPage={onPrevPage}
-              onNextPage={onNextPage}
-            />
-          )}
-          <div className="practice-workspace__main">
-            <PracticeViewSwitchBar viewMode={viewMode} onViewModeChange={handleViewModeChange} />
-            {isVisualView ? (
-              <VisualPracticeView timingSourceKind={timingSourceKind} />
-            ) : (
-              <div className="practice-workspace__score">
-                <ScoreFollowSetupStatus setupStatus={scoreFollow.setupStatus} />
-                <PdfViewer
-                  variant="practice"
-                  file={pdfFile}
-                  fileName={fileName}
-                  pdfMeta={pdfMeta}
-                  pageNumber={pageNumber}
-                  numPages={numPages}
-                  paperTheme={paperTheme}
-                  onDocumentLoadSuccess={onDocumentLoadSuccess}
-                  onPrevPage={onPrevPage}
-                  onNextPage={onNextPage}
-                  onTogglePaper={onTogglePaper}
-                  actionsRef={pdfActionsRef}
-                  scrollContainerRef={pdfScrollRef}
-                />
-              </div>
+          <PracticeErrorBoundary resetKey={practiceErrorResetKey}>
+            {!isVisualView && (
+              <PracticePageFollowController
+                scrollContainerRef={pdfScrollRef}
+                pageNumber={pageNumber}
+                numPages={numPages}
+                onGoToPage={handleGoToPage}
+                onPrevPage={onPrevPage}
+                onNextPage={onNextPage}
+              />
             )}
-          </div>
+            <div className="practice-workspace__main">
+              <PracticeViewSwitchBar viewMode={viewMode} onViewModeChange={handleViewModeChange} />
+              {isVisualView ? (
+                <VisualPracticeView timingSourceKind={timingSourceKind} />
+              ) : (
+                <div className="practice-workspace__score">
+                  <ScoreFollowSetupStatus setupStatus={scoreFollow.setupStatus} />
+                  <PdfViewer
+                    variant="practice"
+                    file={pdfFile}
+                    fileName={fileName}
+                    pdfMeta={pdfMeta}
+                    pageNumber={pageNumber}
+                    numPages={numPages}
+                    paperTheme={paperTheme}
+                    onDocumentLoadSuccess={onDocumentLoadSuccess}
+                    onPrevPage={onPrevPage}
+                    onNextPage={onNextPage}
+                    onTogglePaper={onTogglePaper}
+                    actionsRef={pdfActionsRef}
+                    scrollContainerRef={pdfScrollRef}
+                  />
+                </div>
+              )}
+            </div>
+          </PracticeErrorBoundary>
           <PracticeControlPanel
             pdfFileName={fileName || null}
             pdfPageNumber={pageNumber}

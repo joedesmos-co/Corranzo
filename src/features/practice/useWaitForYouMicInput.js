@@ -5,7 +5,7 @@ import {
   idleFeedbackForCheckpoint,
   WFY_INPUT_OUTCOME,
 } from './waitForYouInputFeedback.js'
-import { chordLabel } from './waitForYouGuidance.js'
+import { chordLabel } from './waitForYouLabels.js'
 import {
   evaluateMicNoteInput,
   evaluateMicNoteInputWithBuffer,

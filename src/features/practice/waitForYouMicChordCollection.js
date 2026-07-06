@@ -1,6 +1,6 @@
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 import { findMatchingExpectedIndex, matchesAnyExpected } from './midiPitchMatch.js'
-import { missingLabels } from './waitForYouGuidance.js'
+import { missingLabels } from './waitForYouLabels.js'
 import {
   MIC_CHORD_COLLECTION_WINDOW_MS_MAX,
   MIC_CHORD_COLLECTION_WINDOW_MS_MIN,

@@ -52,8 +52,8 @@ function uniqueMidis(notes) {
   for (const note of notes) {
     const candidates =
       note.expectedMidis?.length > 0
-        ? note.expectedMidis
-        : note.midi != null
+        ? note.expectedMidis.filter((midi) => Number.isFinite(midi))
+        : Number.isFinite(note.midi)
           ? [note.midi]
           : []
     for (const midi of candidates) {
@@ -103,9 +103,11 @@ function mergeTiedContinuations(notes) {
             !candidate.suppressPlaybackAttack,
         )
       if (head) {
-        head.durationQuarters += note.durationQuarters
-        if (Number.isFinite(head.durationSeconds) && Number.isFinite(note.durationSeconds)) {
-          head.durationSeconds += note.durationSeconds
+        const addedQuarters = Number.isFinite(note.durationQuarters) ? note.durationQuarters : 0
+        const addedSeconds = Number.isFinite(note.durationSeconds) ? note.durationSeconds : 0
+        head.durationQuarters = (Number.isFinite(head.durationQuarters) ? head.durationQuarters : 0) + addedQuarters
+        if (Number.isFinite(head.durationSeconds) || addedSeconds > 0) {
+          head.durationSeconds = (Number.isFinite(head.durationSeconds) ? head.durationSeconds : 0) + addedSeconds
         }
         head.tieStop = Boolean(head.tieStop || note.tieStop)
         continue
@@ -168,7 +170,7 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null, options = {})
   // TAB-staff mirrors duplicate standard-staff notes in mixed guitar scores;
   // one played note must count once. Piano scores never set this flag.
   let notes = sourceNotes.filter(
-    (note) => !note.isRest && note.midi != null && !note.isTabMirror,
+    (note) => !note.isRest && Number.isFinite(note.midi) && !note.isTabMirror,
   )
   notes = filterNotesForPracticeScope(notes, options.practiceScope, timingMap)
   notes = filterByLoopRegion(notes, loopRegion)
