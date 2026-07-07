@@ -25,6 +25,7 @@ const CALIBRATION_FRAMES = 45
 export default function useMicEngineV2Detector({
   enabled,
   expectedMidis = [],
+  expectedStringFrets = null,
   analyserRef,
   getTimeDomainBuffer,
   sampleRate,
@@ -51,6 +52,7 @@ export default function useMicEngineV2Detector({
   const rafRef = useRef(null)
   const uiFrameSkipRef = useRef(0)
   const expectedMidisRef = useRef(expectedMidis)
+  const expectedStringFretsRef = useRef(expectedStringFrets)
   const v2ErroredRef = useRef(false)
   const onFrameRef = useRef(onFrame)
   const onAnalyzedFrameRef = useRef(onAnalyzedFrame)
@@ -96,7 +98,8 @@ export default function useMicEngineV2Detector({
 
   useEffect(() => {
     expectedMidisRef.current = expectedMidis ?? []
-  }, [expectedMidis, expectedMidisKey])
+    expectedStringFretsRef.current = expectedStringFrets ?? null
+  }, [expectedMidis, expectedMidisKey, expectedStringFrets])
 
   useEffect(() => {
     resetMicEngineV2RuntimeState(v2StateRef.current)
@@ -163,6 +166,7 @@ export default function useMicEngineV2Detector({
               buffer,
               sampleRate,
               expectedMidis: expectedMidisRef.current,
+              expectedStringFrets: expectedStringFretsRef.current,
               noiseFloor: analyzerRef.current.noiseFloor,
               state: v2StateRef.current,
               centsTolerance,

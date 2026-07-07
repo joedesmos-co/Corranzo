@@ -143,6 +143,7 @@ function runGuitarShapeLiveFrames(samples, checkpoint) {
       buffer: new Float32Array(samples.subarray(end - FFT, end)),
       sampleRate: SAMPLE_RATE,
       expectedMidis: checkpoint.expectedMidis,
+      expectedStringFrets: checkpoint.expectedStringFrets ?? null,
       noiseFloor: analyzer.noiseFloor,
       state,
       gateOptions: profile?.gate ?? null,
@@ -159,6 +160,20 @@ function runGuitarShapeLiveFrames(samples, checkpoint) {
   }
 
   return { result, seen }
+}
+
+function highLowDoubleStopCheckpoint({ lowMidi, lowString, highMidi, highString, highFret }) {
+  return enrichGuitarChordCheckpoint(
+    {
+      isChord: true,
+      expectedMidis: [lowMidi, highMidi],
+      notes: [
+        { midi: lowMidi, string: lowString, fret: 5 },
+        { midi: highMidi, string: highString, fret: highFret },
+      ],
+    },
+    { instrumentId: INSTRUMENT_IDS.GUITAR },
+  )
 }
 
 describe('guitar chord shape checkpoint model', () => {
@@ -433,6 +448,128 @@ describe('guitar chord mic acceptance', () => {
     expect(partial.outcome).toBe('chord-progress')
     const complete = evaluateMicScoreInformedInput(pianoLike, [60, 64, 67], {})
     expect(complete.outcome).toBe('complete')
+  })
+
+  it('advances a high-string + low-E double-stop when both are played', () => {
+    const checkpoint = highLowDoubleStopCheckpoint({
+      lowMidi: 40,
+      lowString: 6,
+      highMidi: 66,
+      highString: 1,
+      highFret: 2,
+    })
+    const total = new Float32Array(Math.round(SAMPLE_RATE * 1.0))
+    mixInto(total, pluckMidi(40, { amplitude: 0.34 }), 0)
+    mixInto(total, pluckMidi(66, { amplitude: 0.045 }), 0)
+
+    const { result, seen } = runGuitarShapeLiveFrames(total, checkpoint)
+
+    expect(seen.some((midis) => midis.includes(40))).toBe(true)
+    expect(seen.some((midis) => midis.includes(66))).toBe(true)
+    expect(result?.outcome).toBe('complete')
+  })
+
+  it('advances a high-string + A-string double-stop when both are played', () => {
+    const checkpoint = highLowDoubleStopCheckpoint({
+      lowMidi: 45,
+      lowString: 5,
+      highMidi: 66,
+      highString: 1,
+      highFret: 2,
+    })
+    const total = new Float32Array(Math.round(SAMPLE_RATE * 1.0))
+    mixInto(total, pluckMidi(45, { amplitude: 0.32 }), 0)
+    mixInto(total, pluckMidi(66, { amplitude: 0.05 }), 0)
+
+    const { result } = runGuitarShapeLiveFrames(total, checkpoint)
+
+    expect(result?.outcome).toBe('complete')
+  })
+
+  it('does not satisfy a double-stop from the high string alone', () => {
+    const checkpoint = highLowDoubleStopCheckpoint({
+      lowMidi: 40,
+      lowString: 6,
+      highMidi: 66,
+      highString: 1,
+      highFret: 2,
+    })
+    const highOnly = pluckMidi(66, { amplitude: 0.2 })
+    const { result } = runGuitarShapeLiveFrames(highOnly, checkpoint)
+    expect(result?.outcome).not.toBe('complete')
+  })
+
+  it('does not satisfy a double-stop from the low string alone', () => {
+    const checkpoint = highLowDoubleStopCheckpoint({
+      lowMidi: 40,
+      lowString: 6,
+      highMidi: 66,
+      highString: 1,
+      highFret: 2,
+    })
+    const lowOnly = pluckMidi(40, { amplitude: 0.32 })
+    const { result } = runGuitarShapeLiveFrames(lowOnly, checkpoint)
+    expect(result?.outcome).not.toBe('complete')
+  })
+
+  it('does not count a low-string harmonic as the required high-string note', () => {
+    const checkpoint = enrichGuitarChordCheckpoint(
+      {
+        isChord: true,
+        expectedMidis: [45, 69],
+        notes: [
+          { midi: 45, string: 5, fret: 0 },
+          { midi: 69, string: 1, fret: 5 },
+        ],
+      },
+      { instrumentId: INSTRUMENT_IDS.GUITAR },
+    )
+    const lowAOnly = pluckMidi(45, { amplitude: 0.34 })
+    const { result, seen } = runGuitarShapeLiveFrames(lowAOnly, checkpoint)
+
+    expect(seen.some((midis) => midis.includes(45))).toBe(true)
+    expect(seen.some((midis) => midis.includes(69))).toBe(false)
+    expect(result?.outcome).not.toBe('complete')
+  })
+
+  it('does not advance when the wrong high-string fret is played', () => {
+    const checkpoint = highLowDoubleStopCheckpoint({
+      lowMidi: 40,
+      lowString: 6,
+      highMidi: 66,
+      highString: 1,
+      highFret: 2,
+    })
+    const total = new Float32Array(Math.round(SAMPLE_RATE * 1.0))
+    mixInto(total, pluckMidi(40, { amplitude: 0.34 }), 0)
+    mixInto(total, pluckMidi(67, { amplitude: 0.08 }), 0)
+
+    const { result } = runGuitarShapeLiveFrames(total, checkpoint)
+
+    expect(result?.outcome).not.toBe('complete')
+  })
+
+  it('retains a weak high-string tone briefly after the rolling window resets', () => {
+    const checkpoint = highLowDoubleStopCheckpoint({
+      lowMidi: 40,
+      lowString: 6,
+      highMidi: 66,
+      highString: 1,
+      highFret: 2,
+    })
+    const buffer = createGuitarChordShapeBufferState()
+    const stringByMidi = new Map([
+      [40, 6],
+      [66, 1],
+    ])
+    buffer.windowStartMs = Date.now() - 950
+    buffer.heardMidis.add(40)
+    buffer.stickyHighMidis.set(66, Date.now() - 200)
+    buffer.heardMidis.add(66)
+
+    const result = evaluateGuitarChordShapeMicInput(checkpoint, [40], buffer, {})
+    expect(result.outcome).toBe('complete')
+    expect(stringByMidi.get(66)).toBe(1)
   })
 })
 

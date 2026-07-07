@@ -19,6 +19,10 @@ import {
 } from './waitForYouMicChordCollection.js'
 import {
   GUITAR_CHORD_SHAPE_WINDOW_MS as DEFAULT_GUITAR_CHORD_SHAPE_WINDOW_MS,
+  GUITAR_HIGH_STRING_STICKY_MS,
+  buildExpectedStringByMidi,
+  isHighGuitarString,
+  isLowGuitarString,
   minimumGuitarChordTonesRequired,
 } from './guitarChordShapeCheckpoint.js'
 
@@ -404,6 +408,7 @@ export function createGuitarChordShapeBufferState() {
   return {
     heardMidis: new Set(),
     windowStartMs: null,
+    stickyHighMidis: new Map(),
   }
 }
 
@@ -413,6 +418,50 @@ export function resetGuitarChordShapeBufferState(state) {
   }
   state.heardMidis.clear()
   state.windowStartMs = null
+  state.stickyHighMidis?.clear?.()
+}
+
+function pruneStickyHighMidis(bufferState, now, stickyMs = GUITAR_HIGH_STRING_STICKY_MS) {
+  if (!bufferState?.stickyHighMidis?.size) {
+    return
+  }
+  for (const [midi, lastSeenMs] of bufferState.stickyHighMidis.entries()) {
+    if (now - lastSeenMs > stickyMs) {
+      bufferState.stickyHighMidis.delete(midi)
+    }
+  }
+}
+
+function rememberGuitarHeardMidis(
+  bufferState,
+  detectedMidis,
+  expected,
+  stringByMidi,
+  settings,
+  now,
+) {
+  for (const detected of detectedMidis ?? []) {
+    for (const expectedMidi of expected) {
+      if (!pitchMatches(detected, expectedMidi, settings ?? {})) {
+        continue
+      }
+      bufferState.heardMidis.add(expectedMidi)
+      if (isHighGuitarString(stringByMidi.get(expectedMidi))) {
+        bufferState.stickyHighMidis.set(expectedMidi, now)
+      }
+    }
+  }
+}
+
+function guitarHeardExpectedMidi(bufferState, expectedMidi, stringByMidi, now) {
+  if (bufferState?.heardMidis?.has(expectedMidi)) {
+    return true
+  }
+  if (!isHighGuitarString(stringByMidi.get(expectedMidi))) {
+    return false
+  }
+  const lastSeenMs = bufferState?.stickyHighMidis?.get(expectedMidi)
+  return lastSeenMs != null && now - lastSeenMs <= GUITAR_HIGH_STRING_STICKY_MS
 }
 
 /**
@@ -435,21 +484,33 @@ export function evaluateGuitarChordShapeMicInput(
     Number(checkpoint?.rollingWindowMs) ||
     DEFAULT_GUITAR_CHORD_SHAPE_WINDOW_MS
   const now = Date.now()
+  const stringByMidi = buildExpectedStringByMidi(checkpoint?.expectedStringFrets)
 
   if (bufferState) {
+    pruneStickyHighMidis(bufferState, now)
     if (bufferState.windowStartMs == null) {
       bufferState.windowStartMs = now
     } else if (now - bufferState.windowStartMs > windowMs) {
-      bufferState.heardMidis.clear()
-      bufferState.windowStartMs = now
-    }
-    for (const detected of detectedMidis ?? []) {
-      for (const expectedMidi of expected) {
-        if (pitchMatches(detected, expectedMidi, settings ?? {})) {
-          bufferState.heardMidis.add(expectedMidi)
+      const retainedHighMidis = new Set()
+      for (const midi of bufferState.heardMidis) {
+        if (guitarHeardExpectedMidi(bufferState, midi, stringByMidi, now)) {
+          retainedHighMidis.add(midi)
         }
       }
+      bufferState.heardMidis.clear()
+      for (const midi of retainedHighMidis) {
+        bufferState.heardMidis.add(midi)
+      }
+      bufferState.windowStartMs = now
     }
+    rememberGuitarHeardMidis(
+      bufferState,
+      detectedMidis,
+      expected,
+      stringByMidi,
+      settings,
+      now,
+    )
   }
 
   const matchedIndices = new Set()
@@ -458,13 +519,20 @@ export function evaluateGuitarChordShapeMicInput(
     const heardInFrame = (detectedMidis ?? []).some((midi) =>
       pitchMatches(midi, expectedMidi, settings ?? {}),
     )
-    const heardInBuffer = bufferState?.heardMidis?.has(expectedMidi)
+    const heardInBuffer = guitarHeardExpectedMidi(bufferState, expectedMidi, stringByMidi, now)
     if (heardInFrame || heardInBuffer) {
       matchedIndices.add(index)
     }
   }
 
   const matchedCount = matchedIndices.size
+  const heardLowString = [...matchedIndices].some((index) =>
+    isLowGuitarString(stringByMidi.get(expected[index])),
+  )
+  const missingHighStringMidis = expected.filter(
+    (midi, index) =>
+      !matchedIndices.has(index) && isHighGuitarString(stringByMidi.get(midi)),
+  )
   const base = {
     expected,
     matchedIndices,
@@ -476,6 +544,8 @@ export function evaluateGuitarChordShapeMicInput(
     totalExpected: expected.length,
     requiredTones: required,
     isGuitarChordShape: true,
+    heardLowString,
+    missingHighStringMidis,
   }
 
   if (matchedCount >= required) {

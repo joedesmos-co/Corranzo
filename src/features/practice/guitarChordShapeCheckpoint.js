@@ -12,6 +12,48 @@ import {
 /** Short rolling window for guitar strum/pick partial chord-tone detection. */
 export const GUITAR_CHORD_SHAPE_WINDOW_MS = 900
 
+/** Extra retention for weak high-string detections paired with a confirmed low string. */
+export const GUITAR_HIGH_STRING_STICKY_MS = 450
+
+/** TAB string numbers: 1 = high e, 6 = low E. */
+export const GUITAR_HIGH_STRING_MAX = 2
+export const GUITAR_LOW_STRING_MIN = 5
+
+export const GUITAR_STRING_PICK_LABELS = {
+  1: 'high e',
+  2: 'B',
+  3: 'G',
+  4: 'D',
+  5: 'A',
+  6: 'low E',
+}
+
+export function buildExpectedStringByMidi(expectedStringFrets = []) {
+  const map = new Map()
+  for (const entry of expectedStringFrets ?? []) {
+    const midi = Number(entry?.midi)
+    const string = Number(entry?.string)
+    if (Number.isFinite(midi) && Number.isFinite(string)) {
+      map.set(midi, string)
+    }
+  }
+  return map
+}
+
+export function isHighGuitarString(stringNum) {
+  const string = Number(stringNum)
+  return Number.isFinite(string) && string >= 1 && string <= GUITAR_HIGH_STRING_MAX
+}
+
+export function isLowGuitarString(stringNum) {
+  const string = Number(stringNum)
+  return Number.isFinite(string) && string >= GUITAR_LOW_STRING_MIN && string <= 6
+}
+
+export function guitarStringPickLabel(stringNum) {
+  return GUITAR_STRING_PICK_LABELS[Number(stringNum)] ?? `string ${stringNum}`
+}
+
 export function minimumGuitarChordTonesRequired(toneCount) {
   const count = Number(toneCount) || 0
   if (count <= 2) {

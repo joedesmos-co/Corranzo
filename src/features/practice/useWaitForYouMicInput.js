@@ -55,12 +55,18 @@ import {
 import { isMusicalMicFrame, micMusicalRejectReason } from './micMusicalAcceptance.js'
 import { MIC_CALIBRATION_STATUS } from '../microphone-input/micCalibration.js'
 import { MIC_CALIBRATION_STATUS_LABELS } from '../microphone-input/micCalibration.js'
+import {
+  buildExpectedStringByMidi,
+  guitarStringPickLabel,
+  isHighGuitarString,
+  isLowGuitarString,
+} from './guitarChordShapeCheckpoint.js'
 
 function micUsesChordSequence(checkpoint) {
   return Boolean(checkpoint?.isChord) && !checkpoint?.isGuitarChordShape
 }
 
-function micFeedbackFromResult(result, checkpoint = null) {
+function micFeedbackFromResult(result, checkpoint = null, frame = null) {
   if (result?.isGuitarChordShape) {
     const matchedCount = result.matchedCount ?? result.matchedIndices?.size ?? 0
     const required = result.requiredTones ?? matchedCount
@@ -75,9 +81,12 @@ function micFeedbackFromResult(result, checkpoint = null) {
       }
     }
     if (result.outcome === MATCH_OUTCOME.CHORD_PROGRESS) {
+      const targetedMessage = guitarMissingHighStringFeedback(checkpoint, result, frame)
       return {
         outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
-        message: `Heard ${matchedCount} of ${required} chord tones — keep strumming the shape`,
+        message:
+          targetedMessage ??
+          `Heard ${matchedCount} of ${required} chord tones — keep strumming the shape`,
         tone: 'partial',
         matchedCount,
         total,
@@ -149,6 +158,36 @@ function hasStrongExpectedV2Evidence(frame, expectedMidi, {
   )
 }
 
+function hasWeakExpectedHighStringEvidence(frame, expectedMidi) {
+  return (frame?.v2Notes ?? []).some(
+    (note) =>
+      note?.midi === expectedMidi &&
+      !note.detected &&
+      ((note.ratio ?? 0) >= 1.02 || (note.confidence ?? 0) >= 0.16),
+  )
+}
+
+function guitarMissingHighStringFeedback(checkpoint, result, frame = null) {
+  if (!result?.heardLowString || !result?.missingHighStringMidis?.length) {
+    return null
+  }
+  const stringByMidi = buildExpectedStringByMidi(checkpoint?.expectedStringFrets)
+  const missingMidi = result.missingHighStringMidis.find((midi) => {
+    if (!isHighGuitarString(stringByMidi.get(midi))) {
+      return false
+    }
+    return frame ? hasWeakExpectedHighStringEvidence(frame, midi) : true
+  })
+  if (missingMidi == null) {
+    return null
+  }
+  const stringNum = stringByMidi.get(missingMidi)
+  if (!isHighGuitarString(stringNum)) {
+    return null
+  }
+  return `Heard low string — try picking the ${guitarStringPickLabel(stringNum)} string a little louder`
+}
+
 function hasStrongMissingGuitarChordToneEvidence(frame, expectedMidis = [], heardMidis = new Set()) {
   if (!frame?.v2DetectedMidis?.length || !heardMidis?.size) {
     return false
@@ -158,15 +197,23 @@ function hasStrongMissingGuitarChordToneEvidence(frame, expectedMidis = [], hear
   if (rms < Math.max(0.0012, noiseFloor * 0.35)) {
     return false
   }
-  return expectedMidis.some(
-    (midi) =>
-      !heardMidis.has(midi) &&
-      frame.v2DetectedMidis.includes(midi) &&
-      hasStrongExpectedV2Evidence(frame, midi, {
-        minConfidence: 0.58,
-        minRatio: 2.6,
-      }),
+  const stringByMidi = buildExpectedStringByMidi(frame?.expectedStringFrets)
+  const heardLowString = [...heardMidis].some((midi) =>
+    isLowGuitarString(stringByMidi.get(midi)),
   )
+  return expectedMidis.some((midi) => {
+    if (heardMidis.has(midi)) {
+      return false
+    }
+    if (!frame.v2DetectedMidis.includes(midi)) {
+      return false
+    }
+    const isMissingHighString =
+      heardLowString && isHighGuitarString(stringByMidi.get(midi))
+    return hasStrongExpectedV2Evidence(frame, midi, isMissingHighString
+      ? { minConfidence: 0.5, minRatio: 2.2 }
+      : { minConfidence: 0.58, minRatio: 2.6 })
+  })
 }
 
 function micFrameRejectReason({
@@ -445,12 +492,12 @@ export default function useWaitForYouMicInput({
   )
 
   const applyMatchResult = useCallback(
-    (result) => {
+    (result, frame = null) => {
       if (!result) {
         return
       }
 
-      const feedback = micFeedbackFromResult(result, currentCheckpoint)
+      const feedback = micFeedbackFromResult(result, currentCheckpoint, frame)
 
       if (
         feedback.outcome === WFY_INPUT_OUTCOME.CORRECT &&
@@ -758,7 +805,7 @@ export default function useWaitForYouMicInput({
           if (confirmConfidentMatch(key, frameConfident)) {
             resetMatchConfirm()
             advancedForTrace = true
-            applyMatchResult(preview)
+            applyMatchResult(preview, frame)
             return
           }
         } else {
@@ -769,7 +816,7 @@ export default function useWaitForYouMicInput({
           preview.outcome === MATCH_OUTCOME.COMPLETE
         ) {
           setInputFeedback({
-            ...micFeedbackFromResult(preview, currentCheckpoint),
+            ...micFeedbackFromResult(preview, currentCheckpoint, frame),
             outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
             micEngineMode,
           })
@@ -798,7 +845,7 @@ export default function useWaitForYouMicInput({
         if (sequencePreview.outcome === MATCH_OUTCOME.WRONG) {
           resetMatchConfirm()
           setInputFeedback({
-            ...micFeedbackFromResult(sequencePreview, currentCheckpoint),
+            ...micFeedbackFromResult(sequencePreview, currentCheckpoint, frame),
             micChordMode: true,
             micEngineMode,
           })
@@ -816,7 +863,7 @@ export default function useWaitForYouMicInput({
             resetMatchConfirm()
             setLastHeardMidi(frame.midi)
             advancedForTrace = true
-            applyMatchResult(sequencePreview)
+            applyMatchResult(sequencePreview, frame)
             return
           }
         } else {
@@ -827,7 +874,7 @@ export default function useWaitForYouMicInput({
           sequencePreview.outcome === MATCH_OUTCOME.COMPLETE
         ) {
           setInputFeedback({
-            ...micFeedbackFromResult(sequencePreview, currentCheckpoint),
+            ...micFeedbackFromResult(sequencePreview, currentCheckpoint, frame),
             outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
             micChordMode: true,
             micEngineMode,
@@ -862,7 +909,7 @@ export default function useWaitForYouMicInput({
           resetMatchConfirm()
           setLastHeardMidi(frame.v2DetectedMidis[0] ?? frame.midi)
           advancedForTrace = true
-          applyMatchResult(v2Preview)
+          applyMatchResult(v2Preview, frame)
           return
         }
       } else if (v2Preview) {
@@ -874,7 +921,7 @@ export default function useWaitForYouMicInput({
         v2Preview?.outcome === MATCH_OUTCOME.COMPLETE
       ) {
         setInputFeedback({
-          ...micFeedbackFromResult(v2Preview, currentCheckpoint),
+          ...micFeedbackFromResult(v2Preview, currentCheckpoint, frame),
           outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
           micEngineMode,
         })
@@ -908,7 +955,7 @@ export default function useWaitForYouMicInput({
       ) {
         matchResultForTrace = monophonicPreview
         setInputFeedback({
-          ...micFeedbackFromResult(monophonicPreview, currentCheckpoint),
+          ...micFeedbackFromResult(monophonicPreview, currentCheckpoint, frame),
           outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
           micEngineMode,
         })
@@ -942,6 +989,7 @@ export default function useWaitForYouMicInput({
   useMicEngineV2Detector({
     enabled: useV2Detector,
     expectedMidis,
+    expectedStringFrets: isGuitarChordShape ? currentCheckpoint?.expectedStringFrets ?? null : null,
     analyserRef: microphone?.analyser,
     getTimeDomainBuffer: microphone?.getTimeDomainBuffer,
     sampleRate: microphone?.sampleRate ?? 44100,

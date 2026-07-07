@@ -122,6 +122,7 @@ export function processMicEngineV2Tick({
   buffer,
   sampleRate,
   expectedMidis = [],
+  expectedStringFrets = null,
   noiseFloor = null,
   state,
   centsTolerance = 35,
@@ -175,6 +176,7 @@ export function processMicEngineV2Tick({
       const scored = scoreInformedChordWindow(buffer, sampleRate, expectedMidis, {
         fftSize: runtimeState.fftSize,
         window: runtimeState.window,
+        expectedStringFrets: expectedStringFrets ?? undefined,
       })
       v2Notes = scored.notes ?? []
       detectedMidis = scored.detectedMidis ?? []

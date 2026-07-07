@@ -1,7 +1,77 @@
 {
-  "generatedAt": "2026-07-05T22:38:03.821Z",
+  "generatedAt": "2026-07-07T20:04:25.655Z",
   "baseUrl": "http://127.0.0.1:4173",
   "scenarios": [
+    {
+      "id": "live-frame-regression-replay",
+      "cases": [
+        {
+          "name": "next different note advances while previous rings",
+          "passed": true,
+          "detail": ""
+        },
+        {
+          "name": "sustained note does not skip checkpoints",
+          "passed": true,
+          "detail": ""
+        },
+        {
+          "name": "repeated same note requires fresh attack",
+          "passed": true,
+          "detail": ""
+        },
+        {
+          "name": "repeated same note accepts fresh attack",
+          "passed": true,
+          "detail": ""
+        },
+        {
+          "name": "speech over ringing instrument does not advance",
+          "passed": true,
+          "detail": ""
+        },
+        {
+          "name": "room noise does not advance",
+          "passed": true,
+          "detail": ""
+        },
+        {
+          "name": "quiet piano note advances",
+          "passed": true,
+          "detail": ""
+        },
+        {
+          "name": "quiet acoustic guitar note advances",
+          "passed": true,
+          "detail": ""
+        },
+        {
+          "name": "quiet electric-style guitar note advances",
+          "passed": true,
+          "detail": ""
+        },
+        {
+          "name": "guitar double-stop with one weak tone advances",
+          "passed": true,
+          "detail": ""
+        },
+        {
+          "name": "one double-stop tone alone does not advance",
+          "passed": true,
+          "detail": ""
+        },
+        {
+          "name": "staggered guitar double-stop advances",
+          "passed": true,
+          "detail": ""
+        },
+        {
+          "name": "wrong guitar double-stop does not advance",
+          "passed": true,
+          "detail": ""
+        }
+      ]
+    },
     {
       "id": "permission-denied",
       "blocked": true,
@@ -9,8 +79,8 @@
     },
     {
       "id": "wfy-mic-main",
-      "chipAfterEnable": "No input detected — check the mic is unmuted",
-      "calLabel": "No input detected — check the mic is unmuted"
+      "chipAfterEnable": "Ready — play the highlighted note",
+      "calLabel": "Ready — play the highlighted note"
     },
     {
       "id": "quiet-room",
@@ -23,6 +93,58 @@
     }
   ],
   "passes": [
+    {
+      "name": "frame replay: next different note advances while previous rings",
+      "detail": ""
+    },
+    {
+      "name": "frame replay: sustained note does not skip checkpoints",
+      "detail": ""
+    },
+    {
+      "name": "frame replay: repeated same note requires fresh attack",
+      "detail": ""
+    },
+    {
+      "name": "frame replay: repeated same note accepts fresh attack",
+      "detail": ""
+    },
+    {
+      "name": "frame replay: speech over ringing instrument does not advance",
+      "detail": ""
+    },
+    {
+      "name": "frame replay: room noise does not advance",
+      "detail": ""
+    },
+    {
+      "name": "frame replay: quiet piano note advances",
+      "detail": ""
+    },
+    {
+      "name": "frame replay: quiet acoustic guitar note advances",
+      "detail": ""
+    },
+    {
+      "name": "frame replay: quiet electric-style guitar note advances",
+      "detail": ""
+    },
+    {
+      "name": "frame replay: guitar double-stop with one weak tone advances",
+      "detail": ""
+    },
+    {
+      "name": "frame replay: one double-stop tone alone does not advance",
+      "detail": ""
+    },
+    {
+      "name": "frame replay: staggered guitar double-stop advances",
+      "detail": ""
+    },
+    {
+      "name": "frame replay: wrong guitar double-stop does not advance",
+      "detail": ""
+    },
     {
       "name": "mic permission denied shows Mic blocked",
       "detail": ""
@@ -40,12 +162,16 @@
       "detail": "v2-score-informed"
     },
     {
+      "name": "recent mic trace export contains live browser frames",
+      "detail": "frames=120"
+    },
+    {
       "name": "mic shows actionable status after grant",
-      "detail": "No input detected — check the mic is unmuted"
+      "detail": "Ready — play the highlighted note"
     },
     {
       "name": "mic calibration status line present",
-      "detail": "No input detected — check the mic is unmuted"
+      "detail": "Ready — play the highlighted note"
     },
     {
       "name": "Hear It does not dismiss mic panel",

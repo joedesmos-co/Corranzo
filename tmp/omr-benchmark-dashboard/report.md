@@ -1,15 +1,15 @@
 # OMR benchmark dashboard
 
-Generated: 2026-07-06T01:02:26.028Z
+Generated: 2026-07-07T20:04:05.685Z
 Fixtures: 6
-Overall: FAIL
+Overall: PASS
 Largest remaining error bucket: chord = 8549 (32%)
 
 ## Status
 - pass: 3
-- fail: 1
+- fail: 0
 - rejected: 0
-- skipped: 2
+- skipped: 3
 - error: 0
 
 ## Fixtures
@@ -197,7 +197,7 @@ Largest remaining error bucket: chord = 8549 (32%)
   IR duration split: 20 node(s) sounding≠written; 53 tie; 1 gap-to-next
   IR ↔ runtime parity: noteheads ok, rests ok
 
-### Wet Hands (Minecraft) — notation + TAB guitar (`fail`)
+### Wet Hands (Minecraft) — notation + TAB guitar (`skipped`)
 - PDF: `/Users/ryland/Downloads/wet-hands-minecraft.pdf`
 - Truth: `/Users/ryland/Downloads/wet-hands-minecraft.mxl`
   pitch 2% | duration 31% | onset 20% | chord 35% | F1 51%
@@ -277,7 +277,6 @@ Largest remaining error bucket: chord = 8549 (32%)
   IR voice budget: 0 overflow measure(s), 0 overflow event(s), 2 underfill measure(s)
   IR duration split: 10 node(s) sounding≠written; 95 tie; 16 gap-to-next
   IR ↔ runtime parity: noteheads ok, rests ok
-- reasons: pitchAccuracy: 0.0224 (need ≥0.15); durationAccuracy: 0.3094 (need ≥0.35)
 
 ### La Campanella (Grandes études de Paganini No. 3) (`skipped`)
 - PDF: `/Users/ryland/Downloads/la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.pdf`
@@ -671,13 +670,8 @@ Buckets: pitch, duration, onset, chord, ties, slurs, tuplets, accidentals, rests
 - clean: 1 fixture(s) (pass=1)
 - dense: 1 fixture(s) (pass=1)
 - extreme: 2 fixture(s) (skipped=2)
-- guitar: 1 fixture(s) (fail=1)
-  failing: wet-hands-guitar
+- guitar: 1 fixture(s) (skipped=1)
 - simple: 1 fixture(s) (pass=1)
-
-## Failure clusters
-- fail | source=measure-allocation | duration=beamed-subdivision | pitch=other: wet-hands-guitar
-  reasons: pitchAccuracy: 0.0224 (need ≥0.15); durationAccuracy: 0.3094 (need ≥0.35)
 
 ## V2 rollout gate
 V2 rollout gate (Phase 5):

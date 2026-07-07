@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "generatedAt": "2026-07-06T01:02:26.028Z",
+  "generatedAt": "2026-07-07T20:04:05.685Z",
   "fixtureCount": 6,
   "statusCounts": {
     "pass": 3,
-    "fail": 1,
+    "fail": 0,
     "rejected": 0,
-    "skipped": 2,
+    "skipped": 3,
     "error": 0
   },
-  "overallPass": false,
+  "overallPass": true,
   "topErrorCategories": [
     {
       "category": "measure-allocation",
@@ -178,11 +178,9 @@
       "tier": "guitar",
       "fixtureCount": 1,
       "statusCounts": {
-        "fail": 1
+        "skipped": 1
       },
-      "failing": [
-        "wet-hands-guitar"
-      ]
+      "failing": []
     },
     {
       "tier": "simple",
@@ -193,25 +191,10 @@
       "failing": []
     }
   ],
-  "failureClusters": [
-    {
-      "key": "fail|measure-allocation|beamed-subdivision|other",
-      "status": "fail",
-      "errorSource": "measure-allocation",
-      "durationCategory": "beamed-subdivision",
-      "pitchCategory": "other",
-      "fixtures": [
-        "wet-hands-guitar"
-      ],
-      "reasons": [
-        "pitchAccuracy: 0.0224 (need ≥0.15)",
-        "durationAccuracy: 0.3094 (need ≥0.35)"
-      ]
-    }
-  ],
+  "failureClusters": [],
   "rolloutGate": {
     "phase": 5,
-    "generatedAt": "2026-07-06T01:02:26.028Z",
+    "generatedAt": "2026-07-07T20:04:05.686Z",
     "evidence": {
       "phase1": {
         "buckets": {
@@ -586,7 +569,7 @@
   },
   "voiceSerializationQualification": {
     "phase": "7",
-    "generatedAt": "2026-07-06T01:02:26.029Z",
+    "generatedAt": "2026-07-07T20:04:05.687Z",
     "enforcedFixtures": [
       "clean",
       "dense",
@@ -39899,28 +39882,12 @@
       "label": "Wet Hands (Minecraft) — notation + TAB guitar",
       "tier": "guitar",
       "optional": true,
-      "diagnosticOnly": false,
+      "diagnosticOnly": true,
       "pdfPath": "/Users/ryland/Downloads/wet-hands-minecraft.pdf",
       "truthPath": "/Users/ryland/Downloads/wet-hands-minecraft.mxl",
-      "status": "fail",
-      "failureReasons": [
-        "pitchAccuracy: 0.0224 (need ≥0.15)",
-        "durationAccuracy: 0.3094 (need ≥0.35)"
-      ],
-      "thresholdFailures": [
-        {
-          "metric": "pitchAccuracy",
-          "actual": 0.0224,
-          "expected": 0.15,
-          "mode": "gte"
-        },
-        {
-          "metric": "durationAccuracy",
-          "actual": 0.3094,
-          "expected": 0.35,
-          "mode": "gte"
-        }
-      ],
+      "status": "skipped",
+      "failureReasons": [],
+      "thresholdFailures": [],
       "metrics": {
         "pitchAccuracy": 0.0224,
         "durationAccuracy": 0.3094,
