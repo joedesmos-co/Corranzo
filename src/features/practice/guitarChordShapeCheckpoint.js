@@ -45,6 +45,12 @@ export function isHighGuitarString(stringNum) {
   return Number.isFinite(string) && string >= 1 && string <= GUITAR_HIGH_STRING_MAX
 }
 
+/** Strings 1–3: thin strings that need masking relief when a low string is loud. */
+export function isUpperGuitarStringForMasking(stringNum) {
+  const string = Number(stringNum)
+  return Number.isFinite(string) && string >= 1 && string <= 3
+}
+
 export function isLowGuitarString(stringNum) {
   const string = Number(stringNum)
   return Number.isFinite(string) && string >= GUITAR_LOW_STRING_MIN && string <= 6
@@ -184,6 +190,7 @@ export function enrichGuitarChordCheckpoint(checkpoint, { instrumentId = null, t
     kind: CHORD_CHECKPOINT_KIND.CHORD_SHAPE,
     targetKind: CHORD_CHECKPOINT_KIND.CHORD_SHAPE,
     isGuitarChordShape: true,
+    isRollingChordMic: true,
     guitarChordShape: shape,
     expectedStringFrets,
     displayLabel,

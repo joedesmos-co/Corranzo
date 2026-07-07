@@ -23,6 +23,7 @@ import {
   buildExpectedStringByMidi,
   isHighGuitarString,
   isLowGuitarString,
+  isUpperGuitarStringForMasking,
   minimumGuitarChordTonesRequired,
 } from './guitarChordShapeCheckpoint.js'
 
@@ -453,6 +454,75 @@ function rememberGuitarHeardMidis(
   }
 }
 
+function guitarMidiPitchClass(midi) {
+  return ((midi % 12) + 12) % 12
+}
+
+/**
+ * Drop weak V2 grazes so noise cannot accumulate chord tones across the rolling window.
+ */
+export function filterGuitarChordDetectedMidis(frame, detectedMidis = [], expected = [], stringByMidi = new Map()) {
+  if (!frame?.v2Active) {
+    return detectedMidis ?? []
+  }
+
+  const lowPitchClassesInFrame = new Set(
+    (detectedMidis ?? [])
+      .filter((midi) => isLowGuitarString(stringByMidi.get(midi)))
+      .map((midi) => guitarMidiPitchClass(midi)),
+  )
+  const lowPresentInFrame = lowPitchClassesInFrame.size > 0
+  const dyad = expected.length === 2
+
+  return (detectedMidis ?? []).filter((midi) => {
+    if (!expected.includes(midi)) {
+      return false
+    }
+    const note = (frame.v2Notes ?? []).find((entry) => entry?.midi === midi)
+    if (!note?.detected) {
+      return false
+    }
+    const stringNum = stringByMidi.get(midi)
+    const midiPitchClass = guitarMidiPitchClass(midi)
+
+    // Masking-rescored upper tones that share pitch class with a confirmed low string
+    // are usually octave harmonics, not a separately plucked note.
+    if (
+      note.maskingRescored &&
+      isUpperGuitarStringForMasking(stringNum) &&
+      lowPitchClassesInFrame.has(midiPitchClass)
+    ) {
+      return false
+    }
+
+    let minConfidence = isHighGuitarString(stringNum)
+      ? 0.24
+      : isUpperGuitarStringForMasking(stringNum)
+        ? 0.28
+        : 0.36
+    let minRatio = isHighGuitarString(stringNum)
+      ? 1.18
+      : isUpperGuitarStringForMasking(stringNum)
+        ? 1.22
+        : 1.38
+
+    if (dyad && lowPresentInFrame) {
+      if (isHighGuitarString(stringNum)) {
+        minConfidence = 0.14
+        minRatio = 1.08
+      } else if (
+        isUpperGuitarStringForMasking(stringNum) &&
+        !lowPitchClassesInFrame.has(midiPitchClass)
+      ) {
+        minConfidence = 0.16
+        minRatio = 1.1
+      }
+    }
+
+    return (note.confidence ?? 0) >= minConfidence && (note.ratio ?? 0) >= minRatio
+  })
+}
+
 function guitarHeardExpectedMidi(bufferState, expectedMidi, stringByMidi, now) {
   if (bufferState?.heardMidis?.has(expectedMidi)) {
     return true
@@ -473,8 +543,13 @@ export function evaluateGuitarChordShapeMicInput(
   detectedMidis = [],
   bufferState = null,
   settings = {},
+  frame = null,
 ) {
   const expected = getExpectedMidis(checkpoint)
+  const stringByMidi = buildExpectedStringByMidi(checkpoint?.expectedStringFrets)
+  const filteredMidis = frame
+    ? filterGuitarChordDetectedMidis(frame, detectedMidis, expected, stringByMidi)
+    : detectedMidis
   const required =
     checkpoint?.minimumRequiredTones ??
     checkpoint?.minimumChordTonesRequired ??
@@ -484,7 +559,6 @@ export function evaluateGuitarChordShapeMicInput(
     Number(checkpoint?.rollingWindowMs) ||
     DEFAULT_GUITAR_CHORD_SHAPE_WINDOW_MS
   const now = Date.now()
-  const stringByMidi = buildExpectedStringByMidi(checkpoint?.expectedStringFrets)
 
   if (bufferState) {
     pruneStickyHighMidis(bufferState, now)
@@ -505,7 +579,7 @@ export function evaluateGuitarChordShapeMicInput(
     }
     rememberGuitarHeardMidis(
       bufferState,
-      detectedMidis,
+      filteredMidis,
       expected,
       stringByMidi,
       settings,
@@ -516,7 +590,7 @@ export function evaluateGuitarChordShapeMicInput(
   const matchedIndices = new Set()
   for (let index = 0; index < expected.length; index += 1) {
     const expectedMidi = expected[index]
-    const heardInFrame = (detectedMidis ?? []).some((midi) =>
+    const heardInFrame = filteredMidis.some((midi) =>
       pitchMatches(midi, expectedMidi, settings ?? {}),
     )
     const heardInBuffer = guitarHeardExpectedMidi(bufferState, expectedMidi, stringByMidi, now)
@@ -537,13 +611,15 @@ export function evaluateGuitarChordShapeMicInput(
     expected,
     matchedIndices,
     isChord: true,
-    playedMidi: detectedMidis?.[0] ?? null,
-    micEngineMode: 'guitar-chord-shape',
-    detectedMidis: [...(detectedMidis ?? [])],
+    playedMidi: filteredMidis?.[0] ?? detectedMidis?.[0] ?? null,
+    micEngineMode: checkpoint?.isPianoChordMic ? 'piano-chord-rolling' : 'guitar-chord-shape',
+    detectedMidis: [...(filteredMidis ?? detectedMidis ?? [])],
     matchedCount,
     totalExpected: expected.length,
     requiredTones: required,
-    isGuitarChordShape: true,
+    isGuitarChordShape: Boolean(checkpoint?.isGuitarChordShape),
+    isRollingChordMic: Boolean(checkpoint?.isRollingChordMic),
+    isPianoChordMic: Boolean(checkpoint?.isPianoChordMic),
     heardLowString,
     missingHighStringMidis,
   }
@@ -568,7 +644,7 @@ export function evaluateGuitarChordShapeMicInput(
  * (matching what those settings promise the player).
  */
 export function evaluateMicScoreInformedInput(checkpoint, detectedMidis = [], settings) {
-  if (checkpoint?.isGuitarChordShape) {
+  if (checkpoint?.isRollingChordMic) {
     return evaluateGuitarChordShapeMicInput(checkpoint, detectedMidis, null, settings)
   }
   const expected = getExpectedMidis(checkpoint)

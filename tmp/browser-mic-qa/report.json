@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T20:04:25.655Z",
+  "generatedAt": "2026-07-07T21:28:11.267Z",
   "baseUrl": "http://127.0.0.1:4173",
   "scenarios": [
     {
@@ -79,8 +79,8 @@
     },
     {
       "id": "wfy-mic-main",
-      "chipAfterEnable": "Ready — play the highlighted note",
-      "calLabel": "Ready — play the highlighted note"
+      "chipAfterEnable": "No input detected — check the mic is unmuted",
+      "calLabel": "No input detected — check the mic is unmuted"
     },
     {
       "id": "quiet-room",
@@ -163,15 +163,15 @@
     },
     {
       "name": "recent mic trace export contains live browser frames",
-      "detail": "frames=120"
+      "detail": "frames=121"
     },
     {
       "name": "mic shows actionable status after grant",
-      "detail": "Ready — play the highlighted note"
+      "detail": "No input detected — check the mic is unmuted"
     },
     {
       "name": "mic calibration status line present",
-      "detail": "Ready — play the highlighted note"
+      "detail": "No input detected — check the mic is unmuted"
     },
     {
       "name": "Hear It does not dismiss mic panel",

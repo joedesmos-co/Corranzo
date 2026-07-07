@@ -1,6 +1,6 @@
 # Real Mic Browser QA Report
 
-**Generated:** 2026-07-07T20:04:25.655Z
+**Generated:** 2026-07-07T21:28:11.267Z
 
 **Passed:** 28 · **Failed:** 0
 
@@ -22,9 +22,9 @@
 - WFY section visible with Microphone source
 - mic permission grant enables capture — auto-started
 - production build uses V2 mic engine when flag unset — v2-score-informed
-- recent mic trace export contains live browser frames — frames=120
-- mic shows actionable status after grant — Ready — play the highlighted note
-- mic calibration status line present — Ready — play the highlighted note
+- recent mic trace export contains live browser frames — frames=121
+- mic shows actionable status after grant — No input detected — check the mic is unmuted
+- mic calibration status line present — No input detected — check the mic is unmuted
 - Hear It does not dismiss mic panel
 - leaving WFY hides mic panel and test UI
 - instrument switch does not show stale Last confirmed mic feedback

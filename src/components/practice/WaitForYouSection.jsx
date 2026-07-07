@@ -9,7 +9,6 @@ import {
   WFY_INPUT_SOURCE,
 } from '../../features/microphone-input/micInputConstants.js'
 import WaitForYouMatchSettingsPanel from './WaitForYouMatchSettingsPanel.jsx'
-import WaitForYouInputSourceSelector from './WaitForYouInputSourceSelector.jsx'
 import PracticeHelpTip from './PracticeHelpTip.jsx'
 
 function statusMessage(status, currentCheckpoint, checkpointMode, displayLabel) {
@@ -92,9 +91,6 @@ export default function WaitForYouSection({
   checkpointIndex,
   totalCheckpoints,
   inputSource,
-  onInputSourceChange,
-  midiAvailable,
-  microphoneAvailable,
   inputMatchingActive,
   inputFeedback,
   guidance = null,
@@ -138,6 +134,7 @@ export default function WaitForYouSection({
 
   const expectedMidis = currentCheckpoint ? getExpectedMidis(currentCheckpoint) : []
   const isGuitarChordShape = Boolean(currentCheckpoint?.isGuitarChordShape)
+  const isRollingChordMic = Boolean(currentCheckpoint?.isRollingChordMic)
   const chordTargetLabel = conciseChordTargetLabel(currentCheckpoint, expectedMidis)
   const detailsLabel = checkpointDetailsLabel(currentCheckpoint, expectedMidis)
   const showChordDetails = expectedMidis.length > 1 && Boolean(detailsLabel)
@@ -147,12 +144,6 @@ export default function WaitForYouSection({
     status === WFY_STATUS.WAITING &&
     guidance?.primary != null
 
-  const showMicInputHint =
-    checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
-    inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
-    status === WFY_STATUS.WAITING &&
-    getExpectedMidis(currentCheckpoint).length > 1 &&
-    !isGuitarChordShape
   const showMicOffNotice =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
@@ -178,11 +169,7 @@ export default function WaitForYouSection({
   const structurallyDone =
     status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS
   const primaryActionDisabled = displayStatus === WFY_DISPLAY_STATUS.CONTINUING
-  const micChordSequence =
-    checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
-    inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
-    expectedMidis.length > 1 &&
-    !isGuitarChordShape
+  const micChordSequence = false
 
   return (
     <section className={sectionClass} aria-label="Wait For You">
@@ -204,16 +191,6 @@ export default function WaitForYouSection({
           </span>
         )}
       </div>
-
-      <WaitForYouInputSourceSelector
-        checkpointMode={checkpointMode}
-        inputSource={inputSource}
-        onInputSourceChange={onInputSourceChange}
-        instrumentId={instrumentId}
-        midiAvailable={midiAvailable}
-        microphoneAvailable={microphoneAvailable}
-        disabled={structurallyDone}
-      />
 
       {showMatchSettings && matchSettings && (
         <WaitForYouMatchSettingsPanel
@@ -282,12 +259,6 @@ export default function WaitForYouSection({
             </button>
           )}
         </div>
-      )}
-
-      {showMicInputHint && (
-        <p className="wait-for-you__mic-chord-hint" role="status">
-          Chord practice sequence: play one chord tone at a time. Use MIDI for chords together.
-        </p>
       )}
 
       {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && status === WFY_STATUS.WAITING && (
@@ -365,19 +336,17 @@ export default function WaitForYouSection({
           {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && (
             <div className="wait-for-you__now-notes">
               <span className="wait-for-you__now-notes-label">
-                {isGuitarChordShape
-                  ? 'Play shape'
-                  : micChordSequence
-                    ? 'Chord practice sequence'
-                    : expectedMidis.length > 1
-                      ? 'Chord target'
-                      : 'Play'}
+                {isRollingChordMic || isGuitarChordShape
+                  ? 'Play'
+                  : expectedMidis.length > 1
+                    ? 'Chord target'
+                    : 'Play'}
               </span>
               <span className="wait-for-you__note-chips">
                 {expectedMidis.length > 1 ? (
                   <span
                     className={`wait-for-you__note-chip${
-                      isGuitarChordShape ? ' wait-for-you__note-chip--shape' : ''
+                      isRollingChordMic || isGuitarChordShape ? ' wait-for-you__note-chip--shape' : ''
                     }`}
                   >
                     {chordTargetLabel ?? guidance?.expectedLabel ?? 'Chord'}

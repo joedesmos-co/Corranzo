@@ -4,7 +4,10 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { INSTRUMENT_IDS } from '../src/features/instruments/instruments.js'
 import { WFY_INPUT_SOURCE } from '../src/features/microphone-input/micInputConstants.js'
-import { buildWfyInputModalLayout } from '../src/features/practice/wfyInputSourceOptions.js'
+import {
+  buildWfyInputModalLayout,
+  buildWfyInputSelectorOptions,
+} from '../src/features/practice/wfyInputSourceOptions.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const readSrc = (...parts) => readFileSync(join(root, 'src', ...parts), 'utf8')
@@ -20,47 +23,54 @@ describe('guitar WFY input modal simplification', () => {
     expect(layout.primaryActions[0].label).toBe('Use Microphone')
   })
 
-  it('does not expose MIDI device in the default guitar modal actions', () => {
+  it('does not expose MIDI device or Continue in the default guitar modal', () => {
     const layout = buildWfyInputModalLayout({
       instrumentId: INSTRUMENT_IDS.GUITAR,
       midiAvailable: true,
       microphoneAvailable: true,
     })
     expect(layout.primaryActions.some((action) => action.id === WFY_INPUT_SOURCE.MIDI)).toBe(false)
-    expect(layout.advancedActions.some((action) => action.id === WFY_INPUT_SOURCE.MIDI)).toBe(true)
-  })
-
-  it('does not expose Continue as a large guitar modal button', () => {
-    const layout = buildWfyInputModalLayout({
-      instrumentId: INSTRUMENT_IDS.GUITAR,
-      midiAvailable: true,
-      microphoneAvailable: true,
-    })
     expect(layout.primaryActions.some((action) => action.id === WFY_INPUT_SOURCE.MANUAL)).toBe(false)
-    expect(layout.fallbackLink?.label).toBe('Practice without mic')
-    expect(layout.fallbackLink?.id).toBe(WFY_INPUT_SOURCE.MANUAL)
+    expect(layout.fallbackLink).toBeNull()
+    expect(layout.advancedActions).toEqual([])
   })
 
-  it('keeps piano modal primary actions for microphone, continue, and MIDI', () => {
+  it('piano modal shows Microphone and MIDI keyboard only', () => {
     const layout = buildWfyInputModalLayout({
       instrumentId: INSTRUMENT_IDS.PIANO,
       midiAvailable: true,
       microphoneAvailable: true,
     })
-    expect(layout.layout).toBe('standard')
-    expect(layout.primaryActions.map((action) => action.id)).toEqual([
-      WFY_INPUT_SOURCE.MICROPHONE,
-      WFY_INPUT_SOURCE.MANUAL,
-      WFY_INPUT_SOURCE.MIDI,
+    expect(layout.layout).toBe('piano')
+    expect(layout.primaryActions.map((action) => action.label)).toEqual([
+      'Use Microphone',
+      'Use MIDI Keyboard',
+    ])
+    expect(layout.fallbackLink).toBeNull()
+    expect(layout.advancedActions).toEqual([])
+  })
+
+  it('keeps guitar MIDI and Continue under More options in the side selector', () => {
+    const options = buildWfyInputSelectorOptions({
+      instrumentId: INSTRUMENT_IDS.GUITAR,
+      midiAvailable: true,
+      microphoneAvailable: true,
+    })
+    expect(options.filter((option) => !option.advanced).map((option) => option.label)).toEqual([
+      'Use Microphone',
+    ])
+    expect(options.filter((option) => option.advanced).map((option) => option.label)).toEqual([
+      'Use MIDI device',
+      'Use Continue button',
     ])
   })
 
-  it('renders guitar fallback link and advanced MIDI in the modal component', () => {
+  it('renders simplified guitar and piano layouts in the modal component', () => {
     const modal = readSrc('components', 'practice', 'WaitForYouInputSourceModal.jsx')
-    expect(modal).toContain('layout.fallbackLink.label')
-    expect(modal).toContain('More options')
-    expect(modal).toContain('wfy-input-source-modal__link')
-    expect(modal).toContain('wfy-input-source-modal__advanced')
+    expect(modal).toContain("layout.layout === 'guitar'")
+    expect(modal).toContain("layout.layout === 'piano'")
+    expect(modal).not.toContain('layout.fallbackLink')
+    expect(modal).not.toContain('Practice without mic')
   })
 
   it('keeps side-panel source changes available after the modal closes', () => {
@@ -69,5 +79,6 @@ describe('guitar WFY input modal simplification', () => {
     expect(panel).toContain('onInputSourceChange={session.setWfyInputSource}')
     expect(selector).toContain('buildWfyInputSelectorOptions')
     expect(selector).toContain('onInputSourceChange(option.id)')
+    expect(selector).toContain('More options')
   })
 })

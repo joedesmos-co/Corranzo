@@ -2,54 +2,49 @@ import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { WFY_CHECKPOINT_MODE } from '../src/features/practice/waitForYouCheckpointMode.js'
 import {
-  shouldShowWaitForYouInputSourceModal,
-  waitForYouInputSourceIsReady,
+  practiceInputSourceIsReady,
+  shouldShowPracticeInputSourceModal,
 } from '../src/features/practice/waitForYouInputSourceSession.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const readSrc = (...parts) => readFileSync(join(root, 'src', ...parts), 'utf8')
 
-describe('Wait For You input-source modal state', () => {
-  it('opens on entering note-mode WFY when no source was selected this session', () => {
+describe('Practice input-source modal state', () => {
+  it('opens when entering Practice before a source was selected this session', () => {
     expect(
-      shouldShowWaitForYouInputSourceModal({
-        isWaitForYou: true,
-        checkpointMode: WFY_CHECKPOINT_MODE.NOTE,
+      shouldShowPracticeInputSourceModal({
+        practiceActive: true,
         sourceSelectedThisSession: false,
       }),
     ).toBe(true)
   })
 
-  it('does not reopen every checkpoint after a source choice', () => {
+  it('does not reopen after a source choice', () => {
     expect(
-      shouldShowWaitForYouInputSourceModal({
-        isWaitForYou: true,
-        checkpointMode: WFY_CHECKPOINT_MODE.NOTE,
+      shouldShowPracticeInputSourceModal({
+        practiceActive: true,
         sourceSelectedThisSession: true,
       }),
     ).toBe(false)
     expect(
-      waitForYouInputSourceIsReady({
-        checkpointMode: WFY_CHECKPOINT_MODE.NOTE,
+      practiceInputSourceIsReady({
         sourceSelectedThisSession: true,
       }),
     ).toBe(true)
   })
 
-  it('does not block beat-mode WFY, which only needs Continue', () => {
+  it('does not open when Practice is inactive', () => {
     expect(
-      shouldShowWaitForYouInputSourceModal({
-        isWaitForYou: true,
-        checkpointMode: WFY_CHECKPOINT_MODE.BEAT,
+      shouldShowPracticeInputSourceModal({
+        practiceActive: false,
         sourceSelectedThisSession: false,
       }),
     ).toBe(false)
   })
 })
 
-describe('Wait For You input-source modal wiring', () => {
+describe('Practice input-source modal wiring', () => {
   const session = readSrc('features', 'practice', 'usePracticeSession.js')
   const panel = readSrc('components', 'practice', 'PracticeControlPanel.jsx')
   const modal = readSrc('components', 'practice', 'WaitForYouInputSourceModal.jsx')
@@ -57,24 +52,27 @@ describe('Wait For You input-source modal wiring', () => {
   const section = readSrc('components', 'practice', 'WaitForYouSection.jsx')
 
   it('renders the required modal title and choices', () => {
-    expect(modal).toContain('How do you want to play?')
+    expect(modal).toContain('How should Corranzo hear you?')
     expect(modal).toContain('buildWfyInputModalLayout')
     expect(modal).toContain('instrumentId')
     expect(modal).toContain('onChooseSource(action.id)')
-    expect(modal).toContain('onChooseSource(layout.fallbackLink.id)')
     expect(modal).toContain('role="dialog"')
     expect(modal).toContain('aria-modal="true"')
   })
 
-  it('guitar modal shows Microphone only, practice-without-mic link, and More options for MIDI', () => {
+  it('guitar modal shows Microphone only with no fallback or advanced MIDI', () => {
     expect(modal).toContain("layout.layout === 'guitar'")
-    expect(modal).toContain('layout.fallbackLink.label')
-    expect(modal).toContain('More options')
-    expect(modal).toContain('wfy-input-source-modal__link')
-    expect(modal).toContain('wfy-input-source-modal__advanced')
+    expect(modal).not.toContain('layout.fallbackLink')
+    expect(modal).not.toContain('Practice without mic')
     expect(options).toContain('buildWfyInputModalLayout')
     expect(options).toContain("layout: 'guitar'")
-    expect(options).toContain('Practice without mic')
+  })
+
+  it('piano modal shows Microphone and MIDI keyboard only', () => {
+    expect(modal).toContain("layout.layout === 'piano'")
+    expect(options).toContain("layout: 'piano'")
+    expect(options).toContain('Use MIDI Keyboard')
+    expect(options).not.toContain('Practice without mic')
   })
 
   it('portals backdrop and dialog together to document.body', () => {
@@ -105,7 +103,7 @@ describe('Wait For You input-source modal wiring', () => {
     )
   })
 
-  it('choosing Continue closes the modal and keeps manual Continue available', () => {
+  it('keeps manual Continue available for non-piano/guitar instruments', () => {
     expect(options).toContain('WFY_INPUT_SOURCE.MANUAL')
     expect(session).toContain('source: WFY_INPUT_SOURCE.MANUAL')
     expect(section).toContain('Pauses at each note in your loop until you play it or tap Continue.')
@@ -114,14 +112,18 @@ describe('Wait For You input-source modal wiring', () => {
 
   it('keeps source changes available later from the side panel', () => {
     expect(panel).toContain('<WaitForYouInputSourceModal')
-    expect(panel).toContain('<WaitForYouSection')
+    expect(panel).toContain('<WaitForYouInputSourceSelector')
     expect(panel).toContain('onInputSourceChange={session.setWfyInputSource}')
     expect(panel).toContain('onChooseSource={session.setWfyInputSource}')
     expect(panel).toContain('instrumentId={session.instrumentId}')
+    expect(section).not.toContain('<WaitForYouInputSourceSelector')
   })
 
-  it('resets source-choice state after leaving WFY', () => {
+  it('resets source-choice state when the score sources change', () => {
     expect(session).toMatch(
+      /setWfyInputSourceSelectedThisSession\(false\)[\s\S]*sourcesRevision/,
+    )
+    expect(session).not.toMatch(
       /if \(!isWaitForYou\) \{[\s\S]*setWfyInputSourceSelectedThisSession\(false\)/,
     )
   })

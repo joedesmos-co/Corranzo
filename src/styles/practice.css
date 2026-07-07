@@ -5302,6 +5302,34 @@
   stroke-width: 2;
 }
 
+/* Play Along / WFY match feedback on lane notes. */
+.staff-lane__note--correct,
+.tab-lane__note--correct {
+  color: var(--vp-played, #57b48a);
+  opacity: 1;
+  filter: drop-shadow(0 0 5px rgba(87, 180, 138, 0.55));
+}
+
+.staff-lane__note--wrong,
+.tab-lane__note--wrong {
+  color: #e85d5d;
+  opacity: 0.92;
+  filter: drop-shadow(0 0 4px rgba(232, 93, 93, 0.45));
+}
+
+.tab-lane__sustain {
+  fill: currentColor;
+  opacity: 0.42;
+}
+
+.visual-practice__legend-item--correct::before {
+  background: var(--vp-played, #57b48a);
+}
+
+.visual-practice__legend-item--wrong::before {
+  background: #e85d5d;
+}
+
 /* Upcoming notes: readable gray with a smooth handoff to current/past. */
 .staff-lane__note {
   color: var(--vp-upcoming, #b4b4bb);
@@ -5450,9 +5478,11 @@
 }
 
 .tab-lane__chord-shape {
-  fill: var(--sf-accent-muted, rgba(255, 255, 255, 0.08));
-  stroke: var(--sf-border-strong, #3f3f46);
+  fill: currentColor;
+  opacity: 0.16;
+  stroke: currentColor;
   stroke-width: 1;
+  stroke-opacity: 0.35;
 }
 
 .wait-for-you__note-chip--shape {

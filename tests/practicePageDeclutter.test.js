@@ -92,8 +92,10 @@ describe('controls are contextual, not always-on', () => {
     expect(panel).toContain('onChooseSource={session.setWfyInputSource}')
   })
 
-  it('collapses the in-panel input chooser to a one-line summary', () => {
+  it('collapses the in-panel input chooser to a one-line summary in the control panel', () => {
+    const panel = readSrc('components', 'practice', 'PracticeControlPanel.jsx')
     const selector = readSrc('components', 'practice', 'WaitForYouInputSourceSelector.jsx')
+    expect(panel).toContain('<WaitForYouInputSourceSelector')
     expect(selector).toContain('<details className="wfy-input-source wfy-input-source--compact"')
     expect(selector).toContain('wfy-input-source__summary')
     expect(selector).toContain('wfyInputSourceLabel(inputSource, instrumentId)')

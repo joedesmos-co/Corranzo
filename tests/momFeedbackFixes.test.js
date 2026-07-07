@@ -57,8 +57,8 @@ describe('Corranzo mom-test feedback pass', () => {
 
     expect(waitForYou).toContain('Starting microphone... allow access, then stay quiet for a moment.')
     expect(waitForYou).toContain('Start microphone')
-    expect(waitForYou).toContain('Chord practice sequence: play one chord tone at a time.')
-    expect(waitForYou).toContain('Use MIDI for chords together.')
+    expect(waitForYou).toContain('isRollingChordMic')
+    expect(waitForYou).toContain('wait-for-you__target-details')
   })
 
   it('defaults Wait For You to note mode and keeps beat stepping out of beginner UI', () => {

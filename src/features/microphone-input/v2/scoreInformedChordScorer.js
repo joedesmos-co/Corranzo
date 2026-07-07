@@ -9,6 +9,7 @@ import { midiToFrequency } from '../micSyntheticClips.js'
 import {
   buildExpectedStringByMidi,
   isHighGuitarString,
+  isUpperGuitarStringForMasking,
   isLowGuitarString,
 } from '../../practice/guitarChordShapeCheckpoint.js'
 import {
@@ -42,8 +43,8 @@ export const SCORE_INFORMED_DEFAULTS = {
   guitarHighStringMinConfidence: 0.14,
   guitarHighStringDetectionRatio: 1.12,
   guitarHighStringOctaveLeakFloor: 0.38,
-  guitarHighStringProbeMinRatio: 1.02,
-  guitarHighStringProbeMinConfidence: 0.14,
+  guitarHighStringProbeMinRatio: 1.08,
+  guitarHighStringProbeMinConfidence: 0.18,
   guitarHighStringProbeMinRelativeEnergy: 0.1,
   guitarHighStringFundamentalWeight: 1.28,
   guitarHighStringNoiseFloorFactor: 0.42,
@@ -347,7 +348,7 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
       }
 
       const stringNum = stringByMidi.get(note.midi) ?? null
-      const isHighString = guitarShapeContext && isHighGuitarString(stringNum)
+      const isUpperString = guitarShapeContext && isUpperGuitarStringForMasking(stringNum)
       const relativeEnergy = peakEnergy > 0 ? note.harmonicEnergy / peakEnergy : 0
       const peerRelative = peerMedian > 0 ? note.harmonicEnergy / peerMedian : 0
       note.relativeEnergy = relativeEnergy
@@ -361,7 +362,7 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
         options.octaveLeakRelativeEnergyFloor ??
         SCORE_INFORMED_DEFAULTS.octaveLeakRelativeEnergyFloor
 
-      if (highStringMaskingRelief && isHighString && lowPeerNotes.length > 0) {
+      if (highStringMaskingRelief && isUpperString && lowPeerNotes.length > 0) {
         effectiveRelativeFloor =
           options.guitarHighStringDyadRelativeFloor ??
           SCORE_INFORMED_DEFAULTS.guitarHighStringDyadRelativeFloor
@@ -376,6 +377,16 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
           SCORE_INFORMED_DEFAULTS.guitarHighStringOctaveLeakFloor
       }
 
+      const octaveHarmonicFromLowPeer =
+        highStringMaskingRelief &&
+        isUpperString &&
+        lowPeerNotes.some(
+          (peer) =>
+            pitchClass(note.midi) === pitchClass(peer.midi) &&
+            isLikelyLowStringHarmonicArtifact(note.midi, peer.midi) &&
+            (note.fundamentalEnergy ?? 0) <
+              (options.guitarOctaveDyadMinFundamental ?? 0.025),
+        )
       const octaveLeakageGuard =
         hasStrongerOctavePeer(note, notes) && relativeEnergy < octaveLeakFloor
       const adjacentLeakageGuard = hasStrongerAdjacentProbe(note, {
@@ -386,7 +397,7 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
         options,
       })
       const minFundamentalEnergy =
-        highStringMaskingRelief && isHighString
+        highStringMaskingRelief && isUpperString
           ? (options.guitarHighStringMinFundamentalEnergy ??
             SCORE_INFORMED_DEFAULTS.guitarHighStringMinFundamentalEnergy)
           : 0
@@ -397,9 +408,10 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
         (relativeEnergy >= effectiveRelativeFloor || peerRelative >= 0.72) &&
         (note.fundamentalEnergy ?? 0) >= minFundamentalEnergy &&
         !octaveLeakageGuard &&
-        !adjacentLeakageGuard
+        !adjacentLeakageGuard &&
+        !octaveHarmonicFromLowPeer
 
-      if (highStringMaskingRelief && isHighString && !note.detected) {
+      if (highStringMaskingRelief && isUpperString && !note.detected) {
         const probeNoiseFloor =
           noiseFloor *
           (options.guitarHighStringNoiseFloorFactor ??
@@ -436,7 +448,7 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
           continue
         }
         const stringNum = stringByMidi.get(note.midi)
-        if (!isHighGuitarString(stringNum)) {
+        if (!isUpperGuitarStringForMasking(stringNum)) {
           continue
         }
         const rescore = scoreExpectedNote(windowed, sampleRate, note.midi, {

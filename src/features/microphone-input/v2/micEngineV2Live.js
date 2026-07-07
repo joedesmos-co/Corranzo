@@ -246,6 +246,8 @@ export function processMicEngineV2Tick({
     v2MeanConfidence: meanConfidence,
     v2Active: usedV2 && !runtimeState.v2Unavailable,
     v2Unavailable: runtimeState.v2Unavailable,
+    expectedMidis: expectedMidis.length ? [...expectedMidis] : [],
+    expectedStringFrets: expectedStringFrets ?? null,
   }
 
   let stableMidi = null

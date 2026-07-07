@@ -19,7 +19,7 @@ describe('practice settings audit', () => {
     expect(WFY_INPUT_SOURCE_LABELS.manual).toBe('Continue button')
     const options = readSrc('features', 'practice', 'wfyInputSourceOptions.js')
     expect(options).toContain('Use Microphone')
-    expect(options).toContain('Use Continue button')
+    expect(options).toContain('Use MIDI Keyboard')
     expect(options).toContain('buildWfyInputSelectorOptions')
   })
 

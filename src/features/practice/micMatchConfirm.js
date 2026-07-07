@@ -12,12 +12,16 @@ import {
   MIC_AC_MAX_TRACKED_HZ,
   MIC_AC_MIN_TRACKED_HZ,
 } from '../microphone-input/pitchDetection.js'
+import { MIC_SIGNAL_SHAPE } from '../microphone-input/micSignalShape.js'
 
 /** Clarity a single-note frame needs before it counts toward a confirm. */
 export const MIC_MATCH_MIN_CLARITY = 0.5
 
 /** Consecutive confident frames required before committing an advance. */
 export const MIC_MATCH_CONFIRM_FRAMES = 3
+
+/** Guitar rolling chord / double-stop: need 2+ confident frames to block noise. */
+export const GUITAR_ROLLING_CHORD_CONFIRM_FRAMES = 2
 
 /**
  * Max pitch drift (cents) between consecutive confirming frames for a
@@ -86,6 +90,35 @@ export function confirmConfidentMatch(
 }
 
 /** A single-note frame is confident when the gate is open and pitch is clear. */
+function hasScoreInformedNoteConfidence(note) {
+  return (
+    note?.detected &&
+    (note.confidence ?? 0) >= 0.34 &&
+    (note.ratio ?? 0) >= 1.3 &&
+    (note.harmonicSupport ?? 0) >= 1.0
+  )
+}
+
+function hasAmpColoredNoteConfidence(note) {
+  const magnitudes = note?.harmonicMagnitudes
+  if (!note?.detected || !Array.isArray(magnitudes) || magnitudes.length < 2) {
+    return false
+  }
+  const fundamental = magnitudes[0] ?? 0
+  const second = magnitudes[1] ?? 0
+  const third = magnitudes[2] ?? 0
+  if (!(fundamental > 0)) {
+    return false
+  }
+  const ampColored =
+    second >= fundamental * 1.15 || third >= fundamental * 0.95
+  return (
+    ampColored &&
+    (note.confidence ?? 0) >= 0.3 &&
+    (note.ratio ?? 0) >= 1.22
+  )
+}
+
 export function frameConfidentForMatch(frame, { minClarity = MIC_MATCH_MIN_CLARITY } = {}) {
   if (!frame?.gateOpen) {
     return false
@@ -107,6 +140,21 @@ export function frameConfidentForMatch(frame, { minClarity = MIC_MATCH_MIN_CLARI
       (note.harmonicSupport ?? 0) >= 1.2 &&
       fundamental > 0 &&
       second >= fundamental * 1.5
+    ) {
+      return true
+    }
+    if (hasScoreInformedNoteConfidence(note)) {
+      return true
+    }
+    if (hasAmpColoredNoteConfidence(note)) {
+      return true
+    }
+    const shape = frame?.signalShape
+    if (
+      (shape === MIC_SIGNAL_SHAPE.DISTORTED || shape === MIC_SIGNAL_SHAPE.SUSTAINED) &&
+      note?.detected &&
+      (note.confidence ?? 0) >= 0.38 &&
+      (note.ratio ?? 0) >= 1.4
     ) {
       return true
     }

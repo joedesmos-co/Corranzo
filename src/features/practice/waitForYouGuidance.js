@@ -91,17 +91,23 @@ export function buildEscalatingHint({
   tabPositions = null,
   chordAsSequence = false,
   guitarChordShapeMode = false,
+  rollingChordMicMode = false,
 }) {
   if (!expectedMidis?.length || wrongAttempts <= 0) return null
   const isChord = expectedMidis.length > 1
   const label = expectedLabelFor(expectedMidis, checkpoint)
-  if (guitarChordShapeMode) {
-    if (wrongAttempts === 1) return 'Not quite — strum the highlighted shape again.'
-    if (wrongAttempts === 2) return checkpoint?.displayLabel ?? 'Play this shape.'
+  if (guitarChordShapeMode || rollingChordMicMode) {
+    if (wrongAttempts === 1) {
+      return rollingChordMicMode && !guitarChordShapeMode
+        ? 'Not quite — play the chord again.'
+        : 'Not quite — strum the highlighted shape again.'
+    }
+    if (wrongAttempts === 2) {
+      return checkpoint?.displayLabel ?? (guitarChordShapeMode ? 'Play this shape.' : 'Play this chord.')
+    }
     const position = positionHintForCheckpoint(checkpoint, { strings, tabPositions })
-    return position
-      ? `${checkpoint?.displayLabel ?? 'Play this shape'} (${position.replace(/ \+ /g, ', ')})`
-      : checkpoint?.displayLabel ?? 'Play this shape.'
+    const fallback = checkpoint?.displayLabel ?? (guitarChordShapeMode ? 'Play this shape.' : 'Play this chord.')
+    return position ? `${fallback} (${position.replace(/ \+ /g, ', ')})` : fallback
   }
   if (wrongAttempts === 1) return 'Not quite — try again.'
   if (wrongAttempts === 2) return `Expected ${label}.`
@@ -121,9 +127,15 @@ export function buildEscalatingHint({
 }
 
 /** Plain "play this" hint used on timeout or when the player asks for help. */
-export function buildTargetHint({ expectedMidis, chordAsSequence = false, checkpoint = null, guitarChordShapeMode = false }) {
-  if (guitarChordShapeMode) {
-    return checkpoint?.displayLabel ?? 'Play this shape'
+export function buildTargetHint({
+  expectedMidis,
+  chordAsSequence = false,
+  checkpoint = null,
+  guitarChordShapeMode = false,
+  rollingChordMicMode = false,
+}) {
+  if (guitarChordShapeMode || rollingChordMicMode) {
+    return checkpoint?.displayLabel ?? (guitarChordShapeMode ? 'Play this shape' : 'Play this chord')
   }
   if (expectedMidis?.length > 1 && checkpoint?.displayLabel && !chordAsSequence) {
     return checkpoint.displayLabel
@@ -151,6 +163,7 @@ export function buildGuidance({
   tabPositions = null,
   chordAsSequence = false,
   guitarChordShapeMode = false,
+  rollingChordMicMode = false,
 }) {
   const expectedMidis = getExpectedMidis(checkpoint)
   const isChord = expectedMidis.length > 1
@@ -180,7 +193,15 @@ export function buildGuidance({
       ...base,
       state: WFY_GUIDANCE.CORRECT,
       tone: 'success',
-      primary: isChord ? (chordAsSequence ? 'Sequence complete — nice!' : guitarChordShapeMode ? 'Chord shape — nice!' : 'Chord — nice!') : 'Correct!',
+      primary: isChord
+        ? (chordAsSequence
+            ? 'Sequence complete — nice!'
+            : guitarChordShapeMode
+              ? 'Chord shape — nice!'
+              : rollingChordMicMode
+                ? 'Chord — nice!'
+                : 'Chord — nice!')
+        : 'Correct!',
     }
   }
 
@@ -200,6 +221,7 @@ export function buildGuidance({
         tabPositions,
         chordAsSequence,
         guitarChordShapeMode,
+        rollingChordMicMode,
       }),
       // After enough wrong tries, surface the target on the score too.
       showTarget: wrongAttempts >= HINT_AFTER_WRONG_ATTEMPTS,
@@ -212,15 +234,17 @@ export function buildGuidance({
       inputFeedback?.remainingLabels ??
       missingLabels(expectedMidis, inputFeedback?.matchedIndices)
     let primary = missing.length
-      ? guitarChordShapeMode
-        ? `Heard part of the shape — need ${Math.max(1, (checkpoint?.minimumRequiredTones ?? checkpoint?.minimumChordTonesRequired ?? 2) - (inputFeedback?.matchedCount ?? heard.length))} more tone(s)`
+      ? guitarChordShapeMode || rollingChordMicMode
+        ? `Heard part of the chord — need ${Math.max(1, (checkpoint?.minimumRequiredTones ?? checkpoint?.minimumChordTonesRequired ?? 2) - (inputFeedback?.matchedCount ?? heard.length))} more tone(s)`
         : `Still need ${missing.join(', ')}`
       : chordAsSequence
         ? 'Sequence almost complete'
         : guitarChordShapeMode
           ? 'Almost — keep strumming the shape'
-          : 'Almost — hold the chord'
-    if (heard.length && missing.length && !guitarChordShapeMode) {
+          : rollingChordMicMode
+            ? 'Almost — keep playing the chord'
+            : 'Almost — hold the chord'
+    if (heard.length && missing.length && !guitarChordShapeMode && !rollingChordMicMode) {
       primary = `Heard ${heard.join(' + ')} — still need ${missing.join(', ')}`
     } else if (heard.length && !missing.length) {
       primary = `Heard ${heard.join(' + ')}`
@@ -241,7 +265,7 @@ export function buildGuidance({
       ...base,
       state: WFY_GUIDANCE.HINT,
       tone: 'hint',
-      primary: buildTargetHint({ expectedMidis, chordAsSequence, checkpoint, guitarChordShapeMode }),
+      primary: buildTargetHint({ expectedMidis, chordAsSequence, checkpoint, guitarChordShapeMode, rollingChordMicMode }),
       hint:
         buildEscalatingHint({
           expectedMidis,
@@ -266,15 +290,17 @@ export function buildGuidance({
       ? isChord
         ? guitarChordShapeMode
           ? checkpoint?.displayLabel ?? 'Play this shape'
-          : chordAsSequence
-            ? checkpoint?.chordSymbol
-              ? `Play ${checkpoint.chordSymbol} chord tones one at a time`
-              : `Chord practice sequence: ${conciseChordName(expectedMidis, checkpoint)}`
-            : checkpoint?.displayLabel
-              ? checkpoint.displayLabel
-            : checkpoint?.chordSymbol
-              ? `Play the ${checkpoint.chordSymbol} chord`
-              : `Play ${expectedMidis.length}-note chord`
+          : rollingChordMicMode
+            ? checkpoint?.displayLabel ?? 'Play this chord'
+            : chordAsSequence
+              ? checkpoint?.chordSymbol
+                ? `Play ${checkpoint.chordSymbol} chord tones one at a time`
+                : `Chord practice sequence: ${conciseChordName(expectedMidis, checkpoint)}`
+              : checkpoint?.displayLabel
+                ? checkpoint.displayLabel
+                : checkpoint?.chordSymbol
+                  ? `Play the ${checkpoint.chordSymbol} chord`
+                  : `Play ${expectedMidis.length}-note chord`
         : `Play ${expectedLabel}`
       : `Play ${expectedLabel}, or tap Continue`,
   }

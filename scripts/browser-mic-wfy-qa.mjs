@@ -516,17 +516,21 @@ async function clickInputSource(page, sourceLabel) {
         : 'Continue button'
 
   const modalChoice = page
-    .getByRole('dialog', { name: 'How do you want to play?' })
+    .getByRole('dialog', { name: 'How should Corranzo hear you?' })
     .getByRole('button', { name: label })
   if (await modalChoice.isVisible().catch(() => false)) {
     await modalChoice.click()
-    await sleep(800)
+    await page
+      .getByRole('dialog', { name: 'How should Corranzo hear you?' })
+      .waitFor({ state: 'hidden', timeout: 10_000 })
+      .catch(() => {})
+    await sleep(400)
     return
   }
 
   const compactSelector = page.locator('.wfy-input-source').first()
   if (await compactSelector.isVisible().catch(() => false)) {
-    const selectorBody = page.getByRole('radiogroup', { name: 'Wait For You input source' })
+    const selectorBody = page.getByRole('radiogroup', { name: 'Practice input source' })
     if (!(await selectorBody.isVisible().catch(() => false))) {
       await compactSelector.locator('summary').click()
       await sleep(200)
@@ -545,7 +549,7 @@ async function clickInputSource(page, sourceLabel) {
 }
 
 async function dismissWfyInputModalIfOpen(page, sourceLabel = 'Microphone') {
-  const dialog = page.getByRole('dialog', { name: 'How do you want to play?' })
+  const dialog = page.getByRole('dialog', { name: 'How should Corranzo hear you?' })
   if (await dialog.isVisible().catch(() => false)) {
     await clickInputSource(page, sourceLabel)
   }
@@ -556,18 +560,35 @@ async function ensurePracticeView(page) {
   if (await page.locator('.practice-workspace').isVisible().catch(() => false)) {
     return
   }
-  await page.getByRole('button', { name: 'Practice', exact: true }).click()
-  await sleep(800)
+  const modalOpen = await page
+    .getByRole('dialog', { name: 'How should Corranzo hear you?' })
+    .isVisible()
+    .catch(() => false)
+  if (!modalOpen) {
+    await page.getByRole('button', { name: 'Practice', exact: true }).click()
+    await sleep(800)
+  }
   await dismissWfyInputModalIfOpen(page)
 }
 
 async function openWfyMicPractice(page, { chooseInput = true } = {}) {
-  await page.getByRole('button', { name: 'Practice', exact: true }).click()
-  await sleep(1200)
-  await clickPracticeMode(page, 'Wait For You')
+  const modalOpen = await page
+    .getByRole('dialog', { name: 'How should Corranzo hear you?' })
+    .isVisible()
+    .catch(() => false)
+  const onPractice = await page.locator('.practice-workspace').isVisible().catch(() => false)
+
+  if (!onPractice && !modalOpen) {
+    await page.getByRole('button', { name: 'Practice', exact: true }).click()
+    await sleep(1200)
+  } else if (modalOpen || onPractice) {
+    await sleep(600)
+  }
+
   if (chooseInput) {
     await clickInputSource(page, 'Microphone')
   }
+  await clickPracticeMode(page, 'Wait For You')
 }
 
 function readMicDebug(page) {

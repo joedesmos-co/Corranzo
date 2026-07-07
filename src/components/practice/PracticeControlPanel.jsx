@@ -17,6 +17,7 @@ import MidiDiagnosticsPanel from './MidiDiagnosticsPanel.jsx'
 import MicrophoneInputStatusPanel from './MicrophoneInputStatusPanel.jsx'
 import WaitForYouSection from './WaitForYouSection.jsx'
 import WaitForYouInputSourceModal from './WaitForYouInputSourceModal.jsx'
+import WaitForYouInputSourceSelector from './WaitForYouInputSourceSelector.jsx'
 import PracticeCollapsibleSection from './PracticeCollapsibleSection.jsx'
 import PracticeSetupPanel from './PracticeSetupPanel.jsx'
 import PracticeDiagnosticsPanel from './PracticeDiagnosticsPanel.jsx'
@@ -115,6 +116,16 @@ export default memo(function PracticeControlPanel({
           compact
         />
 
+        {session.wfyInputSourceReady && (
+          <WaitForYouInputSourceSelector
+            inputSource={session.wfyInputSource}
+            onInputSourceChange={session.setWfyInputSource}
+            instrumentId={session.instrumentId}
+            midiAvailable={isWebMidiSupported()}
+            microphoneAvailable={isMicrophoneSupported()}
+          />
+        )}
+
         <WaitForYouSection
           active={session.waitForYou.active}
           status={session.waitForYou.status}
@@ -129,10 +140,6 @@ export default memo(function PracticeControlPanel({
           inputSource={
             session.wfyInputSourceReady ? session.wfyInputSource : WFY_INPUT_SOURCE.MANUAL
           }
-          onInputSourceChange={session.setWfyInputSource}
-          instrumentId={session.instrumentId}
-          midiAvailable={isWebMidiSupported()}
-          microphoneAvailable={isMicrophoneSupported()}
           inputMatchingActive={session.waitForYouInput.matchingEnabled}
           inputFeedback={session.waitForYouInput.inputFeedback}
           guidance={session.waitForYou.guidance}

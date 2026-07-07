@@ -36,13 +36,14 @@ describe('mic capture asks for raw instrument input', () => {
 })
 
 describe('choosing Microphone or MIDI is the whole setup', () => {
-  it('offers clear input choices including manual Continue', () => {
+  it('offers clear default input choices per instrument in the side selector', () => {
     const selector = readSrc('components', 'practice', 'WaitForYouInputSourceSelector.jsx')
     const options = readSrc('features', 'practice', 'wfyInputSourceOptions.js')
     expect(selector).toContain('role="radiogroup"')
     expect(options).toContain('Use Microphone')
-    expect(options).toContain('Use Continue button')
+    expect(options).toContain('Use MIDI keyboard')
     expect(options).toContain('buildWfyInputSelectorOptions')
+    expect(options).toContain('advanced: true')
   })
 
   it('auto-requests the microphone so calibration starts on its own', () => {
@@ -63,10 +64,11 @@ describe('microphone lifecycle follows Wait For You', () => {
   const session = readSrc('features', 'practice', 'usePracticeSession.js')
   const capture = readSrc('features', 'microphone-input', 'useMicrophoneCapture.js')
 
-  it('only captures while in Wait For You with the mic source selected', () => {
+  it('only captures while practicing with the mic source selected', () => {
     expect(session).toMatch(
-      /micCaptureActive =[\s\S]*practiceActive[\s\S]*isWaitForYou[\s\S]*WFY_INPUT_SOURCE\.MICROPHONE/,
+      /micCaptureActive =[\s\S]*practiceActive[\s\S]*WFY_INPUT_SOURCE\.MICROPHONE/,
     )
+    expect(session).toMatch(/isWaitForYou \|\| playback\.isPlaying/)
   })
 
   it('tears the mic down when it becomes inactive (leaving WFY)', () => {

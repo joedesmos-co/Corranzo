@@ -135,11 +135,11 @@ describe('launch readiness fixes', () => {
     expect(smoke).not.toContain('PDF visible in Library')
   })
 
-  it('keeps mic browser QA aligned with first-time WFY input setup', () => {
+  it('keeps mic browser QA aligned with first-time Practice input setup', () => {
     const micQa = readRoot('scripts', 'browser-mic-wfy-qa.mjs')
 
-    expect(micQa).toContain("getByRole('dialog', { name: 'How do you want to play?' })")
-    expect(micQa).toContain("getByRole('radiogroup', { name: 'Wait For You input source' })")
+    expect(micQa).toContain("getByRole('dialog', { name: 'How should Corranzo hear you?' })")
+    expect(micQa).toContain("getByRole('radiogroup', { name: 'Practice input source' })")
     expect(micQa).toContain("locator('.wait-for-you__mic-calibration, .wait-for-you__mic-off')")
     expect(micQa).toContain("openWfyMicPractice(page, { chooseInput: false })")
   })

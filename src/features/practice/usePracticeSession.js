@@ -25,8 +25,8 @@ import useWaitForYouMatchSettings from './useWaitForYouMatchSettings.js'
 import useWaitForYouReferencePlayback from './useWaitForYouReferencePlayback.js'
 import useWaitForYouGuidance from './useWaitForYouGuidance.js'
 import {
-  shouldShowWaitForYouInputSourceModal,
-  waitForYouInputSourceIsReady,
+  practiceInputSourceIsReady,
+  shouldShowPracticeInputSourceModal,
 } from './waitForYouInputSourceSession.js'
 import {
   resolveWfyDisplayStatus,
@@ -45,7 +45,12 @@ import {
   getTabPositionsForTimingMap,
   resolveStringsForTimingMap,
 } from '../instruments/timingMapTabPositions.js'
-import { enrichGuitarChordCheckpoint } from './guitarChordShapeCheckpoint.js'
+import { enrichWfyChordCheckpoint } from './pianoChordCheckpoint.js'
+import { buildVisualLaneGroups } from './visualPracticeLane.js'
+import { resolvePlayAlongTargetIndex } from './playAlongLaneFeedback.js'
+import usePlayAlongLaneFeedback from './usePlayAlongLaneFeedback.js'
+import { VISUAL_LANE_OUTCOME } from './visualLaneFeedback.js'
+import { WFY_INPUT_OUTCOME } from './waitForYouInputFeedback.js'
 
 /**
  * Wires playback, timing, navigation, loop, and Wait For You hooks for the Practice view.
@@ -115,13 +120,11 @@ export default function usePracticeSession({
   const hasMidi = Boolean(midiSource?.data)
   const hasMusicXml = Boolean(musicXmlSource?.data)
   const isWaitForYou = practiceMode === PRACTICE_MODE.WAIT_FOR_YOU
-  const wfyInputSourceReady = waitForYouInputSourceIsReady({
-    checkpointMode,
+  const wfyInputSourceReady = practiceInputSourceIsReady({
     sourceSelectedThisSession: wfyInputSourceSelectedThisSession,
   })
-  const showWfyInputSourceModal = shouldShowWaitForYouInputSourceModal({
-    isWaitForYou,
-    checkpointMode,
+  const showWfyInputSourceModal = shouldShowPracticeInputSourceModal({
+    practiceActive,
     sourceSelectedThisSession: wfyInputSourceSelectedThisSession,
   })
 
@@ -298,7 +301,7 @@ export default function usePracticeSession({
   const enrichedWfyCheckpoint = useMemo(
     () =>
       waitForYou.currentCheckpoint
-        ? enrichGuitarChordCheckpoint(waitForYou.currentCheckpoint, {
+        ? enrichWfyChordCheckpoint(waitForYou.currentCheckpoint, {
             instrumentId,
             tabPositions: guidanceTabPositions,
           })
@@ -306,21 +309,109 @@ export default function usePracticeSession({
     [waitForYou.currentCheckpoint, instrumentId, guidanceTabPositions],
   )
 
+  const playAlongLaneGroups = useMemo(() => {
+    if (isWaitForYou || !timing.timingMap) {
+      return []
+    }
+    return buildVisualLaneGroups(
+      timing.timingMap,
+      loop.enabled ? loop.region : null,
+      {
+        practiceScope: effectivePracticeScope,
+        instrumentId,
+        tabPositions: guidanceTabPositions,
+      },
+    )
+  }, [
+    isWaitForYou,
+    timing.timingMap,
+    loop.enabled,
+    loop.region,
+    effectivePracticeScope,
+    instrumentId,
+    guidanceTabPositions,
+  ])
+
+  const playAlongInputActive =
+    practiceActive &&
+    !isWaitForYou &&
+    wfyInputSourceReady &&
+    playback.isPlaying &&
+    (wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE ||
+      wfyInputSource === WFY_INPUT_SOURCE.MIDI)
+
+  const playAlongFeedback = usePlayAlongLaneFeedback({
+    active: playAlongInputActive,
+    groups: playAlongLaneGroups,
+    practiceTime,
+    matchSettings: matchSettingsState.settings,
+    isPlaying: playback.isPlaying,
+  })
+
+  const playAlongTargetCheckpoint = useMemo(() => {
+    if (!playAlongInputActive || !playAlongLaneGroups.length) {
+      return null
+    }
+    const index = resolvePlayAlongTargetIndex(playAlongLaneGroups, practiceTime)
+    const group = playAlongLaneGroups[index]
+    if (!group) {
+      return null
+    }
+    return enrichWfyChordCheckpoint(
+      {
+        id: group.id,
+        timeSeconds: group.timeSeconds,
+        expectedMidis: group.midis,
+        isChord: group.isChord,
+        notes: group.notes,
+        measureNumber: group.measureNumber,
+        beat: group.beat,
+        kind: group.kind,
+      },
+      { instrumentId, tabPositions: guidanceTabPositions },
+    )
+  }, [
+    playAlongInputActive,
+    playAlongLaneGroups,
+    practiceTime,
+    instrumentId,
+    guidanceTabPositions,
+  ])
+
+  const handlePlayAlongCorrect = useCallback(() => {
+    if (playAlongTargetCheckpoint?.id) {
+      playAlongFeedback.setGroupOutcome(
+        playAlongTargetCheckpoint.id,
+        VISUAL_LANE_OUTCOME.CORRECT,
+      )
+    }
+  }, [playAlongTargetCheckpoint?.id, playAlongFeedback])
+
+  const handlePlayAlongWrong = useCallback(() => {
+    if (playAlongTargetCheckpoint?.id) {
+      playAlongFeedback.setGroupOutcome(
+        playAlongTargetCheckpoint.id,
+        VISUAL_LANE_OUTCOME.WRONG,
+      )
+    }
+  }, [playAlongTargetCheckpoint?.id, playAlongFeedback])
+
   const micCaptureActive =
     practiceActive &&
-    isWaitForYou &&
     wfyInputSourceReady &&
-    wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE
+    wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+    (isWaitForYou || playback.isPlaying)
 
   const microphone = useMicrophoneCapture({ active: micCaptureActive })
 
   const webMidi = useWebMidiInput({
     listen:
       practiceActive &&
-      isWaitForYou &&
       wfyInputSourceReady &&
-      checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
-      wfyInputSource === WFY_INPUT_SOURCE.MIDI,
+      wfyInputSource === WFY_INPUT_SOURCE.MIDI &&
+      (isWaitForYou
+        ? checkpointMode === WFY_CHECKPOINT_MODE.NOTE
+        : playback.isPlaying),
   })
 
   const waitForYouMidi = useWaitForYouMidiInput({
@@ -354,6 +445,29 @@ export default function usePracticeSession({
     instrumentId,
   })
 
+  const playAlongMic = useWaitForYouMicInput({
+    active:
+      playAlongInputActive && wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE,
+    checkpointMode: WFY_CHECKPOINT_MODE.NOTE,
+    currentCheckpoint: playAlongTargetCheckpoint,
+    matchSettings: matchSettingsState.settings,
+    onPlayerInputMatched: handlePlayAlongCorrect,
+    onWrongNote: handlePlayAlongWrong,
+    microphone,
+    instrumentId,
+  })
+
+  const playAlongMidi = useWaitForYouMidiInput({
+    active: playAlongInputActive && wfyInputSource === WFY_INPUT_SOURCE.MIDI,
+    checkpointMode: WFY_CHECKPOINT_MODE.NOTE,
+    currentCheckpoint: playAlongTargetCheckpoint,
+    checkpointIndex: resolvePlayAlongTargetIndex(playAlongLaneGroups, practiceTime),
+    matchSettings: matchSettingsState.settings,
+    onPlayerInputMatched: handlePlayAlongCorrect,
+    onWrongNote: handlePlayAlongWrong,
+    webMidi,
+  })
+
   const handleWfyInputSourceChange = useCallback(
     (source) => {
       if (source !== WFY_INPUT_SOURCE.MICROPHONE) {
@@ -366,23 +480,23 @@ export default function usePracticeSession({
   )
 
   useEffect(() => {
-    if (!isWaitForYou) {
-      setWfyInputSourceSelectedThisSession(false)
-    }
-  }, [isWaitForYou])
+    setWfyInputSourceSelectedThisSession(false)
+  }, [sourcesRevision])
 
   useEffect(() => {
-    if (!(isWaitForYou && wfyInputSourceReady && wfyInputSource === WFY_INPUT_SOURCE.MIDI)) {
+    if (!(wfyInputSourceReady && wfyInputSource === WFY_INPUT_SOURCE.MIDI)) {
       autoMidiRequestedRef.current = false
     }
-  }, [isWaitForYou, wfyInputSourceReady, wfyInputSource])
+  }, [wfyInputSourceReady, wfyInputSource])
 
   useEffect(() => {
     const shouldAutoEnable =
-      isWaitForYou &&
+      practiceActive &&
       wfyInputSourceReady &&
-      checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
       wfyInputSource === WFY_INPUT_SOURCE.MIDI &&
+      (isWaitForYou
+        ? checkpointMode === WFY_CHECKPOINT_MODE.NOTE
+        : playback.isPlaying) &&
       webMidi.support === WEB_MIDI_SUPPORT.SUPPORTED &&
       webMidi.permission === WEB_MIDI_PERMISSION.PROMPT &&
       !autoMidiRequestedRef.current
@@ -393,24 +507,33 @@ export default function usePracticeSession({
 
     autoMidiRequestedRef.current = true
     webMidi.requestAccess()
-  }, [isWaitForYou, wfyInputSourceReady, checkpointMode, wfyInputSource, webMidi])
+  }, [
+    isWaitForYou,
+    practiceActive,
+    wfyInputSourceReady,
+    checkpointMode,
+    wfyInputSource,
+    playback.isPlaying,
+    webMidi,
+  ])
 
   // Choosing Microphone is the whole setup: request permission automatically so
   // calibration starts on its own (no separate "enable mic" click in the main
   // path). Re-armed whenever the user leaves mic mode so re-entry re-requests.
   useEffect(() => {
-    if (!(isWaitForYou && wfyInputSourceReady && wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE)) {
+    if (!(wfyInputSourceReady && wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE)) {
       autoMicRequestedRef.current = false
     }
-  }, [isWaitForYou, wfyInputSourceReady, wfyInputSource])
+  }, [wfyInputSourceReady, wfyInputSource])
 
   useEffect(() => {
     const shouldAutoRequest =
-      isWaitForYou &&
       practiceActive &&
       wfyInputSourceReady &&
-      checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
       wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+      (isWaitForYou
+        ? checkpointMode === WFY_CHECKPOINT_MODE.NOTE && !waitForYou.displayPhase
+        : playback.isPlaying) &&
       microphone.support === MIC_SUPPORT.SUPPORTED &&
       (microphone.permission === MIC_PERMISSION.PROMPT ||
         microphone.permission === MIC_PERMISSION.GRANTED) &&
@@ -429,6 +552,8 @@ export default function usePracticeSession({
     wfyInputSourceReady,
     checkpointMode,
     wfyInputSource,
+    waitForYou.displayPhase,
+    playback.isPlaying,
     microphone,
   ])
 
@@ -438,7 +563,7 @@ export default function usePracticeSession({
         chordAsSequence:
           wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
           Boolean(waitForYou.currentCheckpoint?.isChord) &&
-          !Boolean(enrichedWfyCheckpoint?.isGuitarChordShape),
+          !Boolean(enrichedWfyCheckpoint?.isRollingChordMic),
       }),
     [
       wfyInputSource,
@@ -446,7 +571,7 @@ export default function usePracticeSession({
       waitForYou.currentCheckpoint?.expectedMidi,
       waitForYou.currentCheckpoint?.expectedMidis,
       waitForYou.currentCheckpoint?.isChord,
-      enrichedWfyCheckpoint?.isGuitarChordShape,
+      enrichedWfyCheckpoint?.isRollingChordMic,
       enrichedWfyCheckpoint?.displayLabel,
     ],
   )
@@ -517,7 +642,8 @@ export default function usePracticeSession({
     chordAsSequence:
       waitForYouInput.source === WFY_INPUT_SOURCE.MICROPHONE &&
       Boolean(waitForYou.currentCheckpoint?.isChord) &&
-      !Boolean(enrichedWfyCheckpoint?.isGuitarChordShape),
+      !Boolean(enrichedWfyCheckpoint?.isRollingChordMic),
+    rollingChordMicMode: Boolean(enrichedWfyCheckpoint?.isRollingChordMic),
     guitarChordShapeMode: Boolean(enrichedWfyCheckpoint?.isGuitarChordShape),
   })
 
@@ -728,6 +854,28 @@ export default function usePracticeSession({
     ],
   )
 
+  const laneOutcomesByGroupId = useMemo(() => {
+    if (isWaitForYou) {
+      const outcomes = new Map()
+      const checkpointId = waitForYou.currentCheckpoint?.id
+      if (checkpointId) {
+        if (waitForYou.displayPhase === 'correct') {
+          outcomes.set(checkpointId, VISUAL_LANE_OUTCOME.CORRECT)
+        } else if (waitForYouInput.feedbackOutcome === WFY_INPUT_OUTCOME.WRONG) {
+          outcomes.set(checkpointId, VISUAL_LANE_OUTCOME.WRONG)
+        }
+      }
+      return outcomes
+    }
+    return playAlongFeedback.outcomes
+  }, [
+    isWaitForYou,
+    waitForYou.currentCheckpoint?.id,
+    waitForYou.displayPhase,
+    waitForYouInput.feedbackOutcome,
+    playAlongFeedback.outcomes,
+  ])
+
   return useMemo(
     () => ({
       practicePrefsSnapshot,
@@ -771,6 +919,7 @@ export default function usePracticeSession({
       checkpointMode,
       setCheckpointMode,
       webMidi,
+      laneOutcomesByGroupId,
       timingDisabled,
       seekToPracticeTime: seekToPracticeTimeWithWfy,
       handlePlay,
@@ -820,6 +969,7 @@ export default function usePracticeSession({
       checkpointMode,
       setCheckpointMode,
       webMidi,
+      laneOutcomesByGroupId,
       timingDisabled,
       seekToPracticeTimeWithWfy,
       handlePlay,

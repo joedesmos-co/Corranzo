@@ -14,6 +14,7 @@ import {
   buildTabLaneTechniqueMarkings,
   buildTabChordShapeOverlays,
 } from '../../features/practice/tabLaneLayout.js'
+import { resolveLaneNoteClass } from '../../features/practice/visualLaneFeedback.js'
 
 const PX_PER_SECOND = VISUAL_LANE_DEFAULTS.pixelsPerSecond
 const MIN_SCALE = 0.9
@@ -142,7 +143,10 @@ function TabVisualLane({
             {chordShapeOverlays.map((overlay) => (
               <rect
                 key={overlay.id}
-                className="tab-lane__chord-shape"
+                className={`tab-lane__chord-shape tab-lane__note--${resolveLaneNoteClass(
+                  overlay.status,
+                  overlay.laneOutcome,
+                )}`}
                 x={overlay.x - overlay.width / 2}
                 y={overlay.minY - FRET_DISC_RADIUS * 1.1}
                 width={overlay.width}
@@ -152,11 +156,22 @@ function TabVisualLane({
             {notes.map((note) => {
               const radius =
                 note.status === 'current' ? FRET_DISC_RADIUS * CURRENT_DISC_SCALE : FRET_DISC_RADIUS
+              const noteClass = resolveLaneNoteClass(note.status, note.laneOutcome)
+              const showSustain = note.sustainWidth > radius * 1.15
               return (
                 <g
                   key={note.id}
-                  className={`tab-lane__note tab-lane__note--${note.status ?? 'upcoming'}`}
+                  className={`tab-lane__note tab-lane__note--${noteClass}`}
                 >
+                  {showSustain ? (
+                    <rect
+                      className="tab-lane__sustain"
+                      x={note.x - radius * 0.12}
+                      y={note.y - radius * 0.42}
+                      width={note.sustainWidth}
+                      height={radius * 0.84}
+                    />
+                  ) : null}
                   <circle className="tab-lane__disc" cx={note.x} cy={note.y} r={radius} />
                   <text
                     className="tab-lane__fret"

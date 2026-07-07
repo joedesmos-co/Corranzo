@@ -21,11 +21,26 @@ import {
   createMicChordCollectionState,
 } from '../src/features/practice/waitForYouMicChordCollection.js'
 import {
-  createMusicalEventBufferState,
+  createGuitarChordShapeBufferState,
+  evaluateGuitarChordShapeMicInput,
   evaluateMicNoteInputWithBuffer,
+  evaluateMicScoreInformedInput,
   evaluateNoteInput,
+  createMusicalEventBufferState,
   MATCH_OUTCOME,
 } from '../src/features/practice/waitForYouNoteMatch.js'
+import {
+  enrichPianoChordCheckpoint,
+  enrichWfyChordCheckpoint,
+} from '../src/features/practice/pianoChordCheckpoint.js'
+import {
+  createMicEngineV2RuntimeState,
+  processMicEngineV2Tick,
+} from '../src/features/microphone-input/v2/micEngineV2Live.js'
+import { createMicFrameAnalyzer } from '../src/features/microphone-input/micFrameAnalysis.js'
+import { getMicInstrumentProfile } from '../src/features/microphone-input/micInstrumentProfiles.js'
+import { renderSyntheticClip } from '../src/features/microphone-input/micSyntheticClips.js'
+import { synthSimultaneousChord } from '../src/features/microphone-input/micSyntheticChordClips.js'
 import { normalizeMatchSettings } from '../src/features/practice/waitForYouMatchSettings.js'
 import {
   buildWfyInputModalActions,
@@ -96,7 +111,7 @@ describe('guitar-specific WFY input setup', () => {
     expect(wfyInputSourceLabel(WFY_INPUT_SOURCE.MIDI, INSTRUMENT_IDS.PIANO)).toBe('MIDI keyboard')
   })
 
-  it('shows only Microphone up front for guitar; manual link and MIDI in More options', () => {
+  it('shows only Microphone up front for guitar with no modal fallback or MIDI', () => {
     const layout = buildWfyInputModalLayout({
       instrumentId: INSTRUMENT_IDS.GUITAR,
       midiAvailable: true,
@@ -104,14 +119,28 @@ describe('guitar-specific WFY input setup', () => {
     })
     expect(layout.layout).toBe('guitar')
     expect(layout.primaryActions.map((action) => action.label)).toEqual(['Use Microphone'])
-    expect(layout.fallbackLink?.label).toBe('Practice without mic')
-    expect(layout.fallbackLink?.id).toBe(WFY_INPUT_SOURCE.MANUAL)
-    expect(layout.advancedActions.map((action) => action.label)).toEqual(['Use MIDI device'])
+    expect(layout.fallbackLink).toBeNull()
+    expect(layout.advancedActions).toEqual([])
   })
 
-  it('keeps piano modal with Microphone, Continue, and MIDI keyboard when available', () => {
+  it('shows Microphone and MIDI keyboard for piano with no Continue fallback', () => {
     const layout = buildWfyInputModalLayout({
       instrumentId: INSTRUMENT_IDS.PIANO,
+      midiAvailable: true,
+      microphoneAvailable: true,
+    })
+    expect(layout.layout).toBe('piano')
+    expect(layout.primaryActions.map((action) => action.label)).toEqual([
+      'Use Microphone',
+      'Use MIDI Keyboard',
+    ])
+    expect(layout.fallbackLink).toBeNull()
+    expect(layout.advancedActions).toEqual([])
+  })
+
+  it('keeps legacy standard modal layout for non-piano instruments', () => {
+    const layout = buildWfyInputModalLayout({
+      instrumentId: 'violin',
       midiAvailable: true,
       microphoneAvailable: true,
     })
@@ -121,31 +150,23 @@ describe('guitar-specific WFY input setup', () => {
       'Continue button',
       'Use MIDI Keyboard',
     ])
-    expect(layout.fallbackLink).toBeNull()
-    expect(layout.advancedActions).toEqual([])
   })
 
-  it('legacy buildWfyInputModalActions still exposes guitar Microphone primary only', () => {
-    const actions = buildWfyInputModalActions({
-      instrumentId: INSTRUMENT_IDS.GUITAR,
-      midiAvailable: true,
-      microphoneAvailable: true,
-    })
-    expect(actions.map((action) => action.label)).toEqual(['Use Microphone'])
-  })
-
-  it('does not duplicate Continue below MIDI in the guitar selector', () => {
+  it('side selector keeps guitar MIDI and Continue under advanced options', () => {
     const options = buildWfyInputSelectorOptions({
       instrumentId: INSTRUMENT_IDS.GUITAR,
       midiAvailable: true,
       microphoneAvailable: true,
     })
-    expect(options.map((option) => option.label)).toEqual([
+    expect(options.filter((option) => !option.advanced).map((option) => option.label)).toEqual([
       'Use Microphone',
-      'Use Continue button',
+    ])
+    expect(options.filter((option) => option.advanced).map((option) => option.label)).toEqual([
       'Use MIDI device',
+      'Use Continue button',
     ])
     const selector = readSrc('components', 'practice', 'WaitForYouInputSourceSelector.jsx')
+    expect(selector).toContain('More options')
     expect(selector).not.toContain('wfy-input-source__manual')
   })
 })
@@ -241,15 +262,132 @@ describe('WFY tie-aware checkpoints', () => {
 })
 
 describe('piano chord WFY matching', () => {
+  const SAMPLE_RATE = 44100
+  const FFT = 2048
+  const HOP = Math.round(SAMPLE_RATE / 60)
+
+  function pianoTriadCheckpoint() {
+    return enrichPianoChordCheckpoint(
+      {
+        isChord: true,
+        chordSymbol: 'C',
+        expectedMidis: [60, 64, 67],
+        notes: [
+          { midi: 60, staff: 1 },
+          { midi: 64, staff: 1 },
+          { midi: 67, staff: 1 },
+        ],
+      },
+      { instrumentId: INSTRUMENT_IDS.PIANO },
+    )
+  }
+
+  function pianoDyadCheckpoint() {
+    return enrichPianoChordCheckpoint(
+      {
+        isChord: true,
+        expectedMidis: [60, 64],
+        notes: [
+          { midi: 60, staff: 1 },
+          { midi: 64, staff: 1 },
+        ],
+      },
+      { instrumentId: INSTRUMENT_IDS.PIANO },
+    )
+  }
+
+  function runPianoChordLiveFrames(samples, checkpoint) {
+    const state = createMicEngineV2RuntimeState()
+    const analyzer = createMicFrameAnalyzer()
+    const profile = getMicInstrumentProfile('piano')
+    const buffer = createGuitarChordShapeBufferState()
+    let result = null
+
+    for (let end = FFT; end <= samples.length; end += HOP) {
+      const tick = processMicEngineV2Tick({
+        buffer: new Float32Array(samples.subarray(end - FFT, end)),
+        sampleRate: SAMPLE_RATE,
+        expectedMidis: checkpoint.expectedMidis,
+        noiseFloor: analyzer.noiseFloor,
+        state,
+        gateOptions: profile?.gate ?? null,
+        timeMs: (end / SAMPLE_RATE) * 1000,
+      })
+      const detected = tick.frame?.v2DetectedMidis ?? []
+      if (detected.length) {
+        result = evaluateGuitarChordShapeMicInput(checkpoint, detected, buffer, {})
+        if (result.outcome === MATCH_OUTCOME.COMPLETE) {
+          return { result, detected }
+        }
+      }
+    }
+
+    return { result, detected: [] }
+  }
+
+  it('enriches piano chords for rolling mic collection', () => {
+    const checkpoint = pianoTriadCheckpoint()
+    expect(checkpoint.isRollingChordMic).toBe(true)
+    expect(checkpoint.isPianoChordMic).toBe(true)
+    expect(checkpoint.displayLabel).toBe('Play C chord')
+    expect(checkpoint.minimumRequiredTones).toBe(3)
+  })
+
   it('advances a piano triad with MIDI chord tones', () => {
-    const checkpoint = { expectedMidis: [60, 64, 67], isChord: true }
+    const checkpoint = pianoTriadCheckpoint()
     const state = createMusicalEventBufferState()
     expect(evaluateNoteInput(checkpoint, 60, state, settings).outcome).toBe(MATCH_OUTCOME.CHORD_PROGRESS)
     expect(evaluateNoteInput(checkpoint, 64, state, settings).outcome).toBe(MATCH_OUTCOME.CHORD_PROGRESS)
     expect(evaluateNoteInput(checkpoint, 67, state, settings).outcome).toBe(MATCH_OUTCOME.COMPLETE)
   })
 
-  it('lets piano mic chord sequence collect tones without simultaneous detection', () => {
+  it('advances a piano double-note with MIDI when played together in the chord window', () => {
+    const checkpoint = pianoDyadCheckpoint()
+    const state = createMusicalEventBufferState()
+    const first = evaluateNoteInput(checkpoint, 60, state, settings)
+    const second = evaluateNoteInput(checkpoint, 64, state, settings)
+    expect(first.outcome).toBe(MATCH_OUTCOME.CHORD_PROGRESS)
+    expect(second.outcome).toBe(MATCH_OUTCOME.COMPLETE)
+  })
+
+  it('collects a piano triad through rolling mic detection', () => {
+    const checkpoint = pianoTriadCheckpoint()
+    const samples = synthSimultaneousChord([60, 64, 67], SAMPLE_RATE, {
+      seconds: 1.0,
+      amplitude: 0.34,
+    })
+    const { result } = runPianoChordLiveFrames(samples, checkpoint)
+    expect(result?.outcome).toBe(MATCH_OUTCOME.COMPLETE)
+  })
+
+  it('collects a piano double-note through rolling mic detection', () => {
+    const checkpoint = pianoDyadCheckpoint()
+    const samples = synthSimultaneousChord([60, 64], SAMPLE_RATE, {
+      seconds: 1.0,
+      amplitude: 0.34,
+    })
+    const { result } = runPianoChordLiveFrames(samples, checkpoint)
+    expect(result?.outcome).toBe(MATCH_OUTCOME.COMPLETE)
+  })
+
+  it('does not complete a piano triad from one random tone', () => {
+    const checkpoint = pianoTriadCheckpoint()
+    const result = evaluateGuitarChordShapeMicInput(checkpoint, [60], createGuitarChordShapeBufferState(), {})
+    expect(result.outcome).not.toBe(MATCH_OUTCOME.COMPLETE)
+  })
+
+  it('does not treat score-informed all-tones-at-once as the default piano mic path without enrichment', () => {
+    const pianoLike = {
+      isChord: true,
+      expectedMidis: [60, 64, 67],
+    }
+    const partial = evaluateMicScoreInformedInput(pianoLike, [60, 64], {})
+    expect(partial.outcome).toBe(MATCH_OUTCOME.CHORD_PROGRESS)
+    const complete = evaluateMicScoreInformedInput(pianoLike, [60, 64, 67], {})
+    expect(complete.outcome).toBe(MATCH_OUTCOME.COMPLETE)
+  })
+
+  it('lets piano mic chord sequence still collect tones when rolling enrichment is off', () => {
     const checkpoint = { expectedMidis: [60, 64, 67], isChord: true }
     const state = createMicChordCollectionState()
     let result = null

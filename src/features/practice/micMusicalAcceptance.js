@@ -35,7 +35,8 @@ function hasElectricHarmonicRichProfile(note, frame) {
   if (shape === MIC_SIGNAL_SHAPE.NOISY || shape === MIC_SIGNAL_SHAPE.QUIET) {
     return false
   }
-  if ((frame?.zeroCrossingRate ?? 0) >= 0.18) {
+  const zcrLimit = shape === MIC_SIGNAL_SHAPE.DISTORTED ? 0.3 : 0.18
+  if ((frame?.zeroCrossingRate ?? 0) >= zcrLimit) {
     return false
   }
 

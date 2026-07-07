@@ -9,12 +9,16 @@ import {
   buildKeyboardKeys,
   buildVisualLaneGroups,
   computeKeyboardRange,
-  resolveWfyDisplayFrameTime,
   resolveVisualFrameTime,
   resolveVisualTarget,
   selectVisualWindow,
-  WFY_VISUAL_MOVE_MS,
 } from '../../features/practice/visualPracticeLane.js'
+import { applyLaneOutcomes } from '../../features/practice/visualLaneFeedback.js'
+import {
+  createWfyVisualTravelState,
+  resolveWfyVisualTravelFrameTime,
+  startWfyVisualTravel,
+} from '../../features/practice/wfyVisualTravel.js'
 import { detectStaves } from '../../features/practice/staffLaneLayout.js'
 import {
   buildFretboardDisplayFrets,
@@ -91,6 +95,8 @@ function VisualPracticeView({ timingSourceKind = null }) {
   const isWaitForYou = visual.isWaitForYou
   const wfyStatus = visual.wfyStatus
   const wfyCheckpoint = visual.wfyCheckpoint
+  const wfyCheckpointIndex = visual.wfyCheckpointIndex ?? -1
+  const laneOutcomesByGroupId = visual.laneOutcomesByGroupId
   const visualGuitarScoreTarget = isFretboardLane
     ? visual.guitarScoreTarget?.activeTarget ?? null
     : null
@@ -100,10 +106,11 @@ function VisualPracticeView({ timingSourceKind = null }) {
     waitForYouWaiting,
     waitForYouCheckpoint: wfyCheckpoint,
   })
-  const getSmoothVisualFrameTime = useSmoothWfyFrameTime({
+  const getWfyVisualFrameTime = useWfyVisualFrameTime({
     rawFrameTime: visualFrameTime,
     waiting: waitForYouWaiting,
-    checkpointId: wfyCheckpoint?.id ?? null,
+    checkpoint: wfyCheckpoint,
+    checkpointIndex: wfyCheckpointIndex,
   })
 
   const { index: targetIndex, group: targetGroup } = useMemo(
@@ -115,10 +122,10 @@ function VisualPracticeView({ timingSourceKind = null }) {
   // look-ahead margin covers the coarseness, so the note layer's props stay
   // referentially stable between beats — scrolling itself is rAF-driven.
   const timeBucket = Math.floor(visualFrameTime)
-  const visibleGroups = useMemo(
-    () => selectVisualWindow(groups, timeBucket, targetIndex),
-    [groups, timeBucket, targetIndex],
-  )
+  const visibleGroups = useMemo(() => {
+    const windowed = selectVisualWindow(groups, timeBucket, targetIndex)
+    return applyLaneOutcomes(windowed, laneOutcomesByGroupId)
+  }, [groups, timeBucket, targetIndex, laneOutcomesByGroupId])
 
   // Per-frame time source for the lane scroll: the engine's wall-clock
   // interpolated score time while playing (same source as the score-follow
@@ -132,8 +139,11 @@ function VisualPracticeView({ timingSourceKind = null }) {
   }, [tick.playbackIsPlaying])
   const getFrameTime = useCallback(() => {
     const state = frameStateRef.current
-    return state.isPlaying && getScoreTime ? getScoreTime() : getSmoothVisualFrameTime()
-  }, [getScoreTime, getSmoothVisualFrameTime])
+    if (state.isPlaying && !isWaitForYou && getScoreTime) {
+      return getScoreTime()
+    }
+    return getWfyVisualFrameTime()
+  }, [getScoreTime, getWfyVisualFrameTime, isWaitForYou])
 
   const targetMidisKey = targetGroup?.midis?.join(',') ?? ''
   const keyboardKeys = useMemo(
@@ -186,7 +196,7 @@ function VisualPracticeView({ timingSourceKind = null }) {
           isWaitForYou &&
           visual.wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
           Boolean(targetGroup?.isChord) &&
-          !Boolean(targetGroup?.isGuitarChordShape)
+          !Boolean(targetGroup?.isRollingChordMic)
         }
         strings={laneStrings}
         tabPositions={tabPositions}
@@ -225,6 +235,16 @@ function VisualPracticeView({ timingSourceKind = null }) {
       )}
 
       <div className="visual-practice__legend" aria-hidden="true">
+        {!isWaitForYou && (
+          <>
+            <span className="visual-practice__legend-item visual-practice__legend-item--correct">
+              Correct
+            </span>
+            <span className="visual-practice__legend-item visual-practice__legend-item--wrong">
+              Wrong / missed
+            </span>
+          </>
+        )}
         <span className="visual-practice__legend-item visual-practice__legend-item--played">
           Played
         </span>
@@ -241,61 +261,50 @@ function VisualPracticeView({ timingSourceKind = null }) {
 
 export default memo(VisualPracticeView)
 
-function useSmoothWfyFrameTime({ rawFrameTime, waiting, checkpointId }) {
-  const animationRef = useRef({
-    from: rawFrameTime,
-    to: rawFrameTime,
-    startedAt: 0,
-    checkpointId,
-  })
+function useWfyVisualFrameTime({ rawFrameTime, waiting, checkpoint, checkpointIndex }) {
+  const travelRef = useRef(createWfyVisualTravelState())
   const displayRef = useRef(rawFrameTime)
+  const prevCheckpointRef = useRef({ id: null, time: 0, index: -1 })
   const latestRef = useRef({ rawFrameTime, waiting })
   latestRef.current = { rawFrameTime, waiting }
 
   useEffect(() => {
-    if (!waiting) {
-      animationRef.current = {
-        from: rawFrameTime,
-        to: rawFrameTime,
-        startedAt: 0,
-        checkpointId,
-      }
+    if (!waiting || !checkpoint) {
+      travelRef.current.arrived = true
       displayRef.current = rawFrameTime
       return
     }
-    if (
-      checkpointId !== animationRef.current.checkpointId ||
-      Math.abs(rawFrameTime - animationRef.current.to) > 0.001
-    ) {
-      animationRef.current = {
-        from: displayRef.current,
-        to: rawFrameTime,
-        startedAt: typeof performance !== 'undefined' ? performance.now() : Date.now(),
-        checkpointId,
-      }
-    }
-  }, [rawFrameTime, waiting, checkpointId])
 
-  const getSmoothedTime = useCallback(() => {
+    const prev = prevCheckpointRef.current
+    const fromTime =
+      prev.index >= 0 && checkpointIndex > prev.index ? prev.time : displayRef.current
+    const now = typeof performance !== 'undefined' ? performance.now() : Date.now()
+    startWfyVisualTravel(travelRef.current, {
+      fromTime,
+      toTime: checkpoint.timeSeconds,
+      checkpointId: checkpoint.id,
+      now,
+    })
+    prevCheckpointRef.current = {
+      id: checkpoint.id,
+      time: checkpoint.timeSeconds,
+      index: checkpointIndex,
+    }
+  }, [checkpoint?.id, checkpoint?.timeSeconds, checkpointIndex, waiting, rawFrameTime])
+
+  const getFrameTime = useCallback(() => {
     const latest = latestRef.current
     if (!latest.waiting) {
       displayRef.current = latest.rawFrameTime
       return latest.rawFrameTime
     }
-    const animation = animationRef.current
     const now = typeof performance !== 'undefined' ? performance.now() : Date.now()
-    const elapsed = Math.max(0, now - animation.startedAt)
-    const next = resolveWfyDisplayFrameTime({
-      fromTime: animation.from,
-      toTime: animation.to,
-      elapsedMs: elapsed,
-      durationMs: WFY_VISUAL_MOVE_MS,
-    })
+    const next = resolveWfyVisualTravelFrameTime(travelRef.current, now)
     displayRef.current = next
     return next
   }, [])
 
-  return getSmoothedTime
+  return getFrameTime
 }
 
 /**

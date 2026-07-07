@@ -1,20 +1,33 @@
-import { WFY_CHECKPOINT_MODE } from './waitForYouCheckpointMode.js'
+/**
+ * Practice input-source modal: shown once when entering Practice so the same
+ * choice applies to Play Along and Wait For You.
+ */
 
-export function shouldShowWaitForYouInputSourceModal({
-  isWaitForYou,
-  checkpointMode,
-  sourceSelectedThisSession,
-}) {
-  return Boolean(
-    isWaitForYou &&
-      checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
-      !sourceSelectedThisSession,
-  )
+export function shouldShowPracticeInputSourceModal({
+  practiceActive = false,
+  sourceSelectedThisSession = false,
+} = {}) {
+  return Boolean(practiceActive && !sourceSelectedThisSession)
 }
 
+export function practiceInputSourceIsReady({
+  sourceSelectedThisSession = false,
+} = {}) {
+  return Boolean(sourceSelectedThisSession)
+}
+
+/** @deprecated Use shouldShowPracticeInputSourceModal */
+export function shouldShowWaitForYouInputSourceModal({
+  isWaitForYou = false,
+  practiceActive = isWaitForYou,
+  sourceSelectedThisSession = false,
+} = {}) {
+  return shouldShowPracticeInputSourceModal({ practiceActive, sourceSelectedThisSession })
+}
+
+/** @deprecated Use practiceInputSourceIsReady */
 export function waitForYouInputSourceIsReady({
-  checkpointMode,
-  sourceSelectedThisSession,
-}) {
-  return checkpointMode !== WFY_CHECKPOINT_MODE.NOTE || Boolean(sourceSelectedThisSession)
+  sourceSelectedThisSession = false,
+} = {}) {
+  return practiceInputSourceIsReady({ sourceSelectedThisSession })
 }

@@ -152,7 +152,7 @@ function runGuitarShapeLiveFrames(samples, checkpoint) {
     const detected = tick.frame?.v2DetectedMidis ?? []
     if (detected.length) {
       seen.push([...detected])
-      result = evaluateGuitarChordShapeMicInput(checkpoint, detected, buffer, {})
+      result = evaluateGuitarChordShapeMicInput(checkpoint, detected, buffer, {}, tick.frame)
       if (result.outcome === 'complete') {
         return { result, seen }
       }
@@ -576,9 +576,9 @@ describe('guitar chord mic acceptance', () => {
 describe('guitar chord visual TAB grouping', () => {
   it('builds one overlay band for a current multi-string chord', () => {
     const overlays = buildTabChordShapeOverlays([
-      { groupId: 'g1', status: 'current', x: 100, y: 10, string: 1, fret: 8 },
-      { groupId: 'g1', status: 'current', x: 100, y: 25, string: 2, fret: 8 },
-      { groupId: 'g1', status: 'current', x: 100, y: 40, string: 3, fret: 8 },
+      { groupId: 'g1', status: 'current', isChord: true, x: 100, y: 10, string: 1, fret: 8, sustainWidth: 40 },
+      { groupId: 'g1', status: 'current', isChord: true, x: 100, y: 25, string: 2, fret: 8, sustainWidth: 40 },
+      { groupId: 'g1', status: 'current', isChord: true, x: 100, y: 40, string: 3, fret: 8, sustainWidth: 40 },
     ])
     expect(overlays).toHaveLength(1)
     expect(overlays[0].maxY - overlays[0].minY).toBeGreaterThan(0)
@@ -611,14 +611,14 @@ describe('chord target display details', () => {
 })
 
 describe('guitar modal remains simple', () => {
-  it('shows only Microphone by default with practice-without-mic fallback', () => {
+  it('shows only Microphone by default with no fallback actions', () => {
     const layout = buildWfyInputModalLayout({
       instrumentId: INSTRUMENT_IDS.GUITAR,
       midiAvailable: true,
       microphoneAvailable: true,
     })
     expect(layout.primaryActions).toHaveLength(1)
-    expect(layout.fallbackLink?.label).toBe('Practice without mic')
+    expect(layout.fallbackLink).toBeNull()
   })
 })
 

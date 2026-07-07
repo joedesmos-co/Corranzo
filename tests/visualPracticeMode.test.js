@@ -16,10 +16,10 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import { buildNoteCheckpoints } from '../src/features/practice/waitForYouCheckpoints.js'
+import { resolveWfyTravelDurationMs } from '../src/features/practice/wfyVisualTravel.js'
 import {
   VISUAL_LANE_DEFAULTS,
   VISUAL_GROUP_STATUS,
-  WFY_VISUAL_MOVE_MS,
   buildBarlineTimes,
   buildKeyboardKeys,
   buildVisualLaneGroups,
@@ -207,19 +207,22 @@ describe('visual practice lane', () => {
     expect(targetScreenX).toBeCloseTo(transform.playheadX, 6)
   })
 
-  it('eases WFY visual movement through intermediate positions instead of teleporting', () => {
+  it('eases WFY visual movement through intermediate positions at musical tempo', () => {
     const fromTime = 0.5
     const toTime = 3
-    const start = resolveWfyDisplayFrameTime({ fromTime, toTime, elapsedMs: 0 })
+    const durationMs = resolveWfyTravelDurationMs(fromTime, toTime)
+    const start = resolveWfyDisplayFrameTime({ fromTime, toTime, elapsedMs: 0, durationMs })
     const midway = resolveWfyDisplayFrameTime({
       fromTime,
       toTime,
-      elapsedMs: WFY_VISUAL_MOVE_MS / 2,
+      elapsedMs: durationMs / 2,
+      durationMs,
     })
     const end = resolveWfyDisplayFrameTime({
       fromTime,
       toTime,
-      elapsedMs: WFY_VISUAL_MOVE_MS,
+      elapsedMs: durationMs,
+      durationMs,
     })
 
     expect(start).toBe(fromTime)
@@ -455,8 +458,8 @@ describe('practice view integration', () => {
 
     // Frame time comes from the engine's interpolated clock while playing.
     expect(src).toContain('visual.getScoreTime')
-    expect(src).toContain('useSmoothWfyFrameTime')
-    expect(src).toContain('WFY_VISUAL_MOVE_MS')
+    expect(src).toContain('useWfyVisualFrameTime')
+    expect(src).toContain('resolveWfyVisualTravelFrameTime')
 
     // Gentle guidance for missing timing and OMR-derived notes. The OMR note
     // stays collapsed inside a details fold during normal use.

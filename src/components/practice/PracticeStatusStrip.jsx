@@ -72,41 +72,43 @@ function followStatus(session, scoreFollow) {
 }
 
 function inputStatus(session) {
-  if (
-    !session.isWaitForYou ||
-    session.checkpointMode !== WFY_CHECKPOINT_MODE.NOTE
-  ) {
-    return null
-  }
-
   if (!session.wfyInputSourceSelectedThisSession) {
     return { label: 'Choose input', tone: 'neutral' }
   }
 
+  const showDetailed =
+    session.isWaitForYou && session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE
+
   if (session.wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE) {
-    if (session.microphone.isListening) {
-      return { label: 'Mic listening', tone: 'ready' }
+    if (showDetailed) {
+      if (session.microphone.isListening) {
+        return { label: 'Mic listening', tone: 'ready' }
+      }
+      if (session.microphone.isGranted) {
+        return { label: 'Mic ready', tone: 'ready' }
+      }
+      if (session.microphone.permission === MIC_PERMISSION.DENIED) {
+        return { label: 'Mic blocked', tone: 'warning' }
+      }
+      if (session.microphone.permission === MIC_PERMISSION.ERROR) {
+        return { label: 'Mic error', tone: 'warning' }
+      }
+      return { label: 'Mic starting', tone: 'neutral' }
     }
-    if (session.microphone.isGranted) {
-      return { label: 'Mic ready', tone: 'ready' }
-    }
-    if (session.microphone.permission === MIC_PERMISSION.DENIED) {
-      return { label: 'Mic blocked', tone: 'warning' }
-    }
-    if (session.microphone.permission === MIC_PERMISSION.ERROR) {
-      return { label: 'Mic error', tone: 'warning' }
-    }
-    return { label: 'Mic starting', tone: 'neutral' }
+    return { label: 'Microphone', tone: 'neutral' }
   }
 
   if (session.wfyInputSource === WFY_INPUT_SOURCE.MIDI) {
-    if (session.webMidi.isGranted && session.webMidi.devices.length > 0) {
-      return { label: 'MIDI ready', tone: 'ready' }
+    if (showDetailed) {
+      if (session.webMidi.isGranted && session.webMidi.devices.length > 0) {
+        return { label: 'MIDI ready', tone: 'ready' }
+      }
+      if (session.webMidi.isGranted) {
+        return { label: 'MIDI disconnected', tone: 'warning' }
+      }
+      return { label: 'MIDI off', tone: 'neutral' }
     }
-    if (session.webMidi.isGranted) {
-      return { label: 'MIDI disconnected', tone: 'warning' }
-    }
-    return { label: 'MIDI off', tone: 'neutral' }
+    return { label: 'MIDI keyboard', tone: 'neutral' }
   }
 
   return { label: 'Manual input', tone: 'neutral' }

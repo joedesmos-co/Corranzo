@@ -16,6 +16,7 @@ import {
   buildStaffLaneNotationMarkings,
   buildStaffLaneStems,
 } from '../../features/practice/staffLaneLayout.js'
+import { resolveLaneNoteClass } from '../../features/practice/visualLaneFeedback.js'
 
 const PX_PER_SECOND = VISUAL_LANE_DEFAULTS.pixelsPerSecond
 /** Staff scale bounds: large, learning-first staves. The lane fills its card
@@ -196,7 +197,7 @@ function StaffVisualLane({
             {notes.map((note) => (
               <g
                 key={note.id}
-                className={`staff-lane__note staff-lane__note--${note.status ?? 'upcoming'}`}
+                className={`staff-lane__note staff-lane__note--${resolveLaneNoteClass(note.status, note.laneOutcome)}`}
               >
                 {note.ledgerLines.map((ledgerY) => (
                   <line

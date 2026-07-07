@@ -1,4 +1,5 @@
 import { VISUAL_LANE_DEFAULTS } from './visualLaneConstants.js'
+import { resolveLaneNoteClass } from './visualLaneFeedback.js'
 import {
   VISUAL_GUITAR_TECHNIQUE_SYMBOLS,
   VISUAL_MARKING_KIND,
@@ -84,6 +85,11 @@ export function buildTabLaneNotes(
 
   for (const group of groups ?? []) {
     const x = group.timeSeconds * pixelsPerSecond
+    const durations = (group.notes ?? []).map((note) =>
+      sanitizeVisualDurationSeconds(note.durationSeconds, 0.25),
+    )
+    const groupDuration = durations.length ? Math.max(...durations, 0.25) : 0.25
+    const groupSustainWidth = Math.max(FRET_DISC_RADIUS * 1.6, groupDuration * pixelsPerSecond)
     for (let index = 0; index < (group.notes?.length ?? 0); index += 1) {
       const note = group.notes[index]
       if (!isFiniteMidi(note.midi)) {
@@ -98,17 +104,24 @@ export function buildTabLaneNotes(
         unplacedCount += 1
         continue
       }
+      const durationSeconds = sanitizeVisualDurationSeconds(note.durationSeconds, 0.25)
+      const sustainWidth = group.isChord
+        ? groupSustainWidth
+        : Math.max(FRET_DISC_RADIUS * 1.6, durationSeconds * pixelsPerSecond)
       notes.push({
         id: `${group.id}-s${position.string}-${index}`,
         groupId: group.id,
         status: group.status ?? null,
+        laneOutcome: group.laneOutcome ?? null,
         x,
         y: yForString(position.string, geometry),
         string: position.string,
         fret: position.fret,
         midi: note.midi,
         label: note.label,
-        durationSeconds: sanitizeVisualDurationSeconds(note.durationSeconds, 0),
+        durationSeconds,
+        sustainWidth,
+        isChord: Boolean(group.isChord),
         visualNoteId: note.visualNoteId ?? note.id ?? `${group.id}-${index}`,
         sourceNoteId: note.sourceNoteId ?? note.id ?? null,
         markings: note.markings ?? [],
@@ -120,11 +133,11 @@ export function buildTabLaneNotes(
   return notes
 }
 
-/** Vertical band behind a current guitar chord shape (multi-string stack). */
+/** Vertical band behind guitar chord / double-stop sustain shapes. */
 export function buildTabChordShapeOverlays(notes = []) {
   const byGroup = new Map()
   for (const note of notes) {
-    if (note.status !== 'current') {
+    if (!note.isChord) {
       continue
     }
     const list = byGroup.get(note.groupId) ?? []
@@ -136,12 +149,15 @@ export function buildTabChordShapeOverlays(notes = []) {
     if (groupNotes.length < 2) {
       continue
     }
+    const sustainWidth = Math.max(...groupNotes.map((note) => note.sustainWidth ?? 0))
     overlays.push({
       id: `${groupId}-shape`,
       x: groupNotes[0].x,
       minY: Math.min(...groupNotes.map((note) => note.y)),
       maxY: Math.max(...groupNotes.map((note) => note.y)),
-      width: FRET_DISC_RADIUS * 2.4,
+      width: Math.max(FRET_DISC_RADIUS * 2.4, sustainWidth),
+      status: groupNotes[0].status ?? 'upcoming',
+      laneOutcome: groupNotes[0].laneOutcome ?? null,
     })
   }
   return overlays

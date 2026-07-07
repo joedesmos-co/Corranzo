@@ -32,6 +32,8 @@ export default function WaitForYouInputSourceModal({
     microphoneAvailable,
   })
 
+  const isSimplifiedLayout = layout.layout === 'guitar' || layout.layout === 'piano'
+
   return createPortal(
     <div className="wfy-input-source-modal">
       <div className="wfy-input-source-modal__scrim" aria-hidden="true" />
@@ -42,9 +44,9 @@ export default function WaitForYouInputSourceModal({
         aria-modal="true"
         aria-labelledby="wfy-input-source-modal-title"
       >
-        <h2 id="wfy-input-source-modal-title">How do you want to play?</h2>
+        <h2 id="wfy-input-source-modal-title">How should Corranzo hear you?</h2>
 
-        {layout.layout === 'guitar' ? (
+        {isSimplifiedLayout ? (
           <div className="wfy-input-source-modal__guitar">
             <div className="wfy-input-source-modal__actions">
               {layout.primaryActions.map((action) => (
@@ -59,34 +61,6 @@ export default function WaitForYouInputSourceModal({
                 </button>
               ))}
             </div>
-
-            {layout.fallbackLink ? (
-              <button
-                type="button"
-                className="wfy-input-source-modal__link"
-                onClick={() => onChooseSource(layout.fallbackLink.id)}
-              >
-                {layout.fallbackLink.label}
-              </button>
-            ) : null}
-
-            {layout.advancedActions.length > 0 ? (
-              <details className="wfy-input-source-modal__advanced">
-                <summary className="wfy-input-source-modal__advanced-summary">More options</summary>
-                <div className="wfy-input-source-modal__advanced-body">
-                  {layout.advancedActions.map((action) => (
-                    <button
-                      key={action.id}
-                      type="button"
-                      className="wfy-input-source-modal__btn wfy-input-source-modal__btn--secondary"
-                      onClick={() => onChooseSource(action.id)}
-                    >
-                      {action.label}
-                    </button>
-                  ))}
-                </div>
-              </details>
-            ) : null}
           </div>
         ) : (
           <div className="wfy-input-source-modal__actions">

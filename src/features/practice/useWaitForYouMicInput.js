@@ -41,6 +41,7 @@ import {
   createMatchConfirmState,
   frameConfidentForMatch,
   frameCorroboratesSingleNote,
+  GUITAR_ROLLING_CHORD_CONFIRM_FRAMES,
   resetMatchConfirmState,
 } from './micMatchConfirm.js'
 import {
@@ -63,18 +64,19 @@ import {
 } from './guitarChordShapeCheckpoint.js'
 
 function micUsesChordSequence(checkpoint) {
-  return Boolean(checkpoint?.isChord) && !checkpoint?.isGuitarChordShape
+  return Boolean(checkpoint?.isChord) && !checkpoint?.isRollingChordMic
 }
 
 function micFeedbackFromResult(result, checkpoint = null, frame = null) {
-  if (result?.isGuitarChordShape) {
+  if (result?.isRollingChordMic || result?.isGuitarChordShape) {
     const matchedCount = result.matchedCount ?? result.matchedIndices?.size ?? 0
     const required = result.requiredTones ?? matchedCount
     const total = result.totalExpected ?? result.expected?.length ?? 0
     if (result.outcome === MATCH_OUTCOME.COMPLETE) {
+      const isShape = result.isGuitarChordShape
       return {
         outcome: WFY_INPUT_OUTCOME.CORRECT,
-        message: 'Chord shape matched',
+        message: isShape ? 'Chord shape matched' : 'Chord matched',
         tone: 'success',
         playedMidi: result.playedMidi,
         matchedIndices: result.matchedIndices,
@@ -188,16 +190,23 @@ function guitarMissingHighStringFeedback(checkpoint, result, frame = null) {
   return `Heard low string — try picking the ${guitarStringPickLabel(stringNum)} string a little louder`
 }
 
-function hasStrongMissingGuitarChordToneEvidence(frame, expectedMidis = [], heardMidis = new Set()) {
+function hasStrongMissingGuitarChordToneEvidence(
+  frame,
+  expectedMidis = [],
+  heardMidis = new Set(),
+  expectedStringFrets = null,
+) {
   if (!frame?.v2DetectedMidis?.length || !heardMidis?.size) {
     return false
   }
   const rms = frame.filteredRms ?? frame.rms ?? 0
   const noiseFloor = Math.max(0.001, frame.noiseFloor ?? 0.001)
-  if (rms < Math.max(0.0012, noiseFloor * 0.35)) {
+  if (rms < Math.max(0.0018, noiseFloor * 0.55)) {
     return false
   }
-  const stringByMidi = buildExpectedStringByMidi(frame?.expectedStringFrets)
+  const stringByMidi = buildExpectedStringByMidi(
+    expectedStringFrets ?? frame?.expectedStringFrets,
+  )
   const heardLowString = [...heardMidis].some((midi) =>
     isLowGuitarString(stringByMidi.get(midi)),
   )
@@ -298,11 +307,12 @@ export default function useWaitForYouMicInput({
   const micEngineMode = 'v2-score-informed'
   const chordTargets = getMicChordMatchTargets(currentCheckpoint, matchSettings)
   const isGuitarChordShape = Boolean(currentCheckpoint?.isGuitarChordShape)
+  const isRollingChordMic = Boolean(currentCheckpoint?.isRollingChordMic)
 
   const isMicV2Polyphonic = false
 
   const isMicChordCollection =
-    !isGuitarChordShape &&
+    !isRollingChordMic &&
     expectedMidis.length > 1 &&
     chordTargets.mode === MIC_CHORD_MODES.ANY_TONE
 
@@ -463,17 +473,18 @@ export default function useWaitForYouMicInput({
   }, [])
 
   const evaluateMicMatch = useCallback(
-    (playedMidi, detectedMidis = null) => {
+    (playedMidi, detectedMidis = null, frame = null) => {
       if (!currentCheckpoint || !matchSettings) {
         return null
       }
       if (detectedMidis?.length) {
-        if (currentCheckpoint?.isGuitarChordShape) {
+        if (currentCheckpoint?.isRollingChordMic) {
           return evaluateGuitarChordShapeMicInput(
             currentCheckpoint,
             detectedMidis,
             guitarChordShapeBufferRef.current,
             matchSettings,
+            frame,
           )
         }
         return evaluateMicScoreInformedInput(currentCheckpoint, detectedMidis, matchSettings)
@@ -502,10 +513,11 @@ export default function useWaitForYouMicInput({
       if (
         feedback.outcome === WFY_INPUT_OUTCOME.CORRECT &&
         result.isChord &&
-        !result.isGuitarChordShape
+        !result.isGuitarChordShape &&
+        !result.isRollingChordMic
       ) {
         feedback.message = `Heard ${chordLabel(result.expected)} — all tones matched.`
-      } else if (feedback.outcome === WFY_INPUT_OUTCOME.CORRECT && !result.isGuitarChordShape) {
+      } else if (feedback.outcome === WFY_INPUT_OUTCOME.CORRECT && !result.isGuitarChordShape && !result.isRollingChordMic) {
         feedback.message = `Heard ${feedback.playedLabel ?? 'note'} — correct`
       }
 
@@ -582,6 +594,7 @@ export default function useWaitForYouMicInput({
         matchingEnabled &&
         !isMicChordCollection &&
         !isGuitarChordShape &&
+        !isRollingChordMic &&
         evaluateMicMatch(frame.midi)?.outcome === MATCH_OUTCOME.WRONG
       const quietNoteRejected =
         matchingEnabled &&
@@ -645,11 +658,7 @@ export default function useWaitForYouMicInput({
         wrongPitch,
         quietNoteRejected: quietRejectedFramesRef.current >= 6,
         electricGuitarUnconfirmed: electricUnconfirmedFramesRef.current >= 6,
-        chordUnsupported:
-          matchingEnabled &&
-          isMicChordCollection &&
-          expectedMidis.length > 1 &&
-          !isMicV2Polyphonic,
+        chordUnsupported: false,
       })
       const diagnosticLabel = micDiagnosticLabel(diagnostic)
 
@@ -784,15 +793,30 @@ export default function useWaitForYouMicInput({
       const guitarShapeQuietCollect =
         isGuitarChordShape &&
         !frame.gateOpen &&
+        isMusicalMicFrame(frame) &&
         hasStrongMissingGuitarChordToneEvidence(
           frame,
           expectedMidis,
           guitarChordShapeBufferRef.current?.heardMidis,
+          currentCheckpoint?.expectedStringFrets,
         )
-      const guitarShapeFrameConfident = frameConfident || guitarShapeQuietCollect
+      const rollingChordQuietCollect =
+        isRollingChordMic &&
+        !frame.gateOpen &&
+        isMusicalMicFrame(frame) &&
+        hasStrongMissingGuitarChordToneEvidence(
+          frame,
+          expectedMidis,
+          guitarChordShapeBufferRef.current?.heardMidis,
+          currentCheckpoint?.expectedStringFrets,
+        )
+      const rollingChordFrameConfident =
+        frameConfident ||
+        guitarShapeQuietCollect ||
+        rollingChordQuietCollect
 
       if (isMicV2Polyphonic && frame.gateOpen && frame.v2DetectedMidis?.length) {
-        const preview = evaluateMicMatch(null, frame.v2DetectedMidis)
+        const preview = evaluateMicMatch(null, frame.v2DetectedMidis, frame)
         matchResultForTrace = preview
         if (!preview || feedbackOutcomeRef.current === WFY_INPUT_OUTCOME.CORRECT) {
           return
@@ -802,7 +826,15 @@ export default function useWaitForYouMicInput({
           const key = `${currentCheckpoint.id}:chord:${[...frame.v2DetectedMidis]
             .sort((left, right) => left - right)
             .join(',')}`
-          if (confirmConfidentMatch(key, frameConfident)) {
+          const chordConfirmThreshold =
+            preview.isGuitarChordShape || preview.isRollingChordMic
+              ? GUITAR_ROLLING_CHORD_CONFIRM_FRAMES
+              : undefined
+          if (
+            confirmConfidentMatch(key, rollingChordFrameConfident, {
+              threshold: chordConfirmThreshold,
+            })
+          ) {
             resetMatchConfirm()
             advancedForTrace = true
             applyMatchResult(preview, frame)
@@ -824,7 +856,7 @@ export default function useWaitForYouMicInput({
         return
       }
 
-      if ((frame.midi == null || !frame.gateOpen) && !guitarShapeQuietCollect) {
+      if ((frame.midi == null || !frame.gateOpen) && !guitarShapeQuietCollect && !rollingChordQuietCollect) {
         return
       }
 
@@ -884,7 +916,7 @@ export default function useWaitForYouMicInput({
       }
 
       const v2Preview = frame.v2DetectedMidis?.length
-        ? evaluateMicMatch(null, frame.v2DetectedMidis)
+        ? evaluateMicMatch(null, frame.v2DetectedMidis, frame)
         : null
       matchResultForTrace = v2Preview
 
@@ -900,10 +932,14 @@ export default function useWaitForYouMicInput({
           }) ||
           (attackRearmReason === 'score-informed-transition' &&
             hasStrongExpectedV2Evidence(frame, expectedMidis[0]))
+        const guitarChordConfirmThreshold =
+          v2Preview.isGuitarChordShape || v2Preview.isRollingChordMic
+            ? GUITAR_ROLLING_CHORD_CONFIRM_FRAMES
+            : undefined
         if (
-          confirmConfidentMatch(key, guitarShapeFrameConfident && corroborated, {
+          confirmConfidentMatch(key, rollingChordFrameConfident && corroborated, {
             pitchCents,
-            threshold: v2Preview.isGuitarChordShape ? 1 : undefined,
+            threshold: guitarChordConfirmThreshold,
           })
         ) {
           resetMatchConfirm()
@@ -976,6 +1012,7 @@ export default function useWaitForYouMicInput({
       expectedMidis,
       isMicChordCollection,
       isGuitarChordShape,
+      isRollingChordMic,
       isMicV2Polyphonic,
       micEngineMode,
       reportMicDebug,

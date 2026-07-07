@@ -217,6 +217,7 @@ export function buildStaffLaneNotes(
           id: `${group.id}-${note.midi}-${i}`,
           groupId: group.id,
           status: group.status ?? null,
+          laneOutcome: group.laneOutcome ?? null,
           x,
           xOffset: 0,
           y,
