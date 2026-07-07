@@ -303,8 +303,17 @@ function useSmoothWfyFrameTime({ rawFrameTime, waiting, checkpointId }) {
  * instruments append the position ("E3 · fret 2 · D string").
  */
 function describeTargetNotes(targetGroup, strings, tabPositions) {
-  if (targetGroup?.isGuitarChordShape) {
-    return targetGroup.displayLabel ?? 'Play this shape'
+  if (targetGroup?.isChord) {
+    if (targetGroup.displayLabel) {
+      return targetGroup.displayLabel
+    }
+    if (targetGroup.chordSymbol) {
+      return `Play ${targetGroup.chordSymbol} chord`
+    }
+    if (targetGroup.midis?.length === 2) {
+      return 'Play this double-stop'
+    }
+    return `Play ${targetGroup.midis?.length ?? targetGroup.notes?.length ?? 0}-note chord`
   }
   const notes = targetGroup?.notes ?? []
   if (!strings) {
@@ -369,13 +378,7 @@ const VisualTargetHeader = memo(function VisualTargetHeader({
       </span>
       <strong className="visual-practice__target-notes">
         {describeTargetNotes(targetGroup, strings, tabPositions)}
-        {targetGroup.isGuitarChordShape
-          ? ''
-          : targetGroup.isChord
-            ? micChordSequence
-              ? ' (one at a time)'
-              : ' (together)'
-            : ''}
+        {targetGroup.isChord && micChordSequence ? ' (one at a time)' : ''}
       </strong>
       <span className="visual-practice__target-meta">
         {position} · {Math.min(targetIndex + 1, totalGroups)} of {totalGroups}

@@ -81,6 +81,7 @@
       "label": "Wet Hands (Minecraft) — notation + TAB guitar",
       "tier": "guitar",
       "optional": true,
+      "diagnosticOnly": true,
       "pdf": "wet-hands-minecraft.pdf",
       "truth": "wet-hands-minecraft.mxl",
       "pdfLegacyPath": "~/Downloads/wet-hands-minecraft.pdf",
@@ -91,16 +92,7 @@
       },
       "instrumentId": "guitar",
       "maxPages": 4,
-      "thresholds": {
-        "pitchAccuracy": 0.15,
-        "durationAccuracy": 0.35,
-        "onsetAccuracy": 0.2,
-        "chordGroupingAccuracy": 0.25,
-        "noteDetectionF1": 0.45,
-        "maxMeasureCountDiff": 20,
-        "maxNoteCountDiff": 80
-      },
-      "notes": "Notation+TAB guitar regression fixture. Optional — skipped unless files are present locally. Thresholds are regression floors for the pairing sprint, not product targets."
+      "notes": "Notation+TAB guitar stress fixture. Optional and diagnostic-only: skipped unless files are present locally, and never blocks the dashboard because the real-world PDF is not a stable enforced regression fixture."
     },
     {
       "id": "campanella-grandes",

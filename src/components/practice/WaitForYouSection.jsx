@@ -56,6 +56,32 @@ function feedbackClassName(outcome) {
   }
 }
 
+function conciseChordTargetLabel(checkpoint, expectedMidis) {
+  if (!expectedMidis || expectedMidis.length <= 1) {
+    return null
+  }
+  if (checkpoint?.displayLabel) {
+    return checkpoint.displayLabel
+  }
+  if (checkpoint?.chordSymbol) {
+    return `Play ${checkpoint.chordSymbol} chord`
+  }
+  if (expectedMidis.length === 2) {
+    return 'Play this double-stop'
+  }
+  return `Play ${expectedMidis.length}-note chord`
+}
+
+function checkpointDetailsLabel(checkpoint, expectedMidis) {
+  if (checkpoint?.detailsLabel) {
+    return checkpoint.detailsLabel
+  }
+  if (!expectedMidis?.length) {
+    return null
+  }
+  return expectedMidis.map((midi) => midiToNoteLabel(midi)).join(', ')
+}
+
 export default function WaitForYouSection({
   active,
   status,
@@ -110,6 +136,12 @@ export default function WaitForYouSection({
     inputMatchingActive &&
     inputFeedback?.message
 
+  const expectedMidis = currentCheckpoint ? getExpectedMidis(currentCheckpoint) : []
+  const isGuitarChordShape = Boolean(currentCheckpoint?.isGuitarChordShape)
+  const chordTargetLabel = conciseChordTargetLabel(currentCheckpoint, expectedMidis)
+  const detailsLabel = checkpointDetailsLabel(currentCheckpoint, expectedMidis)
+  const showChordDetails = expectedMidis.length > 1 && Boolean(detailsLabel)
+
   const showGuidance =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     status === WFY_STATUS.WAITING &&
@@ -146,8 +178,6 @@ export default function WaitForYouSection({
   const structurallyDone =
     status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS
   const primaryActionDisabled = displayStatus === WFY_DISPLAY_STATUS.CONTINUING
-  const expectedMidis = currentCheckpoint ? getExpectedMidis(currentCheckpoint) : []
-  const isGuitarChordShape = Boolean(currentCheckpoint?.isGuitarChordShape)
   const micChordSequence =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
@@ -333,20 +363,24 @@ export default function WaitForYouSection({
             )}
           </p>
           {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && (
-            <p className="wait-for-you__now-notes">
+            <div className="wait-for-you__now-notes">
               <span className="wait-for-you__now-notes-label">
                 {isGuitarChordShape
                   ? 'Play shape'
                   : micChordSequence
                     ? 'Chord practice sequence'
                     : expectedMidis.length > 1
-                      ? 'Play together'
+                      ? 'Chord target'
                       : 'Play'}
               </span>
               <span className="wait-for-you__note-chips">
-                {isGuitarChordShape ? (
-                  <span className="wait-for-you__note-chip wait-for-you__note-chip--shape">
-                    {currentCheckpoint.displayLabel ?? guidance?.expectedLabel ?? 'Chord shape'}
+                {expectedMidis.length > 1 ? (
+                  <span
+                    className={`wait-for-you__note-chip${
+                      isGuitarChordShape ? ' wait-for-you__note-chip--shape' : ''
+                    }`}
+                  >
+                    {chordTargetLabel ?? guidance?.expectedLabel ?? 'Chord'}
                   </span>
                 ) : (
                   expectedMidis.map((midi) => (
@@ -356,7 +390,13 @@ export default function WaitForYouSection({
                   ))
                 )}
               </span>
-            </p>
+            </div>
+          )}
+          {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && showChordDetails && (
+            <details className="wait-for-you__target-details">
+              <summary>Details</summary>
+              <p>{detailsLabel}</p>
+            </details>
           )}
         </div>
       )}

@@ -1,7 +1,7 @@
 import { noteHasLayout } from '../musicxml/readNoteLayout.js'
 import { clamp, lerp } from '../score-follow/scoreFollowEasing.js'
 import { resolveScoreFollowCursor } from '../score-follow/resolveScoreFollowCursor.js'
-import { CHECKPOINT_KIND } from './waitForYouCheckpoints.js'
+import { isPlayableCheckpointKind } from './waitForYouCheckpoints.js'
 import { resolveNotePracticeHand } from './practiceScope.js'
 import {
   buildMeasureAnchorGeometry,
@@ -259,7 +259,7 @@ export function resolveNoteTargetPosition({
   timingMap,
   anchors,
 }) {
-  if (!checkpoint || checkpoint.kind !== CHECKPOINT_KIND.NOTE) {
+  if (!checkpoint || !isPlayableCheckpointKind(checkpoint.kind)) {
     return { visible: false, reason: 'not-note-checkpoint' }
   }
 

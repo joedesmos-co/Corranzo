@@ -17,10 +17,12 @@ import {
   MIC_CHORD_MATCH_WRONG,
   resolveMicChordCollectionWindowMs,
 } from './waitForYouMicChordCollection.js'
-import { minimumGuitarChordTonesRequired } from './guitarChordShapeCheckpoint.js'
+import {
+  GUITAR_CHORD_SHAPE_WINDOW_MS as DEFAULT_GUITAR_CHORD_SHAPE_WINDOW_MS,
+  minimumGuitarChordTonesRequired,
+} from './guitarChordShapeCheckpoint.js'
 
-/** Short window for guitar strum/pick partial chord-tone detection. */
-export const GUITAR_CHORD_SHAPE_WINDOW_MS = 900
+export { DEFAULT_GUITAR_CHORD_SHAPE_WINDOW_MS as GUITAR_CHORD_SHAPE_WINDOW_MS }
 
 export const MATCH_OUTCOME = {
   NO_EXPECTED: 'no-expected',
@@ -425,9 +427,13 @@ export function evaluateGuitarChordShapeMicInput(
 ) {
   const expected = getExpectedMidis(checkpoint)
   const required =
+    checkpoint?.minimumRequiredTones ??
     checkpoint?.minimumChordTonesRequired ??
     minimumGuitarChordTonesRequired(expected.length)
-  const windowMs = Number(settings.guitarChordShapeWindowMs) || GUITAR_CHORD_SHAPE_WINDOW_MS
+  const windowMs =
+    Number(settings.guitarChordShapeWindowMs) ||
+    Number(checkpoint?.rollingWindowMs) ||
+    DEFAULT_GUITAR_CHORD_SHAPE_WINDOW_MS
   const now = Date.now()
 
   if (bufferState) {

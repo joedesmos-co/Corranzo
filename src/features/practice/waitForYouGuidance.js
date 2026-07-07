@@ -16,14 +16,21 @@ export { HINT_AFTER_WRONG_ATTEMPTS, WFY_GUIDANCE } from './waitForYouGuidanceCon
  */
 
 export function expectedLabelFor(expectedMidis, checkpoint = null) {
-  if (checkpoint?.displayLabel) {
-    return checkpoint.displayLabel
-  }
   if (checkpoint?.chordSymbol) {
     return checkpoint.chordSymbol
   }
   if (!expectedMidis?.length) return null
   return expectedMidis.length > 1 ? chordLabel(expectedMidis) : midiToNoteLabel(expectedMidis[0])
+}
+
+function conciseChordName(expectedMidis, checkpoint = null) {
+  if (checkpoint?.chordSymbol) {
+    return `${checkpoint.chordSymbol} chord`
+  }
+  if (checkpoint?.displayLabel) {
+    return checkpoint.displayLabel.replace(/^Play\s+/i, '')
+  }
+  return `${expectedMidis.length}-note chord`
 }
 
 /**
@@ -118,10 +125,13 @@ export function buildTargetHint({ expectedMidis, chordAsSequence = false, checkp
   if (guitarChordShapeMode) {
     return checkpoint?.displayLabel ?? 'Play this shape'
   }
+  if (expectedMidis?.length > 1 && checkpoint?.displayLabel && !chordAsSequence) {
+    return checkpoint.displayLabel
+  }
   const label = expectedLabelFor(expectedMidis, checkpoint)
   if (!label) return null
   return chordAsSequence && expectedMidis.length > 1
-    ? `Chord practice sequence: ${label}`
+    ? `Chord practice sequence: ${conciseChordName(expectedMidis, checkpoint)}`
     : `Play ${label}`
 }
 
@@ -203,7 +213,7 @@ export function buildGuidance({
       missingLabels(expectedMidis, inputFeedback?.matchedIndices)
     let primary = missing.length
       ? guitarChordShapeMode
-        ? `Heard part of the shape — need ${Math.max(1, (checkpoint?.minimumChordTonesRequired ?? 2) - (inputFeedback?.matchedCount ?? heard.length))} more tone(s)`
+        ? `Heard part of the shape — need ${Math.max(1, (checkpoint?.minimumRequiredTones ?? checkpoint?.minimumChordTonesRequired ?? 2) - (inputFeedback?.matchedCount ?? heard.length))} more tone(s)`
         : `Still need ${missing.join(', ')}`
       : chordAsSequence
         ? 'Sequence almost complete'
@@ -259,10 +269,12 @@ export function buildGuidance({
           : chordAsSequence
             ? checkpoint?.chordSymbol
               ? `Play ${checkpoint.chordSymbol} chord tones one at a time`
-              : `Chord practice sequence: ${expectedLabel}`
+              : `Chord practice sequence: ${conciseChordName(expectedMidis, checkpoint)}`
+            : checkpoint?.displayLabel
+              ? checkpoint.displayLabel
             : checkpoint?.chordSymbol
               ? `Play the ${checkpoint.chordSymbol} chord`
-              : `Play the chord: ${expectedLabel}`
+              : `Play ${expectedMidis.length}-note chord`
         : `Play ${expectedLabel}`
       : `Play ${expectedLabel}, or tap Continue`,
   }

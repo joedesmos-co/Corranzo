@@ -4,11 +4,21 @@ import { usesPerformedTimeline } from '../musicxml/performedTimeline.js'
 import { alignChordScoreTime } from '../playback/pianoVoiceMix.js'
 import { filterNotesForPracticeScope } from './practiceScope.js'
 import { resolveGroupChordSymbol } from './guitarChordShapeCheckpoint.js'
+import {
+  CHORD_CHECKPOINT_KIND,
+  buildChordCheckpointModel,
+  isPlayableCheckpointKind,
+} from './chordCheckpoint.js'
 
 export const CHECKPOINT_KIND = {
   BEAT: 'beat',
-  NOTE: 'note',
+  NOTE: CHORD_CHECKPOINT_KIND.NOTE,
+  DOUBLE_STOP: CHORD_CHECKPOINT_KIND.DOUBLE_STOP,
+  CHORD: CHORD_CHECKPOINT_KIND.CHORD,
+  CHORD_SHAPE: CHORD_CHECKPOINT_KIND.CHORD_SHAPE,
 }
+
+export { isPlayableCheckpointKind }
 
 /** Notes within this window (seconds) form one checkpoint — hands may be slightly apart. */
 export const NOTE_TIME_GROUP_SECONDS = 0.18
@@ -93,7 +103,10 @@ function mergeTiedContinuations(notes) {
   const merged = []
 
   for (const note of sorted) {
-    if (note.suppressPlaybackAttack) {
+    const isTieContinuation = Boolean(
+      note.suppressPlaybackAttack || (note.tieStop && !note.tieStart),
+    )
+    if (isTieContinuation) {
       const head = [...merged]
         .reverse()
         .find(
@@ -110,6 +123,22 @@ function mergeTiedContinuations(notes) {
           head.durationSeconds = (Number.isFinite(head.durationSeconds) ? head.durationSeconds : 0) + addedSeconds
         }
         head.tieStop = Boolean(head.tieStop || note.tieStop)
+        head.hasTiedSustain = true
+        head.tiedContinuations = [
+          ...(head.tiedContinuations ?? []),
+          {
+            id: note.id ?? null,
+            timeSeconds: note.timeSeconds,
+            quarterTime: note.quarterTime,
+            durationSeconds: note.durationSeconds,
+            durationQuarters: note.durationQuarters,
+          },
+        ]
+        continue
+      }
+      // A tie continuation without its attack is sustain, not a new playable
+      // target. This can happen when a loop starts inside a tie.
+      if (note.tieStop) {
         continue
       }
     }
@@ -117,6 +146,30 @@ function mergeTiedContinuations(notes) {
   }
 
   return merged
+}
+
+function expectedStringFretsForNotes(notes) {
+  const result = []
+  const seen = new Set()
+  for (const note of notes ?? []) {
+    const string = Number(note?.string)
+    const fret = Number(note?.fret)
+    if (!Number.isFinite(string) || !Number.isFinite(fret)) {
+      continue
+    }
+    const key = `${string}:${fret}:${note.midi ?? ''}`
+    if (seen.has(key)) {
+      continue
+    }
+    seen.add(key)
+    result.push({
+      string,
+      fret,
+      midi: Number.isFinite(note.midi) ? note.midi : null,
+      noteId: note.id ?? null,
+    })
+  }
+  return result.sort((left, right) => left.string - right.string)
 }
 
 /**
@@ -186,19 +239,38 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null, options = {})
     const beatAtTime = timingMap ? getBeatAtTime(timingMap, group.timeSeconds) : null
     const measureNumber = group.notes[0].measureNumber
 
+    const checkpointModel = buildChordCheckpointModel({
+      expectedMidis: midis,
+      expectedStringFrets: expectedStringFretsForNotes(group.notes),
+      chordSymbol,
+      isTiedContinuation: group.notes.every((note) => note.suppressPlaybackAttack),
+    })
+    const singleNoteLabel = group.notes.map((note) => noteCheckpointLabel(note)).join(' + ')
+    const displayLabel =
+      midis.length > 1
+        ? checkpointModel.displayLabel
+        : singleNoteLabel
+
     return {
       id: `note-m${measureNumber}-t${group.timeSeconds.toFixed(3)}-${index}`,
-      kind: CHECKPOINT_KIND.NOTE,
+      kind: checkpointModel.kind,
+      checkpointType: CHECKPOINT_KIND.NOTE,
       index,
       measureNumber,
       beat: beatAtTime?.beat ?? null,
       timeSeconds: group.timeSeconds,
       quarterTime: group.notes[0].quarterTime,
       repeatPass: group.notes[0].repeatPass ?? beatAtTime?.repeatPass ?? 1,
-      label: chordSymbol && midis.length > 1 ? chordSymbol : group.notes.map((note) => noteCheckpointLabel(note)).join(' + '),
-      chordSymbol,
+      label: displayLabel,
+      displayLabel,
+      detailsLabel: checkpointModel.detailsLabel,
+      chordSymbol: checkpointModel.chordSymbol,
       expectedMidi: midis[0],
-      expectedMidis: midis,
+      expectedMidis: checkpointModel.expectedMidis,
+      expectedStringFrets: checkpointModel.expectedStringFrets,
+      minimumRequiredTones: checkpointModel.minimumRequiredTones,
+      rollingWindowMs: checkpointModel.rollingWindowMs,
+      isTiedContinuation: checkpointModel.isTiedContinuation,
       isChord: midis.length > 1,
       notes: group.notes,
     }

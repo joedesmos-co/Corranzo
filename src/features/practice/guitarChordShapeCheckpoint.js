@@ -1,9 +1,16 @@
 import { INSTRUMENT_IDS } from '../instruments/instruments.js'
+import {
+  CHORD_CHECKPOINT_KIND,
+  buildCheckpointDetails,
+} from './chordCheckpoint.js'
 
 /**
  * Guitar chord checkpoints: vertical fret stacks treated as one shape target,
  * not a piano-style pitch list. Pure helpers — no React, no audio APIs.
  */
+
+/** Short rolling window for guitar strum/pick partial chord-tone detection. */
+export const GUITAR_CHORD_SHAPE_WINDOW_MS = 900
 
 export function minimumGuitarChordTonesRequired(toneCount) {
   const count = Number(toneCount) || 0
@@ -107,6 +114,9 @@ export function buildGuitarChordShape(checkpoint, tabPositions = null) {
 
 export function guitarChordDisplayLabel(checkpoint, shape) {
   const toneCount = shape?.positions?.length ?? checkpoint?.expectedMidis?.length ?? 0
+  if (shape?.chordSymbol && toneCount >= 3) {
+    return `Play ${shape.chordSymbol} chord`
+  }
   return guitarShapeTargetLabel(toneCount)
 }
 
@@ -120,12 +130,28 @@ export function enrichGuitarChordCheckpoint(checkpoint, { instrumentId = null, t
   }
   const toneCount = checkpoint.expectedMidis?.length ?? shape.positions.length
   const displayLabel = guitarChordDisplayLabel(checkpoint, shape)
+  const expectedStringFrets = shape.positions.map((position) => ({
+    string: position.string,
+    fret: position.fret,
+    midi: position.midi,
+    noteId: position.noteId,
+  }))
+  const minimumRequiredTones = minimumGuitarChordTonesRequired(toneCount)
   return {
     ...checkpoint,
+    kind: CHORD_CHECKPOINT_KIND.CHORD_SHAPE,
+    targetKind: CHORD_CHECKPOINT_KIND.CHORD_SHAPE,
     isGuitarChordShape: true,
     guitarChordShape: shape,
+    expectedStringFrets,
     displayLabel,
-    minimumChordTonesRequired: minimumGuitarChordTonesRequired(toneCount),
+    detailsLabel: buildCheckpointDetails({
+      expectedMidis: checkpoint.expectedMidis ?? [],
+      expectedStringFrets,
+    }),
+    minimumRequiredTones,
+    minimumChordTonesRequired: minimumRequiredTones,
+    rollingWindowMs: GUITAR_CHORD_SHAPE_WINDOW_MS,
     label: displayLabel,
   }
 }

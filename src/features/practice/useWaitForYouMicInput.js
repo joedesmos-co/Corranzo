@@ -24,7 +24,7 @@ import {
   resetMicChordCollectionState,
 } from './waitForYouMicChordCollection.js'
 import { MIC_CHORD_MODES } from './waitForYouMatchSettings.js'
-import { CHECKPOINT_KIND } from './waitForYouCheckpoints.js'
+import { isPlayableCheckpointKind } from './waitForYouCheckpoints.js'
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 import { resolveMicDiagnostic, micDiagnosticLabel } from '../microphone-input/micDiagnosticState.js'
 import {
@@ -223,7 +223,7 @@ export default function useWaitForYouMicInput({
   const matchingEnabled =
     detectEnabled &&
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
-    currentCheckpoint?.kind === CHECKPOINT_KIND.NOTE
+    isPlayableCheckpointKind(currentCheckpoint?.kind)
 
   const useV2Detector = detectEnabled && micEngineV2Active
   const micMatchingReady = matchingEnabled && micEngineV2Active && Boolean(calibration?.ready)
@@ -455,6 +455,8 @@ export default function useWaitForYouMicInput({
         frame.midi != null &&
         frame.gateOpen &&
         matchingEnabled &&
+        !isMicChordCollection &&
+        !isGuitarChordShape &&
         evaluateMicMatch(frame.midi)?.outcome === MATCH_OUTCOME.WRONG
       const quietNoteRejected =
         matchingEnabled &&
@@ -681,6 +683,51 @@ export default function useWaitForYouMicInput({
         return
       }
 
+      if (isMicChordCollection) {
+        const sequencePreview = evaluateMicMatch(frame.midi)
+        if (!sequencePreview) {
+          return
+        }
+        if (sequencePreview.outcome === MATCH_OUTCOME.WRONG) {
+          resetMatchConfirm()
+          setInputFeedback({
+            ...micFeedbackFromResult(sequencePreview, currentCheckpoint),
+            micChordMode: true,
+            micEngineMode,
+          })
+          return
+        }
+        if (sequencePreview.outcome === MATCH_OUTCOME.COMPLETE) {
+          const pitchCents = frame.midiFloat != null ? frame.midiFloat * 100 : null
+          if (
+            confirmConfidentMatch(
+              `${currentCheckpoint.id}:sequence:${frame.midi}`,
+              frameConfident,
+              { pitchCents, threshold: 1 },
+            )
+          ) {
+            resetMatchConfirm()
+            setLastHeardMidi(frame.midi)
+            applyMatchResult(sequencePreview)
+            return
+          }
+        } else {
+          resetMatchConfirm()
+        }
+        if (
+          sequencePreview.outcome === MATCH_OUTCOME.CHORD_PROGRESS ||
+          sequencePreview.outcome === MATCH_OUTCOME.COMPLETE
+        ) {
+          setInputFeedback({
+            ...micFeedbackFromResult(sequencePreview, currentCheckpoint),
+            outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
+            micChordMode: true,
+            micEngineMode,
+          })
+        }
+        return
+      }
+
       const v2Preview = frame.v2DetectedMidis?.length
         ? evaluateMicMatch(null, frame.v2DetectedMidis)
         : null
@@ -695,7 +742,12 @@ export default function useWaitForYouMicInput({
           frameCorroboratesSingleNote(frame, expectedMidis[0], {
             centsTolerance: micCentsTolerance,
           })
-        if (confirmConfidentMatch(key, frameConfident && corroborated, { pitchCents })) {
+        if (
+          confirmConfidentMatch(key, frameConfident && corroborated, {
+            pitchCents,
+            threshold: v2Preview.isGuitarChordShape ? 1 : undefined,
+          })
+        ) {
           resetMatchConfirm()
           setLastHeardMidi(frame.v2DetectedMidis[0] ?? frame.midi)
           applyMatchResult(v2Preview)
@@ -735,20 +787,7 @@ export default function useWaitForYouMicInput({
         return
       }
 
-      // Legacy chord-collection mode keeps its sequential flow when it is used
-      // by non-simultaneous chord settings. Normal note advancement is V2-only.
-      if (monophonicPreview.outcome === MATCH_OUTCOME.COMPLETE && isMicChordCollection) {
-        const confident = frameConfident
-        const pitchCents = frame.midiFloat != null ? frame.midiFloat * 100 : null
-        if (confirmConfidentMatch(`${currentCheckpoint.id}:${frame.midi}`, confident, { pitchCents })) {
-          resetMatchConfirm()
-          setLastHeardMidi(frame.midi)
-          applyMatchResult(monophonicPreview)
-          return
-        }
-      } else {
-        resetMatchConfirm()
-      }
+      resetMatchConfirm()
 
       if (
         monophonicPreview.outcome === MATCH_OUTCOME.CHORD_PROGRESS ||
@@ -771,6 +810,7 @@ export default function useWaitForYouMicInput({
       resetMatchConfirm,
       expectedMidis,
       isMicChordCollection,
+      isGuitarChordShape,
       isMicV2Polyphonic,
       micEngineMode,
       reportMicDebug,

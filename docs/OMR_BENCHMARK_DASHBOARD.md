@@ -22,8 +22,14 @@ The manifest expects local benchmark assets in `~/Downloads`:
 - `gymnopedie-no-1-satie.mxl`
 - `a-cruel-angels-thesis-neon-genesis-evangelion.pdf`
 - `a-cruel-angels-thesis-neon-genesis-evangelion.mxl`
+- `twinkle-twinkle-little-star-easy.pdf`
+- `twinkle-twinkle-little-star-easy.mxl`
 
 Do not commit downloaded PDF/MIDI/MXL assets.
+
+Clean, dense, and simple fixtures are enforced regression gates. Wet Hands and
+La Campanella fixtures are optional diagnostic stress inputs: if present, their
+metrics are reported, but they are marked skipped and do not block the dashboard.
 
 ## Outputs
 

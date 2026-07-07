@@ -8,6 +8,7 @@ import {
   minimumGuitarChordTonesRequired,
   resolveGroupChordSymbol,
 } from '../src/features/practice/guitarChordShapeCheckpoint.js'
+import { CHORD_CHECKPOINT_KIND } from '../src/features/practice/chordCheckpoint.js'
 import { buildNoteCheckpoints } from '../src/features/practice/waitForYouCheckpoints.js'
 import { buildGuidance } from '../src/features/practice/waitForYouGuidance.js'
 import {
@@ -25,9 +26,14 @@ import { renderSyntheticClip, synthSpeech } from '../src/features/microphone-inp
 import { analyzeMicFrame, createMicFrameAnalyzer } from '../src/features/microphone-input/micFrameAnalysis.js'
 import { getMicInstrumentProfile } from '../src/features/microphone-input/micInstrumentProfiles.js'
 import { isMusicalMicFrame, micMusicalRejectReason } from '../src/features/practice/micMusicalAcceptance.js'
+import { readFileSync } from 'node:fs'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const SAMPLE_RATE = 44100
 const FFT = 2048
+const root = join(dirname(fileURLToPath(import.meta.url)), '..')
+const readSrc = (...parts) => readFileSync(join(root, 'src', ...parts), 'utf8')
 
 function guitarNote(step, octave, duration, { string = null, fret = null, chord = false } = {}) {
   const technical =
@@ -118,7 +124,11 @@ describe('guitar chord shape checkpoint model', () => {
       ],
     }
     const enriched = enrichGuitarChordCheckpoint(checkpoint, { instrumentId: INSTRUMENT_IDS.GUITAR })
-    expect(enriched.displayLabel).toBe('Play this chord')
+    expect(enriched.kind).toBe(CHORD_CHECKPOINT_KIND.CHORD_SHAPE)
+    expect(enriched.displayLabel).toBe('Play G chord')
+    expect(enriched.expectedStringFrets).toHaveLength(3)
+    expect(enriched.minimumRequiredTones).toBe(2)
+    expect(enriched.rollingWindowMs).toBeGreaterThan(0)
     expect(enriched.minimumChordTonesRequired).toBe(2)
     expect(enriched.label).not.toContain('one at a time')
   })
@@ -144,8 +154,9 @@ describe('guitar chord shape checkpoint model', () => {
     expect(checkpoint.chordSymbol).toBe('G')
     const enriched = enrichGuitarChordCheckpoint(checkpoint, { instrumentId: INSTRUMENT_IDS.GUITAR })
     expect(enriched.isGuitarChordShape).toBe(true)
-    expect(enriched.displayLabel).toBe('Play this chord')
-    expect(enriched.label).toBe('Play this chord')
+    expect(enriched.displayLabel).toBe('Play G chord')
+    expect(enriched.label).toBe('Play G chord')
+    expect(enriched.detailsLabel).toContain('string')
     expect(enriched.label).not.toContain(' + ')
     expect(enriched.label).not.toContain('one at a time')
   })
@@ -181,7 +192,7 @@ describe('guitar chord WFY guidance', () => {
       guitarChordShapeMode: true,
       chordAsSequence: false,
     })
-    expect(guidance.primary).toBe('Play this chord')
+    expect(guidance.primary).toBe('Play Am chord')
     expect(guidance.primary).not.toContain('one at a time')
     expect(guidance.primary).not.toContain(' + ')
   })
@@ -233,6 +244,40 @@ describe('guitar chord mic acceptance', () => {
     const result = evaluateGuitarChordShapeMicInput(checkpoint, [67], buffer, {})
     expect(result.outcome).toBe('chord-progress')
     expect(result.outcome).not.toBe('complete')
+  })
+
+  it('accepts a 4-note chord by quorum', () => {
+    const fourNote = enrichGuitarChordCheckpoint(
+      {
+        isChord: true,
+        expectedMidis: [52, 57, 60, 64],
+        notes: [
+          { midi: 52, string: 6, fret: 5 },
+          { midi: 57, string: 5, fret: 5 },
+          { midi: 60, string: 4, fret: 5 },
+          { midi: 64, string: 3, fret: 5 },
+        ],
+      },
+      { instrumentId: INSTRUMENT_IDS.GUITAR },
+    )
+    const result = evaluateGuitarChordShapeMicInput(
+      fourNote,
+      [52, 57, 60],
+      createGuitarChordShapeBufferState(),
+      {},
+    )
+    expect(result.requiredTones).toBe(3)
+    expect(result.outcome).toBe('complete')
+  })
+
+  it('does not advance on the wrong guitar chord', () => {
+    const result = evaluateGuitarChordShapeMicInput(
+      checkpoint,
+      [60, 64, 65],
+      createGuitarChordShapeBufferState(),
+      {},
+    )
+    expect(result.outcome).toBe('wrong')
   })
 
   it('does not advance on speech even when pitch overlaps a chord tone', () => {
@@ -292,7 +337,25 @@ describe('guitar chord visual TAB grouping', () => {
     const map = parseMusicXml(guitarChordXml(), 'visual-guitar-chord.musicxml')
     const groups = buildVisualLaneGroups(map, null, { instrumentId: INSTRUMENT_IDS.GUITAR })
     expect(groups[0].isGuitarChordShape).toBe(true)
-    expect(groups[0].displayLabel).toBe('Play this chord')
+    expect(groups[0].displayLabel).toBe('Play G chord')
+    expect(groups[0].detailsLabel).toContain('string')
+  })
+
+  it('builds fretboard targets for the whole shape as one target group', () => {
+    const map = parseMusicXml(guitarChordXml(), 'visual-guitar-fretboard.musicxml')
+    const [group] = buildVisualLaneGroups(map, null, { instrumentId: INSTRUMENT_IDS.GUITAR })
+    const targets = group.guitarChordShape.positions
+    expect(targets.map((target) => `${target.string}:${target.fret}`)).toEqual(['1:8', '2:8', '3:8'])
+  })
+})
+
+describe('chord target display details', () => {
+  it('renders chord details as a collapsed disclosure instead of main note chips', () => {
+    const section = readSrc('components', 'practice', 'WaitForYouSection.jsx')
+    expect(section).toContain('conciseChordTargetLabel')
+    expect(section).toContain('wait-for-you__target-details')
+    expect(section).toContain('<summary>Details</summary>')
+    expect(section).toContain('expectedMidis.length > 1 ? (')
   })
 })
 

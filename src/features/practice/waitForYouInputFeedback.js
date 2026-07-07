@@ -105,11 +105,24 @@ export function idleFeedbackForCheckpoint(checkpoint, options = {}) {
       ? [checkpoint.expectedMidi]
       : []
 
-  return buildInputFeedback({
+  const feedback = buildInputFeedback({
     outcome: WFY_INPUT_OUTCOME.IDLE,
     expectedMidis,
     matchedIndices: new Set(),
     isChord: Boolean(checkpoint?.isChord),
     chordAsSequence: Boolean(options.chordAsSequence),
   })
+  if (expectedMidis.length > 1 && checkpoint?.displayLabel && !options.chordAsSequence) {
+    return {
+      ...feedback,
+      message: checkpoint.displayLabel,
+    }
+  }
+  if (expectedMidis.length > 1 && options.chordAsSequence && checkpoint?.displayLabel) {
+    return {
+      ...feedback,
+      message: `Chord practice sequence: ${checkpoint.displayLabel.replace(/^Play\s+/i, '')}`,
+    }
+  }
+  return feedback
 }

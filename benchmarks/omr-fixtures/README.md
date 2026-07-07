@@ -44,6 +44,8 @@ sha256 matches — without running OMR.
 | `dense` | `a-cruel-angels-thesis-neon-genesis-evangelion.mxl` | `6c1d8d7530…a32ff91` |
 | `simple` | `twinkle-twinkle-little-star-easy.pdf` | `b13d213151…5ec10f8` |
 | `simple` | `twinkle-twinkle-little-star-easy.mxl` | `4515c53ffb…a5e26d1` |
+| `wet-hands-guitar` *(optional, diagnostic-only)* | `wet-hands-minecraft.pdf` | `ed4e6543a…dc2804` |
+| `wet-hands-guitar` *(optional, diagnostic-only)* | `wet-hands-minecraft.mxl` | `a370bb56fe…84e66` |
 | `campanella-grandes` *(optional)* | `la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.pdf` | `3ab86a247c…84cc8b60` |
 | `campanella-grandes` *(optional)* | `la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.mxl` | `2da9b32995…990324bd` |
 | `campanella-etude` *(optional)* | `etude-s-1413-in-g-minor-la-campanella-liszt.pdf` | `5c40124f2a…a5afbd7d` |
@@ -60,13 +62,17 @@ shasum -a 256 benchmarks/omr-fixtures/gymnopedie-no-1-satie.pdf
 
 ## Optional / diagnostic-only fixtures
 
-`campanella-grandes` and `campanella-etude` are marked `optional` and
-`diagnosticOnly` in the manifest:
+`wet-hands-guitar`, `campanella-grandes`, and `campanella-etude` are marked
+`optional` and `diagnosticOnly` in the manifest:
 
 - **optional** — if the files are absent, the dashboard **skips** them (no
   error, no failure).
 - **diagnosticOnly** — they have **no pass/fail thresholds**, so they can never
   block the dashboard. They exist to surface error buckets on extreme input.
+
+Wet Hands is a known-bad real-world notation+TAB guitar PDF stress fixture. It
+is useful diagnostic signal when present locally, but it is not an enforced
+regression fixture with stable expected metrics.
 
 Regular fixtures (`clean`, `dense`, `simple`) still error if missing, unless you
 pass `--allow-missing`.

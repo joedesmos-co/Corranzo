@@ -57,6 +57,19 @@ describe('omrBenchmarkDashboard', () => {
     }
   })
 
+  it('keeps Wet Hands guitar diagnostic-only so local copies do not block the dashboard', () => {
+    const manifest = JSON.parse(
+      readFileSync(join(process.cwd(), 'benchmarks/omr-benchmark.manifest.json'), 'utf8'),
+    )
+    const fixture = manifest.fixtures.find((entry) => entry.id === 'wet-hands-guitar')
+
+    expect(fixture.optional).toBe(true)
+    expect(fixture.diagnosticOnly).toBe(true)
+    expect(fixture.thresholds).toBeUndefined()
+    expect(fixture.checksums?.pdf).toMatch(/^sha256:/)
+    expect(fixture.checksums?.truth).toMatch(/^sha256:/)
+  })
+
   it('every fixture declares stable checksums for integrity', () => {
     const manifest = JSON.parse(
       readFileSync(join(process.cwd(), 'benchmarks/omr-benchmark.manifest.json'), 'utf8'),

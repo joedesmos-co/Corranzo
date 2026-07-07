@@ -18,6 +18,16 @@ import {
 import { buildOmrGeneratedWarnings } from '../src/features/import/useImportReadiness.js'
 import { buildNoteCheckpoints } from '../src/features/practice/waitForYouCheckpoints.js'
 import {
+  createMicChordCollectionState,
+} from '../src/features/practice/waitForYouMicChordCollection.js'
+import {
+  createMusicalEventBufferState,
+  evaluateMicNoteInputWithBuffer,
+  evaluateNoteInput,
+  MATCH_OUTCOME,
+} from '../src/features/practice/waitForYouNoteMatch.js'
+import { normalizeMatchSettings } from '../src/features/practice/waitForYouMatchSettings.js'
+import {
   buildWfyInputModalActions,
   buildWfyInputModalLayout,
   buildWfyInputSelectorOptions,
@@ -27,6 +37,8 @@ import { INSTRUMENT_IDS } from '../src/features/instruments/instruments.js'
 import { WFY_INPUT_SOURCE } from '../src/features/microphone-input/micInputConstants.js'
 import { buildGuidance } from '../src/features/practice/waitForYouGuidance.js'
 import * as F from './helpers/buildXml.js'
+
+const settings = normalizeMatchSettings({})
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const readSrc = (...parts) => readFileSync(join(root, 'src', ...parts), 'utf8')
@@ -179,6 +191,72 @@ describe('WFY tie-aware checkpoints', () => {
     const timingMap = parseMusicXml(xml, 'guitar-ties.musicxml')
     const checkpoints = buildNoteCheckpoints(timingMap)
     expect(checkpoints).toHaveLength(2)
+  })
+
+  it('does not make a tied piano chord continuation a new checkpoint', () => {
+    const tiedChord = (type) =>
+      F.note('C', 4, 1, tieNotations(type)) +
+      F.note('E', 4, 1, `<chord/>${tieNotations(type)}`) +
+      F.note('G', 4, 1, `<chord/>${tieNotations(type)}`)
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes({ beats: 3 })}${F.soundTempo(120)}` +
+        tiedChord('start') +
+        tiedChord('stop') +
+        F.note('D', 4, 1) +
+        '</measure></part>',
+    )
+    const timingMap = parseMusicXml(xml, 'piano-tied-chord.musicxml')
+    const checkpoints = buildNoteCheckpoints(timingMap)
+    expect(checkpoints).toHaveLength(2)
+    expect(checkpoints[0].expectedMidis).toEqual(expect.arrayContaining([60, 64, 67]))
+    expect(checkpoints[0].notes.every((note) => note.hasTiedSustain)).toBe(true)
+    expect(checkpoints[1].expectedMidis).toEqual([62])
+  })
+
+  it('does not make a tied guitar chord continuation a replay checkpoint', () => {
+    const attributes =
+      '<attributes><divisions>1</divisions><time><beats>3</beats><beat-type>4</beat-type></time>' +
+      '<clef><sign>TAB</sign><line>5</line></clef></attributes>'
+    const tabChord = (type) => {
+      const technical = (string, fret) =>
+        `<notations><technical><string>${string}</string><fret>${fret}</fret></technical><tied type="${type}"/></notations>`
+      return (
+        `<note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type><tie type="${type}"/>${technical(2, 1)}</note>` +
+        `<note><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type><tie type="${type}"/>${technical(1, 0)}</note>`
+      )
+    }
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1">${attributes}${F.soundTempo(120)}` +
+        tabChord('start') +
+        tabChord('stop') +
+        F.note('G', 4, 1) +
+        '</measure></part>',
+    )
+    const timingMap = parseMusicXml(xml, 'guitar-tied-chord.musicxml')
+    const checkpoints = buildNoteCheckpoints(timingMap)
+    expect(checkpoints).toHaveLength(2)
+    expect(checkpoints[0].expectedMidis.length).toBe(2)
+    expect(checkpoints[0].notes.every((note) => note.hasTiedSustain)).toBe(true)
+  })
+})
+
+describe('piano chord WFY matching', () => {
+  it('advances a piano triad with MIDI chord tones', () => {
+    const checkpoint = { expectedMidis: [60, 64, 67], isChord: true }
+    const state = createMusicalEventBufferState()
+    expect(evaluateNoteInput(checkpoint, 60, state, settings).outcome).toBe(MATCH_OUTCOME.CHORD_PROGRESS)
+    expect(evaluateNoteInput(checkpoint, 64, state, settings).outcome).toBe(MATCH_OUTCOME.CHORD_PROGRESS)
+    expect(evaluateNoteInput(checkpoint, 67, state, settings).outcome).toBe(MATCH_OUTCOME.COMPLETE)
+  })
+
+  it('lets piano mic chord sequence collect tones without simultaneous detection', () => {
+    const checkpoint = { expectedMidis: [60, 64, 67], isChord: true }
+    const state = createMicChordCollectionState()
+    let result = null
+    for (const midi of [60, 60, 64, 64, 67, 67]) {
+      result = evaluateMicNoteInputWithBuffer(checkpoint, midi, state, settings)
+    }
+    expect(result.outcome).toBe(MATCH_OUTCOME.COMPLETE)
   })
 })
 

@@ -3562,6 +3562,23 @@
   border: 1px solid rgba(109, 74, 255, 0.45);
 }
 
+.wait-for-you__target-details {
+  margin-top: 8px;
+  color: #8fa3c7;
+  font-size: 0.78rem;
+}
+
+.wait-for-you__target-details summary {
+  cursor: pointer;
+  width: fit-content;
+  color: #b7c5df;
+}
+
+.wait-for-you__target-details p {
+  margin: 6px 0 0;
+  line-height: 1.4;
+}
+
 .practice-fullscreen-hud {
   position: absolute;
   left: 50%;

@@ -13,7 +13,7 @@ import {
   resetChordMatchState,
   toFeedbackOutcome,
 } from './waitForYouNoteMatch.js'
-import { CHECKPOINT_KIND } from './waitForYouCheckpoints.js'
+import { isPlayableCheckpointKind } from './waitForYouCheckpoints.js'
 
 /**
  * Bridges Web MIDI note-on events to Wait For You checkpoint matching.
@@ -37,7 +37,7 @@ export default function useWaitForYouMidiInput({
   const matchingEnabled =
     active &&
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
-    currentCheckpoint?.kind === CHECKPOINT_KIND.NOTE &&
+    isPlayableCheckpointKind(currentCheckpoint?.kind) &&
     webMidi?.isListening
 
   const resetFeedback = useCallback(() => {
