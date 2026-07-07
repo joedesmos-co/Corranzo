@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest'
 import {
   canAcceptMicAttackMatch,
   createMicAttackLatchState,
+  getMicAttackRearmReason,
   markMicAttackConsumed,
   MIC_ATTACK_REARM_RISE_RATIO,
   rearmMicAttackLatch,
@@ -106,6 +107,25 @@ describe('micAttackLatch attack-aware rearm (unit)', () => {
         expectedMidis: [52],
       }),
     ).toBe(false)
+  })
+
+  it('rearms a different expected note from strong V2 transition evidence when RMS rise is small', () => {
+    const latch = createMicAttackLatchState()
+    markMicAttackConsumed(latch, { consumedMidis: [64] })
+    updateMicAttackRelease(latch, true, { rms: 0.2 })
+    updateMicAttackRelease(latch, true, { rms: 0.16 })
+
+    const frame = ringingFrame({
+      rms: 0.175,
+      detected: [57],
+      // The independent tracker is still pinned to the old ringing note.
+      midiFloat: 64.05,
+    })
+    frame.v2Notes = [{ midi: 57, detected: true, confidence: 0.55, ratio: 2.6 }]
+
+    expect(getMicAttackRearmReason(latch, frame, { expectedMidis: [57] })).toBe(
+      'score-informed-transition',
+    )
   })
 
   it('does not rearm when the gate is closed (normal release path handles it)', () => {

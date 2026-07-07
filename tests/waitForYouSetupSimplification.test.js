@@ -89,6 +89,7 @@ describe('advanced mic controls collapse under Troubleshooting', () => {
     expect(panel.indexOf('<MicTestPanel')).toBeGreaterThan(summaryIndex)
     expect(panel.indexOf('mic-input-status__grid')).toBeGreaterThan(summaryIndex)
     expect(panel.indexOf('Export mic debug JSON')).toBeGreaterThan(summaryIndex)
+    expect(panel.indexOf('Export recent mic trace')).toBeGreaterThan(summaryIndex)
   })
 
   it('keeps the Advanced control-panel drawer separate from mic Troubleshooting', () => {
@@ -104,6 +105,7 @@ describe('mic diagnostics are inspectable in any build', () => {
   it('publishes a stable window.SCOREFLOW_MIC_DEBUG object', () => {
     expect(hook).toContain('globalThis.SCOREFLOW_MIC_DEBUG')
     expect(hook).toContain('exportLastFrames')
+    expect(hook).toContain('exportRecentMicTrace')
   })
 
   it('reports the fields needed to diagnose "too quiet"', () => {
@@ -133,6 +135,9 @@ describe('mic diagnostics are inspectable in any build', () => {
       'distortedLikely:',
       'harmonicProfile',
       'electricGuitarSignal',
+      'attackRearmReason:',
+      'matchConfirm:',
+      'advanced:',
     ]) {
       expect(debugExport).toContain(field)
     }
@@ -143,6 +148,7 @@ describe('mic diagnostics are inspectable in any build', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
     expect(detector).toContain('getMicInstrumentProfile')
     expect(detector).toContain('gateOptions:')
+    expect(detector).toContain('onAnalyzedFrame')
     expect(mic).toContain('instrumentId')
     expect(mic).toContain('analysisKey:')
   })

@@ -331,6 +331,7 @@ export default function usePracticeSession({
       !waitForYou.displayPhase,
     checkpointMode,
     currentCheckpoint: enrichedWfyCheckpoint ?? waitForYou.currentCheckpoint,
+    checkpointIndex: waitForYou.checkpointIndex,
     matchSettings: matchSettingsState.settings,
     onPlayerInputMatched: handleWfyPlayerInputMatched,
     onWrongNote: handleWfyWrongNote,

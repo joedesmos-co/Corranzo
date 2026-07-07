@@ -24,6 +24,10 @@ import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import { buildWfyInputModalLayout } from '../src/features/practice/wfyInputSourceOptions.js'
 import { renderSyntheticClip, synthSpeech } from '../src/features/microphone-input/micSyntheticClips.js'
 import { analyzeMicFrame, createMicFrameAnalyzer } from '../src/features/microphone-input/micFrameAnalysis.js'
+import {
+  createMicEngineV2RuntimeState,
+  processMicEngineV2Tick,
+} from '../src/features/microphone-input/v2/micEngineV2Live.js'
 import { getMicInstrumentProfile } from '../src/features/microphone-input/micInstrumentProfiles.js'
 import { isMusicalMicFrame, micMusicalRejectReason } from '../src/features/practice/micMusicalAcceptance.js'
 import { readFileSync } from 'node:fs'
@@ -32,6 +36,7 @@ import { fileURLToPath } from 'node:url'
 
 const SAMPLE_RATE = 44100
 const FFT = 2048
+const HOP = Math.round(SAMPLE_RATE / 60)
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const readSrc = (...parts) => readFileSync(join(root, 'src', ...parts), 'utf8')
 
@@ -109,6 +114,51 @@ function analyzeNoiseFrame() {
   return analyzeMicFrame(samples.subarray(0, FFT), SAMPLE_RATE, analyzer.noiseFloor, {
     gateOptions: profile?.gate ?? null,
   })
+}
+
+function mixInto(target, source, offsetSamples = 0) {
+  for (let index = 0; index < source.length; index += 1) {
+    const at = offsetSamples + index
+    if (at >= target.length) {
+      break
+    }
+    target[at] += source[index]
+  }
+}
+
+function pluckMidi(midi, { seconds = 0.9, amplitude = 0.32, decay = 2.2 } = {}) {
+  return renderSyntheticClip({ type: 'pluck', midi, seconds, amplitude, decay }, SAMPLE_RATE)
+}
+
+function runGuitarShapeLiveFrames(samples, checkpoint) {
+  const state = createMicEngineV2RuntimeState()
+  const analyzer = createMicFrameAnalyzer()
+  const profile = getMicInstrumentProfile('guitar')
+  const buffer = createGuitarChordShapeBufferState()
+  const seen = []
+  let result = null
+
+  for (let end = FFT; end <= samples.length; end += HOP) {
+    const tick = processMicEngineV2Tick({
+      buffer: new Float32Array(samples.subarray(end - FFT, end)),
+      sampleRate: SAMPLE_RATE,
+      expectedMidis: checkpoint.expectedMidis,
+      noiseFloor: analyzer.noiseFloor,
+      state,
+      gateOptions: profile?.gate ?? null,
+      timeMs: (end / SAMPLE_RATE) * 1000,
+    })
+    const detected = tick.frame?.v2DetectedMidis ?? []
+    if (detected.length) {
+      seen.push([...detected])
+      result = evaluateGuitarChordShapeMicInput(checkpoint, detected, buffer, {})
+      if (result.outcome === 'complete') {
+        return { result, seen }
+      }
+    }
+  }
+
+  return { result, seen }
 }
 
 describe('guitar chord shape checkpoint model', () => {
@@ -216,6 +266,70 @@ describe('guitar chord mic acceptance', () => {
     const doubleStop = doubleStopCheckpoint()
     const result = evaluateGuitarChordShapeMicInput(doubleStop, [52], null, {})
     expect(result.outcome).not.toBe('complete')
+  })
+
+  it('does not let one octave-related guitar string satisfy a double-stop in the live scorer', () => {
+    const octaveDoubleStop = enrichGuitarChordCheckpoint(
+      {
+        isChord: true,
+        expectedMidis: [45, 57],
+        notes: [
+          { midi: 45, string: 6, fret: 5 },
+          { midi: 57, string: 3, fret: 2 },
+        ],
+      },
+      { instrumentId: INSTRUMENT_IDS.GUITAR },
+    )
+    const lowAOnly = pluckMidi(45, { amplitude: 0.32 })
+    const { result, seen } = runGuitarShapeLiveFrames(lowAOnly, octaveDoubleStop)
+
+    expect(seen.some((midis) => midis.includes(45))).toBe(true)
+    expect(seen.some((midis) => midis.includes(57))).toBe(false)
+    expect(result?.outcome).not.toBe('complete')
+  })
+
+  it('collects a weak octave double-stop tone when both guitar strings are present', () => {
+    const octaveDoubleStop = enrichGuitarChordCheckpoint(
+      {
+        isChord: true,
+        expectedMidis: [45, 57],
+        notes: [
+          { midi: 45, string: 6, fret: 5 },
+          { midi: 57, string: 3, fret: 2 },
+        ],
+      },
+      { instrumentId: INSTRUMENT_IDS.GUITAR },
+    )
+    const total = new Float32Array(Math.round(SAMPLE_RATE * 1.0))
+    mixInto(total, pluckMidi(45, { amplitude: 0.32 }), 0)
+    mixInto(total, pluckMidi(57, { amplitude: 0.04 }), 0)
+
+    const { result, seen } = runGuitarShapeLiveFrames(total, octaveDoubleStop)
+
+    expect(seen.some((midis) => midis.includes(45))).toBe(true)
+    expect(seen.some((midis) => midis.includes(57))).toBe(true)
+    expect(result?.outcome).toBe('complete')
+  })
+
+  it('collects a slightly staggered weak guitar double-stop in one rolling window', () => {
+    const octaveDoubleStop = enrichGuitarChordCheckpoint(
+      {
+        isChord: true,
+        expectedMidis: [45, 57],
+        notes: [
+          { midi: 45, string: 6, fret: 5 },
+          { midi: 57, string: 3, fret: 2 },
+        ],
+      },
+      { instrumentId: INSTRUMENT_IDS.GUITAR },
+    )
+    const total = new Float32Array(Math.round(SAMPLE_RATE * 1.2))
+    mixInto(total, pluckMidi(45, { amplitude: 0.3 }), 0)
+    mixInto(total, pluckMidi(57, { amplitude: 0.05 }), Math.round(SAMPLE_RATE * 0.08))
+
+    const { result } = runGuitarShapeLiveFrames(total, octaveDoubleStop)
+
+    expect(result?.outcome).toBe('complete')
   })
 
   it('accepts a strummed 3-note chord when enough expected tones are heard', () => {

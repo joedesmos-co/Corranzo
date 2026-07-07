@@ -22,6 +22,10 @@ export const MIC_ENGINE_V2_LIVE_DEFAULTS = {
   peakConfidenceThreshold: 0.26,
   softGateMinConfidence: 0.55,
   softGateMinRatio: 2.2,
+  quietGateMinConfidence: 0.68,
+  quietGateMinRatio: 3.0,
+  quietGateFloorMultiplier: 1.25,
+  quietGateFloorMargin: 0.0008,
 }
 
 export function createMicEngineV2RuntimeState() {
@@ -93,6 +97,24 @@ function hasSoftGateEvidence(notes = [], detectedMidis = [], options = {}) {
   )
 }
 
+function passesScoreInformedQuietGate(frame, notes = [], detectedMidis = [], options = {}) {
+  const {
+    minConfidence = MIC_ENGINE_V2_LIVE_DEFAULTS.quietGateMinConfidence,
+    minRatio = MIC_ENGINE_V2_LIVE_DEFAULTS.quietGateMinRatio,
+    floorMultiplier = MIC_ENGINE_V2_LIVE_DEFAULTS.quietGateFloorMultiplier,
+    floorMargin = MIC_ENGINE_V2_LIVE_DEFAULTS.quietGateFloorMargin,
+  } = options
+  const floor = Math.max(0.004, frame?.noiseFloor ?? 0.004)
+  const rms = frame?.filteredRms ?? 0
+  if (rms < Math.max(floor * floorMultiplier, floor + floorMargin)) {
+    return false
+  }
+  return hasSoftGateEvidence(notes, detectedMidis, {
+    minConfidence,
+    minRatio,
+  })
+}
+
 /**
  * Process one live audio buffer tick. Returns signal-diagnostic frame fields plus V2 metadata.
  */
@@ -110,6 +132,8 @@ export function processMicEngineV2Tick({
   peakConfidenceThreshold = MIC_ENGINE_V2_LIVE_DEFAULTS.peakConfidenceThreshold,
   softGateMinConfidence = MIC_ENGINE_V2_LIVE_DEFAULTS.softGateMinConfidence,
   softGateMinRatio = MIC_ENGINE_V2_LIVE_DEFAULTS.softGateMinRatio,
+  quietGateMinConfidence = MIC_ENGINE_V2_LIVE_DEFAULTS.quietGateMinConfidence,
+  quietGateMinRatio = MIC_ENGINE_V2_LIVE_DEFAULTS.quietGateMinRatio,
 } = {}) {
   const runtimeState = state ?? createMicEngineV2RuntimeState()
 
@@ -177,6 +201,8 @@ export function processMicEngineV2Tick({
   const stableMidis = stableTracks.map((track) => track.midi)
 
   const primaryMidi = pickPrimaryMidi(v2Notes, detectedMidis) ?? signalFrame.midi
+  const dominantPitchMidi = signalFrame.midi
+  const dominantPitchMidiFloat = signalFrame.midiFloat
   const rawGateOpen = Boolean(signalFrame.gateOpen)
   const softGateThreshold = softGateOpenThreshold(signalFrame.noiseFloor, softGateOptions)
   const softGateEvidence = expectedMidis.length > 0 &&
@@ -185,9 +211,17 @@ export function processMicEngineV2Tick({
       minConfidence: softGateMinConfidence,
       minRatio: softGateMinRatio,
     })
+  const scoreInformedQuietGateOpen = !rawGateOpen &&
+    expectedMidis.length > 0 &&
+    detectedMidis.length > 0 &&
+    passesScoreInformedQuietGate(signalFrame, v2Notes, detectedMidis, {
+      minConfidence: quietGateMinConfidence,
+      minRatio: quietGateMinRatio,
+    })
   const softGateOpen = !rawGateOpen &&
-    softGateEvidence &&
-    passesSoftMusicalGate(signalFrame.filteredRms, signalFrame.noiseFloor, softGateOptions)
+    ((softGateEvidence &&
+      passesSoftMusicalGate(signalFrame.filteredRms, signalFrame.noiseFloor, softGateOptions)) ||
+      scoreInformedQuietGateOpen)
   const effectiveGateOpen = rawGateOpen || softGateOpen
   const signalQuality = softGateOpen && signalFrame.signalQuality === MIC_SIGNAL_QUALITY.TOO_QUIET
     ? MIC_SIGNAL_QUALITY.GOOD
@@ -199,6 +233,9 @@ export function processMicEngineV2Tick({
     softGateOpen,
     softGateThreshold,
     softGateEvidence,
+    scoreInformedQuietGateOpen,
+    dominantPitchMidi,
+    dominantPitchMidiFloat,
     midi: primaryMidi,
     clarity: usedV2 && meanConfidence > 0 ? meanConfidence : signalFrame.clarity,
     signalQuality,

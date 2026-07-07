@@ -31,7 +31,7 @@ function calibrationLabel({ liveFrame, calibration }) {
   return MIC_CALIBRATION_STATUS_LABELS[MIC_CALIBRATION_STATUS.READY]
 }
 
-function downloadMicDebugJson(json) {
+function downloadMicDebugJson(json, prefix = 'scoreflow-mic-debug') {
   if (!json || typeof document === 'undefined') {
     return
   }
@@ -39,7 +39,7 @@ function downloadMicDebugJson(json) {
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  link.download = `scoreflow-mic-debug-${Date.now()}.json`
+  link.download = `${prefix}-${Date.now()}.json`
   document.body.appendChild(link)
   link.click()
   link.remove()
@@ -68,6 +68,7 @@ export default function MicrophoneInputStatusPanel({
   onDisable,
   onRetryCalibration,
   onExportDebugFrames,
+  onExportMicTrace,
   compact = false,
 }) {
   const supported = support === MIC_SUPPORT.SUPPORTED
@@ -77,6 +78,7 @@ export default function MicrophoneInputStatusPanel({
     calibration?.status === MIC_CALIBRATION_STATUS.NO_INPUT ||
     calibration?.status === MIC_CALIBRATION_STATUS.ROOM_NOISY
   const calibrationReady = calibration?.status === MIC_CALIBRATION_STATUS.READY
+  const showDeveloperTraceExport = Boolean(import.meta.env?.DEV && onExportMicTrace)
 
   let statusLine = 'Starting microphone...'
   if (!supported) {
@@ -237,6 +239,15 @@ export default function MicrophoneInputStatusPanel({
               onClick={() => downloadMicDebugJson(onExportDebugFrames())}
             >
               Export mic debug JSON
+            </button>
+          )}
+          {showDeveloperTraceExport && (
+            <button
+              type="button"
+              className="mic-input-status__btn mic-input-status__btn--debug"
+              onClick={() => downloadMicDebugJson(onExportMicTrace(), 'scoreflow-mic-trace')}
+            >
+              Export recent mic trace
             </button>
           )}
         </div>

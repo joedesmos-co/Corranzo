@@ -110,7 +110,11 @@ export function isMusicalMicFrame(frame) {
   }
 
   const shape = frame.signalShape
-  if (shape === MIC_SIGNAL_SHAPE.NOISY || shape === MIC_SIGNAL_SHAPE.QUIET) {
+  const scoreInformedQuietGate = Boolean(frame.scoreInformedQuietGateOpen)
+  if (shape === MIC_SIGNAL_SHAPE.NOISY) {
+    return false
+  }
+  if (shape === MIC_SIGNAL_SHAPE.QUIET && !scoreInformedQuietGate) {
     return false
   }
 

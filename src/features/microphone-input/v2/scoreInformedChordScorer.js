@@ -23,6 +23,9 @@ export const SCORE_INFORMED_DEFAULTS = {
   relativeEnergyFloor: 0.38,
   dyadRelativeEnergyFloor: 0.26,
   triadRelativeEnergyFloor: 0.32,
+  octaveLeakRelativeEnergyFloor: 0.56,
+  adjacentLeakRatio: 1.08,
+  adjacentLeakMinRatio: 2.0,
   bassMidiThreshold: 60,
   bassBoost: 1.4,
   bassFundamentalWeight: 1.65,
@@ -48,6 +51,51 @@ function relativeEnergyFloorForChord(expectedCount, options = {}) {
     return options.triadRelativeEnergyFloor ?? SCORE_INFORMED_DEFAULTS.triadRelativeEnergyFloor
   }
   return options.relativeEnergyFloor ?? SCORE_INFORMED_DEFAULTS.relativeEnergyFloor
+}
+
+function pitchClass(midi) {
+  return ((midi % 12) + 12) % 12
+}
+
+function hasStrongerOctavePeer(note, notes = []) {
+  return notes.some(
+    (peer) =>
+      peer !== note &&
+      pitchClass(peer.midi) === pitchClass(note.midi) &&
+      peer.harmonicEnergy > note.harmonicEnergy,
+  )
+}
+
+function hasStrongerAdjacentProbe(note, {
+  sampleRate,
+  windowed,
+  noiseFloor,
+  expectedMidis = [],
+  options = {},
+} = {}) {
+  const expected = new Set(expectedMidis)
+  const leakRatio =
+    options.adjacentLeakRatio ?? SCORE_INFORMED_DEFAULTS.adjacentLeakRatio
+  const minRatio =
+    options.adjacentLeakMinRatio ?? SCORE_INFORMED_DEFAULTS.adjacentLeakMinRatio
+  for (const adjacentMidi of [note.midi - 1, note.midi + 1]) {
+    if (expected.has(adjacentMidi)) {
+      continue
+    }
+    const adjacent = scoreExpectedNote(windowed, sampleRate, adjacentMidi, {
+      ...options,
+      expectedMidis,
+      noiseFloor,
+    })
+    if (
+      adjacent.ratio >= minRatio &&
+      adjacent.confidence >= (note.confidence ?? 0) - 0.04 &&
+      adjacent.harmonicEnergy >= note.harmonicEnergy * leakRatio
+    ) {
+      return true
+    }
+  }
+  return false
 }
 
 function ratioToConfidence(ratio) {
@@ -145,10 +193,25 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
     note.relativeEnergy = relativeEnergy
     note.peerRelative = peerRelative
     const bassRelief = note.isBass ? 0.06 : 0
+    const octaveLeakageGuard =
+      hasStrongerOctavePeer(note, notes) &&
+      relativeEnergy < (
+        options.octaveLeakRelativeEnergyFloor ??
+        SCORE_INFORMED_DEFAULTS.octaveLeakRelativeEnergyFloor
+      )
+    const adjacentLeakageGuard = hasStrongerAdjacentProbe(note, {
+      sampleRate,
+      windowed,
+      noiseFloor,
+      expectedMidis,
+      options,
+    })
     note.detected =
       note.ratio >= (options.detectionRatio ?? SCORE_INFORMED_DEFAULTS.detectionRatio) &&
       note.confidence >= (options.minConfidence ?? SCORE_INFORMED_DEFAULTS.minConfidence) &&
-      (relativeEnergy >= relativeFloor - bassRelief || peerRelative >= 0.72)
+      (relativeEnergy >= relativeFloor - bassRelief || peerRelative >= 0.72) &&
+      !octaveLeakageGuard &&
+      !adjacentLeakageGuard
   }
 
   const detectedMidis = notes.filter((note) => note.detected).map((note) => note.midi)

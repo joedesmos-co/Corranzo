@@ -30,6 +30,7 @@ export default function useMicEngineV2Detector({
   sampleRate,
   centsTolerance = 30,
   onFrame,
+  onAnalyzedFrame,
   onStableMidi,
   onStableChord,
   onCalibration,
@@ -52,6 +53,7 @@ export default function useMicEngineV2Detector({
   const expectedMidisRef = useRef(expectedMidis)
   const v2ErroredRef = useRef(false)
   const onFrameRef = useRef(onFrame)
+  const onAnalyzedFrameRef = useRef(onAnalyzedFrame)
   const onStableMidiRef = useRef(onStableMidi)
   const onStableChordRef = useRef(onStableChord)
   const onCalibrationRef = useRef(onCalibration)
@@ -60,6 +62,9 @@ export default function useMicEngineV2Detector({
   useEffect(() => {
     onFrameRef.current = onFrame
   }, [onFrame])
+  useEffect(() => {
+    onAnalyzedFrameRef.current = onAnalyzedFrame
+  }, [onAnalyzedFrame])
   useEffect(() => {
     onStableMidiRef.current = onStableMidi
   }, [onStableMidi])
@@ -166,18 +171,22 @@ export default function useMicEngineV2Detector({
               stableFrameThreshold,
             })
 
+            const analyzedFrame = {
+              ...(tickResult.frame ?? previewFrame),
+              stabilizerPending: false,
+              calibrating: false,
+              calibrationStatus:
+                calibrationResultRef.current?.status ?? MIC_CALIBRATION_STATUS.READY,
+              calibration: calibrationResultRef.current,
+              micEngineMode: 'v2-score-informed',
+            }
+
+            onAnalyzedFrameRef.current?.(analyzedFrame)
+
             uiFrameSkipRef.current += 1
             if (onFrameRef.current && uiFrameSkipRef.current >= UI_FRAME_INTERVAL) {
               uiFrameSkipRef.current = 0
-              onFrameRef.current({
-                ...(tickResult.frame ?? previewFrame),
-                stabilizerPending: false,
-                calibrating: false,
-                calibrationStatus:
-                  calibrationResultRef.current?.status ?? MIC_CALIBRATION_STATUS.READY,
-                calibration: calibrationResultRef.current,
-                micEngineMode: 'v2-score-informed',
-              })
+              onFrameRef.current(analyzedFrame)
             }
 
             if (onStableChordRef.current && tickResult.stableMidis?.length > 1) {
@@ -188,19 +197,23 @@ export default function useMicEngineV2Detector({
               }
             }
           } else if (previewFrame) {
+            const analyzedFrame = {
+              ...previewFrame,
+              stabilizerPending: false,
+              calibrating: stillCalibrating,
+              calibrationStatus: stillCalibrating
+                ? MIC_CALIBRATION_STATUS.MEASURING
+                : calibrationResultRef.current?.status ?? MIC_CALIBRATION_STATUS.READY,
+              calibration: calibrationResultRef.current,
+              micEngineMode: 'v2-score-informed',
+            }
+
+            onAnalyzedFrameRef.current?.(analyzedFrame)
+
             uiFrameSkipRef.current += 1
             if (onFrameRef.current && uiFrameSkipRef.current >= UI_FRAME_INTERVAL) {
               uiFrameSkipRef.current = 0
-              onFrameRef.current({
-                ...previewFrame,
-                stabilizerPending: false,
-                calibrating: stillCalibrating,
-                calibrationStatus: stillCalibrating
-                  ? MIC_CALIBRATION_STATUS.MEASURING
-                  : calibrationResultRef.current?.status ?? MIC_CALIBRATION_STATUS.READY,
-                calibration: calibrationResultRef.current,
-                micEngineMode: 'v2-score-informed',
-              })
+              onFrameRef.current(analyzedFrame)
             }
           }
         }

@@ -247,6 +247,7 @@ export default memo(function PracticeControlPanel({
                   onDisable={session.microphone.disable}
                   onRetryCalibration={session.waitForYouMic.retryCalibration}
                   onExportDebugFrames={session.waitForYouMic.exportDebugFrames}
+                  onExportMicTrace={session.waitForYouMic.exportMicTrace}
                   compact
                 />
               )}

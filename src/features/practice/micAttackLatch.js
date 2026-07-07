@@ -24,6 +24,9 @@ export const MIC_ATTACK_REARM_RISE_RATIO = 1.6
  * not rearm an octave-related next checkpoint.
  */
 export const MIC_ATTACK_REARM_DOMINANCE_CENTS = 75
+export const MIC_ATTACK_REARM_SCORE_CONFIDENCE = 0.48
+export const MIC_ATTACK_REARM_SCORE_RATIO = 2.2
+export const MIC_ATTACK_REARM_SMALL_RISE_RATIO = 1.08
 
 export function createMicAttackLatchState() {
   return {
@@ -89,23 +92,50 @@ function absCentsToNearest(midiFloat, midis) {
   return best
 }
 
+function pitchClass(midi) {
+  return ((midi % 12) + 12) % 12
+}
+
+function octaveRelatedToAny(midi, midis = []) {
+  return midis.some((other) => pitchClass(other) === pitchClass(midi))
+}
+
+function bestExpectedNoteEvidence(frame, expectedMidis = []) {
+  let best = null
+  for (const note of frame?.v2Notes ?? []) {
+    if (!expectedMidis.includes(note?.midi)) {
+      continue
+    }
+    if (!note?.detected) {
+      continue
+    }
+    if (!best || (note.confidence ?? 0) > (best.confidence ?? 0)) {
+      best = note
+    }
+  }
+  return best
+}
+
 /**
- * True when a NEW attack should rearm the latch while the previous note still
- * rings (gate never closed). Rearming only unlocks matching — the musical
+ * Return the evidence type that should rearm the latch while the previous note
+ * still rings (gate never closed). Rearming only unlocks matching — the musical
  * acceptance, confidence confirm, and corroboration gates still stand between
  * the frame and an advance, so speech/noise cannot exploit this path.
  */
-export function shouldRearmMicAttack(
+export function getMicAttackRearmReason(
   state,
   frame,
   {
     expectedMidis = [],
     riseRatio = MIC_ATTACK_REARM_RISE_RATIO,
+    smallRiseRatio = MIC_ATTACK_REARM_SMALL_RISE_RATIO,
     dominanceCents = MIC_ATTACK_REARM_DOMINANCE_CENTS,
+    scoreConfidence = MIC_ATTACK_REARM_SCORE_CONFIDENCE,
+    scoreRatio = MIC_ATTACK_REARM_SCORE_RATIO,
   } = {},
 ) {
   if (!state?.awaitingRelease || !frame?.gateOpen) {
-    return false
+    return null
   }
 
   // 1. Energy rise: any real new attack (same or different note) jumps above
@@ -118,7 +148,7 @@ export function shouldRearmMicAttack(
     state.envelopeRms > 0 &&
     rms >= state.envelopeRms * riseRatio
   ) {
-    return true
+    return 'energy-rise'
   }
 
   // 2. Different-note dominance: the next checkpoint expects a note the
@@ -129,19 +159,55 @@ export function shouldRearmMicAttack(
   const consumed = new Set(state.consumedMidis ?? [])
   const newExpected = expectedMidis.filter((midi) => !consumed.has(midi))
   if (!newExpected.length) {
-    return false
+    return null
   }
   const detectsNewExpected = (frame.v2DetectedMidis ?? []).some((midi) =>
     newExpected.includes(midi),
   )
   if (!detectsNewExpected) {
-    return false
+    return null
   }
   const midiFloat = frame.midiFloat ?? frame.midi
-  if (midiFloat == null || !Number.isFinite(midiFloat)) {
-    return false
+  if (midiFloat != null && Number.isFinite(midiFloat)) {
+    if (absCentsToNearest(midiFloat, newExpected) <= dominanceCents) {
+      return 'different-note-dominance'
+    }
   }
-  return absCentsToNearest(midiFloat, newExpected) <= dominanceCents
+
+  // 3. Score-informed transition: real instruments can leave the independent
+  // pitch tracker pinned to the old ringing note while V2 already sees the new
+  // target. Accept only strong expected-note evidence plus a small decay-relative
+  // energy lift, and never for octave-related targets where a ringing harmonic
+  // can masquerade as the next note.
+  const consumedMidis = [...consumed]
+  const nonOctaveNewExpected = newExpected.filter(
+    (midi) => !octaveRelatedToAny(midi, consumedMidis),
+  )
+  const noteEvidence = bestExpectedNoteEvidence(frame, nonOctaveNewExpected)
+  const smallRise =
+    rms != null &&
+    Number.isFinite(rms) &&
+    state.envelopeRms != null &&
+    state.envelopeRms > 0 &&
+    rms >= state.envelopeRms * smallRiseRatio
+  if (
+    noteEvidence &&
+    smallRise &&
+    (noteEvidence.confidence ?? 0) >= scoreConfidence &&
+    (noteEvidence.ratio ?? 0) >= scoreRatio
+  ) {
+    return 'score-informed-transition'
+  }
+
+  return null
+}
+
+/**
+ * True when a NEW attack should rearm the latch while the previous note still
+ * rings (gate never closed).
+ */
+export function shouldRearmMicAttack(state, frame, options = {}) {
+  return Boolean(getMicAttackRearmReason(state, frame, options))
 }
 
 export function rearmMicAttackLatch(state) {

@@ -145,6 +145,16 @@ function loadWav(relativePath) {
   return readWavPcm(join(root, relativePath))
 }
 
+function hasStrongExpectedV2Evidence(frame, expectedMidi) {
+  return (frame?.v2Notes ?? []).some(
+    (note) =>
+      note?.midi === expectedMidi &&
+      note.detected &&
+      (note.confidence ?? 0) >= 0.48 &&
+      (note.ratio ?? 0) >= 2.2,
+  )
+}
+
 describe('WFY live mic gate — real note fixtures advance exactly once', () => {
   const noteCases = [
     { file: 'benchmarks/mic-accuracy/clips/real-piano-c4.wav', midi: 60, label: 'real piano C4' },
@@ -235,6 +245,18 @@ describe('WFY live mic gate — real note fixtures advance exactly once', () => 
     expect(trace.rawGateOpenFrames).toBe(0)
     expect(trace.softGateOpenFrames).toBeGreaterThan(0)
     expect(trace.v2DetectedFrames).toBeGreaterThan(0)
+  })
+
+  it('clear very quiet piano above the adaptive floor advances through expected-note evidence', () => {
+    const samples = renderSyntheticClip(
+      { type: 'speaker', midi: 60, seconds: 0.7, amplitude: 0.016, noise: 0.003, seed: 42 },
+      SAMPLE_RATE,
+    )
+    const trace = runLiveAdvanceGateTrace(samples, SAMPLE_RATE, 60, { instrumentId: 'piano' })
+
+    expect(trace.advances).toBe(1)
+    expect(trace.rawGateOpenFrames).toBe(0)
+    expect(trace.softGateOpenFrames).toBeGreaterThan(0)
   })
 
   it('quiet acoustic guitar above the room floor advances without opening silence/noise', () => {
@@ -401,7 +423,10 @@ describe('WFY live mic gate — sustain and re-attack behavior', () => {
         resetMatchConfirmState(confirm)
         continue
       }
-      const frameConfident = frameConfidentForMatch(frame) && isMusicalMicFrame(frame)
+    const frameConfident =
+      (frameConfidentForMatch(frame) ||
+        (frame.scoreInformedQuietGateOpen && hasStrongExpectedV2Evidence(frame, expectedMidi))) &&
+      isMusicalMicFrame(frame)
       if (!frame.gateOpen || !frame.v2DetectedMidis?.length) {
         resetMatchConfirmState(confirm)
         continue

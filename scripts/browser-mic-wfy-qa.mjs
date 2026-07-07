@@ -11,6 +11,43 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { join, dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { synthSimultaneousChord } from '../src/features/microphone-input/micSyntheticChordClips.js'
+import {
+  midiToFrequency,
+  renderSyntheticClip,
+  synthHarmonicTone,
+  synthSpeech,
+} from '../src/features/microphone-input/micSyntheticClips.js'
+import { createMicFrameAnalyzer } from '../src/features/microphone-input/micFrameAnalysis.js'
+import { getMicInstrumentProfile } from '../src/features/microphone-input/micInstrumentProfiles.js'
+import {
+  createMicEngineV2RuntimeState,
+  processMicEngineV2Tick,
+} from '../src/features/microphone-input/v2/micEngineV2Live.js'
+import {
+  confirmConfidentMatch,
+  createMatchConfirmState,
+  frameConfidentForMatch,
+  frameCorroboratesSingleNote,
+  resetMatchConfirmState,
+} from '../src/features/practice/micMatchConfirm.js'
+import {
+  canAcceptMicAttackMatch,
+  createMicAttackLatchState,
+  getMicAttackRearmReason,
+  markMicAttackConsumed,
+  rearmMicAttackLatch,
+  updateMicAttackRelease,
+} from '../src/features/practice/micAttackLatch.js'
+import { isMusicalMicFrame } from '../src/features/practice/micMusicalAcceptance.js'
+import {
+  createGuitarChordShapeBufferState,
+  evaluateGuitarChordShapeMicInput,
+  evaluateMicScoreInformedInput,
+  MATCH_OUTCOME,
+} from '../src/features/practice/waitForYouNoteMatch.js'
+import { normalizeMatchSettings } from '../src/features/practice/waitForYouMatchSettings.js'
+import { enrichGuitarChordCheckpoint } from '../src/features/practice/guitarChordShapeCheckpoint.js'
+import { INSTRUMENT_IDS } from '../src/features/instruments/instruments.js'
 import { writeWavPcm } from './lib/writeWavPcm.mjs'
 
 const __dir = dirname(fileURLToPath(import.meta.url))
@@ -36,6 +73,346 @@ const VIEWPORTS = [
   { name: 'ipad', width: 820, height: 1180 },
   { name: 'mobile', width: 390, height: 844 },
 ]
+
+const QA_SAMPLE_RATE = 44100
+const QA_FFT = 2048
+const QA_HOP = Math.round(QA_SAMPLE_RATE / 60)
+const QA_MATCH_SETTINGS = normalizeMatchSettings({})
+
+function mixInto(target, source, offsetSamples = 0) {
+  for (let index = 0; index < source.length; index += 1) {
+    const at = offsetSamples + index
+    if (at >= target.length) {
+      break
+    }
+    target[at] += source[index]
+  }
+}
+
+function guitarTone(midi, seconds, amplitude) {
+  return synthHarmonicTone(
+    midiToFrequency(midi),
+    [
+      { multiple: 1, amplitude },
+      { multiple: 2, amplitude: amplitude * 0.5 },
+      { multiple: 3, amplitude: amplitude * 0.25 },
+    ],
+    QA_SAMPLE_RATE,
+    seconds,
+  )
+}
+
+function pluckMidi(midi, { seconds = 0.9, amplitude = 0.32, decay = 2.2 } = {}) {
+  return renderSyntheticClip({ type: 'pluck', midi, seconds, amplitude, decay }, QA_SAMPLE_RATE)
+}
+
+function hasStrongExpectedV2Evidence(frame, expectedMidi, {
+  minConfidence = 0.48,
+  minRatio = 2.2,
+} = {}) {
+  return (frame?.v2Notes ?? []).some(
+    (note) =>
+      note?.midi === expectedMidi &&
+      note.detected &&
+      (note.confidence ?? 0) >= minConfidence &&
+      (note.ratio ?? 0) >= minRatio,
+  )
+}
+
+function frameConfidentForLiveMatch(frame, expectedMidi, attackRearmReason = null) {
+  const scoreInformedSingleExpectedConfident =
+    hasStrongExpectedV2Evidence(frame, expectedMidi) &&
+    (frame.scoreInformedQuietGateOpen ||
+      attackRearmReason === 'score-informed-transition')
+  return (
+    (frameConfidentForMatch(frame) || scoreInformedSingleExpectedConfident) &&
+    isMusicalMicFrame(frame)
+  )
+}
+
+function hasStrongMissingGuitarChordToneEvidence(frame, expectedMidis = [], heardMidis = new Set()) {
+  if (!frame?.v2DetectedMidis?.length || !heardMidis?.size) {
+    return false
+  }
+  const rms = frame.filteredRms ?? frame.rms ?? 0
+  const noiseFloor = Math.max(0.001, frame.noiseFloor ?? 0.001)
+  if (rms < Math.max(0.0012, noiseFloor * 0.35)) {
+    return false
+  }
+  return expectedMidis.some(
+    (midi) =>
+      !heardMidis.has(midi) &&
+      frame.v2DetectedMidis.includes(midi) &&
+      hasStrongExpectedV2Evidence(frame, midi, {
+        minConfidence: 0.58,
+        minRatio: 2.6,
+      }),
+  )
+}
+
+function runSingleNoteLiveFrameSequence(samples, checkpointMidis, { instrumentId = 'guitar' } = {}) {
+  const v2State = createMicEngineV2RuntimeState()
+  const analyzer = createMicFrameAnalyzer()
+  const profile = getMicInstrumentProfile(instrumentId)
+  const confirm = createMatchConfirmState()
+  const latch = createMicAttackLatchState()
+  const advances = []
+  let checkpointIndex = 0
+
+  for (let end = QA_FFT; end <= samples.length; end += QA_HOP) {
+    const expectedMidi = checkpointMidis[checkpointIndex]
+    if (expectedMidi == null) {
+      break
+    }
+
+    const tick = processMicEngineV2Tick({
+      buffer: new Float32Array(samples.subarray(end - QA_FFT, end)),
+      sampleRate: QA_SAMPLE_RATE,
+      expectedMidis: [expectedMidi],
+      noiseFloor: analyzer.noiseFloor,
+      state: v2State,
+      centsTolerance: QA_MATCH_SETTINGS.micCentsTolerance,
+      gateOptions: profile?.gate ?? null,
+      timeMs: (end / QA_SAMPLE_RATE) * 1000,
+    })
+    const frame = tick.frame
+    if (!frame) {
+      continue
+    }
+
+    updateMicAttackRelease(latch, Boolean(frame.gateOpen), {
+      rms: frame.filteredRms ?? frame.rms ?? null,
+    })
+
+    let attackRearmReason = null
+    if (!canAcceptMicAttackMatch(latch)) {
+      attackRearmReason = getMicAttackRearmReason(latch, frame, {
+        expectedMidis: [expectedMidi],
+      })
+      if (attackRearmReason) {
+        rearmMicAttackLatch(latch)
+      } else {
+        resetMatchConfirmState(confirm)
+        continue
+      }
+    }
+
+    if (!frame.gateOpen || !frame.v2DetectedMidis?.length) {
+      resetMatchConfirmState(confirm)
+      continue
+    }
+
+    const preview = evaluateMicScoreInformedInput(
+      { id: `browser-qa-${checkpointIndex}`, expectedMidi },
+      frame.v2DetectedMidis,
+      QA_MATCH_SETTINGS,
+    )
+    if (preview.outcome !== MATCH_OUTCOME.COMPLETE) {
+      resetMatchConfirmState(confirm)
+      continue
+    }
+
+    const corroborated =
+      frameCorroboratesSingleNote(frame, expectedMidi, {
+        centsTolerance: QA_MATCH_SETTINGS.micCentsTolerance,
+      }) ||
+      (attackRearmReason === 'score-informed-transition' &&
+        hasStrongExpectedV2Evidence(frame, expectedMidi))
+    const key = `browser-qa-${checkpointIndex}:v2:${[...frame.v2DetectedMidis]
+      .sort((a, b) => a - b)
+      .join(',')}`
+    const pitchCents = frame.midiFloat != null ? frame.midiFloat * 100 : null
+    const confident =
+      frameConfidentForLiveMatch(frame, expectedMidi, attackRearmReason) && corroborated
+
+    if (confirmConfidentMatch(confirm, key, confident, { pitchCents })) {
+      resetMatchConfirmState(confirm)
+      markMicAttackConsumed(latch, { consumedMidis: [expectedMidi] })
+      advances.push({
+        checkpointIndex,
+        expectedMidi,
+        timeMs: (end / QA_SAMPLE_RATE) * 1000,
+      })
+      checkpointIndex += 1
+    }
+  }
+
+  return advances
+}
+
+function guitarDoubleStopCheckpoint(expectedMidis = [45, 57]) {
+  return enrichGuitarChordCheckpoint(
+    {
+      id: 'browser-qa-guitar-double-stop',
+      isChord: true,
+      expectedMidis,
+      notes: expectedMidis.map((midi, index) => ({
+        midi,
+        string: index === 0 ? 6 : 3,
+        fret: index === 0 ? 5 : 2,
+      })),
+    },
+    { instrumentId: INSTRUMENT_IDS.GUITAR },
+  )
+}
+
+function runGuitarShapeLiveFrames(samples, checkpoint) {
+  const state = createMicEngineV2RuntimeState()
+  const analyzer = createMicFrameAnalyzer()
+  const profile = getMicInstrumentProfile('guitar')
+  const buffer = createGuitarChordShapeBufferState()
+  const confirm = createMatchConfirmState()
+  const seen = []
+  let completed = false
+
+  for (let end = QA_FFT; end <= samples.length; end += QA_HOP) {
+    const tick = processMicEngineV2Tick({
+      buffer: new Float32Array(samples.subarray(end - QA_FFT, end)),
+      sampleRate: QA_SAMPLE_RATE,
+      expectedMidis: checkpoint.expectedMidis,
+      noiseFloor: analyzer.noiseFloor,
+      state,
+      gateOptions: profile?.gate ?? null,
+      timeMs: (end / QA_SAMPLE_RATE) * 1000,
+    })
+    const frame = tick.frame
+    const detected = frame?.v2DetectedMidis ?? []
+    if (detected.length) {
+      seen.push([...detected])
+    }
+    const quietCollect =
+      !frame?.gateOpen &&
+      hasStrongMissingGuitarChordToneEvidence(frame, checkpoint.expectedMidis, buffer.heardMidis)
+    if (!detected.length || (!frame?.gateOpen && !quietCollect) || (!isMusicalMicFrame(frame) && !quietCollect)) {
+      resetMatchConfirmState(confirm)
+      continue
+    }
+
+    const preview = evaluateGuitarChordShapeMicInput(
+      checkpoint,
+      detected,
+      buffer,
+      QA_MATCH_SETTINGS,
+    )
+    if (preview.outcome !== MATCH_OUTCOME.COMPLETE) {
+      continue
+    }
+    const key = `${checkpoint.id}:guitar-shape:${[...detected].sort((a, b) => a - b).join(',')}`
+    if (
+      confirmConfidentMatch(confirm, key, frameConfidentForMatch(frame) || quietCollect, {
+        threshold: 1,
+      })
+    ) {
+      completed = true
+      break
+    }
+  }
+
+  return { completed, seen }
+}
+
+function runMicFrameRegressionSuite() {
+  const cases = []
+  const add = (name, passed, detail = '') => {
+    cases.push({ name, passed: Boolean(passed), detail })
+  }
+
+  const ringing = new Float32Array(Math.round(QA_SAMPLE_RATE * 2.2))
+  mixInto(ringing, guitarTone(64, 2.2, 0.14), 0)
+  mixInto(ringing, guitarTone(57, 1.1, 0.55), Math.round(QA_SAMPLE_RATE * 1.1))
+  add(
+    'next different note advances while previous rings',
+    runSingleNoteLiveFrameSequence(ringing, [64, 57]).length === 2,
+  )
+
+  const sustained = guitarTone(64, 2.0, 0.3)
+  add(
+    'sustained note does not skip checkpoints',
+    runSingleNoteLiveFrameSequence(sustained, [64, 57]).length === 1,
+  )
+  add(
+    'repeated same note requires fresh attack',
+    runSingleNoteLiveFrameSequence(sustained, [64, 64]).length === 1,
+  )
+
+  const repeated = new Float32Array(Math.round(QA_SAMPLE_RATE * 2.2))
+  mixInto(repeated, guitarTone(64, 1.05, 0.18), 0)
+  mixInto(repeated, guitarTone(64, 1.1, 0.6), Math.round(QA_SAMPLE_RATE * 1.1))
+  add(
+    'repeated same note accepts fresh attack',
+    runSingleNoteLiveFrameSequence(repeated, [64, 64]).length === 2,
+  )
+
+  const speechOverRing = new Float32Array(Math.round(QA_SAMPLE_RATE * 2.4))
+  mixInto(speechOverRing, guitarTone(64, 2.4, 0.14), 0)
+  mixInto(
+    speechOverRing,
+    synthSpeech(QA_SAMPLE_RATE, 1.2, { f0: midiToFrequency(57), seed: 17, driftSemitones: 2.4 }),
+    Math.round(QA_SAMPLE_RATE * 1.1),
+  )
+  add(
+    'speech over ringing instrument does not advance',
+    runSingleNoteLiveFrameSequence(speechOverRing, [64, 57]).length === 1,
+  )
+
+  const roomNoise = renderSyntheticClip({ type: 'noise', seconds: 1.2, seed: 7 }, QA_SAMPLE_RATE)
+  add('room noise does not advance', runSingleNoteLiveFrameSequence(roomNoise, [64]).length === 0)
+
+  const quietPiano = renderSyntheticClip(
+    { type: 'speaker', midi: 60, seconds: 0.7, amplitude: 0.016, noise: 0.003, seed: 42 },
+    QA_SAMPLE_RATE,
+  )
+  add(
+    'quiet piano note advances',
+    runSingleNoteLiveFrameSequence(quietPiano, [60], { instrumentId: 'piano' }).length === 1,
+  )
+
+  const quietAcoustic = renderSyntheticClip(
+    { type: 'pluck', midi: 52, seconds: 0.8, amplitude: 0.045, decay: 3.2 },
+    QA_SAMPLE_RATE,
+  )
+  add(
+    'quiet acoustic guitar note advances',
+    runSingleNoteLiveFrameSequence(quietAcoustic, [52], { instrumentId: 'guitar' }).length === 1,
+  )
+
+  const quietElectric = renderSyntheticClip(
+    { type: 'distorted', midi: 52, seconds: 0.8, amplitude: 0.018, drive: 4.5 },
+    QA_SAMPLE_RATE,
+  )
+  add(
+    'quiet electric-style guitar note advances',
+    runSingleNoteLiveFrameSequence(quietElectric, [52], { instrumentId: 'guitar' }).length === 1,
+  )
+
+  const doubleStop = guitarDoubleStopCheckpoint([45, 57])
+  const weakDoubleStop = new Float32Array(Math.round(QA_SAMPLE_RATE * 1.0))
+  mixInto(weakDoubleStop, pluckMidi(45, { amplitude: 0.32 }), 0)
+  mixInto(weakDoubleStop, pluckMidi(57, { amplitude: 0.04 }), 0)
+  add(
+    'guitar double-stop with one weak tone advances',
+    runGuitarShapeLiveFrames(weakDoubleStop, doubleStop).completed,
+  )
+
+  const lowOnly = pluckMidi(45, { amplitude: 0.32 })
+  const lowOnlyResult = runGuitarShapeLiveFrames(lowOnly, doubleStop)
+  add(
+    'one double-stop tone alone does not advance',
+    !lowOnlyResult.completed && !lowOnlyResult.seen.some((midis) => midis.includes(57)),
+  )
+
+  const staggered = new Float32Array(Math.round(QA_SAMPLE_RATE * 1.2))
+  mixInto(staggered, pluckMidi(45, { amplitude: 0.3 }), 0)
+  mixInto(staggered, pluckMidi(57, { amplitude: 0.05 }), Math.round(QA_SAMPLE_RATE * 0.08))
+  add('staggered guitar double-stop advances', runGuitarShapeLiveFrames(staggered, doubleStop).completed)
+
+  const wrongShape = new Float32Array(Math.round(QA_SAMPLE_RATE * 1.0))
+  mixInto(wrongShape, pluckMidi(45, { amplitude: 0.32 }), 0)
+  mixInto(wrongShape, pluckMidi(58, { amplitude: 0.22 }), 0)
+  add('wrong guitar double-stop does not advance', !runGuitarShapeLiveFrames(wrongShape, doubleStop).completed)
+
+  return cases
+}
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms))
@@ -462,6 +839,19 @@ async function main() {
     results.notes.push(text)
   }
 
+  const frameReplayCases = runMicFrameRegressionSuite()
+  results.scenarios.push({
+    id: 'live-frame-regression-replay',
+    cases: frameReplayCases,
+  })
+  for (const entry of frameReplayCases) {
+    if (entry.passed) {
+      pass(`frame replay: ${entry.name}`, entry.detail)
+    } else {
+      fail(`frame replay: ${entry.name}`, entry.detail || 'regression did not satisfy expectation')
+    }
+  }
+
   // ── Denied permission (no grant) ─────────────────────────────────────────
   {
     const browser = await launchBrowser(CLIPS.roomQuiet)
@@ -532,6 +922,31 @@ async function main() {
       note(`Mic engine debug: ${JSON.stringify(micDebugDefault)}`)
     } else {
       note('__SCOREFLOW_MIC_DEBUG__ not exposed (production build?)')
+    }
+
+    const traceExport = await page.evaluate(() => {
+      const dbg = globalThis.__SCOREFLOW_MIC_DEBUG__ ?? globalThis.SCOREFLOW_MIC_DEBUG
+      const text = typeof dbg?.exportRecentMicTrace === 'function'
+        ? dbg.exportRecentMicTrace()
+        : null
+      if (!text) {
+        return { hasExport: false, frameCount: 0 }
+      }
+      try {
+        const parsed = JSON.parse(text)
+        return {
+          hasExport: true,
+          frameCount: parsed.frameCount ?? 0,
+          sample: parsed.frames?.[parsed.frames.length - 1] ?? null,
+        }
+      } catch (error) {
+        return { hasExport: true, frameCount: 0, error: error?.message ?? String(error) }
+      }
+    })
+    if (traceExport.hasExport && traceExport.frameCount > 0) {
+      pass('recent mic trace export contains live browser frames', `frames=${traceExport.frameCount}`)
+    } else {
+      fail('recent mic trace export contains live browser frames', JSON.stringify(traceExport))
     }
 
     await sleep(3000)

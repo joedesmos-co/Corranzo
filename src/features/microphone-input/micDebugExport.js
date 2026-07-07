@@ -1,4 +1,5 @@
 export const MIC_DEBUG_FRAME_LIMIT = 20
+export const MIC_TRACE_FRAME_LIMIT = 240
 
 function finiteOrNull(value) {
   return Number.isFinite(value) ? value : null
@@ -113,6 +114,7 @@ export function createMicDebugFrameRecord({
     midiFloat: finiteOrNull(frame?.midiFloat),
     centsOffset: finiteOrNull(frame?.centsOffset),
     rms: finiteOrNull(frame?.rms),
+    rawRms: finiteOrNull(frame?.rawRms ?? frame?.rms),
     filteredRms: finiteOrNull(frame?.filteredRms),
     level: finiteOrNull(frame?.level),
     noiseFloor: finiteOrNull(frame?.noiseFloor),
@@ -122,6 +124,7 @@ export function createMicDebugFrameRecord({
     softGateOpen: Boolean(frame?.softGateOpen),
     softGateThreshold: finiteOrNull(frame?.softGateThreshold),
     softGateEvidence: Boolean(frame?.softGateEvidence),
+    scoreInformedQuietGateOpen: Boolean(frame?.scoreInformedQuietGateOpen),
     clarity: finiteOrNull(frame?.clarity),
     v2MeanConfidence: finiteOrNull(frame?.v2MeanConfidence),
     v2DetectedMidis: Array.isArray(frame?.v2DetectedMidis) ? [...frame.v2DetectedMidis] : [],
@@ -161,7 +164,162 @@ export function pushMicDebugFrame(buffer, frame, limit = MIC_DEBUG_FRAME_LIMIT) 
   return buffer
 }
 
+function summarizeStringFrets(entries = []) {
+  return Array.isArray(entries)
+    ? entries.map((entry) => ({
+        string: entry?.string ?? null,
+        fret: entry?.fret ?? null,
+        midi: entry?.midi ?? null,
+        label: entry?.label ?? null,
+      }))
+    : []
+}
+
+function summarizeTraceNotes(notes = []) {
+  return Array.isArray(notes)
+    ? notes.map((note) => ({
+        midi: note?.midi ?? null,
+        detected: Boolean(note?.detected),
+        confidence: finiteOrNull(note?.confidence),
+        ratio: finiteOrNull(note?.ratio),
+        relativeEnergy: finiteOrNull(note?.relativeEnergy),
+        peerRelative: finiteOrNull(note?.peerRelative),
+        fundamentalEnergy: finiteOrNull(note?.fundamentalEnergy),
+        harmonicEnergy: finiteOrNull(note?.harmonicEnergy),
+        harmonicSupport: finiteOrNull(note?.harmonicSupport),
+      }))
+    : []
+}
+
+function summarizeChordState({
+  expectedMidis = [],
+  micChordState = null,
+  guitarChordShapeState = null,
+  nowMs = null,
+} = {}) {
+  const sequenceMatched = [...(micChordState?.matchedIndices ?? [])]
+  const guitarHeard = [...(guitarChordShapeState?.heardMidis ?? [])]
+  const sequenceAge =
+    nowMs != null && micChordState?.windowStartMs != null
+      ? finiteOrNull(nowMs - micChordState.windowStartMs)
+      : null
+  const guitarAge =
+    nowMs != null && guitarChordShapeState?.windowStartMs != null
+      ? finiteOrNull(nowMs - guitarChordShapeState.windowStartMs)
+      : null
+
+  return {
+    collectedMidis: [
+      ...new Set([
+        ...sequenceMatched
+          .map((index) => expectedMidis[index])
+          .filter((midi) => Number.isFinite(midi)),
+        ...guitarHeard,
+      ]),
+    ],
+    sequenceMatchedIndices: sequenceMatched,
+    sequencePendingIndex: micChordState?.pendingIndex ?? null,
+    sequencePendingHits: micChordState?.pendingHits ?? 0,
+    sequenceWrongStreak: micChordState?.wrongStreak ?? 0,
+    guitarHeardMidis: guitarHeard,
+    rollingWindowAgeMs: guitarAge ?? sequenceAge,
+  }
+}
+
+export function createMicTraceFrameRecord({
+  frame,
+  checkpoint = null,
+  checkpointIndex = null,
+  expectedMidis = [],
+  micChordState = null,
+  guitarChordShapeState = null,
+  attackLatch = null,
+  attackRearmReason = null,
+  matchConfirm = null,
+  matchResult = null,
+  rejectReason = null,
+  advanced = false,
+  timestampMs = null,
+} = {}) {
+  const nowMs = finiteOrNull(timestampMs)
+  return {
+    timestampMs: nowMs,
+    checkpointId: checkpoint?.id ?? null,
+    checkpointIndex: Number.isFinite(checkpointIndex) ? checkpointIndex : null,
+    checkpointKind: checkpoint?.kind ?? checkpoint?.targetKind ?? null,
+    expectedMidis: Array.isArray(expectedMidis) ? [...expectedMidis] : [],
+    expectedStringFrets: summarizeStringFrets(checkpoint?.expectedStringFrets ?? []),
+    rms: finiteOrNull(frame?.rms),
+    rawRms: finiteOrNull(frame?.rawRms ?? frame?.rms),
+    filteredRms: finiteOrNull(frame?.filteredRms),
+    noiseFloor: finiteOrNull(frame?.noiseFloor),
+    rawGateOpen: Boolean(frame?.rawGateOpen ?? frame?.gateOpen),
+    softGateOpen: Boolean(frame?.softGateOpen),
+    softGateThreshold: finiteOrNull(frame?.softGateThreshold),
+    scoreInformedQuietGateOpen: Boolean(frame?.scoreInformedQuietGateOpen),
+    gateOpen: Boolean(frame?.gateOpen),
+    attackLatch: {
+      awaitingRelease: Boolean(attackLatch?.awaitingRelease),
+      gateClosedFrames: attackLatch?.gateClosedFrames ?? 0,
+      consumedMidis: [...(attackLatch?.consumedMidis ?? [])],
+      envelopeRms: finiteOrNull(attackLatch?.envelopeRms),
+    },
+    attackRearmReason: attackRearmReason ?? null,
+    detectedMidis: Array.isArray(frame?.v2DetectedMidis) ? [...frame.v2DetectedMidis] : [],
+    v2Notes: summarizeTraceNotes(frame?.v2Notes ?? []),
+    dominantPitchMidi: frame?.dominantPitchMidi ?? frame?.midi ?? null,
+    dominantPitchMidiFloat: finiteOrNull(frame?.dominantPitchMidiFloat ?? frame?.midiFloat),
+    dominantPitchCents: finiteOrNull(
+      frame?.dominantPitchMidiFloat != null
+        ? frame.dominantPitchMidiFloat * 100
+        : frame?.midiFloat != null
+          ? frame.midiFloat * 100
+          : null,
+    ),
+    v2MeanConfidence: finiteOrNull(frame?.v2MeanConfidence),
+    chord: summarizeChordState({
+      expectedMidis,
+      micChordState,
+      guitarChordShapeState,
+      nowMs,
+    }),
+    matchConfirm: {
+      key: matchConfirm?.key ?? '',
+      count: matchConfirm?.count ?? 0,
+      anchorCents: finiteOrNull(matchConfirm?.anchorCents),
+    },
+    matchOutcome: matchResult?.outcome ?? null,
+    matchedCount: matchResult?.matchedCount ?? matchResult?.matchedIndices?.size ?? 0,
+    rejectReason: rejectReason ?? null,
+    advanced: Boolean(advanced),
+  }
+}
+
+export function pushMicTraceFrame(buffer, frame, limit = MIC_TRACE_FRAME_LIMIT) {
+  if (!Array.isArray(buffer) || !frame) {
+    return []
+  }
+  buffer.push(frame)
+  while (buffer.length > limit) {
+    buffer.shift()
+  }
+  return buffer
+}
+
 export function serializeMicDebugFrames(frames = []) {
+  return JSON.stringify(
+    {
+      version: 1,
+      generatedAt: new Date().toISOString(),
+      frameCount: Array.isArray(frames) ? frames.length : 0,
+      frames: Array.isArray(frames) ? frames : [],
+    },
+    null,
+    2,
+  )
+}
+
+export function serializeMicTraceFrames(frames = []) {
   return JSON.stringify(
     {
       version: 1,
