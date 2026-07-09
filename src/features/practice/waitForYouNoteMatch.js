@@ -447,7 +447,7 @@ function rememberGuitarHeardMidis(
         continue
       }
       bufferState.heardMidis.add(expectedMidi)
-      if (isHighGuitarString(stringByMidi.get(expectedMidi))) {
+      if (isUpperGuitarStringForMasking(stringByMidi.get(expectedMidi))) {
         bufferState.stickyHighMidis.set(expectedMidi, now)
       }
     }
@@ -461,7 +461,13 @@ function guitarMidiPitchClass(midi) {
 /**
  * Drop weak V2 grazes so noise cannot accumulate chord tones across the rolling window.
  */
-export function filterGuitarChordDetectedMidis(frame, detectedMidis = [], expected = [], stringByMidi = new Map()) {
+export function filterGuitarChordDetectedMidis(
+  frame,
+  detectedMidis = [],
+  expected = [],
+  stringByMidi = new Map(),
+  heardLowInBuffer = false,
+) {
   if (!frame?.v2Active) {
     return detectedMidis ?? []
   }
@@ -471,7 +477,7 @@ export function filterGuitarChordDetectedMidis(frame, detectedMidis = [], expect
       .filter((midi) => isLowGuitarString(stringByMidi.get(midi)))
       .map((midi) => guitarMidiPitchClass(midi)),
   )
-  const lowPresentInFrame = lowPitchClassesInFrame.size > 0
+  const lowPresent = lowPitchClassesInFrame.size > 0 || heardLowInBuffer
   const dyad = expected.length === 2
 
   return (detectedMidis ?? []).filter((midi) => {
@@ -506,7 +512,7 @@ export function filterGuitarChordDetectedMidis(frame, detectedMidis = [], expect
         ? 1.22
         : 1.38
 
-    if (dyad && lowPresentInFrame) {
+    if (dyad && lowPresent) {
       if (isHighGuitarString(stringNum)) {
         minConfidence = 0.14
         minRatio = 1.08
@@ -527,11 +533,29 @@ function guitarHeardExpectedMidi(bufferState, expectedMidi, stringByMidi, now) {
   if (bufferState?.heardMidis?.has(expectedMidi)) {
     return true
   }
-  if (!isHighGuitarString(stringByMidi.get(expectedMidi))) {
+  if (!isUpperGuitarStringForMasking(stringByMidi.get(expectedMidi))) {
     return false
   }
   const lastSeenMs = bufferState?.stickyHighMidis?.get(expectedMidi)
   return lastSeenMs != null && now - lastSeenMs <= GUITAR_HIGH_STRING_STICKY_MS
+}
+
+function guitarChordQuorumComplete(expected, matchedIndices, required) {
+  if (matchedIndices.size < required) {
+    return false
+  }
+  if (expected.length === 3 && matchedIndices.size < expected.length) {
+    let bassIndex = 0
+    for (let index = 1; index < expected.length; index += 1) {
+      if (expected[index] < expected[bassIndex]) {
+        bassIndex = index
+      }
+    }
+    if (!matchedIndices.has(bassIndex)) {
+      return false
+    }
+  }
+  return true
 }
 
 /**
@@ -547,8 +571,17 @@ export function evaluateGuitarChordShapeMicInput(
 ) {
   const expected = getExpectedMidis(checkpoint)
   const stringByMidi = buildExpectedStringByMidi(checkpoint?.expectedStringFrets)
+  const heardLowInBuffer = bufferState?.heardMidis
+    ? [...bufferState.heardMidis].some((midi) => isLowGuitarString(stringByMidi.get(midi)))
+    : false
   const filteredMidis = frame
-    ? filterGuitarChordDetectedMidis(frame, detectedMidis, expected, stringByMidi)
+    ? filterGuitarChordDetectedMidis(
+        frame,
+        detectedMidis,
+        expected,
+        stringByMidi,
+        heardLowInBuffer,
+      )
     : detectedMidis
   const required =
     checkpoint?.minimumRequiredTones ??
@@ -624,7 +657,7 @@ export function evaluateGuitarChordShapeMicInput(
     missingHighStringMidis,
   }
 
-  if (matchedCount >= required) {
+  if (guitarChordQuorumComplete(expected, matchedIndices, required)) {
     if (bufferState) {
       resetGuitarChordShapeBufferState(bufferState)
     }

@@ -14,11 +14,11 @@ import MicTestPanel from './MicTestPanel.jsx'
 
 const MIC_CHORD_MODE_HINTS = {
   [MIC_CHORD_MODES.ANY_TONE]:
-    'Mic hears one note at a time. Play each chord tone in turn, or switch to MIDI for chords together.',
+    'One note at a time, or use MIDI for chords together.',
   [MIC_CHORD_MODES.BASS]:
-    'Experimental: mic listens for the lowest chord tone only. MIDI is best for full chords.',
+    'Experimental: listens for the lowest chord tone only.',
   [MIC_CHORD_MODES.TOP]:
-    'Experimental: mic listens for the highest chord tone only. MIDI is best for full chords.',
+    'Experimental: listens for the highest chord tone only.',
 }
 
 function calibrationLabel({ liveFrame, calibration }) {
@@ -125,7 +125,7 @@ export default function MicrophoneInputStatusPanel({
         </span>
       </div>
 
-      {isListening && (
+      {isListening && !compact && (
         <p
           className={`mic-input-status__calibration mic-input-status__calibration--${
             calibrating ? 'measuring' : calibration?.status ?? 'ready'
@@ -137,7 +137,7 @@ export default function MicrophoneInputStatusPanel({
         </p>
       )}
 
-      {heardLine && (
+      {heardLine && !compact && (
         <p
           className={`mic-input-status__heard${
             inputFeedback?.tone === 'error'
@@ -153,18 +153,18 @@ export default function MicrophoneInputStatusPanel({
         </p>
       )}
 
-      {isChordCheckpoint && inputFeedback?.heardLabels?.length > 0 && (
+      {isChordCheckpoint && inputFeedback?.heardLabels?.length > 0 && !compact && (
         <p className="mic-input-status__chord-progress" role="status">
           Heard: {inputFeedback.heardLabels.join(' + ')}
           {inputFeedback.remainingLabels?.length
-            ? `. Still need: ${inputFeedback.remainingLabels.join(', ')}`
+            ? ` · need ${inputFeedback.remainingLabels.join(', ')}`
             : ''}
         </p>
       )}
 
       {supported && !isGranted && permission === MIC_PERMISSION.DENIED && (
         <p className="mic-input-status__blocked" role="status">
-          Microphone access is blocked. Allow it in your browser, or switch to MIDI above.
+          Mic blocked — allow in browser or switch to MIDI.
         </p>
       )}
 
@@ -174,18 +174,18 @@ export default function MicrophoneInputStatusPanel({
         </p>
       )}
 
-      {isChordCheckpoint && (
-        <p className="mic-input-status__chord-note" role="note">
-          {MIC_CHORD_MODE_HINTS[chordMicMode] ?? MIC_CHORD_MODE_HINTS[MIC_CHORD_MODES.ANY_TONE]}
-        </p>
-      )}
-
       <details className="practice-input-details mic-input-status__troubleshooting">
         <summary>Troubleshooting</summary>
 
+        {isChordCheckpoint && (
+          <p className="mic-input-status__chord-note" role="note">
+            {MIC_CHORD_MODE_HINTS[chordMicMode] ?? MIC_CHORD_MODE_HINTS[MIC_CHORD_MODES.ANY_TONE]}
+          </p>
+        )}
+
         {showIosSafari && (
           <p className="mic-input-status__safari" role="note">
-            Mic input may be less steady on iPhone and iPad. Manual always works.
+            Mic may be less steady on iPhone/iPad. Manual always works.
           </p>
         )}
 

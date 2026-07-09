@@ -16,11 +16,11 @@ export const MIC_CALIBRATION_STATUS = {
 }
 
 export const MIC_CALIBRATION_STATUS_LABELS = {
-  [MIC_CALIBRATION_STATUS.IDLE]: 'Mic not calibrated',
-  [MIC_CALIBRATION_STATUS.MEASURING]: 'Stay quiet for a moment…',
-  [MIC_CALIBRATION_STATUS.READY]: 'Ready — play the highlighted note',
-  [MIC_CALIBRATION_STATUS.ROOM_NOISY]: 'Room is noisy — play a bit louder or move closer',
-  [MIC_CALIBRATION_STATUS.NO_INPUT]: 'No input detected — check the mic is unmuted',
+  [MIC_CALIBRATION_STATUS.IDLE]: 'Not calibrated',
+  [MIC_CALIBRATION_STATUS.MEASURING]: 'Calibrating…',
+  [MIC_CALIBRATION_STATUS.READY]: 'Ready',
+  [MIC_CALIBRATION_STATUS.ROOM_NOISY]: 'Room noisy — play louder',
+  [MIC_CALIBRATION_STATUS.NO_INPUT]: 'No input — check mic',
 }
 
 /** Hard stop so UI never hangs on "Calibrating…". */

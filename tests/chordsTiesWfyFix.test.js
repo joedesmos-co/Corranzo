@@ -83,12 +83,12 @@ describe('compact import warning disclosure', () => {
     expect(classifyImportWarning(warnings[0])).toBe(IMPORT_WARNING_KIND.APPROXIMATION)
   })
 
-  it('renders a single Import notes disclosure with count badge', () => {
+  it('renders a single Import notes disclosure with count in summary', () => {
     const notices = readSrc('components', 'practice', 'PracticeImportNotices.jsx')
     expect(notices).toContain('partitionImportWarnings')
     expect(notices).toContain('practice-import-notices__disclosure')
     expect(notices).toContain('Import notes')
-    expect(notices).toContain('practice-import-notices__disclosure-count')
+    expect(notices).toContain('disclosure.length')
   })
 
   it('stores OMR approximation warnings as mild strength', () => {
@@ -348,6 +348,23 @@ describe('piano chord WFY matching', () => {
     const second = evaluateNoteInput(checkpoint, 64, state, settings)
     expect(first.outcome).toBe(MATCH_OUTCOME.CHORD_PROGRESS)
     expect(second.outcome).toBe(MATCH_OUTCOME.COMPLETE)
+  })
+
+  it('collects a piano triad through staggered rolling mic detection', () => {
+    const checkpoint = pianoTriadCheckpoint()
+    const buffer = createGuitarChordShapeBufferState()
+    evaluateGuitarChordShapeMicInput(checkpoint, [60], buffer, {})
+    evaluateGuitarChordShapeMicInput(checkpoint, [64], buffer, {})
+    const result = evaluateGuitarChordShapeMicInput(checkpoint, [67], buffer, {})
+    expect(result.outcome).toBe(MATCH_OUTCOME.COMPLETE)
+  })
+
+  it('collects a piano double-note through staggered rolling mic detection', () => {
+    const checkpoint = pianoDyadCheckpoint()
+    const buffer = createGuitarChordShapeBufferState()
+    evaluateGuitarChordShapeMicInput(checkpoint, [60], buffer, {})
+    const result = evaluateGuitarChordShapeMicInput(checkpoint, [64], buffer, {})
+    expect(result.outcome).toBe(MATCH_OUTCOME.COMPLETE)
   })
 
   it('collects a piano triad through rolling mic detection', () => {

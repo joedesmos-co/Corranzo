@@ -532,7 +532,7 @@ async function clickInputSource(page, sourceLabel) {
   if (await compactSelector.isVisible().catch(() => false)) {
     const selectorBody = page.getByRole('radiogroup', { name: 'Practice input source' })
     if (!(await selectorBody.isVisible().catch(() => false))) {
-      await compactSelector.locator('summary').click()
+      await compactSelector.locator('summary.wfy-input-source__summary').click()
       await sleep(200)
     }
     await selectorBody.locator('label').filter({ hasText: label }).click()
@@ -587,8 +587,17 @@ async function openWfyMicPractice(page, { chooseInput = true } = {}) {
 
   if (chooseInput) {
     await clickInputSource(page, 'Microphone')
+    await clickPracticeMode(page, 'Wait For You')
+    return
   }
-  await clickPracticeMode(page, 'Wait For You')
+
+  const modalVisible = await page
+    .getByRole('dialog', { name: 'How should Corranzo hear you?' })
+    .isVisible()
+    .catch(() => false)
+  if (!modalVisible) {
+    await clickPracticeMode(page, 'Wait For You')
+  }
 }
 
 function readMicDebug(page) {
@@ -889,8 +898,12 @@ async function main() {
       })
       await openWfyMicPractice(page, { chooseInput: false })
       await clickInputSource(page, 'Microphone')
+      await clickPracticeMode(page, 'Wait For You')
       await enableMic(page)
-      const blocked = await micStatusTextAppears(page, /Mic blocked|Microphone access is blocked/i)
+      const blocked = await micStatusTextAppears(
+        page,
+        /Mic blocked|allow in browser|Microphone access is blocked/i,
+      )
       if (blocked) pass('mic permission denied shows Mic blocked')
       else fail('mic permission denied shows Mic blocked', await micChipText(page) || 'No blocked state in UI')
       results.scenarios.push({ id: 'permission-denied', blocked, status: await micChipText(page) })
@@ -972,7 +985,7 @@ async function main() {
 
     await sleep(3000)
     const chipAfterEnable = await micChipText(page)
-    if (/Calibrating|Mic ready|Mic listening|Ready|No input detected|room noisy/i.test(chipAfterEnable)) {
+    if (/Calibrating|Mic ready|Mic listening|Ready|No input|room noisy/i.test(chipAfterEnable)) {
       pass('mic shows actionable status after grant', chipAfterEnable)
     } else {
       fail('mic shows actionable status after grant', chipAfterEnable || '(empty)')

@@ -61,6 +61,7 @@ import {
   guitarStringPickLabel,
   isHighGuitarString,
   isLowGuitarString,
+  isUpperGuitarStringForMasking,
 } from './guitarChordShapeCheckpoint.js'
 
 function micUsesChordSequence(checkpoint) {
@@ -210,6 +211,7 @@ function hasStrongMissingGuitarChordToneEvidence(
   const heardLowString = [...heardMidis].some((midi) =>
     isLowGuitarString(stringByMidi.get(midi)),
   )
+  const isPianoChord = stringByMidi.size === 0 && expectedMidis.length > 1
   return expectedMidis.some((midi) => {
     if (heardMidis.has(midi)) {
       return false
@@ -217,11 +219,14 @@ function hasStrongMissingGuitarChordToneEvidence(
     if (!frame.v2DetectedMidis.includes(midi)) {
       return false
     }
-    const isMissingHighString =
-      heardLowString && isHighGuitarString(stringByMidi.get(midi))
-    return hasStrongExpectedV2Evidence(frame, midi, isMissingHighString
-      ? { minConfidence: 0.5, minRatio: 2.2 }
-      : { minConfidence: 0.58, minRatio: 2.6 })
+    if (isPianoChord) {
+      return hasStrongExpectedV2Evidence(frame, midi, { minConfidence: 0.4, minRatio: 1.85 })
+    }
+    const stringNum = stringByMidi.get(midi)
+    if (heardLowString && isUpperGuitarStringForMasking(stringNum)) {
+      return hasStrongExpectedV2Evidence(frame, midi, { minConfidence: 0.36, minRatio: 1.6 })
+    }
+    return hasStrongExpectedV2Evidence(frame, midi, { minConfidence: 0.58, minRatio: 2.6 })
   })
 }
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T21:28:11.267Z",
+  "generatedAt": "2026-07-09T02:38:55.368Z",
   "baseUrl": "http://127.0.0.1:4173",
   "scenarios": [
     {
@@ -75,21 +75,21 @@
     {
       "id": "permission-denied",
       "blocked": true,
-      "status": "Microphone access is blocked. Allow it in your browser, or change input."
+      "status": "Mic blocked — allow in browser or change input."
     },
     {
       "id": "wfy-mic-main",
-      "chipAfterEnable": "No input detected — check the mic is unmuted",
-      "calLabel": "No input detected — check the mic is unmuted"
+      "chipAfterEnable": "No input — check mic",
+      "calLabel": "No input — check mic"
     },
     {
       "id": "quiet-room",
-      "quietCal": "Ready — play the highlighted note"
+      "quietCal": "Ready"
     },
     {
       "id": "noisy-room",
-      "noisyCal": "Ready — play the highlighted note",
-      "noisyStatus": "mic-input-status__calibration mic-input-status__calibration--ready"
+      "noisyCal": "Ready",
+      "noisyStatus": ""
     }
   ],
   "passes": [
@@ -163,15 +163,15 @@
     },
     {
       "name": "recent mic trace export contains live browser frames",
-      "detail": "frames=121"
+      "detail": "frames=102"
     },
     {
       "name": "mic shows actionable status after grant",
-      "detail": "No input detected — check the mic is unmuted"
+      "detail": "No input — check mic"
     },
     {
       "name": "mic calibration status line present",
-      "detail": "No input detected — check the mic is unmuted"
+      "detail": "No input — check mic"
     },
     {
       "name": "Hear It does not dismiss mic panel",
@@ -195,11 +195,11 @@
     },
     {
       "name": "quiet room fixture calibrates without crash",
-      "detail": "Ready — play the highlighted note"
+      "detail": "Ready"
     },
     {
       "name": "noisy room fixture surfaces room guidance",
-      "detail": "Ready — play the highlighted note"
+      "detail": "Ready"
     },
     {
       "name": "noisy room does not show false Last confirmed",

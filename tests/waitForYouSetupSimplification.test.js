@@ -55,8 +55,8 @@ describe('choosing Microphone or MIDI is the whole setup', () => {
 
   it('shows the calibrate-then-play copy states', () => {
     const calibration = readSrc('features', 'microphone-input', 'micCalibration.js')
-    expect(calibration).toContain('Stay quiet for a moment…')
-    expect(calibration).toContain('Ready — play the highlighted note')
+    expect(calibration).toContain('Calibrating…')
+    expect(calibration).toContain("'Ready'")
   })
 })
 
@@ -179,9 +179,9 @@ describe('mic diagnostics are inspectable in any build', () => {
     expect(strip).toContain('Mic error')
     expect(panel).toContain('Starting microphone...')
     expect(panel).not.toContain('Mic off')
-    expect(wfy).toContain('Starting microphone... allow access, then stay quiet for a moment.')
-    expect(wfy).toContain('Microphone access is blocked. Allow it in your browser, or change input.')
-    expect(wfy).toContain('Microphone did not start. Check your input device, or change input.')
+    expect(wfy).toContain('Starting mic… allow access, then stay quiet briefly.')
+    expect(wfy).toContain('Mic blocked — allow in browser or change input.')
+    expect(wfy).toContain('Mic did not start — check device or change input.')
     expect(wfy).toContain('!micAccessBlocked')
     expect(wfy).toContain('Start microphone')
     expect(testPanel).toContain('Play one clear note at a time.')

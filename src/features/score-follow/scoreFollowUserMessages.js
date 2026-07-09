@@ -33,4 +33,4 @@ export const SCORE_FOLLOW_OMR_PLAYBACK_READY = 'Experimental playback ready'
 
 /** Experimental OMR playback remains usable when automatic score-follow fails. */
 export const SCORE_FOLLOW_OMR_SETUP_FAILED =
-  'Experimental playback ready — score cursor unavailable for this generated score.'
+  'Playback ready — score cursor unavailable.'

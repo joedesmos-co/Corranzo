@@ -375,6 +375,21 @@ describe('guitar chord mic acceptance', () => {
     expect(result.outcome).not.toBe('complete')
   })
 
+  it('does not accept a 3-note chord from two upper tones without the bass anchor', () => {
+    const buffer = createGuitarChordShapeBufferState()
+    evaluateGuitarChordShapeMicInput(checkpoint, [71], buffer, {})
+    const result = evaluateGuitarChordShapeMicInput(checkpoint, [74], buffer, {})
+    expect(result.matchedCount).toBe(2)
+    expect(result.outcome).not.toBe('complete')
+  })
+
+  it('accepts a 3-note chord when bass and one upper tone are heard across the window', () => {
+    const buffer = createGuitarChordShapeBufferState()
+    evaluateGuitarChordShapeMicInput(checkpoint, [67], buffer, {})
+    const result = evaluateGuitarChordShapeMicInput(checkpoint, [74], buffer, {})
+    expect(result.outcome).toBe('complete')
+  })
+
   it('accepts a 4-note chord by quorum', () => {
     const fourNote = enrichGuitarChordCheckpoint(
       {
@@ -547,6 +562,28 @@ describe('guitar chord mic acceptance', () => {
     const { result } = runGuitarShapeLiveFrames(total, checkpoint)
 
     expect(result?.outcome).not.toBe('complete')
+  })
+
+  it('retains a weak G-string tone briefly after the rolling window resets', () => {
+    const checkpoint = enrichGuitarChordCheckpoint(
+      {
+        isChord: true,
+        expectedMidis: [45, 57],
+        notes: [
+          { midi: 45, string: 6, fret: 5 },
+          { midi: 57, string: 3, fret: 2 },
+        ],
+      },
+      { instrumentId: INSTRUMENT_IDS.GUITAR },
+    )
+    const buffer = createGuitarChordShapeBufferState()
+    buffer.windowStartMs = Date.now() - 950
+    buffer.heardMidis.add(45)
+    buffer.stickyHighMidis.set(57, Date.now() - 200)
+    buffer.heardMidis.add(57)
+
+    const result = evaluateGuitarChordShapeMicInput(checkpoint, [45], buffer, {})
+    expect(result.outcome).toBe('complete')
   })
 
   it('retains a weak high-string tone briefly after the rolling window resets', () => {

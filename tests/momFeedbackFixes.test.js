@@ -55,7 +55,7 @@ describe('Corranzo mom-test feedback pass', () => {
   it('makes microphone-off and microphone-reality states explicit in Wait For You', () => {
     const waitForYou = readSrc('components', 'practice', 'WaitForYouSection.jsx')
 
-    expect(waitForYou).toContain('Starting microphone... allow access, then stay quiet for a moment.')
+    expect(waitForYou).toContain('Starting mic… allow access, then stay quiet briefly.')
     expect(waitForYou).toContain('Start microphone')
     expect(waitForYou).toContain('isRollingChordMic')
     expect(waitForYou).toContain('wait-for-you__target-details')

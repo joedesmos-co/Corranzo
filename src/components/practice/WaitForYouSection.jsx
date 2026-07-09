@@ -1,6 +1,7 @@
 import { WFY_STATUS } from '../../features/practice/waitForYouEngine.js'
 import { WFY_DISPLAY_STATUS } from '../../features/practice/waitForYouDisplayStatus.js'
 import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
+import { WFY_GUIDANCE } from '../../features/practice/waitForYouGuidanceConstants.js'
 import { getExpectedMidis } from '../../features/practice/waitForYouNoteMatch.js'
 import { WFY_INPUT_OUTCOME } from '../../features/practice/waitForYouInputFeedback.js'
 import { midiToNoteLabel } from '../../features/midi-input/midiNoteLabel.js'
@@ -138,11 +139,33 @@ export default function WaitForYouSection({
   const chordTargetLabel = conciseChordTargetLabel(currentCheckpoint, expectedMidis)
   const detailsLabel = checkpointDetailsLabel(currentCheckpoint, expectedMidis)
   const showChordDetails = expectedMidis.length > 1 && Boolean(detailsLabel)
+  const targetApproximate = Boolean(
+    noteTarget?.visible &&
+      (noteTarget.approximate || (noteTarget.confidence != null && noteTarget.confidence < 0.7)),
+  )
 
   const showGuidance =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
     status === WFY_STATUS.WAITING &&
-    guidance?.primary != null
+    guidance?.primary != null &&
+    !(
+      compact &&
+      guidance.state === WFY_GUIDANCE.WAITING &&
+      (guidance.primary === displayLabel ||
+        guidance.primary === chordTargetLabel ||
+        guidance.primary === currentCheckpoint?.displayLabel)
+    )
+
+  const showNoteTargetStatus =
+    checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
+    status === WFY_STATUS.WAITING &&
+    !(
+      compact &&
+      noteTarget?.visible &&
+      noteTarget.displayMode === 'highlight' &&
+      !targetApproximate &&
+      !noteTargetWrongPage
+    )
 
   const showMicOffNotice =
     checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
@@ -156,10 +179,6 @@ export default function WaitForYouSection({
     currentCheckpoint,
     checkpointMode,
     displayLabel,
-  )
-  const targetApproximate = Boolean(
-    noteTarget?.visible &&
-      (noteTarget.approximate || (noteTarget.confidence != null && noteTarget.confidence < 0.7)),
   )
   const statusModifier = statusClassName(displayStatus, status)
   // "Structurally done" states (finished / nothing to practice) hide the
@@ -236,7 +255,7 @@ export default function WaitForYouSection({
           role="status"
           aria-live="polite"
         >
-          {micStatusLabel ?? 'Listening on mic'}
+          {micStatusLabel ?? 'Listening'}
         </p>
       )}
 
@@ -248,10 +267,10 @@ export default function WaitForYouSection({
         <div className="wait-for-you__mic-off" role="status" aria-live="polite">
           <p>
             {micAccessBlocked
-              ? 'Microphone access is blocked. Allow it in your browser, or change input.'
+              ? 'Mic blocked — allow in browser or change input.'
               : micAccessError
-                ? 'Microphone did not start. Check your input device, or change input.'
-                : 'Starting microphone... allow access, then stay quiet for a moment.'}
+                ? 'Mic did not start — check device or change input.'
+                : 'Starting mic… allow access, then stay quiet briefly.'}
           </p>
           {onRequestMicAccess && !micAccessBlocked && (
             <button type="button" className="wait-for-you__btn" onClick={onRequestMicAccess}>
@@ -261,7 +280,7 @@ export default function WaitForYouSection({
         </div>
       )}
 
-      {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && status === WFY_STATUS.WAITING && (
+      {showNoteTargetStatus && (
         <p className="wait-for-you__note-target-status" role="status">
           {noteTargetWrongPage && noteTarget?.visible ? (
             <>Target on page {noteTarget.page} — switching…</>
@@ -269,13 +288,13 @@ export default function WaitForYouSection({
             <>
               <span className="wait-for-you__note-target-chip">Your note</span>
               {targetApproximate
-                ? ' · approximate position'
+                ? ' · approximate'
                 : noteTarget.displayMode === 'highlight'
-                  ? ' · highlighted on score'
-                  : ' · approximate position'}
+                  ? ' · on score'
+                  : ' · approximate'}
             </>
           ) : (
-            <>Set up the score cursor in Advanced to highlight your note.</>
+            <>Set up score cursor in Advanced to highlight notes.</>
           )}
         </p>
       )}
@@ -287,23 +306,30 @@ export default function WaitForYouSection({
           aria-live="polite"
         >
           <p className="wait-for-you__guidance-primary">{guidance.primary}</p>
-          {guidance.state === 'wrong' && guidance.playedLabel && (
-            <p className="wait-for-you__guidance-detail">
-              Expected: <strong>{guidance.expectedLabel}</strong>
-              {' · '}You played: <strong>{guidance.playedLabel}</strong>
-            </p>
+          {(guidance.state === WFY_GUIDANCE.WRONG || guidance.state === WFY_GUIDANCE.PARTIAL) && (
+            <details className="wait-for-you__guidance-details">
+              <summary>Details</summary>
+              {guidance.state === 'wrong' && guidance.playedLabel && (
+                <p className="wait-for-you__guidance-detail">
+                  Expected: <strong>{guidance.expectedLabel}</strong>
+                  {' · '}You played: <strong>{guidance.playedLabel}</strong>
+                </p>
+              )}
+              {guidance.state === 'partial' && guidance.heardLabels?.length > 0 && (
+                <p className="wait-for-you__guidance-detail">
+                  Heard: <strong>{guidance.heardLabels.join(' + ')}</strong>
+                </p>
+              )}
+              {guidance.state === 'partial' && guidance.missingLabels?.length > 0 && (
+                <p className="wait-for-you__guidance-detail">
+                  Still need: <strong>{guidance.missingLabels.join(', ')}</strong>
+                </p>
+              )}
+            </details>
           )}
-          {guidance.state === 'partial' && guidance.heardLabels?.length > 0 && (
-            <p className="wait-for-you__guidance-detail">
-              Heard: <strong>{guidance.heardLabels.join(' + ')}</strong>
-            </p>
+          {guidance.hint && guidance.state === WFY_GUIDANCE.WRONG && (
+            <p className="wait-for-you__guidance-hint">{guidance.hint}</p>
           )}
-          {guidance.state === 'partial' && guidance.missingLabels?.length > 0 && (
-            <p className="wait-for-you__guidance-detail">
-              Still need: <strong>{guidance.missingLabels.join(', ')}</strong>
-            </p>
-          )}
-          {guidance.hint && <p className="wait-for-you__guidance-hint">{guidance.hint}</p>}
         </div>
       )}
 
@@ -326,11 +352,11 @@ export default function WaitForYouSection({
 
       {currentCheckpoint && (
         <div className="wait-for-you__now-playing">
-          <p className="wait-for-you__now-label">At</p>
+          {!compact && <p className="wait-for-you__now-label">At</p>}
           <p className="wait-for-you__now-place">
-            Measure {currentCheckpoint.measureNumber ?? '—'}
+            {compact ? 'M' : 'Measure '}{currentCheckpoint.measureNumber ?? '—'}
             {currentCheckpoint.beat != null && (
-              <span>, beat {currentCheckpoint.beat}</span>
+              <span>{compact ? ` · b${currentCheckpoint.beat}` : `, beat ${currentCheckpoint.beat}`}</span>
             )}
           </p>
           {checkpointMode === WFY_CHECKPOINT_MODE.NOTE && (

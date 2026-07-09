@@ -235,7 +235,7 @@ export function buildGuidance({
       missingLabels(expectedMidis, inputFeedback?.matchedIndices)
     let primary = missing.length
       ? guitarChordShapeMode || rollingChordMicMode
-        ? `Heard part of the chord — need ${Math.max(1, (checkpoint?.minimumRequiredTones ?? checkpoint?.minimumChordTonesRequired ?? 2) - (inputFeedback?.matchedCount ?? heard.length))} more tone(s)`
+        ? `Need ${Math.max(1, (checkpoint?.minimumRequiredTones ?? checkpoint?.minimumChordTonesRequired ?? 2) - (inputFeedback?.matchedCount ?? heard.length))} more tone(s)`
         : `Still need ${missing.join(', ')}`
       : chordAsSequence
         ? 'Sequence almost complete'
@@ -294,8 +294,8 @@ export function buildGuidance({
             ? checkpoint?.displayLabel ?? 'Play this chord'
             : chordAsSequence
               ? checkpoint?.chordSymbol
-                ? `Play ${checkpoint.chordSymbol} chord tones one at a time`
-                : `Chord practice sequence: ${conciseChordName(expectedMidis, checkpoint)}`
+                ? `Play ${checkpoint.chordSymbol} tones one at a time`
+                : `Chord sequence: ${conciseChordName(expectedMidis, checkpoint)}`
               : checkpoint?.displayLabel
                 ? checkpoint.displayLabel
                 : checkpoint?.chordSymbol

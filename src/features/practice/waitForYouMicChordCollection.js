@@ -84,24 +84,24 @@ export function buildMicChordProgressMessage({
   remainingLabels = [],
   softWrongLabel = null,
   windowReset = false,
-  includeHint = true,
+  includeHint = false,
 } = {}) {
   const hint =
-    'Mic chord mode: play notes one at a time, or use MIDI for chords together.'
+    'Play notes one at a time, or use MIDI for chords together.'
   const parts = []
 
   if (windowReset) {
-    parts.push('Time ran out — play each note again.')
+    parts.push('Time ran out — try again.')
   } else if (softWrongLabel) {
     parts.push(`Wrong note (${softWrongLabel}) — keep going.`)
   }
 
   if (heardLabels.length && remainingLabels.length) {
-    parts.push(`Heard: ${heardLabels.join(' + ')}. Still need: ${remainingLabels.join(', ')}.`)
+    parts.push(`Heard: ${heardLabels.join(' + ')} · need ${remainingLabels.join(', ')}`)
   } else if (heardLabels.length) {
-    parts.push(`Heard: ${heardLabels.join(' + ')}.`)
+    parts.push(`Heard: ${heardLabels.join(' + ')}`)
   } else if (remainingLabels.length) {
-    parts.push(`Still need: ${remainingLabels.join(', ')}.`)
+    parts.push(`Need: ${remainingLabels.join(', ')}`)
   }
 
   let message = parts.join(' ')

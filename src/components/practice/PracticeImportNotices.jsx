@@ -42,8 +42,9 @@ export default function PracticeImportNotices({ warnings = [], guidance = [], ma
       {disclosure.length > 0 && (
         <details className="practice-import-notices__disclosure">
           <summary className="practice-import-notices__disclosure-summary">
-            <span className="practice-import-notices__disclosure-label">Import notes</span>
-            <span className="practice-import-notices__disclosure-count">{disclosure.length}</span>
+            <span className="practice-import-notices__disclosure-label">
+              Import notes{disclosure.length > 0 ? ` (${disclosure.length})` : ''}
+            </span>
           </summary>
           <ul className="practice-import-notices__warnings practice-import-notices__warnings--disclosure">
             {disclosure.map((warning) => (
