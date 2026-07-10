@@ -62,6 +62,24 @@ async function dismissOverlays(page) {
   }
 }
 
+async function dismissWfyInputModalIfOpen(page) {
+  const dialog = page.getByRole('dialog', { name: 'How should Corranzo hear you?' })
+  if (!(await dialog.isVisible().catch(() => false))) {
+    return
+  }
+  const useMic = page.getByRole('button', { name: 'Use Microphone' })
+  if (await useMic.isVisible().catch(() => false)) {
+    await useMic.click()
+    await sleep(400)
+    return
+  }
+  const useMidi = page.getByRole('button', { name: /Use MIDI/i })
+  if (await useMidi.isVisible().catch(() => false)) {
+    await useMidi.click()
+    await sleep(400)
+  }
+}
+
 async function prepareFreshSession(page) {
   await page.goto(baseUrl, { waitUntil: 'domcontentloaded' })
   await page.evaluate(async () => {
@@ -87,10 +105,12 @@ async function prepareFreshSession(page) {
 }
 
 async function selectInstrument(page, label) {
+  await dismissWfyInputModalIfOpen(page)
   await page.getByRole('radiogroup', { name: 'Practice instrument' })
     .getByRole('radio', { name: label, exact: true })
     .click()
   await sleep(400)
+  await dismissWfyInputModalIfOpen(page)
 }
 
 async function loadDemo(page) {
@@ -119,6 +139,7 @@ async function loadDemo(page) {
   await demo.waitFor({ state: 'visible', timeout: 20_000 })
   await demo.click()
   await page.waitForTimeout(7000)
+  await dismissWfyInputModalIfOpen(page)
 }
 
 async function pdfCanvasVisible(page) {
@@ -140,8 +161,10 @@ async function practiceLibraryCardsVisible(page) {
 }
 
 async function practiceScoreCanvasVisible(page) {
+  await dismissWfyInputModalIfOpen(page)
   await page.getByRole('button', { name: 'Practice', exact: true }).click().catch(() => {})
   await page.waitForTimeout(1200)
+  await dismissWfyInputModalIfOpen(page)
   return pdfCanvasVisible(page)
 }
 
@@ -225,8 +248,10 @@ async function main() {
     // Piano demo load + play
     await selectInstrument(page, 'Piano')
     await loadDemo(page)
+    await dismissWfyInputModalIfOpen(page)
     await page.getByRole('button', { name: 'Practice', exact: true }).click()
     await page.waitForTimeout(1500)
+    await dismissWfyInputModalIfOpen(page)
 
     if (await page.getByRole('region', { name: 'Playback' }).isVisible()) {
       await pass('Piano practice opens with playback panel')
@@ -256,8 +281,10 @@ async function main() {
 
     // Guitar demo load + play
     await loadDemo(page)
+    await dismissWfyInputModalIfOpen(page)
     await page.getByRole('button', { name: 'Practice', exact: true }).click()
     await page.waitForTimeout(1500)
+    await dismissWfyInputModalIfOpen(page)
     const guitarPlay = page.getByRole('button', { name: /^Play/i }).first()
     if (await guitarPlay.isEnabled()) {
       await guitarPlay.click()
@@ -269,7 +296,9 @@ async function main() {
 
     // Repeated switches + PDF preview after switch back
     for (let i = 0; i < 3; i += 1) {
+      await dismissWfyInputModalIfOpen(page)
       await selectInstrument(page, 'Piano')
+      await dismissWfyInputModalIfOpen(page)
       await page.getByRole('button', { name: 'Library', exact: true }).click()
       await page.waitForTimeout(800)
       const pianoLibrary = await practiceLibraryCardsVisible(page).catch(() => false)
@@ -283,6 +312,7 @@ async function main() {
 
       await selectInstrument(page, 'Guitar')
       await page.waitForTimeout(600)
+      await dismissWfyInputModalIfOpen(page)
       await page.getByRole('button', { name: 'Library', exact: true }).click()
       await page.waitForTimeout(800)
       const guitarLibrary = await practiceLibraryCardsVisible(page).catch(() => false)
@@ -297,6 +327,7 @@ async function main() {
     await pass('Repeated Piano ↔ Guitar switches keep Library cards and Practice scores')
 
     // Score / Visual views
+    await dismissWfyInputModalIfOpen(page)
     await page.getByRole('button', { name: 'Practice', exact: true }).click()
     await page.waitForTimeout(1000)
     await page.getByRole('button', { name: 'Visual', exact: true }).click()
@@ -350,6 +381,7 @@ async function main() {
     }
 
     // Progress filters
+    await dismissWfyInputModalIfOpen(page)
     await page.getByRole('button', { name: 'Progress', exact: true }).click()
     await page.waitForTimeout(800)
     const scopeGroup = page.getByRole('radiogroup', { name: 'Stats instrument filter' })
@@ -368,6 +400,7 @@ async function main() {
     await sleep(2000) // session save debounce
     await page.reload({ waitUntil: 'networkidle' })
     await dismissOverlays(page)
+    await dismissWfyInputModalIfOpen(page)
     await page.waitForTimeout(3000)
 
     const restoredInstrument = await page
@@ -403,7 +436,9 @@ async function main() {
       await page.setViewportSize({ width: viewport.width, height: viewport.height })
       await page.goto(baseUrl, { waitUntil: 'networkidle' })
       await dismissOverlays(page)
+      await dismissWfyInputModalIfOpen(page)
       await runChecks(page, viewport, results)
+      await dismissWfyInputModalIfOpen(page)
       await page.getByRole('button', { name: 'Practice', exact: true }).click().catch(() => {})
       await page.waitForTimeout(800)
       await runChecks(page, { name: `${viewport.name}-practice` }, results)

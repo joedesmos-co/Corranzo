@@ -179,7 +179,7 @@ describe('mic diagnostics are inspectable in any build', () => {
     expect(strip).toContain('Mic error')
     expect(panel).toContain('Starting microphone...')
     expect(panel).not.toContain('Mic off')
-    expect(wfy).toContain('Starting mic… allow access, then stay quiet briefly.')
+    expect(wfy).toContain('Starting mic… stay quiet briefly.')
     expect(wfy).toContain('Mic blocked — allow in browser or change input.')
     expect(wfy).toContain('Mic did not start — check device or change input.')
     expect(wfy).toContain('!micAccessBlocked')

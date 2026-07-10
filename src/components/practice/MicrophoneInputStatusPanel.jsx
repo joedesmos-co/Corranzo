@@ -14,11 +14,11 @@ import MicTestPanel from './MicTestPanel.jsx'
 
 const MIC_CHORD_MODE_HINTS = {
   [MIC_CHORD_MODES.ANY_TONE]:
-    'One note at a time, or use MIDI for chords together.',
+    'One note at a time. MIDI for chords together.',
   [MIC_CHORD_MODES.BASS]:
-    'Experimental: listens for the lowest chord tone only.',
+    'Experimental: listens for the lowest chord tone.',
   [MIC_CHORD_MODES.TOP]:
-    'Experimental: listens for the highest chord tone only.',
+    'Experimental: listens for the highest chord tone.',
 }
 
 function calibrationLabel({ liveFrame, calibration }) {
@@ -190,7 +190,7 @@ export default function MicrophoneInputStatusPanel({
         )}
 
         <p className="mic-input-status__mvp-note">
-          Best for single notes. Use MIDI for chords played together.
+          Best for single notes. MIDI handles chords together.
         </p>
 
         {supported && (

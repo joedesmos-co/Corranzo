@@ -67,7 +67,9 @@ export function buildInputFeedback({
 
     return {
       outcome,
-      message: `Partial chord — ${matchedCount} of ${total} matched. Still need: ${remaining.join(', ')}`,
+      message: remaining.length
+        ? `${matchedCount}/${total} — need ${remaining.join(', ')}`
+        : `${matchedCount}/${total} matched`,
       tone: 'partial',
       matchedCount,
       total,
@@ -79,8 +81,8 @@ export function buildInputFeedback({
     return {
       outcome,
       message: chordAsSequence
-        ? `Chord practice sequence — play ${formatExpectedChord(expectedMidis)} one at a time`
-        : `Waiting for chord — play ${formatExpectedChord(expectedMidis)} within the time window`,
+        ? `Play ${formatExpectedChord(expectedMidis)} one at a time`
+        : `Play ${formatExpectedChord(expectedMidis)} together`,
       tone: 'waiting',
       matchedCount,
       total,

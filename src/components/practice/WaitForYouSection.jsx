@@ -180,6 +180,14 @@ export default function WaitForYouSection({
     checkpointMode,
     displayLabel,
   )
+  const showStatusLine =
+    currentStatusMessage &&
+    !(
+      compact &&
+      status === WFY_STATUS.WAITING &&
+      currentCheckpoint &&
+      checkpointMode === WFY_CHECKPOINT_MODE.NOTE
+    )
   const statusModifier = statusClassName(displayStatus, status)
   // "Structurally done" states (finished / nothing to practice) hide the
   // action buttons entirely instead of stacking disabled ones — only Restart
@@ -222,7 +230,7 @@ export default function WaitForYouSection({
         />
       )}
 
-      {currentStatusMessage && (
+      {showStatusLine && (
         <p
           className={`wait-for-you__status wait-for-you__status--${statusModifier}`}
           role="status"
@@ -270,7 +278,7 @@ export default function WaitForYouSection({
               ? 'Mic blocked — allow in browser or change input.'
               : micAccessError
                 ? 'Mic did not start — check device or change input.'
-                : 'Starting mic… allow access, then stay quiet briefly.'}
+                : 'Starting mic… stay quiet briefly.'}
           </p>
           {onRequestMicAccess && !micAccessBlocked && (
             <button type="button" className="wait-for-you__btn" onClick={onRequestMicAccess}>
@@ -309,18 +317,18 @@ export default function WaitForYouSection({
           {(guidance.state === WFY_GUIDANCE.WRONG || guidance.state === WFY_GUIDANCE.PARTIAL) && (
             <details className="wait-for-you__guidance-details">
               <summary>Details</summary>
-              {guidance.state === 'wrong' && guidance.playedLabel && (
+              {guidance.state === WFY_GUIDANCE.WRONG && guidance.playedLabel && (
                 <p className="wait-for-you__guidance-detail">
                   Expected: <strong>{guidance.expectedLabel}</strong>
                   {' · '}You played: <strong>{guidance.playedLabel}</strong>
                 </p>
               )}
-              {guidance.state === 'partial' && guidance.heardLabels?.length > 0 && (
+              {guidance.state === WFY_GUIDANCE.PARTIAL && guidance.heardLabels?.length > 0 && (
                 <p className="wait-for-you__guidance-detail">
                   Heard: <strong>{guidance.heardLabels.join(' + ')}</strong>
                 </p>
               )}
-              {guidance.state === 'partial' && guidance.missingLabels?.length > 0 && (
+              {guidance.state === WFY_GUIDANCE.PARTIAL && guidance.missingLabels?.length > 0 && (
                 <p className="wait-for-you__guidance-detail">
                   Still need: <strong>{guidance.missingLabels.join(', ')}</strong>
                 </p>

@@ -245,7 +245,7 @@ export function buildGuidance({
             ? 'Almost — keep playing the chord'
             : 'Almost — hold the chord'
     if (heard.length && missing.length && !guitarChordShapeMode && !rollingChordMicMode) {
-      primary = `Heard ${heard.join(' + ')} — still need ${missing.join(', ')}`
+      primary = `Need ${missing.join(', ')}`
     } else if (heard.length && !missing.length) {
       primary = `Heard ${heard.join(' + ')}`
     }
@@ -277,7 +277,7 @@ export function buildGuidance({
           chordAsSequence,
         }) ??
         positionHintForCheckpoint(checkpoint, { strings, tabPositions }) ??
-        (timedOut ? 'Take your time — here is the note.' : null),
+        (timedOut ? 'Here is the note.' : null),
       showTarget: true,
     }
   }

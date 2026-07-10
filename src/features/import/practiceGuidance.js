@@ -25,32 +25,32 @@ export function buildPracticeGuidance({
 
   if (!hasMusicXml) {
     steps.push(
-      'In Library, add a timing file — export MusicXML or MXL from MuseScore for best accuracy today.',
+      'Add a timing file in Library — MusicXML or MXL from MuseScore works best.',
     )
-    steps.push('That unlocks measure numbers, loops, Wait For You, and the score cursor.')
+    steps.push('Unlocks measure numbers, loops, Wait For You, and the score cursor.')
     return steps.slice(0, 3)
   }
 
   if (timingReady) {
     if (isDemoPiece) {
-      steps.push('Press Play (Space) to hear the piece and watch the cursor on the score.')
-      steps.push('Switch to Wait For You, then pick MIDI or microphone to play along.')
-      steps.push('Open Visual view when you want larger note targets for focused practice.')
+      steps.push('Press Play (Space) to hear the piece and follow the score cursor.')
+      steps.push('Switch to Wait For You and pick MIDI or microphone to play along.')
+      steps.push('Open Visual view for larger note targets.')
     } else {
       steps.push(
-        'The score cursor may need a quick setup pass — mark a few measures if it looks off.',
+        'Score cursor may need a quick setup — mark a few measures if it looks off.',
       )
-      steps.push('Press Play (Space) to hear the score and move through measures with the cursor.')
-      steps.push('Wait For You: Manual continue always works; MIDI and microphone are optional.')
+      steps.push('Press Play (Space) to hear the score and move through measures.')
+      steps.push('Wait For You: Continue always works; MIDI and mic are optional.')
     }
   }
 
   if (midiError) {
-    steps.push('Your sound file did not load — try uploading it again from Library.')
+    steps.push('Sound file did not load — try uploading again from Library.')
   } else if (!hasMidi && timingReady) {
-    steps.push('Optional: add a MIDI sound file in Library for alternate backing audio.')
+    steps.push('Optional: add a MIDI sound file in Library for backing audio.')
   } else if (hasMidi && !midiPlayable) {
-    steps.push('Your sound file has no notes — you can still practice with Wait For You.')
+    steps.push('Sound file has no notes — Wait For You still works.')
   }
 
   return steps.slice(0, 3)

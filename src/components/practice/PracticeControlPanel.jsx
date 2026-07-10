@@ -102,7 +102,7 @@ export default memo(function PracticeControlPanel({
           waitForYouDisabled={omrWaitForYouDisabled}
           waitForYouDisabledReason={
             omrWaitForYouDisabled
-              ? 'Set up the score cursor in Advanced before using Wait For You with PDF playback.'
+              ? 'Set up score cursor in Advanced first.'
               : ''
           }
           compact
