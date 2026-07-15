@@ -119,11 +119,13 @@ describe('omrBenchmarkDashboard', () => {
     expect(record.metrics.chordMismatch).toBe(1154)
   })
 
-  it('marks clean fixture pass at manifest thresholds', () => {
+  it('marks an enforced CC0 fixture pass when it clears its regression floors', () => {
     const manifest = JSON.parse(
       readFileSync(join(process.cwd(), 'benchmarks/omr-benchmark.manifest.json'), 'utf8'),
     )
-    const cleanFixture = manifest.fixtures.find((fixture) => fixture.id === 'clean')
+    const cleanFixture = manifest.fixtures.find(
+      (fixture) => fixture.id === 'piano-beginner-single-vector',
+    )
     const record = buildFixtureDashboardRecord({
       fixture: cleanFixture,
       report: sampleCleanReport,

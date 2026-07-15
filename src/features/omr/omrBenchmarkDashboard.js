@@ -33,6 +33,10 @@ import {
   formatRhythmErrorAttributionMarkdown,
 } from './omrRhythmErrorAttribution.js'
 import {
+  buildOmrPipelineStageDiagnostics,
+  formatOmrPipelineStageDiagnosticsMarkdown,
+} from './omrPipelineStageDiagnostics.js'
+import {
   clusterFixtureFailures,
   formatErrorGroupingMarkdown,
   groupAccuracyReportErrors,
@@ -41,7 +45,7 @@ import {
   topHistogramEntries,
 } from './omrDiagnosticGrouping.js'
 
-export const OMR_BENCHMARK_MANIFEST_VERSION = 1
+export const OMR_BENCHMARK_MANIFEST_VERSION = 2
 
 export const OMR_BENCHMARK_STATUS = {
   PASS: 'pass',
@@ -169,6 +173,7 @@ export function validateOmrBenchmarkManifest(manifest) {
     return { ok: false, errors: ['manifest.fixtures must be an array'] }
   }
   manifest.fixtures.forEach((fixture, index) => {
+    const optional = Boolean(fixture?.optional) || Boolean(fixture?.diagnosticOnly)
     if (!fixture?.id) {
       errors.push(`fixtures[${index}]: missing id`)
     }
@@ -180,6 +185,29 @@ export function validateOmrBenchmarkManifest(manifest) {
     }
     if (fixture?.checksums && typeof fixture.checksums !== 'object') {
       errors.push(`fixtures[${index}] (${fixture?.id ?? '?'}): checksums must be an object`)
+    }
+    if (!optional) {
+      if (!fixture?.checksums?.pdf || !fixture?.checksums?.truth) {
+        errors.push(`fixtures[${index}] (${fixture?.id ?? '?'}): enforced fixtures require PDF and truth checksums`)
+      }
+      if (!fixture?.license) {
+        errors.push(`fixtures[${index}] (${fixture?.id ?? '?'}): enforced fixtures require a license`)
+      }
+      if (!fixture?.provenanceRecord) {
+        errors.push(`fixtures[${index}] (${fixture?.id ?? '?'}): enforced fixtures require a provenance record`)
+      }
+      if (!Array.isArray(fixture?.categories) || fixture.categories.length === 0) {
+        errors.push(`fixtures[${index}] (${fixture?.id ?? '?'}): enforced fixtures require category coverage`)
+      }
+      if ((fixture?.expectedOutcome ?? 'transcribe') === 'transcribe' && !fixture?.thresholds) {
+        errors.push(`fixtures[${index}] (${fixture?.id ?? '?'}): transcribed enforced fixtures require frozen regression floors`)
+      }
+    }
+    if (
+      fixture?.expectedOutcome != null &&
+      !['transcribe', 'reject-honestly'].includes(fixture.expectedOutcome)
+    ) {
+      errors.push(`fixtures[${index}] (${fixture?.id ?? '?'}): invalid expectedOutcome`)
     }
   })
   if (manifest.fixtureSearchPaths && !Array.isArray(manifest.fixtureSearchPaths)) {
@@ -292,12 +320,19 @@ export function buildFixtureDashboardRecord({
 } = {}) {
   const diagnosticOnly = Boolean(fixture?.diagnosticOnly)
   const optional = Boolean(fixture?.optional) || diagnosticOnly
+  const expectedOutcome = fixture?.expectedOutcome ?? 'transcribe'
+  const expectedRejectionCodes = fixture?.expectedRejectionCodes ?? ['rejected']
   const base = {
     id: fixture?.id ?? null,
     label: fixture?.label ?? fixture?.id ?? null,
     tier: fixture?.tier ?? null,
     optional,
     diagnosticOnly,
+    license: fixture?.license ?? null,
+    provenanceRecord: fixture?.provenanceRecord ?? null,
+    categories: fixture?.categories ?? [],
+    expectedOutcome,
+    expectedRejectionCodes,
     pdfPath: fixture?.pdfPath ?? null,
     truthPath: fixture?.truthPath ?? null,
     status: OMR_BENCHMARK_STATUS.ERROR,
@@ -306,6 +341,22 @@ export function buildFixtureDashboardRecord({
     metrics: null,
     run: run ?? null,
     error: null,
+  }
+
+  if (error && expectedOutcome === 'reject-honestly') {
+    const rejectionCode = error?.code ?? (error?.difficulty?.tooDifficult ? 'rejected' : 'error')
+    if (expectedRejectionCodes.includes(rejectionCode)) {
+      return {
+        ...base,
+        status: OMR_BENCHMARK_STATUS.PASS,
+        expectedRejection: true,
+        failureReasons: error?.difficulty?.reasons ?? error?.reasons ?? [rejectionCode],
+        error: {
+          message: error?.message ?? 'OMR rejected unsupported input',
+          code: rejectionCode,
+        },
+      }
+    }
   }
 
   if (error?.code === 'rejected' || error?.difficulty?.tooDifficult) {
@@ -353,6 +404,15 @@ export function buildFixtureDashboardRecord({
     }
   }
 
+  if (expectedOutcome === 'reject-honestly') {
+    return {
+      ...base,
+      status: OMR_BENCHMARK_STATUS.FAIL,
+      metrics: extractFixtureMetrics(report),
+      failureReasons: ['expected an honest rejection, but runtime emitted a transcription'],
+    }
+  }
+
   const metrics = extractFixtureMetrics(report)
   const thresholdFailures = diagnosticOnly
     ? []
@@ -369,6 +429,7 @@ export function buildFixtureDashboardRecord({
     fixtureId: fixture?.id,
     scoreGraphMeasures,
   })
+  const pipelineStageDiagnostics = buildOmrPipelineStageDiagnostics(report, { fixture })
   const omrRejected = Boolean(report.generatedOmrDiagnostics?.difficulty?.tooDifficult)
   const status = diagnosticOnly
     ? OMR_BENCHMARK_STATUS.SKIPPED
@@ -385,6 +446,7 @@ export function buildFixtureDashboardRecord({
     hotspotDiagnostics,
     writtenSoundingDuration,
     tieSustainConstraints,
+    pipelineStageDiagnostics,
     rhythmShadow: null,
     voiceSerializationShadow: null,
     thresholdFailures,
@@ -557,6 +619,15 @@ export function formatOmrBenchmarkMarkdown(summary) {
     if (record.truthPath) {
       lines.push(`- Truth: \`${record.truthPath}\``)
     }
+    if (record.license) {
+      lines.push(`- License: ${record.license} (${record.provenanceRecord})`)
+    }
+    if (record.categories?.length) {
+      lines.push(`- Categories: ${record.categories.join(', ')}`)
+    }
+    if (record.expectedRejection) {
+      lines.push(`- Expected honest rejection: ${record.error?.code ?? 'rejected'}`)
+    }
     if (record.metrics) {
       lines.push(fixtureMetricLine(record))
       const top = record.metrics.topErrorCategory
@@ -616,6 +687,15 @@ export function formatOmrBenchmarkMarkdown(summary) {
       if (record.hotspotDiagnostics) {
         lines.push(
           formatHotspotDiagnosticsMarkdown(record.hotspotDiagnostics, { indent: '  ' }).trimEnd(),
+        )
+      }
+      if (record.pipelineStageDiagnostics) {
+        lines.push(
+          formatOmrPipelineStageDiagnosticsMarkdown(record.pipelineStageDiagnostics)
+            .trimEnd()
+            .split('\n')
+            .map((line) => `  ${line}`)
+            .join('\n'),
         )
       }
       if (record.rhythmShadow) {

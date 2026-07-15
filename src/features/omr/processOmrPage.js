@@ -16,6 +16,7 @@ import {
   detectStaccatoOnNote,
 } from './detectOmrExpression.js'
 import {
+  measureConfidenceBreakdown,
   measureConfidenceFromRhythm,
   systemConfidenceFromMeasures,
 } from './buildOmrDiagnostics.js'
@@ -141,10 +142,12 @@ export function processOmrPageAnalysis(imageData, options = {}) {
 
   const scanQuality = estimatePageScanQuality(imageData)
   const contentBounds = detectContentBounds(imageData)
-  const { systems, inkThreshold } = detectStaffLineSystems(imageData, contentBounds, {
+  const detectedSystems = detectStaffLineSystems(imageData, contentBounds, {
     stavesPerSystem,
     countBarlines: true,
   })
+  const inkThreshold = detectedSystems.inkThreshold
+  const systems = detectedSystems.systems
 
   const pageEntry = {
     page,
@@ -164,12 +167,20 @@ export function processOmrPageAnalysis(imageData, options = {}) {
   const systemMeasureBoxes = []
   const measureGrid = []
   const measureGridDiagnostics = []
+  const positionedGlyphs = tabCapable ? textGlyphsToImage(pageText, imageData) : null
+  const vectorGlyphs = hasVectorOmrNoteheads(pageText)
+    ? positionedGlyphs ?? textGlyphsToImage(pageText, imageData)
+    : []
 
   // Fretted-instrument pages: classify bands up front so a notation-over-TAB
   // pair shares ONE set of measure numbers (the TAB band re-reads its
   // partner's measures instead of counting new ones). Null for piano.
   const systemRoles = tabCapable
-    ? resolveGuitarSystemRoles(systems, { stringCount: tabStringCount })
+    ? resolveGuitarSystemRoles(systems, {
+        stringCount: tabStringCount,
+        glyphs: positionedGlyphs,
+        imageData,
+      })
     : null
 
   for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
@@ -194,6 +205,19 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       imageData,
       measureNumberStart: measureCounter,
       darkThreshold: Math.min(inkThreshold, Math.max(145, inkThreshold - 22)),
+      vectorNoteheadXNorms: (tabCapable ? [] : vectorGlyphs)
+        .filter((glyph) => {
+          const yNorm = glyph.y / imageData.height
+          return (
+            /^[\uE0A2-\uE0A4]$/.test(glyph.text ?? '') &&
+            yNorm >= system.y0 - 0.035 &&
+            yNorm <= system.y1 + 0.035
+          )
+        })
+        .map((glyph) => ({
+          x: glyph.x / imageData.width,
+          width: glyph.width / imageData.width,
+        })),
     })
 
     measureCounter += measureBoxes.length
@@ -222,7 +246,6 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     !hasVectorOmrNoteheads(pageText) &&
     systemsContainTablature(systems, { stringCount: tabStringCount })
   ) {
-    const positionedGlyphs = textGlyphsToImage(pageText, imageData)
     const beats = inheritedTimeSignature?.beats ?? 4
     const tabAnnotations = detectTabTextAnnotations(pageText)
     const tabDiagnostics = {
@@ -320,6 +343,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
             rhythmApproximate: true,
             timingModel: tabTiming.timingModel,
             confidence: tabTiming.confidence ?? 0.5,
+            pitchConfidence: noteCount > 0 ? 0.65 : 0.5,
+            rhythmConfidence: tabTiming.confidence ?? 0.5,
             vectorNoteCount: noteCount,
           }
           emittedMeasureBoxes.push(emittedMeasureBox)
@@ -430,7 +455,6 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         pairingConfidence: 1,
         warnings: [],
       }
-      const positionedGlyphs = textGlyphsToImage(pageText, imageData)
       for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
         const role = systemRoles[systemIndex]
         if (!role?.tabStave) {
@@ -613,6 +637,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         systemTextDynamic ?? detectDynamicNearMeasure(imageData, measureBox, inkThreshold)
       const pedal = detectPedalFromText(pageText)
 
+      const confidenceBreakdown = measureConfidenceBreakdown(rhythm, noteheads)
       const confidence = measureConfidenceFromRhythm(rhythm, noteheads)
       const measureRecord = {
         measureNumber: measureBox.measureNumber,
@@ -621,6 +646,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         events: rhythm.events,
         uncertain: rhythm.uncertain,
         confidence,
+        pitchConfidence: confidenceBreakdown.pitchConfidence,
+        rhythmConfidence: confidenceBreakdown.rhythmConfidence,
         repeatMarking,
         endingMarking,
         dynamic,

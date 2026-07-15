@@ -1,6 +1,7 @@
 {
-  "version": 1,
-  "description": "Developer OMR accuracy fixtures. Score PDF + MXL files are NOT vendored into the repo (they are third-party/copyrighted). Each fixture lists stable search paths and a sha256 checksum so any machine can verify it has the exact expected file. See benchmarks/omr-fixtures/README.md for setup. Thresholds are regression floors, not product targets.",
+  "version": 2,
+  "description": "Corranzo OMR regression corpus. Ten original CC0 PDF + MusicXML fixtures are vendored and enforced. Historical third-party scores are optional diagnostics only. Thresholds are frozen regression floors, never product-accuracy promises.",
+  "provenance": "benchmarks/omr-fixtures/provenance.json",
   "fixtureSearchPaths": [
     "benchmarks/omr-fixtures",
     "~/Downloads",
@@ -8,9 +9,328 @@
   ],
   "fixtures": [
     {
+      "id": "piano-beginner-single-vector",
+      "label": "CC0 Beginner Line Study",
+      "tier": "piano-clean",
+      "instrumentId": "piano",
+      "stavesPerSystem": 1,
+      "pdf": "piano-beginner-single-vector/piano-beginner-single-vector.pdf",
+      "truth": "piano-beginner-single-vector/piano-beginner-single-vector.musicxml",
+      "checksums": {
+        "pdf": "sha256:c0648e438e9eac0d1f476b076567461a93b01bb5193551f85b28807f66dfe950",
+        "truth": "sha256:5b1627f9133ef1f876359b25cdc76de1c81b4106086a74b78a8771841f261498"
+      },
+      "license": "CC0-1.0",
+      "provenanceRecord": "piano-beginner-single-vector",
+      "categories": [
+        "clean-beginner-single-staff",
+        "rests-dotted-rhythms",
+        "eighth-notes",
+        "modern-vector-pdf"
+      ],
+      "maxPages": 1,
+      "thresholds": {
+        "pitchAccuracy": 0.25,
+        "durationAccuracy": 0.875,
+        "onsetAccuracy": 0.8438,
+        "chordGroupingAccuracy": 0.9394,
+        "noteDetectionF1": 0.9688,
+        "maxMeasureCountDiff": 0,
+        "maxNoteCountDiff": 0
+      }
+    },
+    {
+      "id": "piano-grand-voices-vector",
+      "label": "CC0 Grand Staff Voice Study",
+      "tier": "piano-grand",
+      "instrumentId": "piano",
+      "stavesPerSystem": 2,
+      "pdf": "piano-grand-voices-vector/piano-grand-voices-vector.pdf",
+      "truth": "piano-grand-voices-vector/piano-grand-voices-vector.musicxml",
+      "checksums": {
+        "pdf": "sha256:2e325f53f24a070fc9f2b9f54193a65ff0763d1a2eaeecd9062169c9409b83b2",
+        "truth": "sha256:bed10cc9a31873d47fdbad060b453795dd2a7d967224f0e7fd289694f747e561"
+      },
+      "license": "CC0-1.0",
+      "provenanceRecord": "piano-grand-voices-vector",
+      "categories": [
+        "grand-staff",
+        "chords-multiple-voices",
+        "ties-slurs-articulations",
+        "repeats-voltas",
+        "modern-vector-pdf"
+      ],
+      "maxPages": 1,
+      "thresholds": {
+        "pitchAccuracy": 0.625,
+        "durationAccuracy": 0.8182,
+        "onsetAccuracy": 0.9773,
+        "chordGroupingAccuracy": 0.9775,
+        "noteDetectionF1": 0.9886,
+        "maxMeasureCountDiff": 0,
+        "maxNoteCountDiff": 0
+      }
+    },
+    {
+      "id": "piano-rhythm-tuplets-vector",
+      "label": "CC0 Rhythm and Tuplet Study",
+      "tier": "piano-rhythm",
+      "instrumentId": "piano",
+      "stavesPerSystem": 1,
+      "pdf": "piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf",
+      "truth": "piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.musicxml",
+      "checksums": {
+        "pdf": "sha256:baa943ebc62bbcb81f616fa0b48b46bf80b61691735418f72fbcc5afea635934",
+        "truth": "sha256:cd1812a1e8b757f6de61f3aaa9946ef83e96f6b95d37ccd96cd053fb4a6fdc7b"
+      },
+      "license": "CC0-1.0",
+      "provenanceRecord": "piano-rhythm-tuplets-vector",
+      "categories": [
+        "eighth-sixteenth-rhythms",
+        "tuplets",
+        "rests-dotted-rhythms",
+        "ties",
+        "modern-vector-pdf"
+      ],
+      "maxPages": 1,
+      "thresholds": {
+        "pitchAccuracy": 0.4127,
+        "durationAccuracy": 0.7778,
+        "onsetAccuracy": 0.5556,
+        "chordGroupingAccuracy": 0.7746,
+        "noteDetectionF1": 0.8889,
+        "maxMeasureCountDiff": 0,
+        "maxNoteCountDiff": 0
+      }
+    },
+    {
+      "id": "piano-articulation-scan",
+      "label": "CC0 Articulation Scan Study",
+      "tier": "piano-scan",
+      "instrumentId": "piano",
+      "stavesPerSystem": 2,
+      "pdf": "piano-articulation-scan/piano-articulation-scan.pdf",
+      "truth": "piano-articulation-scan/piano-articulation-scan.musicxml",
+      "checksums": {
+        "pdf": "sha256:dcdd63be975570054cf5dd5a44f5913982b8370fc16180839cb73f057ed7af06",
+        "truth": "sha256:30d3c4389a7f2259fb180c6c0c2cda805054691f10987cd9954870495f30ee15"
+      },
+      "license": "CC0-1.0",
+      "provenanceRecord": "piano-articulation-scan",
+      "categories": [
+        "scanned-score",
+        "grand-staff",
+        "ties-slurs-articulations",
+        "chords-multiple-voices"
+      ],
+      "maxPages": 1,
+      "thresholds": {
+        "pitchAccuracy": 0.3153,
+        "durationAccuracy": 0.4685,
+        "onsetAccuracy": 0.6126,
+        "chordGroupingAccuracy": 0.6048,
+        "noteDetectionF1": 0.804,
+        "maxMeasureCountDiff": 0,
+        "maxNoteCountDiff": 23
+      }
+    },
+    {
+      "id": "piano-dense-advanced-vector",
+      "label": "CC0 Dense Advanced Texture Study",
+      "tier": "piano-dense",
+      "instrumentId": "piano",
+      "stavesPerSystem": 2,
+      "pdf": "piano-dense-advanced-vector/piano-dense-advanced-vector.pdf",
+      "truth": "piano-dense-advanced-vector/piano-dense-advanced-vector.musicxml",
+      "checksums": {
+        "pdf": "sha256:9acc605832f1c83b0938a19a179997693420da28ec7db4934dc852da5521453f",
+        "truth": "sha256:0951bd7d7a833886fccfb22cfd0c3b5f2437fecfcb42b853df992383fbef87d8"
+      },
+      "license": "CC0-1.0",
+      "provenanceRecord": "piano-dense-advanced-vector",
+      "categories": [
+        "dense-advanced-score",
+        "grand-staff",
+        "chords-multiple-voices",
+        "eighth-sixteenth-rhythms",
+        "modern-vector-pdf"
+      ],
+      "maxPages": 1,
+      "thresholds": {
+        "pitchAccuracy": 0.1477,
+        "durationAccuracy": 0.3939,
+        "onsetAccuracy": 0.3333,
+        "chordGroupingAccuracy": 0.2892,
+        "noteDetectionF1": 0.4563,
+        "maxMeasureCountDiff": 11,
+        "maxNoteCountDiff": 2
+      }
+    },
+    {
+      "id": "guitar-tab-sparse-vector",
+      "label": "CC0 Sparse TAB Technique Study",
+      "tier": "guitar-tab",
+      "instrumentId": "guitar",
+      "stavesPerSystem": 1,
+      "pdf": "guitar-tab-sparse-vector/guitar-tab-sparse-vector.pdf",
+      "truth": "guitar-tab-sparse-vector/guitar-tab-sparse-vector.musicxml",
+      "checksums": {
+        "pdf": "sha256:094c87e9b5fe016bcb8450c48ce988491e040611d726d4c13a09a90bf8ed4805",
+        "truth": "sha256:9fbc62cfd0e6103203cedf4aa6aef4afbd9e8a240df251619441dbb3d533522d"
+      },
+      "license": "CC0-1.0",
+      "provenanceRecord": "guitar-tab-sparse-vector",
+      "categories": [
+        "tab-only",
+        "multi-digit-frets",
+        "techniques",
+        "sparse-layout",
+        "capo-repeat-coda",
+        "vector-pdf"
+      ],
+      "maxPages": 1,
+      "thresholds": {
+        "pitchAccuracy": 0.7,
+        "durationAccuracy": 0.725,
+        "onsetAccuracy": 0.575,
+        "chordGroupingAccuracy": 0.8,
+        "noteDetectionF1": 0.8889,
+        "maxMeasureCountDiff": 0,
+        "maxNoteCountDiff": 8
+      }
+    },
+    {
+      "id": "guitar-standard-chords-vector",
+      "label": "CC0 Standard Guitar Chord Study",
+      "tier": "guitar-standard",
+      "instrumentId": "guitar",
+      "stavesPerSystem": 1,
+      "pdf": "guitar-standard-chords-vector/guitar-standard-chords-vector.pdf",
+      "truth": "guitar-standard-chords-vector/guitar-standard-chords-vector.musicxml",
+      "checksums": {
+        "pdf": "sha256:71efef4011c751c8f1bd7e609be99c629bbd4a6da81300f3d06a4f4eae9469ab",
+        "truth": "sha256:0102d1d2d5720d6177c2ed3de7f8ea533d54a8c8d28114084ae8921e4c95018a"
+      },
+      "license": "CC0-1.0",
+      "provenanceRecord": "guitar-standard-chords-vector",
+      "categories": [
+        "standard-notation-only",
+        "double-stops",
+        "three-to-six-note-chord-stacks",
+        "sparse-and-dense-layouts",
+        "vector-pdf"
+      ],
+      "maxPages": 1,
+      "thresholds": {
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0.1565,
+        "onsetAccuracy": 0.1391,
+        "chordGroupingAccuracy": 0.2061,
+        "noteDetectionF1": 0.3544,
+        "maxMeasureCountDiff": 8,
+        "maxNoteCountDiff": 72
+      }
+    },
+    {
+      "id": "guitar-paired-chords-vector",
+      "label": "CC0 Paired Notation and TAB Study",
+      "tier": "guitar-paired-dense",
+      "instrumentId": "guitar",
+      "stavesPerSystem": 1,
+      "pdf": "guitar-paired-chords-vector/guitar-paired-chords-vector.pdf",
+      "truth": "guitar-paired-chords-vector/guitar-paired-chords-vector.musicxml",
+      "checksums": {
+        "pdf": "sha256:2568c4006c8d8a401311ddfff74a8f29118f7800a1d51d96a24869939362c3f9",
+        "truth": "sha256:fc8ad9a666ed3a7127a4c90de9bd67b1ea8fa0523c8f13febdd9841d986d3a3f"
+      },
+      "license": "CC0-1.0",
+      "provenanceRecord": "guitar-paired-chords-vector",
+      "categories": [
+        "paired-notation-tab",
+        "three-to-six-note-chord-stacks",
+        "multi-digit-frets",
+        "dense-layout",
+        "capo-repeat-coda",
+        "vector-pdf"
+      ],
+      "maxPages": 1,
+      "thresholds": {
+        "pitchAccuracy": 0.1121,
+        "durationAccuracy": 0.3621,
+        "onsetAccuracy": 0.5172,
+        "chordGroupingAccuracy": 0.4786,
+        "noteDetectionF1": 0.686,
+        "maxMeasureCountDiff": 2,
+        "maxNoteCountDiff": 25
+      }
+    },
+    {
+      "id": "guitar-techniques-paired-vector",
+      "label": "CC0 Guitar Technique Pairing Study",
+      "tier": "guitar-paired-sparse",
+      "instrumentId": "guitar",
+      "stavesPerSystem": 1,
+      "pdf": "guitar-techniques-paired-vector/guitar-techniques-paired-vector.pdf",
+      "truth": "guitar-techniques-paired-vector/guitar-techniques-paired-vector.musicxml",
+      "checksums": {
+        "pdf": "sha256:d04dd6f02f9ef58f39ca52e9f91840e55239cb2dccb725ae954ca7066cf90d72",
+        "truth": "sha256:e067fd8352caa286351d08284b1a60f236c17a90e696b3ed9abf915c39196560"
+      },
+      "license": "CC0-1.0",
+      "provenanceRecord": "guitar-techniques-paired-vector",
+      "categories": [
+        "paired-notation-tab",
+        "techniques-ties-slides-hammer-ons-pull-offs",
+        "double-stops",
+        "sparse-layout",
+        "vector-pdf"
+      ],
+      "maxPages": 1,
+      "thresholds": {
+        "pitchAccuracy": 0.0313,
+        "durationAccuracy": 0.5,
+        "onsetAccuracy": 0.6563,
+        "chordGroupingAccuracy": 0.5385,
+        "noteDetectionF1": 0.7,
+        "maxMeasureCountDiff": 4,
+        "maxNoteCountDiff": 4
+      }
+    },
+    {
+      "id": "guitar-paired-scan",
+      "label": "CC0 Paired Guitar Scan Study",
+      "tier": "guitar-scan",
+      "instrumentId": "guitar",
+      "stavesPerSystem": 1,
+      "pdf": "guitar-paired-scan/guitar-paired-scan.pdf",
+      "truth": "guitar-paired-scan/guitar-paired-scan.musicxml",
+      "checksums": {
+        "pdf": "sha256:9b0c8c8d5c52f32d685324e67561fd3ae8817c114111a73d9344d347d63c9ab3",
+        "truth": "sha256:c941f1f6f87c1361ce9a5138fdb259ebf4e898497da4a20ca81d778d8f5cb52e"
+      },
+      "license": "CC0-1.0",
+      "provenanceRecord": "guitar-paired-scan",
+      "categories": [
+        "paired-notation-tab",
+        "scanned-score",
+        "multi-digit-frets",
+        "three-to-six-note-chord-stacks",
+        "dense-layout"
+      ],
+      "expectedOutcome": "reject-honestly",
+      "expectedRejectionCodes": [
+        "no-notes",
+        "low-confidence",
+        "rejected"
+      ],
+      "maxPages": 1
+    },
+    {
       "id": "clean",
-      "label": "Gymnopédie No. 1 (clean)",
-      "tier": "clean",
+      "label": "Gymnopedie No. 1 (legacy local diagnostic)",
+      "tier": "legacy-local",
+      "optional": true,
+      "diagnosticOnly": true,
       "pdf": "gymnopedie-no-1-satie.pdf",
       "truth": "gymnopedie-no-1-satie.mxl",
       "pdfLegacyPath": "~/Downloads/gymnopedie-no-1-satie.pdf",
@@ -20,20 +340,14 @@
         "truth": "sha256:a655f6bb407557e5531103353267ed32015e77ff56ea76e4625d902c465f314d"
       },
       "maxPages": 24,
-      "thresholds": {
-        "pitchAccuracy": 0.95,
-        "durationAccuracy": 0.95,
-        "onsetAccuracy": 0.95,
-        "chordGroupingAccuracy": 0.95,
-        "noteDetectionF1": 0.95,
-        "maxMeasureCountDiff": 0,
-        "maxNoteCountDiff": 5
-      }
+      "notes": "Historical local comparison only; specific edition redistribution rights are not documented, so this fixture is never enforced."
     },
     {
       "id": "dense",
-      "label": "A Cruel Angel's Thesis (dense)",
-      "tier": "dense",
+      "label": "A Cruel Angel's Thesis (legacy copyrighted diagnostic)",
+      "tier": "legacy-local",
+      "optional": true,
+      "diagnosticOnly": true,
       "pdf": "a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
       "truth": "a-cruel-angels-thesis-neon-genesis-evangelion.mxl",
       "pdfLegacyPath": "~/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
@@ -43,20 +357,14 @@
         "truth": "sha256:6c1d8d753049821764110dd04f7571f3bffd629411694496ad6880890a32ff91"
       },
       "maxPages": 24,
-      "thresholds": {
-        "pitchAccuracy": 0.3,
-        "durationAccuracy": 0.75,
-        "onsetAccuracy": 0.65,
-        "chordGroupingAccuracy": 0.55,
-        "noteDetectionF1": 0.85,
-        "maxMeasureCountDiff": 4,
-        "maxNoteCountDiff": 20
-      }
+      "notes": "Copyrighted modern arrangement retained only as a non-vendored, non-blocking local diagnostic."
     },
     {
       "id": "simple",
-      "label": "Twinkle Twinkle Little Star (simple/legacy-font)",
-      "tier": "simple",
+      "label": "Twinkle Twinkle (legacy local diagnostic)",
+      "tier": "legacy-local",
+      "optional": true,
+      "diagnosticOnly": true,
       "pdf": "twinkle-twinkle-little-star-easy.pdf",
       "truth": "twinkle-twinkle-little-star-easy.mxl",
       "pdfLegacyPath": "~/Downloads/twinkle-twinkle-little-star-easy.pdf",
@@ -66,20 +374,12 @@
         "truth": "sha256:4515c53ffb0bb91932cdd1768d6d841c06ce2a1759dc7e12e51d7fbdfa5e26d1"
       },
       "maxPages": 4,
-      "thresholds": {
-        "pitchAccuracy": 0.95,
-        "durationAccuracy": 0.9,
-        "onsetAccuracy": 0.85,
-        "chordGroupingAccuracy": 0.95,
-        "noteDetectionF1": 0.95,
-        "maxMeasureCountDiff": 0,
-        "maxNoteCountDiff": 0
-      }
+      "notes": "Historical local comparison only; the specific downloaded edition is not licensed for redistribution."
     },
     {
       "id": "wet-hands-guitar",
-      "label": "Wet Hands (Minecraft) — notation + TAB guitar",
-      "tier": "guitar",
+      "label": "Wet Hands (legacy copyrighted guitar diagnostic)",
+      "tier": "legacy-local",
       "optional": true,
       "diagnosticOnly": true,
       "pdf": "wet-hands-minecraft.pdf",
@@ -92,12 +392,12 @@
       },
       "instrumentId": "guitar",
       "maxPages": 4,
-      "notes": "Notation+TAB guitar stress fixture. Optional and diagnostic-only: skipped unless files are present locally, and never blocks the dashboard because the real-world PDF is not a stable enforced regression fixture."
+      "notes": "Copyrighted modern work retained only as a non-vendored, non-blocking local diagnostic."
     },
     {
       "id": "campanella-grandes",
-      "label": "La Campanella (Grandes études de Paganini No. 3)",
-      "tier": "extreme",
+      "label": "La Campanella (legacy local diagnostic)",
+      "tier": "legacy-local",
       "optional": true,
       "diagnosticOnly": true,
       "pdf": "la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.pdf",
@@ -107,12 +407,12 @@
         "truth": "sha256:2da9b329953a588aa0bc430aa798216fb726b5eaf6bcdeba0e45e454990324bd"
       },
       "maxPages": 24,
-      "notes": "Extreme-difficulty stress fixture. Diagnostic-only: no thresholds, never blocks the dashboard. Included only when the truth file is present; otherwise skipped."
+      "notes": "Public-domain composition, but the specific edition/file license was not documented; diagnostic-only."
     },
     {
       "id": "campanella-etude",
-      "label": "La Campanella (Étude S.141/3, G minor)",
-      "tier": "extreme",
+      "label": "La Campanella alternate engraving (legacy local diagnostic)",
+      "tier": "legacy-local",
       "optional": true,
       "diagnosticOnly": true,
       "pdf": "etude-s-1413-in-g-minor-la-campanella-liszt.pdf",
@@ -122,7 +422,7 @@
         "truth": "sha256:2e17943683b18560ffb569aaa2cc117f9329c7583b40359011936f8c68b8130a"
       },
       "maxPages": 24,
-      "notes": "Alternate La Campanella engraving. Diagnostic-only stress fixture; skipped unless present locally."
+      "notes": "Public-domain composition, but the specific edition/file license was not documented; diagnostic-only."
     }
   ]
 }

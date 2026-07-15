@@ -4,6 +4,8 @@ import {
   mergeNarrowMeasureSpans,
   mergeTrailingNarrowMeasureSpans,
   MIN_MEASURE_SPAN_FRAC,
+  rejectVectorNoteColumns,
+  splitWideMeasureSpans,
 } from '../src/features/omr/buildOmrMeasureGrid.js'
 import {
   formatOmrMeasureGridDiagnosticsReport,
@@ -94,6 +96,62 @@ describe('mergeTrailingNarrowMeasureSpans', () => {
     expect(unreliable.mergedCount).toBe(1)
     expect(unreliable.spans).toHaveLength(3)
     expect(unreliable.spans[2]).toEqual({ x0: 0.524, x1: 0.971 })
+  })
+})
+
+describe('splitWideMeasureSpans', () => {
+  it('recovers one missing barline from peer-width evidence', () => {
+    const spans = [
+      { x0: 0, x1: 0.23 },
+      { x0: 0.23, x1: 0.69 },
+      { x0: 0.69, x1: 0.92 },
+    ]
+    const recovered = splitWideMeasureSpans(spans)
+    expect(recovered.splitCount).toBe(1)
+    expect(recovered.spans).toHaveLength(4)
+    expect(recovered.spans.map((span) => span.x1 - span.x0)).toEqual([
+      expect.closeTo(0.23),
+      expect.closeTo(0.23),
+      expect.closeTo(0.23),
+      expect.closeTo(0.23),
+    ])
+  })
+
+  it('does not alter a legitimate varied three-measure layout', () => {
+    const spans = [
+      { x0: 0, x1: 0.28 },
+      { x0: 0.28, x1: 0.61 },
+      { x0: 0.61, x1: 1 },
+    ]
+    expect(splitWideMeasureSpans(spans)).toEqual({ spans, splitCount: 0 })
+  })
+})
+
+describe('rejectVectorNoteColumns', () => {
+  it('rejects a resolved note stem but keeps an ambiguous small-glyph column', () => {
+    const resolved = rejectVectorNoteColumns(
+      [0.4],
+      [
+        { x: 0.3932, width: 0.0172 },
+        { x: 0.55, width: 0.0172 },
+        { x: 0.7, width: 0.0172 },
+      ],
+      1000,
+    )
+    expect(resolved.barlines).toEqual([])
+    expect(resolved.rejectedCount).toBe(1)
+
+    const ambiguous = rejectVectorNoteColumns(
+      [0.4],
+      [
+        { x: 0.396, width: 0.011 },
+        { x: 0.55, width: 0.011 },
+        { x: 0.7, width: 0.011 },
+      ],
+      1000,
+    )
+    expect(ambiguous.barlines).toEqual([0.4])
+    expect(ambiguous.rejectedCount).toBe(0)
   })
 })
 

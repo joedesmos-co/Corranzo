@@ -36,6 +36,8 @@ export const TAB_NO_USABLE_NOTES_MESSAGE =
 const DIGIT_RE = /^[0-9]$/
 const STAFF_LINE_COLLAPSE_EPSILON = 0.003
 const TAB_SOURCE_TEXT_RE = /^[\d\s\-–—|/\\]+$/
+const NOTEHEAD_GLYPH_RE = /^[\uE0A2-\uE0A4]$/
+const TAB_TEXT_EVIDENCE_Y_PAD = 0.03
 
 /**
  * Split a detected system's staves into notation vs tablature staves.
@@ -126,21 +128,133 @@ export function systemsContainTablature(systems, options = {}) {
  * Pairing keeps measure numbering honest: a paired TAB band re-reads its
  * partner's measures instead of counting new ones.
  */
-export function resolveGuitarSystemRoles(systems, { stringCount = 6 } = {}) {
-  const list = systems ?? []
-  return list.map((system, index) => {
-    const { tabStaves, notationStaves } = classifySystemStaves(system, { stringCount })
-    if (tabStaves.length > 0 && notationStaves.length > 0) {
-      return { kind: 'mixed', pairedWithIndex: null, tabStave: tabStaves[0] }
+function inferTabLineYs(system, stringCount) {
+  const exact = resolveTabLineYs(system, stringCount)
+  if (exact) {
+    return exact
+  }
+  const collapsed = collapseNearbyStaffLineYs(system?.detectedLineYs)
+  if (!collapsed?.length) {
+    return null
+  }
+  if (collapsed.length >= stringCount) {
+    // Staff detection can admit an isolated volta/ledger line above TAB.
+    // The bottom staff boundary is more reliable, so keep the final complete
+    // six-line run instead of treating the extra line as string 1.
+    return collapsed.slice(-stringCount)
+  }
+  if (collapsed.length < 2) {
+    return null
+  }
+  const gaps = collapsed
+    .slice(1)
+    .map((value, index) => value - collapsed[index])
+    .filter((value) => value > STAFF_LINE_COLLAPSE_EPSILON)
+    .sort((left, right) => left - right)
+  const gap = gaps[Math.floor(gaps.length / 2)]
+  if (!Number.isFinite(gap) || gap <= 0) {
+    return null
+  }
+  const missing = stringCount - collapsed.length
+  const first = collapsed[0] - missing * gap
+  return Array.from({ length: stringCount }, (_value, index) => first + index * gap)
+}
+
+function textEvidenceForSystem(system, glyphs, imageData) {
+  if (!glyphs?.length || !imageData) {
+    return { explicitTab: false, noteheadCount: 0, digitCount: 0 }
+  }
+  const letters = { t: false, a: false, b: false }
+  let noteheadCount = 0
+  let digitCount = 0
+  for (const glyph of glyphs) {
+    const yNorm = glyph.y / imageData.height
+    if (
+      yNorm < (system?.y0 ?? 0) - TAB_TEXT_EVIDENCE_Y_PAD ||
+      yNorm > (system?.y1 ?? 1) + TAB_TEXT_EVIDENCE_Y_PAD
+    ) {
+      continue
     }
-    if (tabStaves.length === 0) {
-      return { kind: 'notation', pairedWithIndex: null, tabStave: null }
+    const char = glyph.text ?? ''
+    if (NOTEHEAD_GLYPH_RE.test(char)) {
+      noteheadCount += 1
+    }
+    if (DIGIT_RE.test(char) && sourceTextLooksLikeTabDigits(glyph)) {
+      digitCount += 1
+    }
+    if (glyph.x / imageData.width > 0.2) {
+      continue
+    }
+    if (TAB_CLEF_GLYPHS.has(char)) {
+      return { explicitTab: true, noteheadCount, digitCount }
+    }
+    const lower = char.toLowerCase()
+    if (lower === 't') letters.t = true
+    if (lower === 'a') letters.a = true
+    if (lower === 'b') letters.b = true
+  }
+  return {
+    explicitTab: letters.t && letters.a && letters.b,
+    noteheadCount,
+    digitCount,
+  }
+}
+
+/**
+ * Resolve guitar system roles using both staff geometry and vector glyph
+ * evidence. Text evidence corrects two generic detector ambiguities:
+ * ledger lines can make five-line notation look six-line, while fret-digit
+ * knockouts can hide one or two TAB lines.
+ */
+export function resolveGuitarSystemRoles(
+  systems,
+  { stringCount = 6, glyphs = null, imageData = null } = {},
+) {
+  const list = systems ?? []
+  const classified = list.map((system) => {
+    const { tabStaves, notationStaves } = classifySystemStaves(system, { stringCount })
+    const textEvidence = textEvidenceForSystem(system, glyphs, imageData)
+    const inferredTabLineYs = textEvidence.explicitTab
+      ? inferTabLineYs(system, stringCount)
+      : null
+    const inferredTabStave = inferredTabLineYs
+      ? { ...system, lineYs: inferredTabLineYs }
+      : null
+
+    // Preserve already-trustworthy multi-stave geometry. Glyph padding is
+    // deliberately wide enough to rescue broken TAB lines, so noteheads from
+    // the paired notation band may also fall inside it and must not turn a
+    // known TAB-only band into a mixed system.
+    if (tabStaves.length > 0 && notationStaves.length > 0) {
+      return {
+        kind: 'mixed',
+        tabStave: tabStaves[0],
+        source: 'staff-geometry',
+      }
+    }
+    if (textEvidence.explicitTab && inferredTabStave) {
+      return { kind: 'tab', tabStave: inferredTabStave, source: 'tab-clef-text' }
+    }
+    if (textEvidence.noteheadCount >= 3) {
+      return { kind: 'notation', tabStave: null, source: 'notehead-glyphs' }
+    }
+    if (tabStaves.length > 0) {
+      return { kind: 'tab', tabStave: tabStaves[0], source: 'staff-geometry' }
+    }
+    return { kind: 'notation', tabStave: null, source: 'staff-geometry' }
+  })
+
+  return classified.map((classification, index) => {
+    const system = list[index]
+    if (classification.kind === 'mixed') {
+      return { ...classification, pairedWithIndex: null }
+    }
+    if (classification.kind === 'notation') {
+      return { ...classification, pairedWithIndex: null }
     }
 
     const previous = list[index - 1]
-    if (previous) {
-      const previousRoles = classifySystemStaves(previous, { stringCount })
-      const previousIsNotation = previousRoles.tabStaves.length === 0
+    if (previous && classified[index - 1]?.kind === 'notation') {
       const previousHeight = Math.max(0.01, (previous.y1 ?? 0) - (previous.y0 ?? 0))
       const gap = (system.y0 ?? 0) - (previous.y1 ?? 0)
       const proximityPairs = gap >= 0 && gap <= previousHeight * 2.4
@@ -152,11 +266,11 @@ export function resolveGuitarSystemRoles(systems, { stringCount = 6 } = {}) {
       const structurePairs =
         (system.barlineCount ?? 0) >= 2 &&
         system.barlineCount === previous.barlineCount
-      if (previousIsNotation && (proximityPairs || structurePairs)) {
-        return { kind: 'tab', pairedWithIndex: index - 1, tabStave: tabStaves[0] }
+      if (proximityPairs || structurePairs) {
+        return { ...classification, pairedWithIndex: index - 1 }
       }
     }
-    return { kind: 'tab', pairedWithIndex: null, tabStave: tabStaves[0] }
+    return { ...classification, pairedWithIndex: null }
   })
 }
 

@@ -17,6 +17,12 @@ const TRAILING_PAIR_MIN_COMBINED_RATIO = 0.75
 const TRAILING_PAIR_MAX_COMBINED_RATIO = 1.35
 const TRAILING_SINGLE_MIN_COMBINED_RATIO = 1.1
 const TRAILING_SINGLE_MAX_COMBINED_RATIO = 1.65
+const VECTOR_NOTE_COLUMN_PRECISE_DISTANCE = 0.0035
+const VECTOR_STEM_MIN_NOTEHEAD_WIDTH_PX = 14
+const VECTOR_STEM_OFFSET_RATIO_MIN = 0.3
+const VECTOR_STEM_OFFSET_RATIO_MAX = 0.5
+const WIDE_SPAN_SPLIT_MIN_RATIO = 1.68
+const WIDE_SPAN_SPLIT_MAX_PARTS = 3
 
 function average(values) {
   if (!values.length) {
@@ -75,6 +81,85 @@ function boundariesToSpans(boundaries, contentWidth) {
   }
 
   return spans
+}
+
+/** Recover a missed barline when one span is an integer multiple of its peers. */
+export function splitWideMeasureSpans(
+  spans,
+  { minRatio = WIDE_SPAN_SPLIT_MIN_RATIO, maxParts = WIDE_SPAN_SPLIT_MAX_PARTS } = {},
+) {
+  if (spans.length < 3) {
+    return { spans, splitCount: 0 }
+  }
+  const widths = spans.map((span) => span.x1 - span.x0)
+  const referenceWidth = median(widths)
+  if (referenceWidth <= 0) {
+    return { spans, splitCount: 0 }
+  }
+  const result = []
+  let splitCount = 0
+  for (const span of spans) {
+    const ratio = (span.x1 - span.x0) / referenceWidth
+    const parts = Math.round(ratio)
+    if (ratio >= minRatio && parts >= 2 && parts <= maxParts) {
+      const partWidth = (span.x1 - span.x0) / parts
+      const partRatio = partWidth / referenceWidth
+      if (partRatio >= 0.72 && partRatio <= 1.35) {
+        for (let part = 0; part < parts; part += 1) {
+          result.push({
+            x0: span.x0 + part * partWidth,
+            x1: span.x0 + (part + 1) * partWidth,
+          })
+        }
+        splitCount += parts - 1
+        continue
+      }
+    }
+    result.push({ ...span })
+  }
+  return { spans: result, splitCount }
+}
+
+export function rejectVectorNoteColumns(barlines, noteheadXNorms = [], imageWidth = 1000) {
+  if (noteheadXNorms.length < 3) {
+    return { barlines, rejectedCount: 0, candidateOffsets: [] }
+  }
+  const columns = noteheadXNorms.map((entry) =>
+    Number.isFinite(entry)
+      ? { x: entry, width: null }
+      : { x: entry.x, width: entry.width ?? null },
+  )
+  const candidates = barlines.map((barlineX) => {
+    const closest = columns.reduce(
+      (best, noteheadX) =>
+        Math.abs(barlineX - noteheadX.x) < Math.abs(best.offset)
+          ? {
+              offset: barlineX - noteheadX.x,
+              width: noteheadX.width,
+              widthRatio: noteheadX.width
+                ? (barlineX - noteheadX.x) / noteheadX.width
+                : null,
+            }
+          : best,
+      { offset: Infinity, width: null, widthRatio: null },
+    )
+    return closest
+  })
+  const candidateOffsets = candidates.filter((candidate) => Math.abs(candidate.offset) <= 0.012)
+  const filtered = barlines.filter((_, index) => {
+    const candidate = candidates[index]
+    const preciseMatch = Math.abs(candidate.offset) <= VECTOR_NOTE_COLUMN_PRECISE_DISTANCE
+    const resolvedStemMatch =
+      (candidate.width ?? 0) * imageWidth >= VECTOR_STEM_MIN_NOTEHEAD_WIDTH_PX &&
+      candidate.widthRatio >= VECTOR_STEM_OFFSET_RATIO_MIN &&
+      candidate.widthRatio <= VECTOR_STEM_OFFSET_RATIO_MAX
+    return !preciseMatch && !resolvedStemMatch
+  })
+  return {
+    barlines: filtered,
+    rejectedCount: barlines.length - filtered.length,
+    candidateOffsets,
+  }
 }
 
 /**
@@ -288,6 +373,7 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
   imageData,
   measureNumberStart = 1,
   darkThreshold = 150,
+  vectorNoteheadXNorms = [],
 }) {
   const x0Content = contentBounds.x0 ?? contentBounds.left / imageData.width
   const x1Content = contentBounds.x1 ?? contentBounds.right / imageData.width
@@ -297,7 +383,12 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
     detectSystemBarlinesWithDiagnostics(imageData, contentBounds, system, {
       darkThreshold,
     })
-  const barlines = rawBarlines.filter(
+  const vectorFiltered = rejectVectorNoteColumns(
+    rawBarlines,
+    vectorNoteheadXNorms,
+    imageData.width,
+  )
+  const barlines = vectorFiltered.barlines.filter(
     (x) => x > x0Content + 0.02 && x < x1Content - 0.02,
   )
   const reliability = assessBarlineReliability(barlines, contentBounds, barlineDiagnostics)
@@ -305,6 +396,11 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
   const boundaries = [x0Content, ...barlines.sort((left, right) => left - right), x1Content]
   let spans = boundariesToSpans(boundaries, contentWidth)
   const initialMeasureCount = spans.length
+
+  const wideSpanRecovery = vectorFiltered.rejectedCount > 0
+    ? splitWideMeasureSpans(spans)
+    : { spans, splitCount: 0 }
+  spans = wideSpanRecovery.spans
 
   const narrowMerge = mergeNarrowMeasureSpans(spans, contentWidth)
   spans = narrowMerge.spans
@@ -345,6 +441,8 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
     barlineCount: barlines.length,
     barlineRejectedSummary: summarizeBarlineRejections(barlineDiagnostics?.rejected),
     barlineThinningRemoved: barlineDiagnostics?.thinningRemoved ?? 0,
+    vectorNoteColumnRejected: vectorFiltered.rejectedCount,
+    vectorNoteColumnCandidates: vectorFiltered.candidateOffsets,
     barlineDensityAmbiguous: barlineDiagnostics?.densityAmbiguous === true,
     reliabilityReason: reliability.reason,
     reliabilityConfident: reliability.confident,
@@ -352,6 +450,7 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
     initialMeasureCount,
     finalMeasureCount: measureBoxes.length,
     mergedNarrowSpans: narrowMerge.mergedCount + narrowAfter.mergedCount,
+    recoveredMissingBarlines: wideSpanRecovery.splitCount,
     mergedTrailingSpans: trailingNarrow.mergedCount,
     collapsedPairs,
     suspiciousShortMeasures,

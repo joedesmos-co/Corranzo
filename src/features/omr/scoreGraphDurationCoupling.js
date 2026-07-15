@@ -18,11 +18,21 @@ function noteKey(note) {
   return `${note.midi}|${note.clef ?? 'treble'}`
 }
 
+function cloneBeamMetadata(beams) {
+  if (Array.isArray(beams)) {
+    return beams.map((beam) => (beam && typeof beam === 'object' ? { ...beam } : beam))
+  }
+  if (beams && typeof beams === 'object') {
+    return { ...beams }
+  }
+  return beams ?? undefined
+}
+
 function cloneEvents(events = []) {
   return events.map((event) => ({
     ...event,
     notes: event.notes ? event.notes.map((note) => ({ ...note })) : undefined,
-    beams: event.beams ? [...event.beams] : undefined,
+    beams: cloneBeamMetadata(event.beams),
   }))
 }
 

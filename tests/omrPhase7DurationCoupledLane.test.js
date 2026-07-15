@@ -91,6 +91,26 @@ describe('OMR V2 Phase 7 duration-coupled lane shadow', () => {
     expect(constraints.pass).toBe(true)
   })
 
+  it('preserves raster beam metadata objects without treating them as iterables', () => {
+    const events = overlapAfterShiftEvents().map((event, index) => ({
+      ...event,
+      beams: { level: index + 1, source: 'raster' },
+    }))
+    const coupled = coupleOverlappingDurations(events, 16)
+    expect(coupled).toBeTruthy()
+    expect(coupled[0].beams).toEqual({ level: 1, source: 'raster' })
+
+    const shifted = applyLanePhaseShift(events, {
+      target: 'none',
+      mode: 'uniform',
+      uniformDelta: -1,
+      totalDivisions: 16,
+      measureContext: { isGrandStaff: true, hasTreble: false, hasBass: true },
+    })
+    expect(shifted).toBeTruthy()
+    expect(shifted[0].beams).toEqual({ level: 1, source: 'raster' })
+  })
+
   it('respects tie sustain floor when shortening', () => {
     const events = [
       { type: 'note', startDivision: 0, durationDivisions: 8, notes: [{ midi: 60, clef: 'treble' }] },

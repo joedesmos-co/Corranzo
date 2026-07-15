@@ -140,7 +140,7 @@ async function makePdfTextExtractor(pdfPath) {
   }
 }
 
-async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, promoteScoreGraphClips = false, includeScoreGraph = false, instrumentId = null }) {
+async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, promoteScoreGraphClips = false, includeScoreGraph = false, instrumentId = null, stavesPerSystem = null }) {
   const rendered = await renderPdfToPages(pdfPath, { rootDir: ROOT })
   const extractPageText = await makePdfTextExtractor(pdfPath)
   return runPdfOmrPipeline(pdfPath, {
@@ -152,6 +152,7 @@ async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, promoteS
     promoteScoreGraphClips,
     includeScoreGraph,
     instrumentId,
+    stavesPerSystem,
     title: basename(pdfPath).replace(/\.pdf$/i, ''),
   })
 }
@@ -287,6 +288,7 @@ async function evaluateFixture(fixture, options) {
       promoteScoreGraphClips,
       includeScoreGraph: true,
       instrumentId: resolved.instrumentId ?? null,
+      stavesPerSystem: resolved.stavesPerSystem ?? null,
     })
     const groundTruthMusicXml = await readScoreXml(resolved.truthPath)
     const report = evaluateOmrAccuracy({

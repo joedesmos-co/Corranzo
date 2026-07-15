@@ -59,9 +59,11 @@ export function buildOmrDiagnostics({
       systemIndex: system.systemIndex,
       confidence: system.confidence,
       measureCount: system.measures?.length ?? 0,
-        measures: (system.measures ?? []).map((measure) => ({
+      measures: (system.measures ?? []).map((measure) => ({
         measureNumber: measure.measureNumber,
         confidence: measure.confidence,
+        pitchConfidence: measure.pitchConfidence ?? null,
+        rhythmConfidence: measure.rhythmConfidence ?? null,
         uncertain: Boolean(measure.uncertain),
         rhythmApproximate: Boolean(measure.rhythmApproximate),
         timingModel: measure.timingModel ?? null,
@@ -115,12 +117,20 @@ export function buildOmrDiagnostics({
   }
 }
 
-export function measureConfidenceFromRhythm(rhythm, pitchNotes = []) {
-  const rhythmScore = rhythm.uncertain ? 0.55 : 0.82
-  const pitchScore = pitchNotes.length
+export function measureConfidenceBreakdown(rhythm, pitchNotes = []) {
+  const rhythmConfidence = rhythm.uncertain ? 0.55 : 0.82
+  const pitchConfidence = pitchNotes.length
     ? average(pitchNotes.map((note) => note.pitchConfidence ?? 0.65))
     : 0.5
-  return Math.min(0.95, rhythmScore * 0.55 + pitchScore * 0.45)
+  return {
+    pitchConfidence,
+    rhythmConfidence,
+    overallConfidence: Math.min(0.95, rhythmConfidence * 0.55 + pitchConfidence * 0.45),
+  }
+}
+
+export function measureConfidenceFromRhythm(rhythm, pitchNotes = []) {
+  return measureConfidenceBreakdown(rhythm, pitchNotes).overallConfidence
 }
 
 export function systemConfidenceFromMeasures(measures) {

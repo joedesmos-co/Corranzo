@@ -116,6 +116,51 @@ describe('guitar OMR tablature detection', () => {
     expect(systemsContainTablature([system], { stringCount: 6 })).toBe(false)
   })
 
+  it('uses vector glyph evidence to correct ledger-line and interrupted-TAB ambiguity', () => {
+    const imageData = { width: 1000, height: 1000 }
+    const notationWithLedgerLine = {
+      y0: 0.1,
+      y1: 0.16,
+      lineCount: 6,
+      detectedLineYs: [0.1, 0.112, 0.124, 0.136, 0.148, 0.16],
+      barlineCount: 5,
+    }
+    const interruptedTab = {
+      y0: 0.24,
+      y1: 0.28,
+      lineCount: 4,
+      detectedLineYs: [0.24, 0.252, 0.264, 0.276],
+      barlineCount: 5,
+    }
+    const glyphs = [
+      ...Array.from({ length: 4 }, (_value, index) => ({
+        text: '\uE0A4',
+        x: 220 + index * 60,
+        y: 130,
+      })),
+      { text: 'T', x: 120, y: 230 },
+      { text: 'A', x: 120, y: 250 },
+      { text: 'B', x: 120, y: 270 },
+      { text: '1', sourceText: '12', x: 240, y: 242 },
+      { text: '2', sourceText: '12', x: 248, y: 242 },
+    ]
+
+    const roles = resolveGuitarSystemRoles([notationWithLedgerLine, interruptedTab], {
+      stringCount: 6,
+      glyphs,
+      imageData,
+    })
+
+    expect(roles[0]).toEqual(
+      expect.objectContaining({ kind: 'notation', source: 'notehead-glyphs' }),
+    )
+    expect(roles[1]).toEqual(
+      expect.objectContaining({ kind: 'tab', pairedWithIndex: 0, source: 'tab-clef-text' }),
+    )
+    expect(roles[1].tabStave.lineYs).toHaveLength(6)
+    expect(roles[1].tabStave.lineYs[5]).toBeCloseTo(0.276)
+  })
+
   it('collapses doubled raster rows before classifying six-line TAB staves', () => {
     const tabLineYs = [0.32, 0.33, 0.34, 0.35, 0.36, 0.37]
     const doubled = tabLineYs.flatMap((y) => [y, y + 0.0007])

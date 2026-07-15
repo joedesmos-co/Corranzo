@@ -1,4 +1,8 @@
-import { measureConfidenceFromRhythm, systemConfidenceFromMeasures } from './buildOmrDiagnostics.js'
+import {
+  measureConfidenceBreakdown,
+  measureConfidenceFromRhythm,
+  systemConfidenceFromMeasures,
+} from './buildOmrDiagnostics.js'
 import { restsForMeasure, summarizeVectorRestDiagnostics, insertMixedMeasureRests, buildEmptyMeasureRestEvents } from './detectVectorRests.js'
 import { assignVectorStaccato, summarizeVectorStaccatoDiagnostics } from './detectVectorStaccato.js'
 import { assignVectorAccent, summarizeVectorAccentDiagnostics } from './detectVectorAccent.js'
@@ -2052,6 +2056,7 @@ export function buildVectorMeasureRecord({
     noteCount > 0 || restCount > 0
       ? measureConfidenceFromRhythm({ uncertain: false }, notes)
       : 0.45
+  const confidenceBreakdown = measureConfidenceBreakdown({ uncertain }, notes)
   const vectorNoteMatching = summarizeMeasureNoteMatching({
     measureNumber: measureBox.measureNumber,
     page: measureBox.page,
@@ -2076,6 +2081,8 @@ export function buildVectorMeasureRecord({
     events,
     uncertain,
     confidence,
+    pitchConfidence: confidenceBreakdown.pitchConfidence,
+    rhythmConfidence: confidenceBreakdown.rhythmConfidence,
     vectorNoteCount: noteCount,
     vectorRestGlyphCount: restCount,
     vectorRestDiagnostics: {

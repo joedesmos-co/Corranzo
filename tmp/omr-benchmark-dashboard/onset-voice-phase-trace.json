@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-07-09T02:42:48.355Z",
+  "generatedAt": "2026-07-15T16:33:57.220Z",
   "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
   "hotspots": [
     {
       "fixtureId": "dense",
-      "label": "A Cruel Angel's Thesis (dense)",
+      "label": "A Cruel Angel's Thesis (legacy copyrighted diagnostic)",
       "measureNumbers": [
         7,
         9,
@@ -774,7 +774,7 @@
     },
     {
       "fixtureId": "simple",
-      "label": "Twinkle Twinkle Little Star (simple/legacy-font)",
+      "label": "Twinkle Twinkle (legacy local diagnostic)",
       "measureNumbers": [
         10
       ],
