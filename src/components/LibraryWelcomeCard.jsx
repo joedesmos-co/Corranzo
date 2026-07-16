@@ -28,11 +28,8 @@ export default function LibraryWelcomeCard({
           Practice with a score that follows you
         </h2>
         <p className="library-welcome__summary">
-          Corranzo helps you read a PDF score while playback and the cursor stay in sync. Try the
-          demo first, then add your own sheet music and timing file when you are ready.
-        </p>
-        <p className="library-welcome__lead">
-          MIDI is optional for backing sound. Your files stay in this browser.
+          Try the demo first, then add your sheet music and timing file. Your PDF score stays in sync
+          while you practice. MIDI is optional. Files stay in this browser.
         </p>
         <div className="library-welcome__actions">
           <button type="button" className="library-welcome__btn" onClick={handleDismiss}>
@@ -72,10 +69,6 @@ export default function LibraryWelcomeCard({
           </li>
         </ol>
       </div>
-
-      <p className="library-welcome__best">
-        Best setup: sheet music PDF + timing file. Add MIDI only when you want backing audio.
-      </p>
 
       <footer className="library-welcome__footer">
         <p className="library-welcome__privacy">{LOCAL_ONLY_MESSAGE}</p>

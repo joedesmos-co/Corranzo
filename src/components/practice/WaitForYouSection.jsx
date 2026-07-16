@@ -240,7 +240,7 @@ export default function WaitForYouSection({
         </p>
       )}
 
-      {totalCheckpoints > 0 && (
+      {totalCheckpoints > 0 && !compact && (
         <div className="wait-for-you__progress-block">
           <div className="wait-for-you__progress-header">
             <span>Progress</span>

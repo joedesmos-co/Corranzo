@@ -30,9 +30,7 @@ export default function LibraryAccuracyGuide({ hasPdf, hasMusicXml, openHelpSign
         <summary>Why a timing file helps</summary>
         <div className="library-accuracy-guide__body">
           <p className="library-accuracy-guide__intro">
-            Corranzo is most accurate with a <strong>timing file</strong> from your notation app.
-            PDF-only generated scores are experimental. For the best practice experience, use a PDF
-            plus a timing file; a PDF alone cannot tell the app exactly which note is which.
+            Best results need a PDF plus a timing file from your notation app. PDF-only generated scores are experimental. MIDI is optional backing audio.
           </p>
 
           <ul className="library-accuracy-guide__tiers">

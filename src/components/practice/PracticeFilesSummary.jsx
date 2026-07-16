@@ -16,17 +16,13 @@ export default function PracticeFilesSummary({
         <span className="practice-files__value practice-files__value--truncate" title={pdfFileName || undefined}>
           {pdfFileName || 'Not loaded — open from Library'}
         </span>
-        {!pdfFileName && (
-          <span className="practice-files__hint">Your score appears in the center panel.</span>
-        )}
       </div>
       <div className={`practice-files__item${hasMusicXml ? ' practice-files__item--ok' : ''}`}>
         <span className="practice-files__label-row">
           <span className="practice-files__label">Timing file</span>
           <PracticeHelpTip label="About timing files">
-            MusicXML/MXL (or future MuseScore source files) tells Corranzo where measures and beats
-            fall in time — measure display, loops, Wait For You, and the score cursor. PDF alone cannot
-            provide this; MIDI is playback only.
+            MusicXML/MXL supplies measures and beats for loops, Wait For You, and the score cursor.
+            PDF alone cannot; MIDI is playback only.
           </PracticeHelpTip>
         </span>
         <span
@@ -46,7 +42,7 @@ export default function PracticeFilesSummary({
         )}
         {!hasMusicXml && !timingError && (
           <span className="practice-files__hint practice-empty-state practice-files__hint--wrap">
-            Required for timing. Add a timing file in Library — export MusicXML or MXL from MuseScore or your notation app.
+            Required — add MusicXML/MXL in Library.
           </span>
         )}
       </div>
@@ -54,8 +50,7 @@ export default function PracticeFilesSummary({
         <span className="practice-files__label-row">
           <span className="practice-files__label">Sound file</span>
           <PracticeHelpTip label="About the sound file">
-            Optional MIDI backing audio for Normal playback. Not required for timing-only practice
-            or Wait For You.
+            Optional MIDI backing for Normal playback. Not required for Wait For You.
           </PracticeHelpTip>
         </span>
         <span
@@ -64,11 +59,6 @@ export default function PracticeFilesSummary({
         >
           {hasMidi ? playbackFileName || 'Loaded' : 'Not added (optional)'}
         </span>
-        {!hasMidi && (
-          <span className="practice-files__hint practice-files__hint--wrap">
-            Optional. Add a MIDI file in Library for backing audio while you practice.
-          </span>
-        )}
       </div>
     </div>
   )

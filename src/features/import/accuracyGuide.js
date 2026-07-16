@@ -8,21 +8,21 @@ export const ACCURACY_TIERS = [
     label: 'Best',
     summary: 'Sheet music + timing file',
     detail:
-      'Timing from your notation app powers Wait For You, loops, and an accurate score cursor.',
+      'Timing powers Wait For You, loops, and the score cursor.',
   },
   {
     id: 'good',
     label: 'Ready',
     summary: 'PDF + timing file',
     detail:
-      'The PDF is what you read; the timing file tells Corranzo where measures and beats are. This is the recommended Practice setup today.',
+      'Recommended Practice setup: PDF to read, timing file for measures and beats.',
   },
   {
     id: 'basic',
     label: 'Basic',
     summary: 'PDF only',
     detail:
-      'PDF-only generated scores are experimental. Read and annotate the score, but use PDF + a timing file for reliable Practice.',
+      'PDF-only generated scores are experimental — use PDF + a timing file for reliable Practice.',
   },
 ]
 
@@ -32,7 +32,7 @@ export function evaluateAccuracySetup({ hasPdf, hasMusicXml }) {
       tierId: 'good',
       tier: ACCURACY_TIERS.find((item) => item.id === 'good'),
       headline: 'Ready for Practice',
-      detail: 'Sheet music and timing are loaded — you are set for accurate follow-along.',
+      detail: 'Sheet music and timing loaded.',
     }
   }
 
@@ -41,7 +41,7 @@ export function evaluateAccuracySetup({ hasPdf, hasMusicXml }) {
       tierId: 'basic',
       tier: ACCURACY_TIERS.find((item) => item.id === 'basic'),
       headline: 'PDF only so far',
-      detail: 'PDF-only generated scores are experimental. Add a timing file for the best Practice experience.',
+      detail: 'Add a timing file for accurate Practice.',
     }
   }
 
@@ -50,7 +50,7 @@ export function evaluateAccuracySetup({ hasPdf, hasMusicXml }) {
       tierId: 'partial',
       tier: null,
       headline: 'Timing loaded — add your PDF',
-      detail: 'Upload the matching sheet music PDF so you can see the score while practicing.',
+      detail: 'Upload the matching sheet music PDF.',
     }
   }
 
@@ -58,7 +58,7 @@ export function evaluateAccuracySetup({ hasPdf, hasMusicXml }) {
     tierId: 'empty',
     tier: null,
     headline: 'Start here',
-    detail: 'Upload your sheet music PDF, then add a timing file from your notation app.',
+    detail: 'Upload PDF, then a timing file.',
   }
 }
 
@@ -70,7 +70,7 @@ export function buildLibraryAccuracyWarnings({ hasPdf, hasMusicXml, hasMidi }) {
       id: 'pdf-only',
       strength: 'strong',
       message:
-        'PDF alone cannot provide exact measure timing or note-following. Add a timing file for accurate Practice features.',
+        'PDF alone cannot time measures. Add a timing file for accurate Practice.',
     })
   }
 
@@ -79,7 +79,7 @@ export function buildLibraryAccuracyWarnings({ hasPdf, hasMusicXml, hasMidi }) {
       id: 'midi-only-timing',
       strength: 'strong',
       message:
-        'MIDI is for optional playback sound only — it does not place measures on your PDF or power Wait For You.',
+        'MIDI is optional sound only — it does not time the PDF or Wait For You.',
     })
   }
 
@@ -87,7 +87,7 @@ export function buildLibraryAccuracyWarnings({ hasPdf, hasMusicXml, hasMidi }) {
     warnings.push({
       id: 'midi-without-pdf',
       strength: 'mild',
-      message: 'Add a PDF of the same piece so you can see the score while practicing.',
+      message: 'Add the matching PDF to see the score while practicing.',
     })
   }
 

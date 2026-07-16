@@ -245,7 +245,11 @@ export default function LibraryPanel({
                           </p>
                           <h4 className="practice-piece-card__title">{piece.title}</h4>
                           <p className="practice-piece-card__subtitle">{piece.subtitle}</p>
-                          <p className="practice-piece-card__teaches">{piece.teaches}</p>
+                          {piece.teaches ? (
+                            <p className="practice-piece-card__teaches" title={piece.teaches}>
+                              {piece.teaches}
+                            </p>
+                          ) : null}
                         </div>
                         <div className="practice-piece-card__action">
                           <button
@@ -315,7 +319,7 @@ export default function LibraryPanel({
                 <p className="practice-piece-card__meta">Add files</p>
                 <h4 className="practice-piece-card__title">Upload your own piece</h4>
                 <p className="practice-piece-card__teaches">
-                  Add PDF, timing, and optional sound files to save them here.
+                  PDF, timing, and optional MIDI.
                 </p>
               </div>
 
@@ -485,7 +489,11 @@ export default function LibraryPanel({
                   </p>
                   <h4 className="practice-piece-card__title">{piece.title}</h4>
                   <p className="practice-piece-card__subtitle">{piece.subtitle}</p>
-                  <p className="practice-piece-card__teaches">{piece.teaches}</p>
+                  {piece.teaches ? (
+                    <p className="practice-piece-card__teaches" title={piece.teaches}>
+                      {piece.teaches}
+                    </p>
+                  ) : null}
                 </div>
                 <div className="practice-piece-card__action">
                   <button
