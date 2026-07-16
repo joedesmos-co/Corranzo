@@ -18,6 +18,7 @@ import { fileURLToPath } from 'node:url'
 import JSZip from 'jszip'
 import { runPdfOmrPipeline } from '../src/features/omr/runPdfOmrPipeline.js'
 import { evaluateOmrAccuracy } from '../src/features/omr/omrAccuracyEvaluator.js'
+import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import {
   buildFixtureDashboardRecord,
   DEFAULT_FIXTURE_SEARCH_PATHS,
@@ -42,6 +43,10 @@ import {
   makeRenderPageCallback,
   renderPdfToPages,
 } from './lib/renderPdfPages.mjs'
+import {
+  assessOmrV3PromotionGate,
+  evaluateOmrV3Shadow,
+} from '../src/features/omr/v3/omrV3Evaluation.js'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const DEFAULT_MANIFEST = join(ROOT, 'benchmarks/omr-benchmark.manifest.json')
@@ -140,7 +145,7 @@ async function makePdfTextExtractor(pdfPath) {
   }
 }
 
-async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, promoteScoreGraphClips = false, includeScoreGraph = false, instrumentId = null, stavesPerSystem = null }) {
+async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, promoteScoreGraphClips = false, includeScoreGraph = false, instrumentId = null, stavesPerSystem = null, omrV3Shadow = true }) {
   const rendered = await renderPdfToPages(pdfPath, { rootDir: ROOT })
   const extractPageText = await makePdfTextExtractor(pdfPath)
   return runPdfOmrPipeline(pdfPath, {
@@ -153,6 +158,7 @@ async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, promoteS
     includeScoreGraph,
     instrumentId,
     stavesPerSystem,
+    omrV3Shadow,
     title: basename(pdfPath).replace(/\.pdf$/i, ''),
   })
 }
@@ -346,6 +352,10 @@ async function evaluateFixture(fixture, options) {
       runtimeMusicXml: omrResult.musicXml,
       scoreGraph: omrResult.diagnostics?.scoreGraphFull ?? null,
     })
+    attachOmrV3Shadow(record, report, resolved, {
+      omrResult,
+      groundTruthMusicXml,
+    })
     return record
   } catch (error) {
     const rejected = error?.difficulty?.tooDifficult
@@ -366,6 +376,90 @@ async function evaluateFixture(fixture, options) {
         failureReasons: error?.difficulty?.reasons ?? [],
       },
     })
+  }
+}
+
+function attachOmrV3Shadow(
+  record,
+  report,
+  resolvedFixture,
+  { omrResult, groundTruthMusicXml } = {},
+) {
+  const shadow = omrResult?.omrV3Shadow
+  if (!shadow || shadow.status !== 'ready' || !shadow.document) {
+    record.omrV3Shadow = shadow
+      ? {
+          status: shadow.status,
+          error: shadow.error ?? null,
+          promotedToRuntime: false,
+        }
+      : null
+    return
+  }
+  try {
+    const truthTiming = parseMusicXml(groundTruthMusicXml, `${resolvedFixture.id}.truth.musicxml`)
+    const inferredSystemCount = (truthTiming.measures ?? []).filter(
+      (measure) => measure.systemBreakBefore,
+    ).length
+    const expectedSystemCount =
+      resolvedFixture.expectedSystemCount ?? (inferredSystemCount > 0 ? inferredSystemCount : null)
+    const categories = new Set(resolvedFixture.categories ?? [])
+    let expectedGroupType = null
+    if (categories.has('paired-notation-tab')) expectedGroupType = 'guitar-notation-tab'
+    else if (categories.has('tab-only')) expectedGroupType = 'tab-only'
+    else if (resolvedFixture.instrumentId === 'guitar') expectedGroupType = 'single-notation'
+    else if (resolvedFixture.stavesPerSystem === 2 || categories.has('grand-staff')) {
+      expectedGroupType = 'piano-grand-staff'
+    } else if (resolvedFixture.stavesPerSystem === 1) expectedGroupType = 'single-notation'
+    const expectedStaffGroupTypes =
+      resolvedFixture.expectedStaffGroupTypes ??
+      (expectedGroupType && Number.isInteger(expectedSystemCount)
+        ? Array.from({ length: expectedSystemCount }, () => expectedGroupType)
+        : undefined)
+    const evaluation = evaluateOmrV3Shadow({
+      document: shadow.document,
+      runtimeMusicXml: omrResult.musicXml,
+      truthMusicXml: groundTruthMusicXml,
+      expectedStructure: {
+        measureCount: report.totals?.truthMeasureCount,
+        systemCount: expectedSystemCount,
+        staffGroupTypes: expectedStaffGroupTypes,
+      },
+    })
+    const { musicXml: _musicXml, ...compactEvaluation } = evaluation
+    record.omrV3Shadow = {
+      status: 'ready',
+      engine: 'omr-v3-shadow',
+      promotedToRuntime: false,
+      rollout: shadow.rollout,
+      stages: shadow.stages,
+      evaluation: compactEvaluation,
+      current: {
+        metrics: report.metrics,
+        structure: {
+          absoluteMeasureCountError: Math.abs(report.totals?.measureCountDifference ?? 0),
+          systemCountAccuracy: Number.isInteger(expectedSystemCount)
+            ? omrResult.diagnostics?.systems === expectedSystemCount
+              ? 1
+              : 0
+            : null,
+        },
+        fusion: {
+          duplicateEventRate: 0,
+        },
+        validity: {
+          invalidEventRate: 0,
+          voiceOverlapViolations: 0,
+        },
+      },
+      v3: compactEvaluation,
+    }
+  } catch (error) {
+    record.omrV3Shadow = {
+      status: 'evaluation-error',
+      error: error instanceof Error ? error.message : String(error),
+      promotedToRuntime: false,
+    }
   }
 }
 
@@ -434,6 +528,49 @@ function mergeVoiceSerializationShadowCache(records, outDir) {
       record.voiceSerializationShadow = cached
     }
   }
+}
+
+function mergeOmrV3ShadowCache(records, outDir) {
+  const cachePath = join(outDir, 'omr-v3-shadow-report.json')
+  if (!existsSync(cachePath)) return
+  let cache
+  try {
+    cache = JSON.parse(readFileSync(cachePath, 'utf8'))
+  } catch {
+    return
+  }
+  for (const record of records) {
+    if (record.omrV3Shadow?.status === 'ready') continue
+    const cached = cache.fixtures?.find((entry) => entry.fixtureId === record.id)
+    if (cached) record.omrV3Shadow = cached.shadow
+  }
+}
+
+function formatOmrV3ShadowMarkdown(report) {
+  const lines = [
+    '# OMR V3 Shadow Evaluation',
+    '',
+    `Generated: ${report.generatedAt}`,
+    '',
+    `Promotion gate: **${report.gate.status}** (improved fixtures ${report.gate.improvedFixtureCount}/${report.gate.requiredImprovedFixtureCount}, regressions ${report.gate.regressionCount})`,
+    '',
+    '| Fixture | Status | Current F1 | V3 F1 | Current measure error | V3 measure error | V3 invalid | V3 duplicates |',
+    '| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |',
+  ]
+  for (const fixture of report.fixtures) {
+    const current = fixture.shadow?.current
+    const v3 = fixture.shadow?.evaluation
+    const pct = (value) => Number.isFinite(value) ? `${Math.round(value * 10000) / 100}%` : 'n/a'
+    lines.push(
+      `| ${fixture.fixtureId} | ${fixture.shadow?.status ?? 'unavailable'} | ${pct(current?.metrics?.noteDetectionF1)} | ${pct(v3?.accuracy?.v3?.noteDetectionF1)} | ${current?.structure?.absoluteMeasureCountError ?? 'n/a'} | ${v3?.structure?.absoluteMeasureCountError ?? 'n/a'} | ${pct(v3?.validity?.invalidEventRate)} | ${pct(v3?.fusion?.duplicateEventRate)} |`,
+    )
+  }
+  lines.push(
+    '',
+    'All V3 results are shadow-only. No runtime candidate is promoted by this report.',
+    '',
+  )
+  return lines.join('\n')
 }
 
 async function attachRhythmShadow(record, report, resolvedFixture, { runtimeMusicXml = null, scoreGraph = null } = {}) {
@@ -619,6 +756,7 @@ async function main() {
   if (fromReportsDir) {
     mergeRhythmShadowCache(records, outDir)
     mergeVoiceSerializationShadowCache(records, outDir)
+    mergeOmrV3ShadowCache(records, outDir)
   }
 
   const summary = summarizeOmrBenchmarkDashboard(records)
@@ -627,10 +765,65 @@ async function main() {
   summary.pipelineOptions = {
     preprocessPages,
     promoteScoreGraphClips,
+    omrV3Shadow: true,
+  }
+
+  const omrV3Fixtures = records
+    .map((record) => ({
+      fixtureId: record.id,
+      label: record.label,
+      enforced: !record.diagnosticOnly && !record.optional,
+      shadow: record.omrV3Shadow,
+    }))
+  const omrV3Gate = assessOmrV3PromotionGate(
+    omrV3Fixtures
+      .filter((fixture) => fixture.shadow?.status === 'ready')
+      .map((fixture) => ({
+        id: fixture.fixtureId,
+        enforced: fixture.enforced,
+        current: fixture.shadow.current,
+        v3: fixture.shadow.v3,
+      })),
+  )
+  const unavailableEnforcedFixtures = omrV3Fixtures
+    .filter((fixture) => fixture.enforced && fixture.shadow?.status !== 'ready')
+    .map((fixture) => ({
+      fixtureId: fixture.fixtureId,
+      status: fixture.shadow?.status ?? 'unavailable',
+      error: fixture.shadow?.error ?? null,
+    }))
+  omrV3Gate.unavailableEnforcedFixtures = unavailableEnforcedFixtures
+  omrV3Gate.unavailableEnforcedFixtureCount = unavailableEnforcedFixtures.length
+  if (unavailableEnforcedFixtures.length > 0) {
+    omrV3Gate.pass = false
+    omrV3Gate.status = 'shadow-only'
+    for (const candidate of Object.keys(omrV3Gate.candidates)) {
+      omrV3Gate.candidates[candidate] = 'not-promoted'
+    }
+  }
+  const omrV3Report = {
+    generatedAt: summary.generatedAt,
+    manifestPath,
+    engine: 'omr-v3-shadow',
+    promoted: false,
+    gate: omrV3Gate,
+    fixtures: omrV3Fixtures,
+  }
+  summary.omrV3Shadow = {
+    fixtureCount: omrV3Fixtures.length,
+    readyFixtureCount: omrV3Fixtures.filter((fixture) => fixture.shadow?.status === 'ready').length,
+    gate: omrV3Gate,
+    promoted: false,
   }
 
   writeText(jsonPath, `${serializeOmrBenchmarkReport(summary)}\n`)
   writeText(mdPath, formatOmrBenchmarkMarkdown(summary))
+  const omrV3JsonPath = join(outDir, 'omr-v3-shadow-report.json')
+  const omrV3MarkdownPath = join(outDir, 'omr-v3-shadow-report.md')
+  writeText(omrV3JsonPath, `${JSON.stringify(omrV3Report, null, 2)}\n`)
+  writeText(omrV3MarkdownPath, formatOmrV3ShadowMarkdown(omrV3Report))
+  console.error(`Wrote ${omrV3JsonPath}`)
+  console.error(`Wrote ${omrV3MarkdownPath}`)
 
   const hotspotRecords = records
     .filter((record) => record.hotspotDiagnostics)

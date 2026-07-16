@@ -57,6 +57,8 @@ import {
   computeDocumentStaffGapReference,
   mergeStaffGapSamples,
 } from './normalizeStaffLineGaps.js'
+import { resolveOmrV3RolloutOptions } from './v3/omrV3Rollout.js'
+import { runOmrV3Shadow } from './v3/omrV3Shadow.js'
 
 const DEFAULT_MAX_PAGES = 24
 
@@ -95,9 +97,20 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     traceRunId = null,
     includeScoreGraph = false,
     promoteScoreGraphClips = false,
+    /** Disabled by default; developer/benchmark shadow only. */
+    omrV3Shadow = false,
+    /** Emergency suppression switch for all V3 analysis. */
+    omrV3Rollback = false,
+    /** Recorded but never runtime-enabled until a future promotion change. */
+    omrV3Promotions = {},
   } = options
 
   const instrument = getInstrument(instrumentId)
+  const omrV3Rollout = resolveOmrV3RolloutOptions({
+    shadow: omrV3Shadow,
+    rollback: omrV3Rollback,
+    promotions: omrV3Promotions,
+  })
   // Piano's registry default is the grand staff (2), so omitting both options
   // reproduces the long-standing behavior exactly.
   const stavesPerSystem = stavesPerSystemOverride ?? instrument.omr.stavesPerSystem
@@ -184,6 +197,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   }
   const orphanDiagnosticsPages = []
   const staffGapNormalizationPages = []
+  const omrV3PageInputs = []
   let documentStaffGapSamples = { treble: [], bass: [] }
 
   let measureCounter = 1
@@ -262,6 +276,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
           keySignature,
           timeSignature,
           documentStaffGapReference,
+          captureOmrV3Shadow: omrV3Rollout.shadow,
         })
       : processOmrPageAnalysis(imageData, {
           page,
@@ -272,6 +287,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
           keySignature,
           timeSignature,
           documentStaffGapReference,
+          captureOmrV3Shadow: omrV3Rollout.shadow,
         })
 
     omrDebugStep(`pipeline:page-${page}:after-analyze`, null, {
@@ -383,6 +399,9 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     pageDiagnostics.push(pageResult.pageEntry)
     measureRhythms.push(...pageResult.measureRhythms)
     measureGridEntries.push(...(pageResult.measureGrid ?? []))
+    if (omrV3Rollout.shadow && pageResult.omrV3ShadowInput) {
+      omrV3PageInputs.push(pageResult.omrV3ShadowInput)
+    }
     omrTracePhaseEnd(pagePhase, {
       systems: pageResult.stats?.systems ?? 0,
       measures: pageResult.stats?.measures ?? 0,
@@ -656,6 +675,47 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       instrument,
     }),
   )
+  let omrV3ShadowResult = null
+  if (omrV3Rollout.shadow) {
+    if (omrV3PageInputs.length === 0) {
+      omrV3ShadowResult = {
+        status: 'unavailable-no-page-capture',
+        engine: 'omr-v3-shadow',
+        promotedToRuntime: false,
+        rollout: omrV3Rollout,
+      }
+    } else {
+      try {
+        omrV3ShadowResult = phaseTracer.sync('omr-v3-shadow', () =>
+          runOmrV3Shadow({
+            documentId: `shadow-${title}`,
+            title: `${title} — OMR V3 shadow`,
+            instrumentId: instrument.id,
+            pageInputs: omrV3PageInputs,
+            musical,
+            runtimeMusicXml: musicXml,
+            measureDurationDivisions: measureDivisions,
+            rollout: omrV3Rollout,
+          }),
+        )
+      } catch (error) {
+        omrV3ShadowResult = {
+          status: 'error',
+          engine: 'omr-v3-shadow',
+          promotedToRuntime: false,
+          rollout: omrV3Rollout,
+          error: error instanceof Error ? error.message : String(error),
+        }
+      }
+    }
+  } else if (omrV3Shadow && omrV3Rollback) {
+    omrV3ShadowResult = {
+      status: 'disabled-by-rollback',
+      engine: 'omr-v3-shadow',
+      promotedToRuntime: false,
+      rollout: omrV3Rollout,
+    }
+  }
   const measurePlaybackReport = buildOmrMeasurePlaybackReport({
     measures: measureRhythms,
     musical,
@@ -721,6 +781,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
 
   return {
     musicXml,
+    ...(omrV3ShadowResult ? { omrV3Shadow: omrV3ShadowResult } : {}),
     diagnostics: {
       ...diagnostics,
       ...richDiagnostics,
