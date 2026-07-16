@@ -157,6 +157,9 @@ describe('lane outcome styling', () => {
   it('prefers match outcomes over temporal status for CSS classes', () => {
     expect(resolveLaneNoteClass('past', VISUAL_LANE_OUTCOME.CORRECT)).toBe('correct')
     expect(resolveLaneNoteClass('current', VISUAL_LANE_OUTCOME.WRONG)).toBe('wrong')
+    expect(resolveLaneNoteClass('current', VISUAL_LANE_OUTCOME.EARLY)).toBe('early')
+    expect(resolveLaneNoteClass('current', VISUAL_LANE_OUTCOME.LATE)).toBe('late')
+    expect(resolveLaneNoteClass('current', VISUAL_LANE_OUTCOME.SUSTAIN)).toBe('sustain')
     expect(resolveLaneNoteClass('upcoming', VISUAL_LANE_OUTCOME.NEUTRAL)).toBe('upcoming')
   })
 })

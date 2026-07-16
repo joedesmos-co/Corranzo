@@ -1,5 +1,5 @@
 /**
- * Mic Engine V2 Phase 3 — Wait For You runtime integration (flagged).
+ * Mic Engine V2 evidence + Mic Engine V3 performance integration.
  */
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
@@ -29,8 +29,8 @@ function synthAttackWindow(midis, seconds = 1.2) {
   return samples.subarray(Math.floor(SAMPLE_RATE * 0.35), Math.floor(SAMPLE_RATE * 0.35) + 2048)
 }
 
-describe('Wait For You mic engine V2 wiring', () => {
-  it('uses V2 as the only live WFY mic detector', () => {
+describe('Wait For You mic engine V2/V3 wiring', () => {
+  it('uses V2 as the live spectral detector beneath the V3 expectation engine', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
     expect(mic).toContain('enabled: useV2Detector')
     expect(mic).toMatch(/useV2Detector = detectEnabled && micEngineV2Active/)
@@ -42,15 +42,21 @@ describe('Wait For You mic engine V2 wiring', () => {
     expect(mic).not.toContain('onStableChord:')
     expect(mic).toContain('handleV2RuntimeError')
     expect(mic).not.toContain('v2SessionFallback')
+    expect(mic).toContain('buildPerformanceExpectation')
+    expect(mic).toContain('evaluateV3Recognition')
+    expect(mic).toContain('if (!active) return')
   })
 
-  it('keeps live microphone chord advancement on sequential collection', () => {
+  it('keeps legacy sequential collection as rollback while V3 owns enriched chord events', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
     expect(mic).toContain('const isMicV2Polyphonic = false')
     expect(mic).toContain('evaluateMicScoreInformedInput')
     expect(mic).toMatch(/isMicChordCollection =[\s\S]*!isGuitarChordShape/)
     expect(mic).toContain('function micUsesChordSequence(checkpoint)')
     expect(mic).toContain('chordAsSequence: micUsesChordSequence(currentCheckpoint)')
+    expect(mic).toContain('v3Evaluation?.matchResult')
+    expect(mic).toContain('if (isMicChordCollection && !v3Evaluation)')
+    expect(mic).toContain('(!isMicChordCollection || Boolean(v3Evaluation))')
   })
 
   it('clears V2 runtime state when the detector disables', () => {
@@ -65,12 +71,12 @@ describe('Wait For You mic engine V2 wiring', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
     expect(hook).toContain('analysisKey')
     expect(hook).toMatch(/analysisKey[\s\S]*expectedMidisKey[\s\S]*stableFrameThreshold/)
-    expect(mic).toContain("analysisKey: currentCheckpoint?.id ?? ''")
+    expect(mic).toContain("analysisKey: performanceExpectation?.id ?? currentCheckpoint?.id ?? ''")
   })
 
   it('resets WFY mic feedback when leaving active mode', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
-    expect(mic).toMatch(/if \(!active\) \{[\s\S]*resetFeedback\(\)/)
+    expect(mic).toMatch(/if \(!active\) \{[\s\S]*queueMicrotask\(\(\) => resetFeedback\(\)\)/)
     expect(mic).toContain('lastStableChordKeyRef.current = \'\'')
   })
 
@@ -83,15 +89,17 @@ describe('Wait For You mic engine V2 wiring', () => {
       /const retryCalibration = useCallback\(\(\) => \{[\s\S]*?setV2RuntimeError\(null\)[\s\S]*?\}, \[\]\)/,
     )
     expect(mic).toMatch(
-      /if \(!detectEnabled\) \{\s*setV2RuntimeError\(null\)\s*\}\s*\}, \[detectEnabled\]\)/,
+      /if \(!detectEnabled\) \{\s*queueMicrotask\(\(\) => setV2RuntimeError\(null\)\)\s*\}\s*\}, \[detectEnabled\]\)/,
     )
   })
 
   it('latches complete mic matches synchronously before advancing', () => {
     const mic = readSrc('features', 'practice', 'useWaitForYouMicInput.js')
     const latchIndex = mic.indexOf('feedbackOutcomeRef.current = feedback.outcome')
-    const advanceIndex = mic.indexOf('onPlayerInputMatched()')
+    const timingIndex = mic.indexOf('musicalTimingRef.current = markMusicalTimingConsumed')
+    const advanceIndex = mic.indexOf('onPlayerInputMatched(result.recognitionDecision ?? null)')
     expect(latchIndex).toBeGreaterThan(-1)
+    expect(timingIndex).toBeGreaterThan(latchIndex)
     expect(advanceIndex).toBeGreaterThan(latchIndex)
     expect(mic).toMatch(/feedbackOutcomeRef\.current === WFY_INPUT_OUTCOME\.CORRECT[\s\S]*return/)
   })

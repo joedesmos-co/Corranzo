@@ -37,6 +37,7 @@ export function createMusicalTimingState(expectation = null) {
     checkpointId: checkpointId(expectation),
     phase: ATTACK_PHASE.RELEASE,
     activeAttackId: null,
+    activeAttackCheckpointId: null,
     attackTimeMs: null,
     holdStartMs: null,
     peakRms: null,
@@ -165,6 +166,7 @@ export function updateMusicalTiming({
       now,
       next.sequence,
     )
+    next.activeAttackCheckpointId = checkpointId(expectation)
     next.peakRms = rms
     next.envelopeRms = rms
     next.releaseFrameCount = 0
@@ -190,6 +192,7 @@ export function updateMusicalTiming({
     next.releaseFrameCount += 1
     if (next.releaseFrameCount >= options.releaseFrames) {
       next.activeAttackId = null
+      next.activeAttackCheckpointId = null
       next.attackTimeMs = null
       next.holdStartMs = null
       next.peakRms = null
@@ -202,16 +205,19 @@ export function updateMusicalTiming({
   const eventTimeMs = next.attackTimeMs ?? now
   const timing = classifyRecognitionTiming(expectation, eventTimeMs)
   const tiedHold = expectation?.event?.kind === 'tied-hold' || expectation?.ties?.attackRequired === false
+  const hasCheckpointAttack = Boolean(
+    next.activeAttackId && next.activeAttackCheckpointId === checkpointId(expectation),
+  )
   const mayCollect = Boolean(
     musicalFrame &&
     !next.consumedForCheckpoint &&
-    (fresh || (gateOpen && next.activeAttackId) || tiedHold),
+    (fresh || (gateOpen && hasCheckpointAttack) || tiedHold),
   )
   const mayAdvance = Boolean(
     mayCollect &&
     !tiedHold &&
     timing !== RECOGNITION_TIMING.OUTSIDE &&
-    next.activeAttackId,
+    hasCheckpointAttack,
   )
   const mayHold = Boolean(
     tiedHold &&
