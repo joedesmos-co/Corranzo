@@ -95,10 +95,17 @@ function resolveNoteX({
   const bandWidth = Math.max(0.025, xMeasureEnd - xMeasureStart)
 
   if (layoutExtents.hasDefaultX && note.defaultX != null) {
-    const minX = layoutExtents.minDefaultX ?? 0
-    const maxX = layoutExtents.maxDefaultX ?? minX
-    const range = maxX - minX
-    const ratio = range > 0.5 ? clamp((note.defaultX - minX) / range, 0, 1) : 0.15
+    // MusicXML default-x is tenths from the left of the measure. Map against the
+    // engraved measure width (or a modest estimate from the rightmost note) —
+    // never min/max-stretch the note cluster across the full PDF measure span,
+    // which parked early notes halfway across empty bars.
+    const engravedWidth = layoutExtents.engravedWidth
+    const maxX = layoutExtents.maxDefaultX ?? note.defaultX
+    const widthTenths =
+      Number.isFinite(engravedWidth) && engravedWidth > 0
+        ? engravedWidth
+        : Math.max(maxX + Math.max(40, maxX * 0.15), 80)
+    const ratio = clamp(note.defaultX / widthTenths, 0, 1)
     return lerp(xMeasureStart, xMeasureEnd, ratio)
   }
 
@@ -230,10 +237,19 @@ function buildTargetHighlight({ placements, geometry, isChord, source, confidenc
   )
   const minWidth = isChord ? 0.036 : 0.028
   const minHeight = isChord ? 0.028 : 0.022
-  const width = padded.x1 - padded.x0
+  const measureWidth = Math.max(0.03, geometry.xMeasureEnd - geometry.xMeasureStart)
+  // Cap the amber score highlight so a bad layout spread cannot paint half a
+  // measure. Simultaneous chord noteheads stay near one column.
+  const maxWidth = Math.max(minWidth, measureWidth * (isChord ? 0.28 : 0.2))
+  let width = padded.x1 - padded.x0
   const height = padded.y1 - padded.y0
-  const centerX = (padded.x0 + padded.x1) / 2
+  let centerX = (padded.x0 + padded.x1) / 2
   const centerY = (padded.y0 + padded.y1) / 2
+  if (width > maxWidth) {
+    const xs = placements.map((placement) => placement.x).sort((a, b) => a - b)
+    centerX = xs[Math.floor(xs.length / 2)]
+    width = maxWidth
+  }
   const halfWidth = Math.max(width, minWidth) / 2
   const halfHeight = Math.max(height, minHeight) / 2
 

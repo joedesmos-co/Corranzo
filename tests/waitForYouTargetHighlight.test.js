@@ -194,23 +194,55 @@ describe('Wait For You target highlight geometry', () => {
     expect(position).toContain('targetKey: checkpoint.id')
   })
 
-  it('changes target keys after Wait For You advances even when nearby geometry matches', () => {
-    const notes = [layoutNote(C4, 40, 0)]
+  it('maps default-x with engraved measure width instead of min/max stretch', () => {
+    // Notes engraved only in the left half of a 200-tenth measure must stay in
+    // the left half of the PDF measure span — not stretch to the barline.
+    const notes = [
+      layoutNote(C4, 40, 0),
+      layoutNote(E4, 80, 0),
+    ]
     const map = timingMap(notes)
-    const targetA = resolveNoteTargetPosition({
-      checkpoint: checkpoint(notes, { id: 'cp-before' }),
+    map.measures[0].engravedWidth = 200
+    // Include a late note so old min/max stretch would pin 40→start and 180→end.
+    map.notes = [...notes, layoutNote(G4, 180, 0)]
+
+    const early = resolveNoteTargetPosition({
+      checkpoint: checkpoint([notes[0]], { id: 'cp-early' }),
       timingMap: map,
       anchors: anchors(),
     })
-    const targetB = resolveNoteTargetPosition({
-      checkpoint: checkpoint(notes, { id: 'cp-after' }),
+    const mid = resolveNoteTargetPosition({
+      checkpoint: checkpoint([notes[1]], { id: 'cp-mid' }),
       timingMap: map,
       anchors: anchors(),
     })
 
-    expect(targetA.displayMode).toBe('highlight')
-    expect(targetB.displayMode).toBe('highlight')
-    expect(targetA.highlight.x0).toBe(targetB.highlight.x0)
-    expect(targetA.targetKey).not.toBe(targetB.targetKey)
+    const measureStart = 0.12
+    const measureEnd = 0.52
+    const span = measureEnd - measureStart
+    expect(early.x).toBeCloseTo(measureStart + span * (40 / 200), 3)
+    expect(mid.x).toBeCloseTo(measureStart + span * (80 / 200), 3)
+    expect(early.x).toBeLessThan(measureStart + span * 0.35)
+    expect(mid.x).toBeLessThan(measureStart + span * 0.55)
+    expect(early.highlight.x1 - early.highlight.x0).toBeLessThan(span * 0.35)
+  })
+
+  it('caps chord highlight width when layout spread is wrongly wide', () => {
+    const notes = [
+      layoutNote(C4, 20, -40),
+      layoutNote(E4, 160, 0),
+      layoutNote(G4, 180, 40),
+    ]
+    const map = timingMap(notes)
+    map.measures[0].engravedWidth = 200
+    const target = resolveNoteTargetPosition({
+      checkpoint: checkpoint(notes, { id: 'cp-wide-spread' }),
+      timingMap: map,
+      anchors: anchors(),
+    })
+
+    const measureWidth = 0.4
+    expect(target.highlight.isChord).toBe(true)
+    expect(target.highlight.x1 - target.highlight.x0).toBeLessThanOrEqual(measureWidth * 0.28 + 1e-6)
   })
 })

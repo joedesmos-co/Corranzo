@@ -38,6 +38,7 @@ export function getMeasureTimingWindow(timingMap, measureNumber, practiceTime = 
 
 export function getMeasureLayoutExtents(timingMap, measureNumber) {
   const notes = timingMap?.notes?.filter((note) => note.measureNumber === measureNumber) ?? []
+  const measure = getMeasureByNumber(timingMap, measureNumber)
   let minDefaultX = Infinity
   let maxDefaultX = 0
   let hasDefaultX = false
@@ -50,10 +51,14 @@ export function getMeasureLayoutExtents(timingMap, measureNumber) {
     }
   }
 
+  const engravedWidth = Number(measure?.engravedWidth)
   return {
     hasDefaultX,
     minDefaultX: hasDefaultX ? minDefaultX : null,
     maxDefaultX: hasDefaultX && maxDefaultX > minDefaultX ? maxDefaultX : hasDefaultX ? maxDefaultX : null,
+    // MusicXML <measure width> in tenths — prefer this over min/max note stretch.
+    engravedWidth:
+      Number.isFinite(engravedWidth) && engravedWidth > 0 ? engravedWidth : null,
   }
 }
 
