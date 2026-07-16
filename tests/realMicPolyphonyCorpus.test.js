@@ -25,6 +25,8 @@ describe('real mic polyphony corpus tooling', () => {
     expect(src).toContain('CORRANZO_DEVELOPER_MODE')
     expect(src).toContain('--from-wav')
     expect(src).toContain('developer-live-mic')
+    expect(src).toContain('assertAudibleCapture')
+    expect(src).toContain('Refusing silent capture')
   })
 
   it('vendors UIowa-derived accuracy and polyphony fixtures with attribution', () => {
@@ -34,7 +36,7 @@ describe('real mic polyphony corpus tooling', () => {
     const accuracyUiowa = accuracy.clips.filter((clip) => clip.id.startsWith('uiowa-'))
     const polyUiowa = polyphony.clips.filter((clip) => clip.id.startsWith('uiowa-'))
     expect(accuracyUiowa.length).toBeGreaterThanOrEqual(3)
-    expect(polyUiowa.length).toBeGreaterThanOrEqual(7)
+    expect(polyUiowa.length).toBeGreaterThanOrEqual(9)
 
     for (const clip of accuracyUiowa) {
       expect(clip.sourceType).toBe('uiowa-mis-derived')
@@ -53,10 +55,30 @@ describe('real mic polyphony corpus tooling', () => {
     }
   })
 
+  it('documents Sprint 2 chord reliability metrics in the polyphony report', () => {
+    const report = readFileSync(
+      join(root, 'src/features/microphone-input/micPolyphonyReport.js'),
+      'utf8',
+    )
+    expect(report).toContain('exactChordHitRate')
+    expect(report).toContain('requiredToneRecall')
+    expect(report).toContain('wrongToneAcceptanceRate')
+    expect(report).toContain('firstAttemptSuccessRate')
+    expect(report).toContain('meanTimeToConfirmationMs')
+    expect(report).toContain('falseAdvanceRate')
+  })
+
   it('documents the sprint measurement policy', () => {
     const doc = readFileSync(join(root, 'docs/MIC_REAL_POLYPHONY_SPRINT.md'), 'utf8')
-    expect(doc).toContain('No live detector thresholds were changed')
-    expect(doc).toContain('E4')
     expect(doc).toContain('mic:import-uiowa-fixtures')
+    expect(doc).toContain('Exact chord hit')
+    expect(doc).toContain('CORRANZO_DEVELOPER_MODE')
+  })
+
+  it('auto-starts preview for browser mic QA when no SMOKE_BASE_URL is set', () => {
+    const src = readFileSync(join(root, 'scripts/browser-mic-wfy-qa.mjs'), 'utf8')
+    expect(src).toContain('ensurePreviewServer')
+    expect(src).toContain("'run', 'preview'")
+    expect(src).toContain('Starts `npm run preview` automatically')
   })
 })

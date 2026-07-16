@@ -126,7 +126,9 @@ describe('mic polyphony scoring', () => {
     expect(summary.perNoteHitRate).toBeCloseTo(3 / 5, 5)
     expect(summary.missedNoteCount).toBe(2)
     expect(summary.falsePositiveRate).toBe(0)
-    expect(formatMicPolyphonyReportMarkdown(summary)).toContain('Per-note hit rate')
+    expect(formatMicPolyphonyReportMarkdown(summary)).toContain('Required tone recall')
+    expect(formatMicPolyphonyReportMarkdown(summary)).toContain('Exact chord hit rate')
+    expect(formatMicPolyphonyReportMarkdown(summary)).toContain('First-attempt success')
   })
 })
 

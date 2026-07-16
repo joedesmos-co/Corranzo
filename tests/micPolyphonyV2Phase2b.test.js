@@ -147,7 +147,7 @@ describe('Mic V2 Phase 2B dyad and rolled chord replay', () => {
   it('measures UIowa real-timbre chords without lowering the Phase 2B regression gate', () => {
     const manifest = loadMicPolyphonyManifest(manifestPath)
     const uiowaClips = manifest.clips.filter((clip) => clip.id.startsWith('uiowa-'))
-    expect(uiowaClips.length).toBeGreaterThanOrEqual(7)
+    expect(uiowaClips.length).toBeGreaterThanOrEqual(9)
 
     const evaluations = uiowaClips.map((clip) => {
       const replay = replayClip(clip, manifest)

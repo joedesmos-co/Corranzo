@@ -4,54 +4,68 @@ Date: 2026-07-15
 
 ## Scope
 
-Sprint 2 lands a redistributable real-timbre mic corpus and developer capture tooling for polyphonic chord measurement. No live detector thresholds were changed.
+Make microphone chord recognition measurable and more reliable on real instrument
+timbre. Generated-only fixtures are not enough.
 
-## What shipped
+Corpus sources:
 
-- `scripts/import-uiowa-mic-fixtures.mjs` (`npm run mic:import-uiowa-fixtures`)
-  - Downloads a small University of Iowa MIS piano/guitar subset
-  - Extracts single notes and mixes dyads, triads, split-register, and rolled guitar chords
-  - Writes WAV fixtures under `benchmarks/mic-accuracy/clips/` and `benchmarks/mic-polyphony/clips/`
-  - Upserts labeled manifest entries with attribution and `sourceType: uiowa-mis-derived`
-- `scripts/capture-real-mic-fixture.mjs` (`npm run mic:capture-real-fixture`)
-  - Developer-gated (`CORRANZO_DEVELOPER_MODE=1`) live mic capture or `--from-wav` import
-  - Writes WAV + compact replay trace and upserts the accuracy/polyphony manifest
-- README updates for both mic suites
+- University of Iowa MIS samples (redistributable)
+- Developer-recorded fixtures (`CORRANZO_DEVELOPER_MODE=1`)
+- Deterministic derived mixes (UIowa note mixes + synthetic electric)
 
-## Corpus added
+## Tooling
 
-| Suite | IDs |
+- `npm run mic:import-uiowa-fixtures` — MIS download → derived WAV + manifest upsert
+- `npm run mic:capture-real-fixture` — live mic or `--from-wav`
+  - Requires `CORRANZO_DEVELOPER_MODE=1`
+  - Stores WAV, trace JSON, instrument, device, dynamic, expected notes, expected
+    string/frets
+  - **Refuses silent captures** (peak/RMS floor)
+- `npm run mic:browser-qa` — starts preview automatically unless `SMOKE_BASE_URL`
+  is already set
+
+## Metrics (offline polyphony report)
+
+| Metric | Meaning |
 | --- | --- |
-| Accuracy | `uiowa-piano-mf-c4`, `uiowa-piano-pp-c4`, `uiowa-guitar-mf-g3` |
-| Polyphony | `uiowa-piano-mf-c4-e4-dyad`, `uiowa-piano-mf-c-major-triad`, `uiowa-piano-pp-c-major-triad`, `uiowa-piano-mf-split-c3-e4-g4`, `uiowa-guitar-mf-adjacent-g3-b3`, `uiowa-guitar-mf-low-high-e2-e4`, `uiowa-guitar-mf-open-em-strum` |
+| Exact chord hit rate | All expected tones matched and no wrong tones |
+| Required tone recall | Matched expected tones ÷ expected tones |
+| Wrong tone acceptance | Chord clips that also accepted extras |
+| Time to confirmation | When the last required tone first stabilizes |
+| First-attempt success | Exact chord hit with no wrong tones |
+| False advances | Silence/noise detections, or chord hits with wrong tones |
 
-Source license: University of Iowa MIS — freely redistributable without restrictions (`https://theremin.music.uiowa.edu/mis.html`).
+## Corpus coverage
 
-## Measured results (no detector tuning)
+Piano: dyads, triads, four-note (Cmaj7), quiet (pp), ringing sustain, split-register.
+Guitar: acoustic MIS dyads/strum, clean electric, distorted electric, open Em
+high-string masking stress.
 
-### Accuracy replay
+## Runtime change (evidence-based)
 
-- Hit rate: **100%** (27/27 note clips)
-- False positives: **0%**
-- UIowa single notes all hit; guitar G3 also shows an octave-competitor frame (`wrong 89`) that does not prevent the expected 55 hit
+**Root cause:** On real MIS piano mixes, interior E4 often sits near the noise floor
+while C/G (or outer chord tones) are strong. Absolute ratio/confidence gates rejected
+E4 even when relative chord energy showed it was present.
 
-### Polyphony replay
+**Fix:** Narrow piano companion-tone relief in `scoreInformedChordScorer.js` — only when
+another expected tone is already strongly detected, recover quieter expected tones that
+still clear a fund≥noise and soft ratio floor. Guitar path unchanged.
 
-| Scope | V2 chord hit | V2 per-note | FP |
-| --- | ---: | ---: | ---: |
-| Phase 2B regression suite (synth + prior real) | 100% | 100% | 0% |
-| Full suite including UIowa | 69.2% | 89.5% | 0% |
-| UIowa guitar chords | 3/3 hit | — | 0% |
-| UIowa piano simultaneous / split | 0/4 full hit | E4 (MIDI 64) consistently missed | 0% |
+## Measured V2 results (full suite)
 
-Root cause of the new piano misses: score-informed V2 already recovers C and G on simultaneous MIS piano mixes, but **E4 energy is masked/under-scored** under real acoustic piano timbre. This is a measurement finding for a later detector pass — not a reason to loosen gates or tune blindly.
+| Metric | Before relief (expanded corpus) | After |
+| --- | ---: | ---: |
+| Exact chord hit | 66.7% | **88.9%** |
+| Required tone recall | 89.1% | **96.4%** |
+| Wrong tone acceptance | 0% | **0%** |
+| First-attempt success | 66.7% | **88.9%** |
+| False advances | 0 | **0** |
 
-## Explicit non-goals this sprint
+Remaining hard misses (documented, not forced): `uiowa-piano-mf-cmaj7` and
+`uiowa-piano-mf-split-c3-e4-g4` still drop E4 when its fundamental stays below the
+noise floor across windows.
 
-- No changes to `pitchDetection.js`, stabilizer thresholds, or live Mic V2 runtime
-- No WFY matching / MIDI / playback timing changes
-- No OMR changes
-- Generated `tmp/*` reports are not committed
+Phase 2B regression suite (synth + prior real) remains 100% chord hit / 0 FP.
 
 ## Verification
 

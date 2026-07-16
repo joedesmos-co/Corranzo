@@ -3,10 +3,11 @@
  * Real Mic Browser QA — Wait For You microphone flow (headless Chromium).
  *
  * Uses Chrome fake media flags + labeled WAV fixtures for note/room scenarios.
+ * Starts `npm run preview` automatically unless SMOKE_BASE_URL is already set.
  * Usage:
- *   npm run build && npm run preview &
- *   node scripts/browser-mic-wfy-qa.mjs
+ *   npm run build && npm run mic:browser-qa
  */
+import { spawn } from 'node:child_process'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join, dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -418,7 +419,7 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms))
 }
 
-async function waitForServer(url, attempts = 40) {
+async function waitForServer(url, attempts = 80) {
   for (let i = 0; i < attempts; i += 1) {
     try {
       const res = await fetch(url)
@@ -429,6 +430,38 @@ async function waitForServer(url, attempts = 40) {
     await sleep(250)
   }
   throw new Error(`Server not ready at ${url}`)
+}
+
+/**
+ * Prefer an already-running preview (SMOKE_BASE_URL). Otherwise build is assumed
+ * complete and we spawn `npm run preview` for this QA process.
+ */
+async function ensurePreviewServer() {
+  if (process.env.SMOKE_BASE_URL) {
+    await waitForServer(baseUrl)
+    return null
+  }
+
+  try {
+    const res = await fetch(baseUrl)
+    if (res.ok || res.status === 404) {
+      return null
+    }
+  } catch {
+    // need to start preview
+  }
+
+  const preview = spawn(
+    'npm',
+    ['run', 'preview', '--', '--host', '127.0.0.1', '--port', '4173'],
+    {
+      cwd: root,
+      stdio: 'ignore',
+      detached: false,
+    },
+  )
+  await waitForServer(baseUrl)
+  return preview
 }
 
 async function dismissOverlays(page) {
@@ -842,12 +875,13 @@ async function launchBrowser(fakeAudioFile) {
 }
 
 async function main() {
-  await waitForServer(baseUrl)
+  const preview = await ensurePreviewServer()
   await mkdir(outDir, { recursive: true })
 
   const results = {
     generatedAt: new Date().toISOString(),
     baseUrl,
+    previewManaged: Boolean(preview),
     scenarios: [],
     passes: [],
     failures: [],
@@ -1455,6 +1489,10 @@ async function main() {
 
   console.log(`\nMic QA report: ${join(outDir, 'report.json')}`)
   console.log(`Passed: ${results.passes.length}, Failed: ${results.failures.length}`)
+
+  if (preview) {
+    preview.kill('SIGTERM')
+  }
 
   if (results.failures.length > 0) {
     process.exit(1)

@@ -223,6 +223,53 @@
       "endMs": 1800
     },
     {
+      "id": "uiowa-piano-mf-cmaj7",
+      "label": "chord",
+      "instrument": "piano",
+      "micDevice": "uiowa-mis",
+      "tone": "acoustic-piano",
+      "dynamic": "mf",
+      "noiseCondition": "clean",
+      "sourceType": "uiowa-mis-derived",
+      "file": "clips/uiowa-piano-mf-cmaj7.wav",
+      "redistribution": "uiowa-mis-unrestricted",
+      "attribution": "University of Iowa Musical Instrument Samples (MIS) — freely redistributable per https://theremin.music.uiowa.edu/mis.html",
+      "notes": "UIowa-derived four-note Cmaj7 chord.",
+      "expectedMidis": [
+        60,
+        64,
+        67,
+        71
+      ],
+      "expectedOnsetMs": 120,
+      "chordType": "simultaneous",
+      "startMs": 40,
+      "endMs": 1900
+    },
+    {
+      "id": "uiowa-piano-mf-ringing-c-major",
+      "label": "chord",
+      "instrument": "piano",
+      "micDevice": "uiowa-mis",
+      "tone": "acoustic-piano",
+      "dynamic": "mf",
+      "noiseCondition": "clean",
+      "sourceType": "uiowa-mis-derived",
+      "file": "clips/uiowa-piano-mf-ringing-c-major.wav",
+      "redistribution": "uiowa-mis-unrestricted",
+      "attribution": "University of Iowa Musical Instrument Samples (MIS) — freely redistributable per https://theremin.music.uiowa.edu/mis.html",
+      "notes": "UIowa-derived ringing C major triad (longer sustain window).",
+      "expectedMidis": [
+        60,
+        64,
+        67
+      ],
+      "expectedOnsetMs": 120,
+      "chordType": "simultaneous",
+      "startMs": 40,
+      "endMs": 3000
+    },
+    {
       "id": "uiowa-piano-pp-c-major-triad",
       "label": "chord",
       "instrument": "piano",
@@ -394,6 +441,148 @@
           "midi": 64
         }
       ]
+    },
+    {
+      "id": "synth-electric-clean-dyad-a2-e3",
+      "label": "chord",
+      "expectedMidis": [
+        45,
+        52
+      ],
+      "chordType": "simultaneous",
+      "instrument": "guitar",
+      "tone": "clean-electric",
+      "micDevice": "synthetic",
+      "noiseCondition": "clean",
+      "synthetic": {
+        "type": "chord-electric",
+        "mode": "clean",
+        "midis": [
+          45,
+          52
+        ],
+        "seconds": 1.6,
+        "amplitude": 0.3,
+        "seed": 41
+      },
+      "expectedOnsetMs": 120,
+      "expectedStringFrets": [
+        {
+          "string": 5,
+          "fret": 0,
+          "midi": 45
+        },
+        {
+          "string": 4,
+          "fret": 2,
+          "midi": 52
+        }
+      ],
+      "notes": "Deterministic clean-electric double stop."
+    },
+    {
+      "id": "synth-electric-distorted-power-e2-b2",
+      "label": "chord",
+      "expectedMidis": [
+        40,
+        47
+      ],
+      "chordType": "simultaneous",
+      "instrument": "guitar",
+      "tone": "distorted-electric",
+      "micDevice": "synthetic",
+      "noiseCondition": "distorted",
+      "synthetic": {
+        "type": "chord-electric",
+        "mode": "distorted",
+        "midis": [
+          40,
+          47
+        ],
+        "seconds": 1.6,
+        "amplitude": 0.34,
+        "seed": 42
+      },
+      "expectedOnsetMs": 120,
+      "expectedStringFrets": [
+        {
+          "string": 6,
+          "fret": 0,
+          "midi": 40
+        },
+        {
+          "string": 5,
+          "fret": 2,
+          "midi": 47
+        }
+      ],
+      "notes": "Deterministic distorted power-chord style dyad."
+    },
+    {
+      "id": "synth-electric-clean-open-em",
+      "label": "chord",
+      "expectedMidis": [
+        40,
+        45,
+        50,
+        55,
+        59,
+        64
+      ],
+      "chordType": "simultaneous",
+      "instrument": "guitar",
+      "tone": "clean-electric",
+      "micDevice": "synthetic",
+      "noiseCondition": "clean",
+      "synthetic": {
+        "type": "chord-electric",
+        "mode": "clean",
+        "midis": [
+          40,
+          45,
+          50,
+          55,
+          59,
+          64
+        ],
+        "seconds": 1.9,
+        "amplitude": 0.26,
+        "seed": 43
+      },
+      "expectedOnsetMs": 120,
+      "expectedStringFrets": [
+        {
+          "string": 6,
+          "fret": 0,
+          "midi": 40
+        },
+        {
+          "string": 5,
+          "fret": 0,
+          "midi": 45
+        },
+        {
+          "string": 4,
+          "fret": 0,
+          "midi": 50
+        },
+        {
+          "string": 3,
+          "fret": 0,
+          "midi": 55
+        },
+        {
+          "string": 2,
+          "fret": 0,
+          "midi": 59
+        },
+        {
+          "string": 1,
+          "fret": 0,
+          "midi": 64
+        }
+      ],
+      "notes": "Deterministic clean-electric open Em (high-string masking stress)."
     }
   ]
 }

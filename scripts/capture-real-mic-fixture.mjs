@@ -79,6 +79,37 @@ function sanitizeId(id) {
     .replace(/^-+|-+$/g, '')
 }
 
+function peakAbs(samples) {
+  let peak = 0
+  for (const sample of samples) {
+    peak = Math.max(peak, Math.abs(sample))
+  }
+  return peak
+}
+
+function rmsEnergy(samples) {
+  if (!samples?.length) {
+    return 0
+  }
+  let sum = 0
+  for (const sample of samples) {
+    sum += sample * sample
+  }
+  return Math.sqrt(sum / samples.length)
+}
+
+/** Refuse silent / near-silent captures so empty rooms never enter the corpus. */
+function assertAudibleCapture(samples, { peakFloor = 0.02, rmsFloor = 0.004 } = {}) {
+  const peak = peakAbs(samples)
+  const rms = rmsEnergy(samples)
+  if (peak < peakFloor || rms < rmsFloor) {
+    throw new Error(
+      `Refusing silent capture (peak=${peak.toFixed(4)}, rms=${rms.toFixed(4)}). Play the expected note/chord and retry.`,
+    )
+  }
+  return { peak, rms }
+}
+
 function requireDeveloperMode() {
   if (process.env.CORRANZO_DEVELOPER_MODE !== '1') {
     throw new Error(
@@ -257,17 +288,24 @@ async function main() {
     const wav = readWavPcm(fromWav)
     samples = wav.samples
     sampleRate = wav.sampleRate
-    if (resolve(fromWav) !== resolve(wavPath)) {
-      copyFileSync(fromWav, wavPath)
-    }
-    console.error(`Imported ${fromWav} → ${wavPath}`)
+    console.error(`Loaded ${fromWav}`)
   } else {
     console.error(`Recording ${seconds}s from the default microphone...`)
     const recording = await recordMicSamples({ seconds })
     samples = Float32Array.from(recording.samples)
     sampleRate = recording.sampleRate
+  }
+
+  const levels = assertAudibleCapture(samples)
+  if (fromWav) {
+    if (resolve(fromWav) !== resolve(wavPath)) {
+      copyFileSync(fromWav, wavPath)
+    }
+    console.error(`Imported ${fromWav} → ${wavPath}`)
+  } else {
     writeWavPcm(wavPath, samples, sampleRate)
   }
+  console.error(`Audible capture OK (peak=${levels.peak.toFixed(3)}, rms=${levels.rms.toFixed(4)})`)
 
   const trace =
     targetName === 'accuracy'

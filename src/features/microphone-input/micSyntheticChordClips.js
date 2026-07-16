@@ -3,7 +3,7 @@
  * Offline only — not used in the live browser mic path.
  */
 
-import { midiToFrequency, synthSilence, synthWhiteNoise } from './micSyntheticClips.js'
+import { midiToFrequency, synthSilence, synthWhiteNoise, synthDistorted, synthHarmonicTone } from './micSyntheticClips.js'
 
 function mulberry32(seed) {
   let state = seed >>> 0
@@ -83,6 +83,51 @@ export function synthRolledChord(midis, sampleRate, options = {}) {
   return buffer
 }
 
+/**
+ * Clean or distorted electric guitar chord mix (deterministic adversarial fixture).
+ */
+export function synthElectricChord(midis, sampleRate, options = {}) {
+  const seconds = options.seconds ?? 1.7
+  const amplitude = options.amplitude ?? 0.28
+  const mode = options.mode === 'distorted' ? 'distorted' : 'clean'
+  const seed = options.seed ?? 11
+  const rng = mulberry32(seed)
+  const length = Math.max(1, Math.floor(sampleRate * seconds))
+  const buffer = new Float32Array(length)
+  const perVoice = amplitude / Math.max(1, midis.length)
+
+  for (const midi of midis) {
+    const f0 = midiToFrequency(midi)
+    let voice
+    if (mode === 'distorted') {
+      voice = synthDistorted(f0, sampleRate, seconds, { amplitude: perVoice, drive: 3.8 })
+    } else {
+      voice = synthHarmonicTone(
+        f0,
+        [
+          { multiple: 1, amplitude: 0.55 },
+          { multiple: 2, amplitude: 0.28 },
+          { multiple: 3, amplitude: 0.14 },
+          { multiple: 4, amplitude: 0.08 },
+        ],
+        sampleRate,
+        seconds,
+      )
+      for (let index = 0; index < voice.length; index += 1) {
+        voice[index] *= perVoice
+      }
+    }
+    for (let index = 0; index < length; index += 1) {
+      buffer[index] += voice[index] ?? 0
+    }
+  }
+
+  for (let index = 0; index < length; index += 1) {
+    buffer[index] += (rng() * 2 - 1) * (mode === 'distorted' ? 0.006 : 0.003)
+  }
+  return buffer
+}
+
 export const MIC_POLYPHONY_CHORD_TYPES = {
   SIMULTANEOUS: 'simultaneous',
   ROLLED: 'rolled',
@@ -90,7 +135,7 @@ export const MIC_POLYPHONY_CHORD_TYPES = {
 }
 
 /**
- * @param {{ type: string, midis?: number[], seconds?: number, staggerMs?: number, amplitude?: number, seed?: number }} spec
+ * @param {{ type: string, midis?: number[], seconds?: number, staggerMs?: number, amplitude?: number, seed?: number, mode?: string }} spec
  */
 export function renderSyntheticChordClip(spec, sampleRate = 44100) {
   const midis = [...(spec.midis ?? [])].sort((a, b) => a - b)
@@ -99,6 +144,8 @@ export function renderSyntheticChordClip(spec, sampleRate = 44100) {
       return synthSimultaneousChord(midis, sampleRate, spec)
     case 'chord-rolled':
       return synthRolledChord(midis, sampleRate, spec)
+    case 'chord-electric':
+      return synthElectricChord(midis, sampleRate, spec)
     case 'silence':
       return synthSilence(sampleRate, spec.seconds ?? 0.8)
     case 'noise':

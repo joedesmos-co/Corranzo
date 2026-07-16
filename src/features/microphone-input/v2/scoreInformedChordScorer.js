@@ -435,6 +435,40 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
 
   applyDetectionPass()
 
+  // Piano / non-guitar: when a chord is clearly present, recover quieter interior
+  // expected tones that sit just above the noise floor (common with real MIS mixes).
+  if (!guitarShapeContext && expectedMidis.length >= 2) {
+    const strongPeers = notes.filter((note) => note.detected && note.ratio >= 1.8)
+    if (strongPeers.length > 0) {
+      for (const note of notes) {
+        if (note.detected) {
+          continue
+        }
+        const relativeEnergy = note.relativeEnergy ?? 0
+        const peerRelative = note.peerRelative ?? 0
+        const fundOverNoise =
+          noiseFloor > 0 ? (note.fundamentalEnergy ?? 0) / noiseFloor : 0
+        const pianoInteriorRelief =
+          (relativeEnergy >= relativeFloor * 0.9 || peerRelative >= 0.55) &&
+          fundOverNoise >= 1.0 &&
+          (note.ratio ?? 0) >= 0.92 &&
+          (note.confidence ?? 0) >= 0.02 &&
+          !hasStrongerOctavePeer(note, notes) &&
+          !hasStrongerAdjacentProbe(note, {
+            sampleRate,
+            windowed,
+            noiseFloor,
+            expectedMidis,
+            options,
+          })
+        if (pianoInteriorRelief) {
+          note.detected = true
+          note.pianoCompanionRelief = true
+        }
+      }
+    }
+  }
+
   if (guitarShapeContext) {
     const confirmedLowPeers = notes.filter(
       (note) => note.detected && isLowGuitarString(stringByMidi.get(note.midi)),

@@ -46,12 +46,15 @@ Missing `file` entries are **skipped** (not scored as misses).
 
 | Metric | Definition |
 |--------|------------|
-| Chord hit rate | Chord clips where every `expectedMidi` has a matching stable V1 detection |
-| Per-note hit rate | Matched expected notes ÷ total expected notes |
-| Missed notes | Expected notes with no matching stable detection |
+| Exact chord hit rate | Every expected tone matched and no wrong tones accepted |
+| Required tone recall | Matched expected notes ÷ total expected notes |
+| Wrong tone acceptance | Chord clips that accepted one or more unexpected tones |
+| Time to confirmation | Last required-tone stable time − `expectedOnsetMs` |
+| First-attempt success | Exact chord hit (no wrong tones) |
+| False advances | Silence/noise detections, or chord hits with wrong tones |
+| Chord hit rate | Chord clips where every `expectedMidi` has a matching stable detection |
 | False positive rate | Silence/noise clips with any stable detection |
-| False positive notes | Extra stable detections on chord clips |
-| Mean confidence | Average clarity on matched detections |
+| Mean confidence | Average clarity/confidence on matched detections |
 | Mean latency | Detection time minus `expectedOnsetMs` |
 
 ## Synthetic types

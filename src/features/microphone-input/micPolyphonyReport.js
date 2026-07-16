@@ -66,12 +66,18 @@ export function evaluatePolyphonyClip(clip, replayResult, options = {}) {
       outcome: 'skipped',
       skipped: true,
       chordHit: false,
+      exactChordHit: false,
       partialChord: false,
       perNoteHitRate: null,
+      requiredToneRecall: null,
       matchedMidis: [],
       missedMidis: [],
       falsePositiveMidis: [],
       falsePositive: false,
+      wrongToneAccepted: false,
+      firstAttemptSuccess: false,
+      timeToConfirmationMs: null,
+      falseAdvance: false,
       meanConfidence: null,
       meanLatencyMs: null,
       detectionCount: 0,
@@ -97,12 +103,18 @@ export function evaluatePolyphonyClip(clip, replayResult, options = {}) {
       outcome: extras.length > 0 ? 'false-positive' : 'correct-reject',
       skipped: false,
       chordHit: false,
+      exactChordHit: false,
       partialChord: false,
       perNoteHitRate: null,
+      requiredToneRecall: null,
       matchedMidis: [],
       missedMidis: [],
       falsePositiveMidis: extras,
       falsePositive: extras.length > 0,
+      wrongToneAccepted: extras.length > 0,
+      firstAttemptSuccess: false,
+      timeToConfirmationMs: null,
+      falseAdvance: extras.length > 0,
       meanConfidence: mean(
         stableDetections.map((d) => d.clarity ?? d.confidence).filter(Number.isFinite),
       ),
@@ -133,6 +145,18 @@ export function evaluatePolyphonyClip(clip, replayResult, options = {}) {
     })
     .filter(Number.isFinite)
 
+  // Time to confirmation = when the last required tone first appears stably.
+  let timeToConfirmationMs = null
+  if (chordHit && perExpected.size === expectedMidis.length) {
+    const confirmationTimes = [...perExpected.values()].map((detection) => detection.timeMs)
+    const confirmationAt = Math.max(...confirmationTimes)
+    timeToConfirmationMs =
+      clip.expectedOnsetMs != null ? confirmationAt - clip.expectedOnsetMs : confirmationAt
+  }
+
+  const wrongToneAccepted = extraMidis.length > 0
+  const firstAttemptSuccess = chordHit && !wrongToneAccepted
+
   let outcome = 'miss'
   if (chordHit) {
     outcome = 'chord-hit'
@@ -155,13 +179,20 @@ export function evaluatePolyphonyClip(clip, replayResult, options = {}) {
     outcome,
     skipped: false,
     chordHit,
+    exactChordHit: chordHit && !wrongToneAccepted,
     partialChord,
     perNoteHitRate,
+    requiredToneRecall: perNoteHitRate,
     matchedMidis,
     missedMidis,
     bassMissedMidis,
     falsePositiveMidis: extraMidis,
     falsePositive: extraMidis.length > 0,
+    wrongToneAccepted,
+    firstAttemptSuccess,
+    timeToConfirmationMs,
+    // Offline proxy for a false WFY advance: chord clip confirms while accepting wrong tones.
+    falseAdvance: chordHit && wrongToneAccepted,
     meanConfidence: mean(clarityValues),
     meanLatencyMs: mean(latencyValues),
     detectionCount: stableDetections.length,
@@ -287,6 +318,11 @@ export function summarizeMicPolyphony(evaluations, { engine = 'v1-monophonic-bas
     (sum, entry) => sum + (entry.falsePositiveMidis?.length ?? 0),
     0,
   )
+  const chordClipsWithWrongTone = chordClips.filter((entry) => entry.wrongToneAccepted)
+  const confirmationLatencies = chordClips
+    .map((entry) => entry.timeToConfirmationMs)
+    .filter((value) => Number.isFinite(value))
+  const falseAdvances = measured.filter((entry) => entry.falseAdvance).length
 
   return {
     clipCount: evaluations.length,
@@ -295,14 +331,28 @@ export function summarizeMicPolyphony(evaluations, { engine = 'v1-monophonic-bas
     chordClipCount: chordClips.length,
     rejectClipCount: rejectClips.length,
     chordHits: chordClips.filter((entry) => entry.chordHit).length,
+    exactChordHits: chordClips.filter((entry) => entry.exactChordHit).length,
     partialChords: chordClips.filter((entry) => entry.partialChord).length,
     chordMisses: chordClips.filter((entry) => !entry.chordHit && !entry.partialChord).length,
     chordHitRate: chordClips.length
       ? chordClips.filter((entry) => entry.chordHit).length / chordClips.length
       : null,
+    exactChordHitRate: chordClips.length
+      ? chordClips.filter((entry) => entry.exactChordHit).length / chordClips.length
+      : null,
     perNoteHitRate: expectedNoteCount ? matchedNoteCount / expectedNoteCount : null,
+    requiredToneRecall: expectedNoteCount ? matchedNoteCount / expectedNoteCount : null,
     missedNoteCount,
     falsePositiveNotes,
+    wrongToneAcceptanceRate: chordClips.length
+      ? chordClipsWithWrongTone.length / chordClips.length
+      : null,
+    firstAttemptSuccessRate: chordClips.length
+      ? chordClips.filter((entry) => entry.firstAttemptSuccess).length / chordClips.length
+      : null,
+    meanTimeToConfirmationMs: mean(confirmationLatencies),
+    falseAdvanceCount: falseAdvances,
+    falseAdvanceRate: measured.length ? falseAdvances / measured.length : null,
     falsePositiveRate: rejectClips.length
       ? rejectClips.filter((entry) => entry.falsePositive).length / rejectClips.length
       : null,
@@ -356,8 +406,13 @@ export function formatMicPolyphonyReportMarkdown(summary) {
     `Clips: ${summary.measuredClipCount} measured · ${summary.skippedClipCount} skipped`,
     '',
     '## Chord detection rates',
+    `- Exact chord hit rate: ${pct(summary.exactChordHitRate)} (${summary.exactChordHits}/${summary.chordClipCount} chord clips)`,
     `- Chord hit rate: ${pct(summary.chordHitRate)} (${summary.chordHits}/${summary.chordClipCount} chord clips)`,
-    `- Per-note hit rate: ${pct(summary.perNoteHitRate)} (${summary.chordClipCount ? summary.chordHits : 0} full chords; ${summary.missedNoteCount} missed notes total)`,
+    `- Required tone recall: ${pct(summary.requiredToneRecall)} (${summary.missedNoteCount} missed notes total)`,
+    `- Wrong tone acceptance: ${pct(summary.wrongToneAcceptanceRate)}`,
+    `- First-attempt success: ${pct(summary.firstAttemptSuccessRate)}`,
+    `- Time to confirmation (mean): ${num(summary.meanTimeToConfirmationMs, 0)} ms`,
+    `- False advances: ${summary.falseAdvanceCount ?? 0} (${pct(summary.falseAdvanceRate)})`,
     `- Partial chords: ${summary.partialChords}`,
     `- False positive rate (silence/noise): ${pct(summary.falsePositiveRate)}`,
     `- False positive notes (on chord clips): ${summary.falsePositiveNotes}`,
