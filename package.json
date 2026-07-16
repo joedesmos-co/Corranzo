@@ -31,6 +31,7 @@
     "mic:browser-qa": "node scripts/browser-mic-wfy-qa.mjs",
     "mic:polyphony-replay": "node scripts/mic-polyphony-replay.mjs",
     "mic:v3-replay": "node scripts/mic-v3-performance-replay.mjs",
+    "mic:manual-validate": "node scripts/mic-v3-manual-validation.mjs",
     "mic:generate-polyphony-clips": "node scripts/generate-mic-polyphony-clips.mjs",
     "mic:import-uiowa-fixtures": "node scripts/import-uiowa-mic-fixtures.mjs",
     "mic:capture-real-fixture": "node scripts/capture-real-mic-fixture.mjs"
