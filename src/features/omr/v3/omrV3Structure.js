@@ -266,6 +266,14 @@ function normalizeBarlineEvidence(barlines, pageWidth, defaultSourceRef) {
         x,
         confidence: clamp(Number(barline?.confidence ?? 0.7)),
         source: barline?.source ?? 'staff-barline-detector',
+        kind: barline?.kind ?? 'barline-candidate',
+        verticalSpanRatio: Number.isFinite(barline?.verticalSpanRatio)
+          ? clamp(barline.verticalSpanRatio)
+          : null,
+        stemLikelihood: Number.isFinite(barline?.stemLikelihood)
+          ? clamp(barline.stemLikelihood)
+          : 0,
+        vectorEvidence: Boolean(barline?.vectorEvidence),
         sourceRefs: [barline?.sourceId ?? defaultSourceRef].filter(Boolean),
       }
     })
