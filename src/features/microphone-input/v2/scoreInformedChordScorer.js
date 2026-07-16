@@ -440,6 +440,10 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
   if (!guitarShapeContext && expectedMidis.length >= 2) {
     const strongPeers = notes.filter((note) => note.detected && note.ratio >= 1.8)
     if (strongPeers.length > 0) {
+      const reliefMinRatio = 0.92
+      // Confidence is a monotonic transform of ratio — keep the floor consistent
+      // with reliefMinRatio so ratio>=0.92 is not dead-gated by conf>=0.02.
+      const reliefMinConfidence = ratioToConfidence(reliefMinRatio)
       for (const note of notes) {
         if (note.detected) {
           continue
@@ -451,8 +455,8 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
         const pianoInteriorRelief =
           (relativeEnergy >= relativeFloor * 0.9 || peerRelative >= 0.55) &&
           fundOverNoise >= 1.0 &&
-          (note.ratio ?? 0) >= 0.92 &&
-          (note.confidence ?? 0) >= 0.02 &&
+          (note.ratio ?? 0) >= reliefMinRatio &&
+          (note.confidence ?? 0) >= reliefMinConfidence &&
           !hasStrongerOctavePeer(note, notes) &&
           !hasStrongerAdjacentProbe(note, {
             sampleRate,

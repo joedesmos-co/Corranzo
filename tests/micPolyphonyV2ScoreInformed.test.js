@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { loadMicPolyphonyManifest } from '../src/features/microphone-input/micPolyphonyManifest.js'
+import { sliceClipSamples } from '../src/features/microphone-input/micAccuracyManifest.js'
 import {
   compareMicPolyphonyEngines,
   evaluatePolyphonyClip,
@@ -141,6 +142,39 @@ describe('Mic V2 offline polyphony replay', () => {
       expect(replay.engine).toBe('v2-score-informed-phase-2b')
       expect(evaluation.perNoteHitRate).toBeGreaterThanOrEqual(0)
     }
+  })
+
+  it('recovers split-register E4 when companion relief ratio/confidence gates agree', () => {
+    const manifest = loadMicPolyphonyManifest(manifestPath)
+    const clip = manifest.clips.find((entry) => entry.id === 'uiowa-piano-mf-split-c3-e4-g4')
+    expect(clip).toBeTruthy()
+    const filePath = join(root, 'benchmarks/mic-polyphony', clip.file)
+    const wav = readWavPcm(filePath)
+    const samples = sliceClipSamples(wav.samples, wav.sampleRate, {
+      startMs: clip.startMs,
+      endMs: clip.endMs,
+    })
+    const replay = replayScoreInformedPolyphonyClip(samples, wav.sampleRate, {
+      expectedMidis: clip.expectedMidis,
+      instrumentId: 'piano',
+    })
+    const evaluation = evaluatePolyphonyClip(clip, replay, {
+      centsTolerance: settings.micCentsTolerance,
+    })
+    expect(evaluation.exactChordHit).toBe(true)
+    expect(evaluation.matchedMidis).toEqual(expect.arrayContaining([48, 64, 67]))
+    expect(evaluation.wrongToneAccepted).toBe(false)
+  })
+
+
+  it('keeps piano companion relief confidence floor consistent with its ratio floor', () => {
+    const scorer = readFileSync(
+      join(root, 'src/features/microphone-input/v2/scoreInformedChordScorer.js'),
+      'utf8',
+    )
+    expect(scorer).toContain('const reliefMinRatio = 0.92')
+    expect(scorer).toContain('const reliefMinConfidence = ratioToConfidence(reliefMinRatio)')
+    expect(scorer).not.toContain('(note.confidence ?? 0) >= 0.02')
   })
 
   it('documents V2 research in MIC_ENGINE_V2_RESEARCH.md', () => {
