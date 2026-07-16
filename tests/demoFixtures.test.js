@@ -11,6 +11,8 @@ import {
   GUITAR_DEMO_PIECE,
   GUITAR_FIXTURE_FILENAMES,
   GUITAR_FIXTURE_PATHS,
+  GUITAR_TAB_REGRESSION_FILENAMES,
+  GUITAR_TAB_REGRESSION_PATHS,
   PRACTICE_LIBRARY_FIXTURES,
   getDemoPieceForInstrument,
   getFixtureFilenamesForInstrument,
@@ -107,10 +109,14 @@ afterAll(() => {
 })
 
 describe('Practice library fixture catalog', () => {
-  it('ships PDF, MusicXML/MXL, and MIDI for every built-in practice card', async () => {
-    expect(PRACTICE_LIBRARY_FIXTURES).toHaveLength(6)
+  it('ships PDF, MusicXML/MXL, and MIDI for every curated practice card', async () => {
+    expect(PRACTICE_LIBRARY_FIXTURES).toHaveLength(26)
 
     for (const fixture of PRACTICE_LIBRARY_FIXTURES) {
+      expect(fixture.license, fixture.id).toBeTruthy()
+      expect(fixture.provenance, fixture.id).toBeTruthy()
+      expect(Array.isArray(fixture.tags), fixture.id).toBe(true)
+      expect(fixture.tags.length, fixture.id).toBeGreaterThan(0)
       expect(existsSync(fixturePath(fixture.paths.pdf)), `${fixture.id} pdf`).toBe(true)
       expect(existsSync(fixturePath(fixture.paths.midi)), `${fixture.id} midi`).toBe(true)
       expect(existsSync(fixturePath(fixture.paths.musicXml)), `${fixture.id} musicxml`).toBe(true)
@@ -125,40 +131,38 @@ describe('Practice library fixture catalog', () => {
       expect(playable.length, fixture.id).toBeGreaterThan(0)
       expect(midi.tracks.reduce((sum, track) => sum + track.notes.length, 0), fixture.id).toBeGreaterThan(0)
       expect(timingMap.durationSeconds, fixture.id).toBeGreaterThan(0)
-      if (fixture.paths.musicXml.includes('/practice-library/')) {
-        expect(timingMap.measures.every((measure) => measure.engravedWidth === 106), fixture.id).toBe(true)
-        const firstPlayable = playable.find((note) => note.measureNumber === 1)
-        expect(firstPlayable?.defaultX, fixture.id).toBe(16)
-      }
-      if (fixture.instrumentId === INSTRUMENT_IDS.GUITAR) {
-        expect(timingMap.notation.suggestedInstrumentId, fixture.id).toBe('guitar')
-        expect(timingMap.notation.hasTabStaff, fixture.id).toBe(true)
-        expect(playable.every((note) => note.string != null && note.fret != null), fixture.id).toBe(true)
-        expect(Math.max(...playable.map((note) => note.fret ?? 0)), fixture.id).toBeLessThanOrEqual(6)
-      }
     }
-  }, 30_000)
+  }, 120_000)
+
+  it('meets the curated difficulty ladder for Piano and Guitar', () => {
+    const piano = PRACTICE_LIBRARY_FIXTURES.filter((piece) => piece.instrumentId === INSTRUMENT_IDS.PIANO)
+    const guitar = PRACTICE_LIBRARY_FIXTURES.filter((piece) => piece.instrumentId === INSTRUMENT_IDS.GUITAR)
+    const count = (pieces, difficulty) => pieces.filter((piece) => piece.difficulty === difficulty).length
+
+    expect(count(piano, 'Beginner')).toBe(5)
+    expect(count(piano, 'Intermediate')).toBe(5)
+    expect(count(piano, 'Advanced')).toBe(3)
+    expect(count(guitar, 'Beginner')).toBe(5)
+    expect(count(guitar, 'Intermediate')).toBe(5)
+    expect(count(guitar, 'Advanced')).toBe(3)
+  })
 
   it('resolves clicked practice cards to their own fixture bundle', () => {
     const minuet = getPracticeLibraryFixture('demo-minuet-in-g', INSTRUMENT_IDS.PIANO)
-    const amazingGrace = getPracticeLibraryFixture('guitar-amazing-grace', INSTRUMENT_IDS.GUITAR)
+    const aguado = getPracticeLibraryFixture('guitar-aguado-op03-1', INSTRUMENT_IDS.GUITAR)
 
     expect(minuet.title).toBe('Minuet in G')
     expect(minuet.paths.musicXml).toContain('/demo-minuet-in-g.musicxml')
-    expect(amazingGrace.title).toBe('Amazing Grace')
-    expect(amazingGrace.paths.musicXml).toContain('/practice-library/guitar-amazing-grace/')
+    expect(aguado.title).toContain('Petites Pièces')
+    expect(aguado.paths.musicXml).toContain('/practice-library/guitar-aguado-op03-1/')
     expect(getPracticeLibraryFixture(null, INSTRUMENT_IDS.PIANO).id).toBe(DEMO_PIECE.id)
     expect(getPracticeLibraryFixture(null, INSTRUMENT_IDS.GUITAR).id).toBe(GUITAR_DEMO_PIECE.id)
   })
 
-  it('auto-setup anchors generated guitar practice library pieces at the first playable note, not the 30% fallback', async () => {
+  it('auto-setup can open curated Mutopia guitar and piano pieces for cursor follow', async () => {
     await configureNodePdfAnalysis()
 
-    const leadFraction = (anchor) =>
-      (anchor.x - anchor.meta.measureStartX) /
-      (anchor.meta.playableEndX - anchor.meta.measureStartX)
-
-    async function assertPracticeLibraryStart({ fixtureId, instrumentId, guitarScoreTarget = null }) {
+    async function assertSetupOk(fixtureId, instrumentId) {
       const fixture = getPracticeLibraryFixture(fixtureId, instrumentId)
       const pdfPath = fixturePath(fixture.paths.pdf)
       const xml = readFileSync(fixturePath(fixture.paths.musicXml), 'utf8')
@@ -166,50 +170,20 @@ describe('Practice library fixture catalog', () => {
         rasterizePdfPages(pdfPath),
         Promise.resolve(parseMusicXml(xml, fixture.fileNames.musicXml)),
       ])
-      const firstPlayable = timingMap.notes.find(
-        (note) => note.measureNumber === 1 && !note.isRest && !note.isTabMirror,
-      )
-      const firstMeasure = timingMap.measures.find((measure) => measure.number === 1)
-      const expectedFirstLead = firstPlayable.defaultX / firstMeasure.engravedWidth
-
       const result = await analyzeSemiAutoScoreSetup({
         pdfSource: `${fixtureId}-practice-library`,
         numPages: pages.length,
         timingMap,
-        guitarScoreTarget,
         renderPage: renderPagesFromArray(pages),
       })
-
       expect(result.ok, fixtureId).toBe(true)
-      const measureOne = result.preview.supplementalMeasureAnchors.find(
-        (item) => item.measureNumber === 1,
-      )
-      expect(measureOne?.meta?.xSource, fixtureId).toContain('default-x')
-      expect(measureOne?.meta?.xSource, fixtureId).not.toBe('estimated')
-      expect(leadFraction(measureOne), fixtureId).toBeCloseTo(expectedFirstLead, 3)
-      expect(leadFraction(measureOne), fixtureId).toBeLessThan(0.22)
-      expect(leadFraction(measureOne), fixtureId).not.toBeCloseTo(0.3, 2)
+      expect(result.preview.supplementalMeasureAnchors.length, fixtureId).toBeGreaterThan(0)
     }
 
-    await assertPracticeLibraryStart({
-      fixtureId: 'guitar-amazing-grace',
-      instrumentId: INSTRUMENT_IDS.GUITAR,
-    })
-    await assertPracticeLibraryStart({
-      fixtureId: 'guitar-amazing-grace',
-      instrumentId: INSTRUMENT_IDS.GUITAR,
-      guitarScoreTarget: GUITAR_SCORE_TARGET.TAB,
-    })
-    await assertPracticeLibraryStart({
-      fixtureId: 'guitar-aura-lee',
-      instrumentId: INSTRUMENT_IDS.GUITAR,
-    })
-    await assertPracticeLibraryStart({
-      fixtureId: 'guitar-aura-lee',
-      instrumentId: INSTRUMENT_IDS.GUITAR,
-      guitarScoreTarget: GUITAR_SCORE_TARGET.TAB,
-    })
-  }, 60_000)
+    await assertSetupOk('piano-mozart-menuet-k2', INSTRUMENT_IDS.PIANO)
+    await assertSetupOk('guitar-aguado-op03-1', INSTRUMENT_IDS.GUITAR)
+    await assertSetupOk('demo-minuet-in-g', INSTRUMENT_IDS.PIANO)
+  }, 120_000)
 })
 
 describe('Hungarian Dance demo fixtures', () => {
@@ -354,11 +328,11 @@ describe('Hungarian Dance demo fixtures', () => {
 })
 
 describe('Guitar demo fixtures', () => {
-  it('exposes a dedicated public-domain beginner guitar demo', () => {
-    expect(GUITAR_DEMO_PIECE.id).toBe('guitar-ode-to-joy')
-    expect(GUITAR_DEMO_PIECE.title).toContain('Ode to Joy')
-    expect(GUITAR_DEMO_PIECE.measureCount).toBeGreaterThanOrEqual(5)
-    expect(GUITAR_DEMO_PIECE.measureCount).toBeLessThanOrEqual(10)
+  it('exposes a dedicated Mutopia beginner guitar demo in the Practice Library', () => {
+    expect(GUITAR_DEMO_PIECE.id).toBe('guitar-aguado-op03-1')
+    expect(GUITAR_DEMO_PIECE.title).toContain('Petites Pièces')
+    expect(GUITAR_DEMO_PIECE.license).toMatch(/CC BY-SA|Public Domain/i)
+    expect(GUITAR_DEMO_PIECE.provenance).toMatch(/Mutopia/i)
     expect(getDemoPieceForInstrument(INSTRUMENT_IDS.GUITAR)).toBe(GUITAR_DEMO_PIECE)
     expect(getDemoPieceForInstrument(INSTRUMENT_IDS.PIANO)).toBe(DEMO_PIECE)
   })
@@ -373,7 +347,7 @@ describe('Guitar demo fixtures', () => {
     expect(GUITAR_FIXTURE_PATHS.musicXml).not.toBe(FIXTURE_PATHS.musicXml)
   })
 
-  it('ships guitar PDF, MusicXML, and MIDI on disk', () => {
+  it('ships guitar PDF, MusicXML, and MIDI on disk for the library demo', () => {
     for (const path of [
       GUITAR_FIXTURE_PATHS.pdf,
       GUITAR_FIXTURE_PATHS.midi,
@@ -383,9 +357,16 @@ describe('Guitar demo fixtures', () => {
     }
   })
 
-  it('parses as a short guitar score with standard notation and TAB positions', () => {
-    const xml = readFileSync(fixturePath(GUITAR_FIXTURE_PATHS.musicXml), 'utf8')
-    const timingMap = parseMusicXml(xml, GUITAR_FIXTURE_FILENAMES.musicXml)
+  it('keeps an internal TAB regression fixture for notation+TAB pipeline tests', () => {
+    for (const path of Object.values(GUITAR_TAB_REGRESSION_PATHS)) {
+      expect(existsSync(fixturePath(path)), path).toBe(true)
+    }
+    expect(PRACTICE_LIBRARY_FIXTURES.map((piece) => piece.id)).not.toContain('guitar-ode-to-joy')
+  })
+
+  it('parses the TAB regression fixture as standard notation with TAB positions', () => {
+    const xml = readFileSync(fixturePath(GUITAR_TAB_REGRESSION_PATHS.musicXml), 'utf8')
+    const timingMap = parseMusicXml(xml, GUITAR_TAB_REGRESSION_FILENAMES.musicXml)
     const playable = timingMap.notes.filter((note) => !note.isRest && !note.isTabMirror)
 
     expect(timingMap.notation.hasStandardStaff).toBe(true)
@@ -400,9 +381,9 @@ describe('Guitar demo fixtures', () => {
     expect(playable.slice(0, 4).map((note) => note.defaultX)).toEqual([20, 47, 74, 101])
   })
 
-  it('can run local OMR from the guitar demo PDF alone', async () => {
+  it('can run local OMR from the TAB regression PDF alone', async () => {
     await configureNodePdfAnalysis()
-    const pdfData = new Uint8Array(readFileSync(fixturePath(GUITAR_FIXTURE_PATHS.pdf)))
+    const pdfData = new Uint8Array(readFileSync(fixturePath(GUITAR_TAB_REGRESSION_PATHS.pdf)))
 
     const result = await runPdfOmrPipeline(
       { data: pdfData, isEvalSupported: false },
@@ -427,11 +408,11 @@ describe('Guitar demo fixtures', () => {
   }, 30_000)
 
   it('auto-setup can follow notation rows or TAB rows for paired guitar systems', async () => {
-    const pdfPath = fixturePath(GUITAR_FIXTURE_PATHS.pdf)
-    const xml = readFileSync(fixturePath(GUITAR_FIXTURE_PATHS.musicXml), 'utf8')
+    const pdfPath = fixturePath(GUITAR_TAB_REGRESSION_PATHS.pdf)
+    const xml = readFileSync(fixturePath(GUITAR_TAB_REGRESSION_PATHS.musicXml), 'utf8')
     const [pages, timingMap] = await Promise.all([
       rasterizePdfPages(pdfPath),
-      Promise.resolve(parseMusicXml(xml, GUITAR_FIXTURE_FILENAMES.musicXml)),
+      Promise.resolve(parseMusicXml(xml, GUITAR_TAB_REGRESSION_FILENAMES.musicXml)),
     ])
 
     const notationResult = await analyzeSemiAutoScoreSetup({

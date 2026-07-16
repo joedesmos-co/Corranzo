@@ -11,6 +11,7 @@ import {
   groupPracticePiecesByDifficulty,
 } from '../src/features/library/practiceLibrary.js'
 import { INSTRUMENT_IDS } from '../src/features/instruments/instruments.js'
+import { getPracticeLibraryDifficultyCounts } from '../src/dev/fixturePaths.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -19,27 +20,37 @@ function readSrc(...parts) {
 }
 
 describe('practice library pieces', () => {
-  it('ships the current Piano and Guitar demos as built-in practice pieces', () => {
-    expect(BUILT_IN_PRACTICE_PIECES).toHaveLength(6)
+  it('ships the curated Piano and Guitar difficulty ladder', () => {
+    expect(BUILT_IN_PRACTICE_PIECES).toHaveLength(26)
+    expect(getPracticeLibraryDifficultyCounts(INSTRUMENT_IDS.PIANO)).toEqual({
+      Beginner: 5,
+      Intermediate: 5,
+      Advanced: 3,
+      total: 13,
+    })
+    expect(getPracticeLibraryDifficultyCounts(INSTRUMENT_IDS.GUITAR)).toEqual({
+      Beginner: 5,
+      Intermediate: 5,
+      Advanced: 3,
+      total: 13,
+    })
     expect(BUILT_IN_PRACTICE_PIECES).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'hungarian-dance-no5',
           title: 'Hungarian Dance No. 5',
           instrumentId: INSTRUMENT_IDS.PIANO,
-          instrument: 'Piano',
           difficulty: 'Advanced',
-          approxDuration: expect.any(String),
-          teaches: expect.any(String),
+          license: expect.any(String),
+          provenance: expect.any(String),
+          tags: expect.any(Array),
         }),
         expect.objectContaining({
-          id: 'guitar-ode-to-joy',
-          title: 'Ode to Joy',
+          id: 'guitar-aguado-op03-1',
           instrumentId: INSTRUMENT_IDS.GUITAR,
-          instrument: 'Guitar',
           difficulty: 'Beginner',
-          approxDuration: expect.any(String),
-          teaches: expect.any(String),
+          license: expect.any(String),
+          provenance: expect.stringMatching(/Mutopia/i),
         }),
       ]),
     )
@@ -49,18 +60,12 @@ describe('practice library pieces', () => {
     const pianoPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.PIANO })
     const guitarPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.GUITAR })
 
-    expect(pianoPieces.map((piece) => piece.title)).toEqual([
-      'Minuet in G',
-      'Hungarian Dance No. 5',
-    ])
-    expect(guitarPieces.map((piece) => piece.title)).toEqual([
-      'Ode to Joy',
-      'Amazing Grace',
-      'When the Saints Go Marching In',
-      'Aura Lee',
-    ])
+    expect(pianoPieces).toHaveLength(13)
+    expect(guitarPieces).toHaveLength(13)
     expect(pianoPieces.every((piece) => piece.instrumentId === INSTRUMENT_IDS.PIANO)).toBe(true)
     expect(guitarPieces.every((piece) => piece.instrumentId === INSTRUMENT_IDS.GUITAR)).toBe(true)
+    expect(pianoPieces.map((piece) => piece.title)).toContain('Minuet in G')
+    expect(guitarPieces.map((piece) => piece.title)).toContain('Spanish Romance')
   })
 
   it('groups visible pieces by difficulty without showing empty levels', () => {
@@ -69,25 +74,30 @@ describe('practice library pieces', () => {
     )
 
     expect(groups.map((group) => [group.difficulty, group.pieces.length])).toEqual([
-      ['Beginner', 3],
-      ['Intermediate', 1],
+      ['Beginner', 5],
+      ['Intermediate', 5],
+      ['Advanced', 3],
     ])
-    expect(groups[0].pieces.map((piece) => piece.title)).toContain('Ode to Joy')
-    expect(groups[1].pieces.map((piece) => piece.title)).toEqual(['Aura Lee'])
-    expect(groups.some((group) => group.difficulty === 'Advanced')).toBe(false)
   })
 
-  it('keeps the visible built-in catalog curated and public-domain only', () => {
+  it('keeps the visible built-in catalog curated and free of generator sketches', () => {
+    const ids = BUILT_IN_PRACTICE_PIECES.map((piece) => piece.id)
     const searchableText = BUILT_IN_PRACTICE_PIECES.map((piece) =>
-      [piece.id, piece.title, piece.subtitle, piece.attribution, piece.teaches].join(' ').toLowerCase(),
+      [piece.id, piece.title, piece.subtitle, piece.attribution, piece.teaches, piece.provenance]
+        .join(' ')
+        .toLowerCase(),
     )
 
-    expect(BUILT_IN_PRACTICE_PIECES.map((piece) => piece.id)).not.toEqual(
+    expect(ids).not.toEqual(
       expect.arrayContaining([
         'guitar-greensleeves',
         'guitar-scarborough-fair',
         'guitar-spanish-romance-intro',
         'guitar-carulli-style-etude',
+        'guitar-amazing-grace',
+        'guitar-when-the-saints',
+        'guitar-aura-lee',
+        'guitar-ode-to-joy',
         'piano-fur-elise-excerpt',
         'piano-gymnopedie-no1-excerpt',
         'piano-mary-had-a-little-lamb',
@@ -95,19 +105,22 @@ describe('practice library pieces', () => {
         'piano-twinkle-twinkle',
       ]),
     )
-    expect(searchableText.some((text) => /\bfixture\b|generated|cc0|style study/.test(text))).toBe(false)
+    expect(searchableText.some((text) => /\bgenerated sketch\b|cc0 style study/.test(text))).toBe(
+      false,
+    )
+    expect(BUILT_IN_PRACTICE_PIECES.every((piece) => piece.license && piece.provenance)).toBe(true)
   })
 
-  it('filters library cards by searchable metadata', () => {
+  it('filters library cards by searchable metadata including tags and license', () => {
     const guitarPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.GUITAR })
     const pianoPieces = getBuiltInPracticePieces({ instrumentId: INSTRUMENT_IDS.PIANO })
 
-    expect(filterLibraryItems(guitarPieces, 'phrasing').map((piece) => piece.title)).toEqual([
-      'Amazing Grace',
-    ])
-    expect(filterLibraryItems(pianoPieces, 'minuet').map((piece) => piece.title)).toEqual([
+    expect(filterLibraryItems(guitarPieces, 'aguado').length).toBeGreaterThanOrEqual(5)
+    expect(filterLibraryItems(pianoPieces, 'minuet').map((piece) => piece.title)).toContain(
       'Minuet in G',
-    ])
+    )
+    expect(filterLibraryItems(pianoPieces, 'public domain').length).toBeGreaterThan(0)
+    expect(filterLibraryItems(guitarPieces, 'classical-guitar').length).toBeGreaterThan(0)
     expect(filterLibraryItems(pianoPieces, 'guitar')).toEqual([])
   })
 

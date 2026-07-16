@@ -261,7 +261,10 @@ export default function LibraryPanel({
                           >
                             {sampleLoadLoading ? 'Opening...' : 'Start Practice'}
                           </button>
-                          <p className="practice-piece-card__credit">{piece.attribution}</p>
+                          <p className="practice-piece-card__credit">
+                            {piece.attribution}
+                            {piece.license ? ` · ${piece.license}` : ''}
+                          </p>
                         </div>
                         {sampleLoadError && (
                           <div className="practice-piece-card__error-block" role="alert">

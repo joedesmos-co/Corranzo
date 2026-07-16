@@ -31,6 +31,9 @@ export const BUILT_IN_PRACTICE_PIECES = [
     difficulty: piece.difficulty,
     approxDuration: piece.approxDuration,
     teaches: piece.teaches,
+    tags: piece.tags ?? [],
+    license: piece.license ?? null,
+    provenance: piece.provenance ?? null,
   })),
 ]
 
@@ -149,6 +152,9 @@ export function filterLibraryItems(items, query = '') {
       item.teaches,
       item.attribution,
       item.description,
+      item.license,
+      item.provenance,
+      ...(Array.isArray(item.tags) ? item.tags : []),
       item.pdfFileName,
       item.musicXmlFileName,
       item.midiFileName,

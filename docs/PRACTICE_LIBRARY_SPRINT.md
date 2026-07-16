@@ -4,40 +4,38 @@ Date: 2026-07-15
 
 ## Scope
 
-Keep the built-in Practice Library small, public-domain only, and better balanced by difficulty. Do not dump synthetic piano sketches or previously rejected style studies.
+Replace generated-looking practice cards with curated Mutopia / public-domain
+editions. Prefer source MusicXML timing derived from the same edition’s MIDI;
+OMR remains for user uploads only.
 
-## Catalog before / after
+## Catalog
 
-| Instrument | Before | After |
-| --- | --- | --- |
-| Piano | Intermediate Minuet, Advanced Hungarian Dance | Unchanged (beginner piano still needs a typeset PD score — generator sketches remain banned) |
-| Guitar | 3 Beginner | 3 Beginner + **Aura Lee (Intermediate)** |
+| Instrument | Beginner | Intermediate | Advanced | Total |
+| --- | ---: | ---: | ---: | ---: |
+| Piano | 5 | 5 | 3 | 13 |
+| Guitar | 5 | 5 | 3 | 13 |
 
-Total built-ins: **5 → 6**.
+Every card has: PDF, MusicXML, MIDI, license, provenance, difficulty, tags.
 
 ## What shipped
 
-- Generated `guitar-aura-lee` PDF / MusicXML / MIDI under `public/fixtures/practice-library/`
-- Registered the piece in `src/dev/fixturePaths.js` with short skill-tag `teaches`
-- Extended `scripts/generate-practice-library-fixtures.mjs`
-- Updated library / demo fixture tests for count, guitar filter order, and Intermediate grouping
-- Documented curation policy in `public/fixtures/practice-library/README.md`
+- `public/fixtures/practice-library/manifest.json` — curated catalog
+- `scripts/import-practice-library.mjs` — Mutopia PDF+MIDI download → MusicXML
+- Registry via `src/dev/fixturePaths.js` (license / provenance / tags)
+- Search includes tags, license, and provenance
+- Removed generated sketches (Amazing Grace, Saints, Aura Lee) from the library
+- Kept `guitar-ode-to-joy` only as an internal TAB/OMR regression fixture
 
 ## Explicit non-goals
 
-- No re-adding removed ids (`piano-twinkle-twinkle`, `guitar-greensleeves`, style studies, etc.)
-- No generated piano sketches
-- No OMR / mic / matching runtime changes
-
-## Remaining gap
-
-Piano still has no Beginner built-in. Fill that only with a hand-checked public-domain typeset score (aligned PDF + MusicXML + MIDI), never a generator sketch.
+- No re-adding banned generator sketch ids
+- No OMR for built-in library timing
+- No mic / matching runtime changes
 
 ## Verification
 
-- `npm run fixtures:practice-library`
-- `npm test`
-- `npm run build`
-- `npm run mic:accuracy-replay`
-- `npm run mic:polyphony-replay`
-- `npm run omr:benchmark-dashboard`
+```bash
+npm run fixtures:practice-library
+npm test
+npm run build
+```

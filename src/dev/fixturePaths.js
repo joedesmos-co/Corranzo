@@ -3,24 +3,74 @@ import {
   INSTRUMENT_IDS,
   normalizeInstrumentId,
 } from '../features/instruments/instruments.js'
+import practiceLibraryManifest from '../../public/fixtures/practice-library/manifest.json'
 
-/** Public demo fixture URLs (served from /public/fixtures in dev). */
-export const DEMO_PIECE = {
-  id: 'hungarian-dance-no5',
-  title: 'Hungarian Dance No. 5',
-  subtitle: 'Demo score · WoO 1, No. 5 in F♯ minor (public domain)',
-  attribution: 'Johannes Brahms · piano arrangement',
-  measureCount: 104,
-  pageCount: 4,
+function curatedPracticePaths(id) {
+  return {
+    pdf: `/fixtures/practice-library/${id}/${id}.pdf`,
+    midi: `/fixtures/practice-library/${id}/${id}.mid`,
+    musicXml: `/fixtures/practice-library/${id}/${id}.musicxml`,
+  }
 }
 
-export const GUITAR_DEMO_PIECE = {
-  id: 'guitar-ode-to-joy',
-  title: 'Ode to Joy',
-  subtitle: 'Guitar demo · beginner standard notation + TAB (public domain)',
-  attribution: 'Ludwig van Beethoven · beginner guitar arrangement',
-  measureCount: 7,
-  pageCount: 1,
+function curatedPracticeFilenames(title, instrumentLabel) {
+  return {
+    pdf: `${title} - ${instrumentLabel}.pdf`,
+    midi: `${title} - ${instrumentLabel}.mid`,
+    musicXml: `${title} - ${instrumentLabel}.musicxml`,
+  }
+}
+
+function practiceFixture(piece) {
+  const instrumentLabel = piece.instrumentId === INSTRUMENT_IDS.GUITAR ? 'Guitar' : 'Piano'
+  return {
+    id: piece.id,
+    title: piece.title,
+    subtitle: piece.subtitle,
+    attribution: piece.attribution,
+    instrumentId: piece.instrumentId,
+    difficulty: piece.difficulty,
+    approxDuration: piece.approxDuration,
+    teaches: piece.teaches,
+    tags: Array.isArray(piece.tags) ? piece.tags : [],
+    license: piece.license ?? 'Public Domain',
+    provenance: piece.provenance ?? '',
+    sourceUrl: piece.sourceUrl ?? null,
+    measureCount: piece.measureCount ?? null,
+    pageCount: piece.pageCount ?? 1,
+    paths: piece.paths ?? curatedPracticePaths(piece.id),
+    fileNames:
+      piece.fileNames ?? curatedPracticeFilenames(piece.title, instrumentLabel),
+  }
+}
+
+/** Curated built-in Practice Library (Mutopia / redistributable PD editions). */
+export const PRACTICE_LIBRARY_FIXTURES = practiceLibraryManifest.pieces.map(practiceFixture)
+
+export const DEMO_PIECE =
+  PRACTICE_LIBRARY_FIXTURES.find(
+    (piece) => piece.id === 'hungarian-dance-no5' && piece.instrumentId === INSTRUMENT_IDS.PIANO,
+  ) ?? PRACTICE_LIBRARY_FIXTURES.find((piece) => piece.instrumentId === INSTRUMENT_IDS.PIANO)
+
+export const GUITAR_DEMO_PIECE =
+  PRACTICE_LIBRARY_FIXTURES.find(
+    (piece) => piece.id === 'guitar-aguado-op03-1' && piece.instrumentId === INSTRUMENT_IDS.GUITAR,
+  ) ?? PRACTICE_LIBRARY_FIXTURES.find((piece) => piece.instrumentId === INSTRUMENT_IDS.GUITAR)
+
+/**
+ * Internal TAB/OMR regression fixture (not a Practice Library card).
+ * Generated notation+TAB pair kept for pipeline tests.
+ */
+export const GUITAR_TAB_REGRESSION_PATHS = {
+  pdf: '/fixtures/guitar-ode-to-joy/guitar-ode-to-joy.pdf',
+  midi: '/fixtures/guitar-ode-to-joy/guitar-ode-to-joy.mid',
+  musicXml: '/fixtures/guitar-ode-to-joy/guitar-ode-to-joy.musicxml',
+}
+
+export const GUITAR_TAB_REGRESSION_FILENAMES = {
+  pdf: 'Guitar Demo - Ode to Joy.pdf',
+  midi: 'Guitar Demo - Ode to Joy.mid',
+  musicXml: 'Guitar Demo - Ode to Joy.musicxml',
 }
 
 export const DEMO_PIECES = {
@@ -29,35 +79,18 @@ export const DEMO_PIECES = {
 }
 
 /** Built-in demo paths (Hungarian Dance). */
-export const FIXTURE_PATHS = {
-  pdf: '/fixtures/hungarian-dance-no5/hungarian-dance-no5.pdf',
-  midi: '/fixtures/hungarian-dance-no5/hungarian-dance-no5.mid',
-  musicXml: '/fixtures/hungarian-dance-no5/hungarian-dance-no5.mxl',
-  demoAnchors: '/fixtures/hungarian-dance-no5/hungarian-dance-no5.anchors.json',
-}
+export const FIXTURE_PATHS = DEMO_PIECE.paths
 
-export const GUITAR_FIXTURE_PATHS = {
-  pdf: '/fixtures/guitar-ode-to-joy/guitar-ode-to-joy.pdf',
-  midi: '/fixtures/guitar-ode-to-joy/guitar-ode-to-joy.mid',
-  musicXml: '/fixtures/guitar-ode-to-joy/guitar-ode-to-joy.musicxml',
-}
+export const GUITAR_FIXTURE_PATHS = GUITAR_DEMO_PIECE.paths
 
 export const FIXTURE_PATHS_BY_INSTRUMENT = {
   [INSTRUMENT_IDS.PIANO]: FIXTURE_PATHS,
   [INSTRUMENT_IDS.GUITAR]: GUITAR_FIXTURE_PATHS,
 }
 
-export const FIXTURE_FILENAMES = {
-  pdf: 'Hungarian Dance No. 5.pdf',
-  midi: 'Hungarian Dance No. 5.mid',
-  musicXml: 'Hungarian Dance No. 5.mxl',
-}
+export const FIXTURE_FILENAMES = DEMO_PIECE.fileNames
 
-export const GUITAR_FIXTURE_FILENAMES = {
-  pdf: 'Guitar Demo - Ode to Joy.pdf',
-  midi: 'Guitar Demo - Ode to Joy.mid',
-  musicXml: 'Guitar Demo - Ode to Joy.musicxml',
-}
+export const GUITAR_FIXTURE_FILENAMES = GUITAR_DEMO_PIECE.fileNames
 
 export const FIXTURE_FILENAMES_BY_INSTRUMENT = {
   [INSTRUMENT_IDS.PIANO]: FIXTURE_FILENAMES,
@@ -76,7 +109,7 @@ export function getFixtureFilenamesForInstrument(instrumentId = DEFAULT_INSTRUME
   return FIXTURE_FILENAMES_BY_INSTRUMENT[normalizeInstrumentId(instrumentId)] ?? FIXTURE_FILENAMES
 }
 
-/** Internal regression fixture (Minuet in G) — not the visible demo card. */
+/** Internal regression fixture (Minuet in G). */
 export const MINUET_FIXTURE_PATHS = {
   pdf: '/fixtures/demo-minuet-in-g.pdf',
   midi: '/fixtures/demo-minuet-in-g.mid',
@@ -89,121 +122,6 @@ export const MINUET_FIXTURE_FILENAMES = {
   midi: 'Minuet in G.mid',
   musicXml: 'Minuet in G.musicxml',
 }
-
-function generatedPracticePaths(id) {
-  return {
-    pdf: `/fixtures/practice-library/${id}/${id}.pdf`,
-    midi: `/fixtures/practice-library/${id}/${id}.mid`,
-    musicXml: `/fixtures/practice-library/${id}/${id}.musicxml`,
-  }
-}
-
-function generatedPracticeFilenames(title, instrumentLabel) {
-  return {
-    pdf: `${title} - ${instrumentLabel}.pdf`,
-    midi: `${title} - ${instrumentLabel}.mid`,
-    musicXml: `${title} - ${instrumentLabel}.musicxml`,
-  }
-}
-
-function practiceFixture({
-  id,
-  title,
-  subtitle,
-  attribution,
-  instrumentId,
-  difficulty,
-  approxDuration,
-  teaches,
-  measureCount,
-  pageCount = 1,
-  paths = generatedPracticePaths(id),
-  fileNames = generatedPracticeFilenames(title, instrumentId === INSTRUMENT_IDS.GUITAR ? 'Guitar' : 'Piano'),
-}) {
-  return {
-    id,
-    title,
-    subtitle,
-    attribution,
-    instrumentId,
-    difficulty,
-    approxDuration,
-    teaches,
-    measureCount,
-    pageCount,
-    paths,
-    fileNames,
-  }
-}
-
-export const PRACTICE_LIBRARY_FIXTURES = [
-  practiceFixture({
-    id: 'demo-minuet-in-g',
-    title: 'Minuet in G',
-    subtitle: 'Public-domain baroque keyboard score',
-    attribution: 'Christian Petzold / J.S. Bach Notebook',
-    instrumentId: INSTRUMENT_IDS.PIANO,
-    difficulty: 'Intermediate',
-    approxDuration: '1 min',
-    teaches: 'Minuet pulse and two-hand balance',
-    measureCount: 32,
-    paths: MINUET_FIXTURE_PATHS,
-    fileNames: MINUET_FIXTURE_FILENAMES,
-  }),
-  practiceFixture({
-    ...DEMO_PIECE,
-    instrumentId: INSTRUMENT_IDS.PIANO,
-    difficulty: 'Advanced',
-    approxDuration: '3 min',
-    subtitle: 'Advanced public-domain piano demo with verified score-follow anchors',
-    teaches: 'Dense reading and phrase flow',
-    paths: FIXTURE_PATHS,
-    fileNames: FIXTURE_FILENAMES,
-  }),
-  practiceFixture({
-    ...GUITAR_DEMO_PIECE,
-    instrumentId: INSTRUMENT_IDS.GUITAR,
-    difficulty: 'Beginner',
-    approxDuration: '1 min',
-    subtitle: 'Public-domain melody with standard notation and TAB',
-    teaches: 'First-position melody and TAB',
-    paths: GUITAR_FIXTURE_PATHS,
-    fileNames: GUITAR_FIXTURE_FILENAMES,
-  }),
-  practiceFixture({
-    id: 'guitar-amazing-grace',
-    title: 'Amazing Grace',
-    subtitle: 'Public-domain open-position melody',
-    attribution: 'Traditional',
-    instrumentId: INSTRUMENT_IDS.GUITAR,
-    difficulty: 'Beginner',
-    approxDuration: '45s',
-    teaches: 'Slow phrasing, open position',
-    measureCount: 4,
-  }),
-  practiceFixture({
-    id: 'guitar-when-the-saints',
-    title: 'When the Saints Go Marching In',
-    subtitle: 'Public-domain first-position tune',
-    attribution: 'Traditional',
-    instrumentId: INSTRUMENT_IDS.GUITAR,
-    difficulty: 'Beginner',
-    approxDuration: '40s',
-    teaches: 'Steady rhythm, first-position frets',
-    measureCount: 5,
-  }),
-  practiceFixture({
-    id: 'guitar-aura-lee',
-    title: 'Aura Lee',
-    subtitle: 'Public-domain intermediate melody',
-    attribution: 'Traditional',
-    instrumentId: INSTRUMENT_IDS.GUITAR,
-    difficulty: 'Intermediate',
-    approxDuration: '1 min',
-    teaches: 'Connected melody, fretted shifts',
-    measureCount: 8,
-  }),
-]
 
 export function getPracticeLibraryFixture(pieceId, instrumentId = DEFAULT_INSTRUMENT_ID) {
   const normalizedInstrument = normalizeInstrumentId(instrumentId)
@@ -223,4 +141,16 @@ export function getPracticeLibraryFixture(pieceId, instrumentId = DEFAULT_INSTRU
     PRACTICE_LIBRARY_FIXTURES.find((piece) => piece.instrumentId === normalizedInstrument) ??
     PRACTICE_LIBRARY_FIXTURES[0]
   )
+}
+
+export function getPracticeLibraryDifficultyCounts(instrumentId) {
+  const pieces = PRACTICE_LIBRARY_FIXTURES.filter(
+    (piece) => piece.instrumentId === normalizeInstrumentId(instrumentId),
+  )
+  return {
+    Beginner: pieces.filter((piece) => piece.difficulty === 'Beginner').length,
+    Intermediate: pieces.filter((piece) => piece.difficulty === 'Intermediate').length,
+    Advanced: pieces.filter((piece) => piece.difficulty === 'Advanced').length,
+    total: pieces.length,
+  }
 }

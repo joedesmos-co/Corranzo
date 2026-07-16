@@ -1,36 +1,20 @@
 # Practice Library fixtures
 
-Short built-in practice pieces for Corranzo. Keep this folder intentionally small:
-only include public-domain material that has aligned PDF, MusicXML, and MIDI and is
-good enough to appear in the visible Practice Library.
+Curated Mutopia / public-domain editions for the built-in Practice Library.
 
-Each generated helper score has:
+## Policy
 
-- PDF score
-- MusicXML timing
-- MIDI playback
+- Prefer Mutopia engraved PDF + MIDI
+- MusicXML timing from the same-edition MIDI (music21), never OMR for built-ins
+- Every piece declares `license`, `provenance`, `difficulty`, and `tags`
+- OMR is only for user uploads in My Uploads
 
-Regenerate deterministic assets with:
+## Regenerate
 
 ```bash
+python3 -m venv .venv-fixtures
+.venv-fixtures/bin/pip install music21
 npm run fixtures:practice-library
 ```
 
-## Source status
-
-The visible Practice Library uses public-domain traditional works or public-domain
-classical excerpts only. Generated helper scores are limited to simple beginner and
-intermediate guitar melodies with hand-checked notation/TAB alignment. Do not add
-synthetic "style" studies or generated piano sketches to the built-in catalog.
-
-Current generated guitar helpers:
-
-- Amazing Grace (Beginner)
-- When the Saints Go Marching In (Beginner)
-- Aura Lee (Intermediate)
-
-Existing non-generated built-ins remain in their original fixture folders:
-
-- Hungarian Dance No. 5
-- Minuet in G
-- Guitar Ode to Joy
+Catalog source of truth: `manifest.json` in this directory.
