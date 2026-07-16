@@ -39,7 +39,6 @@ import { normalizeLegacyMusicFontGlyphs } from './normalizeLegacyMusicFontGlyphs
 import {
   attachTabPositionsToEvents,
   buildTabMeasureEvents,
-  classifySystemStaves,
   detectTabTextAnnotations,
   extractTabDigitNotes,
   groupTabNotesByMeasure,
@@ -120,6 +119,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     documentStaffGapReference = null,
     /** Instrument definition (features/instruments). Null = legacy piano path. */
     instrument = null,
+    /** Developer/benchmark-only capture for the disabled-by-default V3 shadow. */
+    captureOmrV3Shadow = false,
   } = options
 
   const tabCapable = Boolean(instrument?.omr?.supportsTablature && instrument?.strings)
@@ -171,6 +172,24 @@ export function processOmrPageAnalysis(imageData, options = {}) {
   const vectorGlyphs = hasVectorOmrNoteheads(pageText)
     ? positionedGlyphs ?? textGlyphsToImage(pageText, imageData)
     : []
+
+  const buildOmrV3ShadowInput = ({ resultMeasureRhythms, resultMeasureGrid, tabDiagnostics }) =>
+    captureOmrV3Shadow
+      ? {
+          page,
+          width: imageData.width,
+          height: imageData.height,
+          contentBounds,
+          detectedStaves: detectedSystems.staves,
+          systems,
+          systemRoles,
+          systemMeasureBoxes,
+          measureRhythms: resultMeasureRhythms,
+          measureGrid: resultMeasureGrid,
+          tabDiagnostics: tabDiagnostics ?? null,
+          source: hasVectorOmrNoteheads(pageText) ? 'vector' : 'raster',
+        }
+      : null
 
   // Fretted-instrument pages: classify bands up front so a notation-over-TAB
   // pair shares ONE set of measure numbers (the TAB band re-reads its
@@ -419,6 +438,13 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         ? legacyFontNormalization.diagnostics
         : null,
     }
+    if (captureOmrV3Shadow) {
+      result.omrV3ShadowInput = buildOmrV3ShadowInput({
+        resultMeasureRhythms: measureRhythms,
+        resultMeasureGrid: measureGrid,
+        tabDiagnostics,
+      })
+    }
     omrDebugStep(`processOmrPage:done:page-${page}`, imageData, {
       notes,
       systems: systems.length,
@@ -557,6 +583,13 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         ? legacyFontNormalization.diagnostics
         : null,
     }
+    if (captureOmrV3Shadow) {
+      result.omrV3ShadowInput = buildOmrV3ShadowInput({
+        resultMeasureRhythms: measureRhythms,
+        resultMeasureGrid: measureGrid,
+        tabDiagnostics,
+      })
+    }
     omrDebugStep(`processOmrPage:done:page-${page}`, imageData, {
       notes,
       systems: systems.length,
@@ -688,6 +721,13 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     inkThreshold,
     dense: noteheadOptions.dense,
     staffGapNormalization: staffGapNormalizationResult.staffGapNormalization,
+  }
+  if (captureOmrV3Shadow) {
+    result.omrV3ShadowInput = buildOmrV3ShadowInput({
+      resultMeasureRhythms: measureRhythms,
+      resultMeasureGrid: measureGrid,
+      tabDiagnostics: null,
+    })
   }
   omrDebugStep(`processOmrPage:done:page-${page}`, imageData, {
     notes,

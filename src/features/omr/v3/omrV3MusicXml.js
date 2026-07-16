@@ -373,12 +373,23 @@ function attributesXml(context, metadata) {
     : guitar
       ? '<clef><sign>G</sign><line>2</line><clef-octave-change>-1</clef-octave-change></clef>'
       : '<clef><sign>G</sign><line>2</line></clef>'
+  const musical = metadata?.musical ?? {}
+  const fifths = Number(musical.keySignature?.fifths ?? metadata?.fifths ?? 0)
+  const beats = Number(musical.timeSignature?.beats ?? metadata?.beats ?? DEFAULT_BEATS)
+  const beatType = Number(
+    musical.timeSignature?.beatType ?? metadata?.beatType ?? DEFAULT_BEAT_TYPE,
+  )
   return (
     `<attributes><divisions>${DIVISIONS_PER_QUARTER}</divisions>` +
-    `<key><fifths>${Number(metadata?.fifths ?? 0)}</fifths></key>` +
-    `<time><beats>${Number(metadata?.beats ?? DEFAULT_BEATS)}</beats><beat-type>${Number(metadata?.beatType ?? DEFAULT_BEAT_TYPE)}</beat-type></time>` +
+    `<key><fifths>${fifths}</fifths></key>` +
+    `<time><beats>${beats}</beats><beat-type>${beatType}</beat-type></time>` +
     `${staves}${clefs}</attributes>`
   )
+}
+
+function tempoXml(metadata) {
+  const bpm = Number(metadata?.musical?.tempo?.bpm ?? metadata?.tempo?.bpm ?? 120)
+  return Number.isFinite(bpm) && bpm > 0 ? `<direction><sound tempo="${bpm}"/></direction>` : ''
 }
 
 function emptyMeasureXml(totalDivisions, multiStaff) {
@@ -398,7 +409,10 @@ function measureXml(entry, index, preflight, options, diagnostics) {
   const relationships = options.document.relationships ?? []
   const totalDivisions = options.measureDurationDivisions
   const multiStaff = context.staves.length > 1
-  let inner = index === 0 ? attributesXml(context, options.document.metadata) : ''
+  let inner =
+    index === 0
+      ? attributesXml(context, options.document.metadata) + tempoXml(options.document.metadata)
+      : ''
   inner += warningDirections([options.document, entry.page, system, measure])
 
   if (voices.length === 0) {

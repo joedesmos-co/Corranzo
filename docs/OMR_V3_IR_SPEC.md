@@ -1,13 +1,14 @@
 # Corranzo OMR V3 Intermediate Representation
 
-Status: implemented foundation, schema version 1  
-Runtime status: shadow-only; no production consumer
+Status: implemented foundation and shadow pipeline, schema version 1
+
+Runtime status: disabled by default; no production consumer or promoted stage
 
 ## Purpose
 
 OMR V3 is a structure-first document model. It records what the page contains and how evidence is related before committing to note emission, voice numbering, or MusicXML. It is deliberately separate from the existing measure-event pipeline so incomplete V3 stages cannot alter production output.
 
-The implementation is in `src/features/omr/v3/omrV3Ir.js`. It contains only plain JavaScript data constructors and pure validation/serialization helpers; it has no browser, React, PDF.js, canvas, or worker dependency.
+The core implementation is in `src/features/omr/v3/omrV3Ir.js`. It contains only plain JavaScript data constructors and pure validation/serialization helpers; it has no browser, React, PDF.js, canvas, or worker dependency.
 
 ## Design rules
 
@@ -177,6 +178,26 @@ Serialization tests cover stable IDs, round trips, input immutability, deep free
 ## Versioning policy
 
 `schemaVersion` changes only for incompatible representation changes. Additive nullable metadata does not require a version bump. A future migrator must be pure and explicit; the validator will not guess how to reinterpret an unsupported version.
+
+## Implemented transformation stages
+
+All stages are pure-data modules under `src/features/omr/v3/`:
+
+| Module | Responsibility | Runtime authority |
+| --- | --- | --- |
+| `omrV3Structure.js` | raw/canonical line geometry, staff classification, system/staff-group evidence, reading order | shadow only |
+| `omrV3Measures.js` | cross-staff barline reconciliation and shared measure columns | shadow only |
+| `omrV3Ownership.js` | symbol ownership, exclusions, multi-digit TAB preservation, first-class onset columns | shadow only |
+| `omrV3Voices.js` | Piano staff voices, chords/rests, alternate ambiguous candidates, beam/stem/tie/slur relationships | shadow only |
+| `omrV3Guitar.js` | notation/TAB fusion, TAB-only approximate rhythm, unpaired diagnostics | shadow only |
+| `omrV3MusicXml.js` | deterministic independent MusicXML with validation and diagnostics | shadow only |
+| `omrV3Evaluation.js` | truth/current comparisons and conservative promotion gates | benchmark only |
+| `omrV3Shadow.js` | adapter/orchestrator from current detector observations to V3 | opt-in development/benchmark only |
+| `omrV3Rollout.js` | disabled defaults, rollback, and non-enabling promotion requests | production-safe control plane |
+
+`runPdfOmrPipeline` accepts `omrV3Shadow`, `omrV3Rollback`, and `omrV3Promotions`. Shadow defaults to false. Rollback suppresses all V3 work. Every requested promotion resolves false in this sprint, so V3 cannot replace production output accidentally. Benchmarks opt into shadow analysis and write a separate `omr-v3-shadow-report`.
+
+The current shadow adapter deliberately reuses legacy measure/event evidence to exercise the full IR lifecycle. Its symbol evidence is therefore not an independent raw-symbol detector benchmark. This provenance is named on adapted barlines and event technical metadata; no fixture IDs or coordinates are embedded in runtime code.
 
 ## Intentionally deferred
 

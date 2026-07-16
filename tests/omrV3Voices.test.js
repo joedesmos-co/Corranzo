@@ -138,6 +138,47 @@ function measures(document) {
 }
 
 describe('OMR V3 Piano voice candidates', () => {
+  it('builds voices for a single notation staff', () => {
+    const page = analyzeOmrV3PageStructure({
+      documentId: 'single-notation-voice',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'solo-staff',
+          space: 'normalized',
+          lineRows: [0.1, 0.11, 0.12, 0.13, 0.14],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['treble'],
+          noteheadCount: 4,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+      ],
+    }).page
+    const measured = buildOmrV3DocumentMeasureColumns(
+      createOmrDocumentIR({ documentId: 'single-notation-voice', pages: [page] }),
+    ).document
+    const document = assignOmrV3DocumentSymbolOwnership(measured, {
+      symbolsByPage: [
+        musicalSymbol('solo-note', 'notehead', 0.3, 0.12, {
+          midi: 72,
+          onsetDivisions: 0,
+          durationDivisions: 4,
+        }),
+      ],
+    }).document
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const primary = measures(result.document).flatMap((measure) =>
+      measure.voices.filter((voice) => voice.candidateRank === 0),
+    )
+
+    expect(result.totals.pianoMeasureCount).toBe(1)
+    expect(primary).toHaveLength(1)
+  })
+
   it('builds separate staff voices, shared-onset chords, and rest constraints', () => {
     const input = ownedPianoDocument().document
     const result = buildOmrV3PianoVoiceCandidates(input)

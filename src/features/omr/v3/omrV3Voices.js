@@ -340,7 +340,11 @@ function solveStaffMeasure(measure, staff, totalDivisions) {
 
 function pianoStaves(system) {
   return (system.staffGroups ?? [])
-    .filter((group) => group.type === OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF)
+    .filter(
+      (group) =>
+        group.type === OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF ||
+        group.type === OMR_V3_STAFF_GROUP_TYPE.SINGLE_NOTATION,
+    )
     .flatMap((group) => group.staves ?? [])
 }
 

@@ -307,6 +307,26 @@ function rawLinesForSegment(segment, observation, pageWidth, pageHeight, space) 
   return result
 }
 
+function rawGroupsForSegment(segment, allSegments, rawLineRows) {
+  if (!Array.isArray(rawLineRows) || rawLineRows.length === 0) return segment
+  const segmentIndex = allSegments.indexOf(segment)
+  const top = segment.rows[0]
+  const bottom = segment.rows[segment.rows.length - 1]
+  const previous = allSegments[segmentIndex - 1]
+  const next = allSegments[segmentIndex + 1]
+  const lowerBound = previous
+    ? (previous.rows[previous.rows.length - 1] + top) / 2
+    : -Infinity
+  const upperBound = next ? (bottom + next.rows[0]) / 2 : Infinity
+  const selected = rawLineRows.filter((row) => {
+    const y = rowY(row)
+    return Number.isFinite(y) && y > lowerBound && y <= upperBound
+  })
+  return selected.length
+    ? { ...segment, groups: selected.map((row) => [row]) }
+    : segment
+}
+
 function normalizedLinesForSegment(segment, observation, pageWidth, pageHeight, space) {
   const xStart = normalized(Number(observation.xStart ?? 0), pageWidth, space)
   const xEnd = normalized(
@@ -423,7 +443,13 @@ export function buildOmrV3StaffCandidates({
         bandIndex,
         segmentIndex,
         lineCount: segment.rows.length,
-        rawLineGeometry: rawLinesForSegment(segment, observation, pageWidth, pageHeight, space),
+        rawLineGeometry: rawLinesForSegment(
+          rawGroupsForSegment(segment, segmented.segments, observation.rawLineRows),
+          observation,
+          pageWidth,
+          pageHeight,
+          space,
+        ),
         normalizedLineGeometry: normalizedLines,
         boundingBox: createOmrV3BoundingBox({
           x: clamp(xStart),

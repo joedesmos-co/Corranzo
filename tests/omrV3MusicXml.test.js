@@ -78,7 +78,15 @@ function serializerDocument() {
   })
   return createOmrDocumentIR({
     documentId: 'serializer-fixture',
-    metadata: { title: 'V3 & serializer', instrumentId: 'piano' },
+    metadata: {
+      title: 'V3 & serializer',
+      instrumentId: 'piano',
+      musical: {
+        keySignature: { fifths: 2 },
+        timeSignature: { beats: 3, beatType: 4 },
+        tempo: { bpm: 96 },
+      },
+    },
     pages: [
       {
         pageId: 'p1',
@@ -177,6 +185,9 @@ describe('OMR V3 MusicXML serializer', () => {
     expect(first.musicXml).toContain('<chord/>')
     expect(first.musicXml).toContain('<backup><duration>16</duration></backup>')
     expect(first.musicXml).toContain('<staves>2</staves>')
+    expect(first.musicXml).toContain('<key><fifths>2</fifths></key>')
+    expect(first.musicXml).toContain('<time><beats>3</beats><beat-type>4</beat-type></time>')
+    expect(first.musicXml).toContain('<sound tempo="96"/>')
     expect(first.musicXml).toContain('<string>2</string><fret>1</fret>')
     expect(first.musicXml).toContain('<tied type="start"/>')
     expect(first.musicXml).toContain('<tied type="stop"/>')

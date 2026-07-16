@@ -56,6 +56,33 @@ function analyze(staffBands, instrumentId = 'piano') {
 }
 
 describe('OMR V3 structure-first page analysis', () => {
+  it('classifies canonical lines while preserving noisier raw scan rows', () => {
+    const result = analyzeOmrV3PageStructure({
+      documentId: 'raw-row-provenance',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'scan-staff',
+          space: 'normalized',
+          lineRows: [0.2, 0.21, 0.22, 0.23, 0.24],
+          rawLineRows: [0.1998, 0.2, 0.2098, 0.21, 0.2198, 0.22, 0.2298, 0.23, 0.2398, 0.24],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['treble'],
+          noteheadCount: 4,
+        },
+      ],
+    })
+
+    const staff = result.page.systems[0].staffGroups[0].staves[0]
+    expect(staff.lineCount).toBe(5)
+    expect(staff.normalizedLineGeometry).toHaveLength(5)
+    expect(staff.rawLineGeometry).toHaveLength(10)
+  })
+
   it('collapses doubled raster rows while preserving their raw groups', () => {
     const result = collapseDoubledStaffRows([100, 101, 110, 111, 120, 121, 130, 131, 140, 141])
 
