@@ -6,14 +6,20 @@
     {
       "id": "synth-dyad-c4-e4",
       "label": "chord",
-      "expectedMidis": [60, 64],
+      "expectedMidis": [
+        60,
+        64
+      ],
       "chordType": "simultaneous",
       "instrument": "piano",
       "micDevice": "synthetic",
       "noiseCondition": "clean",
       "synthetic": {
         "type": "chord-simultaneous",
-        "midis": [60, 64],
+        "midis": [
+          60,
+          64
+        ],
         "seconds": 1.6,
         "amplitude": 0.3
       },
@@ -23,14 +29,22 @@
     {
       "id": "synth-c-major-triad",
       "label": "chord",
-      "expectedMidis": [60, 64, 67],
+      "expectedMidis": [
+        60,
+        64,
+        67
+      ],
       "chordType": "simultaneous",
       "instrument": "piano",
       "micDevice": "synthetic",
       "noiseCondition": "clean",
       "synthetic": {
         "type": "chord-simultaneous",
-        "midis": [60, 64, 67],
+        "midis": [
+          60,
+          64,
+          67
+        ],
         "seconds": 1.8,
         "amplitude": 0.32
       },
@@ -40,14 +54,24 @@
     {
       "id": "synth-g7-tetrad",
       "label": "chord",
-      "expectedMidis": [55, 59, 62, 65],
+      "expectedMidis": [
+        55,
+        59,
+        62,
+        65
+      ],
       "chordType": "simultaneous",
       "instrument": "piano",
       "micDevice": "synthetic",
       "noiseCondition": "clean",
       "synthetic": {
         "type": "chord-simultaneous",
-        "midis": [55, 59, 62, 65],
+        "midis": [
+          55,
+          59,
+          62,
+          65
+        ],
         "seconds": 1.8,
         "amplitude": 0.3
       },
@@ -57,7 +81,11 @@
     {
       "id": "synth-rolled-c-major",
       "label": "chord",
-      "expectedMidis": [60, 64, 67],
+      "expectedMidis": [
+        60,
+        64,
+        67
+      ],
       "chordType": "rolled",
       "rollMs": 80,
       "instrument": "piano",
@@ -65,7 +93,11 @@
       "noiseCondition": "clean",
       "synthetic": {
         "type": "chord-rolled",
-        "midis": [60, 64, 67],
+        "midis": [
+          60,
+          64,
+          67
+        ],
         "seconds": 2,
         "staggerMs": 80,
         "amplitude": 0.3
@@ -80,7 +112,10 @@
       "instrument": "piano",
       "micDevice": "synthetic",
       "noiseCondition": "clean",
-      "synthetic": { "type": "silence", "seconds": 0.8 },
+      "synthetic": {
+        "type": "silence",
+        "seconds": 0.8
+      },
       "notes": "Silence control."
     },
     {
@@ -90,13 +125,21 @@
       "instrument": "piano",
       "micDevice": "synthetic",
       "noiseCondition": "noisy",
-      "synthetic": { "type": "noise", "seconds": 0.8, "seed": 13 },
+      "synthetic": {
+        "type": "noise",
+        "seconds": 0.8,
+        "seed": 13
+      },
       "notes": "Noise control."
     },
     {
       "id": "real-c-major-triad",
       "label": "chord",
-      "expectedMidis": [60, 64, 67],
+      "expectedMidis": [
+        60,
+        64,
+        67
+      ],
       "chordType": "simultaneous",
       "instrument": "piano",
       "micDevice": "in-repo fixture",
@@ -110,7 +153,10 @@
     {
       "id": "real-dyad-c4-g4",
       "label": "chord",
-      "expectedMidis": [60, 67],
+      "expectedMidis": [
+        60,
+        67
+      ],
       "chordType": "simultaneous",
       "instrument": "piano",
       "micDevice": "in-repo fixture",
@@ -130,6 +176,224 @@
       "noiseCondition": "clean",
       "file": "clips/real-room-quiet.wav",
       "notes": "Quiet room bed."
+    },
+    {
+      "id": "uiowa-piano-mf-c4-e4-dyad",
+      "label": "chord",
+      "instrument": "piano",
+      "micDevice": "uiowa-mis",
+      "tone": "acoustic-piano",
+      "dynamic": "mf",
+      "noiseCondition": "clean",
+      "sourceType": "uiowa-mis-derived",
+      "file": "clips/uiowa-piano-mf-c4-e4-dyad.wav",
+      "redistribution": "uiowa-mis-unrestricted",
+      "attribution": "University of Iowa Musical Instrument Samples (MIS) — freely redistributable per https://theremin.music.uiowa.edu/mis.html",
+      "notes": "UIowa-derived simultaneous C4+E4 dyad.",
+      "expectedMidis": [
+        60,
+        64
+      ],
+      "expectedOnsetMs": 120,
+      "chordType": "simultaneous",
+      "startMs": 40,
+      "endMs": 1800
+    },
+    {
+      "id": "uiowa-piano-mf-c-major-triad",
+      "label": "chord",
+      "instrument": "piano",
+      "micDevice": "uiowa-mis",
+      "tone": "acoustic-piano",
+      "dynamic": "mf",
+      "noiseCondition": "clean",
+      "sourceType": "uiowa-mis-derived",
+      "file": "clips/uiowa-piano-mf-c-major-triad.wav",
+      "redistribution": "uiowa-mis-unrestricted",
+      "attribution": "University of Iowa Musical Instrument Samples (MIS) — freely redistributable per https://theremin.music.uiowa.edu/mis.html",
+      "notes": "UIowa-derived simultaneous C major triad.",
+      "expectedMidis": [
+        60,
+        64,
+        67
+      ],
+      "expectedOnsetMs": 120,
+      "chordType": "simultaneous",
+      "startMs": 40,
+      "endMs": 1800
+    },
+    {
+      "id": "uiowa-piano-pp-c-major-triad",
+      "label": "chord",
+      "instrument": "piano",
+      "micDevice": "uiowa-mis",
+      "tone": "acoustic-piano",
+      "dynamic": "pp",
+      "noiseCondition": "clean",
+      "sourceType": "uiowa-mis-derived",
+      "file": "clips/uiowa-piano-pp-c-major-triad.wav",
+      "redistribution": "uiowa-mis-unrestricted",
+      "attribution": "University of Iowa Musical Instrument Samples (MIS) — freely redistributable per https://theremin.music.uiowa.edu/mis.html",
+      "notes": "UIowa-derived soft simultaneous C major triad.",
+      "expectedMidis": [
+        60,
+        64,
+        67
+      ],
+      "expectedOnsetMs": 120,
+      "chordType": "simultaneous",
+      "startMs": 40,
+      "endMs": 1800
+    },
+    {
+      "id": "uiowa-piano-mf-split-c3-e4-g4",
+      "label": "chord",
+      "instrument": "piano",
+      "micDevice": "uiowa-mis",
+      "tone": "acoustic-piano",
+      "dynamic": "mf",
+      "noiseCondition": "clean",
+      "sourceType": "uiowa-mis-derived",
+      "file": "clips/uiowa-piano-mf-split-c3-e4-g4.wav",
+      "redistribution": "uiowa-mis-unrestricted",
+      "attribution": "University of Iowa Musical Instrument Samples (MIS) — freely redistributable per https://theremin.music.uiowa.edu/mis.html",
+      "notes": "UIowa-derived split-register chord (bass C3 + treble E4/G4).",
+      "expectedMidis": [
+        48,
+        64,
+        67
+      ],
+      "expectedOnsetMs": 120,
+      "chordType": "split-register",
+      "startMs": 40,
+      "endMs": 1900
+    },
+    {
+      "id": "uiowa-guitar-mf-adjacent-g3-b3",
+      "label": "chord",
+      "instrument": "guitar",
+      "micDevice": "uiowa-mis",
+      "tone": "acoustic-guitar",
+      "dynamic": "mf",
+      "noiseCondition": "clean",
+      "sourceType": "uiowa-mis-derived",
+      "file": "clips/uiowa-guitar-mf-adjacent-g3-b3.wav",
+      "redistribution": "uiowa-mis-unrestricted",
+      "attribution": "University of Iowa Musical Instrument Samples (MIS) — freely redistributable per https://theremin.music.uiowa.edu/mis.html",
+      "notes": "UIowa-derived adjacent guitar open strings G3+B3.",
+      "expectedMidis": [
+        55,
+        59
+      ],
+      "expectedOnsetMs": 120,
+      "chordType": "simultaneous",
+      "startMs": 40,
+      "endMs": 1600,
+      "expectedStringFrets": [
+        {
+          "string": 3,
+          "fret": 0,
+          "midi": 55
+        },
+        {
+          "string": 2,
+          "fret": 0,
+          "midi": 59
+        }
+      ]
+    },
+    {
+      "id": "uiowa-guitar-mf-low-high-e2-e4",
+      "label": "chord",
+      "instrument": "guitar",
+      "micDevice": "uiowa-mis",
+      "tone": "acoustic-guitar",
+      "dynamic": "mf",
+      "noiseCondition": "clean",
+      "sourceType": "uiowa-mis-derived",
+      "file": "clips/uiowa-guitar-mf-low-high-e2-e4.wav",
+      "redistribution": "uiowa-mis-unrestricted",
+      "attribution": "University of Iowa Musical Instrument Samples (MIS) — freely redistributable per https://theremin.music.uiowa.edu/mis.html",
+      "notes": "UIowa-derived low+high guitar open E strings.",
+      "expectedMidis": [
+        40,
+        64
+      ],
+      "expectedOnsetMs": 120,
+      "chordType": "split-register",
+      "startMs": 40,
+      "endMs": 1700,
+      "expectedStringFrets": [
+        {
+          "string": 6,
+          "fret": 0,
+          "midi": 40
+        },
+        {
+          "string": 1,
+          "fret": 0,
+          "midi": 64
+        }
+      ]
+    },
+    {
+      "id": "uiowa-guitar-mf-open-em-strum",
+      "label": "chord",
+      "instrument": "guitar",
+      "micDevice": "uiowa-mis",
+      "tone": "acoustic-guitar",
+      "dynamic": "mf",
+      "noiseCondition": "clean",
+      "sourceType": "uiowa-mis-derived",
+      "file": "clips/uiowa-guitar-mf-open-em-strum.wav",
+      "redistribution": "uiowa-mis-unrestricted",
+      "attribution": "University of Iowa Musical Instrument Samples (MIS) — freely redistributable per https://theremin.music.uiowa.edu/mis.html",
+      "notes": "UIowa-derived open Em strum (rolled across six strings).",
+      "expectedMidis": [
+        40,
+        45,
+        50,
+        55,
+        59,
+        64
+      ],
+      "expectedOnsetMs": 120,
+      "chordType": "rolled",
+      "rollMs": 110,
+      "startMs": 40,
+      "endMs": 1900,
+      "expectedStringFrets": [
+        {
+          "string": 6,
+          "fret": 0,
+          "midi": 40
+        },
+        {
+          "string": 5,
+          "fret": 0,
+          "midi": 45
+        },
+        {
+          "string": 4,
+          "fret": 0,
+          "midi": 50
+        },
+        {
+          "string": 3,
+          "fret": 0,
+          "midi": 55
+        },
+        {
+          "string": 2,
+          "fret": 0,
+          "midi": 59
+        },
+        {
+          "string": 1,
+          "fret": 0,
+          "midi": 64
+        }
+      ]
     }
   ]
 }

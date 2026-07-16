@@ -15,6 +15,20 @@ Reports are written to `tmp/mic-accuracy-replay/report.json` and `report.md`.
 
 In-repo fixtures under `clips/` are deterministic piano/guitar/room tones for CI. Replace them with **live mic captures** when you can — update `micDevice` and notes in the manifest.
 
+## Real / recorded sources
+
+```bash
+# Redistributable University of Iowa MIS samples → accuracy + polyphony WAVs + manifests
+npm run mic:import-uiowa-fixtures
+
+# Developer-only live mic capture (or --from-wav import). Requires CORRANZO_DEVELOPER_MODE=1.
+CORRANZO_DEVELOPER_MODE=1 npm run mic:capture-real-fixture -- \
+  --target accuracy --id macbook-piano-c4 --expected-midi 60 \
+  --instrument piano --tone acoustic-piano --device macbook-mic --seconds 3
+```
+
+UIowa-derived clips are labeled `sourceType: uiowa-mis-derived` and may be committed. Live developer captures default to `local-developer-fixture` redistribution and should stay local unless you intentionally clear that flag.
+
 ## Add a real recording
 
 1. Record a short clip (0.5–2 s) with your practice mic setup:

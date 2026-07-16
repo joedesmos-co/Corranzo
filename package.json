@@ -30,7 +30,9 @@
     "mic:generate-clips": "node scripts/generate-mic-accuracy-clips.mjs",
     "mic:browser-qa": "node scripts/browser-mic-wfy-qa.mjs",
     "mic:polyphony-replay": "node scripts/mic-polyphony-replay.mjs",
-    "mic:generate-polyphony-clips": "node scripts/generate-mic-polyphony-clips.mjs"
+    "mic:generate-polyphony-clips": "node scripts/generate-mic-polyphony-clips.mjs",
+    "mic:import-uiowa-fixtures": "node scripts/import-uiowa-mic-fixtures.mjs",
+    "mic:capture-real-fixture": "node scripts/capture-real-mic-fixture.mjs"
   },
   "dependencies": {
     "@tonejs/midi": "^2.0.28",

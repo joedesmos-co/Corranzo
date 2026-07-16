@@ -214,10 +214,11 @@ describe('mic accuracy manifest', () => {
 
   it('replays real-file note clips through the live V2 single-note path', () => {
     const manifest = loadMicAccuracyManifest(manifestPath)
-    const noteClips = manifest.clips.filter(
-      (clip) => clip.file && !clip.synthetic && clip.label === 'note',
-    )
-    expect(noteClips.length).toBeGreaterThanOrEqual(3)
+    // Phase 2B / live V2 single-note regression suite. UIowa stress fixtures are
+    // measured separately; do not expand this gate without a detector pass.
+    const regressionIds = new Set(['real-piano-c4', 'real-piano-e4', 'real-guitar-g3'])
+    const noteClips = manifest.clips.filter((clip) => regressionIds.has(clip.id))
+    expect(noteClips.length).toBe(3)
 
     for (const clip of noteClips) {
       const audio = resolveMicAccuracyClipAudio(clip, manifest, SAMPLE_RATE)
@@ -230,6 +231,31 @@ describe('mic accuracy manifest', () => {
       const replay = replayV2SingleNote(samples, wav.sampleRate, clip.expectedMidi, clip.instrument)
       expect(replay.stableMidi, clip.id).toBe(clip.expectedMidi)
       expect(replay.detectedMidis, clip.id).toContain(clip.expectedMidi)
+    }
+  })
+
+  it('keeps UIowa single-note stress fixtures measurable on the V1 offline path', () => {
+    const manifest = loadMicAccuracyManifest(manifestPath)
+    const uiowaClips = manifest.clips.filter(
+      (clip) => clip.id.startsWith('uiowa-') && clip.label === 'note' && clip.file,
+    )
+    expect(uiowaClips.length).toBeGreaterThanOrEqual(3)
+    for (const clip of uiowaClips) {
+      const audio = resolveMicAccuracyClipAudio(clip, manifest, SAMPLE_RATE)
+      expect(audio.missingFile).toBe(false)
+      const wav = readWavPcm(audio.filePath)
+      const samples = sliceClipSamples(wav.samples, wav.sampleRate, {
+        startMs: clip.startMs,
+        endMs: clip.endMs,
+      })
+      const replay = replayMicClip(samples, wav.sampleRate, {
+        centsTolerance: settings.micCentsTolerance,
+        instrumentId: clip.instrument,
+      })
+      const evaluation = evaluateLabeledClip(clip, replay, {
+        centsTolerance: settings.micCentsTolerance,
+      })
+      expect(evaluation.hit, clip.id).toBe(true)
     }
   })
 

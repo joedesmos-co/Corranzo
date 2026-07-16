@@ -11,7 +11,12 @@
       "instrument": "piano",
       "micDevice": "synthetic",
       "noiseCondition": "clean",
-      "synthetic": { "type": "sine", "frequency": 440, "seconds": 0.6, "amplitude": 0.35 },
+      "synthetic": {
+        "type": "sine",
+        "frequency": 440,
+        "seconds": 0.6,
+        "amplitude": 0.35
+      },
       "notes": "Synthetic sine — baseline sanity check only."
     },
     {
@@ -27,8 +32,14 @@
         "frequency": 220,
         "seconds": 0.6,
         "harmonics": [
-          { "multiple": 1, "amplitude": 0.12 },
-          { "multiple": 2, "amplitude": 0.35 }
+          {
+            "multiple": 1,
+            "amplitude": 0.12
+          },
+          {
+            "multiple": 2,
+            "amplitude": 0.35
+          }
         ]
       },
       "notes": "Harmonic-rich synthetic tone — not used for threshold tuning."
@@ -41,7 +52,14 @@
       "instrument": "piano",
       "micDevice": "synthetic speaker",
       "noiseCondition": "clean",
-      "synthetic": { "type": "speaker", "midi": 60, "seconds": 0.7, "amplitude": 0.34, "noise": 0.008, "seed": 31 },
+      "synthetic": {
+        "type": "speaker",
+        "midi": 60,
+        "seconds": 0.7,
+        "amplitude": 0.34,
+        "noise": 0.008,
+        "seed": 31
+      },
       "notes": "Digital piano through speakers: harmonic tone plus small room/speaker noise."
     },
     {
@@ -52,7 +70,14 @@
       "instrument": "piano",
       "micDevice": "synthetic speaker",
       "noiseCondition": "quiet",
-      "synthetic": { "type": "speaker", "midi": 60, "seconds": 0.7, "amplitude": 0.09, "noise": 0.003, "seed": 32 },
+      "synthetic": {
+        "type": "speaker",
+        "midi": 60,
+        "seconds": 0.7,
+        "amplitude": 0.09,
+        "noise": 0.003,
+        "seed": 32
+      },
       "notes": "Quiet piano/speaker note: should still open the calibrated gate without accepting silence."
     },
     {
@@ -63,7 +88,14 @@
       "instrument": "piano",
       "micDevice": "synthetic speaker",
       "noiseCondition": "quiet",
-      "synthetic": { "type": "speaker", "midi": 60, "seconds": 0.7, "amplitude": 0.024, "noise": 0.003, "seed": 42 },
+      "synthetic": {
+        "type": "speaker",
+        "midi": 60,
+        "seconds": 0.7,
+        "amplitude": 0.024,
+        "noise": 0.003,
+        "seed": 42
+      },
       "notes": "Soft piano/speaker note above the room floor: live WFY should accept via score-informed soft gate."
     },
     {
@@ -74,7 +106,14 @@
       "instrument": "piano",
       "micDevice": "synthetic speaker",
       "noiseCondition": "loud",
-      "synthetic": { "type": "speaker", "midi": 64, "seconds": 0.7, "amplitude": 0.55, "noise": 0.006, "seed": 33 },
+      "synthetic": {
+        "type": "speaker",
+        "midi": 64,
+        "seconds": 0.7,
+        "amplitude": 0.55,
+        "noise": 0.006,
+        "seed": 33
+      },
       "notes": "Loud digital piano speaker note: should not be rejected merely for strong level."
     },
     {
@@ -85,7 +124,13 @@
       "instrument": "guitar",
       "micDevice": "synthetic acoustic guitar",
       "noiseCondition": "clean",
-      "synthetic": { "type": "pluck", "midi": 40, "seconds": 0.9, "amplitude": 0.46, "decay": 2.4 },
+      "synthetic": {
+        "type": "pluck",
+        "midi": 40,
+        "seconds": 0.9,
+        "amplitude": 0.46,
+        "decay": 2.4
+      },
       "notes": "Open low E string: low, plucky, harmonic-rich guitar fixture."
     },
     {
@@ -96,7 +141,13 @@
       "instrument": "guitar",
       "micDevice": "synthetic acoustic guitar",
       "noiseCondition": "clean",
-      "synthetic": { "type": "pluck", "midi": 45, "seconds": 0.9, "amplitude": 0.44, "decay": 2.3 },
+      "synthetic": {
+        "type": "pluck",
+        "midi": 45,
+        "seconds": 0.9,
+        "amplitude": 0.44,
+        "decay": 2.3
+      },
       "notes": "Open A string: guitar open-string coverage."
     },
     {
@@ -107,7 +158,13 @@
       "instrument": "guitar",
       "micDevice": "synthetic acoustic guitar",
       "noiseCondition": "clean",
-      "synthetic": { "type": "pluck", "midi": 60, "seconds": 0.8, "amplitude": 0.38, "decay": 2.8 },
+      "synthetic": {
+        "type": "pluck",
+        "midi": 60,
+        "seconds": 0.8,
+        "amplitude": 0.38,
+        "decay": 2.8
+      },
       "notes": "Fretted mid-register guitar note."
     },
     {
@@ -118,7 +175,13 @@
       "instrument": "guitar",
       "micDevice": "synthetic clean electric",
       "noiseCondition": "clean",
-      "synthetic": { "type": "pluck", "midi": 57, "seconds": 0.8, "amplitude": 0.34, "decay": 1.7 },
+      "synthetic": {
+        "type": "pluck",
+        "midi": 57,
+        "seconds": 0.8,
+        "amplitude": 0.34,
+        "decay": 1.7
+      },
       "notes": "Clean electric guitar-like pluck with slower decay."
     },
     {
@@ -129,7 +192,13 @@
       "instrument": "guitar",
       "micDevice": "synthetic distorted electric",
       "noiseCondition": "distorted",
-      "synthetic": { "type": "distorted", "midi": 40, "seconds": 0.8, "amplitude": 0.44, "drive": 4.5 },
+      "synthetic": {
+        "type": "distorted",
+        "midi": 40,
+        "seconds": 0.8,
+        "amplitude": 0.44,
+        "drive": 4.5
+      },
       "notes": "Distorted/amp-style low guitar note: harmonic-rich but periodic, not noise."
     },
     {
@@ -140,7 +209,13 @@
       "instrument": "guitar",
       "micDevice": "synthetic acoustic guitar",
       "noiseCondition": "quiet",
-      "synthetic": { "type": "pluck", "midi": 52, "seconds": 0.8, "amplitude": 0.16, "decay": 3.2 },
+      "synthetic": {
+        "type": "pluck",
+        "midi": 52,
+        "seconds": 0.8,
+        "amplitude": 0.16,
+        "decay": 3.2
+      },
       "notes": "Quiet fretted/open-style guitar note: decays quickly but should stabilize."
     },
     {
@@ -151,7 +226,13 @@
       "instrument": "guitar",
       "micDevice": "synthetic acoustic guitar",
       "noiseCondition": "quiet",
-      "synthetic": { "type": "pluck", "midi": 52, "seconds": 0.8, "amplitude": 0.045, "decay": 3.2 },
+      "synthetic": {
+        "type": "pluck",
+        "midi": 52,
+        "seconds": 0.8,
+        "amplitude": 0.045,
+        "decay": 3.2
+      },
       "notes": "Soft acoustic-guitar-style pluck above the room floor: should advance without admitting silence/noise."
     },
     {
@@ -162,7 +243,13 @@
       "instrument": "guitar",
       "micDevice": "synthetic soft electric",
       "noiseCondition": "quiet",
-      "synthetic": { "type": "distorted", "midi": 52, "seconds": 0.8, "amplitude": 0.018, "drive": 4.5 },
+      "synthetic": {
+        "type": "distorted",
+        "midi": 52,
+        "seconds": 0.8,
+        "amplitude": 0.018,
+        "drive": 4.5
+      },
       "notes": "Soft electric-style harmonic-rich note above the room floor: should advance via score-informed soft gate."
     },
     {
@@ -173,7 +260,13 @@
       "instrument": "guitar",
       "micDevice": "synthetic amp electric",
       "noiseCondition": "clean",
-      "synthetic": { "type": "electric-amp", "midi": 57, "seconds": 0.9, "profile": "h2-strong", "amplitude": 0.34 },
+      "synthetic": {
+        "type": "electric-amp",
+        "midi": 57,
+        "seconds": 0.9,
+        "profile": "h2-strong",
+        "amplitude": 0.34
+      },
       "notes": "Clean electric through amp/speaker with h2-strong coloration — weak fundamental mic path."
     },
     {
@@ -184,7 +277,13 @@
       "instrument": "guitar",
       "micDevice": "synthetic amp electric",
       "noiseCondition": "distorted",
-      "synthetic": { "type": "electric-amp", "midi": 52, "seconds": 0.9, "profile": "h3-strong", "amplitude": 0.34 },
+      "synthetic": {
+        "type": "electric-amp",
+        "midi": 52,
+        "seconds": 0.9,
+        "profile": "h3-strong",
+        "amplitude": 0.34
+      },
       "notes": "Amp-colored electric with h3-strong partial — must not be rejected as speech formants."
     },
     {
@@ -195,7 +294,12 @@
       "instrument": "guitar",
       "micDevice": "synthetic clean electric",
       "noiseCondition": "clean",
-      "synthetic": { "type": "electric-clean", "midi": 57, "seconds": 0.9, "amplitude": 0.3 },
+      "synthetic": {
+        "type": "electric-clean",
+        "midi": 57,
+        "seconds": 0.9,
+        "amplitude": 0.3
+      },
       "notes": "Sustained clean electric single note."
     },
     {
@@ -206,7 +310,13 @@
       "instrument": "guitar",
       "micDevice": "synthetic distorted electric",
       "noiseCondition": "loud",
-      "synthetic": { "type": "distorted", "midi": 52, "seconds": 0.8, "amplitude": 0.55, "drive": 5 },
+      "synthetic": {
+        "type": "distorted",
+        "midi": 52,
+        "seconds": 0.8,
+        "amplitude": 0.55,
+        "drive": 5
+      },
       "notes": "Loud distorted electric — harmonic-rich periodic tone, not noise."
     },
     {
@@ -217,7 +327,13 @@
       "instrument": "guitar",
       "micDevice": "synthetic distorted electric",
       "noiseCondition": "clean",
-      "synthetic": { "type": "distorted", "midi": 55, "seconds": 0.8, "amplitude": 0.44, "drive": 4.5 },
+      "synthetic": {
+        "type": "distorted",
+        "midi": 55,
+        "seconds": 0.8,
+        "amplitude": 0.44,
+        "drive": 4.5
+      },
       "notes": "Wrong-note control for electric — detected G3 must not satisfy A3 target."
     },
     {
@@ -231,12 +347,24 @@
       "synthetic": {
         "type": "harmonic",
         "midi": 36,
-        "seconds": 1.0,
+        "seconds": 1,
         "harmonics": [
-          { "multiple": 1, "amplitude": 0.09 },
-          { "multiple": 2, "amplitude": 0.28 },
-          { "multiple": 3, "amplitude": 0.2 },
-          { "multiple": 4, "amplitude": 0.11 }
+          {
+            "multiple": 1,
+            "amplitude": 0.09
+          },
+          {
+            "multiple": 2,
+            "amplitude": 0.28
+          },
+          {
+            "multiple": 3,
+            "amplitude": 0.2
+          },
+          {
+            "multiple": 4,
+            "amplitude": 0.11
+          }
         ]
       },
       "notes": "Low piano C2 with realistic weak fundamental — bass register coverage."
@@ -252,12 +380,24 @@
       "synthetic": {
         "type": "harmonic",
         "midi": 33,
-        "seconds": 1.0,
+        "seconds": 1,
         "harmonics": [
-          { "multiple": 1, "amplitude": 0.08 },
-          { "multiple": 2, "amplitude": 0.26 },
-          { "multiple": 3, "amplitude": 0.19 },
-          { "multiple": 4, "amplitude": 0.1 }
+          {
+            "multiple": 1,
+            "amplitude": 0.08
+          },
+          {
+            "multiple": 2,
+            "amplitude": 0.26
+          },
+          {
+            "multiple": 3,
+            "amplitude": 0.19
+          },
+          {
+            "multiple": 4,
+            "amplitude": 0.1
+          }
         ]
       },
       "notes": "Low piano A1 at the bottom of the autocorrelation band (55 Hz) — deep-bass coverage."
@@ -269,7 +409,10 @@
       "instrument": "piano",
       "micDevice": "synthetic",
       "noiseCondition": "clean",
-      "synthetic": { "type": "silence", "seconds": 0.6 },
+      "synthetic": {
+        "type": "silence",
+        "seconds": 0.6
+      },
       "notes": "Silence control — stabilizer should not emit a note."
     },
     {
@@ -279,7 +422,11 @@
       "instrument": "piano",
       "micDevice": "synthetic",
       "noiseCondition": "noisy",
-      "synthetic": { "type": "noise", "seconds": 0.6, "seed": 11 },
+      "synthetic": {
+        "type": "noise",
+        "seconds": 0.6,
+        "seed": 11
+      },
       "notes": "Noise control — should not produce a stable pitch."
     },
     {
@@ -344,6 +491,60 @@
       "startMs": null,
       "endMs": null,
       "notes": "Noisy room bed — should not produce a stable pitch."
+    },
+    {
+      "id": "uiowa-piano-mf-c4",
+      "label": "note",
+      "instrument": "piano",
+      "micDevice": "uiowa-mis",
+      "tone": "acoustic-piano",
+      "dynamic": "mf",
+      "noiseCondition": "clean",
+      "sourceType": "uiowa-mis-derived",
+      "file": "clips/uiowa-piano-mf-c4.wav",
+      "redistribution": "uiowa-mis-unrestricted",
+      "attribution": "University of Iowa Musical Instrument Samples (MIS) — freely redistributable per https://theremin.music.uiowa.edu/mis.html",
+      "notes": "UIowa MIS Piano.mf.C4 — single-note regression fixture.",
+      "expectedMidi": 60,
+      "expectedOnsetMs": 120,
+      "startMs": 40,
+      "endMs": 1700
+    },
+    {
+      "id": "uiowa-piano-pp-c4",
+      "label": "note",
+      "instrument": "piano",
+      "micDevice": "uiowa-mis",
+      "tone": "acoustic-piano",
+      "dynamic": "pp",
+      "noiseCondition": "clean",
+      "sourceType": "uiowa-mis-derived",
+      "file": "clips/uiowa-piano-pp-c4.wav",
+      "redistribution": "uiowa-mis-unrestricted",
+      "attribution": "University of Iowa Musical Instrument Samples (MIS) — freely redistributable per https://theremin.music.uiowa.edu/mis.html",
+      "notes": "UIowa MIS Piano.pp.C4 — soft single-note fixture.",
+      "expectedMidi": 60,
+      "expectedOnsetMs": 120,
+      "startMs": 40,
+      "endMs": 1700
+    },
+    {
+      "id": "uiowa-guitar-mf-g3",
+      "label": "note",
+      "instrument": "guitar",
+      "micDevice": "uiowa-mis",
+      "tone": "acoustic-guitar",
+      "dynamic": "mf",
+      "noiseCondition": "clean",
+      "sourceType": "uiowa-mis-derived",
+      "file": "clips/uiowa-guitar-mf-g3.wav",
+      "redistribution": "uiowa-mis-unrestricted",
+      "attribution": "University of Iowa Musical Instrument Samples (MIS) — freely redistributable per https://theremin.music.uiowa.edu/mis.html",
+      "notes": "UIowa MIS Guitar.mf G3 open string — single-note regression fixture.",
+      "expectedMidi": 55,
+      "expectedOnsetMs": 120,
+      "startMs": 40,
+      "endMs": 1500
     }
   ]
 }

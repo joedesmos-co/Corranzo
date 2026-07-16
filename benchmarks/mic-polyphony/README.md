@@ -8,10 +8,19 @@ This harness replays audio through the **V1 monophonic** pipeline (`micReplayHar
 
 ```bash
 npm run mic:generate-polyphony-clips   # optional — rebuild in-repo WAV fixtures
+npm run mic:import-uiowa-fixtures      # UIowa MIS → real-timbre chord WAVs + manifest
 npm run mic:polyphony-replay
 ```
 
 Reports: `tmp/mic-polyphony-replay/report.json` and `report.md` (includes V1 vs V2 comparison).
+
+Live captures (developer machine only):
+
+```bash
+CORRANZO_DEVELOPER_MODE=1 npm run mic:capture-real-fixture -- \
+  --target polyphony --id macbook-piano-c-major --expected-midis 60,64,67 \
+  --instrument piano --tone acoustic-piano --device macbook-mic --seconds 3
+```
 
 ## Manifest fields
 
