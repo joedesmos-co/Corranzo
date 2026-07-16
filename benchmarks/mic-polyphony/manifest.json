@@ -24,6 +24,7 @@
         "amplitude": 0.3
       },
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 0,
       "notes": "Synthetic dyad — V1 baseline should struggle."
     },
     {
@@ -49,6 +50,7 @@
         "amplitude": 0.32
       },
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 0,
       "notes": "Synthetic C major triad."
     },
     {
@@ -76,6 +78,7 @@
         "amplitude": 0.3
       },
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 0,
       "notes": "Four-note synthetic chord."
     },
     {
@@ -103,6 +106,7 @@
         "amplitude": 0.3
       },
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 0,
       "notes": "Rolled chord — documents V1 sequential collection behavior."
     },
     {
@@ -148,6 +152,7 @@
       "startMs": 80,
       "endMs": 1800,
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 0,
       "notes": "Generated fixture — replace with live mic capture."
     },
     {
@@ -165,6 +170,7 @@
       "startMs": 80,
       "endMs": 1600,
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 0,
       "notes": "Two-note fixture."
     },
     {
@@ -195,6 +201,7 @@
         64
       ],
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 40,
       "chordType": "simultaneous",
       "startMs": 40,
       "endMs": 1800
@@ -218,6 +225,7 @@
         67
       ],
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 40,
       "chordType": "simultaneous",
       "startMs": 40,
       "endMs": 1800
@@ -242,6 +250,7 @@
         71
       ],
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 40,
       "chordType": "simultaneous",
       "startMs": 40,
       "endMs": 1900
@@ -265,6 +274,7 @@
         67
       ],
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 40,
       "chordType": "simultaneous",
       "startMs": 40,
       "endMs": 3000
@@ -288,6 +298,7 @@
         67
       ],
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 40,
       "chordType": "simultaneous",
       "startMs": 40,
       "endMs": 1800
@@ -311,6 +322,7 @@
         67
       ],
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 40,
       "chordType": "split-register",
       "startMs": 40,
       "endMs": 1900
@@ -333,6 +345,7 @@
         59
       ],
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 40,
       "chordType": "simultaneous",
       "startMs": 40,
       "endMs": 1600,
@@ -367,6 +380,7 @@
         64
       ],
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 40,
       "chordType": "split-register",
       "startMs": 40,
       "endMs": 1700,
@@ -405,6 +419,7 @@
         64
       ],
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 40,
       "chordType": "rolled",
       "rollMs": 110,
       "startMs": 40,
@@ -466,6 +481,7 @@
         "seed": 41
       },
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 0,
       "expectedStringFrets": [
         {
           "string": 5,
@@ -504,6 +520,7 @@
         "seed": 42
       },
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 0,
       "expectedStringFrets": [
         {
           "string": 6,
@@ -550,6 +567,7 @@
         "seed": 43
       },
       "expectedOnsetMs": 120,
+      "performanceOnsetMs": 0,
       "expectedStringFrets": [
         {
           "string": 6,
