@@ -992,25 +992,33 @@ async function main() {
       note('__SCOREFLOW_MIC_DEBUG__ not exposed (production build?)')
     }
 
-    const traceExport = await page.evaluate(() => {
-      const dbg = globalThis.__SCOREFLOW_MIC_DEBUG__ ?? globalThis.SCOREFLOW_MIC_DEBUG
-      const text = typeof dbg?.exportRecentMicTrace === 'function'
-        ? dbg.exportRecentMicTrace()
-        : null
-      if (!text) {
-        return { hasExport: false, frameCount: 0 }
-      }
-      try {
-        const parsed = JSON.parse(text)
-        return {
-          hasExport: true,
-          frameCount: parsed.frameCount ?? 0,
-          sample: parsed.frames?.[parsed.frames.length - 1] ?? null,
+    // Wait until live frames land before asserting the developer trace export.
+    let traceExport = { hasExport: false, frameCount: 0 }
+    for (let attempt = 0; attempt < 20; attempt += 1) {
+      traceExport = await page.evaluate(() => {
+        const dbg = globalThis.__SCOREFLOW_MIC_DEBUG__ ?? globalThis.SCOREFLOW_MIC_DEBUG
+        const text = typeof dbg?.exportRecentMicTrace === 'function'
+          ? dbg.exportRecentMicTrace()
+          : null
+        if (!text) {
+          return { hasExport: false, frameCount: 0 }
         }
-      } catch (error) {
-        return { hasExport: true, frameCount: 0, error: error?.message ?? String(error) }
+        try {
+          const parsed = JSON.parse(text)
+          return {
+            hasExport: true,
+            frameCount: parsed.frameCount ?? 0,
+            sample: parsed.frames?.[parsed.frames.length - 1] ?? null,
+          }
+        } catch (error) {
+          return { hasExport: true, frameCount: 0, error: error?.message ?? String(error) }
+        }
+      })
+      if (traceExport.hasExport && traceExport.frameCount > 0) {
+        break
       }
-    })
+      await sleep(250)
+    }
     if (traceExport.hasExport && traceExport.frameCount > 0) {
       pass('recent mic trace export contains live browser frames', `frames=${traceExport.frameCount}`)
     } else {

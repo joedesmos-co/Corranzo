@@ -751,7 +751,8 @@
 
 .practice-piece-card--uploaded .practice-piece-card__meta,
 .practice-piece-card--uploaded .practice-piece-card__subtitle,
-.practice-piece-card--uploaded .practice-piece-card__credit {
+.practice-piece-card--uploaded .practice-piece-card__credit,
+.practice-piece-card__credit {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -261,7 +261,7 @@ export default function LibraryPanel({
                           >
                             {sampleLoadLoading ? 'Opening...' : 'Start Practice'}
                           </button>
-                          <p className="practice-piece-card__credit">
+                          <p className="practice-piece-card__credit" title={[piece.attribution, piece.license].filter(Boolean).join(' · ')}>
                             {piece.attribution}
                             {piece.license ? ` · ${piece.license}` : ''}
                           </p>

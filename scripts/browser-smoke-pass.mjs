@@ -67,16 +67,21 @@ async function dismissWfyInputModalIfOpen(page) {
   if (!(await dialog.isVisible().catch(() => false))) {
     return
   }
-  const useMic = page.getByRole('button', { name: 'Use Microphone' })
-  if (await useMic.isVisible().catch(() => false)) {
-    await useMic.click()
-    await sleep(400)
-    return
-  }
-  const useMidi = page.getByRole('button', { name: /Use MIDI/i })
-  if (await useMidi.isVisible().catch(() => false)) {
-    await useMidi.click()
-    await sleep(400)
+  const candidates = [
+    page.getByRole('button', { name: 'Use Microphone' }),
+    page.getByRole('button', { name: /Use MIDI Keyboard/i }),
+    page.getByRole('button', { name: /Use MIDI/i }),
+    page.getByRole('button', { name: /Continue button/i }),
+  ]
+  for (const button of candidates) {
+    if (
+      (await button.isVisible().catch(() => false)) &&
+      !(await button.isDisabled().catch(() => true))
+    ) {
+      await button.click()
+      await sleep(400)
+      return
+    }
   }
 }
 
@@ -120,6 +125,8 @@ async function loadDemo(page) {
   if (await libraryStart.isVisible().catch(() => false)) {
     await libraryStart.click()
     await page.waitForTimeout(7000)
+    await dismissWfyInputModalIfOpen(page)
+    await dismissOverlays(page)
     return
   }
   let demo = page.getByRole('button', { name: /Try demo:/i }).first()
@@ -140,6 +147,7 @@ async function loadDemo(page) {
   await demo.click()
   await page.waitForTimeout(7000)
   await dismissWfyInputModalIfOpen(page)
+  await dismissOverlays(page)
 }
 
 async function pdfCanvasVisible(page) {
@@ -345,19 +353,25 @@ async function main() {
       await fail('Score view renders', 'Score workspace missing')
     }
 
-    // Wait For You section present
-    if (await page.getByRole('heading', { name: 'Wait For You' }).isVisible().catch(() => false)) {
+    // Wait For You section present (compact chrome hides the title; use the section).
+    // Click the labeled option — the radio input is covered by its sibling span.
+    await page
+      .getByRole('radiogroup', { name: 'Practice mode' })
+      .locator('.practice-mode__option', { hasText: 'Wait For You' })
+      .click()
+      .catch(() => {})
+    await page.waitForTimeout(600)
+    await dismissWfyInputModalIfOpen(page)
+    await dismissOverlays(page)
+    await page.waitForTimeout(400)
+    const wfySection = page.locator('.wait-for-you, [aria-label="Wait For You"]').first()
+    if (await wfySection.isVisible().catch(() => false)) {
       await pass('Wait For You section visible')
     } else {
       await fail('Wait For You section visible', 'Section not found')
     }
 
-    // Hear It — click when checkpoint exposes the control
-    await page.getByRole('radiogroup', { name: 'Practice mode' })
-      .getByRole('radio', { name: 'Wait For You' })
-      .click()
-      .catch(() => {})
-    await page.waitForTimeout(600)
+    // Hear It — deferred behind More in compact mode until opened
     const hearIt = page.getByRole('button', { name: /Hear it/i }).first()
     if (await hearIt.isVisible().catch(() => false)) {
       await hearIt.click()
