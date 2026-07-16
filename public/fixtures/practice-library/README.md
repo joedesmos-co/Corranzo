@@ -19,9 +19,15 @@ npm run fixtures:practice-library
 ## Source status
 
 The visible Practice Library uses public-domain traditional works or public-domain
-classical excerpts only. Generated helper scores are limited to simple beginner
-guitar melodies with hand-checked notation/TAB alignment. Do not add synthetic
-"style" studies or generated piano sketches to the built-in catalog.
+classical excerpts only. Generated helper scores are limited to simple beginner and
+intermediate guitar melodies with hand-checked notation/TAB alignment. Do not add
+synthetic "style" studies or generated piano sketches to the built-in catalog.
+
+Current generated guitar helpers:
+
+- Amazing Grace (Beginner)
+- When the Saints Go Marching In (Beginner)
+- Aura Lee (Intermediate)
 
 Existing non-generated built-ins remain in their original fixture folders:
 

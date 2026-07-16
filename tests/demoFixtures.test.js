@@ -108,7 +108,7 @@ afterAll(() => {
 
 describe('Practice library fixture catalog', () => {
   it('ships PDF, MusicXML/MXL, and MIDI for every built-in practice card', async () => {
-    expect(PRACTICE_LIBRARY_FIXTURES).toHaveLength(5)
+    expect(PRACTICE_LIBRARY_FIXTURES).toHaveLength(6)
 
     for (const fixture of PRACTICE_LIBRARY_FIXTURES) {
       expect(existsSync(fixturePath(fixture.paths.pdf)), `${fixture.id} pdf`).toBe(true)
@@ -197,6 +197,15 @@ describe('Practice library fixture catalog', () => {
     })
     await assertPracticeLibraryStart({
       fixtureId: 'guitar-amazing-grace',
+      instrumentId: INSTRUMENT_IDS.GUITAR,
+      guitarScoreTarget: GUITAR_SCORE_TARGET.TAB,
+    })
+    await assertPracticeLibraryStart({
+      fixtureId: 'guitar-aura-lee',
+      instrumentId: INSTRUMENT_IDS.GUITAR,
+    })
+    await assertPracticeLibraryStart({
+      fixtureId: 'guitar-aura-lee',
       instrumentId: INSTRUMENT_IDS.GUITAR,
       guitarScoreTarget: GUITAR_SCORE_TARGET.TAB,
     })

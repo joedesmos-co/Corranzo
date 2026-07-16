@@ -20,7 +20,7 @@ function readSrc(...parts) {
 
 describe('practice library pieces', () => {
   it('ships the current Piano and Guitar demos as built-in practice pieces', () => {
-    expect(BUILT_IN_PRACTICE_PIECES).toHaveLength(5)
+    expect(BUILT_IN_PRACTICE_PIECES).toHaveLength(6)
     expect(BUILT_IN_PRACTICE_PIECES).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -57,6 +57,7 @@ describe('practice library pieces', () => {
       'Ode to Joy',
       'Amazing Grace',
       'When the Saints Go Marching In',
+      'Aura Lee',
     ])
     expect(pianoPieces.every((piece) => piece.instrumentId === INSTRUMENT_IDS.PIANO)).toBe(true)
     expect(guitarPieces.every((piece) => piece.instrumentId === INSTRUMENT_IDS.GUITAR)).toBe(true)
@@ -69,9 +70,10 @@ describe('practice library pieces', () => {
 
     expect(groups.map((group) => [group.difficulty, group.pieces.length])).toEqual([
       ['Beginner', 3],
+      ['Intermediate', 1],
     ])
     expect(groups[0].pieces.map((piece) => piece.title)).toContain('Ode to Joy')
-    expect(groups.some((group) => group.difficulty === 'Intermediate')).toBe(false)
+    expect(groups[1].pieces.map((piece) => piece.title)).toEqual(['Aura Lee'])
     expect(groups.some((group) => group.difficulty === 'Advanced')).toBe(false)
   })
 

@@ -192,6 +192,17 @@ export const PRACTICE_LIBRARY_FIXTURES = [
     teaches: 'Steady rhythm, first-position frets',
     measureCount: 5,
   }),
+  practiceFixture({
+    id: 'guitar-aura-lee',
+    title: 'Aura Lee',
+    subtitle: 'Public-domain intermediate melody',
+    attribution: 'Traditional',
+    instrumentId: INSTRUMENT_IDS.GUITAR,
+    difficulty: 'Intermediate',
+    approxDuration: '1 min',
+    teaches: 'Connected melody, fretted shifts',
+    measureCount: 8,
+  }),
 ]
 
 export function getPracticeLibraryFixture(pieceId, instrumentId = DEFAULT_INSTRUMENT_ID) {
