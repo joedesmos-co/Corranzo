@@ -1,0 +1,3087 @@
+{
+  "generatedAt": "2026-07-16T22:11:38.079Z",
+  "manifest": "/Users/ryland/Documents/scoreflow/benchmarks/mic-polyphony/manifest.json",
+  "sequenceManifest": "/Users/ryland/Documents/scoreflow/benchmarks/mic-performance-sequences/manifest.json",
+  "constantsTuned": false,
+  "productionThresholdsChanged": false,
+  "summary": {
+    "engine": "v3-performance-expectation",
+    "clipCount": 21,
+    "performanceClipCount": 18,
+    "controlClipCount": 3,
+    "acceptedCount": 17,
+    "eventHitRate": 0.9444444444444444,
+    "firstAttemptSuccessRate": 0.9444444444444444,
+    "averageConfirmationLatencyMs": 80.55755635587566,
+    "averageChordCompletionLatencyMs": 23.529411764705895,
+    "invalidLatencyAnnotationCount": 0,
+    "falseAdvanceCount": 0,
+    "falseAdvanceRate": 0,
+    "falseRejectCount": 1,
+    "falseRejectRate": 0.05555555555555555,
+    "quietNoteSuccess": {
+      "count": 1,
+      "successes": 1,
+      "successRate": 1
+    },
+    "electricSuccess": {
+      "count": 3,
+      "successes": 3,
+      "successRate": 1
+    },
+    "acousticSuccess": {
+      "count": 9,
+      "successes": 8,
+      "successRate": 0.8888888888888888
+    },
+    "doubleStopAccuracy": {
+      "count": 4,
+      "successes": 4,
+      "successRate": 1
+    },
+    "dyadAccuracy": {
+      "count": 3,
+      "successes": 3,
+      "successRate": 1
+    },
+    "triadAccuracy": {
+      "count": 7,
+      "successes": 7,
+      "successRate": 1
+    },
+    "largeChordAccuracy": {
+      "count": 4,
+      "successes": 3,
+      "successRate": 0.75
+    },
+    "ringingTransitionSuccess": {
+      "count": 1,
+      "successes": 1,
+      "successRate": 1
+    },
+    "byCategory": {
+      "double-stop": {
+        "count": 4,
+        "successes": 4,
+        "successRate": 1
+      },
+      "dyad": {
+        "count": 3,
+        "successes": 3,
+        "successRate": 1
+      },
+      "triad": {
+        "count": 7,
+        "successes": 7,
+        "successRate": 1
+      },
+      "large-chord": {
+        "count": 4,
+        "successes": 3,
+        "successRate": 0.75
+      }
+    },
+    "byInstrument": {
+      "piano": {
+        "count": 12,
+        "successes": 11,
+        "successRate": 0.9166666666666666
+      },
+      "guitar": {
+        "count": 6,
+        "successes": 6,
+        "successRate": 1
+      }
+    },
+    "provenance": {
+      "naturalPerformanceClips": 0,
+      "proxyOrSyntheticClips": 21
+    },
+    "perClip": [
+      {
+        "clipId": "synth-dyad-c4-e4",
+        "label": "chord",
+        "instrument": "piano",
+        "tone": null,
+        "dynamic": null,
+        "category": "dyad",
+        "expectedMidis": [
+          60,
+          64
+        ],
+        "matchedMidis": [
+          60,
+          64
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 2,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 46.439909297052154,
+        "performanceOnsetMs": 0,
+        "confirmationLatencyMs": 46.439909297052154,
+        "chordCompletionLatencyMs": 0,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": null,
+        "ringingTransition": false,
+        "fixtureClass": "deterministic-synthesis",
+        "naturalPerformance": false,
+        "finalReason": "expected-rolled-piano-event-complete",
+        "confidence": {
+          "overall": 0.7199765992714715,
+          "signal": 1,
+          "pitch": 0.4970759979184902,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.8,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "2/2 piano tones",
+            "sustain pedal inactive"
+          ]
+        }
+      },
+      {
+        "clipId": "synth-c-major-triad",
+        "label": "chord",
+        "instrument": "piano",
+        "tone": null,
+        "dynamic": null,
+        "category": "triad",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "matchedMidis": [
+          60,
+          64,
+          67
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 3,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 46.439909297052154,
+        "performanceOnsetMs": 0,
+        "confirmationLatencyMs": 46.439909297052154,
+        "chordCompletionLatencyMs": 0,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": null,
+        "ringingTransition": false,
+        "fixtureClass": "deterministic-synthesis",
+        "naturalPerformance": false,
+        "finalReason": "expected-rolled-piano-event-complete",
+        "confidence": {
+          "overall": 0.6888474692809027,
+          "signal": 1,
+          "pitch": 0.4081356265168648,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.8,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "3/3 piano tones",
+            "sustain pedal inactive"
+          ]
+        }
+      },
+      {
+        "clipId": "synth-g7-tetrad",
+        "label": "chord",
+        "instrument": "piano",
+        "tone": null,
+        "dynamic": null,
+        "category": "large-chord",
+        "expectedMidis": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "matchedMidis": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 4,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 46.439909297052154,
+        "performanceOnsetMs": 0,
+        "confirmationLatencyMs": 46.439909297052154,
+        "chordCompletionLatencyMs": 0,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": null,
+        "ringingTransition": false,
+        "fixtureClass": "deterministic-synthesis",
+        "naturalPerformance": false,
+        "finalReason": "expected-rolled-piano-event-complete",
+        "confidence": {
+          "overall": 0.7022638689240435,
+          "signal": 1,
+          "pitch": 0.4464681969258385,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.8,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "4/4 piano tones",
+            "sustain pedal inactive"
+          ]
+        }
+      },
+      {
+        "clipId": "synth-rolled-c-major",
+        "label": "chord",
+        "instrument": "piano",
+        "tone": null,
+        "dynamic": null,
+        "category": "triad",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "matchedMidis": [
+          60,
+          64,
+          67
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 3,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 213.1065759637189,
+        "performanceOnsetMs": 0,
+        "confirmationLatencyMs": 213.1065759637189,
+        "chordCompletionLatencyMs": 166.66666666666674,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": null,
+        "ringingTransition": false,
+        "fixtureClass": "deterministic-synthesis",
+        "naturalPerformance": false,
+        "finalReason": "expected-rolled-piano-event-complete",
+        "confidence": {
+          "overall": 0.6903050117438972,
+          "signal": 1,
+          "pitch": 0.46372860498256374,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.65,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "3/3 piano tones",
+            "sustain pedal inactive"
+          ]
+        }
+      },
+      {
+        "clipId": "synth-silence",
+        "label": "silence",
+        "instrument": "piano",
+        "tone": null,
+        "dynamic": null,
+        "category": "control",
+        "expectedMidis": [],
+        "matchedMidis": [],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "accepted": false,
+        "correctReject": true,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": false,
+        "confirmationAtMs": null,
+        "confirmationLatencyMs": null,
+        "chordCompletionLatencyMs": null,
+        "latencyAnnotationValid": true,
+        "attemptCount": 0,
+        "quiet": false,
+        "toneClass": null,
+        "ringingTransition": false,
+        "fixtureClass": "deterministic-control",
+        "naturalPerformance": false,
+        "finalReason": "control-correct-reject"
+      },
+      {
+        "clipId": "synth-noise",
+        "label": "noise",
+        "instrument": "piano",
+        "tone": null,
+        "dynamic": null,
+        "category": "control",
+        "expectedMidis": [],
+        "matchedMidis": [],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "accepted": false,
+        "correctReject": true,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": false,
+        "confirmationAtMs": null,
+        "confirmationLatencyMs": null,
+        "chordCompletionLatencyMs": null,
+        "latencyAnnotationValid": true,
+        "attemptCount": 0,
+        "quiet": false,
+        "toneClass": null,
+        "ringingTransition": false,
+        "fixtureClass": "deterministic-control",
+        "naturalPerformance": false,
+        "finalReason": "control-correct-reject"
+      },
+      {
+        "clipId": "real-c-major-triad",
+        "label": "chord",
+        "instrument": "piano",
+        "tone": null,
+        "dynamic": null,
+        "category": "triad",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "matchedMidis": [
+          60,
+          64,
+          67
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 3,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 46.439909297052154,
+        "performanceOnsetMs": 0,
+        "confirmationLatencyMs": 46.439909297052154,
+        "chordCompletionLatencyMs": 0,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": null,
+        "ringingTransition": false,
+        "fixtureClass": "generated-placeholder",
+        "naturalPerformance": false,
+        "finalReason": "expected-rolled-piano-event-complete",
+        "confidence": {
+          "overall": 0.6889141100452917,
+          "signal": 1,
+          "pitch": 0.4083260287008334,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.8,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "3/3 piano tones",
+            "sustain pedal inactive"
+          ]
+        }
+      },
+      {
+        "clipId": "real-dyad-c4-g4",
+        "label": "chord",
+        "instrument": "piano",
+        "tone": null,
+        "dynamic": null,
+        "category": "dyad",
+        "expectedMidis": [
+          60,
+          67
+        ],
+        "matchedMidis": [
+          60,
+          67
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 2,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 46.439909297052154,
+        "performanceOnsetMs": 0,
+        "confirmationLatencyMs": 46.439909297052154,
+        "chordCompletionLatencyMs": 0,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": null,
+        "ringingTransition": false,
+        "fixtureClass": "generated-placeholder",
+        "naturalPerformance": false,
+        "finalReason": "expected-rolled-piano-event-complete",
+        "confidence": {
+          "overall": 0.7264437598414181,
+          "signal": 1,
+          "pitch": 0.5155535995469089,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.8,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "2/2 piano tones",
+            "sustain pedal inactive"
+          ]
+        }
+      },
+      {
+        "clipId": "real-room-quiet",
+        "label": "silence",
+        "instrument": "piano",
+        "tone": null,
+        "dynamic": null,
+        "category": "control",
+        "expectedMidis": [],
+        "matchedMidis": [],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "accepted": false,
+        "correctReject": true,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": false,
+        "confirmationAtMs": null,
+        "confirmationLatencyMs": null,
+        "chordCompletionLatencyMs": null,
+        "latencyAnnotationValid": true,
+        "attemptCount": 0,
+        "quiet": false,
+        "toneClass": null,
+        "ringingTransition": false,
+        "fixtureClass": "generated-room-bed",
+        "naturalPerformance": false,
+        "finalReason": "control-correct-reject"
+      },
+      {
+        "clipId": "uiowa-piano-mf-c4-e4-dyad",
+        "label": "chord",
+        "instrument": "piano",
+        "tone": "acoustic-piano",
+        "dynamic": "mf",
+        "category": "dyad",
+        "expectedMidis": [
+          60,
+          64
+        ],
+        "matchedMidis": [
+          60,
+          64
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 2,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 113.10657596371878,
+        "performanceOnsetMs": 40,
+        "confirmationLatencyMs": 73.10657596371878,
+        "chordCompletionLatencyMs": 0,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": "acoustic",
+        "ringingTransition": false,
+        "fixtureClass": "isolated-sample-composite",
+        "naturalPerformance": false,
+        "finalReason": "expected-rolled-piano-event-complete",
+        "confidence": {
+          "overall": 0.6555871285879421,
+          "signal": 1,
+          "pitch": 0.3131060816798347,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.8,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "2/2 piano tones",
+            "sustain pedal inactive"
+          ]
+        }
+      },
+      {
+        "clipId": "uiowa-piano-mf-c-major-triad",
+        "label": "chord",
+        "instrument": "piano",
+        "tone": "acoustic-piano",
+        "dynamic": "mf",
+        "category": "triad",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "matchedMidis": [
+          60,
+          64,
+          67
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 3,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 146.43990929705217,
+        "performanceOnsetMs": 40,
+        "confirmationLatencyMs": 106.43990929705217,
+        "chordCompletionLatencyMs": 33.333333333333385,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": "acoustic",
+        "ringingTransition": false,
+        "fixtureClass": "isolated-sample-composite",
+        "naturalPerformance": false,
+        "finalReason": "expected-rolled-piano-event-complete",
+        "confidence": {
+          "overall": 0.6583859752053165,
+          "signal": 1,
+          "pitch": 0.372531357729476,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.65,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "3/3 piano tones",
+            "sustain pedal inactive"
+          ]
+        }
+      },
+      {
+        "clipId": "uiowa-piano-mf-cmaj7",
+        "label": "chord",
+        "instrument": "piano",
+        "tone": "acoustic-piano",
+        "dynamic": "mf",
+        "category": "large-chord",
+        "expectedMidis": [
+          60,
+          64,
+          67,
+          71
+        ],
+        "matchedMidis": [
+          60,
+          67,
+          71
+        ],
+        "missingMidis": [
+          64
+        ],
+        "unexpectedMidis": [],
+        "requiredToneCount": 4,
+        "accepted": false,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": true,
+        "firstAttemptSuccess": false,
+        "confirmationAtMs": null,
+        "performanceOnsetMs": 40,
+        "confirmationLatencyMs": null,
+        "chordCompletionLatencyMs": null,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": "acoustic",
+        "ringingTransition": false,
+        "fixtureClass": "isolated-sample-composite",
+        "naturalPerformance": false,
+        "finalReason": "piano-chord-progress",
+        "confidence": {
+          "overall": 0.5674781107499453,
+          "signal": 1,
+          "pitch": 0.32708031642841523,
+          "harmony": 0.75,
+          "temporal": 1,
+          "attack": 0.65,
+          "expectation": 0.75,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "3/4 piano tones",
+            "sustain pedal inactive"
+          ]
+        }
+      },
+      {
+        "clipId": "uiowa-piano-mf-ringing-c-major",
+        "label": "chord",
+        "instrument": "piano",
+        "tone": "acoustic-piano",
+        "dynamic": "mf",
+        "category": "triad",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "matchedMidis": [
+          60,
+          64,
+          67
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 3,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 146.43990929705217,
+        "performanceOnsetMs": 40,
+        "confirmationLatencyMs": 106.43990929705217,
+        "chordCompletionLatencyMs": 33.333333333333385,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": "acoustic",
+        "ringingTransition": true,
+        "fixtureClass": "isolated-sample-composite",
+        "naturalPerformance": false,
+        "finalReason": "expected-rolled-piano-event-complete",
+        "confidence": {
+          "overall": 0.6584016423491748,
+          "signal": 1,
+          "pitch": 0.37257612099764237,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.65,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "3/3 piano tones",
+            "sustain pedal inactive"
+          ]
+        }
+      },
+      {
+        "clipId": "uiowa-piano-pp-c-major-triad",
+        "label": "chord",
+        "instrument": "piano",
+        "tone": "acoustic-piano",
+        "dynamic": "pp",
+        "category": "triad",
+        "expectedMidis": [
+          60,
+          64,
+          67
+        ],
+        "matchedMidis": [
+          60,
+          64,
+          67
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 3,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 113.10657596371878,
+        "performanceOnsetMs": 40,
+        "confirmationLatencyMs": 73.10657596371878,
+        "chordCompletionLatencyMs": 0,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": true,
+        "toneClass": "acoustic",
+        "ringingTransition": false,
+        "fixtureClass": "isolated-sample-composite",
+        "naturalPerformance": false,
+        "finalReason": "expected-rolled-piano-event-complete",
+        "confidence": {
+          "overall": 0.6567185910637398,
+          "signal": 1,
+          "pitch": 0.31633883161068527,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.8,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "3/3 piano tones",
+            "sustain pedal inactive"
+          ]
+        }
+      },
+      {
+        "clipId": "uiowa-piano-mf-split-c3-e4-g4",
+        "label": "chord",
+        "instrument": "piano",
+        "tone": "acoustic-piano",
+        "dynamic": "mf",
+        "category": "triad",
+        "expectedMidis": [
+          48,
+          64,
+          67
+        ],
+        "matchedMidis": [
+          48,
+          64,
+          67
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 3,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 113.10657596371878,
+        "performanceOnsetMs": 40,
+        "confirmationLatencyMs": 73.10657596371878,
+        "chordCompletionLatencyMs": 0,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": "acoustic",
+        "ringingTransition": false,
+        "fixtureClass": "isolated-sample-composite",
+        "naturalPerformance": false,
+        "finalReason": "expected-rolled-piano-event-complete",
+        "confidence": {
+          "overall": 0.6435228825912366,
+          "signal": 1,
+          "pitch": 0.27863680740353325,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.8,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "3/3 piano tones",
+            "sustain pedal inactive"
+          ]
+        }
+      },
+      {
+        "clipId": "uiowa-guitar-mf-adjacent-g3-b3",
+        "label": "chord",
+        "instrument": "guitar",
+        "tone": "acoustic-guitar",
+        "dynamic": "mf",
+        "category": "double-stop",
+        "expectedMidis": [
+          55,
+          59
+        ],
+        "matchedMidis": [
+          55,
+          59
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 2,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 113.10657596371878,
+        "performanceOnsetMs": 40,
+        "confirmationLatencyMs": 73.10657596371878,
+        "chordCompletionLatencyMs": 16.66666666666663,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": "acoustic",
+        "ringingTransition": false,
+        "fixtureClass": "isolated-sample-composite",
+        "naturalPerformance": false,
+        "finalReason": "expected-guitar-event-complete",
+        "confidence": {
+          "overall": 0.8765470546410506,
+          "signal": 1,
+          "pitch": 0.7235845457532837,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.65,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "2/2 required tones",
+            "2/2 positioned tones"
+          ]
+        }
+      },
+      {
+        "clipId": "uiowa-guitar-mf-low-high-e2-e4",
+        "label": "chord",
+        "instrument": "guitar",
+        "tone": "acoustic-guitar",
+        "dynamic": "mf",
+        "category": "double-stop",
+        "expectedMidis": [
+          40,
+          64
+        ],
+        "matchedMidis": [
+          40,
+          64
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 2,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 163.1065759637189,
+        "performanceOnsetMs": 40,
+        "confirmationLatencyMs": 123.10657596371891,
+        "chordCompletionLatencyMs": 100.00000000000013,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": "acoustic",
+        "ringingTransition": false,
+        "fixtureClass": "isolated-sample-composite",
+        "naturalPerformance": false,
+        "finalReason": "expected-guitar-event-complete",
+        "confidence": {
+          "overall": 0.8064722461340895,
+          "signal": 1,
+          "pitch": 0.4577257691690302,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.8,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "2/2 required tones",
+            "2/2 positioned tones"
+          ]
+        }
+      },
+      {
+        "clipId": "uiowa-guitar-mf-open-em-strum",
+        "label": "chord",
+        "instrument": "guitar",
+        "tone": "acoustic-guitar",
+        "dynamic": "mf",
+        "category": "large-chord",
+        "expectedMidis": [
+          40,
+          45,
+          50,
+          55,
+          59,
+          64
+        ],
+        "matchedMidis": [
+          45,
+          55,
+          59
+        ],
+        "missingMidis": [
+          40,
+          50,
+          64
+        ],
+        "unexpectedMidis": [],
+        "requiredToneCount": 3,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 196.43990929705217,
+        "performanceOnsetMs": 40,
+        "confirmationLatencyMs": 156.43990929705217,
+        "chordCompletionLatencyMs": 50,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": "acoustic",
+        "ringingTransition": false,
+        "fixtureClass": "isolated-sample-composite",
+        "naturalPerformance": false,
+        "finalReason": "expected-guitar-event-complete",
+        "confidence": {
+          "overall": 0.7299991804322195,
+          "signal": 1,
+          "pitch": 0.6093724388506856,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.65,
+          "expectation": 0.5,
+          "instrument": 0.5,
+          "rejection": 1,
+          "reasons": [
+            "3/3 required tones",
+            "3/6 positioned tones"
+          ]
+        }
+      },
+      {
+        "clipId": "synth-electric-clean-dyad-a2-e3",
+        "label": "chord",
+        "instrument": "guitar",
+        "tone": "clean-electric",
+        "dynamic": null,
+        "category": "double-stop",
+        "expectedMidis": [
+          45,
+          52
+        ],
+        "matchedMidis": [
+          45,
+          52
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 2,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 46.439909297052154,
+        "performanceOnsetMs": 0,
+        "confirmationLatencyMs": 46.439909297052154,
+        "chordCompletionLatencyMs": 0,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": "electric",
+        "ringingTransition": false,
+        "fixtureClass": "deterministic-synthesis",
+        "naturalPerformance": false,
+        "finalReason": "expected-guitar-event-complete",
+        "confidence": {
+          "overall": 0.9050823421972948,
+          "signal": 1,
+          "pitch": 0.7658823193665462,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.8,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "2/2 required tones",
+            "2/2 positioned tones"
+          ]
+        }
+      },
+      {
+        "clipId": "synth-electric-distorted-power-e2-b2",
+        "label": "chord",
+        "instrument": "guitar",
+        "tone": "distorted-electric",
+        "dynamic": null,
+        "category": "double-stop",
+        "expectedMidis": [
+          40,
+          47
+        ],
+        "matchedMidis": [
+          40,
+          47
+        ],
+        "missingMidis": [],
+        "unexpectedMidis": [],
+        "requiredToneCount": 2,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 46.439909297052154,
+        "performanceOnsetMs": 0,
+        "confirmationLatencyMs": 46.439909297052154,
+        "chordCompletionLatencyMs": 0,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": "electric",
+        "ringingTransition": false,
+        "fixtureClass": "deterministic-synthesis",
+        "naturalPerformance": false,
+        "finalReason": "expected-guitar-event-complete",
+        "confidence": {
+          "overall": 0.8941985090290315,
+          "signal": 1,
+          "pitch": 0.7318703407157235,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.8,
+          "expectation": 1,
+          "instrument": 1,
+          "rejection": 1,
+          "reasons": [
+            "2/2 required tones",
+            "2/2 positioned tones"
+          ]
+        }
+      },
+      {
+        "clipId": "synth-electric-clean-open-em",
+        "label": "chord",
+        "instrument": "guitar",
+        "tone": "clean-electric",
+        "dynamic": null,
+        "category": "large-chord",
+        "expectedMidis": [
+          40,
+          45,
+          50,
+          55,
+          59,
+          64
+        ],
+        "matchedMidis": [
+          40,
+          55,
+          59,
+          64
+        ],
+        "missingMidis": [
+          45,
+          50
+        ],
+        "unexpectedMidis": [],
+        "requiredToneCount": 3,
+        "accepted": true,
+        "correctReject": false,
+        "falseAdvance": false,
+        "falseReject": false,
+        "firstAttemptSuccess": true,
+        "confirmationAtMs": 46.439909297052154,
+        "performanceOnsetMs": 0,
+        "confirmationLatencyMs": 46.439909297052154,
+        "chordCompletionLatencyMs": 0,
+        "latencyAnnotationValid": true,
+        "attemptCount": 1,
+        "rejectedAttemptCount": 0,
+        "quiet": false,
+        "toneClass": "electric",
+        "ringingTransition": false,
+        "fixtureClass": "deterministic-synthesis",
+        "naturalPerformance": false,
+        "finalReason": "expected-guitar-event-complete",
+        "confidence": {
+          "overall": 0.736082389230798,
+          "signal": 1,
+          "pitch": 0.46692413301291075,
+          "harmony": 1,
+          "temporal": 1,
+          "attack": 0.8,
+          "expectation": 0.6666666666666666,
+          "instrument": 0.6666666666666666,
+          "rejection": 1,
+          "reasons": [
+            "4/3 required tones",
+            "4/6 positioned tones"
+          ]
+        }
+      }
+    ],
+    "ringingAudioFixtureSuccess": {
+      "count": 1,
+      "successes": 1,
+      "successRate": 1
+    },
+    "sequenceReplay": {
+      "scenarioCount": 8,
+      "passedScenarios": 8,
+      "checkpointCount": 10,
+      "passedCheckpoints": 10,
+      "falseAdvanceCount": 0,
+      "ringingTransitionSuccess": {
+        "count": 1,
+        "successes": 1,
+        "successRate": 1
+      },
+      "results": [
+        {
+          "scenarioId": "guitar-staggered-double-stop",
+          "provenance": {
+            "fixtureClass": "deterministic-ir-sequence",
+            "naturalPerformance": false
+          },
+          "passed": true,
+          "checkpointResults": [
+            {
+              "checkpointId": "guitar-staggered-double-stop-checkpoint-0",
+              "expectedAdvance": true,
+              "advanced": true,
+              "advancedAtFrame": 1,
+              "earlyAdvance": false,
+              "passed": true,
+              "finalDecision": {
+                "schemaVersion": 3,
+                "type": "RecognitionDecision",
+                "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0-70-accepted:untimed",
+                "diagnostics": [],
+                "evidenceRefs": [
+                  "mic3:guitar-frame:mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0:70",
+                  "mic3:guitar-chord:mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0:70"
+                ],
+                "debug": {
+                  "musicalTiming": {
+                    "gateOpen": true,
+                    "musical": true,
+                    "energyRise": false,
+                    "gateOpened": false
+                  }
+                },
+                "checkpointId": "mic3:checkpoint:guitar-staggered-double-stop-checkpoint-0:0",
+                "windowId": "mic3:guitar-window:mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0:0",
+                "timeMs": 70,
+                "outcome": "accepted",
+                "timing": "untimed",
+                "reason": "expected-guitar-event-complete",
+                "advance": true,
+                "matchedMidis": [
+                  55,
+                  59
+                ],
+                "missingMidis": [],
+                "unexpectedMidis": [],
+                "ringingMidis": [],
+                "attackId": "mic3:timing-attack:mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0:0:1",
+                "confidence": {
+                  "overall": 0.9393999999999999,
+                  "signal": 1,
+                  "pitch": 0.92,
+                  "harmony": 1,
+                  "temporal": 1,
+                  "attack": 0.65,
+                  "expectation": 1,
+                  "instrument": 1,
+                  "rejection": 1,
+                  "reasons": [
+                    "2/2 required tones",
+                    "2/2 positioned tones"
+                  ]
+                },
+                "progress": {
+                  "matchedCount": 2,
+                  "requiredCount": 2,
+                  "bassAnchorPresent": true,
+                  "attackPhase": "hold",
+                  "mayHold": false
+                }
+              },
+              "decisions": [
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0-0-progress:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:guitar-frame:mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0:0",
+                    "mic3:guitar-chord:mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0:0"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": true
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:guitar-staggered-double-stop-checkpoint-0:0",
+                  "windowId": "mic3:guitar-window:mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0:0",
+                  "timeMs": 0,
+                  "outcome": "progress",
+                  "timing": "untimed",
+                  "reason": "guitar-chord-progress",
+                  "advance": false,
+                  "matchedMidis": [
+                    55
+                  ],
+                  "missingMidis": [
+                    59
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.7394000000000001,
+                    "signal": 1,
+                    "pitch": 0.92,
+                    "harmony": 0.5,
+                    "temporal": 1,
+                    "attack": 0.95,
+                    "expectation": 0.5,
+                    "instrument": 0.5,
+                    "rejection": 1,
+                    "reasons": [
+                      "1/2 required tones",
+                      "1/2 positioned tones"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 1,
+                    "requiredCount": 2,
+                    "bassAnchorPresent": true,
+                    "attackPhase": "attack",
+                    "mayHold": false
+                  }
+                },
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0-70-accepted:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:guitar-frame:mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0:70",
+                    "mic3:guitar-chord:mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0:70"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": false
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:guitar-staggered-double-stop-checkpoint-0:0",
+                  "windowId": "mic3:guitar-window:mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0:0",
+                  "timeMs": 70,
+                  "outcome": "accepted",
+                  "timing": "untimed",
+                  "reason": "expected-guitar-event-complete",
+                  "advance": true,
+                  "matchedMidis": [
+                    55,
+                    59
+                  ],
+                  "missingMidis": [],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-guitar-staggered-double-stop-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.9393999999999999,
+                    "signal": 1,
+                    "pitch": 0.92,
+                    "harmony": 1,
+                    "temporal": 1,
+                    "attack": 0.65,
+                    "expectation": 1,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "2/2 required tones",
+                      "2/2 positioned tones"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 2,
+                    "requiredCount": 2,
+                    "bassAnchorPresent": true,
+                    "attackPhase": "hold",
+                    "mayHold": false
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "guitar-one-tone-never-satisfies-double-stop",
+          "provenance": {
+            "fixtureClass": "deterministic-ir-sequence",
+            "naturalPerformance": false
+          },
+          "passed": true,
+          "checkpointResults": [
+            {
+              "checkpointId": "guitar-one-tone-never-satisfies-double-stop-checkpoint-0",
+              "expectedAdvance": false,
+              "advanced": false,
+              "advancedAtFrame": null,
+              "earlyAdvance": false,
+              "passed": true,
+              "finalDecision": {
+                "schemaVersion": 3,
+                "type": "RecognitionDecision",
+                "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0-120-progress:untimed",
+                "diagnostics": [],
+                "evidenceRefs": [
+                  "mic3:guitar-frame:mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0:120",
+                  "mic3:guitar-chord:mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0:120"
+                ],
+                "debug": {
+                  "musicalTiming": {
+                    "gateOpen": true,
+                    "musical": true,
+                    "energyRise": false,
+                    "gateOpened": false
+                  }
+                },
+                "checkpointId": "mic3:checkpoint:guitar-one-tone-never-satisfies-double-stop-checkpoint-0:0",
+                "windowId": "mic3:guitar-window:mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0:0",
+                "timeMs": 120,
+                "outcome": "progress",
+                "timing": "untimed",
+                "reason": "guitar-chord-progress",
+                "advance": false,
+                "matchedMidis": [
+                  55
+                ],
+                "missingMidis": [
+                  59
+                ],
+                "unexpectedMidis": [],
+                "ringingMidis": [],
+                "attackId": "mic3:timing-attack:mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0:0:1",
+                "confidence": {
+                  "overall": 0.7094,
+                  "signal": 1,
+                  "pitch": 0.92,
+                  "harmony": 0.5,
+                  "temporal": 1,
+                  "attack": 0.65,
+                  "expectation": 0.5,
+                  "instrument": 0.5,
+                  "rejection": 1,
+                  "reasons": [
+                    "1/2 required tones",
+                    "no string/fret metadata"
+                  ]
+                },
+                "progress": {
+                  "matchedCount": 1,
+                  "requiredCount": 2,
+                  "bassAnchorPresent": true,
+                  "attackPhase": "hold",
+                  "mayHold": false
+                }
+              },
+              "decisions": [
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0-0-progress:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:guitar-frame:mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0:0",
+                    "mic3:guitar-chord:mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0:0"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": true
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:guitar-one-tone-never-satisfies-double-stop-checkpoint-0:0",
+                  "windowId": "mic3:guitar-window:mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0:0",
+                  "timeMs": 0,
+                  "outcome": "progress",
+                  "timing": "untimed",
+                  "reason": "guitar-chord-progress",
+                  "advance": false,
+                  "matchedMidis": [
+                    55
+                  ],
+                  "missingMidis": [
+                    59
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.7394000000000001,
+                    "signal": 1,
+                    "pitch": 0.92,
+                    "harmony": 0.5,
+                    "temporal": 1,
+                    "attack": 0.95,
+                    "expectation": 0.5,
+                    "instrument": 0.5,
+                    "rejection": 1,
+                    "reasons": [
+                      "1/2 required tones",
+                      "no string/fret metadata"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 1,
+                    "requiredCount": 2,
+                    "bassAnchorPresent": true,
+                    "attackPhase": "attack",
+                    "mayHold": false
+                  }
+                },
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0-120-progress:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:guitar-frame:mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0:120",
+                    "mic3:guitar-chord:mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0:120"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": false
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:guitar-one-tone-never-satisfies-double-stop-checkpoint-0:0",
+                  "windowId": "mic3:guitar-window:mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0:0",
+                  "timeMs": 120,
+                  "outcome": "progress",
+                  "timing": "untimed",
+                  "reason": "guitar-chord-progress",
+                  "advance": false,
+                  "matchedMidis": [
+                    55
+                  ],
+                  "missingMidis": [
+                    59
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-guitar-one-tone-never-satisfies-double-stop-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.7094,
+                    "signal": 1,
+                    "pitch": 0.92,
+                    "harmony": 0.5,
+                    "temporal": 1,
+                    "attack": 0.65,
+                    "expectation": 0.5,
+                    "instrument": 0.5,
+                    "rejection": 1,
+                    "reasons": [
+                      "1/2 required tones",
+                      "no string/fret metadata"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 1,
+                    "requiredCount": 2,
+                    "bassAnchorPresent": true,
+                    "attackPhase": "hold",
+                    "mayHold": false
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "guitar-wrong-chord-rejects",
+          "provenance": {
+            "fixtureClass": "deterministic-ir-sequence",
+            "naturalPerformance": false
+          },
+          "passed": true,
+          "checkpointResults": [
+            {
+              "checkpointId": "guitar-wrong-chord-rejects-checkpoint-0",
+              "expectedAdvance": false,
+              "advanced": false,
+              "advancedAtFrame": null,
+              "earlyAdvance": false,
+              "passed": true,
+              "finalDecision": {
+                "schemaVersion": 3,
+                "type": "RecognitionDecision",
+                "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-guitar-wrong-chord-rejects-checkpoint-0-0-0-rejected:untimed",
+                "diagnostics": [],
+                "evidenceRefs": [
+                  "mic3:guitar-frame:mic3-checkpoint-guitar-wrong-chord-rejects-checkpoint-0-0:0",
+                  "mic3:guitar-chord:mic3-checkpoint-guitar-wrong-chord-rejects-checkpoint-0-0:0"
+                ],
+                "debug": {
+                  "musicalTiming": {
+                    "gateOpen": true,
+                    "musical": true,
+                    "energyRise": false,
+                    "gateOpened": true
+                  }
+                },
+                "checkpointId": "mic3:checkpoint:guitar-wrong-chord-rejects-checkpoint-0:0",
+                "windowId": "mic3:guitar-window:mic3-checkpoint-guitar-wrong-chord-rejects-checkpoint-0-0:0",
+                "timeMs": 0,
+                "outcome": "rejected",
+                "timing": "untimed",
+                "reason": "unexpected-tone",
+                "advance": false,
+                "matchedMidis": [],
+                "missingMidis": [
+                  60,
+                  64
+                ],
+                "unexpectedMidis": [
+                  57,
+                  61
+                ],
+                "ringingMidis": [],
+                "attackId": "mic3:timing-attack:mic3-checkpoint-guitar-wrong-chord-rejects-checkpoint-0-0:0:1",
+                "confidence": {
+                  "overall": 0.255,
+                  "signal": 1,
+                  "pitch": 0,
+                  "harmony": 0,
+                  "temporal": 1,
+                  "attack": 0.95,
+                  "expectation": 0,
+                  "instrument": 0.5,
+                  "rejection": 0,
+                  "reasons": [
+                    "0/2 required tones",
+                    "no string/fret metadata"
+                  ]
+                },
+                "progress": {
+                  "matchedCount": 0,
+                  "requiredCount": 2,
+                  "bassAnchorPresent": true,
+                  "attackPhase": "attack",
+                  "mayHold": false
+                }
+              },
+              "decisions": [
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-guitar-wrong-chord-rejects-checkpoint-0-0-0-rejected:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:guitar-frame:mic3-checkpoint-guitar-wrong-chord-rejects-checkpoint-0-0:0",
+                    "mic3:guitar-chord:mic3-checkpoint-guitar-wrong-chord-rejects-checkpoint-0-0:0"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": true
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:guitar-wrong-chord-rejects-checkpoint-0:0",
+                  "windowId": "mic3:guitar-window:mic3-checkpoint-guitar-wrong-chord-rejects-checkpoint-0-0:0",
+                  "timeMs": 0,
+                  "outcome": "rejected",
+                  "timing": "untimed",
+                  "reason": "unexpected-tone",
+                  "advance": false,
+                  "matchedMidis": [],
+                  "missingMidis": [
+                    60,
+                    64
+                  ],
+                  "unexpectedMidis": [
+                    57,
+                    61
+                  ],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-guitar-wrong-chord-rejects-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.255,
+                    "signal": 1,
+                    "pitch": 0,
+                    "harmony": 0,
+                    "temporal": 1,
+                    "attack": 0.95,
+                    "expectation": 0,
+                    "instrument": 0.5,
+                    "rejection": 0,
+                    "reasons": [
+                      "0/2 required tones",
+                      "no string/fret metadata"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 0,
+                    "requiredCount": 2,
+                    "bassAnchorPresent": true,
+                    "attackPhase": "attack",
+                    "mayHold": false
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "guitar-six-string-quorum-with-bass-anchor",
+          "provenance": {
+            "fixtureClass": "deterministic-ir-sequence",
+            "naturalPerformance": false
+          },
+          "passed": true,
+          "checkpointResults": [
+            {
+              "checkpointId": "guitar-six-string-quorum-with-bass-anchor-checkpoint-0",
+              "expectedAdvance": true,
+              "advanced": true,
+              "advancedAtFrame": 0,
+              "earlyAdvance": false,
+              "passed": true,
+              "finalDecision": {
+                "schemaVersion": 3,
+                "type": "RecognitionDecision",
+                "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-guitar-six-string-quorum-with-bass-anchor-checkpoint-0-0-0-accepted:untimed",
+                "diagnostics": [],
+                "evidenceRefs": [
+                  "mic3:guitar-frame:mic3-checkpoint-guitar-six-string-quorum-with-bass-anchor-checkpoint-0-0:0",
+                  "mic3:guitar-chord:mic3-checkpoint-guitar-six-string-quorum-with-bass-anchor-checkpoint-0-0:0"
+                ],
+                "debug": {
+                  "musicalTiming": {
+                    "gateOpen": true,
+                    "musical": true,
+                    "energyRise": false,
+                    "gateOpened": true
+                  }
+                },
+                "checkpointId": "mic3:checkpoint:guitar-six-string-quorum-with-bass-anchor-checkpoint-0:0",
+                "windowId": "mic3:guitar-window:mic3-checkpoint-guitar-six-string-quorum-with-bass-anchor-checkpoint-0-0:0",
+                "timeMs": 0,
+                "outcome": "accepted",
+                "timing": "untimed",
+                "reason": "expected-guitar-event-complete",
+                "advance": true,
+                "matchedMidis": [
+                  40,
+                  50,
+                  59
+                ],
+                "missingMidis": [
+                  45,
+                  55,
+                  64
+                ],
+                "unexpectedMidis": [],
+                "ringingMidis": [],
+                "attackId": "mic3:timing-attack:mic3-checkpoint-guitar-six-string-quorum-with-bass-anchor-checkpoint-0-0:0:1",
+                "confidence": {
+                  "overall": 0.8594,
+                  "signal": 1,
+                  "pitch": 0.92,
+                  "harmony": 1,
+                  "temporal": 1,
+                  "attack": 0.95,
+                  "expectation": 0.5,
+                  "instrument": 0.5,
+                  "rejection": 1,
+                  "reasons": [
+                    "3/3 required tones",
+                    "3/6 positioned tones"
+                  ]
+                },
+                "progress": {
+                  "matchedCount": 3,
+                  "requiredCount": 3,
+                  "bassAnchorPresent": true,
+                  "attackPhase": "attack",
+                  "mayHold": false
+                }
+              },
+              "decisions": [
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-guitar-six-string-quorum-with-bass-anchor-checkpoint-0-0-0-accepted:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:guitar-frame:mic3-checkpoint-guitar-six-string-quorum-with-bass-anchor-checkpoint-0-0:0",
+                    "mic3:guitar-chord:mic3-checkpoint-guitar-six-string-quorum-with-bass-anchor-checkpoint-0-0:0"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": true
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:guitar-six-string-quorum-with-bass-anchor-checkpoint-0:0",
+                  "windowId": "mic3:guitar-window:mic3-checkpoint-guitar-six-string-quorum-with-bass-anchor-checkpoint-0-0:0",
+                  "timeMs": 0,
+                  "outcome": "accepted",
+                  "timing": "untimed",
+                  "reason": "expected-guitar-event-complete",
+                  "advance": true,
+                  "matchedMidis": [
+                    40,
+                    50,
+                    59
+                  ],
+                  "missingMidis": [
+                    45,
+                    55,
+                    64
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-guitar-six-string-quorum-with-bass-anchor-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.8594,
+                    "signal": 1,
+                    "pitch": 0.92,
+                    "harmony": 1,
+                    "temporal": 1,
+                    "attack": 0.95,
+                    "expectation": 0.5,
+                    "instrument": 0.5,
+                    "rejection": 1,
+                    "reasons": [
+                      "3/3 required tones",
+                      "3/6 positioned tones"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 3,
+                    "requiredCount": 3,
+                    "bassAnchorPresent": true,
+                    "attackPhase": "attack",
+                    "mayHold": false
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "piano-rolled-triad",
+          "provenance": {
+            "fixtureClass": "deterministic-ir-sequence",
+            "naturalPerformance": false
+          },
+          "passed": true,
+          "checkpointResults": [
+            {
+              "checkpointId": "piano-rolled-triad-checkpoint-0",
+              "expectedAdvance": true,
+              "advanced": true,
+              "advancedAtFrame": 2,
+              "earlyAdvance": false,
+              "passed": true,
+              "finalDecision": {
+                "schemaVersion": 3,
+                "type": "RecognitionDecision",
+                "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-piano-rolled-triad-checkpoint-0-0-170-accepted:untimed",
+                "diagnostics": [],
+                "evidenceRefs": [
+                  "mic3:piano-frame:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:170",
+                  "mic3:piano-chord:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:170"
+                ],
+                "debug": {
+                  "musicalTiming": {
+                    "gateOpen": true,
+                    "musical": true,
+                    "energyRise": false,
+                    "gateOpened": false
+                  }
+                },
+                "checkpointId": "mic3:checkpoint:piano-rolled-triad-checkpoint-0:0",
+                "windowId": "mic3:piano-window:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:0",
+                "timeMs": 170,
+                "outcome": "accepted",
+                "timing": "untimed",
+                "reason": "expected-rolled-piano-event-complete",
+                "advance": true,
+                "matchedMidis": [
+                  60,
+                  64,
+                  67
+                ],
+                "missingMidis": [],
+                "unexpectedMidis": [],
+                "ringingMidis": [],
+                "attackId": "mic3:timing-attack:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:0:1",
+                "confidence": {
+                  "overall": 0.85,
+                  "signal": 1,
+                  "pitch": 0.92,
+                  "harmony": 1,
+                  "temporal": 1,
+                  "attack": 0.65,
+                  "expectation": 1,
+                  "instrument": 1,
+                  "rejection": 1,
+                  "reasons": [
+                    "3/3 piano tones",
+                    "sustain pedal inactive"
+                  ]
+                },
+                "progress": {
+                  "matchedCount": 3,
+                  "requiredCount": 3,
+                  "sustainPedalDown": false,
+                  "attackPhase": "hold",
+                  "mayHold": false
+                }
+              },
+              "decisions": [
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-piano-rolled-triad-checkpoint-0-0-0-progress:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:0",
+                    "mic3:piano-chord:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:0"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": true
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:piano-rolled-triad-checkpoint-0:0",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:0",
+                  "timeMs": 0,
+                  "outcome": "progress",
+                  "timing": "untimed",
+                  "reason": "piano-chord-progress",
+                  "advance": false,
+                  "matchedMidis": [
+                    60
+                  ],
+                  "missingMidis": [
+                    64,
+                    67
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.6859999999999999,
+                    "signal": 1,
+                    "pitch": 0.92,
+                    "harmony": 0.3333333333333333,
+                    "temporal": 1,
+                    "attack": 0.95,
+                    "expectation": 0.3333333333333333,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "1/3 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 1,
+                    "requiredCount": 3,
+                    "sustainPedalDown": false,
+                    "attackPhase": "attack",
+                    "mayHold": false
+                  }
+                },
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-piano-rolled-triad-checkpoint-0-0-85-progress:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:85",
+                    "mic3:piano-chord:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:85"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": false
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:piano-rolled-triad-checkpoint-0:0",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:0",
+                  "timeMs": 85,
+                  "outcome": "progress",
+                  "timing": "untimed",
+                  "reason": "piano-chord-progress",
+                  "advance": false,
+                  "matchedMidis": [
+                    60,
+                    64
+                  ],
+                  "missingMidis": [
+                    67
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.75,
+                    "signal": 1,
+                    "pitch": 0.92,
+                    "harmony": 0.6666666666666666,
+                    "temporal": 1,
+                    "attack": 0.65,
+                    "expectation": 0.6666666666666666,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "2/3 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 2,
+                    "requiredCount": 3,
+                    "sustainPedalDown": false,
+                    "attackPhase": "hold",
+                    "mayHold": false
+                  }
+                },
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-piano-rolled-triad-checkpoint-0-0-170-accepted:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:170",
+                    "mic3:piano-chord:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:170"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": false
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:piano-rolled-triad-checkpoint-0:0",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:0",
+                  "timeMs": 170,
+                  "outcome": "accepted",
+                  "timing": "untimed",
+                  "reason": "expected-rolled-piano-event-complete",
+                  "advance": true,
+                  "matchedMidis": [
+                    60,
+                    64,
+                    67
+                  ],
+                  "missingMidis": [],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-piano-rolled-triad-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.85,
+                    "signal": 1,
+                    "pitch": 0.92,
+                    "harmony": 1,
+                    "temporal": 1,
+                    "attack": 0.65,
+                    "expectation": 1,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "3/3 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 3,
+                    "requiredCount": 3,
+                    "sustainPedalDown": false,
+                    "attackPhase": "hold",
+                    "mayHold": false
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "ringing-note-cannot-skip-next-checkpoint",
+          "provenance": {
+            "fixtureClass": "deterministic-ir-sequence",
+            "naturalPerformance": false
+          },
+          "passed": true,
+          "checkpointResults": [
+            {
+              "checkpointId": "ringing-note-cannot-skip-next-checkpoint-checkpoint-0",
+              "expectedAdvance": true,
+              "advanced": true,
+              "advancedAtFrame": 0,
+              "earlyAdvance": false,
+              "passed": true,
+              "finalDecision": {
+                "schemaVersion": 3,
+                "type": "RecognitionDecision",
+                "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-0-0-0-accepted:untimed",
+                "diagnostics": [],
+                "evidenceRefs": [
+                  "mic3:piano-frame:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-0-0:0",
+                  "mic3:piano-chord:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-0-0:0"
+                ],
+                "debug": {
+                  "musicalTiming": {
+                    "gateOpen": true,
+                    "musical": true,
+                    "energyRise": false,
+                    "gateOpened": true
+                  }
+                },
+                "checkpointId": "mic3:checkpoint:ringing-note-cannot-skip-next-checkpoint-checkpoint-0:0",
+                "windowId": "mic3:piano-window:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-0-0:0",
+                "timeMs": 0,
+                "outcome": "accepted",
+                "timing": "untimed",
+                "reason": "expected-piano-event-complete",
+                "advance": true,
+                "matchedMidis": [
+                  64
+                ],
+                "missingMidis": [],
+                "unexpectedMidis": [],
+                "ringingMidis": [],
+                "attackId": "mic3:timing-attack:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-0-0:0:1",
+                "confidence": {
+                  "overall": 0.886,
+                  "signal": 1,
+                  "pitch": 0.92,
+                  "harmony": 1,
+                  "temporal": 1,
+                  "attack": 0.95,
+                  "expectation": 1,
+                  "instrument": 1,
+                  "rejection": 1,
+                  "reasons": [
+                    "1/1 piano tones",
+                    "sustain pedal inactive"
+                  ]
+                },
+                "progress": {
+                  "matchedCount": 1,
+                  "requiredCount": 1,
+                  "sustainPedalDown": false,
+                  "attackPhase": "attack",
+                  "mayHold": false
+                }
+              },
+              "decisions": [
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-0-0-0-accepted:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-0-0:0",
+                    "mic3:piano-chord:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-0-0:0"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": true
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:ringing-note-cannot-skip-next-checkpoint-checkpoint-0:0",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-0-0:0",
+                  "timeMs": 0,
+                  "outcome": "accepted",
+                  "timing": "untimed",
+                  "reason": "expected-piano-event-complete",
+                  "advance": true,
+                  "matchedMidis": [
+                    64
+                  ],
+                  "missingMidis": [],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.886,
+                    "signal": 1,
+                    "pitch": 0.92,
+                    "harmony": 1,
+                    "temporal": 1,
+                    "attack": 0.95,
+                    "expectation": 1,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "1/1 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 1,
+                    "requiredCount": 1,
+                    "sustainPedalDown": false,
+                    "attackPhase": "attack",
+                    "mayHold": false
+                  }
+                }
+              ]
+            },
+            {
+              "checkpointId": "ringing-note-cannot-skip-next-checkpoint-checkpoint-1",
+              "expectedAdvance": true,
+              "advanced": true,
+              "advancedAtFrame": 2,
+              "earlyAdvance": false,
+              "passed": true,
+              "finalDecision": {
+                "schemaVersion": 3,
+                "type": "RecognitionDecision",
+                "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1-150-accepted:untimed",
+                "diagnostics": [],
+                "evidenceRefs": [
+                  "mic3:piano-frame:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:150",
+                  "mic3:piano-chord:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:150"
+                ],
+                "debug": {
+                  "musicalTiming": {
+                    "gateOpen": true,
+                    "musical": true,
+                    "energyRise": false,
+                    "gateOpened": false
+                  }
+                },
+                "checkpointId": "mic3:checkpoint:ringing-note-cannot-skip-next-checkpoint-checkpoint-1:1",
+                "windowId": "mic3:piano-window:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:150",
+                "timeMs": 150,
+                "outcome": "accepted",
+                "timing": "untimed",
+                "reason": "expected-piano-event-complete",
+                "advance": true,
+                "matchedMidis": [
+                  57
+                ],
+                "missingMidis": [],
+                "unexpectedMidis": [],
+                "ringingMidis": [
+                  64
+                ],
+                "attackId": "mic3:timing-attack:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:150:4",
+                "confidence": {
+                  "overall": 0.886,
+                  "signal": 1,
+                  "pitch": 0.92,
+                  "harmony": 1,
+                  "temporal": 1,
+                  "attack": 0.95,
+                  "expectation": 1,
+                  "instrument": 1,
+                  "rejection": 1,
+                  "reasons": [
+                    "1/1 piano tones",
+                    "sustain pedal inactive"
+                  ]
+                },
+                "progress": {
+                  "matchedCount": 1,
+                  "requiredCount": 1,
+                  "sustainPedalDown": false,
+                  "attackPhase": "attack",
+                  "mayHold": false
+                }
+              },
+              "decisions": [
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1-100-ignored:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:100",
+                    "mic3:piano-chord:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:100"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": false
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:ringing-note-cannot-skip-next-checkpoint-checkpoint-1:1",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:100",
+                  "timeMs": 100,
+                  "outcome": "ignored",
+                  "timing": "untimed",
+                  "reason": "no-actionable-evidence",
+                  "advance": false,
+                  "matchedMidis": [],
+                  "missingMidis": [
+                    57
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [
+                    64
+                  ],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.15,
+                    "signal": 1,
+                    "pitch": 0,
+                    "harmony": 0,
+                    "temporal": 0,
+                    "attack": 0,
+                    "expectation": 0,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "0/1 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 0,
+                    "requiredCount": 1,
+                    "sustainPedalDown": false,
+                    "attackPhase": "hold",
+                    "mayHold": false
+                  }
+                },
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1-120-rejected:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:120",
+                    "mic3:piano-chord:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:120"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": false,
+                      "energyRise": false,
+                      "gateOpened": false
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:ringing-note-cannot-skip-next-checkpoint-checkpoint-1:1",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:100",
+                  "timeMs": 120,
+                  "outcome": "rejected",
+                  "timing": "untimed",
+                  "reason": "non-musical-input",
+                  "advance": false,
+                  "matchedMidis": [],
+                  "missingMidis": [
+                    57
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [
+                    64
+                  ],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0,
+                    "signal": 0,
+                    "pitch": 0,
+                    "harmony": 0,
+                    "temporal": 0,
+                    "attack": 0,
+                    "expectation": 0,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "0/1 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 0,
+                    "requiredCount": 1,
+                    "sustainPedalDown": false,
+                    "attackPhase": "hold",
+                    "mayHold": false
+                  }
+                },
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1-150-accepted:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:150",
+                    "mic3:piano-chord:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:150"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": false
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:ringing-note-cannot-skip-next-checkpoint-checkpoint-1:1",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:150",
+                  "timeMs": 150,
+                  "outcome": "accepted",
+                  "timing": "untimed",
+                  "reason": "expected-piano-event-complete",
+                  "advance": true,
+                  "matchedMidis": [
+                    57
+                  ],
+                  "missingMidis": [],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [
+                    64
+                  ],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-ringing-note-cannot-skip-next-checkpoint-checkpoint-1-1:150:4",
+                  "confidence": {
+                    "overall": 0.886,
+                    "signal": 1,
+                    "pitch": 0.92,
+                    "harmony": 1,
+                    "temporal": 1,
+                    "attack": 0.95,
+                    "expectation": 1,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "1/1 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 1,
+                    "requiredCount": 1,
+                    "sustainPedalDown": false,
+                    "attackPhase": "attack",
+                    "mayHold": false
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "repeated-piano-note-requires-release-and-attack",
+          "provenance": {
+            "fixtureClass": "deterministic-ir-sequence",
+            "naturalPerformance": false
+          },
+          "passed": true,
+          "checkpointResults": [
+            {
+              "checkpointId": "repeated-piano-note-requires-release-and-attack-checkpoint-0",
+              "expectedAdvance": true,
+              "advanced": true,
+              "advancedAtFrame": 0,
+              "earlyAdvance": false,
+              "passed": true,
+              "finalDecision": {
+                "schemaVersion": 3,
+                "type": "RecognitionDecision",
+                "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0-0-accepted:untimed",
+                "diagnostics": [],
+                "evidenceRefs": [
+                  "mic3:piano-frame:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0:0",
+                  "mic3:piano-chord:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0:0"
+                ],
+                "debug": {
+                  "musicalTiming": {
+                    "gateOpen": true,
+                    "musical": true,
+                    "energyRise": false,
+                    "gateOpened": true
+                  }
+                },
+                "checkpointId": "mic3:checkpoint:repeated-piano-note-requires-release-and-attack-checkpoint-0:0",
+                "windowId": "mic3:piano-window:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0:0",
+                "timeMs": 0,
+                "outcome": "accepted",
+                "timing": "untimed",
+                "reason": "expected-piano-event-complete",
+                "advance": true,
+                "matchedMidis": [
+                  60
+                ],
+                "missingMidis": [],
+                "unexpectedMidis": [],
+                "ringingMidis": [],
+                "attackId": "mic3:timing-attack:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0:0:1",
+                "confidence": {
+                  "overall": 0.886,
+                  "signal": 1,
+                  "pitch": 0.92,
+                  "harmony": 1,
+                  "temporal": 1,
+                  "attack": 0.95,
+                  "expectation": 1,
+                  "instrument": 1,
+                  "rejection": 1,
+                  "reasons": [
+                    "1/1 piano tones",
+                    "sustain pedal inactive"
+                  ]
+                },
+                "progress": {
+                  "matchedCount": 1,
+                  "requiredCount": 1,
+                  "sustainPedalDown": false,
+                  "attackPhase": "attack",
+                  "mayHold": false
+                }
+              },
+              "decisions": [
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0-0-accepted:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0:0",
+                    "mic3:piano-chord:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0:0"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": true
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:repeated-piano-note-requires-release-and-attack-checkpoint-0:0",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0:0",
+                  "timeMs": 0,
+                  "outcome": "accepted",
+                  "timing": "untimed",
+                  "reason": "expected-piano-event-complete",
+                  "advance": true,
+                  "matchedMidis": [
+                    60
+                  ],
+                  "missingMidis": [],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.886,
+                    "signal": 1,
+                    "pitch": 0.92,
+                    "harmony": 1,
+                    "temporal": 1,
+                    "attack": 0.95,
+                    "expectation": 1,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "1/1 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 1,
+                    "requiredCount": 1,
+                    "sustainPedalDown": false,
+                    "attackPhase": "attack",
+                    "mayHold": false
+                  }
+                }
+              ]
+            },
+            {
+              "checkpointId": "repeated-piano-note-requires-release-and-attack-checkpoint-1",
+              "expectedAdvance": true,
+              "advanced": true,
+              "advancedAtFrame": 5,
+              "earlyAdvance": false,
+              "passed": true,
+              "finalDecision": {
+                "schemaVersion": 3,
+                "type": "RecognitionDecision",
+                "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1-140-accepted:untimed",
+                "diagnostics": [],
+                "evidenceRefs": [
+                  "mic3:piano-frame:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:140",
+                  "mic3:piano-chord:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:140"
+                ],
+                "debug": {
+                  "musicalTiming": {
+                    "gateOpen": true,
+                    "musical": true,
+                    "energyRise": false,
+                    "gateOpened": true
+                  }
+                },
+                "checkpointId": "mic3:checkpoint:repeated-piano-note-requires-release-and-attack-checkpoint-1:1",
+                "windowId": "mic3:piano-window:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:140",
+                "timeMs": 140,
+                "outcome": "accepted",
+                "timing": "untimed",
+                "reason": "expected-piano-event-complete",
+                "advance": true,
+                "matchedMidis": [
+                  60
+                ],
+                "missingMidis": [],
+                "unexpectedMidis": [],
+                "ringingMidis": [],
+                "attackId": "mic3:timing-attack:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:140:7",
+                "confidence": {
+                  "overall": 0.886,
+                  "signal": 1,
+                  "pitch": 0.92,
+                  "harmony": 1,
+                  "temporal": 1,
+                  "attack": 0.95,
+                  "expectation": 1,
+                  "instrument": 1,
+                  "rejection": 1,
+                  "reasons": [
+                    "1/1 piano tones",
+                    "sustain pedal inactive"
+                  ]
+                },
+                "progress": {
+                  "matchedCount": 1,
+                  "requiredCount": 1,
+                  "sustainPedalDown": false,
+                  "attackPhase": "attack",
+                  "mayHold": false
+                }
+              },
+              "decisions": [
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1-30-hold:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:30",
+                    "mic3:piano-chord:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:30"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": false
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:repeated-piano-note-requires-release-and-attack-checkpoint-1:1",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:30",
+                  "timeMs": 30,
+                  "outcome": "hold",
+                  "timing": "untimed",
+                  "reason": "ringing-without-new-attack",
+                  "advance": false,
+                  "matchedMidis": [],
+                  "missingMidis": [
+                    60
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [
+                    60
+                  ],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0.15,
+                    "signal": 1,
+                    "pitch": 0,
+                    "harmony": 0,
+                    "temporal": 0,
+                    "attack": 0,
+                    "expectation": 0,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "0/1 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 0,
+                    "requiredCount": 1,
+                    "sustainPedalDown": false,
+                    "attackPhase": "hold",
+                    "mayHold": false
+                  }
+                },
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1-50-rejected:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:50",
+                    "mic3:piano-chord:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:50"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": false,
+                      "musical": false,
+                      "energyRise": false,
+                      "gateOpened": false
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:repeated-piano-note-requires-release-and-attack-checkpoint-1:1",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:30",
+                  "timeMs": 50,
+                  "outcome": "rejected",
+                  "timing": "untimed",
+                  "reason": "non-musical-input",
+                  "advance": false,
+                  "matchedMidis": [],
+                  "missingMidis": [
+                    60
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0,
+                    "signal": 0,
+                    "pitch": 0,
+                    "harmony": 0,
+                    "temporal": 0,
+                    "attack": 0,
+                    "expectation": 0,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "0/1 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 0,
+                    "requiredCount": 1,
+                    "sustainPedalDown": false,
+                    "attackPhase": "release",
+                    "mayHold": false
+                  }
+                },
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1-70-rejected:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:70",
+                    "mic3:piano-chord:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:70"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": false,
+                      "musical": false,
+                      "energyRise": false,
+                      "gateOpened": false
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:repeated-piano-note-requires-release-and-attack-checkpoint-1:1",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:30",
+                  "timeMs": 70,
+                  "outcome": "rejected",
+                  "timing": "untimed",
+                  "reason": "non-musical-input",
+                  "advance": false,
+                  "matchedMidis": [],
+                  "missingMidis": [
+                    60
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0,
+                    "signal": 0,
+                    "pitch": 0,
+                    "harmony": 0,
+                    "temporal": 0,
+                    "attack": 0,
+                    "expectation": 0,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "0/1 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 0,
+                    "requiredCount": 1,
+                    "sustainPedalDown": false,
+                    "attackPhase": "release",
+                    "mayHold": false
+                  }
+                },
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1-90-rejected:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:90",
+                    "mic3:piano-chord:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:90"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": false,
+                      "musical": false,
+                      "energyRise": false,
+                      "gateOpened": false
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:repeated-piano-note-requires-release-and-attack-checkpoint-1:1",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:30",
+                  "timeMs": 90,
+                  "outcome": "rejected",
+                  "timing": "untimed",
+                  "reason": "non-musical-input",
+                  "advance": false,
+                  "matchedMidis": [],
+                  "missingMidis": [
+                    60
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-0-0:0:1",
+                  "confidence": {
+                    "overall": 0,
+                    "signal": 0,
+                    "pitch": 0,
+                    "harmony": 0,
+                    "temporal": 0,
+                    "attack": 0,
+                    "expectation": 0,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "0/1 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 0,
+                    "requiredCount": 1,
+                    "sustainPedalDown": false,
+                    "attackPhase": "release",
+                    "mayHold": false
+                  }
+                },
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1-110-rejected:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:110",
+                    "mic3:piano-chord:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:110"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": false,
+                      "musical": false,
+                      "energyRise": false,
+                      "gateOpened": false
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:repeated-piano-note-requires-release-and-attack-checkpoint-1:1",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:30",
+                  "timeMs": 110,
+                  "outcome": "rejected",
+                  "timing": "untimed",
+                  "reason": "non-musical-input",
+                  "advance": false,
+                  "matchedMidis": [],
+                  "missingMidis": [
+                    60
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": null,
+                  "confidence": {
+                    "overall": 0,
+                    "signal": 0,
+                    "pitch": 0,
+                    "harmony": 0,
+                    "temporal": 0,
+                    "attack": 0,
+                    "expectation": 0,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "0/1 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 0,
+                    "requiredCount": 1,
+                    "sustainPedalDown": false,
+                    "attackPhase": "release",
+                    "mayHold": false
+                  }
+                },
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1-140-accepted:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:140",
+                    "mic3:piano-chord:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:140"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": true,
+                      "energyRise": false,
+                      "gateOpened": true
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:repeated-piano-note-requires-release-and-attack-checkpoint-1:1",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:140",
+                  "timeMs": 140,
+                  "outcome": "accepted",
+                  "timing": "untimed",
+                  "reason": "expected-piano-event-complete",
+                  "advance": true,
+                  "matchedMidis": [
+                    60
+                  ],
+                  "missingMidis": [],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": "mic3:timing-attack:mic3-checkpoint-repeated-piano-note-requires-release-and-attack-checkpoint-1-1:140:7",
+                  "confidence": {
+                    "overall": 0.886,
+                    "signal": 1,
+                    "pitch": 0.92,
+                    "harmony": 1,
+                    "temporal": 1,
+                    "attack": 0.95,
+                    "expectation": 1,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "1/1 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 1,
+                    "requiredCount": 1,
+                    "sustainPedalDown": false,
+                    "attackPhase": "attack",
+                    "mayHold": false
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "speech-like-nonmusical-frame-rejects",
+          "provenance": {
+            "fixtureClass": "deterministic-ir-sequence",
+            "naturalPerformance": false
+          },
+          "passed": true,
+          "checkpointResults": [
+            {
+              "checkpointId": "speech-like-nonmusical-frame-rejects-checkpoint-0",
+              "expectedAdvance": false,
+              "advanced": false,
+              "advancedAtFrame": null,
+              "earlyAdvance": false,
+              "passed": true,
+              "finalDecision": {
+                "schemaVersion": 3,
+                "type": "RecognitionDecision",
+                "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-speech-like-nonmusical-frame-rejects-checkpoint-0-0-0-rejected:untimed",
+                "diagnostics": [],
+                "evidenceRefs": [
+                  "mic3:piano-frame:mic3-checkpoint-speech-like-nonmusical-frame-rejects-checkpoint-0-0:0",
+                  "mic3:piano-chord:mic3-checkpoint-speech-like-nonmusical-frame-rejects-checkpoint-0-0:0"
+                ],
+                "debug": {
+                  "musicalTiming": {
+                    "gateOpen": true,
+                    "musical": false,
+                    "energyRise": false,
+                    "gateOpened": true
+                  }
+                },
+                "checkpointId": "mic3:checkpoint:speech-like-nonmusical-frame-rejects-checkpoint-0:0",
+                "windowId": "mic3:piano-window:mic3-checkpoint-speech-like-nonmusical-frame-rejects-checkpoint-0-0:0",
+                "timeMs": 0,
+                "outcome": "rejected",
+                "timing": "untimed",
+                "reason": "non-musical-input",
+                "advance": false,
+                "matchedMidis": [],
+                "missingMidis": [
+                  60
+                ],
+                "unexpectedMidis": [],
+                "ringingMidis": [],
+                "attackId": null,
+                "confidence": {
+                  "overall": 0,
+                  "signal": 0,
+                  "pitch": 0,
+                  "harmony": 0,
+                  "temporal": 0,
+                  "attack": 0,
+                  "expectation": 0,
+                  "instrument": 1,
+                  "rejection": 1,
+                  "reasons": [
+                    "0/1 piano tones",
+                    "sustain pedal inactive"
+                  ]
+                },
+                "progress": {
+                  "matchedCount": 0,
+                  "requiredCount": 1,
+                  "sustainPedalDown": false,
+                  "attackPhase": "hold",
+                  "mayHold": false
+                }
+              },
+              "decisions": [
+                {
+                  "schemaVersion": 3,
+                  "type": "RecognitionDecision",
+                  "id": "mic3:timed-decision:mic3-decision-mic3-checkpoint-speech-like-nonmusical-frame-rejects-checkpoint-0-0-0-rejected:untimed",
+                  "diagnostics": [],
+                  "evidenceRefs": [
+                    "mic3:piano-frame:mic3-checkpoint-speech-like-nonmusical-frame-rejects-checkpoint-0-0:0",
+                    "mic3:piano-chord:mic3-checkpoint-speech-like-nonmusical-frame-rejects-checkpoint-0-0:0"
+                  ],
+                  "debug": {
+                    "musicalTiming": {
+                      "gateOpen": true,
+                      "musical": false,
+                      "energyRise": false,
+                      "gateOpened": true
+                    }
+                  },
+                  "checkpointId": "mic3:checkpoint:speech-like-nonmusical-frame-rejects-checkpoint-0:0",
+                  "windowId": "mic3:piano-window:mic3-checkpoint-speech-like-nonmusical-frame-rejects-checkpoint-0-0:0",
+                  "timeMs": 0,
+                  "outcome": "rejected",
+                  "timing": "untimed",
+                  "reason": "non-musical-input",
+                  "advance": false,
+                  "matchedMidis": [],
+                  "missingMidis": [
+                    60
+                  ],
+                  "unexpectedMidis": [],
+                  "ringingMidis": [],
+                  "attackId": null,
+                  "confidence": {
+                    "overall": 0,
+                    "signal": 0,
+                    "pitch": 0,
+                    "harmony": 0,
+                    "temporal": 0,
+                    "attack": 0,
+                    "expectation": 0,
+                    "instrument": 1,
+                    "rejection": 1,
+                    "reasons": [
+                      "0/1 piano tones",
+                      "sustain pedal inactive"
+                    ]
+                  },
+                  "progress": {
+                    "matchedCount": 0,
+                    "requiredCount": 1,
+                    "sustainPedalDown": false,
+                    "attackPhase": "hold",
+                    "mayHold": false
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

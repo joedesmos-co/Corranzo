@@ -1,21 +1,21 @@
 # Microphone accuracy replay report
 
-Clips: 28 measured · 0 skipped (missing files)
+Clips: 31 measured · 0 skipped (missing files)
 
 ## Detection rates
-- Hit rate: 100.0% (24/24 note clips)
-- False negative rate: 0.0% (0/24)
+- Hit rate: 100.0% (27/27 note clips)
+- False negative rate: 0.0% (0/27)
 - False positive rate: 0.0% (0/4 silence/noise clips)
 
 ## Quality (matched note clips)
 - Mean clarity: 0.986
-- Mean |cents error|: 6.5
-- Mean stabilizer latency: -21 ms
-- Mean pitch frames / clip: 41.1
+- Mean |cents error|: 6.8
+- Mean stabilizer latency: -15 ms
+- Mean pitch frames / clip: 42.1
 - Mean unstable pitch frames / clip: 0.0
 
 ## Fixture mix
-- Real-file note clips: 3 (hit rate 100.0%)
+- Real-file note clips: 6 (hit rate 100.0%)
 - Synthetic note clips: 21 (hit rate 100.0%)
 
 ## Tuning guidance
@@ -27,18 +27,18 @@ Clips: 28 measured · 0 skipped (missing files)
 ## Breakdowns
 ### By register
 - **bass** (5 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.996, mean |cents| 3.0, mean latency -28 ms
-- **mid** (19 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.983, mean |cents| 7.5, mean latency -19 ms
+- **mid** (22 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.984, mean |cents| 7.7, mean latency -12 ms
 ### By instrument
-- **guitar** (14 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.986, mean |cents| 5.1, mean latency -19 ms
-- **piano** (14 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.985, mean |cents| 8.5, mean latency -23 ms
+- **guitar** (15 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.987, mean |cents| 5.8, mean latency -18 ms
+- **piano** (16 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.985, mean |cents| 8.0, mean latency -10 ms
 ### By noise condition
-- **clean** (17 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.992, mean |cents| 8.4, mean latency -18 ms
+- **clean** (20 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.991, mean |cents| 8.5, mean latency -9 ms
 - **distorted** (2 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.996, mean |cents| 1.6, mean latency -25 ms
 - **loud** (2 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.998, mean |cents| 2.7, mean latency -35 ms
 - **noisy** (2 clips): hit —, false negative —, false positive 0.0%, mean clarity —, mean |cents| —, mean latency — ms
 - **quiet** (5 clips): hit 100.0%, false negative 0.0%, false positive —, mean clarity 0.959, mean |cents| 4.3, mean latency -21 ms
 ### By source
-- **file** (5 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.966, mean |cents| 27.0, mean latency 42 ms
+- **file** (8 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.978, mean |cents| 18.0, mean latency 39 ms
 - **synthetic** (23 clips): hit 100.0%, false negative 0.0%, false positive 0.0%, mean clarity 0.988, mean |cents| 3.6, mean latency -30 ms
 
 ## Per clip
@@ -70,3 +70,6 @@ Clips: 28 measured · 0 skipped (missing files)
 - **real-guitar-g3** (note) → hit · detected 55 · 63 pitch frames · max clarity 0.945 · clarity 0.940 · latency 100 ms · first pitch 17 ms
 - **real-room-quiet** (silence) → correct-reject
 - **real-room-noisy** (silence) → correct-reject
+- **uiowa-piano-mf-c4** (note) → hit · detected 60 · 55 pitch frames · max clarity 1.000 · clarity 0.999 · latency 47 ms · first pitch 50 ms
+- **uiowa-piano-pp-c4** (note) → hit · detected 60 · 19 pitch frames · max clarity 0.998 · clarity 0.975 · latency 63 ms · first pitch 67 ms
+- **uiowa-guitar-mf-g3** (note) → hit · detected 55 · wrong 89 · 79 pitch frames · max clarity 1.000 · clarity 0.994 · latency -3 ms · first pitch 33 ms
