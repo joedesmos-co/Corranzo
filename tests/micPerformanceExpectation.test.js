@@ -104,6 +104,14 @@ describe('Mic Engine V3 performance expectation', () => {
     expect(guitar.event.allowsRollingCompletion).toBe(true)
     expect(piano.event.requiredToneCount).toBe(6)
     expect(piano.policy.chordUsesQuorum).toBe(false)
+
+    const triad = checkpoint('guitar-triad', 2, [40, 47, 52], {
+      minimumRequiredTones: 2,
+    })
+    expect(buildPerformanceExpectation({
+      checkpoint: triad,
+      instrument: 'guitar',
+    }).event.requiredToneCount).toBe(2)
   })
 
   it('models tied continuations as held events without a fresh attack', () => {

@@ -133,7 +133,11 @@ function buildExpectedNotes(checkpoint) {
       tieStart: Boolean(note.tieStart),
       tieStop: Boolean(note.tieStop),
       suppressAttack: Boolean(note.suppressPlaybackAttack),
-      muted: Boolean(note.muted || note.guitarTechniques?.includes?.('muted')),
+      muted: Boolean(
+        note.muted ||
+        note.guitarTechniques?.some?.((technique) =>
+          (typeof technique === 'string' ? technique : technique?.kind) === 'muted'),
+      ),
       techniques: Array.isArray(note.guitarTechniques) ? [...note.guitarTechniques] : [],
     })
   }
@@ -181,7 +185,7 @@ function resolveRequiredToneCount(checkpoint, instrument, kind, noteCount) {
     checkpoint?.minimumRequiredTones ?? checkpoint?.minimumChordTonesRequired,
   )
   if (explicit != null) {
-    return Math.max(3, Math.min(noteCount, Math.round(explicit)))
+    return Math.max(2, Math.min(noteCount, Math.round(explicit)))
   }
   if (noteCount === 3) {
     return 2
