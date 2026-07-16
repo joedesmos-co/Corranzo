@@ -198,6 +198,7 @@ function normalizedSymbol(symbol, geometry, owner, page, index) {
     slurStop: Boolean(symbol?.slurStop),
     slurId: symbol?.slurId ?? null,
     crossStaffTargetStaffId: symbol?.crossStaffTargetStaffId ?? null,
+    warning: symbol?.warning ?? null,
     technical: symbol?.technical && typeof symbol.technical === 'object' ? { ...symbol.technical } : {},
     geometry,
     sourceGeometry: sourceBox(symbol),
