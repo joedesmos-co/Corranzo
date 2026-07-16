@@ -27,11 +27,17 @@ export default function PracticeModeSection({
       aria-label="Practice mode"
       data-tour-id="practice-mode"
     >
-      <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
+      <h3
+        className={`practice-section__title practice-section__title--static practice-section__title--editorial${
+          compact ? '' : ' practice-section__title--with-tip'
+        }`}
+      >
         Mode
-        <PracticeHelpTip label="About practice modes">
-          Play Along keeps the score moving. Wait For You pauses at each note until you play it or tap Continue.
-        </PracticeHelpTip>
+        {!compact && (
+          <PracticeHelpTip label="About practice modes">
+            Play Along keeps the score moving. Wait For You pauses at each note until you play it or tap Continue.
+          </PracticeHelpTip>
+        )}
       </h3>
 
       <div className="practice-mode__options" role="radiogroup" aria-label="Practice mode">

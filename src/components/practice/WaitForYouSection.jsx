@@ -197,16 +197,38 @@ export default function WaitForYouSection({
     status === WFY_STATUS.COMPLETE || status === WFY_STATUS.NO_CHECKPOINTS
   const primaryActionDisabled = displayStatus === WFY_DISPLAY_STATUS.CONTINUING
   const micChordSequence = false
+  const showCompactMicStatus =
+    micCalibrating ||
+    (micListening &&
+      Boolean(micStatusLabel) &&
+      micStatusLabel !== 'Ready' &&
+      micStatusLabel !== 'Listening')
+  const showMicStatusLine =
+    inputMatchingActive &&
+    inputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+    !showMicOffNotice &&
+    (!compact || showCompactMicStatus)
+  const showMidiListeningLine =
+    inputMatchingActive &&
+    inputSource === WFY_INPUT_SOURCE.MIDI &&
+    !compact
+  const hasMoreActions =
+    (!structurallyDone &&
+      ((checkpointMode === WFY_CHECKPOINT_MODE.NOTE && Boolean(currentCheckpoint)) ||
+        Boolean(onSkip))) ||
+    totalCheckpoints > 0
 
   return (
     <section className={sectionClass} aria-label="Wait For You">
-      <div className="wait-for-you__header">
-        <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
-          Wait For You
-          <PracticeHelpTip label="About Wait For You">
-            Pauses at each note in your loop until you play it or tap Continue.
-          </PracticeHelpTip>
-        </h3>
+      <div className={`wait-for-you__header${compact ? ' wait-for-you__header--compact' : ''}`}>
+        {!compact && (
+          <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
+            Wait For You
+            <PracticeHelpTip label="About Wait For You">
+              Pauses at each note in your loop until you play it or tap Continue.
+            </PracticeHelpTip>
+          </h3>
+        )}
         {status === WFY_STATUS.WAITING && displayStatus !== WFY_DISPLAY_STATUS.CONTINUING && (
           <span className="wait-for-you__badge wait-for-you__badge--pulse" role="status">
             {displayStatus === WFY_DISPLAY_STATUS.MISSED ? 'Try again' : 'Your turn'}
@@ -255,7 +277,7 @@ export default function WaitForYouSection({
         </div>
       )}
 
-      {inputMatchingActive && inputSource === WFY_INPUT_SOURCE.MICROPHONE && (
+      {showMicStatusLine && (
         <p
           className={`wait-for-you__mic-calibration${
             micCalibrating ? ' wait-for-you__mic-calibration--measuring' : ' wait-for-you__mic-calibration--ready'
@@ -267,7 +289,7 @@ export default function WaitForYouSection({
         </p>
       )}
 
-      {inputMatchingActive && inputSource === WFY_INPUT_SOURCE.MIDI && (
+      {showMidiListeningLine && (
         <p className="wait-for-you__listening">Listening on MIDI</p>
       )}
 
@@ -405,7 +427,7 @@ export default function WaitForYouSection({
       )}
 
       {status !== WFY_STATUS.NO_CHECKPOINTS && (
-        <div className="wait-for-you__actions">
+        <div className={`wait-for-you__actions${compact ? ' wait-for-you__actions--compact' : ''}`}>
           {!structurallyDone && (
             <button
               type="button"
@@ -416,40 +438,91 @@ export default function WaitForYouSection({
               Continue
             </button>
           )}
-          {!structurallyDone && checkpointMode === WFY_CHECKPOINT_MODE.NOTE && currentCheckpoint && (
-            <button
-              type="button"
-              className="wait-for-you__btn"
-              disabled={
-                referencePlaying ||
-                displayStatus === WFY_DISPLAY_STATUS.CONTINUING ||
-                expectedMidis.length === 0
-              }
-              onClick={() => onPlayReference(currentCheckpoint)}
-            >
-              {referencePlaying ? 'Playing…' : 'Hear it'}
-            </button>
-          )}
-          {!structurallyDone && checkpointMode === WFY_CHECKPOINT_MODE.NOTE && onShowHint && (
-            <button type="button" className="wait-for-you__btn" onClick={onShowHint}>
-              Show hint
-            </button>
-          )}
-          {!structurallyDone && onSkip && (
-            <button
-              type="button"
-              className="wait-for-you__btn"
-              disabled={displayStatus === WFY_DISPLAY_STATUS.CONTINUING}
-              onClick={onSkip}
-              title="Skip this note/chord"
-            >
-              Skip
-            </button>
-          )}
-          {totalCheckpoints > 0 && (
-            <button type="button" className="wait-for-you__btn" onClick={onRestart}>
-              Restart
-            </button>
+          {compact ? (
+            hasMoreActions && (
+              <details className="wait-for-you__more">
+                <summary className="wait-for-you__more-summary">More</summary>
+                <div className="wait-for-you__more-actions">
+                  {!structurallyDone &&
+                    checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
+                    currentCheckpoint && (
+                    <button
+                      type="button"
+                      className="wait-for-you__btn"
+                      disabled={
+                        referencePlaying ||
+                        displayStatus === WFY_DISPLAY_STATUS.CONTINUING ||
+                        expectedMidis.length === 0
+                      }
+                      onClick={() => onPlayReference(currentCheckpoint)}
+                    >
+                      {referencePlaying ? 'Playing…' : 'Hear it'}
+                    </button>
+                  )}
+                  {!structurallyDone &&
+                    checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
+                    onShowHint && (
+                    <button type="button" className="wait-for-you__btn" onClick={onShowHint}>
+                      Show hint
+                    </button>
+                  )}
+                  {!structurallyDone && onSkip && (
+                    <button
+                      type="button"
+                      className="wait-for-you__btn"
+                      disabled={displayStatus === WFY_DISPLAY_STATUS.CONTINUING}
+                      onClick={onSkip}
+                      title="Skip this note/chord"
+                    >
+                      Skip
+                    </button>
+                  )}
+                  {totalCheckpoints > 0 && (
+                    <button type="button" className="wait-for-you__btn" onClick={onRestart}>
+                      Restart
+                    </button>
+                  )}
+                </div>
+              </details>
+            )
+          ) : (
+            <>
+              {!structurallyDone && checkpointMode === WFY_CHECKPOINT_MODE.NOTE && currentCheckpoint && (
+                <button
+                  type="button"
+                  className="wait-for-you__btn"
+                  disabled={
+                    referencePlaying ||
+                    displayStatus === WFY_DISPLAY_STATUS.CONTINUING ||
+                    expectedMidis.length === 0
+                  }
+                  onClick={() => onPlayReference(currentCheckpoint)}
+                >
+                  {referencePlaying ? 'Playing…' : 'Hear it'}
+                </button>
+              )}
+              {!structurallyDone && checkpointMode === WFY_CHECKPOINT_MODE.NOTE && onShowHint && (
+                <button type="button" className="wait-for-you__btn" onClick={onShowHint}>
+                  Show hint
+                </button>
+              )}
+              {!structurallyDone && onSkip && (
+                <button
+                  type="button"
+                  className="wait-for-you__btn"
+                  disabled={displayStatus === WFY_DISPLAY_STATUS.CONTINUING}
+                  onClick={onSkip}
+                  title="Skip this note/chord"
+                >
+                  Skip
+                </button>
+              )}
+              {totalCheckpoints > 0 && (
+                <button type="button" className="wait-for-you__btn" onClick={onRestart}>
+                  Restart
+                </button>
+              )}
+            </>
           )}
         </div>
       )}

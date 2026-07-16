@@ -234,27 +234,25 @@ function VisualPracticeView({ timingSourceKind = null }) {
         <VisualKeyboardStrip keys={keyboardKeys} />
       )}
 
-      <div className="visual-practice__legend" aria-hidden="true">
-        {!isWaitForYou && (
-          <>
-            <span className="visual-practice__legend-item visual-practice__legend-item--correct">
-              Correct
-            </span>
-            <span className="visual-practice__legend-item visual-practice__legend-item--wrong">
-              Wrong / missed
-            </span>
-          </>
-        )}
-        <span className="visual-practice__legend-item visual-practice__legend-item--played">
-          Played
-        </span>
-        <span className="visual-practice__legend-item visual-practice__legend-item--now">
-          Now
-        </span>
-        <span className="visual-practice__legend-item visual-practice__legend-item--upcoming">
-          Upcoming
-        </span>
-      </div>
+      {!isWaitForYou && (
+        <div className="visual-practice__legend" aria-hidden="true">
+          <span className="visual-practice__legend-item visual-practice__legend-item--correct">
+            Correct
+          </span>
+          <span className="visual-practice__legend-item visual-practice__legend-item--wrong">
+            Wrong / missed
+          </span>
+          <span className="visual-practice__legend-item visual-practice__legend-item--played">
+            Played
+          </span>
+          <span className="visual-practice__legend-item visual-practice__legend-item--now">
+            Now
+          </span>
+          <span className="visual-practice__legend-item visual-practice__legend-item--upcoming">
+            Upcoming
+          </span>
+        </div>
+      )}
     </div>
   )
 }
@@ -391,7 +389,6 @@ const VisualTargetHeader = memo(function VisualTargetHeader({
       </strong>
       <span className="visual-practice__target-meta">
         {position} · {Math.min(targetIndex + 1, totalGroups)} of {totalGroups}
-        {waiting ? ' · waiting for you' : ''}
       </span>
     </div>
   )

@@ -63,4 +63,47 @@ describe('copy reduction sprint', () => {
       expect(state.detail.length).toBeLessThanOrEqual(72)
     }
   })
+
+  it('shows a compact piece header on the default Practice surface', () => {
+    const panel = readSrc('components', 'practice', 'PracticeControlPanel.jsx')
+    expect(panel).toContain('practice-piece-header')
+    expect(panel).toContain('practice-piece-header__title')
+    expect(panel).toContain('pieceTitle')
+  })
+
+  it('collapses import warnings out of the default Practice chrome', () => {
+    const panel = readSrc('components', 'practice', 'PracticeControlPanel.jsx')
+    const topNotices = panel.indexOf('<PracticeImportNotices')
+    const advancedIndex = panel.indexOf('title="Advanced"')
+    expect(topNotices).toBeGreaterThan(advancedIndex)
+    expect(panel).toContain('warnings={importWarnings}')
+  })
+
+  it('uses one input-status channel and collapses secondary WFY actions', () => {
+    const wfy = readSrc('components', 'practice', 'WaitForYouSection.jsx')
+    const strip = readSrc('components', 'practice', 'PracticeStatusStrip.jsx')
+    expect(strip).toContain('Mic listening')
+    expect(strip).toContain('MIDI ready')
+    expect(wfy).toContain('showMidiListeningLine')
+    expect(wfy).toContain('!compact')
+    expect(wfy).toContain('wait-for-you__more')
+    expect(wfy).toMatch(/compact \?[\s\S]*wait-for-you__header--compact/)
+  })
+
+  it('keeps piano Hands and guitar Cursor chrome consistent and collapsed by default', () => {
+    const scope = readSrc('components', 'practice', 'PracticeScopeSection.jsx')
+    const cursor = readSrc('components', 'practice', 'PracticeScoreCursorSection.jsx')
+    expect(scope).toContain('Hands')
+    expect(scope).not.toMatch(/>\s*Practice\s*</)
+    expect(cursor).toContain('practice-score-cursor__details')
+    expect(cursor).toContain('<summary className="practice-score-cursor__summary">')
+  })
+
+  it('raises mobile Practice panel height so primary actions stay reachable', () => {
+    const css = readSrc('styles', 'practice.css')
+    expect(css).toContain('max-height: min(62vh, 640px)')
+    expect(css).toContain('max-height: 58vh')
+    expect(css).not.toContain('max-height: min(50vh, 520px)')
+    expect(css).not.toContain('max-height: 46vh')
+  })
 })

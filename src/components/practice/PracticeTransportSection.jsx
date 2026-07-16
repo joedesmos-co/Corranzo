@@ -9,7 +9,7 @@ export default function PracticeTransportSection({
   disabled,
   playDisabled,
   seekDisabled,
-  transportHint,
+  transportHint: _transportHint,
   isPlaying,
   currentTime,
   duration,
@@ -42,11 +42,17 @@ export default function PracticeTransportSection({
       aria-label="Playback"
       data-tour-id="practice-playback"
     >
-      <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial practice-section__title--with-tip">
+      <h3
+        className={`practice-section__title practice-section__title--static practice-section__title--editorial${
+          compact ? '' : ' practice-section__title--with-tip'
+        }`}
+      >
         Play
-        <PracticeHelpTip label="About playback">
-          Built-in instrument sound from your selection above. Optional MIDI file adds backing tracks.
-        </PracticeHelpTip>
+        {!compact && (
+          <PracticeHelpTip label="About playback">
+            Built-in instrument sound from your selection above. Optional MIDI file adds backing tracks.
+          </PracticeHelpTip>
+        )}
       </h3>
 
       {!canPlay ? (
@@ -62,10 +68,6 @@ export default function PracticeTransportSection({
             <p className="practice-section__error" role="alert">
               {error}
             </p>
-          )}
-
-          {transportHint && (
-            <span className="practice-status-chip">Wait For You active</span>
           )}
 
           <PracticePlaybackSettings
@@ -86,9 +88,8 @@ export default function PracticeTransportSection({
             showMetronomeDetails={false}
           />
 
-          {/* In Wait For You, the one primary action (Continue) lives in the
-              Wait For You section next to the note target — the transport only
-              shows the status chip above, never a second Continue button. */}
+          {/* In Wait For You, Continue lives next to the note target — hide
+              transport play controls; Mode already shows the active mode. */}
           {!waitForYouActive && (
             <MidiTransportControls
               disabled={disabled || isLoading}

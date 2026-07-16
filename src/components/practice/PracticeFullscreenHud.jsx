@@ -77,12 +77,6 @@ export default function PracticeFullscreenHud({
           </span>
         )}
       </div>
-
-      <p className="practice-fullscreen-hud__hint">
-        {isWaitForYou
-          ? 'Enter to continue · Esc exits fullscreen'
-          : 'Space play · ← → pages · Shift+← → measures'}
-      </p>
     </div>
   )
 }

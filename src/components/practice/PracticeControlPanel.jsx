@@ -67,6 +67,10 @@ export default memo(function PracticeControlPanel({
     })
   }
 
+  const pieceTitle =
+    practicePiece?.title ||
+    (pdfFileName ? String(pdfFileName).replace(/\.[^.]+$/, '') : null)
+
   const filesBlock = (
     <PracticeFilesSummary
       pdfFileName={pdfFileName}
@@ -89,9 +93,13 @@ export default memo(function PracticeControlPanel({
         microphoneAvailable={isMicrophoneSupported()}
       />
 
-      <PracticeImportNotices warnings={importWarnings} guidance={[]} />
-
       <div className="practice-control-panel__primary practice-control-panel__primary--focus">
+        {pieceTitle ? (
+          <header className="practice-piece-header" data-tour-id="practice-piece">
+            <h2 className="practice-piece-header__title">{pieceTitle}</h2>
+          </header>
+        ) : null}
+
         <PracticeTransportTick />
 
         <PracticeModeSection
@@ -196,7 +204,7 @@ export default memo(function PracticeControlPanel({
               <h4 className="practice-more__group-title">Files</h4>
               {filesReady ? filesBlock : null}
               <PracticeImportNotices
-                warnings={[]}
+                warnings={importWarnings}
                 guidance={session.importReadiness?.guidance ?? []}
                 maxGuidance={2}
               />

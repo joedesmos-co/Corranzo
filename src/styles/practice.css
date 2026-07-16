@@ -3761,6 +3761,27 @@
   box-sizing: border-box;
 }
 
+.practice-piece-header {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin: 0 0 2px;
+  padding: 0 2px;
+}
+
+.practice-piece-header__title {
+  margin: 0;
+  overflow: hidden;
+  color: var(--sf-text);
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .practice-control-panel__primary,
 .practice-control-panel__footer,
 .practice-more {
@@ -4510,11 +4531,73 @@
   gap: 6px;
 }
 
+.wait-for-you__actions--compact {
+  grid-template-columns: 1fr auto;
+  align-items: stretch;
+}
+
+.wait-for-you__actions--compact .wait-for-you__btn--primary {
+  grid-column: auto;
+  min-width: 0;
+}
+
+.wait-for-you__more {
+  min-width: 0;
+}
+
+.wait-for-you__more-summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  min-width: 4.5rem;
+  padding: 0 10px;
+  border: 1px solid var(--sf-border);
+  background: var(--sf-bg-panel-inset);
+  color: var(--sf-text-muted);
+  cursor: pointer;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  list-style: none;
+  text-transform: uppercase;
+}
+
+.wait-for-you__more-summary::-webkit-details-marker {
+  display: none;
+}
+
+.wait-for-you__more[open] {
+  grid-column: 1 / -1;
+}
+
+.wait-for-you__more[open] .wait-for-you__more-summary {
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.wait-for-you__more-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.wait-for-you__header--compact {
+  justify-content: flex-start;
+  margin: 0;
+}
+
 .wait-for-you__btn {
   width: 100%;
   min-height: 34px;
   padding: 0 8px;
+  overflow-wrap: anywhere;
   font-size: 0.72rem;
+}
+
+.wfy-input-source--compact .wfy-input-source__option-hint {
+  display: none;
 }
 
 .practice-input-status__header {
@@ -4606,7 +4689,7 @@
     width: 100%;
     max-width: none;
     min-height: 0;
-    max-height: min(50vh, 520px);
+    max-height: min(62vh, 640px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
@@ -4619,6 +4702,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .practice-piece-header,
   .practice-transport,
   .practice-control-panel__primary > .practice-scope,
   .practice-control-panel__primary > .wait-for-you,
@@ -4634,12 +4718,7 @@
     z-index: 2;
     margin-top: auto;
     padding-top: 8px;
-    background: linear-gradient(
-      to bottom,
-      transparent 0,
-      var(--sf-bg-app) 12px,
-      var(--sf-bg-app) 100%
-    );
+    background: var(--sf-bg-app);
   }
 
   .practice-control-panel__footer .practice-section__toggle {
@@ -4715,7 +4794,7 @@
   }
 
   .practice-control-panel {
-    max-height: 58vh;
+    max-height: 64vh;
   }
 }
 
@@ -4725,17 +4804,17 @@
   }
 
   .practice-control-panel {
-    max-height: 52vh;
+    max-height: 58vh;
   }
 }
 
 @media (max-width: 700px) {
   .practice-workspace__score {
-    min-height: 54vh;
+    min-height: 50vh;
   }
 
   .practice-control-panel {
-    max-height: 46vh;
+    max-height: 58vh;
     padding: 10px;
   }
 
@@ -4743,6 +4822,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .practice-piece-header,
   .practice-transport,
   .practice-control-panel__primary > .practice-scope,
   .practice-control-panel__primary > .wait-for-you,
@@ -4758,13 +4838,26 @@
     padding: 8px 5px;
   }
 
+  .wfy-input-source__options {
+    grid-template-columns: 1fr;
+  }
+
   .wait-for-you__actions {
+    grid-template-columns: 1fr auto;
+  }
+
+  .wait-for-you__actions:not(.wait-for-you__actions--compact) {
     grid-template-columns: 1fr 1fr;
   }
 
   .wait-for-you__btn--primary {
     grid-column: 1 / -1;
     grid-row: 1;
+  }
+
+  .wait-for-you__actions--compact .wait-for-you__btn--primary {
+    grid-column: auto;
+    grid-row: auto;
   }
 }
 
@@ -4773,6 +4866,7 @@
     grid-template-columns: 1fr;
   }
 
+  .practice-piece-header,
   .practice-transport,
   .practice-control-panel__primary > .practice-scope,
   .practice-control-panel__primary > .wait-for-you,
@@ -4780,6 +4874,14 @@
   .practice-control-panel__primary > .mic-input-status,
   .practice-control-panel__primary > .practice-section--collapsible {
     grid-column: auto;
+  }
+
+  .wait-for-you__actions--compact {
+    grid-template-columns: 1fr;
+  }
+
+  .wait-for-you__more-summary {
+    width: 100%;
   }
 }
 

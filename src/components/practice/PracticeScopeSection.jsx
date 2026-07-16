@@ -26,7 +26,7 @@ export default function PracticeScopeSection({
       aria-label="Practice scope"
     >
       <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">
-        Practice
+        Hands
       </h3>
       <div className="practice-scope__options" role="radiogroup" aria-label="Piano practice scope">
         {options.map((scope) => (

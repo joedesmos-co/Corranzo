@@ -46,13 +46,15 @@ describe('practice default view is decluttered', () => {
 
   it('keeps one obvious primary action during Wait For You', () => {
     const transport = readSrc('components', 'practice', 'PracticeTransportSection.jsx')
-    // The transport shows the status chip only — no duplicate Continue.
-    expect(transport).toContain('Wait For You active')
+    // Transport hides Play/Pause in WFY — no duplicate Continue or status chip.
+    expect(transport).not.toContain('Wait For You active')
     expect(transport).toContain('{!waitForYouActive && (')
     expect(transport).not.toContain('onWaitForYouContinue')
 
     const wfy = readSrc('components', 'practice', 'WaitForYouSection.jsx')
     expect(wfy).toContain('className="wait-for-you__btn wait-for-you__btn--primary"')
+    expect(wfy).toContain('wait-for-you__actions--compact')
+    expect(wfy).toContain('wait-for-you__more')
   })
 
   it('does not repeat the add-a-timing-file hint in Mode', () => {
@@ -117,9 +119,11 @@ describe('controls are contextual, not always-on', () => {
     const wfy = readSrc('components', 'practice', 'WaitForYouSection.jsx')
     expect(wfy).toContain('const structurallyDone =')
     // Whole actions row disappears when there is nothing to practice.
-    expect(wfy).toMatch(/status !== WFY_STATUS\.NO_CHECKPOINTS && \(\s*<div className="wait-for-you__actions">/)
+    expect(wfy).toMatch(
+      /status !== WFY_STATUS\.NO_CHECKPOINTS && \(\s*<div className=\{`wait-for-you__actions\$\{compact \? ' wait-for-you__actions--compact' : ''\}`\}>/,
+    )
     // Hear it / Show hint / Skip hide once the run is complete…
-    expect(wfy).toMatch(/\{!structurallyDone && checkpointMode === WFY_CHECKPOINT_MODE\.NOTE && currentCheckpoint && \(/)
+    expect(wfy).toMatch(/\{!structurallyDone &&\s*checkpointMode === WFY_CHECKPOINT_MODE\.NOTE &&\s*currentCheckpoint && \(/)
     expect(wfy).toMatch(/\{!structurallyDone && onSkip && \(/)
     // …while Restart stays as the single follow-up action.
     expect(wfy).toMatch(/\{totalCheckpoints > 0 && \(\s*<button type="button" className="wait-for-you__btn" onClick=\{onRestart\}>/)
