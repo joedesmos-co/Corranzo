@@ -175,7 +175,30 @@ function normalizedSymbol(symbol, geometry, owner, page, index) {
     value: symbol?.value ?? text,
     grace: Boolean(symbol?.grace || symbol?.isGrace),
     string: Number.isFinite(symbol?.string) ? Number(symbol.string) : null,
+    fret: Number.isFinite(symbol?.fret) ? Number(symbol.fret) : null,
     lineIndex: Number.isFinite(symbol?.lineIndex) ? Number(symbol.lineIndex) : null,
+    pitch: symbol?.pitch && typeof symbol.pitch === 'object' ? { ...symbol.pitch } : null,
+    midi: Number.isFinite(symbol?.midi) ? Number(symbol.midi) : null,
+    onsetDivisions: Number.isFinite(symbol?.onsetDivisions)
+      ? Number(symbol.onsetDivisions)
+      : null,
+    durationDivisions: Number.isFinite(symbol?.durationDivisions)
+      ? Number(symbol.durationDivisions)
+      : null,
+    duration:
+      symbol?.duration && typeof symbol.duration === 'object' ? { ...symbol.duration } : null,
+    voiceHint: Number.isFinite(symbol?.voiceHint) ? Number(symbol.voiceHint) : null,
+    stemDirection: symbol?.stemDirection ?? null,
+    stemGroupId: symbol?.stemGroupId ?? null,
+    beamGroupId: symbol?.beamGroupId ?? null,
+    tieStart: Boolean(symbol?.tieStart),
+    tieStop: Boolean(symbol?.tieStop),
+    tieId: symbol?.tieId ?? null,
+    slurStart: Boolean(symbol?.slurStart),
+    slurStop: Boolean(symbol?.slurStop),
+    slurId: symbol?.slurId ?? null,
+    crossStaffTargetStaffId: symbol?.crossStaffTargetStaffId ?? null,
+    technical: symbol?.technical && typeof symbol.technical === 'object' ? { ...symbol.technical } : {},
     geometry,
     sourceGeometry: sourceBox(symbol),
     ownership: {
