@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
@@ -14,6 +14,10 @@ import {
   formatMicV3PerformanceMetricsMarkdown,
   summarizeMicV3PerformanceMetrics,
 } from '../src/features/microphone-input/v3/performanceMetrics.js'
+import {
+  replayMicV3PerformanceSequence,
+  summarizeMicV3PerformanceSequences,
+} from '../src/features/microphone-input/v3/performanceSequenceReplay.js'
 import { normalizeMatchSettings } from '../src/features/practice/waitForYouMatchSettings.js'
 import { readWavPcm } from './lib/readWavPcm.mjs'
 
@@ -75,9 +79,19 @@ async function main() {
   }
 
   const summary = summarizeMicV3PerformanceMetrics(evaluations)
+  const sequenceManifestPath = argValue(args, '--sequence-manifest') ??
+    join(ROOT, 'benchmarks/mic-performance-sequences/manifest.json')
+  const sequenceManifest = JSON.parse(readFileSync(sequenceManifestPath, 'utf8'))
+  const sequenceSummary = summarizeMicV3PerformanceSequences(
+    sequenceManifest.scenarios.map(replayMicV3PerformanceSequence),
+  )
+  summary.ringingAudioFixtureSuccess = summary.ringingTransitionSuccess
+  summary.ringingTransitionSuccess = sequenceSummary.ringingTransitionSuccess
+  summary.sequenceReplay = sequenceSummary
   const payload = {
     generatedAt: new Date().toISOString(),
     manifest: manifestPath,
+    sequenceManifest: sequenceManifestPath,
     constantsTuned: false,
     productionThresholdsChanged: false,
     summary,

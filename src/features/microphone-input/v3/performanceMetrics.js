@@ -365,7 +365,13 @@ export function formatMicV3PerformanceMetricsMarkdown(summary) {
     bucketLine('Piano dyads', summary.dyadAccuracy),
     bucketLine('Triads', summary.triadAccuracy),
     bucketLine('Large chords', summary.largeChordAccuracy),
-    bucketLine('Ringing fixtures', summary.ringingTransitionSuccess),
+    bucketLine('Ringing transitions', summary.ringingTransitionSuccess),
+    summary.ringingAudioFixtureSuccess
+      ? bucketLine('Ringing audio fixtures', summary.ringingAudioFixtureSuccess)
+      : null,
+    summary.sequenceReplay
+      ? `- Musical sequence replay: ${summary.sequenceReplay.passedScenarios}/${summary.sequenceReplay.scenarioCount} scenarios · ${summary.sequenceReplay.falseAdvanceCount} false advances`
+      : null,
     '',
     '## Provenance warning',
     `- Natural performance recordings: ${summary.provenance.naturalPerformanceClips}`,
@@ -373,7 +379,7 @@ export function formatMicV3PerformanceMetricsMarkdown(summary) {
     '- Proxy results are not described as live-instrument validation.',
     '',
     '## Per clip',
-  ]
+  ].filter((line) => line != null)
   for (const clip of summary.perClip) {
     lines.push(
       `- **${clip.clipId}** → ${clip.accepted ? 'accepted' : clip.correctReject ? 'correct reject' : 'rejected'} · ` +

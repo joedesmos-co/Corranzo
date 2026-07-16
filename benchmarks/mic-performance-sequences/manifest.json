@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "description": "Deterministic IR-level musical sequence corpus. These are synthetic engine scenarios, not recordings.",
+  "scenarios": [
+    {
+      "id": "guitar-staggered-double-stop",
+      "instrument": "guitar",
+      "provenance": { "fixtureClass": "deterministic-ir-sequence", "naturalPerformance": false },
+      "checkpoints": [
+        {
+          "timeMs": 0,
+          "expectedMidis": [55, 59],
+          "expectedStringFrets": [{ "midi": 55, "string": 3, "fret": 0 }, { "midi": 59, "string": 2, "fret": 0 }],
+          "expectedAdvance": true,
+          "mustNotAdvanceBeforeFrame": 1,
+          "frames": [
+            { "timeMs": 0, "gateOpen": true, "musical": true, "freshAttack": true, "detectedMidis": [55] },
+            { "timeMs": 70, "gateOpen": true, "musical": true, "detectedMidis": [55, 59] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "guitar-one-tone-never-satisfies-double-stop",
+      "instrument": "guitar",
+      "provenance": { "fixtureClass": "deterministic-ir-sequence", "naturalPerformance": false },
+      "checkpoints": [
+        {
+          "timeMs": 0,
+          "expectedMidis": [55, 59],
+          "expectedAdvance": false,
+          "frames": [
+            { "timeMs": 0, "gateOpen": true, "musical": true, "freshAttack": true, "detectedMidis": [55] },
+            { "timeMs": 120, "gateOpen": true, "musical": true, "detectedMidis": [55] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "guitar-wrong-chord-rejects",
+      "instrument": "guitar",
+      "provenance": { "fixtureClass": "deterministic-ir-sequence", "naturalPerformance": false },
+      "checkpoints": [
+        {
+          "timeMs": 0,
+          "expectedMidis": [60, 64],
+          "expectedAdvance": false,
+          "frames": [
+            { "timeMs": 0, "gateOpen": true, "musical": true, "freshAttack": true, "detectedMidis": [], "unexpectedMidis": [57, 61] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "guitar-six-string-quorum-with-bass-anchor",
+      "instrument": "guitar",
+      "provenance": { "fixtureClass": "deterministic-ir-sequence", "naturalPerformance": false },
+      "checkpoints": [
+        {
+          "timeMs": 0,
+          "expectedMidis": [40, 45, 50, 55, 59, 64],
+          "expectedStringFrets": [{ "midi": 40, "string": 6, "fret": 0 }, { "midi": 45, "string": 5, "fret": 0 }, { "midi": 50, "string": 4, "fret": 0 }, { "midi": 55, "string": 3, "fret": 0 }, { "midi": 59, "string": 2, "fret": 0 }, { "midi": 64, "string": 1, "fret": 0 }],
+          "expectedAdvance": true,
+          "frames": [
+            { "timeMs": 0, "gateOpen": true, "musical": true, "freshAttack": true, "detectedMidis": [40, 50, 59] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "piano-rolled-triad",
+      "instrument": "piano",
+      "provenance": { "fixtureClass": "deterministic-ir-sequence", "naturalPerformance": false },
+      "checkpoints": [
+        {
+          "timeMs": 0,
+          "expectedMidis": [60, 64, 67],
+          "expectedAdvance": true,
+          "mustNotAdvanceBeforeFrame": 2,
+          "frames": [
+            { "timeMs": 0, "gateOpen": true, "musical": true, "freshAttack": true, "detectedMidis": [60] },
+            { "timeMs": 85, "gateOpen": true, "musical": true, "detectedMidis": [60, 64] },
+            { "timeMs": 170, "gateOpen": true, "musical": true, "detectedMidis": [60, 64, 67] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ringing-note-cannot-skip-next-checkpoint",
+      "instrument": "piano",
+      "provenance": { "fixtureClass": "deterministic-ir-sequence", "naturalPerformance": false },
+      "checkpoints": [
+        {
+          "timeMs": 0,
+          "expectedMidis": [64],
+          "expectedAdvance": true,
+          "frames": [
+            { "timeMs": 0, "gateOpen": true, "musical": true, "freshAttack": true, "detectedMidis": [64] }
+          ]
+        },
+        {
+          "timeMs": 100,
+          "expectedMidis": [57],
+          "expectedAdvance": true,
+          "mustNotAdvanceBeforeFrame": 2,
+          "frames": [
+            { "timeMs": 100, "gateOpen": true, "musical": true, "detectedMidis": [], "ringingMidis": [64] },
+            { "timeMs": 120, "gateOpen": true, "musical": false, "detectedMidis": [], "ringingMidis": [64] },
+            { "timeMs": 150, "gateOpen": true, "musical": true, "freshAttack": true, "detectedMidis": [57], "ringingMidis": [64] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "repeated-piano-note-requires-release-and-attack",
+      "instrument": "piano",
+      "provenance": { "fixtureClass": "deterministic-ir-sequence", "naturalPerformance": false },
+      "checkpoints": [
+        {
+          "timeMs": 0,
+          "expectedMidis": [60],
+          "expectedAdvance": true,
+          "frames": [{ "timeMs": 0, "gateOpen": true, "musical": true, "freshAttack": true, "detectedMidis": [60] }]
+        },
+        {
+          "timeMs": 30,
+          "expectedMidis": [60],
+          "expectedAdvance": true,
+          "mustNotAdvanceBeforeFrame": 5,
+          "frames": [
+            { "timeMs": 30, "gateOpen": true, "musical": true, "detectedMidis": [60], "ringingMidis": [60] },
+            { "timeMs": 50, "gateOpen": false, "musical": false, "detectedMidis": [] },
+            { "timeMs": 70, "gateOpen": false, "musical": false, "detectedMidis": [] },
+            { "timeMs": 90, "gateOpen": false, "musical": false, "detectedMidis": [] },
+            { "timeMs": 110, "gateOpen": false, "musical": false, "detectedMidis": [] },
+            { "timeMs": 140, "gateOpen": true, "musical": true, "freshAttack": true, "detectedMidis": [60] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "speech-like-nonmusical-frame-rejects",
+      "instrument": "piano",
+      "provenance": { "fixtureClass": "deterministic-ir-sequence", "naturalPerformance": false },
+      "checkpoints": [
+        {
+          "timeMs": 0,
+          "expectedMidis": [60],
+          "expectedAdvance": false,
+          "frames": [{ "timeMs": 0, "gateOpen": true, "musical": false, "freshAttack": true, "detectedMidis": [60] }]
+        }
+      ]
+    }
+  ]
+}

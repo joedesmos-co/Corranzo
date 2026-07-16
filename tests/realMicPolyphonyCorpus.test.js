@@ -27,6 +27,9 @@ describe('real mic polyphony corpus tooling', () => {
     expect(src).toContain('developer-live-mic')
     expect(src).toContain('assertAudibleCapture')
     expect(src).toContain('Refusing silent capture')
+    expect(src).toContain('--performance-onset-ms')
+    expect(src).toContain('--natural-performance')
+    expect(src).toContain('fixtureClass')
   })
 
   it('vendors UIowa-derived accuracy and polyphony fixtures with attribution', () => {
@@ -52,7 +55,18 @@ describe('real mic polyphony corpus tooling', () => {
       expect(existsSync(join(root, 'benchmarks/mic-polyphony', clip.file))).toBe(true)
       expect(Array.isArray(clip.expectedMidis)).toBe(true)
       expect(clip.expectedMidis.length).toBeGreaterThanOrEqual(2)
+      expect(clip.provenance.fixtureClass).toBe('isolated-sample-composite')
+      expect(clip.provenance.naturalPerformance).toBe(false)
     }
+  })
+
+  it('classifies every polyphony clip without claiming constructed audio is natural', () => {
+    const manifest = loadMicPolyphonyManifest(join(root, 'benchmarks/mic-polyphony/manifest.json'))
+    expect(manifest.provenance.policy).toMatch(/uninterrupted human performance/i)
+    expect(manifest.clips.every((clip) => clip.provenance?.fixtureClass)).toBe(true)
+    expect(manifest.clips.filter((clip) => clip.provenance.naturalPerformance)).toHaveLength(0)
+    expect(manifest.clips.find((clip) => clip.id === 'real-c-major-triad').provenance)
+      .toMatchObject({ fixtureClass: 'generated-placeholder', naturalPerformance: false })
   })
 
   it('documents Sprint 2 chord reliability metrics in the polyphony report', () => {
