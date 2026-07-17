@@ -70,7 +70,9 @@ function notationPitch(symbol) {
         ...written,
         writtenMidi,
         soundingMidi,
-        transpositionSemitones: -12,
+        transpositionSemitones: Number.isFinite(original.transpositionSemitones)
+          ? original.transpositionSemitones
+          : soundingMidi - writtenMidi,
       }
     : null
 }
@@ -82,12 +84,30 @@ function tabFret(symbol) {
 }
 
 function tabSoundingMidi(symbol) {
+  if (Number.isFinite(symbol?.pitch?.soundingMidi)) return symbol.pitch.soundingMidi
   const open = GUITAR_OPEN_STRING_MIDI[symbol.string]
   const fret = tabFret(symbol)
   return Number.isFinite(open) && Number.isFinite(fret) ? open + fret : null
 }
 
 function tabPitch(symbol) {
+  const original = symbol.pitch && typeof symbol.pitch === 'object' ? symbol.pitch : null
+  const explicitWrittenMidi = Number.isFinite(original?.writtenMidi)
+    ? original.writtenMidi
+    : midiFromPitch(original) ?? symbol.midi
+  if (Number.isFinite(explicitWrittenMidi)) {
+    const explicitSoundingMidi = Number.isFinite(original?.soundingMidi)
+      ? original.soundingMidi
+      : explicitWrittenMidi
+    return midiPitch(explicitWrittenMidi, {
+      ...original,
+      writtenMidi: explicitWrittenMidi,
+      soundingMidi: explicitSoundingMidi,
+      transpositionSemitones: Number.isFinite(original?.transpositionSemitones)
+        ? original.transpositionSemitones
+        : explicitSoundingMidi - explicitWrittenMidi,
+    })
+  }
   const soundingMidi = tabSoundingMidi(symbol)
   if (!Number.isFinite(soundingMidi)) return null
   const writtenMidi = soundingMidi + 12
@@ -192,6 +212,7 @@ function eventFromPair({ notation, tab }, context) {
     onset: eventOnset.divisions,
     duration: eventDuration,
     pitch: notationPitch(notation),
+    sourceEventGroupId: notation.sourceEventGroupId ?? null,
     string,
     fret,
     technical: {
@@ -229,15 +250,24 @@ function notationOnlyEvent(symbol, context) {
 }
 
 function chordGroups(events, measureId, onsetColumnId) {
-  const byVoice = new Map()
+  const bySourceEvent = new Map()
   for (const event of events) {
     const voice = Number.isFinite(event.voiceHint) ? event.voiceHint : 1
-    if (!byVoice.has(voice)) byVoice.set(voice, [])
-    byVoice.get(voice).push(event)
+    const key = event.sourceEventGroupId
+      ? `source:${event.sourceEventGroupId}`
+      : `voice:${voice}`
+    if (!bySourceEvent.has(key)) bySourceEvent.set(key, [])
+    bySourceEvent.get(key).push(event)
   }
-  for (const [voice, members] of byVoice) {
+  for (const [sourceEvent, members] of bySourceEvent) {
     if (members.length < 2) continue
-    const chordGroupId = createOmrV3Id('chord', 'guitar', measureId, onsetColumnId, voice)
+    const chordGroupId = createOmrV3Id(
+      'chord',
+      'guitar',
+      measureId,
+      onsetColumnId,
+      sourceEvent,
+    )
     members.forEach((event) => {
       event.chordGroupId = chordGroupId
     })
@@ -246,31 +276,52 @@ function chordGroups(events, measureId, onsetColumnId) {
 }
 
 function makeVoices(events, measure, staffId, { approximate = false } = {}) {
-  const byVoice = new Map()
+  const groupsByVoice = new Map()
+  const eventGroups = new Map()
   for (const event of events) {
-    const voiceNumber = Number.isFinite(event.voiceHint) ? event.voiceHint : 1
-    if (!byVoice.has(voiceNumber)) byVoice.set(voiceNumber, [])
-    byVoice.get(voiceNumber).push(event)
+    const groupId = event.chordGroupId ?? event.eventId
+    if (!eventGroups.has(groupId)) eventGroups.set(groupId, [])
+    eventGroups.get(groupId).push(event)
   }
-  return [...byVoice.entries()]
-    .sort(([left], [right]) => left - right)
-    .map(([voiceNumber, voiceEvents], index) => {
-      const voiceId = createOmrV3Id('voice', 'guitar', measure.measureId, staffId, voiceNumber)
-      const intervals = []
-      const seenGroups = new Set()
-      for (const event of [...voiceEvents].sort((left, right) => left.onset - right.onset)) {
-        const groupId = event.chordGroupId ?? event.eventId
-        if (seenGroups.has(groupId)) continue
-        seenGroups.add(groupId)
-        intervals.push(event)
+  for (const groupEvents of eventGroups.values()) {
+    const event = groupEvents[0]
+    const voiceNumber = Number.isFinite(event.voiceHint) ? event.voiceHint : 1
+    if (!groupsByVoice.has(voiceNumber)) groupsByVoice.set(voiceNumber, [])
+    groupsByVoice.get(voiceNumber).push(groupEvents)
+  }
+  const voices = []
+  for (const [voiceNumber, temporalGroups] of [...groupsByVoice.entries()].sort(
+    ([left], [right]) => left - right,
+  )) {
+    const lanes = []
+    for (const groupEvents of temporalGroups.sort(
+      (left, right) =>
+        left[0].onset - right[0].onset || left[0].eventId.localeCompare(right[0].eventId),
+    )) {
+      const event = groupEvents[0]
+      let laneIndex = lanes.findIndex((lane) => lane.end <= event.onset)
+      if (laneIndex < 0) {
+        laneIndex = lanes.length
+        lanes.push({ end: 0, groups: [] })
       }
-      const overlapSafe = intervals.every(
-        (event, eventIndex) =>
-          eventIndex === 0 ||
-          intervals[eventIndex - 1].onset + intervals[eventIndex - 1].duration.divisions <=
-            event.onset,
+      lanes[laneIndex].groups.push(groupEvents)
+      lanes[laneIndex].end = Math.max(
+        lanes[laneIndex].end,
+        event.onset + event.duration.divisions,
       )
-      return createOmrVoiceIR({
+    }
+    lanes.forEach((lane, laneIndex) => {
+      const voiceEvents = lane.groups.flat()
+      const splitOverlap = lanes.length > 1
+      const voiceId = createOmrV3Id(
+        'voice',
+        'guitar',
+        measure.measureId,
+        staffId,
+        voiceNumber,
+        laneIndex,
+      )
+      voices.push(createOmrVoiceIR({
         voiceId,
         staffId,
         candidateRank: 0,
@@ -281,20 +332,22 @@ function makeVoices(events, measure, staffId, { approximate = false } = {}) {
         overlapConstraints: [
           {
             kind: approximate ? 'approximate-tab-spacing' : 'notation-voice-no-overlap',
-            satisfied: overlapSafe,
+            satisfied: true,
           },
         ],
-        ambiguous: approximate || !overlapSafe,
+        ambiguous: approximate || splitOverlap,
         confidence: {
-          overall: approximate ? 0.4 : overlapSafe ? 0.82 : 0.3,
+          overall: approximate ? 0.4 : splitOverlap ? 0.64 : 0.82,
           stages: {
-            'guitar-notation-tab-fusion': approximate ? 0.4 : overlapSafe ? 0.82 : 0.3,
+            'guitar-notation-tab-fusion': approximate ? 0.4 : splitOverlap ? 0.64 : 0.82,
           },
         },
         sourceRefs: voiceEvents.flatMap((event) => event.sourceRefs),
-        index,
-      })
+        index: voices.length,
+      }))
     })
+  }
+  return voices
 }
 
 function tabOnlyEvents(measure, tabStaff, lookup, totalDivisions) {
@@ -306,30 +359,49 @@ function tabOnlyEvents(measure, tabStaff, lookup, totalDivisions) {
     .filter((entry) => entry.tabs.length > 0)
   const events = []
   onsetEntries.forEach((entry, index) => {
-    const start = entry.column.measureRelativePosition * totalDivisions
+    const fallbackStart = entry.column.measureRelativePosition * totalDivisions
     const nextStart =
       (onsetEntries[index + 1]?.column.measureRelativePosition ?? 1) * totalDivisions
-    const eventDuration = Math.max(0.25, nextStart - start)
+    const fallbackDuration = Math.max(0.25, nextStart - fallbackStart)
     const chordGroupId =
       entry.tabs.length > 1
         ? createOmrV3Id('chord', 'tab-only', measure.measureId, entry.column.onsetColumnId)
         : null
     for (const tab of entry.tabs) {
+      const observedOnset = onset(tab, entry.column, totalDivisions)
+      const observedDuration = duration(tab)
+      const eventStart =
+        Number.isFinite(observedOnset.divisions) &&
+        observedOnset.divisions >= 0 &&
+        observedOnset.divisions < totalDivisions
+          ? observedOnset.divisions
+          : fallbackStart
+      const eventDuration =
+        observedDuration && eventStart + observedDuration.divisions <= totalDivisions
+          ? observedDuration
+          : { divisions: fallbackDuration, type: null, dots: 0, exact: false }
       events.push({
         eventId: createOmrV3Id('event', 'tab-only', measure.measureId, tab.symbolId),
         staffId: tabStaff.staffId,
         measureId: measure.measureId,
         onsetColumnId: entry.column.onsetColumnId,
         kind: 'note',
-        onset: start,
-        duration: { divisions: eventDuration, type: null, dots: 0, exact: false },
+        onset: eventStart,
+        duration: eventDuration,
         pitch: tabPitch(tab),
+        sourceEventGroupId: tab.sourceEventGroupId ?? null,
         chordGroupId,
         string: tab.string,
         fret: tabFret(tab),
-        technical: { ...(tab.technical ?? {}), approximateRhythm: true },
+        technical: {
+          ...(tab.technical ?? {}),
+          approximateRhythm: eventDuration.exact === false,
+        },
         geometry: tab.geometry,
-        confidenceBreakdown: { rhythmSource: 'tab-spacing', rhythmExact: false },
+        confidenceBreakdown: {
+          rhythmSource: observedDuration ? 'detector-observation' : 'tab-spacing',
+          rhythmExact: eventDuration.exact,
+        },
         confidence: {
           overall: 0.4,
           stages: { 'guitar-tab-only-spacing': 0.4 },

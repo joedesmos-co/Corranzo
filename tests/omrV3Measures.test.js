@@ -132,6 +132,20 @@ describe('OMR V3 shared measure-column geometry', () => {
     expect(result.system.diagnostics.map((entry) => entry.code)).toContain('missing-barline-inferred')
   })
 
+  it('does not subdivide a detector-declared complete measure grid', () => {
+    const observed = [0.2, 0.3, 0.4, 0.6, 0.7, 0.8].map((x) =>
+      bar(x, { completeGrid: true }),
+    )
+    const result = buildOmrV3MeasureColumnsForSystem(
+      grandStaff([observed, observed]),
+      { expectedMeasureWidth: 0.1 },
+    )
+
+    expect(result.measureColumns).toHaveLength(7)
+    expect(result.diagnostics.inferredBoundaryCount).toBe(0)
+    expect(result.diagnostics.completeGridEvidence).toBe(true)
+  })
+
   it('rejects stem-like single-staff candidates instead of inflating measures', () => {
     const input = systemFrom([
       staffBand({

@@ -142,6 +142,24 @@ describe('OMR V3 symbol ownership and onset columns', () => {
     expect(result.page.unassignedSymbols[0].rejectionReason).toBe('no-safe-structural-owner')
   })
 
+  it('uses an explicit detector staff owner before fallible vertical geometry', () => {
+    const document = guitarDocument()
+    const result = assignOmrV3PageSymbolOwnership(document.pages[0], [
+      symbol('source-owned', 'notehead', 0.2, 0.9, {
+        sourceStaffId: 'notation',
+        sourceEventGroupId: 'detector-event-1',
+      }),
+    ])
+
+    expect(result.summary.unassignedSymbolCount).toBe(0)
+    expect(result.symbols[0].ownership.staffId).toBe(
+      document.pages[0].systems[0].staffGroups[0].staves[0].staffId,
+    )
+    expect(result.symbols[0].sourceRefs).toEqual(
+      expect.arrayContaining(['notation', 'detector-event-1']),
+    )
+  })
+
   it('applies ownership document-wide as a pure, serializable transformation', () => {
     const document = guitarDocument()
     const before = JSON.stringify(document)

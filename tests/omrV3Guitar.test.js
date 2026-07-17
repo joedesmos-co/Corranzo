@@ -140,6 +140,32 @@ describe('OMR V3 Guitar notation/TAB fusion', () => {
     expect(result.totals.duplicateEventCount).toBe(0)
   })
 
+  it('preserves explicit detector playback pitch when pairing notation and TAB', () => {
+    const observedPitch = {
+      midi: 65,
+      writtenMidi: 65,
+      soundingMidi: 65,
+      transpositionSemitones: 0,
+    }
+    const result = fuse(structuralDocument(), [
+      symbol('observed-note', 'notehead', 0.19, 0.09, {
+        pitch: observedPitch,
+        onsetDivisions: 0,
+        durationDivisions: 4,
+      }),
+      symbol('observed-tab', 'tab-digit', 0.19, 0.25, {
+        text: '1',
+        string: 1,
+        pitch: observedPitch,
+      }),
+    ])
+    const fused = events(result.document)
+
+    expect(fused).toHaveLength(1)
+    expect(fused[0].pitch).toMatchObject(observedPitch)
+    expect(result.totals.pairedCount).toBe(1)
+  })
+
   it('retains notation events with missing TAB, rejects extra TAB duplication, and excludes watermarks', () => {
     const result = fuse(structuralDocument(), [
       symbol('paired-note', 'notehead', 0.19, 0.09, {
@@ -188,6 +214,32 @@ describe('OMR V3 Guitar notation/TAB fusion', () => {
     )
   })
 
+  it('retains observed TAB-only onset and duration evidence', () => {
+    const result = fuse(structuralDocument('tab-only'), [
+      symbol('observed-tab', 'tab-digit', 0.19, 0.21, {
+        text: '1',
+        string: 1,
+        pitch: {
+          midi: 65,
+          writtenMidi: 65,
+          soundingMidi: 65,
+          transpositionSemitones: 0,
+        },
+        onsetDivisions: 3,
+        duration: { divisions: 5, type: 'quarter', dots: 0, exact: false },
+      }),
+    ])
+    const fused = events(result.document)
+
+    expect(fused).toHaveLength(1)
+    expect(fused[0]).toMatchObject({
+      onset: 3,
+      duration: { divisions: 5, exact: false },
+      pitch: { midi: 65, soundingMidi: 65 },
+    })
+    expect(fused[0].confidenceBreakdown.rhythmSource).toBe('detector-observation')
+  })
+
   it('supports standard-notation Guitar without inventing TAB data', () => {
     const result = fuse(structuralDocument('notation-only'), [
       symbol('standard-note', 'notehead', 0.19, 0.17, {
@@ -201,6 +253,31 @@ describe('OMR V3 Guitar notation/TAB fusion', () => {
     expect(fused).toHaveLength(1)
     expect(fused[0]).toMatchObject({ string: null, fret: null })
     expect(result.relationships).toHaveLength(0)
+  })
+
+  it('keeps separate source events at one onset out of the same chord and voice lane', () => {
+    const result = fuse(structuralDocument('notation-only'), [
+      symbol('event-a', 'notehead', 0.19, 0.17, {
+        midi: 64,
+        onsetDivisions: 0,
+        durationDivisions: 4,
+        sourceEventGroupId: 'source-event-a',
+      }),
+      symbol('event-b', 'notehead', 0.19, 0.18, {
+        midi: 67,
+        onsetDivisions: 0,
+        durationDivisions: 2,
+        sourceEventGroupId: 'source-event-b',
+      }),
+    ])
+    const firstMeasure = result.document.pages[0].systems[0].measureColumns[0]
+    const primary = firstMeasure.voices.filter((voice) => voice.candidateRank === 0)
+    const fused = primary.flatMap((voice) => voice.events)
+
+    expect(fused).toHaveLength(2)
+    expect(fused.every((event) => event.chordGroupId == null)).toBe(true)
+    expect(primary).toHaveLength(2)
+    expect(primary.every((voice) => voice.overlapConstraints[0].satisfied)).toBe(true)
   })
 
   it('is pure and emits valid serializable relationships', () => {

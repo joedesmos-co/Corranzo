@@ -110,6 +110,8 @@ function clusterAssessment(cluster, staves) {
     accepted,
     reason,
     confidence: clamp(confidence * (0.65 + supportRatio * 0.35)),
+    completeGrid:
+      cluster.entries.length > 0 && cluster.entries.every((entry) => entry.completeGrid === true),
     supportRatio,
     participatingStaffIds: staffIds,
     entries: cluster.entries,
@@ -168,7 +170,9 @@ function recoverMissingBoundaries(
   evidenceCount,
   hasExternalWidthEvidence,
   hasStrongExternalWidthConsensus,
+  completeGridEvidence,
 ) {
+  if (completeGridEvidence) return { boundaries, inferred: [] }
   const enoughEvidence =
     evidenceCount >= 3 ||
     (hasExternalWidthEvidence && evidenceCount >= 2) ||
@@ -320,12 +324,15 @@ export function buildOmrV3MeasureColumnsForSystem(
   const hasStrongExternalWidthConsensus =
     neighboringMeasureWidths.length >= 4 &&
     coefficientOfVariation(neighboringMeasureWidths) <= 0.1
+  const completeGridEvidence =
+    accepted.length > 0 && accepted.every((assessment) => assessment.completeGrid)
   const recovered = recoverMissingBoundaries(
     boundaries,
     expectedWidth,
     accepted.length,
     hasExternalWidthEvidence,
     hasStrongExternalWidthConsensus,
+    completeGridEvidence,
   )
   boundaries = recovered.boundaries
   const trailing = trimInventedTrailingSpan(spansFromBoundaries(boundaries), symbolXs, expectedWidth)
@@ -422,6 +429,7 @@ export function buildOmrV3MeasureColumnsForSystem(
       kind: boundary.kind,
       confidence: boundary.confidence,
       supportRatio: boundary.supportRatio,
+      completeGrid: boundary.completeGrid ?? false,
       participatingStaffIds: boundary.participatingStaffIds ?? [],
     })),
     diagnostics: [...(system.diagnostics ?? []), ...diagnostics],
@@ -451,6 +459,7 @@ export function buildOmrV3MeasureColumnsForSystem(
       trailingSpanRejected: Boolean(trailing.trimmed),
       expectedMeasureWidth: expectedWidth || null,
       strongExternalWidthConsensus: hasStrongExternalWidthConsensus,
+      completeGridEvidence,
       measureCount: measureColumns.length,
       perSystemAlignment: staves.length
         ? average(

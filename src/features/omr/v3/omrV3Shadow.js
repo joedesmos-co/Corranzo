@@ -34,6 +34,18 @@ function runtimeRecordsForSystem(pageInput, systemIndex) {
   return (pageInput.measureRhythms ?? []).filter((measure) => measure.systemIndex === systemIndex)
 }
 
+function pairedNotationSystemIndex(pageInput, systemIndex) {
+  const role = pageInput.systemRoles?.[systemIndex]
+  if (role?.kind === 'tab' && Number.isInteger(role.pairedWithIndex)) {
+    return role.pairedWithIndex
+  }
+  return (pageInput.systemRoles ?? []).some(
+    (candidate) => candidate?.kind === 'tab' && candidate.pairedWithIndex === systemIndex,
+  )
+    ? systemIndex
+    : null
+}
+
 function staffBandsFromPage(pageInput, instrumentId) {
   const bands = []
   for (let systemIndex = 0; systemIndex < (pageInput.systems ?? []).length; systemIndex += 1) {
@@ -41,6 +53,11 @@ function staffBandsFromPage(pageInput, instrumentId) {
     const role = pageInput.systemRoles?.[systemIndex]
     const staves = legacyStaves(system)
     const boxes = measuresForLegacySystem(pageInput, systemIndex)
+    const pairedNotationIndex = pairedNotationSystemIndex(pageInput, systemIndex)
+    const sourceSystemId = `legacy-page-${pageInput.page}-system-${systemIndex}`
+    const sourcePairId = Number.isInteger(pairedNotationIndex)
+      ? `legacy-page-${pageInput.page}-notation-tab-pair-${pairedNotationIndex}`
+      : null
     const boundaries = uniqueNumbers(boxes.flatMap((box) => [box.x0, box.x1]))
     const records = runtimeRecordsForSystem(
       pageInput,
@@ -73,6 +90,9 @@ function staffBandsFromPage(pageInput, instrumentId) {
       }
       bands.push({
         sourceId: `legacy-page-${pageInput.page}-system-${systemIndex}-staff-${staffIndex}`,
+        sourceSystemId,
+        sourcePairId,
+        sourceRole: isTab ? 'tab' : 'notation',
         space: 'normalized',
         lineRows,
         rawLineRows,
@@ -80,6 +100,7 @@ function staffBandsFromPage(pageInput, instrumentId) {
         xEnd: boxes.at(-1)?.x1 ?? pageInput.contentBounds?.x1 ?? 1,
         clefs,
         noteheadCount: isNotation ? noteCount : 0,
+        explicitNotation: isNotation,
         explicitTab: isTab,
         tabDigitCount: isTab ? Math.max(2, pageInput.tabDiagnostics?.tabNotes ?? 0) : 0,
         barlines: boundaries.map((x, index) => ({
@@ -89,6 +110,7 @@ function staffBandsFromPage(pageInput, instrumentId) {
           confidence: system.barlineConfident ? 0.86 : 0.62,
           verticalSpanRatio: 1,
           source: 'legacy-system-measure-grid-shadow-adapter',
+          completeGrid: true,
         })),
         confidence: 0.72,
       })
@@ -111,6 +133,32 @@ function staffCenter(system, clef) {
   const y0 = system?.y0 ?? 0.2
   const y1 = system?.y1 ?? y0 + 0.08
   return clef === 'bass' ? y0 + (y1 - y0) * 0.7 : y0 + (y1 - y0) * 0.3
+}
+
+function legacyStaffIndex(system, clef) {
+  const staves = legacyStaves(system)
+  if (staves.length <= 1) return 0
+  return clef === 'bass' ? staves.length - 1 : 0
+}
+
+function legacyStaffSourceId(pageInput, systemIndex, staffIndex) {
+  return `legacy-page-${pageInput.page}-system-${systemIndex}-staff-${staffIndex}`
+}
+
+function tabStaffSourceId(pageInput, notationSystemIndex) {
+  const pairedIndex = (pageInput.systemRoles ?? []).findIndex(
+    (role) => role?.kind === 'tab' && role.pairedWithIndex === notationSystemIndex,
+  )
+  const systemIndex = pairedIndex >= 0 ? pairedIndex : notationSystemIndex
+  const staves = legacyStaves(pageInput.systems?.[systemIndex])
+  const detectedIndex = staves.findIndex(
+    (staff) => Number(staff.lineCount ?? staff.lineYs?.length) === 6,
+  )
+  return legacyStaffSourceId(
+    pageInput,
+    systemIndex,
+    detectedIndex >= 0 ? detectedIndex : Math.max(0, staves.length - 1),
+  )
 }
 
 function tabSystemForNotation(pageInput, systemIndex) {
@@ -150,9 +198,17 @@ function sourceSymbolsFromPage(pageInput, instrumentId, totalDivisions) {
       const event = measure.events[eventIndex]
       const x = eventX(event, grid, totalDivisions)
       const durationDivisions = event.durationDivisions
+      const sourceEventGroupId = `legacy-event-${pageInput.page}-${measure.measureNumber}-${eventIndex}`
+      const notationStaffSourceId = legacyStaffSourceId(
+        pageInput,
+        measure.systemIndex,
+        legacyStaffIndex(system, event.clef),
+      )
       if (event.type === 'rest') {
         symbols.push({
           id: `legacy-rest-${pageInput.page}-${measure.measureNumber}-${eventIndex}`,
+          sourceEventGroupId,
+          sourceStaffId: notationStaffSourceId,
           kind: 'rest',
           geometry: {
             x,
@@ -177,8 +233,17 @@ function sourceSymbolsFromPage(pageInput, instrumentId, totalDivisions) {
         const note = event.notes[noteIndex]
         const sourceId = `legacy-note-${pageInput.page}-${measure.measureNumber}-${eventIndex}-${noteIndex}`
         const noteY = normalizedCenter(note.cy, pageInput.height, staffCenter(system, note.clef))
+        const serializedMidi = Number.isFinite(note.midi)
+          ? note.midi + (instrumentId === 'guitar' && !note.soundingPitch ? -12 : 0)
+          : null
         const common = {
           id: sourceId,
+          sourceEventGroupId,
+          sourceStaffId: legacyStaffSourceId(
+            pageInput,
+            measure.systemIndex,
+            legacyStaffIndex(system, note.clef),
+          ),
           geometry: { x, y: noteY, width: 0.006, height: 0.006, space: 'normalized' },
           onsetDivisions: event.startDivision,
           duration: {
@@ -187,7 +252,18 @@ function sourceSymbolsFromPage(pageInput, instrumentId, totalDivisions) {
             dots: event.dotted ? 1 : 0,
             exact: !measure.rhythmApproximate,
           },
-          midi: note.midi,
+          midi: serializedMidi,
+          pitch: Number.isFinite(serializedMidi)
+            ? {
+                midi: serializedMidi,
+                writtenMidi: serializedMidi,
+                soundingMidi: serializedMidi,
+                transpositionSemitones: 0,
+                source: note.soundingPitch
+                  ? 'legacy-sounding-pitch'
+                  : 'legacy-written-octave-output',
+              }
+            : null,
           string: note.string,
           fret: note.fret,
           voiceHint: note.voice ?? event.voice ?? 1,
@@ -223,6 +299,13 @@ function sourceSymbolsFromPage(pageInput, instrumentId, totalDivisions) {
             text: String(note.fret),
             string: note.string,
             fret: note.fret,
+            sourceEventGroupId: common.sourceEventGroupId,
+            sourceStaffId: tabStaffSourceId(pageInput, measure.systemIndex),
+            midi: common.midi,
+            pitch: common.pitch,
+            onsetDivisions: common.onsetDivisions,
+            duration: common.duration,
+            voiceHint: common.voiceHint,
             geometry: {
               x,
               y: tabY(pageInput, measure.systemIndex, note.string),

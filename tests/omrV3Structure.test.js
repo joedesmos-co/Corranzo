@@ -23,8 +23,12 @@ function staffBand({
   sourceId = `staff-${y}`,
   clefs = [],
   noteheadCount = 0,
+  explicitNotation = false,
   explicitTab = false,
   tabDigitCount = 0,
+  sourceSystemId = null,
+  sourcePairId = null,
+  sourceRole = null,
   barlines = BARLINES,
   xStart = 0.1,
   xEnd = 0.92,
@@ -37,8 +41,12 @@ function staffBand({
     xEnd,
     clefs,
     noteheadCount,
+    explicitNotation,
     explicitTab,
     tabDigitCount,
+    sourceSystemId,
+    sourcePairId,
+    sourceRole,
     barlines,
     confidence: 0.9,
   }
@@ -172,6 +180,97 @@ describe('OMR V3 structure-first page analysis', () => {
     expect(ambiguous.page.diagnostics.map((entry) => entry.code)).toContain(
       'unassigned-or-ambiguous-staves',
     )
+  })
+
+  it('uses an explicit detector notation role to recover an incomplete staff band', () => {
+    const recovered = analyze(
+      [staffBand({ y: 0.2, lines: 2, explicitNotation: true, sourceRole: 'notation' })],
+      'guitar',
+    )
+    const unlabeled = analyze([staffBand({ y: 0.2, lines: 2 })], 'guitar')
+
+    expect(recovered.page.systems[0].staffGroups[0].type).toBe(
+      OMR_V3_STAFF_GROUP_TYPE.SINGLE_NOTATION,
+    )
+    expect(unlabeled.page.systems[0].staffGroups[0].type).toBe(
+      OMR_V3_STAFF_GROUP_TYPE.UNKNOWN,
+    )
+  })
+
+  it('preserves two staves from the same detector system despite incomplete geometry', () => {
+    const result = analyze([
+      staffBand({
+        y: 0.1,
+        lines: 6,
+        sourceId: 'incomplete-upper',
+        sourceSystemId: 'source-system-1',
+        sourceRole: 'notation',
+        explicitNotation: true,
+        clefs: ['treble'],
+        noteheadCount: 4,
+      }),
+      staffBand({
+        y: 0.42,
+        sourceId: 'lower',
+        sourceSystemId: 'source-system-1',
+        sourceRole: 'notation',
+        explicitNotation: true,
+        clefs: ['bass'],
+        noteheadCount: 4,
+      }),
+    ])
+
+    expect(result.page.systems).toHaveLength(1)
+    const group = result.page.systems[0].staffGroups[0]
+    expect(group.type).toBe(OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF)
+    expect(group.pairingEvidence).toContainEqual({
+      signal: 'source-structure-continuity',
+      score: 1,
+    })
+  })
+
+  it('keeps detector notation/TAB pairs from crossing adjacent source pairs', () => {
+    const result = analyze(
+      [
+        staffBand({
+          y: 0.08,
+          sourceId: 'notation-a',
+          sourcePairId: 'pair-a',
+          sourceRole: 'notation',
+          explicitNotation: true,
+        }),
+        staffBand({
+          y: 0.2,
+          lines: 6,
+          sourceId: 'tab-a',
+          sourcePairId: 'pair-a',
+          sourceRole: 'tab',
+          explicitTab: true,
+        }),
+        staffBand({
+          y: 0.32,
+          sourceId: 'notation-b',
+          sourcePairId: 'pair-b',
+          sourceRole: 'notation',
+          explicitNotation: true,
+        }),
+        staffBand({
+          y: 0.44,
+          lines: 6,
+          sourceId: 'tab-b',
+          sourcePairId: 'pair-b',
+          sourceRole: 'tab',
+          explicitTab: true,
+        }),
+      ],
+      'guitar',
+    )
+
+    expect(result.page.systems).toHaveLength(2)
+    expect(result.page.systems.map((system) => system.staffGroups[0].sourceRefs)).toEqual([
+      expect.arrayContaining(['pair-a']),
+      expect.arrayContaining(['pair-b']),
+    ])
   })
 
   it('pairs a spacious notation/TAB layout when explicit role and shared barlines agree', () => {

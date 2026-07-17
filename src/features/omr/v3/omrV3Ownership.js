@@ -120,8 +120,29 @@ function allStaffEntries(system) {
   )
 }
 
-function ownerForSymbol(page, geometry) {
+function measureForPoint(system, point) {
+  const measures = system.measureColumns ?? []
+  return measures.find(
+    (candidate, index) =>
+      point.x >= candidate.xStart &&
+      (point.x < candidate.xEnd || (index === measures.length - 1 && point.x <= candidate.xEnd)),
+  )
+}
+
+function ownerForSymbol(page, geometry, sourceStaffId = null) {
   const point = center(geometry)
+  if (sourceStaffId) {
+    for (const system of page.systems ?? []) {
+      const staffEntry = allStaffEntries(system).find((entry) =>
+        (entry.staff.sourceRefs ?? []).includes(sourceStaffId),
+      )
+      if (!staffEntry) continue
+      const measure = measureForPoint(system, point)
+      if (measure) {
+        return { system, group: staffEntry.group, staff: staffEntry.staff, measure, point }
+      }
+    }
+  }
   const systemCandidates = (page.systems ?? [])
     .map((system) => ({ system, distance: pointBoxDistance(point, system.boundingBox) }))
     .filter((entry) => entry.distance <= STAFF_VERTICAL_MARGIN)
@@ -141,12 +162,7 @@ function ownerForSymbol(page, geometry) {
     .sort((left, right) => left.distance - right.distance)[0]
   if (!staffEntry || staffEntry.distance > STAFF_VERTICAL_MARGIN) return null
 
-  const measures = system.measureColumns ?? []
-  const measure = measures.find(
-    (candidate, index) =>
-      point.x >= candidate.xStart &&
-      (point.x < candidate.xEnd || (index === measures.length - 1 && point.x <= candidate.xEnd)),
-  )
+  const measure = measureForPoint(system, point)
   if (!measure) return null
   return { system, group: staffEntry.group, staff: staffEntry.staff, measure, point }
 }
@@ -188,6 +204,7 @@ function normalizedSymbol(symbol, geometry, owner, page, index) {
     duration:
       symbol?.duration && typeof symbol.duration === 'object' ? { ...symbol.duration } : null,
     voiceHint: Number.isFinite(symbol?.voiceHint) ? Number(symbol.voiceHint) : null,
+    sourceEventGroupId: symbol?.sourceEventGroupId ?? null,
     stemDirection: symbol?.stemDirection ?? null,
     stemGroupId: symbol?.stemGroupId ?? null,
     beamGroupId: symbol?.beamGroupId ?? null,
@@ -214,7 +231,7 @@ function normalizedSymbol(symbol, geometry, owner, page, index) {
       overall: confidence,
       stages: { 'symbol-ownership': confidence },
     },
-    sourceRefs: [String(sourceId)],
+    sourceRefs: [String(sourceId), symbol?.sourceStaffId, symbol?.sourceEventGroupId].filter(Boolean),
   }
 }
 
@@ -389,7 +406,7 @@ export function assignOmrV3PageSymbolOwnership(
   const seenSymbolIds = new Set()
   rawSymbols.forEach((rawSymbol, index) => {
     const geometry = normalizedBox(rawSymbol, page)
-    const owner = geometry ? ownerForSymbol(page, geometry) : null
+    const owner = geometry ? ownerForSymbol(page, geometry, rawSymbol?.sourceStaffId) : null
     if (!geometry || !owner) {
       unassigned.push({
         ...rawSymbol,
