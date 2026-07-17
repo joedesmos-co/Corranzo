@@ -14,6 +14,7 @@ import {
 
 const DEFAULT_MEASURE_DIVISIONS = 16
 const EPSILON = 1e-6
+const DURATION_LADDER = [16, 12, 8, 6, 4, 3, 2, 1]
 
 const MIDI_STEPS = [
   ['C', 0],
@@ -51,6 +52,154 @@ function durationFromSymbol(symbol) {
     type: symbol?.duration?.type ?? null,
     dots: Number.isInteger(symbol?.duration?.dots) ? symbol.duration.dots : 0,
     exact: symbol?.duration?.exact !== false,
+  }
+}
+
+function snapDownToLadder(value) {
+  if (!Number.isFinite(value) || value <= EPSILON) return null
+  for (const step of DURATION_LADDER) {
+    if (step <= value + EPSILON) return step
+  }
+  return null
+}
+
+function nearestLadder(value) {
+  if (!Number.isFinite(value) || value <= EPSILON) return null
+  let best = null
+  let bestDistance = Number.POSITIVE_INFINITY
+  for (const step of DURATION_LADDER) {
+    const distance = Math.abs(step - value)
+    if (distance < bestDistance) {
+      best = step
+      bestDistance = distance
+    }
+  }
+  return best
+}
+
+function durationTypeForDivisions(divisions) {
+  if (divisions === 1) return '16th'
+  if (divisions === 2) return 'eighth'
+  if (divisions === 4) return 'quarter'
+  if (divisions === 8) return 'half'
+  if (divisions === 16) return 'whole'
+  return null
+}
+
+function withDuration(item, divisions, recovery) {
+  return {
+    ...item,
+    duration: {
+      divisions,
+      type: durationTypeForDivisions(divisions),
+      dots: divisions === 3 || divisions === 6 || divisions === 12 ? 1 : 0,
+      exact: false,
+      recovery,
+    },
+  }
+}
+
+function itemIdentity(item) {
+  return `${item.onset.divisions}:${(item.symbols ?? []).map((symbol) => symbol.symbolId).join(',')}`
+}
+
+function onsetGroups(items) {
+  const ordered = [...items].sort((left, right) => left.onset.divisions - right.onset.divisions)
+  const groups = []
+  for (const item of ordered) {
+    const last = groups[groups.length - 1]
+    if (last && Math.abs(last.onset - item.onset.divisions) <= EPSILON) {
+      last.items.push(item)
+    } else {
+      groups.push({ onset: item.onset.divisions, items: [item] })
+    }
+  }
+  return groups
+}
+
+function packedSubdivision(groups) {
+  if (groups.length < 3) return null
+  const rawGaps = []
+  for (let index = 0; index < groups.length - 1; index += 1) {
+    rawGaps.push(groups[index + 1].onset - groups[index].onset)
+  }
+  const mean = rawGaps.reduce((sum, gap) => sum + gap, 0) / rawGaps.length
+  const target = nearestLadder(mean)
+  // Only short packed subdivisions are safe to impose on approximate writing.
+  if (!Number.isFinite(target) || target > 2 || target < 1) return null
+  if (Math.abs(mean - target) / target > 0.5) return null
+  if (rawGaps.some((gap) => Math.abs(gap - target) / target > 0.55)) return null
+  return target
+}
+
+/**
+ * After lane membership is fixed, shorten overlong approximate durations inside
+ * clearly packed stem/lane families. Voice identity is preserved. Beam durations
+ * are left to the upstream handoff; second-guessing them regressed dense F1.
+ * Values are never lengthened.
+ */
+function refineApproximatePackedDurations(items, totalDivisions) {
+  const families = new Map()
+  items.forEach((item, index) => {
+    const key = Number.isInteger(item.preferredLane)
+      ? `lane:${item.preferredLane}`
+      : item.stemDirection
+        ? `stem:${item.stemDirection}`
+        : item.beamGroupId != null
+          ? `beam:${item.beamGroupId}`
+          : `singleton:${index}`
+    if (!families.has(key)) families.set(key, [])
+    families.get(key).push(item)
+  })
+
+  const replaced = new Map()
+  let changedCount = 0
+  for (const family of families.values()) {
+    const groups = onsetGroups(family)
+    const packing = packedSubdivision(groups)
+    if (!Number.isFinite(packing)) continue
+    const overlong = groups.flatMap((group) => group.items).filter(
+      (item) =>
+        item.duration?.exact === false &&
+        Number.isFinite(item.duration?.divisions) &&
+        item.duration.divisions >= 4,
+    )
+    // Require that packing is correcting sustained detector values, not rewriting
+    // an already short family.
+    if (overlong.length < Math.ceil(groups.length * 0.5)) continue
+    for (let index = 0; index < groups.length; index += 1) {
+      const group = groups[index]
+      const nextOnset = index + 1 < groups.length ? groups[index + 1].onset : totalDivisions
+      const capacity = snapDownToLadder(
+        Math.min(nextOnset - group.onset, totalDivisions - group.onset),
+      )
+      for (const item of group.items) {
+        if (
+          !item.duration ||
+          item.duration.exact !== false ||
+          !Number.isFinite(item.duration.divisions) ||
+          item.duration.divisions <= packing + EPSILON ||
+          item.duration.divisions < 4 ||
+          !Number.isFinite(capacity) ||
+          packing > capacity + EPSILON
+        ) {
+          continue
+        }
+        changedCount += 1
+        replaced.set(
+          itemIdentity(item),
+          withDuration(
+            item,
+            packing,
+            index === groups.length - 1 ? 'lane-subdivision-continuity' : 'lane-gap-shorten',
+          ),
+        )
+      }
+    }
+  }
+  return {
+    items: items.map((item) => replaced.get(itemIdentity(item)) ?? item),
+    changedCount,
   }
 }
 
@@ -401,13 +550,21 @@ function solveStaffMeasure(measure, staff, totalDivisions, beats, allowUniformBe
   const recovery = recoverApproximateMeasureEnd(beatGridRecovery.items, totalDivisions)
   const classified = classifyItems(recovery.items, totalDivisions)
   const assignment = assignLanes(classified.valid)
+  const refined = refineApproximatePackedDurations(
+    assignment.lanes.flatMap((lane) => lane.items),
+    totalDivisions,
+  )
+  const refinedById = new Map(refined.items.map((item) => [itemIdentity(item), item]))
+  const solvedLanes = assignment.lanes.map((lane) => ({
+    items: lane.items.map((item) => refinedById.get(itemIdentity(item)) ?? item),
+  }))
   const measureContext = { ...measure, totalDivisions }
-  const primary = assignment.lanes.map((lane, laneIndex) =>
+  const primary = solvedLanes.map((lane, laneIndex) =>
     voiceForLane(staff.staffId, measureContext, lane, laneIndex, 0, assignment.ambiguous),
   )
   const alternate =
-    assignment.ambiguous && assignment.lanes.length > 1
-      ? [...assignment.lanes]
+    assignment.ambiguous && solvedLanes.length > 1
+      ? [...solvedLanes]
           .reverse()
           .map((lane, laneIndex) =>
             voiceForLane(staff.staffId, measureContext, lane, laneIndex, 1, true),

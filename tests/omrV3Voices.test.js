@@ -270,10 +270,169 @@ describe('OMR V3 Piano voice candidates', () => {
     expect(recovered.duration).toMatchObject({
       divisions: 2,
       exact: false,
-      recovery: 'clip-approximate-to-measure-end',
     })
+    expect(['clip-approximate-to-measure-end', 'lane-gap-shorten']).toContain(
+      recovered.duration.recovery,
+    )
     expect(result.totals.recoveredMeasureEndCount).toBe(1)
     expect(result.totals.rejectedEventGroupCount).toBe(0)
+  })
+
+  it('keeps stem-continuous approximate notes in one lane and shortens to the next onset', () => {
+    const page = analyzeOmrV3PageStructure({
+      documentId: 'dense-lane-duration',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'solo-staff',
+          space: 'normalized',
+          lineRows: [0.1, 0.11, 0.12, 0.13, 0.14],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['treble'],
+          noteheadCount: 4,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+      ],
+    }).page
+    const measured = buildOmrV3DocumentMeasureColumns(
+      createOmrDocumentIR({ documentId: 'dense-lane-duration', pages: [page] }),
+    ).document
+    const document = assignOmrV3DocumentSymbolOwnership(measured, {
+      symbolsByPage: [0, 2, 4, 6, 8].map((onset, index) =>
+        musicalSymbol(`eighth-${index}`, 'notehead', 0.15 + index * 0.12, 0.12, {
+          midi: 72 + index,
+          onsetDivisions: onset,
+          duration: { divisions: 4, type: 'quarter', dots: 0, exact: false },
+          stemDirection: 'up',
+        }),
+      ),
+    }).document
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const primary = measures(result.document)[0].voices.filter((voice) => voice.candidateRank === 0)
+    const events = primary
+      .flatMap((voice) => voice.events)
+      .sort((left, right) => left.onset - right.onset || left.pitch.midi - right.pitch.midi)
+
+    expect(events.map((event) => [event.onset, event.duration.divisions])).toEqual([
+      [0, 2],
+      [2, 2],
+      [4, 2],
+      [6, 2],
+      [8, 2],
+    ])
+    expect(
+      events.every(
+        (event) =>
+          event.duration.recovery === 'lane-gap-shorten' ||
+          event.duration.recovery === 'lane-subdivision-continuity',
+      ),
+    ).toBe(true)
+    expect(countOmrV3VoiceOverlapViolations(result.document)).toBe(0)
+  })
+
+  it('prefers high-confidence beam duration over a larger geometric lane gap', () => {
+    const page = analyzeOmrV3PageStructure({
+      documentId: 'beam-over-gap',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'solo-staff',
+          space: 'normalized',
+          lineRows: [0.1, 0.11, 0.12, 0.13, 0.14],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['treble'],
+          noteheadCount: 2,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+      ],
+    }).page
+    const measured = buildOmrV3DocumentMeasureColumns(
+      createOmrDocumentIR({ documentId: 'beam-over-gap', pages: [page] }),
+    ).document
+    const document = assignOmrV3DocumentSymbolOwnership(measured, {
+      symbolsByPage: [
+        musicalSymbol('beamed-a', 'notehead', 0.25, 0.12, {
+          midi: 72,
+          onsetDivisions: 0,
+          duration: { divisions: 2, type: 'eighth', dots: 0, exact: false },
+          stemDirection: 'up',
+          beamGroupId: 'beam-1',
+          technical: { beamExpectedDivisions: 2, beamOwnershipConfidence: 0.85 },
+        }),
+        musicalSymbol('beamed-b', 'notehead', 0.55, 0.12, {
+          midi: 74,
+          onsetDivisions: 4,
+          duration: { divisions: 2, type: 'eighth', dots: 0, exact: false },
+          stemDirection: 'up',
+          beamGroupId: 'beam-1',
+          technical: { beamExpectedDivisions: 2, beamOwnershipConfidence: 0.85 },
+        }),
+      ],
+    }).document
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const events = measures(result.document)[0].voices
+      .filter((voice) => voice.candidateRank === 0)
+      .flatMap((voice) => voice.events)
+      .sort((left, right) => left.onset - right.onset)
+
+    expect(events.map((event) => event.duration.divisions)).toEqual([2, 2])
+    expect(events.every((event) => event.duration.divisions === 2)).toBe(true)
+  })
+
+  it('does not lengthen approximate durations to fill a sparse lane gap', () => {
+    const page = analyzeOmrV3PageStructure({
+      documentId: 'no-lengthen-gap',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'solo-staff',
+          space: 'normalized',
+          lineRows: [0.1, 0.11, 0.12, 0.13, 0.14],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['treble'],
+          noteheadCount: 2,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+      ],
+    }).page
+    const measured = buildOmrV3DocumentMeasureColumns(
+      createOmrDocumentIR({ documentId: 'no-lengthen-gap', pages: [page] }),
+    ).document
+    const document = assignOmrV3DocumentSymbolOwnership(measured, {
+      symbolsByPage: [
+        musicalSymbol('short-a', 'notehead', 0.2, 0.12, {
+          midi: 72,
+          onsetDivisions: 0,
+          duration: { divisions: 2, type: 'eighth', dots: 0, exact: false },
+          stemDirection: 'up',
+        }),
+        musicalSymbol('short-b', 'notehead', 0.7, 0.12, {
+          midi: 74,
+          onsetDivisions: 8,
+          duration: { divisions: 2, type: 'eighth', dots: 0, exact: false },
+          stemDirection: 'up',
+        }),
+      ],
+    }).document
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const events = measures(result.document)[0].voices
+      .filter((voice) => voice.candidateRank === 0)
+      .flatMap((voice) => voice.events)
+      .sort((left, right) => left.onset - right.onset)
+
+    expect(events.map((event) => event.duration.divisions)).toEqual([2, 2])
   })
 
   it('recovers a uniformly spaced approximate event on each detected beat', () => {
