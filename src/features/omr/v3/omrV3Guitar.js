@@ -373,18 +373,43 @@ function makeVoices(events, measure, staffId, { approximate = false } = {}) {
   return voices
 }
 
-function tabOnlyEvents(measure, tabStaff, lookup, totalDivisions) {
+function assignMonotonicTabSlots(entries, slotCount) {
+  let previousSlot = -1
+  return entries.map((entry, index) => {
+    const remainingAfter = entries.length - index - 1
+    const desired = Math.round(entry.column.measureRelativePosition * (slotCount - 1))
+    const minSlot = previousSlot + 1
+    const maxSlot = Math.max(minSlot, slotCount - 1 - remainingAfter)
+    const slot = Math.min(maxSlot, Math.max(minSlot, desired))
+    previousSlot = slot
+    return slot
+  })
+}
+
+function tabOnlyEvents(measure, tabStaff, lookup, totalDivisions, beats) {
   const onsetEntries = (measure.onsetColumns ?? [])
     .map((column) => ({
       column,
       tabs: symbolsForColumn(column, 'tabDigits', lookup, tabStaff.staffId),
     }))
     .filter((entry) => entry.tabs.length > 0)
+  const maxOnsets = Math.max(1, Math.min(Math.round(beats * 4), 16, totalDivisions))
+  const compressed = onsetEntries.length > maxOnsets
+  const slotCount = onsetEntries.length <= beats ? beats : maxOnsets
+  const slots = compressed
+    ? onsetEntries.map((entry) =>
+        Math.min(
+          slotCount - 1,
+          Math.max(0, Math.round(entry.column.measureRelativePosition * (slotCount - 1))),
+        ),
+      )
+    : assignMonotonicTabSlots(onsetEntries, slotCount)
+  const slotDuration = Math.max(1, Math.round(totalDivisions / slotCount))
+  const slotStarts = slots.map((slot) => Math.min(totalDivisions - 1, slot * slotDuration))
   const events = []
   onsetEntries.forEach((entry, index) => {
-    const fallbackStart = entry.column.measureRelativePosition * totalDivisions
-    const nextStart =
-      (onsetEntries[index + 1]?.column.measureRelativePosition ?? 1) * totalDivisions
+    const fallbackStart = slotStarts[index]
+    const nextStart = slotStarts[index + 1] ?? totalDivisions
     const fallbackDuration = Math.max(0.25, nextStart - fallbackStart)
     const chordGroupId =
       entry.tabs.length > 1
@@ -394,6 +419,7 @@ function tabOnlyEvents(measure, tabStaff, lookup, totalDivisions) {
       const observedOnset = onset(tab, entry.column, totalDivisions)
       const observedDuration = duration(tab)
       const eventStart =
+        observedOnset.exact &&
         Number.isFinite(observedOnset.divisions) &&
         observedOnset.divisions >= 0 &&
         observedOnset.divisions < totalDivisions
@@ -526,10 +552,10 @@ function solveNotationTabMeasure(measure, group, totalDivisions) {
   }
 }
 
-function solveTabOnlyMeasure(measure, group, totalDivisions) {
+function solveTabOnlyMeasure(measure, group, totalDivisions, beats) {
   const tabStaff = group.staves[0]
   const lookup = new Map((tabStaff.symbols ?? []).map((symbol) => [symbol.symbolId, symbol]))
-  const events = tabOnlyEvents(measure, tabStaff, lookup, totalDivisions)
+  const events = tabOnlyEvents(measure, tabStaff, lookup, totalDivisions, beats)
   return {
     voices: makeVoices(events, measure, tabStaff.staffId, { approximate: true }),
     diagnostics: events.length
@@ -593,7 +619,7 @@ function isGuitarNotationOnly(group, document) {
   )
 }
 
-function solveDocument(document, totalDivisions) {
+function solveDocument(document, totalDivisions, beats) {
   const summaries = []
   const mirrorPairs = []
   const pages = (document.pages ?? []).map((page) => ({
@@ -612,7 +638,7 @@ function solveDocument(document, totalDivisions) {
           group.type === OMR_V3_STAFF_GROUP_TYPE.GUITAR_NOTATION_TAB
             ? solveNotationTabMeasure(measure, group, totalDivisions)
             : group.type === OMR_V3_STAFF_GROUP_TYPE.TAB_ONLY
-              ? solveTabOnlyMeasure(measure, group, totalDivisions)
+              ? solveTabOnlyMeasure(measure, group, totalDivisions, beats)
               : solveNotationOnlyMeasure(measure, group, totalDivisions)
         mirrorPairs.push(...solved.mirrorPairs)
         summaries.push({
@@ -692,7 +718,8 @@ export function buildOmrV3GuitarFusion(
   { measureDurationDivisions = DEFAULT_MEASURE_DIVISIONS } = {},
 ) {
   const before = JSON.stringify(document)
-  const solved = solveDocument(document, measureDurationDivisions)
+  const beats = Number(document.metadata?.musical?.timeSignature?.beats ?? 4)
+  const solved = solveDocument(document, measureDurationDivisions, beats)
   const linked = linkMirrorRelationships(solved.document, solved.mirrorPairs)
   return {
     document: linked.document,
