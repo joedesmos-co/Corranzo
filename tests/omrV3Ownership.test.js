@@ -107,6 +107,32 @@ describe('OMR V3 symbol ownership and onset columns', () => {
     expect(new Set(columns.map((column) => column.onsetColumnId)).size).toBe(4)
   })
 
+  it('prefers a detector measure-position observation over clef-zone geometry', () => {
+    const document = guitarDocument()
+    const result = assignOmrV3PageSymbolOwnership(document.pages[0], [
+      symbol('position-hint', 'notehead', 0.15, 0.11, {
+        measureRelativePositionHint: 0.25,
+      }),
+    ])
+
+    expect(allMeasures(result.page)[0].onsetColumns[0].measureRelativePosition).toBe(0.25)
+  })
+
+  it('keeps shared notation/TAB columns in their common geometry coordinate system', () => {
+    const document = guitarDocument()
+    const result = assignOmrV3PageSymbolOwnership(document.pages[0], [
+      symbol('notation-position', 'notehead', 0.18, 0.11, {
+        measureRelativePositionHint: 0.25,
+      }),
+      symbol('tab-position', 'tab-digit', 0.181, 0.25, { text: '3', string: 1 }),
+    ])
+    const column = allMeasures(result.page)[0].onsetColumns[0]
+
+    expect(column.measureRelativePosition).not.toBe(0.25)
+    expect(column.symbols.noteheads).toHaveLength(1)
+    expect(column.symbols.tabDigits).toHaveLength(1)
+  })
+
   it('excludes lyrics, chord text, and watermarks without creating duplicate onsets', () => {
     const document = guitarDocument()
     const result = assignOmrV3PageSymbolOwnership(document.pages[0], [

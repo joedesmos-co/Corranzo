@@ -166,6 +166,24 @@ describe('OMR V3 Guitar notation/TAB fusion', () => {
     expect(result.totals.pairedCount).toBe(1)
   })
 
+  it('retains an approximate notation event that reaches past the measure end', () => {
+    const result = fuse(structuralDocument('notation-only'), [
+      symbol('approximate-tail', 'notehead', 0.28, 0.17, {
+        midi: 64,
+        onsetDivisions: 14,
+        duration: { divisions: 4, type: 'quarter', dots: 0, exact: false },
+      }),
+    ])
+    const recovered = events(result.document)[0]
+
+    expect(recovered.duration).toMatchObject({
+      divisions: 2,
+      exact: false,
+      recovery: 'clip-approximate-to-measure-end',
+    })
+    expect(recovered.technical.durationRecovery).toBe('clip-approximate-to-measure-end')
+  })
+
   it('retains notation events with missing TAB, rejects extra TAB duplication, and excludes watermarks', () => {
     const result = fuse(structuralDocument(), [
       symbol('paired-note', 'notehead', 0.19, 0.09, {

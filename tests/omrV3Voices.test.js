@@ -253,6 +253,29 @@ describe('OMR V3 Piano voice candidates', () => {
     expect(result.totals.voiceOverlapViolations).toBe(0)
   })
 
+  it('clips only approximate detector durations at the measure end instead of dropping them', () => {
+    const { document } = ownedPianoDocument([
+      musicalSymbol('approximate-overflow', 'notehead', 0.66, 0.13, {
+        midi: 71,
+        onsetDivisions: 14,
+        duration: { divisions: 4, type: 'quarter', dots: 0, exact: false },
+      }),
+    ])
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const recovered = measures(result.document)[2].voices
+      .filter((voice) => voice.candidateRank === 0)
+      .flatMap((voice) => voice.events)
+      .find((event) => event.sourceRefs.includes('approximate-overflow'))
+
+    expect(recovered.duration).toMatchObject({
+      divisions: 2,
+      exact: false,
+      recovery: 'clip-approximate-to-measure-end',
+    })
+    expect(result.totals.recoveredMeasureEndCount).toBe(1)
+    expect(result.totals.rejectedEventGroupCount).toBe(0)
+  })
+
   it('is pure and produces a valid serializable IR', () => {
     const input = ownedPianoDocument().document
     const before = JSON.stringify(input)

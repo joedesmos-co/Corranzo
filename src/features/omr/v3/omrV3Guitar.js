@@ -185,8 +185,26 @@ function pairNotationWithTab(notation, tabs) {
 }
 
 function eventFromPair({ notation, tab }, context) {
-  const eventDuration = duration(notation)
+  let eventDuration = duration(notation)
   const eventOnset = onset(notation, context.column, context.totalDivisions)
+  let durationRecovery = null
+  if (
+    context.allowApproximateMeasureEndRecovery === true &&
+    eventDuration?.exact === false &&
+    Number.isFinite(eventOnset.divisions) &&
+    eventOnset.divisions >= 0 &&
+    eventOnset.divisions < context.totalDivisions &&
+    eventOnset.divisions + eventDuration.divisions > context.totalDivisions
+  ) {
+    eventDuration = {
+      divisions: context.totalDivisions - eventOnset.divisions,
+      type: null,
+      dots: 0,
+      exact: false,
+      recovery: 'clip-approximate-to-measure-end',
+    }
+    durationRecovery = eventDuration.recovery
+  }
   if (
     !eventDuration ||
     !Number.isFinite(eventOnset.divisions) ||
@@ -219,6 +237,7 @@ function eventFromPair({ notation, tab }, context) {
       ...(notation.technical ?? {}),
       ...(tab?.technical ?? {}),
       guitarWrittenOctave: true,
+      durationRecovery,
       notationSymbolId: notation.symbolId,
       tabSymbolId: tab?.symbolId ?? null,
     },
@@ -245,7 +264,11 @@ function eventFromPair({ notation, tab }, context) {
 function notationOnlyEvent(symbol, context) {
   return eventFromPair(
     { notation: symbol, tab: null },
-    { ...context, notationStaff: context.staff },
+    {
+      ...context,
+      notationStaff: context.staff,
+      allowApproximateMeasureEndRecovery: true,
+    },
   )
 }
 

@@ -22,7 +22,10 @@ import {
 } from './buildOmrDiagnostics.js'
 import { estimatePageScanQuality } from './preprocessOmrPageImage.js'
 import { OMR_PIANO_STAVES_PER_SYSTEM } from './omrConstants.js'
-import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
+import {
+  OMR_DIVISIONS_PER_QUARTER,
+  OMR_DURATION_DIVISIONS,
+} from './omrRhythmConstants.js'
 import { assertPixelViewReadable } from './omrPixelBuffer.js'
 import { omrDebugStep } from './omrDebug.js'
 import {
@@ -104,6 +107,76 @@ function tabMeasureBoxesForOutput(measureBoxes, byMeasure) {
   return measureBoxes.slice(0, lastNotedIndex + 1)
 }
 
+function detectorSymbolsFromObservations(
+  observations,
+  { page, systemIndex, source },
+) {
+  const noteheads = (observations?.noteheads ?? []).map((note, index) => ({
+    id: `detector-${source}-note-${page}-${systemIndex}-${note.measureNumber ?? 'x'}-${index}`,
+    kind: 'notehead',
+    systemIndex,
+    measureNumber: note.measureNumber ?? null,
+    measureRelativePosition: note.positionInMeasure,
+    geometry: {
+      x: note.cx - 3,
+      y: note.cy - 3,
+      width: 6,
+      height: 6,
+      space: 'pixels',
+    },
+    midi: note.midi,
+    clef: note.clef,
+    durationType: note.durationType,
+    durationDivisions: note.durationDivisions,
+    dotted: Boolean(note.dotted),
+    stemDirection: note.stem?.direction ?? note.stemDirection ?? null,
+    tieStart: Boolean(note.tieStart),
+    confidence: note.confidence ?? note.pitchConfidence ?? 0.6,
+    articulation: note.articulation ?? null,
+    evidenceSource: `detector-${source}-notehead`,
+  }))
+  const rests = (observations?.rests ?? []).map((rest, index) => ({
+    id: `detector-${source}-rest-${page}-${systemIndex}-${rest.measureNumber ?? 'x'}-${index}`,
+    kind: 'rest',
+    systemIndex,
+    measureNumber: rest.measureNumber ?? null,
+    measureRelativePosition: rest.positionInMeasure,
+    geometry: {
+      x: rest.cx - 3,
+      y: rest.cy - 4,
+      width: 6,
+      height: 8,
+      space: 'pixels',
+    },
+    clef: rest.clef,
+    durationType: rest.durationType ?? 'quarter',
+    durationDivisions:
+      rest.durationDivisions ?? OMR_DURATION_DIVISIONS[rest.durationType] ?? OMR_DIVISIONS_PER_QUARTER,
+    confidence: rest.confidence ?? 0.6,
+    evidenceSource: `detector-${source}-rest`,
+  }))
+  return [...noteheads, ...rests]
+}
+
+function detectorSymbolsFromTabNotes(tabNotes, { page, systemIndex }) {
+  return (tabNotes ?? []).map((note, index) => ({
+    id: `detector-tab-digit-${page}-${systemIndex}-${note.measureNumber ?? 'x'}-${index}`,
+    kind: 'tab-digit',
+    text: String(note.fret),
+    systemIndex,
+    measureNumber: note.measureNumber ?? null,
+    measureRelativePosition: note.positionInMeasure,
+    x: note.x,
+    xNorm: note.xNorm,
+    string: note.string,
+    fret: note.fret,
+    midi: note.midi,
+    soundingPitch: true,
+    confidence: 0.82,
+    evidenceSource: 'detector-tab-digit',
+  }))
+}
+
 /**
  * Analyze one preprocessed page image (systems, measures, notes).
  */
@@ -121,6 +194,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     instrument = null,
     /** Developer/benchmark-only capture for the disabled-by-default V3 shadow. */
     captureOmrV3Shadow = false,
+    /** Capture detector observations for an independent V3 qualification shadow. */
+    captureOmrV3RawSymbols = false,
   } = options
 
   const tabCapable = Boolean(instrument?.omr?.supportsTablature && instrument?.strings)
@@ -168,6 +243,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
   const systemMeasureBoxes = []
   const measureGrid = []
   const measureGridDiagnostics = []
+  const rawDetectorSymbols = []
   const positionedGlyphs = tabCapable ? textGlyphsToImage(pageText, imageData) : null
   const vectorGlyphs = hasVectorOmrNoteheads(pageText)
     ? positionedGlyphs ?? textGlyphsToImage(pageText, imageData)
@@ -186,6 +262,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           systemMeasureBoxes,
           measureRhythms: resultMeasureRhythms,
           measureGrid: resultMeasureGrid,
+          ...(captureOmrV3RawSymbols ? { rawDetectorSymbols } : {}),
           tabDiagnostics: tabDiagnostics ?? null,
           source: hasVectorOmrNoteheads(pageText) ? 'vector' : 'raster',
         }
@@ -302,6 +379,11 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           imageData,
           { tuning: tabTuning ?? undefined, fretCount: tabFretCount },
         )
+        if (captureOmrV3RawSymbols) {
+          rawDetectorSymbols.push(
+            ...detectorSymbolsFromTabNotes(tabNotes, { page, systemIndex: targetIndex }),
+          )
+        }
         tabDiagnostics.tabNotes += tabNotes.length
         const byMeasure = groupTabNotesByMeasure(tabNotes)
         const outputMeasureBoxes = tabMeasureBoxesForOutput(measureBoxes, byMeasure)
@@ -462,6 +544,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       inheritedKeySignature,
       inheritedTimeSignature,
       inkThreshold,
+      captureDetectorObservations: captureOmrV3RawSymbols,
     })
 
     // Mixed notation+TAB (fretted instruments): pull string/fret positions
@@ -499,6 +582,11 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           imageData,
           { tuning: tabTuning ?? undefined, fretCount: tabFretCount },
         )
+        if (captureOmrV3RawSymbols) {
+          rawDetectorSymbols.push(
+            ...detectorSymbolsFromTabNotes(tabNotes, { page, systemIndex: targetIndex }),
+          )
+        }
         tabDiagnostics.tabNotes += tabNotes.length
         const byMeasure = groupTabNotesByMeasure(tabNotes)
         for (const measureRecord of vector.measureRecordsBySystem[targetIndex] ?? []) {
@@ -534,6 +622,18 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     for (let systemIndex = 0; systemIndex < systemMeasureBoxes.length; systemIndex += 1) {
       const systemMeasures = vector.measureRecordsBySystem[systemIndex] ?? []
       for (const measureRecord of systemMeasures) {
+        if (captureOmrV3RawSymbols) {
+          rawDetectorSymbols.push(
+            ...detectorSymbolsFromObservations(measureRecord.detectorObservations, {
+              page,
+              systemIndex,
+              source: 'vector',
+            }),
+          )
+          // Detector observations have been copied into the page-level V3
+          // input; do not retain a second heavy copy in runtime diagnostics.
+          delete measureRecord.detectorObservations
+        }
         measureRhythms.push(measureRecord)
         notes += measureRecord.vectorNoteCount ?? 0
         if (measureRecord.uncertain) {
@@ -645,7 +745,18 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         }
       }
 
-      const rhythm = assembleMeasureRhythm(imageData, measureBox, noteheads, inkThreshold)
+      const rhythm = assembleMeasureRhythm(imageData, measureBox, noteheads, inkThreshold, {
+        captureDetectorObservations: captureOmrV3RawSymbols,
+      })
+      if (captureOmrV3RawSymbols) {
+        rawDetectorSymbols.push(
+          ...detectorSymbolsFromObservations(rhythm.detectorObservations, {
+            page,
+            systemIndex,
+            source: 'raster',
+          }),
+        )
+      }
       notes += noteheads.length
       if (rhythm.uncertain) {
         uncertainMeasures += 1

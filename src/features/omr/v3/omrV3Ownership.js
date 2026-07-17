@@ -212,6 +212,9 @@ function normalizedSymbol(symbol, geometry, owner, page, index) {
     onsetDivisions: Number.isFinite(symbol?.onsetDivisions)
       ? Number(symbol.onsetDivisions)
       : null,
+    measureRelativePositionHint: Number.isFinite(symbol?.measureRelativePositionHint)
+      ? clamp(Number(symbol.measureRelativePositionHint))
+      : null,
     durationDivisions: Number.isFinite(symbol?.durationDivisions)
       ? Number(symbol.durationDivisions)
       : null,
@@ -383,11 +386,22 @@ function materializeOnsetColumns(measure, measureSymbols, onsetTolerance) {
       if (collection) collections[collection].push(symbol.symbolId)
     }
     const width = measure.xEnd - measure.xStart
+    const positionHints = cluster.symbols
+      .map((symbol) => symbol.measureRelativePositionHint)
+      .filter(Number.isFinite)
+    const mixesNotationAndTab =
+      cluster.symbols.some((symbol) => symbol.kind === 'tab-digit') &&
+      cluster.symbols.some((symbol) => symbol.kind === 'notehead' || symbol.kind === 'rest')
     return createOmrOnsetColumnIR({
       onsetColumnId,
       measureId: measure.measureId,
       x: cluster.x,
-      measureRelativePosition: width > 0 ? clamp((cluster.x - measure.xStart) / width) : null,
+      measureRelativePosition:
+        positionHints.length > 0 && !mixesNotationAndTab
+          ? clamp(average(positionHints))
+          : width > 0
+            ? clamp((cluster.x - measure.xStart) / width)
+            : null,
       grace: cluster.grace,
       ...collections,
       confidence: {

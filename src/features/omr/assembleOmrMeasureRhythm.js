@@ -94,7 +94,13 @@ function buildEvenQuarterFallback(noteChords, measureBox) {
 /**
  * Turn raw noteheads into validated rhythmic events for one measure.
  */
-export function assembleMeasureRhythm(imageData, measureBox, noteheads, inkThreshold) {
+export function assembleMeasureRhythm(
+  imageData,
+  measureBox,
+  noteheads,
+  inkThreshold,
+  { captureDetectorObservations = false } = {},
+) {
   const bounds = contentPixelBounds(imageData, {
     x0: measureBox.playableX0 ?? measureBox.x0,
     x1: measureBox.x1,
@@ -151,5 +157,14 @@ export function assembleMeasureRhythm(imageData, measureBox, noteheads, inkThres
     events,
     uncertain,
     validation,
+    ...(captureDetectorObservations
+      ? {
+          // V3 receives detector-level symbols after the detector's local
+          // chord-proximity and measure-capacity noise filter, before legacy
+          // event timing/grouping. Passing every raster blob would mislabel
+          // rejected noise candidates as musical rests.
+          detectorObservations: { noteheads: enriched, rests: filteredRests },
+        }
+      : {}),
   }
 }

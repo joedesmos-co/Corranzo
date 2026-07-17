@@ -14,6 +14,11 @@ import { evaluateOmrV3Shadow } from './omrV3Evaluation.js'
 
 const DEFAULT_MEASURE_DIVISIONS = 16
 
+export const OMR_V3_SYMBOL_EVIDENCE_MODE = Object.freeze({
+  LEGACY_RUNTIME_EVENTS: 'legacy-runtime-events',
+  RAW_DETECTOR_SYMBOLS: 'raw-detector-symbols',
+})
+
 function uniqueNumbers(values) {
   return [...new Set(values.filter(Number.isFinite))].sort((left, right) => left - right)
 }
@@ -326,6 +331,108 @@ function sourceSymbolsFromPage(pageInput, instrumentId, totalDivisions) {
   return symbols
 }
 
+function rawDetectorSymbolsFromPage(pageInput, instrumentId) {
+  return (pageInput.rawDetectorSymbols ?? []).map((source, index) => {
+    const systemIndex = Number.isInteger(source.systemIndex) ? source.systemIndex : 0
+    const system = pageInput.systems?.[systemIndex]
+    const isTab = source.kind === 'tab-digit'
+    const sourceStaffId = isTab
+      ? tabStaffSourceId(pageInput, systemIndex)
+      : legacyStaffSourceId(
+          pageInput,
+          systemIndex,
+          legacyStaffIndex(system, source.clef),
+        )
+    const sourceMidi = Number.isFinite(source.midi) ? source.midi : null
+    const serializedMidi = Number.isFinite(sourceMidi)
+      ? sourceMidi +
+        (instrumentId === 'guitar' && !source.soundingPitch && !isTab ? -12 : 0)
+      : null
+    const geometry = source.geometry ?? {
+      x: Number(source.cx ?? source.x) - 3,
+      y: Number(source.cy ?? source.y) - 3,
+      width: 6,
+      height: 6,
+      space: 'pixels',
+    }
+    const tabGeometry = isTab
+      ? {
+          x: Number.isFinite(source.xNorm)
+            ? source.xNorm - 0.003
+            : Number(source.x ?? 0) / Math.max(1, pageInput.width) - 0.003,
+          y: tabY(pageInput, systemIndex, source.string) - 0.004,
+          width: Math.max(0.006, Number(source.width ?? 0) / Math.max(1, pageInput.width)),
+          height: 0.008,
+          space: 'normalized',
+        }
+      : geometry
+    return {
+      id: source.id ?? `detector-${pageInput.page}-${systemIndex}-${index}`,
+      kind: source.kind,
+      text: source.text,
+      sourceStaffId,
+      preferSourceStaffOwnership: instrumentId === 'guitar',
+      geometry: tabGeometry,
+      // Notation detector positions use the playable (post-clef) span. TAB
+      // positions use raw barline spans, so averaging both coordinate systems
+      // would shift paired onsets. TAB-only timing can safely use geometry.
+      measureRelativePositionHint: isTab ? null : source.measureRelativePosition,
+      duration:
+        Number.isFinite(source.durationDivisions) && source.durationDivisions > 0
+          ? {
+              divisions: source.durationDivisions,
+              type: source.durationType ?? null,
+              dots: source.dotted ? 1 : 0,
+              exact: false,
+            }
+          : null,
+      midi: serializedMidi,
+      pitch: Number.isFinite(serializedMidi)
+        ? {
+            midi: serializedMidi,
+            writtenMidi: serializedMidi,
+            soundingMidi: serializedMidi,
+            transpositionSemitones: 0,
+            source: source.soundingPitch
+              ? 'detector-sounding-pitch'
+              : 'detector-staff-pitch',
+          }
+        : null,
+      string: source.string,
+      fret: source.fret,
+      stemDirection: source.stemDirection ?? null,
+      stemGroupId: source.stemGroupId ?? null,
+      beamGroupId: source.beamGroupId ?? null,
+      tieStart: Boolean(source.tieStart),
+      confidence: source.confidence ?? 0.6,
+      technical: {
+        ...(source.technical ?? {}),
+        articulation: source.articulation ?? null,
+        adapterSource: source.evidenceSource ?? 'detector-observation',
+      },
+    }
+  })
+}
+
+function isIndependentDetectorSource(source) {
+  return String(source?.technical?.adapterSource ?? '').startsWith('detector-')
+}
+
+function primaryEvents(document) {
+  return (document.pages ?? [])
+    .flatMap((page) => page.systems ?? [])
+    .flatMap((system) => system.measureColumns ?? [])
+    .flatMap((measure) => measure.voices ?? [])
+    .filter((voice) => voice.candidateRank === 0)
+    .flatMap((voice) => voice.events ?? [])
+}
+
+function shadowEngine(symbolEvidenceMode) {
+  return symbolEvidenceMode === OMR_V3_SYMBOL_EVIDENCE_MODE.RAW_DETECTOR_SYMBOLS
+    ? 'omr-v3-independent-shadow'
+    : 'omr-v3-shadow'
+}
+
 /** Build the existing V3 IR stages once for confidence reasoning or shadow serialization. */
 export function buildOmrV3AnalysisDocument({
   documentId,
@@ -334,7 +441,11 @@ export function buildOmrV3AnalysisDocument({
   pageInputs = [],
   musical = {},
   measureDurationDivisions = DEFAULT_MEASURE_DIVISIONS,
+  symbolEvidenceMode = OMR_V3_SYMBOL_EVIDENCE_MODE.LEGACY_RUNTIME_EVENTS,
+  captureEvidence = true,
 } = {}) {
+  const independentSymbols =
+    symbolEvidenceMode === OMR_V3_SYMBOL_EVIDENCE_MODE.RAW_DETECTOR_SYMBOLS
   const structurePages = pageInputs.map((pageInput) =>
     analyzeOmrV3PageStructure({
       documentId,
@@ -358,7 +469,8 @@ export function buildOmrV3AnalysisDocument({
       title,
       instrumentId,
       musical,
-      engine: 'omr-v3-shadow',
+      engine: independentSymbols ? 'omr-v3-independent-shadow' : 'omr-v3-shadow',
+      symbolEvidenceMode,
       promotedToRuntime: false,
     },
     pages: structurePages.map((result) => result.page),
@@ -370,9 +482,12 @@ export function buildOmrV3AnalysisDocument({
   const symbolsByPage = new Map(
     pageInputs.map((pageInput) => [
       Math.max(0, Number(pageInput.page ?? 1) - 1),
-      sourceSymbolsFromPage(pageInput, instrumentId, measureDurationDivisions),
+      independentSymbols
+        ? rawDetectorSymbolsFromPage(pageInput, instrumentId)
+        : sourceSymbolsFromPage(pageInput, instrumentId, measureDurationDivisions),
     ]),
   )
+  const sourceSymbols = captureEvidence ? [...symbolsByPage.values()].flat() : []
   const owned = assignOmrV3DocumentSymbolOwnership(document, { symbolsByPage })
   document = owned.document
   const musicalResult =
@@ -380,8 +495,31 @@ export function buildOmrV3AnalysisDocument({
       ? buildOmrV3GuitarFusion(document, { measureDurationDivisions })
       : buildOmrV3PianoVoiceCandidates(document, { measureDurationDivisions })
   document = musicalResult.document
+  const events = captureEvidence ? primaryEvents(document) : []
+  const independentPrimaryEventCount = events.filter((event) =>
+    isIndependentDetectorSource(event),
+  ).length
+  const independentSourceSymbolCount = sourceSymbols.filter((symbol) =>
+    isIndependentDetectorSource(symbol),
+  ).length
+  const evidence = captureEvidence
+    ? {
+        mode: symbolEvidenceMode,
+        sourceSymbolCount: sourceSymbols.length,
+        independentSourceSymbolCount,
+        independentSourceSymbolRate: sourceSymbols.length
+          ? independentSourceSymbolCount / sourceSymbols.length
+          : 0,
+        primaryEventCount: events.length,
+        independentPrimaryEventCount,
+        independentPrimaryEventRate: events.length
+          ? independentPrimaryEventCount / events.length
+          : 0,
+      }
+    : null
   return {
     document,
+    evidence,
     stages: {
       pages: structurePages.map((result) => ({
         pageIndex: result.page.pageIndex,
@@ -395,6 +533,55 @@ export function buildOmrV3AnalysisDocument({
       measures: measured.systems,
       ownership: owned.totals,
       musical: musicalResult.totals,
+      ...(evidence ? { evidence } : {}),
+    },
+  }
+}
+
+/**
+ * Preserve V3 structural/evidence diagnostics when production safely rejects
+ * an import. This observes the V2-owned decision; it deliberately does not
+ * claim that V3 independently owns or agrees with the rejection.
+ */
+export function observeOmrV3RejectedImport({
+  documentId,
+  title,
+  instrumentId = 'piano',
+  pageInputs = [],
+  musical = {},
+  measureDurationDivisions = DEFAULT_MEASURE_DIVISIONS,
+  rollout = null,
+  analysis = null,
+  symbolEvidenceMode = OMR_V3_SYMBOL_EVIDENCE_MODE.LEGACY_RUNTIME_EVENTS,
+  failureReason = null,
+  productionConfidence = null,
+} = {}) {
+  const prepared =
+    analysis ??
+    buildOmrV3AnalysisDocument({
+      documentId,
+      title,
+      instrumentId,
+      pageInputs,
+      musical,
+      measureDurationDivisions,
+      symbolEvidenceMode,
+    })
+  return {
+    status: 'structure-ready',
+    engine: shadowEngine(symbolEvidenceMode),
+    promotedToRuntime: false,
+    rollout,
+    document: prepared.document,
+    debugJson: exportOmrV3DebugJson(prepared.document),
+    stages: prepared.stages,
+    evidence: prepared.evidence,
+    decision: {
+      status: 'observe-production-rejection',
+      ownedBy: 'v2-policy',
+      independent: false,
+      failureReason,
+      productionConfidence,
     },
   }
 }
@@ -410,6 +597,7 @@ export function runOmrV3Shadow({
   measureDurationDivisions = DEFAULT_MEASURE_DIVISIONS,
   rollout = null,
   analysis = null,
+  symbolEvidenceMode = OMR_V3_SYMBOL_EVIDENCE_MODE.LEGACY_RUNTIME_EVENTS,
 } = {}) {
   const prepared =
     analysis ??
@@ -420,6 +608,7 @@ export function runOmrV3Shadow({
       pageInputs,
       musical,
       measureDurationDivisions,
+      symbolEvidenceMode,
     })
   const document = prepared.document
   const serializer = serializeOmrV3MusicXml(document, { title, measureDurationDivisions })
@@ -438,7 +627,7 @@ export function runOmrV3Shadow({
   })
   return {
     status: 'ready',
-    engine: 'omr-v3-shadow',
+    engine: shadowEngine(symbolEvidenceMode),
     promotedToRuntime: false,
     rollout,
     document,
@@ -447,5 +636,6 @@ export function runOmrV3Shadow({
     serializer: serializer.summary,
     evaluation: { ...evaluation, musicXml: undefined },
     stages: prepared.stages,
+    evidence: prepared.evidence,
   }
 }

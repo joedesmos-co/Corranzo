@@ -163,6 +163,35 @@ function classifyItems(items, totalDivisions) {
   return { valid, unresolved, rejected }
 }
 
+function recoverApproximateMeasureEnd(items, totalDivisions) {
+  let recoveredCount = 0
+  const recovered = items.map((item) => {
+    if (
+      item.duration?.exact !== false ||
+      !Number.isFinite(item.onset?.divisions) ||
+      item.onset.divisions < 0 ||
+      item.onset.divisions >= totalDivisions ||
+      item.onset.divisions + item.duration.divisions <= totalDivisions + EPSILON
+    ) {
+      return item
+    }
+    const available = totalDivisions - item.onset.divisions
+    if (available <= EPSILON) return item
+    recoveredCount += 1
+    return {
+      ...item,
+      duration: {
+        divisions: available,
+        type: null,
+        dots: 0,
+        exact: false,
+        recovery: 'clip-approximate-to-measure-end',
+      },
+    }
+  })
+  return { items: recovered, recoveredCount }
+}
+
 function assignLanes(items) {
   const lanes = []
   let ambiguous = false
@@ -315,7 +344,8 @@ function unresolvedVoice(staffId, measure, items) {
 function solveStaffMeasure(measure, staff, totalDivisions) {
   const symbolLookup = new Map((staff.symbols ?? []).map((symbol) => [symbol.symbolId, symbol]))
   const items = itemsForStaff(measure, staff.staffId, symbolLookup, totalDivisions)
-  const classified = classifyItems(items, totalDivisions)
+  const recovery = recoverApproximateMeasureEnd(items, totalDivisions)
+  const classified = classifyItems(recovery.items, totalDivisions)
   const assignment = assignLanes(classified.valid)
   const measureContext = { ...measure, totalDivisions }
   const primary = assignment.lanes.map((lane, laneIndex) =>
@@ -334,6 +364,7 @@ function solveStaffMeasure(measure, staff, totalDivisions) {
     voices: [...primary, ...alternate, ...(unresolved ? [unresolved] : [])],
     ambiguous: assignment.ambiguous || classified.unresolved.length > 0,
     unresolvedCount: classified.unresolved.length,
+    recoveredMeasureEndCount: recovery.recoveredCount,
     rejected: classified.rejected,
   }
 }
@@ -360,6 +391,10 @@ function addVoiceCandidates(document, totalDivisions) {
         const voices = solved.flatMap((entry) => entry.voices)
         const rejected = solved.flatMap((entry) => entry.rejected)
         const unresolvedCount = solved.reduce((sum, entry) => sum + entry.unresolvedCount, 0)
+        const recoveredMeasureEndCount = solved.reduce(
+          (sum, entry) => sum + entry.recoveredMeasureEndCount,
+          0,
+        )
         const ambiguous = solved.some((entry) => entry.ambiguous)
         summaries.push({
           systemId: system.systemId,
@@ -369,6 +404,7 @@ function addVoiceCandidates(document, totalDivisions) {
           alternateVoiceCount: voices.filter((voice) => voice.candidateRank > 0).length,
           rejectedEventGroupCount: rejected.length,
           unresolvedEventGroupCount: unresolvedCount,
+          recoveredMeasureEndCount,
           ambiguous,
         })
         return createOmrMeasureColumnIR({
@@ -613,6 +649,10 @@ export function buildOmrV3PianoVoiceCandidates(
       ),
       unresolvedEventGroupCount: voiced.summaries.reduce(
         (sum, summary) => sum + summary.unresolvedEventGroupCount,
+        0,
+      ),
+      recoveredMeasureEndCount: voiced.summaries.reduce(
+        (sum, summary) => sum + summary.recoveredMeasureEndCount,
         0,
       ),
       voiceOverlapViolations: overlapViolations,

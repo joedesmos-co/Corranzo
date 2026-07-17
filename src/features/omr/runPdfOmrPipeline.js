@@ -59,6 +59,8 @@ import {
 import { resolveOmrV3RolloutOptions } from './v3/omrV3Rollout.js'
 import {
   buildOmrV3AnalysisDocument,
+  observeOmrV3RejectedImport,
+  OMR_V3_SYMBOL_EVIDENCE_MODE,
   runOmrV3Shadow,
 } from './v3/omrV3Shadow.js'
 import { reasonAboutOmrV3Confidence } from './v3/omrV3Confidence.js'
@@ -228,6 +230,54 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   }
   let documentStaffGapSamples = { treble: [], bass: [] }
 
+  const attachOmrV3RejectionObservation = (error, compatibilityAnalysis = null) => {
+    if (!omrV3Rollout.shadow || omrV3PageInputs.length === 0) return
+    const rejectionMusical = { keySignature, timeSignature, tempo }
+    const measureDurationDivisions = Math.round(
+      (timeSignature?.beats ?? 4) *
+        OMR_DIVISIONS_PER_QUARTER *
+        (4 / (timeSignature?.beatType ?? 4)),
+    )
+    const common = {
+      title,
+      instrumentId: instrument.id,
+      pageInputs: omrV3PageInputs,
+      musical: rejectionMusical,
+      measureDurationDivisions,
+      rollout: omrV3Rollout,
+      failureReason: error.code ?? null,
+      productionConfidence: error.difficulty?.confidence ?? 0,
+    }
+    try {
+      error.omrV3Shadow = observeOmrV3RejectedImport({
+        ...common,
+        documentId: `rejected-shadow-${title}`,
+        analysis: compatibilityAnalysis,
+      })
+    } catch (shadowError) {
+      error.omrV3Shadow = {
+        status: 'error',
+        engine: 'omr-v3-shadow',
+        promotedToRuntime: false,
+        error: shadowError instanceof Error ? shadowError.message : String(shadowError),
+      }
+    }
+    try {
+      error.omrV3IndependentShadow = observeOmrV3RejectedImport({
+        ...common,
+        documentId: `rejected-independent-shadow-${title}`,
+        symbolEvidenceMode: OMR_V3_SYMBOL_EVIDENCE_MODE.RAW_DETECTOR_SYMBOLS,
+      })
+    } catch (shadowError) {
+      error.omrV3IndependentShadow = {
+        status: 'error',
+        engine: 'omr-v3-independent-shadow',
+        promotedToRuntime: false,
+        error: shadowError instanceof Error ? shadowError.message : String(shadowError),
+      }
+    }
+  }
+
   let measureCounter = 1
   const measureGridDiagnosticsEntries = []
 
@@ -318,6 +368,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
         timeSignature,
         documentStaffGapReference,
         captureOmrV3Shadow: captureOmrV3Analysis,
+        captureOmrV3RawSymbols: omrV3Rollout.shadow,
       }
       pageResult = analyzePage
         ? await analyzePage(imageData, analysisContext)
@@ -473,6 +524,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     )
     error.code = OMR_FAILURE_REASON.NO_SYSTEMS
     error.diagnostics = { ...diagnostics, preprocessLog, partialRecovery }
+    attachOmrV3RejectionObservation(error)
     throw error
   }
 
@@ -483,6 +535,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       ...diagnostics,
       preprocessLog,
     }
+    attachOmrV3RejectionObservation(error)
     throw error
   }
 
@@ -492,6 +545,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     )
     error.code = OMR_FAILURE_REASON.NO_NOTES
     error.diagnostics = { ...diagnostics, preprocessLog, partialRecovery }
+    attachOmrV3RejectionObservation(error)
     throw error
   }
 
@@ -522,6 +576,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
               OMR_DIVISIONS_PER_QUARTER *
               (4 / (timeSignature?.beatType ?? 4)),
           ),
+          captureEvidence: omrV3Rollout.shadow,
         }),
       )
       const confidenceReasoning = reasonAboutOmrV3Confidence(omrV3Analysis.document, {
@@ -578,6 +633,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       preprocessLog,
       difficulty,
     }
+    attachOmrV3RejectionObservation(error, omrV3Analysis)
     throw error
   }
 
@@ -782,6 +838,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     }),
   )
   let omrV3ShadowResult = null
+  let omrV3IndependentShadowResult = null
   if (omrV3Rollout.shadow) {
     if (omrV3PageInputs.length === 0) {
       omrV3ShadowResult = {
@@ -809,6 +866,29 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
         omrV3ShadowResult = {
           status: 'error',
           engine: 'omr-v3-shadow',
+          promotedToRuntime: false,
+          rollout: omrV3Rollout,
+          error: error instanceof Error ? error.message : String(error),
+        }
+      }
+      try {
+        omrV3IndependentShadowResult = phaseTracer.sync('omr-v3-independent-shadow', () =>
+          runOmrV3Shadow({
+            documentId: `independent-shadow-${title}`,
+            title: `${title} — OMR V3 independent shadow`,
+            instrumentId: instrument.id,
+            pageInputs: omrV3PageInputs,
+            musical,
+            runtimeMusicXml: musicXml,
+            measureDurationDivisions: measureDivisions,
+            rollout: omrV3Rollout,
+            symbolEvidenceMode: OMR_V3_SYMBOL_EVIDENCE_MODE.RAW_DETECTOR_SYMBOLS,
+          }),
+        )
+      } catch (error) {
+        omrV3IndependentShadowResult = {
+          status: 'error',
+          engine: 'omr-v3-independent-shadow',
           promotedToRuntime: false,
           rollout: omrV3Rollout,
           error: error instanceof Error ? error.message : String(error),
@@ -896,6 +976,9 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   return {
     musicXml,
     ...(omrV3ShadowResult ? { omrV3Shadow: omrV3ShadowResult } : {}),
+    ...(omrV3IndependentShadowResult
+      ? { omrV3IndependentShadow: omrV3IndependentShadowResult }
+      : {}),
     diagnostics: {
       ...diagnostics,
       ...richDiagnostics,
