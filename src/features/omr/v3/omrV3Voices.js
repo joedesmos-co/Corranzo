@@ -144,6 +144,15 @@ function packedSubdivision(groups) {
 function refineApproximatePackedDurations(items, totalDivisions) {
   const families = new Map()
   items.forEach((item, index) => {
+    // Subdivision-grid recoveries already own onset and sounding duration
+    // (including 3:2 tuplets). Do not second-guess them with the integer ladder.
+    if (
+      item.duration?.recovery === 'uniform-subdivision-grid' ||
+      item.duration?.recovery === 'uniform-beat-grid' ||
+      item.tuplet
+    ) {
+      return
+    }
     const key = Number.isInteger(item.preferredLane)
       ? `lane:${item.preferredLane}`
       : item.stemDirection
@@ -314,8 +323,17 @@ function classifyItems(items, totalDivisions) {
   return { valid, unresolved, rejected }
 }
 
+/**
+ * Recover uniformly spaced single-staff subdivisions from approximate geometry.
+ *
+ * Factor 1 preserves the historical one-event-per-beat grid. Factors 2 and 4
+ * cover ordinary eighth/sixteenth packing. Factor 3 is the owned 3:2 tuplet
+ * case: equal slots whose count is exactly three per beat, with sounding
+ * duration = written * normalNotes / actualNotes. Irregular spacing abstains.
+ * Grand-staff callers must keep allowUniformBeatGrid false.
+ */
 function recoverUniformBeatGrid(items, totalDivisions, beats) {
-  if (!Number.isInteger(beats) || beats < 2 || beats > 12 || items.length !== beats) {
+  if (!Number.isInteger(beats) || beats < 2 || beats > 12 || items.length === 0) {
     return { items, recoveredCount: 0 }
   }
   if (
@@ -323,16 +341,37 @@ function recoverUniformBeatGrid(items, totalDivisions, beats) {
       (item) =>
         item.onset.exact ||
         item.duration?.exact !== false ||
-        !Number.isFinite(item.onset.divisions),
+        !Number.isFinite(item.onset.divisions) ||
+        !item.column?.onsetColumnId,
     )
   ) {
     return { items, recoveredCount: 0 }
   }
-  if (new Set(items.map((item) => item.column.onsetColumnId)).size !== beats) {
+
+  const byColumn = new Map()
+  for (const item of items) {
+    const key = item.column.onsetColumnId
+    if (!byColumn.has(key)) byColumn.set(key, [])
+    byColumn.get(key).push(item)
+  }
+  const orderedColumns = [...byColumn.entries()].sort(
+    (left, right) =>
+      average(left[1].map((item) => item.onset.divisions)) -
+      average(right[1].map((item) => item.onset.divisions)),
+  )
+  const columnCount = orderedColumns.length
+  if (columnCount < beats || columnCount % beats !== 0) {
     return { items, recoveredCount: 0 }
   }
-  const ordered = [...items].sort((left, right) => left.onset.divisions - right.onset.divisions)
-  const gaps = ordered.slice(1).map((item, index) => item.onset.divisions - ordered[index].onset.divisions)
+  const factor = columnCount / beats
+  if (![1, 2, 3, 4].includes(factor)) {
+    return { items, recoveredCount: 0 }
+  }
+
+  const positions = orderedColumns.map(([, columnItems]) =>
+    average(columnItems.map((item) => item.onset.divisions)),
+  )
+  const gaps = positions.slice(1).map((position, index) => position - positions[index])
   const meanGap = average(gaps)
   if (
     !Number.isFinite(meanGap) ||
@@ -341,27 +380,56 @@ function recoverUniformBeatGrid(items, totalDivisions, beats) {
   ) {
     return { items, recoveredCount: 0 }
   }
-  const beatDivisions = totalDivisions / beats
-  if (!Number.isFinite(beatDivisions) || beatDivisions <= EPSILON) {
+
+  const slotDivisions = totalDivisions / columnCount
+  if (!Number.isFinite(slotDivisions) || slotDivisions <= EPSILON) {
     return { items, recoveredCount: 0 }
   }
+
+  // 3 equal slots per beat ⇒ written eighths performed as a 3:2 tuplet.
+  const tuplet =
+    factor === 3
+      ? {
+          actualNotes: 3,
+          normalNotes: 2,
+          writtenDivisions: totalDivisions / (beats * 2),
+        }
+      : null
+  const recovery = factor === 1 ? 'uniform-beat-grid' : 'uniform-subdivision-grid'
+  const replaced = new Map()
+  orderedColumns.forEach(([, columnItems], index) => {
+    const tupletGroupId =
+      tuplet != null ? `tuplet:${Math.floor(index / 3)}:${beats}:${columnCount}` : null
+    for (const item of columnItems) {
+      replaced.set(itemIdentity(item), {
+        ...item,
+        onset: {
+          divisions: index * slotDivisions,
+          exact: false,
+          recovery,
+        },
+        duration: {
+          divisions: slotDivisions,
+          type: null,
+          dots: 0,
+          exact: false,
+          recovery,
+        },
+        tuplet:
+          tuplet == null
+            ? null
+            : {
+                ...tuplet,
+                groupId: tupletGroupId,
+                slotIndex: index % 3,
+              },
+      })
+    }
+  })
+
   return {
-    items: ordered.map((item, index) => ({
-      ...item,
-      onset: {
-        divisions: index * beatDivisions,
-        exact: false,
-        recovery: 'uniform-beat-grid',
-      },
-      duration: {
-        divisions: beatDivisions,
-        type: null,
-        dots: 0,
-        exact: false,
-        recovery: 'uniform-beat-grid',
-      },
-    })),
-    recoveredCount: ordered.length,
+    items: items.map((item) => replaced.get(itemIdentity(item)) ?? item),
+    recoveredCount: replaced.size,
   }
 }
 
@@ -422,7 +490,7 @@ function assignLanes(items) {
   return { lanes: lanes.filter((lane) => lane.items.length > 0), ambiguous }
 }
 
-function eventTechnical(symbol) {
+function eventTechnical(symbol, item = null) {
   return {
     ...(symbol.technical ?? {}),
     stemDirection: symbol.stemDirection ?? null,
@@ -433,6 +501,17 @@ function eventTechnical(symbol) {
     slurStop: Boolean(symbol.slurStop),
     slurId: symbol.slurId ?? null,
     crossStaffTargetStaffId: symbol.crossStaffTargetStaffId ?? null,
+    ...(item?.tuplet
+      ? {
+          tuplet: {
+            actualNotes: item.tuplet.actualNotes,
+            normalNotes: item.tuplet.normalNotes,
+            writtenDivisions: item.tuplet.writtenDivisions,
+            groupId: item.tuplet.groupId,
+            slotIndex: item.tuplet.slotIndex,
+          },
+        }
+      : {}),
   }
 }
 
@@ -464,7 +543,7 @@ function eventsForItem(item, staffId, measureId, voiceId, candidateRank, laneInd
     beamGroupId: item.beamGroupId,
     string: symbol.string,
     fret: symbol.fret,
-    technical: eventTechnical(symbol),
+    technical: eventTechnical(symbol, item),
     geometry: symbol.geometry,
     confidenceBreakdown: {
       symbol: symbol.confidence?.overall ?? null,
@@ -783,6 +862,25 @@ function buildRelationships(document) {
       groups.get(key).members.push(event.eventId)
     }
   }
+  for (const { event } of entries) {
+    const tuplet = event.technical?.tuplet
+    if (!tuplet?.groupId) continue
+    const key = `${OMR_V3_RELATIONSHIP_TYPE.TUPLET}:${event.measureId}:${tuplet.groupId}`
+    if (!groups.has(key)) {
+      groups.set(key, {
+        relationshipType: OMR_V3_RELATIONSHIP_TYPE.TUPLET,
+        groupId: tuplet.groupId,
+        measureId: event.measureId,
+        members: [],
+        metadata: {
+          actualNotes: tuplet.actualNotes,
+          normalNotes: tuplet.normalNotes,
+          writtenDivisions: tuplet.writtenDivisions,
+        },
+      })
+    }
+    groups.get(key).members.push(event.eventId)
+  }
   for (const group of groups.values()) {
     if (group.members.length < 2) continue
     relationships.push(
@@ -795,7 +893,10 @@ function buildRelationships(document) {
         ),
         type: group.relationshipType,
         members: group.members,
-        metadata: { detectorGroupId: group.groupId },
+        metadata: {
+          detectorGroupId: group.groupId,
+          ...(group.metadata ?? {}),
+        },
       }),
     )
   }

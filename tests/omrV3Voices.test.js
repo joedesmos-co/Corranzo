@@ -552,6 +552,124 @@ describe('OMR V3 Piano voice candidates', () => {
     expect(result.totals.recoveredUniformBeatGridCount).toBe(4)
   })
 
+  it('recovers packed eighth and sixteenth subdivision grids on single-staff music', () => {
+    function singleStaffDoc(id, xs, durationSeed = 6) {
+      const page = analyzeOmrV3PageStructure({
+        documentId: id,
+        pageIndex: 0,
+        pageWidth: 1000,
+        pageHeight: 1400,
+        instrumentId: 'piano',
+        staffBands: [
+          {
+            sourceId: 'solo-staff',
+            space: 'normalized',
+            lineRows: [0.1, 0.11, 0.12, 0.13, 0.14],
+            xStart: 0.1,
+            xEnd: 0.9,
+            clefs: ['treble'],
+            noteheadCount: xs.length,
+            barlines: [bar(0.1), bar(0.9)],
+          },
+        ],
+      }).page
+      const measured = buildOmrV3DocumentMeasureColumns(
+        createOmrDocumentIR({
+          documentId: id,
+          metadata: { musical: { timeSignature: { beats: 4, beatType: 4 } } },
+          pages: [page],
+        }),
+      ).document
+      return assignOmrV3DocumentSymbolOwnership(measured, {
+        symbolsByPage: xs.map((x, index) =>
+          musicalSymbol(`${id}-${index}`, 'notehead', x, 0.12, {
+            midi: 72,
+            duration: { divisions: durationSeed, type: null, dots: 0, exact: false },
+          }),
+        ),
+      }).document
+    }
+
+    const eighthXs = Array.from({ length: 8 }, (_, index) => 0.15 + index * 0.09)
+    const eighthEvents = measures(
+      buildOmrV3PianoVoiceCandidates(singleStaffDoc('eighth-grid', eighthXs)).document,
+    )[0].voices
+      .filter((voice) => voice.candidateRank === 0)
+      .flatMap((voice) => voice.events)
+      .sort((left, right) => left.onset - right.onset)
+    expect(eighthEvents.map((event) => [event.onset, event.duration.divisions])).toEqual(
+      Array.from({ length: 8 }, (_, index) => [index * 2, 2]),
+    )
+
+    const sixteenthXs = Array.from({ length: 16 }, (_, index) => 0.12 + index * 0.045)
+    const sixteenthEvents = measures(
+      buildOmrV3PianoVoiceCandidates(singleStaffDoc('sixteenth-grid', sixteenthXs)).document,
+    )[0].voices
+      .filter((voice) => voice.candidateRank === 0)
+      .flatMap((voice) => voice.events)
+      .sort((left, right) => left.onset - right.onset)
+    expect(sixteenthEvents.map((event) => [event.onset, event.duration.divisions])).toEqual(
+      Array.from({ length: 16 }, (_, index) => [index, 1]),
+    )
+  })
+
+  it('recovers 3:2 tuplet sounding durations from a uniform three-per-beat grid', () => {
+    const page = analyzeOmrV3PageStructure({
+      documentId: 'triplet-grid',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'solo-staff',
+          space: 'normalized',
+          lineRows: [0.1, 0.11, 0.12, 0.13, 0.14],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['treble'],
+          noteheadCount: 12,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+      ],
+    }).page
+    const measured = buildOmrV3DocumentMeasureColumns(
+      createOmrDocumentIR({
+        documentId: 'triplet-grid',
+        metadata: { musical: { timeSignature: { beats: 4, beatType: 4 } } },
+        pages: [page],
+      }),
+    ).document
+    const xs = Array.from({ length: 12 }, (_, index) => 0.14 + index * 0.06)
+    const document = assignOmrV3DocumentSymbolOwnership(measured, {
+      symbolsByPage: xs.map((x, index) =>
+        musicalSymbol(`trip-${index}`, 'notehead', x, 0.12, {
+          midi: 64,
+          duration: { divisions: 4, type: null, dots: 0, exact: false },
+        }),
+      ),
+    }).document
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const events = measures(result.document)[0].voices
+      .filter((voice) => voice.candidateRank === 0)
+      .flatMap((voice) => voice.events)
+      .sort((left, right) => left.onset - right.onset)
+
+    const slot = 16 / 12
+    expect(events).toHaveLength(12)
+    expect(events.every((event) => Math.abs(event.duration.divisions - slot) < 1e-9)).toBe(true)
+    expect(events.every((event) => event.technical?.tuplet?.actualNotes === 3)).toBe(true)
+    expect(events.every((event) => event.technical?.tuplet?.normalNotes === 2)).toBe(true)
+    expect(
+      result.document.relationships.some(
+        (relationship) =>
+          relationship.type === OMR_V3_RELATIONSHIP_TYPE.TUPLET &&
+          relationship.members.length === 3 &&
+          relationship.metadata?.actualNotes === 3,
+      ),
+    ).toBe(true)
+  })
+
   it('is pure and produces a valid serializable IR', () => {
     const input = ownedPianoDocument().document
     const before = JSON.stringify(input)

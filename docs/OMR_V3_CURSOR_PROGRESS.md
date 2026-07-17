@@ -81,10 +81,52 @@ Shared onset columns used drifted geometric `measureRelativePosition` values (e.
 
 Beginner, dense, tuplet, and scan independent metrics remain non-regressing vs prior phase.
 
+## Phase 3 — Tuplet duration inference — COMPLETE
+
+### Root cause
+
+Single-staff uniform recovery only fired when item count equaled beat count (quarters). The tuplet fixture’s dominant measures are packed eighths (8), sixteenths (16), and full-bar 3:2 triplets (12). Those stayed on drifted geometric onsets with overlong approximate detector durations. True tuplets appear only in measure 3; V2 still scored duration via spacing, while independent V3 had no owned tuplet ratio and no subdivision grid.
+
+### Attempted / rejected
+
+- Inferring tuplets only by post-hoc measure fitting without a structural slot count.
+- Broadening the rejected grand-staff uniform item grid (`tmp/omr-v3-uniform-grid-trial/`).
+- Relying on packed stem-family refine alone (no stem/beam families → singleton no-ops).
+- Treating ASCII measure numbers as tuplet numerals without staff-relative structure.
+
+### Implementation
+
+Extended `recoverUniformBeatGrid` (single-notation only) to uniform **subdivision** factors `{1,2,3,4}` keyed by unique onset columns:
+
+- factor 1: historical beat grid
+- factor 2 / 4: ordinary eighth / sixteenth packing
+- factor 3: owned **3:2** tuplet — sounding slot = `totalDivisions / (beats * 3)`, with `technical.tuplet` + `OMR_V3_RELATIONSHIP_TYPE.TUPLET` groups
+
+Requires regular inter-column spacing (±20%). Packed-duration refine skips subdivision/tuplet recoveries so the integer ladder cannot collapse `4/3` to `1`.
+
+### Tests
+
+`tests/omrV3Voices.test.js`:
+
+- packed eighth and sixteenth subdivision grids
+- 3:2 tuplet sounding durations + tuplet relationships
+
+### Qualification impact
+
+| Metric | Before | After | V2 / acceptance |
+| --- | ---: | ---: | ---: |
+| Independent regressions | 4 | **3** | — |
+| Tuplet duration | 0.5079 | **0.9206** | ≥ 0.7778 |
+| Tuplet F1 | 0.9048 | **0.9683** | ≥ 0.8889 |
+| Tuplet onset | 0.5873 | **0.7302** | ≥ 0.5556 |
+| Tuplet chord | 0.8000 | **0.9688** | ≥ 0.7746 |
+| Beginner / grand / dense | unchanged | unchanged | no regression |
+| Scan / paired guitar | unchanged | unchanged | still blocked |
+
 ### Remaining
 
-Tuplets, scanned piano beams, paired-guitar chords, paired-guitar techniques.
+Scan beam/stem, paired-guitar chords, paired-guitar techniques.
 
 ## Next
 
-Phase 3 — Tuplet duration inference.
+Phase 4 — Scanned piano beam/stem relationships.
