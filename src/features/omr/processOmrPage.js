@@ -109,32 +109,41 @@ function tabMeasureBoxesForOutput(measureBoxes, byMeasure) {
 
 function detectorSymbolsFromObservations(
   observations,
-  { page, systemIndex, source },
+  { page, systemIndex, source, beamStemGraph = null },
 ) {
-  const noteheads = (observations?.noteheads ?? []).map((note, index) => ({
-    id: `detector-${source}-note-${page}-${systemIndex}-${note.measureNumber ?? 'x'}-${index}`,
-    kind: 'notehead',
-    systemIndex,
-    measureNumber: note.measureNumber ?? null,
-    measureRelativePosition: note.positionInMeasure,
-    geometry: {
-      x: note.cx - 3,
-      y: note.cy - 3,
-      width: 6,
-      height: 6,
-      space: 'pixels',
-    },
-    midi: note.midi,
-    clef: note.clef,
-    durationType: note.durationType,
-    durationDivisions: note.durationDivisions,
-    dotted: Boolean(note.dotted),
-    stemDirection: note.stem?.direction ?? note.stemDirection ?? null,
-    tieStart: Boolean(note.tieStart),
-    confidence: note.confidence ?? note.pitchConfidence ?? 0.6,
-    articulation: note.articulation ?? null,
-    evidenceSource: `detector-${source}-notehead`,
-  }))
+  const graphNoteheads = beamStemGraph?.noteheads ?? []
+  const noteheads = (observations?.noteheads ?? []).map((note, index) => {
+    const beamOwnership = graphNoteheads[index]?.beamOwnership ?? null
+    return {
+      id: `detector-${source}-note-${page}-${systemIndex}-${note.measureNumber ?? 'x'}-${index}`,
+      kind: 'notehead',
+      systemIndex,
+      measureNumber: note.measureNumber ?? null,
+      measureRelativePosition: note.positionInMeasure,
+      geometry: {
+        x: note.cx - 3,
+        y: note.cy - 3,
+        width: 6,
+        height: 6,
+        space: 'pixels',
+      },
+      midi: note.midi,
+      clef: note.clef,
+      durationType: note.durationType,
+      durationDivisions: note.durationDivisions,
+      dotted: Boolean(note.dotted),
+      stemDirection:
+        beamOwnership?.stemDirection ?? note.stem?.direction ?? note.stemDirection ?? null,
+      stemGroupId: beamOwnership?.attachedStemId ?? null,
+      beamGroupId: beamOwnership?.beamGroupId ?? null,
+      beamExpectedDivisions: beamOwnership?.expectedDivisions ?? null,
+      beamOwnershipConfidence: beamOwnership?.confidence ?? null,
+      tieStart: Boolean(note.tieStart),
+      confidence: note.confidence ?? note.pitchConfidence ?? 0.6,
+      articulation: note.articulation ?? null,
+      evidenceSource: `detector-${source}-notehead`,
+    }
+  })
   const rests = (observations?.rests ?? []).map((rest, index) => ({
     id: `detector-${source}-rest-${page}-${systemIndex}-${rest.measureNumber ?? 'x'}-${index}`,
     kind: 'rest',
@@ -628,6 +637,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
               page,
               systemIndex,
               source: 'vector',
+              beamStemGraph: measureRecord.beamStemGraph,
             }),
           )
           // Detector observations have been copied into the page-level V3

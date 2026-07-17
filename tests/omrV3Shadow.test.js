@@ -54,6 +54,9 @@ function pageInput() {
         midi: 72,
         durationDivisions: 4,
         durationType: 'quarter',
+        beamExpectedDivisions: 2,
+        beamOwnershipConfidence: 0.8,
+        beamGroupId: 'raw-beam-group',
         geometry: { x: 197, y: 277, width: 6, height: 6, space: 'pixels' },
         confidence: 0.9,
         evidenceSource: 'detector-vector-notehead',
@@ -99,6 +102,14 @@ describe('OMR V3 shadow evidence provenance', () => {
       independentPrimaryEventCount: 1,
       independentPrimaryEventRate: 1,
     })
+    const event = result.document.pages[0].systems[0].measureColumns[0].voices
+      .find((voice) => voice.candidateRank === 0)
+      .events[0]
+    expect(event.duration).toMatchObject({ divisions: 2, type: 'eighth', exact: false })
+    expect(event.technical).toMatchObject({
+      beamExpectedDivisions: 2,
+      beamOwnershipConfidence: 0.8,
+    })
   })
 
   it('does not claim an independent rejection when raw musical evidence exists', () => {
@@ -117,5 +128,19 @@ describe('OMR V3 shadow evidence provenance', () => {
       independent: false,
       failureReason: 'low-confidence',
     })
+  })
+
+  it('leaves guitar duration evidence to the guitar fusion solver', () => {
+    const result = runOmrV3Shadow({
+      documentId: 'guitar-independent-shadow',
+      title: 'Guitar independent shadow',
+      instrumentId: 'guitar',
+      pageInputs: [pageInput()],
+      symbolEvidenceMode: OMR_V3_SYMBOL_EVIDENCE_MODE.RAW_DETECTOR_SYMBOLS,
+    })
+    const event = result.document.pages[0].systems[0].measureColumns[0].voices[0].events[0]
+
+    expect(event.duration).toMatchObject({ divisions: 4, type: 'quarter', exact: false })
+    expect(event.technical.beamExpectedDivisions).toBeNull()
   })
 })

@@ -366,6 +366,15 @@ function rawDetectorSymbolsFromPage(pageInput, instrumentId) {
           space: 'normalized',
         }
       : geometry
+    const beamDurationDivisions =
+      instrumentId !== 'guitar' &&
+      Number.isFinite(source.beamExpectedDivisions) &&
+      Number(source.beamOwnershipConfidence ?? 0) >= 0.7
+        ? Number(source.beamExpectedDivisions)
+        : null
+    const durationDivisions = Number.isFinite(beamDurationDivisions)
+      ? beamDurationDivisions
+      : source.durationDivisions
     return {
       id: source.id ?? `detector-${pageInput.page}-${systemIndex}-${index}`,
       kind: source.kind,
@@ -378,11 +387,18 @@ function rawDetectorSymbolsFromPage(pageInput, instrumentId) {
       // would shift paired onsets. TAB-only timing can safely use geometry.
       measureRelativePositionHint: isTab ? null : source.measureRelativePosition,
       duration:
-        Number.isFinite(source.durationDivisions) && source.durationDivisions > 0
+        Number.isFinite(durationDivisions) && durationDivisions > 0
           ? {
-              divisions: source.durationDivisions,
-              type: source.durationType ?? null,
-              dots: source.dotted ? 1 : 0,
+              divisions: durationDivisions,
+              type:
+                Number.isFinite(beamDurationDivisions)
+                  ? beamDurationDivisions === 1
+                    ? '16th'
+                    : beamDurationDivisions === 2
+                      ? 'eighth'
+                      : null
+                  : source.durationType ?? null,
+              dots: Number.isFinite(beamDurationDivisions) ? 0 : source.dotted ? 1 : 0,
               exact: false,
             }
           : null,
@@ -408,6 +424,8 @@ function rawDetectorSymbolsFromPage(pageInput, instrumentId) {
       technical: {
         ...(source.technical ?? {}),
         articulation: source.articulation ?? null,
+        beamExpectedDivisions: beamDurationDivisions,
+        beamOwnershipConfidence: source.beamOwnershipConfidence ?? null,
         adapterSource: source.evidenceSource ?? 'detector-observation',
       },
     }
