@@ -80,6 +80,19 @@ function throwIfCancelled(signal) {
   }
 }
 
+function isAbortError(error, signal) {
+  return signal?.aborted || error?.name === 'AbortError'
+}
+
+function pageFailureEntry(page, stage, error) {
+  return {
+    page,
+    stage,
+    code: error?.code ?? 'page-processing-error',
+    message: error instanceof Error ? error.message : String(error),
+  }
+}
+
 /**
  * Local-only experimental OMR: PDF page images → musical events → MusicXML.
  */
@@ -101,6 +114,8 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     traceRunId = null,
     includeScoreGraph = false,
     promoteScoreGraphClips = false,
+    /** Keep healthy pages when one page in a multi-page import cannot be analyzed. */
+    allowPartialRecovery = true,
     /** Disabled by default; developer/benchmark shadow only. */
     omrV3Shadow = false,
     /** Production-safe V3 IR confidence reasoning; does not replace recognized notes. */
@@ -205,6 +220,13 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   const orphanDiagnosticsPages = []
   const staffGapNormalizationPages = []
   const omrV3PageInputs = []
+  const partialRecovery = {
+    enabled: allowPartialRecovery,
+    recovered: false,
+    successfulPages: 0,
+    failedPages: [],
+    isolatedRegions: [],
+  }
   let documentStaffGapSamples = { treble: [], bass: [] }
 
   let measureCounter = 1
@@ -226,10 +248,20 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     const pageTextPromise = shouldSkipDefaultTextExtraction
       ? Promise.resolve([])
       : Promise.resolve().then(() => extractPageText(pdfSource, page)).catch(() => [])
-    const [rendered, pageText] = await Promise.all([
-      renderPage(pdfSource, page),
-      pageTextPromise,
-    ])
+    let rendered
+    let pageText
+    try {
+      [rendered, pageText] = await Promise.all([
+        renderPage(pdfSource, page),
+        pageTextPromise,
+      ])
+    } catch (error) {
+      if (isAbortError(error, signal) || !allowPartialRecovery || pageCount === 1) throw error
+      partialRecovery.failedPages.push(pageFailureEntry(page, 'render', error))
+      partialRecovery.recovered = true
+      omrTracePhaseEnd(pagePhase, { recovered: true, stage: 'render' })
+      continue
+    }
     throwIfCancelled(signal)
     await yieldToBrowser()
 
@@ -275,29 +307,29 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
 
     const documentStaffGapReference = computeDocumentStaffGapReference(documentStaffGapSamples)
 
-    const pageResult = analyzePage
-      ? await analyzePage(imageData, {
-          page,
-          measureNumberStart: measureCounter,
-          pageText,
-          stavesPerSystem,
-          instrument,
-          keySignature,
-          timeSignature,
-          documentStaffGapReference,
-          captureOmrV3Shadow: captureOmrV3Analysis,
-        })
-      : processOmrPageAnalysis(imageData, {
-          page,
-          measureNumberStart: measureCounter,
-          pageText,
-          stavesPerSystem,
-          instrument,
-          keySignature,
-          timeSignature,
-          documentStaffGapReference,
-          captureOmrV3Shadow: captureOmrV3Analysis,
-        })
+    let pageResult
+    try {
+      const analysisContext = {
+        page,
+        measureNumberStart: measureCounter,
+        pageText,
+        stavesPerSystem,
+        instrument,
+        keySignature,
+        timeSignature,
+        documentStaffGapReference,
+        captureOmrV3Shadow: captureOmrV3Analysis,
+      }
+      pageResult = analyzePage
+        ? await analyzePage(imageData, analysisContext)
+        : processOmrPageAnalysis(imageData, analysisContext)
+    } catch (error) {
+      if (isAbortError(error, signal) || !allowPartialRecovery || pageCount === 1) throw error
+      partialRecovery.failedPages.push(pageFailureEntry(page, 'recognition', error))
+      partialRecovery.recovered = true
+      omrTracePhaseEnd(pagePhase, { recovered: true, stage: 'recognition' })
+      continue
+    }
 
     omrDebugStep(`pipeline:page-${page}:after-analyze`, null, {
       notes: pageResult.stats?.notes ?? 0,
@@ -322,6 +354,16 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     }
     if (pageResult.stats.systems > 0) {
       diagnostics.pagesWithSystems += 1
+    }
+    partialRecovery.successfulPages += 1
+    if ((pageResult.stats.systems ?? 0) === 0 || (pageResult.stats.notes ?? 0) === 0) {
+      partialRecovery.isolatedRegions.push({
+        page,
+        kind: (pageResult.stats.systems ?? 0) === 0 ? 'no-staff-systems' : 'no-musical-events',
+        systems: pageResult.stats.systems ?? 0,
+        measures: pageResult.stats.measures ?? 0,
+      })
+      partialRecovery.recovered = true
     }
 
     const pageTies = pageResult.tieDiagnostics
@@ -426,10 +468,13 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       noteCount: 0,
       measureCount: 0,
     })
-    throw new Error(
+    const error = new Error(
       assessment.message ??
         `No staff systems detected. Try a cleaner digital ${instrument.label.toLowerCase()} PDF.`,
     )
+    error.code = OMR_FAILURE_REASON.NO_SYSTEMS
+    error.diagnostics = { ...diagnostics, preprocessLog, partialRecovery }
+    throw error
   }
 
   if (!measureRhythms.length && diagnostics.tablature.tabOnly && diagnostics.tablature.tabStaves > 0) {
@@ -443,9 +488,12 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   }
 
   if (!measureRhythms.length) {
-    throw new Error(
+    const error = new Error(
       'No noteheads detected. Experimental OMR works best on clean engraved scores.',
     )
+    error.code = OMR_FAILURE_REASON.NO_NOTES
+    error.diagnostics = { ...diagnostics, preprocessLog, partialRecovery }
+    throw error
   }
 
   onStatus(OMR_STATUS.BUILDING_PLAYBACK)
@@ -822,6 +870,13 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   if (difficulty.reasons.length) {
     warnings.push(`Quality notes: ${difficulty.reasons.join(', ')}`)
   }
+  if (partialRecovery.recovered) {
+    const failedPageCount = partialRecovery.failedPages.length
+    const isolatedRegionCount = partialRecovery.isolatedRegions.length
+    warnings.push(
+      `Partial recovery kept the recognized music; ${failedPageCount} page(s) failed and ${isolatedRegionCount} region(s) were isolated.`,
+    )
+  }
 
   omrTrace('pipeline:success', {
     noteCount,
@@ -850,6 +905,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       staffGapNormalization,
       layoutConsistency,
       preprocessLog,
+      partialRecovery,
       difficulty,
       failureReasons: difficulty.reasons,
       measureGrid,

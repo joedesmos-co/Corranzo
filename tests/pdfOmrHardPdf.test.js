@@ -239,6 +239,34 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
     ).rejects.toMatchObject({ name: 'AbortError' })
   })
 
+  it('keeps recognized pages when one page analysis fails', async () => {
+    const pages = [rhythmicPianoPage(), rhythmicPianoPage()]
+    const analyzePage = vi.fn(async (imageData, context) => {
+      if (context.page === 2) throw new Error('damaged page region')
+      return processOmrPageAnalysis(imageData, context)
+    })
+
+    const result = await runPdfOmrPipeline('synthetic', {
+      numPages: 2,
+      renderPage: renderPagesFromArray(pages),
+      analyzePage,
+    })
+
+    expect(result.noteCount).toBeGreaterThan(0)
+    expect(result.diagnostics.partialRecovery).toMatchObject({
+      recovered: true,
+      successfulPages: 1,
+      failedPages: [
+        {
+          page: 2,
+          stage: 'recognition',
+          message: 'damaged page region',
+        },
+      ],
+    })
+    expect(result.warnings.join(' ')).toMatch(/partial recovery kept the recognized music/i)
+  })
+
   it('processOmrPageAnalysis enables dense noteheads on scanned pages', () => {
     const scanned = scannedPianoPage({ measuresPerSystem: 2 })
     const result = processOmrPageAnalysis(scanned, { page: 1, measureNumberStart: 1 })
