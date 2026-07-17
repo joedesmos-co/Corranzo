@@ -19,8 +19,10 @@ describe('OMR viewer recovery', () => {
 
   it('clears previous timing and sound when a PDF replacement enters the library', () => {
     const orchestration = readSrc('features', 'library', 'autoOmrOrchestration.js')
-    expect(app).toMatch(/const clearedCompanionFiles = Boolean\(midiSource \|\| musicXmlSource\)[\s\S]*setMusicXmlSource\(null\)[\s\S]*setMidiSource\(null\)/)
-    expect(app).toMatch(/clearedCompanionFilesForPdf = Boolean\(loadedMidi \|\| loadedXml\)[\s\S]*setMidiSource\(null\)[\s\S]*setMusicXmlSource\(null\)/)
+    expect(app).toContain('beginPdfScoreSourceReplacement')
+    expect(app).toMatch(
+      /beginPdfScoreSourceReplacement[\s\S]*setMusicXmlSource\(null\)[\s\S]*setMidiSource\(null\)/,
+    )
     expect(app).toContain('pdfPreparingScoreMessage')
     expect(orchestration).toContain('Previous timing and sound files were cleared')
     expect(app).toMatch(/setMusicXmlSource\(\(source\) => clearOmrGeneratedPlaybackSource\(source\)\)/)

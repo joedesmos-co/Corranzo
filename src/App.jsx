@@ -69,6 +69,10 @@ import {
   shouldQueueAutoOmr,
 } from './features/library/autoOmrOrchestration.js'
 import {
+  hadCompanionScoreSources,
+  invalidatePreviousScoreSideEffects,
+} from './features/library/scoreSourceReplacement.js'
+import {
   createEmptyInstrumentBundle,
   createInstrumentBundleStore,
   snapshotInstrumentBundle,
@@ -339,6 +343,44 @@ export default function App() {
     resetPdfViewerRuntime()
   }, [resetPdfViewerRuntime])
 
+  /**
+   * Drop every prior score source before a different PDF becomes active.
+   * Keeps library identity clean so automatic OMR cannot inherit old timing/MIDI.
+   */
+  const beginPdfScoreSourceReplacement = useCallback(
+    ({ previousPdfMeta, previousFileName, previousMidi, previousMusicXml }) => {
+      invalidatePreviousScoreSideEffects({
+        previousPdfMeta,
+        previousFileName,
+        previousMusicXmlSource: previousMusicXml,
+      })
+      cancelInFlightOmrGeneration(setAutoOmrRequest)
+      setMusicXmlSource(null)
+      setMidiSource(null)
+      setDemoPieceActive(false)
+      resetPracticePrefsForNewScore()
+      setPracticeSessionEpoch((epoch) => epoch + 1)
+      const instrument = normalizeInstrumentId(activeInstrumentRef.current)
+      const live = liveBundleRef.current ?? {}
+      instrumentBundleStoreRef.current.set(
+        instrument,
+        snapshotInstrumentBundle({
+          ...live,
+          instrumentId: instrument,
+          midiSource: null,
+          musicXmlSource: null,
+          demoPieceActive: false,
+          practicePrefs: practicePrefsRef.current,
+        }),
+      )
+      return hadCompanionScoreSources({
+        midiSource: previousMidi,
+        musicXmlSource: previousMusicXml,
+      })
+    },
+    [resetPracticePrefsForNewScore],
+  )
+
   const handleFileSelect = useCallback(async (file) => {
     clearDemoPiece()
     markDemoCardHidden()
@@ -350,29 +392,51 @@ export default function App() {
 
     try {
       const buffer = await file.arrayBuffer()
-      const clearedCompanionFiles = Boolean(midiSource || musicXmlSource)
-      setMusicXmlSource(null)
-      setMidiSource(null)
-      setPdfBuffer(buffer.slice(0))
+      const clearedCompanionFiles = beginPdfScoreSourceReplacement({
+        previousPdfMeta: pdfMeta,
+        previousFileName: fileName,
+        previousMidi: midiSource,
+        previousMusicXml: musicXmlSource,
+      })
+      const nextPdfMeta = {
+        fileName: file.name,
+        size: file.size,
+        lastModified: file.lastModified,
+      }
+      const nextPdfBuffer = buffer.slice(0)
+      const nextPdfUrl = URL.createObjectURL(file)
+      setPdfBuffer(nextPdfBuffer)
       setPdfFile((previous) => {
         if (previous) {
           URL.revokeObjectURL(previous)
         }
-        return URL.createObjectURL(file)
+        return nextPdfUrl
       })
       setFileName(file.name)
-      setPdfMeta({
-        fileName: file.name,
-        size: file.size,
-        lastModified: file.lastModified,
-      })
+      setPdfMeta(nextPdfMeta)
       setPageNumber(1)
       setNumPages(null)
       resetPdfViewerRuntime()
-      resetPracticePrefsForNewScore()
       setPdfSoftWarning(validation.softWarning)
-      cancelInFlightOmrGeneration(setAutoOmrRequest)
       setAutoOmrRequest(buildAutoOmrRequest(file, activeInstrumentRef.current))
+      const instrument = normalizeInstrumentId(activeInstrumentRef.current)
+      instrumentBundleStoreRef.current.set(
+        instrument,
+        snapshotInstrumentBundle({
+          instrumentId: instrument,
+          pdfFile: nextPdfUrl,
+          pdfBuffer: nextPdfBuffer,
+          pdfMeta: nextPdfMeta,
+          fileName: file.name,
+          pageNumber: 1,
+          numPages: null,
+          midiSource: null,
+          musicXmlSource: null,
+          demoPieceActive: false,
+          practicePrefs: practicePrefsRef.current,
+          pdfSoftWarning: validation.softWarning ?? null,
+        }),
+      )
       setLibraryFeedback({
         type: clearedCompanionFiles || validation.softWarning ? 'info' : 'success',
         message: pdfPreparingScoreMessage(file.name, {
@@ -388,7 +452,17 @@ export default function App() {
         message: formatPdfImportError(error),
       })
     }
-  }, [midiSource, musicXmlSource, clearDemoPiece, markDemoCardHidden, navigateToView, resetPdfViewerRuntime, resetPracticePrefsForNewScore])
+  }, [
+    pdfMeta,
+    fileName,
+    midiSource,
+    musicXmlSource,
+    beginPdfScoreSourceReplacement,
+    clearDemoPiece,
+    markDemoCardHidden,
+    navigateToView,
+    resetPdfViewerRuntime,
+  ])
 
   const handleMidiSelect = useCallback(async (file) => {
     clearDemoPiece()
@@ -507,10 +581,14 @@ export default function App() {
     sourceInstrumentId = null,
   }) => {
     releaseOmrUiLocks()
+    // Always read live sources — never trust the callback closure, which can still
+    // hold Piece A's MusicXML/MIDI if generation started across a PDF replacement.
     const currentBundle = liveBundleRef.current ?? {}
+    const liveMusicXmlSource = currentBundle.musicXmlSource ?? null
+    const liveMidiSource = currentBundle.midiSource ?? null
     const currentInstrument = normalizeInstrumentId(activeInstrumentRef.current)
     const acceptance = shouldAcceptOmrGeneratedResult({
-      musicXmlSource: currentBundle.musicXmlSource ?? musicXmlSource,
+      musicXmlSource: liveMusicXmlSource,
       sourceInstrumentId,
       currentInstrumentId: currentInstrument,
       sourcePdfFileName,
@@ -621,6 +699,8 @@ export default function App() {
     markDemoCardHidden()
     dismissOnboarding()
     setShowWelcome(false)
+    // Keep React midi aligned with the live bundle (null after PDF-only replace).
+    setMidiSource(liveMidiSource)
     setMusicXmlSource(nextMusicXmlSource)
     setAutoOmrRequest(null)
     setLibraryFeedback({
@@ -630,27 +710,29 @@ export default function App() {
     navigateToView('practice')
 
     const activeBundleForPersistence = snapshotInstrumentBundle({
-      ...currentBundle,
       instrumentId: currentInstrument,
       pdfFile: nextPdfFile,
       pdfBuffer: nextPdfBuffer,
       pdfMeta: stablePdfMeta,
       fileName: stablePdfMeta.fileName,
-      pageNumber,
-      midiSource,
+      pageNumber: currentBundle.pageNumber ?? pageNumber,
+      numPages: currentBundle.numPages ?? null,
+      midiSource: liveMidiSource,
       musicXmlSource: nextMusicXmlSource,
       practicePrefs: practicePrefsRef.current,
       demoPieceActive: false,
+      pdfSoftWarning: currentBundle.pdfSoftWarning ?? null,
     })
+    instrumentBundleStoreRef.current.set(currentInstrument, activeBundleForPersistence)
     const persistedInstrumentBundles = Object.fromEntries(instrumentBundleStoreRef.current.entries())
     persistedInstrumentBundles[currentInstrument] = activeBundleForPersistence
 
     const sessionMeta = buildSessionMeta({
       pdfMeta: stablePdfMeta,
-      midiSource,
+      midiSource: liveMidiSource,
       musicXmlSource: nextMusicXmlSource,
       activeView: 'practice',
-      pageNumber,
+      pageNumber: currentBundle.pageNumber ?? pageNumber,
       practicePrefs: practicePrefsRef.current,
       instrumentId: currentInstrument,
       instrumentBundles: persistedInstrumentBundles,
@@ -659,7 +741,7 @@ export default function App() {
     try {
       await saveSessionFiles({
         pdf: nextPdfBuffer ? { data: nextPdfBuffer.slice(0) } : null,
-        midi: midiSource?.data ? { data: midiSource.data.slice(0) } : null,
+        midi: liveMidiSource?.data ? { data: liveMidiSource.data.slice(0) } : null,
         musicXml: nextMusicXmlSource.data ? { data: nextMusicXmlSource.data.slice(0) } : null,
         instrumentFiles: Object.fromEntries(
           Object.entries(persistedInstrumentBundles).map(([bundleInstrumentId, bundle]) => [
@@ -696,10 +778,7 @@ export default function App() {
     pdfFile,
     pdfMeta,
     pdfBuffer,
-    midiSource,
-    musicXmlSource,
     pageNumber,
-    instrumentId,
     navigateToView,
     clearDemoPiece,
     markDemoCardHidden,
@@ -801,31 +880,54 @@ export default function App() {
             return notices
           }
           const buffer = await file.arrayBuffer()
-          setPdfBuffer(buffer.slice(0))
+          clearedCompanionFilesForPdf = beginPdfScoreSourceReplacement({
+            previousPdfMeta: pdfMeta,
+            previousFileName: fileName,
+            previousMidi: loadedMidi,
+            previousMusicXml: loadedXml,
+          })
+          const nextPdfMeta = {
+            fileName: file.name,
+            size: file.size,
+            lastModified: file.lastModified,
+          }
+          const nextPdfBuffer = buffer.slice(0)
+          const nextPdfUrl = URL.createObjectURL(file)
+          setPdfBuffer(nextPdfBuffer)
           setPdfFile((previous) => {
             if (previous) {
               URL.revokeObjectURL(previous)
             }
-            return URL.createObjectURL(file)
+            return nextPdfUrl
           })
           setFileName(file.name)
-          setPdfMeta({
-            fileName: file.name,
-            size: file.size,
-            lastModified: file.lastModified,
-          })
+          setPdfMeta(nextPdfMeta)
           setPageNumber(1)
           setNumPages(null)
           resetPdfViewerRuntime()
-          resetPracticePrefsForNewScore()
           loadedSoftWarning = validation.softWarning ?? null
           setPdfSoftWarning(loadedSoftWarning)
           loadedPdf = true
-          clearedCompanionFilesForPdf = Boolean(loadedMidi || loadedXml)
-          setMidiSource(null)
-          setMusicXmlSource(null)
           loadedMidi = null
           loadedXml = null
+          const instrument = normalizeInstrumentId(activeInstrumentRef.current)
+          instrumentBundleStoreRef.current.set(
+            instrument,
+            snapshotInstrumentBundle({
+              instrumentId: instrument,
+              pdfFile: nextPdfUrl,
+              pdfBuffer: nextPdfBuffer,
+              pdfMeta: nextPdfMeta,
+              fileName: file.name,
+              pageNumber: 1,
+              numPages: null,
+              midiSource: null,
+              musicXmlSource: null,
+              demoPieceActive: false,
+              practicePrefs: practicePrefsRef.current,
+              pdfSoftWarning: loadedSoftWarning,
+            }),
+          )
         }
 
         if (classified.musicXml[0]) {
@@ -866,6 +968,21 @@ export default function App() {
           loadedMidi = nextMidi
           // MIDI is playback-only; do not cancel score preparation — timing still
           // comes from MusicXML or automatic PDF preparation.
+        }
+
+        if (classified.pdf[0] && (loadedMidi || loadedXml)) {
+          const instrument = normalizeInstrumentId(activeInstrumentRef.current)
+          const existing = instrumentBundleStoreRef.current.get(instrument) ?? {}
+          instrumentBundleStoreRef.current.set(
+            instrument,
+            snapshotInstrumentBundle({
+              ...existing,
+              instrumentId: instrument,
+              midiSource: loadedMidi,
+              musicXmlSource: loadedXml,
+              practicePrefs: practicePrefsRef.current,
+            }),
+          )
         }
 
         if (classified.pdf[0]) {
@@ -949,9 +1066,11 @@ export default function App() {
     [
       pdfFile,
       pdfMeta,
+      fileName,
       midiSource,
       musicXmlSource,
       pdfSoftWarning,
+      beginPdfScoreSourceReplacement,
       clearDemoPiece,
       markDemoCardHidden,
       navigateToView,

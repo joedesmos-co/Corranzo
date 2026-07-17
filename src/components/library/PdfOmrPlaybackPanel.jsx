@@ -84,6 +84,11 @@ export default function PdfOmrPlaybackPanel({
     onFeedback?.(null)
   }, [onFeedback])
 
+  const onGeneratedRef = useRef(onGenerated)
+  onGeneratedRef.current = onGenerated
+  const onFeedbackRef = useRef(onFeedback)
+  onFeedbackRef.current = onFeedback
+
   const handleGenerate = useCallback(async () => {
     const runId = nextOmrTraceRunId()
     activeRunRef.current = runId
@@ -217,7 +222,7 @@ export default function PdfOmrPlaybackPanel({
 
       await yieldToBrowser()
       const fileName = `${(pdfFileName ?? 'score.pdf').replace(/\.pdf$/i, '')}.omr.musicxml`
-      const accepted = await onGenerated?.({
+      const accepted = await onGeneratedRef.current?.({
         fileName,
         musicXml: acceptedMusicXml,
         noteCount: result.noteCount,
@@ -293,7 +298,7 @@ export default function PdfOmrPlaybackPanel({
       setProgressLabel('')
       setStatus(OMR_STATUS.FAILED)
       omrTrace('ui:onFeedback:error', { message }, runId)
-      onFeedback?.({ type: 'error', message })
+      onFeedbackRef.current?.({ type: 'error', message })
     } finally {
       cancelActiveOmrWorker()
       endOmrUiBlock()
@@ -306,7 +311,7 @@ export default function PdfOmrPlaybackPanel({
         completed: completedRunRef.current,
       }, runId)
     }
-  }, [pdfSource, pdfFileUrl, pdfFileName, instrumentId, isGenerating, disabled, onGenerated, onFeedback])
+  }, [pdfSource, pdfFileUrl, pdfFileName, instrumentId, isGenerating, disabled])
 
   // Keep the latest start helpers in refs so this effect can stay Strict Mode
   // safe without re-arming whenever callback identities churn.

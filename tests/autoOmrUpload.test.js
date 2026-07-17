@@ -188,8 +188,10 @@ describe('auto OMR upload wiring', () => {
     expect(orchestration).toContain('authoritative **playback audio** only')
   })
 
-  it('rejects stale OMR via shouldAcceptOmrGeneratedResult including uploaded-timing ownership', () => {
+  it('rejects late OMR when uploaded timing already owns the session', () => {
     expect(app).toContain('shouldAcceptOmrGeneratedResult')
+    expect(app).toContain('liveMusicXmlSource')
+    expect(app).toContain('liveMidiSource')
     expect(app).toContain('sourcePdfFileName = null')
     expect(app).toContain('sourcePdfFileUrl = null')
     expect(app).toContain('sourceInstrumentId = null')

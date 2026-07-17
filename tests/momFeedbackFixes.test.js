@@ -47,8 +47,10 @@ describe('Corranzo mom-test feedback pass', () => {
   it('clears old timing and sound when a new PDF is uploaded', () => {
     const app = readSrc('App.jsx')
 
-    expect(app).toMatch(/const clearedCompanionFiles = Boolean\(midiSource \|\| musicXmlSource\)[\s\S]*setMusicXmlSource\(null\)[\s\S]*setMidiSource\(null\)/)
-    expect(app).toMatch(/clearedCompanionFilesForPdf = Boolean\(loadedMidi \|\| loadedXml\)[\s\S]*setMidiSource\(null\)[\s\S]*setMusicXmlSource\(null\)/)
+    expect(app).toContain('beginPdfScoreSourceReplacement')
+    expect(app).toMatch(
+      /beginPdfScoreSourceReplacement[\s\S]*setMusicXmlSource\(null\)[\s\S]*setMidiSource\(null\)/,
+    )
     expect(app).toContain('pdfPreparingScoreMessage')
     expect(readSrc('features', 'library', 'autoOmrOrchestration.js')).toContain(
       'Previous timing and sound files were cleared',
