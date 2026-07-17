@@ -44,6 +44,7 @@ import {
   renderPdfToPages,
 } from './lib/renderPdfPages.mjs'
 import {
+  assessOmrV3ProductionGate,
   assessOmrV3PromotionGate,
   evaluateOmrV3Shadow,
 } from '../src/features/omr/v3/omrV3Evaluation.js'
@@ -573,6 +574,9 @@ function formatOmrV3ShadowMarkdown(report) {
     '',
     `Promotion gate: **${report.gate.status}** (improved fixtures ${report.gate.improvedFixtureCount}/${report.gate.requiredImprovedFixtureCount}, regressions ${report.gate.regressionCount})`,
     '',
+    `Production replacement gate: **${report.productionGate.status}** (${report.productionGate.blockers.length} blocker(s))`,
+    ...report.productionGate.blockers.map((blocker) => `- ${blocker.code}`),
+    '',
     '| Fixture | Status | Current F1 | V3 F1 | Current measure error | V3 measure error | V3 invalid | V3 duplicates |',
     '| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |',
   ]
@@ -793,6 +797,7 @@ async function main() {
       fixtureId: record.id,
       label: record.label,
       enforced: !record.diagnosticOnly && !record.optional,
+      expectedOutcome: manifest.fixtures.find((fixture) => fixture.id === record.id)?.expectedOutcome,
       shadow: record.omrV3Shadow,
     }))
   const omrV3Gate = assessOmrV3PromotionGate(
@@ -821,18 +826,34 @@ async function main() {
       omrV3Gate.candidates[candidate] = 'not-promoted'
     }
   }
+  const omrV3ProductionGate = assessOmrV3ProductionGate(
+    omrV3Fixtures.map((fixture) => ({
+      id: fixture.fixtureId,
+      enforced: fixture.enforced,
+      expectedOutcome: fixture.expectedOutcome,
+      shadow: fixture.shadow,
+    })),
+    {
+      // Metrics cannot activate a runtime that has not been independently
+      // qualified and had its rollback path exercised.
+      runtimeCandidateImplemented: false,
+      rollbackVerified: false,
+    },
+  )
   const omrV3Report = {
     generatedAt: summary.generatedAt,
     manifestPath,
     engine: 'omr-v3-shadow',
     promoted: false,
     gate: omrV3Gate,
+    productionGate: omrV3ProductionGate,
     fixtures: omrV3Fixtures,
   }
   summary.omrV3Shadow = {
     fixtureCount: omrV3Fixtures.length,
     readyFixtureCount: omrV3Fixtures.filter((fixture) => fixture.shadow?.status === 'ready').length,
     gate: omrV3Gate,
+    productionGate: omrV3ProductionGate,
     promoted: false,
   }
 

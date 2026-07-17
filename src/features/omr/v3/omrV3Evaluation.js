@@ -181,3 +181,139 @@ export function assessOmrV3PromotionGate(
     },
   }
 }
+
+function productionFixtureStatus(fixture) {
+  return fixture?.shadow?.status ?? fixture?.status ?? 'unavailable'
+}
+
+function productionFixtureEvidence(fixture) {
+  return fixture?.shadow?.evidence ?? fixture?.evidence ?? {}
+}
+
+function productionFixtureDecision(fixture) {
+  return fixture?.shadow?.decision ?? fixture?.decision ?? null
+}
+
+/**
+ * Full-runtime qualification is intentionally stricter than the historical
+ * partial-promotion review gate above. A V3 replacement must be evaluated on
+ * every enforced fixture, must own its musical symbols instead of replaying
+ * legacy events, and must own honest rejection decisions. Runtime and rollback
+ * readiness are explicit evidence inputs rather than inferred from metrics.
+ */
+export function assessOmrV3ProductionGate(
+  fixtures = [],
+  {
+    runtimeCandidateImplemented = false,
+    rollbackVerified = false,
+    thresholdLowered = false,
+    fixtureHardcodingDetected = false,
+    confidenceInflationDetected = false,
+  } = {},
+) {
+  const enforced = fixtures.filter((fixture) => fixture.enforced !== false)
+  const recognitionFixtures = enforced.filter(
+    (fixture) => fixture.expectedOutcome !== 'reject-honestly',
+  )
+  const rejectionFixtures = enforced.filter(
+    (fixture) => fixture.expectedOutcome === 'reject-honestly',
+  )
+  const evaluatedRecognitionFixtures = recognitionFixtures.filter(
+    (fixture) => productionFixtureStatus(fixture) === 'ready',
+  )
+  const independentRecognitionFixtures = evaluatedRecognitionFixtures.filter(
+    (fixture) => productionFixtureEvidence(fixture).independentPrimaryEventRate === 1,
+  )
+  const independentlyRejectedFixtures = rejectionFixtures.filter((fixture) => {
+    const decision = productionFixtureDecision(fixture)
+    return (
+      decision?.status === 'reject' &&
+      decision?.ownedBy === 'omr-v3' &&
+      decision?.independent === true
+    )
+  })
+  const comparableFixtures = evaluatedRecognitionFixtures.map((fixture) => ({
+    id: fixture.id ?? fixture.fixtureId,
+    enforced: true,
+    current: fixture.current ?? fixture.shadow?.current,
+    v3: fixture.v3 ?? fixture.shadow?.v3,
+  }))
+  const regressionGate = assessOmrV3PromotionGate(comparableFixtures, {
+    thresholdLowered,
+    fixtureHardcodingDetected,
+    confidenceInflationDetected,
+  })
+  const blockers = []
+
+  if (evaluatedRecognitionFixtures.length !== recognitionFixtures.length) {
+    blockers.push({
+      code: 'incomplete-enforced-recognition-coverage',
+      expected: recognitionFixtures.length,
+      actual: evaluatedRecognitionFixtures.length,
+      fixtures: recognitionFixtures
+        .filter((fixture) => productionFixtureStatus(fixture) !== 'ready')
+        .map((fixture) => fixture.id ?? fixture.fixtureId),
+    })
+  }
+  if (independentRecognitionFixtures.length !== recognitionFixtures.length) {
+    blockers.push({
+      code: 'legacy-derived-symbol-evidence',
+      expected: recognitionFixtures.length,
+      actual: independentRecognitionFixtures.length,
+      fixtures: recognitionFixtures
+        .filter(
+          (fixture) => productionFixtureEvidence(fixture).independentPrimaryEventRate !== 1,
+        )
+        .map((fixture) => fixture.id ?? fixture.fixtureId),
+    })
+  }
+  if (independentlyRejectedFixtures.length !== rejectionFixtures.length) {
+    blockers.push({
+      code: 'v3-rejection-ownership-incomplete',
+      expected: rejectionFixtures.length,
+      actual: independentlyRejectedFixtures.length,
+      fixtures: rejectionFixtures
+        .filter((fixture) => !independentlyRejectedFixtures.includes(fixture))
+        .map((fixture) => fixture.id ?? fixture.fixtureId),
+    })
+  }
+  if (regressionGate.regressionCount > 0) {
+    blockers.push({
+      code: 'enforced-regressions',
+      count: regressionGate.regressionCount,
+      fixtures: regressionGate.comparisons
+        .filter((comparison) => comparison.regressions.length > 0)
+        .map((comparison) => comparison.id),
+    })
+  }
+  if (regressionGate.policyViolations.length > 0) {
+    blockers.push({
+      code: 'policy-violations',
+      violations: regressionGate.policyViolations,
+    })
+  }
+  if (!runtimeCandidateImplemented) {
+    blockers.push({ code: 'runtime-candidate-not-implemented' })
+  }
+  if (!rollbackVerified) {
+    blockers.push({ code: 'rollback-not-verified' })
+  }
+
+  const pass = blockers.length === 0
+  return {
+    pass,
+    status: pass ? 'eligible-for-production-rollout' : 'blocked',
+    promotedToRuntime: false,
+    enforcedFixtureCount: enforced.length,
+    recognitionFixtureCount: recognitionFixtures.length,
+    rejectionFixtureCount: rejectionFixtures.length,
+    evaluatedRecognitionFixtureCount: evaluatedRecognitionFixtures.length,
+    independentRecognitionFixtureCount: independentRecognitionFixtures.length,
+    independentlyRejectedFixtureCount: independentlyRejectedFixtures.length,
+    regressionCount: regressionGate.regressionCount,
+    policyViolations: regressionGate.policyViolations,
+    runtimeCandidateImplemented: Boolean(runtimeCandidateImplemented),
+    rollbackVerified: Boolean(rollbackVerified),
+    blockers,
+  }
+}
