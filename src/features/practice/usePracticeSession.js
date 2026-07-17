@@ -116,6 +116,8 @@ export default function usePracticeSession({
     alignmentDiagnostics: alignment.diagnostics,
     instrumentId,
   })
+  const playbackRef = useRef(playback)
+  playbackRef.current = playback
 
   const hasMidi = Boolean(midiSource?.data)
   const hasMusicXml = Boolean(musicXmlSource?.data)
@@ -128,6 +130,13 @@ export default function usePracticeSession({
     sourceSelectedThisSession: wfyInputSourceSelectedThisSession,
   })
 
+  const sourcesRevisionKey = [
+    midiSource?.fileName ?? '',
+    midiSource?.data?.byteLength ?? 0,
+    musicXmlSource?.fileName ?? '',
+    musicXmlSource?.data?.byteLength ?? 0,
+    musicXmlSource?.source ?? '',
+  ].join('|')
   const sourcesRevision = useMemo(
     () => ({
       midiFileName: midiSource?.fileName ?? '',
@@ -135,7 +144,8 @@ export default function usePracticeSession({
       musicXmlFileName: musicXmlSource?.fileName ?? '',
       musicXmlData: musicXmlSource?.data ?? null,
     }),
-    [midiSource?.fileName, midiSource?.data, musicXmlSource?.fileName, musicXmlSource?.data],
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- identity keyed by sourcesRevisionKey
+    [sourcesRevisionKey],
   )
 
   const clock = usePracticeClock({
@@ -175,10 +185,10 @@ export default function usePracticeSession({
     : null
 
   const ensurePaused = useCallback(() => {
-    if (playback.isPlaying) {
-      playback.pause()
+    if (playbackRef.current.isPlaying) {
+      playbackRef.current.pause()
     }
-  }, [playback])
+  }, [])
 
   ensurePausedRef.current = ensurePaused
 
@@ -192,11 +202,11 @@ export default function usePracticeSession({
     if (!hasMusicXml) {
       return
     }
-    playback.seek(0)
+    playbackRef.current.seek(0)
     clock.syncManualTimeToMidi(0)
     clock.setManualTime(0)
     setPracticeScopeState(PRACTICE_SCOPE.BOTH_HANDS)
-  }, [sourcesRevision]) // eslint-disable-line react-hooks/exhaustive-deps -- new score files → start at 0
+  }, [sourcesRevisionKey]) // eslint-disable-line react-hooks/exhaustive-deps -- new score files → start at 0
 
   const setPracticeScope = useCallback((scope) => {
     setPracticeScopeState(normalizePracticeScope(scope))
@@ -226,14 +236,14 @@ export default function usePracticeSession({
         setPracticeTime()
       }
       try {
-        playback.seek(safeSeconds)
+        playbackRef.current.seek(safeSeconds)
       } catch (error) {
         if (import.meta.env?.DEV) {
           console.error('[Practice] Playback seek failed (practice position still updated):', error)
         }
       }
     },
-    [hasMusicXml, playback, clock.setManualTime],
+    [hasMusicXml, clock.setManualTime],
   )
 
   const referencePlayback = useWaitForYouReferencePlayback({
@@ -694,14 +704,14 @@ export default function usePracticeSession({
       ensurePaused()
       return
     }
-    if (playback.isPlaying) {
+    if (playbackRef.current.isPlaying) {
       return
     }
-    playback.play()
-  }, [isWaitForYou, ensurePaused, playback])
+    playbackRef.current.play()
+  }, [isWaitForYou, ensurePaused])
 
   const handleMidiStop = useCallback(() => {
-    playback.stop()
+    playbackRef.current.stop()
     if (hasMusicXml) {
       clock.syncManualTimeToMidi(0)
       clock.setManualTime(0)
@@ -709,7 +719,7 @@ export default function usePracticeSession({
     if (isWaitForYou) {
       waitForYou.restart()
     }
-  }, [playback, hasMusicXml, clock, isWaitForYou, waitForYou])
+  }, [hasMusicXml, clock, isWaitForYou, waitForYou])
 
   const handleMidiSeek = useCallback(
     (seconds) => {
@@ -718,12 +728,9 @@ export default function usePracticeSession({
     [seekToPracticeTimeWithWfy],
   )
 
-  const handleToggleMute = useCallback(
-    (trackId, muted) => {
-      playback.setTrackMuted(trackId, muted)
-    },
-    [playback],
-  )
+  const handleToggleMute = useCallback((trackId, muted) => {
+    playbackRef.current.setTrackMuted(trackId, muted)
+  }, [])
 
   const handlePracticeModeChange = useCallback(
     (mode) => {

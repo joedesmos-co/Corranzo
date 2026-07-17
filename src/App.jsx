@@ -470,6 +470,10 @@ export default function App() {
     resetPracticePrefsForNewScore,
   ])
 
+  const handleAutoOmrRequestConsumed = useCallback(() => {
+    setAutoOmrRequest(null)
+  }, [])
+
   const handleClearMusicXml = useCallback(() => {
     clearDemoPiece()
     setMusicXmlSource(null)
@@ -1583,7 +1587,7 @@ export default function App() {
             onClearMusicXml={handleClearMusicXml}
             onOmrGenerated={handleOmrGenerated}
             autoOmrRequest={autoOmrRequest}
-            onAutoOmrRequestConsumed={() => setAutoOmrRequest(null)}
+            onAutoOmrRequestConsumed={handleAutoOmrRequestConsumed}
             onImportFeedback={setLibraryFeedback}
             pdfSource={pdfBuffer}
             pdfFileUrl={pdfFile}

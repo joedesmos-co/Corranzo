@@ -308,22 +308,39 @@ export default function PdfOmrPlaybackPanel({
     }
   }, [pdfSource, pdfFileUrl, pdfFileName, instrumentId, isGenerating, disabled, onGenerated, onFeedback])
 
+  // Keep the latest start helpers in refs so this effect can stay Strict Mode
+  // safe without re-arming whenever callback identities churn.
+  const handleGenerateRef = useRef(handleGenerate)
+  handleGenerateRef.current = handleGenerate
+  const onAutoStartConsumedRef = useRef(onAutoStartConsumed)
+  onAutoStartConsumedRef.current = onAutoStartConsumed
+
   useEffect(() => {
     if (!autoStartKey || autoStartedKeyRef.current === autoStartKey) {
-      return
+      return undefined
     }
     if ((!pdfSource && !pdfFileUrl) || disabled || isGenerating) {
-      return
+      return undefined
     }
     if (status === OMR_STATUS.READY || status === OMR_STATUS.FAILED) {
-      return
+      return undefined
     }
-    autoStartedKeyRef.current = autoStartKey
+
+    // Do NOT mark the key as started until the timeout fires. React Strict Mode
+    // re-runs effects on the same fiber (refs persist); marking early + clearing
+    // the timeout leaves preparation stuck in IDLE forever.
+    const keyToStart = autoStartKey
     const autoRunTimer = setTimeout(() => {
-      onAutoStartConsumed?.(autoStartKey)
-      handleGenerate()
+      if (autoStartedKeyRef.current === keyToStart) {
+        return
+      }
+      autoStartedKeyRef.current = keyToStart
+      onAutoStartConsumedRef.current?.(keyToStart)
+      handleGenerateRef.current()
     }, 0)
-    return () => clearTimeout(autoRunTimer)
+    return () => {
+      clearTimeout(autoRunTimer)
+    }
   }, [
     autoStartKey,
     pdfSource,
@@ -331,8 +348,6 @@ export default function PdfOmrPlaybackPanel({
     disabled,
     isGenerating,
     status,
-    onAutoStartConsumed,
-    handleGenerate,
   ])
 
   const handleCopyDiagnostics = useCallback(async () => {

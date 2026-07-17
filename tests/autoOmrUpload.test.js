@@ -214,7 +214,12 @@ describe('auto OMR upload wiring', () => {
   it('auto-starts once per key; Retry only after failure; no Generate on happy path', () => {
     expect(omrPanel).toContain('autoStartKey = null')
     expect(omrPanel).toContain('autoStartedKeyRef')
-    expect(omrPanel).toMatch(/onAutoStartConsumed\?\.\(autoStartKey\)[\s\S]*handleGenerate\(\)/)
+    expect(omrPanel).toContain('handleGenerateRef')
+    expect(omrPanel).toContain('onAutoStartConsumedRef')
+    expect(omrPanel).toMatch(
+      /autoStartedKeyRef\.current = keyToStart[\s\S]*onAutoStartConsumedRef\.current\?\.\(keyToStart\)[\s\S]*handleGenerateRef\.current\(\)/,
+    )
+    expect(omrPanel).toContain('Do NOT mark the key as started until the timeout fires')
     expect(omrPanel).toContain('Preparing score')
     expect(omrPanel).toContain('Try again')
     expect(omrPanel).toContain('Cancel')
@@ -229,6 +234,6 @@ describe('auto OMR upload wiring', () => {
     expect(library).toMatch(/autoStartKey=\{autoOmrRequestForCurrentPdf\?\.key \?\? null\}/)
     expect(library).toMatch(/key=\{`omr-panel-\$\{fileName/)
     expect(app).toContain('autoOmrRequest={autoOmrRequest}')
-    expect(app).toContain('onAutoOmrRequestConsumed={() => setAutoOmrRequest(null)}')
+    expect(app).toContain('onAutoOmrRequestConsumed={handleAutoOmrRequestConsumed}')
   })
 })

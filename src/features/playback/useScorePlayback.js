@@ -56,15 +56,18 @@ export default function useScorePlayback({
       if (!mountedRef.current || pendingTime == null) {
         return
       }
-      setCurrentTime(pendingTime)
+      const nextTime = pendingTime
       pendingTime = null
+      setCurrentTime((previous) => (Object.is(previous, nextTime) ? previous : nextTime))
       if (pendingDuration != null) {
-        setDuration(pendingDuration)
+        const nextDuration = pendingDuration
         pendingDuration = null
+        setDuration((previous) => (Object.is(previous, nextDuration) ? previous : nextDuration))
       }
       if (pendingIsPlaying != null) {
-        setIsPlaying(pendingIsPlaying)
+        const nextPlaying = pendingIsPlaying
         pendingIsPlaying = null
+        setIsPlaying((previous) => (previous === nextPlaying ? previous : nextPlaying))
       }
     }
 
@@ -136,16 +139,19 @@ export default function useScorePlayback({
 
     if (!timingMap || timingLoading) {
       engine.stop()
-      setIsPlaying(false)
+      setIsPlaying((previous) => (previous ? false : previous))
       if (!timingMap) {
-        setTracks([])
-        setDuration(0)
-        setCurrentTime(0)
-        setError(null)
-        setMappingWarning(null)
-        setAudioSource('musicxml')
+        setTracks((previous) => (previous.length === 0 ? previous : []))
+        setDuration((previous) => (previous === 0 ? previous : 0))
+        setCurrentTime((previous) => (previous === 0 ? previous : 0))
+        setError((previous) => (previous == null ? previous : null))
+        setMappingWarning((previous) => (previous == null ? previous : null))
+        setAudioSource((previous) => (previous === 'musicxml' ? previous : 'musicxml'))
       }
-      setIsLoading(Boolean(timingLoading))
+      setIsLoading((previous) => {
+        const next = Boolean(timingLoading)
+        return previous === next ? previous : next
+      })
       return undefined
     }
 
