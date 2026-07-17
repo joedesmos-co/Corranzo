@@ -122,7 +122,7 @@ describe('OMR V3 disabled-by-default rollout', () => {
     expect(result.omrV3Shadow).toMatchObject({
       status: 'disabled-by-rollback',
       promotedToRuntime: false,
-      rollout: { mode: 'off', rollback: true },
+      rollout: { mode: 'rollback', rollback: true },
     })
   })
 })
