@@ -127,6 +127,47 @@ Requires regular inter-column spacing (±20%). Packed-duration refine skips subd
 
 Scan beam/stem (sole remaining enforced regression after guitar).
 
+## Phase 3b — Tuplet sprint verification — COMPLETE (no further tuplet work)
+
+### Reproduce (2026-07-17)
+
+Re-ran `piano-rhythm-tuplets-vector` after Phase 2b grand-staff chord grouping (`tmp/cursor-tuplets-sprint/`).
+
+| Path | Duration | F1 | Onset | Chord | Wrong durations |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| V2 runtime | 0.7778 | 0.8889 | 0.5556 | 0.7746 | **7** |
+| V3 independent | **0.9206** | **0.9683** | **0.7302** | **0.9688** | **3** |
+| Handoff acceptance | ≥ 0.7778 | ≥ 0.8889 | ≥ 0.5556 | ≥ 0.7746 | — |
+
+V2 hotspots: m1–m5 duration errors including **m3 tuplet** (`written-duration-wrong`, `onset-coupled-duration`). V3 independent eliminates all m3 duration wrongs.
+
+### First-loss (proven)
+
+Instrumented independent shadow IR (`tmp/cursor-tuplets-sprint/probe-v3-independent.json`):
+
+| Measure | Content | Onset columns | Uniform grid | Tuplet metadata | V3 duration wrongs |
+| --- | --- | ---: | --- | --- | ---: |
+| m3 | full-bar 3:2 eighth triplets | 12 (= 4×3) | factor 3 fires | `actualNotes:3 normalNotes:2`, slot `4/3` div | **0** |
+| m4 | rest + dotted quarter + sixteenths | 5 (irregular) | abstains | none | 1 (eval coupling) |
+| m5 | tied half + quarter | irregular | abstains | none | 1 (pitch/onset coupling) |
+| m8 | dotted eighth + sixteenth | irregular | abstains | none | 1 (pitch/onset coupling) |
+
+**First-loss for tuplet measure 3 = none** — subdivision grid + 3:2 ownership is correct end-to-end (detection → beat allocation → serialization). Remaining 3 independent duration errors are **not tuplet failures**: they occur in heterogeneous measures where column count is not a uniform factor of the beat count, and evaluator matching couples wrong pitch/onset partners (m4 A4↔B4, m5 C5↔G5, m8 F4↔E4).
+
+### Rejected approaches
+
+- Broadening uniform grid to irregular column counts (would damage scan/grand regularity gates).
+- Post-hoc tuplet ratio on non–factor-3 measures without structural slot evidence.
+- Duration heuristics on tied/dotted heterogeneous measures (onset/voice/pitch domain per Phase 1b/2b classification).
+
+### Qualification impact
+
+Full gate after verification: **pass**, `regressionCount: 0` (`tmp/cursor-tuplets-sprint/full-report.json`). Tuplet unit tests (`uniform-beat-grid`, `subdivision`, `3:2 tuplet`) pass unchanged.
+
+### Remaining risk
+
+Independent tuplet duration **0.9206** leaves 3 onset-coupled evaluator artifacts in non-tuplet measures — not actionable under tuplet scope. Do not add tuplet-specific heuristics without new structural evidence.
+
 ## Phase 4 — Scanned piano beam/stem — COMPLETE
 
 ### Root cause
@@ -160,9 +201,58 @@ Raster noteheads matched V2 F1, but independent V3 inherited only geometric `pos
 
 Vector piano + guitar fixtures remain non-regressing. Full gate: `regressionCount: 0`; remaining blockers are rollout-only (`runtime-candidate-not-implemented`, `rollback-not-verified`).
 
-## Next
+## Phase 4b — Scanned beam/stem sprint verification — COMPLETE (no further beam/stem work)
 
-Implement guarded production rollout (default-off runtime candidate + V2 kill switch) and real-PDF / negative-page evidence per handoff §§6–7. Do not enable V3 by default until those blockers clear.
+### Reproduce (2026-07-17)
+
+Re-ran `piano-articulation-scan` on the detector-independent path (`tmp/cursor-scan-sprint/`).
+
+| Metric | V2 | V3 independent | Handoff floor |
+| --- | ---: | ---: | ---: |
+| F1 | 0.804 | **0.804** | ≥ 0.804 |
+| Duration | 0.4685 | **0.5856** | ≥ 0.4685 |
+| Onset | 0.6126 | **0.6126** | ≥ 0.6126 |
+| Chord | 0.6048 | **0.6048** | ≥ 0.6048 |
+| Pitch | 0.3153 | **0.3153** | ≥ 0.3153 |
+| Measure error | 0 | **0** | 0 |
+
+### Structural evidence (not assumed from final duration)
+
+| Signal | Value | Interpretation |
+| --- | --- | --- |
+| Truth note types | **56 quarter + 32 half; 0 eighth/16th; 0 `<beam>`** | Fixture is articulation/sustain, not beamed rhythm |
+| Raster stem attach | 75/111 (67.6%) | Majority of heads own a stem |
+| Stem handoff ≥ 0.7 | 43/111 | Conservative gate; floor not lowered |
+| Raster beam attach | 4/111 (3.6%), 2 beam candidates | Slight **over**-detection vs truth (0 beams) |
+| Beam handoff ≥ 0.7 | 2 symbols; 0 events use beam duration | Gate correctly abstains |
+| Exact stamped onsets | 111/111 | Phase 4 rhythm stamp intact |
+| Ambiguous measures | 7 | Voice overlap ambiguity, not missing beams |
+| Wrong durations (ind.) | 15 (5 pure, 10 onset/pitch-coupled) | Pure cases are bass half→quarter |
+
+### First-loss (proven)
+
+**Beam/stem relationship recovery is not the first-loss for remaining scan errors.**
+
+1. Truth contains **no beams**. Further beam-recovery heuristics cannot be validated against this fixture and would chase scan noise (graph already invents 2 false beam groups).
+2. Stem ownership is already recovered for most heads; gated handoff preserves clean digital behavior (Phase 4 rejected ungated beam ownership and floor lowering).
+3. Residual pure duration wrongs (e.g. bass `C3 2→1`, `G2 2→1`) occur where packing stamps quarters and lane-local gap lengthen does not fire — **duration packing / voice-lane fragmentation**, not notehead↔stem ownership or beam continuity.
+4. Dominant error buckets remain **chord grouping** and **pitch/accidentals**, matching V2 floors exactly for chord/onset/F1/pitch.
+
+### Rejected approaches
+
+- Lowering stem/beam confidence floors (already rejected in Phase 4; would admit noise).
+- Ungated raster beam duration handoff (regressed scan duration historically).
+- Inventing beam continuity on a fixture whose ground truth has zero beams.
+- Treating Theme-crop / Twinkle scan ambiguity as a substitute for this fixture (separate human-blocked truth task).
+
+### Qualification impact
+
+No code change. Focused `tests/omrBeamStemReconstruction.test.js`: **pass**. Full gate remains **pass**, `regressionCount: 0`.
+
+### Remaining risk / separation of concerns
+
+- `piano-articulation-scan` residuals are research-bound under pitch/chord/voice — not beam/stem.
+- Independently verified MusicXML for historical Twinkle Theme crop remains **human-blocked** (Phase 0); do not invent truth or conflate it with this enforced articulation-scan fixture.
 
 ## Phase 5 — Paired-guitar chord fusion — COMPLETE
 
@@ -413,6 +503,54 @@ No change to packed-duration refine or bass lengthen policy beyond receiving cor
 
 Grand pitch stays at **0.625** (same as V2): missing sharps / diatonic errors — pitch-mapping/accidentals, not onset/voice. Residual half→dotted-half (`2→3`) follows detector dur=12 on stemmed heads. Do not add duration heuristics for that without new structural evidence.
 
+## Phase 5 — Pitch and Accidental Ownership — first-loss proven OUTSIDE the V3-independent surface (no V3 code change)
+
+### Reproduce (2026-07-17)
+
+Ran every enforced recognition fixture on the detector-independent V3 path and categorized all wrong pitches (`tmp/cursor-pitch-sprint/probe-pitch.{mjs,json}`, root-cause classifier `omrPitchErrorAnalysis.js`).
+
+| Fixture | V2 pitch | V3 independent pitch | Pitch source |
+| --- | ---: | ---: | --- |
+| piano-beginner-single | 0.25 | 0.25 | 100% `detector-staff-pitch` |
+| piano-grand-voices | 0.625 | 0.625 | 100% `detector-staff-pitch` |
+| piano-rhythm-tuplets | 0.4127 | 0.4444 | 100% `detector-staff-pitch` |
+| piano-articulation-scan | 0.3153 | 0.3153 | 100% `detector-staff-pitch` |
+| piano-dense-advanced | 0.1477 | 0.2045 | 100% `detector-staff-pitch` |
+| guitar-* | (see report) | (see report) | `detector-sounding-pitch` / `detector-staff-pitch` |
+
+V3 independent pitch equals V2 on every fixture where F1 is identical; the small tuplet/dense deltas are matching (F1) differences, not pitch re-derivation.
+
+### First-loss (proven)
+
+**Pitch/accidental ownership is not implemented on the V3-independent surface — V3 inherits the detector's final MIDI verbatim.**
+
+1. No `v3/` module re-derives pitch: grep for `midiFromStaffPosition` / `pitchFromStaffPosition` / `midiToWrittenPitch` across `src/features/omr/v3/` returns **zero matches**.
+2. `rawDetectorSymbolsFromPage` (`omrV3Shadow.js:406–416`) copies `source.midi` straight into `pitch.{midi,writtenMidi,soundingMidi}` with `source: 'detector-staff-pitch'`. No accidental/ledger/octave/key stage runs.
+3. The V3-independent symbol stream for `piano-grand-voices` contains **`{ notehead: 88 }` only** — no accidental glyphs are carried into V3, so there is nothing for a V3 stage to re-own.
+4. Accidentals are folded into `note.midi` earlier, in the **shared detector**: `detectOmrAccidentals.js#refineNotePitch` applies `applyAlterToMidi(...)` and `processVectorOmrPage.js` bakes the result before any shadow runs. This is V2-authoritative code.
+5. Proof by example: grand m2 truth `F#4` (MIDI 66); detector emits MIDI 65 (`F4`, `alter: undefined`). The sharp was missed by detector accidental detection; V3 receives the already-wrong 65 with no glyph to recover from. Grand key is `<fifths>0</fifths>`, so these are explicit accidentals, not a key-signature miss.
+
+Root-cause split of at-onset wrong pitches (probe samples): **44 same-voice**, **40 different-voice**. The different-voice rows are evaluator matches across voices (chord/voice grouping artifacts, Phase 2b domain — separately tracked). Piano same-voice classes: **accidental 20, octave 8, diatonic 6, register 6** — all produced by the shared detector's accidental + staff-position mapping.
+
+### Conclusion (per handoff escape clause)
+
+The remaining pitch errors originate **outside the V3-independent-ownable pipeline** — inside the shared detector's accidental detection + staff-position mapping, which is V2-authoritative and frozen. The detector-independent V3 path cannot improve pitch without (a) modifying authoritative V2 output, or (b) building a brand-new V3 accidental-detection subsystem, which is not a "smallest general structural improvement" and cannot even be validated because the accidental glyphs are not carried into V3's stream. Per the instruction ("if pitch errors originate outside pitch ownership, document and continue — do not force a pitch-specific solution"), **no V3 code change is made.**
+
+### Rejected approaches
+
+- Modifying `detectOmrAccidentals` / `pitchFromStaffPosition` — shared with V2; would alter authoritative output and require V2 re-qualification (out of scope; V2 must stay frozen).
+- Carrying accidental glyphs into the raw stream + a new V3 accidental-attachment stage — large new subsystem, not the smallest change; unvalidatable while the detector does not surface the glyphs; high regression risk.
+- Tuning any pitch/register threshold — forbidden without structural evidence; there is no V3 structural seam to tune.
+- Treating different-voice evaluator matches as pitch errors — they are chord/voice grouping artifacts (Phase 2b), not pitch ownership.
+
+### Qualification impact
+
+No code change. Focused pitch tests (`pitchFromStaffPosition`, `omrPitchAlteration`, `omrPitchStaffMapping`, `omrV3Ownership`): **38/38 pass**. Full gate: **PASS 11/11**, `productionGate.pass: true`, `regressionCount: 0` (`tmp/cursor-pitch-sprint/full-report.json`). Stress corpus unaffected (zero code delta).
+
+### Remaining risk
+
+Pitch is the dominant residual error bucket but is bounded by the shared detector, not by V3 structure. Meaningful pitch gains require detector-level accidental/staff-position work under a V2 re-qualification effort — a separate track from the detector-independent V3 campaign. Do not add V3 pitch heuristics without new structural evidence that the detector surfaces re-ownable pitch evidence into the V3 stream.
+
 ## Next
 
-All handoff §§1–7 algorithmic/regression blockers remain cleared under the independent gate. Optional next algorithmic targets are pitch/accidental ownership or tuplet/raster residual polish only if newly proven. Theme-scan MusicXML stays human-blocked. Keep runtime candidate default-off.
+All handoff §§1–7 algorithmic/regression blockers are cleared under the independent gate. Tuplet (Phase 3+3b), scanned beam/stem (Phase 4+4b), and pitch/accidental (Phase 5) are all resolved or proven out-of-surface. Pitch improvement is detector/V2-bound, not a V3-independent blocker. No further V3 algorithmic blocker is currently proven; V3 stays default-off and V2 authoritative pending a detector-track decision. Theme-scan MusicXML stays human-blocked (separate from `piano-articulation-scan`).
