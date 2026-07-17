@@ -111,6 +111,11 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
 
     expect(result.noteCount).toBeGreaterThan(0)
     expect(result.diagnostics.preprocessLog?.[0]?.applied?.length).toBeGreaterThan(0)
+    expect(result.diagnostics.omrV3Confidence?.method).toBe(
+      'omr-v3-hierarchical-bottleneck-v1',
+    )
+    expect(result.overallConfidence).toBe(result.diagnostics.omrV3Confidence.overallConfidence)
+    expect(result.diagnostics.legacyOverallConfidence).toBeGreaterThan(0)
     expect(progress.some((event) => event.phase === 'preprocess')).toBe(true)
 
     const timing = parseMusicXml(result.musicXml, 'scanned.omr.musicxml')

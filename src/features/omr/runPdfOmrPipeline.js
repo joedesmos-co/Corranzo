@@ -58,7 +58,11 @@ import {
   mergeStaffGapSamples,
 } from './normalizeStaffLineGaps.js'
 import { resolveOmrV3RolloutOptions } from './v3/omrV3Rollout.js'
-import { runOmrV3Shadow } from './v3/omrV3Shadow.js'
+import {
+  buildOmrV3AnalysisDocument,
+  runOmrV3Shadow,
+} from './v3/omrV3Shadow.js'
+import { reasonAboutOmrV3Confidence } from './v3/omrV3Confidence.js'
 
 const DEFAULT_MAX_PAGES = 24
 
@@ -99,6 +103,8 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     promoteScoreGraphClips = false,
     /** Disabled by default; developer/benchmark shadow only. */
     omrV3Shadow = false,
+    /** Production-safe V3 IR confidence reasoning; does not replace recognized notes. */
+    omrV3Confidence = true,
     /** Emergency suppression switch for all V3 analysis. */
     omrV3Rollback = false,
     /** Recorded but never runtime-enabled until a future promotion change. */
@@ -111,6 +117,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     rollback: omrV3Rollback,
     promotions: omrV3Promotions,
   })
+  const captureOmrV3Analysis = !omrV3Rollback && (omrV3Confidence || omrV3Rollout.shadow)
   // Piano's registry default is the grand staff (2), so omitting both options
   // reproduces the long-standing behavior exactly.
   const stavesPerSystem = stavesPerSystemOverride ?? instrument.omr.stavesPerSystem
@@ -278,7 +285,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
           keySignature,
           timeSignature,
           documentStaffGapReference,
-          captureOmrV3Shadow: omrV3Rollout.shadow,
+          captureOmrV3Shadow: captureOmrV3Analysis,
         })
       : processOmrPageAnalysis(imageData, {
           page,
@@ -289,7 +296,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
           keySignature,
           timeSignature,
           documentStaffGapReference,
-          captureOmrV3Shadow: omrV3Rollout.shadow,
+          captureOmrV3Shadow: captureOmrV3Analysis,
         })
 
     omrDebugStep(`pipeline:page-${page}:after-analyze`, null, {
@@ -401,7 +408,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     pageDiagnostics.push(pageResult.pageEntry)
     measureRhythms.push(...pageResult.measureRhythms)
     measureGridEntries.push(...(pageResult.measureGrid ?? []))
-    if (omrV3Rollout.shadow && pageResult.omrV3ShadowInput) {
+    if (captureOmrV3Analysis && pageResult.omrV3ShadowInput) {
       omrV3PageInputs.push(pageResult.omrV3ShadowInput)
     }
     omrTracePhaseEnd(pagePhase, {
@@ -445,13 +452,63 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
 
   const musical = { keySignature, timeSignature, tempo }
   const layoutConsistency = validateOmrMultiPageLayout(pageDiagnostics)
-  const richDiagnostics = buildOmrDiagnostics({
+  let richDiagnostics = buildOmrDiagnostics({
     pages: pageDiagnostics,
     musical,
     uncertainMeasures: diagnostics.uncertainMeasures,
     totalMeasures: diagnostics.measures,
     includeScoreGraph,
   })
+
+  let omrV3Analysis = null
+  if (omrV3Confidence && !omrV3Rollback && omrV3PageInputs.length > 0) {
+    try {
+      omrV3Analysis = phaseTracer.sync('omr-v3-confidence', () =>
+        buildOmrV3AnalysisDocument({
+          documentId: `analysis-${title}`,
+          title,
+          instrumentId: instrument.id,
+          pageInputs: omrV3PageInputs,
+          musical,
+          measureDurationDivisions: Math.round(
+            (timeSignature?.beats ?? 4) *
+              OMR_DIVISIONS_PER_QUARTER *
+              (4 / (timeSignature?.beatType ?? 4)),
+          ),
+        }),
+      )
+      const confidenceReasoning = reasonAboutOmrV3Confidence(omrV3Analysis.document, {
+        legacyConfidence: richDiagnostics.overallConfidence,
+      })
+      richDiagnostics = {
+        ...richDiagnostics,
+        legacyOverallConfidence: richDiagnostics.overallConfidence,
+        overallConfidence: confidenceReasoning.overallConfidence,
+        omrV3Confidence: {
+          ...confidenceReasoning,
+          stages: {
+            pageCount: omrV3Analysis.stages.pages.length,
+            recoveredPairingCount:
+              omrV3Analysis.stages.structuralRecovery.recoveredPairingCount,
+            ownership: omrV3Analysis.stages.ownership,
+            musical: omrV3Analysis.stages.musical,
+          },
+        },
+      }
+    } catch (error) {
+      richDiagnostics = {
+        ...richDiagnostics,
+        omrV3Confidence: {
+          method: 'omr-v3-hierarchical-bottleneck-v1',
+          status: 'fallback-to-legacy',
+          error: error instanceof Error ? error.message : String(error),
+          legacyConfidence: richDiagnostics.overallConfidence,
+          overallConfidence: richDiagnostics.overallConfidence,
+        },
+      }
+      omrV3Analysis = null
+    }
+  }
 
   const difficulty = assessOmrDifficulty({
     overallConfidence: richDiagnostics.overallConfidence,
@@ -698,6 +755,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
             runtimeMusicXml: musicXml,
             measureDurationDivisions: measureDivisions,
             rollout: omrV3Rollout,
+            analysis: omrV3Analysis,
           }),
         )
       } catch (error) {

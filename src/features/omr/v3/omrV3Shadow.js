@@ -240,16 +240,14 @@ function sourceSymbolsFromPage(pageInput, instrumentId, totalDivisions) {
   return symbols
 }
 
-/** Run every implemented V3 stage without changing the production result. */
-export function runOmrV3Shadow({
+/** Build the existing V3 IR stages once for confidence reasoning or shadow serialization. */
+export function buildOmrV3AnalysisDocument({
   documentId,
   title,
   instrumentId = 'piano',
   pageInputs = [],
   musical = {},
-  runtimeMusicXml = null,
   measureDurationDivisions = DEFAULT_MEASURE_DIVISIONS,
-  rollout = null,
 } = {}) {
   const structurePages = pageInputs.map((pageInput) =>
     analyzeOmrV3PageStructure({
@@ -296,6 +294,48 @@ export function runOmrV3Shadow({
       ? buildOmrV3GuitarFusion(document, { measureDurationDivisions })
       : buildOmrV3PianoVoiceCandidates(document, { measureDurationDivisions })
   document = musicalResult.document
+  return {
+    document,
+    stages: {
+      pages: structurePages.map((result) => ({
+        pageIndex: result.page.pageIndex,
+        systemCount: result.page.systems.length,
+        rejectedPairingCount: result.rejectedPairings.length,
+      })),
+      structuralRecovery: {
+        recoveredPairingCount: structuralRecovery.recoveredPairings.length,
+        recoveredPairings: structuralRecovery.recoveredPairings,
+      },
+      measures: measured.systems,
+      ownership: owned.totals,
+      musical: musicalResult.totals,
+    },
+  }
+}
+
+/** Run every implemented V3 stage without changing the production result. */
+export function runOmrV3Shadow({
+  documentId,
+  title,
+  instrumentId = 'piano',
+  pageInputs = [],
+  musical = {},
+  runtimeMusicXml = null,
+  measureDurationDivisions = DEFAULT_MEASURE_DIVISIONS,
+  rollout = null,
+  analysis = null,
+} = {}) {
+  const prepared =
+    analysis ??
+    buildOmrV3AnalysisDocument({
+      documentId,
+      title,
+      instrumentId,
+      pageInputs,
+      musical,
+      measureDurationDivisions,
+    })
+  const document = prepared.document
   const serializer = serializeOmrV3MusicXml(document, { title, measureDurationDivisions })
   const expectedStructure = {
     systemCount: pageInputs.reduce((sum, page) => sum + (page.systems?.length ?? 0), 0),
@@ -320,19 +360,6 @@ export function runOmrV3Shadow({
     musicXml: serializer.musicXml,
     serializer: serializer.summary,
     evaluation: { ...evaluation, musicXml: undefined },
-    stages: {
-      pages: structurePages.map((result) => ({
-        pageIndex: result.page.pageIndex,
-        systemCount: result.page.systems.length,
-        rejectedPairingCount: result.rejectedPairings.length,
-      })),
-      structuralRecovery: {
-        recoveredPairingCount: structuralRecovery.recoveredPairings.length,
-        recoveredPairings: structuralRecovery.recoveredPairings,
-      },
-      measures: measured.systems,
-      ownership: owned.totals,
-      musical: musicalResult.totals,
-    },
+    stages: prepared.stages,
   }
 }
