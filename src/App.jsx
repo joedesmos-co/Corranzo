@@ -66,7 +66,11 @@ import {
   snapshotInstrumentBundle,
 } from './features/instruments/instrumentPracticeBundle.js'
 import { createMusicXmlSource, cloneMusicXmlSource, clearOmrGeneratedPlaybackSource, describeMusicXmlSource, isMusicXmlSourceReady, isOmrGeneratedPlayback, isPracticePlaybackReady, validateRestoredOmrPlayback } from './features/import/musicXmlSource.js'
-import { describePdfPracticeSource, refreshOwnedPdfFromBlobUrl } from './features/import/pdfPracticeSource.js'
+import {
+  describePdfPracticeSource,
+  refreshOwnedPdfFromBlobUrl,
+  reuseOwnedPdfPracticeSource,
+} from './features/import/pdfPracticeSource.js'
 import { validateOmrGeneratedPlayback } from './features/omr/validateOmrGeneratedPlayback.js'
 import { normalizeOmrMeasureGridMetadata } from './features/omr/omrMeasureGridMeta.js'
 import { isPdfBufferAttached } from './features/omr/omrPdfSource.js'
@@ -517,21 +521,29 @@ export default function App() {
       return { ok: false, message }
     }
 
-    let nextPdfFile
-    let nextPdfBuffer
+    let nextPdfFile = activePdfFile
+    let nextPdfBuffer = currentBundle.pdfBuffer ?? pdfBuffer
+    const reusablePdf = reuseOwnedPdfPracticeSource({
+      pdfFile: activePdfFile,
+      pdfBuffer: nextPdfBuffer,
+    })
     try {
-      const refreshed = await refreshOwnedPdfFromBlobUrl(activePdfFile, { revokePrevious: false })
-      nextPdfFile = refreshed.pdfFile
-      nextPdfBuffer = refreshed.pdfBuffer
-      setPdfBuffer(refreshed.pdfBuffer)
-      setPdfFile((previous) => {
-        if (previous && previous !== refreshed.pdfFile) {
-          URL.revokeObjectURL(previous)
-        }
-        return refreshed.pdfFile
-      })
-      setNumPages(null)
-      resetPdfViewerRuntime()
+      if (!reusablePdf) {
+        const refreshed = await refreshOwnedPdfFromBlobUrl(activePdfFile, {
+          revokePrevious: false,
+        })
+        nextPdfFile = refreshed.pdfFile
+        nextPdfBuffer = refreshed.pdfBuffer
+        setPdfBuffer(refreshed.pdfBuffer)
+        setPdfFile((previous) => {
+          if (previous && previous !== refreshed.pdfFile) {
+            URL.revokeObjectURL(previous)
+          }
+          return refreshed.pdfFile
+        })
+        setNumPages(null)
+        resetPdfViewerRuntime()
+      }
     } catch (error) {
       const message =
         error instanceof Error
@@ -659,6 +671,7 @@ export default function App() {
   }, [
     pdfFile,
     pdfMeta,
+    pdfBuffer,
     midiSource,
     pageNumber,
     instrumentId,

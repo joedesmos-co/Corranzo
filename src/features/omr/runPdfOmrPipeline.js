@@ -214,7 +214,15 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       label: omrPageProgressLabel(page, pageCount, 'analyze'),
     })
 
-    const rendered = await renderPage(pdfSource, page)
+    const shouldSkipDefaultTextExtraction =
+      numPagesOverride != null && extractPageText === extractPdfPageText
+    const pageTextPromise = shouldSkipDefaultTextExtraction
+      ? Promise.resolve([])
+      : Promise.resolve().then(() => extractPageText(pdfSource, page)).catch(() => [])
+    const [rendered, pageText] = await Promise.all([
+      renderPage(pdfSource, page),
+      pageTextPromise,
+    ])
     throwIfCancelled(signal)
     await yieldToBrowser()
 
@@ -223,12 +231,6 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
 
     let imageData = copyOmrPixels(renderedImage, `pipeline:page-${page}:after-render-copy`)
     omrDebugStep(`pipeline:page-${page}:owned-render-copy`, imageData)
-    const shouldSkipDefaultTextExtraction =
-      numPagesOverride != null && extractPageText === extractPdfPageText
-    const pageText = shouldSkipDefaultTextExtraction
-      ? []
-      : await extractPageText(pdfSource, page).catch(() => [])
-
     const pageTempo = parseTempoFromTextItems(pageText, { pageNumber: page })
     const canReplaceTempo =
       (pageTempo.confidence ?? 0) > (tempo.confidence ?? 0) &&

@@ -35,6 +35,7 @@ import {
   cloneOmrPdfSource,
   describePdfSourceType,
   isPdfBufferAttached,
+  resolveOmrPdfSource,
 } from '../src/features/omr/omrPdfSource.js'
 
 describe('experimental PDF OMR v4 (harder PDFs)', () => {
@@ -271,6 +272,28 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
     expect(cloned).not.toBe(source)
     expect(new Uint8Array(cloned)[0]).toBe(37)
     expect(isPdfBufferAttached(source)).toBe(true)
+  })
+
+  it('reuses available app bytes without fetching the duplicate blob URL', async () => {
+    const source = new Uint8Array([37, 80, 68, 70]).buffer
+    const originalFetch = globalThis.fetch
+    let fetchCount = 0
+    globalThis.fetch = async () => {
+      fetchCount += 1
+      throw new Error('unexpected fetch')
+    }
+    try {
+      const resolved = await resolveOmrPdfSource({
+        pdfSource: source,
+        pdfFileUrl: 'blob:duplicate-source',
+      })
+      expect(fetchCount).toBe(0)
+      expect(Array.from(resolved.data)).toEqual([37, 80, 68, 70])
+      expect(resolved.data.buffer).not.toBe(source)
+      expect(isPdfBufferAttached(source)).toBe(true)
+    } finally {
+      globalThis.fetch = originalFetch
+    }
   })
 
   it('cloneArrayBuffer throws a labeled error when the source buffer is detached', () => {

@@ -73,7 +73,8 @@ export function cloneOmrPdfSource(source, label = 'cloneOmrPdfSource') {
 }
 
 /**
- * Resolve owned PDF bytes for OMR. Prefer blob URL over shared App-state ArrayBuffer.
+ * Resolve owned PDF bytes for OMR. Clone available App-state bytes once; use the
+ * blob URL only as a recovery source when bytes are unavailable.
  */
 export async function resolveOmrPdfSource({
   pdfSource = null,
@@ -91,37 +92,37 @@ export async function resolveOmrPdfSource({
     traceRunId,
   )
 
+  if (pdfSource != null) {
+    const cloned = cloneOmrPdfSource(pdfSource, 'omr pdf source before load')
+    if (typeof cloned === 'string') {
+      omrTrace('client:pdfSource-after-clone', { via: 'url' }, traceRunId)
+      return cloned
+    }
+
+    const bytes = cloned instanceof ArrayBuffer ? new Uint8Array(cloned) : cloned
+    omrTrace(
+      'client:pdfSource-after-clone',
+      { byteLength: bytes.byteLength, via: 'app-bytes' },
+      traceRunId,
+    )
+    return { data: bytes }
+  }
+
   if (typeof pdfFileUrl === 'string' && pdfFileUrl.length > 0) {
     omrTrace('client:pdfSource-load-from-blob-url', null, traceRunId)
     const response = await fetch(pdfFileUrl)
     if (!response.ok) {
       throw new Error(`[OMR pdf source from blob url] fetch failed (${response.status})`)
     }
-    const buffer = await response.arrayBuffer()
-    const owned = cloneArrayBuffer(buffer, 'omr pdf source from blob url')
+    const owned = await response.arrayBuffer()
+    assertBufferNotDetached(owned, 'omr pdf source from blob url')
     omrTrace(
       'client:pdfSource-after-clone',
-      { byteLength: owned.byteLength, via: 'blob-url' },
+      { byteLength: owned.byteLength, via: 'blob-url-recovery' },
       traceRunId,
     )
     return { data: new Uint8Array(owned) }
   }
 
-  if (pdfSource == null) {
-    throw new Error('[OMR pdf source] missing PDF bytes and blob URL')
-  }
-
-  const cloned = cloneOmrPdfSource(pdfSource, 'omr pdf source before load')
-  if (typeof cloned === 'string') {
-    omrTrace('client:pdfSource-after-clone', { via: 'url' }, traceRunId)
-    return cloned
-  }
-
-  const bytes = cloned instanceof ArrayBuffer ? new Uint8Array(cloned) : cloned
-  omrTrace(
-    'client:pdfSource-after-clone',
-    { byteLength: bytes.byteLength, via: 'clone' },
-    traceRunId,
-  )
-  return { data: bytes }
+  throw new Error('[OMR pdf source] missing PDF bytes and blob URL')
 }
