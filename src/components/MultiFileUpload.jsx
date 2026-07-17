@@ -12,9 +12,9 @@ const ACCEPT_ALL = [
 ].join(',')
 
 /**
- * One upload box for all score files: drag/drop or pick PDF + timing file +
- * optional MIDI at once. Each file is routed to the SAME import handler the
- * per-file cards use; this component adds no parsing.
+ * One upload box for score files. A PDF starts local setup automatically;
+ * optional timing and MIDI files still route to the same per-file handlers.
+ * This component adds no parsing.
  */
 export default function MultiFileUpload({
   hasPdf = false,
@@ -95,7 +95,9 @@ export default function MultiFileUpload({
         disabled={disabled}
       >
         <span className="multi-upload__title">Add your files</span>
-        <span className="multi-upload__hint">Choose sheet music + timing file together. MIDI is optional.</span>
+        <span className="multi-upload__hint">
+          Choose a PDF. Corranzo sets it up automatically; timing and MIDI are optional.
+        </span>
         <span className="multi-upload__cta" aria-hidden="true">
           Choose files
         </span>
@@ -118,7 +120,7 @@ export default function MultiFileUpload({
           PDF: {hasPdf ? 'Ready' : 'Needed'}
         </li>
         <li className={`multi-upload__chip${statusClass(hasMusicXml)}`}>
-          <span>Timing: {hasMusicXml ? 'Ready' : 'Needed'}</span>
+          <span>Timing: {hasMusicXml ? 'Ready' : 'Optional'}</span>
           {canClearMusicXml && (
             <button
               type="button"

@@ -69,9 +69,8 @@ describe('OMR viewer recovery', () => {
   })
 
   it('uses friendly PDF timing copy and exposes cursor retry', () => {
-    expect(omrPanel).toContain(
-      'Upload MusicXML/MXL anytime for the most accurate timing.',
-    )
+    expect(omrPanel).toContain('Setting up your music...')
+    expect(omrPanel).toContain('Ready to practice')
     expect(omrPanel).toContain('Try again')
     expect(omrPanel).not.toContain('Generate experimental playback from PDF')
     expect(scoreFollowControls).toContain(

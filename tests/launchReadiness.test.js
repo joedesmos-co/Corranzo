@@ -59,10 +59,11 @@ describe('launch readiness fixes', () => {
     expect(app).toContain('setPdfSoftWarning(`PDF reload failed:')
   })
 
-  it('fixes experimental OMR panel copy typo', () => {
+  it('keeps PDF setup automatic and concise', () => {
     const omr = readSrc('components', 'library', 'PdfOmrPlaybackPanel.jsx')
 
-    expect(omr).toContain('Upload MusicXML/MXL anytime for the most accurate timing.')
+    expect(omr).toContain('Setting up your music...')
+    expect(omr).toContain('Ready to practice')
     expect(omr).not.toContain('Generate experimental playback from PDF')
   })
 

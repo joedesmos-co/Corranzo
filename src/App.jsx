@@ -116,7 +116,7 @@ function pdfOmrPreparingMessage(fileName, { clearedCompanionFiles = false, softW
     ? ' Previous timing and sound files were cleared.'
     : ''
   const warningHint = softWarning ? `${softWarning} ` : ''
-  return `${warningHint}Loaded ${fileName}.${clearedHint} Getting your music ready... This may take a moment. Upload MusicXML/MXL anytime for the most accurate timing.`
+  return `${warningHint}Loaded ${fileName}.${clearedHint} Setting up your music... This may take a moment.`
 }
 
 export default function App() {
@@ -601,7 +601,7 @@ export default function App() {
     setAutoOmrRequest(null)
     setLibraryFeedback({
       type: 'success',
-      message: `Timing ready from PDF (${playbackValidation.noteCount} notes, ${Math.round(playbackValidation.durationSeconds)}s). Opening Practice.`,
+      message: `Ready to practice (${playbackValidation.noteCount} notes, ${Math.round(playbackValidation.durationSeconds)}s).`,
     })
     navigateToView('practice')
 

@@ -16,8 +16,8 @@ describe('auto OMR on PDF upload', () => {
     expect(app).toMatch(
       /handleFileSelect[\s\S]*setAutoOmrRequest\(buildAutoOmrRequest\(file, activeInstrumentRef\.current\)\)/,
     )
-    expect(app).toContain('Getting your music ready...')
-    expect(app).toContain('Upload MusicXML/MXL anytime for the most accurate timing.')
+    expect(app).toContain('Setting up your music...')
+    expect(app).not.toContain('Getting your music ready...')
   })
 
   it('skips auto OMR when uploaded MusicXML timing is present or later replaces generated timing', () => {
@@ -44,7 +44,7 @@ describe('auto OMR on PDF upload', () => {
       /setMusicXmlSource\(nextMusicXmlSource\)[\s\S]*setAutoOmrRequest\(null\)[\s\S]*navigateToView\('practice'\)/,
     )
     expect(app).toContain("activeView: 'practice'")
-    expect(app).toContain('Timing ready from PDF')
+    expect(app).toContain('Ready to practice')
   })
 
   it('lets the OMR panel consume one auto-start request while preserving manual retry', () => {

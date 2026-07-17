@@ -334,12 +334,12 @@ export default function PdfOmrPlaybackPanel({
     <section className="library-omr-panel" aria-label="PDF timing generation" aria-busy={isGenerating}>
       <div className="library-omr-panel__header">
         <h2 className="library-omr-panel__title practice-section__title--editorial">
-          Getting your music ready
+          Setting up your music
         </h2>
         <span className="library-omr-panel__badge">Local</span>
       </div>
       <p className="library-omr-panel__lede">
-        This may take a moment. Upload MusicXML/MXL anytime for the most accurate timing.
+        This may take a moment.
       </p>
       <div className="library-omr-panel__actions">
         <button
@@ -349,7 +349,7 @@ export default function PdfOmrPlaybackPanel({
           onClick={handleGenerate}
         >
           {isGenerating
-            ? 'Getting your music ready...'
+            ? 'Setting up your music...'
             : status === OMR_STATUS.FAILED
               ? 'Try again'
               : 'Generate timing from PDF'}
@@ -373,18 +373,13 @@ export default function PdfOmrPlaybackPanel({
         <div className="library-omr-panel__progress" role="status" aria-live="polite">
           <span className="library-omr-panel__progress-bar" aria-hidden="true" />
           <p className="library-omr-panel__status">
-            Getting your music ready... {progressLabel || OMR_STATUS_LABEL[status] || 'This may take a moment.'}
+            Setting up your music... {progressLabel || OMR_STATUS_LABEL[status] || 'This may take a moment.'}
           </p>
         </div>
       )}
       {!isGenerating && status === OMR_STATUS.READY && summary && (
         <p className="library-omr-panel__status library-omr-panel__status--ready" role="status">
-          Timing ready from PDF — {summary}
-        </p>
-      )}
-      {!isGenerating && status === OMR_STATUS.READY && (
-        <p className="library-omr-panel__status library-omr-panel__disclaimer" role="note">
-          Upload MusicXML/MXL anytime for the most accurate timing.
+          Ready to practice — {summary}
         </p>
       )}
       {!isGenerating && status === OMR_STATUS.FAILED && error && (
