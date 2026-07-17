@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-17T02:37:44.091Z",
+  "generatedAt": "2026-07-17T03:27:03.197Z",
   "baseUrl": "http://127.0.0.1:4173",
   "checks": [
     {
@@ -63,7 +63,7 @@
   "passes": [
     "cold load renders top bar",
     "PDF-only import shows Setting up your music",
-    "PDF-only import reaches Practice in 200ms",
+    "PDF-only import reaches Practice in 208ms",
     "Piano practice opens with playback panel",
     "Piano Play clicked without crash",
     "Guitar shows empty practice after Piano load",
@@ -81,5 +81,5 @@
     "No console errors",
     "No uncaught page errors"
   ],
-  "omrImportMs": 200
+  "omrImportMs": 208
 }
