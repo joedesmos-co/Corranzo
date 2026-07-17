@@ -330,6 +330,106 @@ describe('OMR V3 Guitar notation/TAB fusion', () => {
     expect(fused.map((event) => event.fret).sort((a, b) => a - b)).toEqual([0, 0, 1])
   })
 
+  it('remaps approximate joint notation/TAB columns onto an equal measure grid by order', () => {
+    const document = structuralDocument('notation-tab', { largeGap: true })
+    // Keep all four columns inside the first measure (barlines at 0.3 / 0.5 / 0.7).
+    const symbols = [
+      symbol('n1', 'notehead', 0.14, 0.09, {
+        midi: 64,
+        duration: { divisions: 6, exact: false },
+      }),
+      symbol('n2', 'notehead', 0.18, 0.09, {
+        midi: 67,
+        duration: { divisions: 6, exact: false },
+      }),
+      symbol('n3', 'notehead', 0.22, 0.09, {
+        midi: 71,
+        duration: { divisions: 6, exact: false },
+      }),
+      symbol('n4', 'notehead', 0.26, 0.09, {
+        midi: 72,
+        duration: { divisions: 6, exact: false },
+      }),
+      symbol('t1', 'tab-digit', 0.14, 0.29, { text: '0', string: 1 }),
+      symbol('t2', 'tab-digit', 0.18, 0.29, { text: '0', string: 2 }),
+      symbol('t3', 'tab-digit', 0.22, 0.29, { text: '0', string: 3 }),
+      symbol('t4', 'tab-digit', 0.26, 0.29, { text: '0', string: 4 }),
+    ]
+    const result = fuse(document, symbols)
+    const fused = events(result.document).sort((left, right) => left.onset - right.onset)
+    const measure = result.document.pages[0].systems[0].measureColumns[0]
+
+    expect(fused.map((event) => event.onset)).toEqual([0, 4, 8, 12])
+    expect(fused.every((event) => event.duration.divisions === 4)).toBe(true)
+    expect(fused.every((event) => event.duration.exact === false)).toBe(true)
+    expect(measure.diagnostics.map((entry) => entry.code)).toContain(
+      'joint-guitar-notation-tab-onset-grid',
+    )
+  })
+
+  it('compresses beats+1 approximate columns onto the beat grid', () => {
+    const document = structuralDocument('notation-tab', { largeGap: true })
+    // Spread beyond default onset clustering tolerance so five columns survive.
+    const xs = [0.12, 0.155, 0.19, 0.225, 0.28]
+    const symbols = xs.flatMap((x, index) => [
+      symbol(`n${index}`, 'notehead', x, 0.09, {
+        midi: 64 + index,
+        duration: { divisions: 3, exact: false },
+      }),
+      symbol(`t${index}`, 'tab-digit', x, 0.29, { text: '0', string: (index % 6) + 1 }),
+    ])
+    const result = fuse(document, symbols)
+    const fused = events(result.document).sort((left, right) => left.onset - right.onset)
+    const columnCount = result.document.pages[0].systems[0].measureColumns[0].onsetColumns.filter(
+      (column) => !column.grace,
+    ).length
+
+    expect(columnCount).toBe(5)
+    expect([...new Set(fused.map((event) => event.onset))].sort((a, b) => a - b)).toEqual([0, 4, 8, 12])
+    expect(fused.length).toBeGreaterThanOrEqual(4)
+  })
+
+  it('snaps a singleton approximate paired column to the downbeat', () => {
+    const document = structuralDocument('notation-tab', { largeGap: true })
+    const result = fuse(document, [
+      symbol('n1', 'notehead', 0.22, 0.09, {
+        midi: 64,
+        duration: { divisions: 4, exact: false },
+      }),
+      symbol('t1', 'tab-digit', 0.22, 0.29, { text: '0', string: 1 }),
+    ])
+    const fused = events(result.document)
+
+    expect(fused).toHaveLength(1)
+    expect(fused[0].onset).toBe(0)
+    expect(fused[0].duration.divisions).toBe(4)
+  })
+
+  it('does not remap joint columns when notation carries exact onset divisions', () => {
+    const document = structuralDocument('notation-tab', { largeGap: true })
+    const symbols = [
+      symbol('n1', 'notehead', 0.34, 0.09, {
+        midi: 64,
+        onsetDivisions: 2,
+        durationDivisions: 4,
+      }),
+      symbol('n2', 'notehead', 0.62, 0.09, {
+        midi: 67,
+        onsetDivisions: 8,
+        durationDivisions: 4,
+      }),
+      symbol('t1', 'tab-digit', 0.34, 0.29, { text: '0', string: 1 }),
+      symbol('t2', 'tab-digit', 0.62, 0.29, { text: '0', string: 2 }),
+    ]
+    const result = fuse(document, symbols)
+    const fused = events(result.document).sort((left, right) => left.onset - right.onset)
+
+    expect(fused.map((event) => event.onset)).toEqual([2, 8])
+    expect(
+      result.document.pages[0].systems[0].measureColumns[0].diagnostics.map((entry) => entry.code),
+    ).not.toContain('joint-guitar-notation-tab-onset-grid')
+  })
+
   it('is pure and emits valid serializable relationships', () => {
     const document = structuralDocument()
     const owned = assignOmrV3DocumentSymbolOwnership(document, {

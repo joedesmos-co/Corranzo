@@ -3,6 +3,7 @@
 import {
   createOmrDocumentIR,
   createOmrMeasureColumnIR,
+  createOmrOnsetColumnIR,
   createOmrRelationshipIR,
   createOmrV3Diagnostic,
   createOmrV3Id,
@@ -16,6 +17,7 @@ import {
 const DEFAULT_MEASURE_DIVISIONS = 16
 const GUITAR_OPEN_STRING_MIDI = Object.freeze({ 1: 64, 2: 59, 3: 55, 4: 50, 5: 45, 6: 40 })
 const CONTROL_WARNING_KINDS = new Set(['capo', 'repeat', 'coda', 'segno', 'volta'])
+const EPSILON = 1e-6
 
 const MIDI_STEPS = [
   ['C', 0],
@@ -434,6 +436,166 @@ function assignMonotonicTabSlots(entries, slotCount) {
   })
 }
 
+/**
+ * Joint onset timing for guitar-notation-tab measures.
+ *
+ * Paired raw noteheads almost never carry exact onsetDivisions, so shared
+ * columns inherit drifted geometric measureRelativePosition values. Remap by
+ * column order onto a joint grid without requiring geometric gap regularity
+ * (rejected for irregular guitar).
+ *
+ * Only columns that own notation noteheads participate: tab-only clusters must
+ * not consume early beat slots. Fewer-than-beat active columns pack onto the
+ * first N beats; beats+1 compresses onto the beat grid; singletons snap to the
+ * downbeat. Exact detector onsets abstain.
+ */
+function quantizeJointGuitarNotationTabOnsetColumns(measure, totalDivisions, beats, lookup) {
+  if (!Number.isInteger(beats) || beats < 2 || beats > 12) {
+    return { measure, recoveredCount: 0 }
+  }
+  if (!Number.isFinite(totalDivisions) || totalDivisions < 2) {
+    return { measure, recoveredCount: 0 }
+  }
+  const graceColumns = (measure.onsetColumns ?? []).filter((column) => column.grace)
+  const columns = (measure.onsetColumns ?? []).filter((column) => !column.grace)
+  if (columns.length < 1 || columns.length > Math.min(beats * 2, totalDivisions)) {
+    return { measure, recoveredCount: 0 }
+  }
+  if (columns.some((column) => !Number.isFinite(column.measureRelativePosition))) {
+    return { measure, recoveredCount: 0 }
+  }
+  const ordered = [...columns].sort(
+    (left, right) => left.measureRelativePosition - right.measureRelativePosition,
+  )
+  const hasExactOnset = ordered.some((column) =>
+    (column.symbols?.noteheads ?? [])
+      .map((symbolId) => lookup.get(symbolId))
+      .some((symbol) => Number.isFinite(symbol?.onsetDivisions) && symbol.onsetDivisions >= 0),
+  )
+  if (hasExactOnset) return { measure, recoveredCount: 0 }
+
+  const columnHasNotation = (column) =>
+    (column.symbols?.noteheads ?? []).some((symbolId) => lookup.get(symbolId))
+  const active = ordered.filter(columnHasNotation)
+  if (active.length < 1) return { measure, recoveredCount: 0 }
+
+  let slotIndexes
+  let slotCount
+  if (active.length === 1) {
+    slotCount = beats
+    slotIndexes = [0]
+  } else if (active.length === beats + 1) {
+    slotCount = beats
+    slotIndexes = assignMonotonicTabSlots(
+      active.map((column) => ({ column })),
+      beats,
+    )
+  } else if (active.length < beats) {
+    // Prefer early beats over equal packing across the whole measure.
+    slotCount = beats
+    slotIndexes = active.map((_, index) => index)
+  } else {
+    slotCount = active.length
+    slotIndexes = active.map((_, index) => index)
+  }
+
+  const positionById = new Map(
+    active.map((column, index) => [column.onsetColumnId, slotIndexes[index] / slotCount]),
+  )
+  const quantized = ordered.map((column) => {
+    if (!positionById.has(column.onsetColumnId)) return column
+    const slotIndex = Math.round(positionById.get(column.onsetColumnId) * slotCount)
+    return createOmrOnsetColumnIR({
+      ...column,
+      measureRelativePosition: positionById.get(column.onsetColumnId),
+      diagnostics: [
+        ...(column.diagnostics ?? []),
+        createOmrV3Diagnostic({
+          code: 'joint-guitar-notation-tab-onset-grid',
+          severity: OMR_V3_DIAGNOSTIC_SEVERITY.INFO,
+          stage: 'guitar-notation-tab-fusion',
+          message:
+            'Snapped a shared notation/TAB onset column onto a joint measure grid by column order.',
+          data: {
+            slotIndex,
+            slotCount,
+            activeColumnCount: active.length,
+            beats,
+          },
+        }),
+      ],
+    })
+  })
+  return {
+    measure: {
+      ...measure,
+      onsetColumns: [...quantized, ...graceColumns],
+    },
+    recoveredCount: active.length,
+  }
+}
+
+/**
+ * After joint onset remapping, approximate notation durations are detector
+ * leftovers. Prefer a beat-length fill when the onset sits on the measure beat
+ * grid (so a 3-column measure does not turn the last beat into a half note);
+ * otherwise assign the gap to the next joint onset. Exact detector durations
+ * are left untouched.
+ */
+function refineApproximatePairedDurations(events, totalDivisions, beats) {
+  if (!events.length) return events
+  const orderedOnsets = [
+    ...new Set(
+      events
+        .map((event) => event.onset)
+        .filter((value) => Number.isFinite(value))
+        .sort((left, right) => left - right),
+    ),
+  ]
+  if (orderedOnsets.length < 1) return events
+  const nextOnsetByOnset = new Map()
+  orderedOnsets.forEach((onsetValue, index) => {
+    nextOnsetByOnset.set(
+      onsetValue,
+      index + 1 < orderedOnsets.length ? orderedOnsets[index + 1] : totalDivisions,
+    )
+  })
+  const beatDuration =
+    Number.isInteger(beats) && beats >= 2 ? totalDivisions / beats : null
+  return events.map((event) => {
+    if (event.duration?.exact !== false) return event
+    if (!Number.isFinite(event.onset) || !Number.isFinite(event.duration?.divisions)) return event
+    const nextOnset = nextOnsetByOnset.get(event.onset)
+    if (!Number.isFinite(nextOnset)) return event
+    let available = Math.max(EPSILON, nextOnset - event.onset)
+    let recovery = 'assign-approximate-to-joint-onset-gap'
+    if (
+      Number.isFinite(beatDuration) &&
+      beatDuration > EPSILON &&
+      event.onset + beatDuration <= totalDivisions + EPSILON &&
+      Math.abs(event.onset / beatDuration - Math.round(event.onset / beatDuration)) <= 1e-6
+    ) {
+      available = beatDuration
+      recovery = 'assign-approximate-to-beat-duration'
+    }
+    if (Math.abs(event.duration.divisions - available) <= EPSILON) return event
+    return {
+      ...event,
+      duration: {
+        divisions: available,
+        type: null,
+        dots: 0,
+        exact: false,
+        recovery,
+      },
+      technical: {
+        ...(event.technical ?? {}),
+        durationRecovery: recovery,
+      },
+    }
+  })
+}
+
 function tabOnlyEvents(measure, tabStaff, lookup, totalDivisions, beats) {
   const onsetEntries = (measure.onsetColumns ?? [])
     .map((column) => ({
@@ -526,7 +688,7 @@ function controlDiagnostics(group) {
     )
 }
 
-function solveNotationTabMeasure(measure, group, totalDivisions) {
+function solveNotationTabMeasure(measure, group, totalDivisions, beats) {
   const notationStaff = group.staves.find(
     (staff) => staff.notationType === OMR_V3_NOTATION_TYPE.NOTATION,
   )
@@ -534,17 +696,24 @@ function solveNotationTabMeasure(measure, group, totalDivisions) {
   const lookup = new Map(
     group.staves.flatMap((staff) => staff.symbols ?? []).map((symbol) => [symbol.symbolId, symbol]),
   )
+  const onsetGrid = quantizeJointGuitarNotationTabOnsetColumns(
+    measure,
+    totalDivisions,
+    beats,
+    lookup,
+  )
+  const timedMeasure = onsetGrid.measure
   const events = []
   const diagnostics = []
   const mirrorPairs = []
-  for (const column of measure.onsetColumns ?? []) {
+  for (const column of timedMeasure.onsetColumns ?? []) {
     const notation = symbolsForColumn(column, 'noteheads', lookup, notationStaff.staffId)
     const tabs = symbolsForColumn(column, 'tabDigits', lookup, tabStaff.staffId)
     const paired = pairNotationWithTab(notation, tabs)
     const columnEvents = []
     for (const pair of paired.pairs) {
       const event = eventFromPair(pair, {
-        measure,
+        measure: timedMeasure,
         column,
         notationStaff,
         totalDivisions,
@@ -577,7 +746,7 @@ function solveNotationTabMeasure(measure, group, totalDivisions) {
         )
       }
     }
-    chordGroups(columnEvents, measure.measureId, column.onsetColumnId)
+    chordGroups(columnEvents, timedMeasure.measureId, column.onsetColumnId)
     events.push(...columnEvents)
     if (paired.unpairedTabs.length > 0) {
       diagnostics.push(
@@ -591,11 +760,23 @@ function solveNotationTabMeasure(measure, group, totalDivisions) {
       )
     }
   }
+  const refinedEvents = refineApproximatePairedDurations(events, totalDivisions, beats)
+  if (onsetGrid.recoveredCount > 0) {
+    diagnostics.push(
+      createOmrV3Diagnostic({
+        code: 'joint-guitar-notation-tab-onset-grid',
+        severity: OMR_V3_DIAGNOSTIC_SEVERITY.INFO,
+        stage: 'guitar-notation-tab-fusion',
+        message: `Recovered ${onsetGrid.recoveredCount} shared notation/TAB onset column(s) onto a joint measure grid.`,
+        data: { recoveredCount: onsetGrid.recoveredCount },
+      }),
+    )
+  }
   return {
-    voices: makeVoices(events, measure, notationStaff.staffId),
+    voices: makeVoices(refinedEvents, timedMeasure, notationStaff.staffId),
     diagnostics,
     mirrorPairs,
-    eventCount: events.length,
+    eventCount: refinedEvents.length,
     pairedCount: mirrorPairs.length,
     duplicateEventCount: 0,
   }
@@ -685,7 +866,7 @@ function solveDocument(document, totalDivisions, beats) {
       const measureColumns = (system.measureColumns ?? []).map((measure) => {
         const solved =
           group.type === OMR_V3_STAFF_GROUP_TYPE.GUITAR_NOTATION_TAB
-            ? solveNotationTabMeasure(measure, group, totalDivisions)
+            ? solveNotationTabMeasure(measure, group, totalDivisions, beats)
             : group.type === OMR_V3_STAFF_GROUP_TYPE.TAB_ONLY
               ? solveTabOnlyMeasure(measure, group, totalDivisions, beats)
               : solveNotationOnlyMeasure(measure, group, totalDivisions)

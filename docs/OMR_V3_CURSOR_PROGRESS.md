@@ -154,39 +154,68 @@ Scan independent metrics unchanged vs Phase 3 baseline (still regressing). Enfor
 
 Clearing `piano-articulation-scan` needs stronger conservative raster stem/beam ink association and/or scan-safe onset clustering that does not repeat the rejected MAD snap.
 
-## Phase 5 — Paired-guitar chord fusion — PARTIAL
+## Phase 5 — Paired-guitar chord fusion — COMPLETE
 
 ### Root cause
 
-Within shared onset columns, pairing used only `soundingMidi` distance ≤ 2. Detector notation midis are often octave-wrong or garbage (e.g. 19/28), while TAB frets are reliable, so pair recall sat at ~0.26. Paired events also skipped approximate measure-end duration recovery, dropping overflow notation notes.
+Within shared onset columns, pairing used only `soundingMidi` distance ≤ 2. Detector notation midis are often octave-wrong or garbage (e.g. 19/28), while TAB frets are reliable, so pair recall sat at ~0.26. Paired events also skipped approximate measure-end duration recovery, dropping overflow notation notes. After pairing improved, all raw paired noteheads still lacked exact `onsetDivisions`, so geometric `measureRelativePosition` dominated onset/duration/chord/F1.
 
 ### Implementation
+
+**Pairing (prior):**
 
 - Octave/written/sounding-aware pitch distance for notation↔TAB.
 - Vertical-rank fallback only when a note has **no** pitch-compatible TAB in the column.
 - Enable `allowApproximateMeasureEndRecovery` for paired notation events.
 
+**Joint onset timing (this phase):**
+
+- `quantizeJointGuitarNotationTabOnsetColumns` remaps shared columns by order onto a joint grid (no geometric gap-regularity requirement — that approach was rejected).
+- Only columns with notation noteheads participate (tab-only clusters do not consume early beats).
+- Active count == beats → equal beat grid; count == beats+1 → monotonic compress onto beats; count < beats → first N beats; singleton → downbeat.
+- `refineApproximatePairedDurations` assigns approximate durations to beat length when onset is on the beat grid, else to the next-onset gap. Exact detector durations untouched.
+
 ### Qualification impact
 
-| Metric | Before | After | Target |
+| Metric | Before timing | After | V2 floor |
 | --- | ---: | ---: | ---: |
-| Pair recall | 0.265 | **~0.82–0.90** | ≥ 0.890 |
-| Events emitted | 68 | **91** | — |
-| F1 | 0.620 | **0.628** | ≥ 0.686 |
-| Onset / duration / chord | still below V2 | still below V2 | V2 floors |
+| Independent regressions (full gate) | 3 (incl. this) | **removed** | — |
+| F1 | 0.628 | **0.7059** | ≥ 0.686 |
+| Onset | 0.181 | **0.6207** | ≥ 0.5172 |
+| Duration | 0.2931 | **0.6207** | ≥ 0.3621 |
+| Chord | 0.4476 | **0.5455** | ≥ 0.4786 |
+| Pitch | ~0.12 | **0.1293** | ≥ 0.1121 |
+| Measure error | 2 | **2** | ≤ 2 |
 
-Standard and TAB-only Guitar remain non-regressing. Enforced independent regressions still include this fixture because onset/duration/F1/chord stay below V2 (all approximate geometric onsets; no exact `onsetDivisions` on raw symbols).
+Standard and TAB-only Guitar remain non-regressing.
 
 ### Rejected / remaining
 
 - Unconditional rank pairing (false-matched unpaired-note tests).
-- Joint beat-grid snap on irregular guitar columns (not yet safe).
-- Needs a true joint onset-column timing solver beyond pairing.
+- Gap-regularity beat snap on irregular guitar columns (`joint beat-grid snap` earlier).
+- Passing Piano beam evidence into Guitar (`tmp/omr-v3-beam-evidence-all/`).
 
-## Phase 6 — Paired-guitar techniques — PARTIAL
+## Phase 6 — Paired-guitar techniques — COMPLETE
 
-Same pairing path now yields **pair recall 1.0** and all 25–28 events paired, but F1/onset/duration/chord remain below V2 for the same geometric timing reasons. Technique attachment piggybacks on successful pairs; timing still blocks the gate.
+Same joint onset path. Pair recall already **1.0**; timing was the blocker.
+
+| Metric | Before timing | After | V2 floor |
+| --- | ---: | ---: | ---: |
+| F1 | 0.600 | **0.700** | ≥ 0.700 |
+| Onset | 0.250 | **0.6563** | ≥ 0.6563 |
+| Duration | 0.1875 | **0.6563** | ≥ 0.500 |
+| Chord | 0.4634 | **0.5385** | ≥ 0.5385 |
+| Measure error | 4 | **4** | ≤ 4 |
+
+## Tests
+
+`tests/omrV3Guitar.test.js`:
+
+- equal-order joint grid + approximate gap/beat duration fill
+- beats+1 monotonic compression onto the beat grid
+- singleton approximate column → downbeat
+- exact `onsetDivisions` abstain from remapping
 
 ## Next
 
-Continue guitar joint onset timing, then revisit scan beam ink, then full production gate / rollout docs.
+Revisit **scan beam/stem ink** for `piano-articulation-scan` (sole remaining enforced independent regression), then full gate / rollout docs only if regressions hit 0.

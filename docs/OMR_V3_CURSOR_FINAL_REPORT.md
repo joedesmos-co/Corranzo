@@ -8,13 +8,11 @@ Continuation of the Codex production qualification sprint.
 
 ### 1. How many independent regressions remain?
 
-**3** detector-independent enforced regressions:
+**1** detector-independent enforced regression:
 
 - `piano-articulation-scan`
-- `guitar-paired-chords-vector`
-- `guitar-techniques-paired-vector`
 
-Started at **6**. Cleared: dense piano duration, grand-staff onset/voice, tuplet duration.
+Started at **6**. Cleared: dense piano duration, grand-staff onset/voice, tuplet duration, paired-guitar chords, paired-guitar techniques.
 
 ### 2. Which blockers were fixed?
 
@@ -24,8 +22,8 @@ Started at **6**. Cleared: dense piano duration, grand-staff onset/voice, tuplet
 | 2 | `piano-grand-voices-vector` | **Fixed** — joint grand-staff beat-column snap |
 | 3 | `piano-rhythm-tuplets-vector` | **Fixed** — single-staff subdivision grid + 3:2 tuplet ownership |
 | 4 | `piano-articulation-scan` | **Not cleared** — raster beam graph infrastructure only |
-| 5 | `guitar-paired-chords-vector` | **Partial** — pair recall ≈0.82–0.90; F1/onset/duration/chord still below V2 |
-| 6 | `guitar-techniques-paired-vector` | **Partial** — pair recall 1.0; timing metrics still below V2 |
+| 5 | `guitar-paired-chords-vector` | **Fixed** — pairing + joint notation/TAB onset timing |
+| 6 | `guitar-techniques-paired-vector` | **Fixed** — same joint onset path |
 
 ### 3. What generalized algorithms were added or changed?
 
@@ -34,10 +32,11 @@ Started at **6**. Cleared: dense piano duration, grand-staff onset/voice, tuplet
 3. **Uniform subdivision recovery** — factors `{1,2,3,4}` for single-notation; factor 3 owns 3:2 tuplet ratio + `TUPLET` relationships.
 4. **Raster `beamStemGraph`** on measures + detector ownership gated at confidence ≥ 0.7 (V3 handoff of weak scan beams withheld).
 5. **Guitar notation/TAB pairing** — octave-aware pitch distance; rank fallback only when no pitch-compatible TAB; paired measure-end duration recovery.
+6. **Guitar joint onset timing** (`omrV3Guitar.js`) — order-based joint grid for approximate paired columns (notation-active only); beats+1 compress; first-N-beats when sparse; beat-length approximate duration fill on-grid.
 
 ### 4. Did any diagnostic fixtures worsen?
 
-No intentional diagnostic threshold changes. Enforced non-target fixtures (beginner, grand, dense, tuplet, tab-sparse, standard-chords) remained non-regressing vs V2 on the axes checked after each phase. Scan V3 metrics were restored to baseline after rejected MAD onset snap and ungated beam handoff trials.
+No intentional diagnostic threshold changes. Enforced non-target fixtures (beginner, grand, dense, tuplet, tab-sparse, standard-chords) remained non-regressing vs V2 after the guitar timing phase. Scan metrics unchanged vs prior baseline.
 
 ### 5. Did performance or memory regress?
 
@@ -45,7 +44,7 @@ No dedicated memory profiling this sprint. Full dashboard runtime remained on th
 
 ### 6. Does the production gate pass?
 
-**No.** `omrV3Shadow.productionGate`: `pass: false`, `status: blocked`, `regressionCount: 3`, plus `runtime-candidate-not-implemented` and `rollback-not-verified`.
+**No.** `omrV3Shadow.productionGate`: `pass: false`, `status: blocked`, `regressionCount: 1`, plus `runtime-candidate-not-implemented` and `rollback-not-verified`.
 
 ### 7. Is V3 enabled?
 
@@ -58,14 +57,12 @@ Existing rollout switches (`omrV3Shadow` / `omrV3Rollback`) remain. Guarded prod
 ### 9. What requires human real-score review?
 
 - Scanned piano beam/stem ink association quality vs false joins.
-- Guitar paired scores: whether geometric onset columns can be musically corrected without labeled onset truth.
 - Historical/non-musical scan pages and redistribution-safe real PDF truth (unchanged gap from Codex handoff).
 
 ### 10. What should be worked on next?
 
-1. **Guitar joint onset timing** — all paired raw noteheads lack exact `onsetDivisions`; geometric positions dominate the remaining F1/onset/duration/chord gap despite high pair recall.
-2. **Raster beam ink recovery** — increase high-confidence attachments without lowering the 0.7 floor; only then feed ownership into independent V3.
-3. Re-run full gate + stress + browser smoke; if regressions hit 0, implement guarded rollout (flag + immediate V2 rollback) without deleting V2.
+1. **Raster beam ink recovery** for `piano-articulation-scan` — increase high-confidence attachments without lowering the 0.7 floor; only then feed ownership into independent V3.
+2. Re-run full gate + stress + browser smoke; if regressions hit 0, implement guarded rollout (flag + immediate V2 rollback) without deleting V2.
 
 ## Non-negotiables preserved
 
@@ -78,7 +75,8 @@ No threshold lowering, no fixture-name branches, no truth edits, no converting e
 - `96538b4` — tuplet/subdivision duration inference  
 - `33c3ed0` — conservative raster beam/stem graph (no scan promotion)  
 - `3c06e54` — guitar pairing under unreliable pitch  
+- guitar joint notation/TAB onset timing (this commit)  
 
 ## Verdict
 
-**Acceptable fallback outcome:** every safe improvement completed for this session; blockers reduced **6 → 3**; V2 remains authoritative; remaining work documented with focused tests and acceptance criteria.
+**Campaign progress:** blockers reduced **6 → 1**; both paired-Guitar fixtures cleared via structural joint onset timing; V2 remains authoritative; sole remaining enforced regression is scanned piano beam/stem.
