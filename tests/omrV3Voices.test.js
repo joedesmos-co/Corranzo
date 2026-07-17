@@ -435,6 +435,156 @@ describe('OMR V3 Piano voice candidates', () => {
     expect(events.map((event) => event.duration.divisions)).toEqual([2, 2])
   })
 
+  it('lengthens bass accompaniment quarters to the next lane onset when packing did not fire', () => {
+    const page = analyzeOmrV3PageStructure({
+      documentId: 'bass-gap-lengthen',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'treble',
+          space: 'normalized',
+          lineRows: [0.1, 0.11, 0.12, 0.13, 0.14],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['treble'],
+          noteheadCount: 1,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+        {
+          sourceId: 'bass',
+          space: 'normalized',
+          lineRows: [0.18, 0.19, 0.2, 0.21, 0.22],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['bass'],
+          noteheadCount: 2,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+      ],
+    }).page
+    const measured = buildOmrV3DocumentMeasureColumns(
+      createOmrDocumentIR({
+        documentId: 'bass-gap-lengthen',
+        metadata: { musical: { timeSignature: { beats: 4, beatType: 4 } } },
+        pages: [page],
+      }),
+    ).document
+    const document = assignOmrV3DocumentSymbolOwnership(measured, {
+      symbolsByPage: [
+        musicalSymbol('treble-pad', 'notehead', 0.2, 0.12, {
+          midi: 72,
+          onsetDivisions: 0,
+          duration: { divisions: 16, type: 'whole', dots: 0, exact: false },
+          stemDirection: 'up',
+        }),
+        musicalSymbol('bass-a', 'notehead', 0.2, 0.2, {
+          midi: 48,
+          onsetDivisions: 0,
+          duration: { divisions: 4, type: 'quarter', dots: 0, exact: false },
+          stemDirection: 'down',
+        }),
+        musicalSymbol('bass-b', 'notehead', 0.55, 0.2, {
+          midi: 50,
+          onsetDivisions: 8,
+          duration: { divisions: 4, type: 'quarter', dots: 0, exact: false },
+          stemDirection: 'down',
+        }),
+      ],
+    }).document
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const bassEvents = measures(result.document)[0].voices
+      .filter((voice) => voice.candidateRank === 0 && voice.events.some((event) => event.sourceRefs?.includes('bass-a')))
+      .flatMap((voice) => voice.events)
+      .filter((event) => event.kind === 'note')
+      .sort((left, right) => left.onset - right.onset)
+
+    expect(bassEvents.map((event) => event.duration.divisions)).toEqual([8, 8])
+    expect(bassEvents[0].duration.recovery).toBe('lane-gap-lengthen')
+  })
+
+  it('does not let bass gap lengthen undo packed subdivision shorten', () => {
+    const page = analyzeOmrV3PageStructure({
+      documentId: 'bass-no-undo-packing',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'treble',
+          space: 'normalized',
+          lineRows: [0.1, 0.11, 0.12, 0.13, 0.14],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['treble'],
+          noteheadCount: 1,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+        {
+          sourceId: 'bass',
+          space: 'normalized',
+          lineRows: [0.18, 0.19, 0.2, 0.21, 0.22],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['bass'],
+          noteheadCount: 4,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+      ],
+    }).page
+    const measured = buildOmrV3DocumentMeasureColumns(
+      createOmrDocumentIR({
+        documentId: 'bass-no-undo-packing',
+        metadata: { musical: { timeSignature: { beats: 4, beatType: 4 } } },
+        pages: [page],
+      }),
+    ).document
+    // Four packed onsets with overlong detector durations; packing shortens to eighths.
+    // A sparse final gap must not stretch the last packed note back open.
+    const xs = [0.15, 0.28, 0.41, 0.54]
+    const document = assignOmrV3DocumentSymbolOwnership(measured, {
+      symbolsByPage: [
+        musicalSymbol('treble-pad', 'notehead', 0.2, 0.12, {
+          midi: 72,
+          onsetDivisions: 0,
+          duration: { divisions: 16, type: 'whole', dots: 0, exact: false },
+          stemDirection: 'up',
+        }),
+        ...xs.map((x, index) =>
+          musicalSymbol(`bass-${index}`, 'notehead', x, 0.2, {
+            midi: 48 + index,
+            onsetDivisions: index * 2,
+            duration: { divisions: 6, type: 'quarter', dots: 1, exact: false },
+            stemDirection: 'down',
+          }),
+        ),
+      ],
+    }).document
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const bassEvents = measures(result.document)[0].voices
+      .filter((voice) => voice.candidateRank === 0)
+      .flatMap((voice) => voice.events)
+      .filter((event) => event.kind === 'note' && (event.sourceRefs ?? []).some((ref) => String(ref).startsWith('bass-')))
+      .sort((left, right) => left.onset - right.onset)
+
+    expect(bassEvents.map((event) => [event.onset, event.duration.divisions])).toEqual([
+      [0, 2],
+      [2, 2],
+      [4, 2],
+      [6, 2],
+    ])
+    expect(
+      bassEvents.every(
+        (event) =>
+          event.duration.recovery === 'lane-gap-shorten' ||
+          event.duration.recovery === 'lane-subdivision-continuity',
+      ),
+    ).toBe(true)
+  })
+
   it('snaps shared grand-staff onset columns onto a joint beat grid', () => {
     const page = analyzeOmrV3PageStructure({
       documentId: 'grand-onset-grid',

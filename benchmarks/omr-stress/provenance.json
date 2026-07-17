@@ -19,7 +19,7 @@
       "pageCount": 151,
       "pagesBenchmarked": 2,
       "pdfKind": "vector engraving",
-      "truthStatus": "No independently verified MusicXML; import observation only."
+      "truthStatus": "No independently verified MusicXML; import observation only. Current runtime honestly rejects (low-confidence)."
     },
     {
       "fixtureId": "real-pd-piano-pathetique",
@@ -38,7 +38,7 @@
       "pageCount": 9,
       "pagesBenchmarked": 2,
       "pdfKind": "vector engraving",
-      "truthStatus": "No independently verified MusicXML; import observation only."
+      "truthStatus": "No independently verified MusicXML; import observation only. Current runtime honestly rejects (low-confidence)."
     },
     {
       "fixtureId": "real-pd-scan-twinkle-1880",
@@ -57,7 +57,47 @@
       "pageCount": 9,
       "pagesBenchmarked": 2,
       "pdfKind": "historical image scan",
-      "truthStatus": "No independently verified MusicXML; import observation only."
+      "truthStatus": "No independently verified MusicXML; import observation only. Decorative cover isolated by negative-page classifier."
+    },
+    {
+      "fixtureId": "real-pd-scan-twinkle-1880-cover",
+      "title": "Twinkle, Twinkle Little Stars — decorative cover (page 1 crop)",
+      "composer": "Eben H. Bailey",
+      "publisherAndDate": "White, Smith & Co., 1880",
+      "instrument": "piano",
+      "sourcePage": "https://www.loc.gov/item/2023836677/",
+      "downloadUrl": "https://tile.loc.gov/storage-services/public/music/mussm-sm1880-10988/mussm-sm1880-10988.pdf",
+      "downloadDate": "2026-07-16",
+      "extractedFrom": "twinkle-1880-loc.pdf page 1",
+      "sourceRightsStatement": "Library of Congress states that Music for the Nation: American Sheet Music, ca. 1870 to 1885 is public domain and free to use and reuse.",
+      "editionFileLicense": "Public-Domain",
+      "requiredAttribution": "Library of Congress requests the credit line: Library of Congress, Music Division.",
+      "allowedRedistributionUse": "Public-domain use and reuse, including redistribution.",
+      "sha256": "215f6044b94444992f0a4a05a28ff7a38cd33825bda45f04f32cd592cbdff9f4",
+      "pageCount": 1,
+      "pagesBenchmarked": 1,
+      "pdfKind": "historical image scan — cover crop",
+      "truthStatus": "Negative-page fixture; no symbolic truth. Expected honest rejection with zero playable events."
+    },
+    {
+      "fixtureId": "real-pd-scan-twinkle-1880-music",
+      "title": "Twinkle, Twinkle Little Stars — music page (page 2 crop)",
+      "composer": "Eben H. Bailey",
+      "publisherAndDate": "White, Smith & Co., 1880",
+      "instrument": "piano",
+      "sourcePage": "https://www.loc.gov/item/2023836677/",
+      "downloadUrl": "https://tile.loc.gov/storage-services/public/music/mussm-sm1880-10988/mussm-sm1880-10988.pdf",
+      "downloadDate": "2026-07-16",
+      "extractedFrom": "twinkle-1880-loc.pdf page 2",
+      "sourceRightsStatement": "Library of Congress states that Music for the Nation: American Sheet Music, ca. 1870 to 1885 is public domain and free to use and reuse.",
+      "editionFileLicense": "Public-Domain",
+      "requiredAttribution": "Library of Congress requests the credit line: Library of Congress, Music Division.",
+      "allowedRedistributionUse": "Public-domain use and reuse, including redistribution.",
+      "sha256": "01da2835223c265ba4a6e410e59fbdb1c66ab29283bdd51a21c80031f6ebf8a4",
+      "pageCount": 1,
+      "pagesBenchmarked": 1,
+      "pdfKind": "historical image scan — music crop",
+      "truthStatus": "No independently verified MusicXML yet; import observation only. Dual independent transcriptions on twinkle-1880-loc-theme-m1-3.pdf disagreed on key (1 vs 2 flats), meter, and measure count — blocked pending human review."
     }
   ]
 }

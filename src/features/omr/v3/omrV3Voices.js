@@ -218,6 +218,11 @@ function refineApproximatePackedDurations(items, totalDivisions) {
  * Lengthen approximate short durations to the next onset in the same lane.
  * Used for grand-staff bass accompaniment where detector packing leaves
  * quarters that should sustain as halves. Never touches exact durations.
+ *
+ * Must not undo packed-subdivision shorten evidence: when a stem/lane family
+ * was already rewritten to a short packing target, incomplete lane membership
+ * can leave a large geometric gap that would otherwise stretch notes back to
+ * overlong values (and non-ladder floats).
  */
 function fillApproximateLaneGaps(items, totalDivisions) {
   const groups = onsetGroups(items)
@@ -227,12 +232,19 @@ function fillApproximateLaneGaps(items, totalDivisions) {
     const group = groups[index]
     const nextOnset = index + 1 < groups.length ? groups[index + 1].onset : totalDivisions
     const gap = Math.max(EPSILON, nextOnset - group.onset)
+    const capacity = snapDownToLadder(Math.min(gap, totalDivisions - group.onset))
     for (const item of group.items) {
       if (item.kind !== 'note') continue
       if (item.duration?.exact !== false) continue
       if (!Number.isFinite(item.duration?.divisions)) continue
-      if (item.duration.divisions >= gap - EPSILON) continue
-      replaced.set(itemIdentity(item), withDuration(item, gap, 'lane-gap-lengthen'))
+      if (
+        item.duration.recovery === 'lane-gap-shorten' ||
+        item.duration.recovery === 'lane-subdivision-continuity'
+      ) {
+        continue
+      }
+      if (!Number.isFinite(capacity) || item.duration.divisions >= capacity - EPSILON) continue
+      replaced.set(itemIdentity(item), withDuration(item, capacity, 'lane-gap-lengthen'))
     }
   }
   return items.map((item) => replaced.get(itemIdentity(item)) ?? item)
