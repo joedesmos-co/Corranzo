@@ -370,31 +370,34 @@ export default function PdfOmrPlaybackPanel({
 
   const pdfBytesAvailable = Boolean(pdfSource) || Boolean(pdfFileUrl)
   const showDevTools = import.meta.env.DEV
+  const showRetry = !isGenerating && status === OMR_STATUS.FAILED
+  const showPreparing =
+    isGenerating || (Boolean(autoStartKey) && status === OMR_STATUS.IDLE)
 
   return (
-    <section className="library-omr-panel" aria-label="PDF timing generation" aria-busy={isGenerating}>
+    <section className="library-omr-panel" aria-label="Preparing score" aria-busy={isGenerating}>
       <div className="library-omr-panel__header">
         <h2 className="library-omr-panel__title practice-section__title--editorial">
-          Setting up your music
+          Preparing score
         </h2>
         <span className="library-omr-panel__badge">Local</span>
       </div>
       <p className="library-omr-panel__lede">
-        This may take a moment.
+        {showRetry
+          ? 'Something went wrong while preparing this PDF.'
+          : 'This may take a moment.'}
       </p>
       <div className="library-omr-panel__actions">
-        <button
-          type="button"
-          className="upload-btn library-omr-panel__btn"
-          disabled={disabled || isGenerating || !pdfBytesAvailable}
-          onClick={handleGenerate}
-        >
-          {isGenerating
-            ? 'Setting up your music...'
-            : status === OMR_STATUS.FAILED
-              ? 'Try again'
-              : 'Generate timing from PDF'}
-        </button>
+        {showRetry && (
+          <button
+            type="button"
+            className="upload-btn library-omr-panel__btn"
+            disabled={disabled || !pdfBytesAvailable}
+            onClick={handleGenerate}
+          >
+            Try again
+          </button>
+        )}
         {!pdfBytesAvailable && !isGenerating && (
           <p className="library-omr-panel__status" role="status">
             PDF is still loading — try again in a moment.
@@ -410,11 +413,11 @@ export default function PdfOmrPlaybackPanel({
           </button>
         )}
       </div>
-      {isGenerating && (
+      {showPreparing && (
         <div className="library-omr-panel__progress" role="status" aria-live="polite">
           <span className="library-omr-panel__progress-bar" aria-hidden="true" />
           <p className="library-omr-panel__status">
-            Setting up your music... {progressLabel || OMR_STATUS_LABEL[status] || 'This may take a moment.'}
+            Preparing score… {isGenerating ? progressLabel || OMR_STATUS_LABEL[status] || '' : ''}
           </p>
         </div>
       )}

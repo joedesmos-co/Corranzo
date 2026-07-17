@@ -62,9 +62,10 @@ describe('launch readiness fixes', () => {
   it('keeps PDF setup automatic and concise', () => {
     const omr = readSrc('components', 'library', 'PdfOmrPlaybackPanel.jsx')
 
-    expect(omr).toContain('Setting up your music...')
+    expect(omr).toContain('Preparing score')
     expect(omr).toContain('Ready to practice')
     expect(omr).not.toContain('Generate experimental playback from PDF')
+    expect(omr).not.toContain('Generate timing from PDF')
   })
 
   it('keeps the guided tutorial off Profile and legal views', () => {

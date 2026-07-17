@@ -364,7 +364,7 @@ export default function LibraryPanel({
 
               {showOmrPanel && (
                 <p className="library-panel__workflow library-panel__workflow-next" role="status">
-                  Corranzo is setting up this PDF automatically.
+                  Corranzo is preparing this score automatically.
                 </p>
               )}
 

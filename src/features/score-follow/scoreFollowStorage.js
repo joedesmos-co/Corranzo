@@ -88,6 +88,26 @@ export function saveScoreFollowAnchors(fingerprint, anchors) {
   return writeAnchorsToKey(getScoreFollowStorageKey(fingerprint), anchors)
 }
 
+/** Drop stored anchors for a PDF so a replacement timing source cannot reuse them. */
+export function clearScoreFollowAnchors({ fingerprint, fileName } = {}) {
+  const keys = [
+    getScoreFollowStorageKey(fingerprint),
+    getLegacyScoreFollowStorageKey(fileName),
+  ].filter(Boolean)
+  let cleared = 0
+  for (const key of [...new Set(keys)]) {
+    try {
+      if (localStorage.getItem(key) != null) {
+        localStorage.removeItem(key)
+        cleared += 1
+      }
+    } catch {
+      // ignore storage errors
+    }
+  }
+  return { ok: true, cleared }
+}
+
 export function createAnchorId() {
   return `anchor-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
 }

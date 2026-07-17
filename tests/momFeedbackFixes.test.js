@@ -49,7 +49,10 @@ describe('Corranzo mom-test feedback pass', () => {
 
     expect(app).toMatch(/const clearedCompanionFiles = Boolean\(midiSource \|\| musicXmlSource\)[\s\S]*setMusicXmlSource\(null\)[\s\S]*setMidiSource\(null\)/)
     expect(app).toMatch(/clearedCompanionFilesForPdf = Boolean\(loadedMidi \|\| loadedXml\)[\s\S]*setMidiSource\(null\)[\s\S]*setMusicXmlSource\(null\)/)
-    expect(app).toContain('Previous timing and sound files were cleared')
+    expect(app).toContain('pdfPreparingScoreMessage')
+    expect(readSrc('features', 'library', 'autoOmrOrchestration.js')).toContain(
+      'Previous timing and sound files were cleared',
+    )
   })
 
   it('makes microphone-off and microphone-reality states explicit in Wait For You', () => {
