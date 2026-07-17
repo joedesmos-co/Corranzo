@@ -11,6 +11,9 @@ import {
   OMR_FAILURE_REASON,
 } from '../src/features/omr/assessOmrDifficulty.js'
 import {
+  denoiseImageData,
+  deskewImageData,
+  estimateDeskewAngle,
   estimatePageScanQuality,
   preprocessOmrPageImage,
 } from '../src/features/omr/preprocessOmrPageImage.js'
@@ -48,6 +51,53 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
     const { applied } = preprocessOmrPageImage(scanned)
     expect(applied.length).toBeGreaterThan(0)
     expect(applied).toContain('contrast')
+  })
+
+  it('leaves already-clean digital pages pixel-identical', () => {
+    const clean = rhythmicPianoPage()
+    const before = clean.data.slice()
+    const result = preprocessOmrPageImage(clean)
+    expect(result.applied).toEqual([])
+    expect(result.imageData).not.toBe(clean)
+    expect(result.imageData.data.every((value, index) => value === before[index])).toBe(true)
+    expect(clean.data.every((value, index) => value === before[index])).toBe(true)
+  })
+
+  it('removes isolated specks without erasing connected staff ink', () => {
+    const imageData = {
+      width: 9,
+      height: 9,
+      data: new Uint8ClampedArray(9 * 9 * 4).fill(255),
+    }
+    for (let index = 3; index <= 5; index += 1) {
+      const pixel = (4 * imageData.width + index) * 4
+      imageData.data[pixel] = 0
+      imageData.data[pixel + 1] = 0
+      imageData.data[pixel + 2] = 0
+    }
+    const speck = (2 * imageData.width + 2) * 4
+    imageData.data[speck] = 0
+    imageData.data[speck + 1] = 0
+    imageData.data[speck + 2] = 0
+
+    denoiseImageData(imageData)
+
+    expect(imageData.data[speck]).toBeGreaterThanOrEqual(235)
+    expect(imageData.data[(4 * imageData.width + 4) * 4]).toBe(0)
+  })
+
+  it('does not invent deskew on a clean horizontal score', () => {
+    const clean = rhythmicPianoPage()
+    const estimate = estimateDeskewAngle(clean)
+    expect(estimate.angle).toBe(0)
+  })
+
+  it('recovers a conservative skew estimate from repeated staff lines', () => {
+    const skewed = rhythmicPianoPage()
+    deskewImageData(skewed, 0.75)
+    const estimate = estimateDeskewAngle(skewed)
+    expect(estimate.angle).toBe(-0.75)
+    expect(estimate.improvement).toBeGreaterThan(0.025)
   })
 
   it('produces playback from a scanned synthetic page after preprocessing', async () => {
@@ -153,12 +203,16 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
       blank.data[i + 2] = 255
     }
 
+    const preprocessed = preprocessOmrPageImage(blank)
+    expect(preprocessed.quality.isLikelyScanned).toBe(false)
+    expect(preprocessed.applied).toEqual([])
+
     await expect(
       runPdfOmrPipeline('synthetic', {
         numPages: 1,
         renderPage: renderPagesFromArray([blank]),
       }),
-    ).rejects.toThrow(/staff systems|noteheads/i)
+    ).rejects.toThrow(OMR_TOO_DIFFICULT_MESSAGE)
   })
 
   it('supports cancellation between pages', async () => {
