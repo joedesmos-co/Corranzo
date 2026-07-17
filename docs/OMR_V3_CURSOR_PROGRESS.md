@@ -127,6 +127,33 @@ Requires regular inter-column spacing (±20%). Packed-duration refine skips subd
 
 Scan beam/stem, paired-guitar chords, paired-guitar techniques.
 
+## Phase 4 — Scanned piano beam/stem — PARTIAL / NOT CLEARED
+
+### Root cause
+
+Raster path never built `beamStemGraph`, so independent V3 received no beam/stem ownership. Noteheads survive, but onset columns are irregular on the grand staff, durations stay overlong (many halves/wholes), and chord grouping lags V2. Existing `buildBeamStemGraph` already supports rendered-image recovery, but scan ink yields few high-confidence beam attachments.
+
+### Attempted / rejected
+
+- Feeding ungated raster ownership into V3 — F1/onset rose slightly, duration fell (0.3333 → 0.3243); still far below V2 floors.
+- MAD-to-beat-grid snap for noisy grand-staff columns — damaged scan F1 (0.804 → 0.774).
+- Lowering confidence floors / widening gap tolerances — rejected as gate weakening.
+
+### Implementation
+
+- Raster measures now build and attach `beamStemGraph` / diagnostics (score-graph parity with vector).
+- Detector symbol ownership applies only when `beamOwnership.confidence >= 0.7` (shared with duration handoff).
+- Raster → independent V3 still omits the graph until attachments clear duration/onset/chord acceptance without collateral damage.
+- Added abstention test for broken/sparse beam ink.
+
+### Qualification impact
+
+Scan independent metrics unchanged vs Phase 3 baseline (still regressing). Enforced independent regressions remain **3**.
+
+### Remaining risk
+
+Clearing `piano-articulation-scan` needs stronger conservative raster stem/beam ink association and/or scan-safe onset clustering that does not repeat the rejected MAD snap.
+
 ## Next
 
-Phase 4 — Scanned piano beam/stem relationships.
+Phase 5 — Paired-guitar chord fusion.

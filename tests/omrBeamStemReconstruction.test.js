@@ -275,4 +275,27 @@ describe('beam/stem reconstruction diagnostics', () => {
     expect(summary.beamAttachmentRate).toBe(0)
   })
 
+  it('requires strong ink evidence before treating a raster beam as connected', () => {
+    const imageData = makeImageData()
+    // Broken / sparse ink between stems — must abstain rather than false-join.
+    drawInkRect(imageData, 44, 27, 48, 29)
+    drawInkRect(imageData, 58, 27, 62, 29)
+    const notes = [
+      note({
+        midi: 72,
+        cx: 40,
+        stem: { x: 44, tipY: 28, length: 32, direction: 'up' },
+        durationDivisions: 2,
+      }),
+      note({
+        midi: 74,
+        cx: 58,
+        stem: { x: 62, tipY: 28, length: 31, direction: 'up' },
+        durationDivisions: 2,
+      }),
+    ]
+    const graph = buildBeamStemGraph({ notes, measureBox, imageData })
+    expect(summarizeBeamStemGraph(graph).beamCandidateCount).toBe(0)
+  })
+
 })

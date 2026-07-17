@@ -34,6 +34,10 @@ import {
   systemConfidenceFromMeasures as vectorSystemConfidenceFromMeasures,
   textGlyphsToImage,
 } from './processVectorOmrPage.js'
+import {
+  buildBeamStemGraph,
+  summarizeBeamStemGraph,
+} from './beamStemReconstructionDiagnostics.js'
 import { detectStaffClefsFromGlyphs } from './pitchFromStaffPosition.js'
 import { serializeOmrMeasureBox } from './omrMeasureGridMeta.js'
 import { computeOmrMeasureVisualExtents } from './omrMeasureVisualExtents.js'
@@ -113,7 +117,11 @@ function detectorSymbolsFromObservations(
 ) {
   const graphNoteheads = beamStemGraph?.noteheads ?? []
   const noteheads = (observations?.noteheads ?? []).map((note, index) => {
-    const beamOwnership = graphNoteheads[index]?.beamOwnership ?? null
+    const rawOwnership = graphNoteheads[index]?.beamOwnership ?? null
+    // Shared confidence floor with independent beam-duration handoff. Weak
+    // raster recoveries abstain rather than reshape stem lanes or durations.
+    const beamOwnership =
+      rawOwnership && Number(rawOwnership.confidence ?? 0) >= 0.7 ? rawOwnership : null
     return {
       id: `detector-${source}-note-${page}-${systemIndex}-${note.measureNumber ?? 'x'}-${index}`,
       kind: 'notehead',
@@ -137,7 +145,7 @@ function detectorSymbolsFromObservations(
       stemGroupId: beamOwnership?.attachedStemId ?? null,
       beamGroupId: beamOwnership?.beamGroupId ?? null,
       beamExpectedDivisions: beamOwnership?.expectedDivisions ?? null,
-      beamOwnershipConfidence: beamOwnership?.confidence ?? null,
+      beamOwnershipConfidence: beamOwnership?.confidence ?? rawOwnership?.confidence ?? null,
       tieStart: Boolean(note.tieStart),
       confidence: note.confidence ?? note.pitchConfidence ?? 0.6,
       articulation: note.articulation ?? null,
@@ -756,9 +764,24 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       }
 
       const rhythm = assembleMeasureRhythm(imageData, measureBox, noteheads, inkThreshold, {
-        captureDetectorObservations: captureOmrV3RawSymbols,
+        // Always capture enriched heads so the raster beam/stem graph can use the
+        // same notehead→stem interface as the vector path. Raw V3 symbols still
+        // only emit when captureOmrV3RawSymbols is enabled.
+        captureDetectorObservations: true,
       })
+      const beamStemGraph = buildBeamStemGraph({
+        notes: rhythm.detectorObservations?.noteheads ?? noteheads,
+        events: rhythm.events,
+        measureBox,
+        imageData,
+        inkThreshold,
+      })
+      const beamStemDiagnostics = summarizeBeamStemGraph(beamStemGraph)
       if (captureOmrV3RawSymbols) {
+        // Keep the raster beam/stem graph on the measure record for score-graph
+        // parity, but do not feed weak scan ownership into independent V3 yet:
+        // gated handoff improved F1/onset slightly while regressing duration and
+        // still missed the scan acceptance floor.
         rawDetectorSymbols.push(
           ...detectorSymbolsFromObservations(rhythm.detectorObservations, {
             page,
@@ -806,6 +829,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         endingMarking,
         dynamic,
         pedal: boxIndex === 0 ? pedal : null,
+        beamStemGraph,
+        beamStemDiagnostics,
       }
       systemMeasures.push(measureRecord)
       measureRhythms.push(measureRecord)
