@@ -149,6 +149,25 @@ function createWorkerAnalyzer(signal, traceRunId = null) {
     })
 }
 
+function createRetryingWorkerAnalyzer(signal, traceRunId = null) {
+  let analyzePage = createWorkerAnalyzer(signal, traceRunId)
+  return async (imageData, pageOptions) => {
+    try {
+      return await analyzePage(imageData, pageOptions)
+    } catch (error) {
+      if (signal?.aborted || error?.name === 'AbortError') {
+        throw error
+      }
+      omrTrace('client:worker-page-retry', {
+        page: pageOptions?.page ?? null,
+        message: error?.message ?? String(error),
+      }, traceRunId)
+      analyzePage = createWorkerAnalyzer(signal, traceRunId)
+      return analyzePage(imageData, pageOptions)
+    }
+  }
+}
+
 /**
  * Run experimental OMR off the main thread when workers are available.
  */
@@ -167,7 +186,7 @@ export async function runPdfOmrClient(pdfSource, options = {}) {
       ...rest,
       signal,
       traceRunId,
-      analyzePage: canUseWorker ? createWorkerAnalyzer(signal, traceRunId) : null,
+      analyzePage: canUseWorker ? createRetryingWorkerAnalyzer(signal, traceRunId) : null,
     })
   } finally {
     terminateActiveWorker()

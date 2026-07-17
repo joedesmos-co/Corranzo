@@ -2018,6 +2018,7 @@ export function buildVectorMeasureRecord({
   measurePlacement = {},
   orphanGlyphs = [],
   inkThreshold = 170,
+  captureDetectorObservations = false,
 }) {
   const { notes, vectorStaccatoDiagnostics, vectorAccentDiagnostics } = noteheadsForMeasure(
     glyphs,
@@ -2100,6 +2101,9 @@ export function buildVectorMeasureRecord({
     musicalEventReconstructionDiagnostics,
     beamStemGraph,
     beamStemDiagnostics,
+    ...(captureDetectorObservations
+      ? { detectorObservations: { noteheads: notes, rests: detectedRests } }
+      : {}),
   }
 }
 
@@ -2111,6 +2115,7 @@ export function processVectorPageSystems({
   inheritedKeySignature = null,
   inheritedTimeSignature = null,
   inkThreshold = 170,
+  captureDetectorObservations = false,
 }) {
   const glyphs = textGlyphsToImage(pageText, imageData)
   const firstSystemBoxes = systemMeasureBoxes[0] ?? []
@@ -2149,6 +2154,7 @@ export function processVectorPageSystems({
         timeSignature,
         measurePlacement,
         inkThreshold,
+        captureDetectorObservations,
       })
       noteCount += record.vectorNoteCount ?? 0
       return record
@@ -2187,6 +2193,7 @@ export function processVectorPageSystems({
         measurePlacement,
         orphanGlyphs,
         inkThreshold,
+        captureDetectorObservations,
       })
       noteCount += (rebuilt.vectorNoteCount ?? 0) - (previous.vectorNoteCount ?? 0)
       measureRecordsBySystem[systemIndex][measureIndex] = rebuilt

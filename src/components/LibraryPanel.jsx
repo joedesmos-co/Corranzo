@@ -322,7 +322,7 @@ export default function LibraryPanel({
                 <p className="practice-piece-card__meta">Add files</p>
                 <h4 className="practice-piece-card__title">Upload your own piece</h4>
                 <p className="practice-piece-card__teaches">
-                  PDF, timing, and optional MIDI.
+                  PDF sets up automatically. Timing and MIDI are optional.
                 </p>
               </div>
 
@@ -364,7 +364,7 @@ export default function LibraryPanel({
 
               {showOmrPanel && (
                 <p className="library-panel__workflow library-panel__workflow-next" role="status">
-                  Upload MusicXML/MXL anytime for the most accurate timing.
+                  Corranzo is setting up this PDF automatically.
                 </p>
               )}
 

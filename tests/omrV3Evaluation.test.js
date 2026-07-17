@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  assessOmrV3ProductionGate,
   assessOmrV3PromotionGate,
   evaluateOmrV3Shadow,
 } from '../src/features/omr/v3/omrV3Evaluation.js'
@@ -137,5 +138,57 @@ describe('OMR V3 shadow evaluation and promotion gates', () => {
       'confidence-inflation',
     ])
     expect(Object.values(gate.candidates).every((status) => status === 'not-promoted')).toBe(true)
+  })
+
+  it('keeps full production blocked when compatibility shadows replay legacy events', () => {
+    const gate = assessOmrV3ProductionGate([
+      {
+        id: 'recognized',
+        status: 'ready',
+        current: { metrics: metrics() },
+        v3: { metrics: metrics() },
+        evidence: { independentPrimaryEventRate: 0 },
+      },
+      {
+        id: 'rejected',
+        expectedOutcome: 'reject-honestly',
+        status: 'structure-ready',
+      },
+    ])
+
+    expect(gate.pass).toBe(false)
+    expect(gate.status).toBe('blocked')
+    expect(gate.blockers.map((blocker) => blocker.code)).toEqual([
+      'legacy-derived-symbol-evidence',
+      'v3-rejection-ownership-incomplete',
+      'runtime-candidate-not-implemented',
+      'rollback-not-verified',
+    ])
+  })
+
+  it('allows production review only with independent coverage, rejection ownership, and rollback', () => {
+    const gate = assessOmrV3ProductionGate(
+      [
+        {
+          id: 'recognized',
+          status: 'ready',
+          current: { metrics: metrics() },
+          v3: { metrics: metrics() },
+          evidence: { independentPrimaryEventRate: 1 },
+        },
+        {
+          id: 'rejected',
+          expectedOutcome: 'reject-honestly',
+          status: 'structure-ready',
+          decision: { status: 'reject', ownedBy: 'omr-v3', independent: true },
+        },
+      ],
+      { runtimeCandidateImplemented: true, rollbackVerified: true },
+    )
+
+    expect(gate.pass).toBe(true)
+    expect(gate.status).toBe('eligible-for-production-rollout')
+    expect(gate.blockers).toEqual([])
+    expect(gate.promotedToRuntime).toBe(false)
   })
 })

@@ -27,6 +27,7 @@ export const OMR_V3_RELATIONSHIP_TYPE = Object.freeze({
   SLUR: 'slur',
   BEAM: 'beam',
   STEM_GROUP: 'stem-group',
+  TUPLET: 'tuplet',
   NOTATION_TAB_MIRROR: 'notation-tab-mirror',
   CROSS_STAFF: 'cross-staff',
   REPEAT_VOLTA: 'repeat-volta',

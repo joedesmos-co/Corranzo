@@ -132,6 +132,20 @@ describe('OMR V3 shared measure-column geometry', () => {
     expect(result.system.diagnostics.map((entry) => entry.code)).toContain('missing-barline-inferred')
   })
 
+  it('does not subdivide a detector-declared complete measure grid', () => {
+    const observed = [0.2, 0.3, 0.4, 0.6, 0.7, 0.8].map((x) =>
+      bar(x, { completeGrid: true }),
+    )
+    const result = buildOmrV3MeasureColumnsForSystem(
+      grandStaff([observed, observed]),
+      { expectedMeasureWidth: 0.1 },
+    )
+
+    expect(result.measureColumns).toHaveLength(7)
+    expect(result.diagnostics.inferredBoundaryCount).toBe(0)
+    expect(result.diagnostics.completeGridEvidence).toBe(true)
+  })
+
   it('rejects stem-like single-staff candidates instead of inflating measures', () => {
     const input = systemFrom([
       staffBand({
@@ -176,6 +190,50 @@ describe('OMR V3 shared measure-column geometry', () => {
     expect(result.system.diagnostics.map((entry) => entry.code)).toContain(
       'invented-trailing-measure-rejected',
     )
+  })
+
+  it('recovers sparse boundaries from stable neighboring-system widths', () => {
+    const completeBars = [bar(0.3), bar(0.5), bar(0.7)]
+    const first = grandStaff([completeBars, completeBars])
+    const sparse = analyzeOmrV3PageStructure({
+      documentId: 'measure-continuity',
+      pageIndex: 1,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      staffBands: [
+        staffBand({
+          y: 0.1,
+          sourceId: 'sparse-treble',
+          clefs: ['treble'],
+          noteheadCount: 8,
+          barlines: [bar(0.5)],
+        }),
+        staffBand({
+          y: 0.18,
+          sourceId: 'sparse-bass',
+          clefs: ['bass'],
+          noteheadCount: 7,
+          barlines: [bar(0.5)],
+        }),
+      ],
+      instrumentId: 'piano',
+    }).page.systems[0]
+    const document = createOmrDocumentIR({
+      documentId: 'measure-continuity',
+      pages: [
+        { pageIndex: 0, width: 1000, height: 1400, systems: [first] },
+        { pageIndex: 1, width: 1000, height: 1400, systems: [sparse] },
+      ],
+    })
+    const result = buildOmrV3DocumentMeasureColumns(document)
+    const secondSystem = result.document.pages[1].systems[0]
+
+    expect(secondSystem.measureColumns).toHaveLength(4)
+    expect(
+      secondSystem.systemBarlines.filter((entry) => entry.kind === 'inferred-missing-barline'),
+    ).toHaveLength(2)
+    expect(result.systems[1].strongExternalWidthConsensus).toBe(true)
+    expect(result.totalMeasures).toBe(8)
   })
 
   it('numbers columns across systems without mutating the source document', () => {

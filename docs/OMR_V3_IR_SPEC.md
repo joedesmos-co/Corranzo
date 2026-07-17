@@ -195,7 +195,7 @@ All stages are pure-data modules under `src/features/omr/v3/`:
 | `omrV3Shadow.js` | adapter/orchestrator from current detector observations to V3 | opt-in development/benchmark only |
 | `omrV3Rollout.js` | disabled defaults, rollback, and non-enabling promotion requests | production-safe control plane |
 
-`runPdfOmrPipeline` accepts `omrV3Shadow`, `omrV3Rollback`, and `omrV3Promotions`. Shadow defaults to false. Rollback suppresses all V3 work. Every requested promotion resolves false in this sprint, so V3 cannot replace production output accidentally. Benchmarks opt into shadow analysis and write a separate `omr-v3-shadow-report`.
+`runPdfOmrPipeline` accepts `omrV3Shadow`, `omrV3Compare`, `omrV3Rollback`, `omrV3RuntimeCandidate`, and `omrV3Promotions`. Shadow and the runtime candidate default to false. Rollback suppresses all V3 work. Promotions resolve only when `omrV3RuntimeCandidate` is armed and rollback is off; `fullV3` is the only key that may swap MusicXML. Comparison mode (`omrV3Compare`) runs independent V3 beside V2, keeps V2 user-visible, and attaches `omrV3Comparison` / disagreement telemetry without promoting. Benchmarks opt into shadow analysis and write a separate `omr-v3-shadow-report`.
 
 The current shadow adapter deliberately reuses legacy measure/event evidence to exercise the full IR lifecycle. Its symbol evidence is therefore not an independent raw-symbol detector benchmark. This provenance is named on adapted barlines and event technical metadata; no fixture IDs or coordinates are embedded in runtime code.
 

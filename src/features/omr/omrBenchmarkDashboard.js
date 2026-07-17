@@ -174,17 +174,23 @@ export function validateOmrBenchmarkManifest(manifest) {
   }
   manifest.fixtures.forEach((fixture, index) => {
     const optional = Boolean(fixture?.optional) || Boolean(fixture?.diagnosticOnly)
+    const importOnly = fixture?.expectedOutcome === 'import-only'
     if (!fixture?.id) {
       errors.push(`fixtures[${index}]: missing id`)
     }
     if (!fixture?.pdf) {
       errors.push(`fixtures[${index}] (${fixture?.id ?? '?'}): missing pdf`)
     }
-    if (!fixture?.truth) {
+    if (!fixture?.truth && !importOnly) {
       errors.push(`fixtures[${index}] (${fixture?.id ?? '?'}): missing truth`)
     }
     if (fixture?.checksums && typeof fixture.checksums !== 'object') {
       errors.push(`fixtures[${index}] (${fixture?.id ?? '?'}): checksums must be an object`)
+    }
+    if (importOnly && !optional) {
+      errors.push(
+        `fixtures[${index}] (${fixture?.id ?? '?'}): import-only fixtures must be optional diagnostics`,
+      )
     }
     if (!optional) {
       if (!fixture?.checksums?.pdf || !fixture?.checksums?.truth) {
@@ -205,7 +211,7 @@ export function validateOmrBenchmarkManifest(manifest) {
     }
     if (
       fixture?.expectedOutcome != null &&
-      !['transcribe', 'reject-honestly'].includes(fixture.expectedOutcome)
+      !['transcribe', 'reject-honestly', 'import-only'].includes(fixture.expectedOutcome)
     ) {
       errors.push(`fixtures[${index}] (${fixture?.id ?? '?'}): invalid expectedOutcome`)
     }
@@ -316,6 +322,7 @@ export function buildFixtureDashboardRecord({
   report = null,
   error = null,
   run = null,
+  observation = null,
   scoreGraphMeasures = null,
 } = {}) {
   const diagnosticOnly = Boolean(fixture?.diagnosticOnly)
@@ -340,6 +347,7 @@ export function buildFixtureDashboardRecord({
     thresholdFailures: [],
     metrics: null,
     run: run ?? null,
+    stressObservation: observation,
     error: null,
   }
 
@@ -397,6 +405,13 @@ export function buildFixtureDashboardRecord({
   }
 
   if (!report) {
+    if (expectedOutcome === 'import-only') {
+      return {
+        ...base,
+        status: OMR_BENCHMARK_STATUS.SKIPPED,
+        failureReasons: observation ? [] : ['missing-import-observation'],
+      }
+    }
     return {
       ...base,
       status: OMR_BENCHMARK_STATUS.SKIPPED,
@@ -627,6 +642,23 @@ export function formatOmrBenchmarkMarkdown(summary) {
     }
     if (record.expectedRejection) {
       lines.push(`- Expected honest rejection: ${record.error?.code ?? 'rejected'}`)
+    }
+    if (record.stressObservation) {
+      const observation = record.stressObservation
+      lines.push(`- Import observation: ${observation.outcome ?? 'unknown'}`)
+      if (Number.isFinite(observation.pagesProcessed)) {
+        lines.push(
+          `- Regions: ${observation.pagesProcessed} page(s) processed, ${observation.failedPages ?? 0} failed, ${observation.isolatedRegions ?? 0} isolated`,
+        )
+      }
+      if (Number.isFinite(observation.noteCount) || Number.isFinite(observation.measureCount)) {
+        lines.push(
+          `- Recognition: ${observation.noteCount ?? 0} note(s), ${observation.measureCount ?? 0} measure(s), confidence ${pct(observation.confidence)}`,
+        )
+      }
+      if (Number.isFinite(observation.processingMs)) {
+        lines.push(`- Pipeline timing: ${Math.round(observation.processingMs)} ms`)
+      }
     }
     if (record.metrics) {
       lines.push(fixtureMetricLine(record))

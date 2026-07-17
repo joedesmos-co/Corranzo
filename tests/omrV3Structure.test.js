@@ -3,6 +3,7 @@ import {
   analyzeOmrV3PageStructure,
   buildOmrV3StaffCandidates,
   collapseDoubledStaffRows,
+  recoverOmrV3DocumentStructure,
   segmentMergedStaffRows,
   summarizeOmrV3Structure,
 } from '../src/features/omr/v3/omrV3Structure.js'
@@ -22,8 +23,12 @@ function staffBand({
   sourceId = `staff-${y}`,
   clefs = [],
   noteheadCount = 0,
+  explicitNotation = false,
   explicitTab = false,
   tabDigitCount = 0,
+  sourceSystemId = null,
+  sourcePairId = null,
+  sourceRole = null,
   barlines = BARLINES,
   xStart = 0.1,
   xEnd = 0.92,
@@ -36,8 +41,12 @@ function staffBand({
     xEnd,
     clefs,
     noteheadCount,
+    explicitNotation,
     explicitTab,
     tabDigitCount,
+    sourceSystemId,
+    sourcePairId,
+    sourceRole,
     barlines,
     confidence: 0.9,
   }
@@ -173,6 +182,104 @@ describe('OMR V3 structure-first page analysis', () => {
     )
   })
 
+  it('uses an explicit detector notation role to recover an incomplete staff band', () => {
+    const recovered = analyze(
+      [staffBand({ y: 0.2, lines: 2, explicitNotation: true, sourceRole: 'notation' })],
+      'guitar',
+    )
+    const unlabeled = analyze([staffBand({ y: 0.2, lines: 2 })], 'guitar')
+    const unpairedPiano = analyze(
+      [staffBand({ y: 0.2, lines: 2, explicitNotation: true, sourceRole: 'notation' })],
+      'piano',
+    )
+
+    expect(recovered.page.systems[0].staffGroups[0].type).toBe(
+      OMR_V3_STAFF_GROUP_TYPE.SINGLE_NOTATION,
+    )
+    expect(unlabeled.page.systems[0].staffGroups[0].type).toBe(
+      OMR_V3_STAFF_GROUP_TYPE.UNKNOWN,
+    )
+    expect(unpairedPiano.page.systems[0].staffGroups[0].type).toBe(
+      OMR_V3_STAFF_GROUP_TYPE.UNKNOWN,
+    )
+  })
+
+  it('preserves two staves from the same detector system despite incomplete geometry', () => {
+    const result = analyze([
+      staffBand({
+        y: 0.1,
+        lines: 6,
+        sourceId: 'incomplete-upper',
+        sourceSystemId: 'source-system-1',
+        sourceRole: 'notation',
+        explicitNotation: true,
+        clefs: ['treble'],
+        noteheadCount: 4,
+      }),
+      staffBand({
+        y: 0.42,
+        sourceId: 'lower',
+        sourceSystemId: 'source-system-1',
+        sourceRole: 'notation',
+        explicitNotation: true,
+        clefs: ['bass'],
+        noteheadCount: 4,
+      }),
+    ])
+
+    expect(result.page.systems).toHaveLength(1)
+    const group = result.page.systems[0].staffGroups[0]
+    expect(group.type).toBe(OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF)
+    expect(group.pairingEvidence).toContainEqual({
+      signal: 'source-structure-continuity',
+      score: 1,
+    })
+  })
+
+  it('keeps detector notation/TAB pairs from crossing adjacent source pairs', () => {
+    const result = analyze(
+      [
+        staffBand({
+          y: 0.08,
+          sourceId: 'notation-a',
+          sourcePairId: 'pair-a',
+          sourceRole: 'notation',
+          explicitNotation: true,
+        }),
+        staffBand({
+          y: 0.2,
+          lines: 6,
+          sourceId: 'tab-a',
+          sourcePairId: 'pair-a',
+          sourceRole: 'tab',
+          explicitTab: true,
+        }),
+        staffBand({
+          y: 0.32,
+          sourceId: 'notation-b',
+          sourcePairId: 'pair-b',
+          sourceRole: 'notation',
+          explicitNotation: true,
+        }),
+        staffBand({
+          y: 0.44,
+          lines: 6,
+          sourceId: 'tab-b',
+          sourcePairId: 'pair-b',
+          sourceRole: 'tab',
+          explicitTab: true,
+        }),
+      ],
+      'guitar',
+    )
+
+    expect(result.page.systems).toHaveLength(2)
+    expect(result.page.systems.map((system) => system.staffGroups[0].sourceRefs)).toEqual([
+      expect.arrayContaining(['pair-a']),
+      expect.arrayContaining(['pair-b']),
+    ])
+  })
+
   it('pairs a spacious notation/TAB layout when explicit role and shared barlines agree', () => {
     const result = analyze(
       [
@@ -242,6 +349,43 @@ describe('OMR V3 structure-first page analysis', () => {
     expect(result.page.systems.map((system) => system.boundingBox.y)).toEqual(
       [...result.page.systems.map((system) => system.boundingBox.y)].sort((a, b) => a - b),
     )
+  })
+
+  it('recovers one incomplete grand staff from repeated document geometry', () => {
+    const analysis = analyze([
+      staffBand({ y: 0.08, sourceId: 'a-t', clefs: ['treble'], noteheadCount: 8 }),
+      staffBand({ y: 0.15, sourceId: 'a-b', clefs: ['bass'], noteheadCount: 7 }),
+      staffBand({ y: 0.36, sourceId: 'b-t', clefs: ['treble'], noteheadCount: 8, barlines: [] }),
+      staffBand({ y: 0.43, sourceId: 'b-b', clefs: ['bass'], noteheadCount: 7, barlines: [] }),
+      staffBand({ y: 0.64, sourceId: 'c-t', clefs: ['treble'], noteheadCount: 8 }),
+      staffBand({ y: 0.71, sourceId: 'c-b', clefs: ['bass'], noteheadCount: 7 }),
+    ])
+    expect(analysis.page.systems).toHaveLength(4)
+    const document = createOmrDocumentIR({
+      documentId: 'fixture-document',
+      pages: [analysis.page],
+    })
+    const original = JSON.stringify(document)
+    const recovered = recoverOmrV3DocumentStructure(document)
+
+    expect(JSON.stringify(document)).toBe(original)
+    expect(recovered.recoveredPairings).toHaveLength(1)
+    expect(recovered.document.pages[0].systems).toHaveLength(3)
+    expect(
+      recovered.document.pages[0].systems.every(
+        (system) =>
+          system.staffGroups[0].type === OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF &&
+          system.staffGroups[0].staves.length === 2,
+      ),
+    ).toBe(true)
+    expect(
+      recovered.document.pages[0].systems[1].diagnostics.map((entry) => entry.code),
+    ).toContain('staff-group-recovered-from-document-continuity')
+    expect(validateOmrDocumentIR(recovered.document)).toEqual({
+      valid: true,
+      errors: [],
+      warnings: [],
+    })
   })
 
   it('produces a document-valid, serializable structure hierarchy', () => {

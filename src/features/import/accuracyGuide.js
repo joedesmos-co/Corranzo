@@ -40,8 +40,8 @@ export function evaluateAccuracySetup({ hasPdf, hasMusicXml }) {
     return {
       tierId: 'basic',
       tier: ACCURACY_TIERS.find((item) => item.id === 'basic'),
-      headline: 'PDF only so far',
-      detail: 'Add a timing file for accurate Practice.',
+      headline: 'Setting up your music',
+      detail: 'Corranzo is generating practice timing from your PDF.',
     }
   }
 
@@ -58,7 +58,7 @@ export function evaluateAccuracySetup({ hasPdf, hasMusicXml }) {
     tierId: 'empty',
     tier: null,
     headline: 'Start here',
-    detail: 'Upload PDF, then a timing file.',
+    detail: 'Upload a PDF to set up your music automatically.',
   }
 }
 

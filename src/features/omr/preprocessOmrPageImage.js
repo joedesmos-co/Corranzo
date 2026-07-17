@@ -7,87 +7,163 @@ function cloneImageData(imageData) {
 }
 
 function setRgb(data, index, value) {
-  data[index] = value
-  data[index + 1] = value
-  data[index + 2] = value
+  const bounded = Math.max(0, Math.min(255, Math.round(value)))
+  data[index] = bounded
+  data[index + 1] = bounded
+  data[index + 2] = bounded
   data[index + 3] = 255
+}
+
+function percentileFromHistogram(histogram, total, percentile, maxValue = 255) {
+  const target = Math.max(1, total * percentile)
+  let seen = 0
+  for (let value = 0; value <= maxValue; value += 1) {
+    seen += histogram[value]
+    if (seen >= target) return value
+  }
+  return maxValue
+}
+
+function sampledPageStatistics(imageData, stride = 4) {
+  const { data, width, height } = imageData
+  const histogram = new Uint32Array(256)
+  let edgeVariance = 0
+  let midtoneCount = 0
+  let samples = 0
+  let inkSamples = 0
+  let minX = width
+  let minY = height
+  let maxX = -1
+  let maxY = -1
+
+  for (let y = 1; y < height - stride; y += stride) {
+    for (let x = 1; x < width - stride; x += stride) {
+      const index = (y * width + x) * 4
+      const lum = Math.max(0, Math.min(255, Math.round(compositeLuminance(data, index))))
+      histogram[lum] += 1
+      if (lum >= 32 && lum < 247) midtoneCount += 1
+      if (lum < 235) {
+        inkSamples += 1
+        minX = Math.min(minX, x)
+        minY = Math.min(minY, y)
+        maxX = Math.max(maxX, x)
+        maxY = Math.max(maxY, y)
+      }
+      const right = compositeLuminance(data, index + stride * 4)
+      const down = compositeLuminance(data, index + width * stride * 4)
+      edgeVariance += Math.abs(lum - right) + Math.abs(lum - down)
+      samples += 1
+    }
+  }
+
+  const foregroundSampleCount = histogram.slice(0, 245).reduce((sum, count) => sum + count, 0)
+  const foregroundLuminance = foregroundSampleCount
+    ? percentileFromHistogram(histogram, foregroundSampleCount, 0.2, 244)
+    : 255
+  const backgroundLuminance = percentileFromHistogram(histogram, samples, 0.5)
+  const robustContrastSpread = Math.max(0, backgroundLuminance - foregroundLuminance)
+  const hasContent = maxX >= minX && maxY >= minY
+  return {
+    histogram,
+    samples,
+    foregroundLuminance,
+    backgroundLuminance,
+    robustContrastSpread,
+    midtoneRatio: samples ? midtoneCount / samples : 0,
+    inkRatio: samples ? inkSamples / samples : 0,
+    noiseLevel: samples ? edgeVariance / samples : 0,
+    contentBounds: hasContent
+      ? {
+          x: minX / width,
+          y: minY / height,
+          width: (maxX - minX + stride) / width,
+          height: (maxY - minY + stride) / height,
+          space: 'normalized',
+        }
+      : null,
+  }
 }
 
 /**
  * Estimate whether a page looks scanned (noisy, low contrast) vs clean digital.
  */
 export function estimatePageScanQuality(imageData) {
-  const { data, width, height } = imageData
-  let minLum = 255
-  let maxLum = 0
-  let edgeVariance = 0
-  let samples = 0
-
-  for (let y = 1; y < height - 1; y += 4) {
-    for (let x = 1; x < width - 1; x += 4) {
-      const index = (y * width + x) * 4
-      const lum = compositeLuminance(data, index)
-      minLum = Math.min(minLum, lum)
-      maxLum = Math.max(maxLum, lum)
-      const right = compositeLuminance(data, index + 4)
-      const down = compositeLuminance(data, index + width * 4)
-      edgeVariance += Math.abs(lum - right) + Math.abs(lum - down)
-      samples += 1
-    }
-  }
-
-  const contrastSpread = maxLum - minLum
-  const noiseLevel = samples > 0 ? edgeVariance / samples : 0
-  const isLikelyScanned = contrastSpread < 175 || noiseLevel > 22
+  const { histogram, ...statistics } = sampledPageStatistics(imageData)
+  const minLum = histogram.findIndex((count) => count > 0)
+  let maxLum = 255
+  while (maxLum > 0 && histogram[maxLum] === 0) maxLum -= 1
+  const contrastSpread = Math.max(0, maxLum - Math.max(0, minLum))
+  const backgroundTexture =
+    statistics.backgroundLuminance < 255 && statistics.midtoneRatio > 0.035
+  const hasMusicalContent = statistics.inkRatio >= 0.001 && statistics.contentBounds !== null
+  const isLikelyScanned =
+    hasMusicalContent &&
+    (contrastSpread < 175 || statistics.noiseLevel > 22 || backgroundTexture)
 
   return {
     isLikelyScanned,
+    backgroundTexture,
     contrastSpread,
-    noiseLevel,
-    confidence: isLikelyScanned ? 0.72 : 0.65,
+    ...statistics,
+    confidence: isLikelyScanned ? (backgroundTexture ? 0.8 : 0.72) : 0.7,
   }
 }
 
-export function normalizeImageContrast(imageData) {
+/**
+ * Lift only the paper-tone range on a high-contrast scan. Dark notation stays
+ * untouched; the transition avoids a hard threshold around antialiased ink.
+ */
+export function normalizeScanBackground(imageData) {
   const { data } = imageData
-  let minLum = 255
-  let maxLum = 0
-  for (let i = 0; i < data.length; i += 4) {
-    const lum = compositeLuminance(data, i)
-    minLum = Math.min(minLum, lum)
-    maxLum = Math.max(maxLum, lum)
-  }
-
-  const span = Math.max(1, maxLum - minLum)
-  const targetMin = 12
-  const targetMax = 245
-
-  for (let i = 0; i < data.length; i += 4) {
-    const lum = compositeLuminance(data, i)
-    const stretched = targetMin + ((lum - minLum) / span) * (targetMax - targetMin)
-    setRgb(data, i, Math.round(stretched))
+  for (let index = 0; index < data.length; index += 4) {
+    const lum = compositeLuminance(data, index)
+    if (lum < 220) continue
+    const strength = Math.min(1, Math.max(0, (lum - 220) / 30))
+    setRgb(data, index, lum + (255 - lum) * strength)
   }
 }
 
+export function normalizeImageContrast(imageData, quality = estimatePageScanQuality(imageData)) {
+  const { data } = imageData
+  const sourceMin = Math.max(0, Math.min(220, quality.foregroundLuminance ?? 0))
+  const sourceMax = Math.max(sourceMin + 1, quality.backgroundLuminance ?? 255)
+  const span = sourceMax - sourceMin
+  const targetMin = 0
+  const targetMax = 252
+
+  for (let i = 0; i < data.length; i += 4) {
+    const lum = compositeLuminance(data, i)
+    const stretched = targetMin + ((lum - sourceMin) / span) * (targetMax - targetMin)
+    setRgb(data, i, stretched)
+  }
+}
+
+/** Remove only isolated dark specks; connected notation and staff ink is untouched. */
 export function denoiseImageData(imageData) {
   const { width, height, data } = imageData
   const copy = copyPixelView(data, 'preprocess:denoise-copy')
   for (let y = 1; y < height - 1; y += 1) {
     for (let x = 1; x < width - 1; x += 1) {
-      let sum = 0
-      let count = 0
-      for (let dy = -1; dy <= 1; dy += 1) {
-        for (let dx = -1; dx <= 1; dx += 1) {
-          const index = ((y + dy) * width + (x + dx)) * 4
-          sum += compositeLuminance(copy, index)
-          count += 1
-        }
-      }
       const index = (y * width + x) * 4
       const center = compositeLuminance(copy, index)
-      const blurred = sum / count
-      const blended = Math.abs(center - blurred) > 28 ? center : blurred * 0.65 + center * 0.35
-      setRgb(data, index, Math.round(blended))
+      if (center >= 165) continue
+      let connected = 0
+      for (let dy = -1; dy <= 1; dy += 1) {
+        for (let dx = -1; dx <= 1; dx += 1) {
+          if (dx === 0 && dy === 0) continue
+          const neighborIndex = ((y + dy) * width + (x + dx)) * 4
+          if (compositeLuminance(copy, neighborIndex) < 205) connected += 1
+        }
+      }
+      if (connected <= 1) {
+        const surrounding = [
+          compositeLuminance(copy, ((y - 1) * width + x) * 4),
+          compositeLuminance(copy, ((y + 1) * width + x) * 4),
+          compositeLuminance(copy, (y * width + x - 1) * 4),
+          compositeLuminance(copy, (y * width + x + 1) * 4),
+        ]
+        setRgb(data, index, Math.max(235, surrounding.reduce((sum, value) => sum + value, 0) / 4))
+      }
     }
   }
 }
@@ -124,32 +200,41 @@ export function recoverStaffLineInk(imageData) {
 export function estimateDeskewAngle(imageData) {
   const { width, height, data } = imageData
   let bestAngle = 0
-  let bestScore = 0
-  for (let angleTenths = -15; angleTenths <= 15; angleTenths += 5) {
-    const angle = angleTenths / 10
-    let score = 0
-    for (let y = Math.floor(height * 0.15); y < Math.floor(height * 0.85); y += 6) {
-      let rowInk = 0
-      for (let x = 0; x < width; x += 2) {
-        const shiftedY = Math.round(y + x * Math.tan((angle * Math.PI) / 180) * 0.02)
-        if (shiftedY < 0 || shiftedY >= height) {
-          continue
-        }
-        const index = (shiftedY * width + x) * 4
-        if (compositeLuminance(data, index) < 185) {
-          rowInk += 1
-        }
-      }
-      if (rowInk / Math.max(1, width / 2) > 0.2) {
-        score += rowInk
-      }
+  let bestScore = -Infinity
+  let zeroScore = 0
+  const centerX = (width - 1) / 2
+  const inkPoints = []
+  for (let y = Math.floor(height * 0.1); y < Math.floor(height * 0.9); y += 1) {
+    for (let x = 1; x < width - 1; x += 3) {
+      const index = (y * width + x) * 4
+      if (compositeLuminance(data, index) < 190) inkPoints.push([x, y])
     }
+  }
+  for (let angleQuarters = -6; angleQuarters <= 6; angleQuarters += 1) {
+    const angle = angleQuarters / 4
+    const slope = Math.tan((angle * Math.PI) / 180)
+    const rows = new Uint32Array(height)
+    for (const [x, y] of inkPoints) {
+      const projectedY = Math.round(y - (x - centerX) * slope)
+      if (projectedY >= 0 && projectedY < height) rows[projectedY] += 1
+    }
+    let score = 0
+    for (const rowInk of rows) {
+      if (rowInk >= width / 45) score += rowInk * rowInk
+    }
+    if (angle === 0) zeroScore = score
     if (score > bestScore) {
       bestScore = score
       bestAngle = angle
     }
   }
-  return { angle: Math.abs(bestAngle) < 0.3 ? 0 : bestAngle, confidence: bestScore > 0 ? 0.6 : 0 }
+  const improvement = zeroScore > 0 ? (bestScore - zeroScore) / zeroScore : 0
+  const accepted = Math.abs(bestAngle) >= 0.5 && improvement >= 0.025
+  return {
+    angle: accepted ? bestAngle : 0,
+    confidence: accepted ? Math.min(0.95, 0.6 + improvement) : 0,
+    improvement,
+  }
 }
 
 export function deskewImageData(imageData, angleDegrees = 0) {
@@ -159,9 +244,11 @@ export function deskewImageData(imageData, angleDegrees = 0) {
   const { width, height, data } = imageData
   const out = new Uint8ClampedArray(data.length)
   out.fill(255)
+  const centerX = (width - 1) / 2
+  const slope = Math.tan((angleDegrees * Math.PI) / 180)
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
-      const sourceY = Math.round(y - x * Math.tan((angleDegrees * Math.PI) / 180) * 0.02)
+      const sourceY = Math.round(y + (x - centerX) * slope)
       if (sourceY < 0 || sourceY >= height) {
         continue
       }
@@ -186,28 +273,48 @@ export function preprocessOmrPageImage(imageData, options = {}) {
   const quality = estimatePageScanQuality(imageData)
   const shouldPreprocess = force || quality.isLikelyScanned
   if (!shouldPreprocess) {
-    const owned = copyOmrPixels(imageData, 'preprocess:pass-through')
-    omrDebugStep('preprocess:skipped-owned-copy', owned)
-    return { imageData: owned, quality, applied: [] }
+    omrDebugStep('preprocess:skipped-zero-copy', imageData)
+    return { imageData, quality, applied: [] }
   }
 
   const processed = cloneImageData(imageData)
   const applied = []
 
-  normalizeImageContrast(processed)
-  applied.push('contrast')
-  denoiseImageData(processed)
-  applied.push('denoise')
+  const needsContrast =
+    quality.contrastSpread < 175 || quality.backgroundLuminance < 235 || quality.backgroundTexture
+  if (needsContrast) {
+    normalizeImageContrast(processed, quality)
+    applied.push('contrast')
+  }
+  if (
+    quality.backgroundTexture &&
+    quality.robustContrastSpread >= 150 &&
+    quality.foregroundLuminance < 100
+  ) {
+    normalizeScanBackground(processed)
+    applied.push('background-cleanup')
+  }
+  if (quality.noiseLevel > 14) {
+    denoiseImageData(processed)
+    applied.push('despeckle')
+  }
 
-  const { angle } = estimateDeskewAngle(processed)
+  const deskew = estimateDeskewAngle(processed)
+  const { angle } = deskew
   if (angle) {
     deskewImageData(processed, angle)
     applied.push('deskew')
   }
 
-  recoverStaffLineInk(processed)
-  applied.push('staff-recovery')
+  if (
+    quality.contrastSpread < 175 ||
+    quality.backgroundLuminance < 235 ||
+    quality.foregroundLuminance > 90
+  ) {
+    recoverStaffLineInk(processed)
+    applied.push('staff-recovery')
+  }
 
-  omrDebugStep('preprocess:output', processed, { applied })
-  return { imageData: processed, quality, applied }
+  omrDebugStep('preprocess:output', processed, { applied, deskew })
+  return { imageData: processed, quality, applied, deskew }
 }

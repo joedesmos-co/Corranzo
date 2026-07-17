@@ -450,6 +450,10 @@ describe('omrTrace phases', () => {
     const tracer = createOmrPhaseTracer(99)
     const value = tracer.sync('test-phase', () => 42)
     expect(value).toBe(42)
+    expect(tracer.snapshot()).toMatchObject({
+      phases: [{ phase: 'test-phase' }],
+    })
+    expect(tracer.snapshot().totalMs).toBeGreaterThanOrEqual(0)
     setOmrDiagnosticFlag(OMR_DIAGNOSTIC_FLAG.TRACE, true)
   })
 })

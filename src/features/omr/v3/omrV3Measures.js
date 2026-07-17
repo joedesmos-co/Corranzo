@@ -31,6 +31,14 @@ function median(values) {
   return finite.length ? finite[Math.floor(finite.length / 2)] : 0
 }
 
+function coefficientOfVariation(values) {
+  const finite = values.filter((value) => Number.isFinite(value) && value > 0)
+  const mean = average(finite)
+  if (finite.length === 0 || mean <= 0) return Infinity
+  const variance = finite.reduce((sum, value) => sum + (value - mean) ** 2, 0) / finite.length
+  return Math.sqrt(variance) / mean
+}
+
 function flattenStaves(system) {
   return (system?.staffGroups ?? []).flatMap((group) => group.staves ?? [])
 }
@@ -102,6 +110,8 @@ function clusterAssessment(cluster, staves) {
     accepted,
     reason,
     confidence: clamp(confidence * (0.65 + supportRatio * 0.35)),
+    completeGrid:
+      cluster.entries.length > 0 && cluster.entries.every((entry) => entry.completeGrid === true),
     supportRatio,
     participatingStaffIds: staffIds,
     entries: cluster.entries,
@@ -159,8 +169,14 @@ function recoverMissingBoundaries(
   expectedWidth,
   evidenceCount,
   hasExternalWidthEvidence,
+  hasStrongExternalWidthConsensus,
+  completeGridEvidence,
 ) {
-  const enoughEvidence = evidenceCount >= 3 || (hasExternalWidthEvidence && evidenceCount >= 2)
+  if (completeGridEvidence) return { boundaries, inferred: [] }
+  const enoughEvidence =
+    evidenceCount >= 3 ||
+    (hasExternalWidthEvidence && evidenceCount >= 2) ||
+    (hasStrongExternalWidthConsensus && evidenceCount >= 1)
   if (!Number.isFinite(expectedWidth) || expectedWidth <= 0 || !enoughEvidence) {
     return { boundaries, inferred: [] }
   }
@@ -305,11 +321,18 @@ export function buildOmrV3MeasureColumnsForSystem(
   const hasExternalWidthEvidence =
     (Number.isFinite(expectedMeasureWidth) && expectedMeasureWidth > 0) ||
     neighboringMeasureWidths.some((width) => Number.isFinite(width) && width > 0)
+  const hasStrongExternalWidthConsensus =
+    neighboringMeasureWidths.length >= 4 &&
+    coefficientOfVariation(neighboringMeasureWidths) <= 0.1
+  const completeGridEvidence =
+    accepted.length > 0 && accepted.every((assessment) => assessment.completeGrid)
   const recovered = recoverMissingBoundaries(
     boundaries,
     expectedWidth,
     accepted.length,
     hasExternalWidthEvidence,
+    hasStrongExternalWidthConsensus,
+    completeGridEvidence,
   )
   boundaries = recovered.boundaries
   const trailing = trimInventedTrailingSpan(spansFromBoundaries(boundaries), symbolXs, expectedWidth)
@@ -406,6 +429,7 @@ export function buildOmrV3MeasureColumnsForSystem(
       kind: boundary.kind,
       confidence: boundary.confidence,
       supportRatio: boundary.supportRatio,
+      completeGrid: boundary.completeGrid ?? false,
       participatingStaffIds: boundary.participatingStaffIds ?? [],
     })),
     diagnostics: [...(system.diagnostics ?? []), ...diagnostics],
@@ -434,6 +458,8 @@ export function buildOmrV3MeasureColumnsForSystem(
       inferredBoundaryCount: recovered.inferred.length,
       trailingSpanRejected: Boolean(trailing.trimmed),
       expectedMeasureWidth: expectedWidth || null,
+      strongExternalWidthConsensus: hasStrongExternalWidthConsensus,
+      completeGridEvidence,
       measureCount: measureColumns.length,
       perSystemAlignment: staves.length
         ? average(

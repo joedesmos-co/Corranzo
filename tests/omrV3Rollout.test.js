@@ -46,6 +46,66 @@ describe('OMR V3 disabled-by-default rollout', () => {
     expect(shadow.omrV3Shadow.musicXml).not.toBe(shadow.musicXml)
     expect(shadow.omrV3Shadow.debugJson).toContain('"schemaVersion": 1')
     expect(shadow.omrV3Shadow.serializer.promotedToRuntime).toBe(false)
+    expect(shadow.omrV3Shadow.evidence.independentPrimaryEventRate).toBe(0)
+    expect(shadow.omrV3IndependentShadow).toMatchObject({
+      status: 'ready',
+      engine: 'omr-v3-independent-shadow',
+      promotedToRuntime: false,
+      evidence: {
+        independentSourceSymbolRate: 1,
+        independentPrimaryEventRate: 1,
+      },
+    })
+  })
+
+  it('owns a zero-symbol rejection independently while retaining the V2 observation', async () => {
+    const page = rhythmicPianoPage({ measuresPerSystem: 2 })
+    let rejection
+    try {
+      await runPdfOmrPipeline('synthetic', {
+        numPages: 1,
+        preprocessPages: false,
+        renderPage: renderPagesFromArray([page]),
+        title: 'v3-shadow-rejection',
+        omrV3Shadow: true,
+        analyzePage: (imageData, context) => ({
+          pageEntry: { page: context.page, systems: [] },
+          measureRhythms: [],
+          measureGrid: [],
+          nextMeasureNumber: context.measureNumberStart,
+          stats: { systems: 0, measures: 0, notes: 0, uncertainMeasures: 0 },
+          omrV3ShadowInput: {
+            page: context.page,
+            width: imageData.width,
+            height: imageData.height,
+            contentBounds: { x0: 0, x1: 1 },
+            systems: [],
+            systemMeasureBoxes: [],
+            measureRhythms: [],
+            measureGrid: [],
+            rawDetectorSymbols: [],
+          },
+        }),
+      })
+    } catch (error) {
+      rejection = error
+    }
+
+    expect(rejection).toBeInstanceOf(Error)
+    expect(rejection.omrV3Shadow).toMatchObject({
+      status: 'structure-ready',
+      decision: { status: 'observe-production-rejection', ownedBy: 'v2-policy', independent: false },
+    })
+    expect(rejection.omrV3IndependentShadow).toMatchObject({
+      status: 'structure-ready',
+      engine: 'omr-v3-independent-shadow',
+      decision: {
+        status: 'reject',
+        ownedBy: 'omr-v3',
+        independent: true,
+        failureReason: 'no-independent-symbols',
+      },
+    })
   })
 
   it('suppresses shadow analysis with the rollback switch', async () => {

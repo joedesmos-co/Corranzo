@@ -11,6 +11,13 @@ const __dir = dirname(fileURLToPath(import.meta.url))
 const root = join(__dir, '..')
 const outDir = join(root, 'tmp', 'browser-smoke')
 const baseUrl = process.env.SMOKE_BASE_URL ?? 'http://127.0.0.1:4173'
+const omrPdfFixture = join(
+  root,
+  'benchmarks',
+  'omr-fixtures',
+  'piano-beginner-single-vector',
+  'piano-beginner-single-vector.pdf',
+)
 
 const VIEWPORTS = [
   { name: 'desktop', width: 1280, height: 800 },
@@ -214,6 +221,7 @@ async function main() {
     pageErrors: [],
     failures: [],
     passes: [],
+    omrImportMs: null,
   }
 
   const context = await browser.newContext({
@@ -252,6 +260,52 @@ async function main() {
     } else {
       await fail('cold load renders top bar', 'Top bar missing')
     }
+
+    // PDF-only OMR import: one file, automatic setup, then Practice.
+    await page.getByRole('button', { name: 'Library', exact: true }).click()
+    await page.getByRole('tab', { name: 'My Uploads', exact: true }).click()
+    const multiFileInput = page.locator('input[type="file"][multiple]')
+    if ((await multiFileInput.count()) !== 1) {
+      await fail('PDF-only import exposes one primary picker', 'Primary file input missing or ambiguous')
+    } else {
+      const importStartedAt = Date.now()
+      await page.evaluate(() => {
+        window.__corranzoOmrSetupCopySeen = false
+        window.__corranzoOmrSetupObserver?.disconnect()
+        window.__corranzoOmrSetupObserver = new MutationObserver(() => {
+          if (document.body?.innerText.includes('Setting up your music...')) {
+            window.__corranzoOmrSetupCopySeen = true
+          }
+        })
+        window.__corranzoOmrSetupObserver.observe(document.body, {
+          childList: true,
+          characterData: true,
+          subtree: true,
+        })
+      })
+      await multiFileInput.setInputFiles(omrPdfFixture)
+      const playback = page.getByRole('region', { name: 'Playback' })
+      await playback.waitFor({ state: 'visible', timeout: 30_000 }).catch(() => {})
+      results.omrImportMs = Date.now() - importStartedAt
+      const setupCopySeen = await page.evaluate(() => {
+        window.__corranzoOmrSetupObserver?.disconnect()
+        return window.__corranzoOmrSetupCopySeen
+      })
+      if (setupCopySeen) {
+        await pass('PDF-only import shows Setting up your music')
+      } else {
+        await fail('PDF-only import shows Setting up your music', 'Automatic progress state not observed')
+      }
+      const scoreVisible = await pdfCanvasVisible(page).catch(() => false)
+      if ((await playback.isVisible().catch(() => false)) && scoreVisible) {
+        await pass(`PDF-only import reaches Practice in ${results.omrImportMs}ms`)
+      } else {
+        await fail('PDF-only import reaches Practice', 'Playback or PDF score was not ready')
+      }
+    }
+
+    // Keep the remaining cross-instrument smoke checks independent of import state.
+    await prepareFreshSession(page)
 
     // Piano demo load + play
     await selectInstrument(page, 'Piano')

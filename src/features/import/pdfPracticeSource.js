@@ -27,6 +27,26 @@ export function isPdfPracticeSourceReady({ pdfFile, pdfBuffer = null }) {
   return true
 }
 
+/** Reuse the stable viewer URL and owned bytes after OMR when they remain valid. */
+export function reuseOwnedPdfPracticeSource({ pdfFile, pdfBuffer }) {
+  if (typeof pdfFile !== 'string' || pdfFile.length === 0) {
+    return null
+  }
+  if (
+    !(pdfBuffer instanceof ArrayBuffer) ||
+    !isPdfBufferAttached(pdfBuffer) ||
+    pdfBuffer.byteLength === 0
+  ) {
+    return null
+  }
+  return {
+    pdfFile,
+    pdfBuffer,
+    byteLength: pdfBuffer.byteLength,
+    reused: true,
+  }
+}
+
 /**
  * Re-fetch PDF bytes from a blob URL and return fresh owned buffer + URL for react-pdf.
  */

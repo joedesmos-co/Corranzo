@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "description": "Corranzo OMR regression corpus. Ten original CC0 PDF + MusicXML fixtures are vendored and enforced. Historical third-party scores are optional diagnostics only. Thresholds are frozen regression floors, never product-accuracy promises.",
+  "description": "Corranzo OMR regression and stress corpus. Ten original CC0 PDF + MusicXML fixtures are vendored and enforced. Redistributable public-domain real-score PDFs and historical local scores are diagnostic-only. Thresholds are frozen regression floors, never product-accuracy promises.",
   "provenance": "benchmarks/omr-fixtures/provenance.json",
   "fixtureSearchPaths": [
     "benchmarks/omr-fixtures",
+    "benchmarks/omr-stress",
     "~/Downloads",
     "tmp/sprint1"
   ],
@@ -324,6 +325,107 @@
         "rejected"
       ],
       "maxPages": 1
+    },
+    {
+      "id": "real-pd-orchestra-beethoven-7",
+      "label": "Beethoven Symphony No. 7, movement 1 (Mutopia public-domain stress)",
+      "tier": "real-public-domain-orchestral-vector",
+      "optional": true,
+      "diagnosticOnly": true,
+      "expectedOutcome": "import-only",
+      "pdf": "beethoven-symphony-7-mutopia/beethoven-symphony-7-mutopia.pdf",
+      "checksums": {
+        "pdf": "sha256:208791baf0a69548b64456b2c0457daa3ba213a5bad77afb554d6ed110bf86f1"
+      },
+      "license": "Public-Domain",
+      "provenanceRecord": "real-pd-orchestra-beethoven-7",
+      "categories": [
+        "orchestral-score",
+        "full-score-many-staves",
+        "dense-engraving",
+        "modern-vector-pdf",
+        "public-domain",
+        "real-world-score"
+      ],
+      "maxPages": 2,
+      "notes": "Truthless import stress observation. Never contributes an accuracy pass or changes the enforced corpus gate."
+    },
+    {
+      "id": "real-pd-piano-pathetique",
+      "label": "Beethoven Pathetique, movement 1 (Mutopia public-domain stress)",
+      "tier": "real-public-domain-piano-vector",
+      "optional": true,
+      "diagnosticOnly": true,
+      "expectedOutcome": "import-only",
+      "instrumentId": "piano",
+      "stavesPerSystem": 2,
+      "pdf": "beethoven-pathetique-mutopia/beethoven-pathetique-mutopia.pdf",
+      "checksums": {
+        "pdf": "sha256:024079d0225423b40c07811badbfeed01d2497e759690a3c271d83b3678ab072"
+      },
+      "license": "Public-Domain",
+      "provenanceRecord": "real-pd-piano-pathetique",
+      "categories": [
+        "piano-grand-staff",
+        "dense-advanced-score",
+        "historical-repertoire",
+        "modern-vector-pdf",
+        "public-domain",
+        "real-world-score"
+      ],
+      "maxPages": 2,
+      "notes": "Truthless import stress observation. Never contributes an accuracy pass or changes the enforced corpus gate."
+    },
+    {
+      "id": "real-pd-scan-twinkle-1880",
+      "label": "Twinkle, Twinkle Little Stars (1880 Library of Congress scan)",
+      "tier": "real-public-domain-piano-scan",
+      "optional": true,
+      "diagnosticOnly": true,
+      "expectedOutcome": "import-only",
+      "instrumentId": "piano",
+      "stavesPerSystem": 2,
+      "pdf": "twinkle-1880-loc/twinkle-1880-loc.pdf",
+      "checksums": {
+        "pdf": "sha256:52ef03f7381a21991421e2b8b3c2e770181b36589c44a319220ba7d625a59789"
+      },
+      "license": "Public-Domain",
+      "provenanceRecord": "real-pd-scan-twinkle-1880",
+      "categories": [
+        "piano-grand-staff",
+        "historical-scan",
+        "uneven-margins",
+        "page-noise",
+        "public-domain",
+        "real-world-score"
+      ],
+      "maxPages": 2,
+      "notes": "Truthless import stress observation. Page 1 is an illustrated cover and page 2 begins the score; blank/damaged-region isolation is part of the observation."
+    },
+    {
+      "id": "real-local-beginner-workbook",
+      "label": "Beginner piano themes workbook (local non-redistributable stress)",
+      "tier": "real-local-beginner-workbook",
+      "optional": true,
+      "diagnosticOnly": true,
+      "expectedOutcome": "import-only",
+      "instrumentId": "piano",
+      "stavesPerSystem": 2,
+      "pdf": "beginner-minecraft-piano-themes-in-c-minecraft.pdf",
+      "pdfLegacyPath": "~/Downloads/beginner-minecraft-piano-themes-in-c-minecraft.pdf",
+      "checksums": {
+        "pdf": "sha256:41ba6f71a4499180441a290e591e69f5a99c1c191ebc2083ebbf443c199170c4"
+      },
+      "categories": [
+        "beginner-book-or-workbook",
+        "piano-grand-staff",
+        "sparse-layout",
+        "modern-vector-pdf",
+        "real-world-score",
+        "local-only-non-redistributable"
+      ],
+      "maxPages": 3,
+      "notes": "The PDF itself prohibits sharing and photocopying. It remains a non-vendored local observation only and must never be redistributed or enforced."
     },
     {
       "id": "clean",

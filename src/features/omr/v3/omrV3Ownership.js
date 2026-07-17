@@ -120,35 +120,65 @@ function allStaffEntries(system) {
   )
 }
 
-function ownerForSymbol(page, geometry) {
+function measureForPoint(system, point) {
+  const measures = system.measureColumns ?? []
+  return measures.find(
+    (candidate, index) =>
+      point.x >= candidate.xStart &&
+      (point.x < candidate.xEnd || (index === measures.length - 1 && point.x <= candidate.xEnd)),
+  )
+}
+
+function sourceOwnerForPoint(page, point, sourceStaffId) {
+  if (!sourceStaffId) return null
+  for (const system of page.systems ?? []) {
+    const staffEntry = allStaffEntries(system).find((entry) =>
+      (entry.staff.sourceRefs ?? []).includes(sourceStaffId),
+    )
+    if (!staffEntry) continue
+    const measure = measureForPoint(system, point)
+    if (measure) {
+      return { system, group: staffEntry.group, staff: staffEntry.staff, measure, point }
+    }
+  }
+  return null
+}
+
+function ownerForSymbol(
+  page,
+  geometry,
+  sourceStaffId = null,
+  preferSourceStaffOwnership = false,
+) {
   const point = center(geometry)
+  if (preferSourceStaffOwnership) {
+    const sourceOwner = sourceOwnerForPoint(page, point, sourceStaffId)
+    if (sourceOwner) return sourceOwner
+  }
   const systemCandidates = (page.systems ?? [])
     .map((system) => ({ system, distance: pointBoxDistance(point, system.boundingBox) }))
     .filter((entry) => entry.distance <= STAFF_VERTICAL_MARGIN)
     .sort((left, right) => left.distance - right.distance)
   const system = systemCandidates[0]?.system
-  if (!system) return null
-
-  const staffEntry = allStaffEntries(system)
-    .map((entry) => ({
-      ...entry,
-      distance: pointBoxDistance(point, {
-        ...entry.staff.boundingBox,
-        y: entry.staff.boundingBox.y - STAFF_VERTICAL_MARGIN,
-        height: entry.staff.boundingBox.height + STAFF_VERTICAL_MARGIN * 2,
-      }),
-    }))
-    .sort((left, right) => left.distance - right.distance)[0]
-  if (!staffEntry || staffEntry.distance > STAFF_VERTICAL_MARGIN) return null
-
-  const measures = system.measureColumns ?? []
-  const measure = measures.find(
-    (candidate, index) =>
-      point.x >= candidate.xStart &&
-      (point.x < candidate.xEnd || (index === measures.length - 1 && point.x <= candidate.xEnd)),
-  )
-  if (!measure) return null
-  return { system, group: staffEntry.group, staff: staffEntry.staff, measure, point }
+  if (system) {
+    const staffEntry = allStaffEntries(system)
+      .map((entry) => ({
+        ...entry,
+        distance: pointBoxDistance(point, {
+          ...entry.staff.boundingBox,
+          y: entry.staff.boundingBox.y - STAFF_VERTICAL_MARGIN,
+          height: entry.staff.boundingBox.height + STAFF_VERTICAL_MARGIN * 2,
+        }),
+      }))
+      .sort((left, right) => left.distance - right.distance)[0]
+    if (staffEntry && staffEntry.distance <= STAFF_VERTICAL_MARGIN) {
+      const measure = measureForPoint(system, point)
+      if (measure) {
+        return { system, group: staffEntry.group, staff: staffEntry.staff, measure, point }
+      }
+    }
+  }
+  return sourceOwnerForPoint(page, point, sourceStaffId)
 }
 
 function normalizedSymbol(symbol, geometry, owner, page, index) {
@@ -182,12 +212,16 @@ function normalizedSymbol(symbol, geometry, owner, page, index) {
     onsetDivisions: Number.isFinite(symbol?.onsetDivisions)
       ? Number(symbol.onsetDivisions)
       : null,
+    measureRelativePositionHint: Number.isFinite(symbol?.measureRelativePositionHint)
+      ? clamp(Number(symbol.measureRelativePositionHint))
+      : null,
     durationDivisions: Number.isFinite(symbol?.durationDivisions)
       ? Number(symbol.durationDivisions)
       : null,
     duration:
       symbol?.duration && typeof symbol.duration === 'object' ? { ...symbol.duration } : null,
     voiceHint: Number.isFinite(symbol?.voiceHint) ? Number(symbol.voiceHint) : null,
+    sourceEventGroupId: symbol?.sourceEventGroupId ?? null,
     stemDirection: symbol?.stemDirection ?? null,
     stemGroupId: symbol?.stemGroupId ?? null,
     beamGroupId: symbol?.beamGroupId ?? null,
@@ -214,7 +248,7 @@ function normalizedSymbol(symbol, geometry, owner, page, index) {
       overall: confidence,
       stages: { 'symbol-ownership': confidence },
     },
-    sourceRefs: [String(sourceId)],
+    sourceRefs: [String(sourceId), symbol?.sourceStaffId, symbol?.sourceEventGroupId].filter(Boolean),
   }
 }
 
@@ -352,11 +386,22 @@ function materializeOnsetColumns(measure, measureSymbols, onsetTolerance) {
       if (collection) collections[collection].push(symbol.symbolId)
     }
     const width = measure.xEnd - measure.xStart
+    const positionHints = cluster.symbols
+      .map((symbol) => symbol.measureRelativePositionHint)
+      .filter(Number.isFinite)
+    const mixesNotationAndTab =
+      cluster.symbols.some((symbol) => symbol.kind === 'tab-digit') &&
+      cluster.symbols.some((symbol) => symbol.kind === 'notehead' || symbol.kind === 'rest')
     return createOmrOnsetColumnIR({
       onsetColumnId,
       measureId: measure.measureId,
       x: cluster.x,
-      measureRelativePosition: width > 0 ? clamp((cluster.x - measure.xStart) / width) : null,
+      measureRelativePosition:
+        positionHints.length > 0 && !mixesNotationAndTab
+          ? clamp(average(positionHints))
+          : width > 0
+            ? clamp((cluster.x - measure.xStart) / width)
+            : null,
       grace: cluster.grace,
       ...collections,
       confidence: {
@@ -389,7 +434,14 @@ export function assignOmrV3PageSymbolOwnership(
   const seenSymbolIds = new Set()
   rawSymbols.forEach((rawSymbol, index) => {
     const geometry = normalizedBox(rawSymbol, page)
-    const owner = geometry ? ownerForSymbol(page, geometry) : null
+    const owner = geometry
+      ? ownerForSymbol(
+          page,
+          geometry,
+          rawSymbol?.sourceStaffId,
+          Boolean(rawSymbol?.preferSourceStaffOwnership),
+        )
+      : null
     if (!geometry || !owner) {
       unassigned.push({
         ...rawSymbol,

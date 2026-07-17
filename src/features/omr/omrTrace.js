@@ -101,12 +101,27 @@ export function omrTracePhaseEnd(token, detail = null) {
 }
 
 export function createOmrPhaseTracer(runId = null) {
+  const timings = []
+  const start = (phase) => ({
+    phase,
+    startedAt: performanceNow(),
+    traceToken: omrTracePhaseStart(phase, runId),
+  })
+  const end = (token, detail = null) => {
+    if (!token) return 0
+    const ms = performanceNow() - token.startedAt
+    timings.push({ phase: token.phase, ms })
+    omrTracePhaseEnd(token.traceToken, detail)
+    return ms
+  }
   return {
+    start,
+    end,
     async run(phase, fn) {
-      const token = omrTracePhaseStart(phase, runId)
+      const token = start(phase)
       try {
         const result = await fn()
-        omrTracePhaseEnd(token)
+        end(token)
         return result
       } catch (error) {
         omrTraceError(
@@ -115,15 +130,15 @@ export function createOmrPhaseTracer(runId = null) {
           { phase, name: error?.name ?? null },
           runId,
         )
-        omrTracePhaseEnd(token, { failed: true })
+        end(token, { failed: true })
         throw error
       }
     },
     sync(phase, fn) {
-      const token = omrTracePhaseStart(phase, runId)
+      const token = start(phase)
       try {
         const result = fn()
-        omrTracePhaseEnd(token)
+        end(token)
         return result
       } catch (error) {
         omrTraceError(
@@ -132,12 +147,18 @@ export function createOmrPhaseTracer(runId = null) {
           { phase, name: error?.name ?? null },
           runId,
         )
-        omrTracePhaseEnd(token, { failed: true })
+        end(token, { failed: true })
         throw error
       }
     },
     mark(label, detail = null) {
       omrTrace(label, detail, runId)
+    },
+    snapshot() {
+      return {
+        totalMs: timings.reduce((sum, timing) => sum + timing.ms, 0),
+        phases: timings.map((timing) => ({ ...timing })),
+      }
     },
   }
 }

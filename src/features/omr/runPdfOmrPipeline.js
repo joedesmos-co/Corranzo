@@ -13,9 +13,8 @@ import { preprocessOmrPageImage } from './preprocessOmrPageImage.js'
 import { processOmrPageAnalysis } from './processOmrPage.js'
 import { assessOmrDifficulty, OMR_FAILURE_REASON } from './assessOmrDifficulty.js'
 import { validateOmrMultiPageLayout } from './validateOmrMultiPage.js'
-import { copyOmrPixels } from './omrPixelBuffer.js'
 import { omrDebugStep } from './omrDebug.js'
-import { omrTrace, createOmrPhaseTracer, omrTracePhaseStart, omrTracePhaseEnd } from './omrTrace.js'
+import { omrTrace, createOmrPhaseTracer } from './omrTrace.js'
 import { buildOmrMeasureGridMetadata } from './omrMeasureGridMeta.js'
 import {
   formatOmrMeasureGridDiagnosticsReport,
@@ -57,8 +56,22 @@ import {
   computeDocumentStaffGapReference,
   mergeStaffGapSamples,
 } from './normalizeStaffLineGaps.js'
-import { resolveOmrV3RolloutOptions } from './v3/omrV3Rollout.js'
-import { runOmrV3Shadow } from './v3/omrV3Shadow.js'
+import {
+  decideOmrV3RuntimePromotion,
+  resolveOmrV3RolloutOptions,
+} from './v3/omrV3Rollout.js'
+import {
+  buildOmrV3AnalysisDocument,
+  observeOmrV3RejectedImport,
+  OMR_V3_SYMBOL_EVIDENCE_MODE,
+  runOmrV3Shadow,
+} from './v3/omrV3Shadow.js'
+import { reasonAboutOmrV3Confidence } from './v3/omrV3Confidence.js'
+import {
+  buildOmrV3DisagreementTelemetry,
+  compareOmrV2V3MusicXml,
+} from './v3/omrV3Comparison.js'
+import { buildOmrV3DeveloperDiagnostics } from './v3/omrV3Diagnostics.js'
 
 const DEFAULT_MAX_PAGES = 24
 
@@ -73,6 +86,19 @@ function pushUnique(target, values = []) {
 function throwIfCancelled(signal) {
   if (signal?.aborted) {
     throw new DOMException('OMR generation cancelled.', 'AbortError')
+  }
+}
+
+function isAbortError(error, signal) {
+  return signal?.aborted || error?.name === 'AbortError'
+}
+
+function pageFailureEntry(page, stage, error) {
+  return {
+    page,
+    stage,
+    code: error?.code ?? 'page-processing-error',
+    message: error instanceof Error ? error.message : String(error),
   }
 }
 
@@ -97,20 +123,47 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     traceRunId = null,
     includeScoreGraph = false,
     promoteScoreGraphClips = false,
+    /** Keep healthy pages when one page in a multi-page import cannot be analyzed. */
+    allowPartialRecovery = true,
     /** Disabled by default; developer/benchmark shadow only. */
     omrV3Shadow = false,
+    /**
+     * Comparison mode: run independent V3 beside V2, keep V2 user-visible, and
+     * attach a structured V2↔V3 disagreement report. Does not arm promotions.
+     */
+    omrV3Compare = false,
+    /** Production-safe V3 IR confidence reasoning; does not replace recognized notes. */
+    omrV3Confidence = true,
     /** Emergency suppression switch for all V3 analysis. */
     omrV3Rollback = false,
-    /** Recorded but never runtime-enabled until a future promotion change. */
+    /**
+     * Default-off runtime candidate arm. Requested promotions resolve only when
+     * this is true and rollback is not engaged.
+     */
+    omrV3RuntimeCandidate = false,
+    /** Category / full-V3 promotion requests (resolved only with runtime candidate). */
     omrV3Promotions = {},
   } = options
 
   const instrument = getInstrument(instrumentId)
+  const comparisonMode = Boolean(omrV3Compare) && !omrV3Rollback
   const omrV3Rollout = resolveOmrV3RolloutOptions({
-    shadow: omrV3Shadow,
+    // Comparison implies shadow capture so both engines run; promotions stay off
+    // unless runtimeCandidate is separately armed.
+    shadow: omrV3Shadow || comparisonMode,
     rollback: omrV3Rollback,
     promotions: omrV3Promotions,
+    runtimeCandidate: omrV3RuntimeCandidate,
   })
+  const needOmrV3Independent =
+    !omrV3Rollback &&
+    (omrV3Rollout.shadow || omrV3Rollout.promotions.fullV3 || comparisonMode)
+  const captureOmrV3Analysis =
+    !omrV3Rollback &&
+    (omrV3Confidence ||
+      omrV3Rollout.shadow ||
+      omrV3Rollout.anyPromotionEnabled ||
+      comparisonMode)
   // Piano's registry default is the grand staff (2), so omitting both options
   // reproduces the long-standing behavior exactly.
   const stavesPerSystem = stavesPerSystemOverride ?? instrument.omr.stavesPerSystem
@@ -198,13 +251,68 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   const orphanDiagnosticsPages = []
   const staffGapNormalizationPages = []
   const omrV3PageInputs = []
+  const partialRecovery = {
+    enabled: allowPartialRecovery,
+    recovered: false,
+    successfulPages: 0,
+    failedPages: [],
+    isolatedRegions: [],
+  }
   let documentStaffGapSamples = { treble: [], bass: [] }
+
+  const attachOmrV3RejectionObservation = (error, compatibilityAnalysis = null) => {
+    if (!omrV3Rollout.shadow || omrV3PageInputs.length === 0) return
+    const rejectionMusical = { keySignature, timeSignature, tempo }
+    const measureDurationDivisions = Math.round(
+      (timeSignature?.beats ?? 4) *
+        OMR_DIVISIONS_PER_QUARTER *
+        (4 / (timeSignature?.beatType ?? 4)),
+    )
+    const common = {
+      title,
+      instrumentId: instrument.id,
+      pageInputs: omrV3PageInputs,
+      musical: rejectionMusical,
+      measureDurationDivisions,
+      rollout: omrV3Rollout,
+      failureReason: error.code ?? null,
+      productionConfidence: error.difficulty?.confidence ?? 0,
+    }
+    try {
+      error.omrV3Shadow = observeOmrV3RejectedImport({
+        ...common,
+        documentId: `rejected-shadow-${title}`,
+        analysis: compatibilityAnalysis,
+      })
+    } catch (shadowError) {
+      error.omrV3Shadow = {
+        status: 'error',
+        engine: 'omr-v3-shadow',
+        promotedToRuntime: false,
+        error: shadowError instanceof Error ? shadowError.message : String(shadowError),
+      }
+    }
+    try {
+      error.omrV3IndependentShadow = observeOmrV3RejectedImport({
+        ...common,
+        documentId: `rejected-independent-shadow-${title}`,
+        symbolEvidenceMode: OMR_V3_SYMBOL_EVIDENCE_MODE.RAW_DETECTOR_SYMBOLS,
+      })
+    } catch (shadowError) {
+      error.omrV3IndependentShadow = {
+        status: 'error',
+        engine: 'omr-v3-independent-shadow',
+        promotedToRuntime: false,
+        error: shadowError instanceof Error ? shadowError.message : String(shadowError),
+      }
+    }
+  }
 
   let measureCounter = 1
   const measureGridDiagnosticsEntries = []
 
   for (let page = 1; page <= pageCount; page += 1) {
-    const pagePhase = omrTracePhaseStart(`page-${page}`, traceRunId)
+    const pagePhase = phaseTracer.start(`page-${page}`)
     omrTrace(`pipeline:page-${page}:loop-start`, null, traceRunId)
     throwIfCancelled(signal)
     onProgress?.({
@@ -214,21 +322,33 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       label: omrPageProgressLabel(page, pageCount, 'analyze'),
     })
 
-    const rendered = await renderPage(pdfSource, page)
+    const shouldSkipDefaultTextExtraction =
+      numPagesOverride != null && extractPageText === extractPdfPageText
+    const pageTextPromise = shouldSkipDefaultTextExtraction
+      ? Promise.resolve([])
+      : Promise.resolve().then(() => extractPageText(pdfSource, page)).catch(() => [])
+    let rendered
+    let pageText
+    try {
+      [rendered, pageText] = await Promise.all([
+        renderPage(pdfSource, page),
+        pageTextPromise,
+      ])
+    } catch (error) {
+      if (isAbortError(error, signal) || !allowPartialRecovery || pageCount === 1) throw error
+      partialRecovery.failedPages.push(pageFailureEntry(page, 'render', error))
+      partialRecovery.recovered = true
+      phaseTracer.end(pagePhase, { recovered: true, stage: 'render' })
+      continue
+    }
     throwIfCancelled(signal)
     await yieldToBrowser()
 
     const renderedImage = rendered?.imageData ?? rendered
     omrDebugStep(`pipeline:page-${page}:after-pdf-render`, renderedImage)
 
-    let imageData = copyOmrPixels(renderedImage, `pipeline:page-${page}:after-render-copy`)
-    omrDebugStep(`pipeline:page-${page}:owned-render-copy`, imageData)
-    const shouldSkipDefaultTextExtraction =
-      numPagesOverride != null && extractPageText === extractPdfPageText
-    const pageText = shouldSkipDefaultTextExtraction
-      ? []
-      : await extractPageText(pdfSource, page).catch(() => [])
-
+    let imageData = renderedImage
+    omrDebugStep(`pipeline:page-${page}:owned-render-buffer`, imageData)
     const pageTempo = parseTempoFromTextItems(pageText, { pageNumber: page })
     const canReplaceTempo =
       (pageTempo.confidence ?? 0) > (tempo.confidence ?? 0) &&
@@ -266,29 +386,30 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
 
     const documentStaffGapReference = computeDocumentStaffGapReference(documentStaffGapSamples)
 
-    const pageResult = analyzePage
-      ? await analyzePage(imageData, {
-          page,
-          measureNumberStart: measureCounter,
-          pageText,
-          stavesPerSystem,
-          instrument,
-          keySignature,
-          timeSignature,
-          documentStaffGapReference,
-          captureOmrV3Shadow: omrV3Rollout.shadow,
-        })
-      : processOmrPageAnalysis(imageData, {
-          page,
-          measureNumberStart: measureCounter,
-          pageText,
-          stavesPerSystem,
-          instrument,
-          keySignature,
-          timeSignature,
-          documentStaffGapReference,
-          captureOmrV3Shadow: omrV3Rollout.shadow,
-        })
+    let pageResult
+    try {
+      const analysisContext = {
+        page,
+        measureNumberStart: measureCounter,
+        pageText,
+        stavesPerSystem,
+        instrument,
+        keySignature,
+        timeSignature,
+        documentStaffGapReference,
+        captureOmrV3Shadow: captureOmrV3Analysis,
+        captureOmrV3RawSymbols: needOmrV3Independent,
+      }
+      pageResult = analyzePage
+        ? await analyzePage(imageData, analysisContext)
+        : processOmrPageAnalysis(imageData, analysisContext)
+    } catch (error) {
+      if (isAbortError(error, signal) || !allowPartialRecovery || pageCount === 1) throw error
+      partialRecovery.failedPages.push(pageFailureEntry(page, 'recognition', error))
+      partialRecovery.recovered = true
+      phaseTracer.end(pagePhase, { recovered: true, stage: 'recognition' })
+      continue
+    }
 
     omrDebugStep(`pipeline:page-${page}:after-analyze`, null, {
       notes: pageResult.stats?.notes ?? 0,
@@ -313,6 +434,19 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     }
     if (pageResult.stats.systems > 0) {
       diagnostics.pagesWithSystems += 1
+    }
+    partialRecovery.successfulPages += 1
+    if ((pageResult.stats.systems ?? 0) === 0 || (pageResult.stats.notes ?? 0) === 0) {
+      partialRecovery.isolatedRegions.push({
+        page,
+        kind:
+          pageResult.negativePage?.kind ??
+          ((pageResult.stats.systems ?? 0) === 0 ? 'no-staff-systems' : 'no-musical-events'),
+        reason: pageResult.negativePage?.reason ?? null,
+        systems: pageResult.stats.systems ?? 0,
+        measures: pageResult.stats.measures ?? 0,
+      })
+      partialRecovery.recovered = true
     }
 
     const pageTies = pageResult.tieDiagnostics
@@ -399,10 +533,10 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     pageDiagnostics.push(pageResult.pageEntry)
     measureRhythms.push(...pageResult.measureRhythms)
     measureGridEntries.push(...(pageResult.measureGrid ?? []))
-    if (omrV3Rollout.shadow && pageResult.omrV3ShadowInput) {
+    if (captureOmrV3Analysis && pageResult.omrV3ShadowInput) {
       omrV3PageInputs.push(pageResult.omrV3ShadowInput)
     }
-    omrTracePhaseEnd(pagePhase, {
+    phaseTracer.end(pagePhase, {
       systems: pageResult.stats?.systems ?? 0,
       measures: pageResult.stats?.measures ?? 0,
       notes: pageResult.stats?.notes ?? 0,
@@ -417,10 +551,14 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       noteCount: 0,
       measureCount: 0,
     })
-    throw new Error(
+    const error = new Error(
       assessment.message ??
         `No staff systems detected. Try a cleaner digital ${instrument.label.toLowerCase()} PDF.`,
     )
+    error.code = OMR_FAILURE_REASON.NO_SYSTEMS
+    error.diagnostics = { ...diagnostics, preprocessLog, partialRecovery }
+    attachOmrV3RejectionObservation(error)
+    throw error
   }
 
   if (!measureRhythms.length && diagnostics.tablature.tabOnly && diagnostics.tablature.tabStaves > 0) {
@@ -430,26 +568,82 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       ...diagnostics,
       preprocessLog,
     }
+    attachOmrV3RejectionObservation(error)
     throw error
   }
 
   if (!measureRhythms.length) {
-    throw new Error(
+    const error = new Error(
       'No noteheads detected. Experimental OMR works best on clean engraved scores.',
     )
+    error.code = OMR_FAILURE_REASON.NO_NOTES
+    error.diagnostics = { ...diagnostics, preprocessLog, partialRecovery }
+    attachOmrV3RejectionObservation(error)
+    throw error
   }
 
   onStatus(OMR_STATUS.BUILDING_PLAYBACK)
 
   const musical = { keySignature, timeSignature, tempo }
   const layoutConsistency = validateOmrMultiPageLayout(pageDiagnostics)
-  const richDiagnostics = buildOmrDiagnostics({
+  let richDiagnostics = buildOmrDiagnostics({
     pages: pageDiagnostics,
     musical,
     uncertainMeasures: diagnostics.uncertainMeasures,
     totalMeasures: diagnostics.measures,
     includeScoreGraph,
   })
+
+  let omrV3Analysis = null
+  if (omrV3Confidence && !omrV3Rollback && omrV3PageInputs.length > 0) {
+    try {
+      omrV3Analysis = phaseTracer.sync('omr-v3-confidence', () =>
+        buildOmrV3AnalysisDocument({
+          documentId: `analysis-${title}`,
+          title,
+          instrumentId: instrument.id,
+          pageInputs: omrV3PageInputs,
+          musical,
+          measureDurationDivisions: Math.round(
+            (timeSignature?.beats ?? 4) *
+              OMR_DIVISIONS_PER_QUARTER *
+              (4 / (timeSignature?.beatType ?? 4)),
+          ),
+          captureEvidence: omrV3Rollout.shadow || comparisonMode,
+        }),
+      )
+      const confidenceReasoning = reasonAboutOmrV3Confidence(omrV3Analysis.document, {
+        legacyConfidence: richDiagnostics.overallConfidence,
+      })
+      richDiagnostics = {
+        ...richDiagnostics,
+        legacyOverallConfidence: richDiagnostics.overallConfidence,
+        overallConfidence: confidenceReasoning.overallConfidence,
+        omrV3Confidence: {
+          ...confidenceReasoning,
+          stages: {
+            pageCount: omrV3Analysis.stages.pages.length,
+            recoveredPairingCount:
+              omrV3Analysis.stages.structuralRecovery.recoveredPairingCount,
+            ownership: omrV3Analysis.stages.ownership,
+            musical: omrV3Analysis.stages.musical,
+          },
+        },
+      }
+    } catch (error) {
+      richDiagnostics = {
+        ...richDiagnostics,
+        omrV3Confidence: {
+          method: 'omr-v3-hierarchical-bottleneck-v1',
+          status: 'fallback-to-legacy',
+          error: error instanceof Error ? error.message : String(error),
+          legacyConfidence: richDiagnostics.overallConfidence,
+          overallConfidence: richDiagnostics.overallConfidence,
+        },
+      }
+      omrV3Analysis = null
+    }
+  }
 
   const difficulty = assessOmrDifficulty({
     overallConfidence: richDiagnostics.overallConfidence,
@@ -472,13 +666,14 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       preprocessLog,
       difficulty,
     }
+    attachOmrV3RejectionObservation(error, omrV3Analysis)
     throw error
   }
 
   const beats = timeSignature?.beats ?? 4
   const beatType = timeSignature?.beatType ?? 4
   const measureDivisions = Math.round(beats * OMR_DIVISIONS_PER_QUARTER * (4 / beatType))
-  const postProcessPhase = omrTracePhaseStart('post-process', traceRunId)
+  const postProcessPhase = phaseTracer.start('post-process')
   const openingLeadNoteMerge = applyOpeningLeadNoteMerge(measureRhythms, {
     minStackNotes: OPENING_LEAD_MIN_STACK_NOTES,
   })
@@ -664,9 +859,9 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     }, traceRunId)
   }
 
-  omrTracePhaseEnd(postProcessPhase, { measureCount: measureRhythms.length })
+  phaseTracer.end(postProcessPhase, { measureCount: measureRhythms.length })
 
-  const musicXml = phaseTracer.sync('build-musicxml', () =>
+  const productionMusicXml = phaseTracer.sync('build-musicxml', () =>
     buildOmrMusicXml({
       title,
       measures: measureRhythms,
@@ -675,45 +870,174 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       instrument,
     }),
   )
+  let musicXml = productionMusicXml
   let omrV3ShadowResult = null
-  if (omrV3Rollout.shadow) {
+  let omrV3IndependentShadowResult = null
+  let omrV3RuntimePromotion = null
+  const runIndependentShadow = () =>
+    runOmrV3Shadow({
+      documentId: `independent-shadow-${title}`,
+      title: `${title} — OMR V3 independent shadow`,
+      instrumentId: instrument.id,
+      pageInputs: omrV3PageInputs,
+      musical,
+      runtimeMusicXml: productionMusicXml,
+      measureDurationDivisions: measureDivisions,
+      rollout: omrV3Rollout,
+      symbolEvidenceMode: OMR_V3_SYMBOL_EVIDENCE_MODE.RAW_DETECTOR_SYMBOLS,
+    })
+
+  if (omrV3Rollout.shadow || needOmrV3Independent) {
     if (omrV3PageInputs.length === 0) {
-      omrV3ShadowResult = {
-        status: 'unavailable-no-page-capture',
-        engine: 'omr-v3-shadow',
-        promotedToRuntime: false,
-        rollout: omrV3Rollout,
-      }
-    } else {
-      try {
-        omrV3ShadowResult = phaseTracer.sync('omr-v3-shadow', () =>
-          runOmrV3Shadow({
-            documentId: `shadow-${title}`,
-            title: `${title} — OMR V3 shadow`,
-            instrumentId: instrument.id,
-            pageInputs: omrV3PageInputs,
-            musical,
-            runtimeMusicXml: musicXml,
-            measureDurationDivisions: measureDivisions,
-            rollout: omrV3Rollout,
-          }),
-        )
-      } catch (error) {
+      if (omrV3Rollout.shadow) {
         omrV3ShadowResult = {
-          status: 'error',
+          status: 'unavailable-no-page-capture',
           engine: 'omr-v3-shadow',
           promotedToRuntime: false,
           rollout: omrV3Rollout,
-          error: error instanceof Error ? error.message : String(error),
+        }
+      }
+      if (needOmrV3Independent) {
+        omrV3IndependentShadowResult = {
+          status: 'unavailable-no-page-capture',
+          engine: 'omr-v3-independent-shadow',
+          promotedToRuntime: false,
+          rollout: omrV3Rollout,
+        }
+      }
+    } else {
+      if (omrV3Rollout.shadow) {
+        try {
+          omrV3ShadowResult = phaseTracer.sync('omr-v3-shadow', () =>
+            runOmrV3Shadow({
+              documentId: `shadow-${title}`,
+              title: `${title} — OMR V3 shadow`,
+              instrumentId: instrument.id,
+              pageInputs: omrV3PageInputs,
+              musical,
+              runtimeMusicXml: productionMusicXml,
+              measureDurationDivisions: measureDivisions,
+              rollout: omrV3Rollout,
+              analysis: omrV3Analysis,
+            }),
+          )
+        } catch (error) {
+          omrV3ShadowResult = {
+            status: 'error',
+            engine: 'omr-v3-shadow',
+            promotedToRuntime: false,
+            rollout: omrV3Rollout,
+            error: error instanceof Error ? error.message : String(error),
+          }
+        }
+      }
+      if (needOmrV3Independent) {
+        try {
+          omrV3IndependentShadowResult = phaseTracer.sync('omr-v3-independent-shadow', () =>
+            runIndependentShadow(),
+          )
+        } catch (error) {
+          omrV3IndependentShadowResult = {
+            status: 'error',
+            engine: 'omr-v3-independent-shadow',
+            promotedToRuntime: false,
+            rollout: omrV3Rollout,
+            error: error instanceof Error ? error.message : String(error),
+          }
         }
       }
     }
-  } else if (omrV3Shadow && omrV3Rollback) {
+  } else if ((omrV3Shadow || omrV3Compare || omrV3RuntimeCandidate) && omrV3Rollback) {
     omrV3ShadowResult = {
       status: 'disabled-by-rollback',
       engine: 'omr-v3-shadow',
       promotedToRuntime: false,
       rollout: omrV3Rollout,
+    }
+    if (omrV3RuntimeCandidate || omrV3Promotions?.fullV3) {
+      omrV3IndependentShadowResult = {
+        status: 'disabled-by-rollback',
+        engine: 'omr-v3-independent-shadow',
+        promotedToRuntime: false,
+        rollout: omrV3Rollout,
+      }
+    }
+  }
+
+  const independentLatencyMs =
+    phaseTracer
+      .snapshot()
+      ?.phases?.find((entry) => entry.phase === 'omr-v3-independent-shadow')?.ms ?? null
+  const promotionDecision = decideOmrV3RuntimePromotion({
+    productionMusicXml,
+    independentShadow: omrV3IndependentShadowResult,
+    rollout: omrV3Rollout,
+    latencyMs: independentLatencyMs,
+  })
+  // Comparison mode never swaps user-visible MusicXML; only an armed fullV3
+  // promotion (outside compare-only) may replace production output.
+  musicXml =
+    comparisonMode && !omrV3Rollout.promotions.fullV3
+      ? productionMusicXml
+      : promotionDecision.musicXml
+  omrV3IndependentShadowResult = promotionDecision.independentShadow
+
+  let omrV3Comparison = null
+  if (
+    (comparisonMode || omrV3Rollout.shadow) &&
+    productionMusicXml &&
+    omrV3IndependentShadowResult?.musicXml
+  ) {
+    omrV3Comparison = compareOmrV2V3MusicXml({
+      v2MusicXml: productionMusicXml,
+      v3MusicXml: omrV3IndependentShadowResult.musicXml,
+      v2Confidence: {
+        overall: richDiagnostics?.omrV3Confidence?.legacyConfidence ?? null,
+      },
+      v3Confidence: {
+        overall:
+          richDiagnostics?.omrV3Confidence?.overallConfidence ??
+          omrV3IndependentShadowResult?.evaluation?.confidence?.overall ??
+          null,
+      },
+      v3Serializer: omrV3IndependentShadowResult?.serializer ?? null,
+    })
+  }
+
+  const disagreementTelemetry = buildOmrV3DisagreementTelemetry(omrV3Comparison)
+  const reportRolloutTelemetry =
+    Boolean(omrV3Shadow) ||
+    Boolean(omrV3Compare) ||
+    Boolean(omrV3RuntimeCandidate) ||
+    Boolean(omrV3Rollback) ||
+    omrV3Rollout.anyPromotionRequested
+  omrV3RuntimePromotion = reportRolloutTelemetry
+    ? {
+        ...promotionDecision.telemetry,
+        // Comparison mode keeps V2 visible even if a promotion decision object
+        // would otherwise promote — mirror the musicXml choice above.
+        promotedToRuntime:
+          comparisonMode && !omrV3Rollout.promotions.fullV3
+            ? false
+            : promotionDecision.telemetry.promotedToRuntime,
+        decision:
+          comparisonMode && !omrV3Rollout.promotions.fullV3
+            ? 'hold-comparison-mode'
+            : promotionDecision.telemetry.decision,
+        reason:
+          comparisonMode && !omrV3Rollout.promotions.fullV3
+            ? 'v2-user-visible-compare'
+            : promotionDecision.telemetry.reason,
+        rolloutMode: omrV3Rollout.mode,
+        comparisonMode,
+        // Compact disagreement counts only — never MusicXML or PDF bytes.
+        disagreement: disagreementTelemetry,
+      }
+    : null
+  if (omrV3ShadowResult && omrV3RuntimePromotion?.promotedToRuntime) {
+    omrV3ShadowResult = {
+      ...omrV3ShadowResult,
+      promotedToRuntime: false,
     }
   }
   const measurePlaybackReport = buildOmrMeasurePlaybackReport({
@@ -762,6 +1086,13 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   if (difficulty.reasons.length) {
     warnings.push(`Quality notes: ${difficulty.reasons.join(', ')}`)
   }
+  if (partialRecovery.recovered) {
+    const failedPageCount = partialRecovery.failedPages.length
+    const isolatedRegionCount = partialRecovery.isolatedRegions.length
+    warnings.push(
+      `Partial recovery kept the recognized music; ${failedPageCount} page(s) failed and ${isolatedRegionCount} region(s) were isolated.`,
+    )
+  }
 
   omrTrace('pipeline:success', {
     noteCount,
@@ -779,9 +1110,14 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     ),
   }
 
-  return {
+  const pipelineResult = {
     musicXml,
     ...(omrV3ShadowResult ? { omrV3Shadow: omrV3ShadowResult } : {}),
+    ...(omrV3IndependentShadowResult
+      ? { omrV3IndependentShadow: omrV3IndependentShadowResult }
+      : {}),
+    ...(omrV3RuntimePromotion ? { omrV3RuntimePromotion } : {}),
+    ...(omrV3Comparison ? { omrV3Comparison } : {}),
     diagnostics: {
       ...diagnostics,
       ...richDiagnostics,
@@ -790,6 +1126,17 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       staffGapNormalization,
       layoutConsistency,
       preprocessLog,
+      partialRecovery,
+      performance: {
+        ...phaseTracer.snapshot(),
+        renderedPixelCopiesAvoided: partialRecovery.successfulPages,
+        passThroughCopiesAvoided: preprocessPages
+          ? preprocessLog.filter((entry) => (entry.applied?.length ?? 0) === 0).length
+          : 0,
+        preprocessingCopies:
+          preprocessLog.filter((entry) => (entry.applied?.length ?? 0) > 0).length,
+        analysisHandoffCopies: analyzePage ? partialRecovery.successfulPages : 0,
+      },
       difficulty,
       failureReasons: difficulty.reasons,
       measureGrid,
@@ -816,4 +1163,10 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     measurePlaybackReport,
     measurePlaybackReportText: formatOmrMeasurePlaybackReport(measurePlaybackReport),
   }
+
+  if (omrV3Comparison || omrV3IndependentShadowResult || omrV3ShadowResult) {
+    pipelineResult.omrV3DeveloperDiagnostics = buildOmrV3DeveloperDiagnostics(pipelineResult)
+  }
+
+  return pipelineResult
 }

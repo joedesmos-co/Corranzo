@@ -22,7 +22,10 @@ import {
 } from './buildOmrDiagnostics.js'
 import { estimatePageScanQuality } from './preprocessOmrPageImage.js'
 import { OMR_PIANO_STAVES_PER_SYSTEM } from './omrConstants.js'
-import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
+import {
+  OMR_DIVISIONS_PER_QUARTER,
+  OMR_DURATION_DIVISIONS,
+} from './omrRhythmConstants.js'
 import { assertPixelViewReadable } from './omrPixelBuffer.js'
 import { omrDebugStep } from './omrDebug.js'
 import {
@@ -31,6 +34,10 @@ import {
   systemConfidenceFromMeasures as vectorSystemConfidenceFromMeasures,
   textGlyphsToImage,
 } from './processVectorOmrPage.js'
+import {
+  buildBeamStemGraph,
+  summarizeBeamStemGraph,
+} from './beamStemReconstructionDiagnostics.js'
 import { detectStaffClefsFromGlyphs } from './pitchFromStaffPosition.js'
 import { serializeOmrMeasureBox } from './omrMeasureGridMeta.js'
 import { computeOmrMeasureVisualExtents } from './omrMeasureVisualExtents.js'
@@ -104,6 +111,100 @@ function tabMeasureBoxesForOutput(measureBoxes, byMeasure) {
   return measureBoxes.slice(0, lastNotedIndex + 1)
 }
 
+function detectorSymbolsFromObservations(
+  observations,
+  { page, systemIndex, source, beamStemGraph = null },
+) {
+  const graphNoteheads = beamStemGraph?.noteheads ?? []
+  const noteheads = (observations?.noteheads ?? []).map((note, index) => {
+    const rawOwnership = graphNoteheads[index]?.beamOwnership ?? null
+    // Split stem vs beam gates. Stem continuity may be owned without accepting
+    // weak beam duration handoff (ungated raster beam ownership regressed scan
+    // duration while still missing the acceptance floor).
+    const stemConfidence = Number(rawOwnership?.stemConfidence ?? rawOwnership?.confidence ?? 0)
+    const beamConfidence = Number(rawOwnership?.beamConfidence ?? 0)
+    const stemOwned =
+      Boolean(rawOwnership?.attachedStemId) && stemConfidence >= 0.7 ? rawOwnership : null
+    const beamOwned =
+      stemOwned &&
+      Number(rawOwnership?.beamCandidateCount ?? 0) > 0 &&
+      beamConfidence >= 0.7
+        ? rawOwnership
+        : null
+    return {
+      id: `detector-${source}-note-${page}-${systemIndex}-${note.measureNumber ?? 'x'}-${index}`,
+      kind: 'notehead',
+      systemIndex,
+      measureNumber: note.measureNumber ?? null,
+      measureRelativePosition: note.positionInMeasure,
+      geometry: {
+        x: note.cx - 3,
+        y: note.cy - 3,
+        width: 6,
+        height: 6,
+        space: 'pixels',
+      },
+      midi: note.midi,
+      clef: note.clef,
+      durationType: note.durationType,
+      durationDivisions: note.durationDivisions,
+      dotted: Boolean(note.dotted),
+      onsetDivisions: Number.isFinite(note.onsetDivisions) ? note.onsetDivisions : null,
+      rhythmPacking: note.rhythmPacking ?? null,
+      stemDirection:
+        stemOwned?.stemDirection ?? note.stem?.direction ?? note.stemDirection ?? null,
+      stemGroupId: stemOwned?.attachedStemId ?? null,
+      beamGroupId: beamOwned?.beamGroupId ?? null,
+      beamExpectedDivisions: beamOwned?.expectedDivisions ?? null,
+      beamOwnershipConfidence: beamOwned?.confidence ?? stemOwned?.stemConfidence ?? rawOwnership?.confidence ?? null,
+      tieStart: Boolean(note.tieStart),
+      confidence: note.confidence ?? note.pitchConfidence ?? 0.6,
+      articulation: note.articulation ?? null,
+      evidenceSource: `detector-${source}-notehead`,
+    }
+  })
+  const rests = (observations?.rests ?? []).map((rest, index) => ({
+    id: `detector-${source}-rest-${page}-${systemIndex}-${rest.measureNumber ?? 'x'}-${index}`,
+    kind: 'rest',
+    systemIndex,
+    measureNumber: rest.measureNumber ?? null,
+    measureRelativePosition: rest.positionInMeasure,
+    geometry: {
+      x: rest.cx - 3,
+      y: rest.cy - 4,
+      width: 6,
+      height: 8,
+      space: 'pixels',
+    },
+    clef: rest.clef,
+    durationType: rest.durationType ?? 'quarter',
+    durationDivisions:
+      rest.durationDivisions ?? OMR_DURATION_DIVISIONS[rest.durationType] ?? OMR_DIVISIONS_PER_QUARTER,
+    confidence: rest.confidence ?? 0.6,
+    evidenceSource: `detector-${source}-rest`,
+  }))
+  return [...noteheads, ...rests]
+}
+
+function detectorSymbolsFromTabNotes(tabNotes, { page, systemIndex }) {
+  return (tabNotes ?? []).map((note, index) => ({
+    id: `detector-tab-digit-${page}-${systemIndex}-${note.measureNumber ?? 'x'}-${index}`,
+    kind: 'tab-digit',
+    text: String(note.fret),
+    systemIndex,
+    measureNumber: note.measureNumber ?? null,
+    measureRelativePosition: note.positionInMeasure,
+    x: note.x,
+    xNorm: note.xNorm,
+    string: note.string,
+    fret: note.fret,
+    midi: note.midi,
+    soundingPitch: true,
+    confidence: 0.82,
+    evidenceSource: 'detector-tab-digit',
+  }))
+}
+
 /**
  * Analyze one preprocessed page image (systems, measures, notes).
  */
@@ -121,6 +222,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     instrument = null,
     /** Developer/benchmark-only capture for the disabled-by-default V3 shadow. */
     captureOmrV3Shadow = false,
+    /** Capture detector observations for an independent V3 qualification shadow. */
+    captureOmrV3RawSymbols = false,
   } = options
 
   const tabCapable = Boolean(instrument?.omr?.supportsTablature && instrument?.strings)
@@ -168,6 +271,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
   const systemMeasureBoxes = []
   const measureGrid = []
   const measureGridDiagnostics = []
+  const rawDetectorSymbols = []
   const positionedGlyphs = tabCapable ? textGlyphsToImage(pageText, imageData) : null
   const vectorGlyphs = hasVectorOmrNoteheads(pageText)
     ? positionedGlyphs ?? textGlyphsToImage(pageText, imageData)
@@ -186,6 +290,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           systemMeasureBoxes,
           measureRhythms: resultMeasureRhythms,
           measureGrid: resultMeasureGrid,
+          ...(captureOmrV3RawSymbols ? { rawDetectorSymbols } : {}),
           tabDiagnostics: tabDiagnostics ?? null,
           source: hasVectorOmrNoteheads(pageText) ? 'vector' : 'raster',
         }
@@ -302,6 +407,11 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           imageData,
           { tuning: tabTuning ?? undefined, fretCount: tabFretCount },
         )
+        if (captureOmrV3RawSymbols) {
+          rawDetectorSymbols.push(
+            ...detectorSymbolsFromTabNotes(tabNotes, { page, systemIndex: targetIndex }),
+          )
+        }
         tabDiagnostics.tabNotes += tabNotes.length
         const byMeasure = groupTabNotesByMeasure(tabNotes)
         const outputMeasureBoxes = tabMeasureBoxesForOutput(measureBoxes, byMeasure)
@@ -462,6 +572,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       inheritedKeySignature,
       inheritedTimeSignature,
       inkThreshold,
+      captureDetectorObservations: captureOmrV3RawSymbols,
     })
 
     // Mixed notation+TAB (fretted instruments): pull string/fret positions
@@ -499,6 +610,11 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           imageData,
           { tuning: tabTuning ?? undefined, fretCount: tabFretCount },
         )
+        if (captureOmrV3RawSymbols) {
+          rawDetectorSymbols.push(
+            ...detectorSymbolsFromTabNotes(tabNotes, { page, systemIndex: targetIndex }),
+          )
+        }
         tabDiagnostics.tabNotes += tabNotes.length
         const byMeasure = groupTabNotesByMeasure(tabNotes)
         for (const measureRecord of vector.measureRecordsBySystem[targetIndex] ?? []) {
@@ -534,6 +650,19 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     for (let systemIndex = 0; systemIndex < systemMeasureBoxes.length; systemIndex += 1) {
       const systemMeasures = vector.measureRecordsBySystem[systemIndex] ?? []
       for (const measureRecord of systemMeasures) {
+        if (captureOmrV3RawSymbols) {
+          rawDetectorSymbols.push(
+            ...detectorSymbolsFromObservations(measureRecord.detectorObservations, {
+              page,
+              systemIndex,
+              source: 'vector',
+              beamStemGraph: measureRecord.beamStemGraph,
+            }),
+          )
+          // Detector observations have been copied into the page-level V3
+          // input; do not retain a second heavy copy in runtime diagnostics.
+          delete measureRecord.detectorObservations
+        }
         measureRhythms.push(measureRecord)
         notes += measureRecord.vectorNoteCount ?? 0
         if (measureRecord.uncertain) {
@@ -645,7 +774,33 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         }
       }
 
-      const rhythm = assembleMeasureRhythm(imageData, measureBox, noteheads, inkThreshold)
+      const rhythm = assembleMeasureRhythm(imageData, measureBox, noteheads, inkThreshold, {
+        // Always capture enriched heads so the raster beam/stem graph can use the
+        // same notehead→stem interface as the vector path. Raw V3 symbols still
+        // only emit when captureOmrV3RawSymbols is enabled.
+        captureDetectorObservations: true,
+      })
+      const beamStemGraph = buildBeamStemGraph({
+        notes: rhythm.detectorObservations?.noteheads ?? noteheads,
+        events: rhythm.events,
+        measureBox,
+        imageData,
+        inkThreshold,
+      })
+      const beamStemDiagnostics = summarizeBeamStemGraph(beamStemGraph)
+      if (captureOmrV3RawSymbols) {
+        // Pass the raster beam/stem graph with split stem/beam gates in
+        // detectorSymbolsFromObservations. Stem-only ownership may reshape lanes;
+        // beam duration handoff still requires attached beams at confidence >= 0.7.
+        rawDetectorSymbols.push(
+          ...detectorSymbolsFromObservations(rhythm.detectorObservations, {
+            page,
+            systemIndex,
+            source: 'raster',
+            beamStemGraph,
+          }),
+        )
+      }
       notes += noteheads.length
       if (rhythm.uncertain) {
         uncertainMeasures += 1
@@ -685,6 +840,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         endingMarking,
         dynamic,
         pedal: boxIndex === 0 ? pedal : null,
+        beamStemGraph,
+        beamStemDiagnostics,
       }
       systemMeasures.push(measureRecord)
       measureRhythms.push(measureRecord)

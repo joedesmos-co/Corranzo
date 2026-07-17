@@ -107,6 +107,32 @@ describe('OMR V3 symbol ownership and onset columns', () => {
     expect(new Set(columns.map((column) => column.onsetColumnId)).size).toBe(4)
   })
 
+  it('prefers a detector measure-position observation over clef-zone geometry', () => {
+    const document = guitarDocument()
+    const result = assignOmrV3PageSymbolOwnership(document.pages[0], [
+      symbol('position-hint', 'notehead', 0.15, 0.11, {
+        measureRelativePositionHint: 0.25,
+      }),
+    ])
+
+    expect(allMeasures(result.page)[0].onsetColumns[0].measureRelativePosition).toBe(0.25)
+  })
+
+  it('keeps shared notation/TAB columns in their common geometry coordinate system', () => {
+    const document = guitarDocument()
+    const result = assignOmrV3PageSymbolOwnership(document.pages[0], [
+      symbol('notation-position', 'notehead', 0.18, 0.11, {
+        measureRelativePositionHint: 0.25,
+      }),
+      symbol('tab-position', 'tab-digit', 0.181, 0.25, { text: '3', string: 1 }),
+    ])
+    const column = allMeasures(result.page)[0].onsetColumns[0]
+
+    expect(column.measureRelativePosition).not.toBe(0.25)
+    expect(column.symbols.noteheads).toHaveLength(1)
+    expect(column.symbols.tabDigits).toHaveLength(1)
+  })
+
   it('excludes lyrics, chord text, and watermarks without creating duplicate onsets', () => {
     const document = guitarDocument()
     const result = assignOmrV3PageSymbolOwnership(document.pages[0], [
@@ -140,6 +166,38 @@ describe('OMR V3 symbol ownership and onset columns', () => {
     expect(owned.ownership.onsetColumnId).toBeTruthy()
     expect(result.page.unassignedSymbols).toHaveLength(1)
     expect(result.page.unassignedSymbols[0].rejectionReason).toBe('no-safe-structural-owner')
+  })
+
+  it('uses an explicit detector staff owner before fallible vertical geometry', () => {
+    const document = guitarDocument()
+    const result = assignOmrV3PageSymbolOwnership(document.pages[0], [
+      symbol('source-owned', 'notehead', 0.2, 0.9, {
+        sourceStaffId: 'notation',
+        sourceEventGroupId: 'detector-event-1',
+      }),
+    ])
+
+    expect(result.summary.unassignedSymbolCount).toBe(0)
+    expect(result.symbols[0].ownership.staffId).toBe(
+      document.pages[0].systems[0].staffGroups[0].staves[0].staffId,
+    )
+    expect(result.symbols[0].sourceRefs).toEqual(
+      expect.arrayContaining(['notation', 'detector-event-1']),
+    )
+  })
+
+  it('honors a detector-owned Guitar staff even when geometry favors its paired staff', () => {
+    const document = guitarDocument()
+    const result = assignOmrV3PageSymbolOwnership(document.pages[0], [
+      symbol('source-preferred', 'notehead', 0.2, 0.27, {
+        sourceStaffId: 'notation',
+        preferSourceStaffOwnership: true,
+      }),
+    ])
+
+    expect(result.symbols[0].ownership.staffId).toBe(
+      document.pages[0].systems[0].staffGroups[0].staves[0].staffId,
+    )
   })
 
   it('applies ownership document-wide as a pure, serializable transformation', () => {

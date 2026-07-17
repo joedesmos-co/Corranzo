@@ -3,6 +3,7 @@
 import {
   createOmrDocumentIR,
   createOmrMeasureColumnIR,
+  createOmrOnsetColumnIR,
   createOmrRelationshipIR,
   createOmrV3Diagnostic,
   createOmrV3Id,
@@ -14,6 +15,7 @@ import {
 
 const DEFAULT_MEASURE_DIVISIONS = 16
 const EPSILON = 1e-6
+const DURATION_LADDER = [16, 12, 8, 6, 4, 3, 2, 1]
 
 const MIDI_STEPS = [
   ['C', 0],
@@ -54,6 +56,200 @@ function durationFromSymbol(symbol) {
   }
 }
 
+function snapDownToLadder(value) {
+  if (!Number.isFinite(value) || value <= EPSILON) return null
+  for (const step of DURATION_LADDER) {
+    if (step <= value + EPSILON) return step
+  }
+  return null
+}
+
+function nearestLadder(value) {
+  if (!Number.isFinite(value) || value <= EPSILON) return null
+  let best = null
+  let bestDistance = Number.POSITIVE_INFINITY
+  for (const step of DURATION_LADDER) {
+    const distance = Math.abs(step - value)
+    if (distance < bestDistance) {
+      best = step
+      bestDistance = distance
+    }
+  }
+  return best
+}
+
+function durationTypeForDivisions(divisions) {
+  if (divisions === 1) return '16th'
+  if (divisions === 2) return 'eighth'
+  if (divisions === 4) return 'quarter'
+  if (divisions === 8) return 'half'
+  if (divisions === 16) return 'whole'
+  return null
+}
+
+function withDuration(item, divisions, recovery) {
+  return {
+    ...item,
+    duration: {
+      divisions,
+      type: durationTypeForDivisions(divisions),
+      dots: divisions === 3 || divisions === 6 || divisions === 12 ? 1 : 0,
+      exact: false,
+      recovery,
+    },
+  }
+}
+
+function itemIdentity(item) {
+  return `${item.onset.divisions}:${(item.symbols ?? []).map((symbol) => symbol.symbolId).join(',')}`
+}
+
+function onsetGroups(items) {
+  const ordered = [...items].sort((left, right) => left.onset.divisions - right.onset.divisions)
+  const groups = []
+  for (const item of ordered) {
+    const last = groups[groups.length - 1]
+    if (last && Math.abs(last.onset - item.onset.divisions) <= EPSILON) {
+      last.items.push(item)
+    } else {
+      groups.push({ onset: item.onset.divisions, items: [item] })
+    }
+  }
+  return groups
+}
+
+function packedSubdivision(groups) {
+  if (groups.length < 3) return null
+  const rawGaps = []
+  for (let index = 0; index < groups.length - 1; index += 1) {
+    rawGaps.push(groups[index + 1].onset - groups[index].onset)
+  }
+  const mean = rawGaps.reduce((sum, gap) => sum + gap, 0) / rawGaps.length
+  const target = nearestLadder(mean)
+  // Packed short-to-moderate subdivisions only. Whole-measure packing is too
+  // aggressive for polyphonic writing; eighth/quarter/half families are enough
+  // to correct overlong detector values once onsets are stable.
+  if (!Number.isFinite(target) || target > 8 || target < 1) return null
+  if (Math.abs(mean - target) / target > 0.5) return null
+  if (rawGaps.some((gap) => Math.abs(gap - target) / target > 0.55)) return null
+  return target
+}
+
+/**
+ * After lane membership is fixed, shorten overlong approximate durations inside
+ * clearly packed stem/lane families. Voice identity is preserved. Beam durations
+ * are left to the upstream handoff; second-guessing them regressed dense F1.
+ * Values are never lengthened.
+ */
+function refineApproximatePackedDurations(items, totalDivisions) {
+  const families = new Map()
+  items.forEach((item, index) => {
+    // Subdivision-grid recoveries already own onset and sounding duration
+    // (including 3:2 tuplets). Do not second-guess them with the integer ladder.
+    if (
+      item.duration?.recovery === 'uniform-subdivision-grid' ||
+      item.duration?.recovery === 'uniform-beat-grid' ||
+      item.tuplet
+    ) {
+      return
+    }
+    const key = Number.isInteger(item.preferredLane)
+      ? `lane:${item.preferredLane}`
+      : item.stemDirection
+        ? `stem:${item.stemDirection}`
+        : item.beamGroupId != null
+          ? `beam:${item.beamGroupId}`
+          : `singleton:${index}`
+    if (!families.has(key)) families.set(key, [])
+    families.get(key).push(item)
+  })
+
+  const replaced = new Map()
+  let changedCount = 0
+  for (const family of families.values()) {
+    const groups = onsetGroups(family)
+    const packing = packedSubdivision(groups)
+    if (!Number.isFinite(packing)) continue
+    const overlong = groups.flatMap((group) => group.items).filter(
+      (item) =>
+        item.duration?.exact === false &&
+        Number.isFinite(item.duration?.divisions) &&
+        item.duration.divisions > packing + EPSILON,
+    )
+    // Require that packing is correcting sustained detector values, not rewriting
+    // an already short family.
+    if (overlong.length < Math.ceil(groups.length * 0.5)) continue
+    for (let index = 0; index < groups.length; index += 1) {
+      const group = groups[index]
+      const nextOnset = index + 1 < groups.length ? groups[index + 1].onset : totalDivisions
+      const capacity = snapDownToLadder(
+        Math.min(nextOnset - group.onset, totalDivisions - group.onset),
+      )
+      for (const item of group.items) {
+        if (
+          !item.duration ||
+          item.duration.exact !== false ||
+          !Number.isFinite(item.duration.divisions) ||
+          item.duration.divisions <= packing + EPSILON ||
+          !Number.isFinite(capacity) ||
+          packing > capacity + EPSILON
+        ) {
+          continue
+        }
+        changedCount += 1
+        replaced.set(
+          itemIdentity(item),
+          withDuration(
+            item,
+            packing,
+            index === groups.length - 1 ? 'lane-subdivision-continuity' : 'lane-gap-shorten',
+          ),
+        )
+      }
+    }
+  }
+  return {
+    items: items.map((item) => replaced.get(itemIdentity(item)) ?? item),
+    changedCount,
+  }
+}
+
+/**
+ * Lengthen approximate short durations to the next onset in the same lane.
+ * Used for grand-staff bass accompaniment where detector packing leaves
+ * quarters that should sustain as halves. Never touches exact durations.
+ *
+ * Must not undo packed-subdivision shorten evidence: when a stem/lane family
+ * was already rewritten to a short packing target, incomplete lane membership
+ * can leave a large geometric gap that would otherwise stretch notes back to
+ * overlong values (and non-ladder floats).
+ */
+function fillApproximateLaneGaps(items, totalDivisions) {
+  const groups = onsetGroups(items)
+  if (groups.length < 2) return items
+  const replaced = new Map()
+  for (let index = 0; index < groups.length; index += 1) {
+    const group = groups[index]
+    const nextOnset = index + 1 < groups.length ? groups[index + 1].onset : totalDivisions
+    const gap = Math.max(EPSILON, nextOnset - group.onset)
+    const capacity = snapDownToLadder(Math.min(gap, totalDivisions - group.onset))
+    for (const item of group.items) {
+      if (item.kind !== 'note') continue
+      if (item.duration?.exact !== false) continue
+      if (!Number.isFinite(item.duration?.divisions)) continue
+      if (
+        item.duration.recovery === 'lane-gap-shorten' ||
+        item.duration.recovery === 'lane-subdivision-continuity'
+      ) {
+        continue
+      }
+      if (!Number.isFinite(capacity) || item.duration.divisions >= capacity - EPSILON) continue
+      replaced.set(itemIdentity(item), withDuration(item, capacity, 'lane-gap-lengthen'))
+    }
+  }
+  return items.map((item) => replaced.get(itemIdentity(item)) ?? item)
+}
+
 function symbolOnset(symbol, column, totalDivisions) {
   if (Number.isFinite(symbol?.onsetDivisions) && symbol.onsetDivisions >= 0) {
     return { divisions: symbol.onsetDivisions, exact: true }
@@ -71,9 +267,68 @@ function durationKey(duration) {
   return duration ? `${duration.divisions}:${duration.type ?? ''}:${duration.dots}` : 'unresolved'
 }
 
-function itemKey(symbol) {
-  const stemKey = symbol.stemGroupId ?? symbol.stemDirection ?? symbol.voiceHint ?? 'shared'
-  return `${stemKey}:${durationKey(durationFromSymbol(symbol))}`
+/**
+ * Group noteheads that share one staff onset column into chord/voice items.
+ *
+ * Detectors often attach a unique stem id per notehead even when the engraving is
+ * a single chord. Those singleton stem ids are not voice evidence. Structural
+ * cues that do separate simultaneous events:
+ * - explicit voiceHint
+ * - a stemGroupId shared by 2+ noteheads in this column
+ * - opposing stem directions (up vs down) in the same column
+ */
+function columnStemGroupCounts(noteheads) {
+  const counts = new Map()
+  for (const symbol of noteheads) {
+    const stemId = symbol.stemGroupId
+    if (!stemId) continue
+    counts.set(stemId, (counts.get(stemId) ?? 0) + 1)
+  }
+  return counts
+}
+
+function columnHasOpposingStemDirections(noteheads) {
+  const directions = new Set(
+    noteheads
+      .map((symbol) => symbol.stemDirection)
+      .filter((direction) => direction === 'up' || direction === 'down'),
+  )
+  return directions.has('up') && directions.has('down')
+}
+
+function columnItemKey(symbol, stemCounts, opposingStemDirections) {
+  // Approximate detector durations are too noisy to split a vertical stack: stemless
+  // chord tones are often misread as wholes. Exact durations remain separating.
+  const duration = durationFromSymbol(symbol)
+  const durationPart = duration?.exact === true ? durationKey(duration) : 'approx'
+  if (Number.isFinite(symbol.voiceHint)) {
+    return `voice:${Math.round(symbol.voiceHint)}:${durationPart}`
+  }
+  const stemId = symbol.stemGroupId
+  if (stemId && (stemCounts.get(stemId) ?? 0) >= 2) {
+    return `stem:${stemId}:${durationPart}`
+  }
+  if (opposingStemDirections && (symbol.stemDirection === 'up' || symbol.stemDirection === 'down')) {
+    return `dir:${symbol.stemDirection}:${durationPart}`
+  }
+  return `chord:${durationPart}`
+}
+
+function chordDurationFromSymbols(symbols) {
+  const entries = symbols
+    .map((symbol) => ({ symbol, duration: durationFromSymbol(symbol) }))
+    .filter((entry) => entry.duration)
+  if (entries.length === 0) return null
+  const exact = entries.find((entry) => entry.duration.exact === true)
+  if (exact) return exact.duration
+  const stemmed = entries.filter(
+    (entry) => entry.symbol.stemDirection || entry.symbol.stemGroupId,
+  )
+  const pool = stemmed.length > 0 ? stemmed : entries
+  // Prefer the shorter approximate reading: stemless heads are commonly inflated to wholes.
+  return [...pool.map((entry) => entry.duration)].sort(
+    (left, right) => left.divisions - right.divisions,
+  )[0]
 }
 
 function preferredLane(symbols) {
@@ -92,7 +347,14 @@ function symbolsInColumn(column, staffId, symbolLookup, collection) {
 
 function makeNoteItem(symbols, column, totalDivisions) {
   const onset = symbolOnset(symbols[0], column, totalDivisions)
-  const duration = durationFromSymbol(symbols[0])
+  const duration = chordDurationFromSymbols(symbols)
+  const sharedStemId = symbols
+    .map((symbol) => symbol.stemGroupId)
+    .find(
+      (stemId) =>
+        stemId && symbols.filter((symbol) => symbol.stemGroupId === stemId).length >= 2,
+    )
+  const stemmed = symbols.find((symbol) => symbol.stemDirection || symbol.stemGroupId)
   return {
     kind: 'note',
     symbols,
@@ -100,8 +362,8 @@ function makeNoteItem(symbols, column, totalDivisions) {
     onset,
     duration,
     preferredLane: preferredLane(symbols),
-    stemDirection: symbols[0].stemDirection ?? null,
-    stemGroupId: symbols[0].stemGroupId ?? null,
+    stemDirection: stemmed?.stemDirection ?? symbols[0].stemDirection ?? null,
+    stemGroupId: sharedStemId ?? stemmed?.stemGroupId ?? symbols[0].stemGroupId ?? null,
     beamGroupId: symbols[0].beamGroupId ?? null,
   }
 }
@@ -124,9 +386,11 @@ function itemsForStaff(measure, staffId, symbolLookup, totalDivisions) {
   const items = []
   for (const column of measure.onsetColumns ?? []) {
     const noteheads = symbolsInColumn(column, staffId, symbolLookup, 'noteheads')
+    const stemCounts = columnStemGroupCounts(noteheads)
+    const opposingStemDirections = columnHasOpposingStemDirections(noteheads)
     const noteGroups = new Map()
     for (const symbol of noteheads) {
-      const key = itemKey(symbol)
+      const key = columnItemKey(symbol, stemCounts, opposingStemDirections)
       if (!noteGroups.has(key)) noteGroups.set(key, [])
       noteGroups.get(key).push(symbol)
     }
@@ -163,6 +427,145 @@ function classifyItems(items, totalDivisions) {
   return { valid, unresolved, rejected }
 }
 
+/**
+ * Recover uniformly spaced single-staff subdivisions from approximate geometry.
+ *
+ * Factor 1 preserves the historical one-event-per-beat grid. Factors 2 and 4
+ * cover ordinary eighth/sixteenth packing. Factor 3 is the owned 3:2 tuplet
+ * case: equal slots whose count is exactly three per beat, with sounding
+ * duration = written * normalNotes / actualNotes. Irregular spacing abstains.
+ * Grand-staff callers must keep allowUniformBeatGrid false.
+ */
+function recoverUniformBeatGrid(items, totalDivisions, beats) {
+  if (!Number.isInteger(beats) || beats < 2 || beats > 12 || items.length === 0) {
+    return { items, recoveredCount: 0 }
+  }
+  if (
+    items.some(
+      (item) =>
+        item.onset.exact ||
+        item.duration?.exact !== false ||
+        !Number.isFinite(item.onset.divisions) ||
+        !item.column?.onsetColumnId,
+    )
+  ) {
+    return { items, recoveredCount: 0 }
+  }
+
+  const byColumn = new Map()
+  for (const item of items) {
+    const key = item.column.onsetColumnId
+    if (!byColumn.has(key)) byColumn.set(key, [])
+    byColumn.get(key).push(item)
+  }
+  const orderedColumns = [...byColumn.entries()].sort(
+    (left, right) =>
+      average(left[1].map((item) => item.onset.divisions)) -
+      average(right[1].map((item) => item.onset.divisions)),
+  )
+  const columnCount = orderedColumns.length
+  if (columnCount < beats || columnCount % beats !== 0) {
+    return { items, recoveredCount: 0 }
+  }
+  const factor = columnCount / beats
+  if (![1, 2, 3, 4].includes(factor)) {
+    return { items, recoveredCount: 0 }
+  }
+
+  const positions = orderedColumns.map(([, columnItems]) =>
+    average(columnItems.map((item) => item.onset.divisions)),
+  )
+  const gaps = positions.slice(1).map((position, index) => position - positions[index])
+  const meanGap = average(gaps)
+  if (
+    !Number.isFinite(meanGap) ||
+    meanGap <= EPSILON ||
+    gaps.some((gap) => Math.abs(gap - meanGap) / meanGap > 0.2)
+  ) {
+    return { items, recoveredCount: 0 }
+  }
+
+  const slotDivisions = totalDivisions / columnCount
+  if (!Number.isFinite(slotDivisions) || slotDivisions <= EPSILON) {
+    return { items, recoveredCount: 0 }
+  }
+
+  // 3 equal slots per beat ⇒ written eighths performed as a 3:2 tuplet.
+  const tuplet =
+    factor === 3
+      ? {
+          actualNotes: 3,
+          normalNotes: 2,
+          writtenDivisions: totalDivisions / (beats * 2),
+        }
+      : null
+  const recovery = factor === 1 ? 'uniform-beat-grid' : 'uniform-subdivision-grid'
+  const replaced = new Map()
+  orderedColumns.forEach(([, columnItems], index) => {
+    const tupletGroupId =
+      tuplet != null ? `tuplet:${Math.floor(index / 3)}:${beats}:${columnCount}` : null
+    for (const item of columnItems) {
+      replaced.set(itemIdentity(item), {
+        ...item,
+        onset: {
+          divisions: index * slotDivisions,
+          exact: false,
+          recovery,
+        },
+        duration: {
+          divisions: slotDivisions,
+          type: null,
+          dots: 0,
+          exact: false,
+          recovery,
+        },
+        tuplet:
+          tuplet == null
+            ? null
+            : {
+                ...tuplet,
+                groupId: tupletGroupId,
+                slotIndex: index % 3,
+              },
+      })
+    }
+  })
+
+  return {
+    items: items.map((item) => replaced.get(itemIdentity(item)) ?? item),
+    recoveredCount: replaced.size,
+  }
+}
+
+function recoverApproximateMeasureEnd(items, totalDivisions) {
+  let recoveredCount = 0
+  const recovered = items.map((item) => {
+    if (
+      item.duration?.exact !== false ||
+      !Number.isFinite(item.onset?.divisions) ||
+      item.onset.divisions < 0 ||
+      item.onset.divisions >= totalDivisions ||
+      item.onset.divisions + item.duration.divisions <= totalDivisions + EPSILON
+    ) {
+      return item
+    }
+    const available = totalDivisions - item.onset.divisions
+    if (available <= EPSILON) return item
+    recoveredCount += 1
+    return {
+      ...item,
+      duration: {
+        divisions: available,
+        type: null,
+        dots: 0,
+        exact: false,
+        recovery: 'clip-approximate-to-measure-end',
+      },
+    }
+  })
+  return { items: recovered, recoveredCount }
+}
+
 function assignLanes(items) {
   const lanes = []
   let ambiguous = false
@@ -191,7 +594,7 @@ function assignLanes(items) {
   return { lanes: lanes.filter((lane) => lane.items.length > 0), ambiguous }
 }
 
-function eventTechnical(symbol) {
+function eventTechnical(symbol, item = null) {
   return {
     ...(symbol.technical ?? {}),
     stemDirection: symbol.stemDirection ?? null,
@@ -202,6 +605,17 @@ function eventTechnical(symbol) {
     slurStop: Boolean(symbol.slurStop),
     slurId: symbol.slurId ?? null,
     crossStaffTargetStaffId: symbol.crossStaffTargetStaffId ?? null,
+    ...(item?.tuplet
+      ? {
+          tuplet: {
+            actualNotes: item.tuplet.actualNotes,
+            normalNotes: item.tuplet.normalNotes,
+            writtenDivisions: item.tuplet.writtenDivisions,
+            groupId: item.tuplet.groupId,
+            slotIndex: item.tuplet.slotIndex,
+          },
+        }
+      : {}),
   }
 }
 
@@ -233,7 +647,7 @@ function eventsForItem(item, staffId, measureId, voiceId, candidateRank, laneInd
     beamGroupId: item.beamGroupId,
     string: symbol.string,
     fret: symbol.fret,
-    technical: eventTechnical(symbol),
+    technical: eventTechnical(symbol, item),
     geometry: symbol.geometry,
     confidenceBreakdown: {
       symbol: symbol.confidence?.overall ?? null,
@@ -312,18 +726,43 @@ function unresolvedVoice(staffId, measure, items) {
   })
 }
 
-function solveStaffMeasure(measure, staff, totalDivisions) {
+function solveStaffMeasure(
+  measure,
+  staff,
+  totalDivisions,
+  beats,
+  allowUniformBeatGrid,
+  { allowAccompanimentLengthen = false } = {},
+) {
   const symbolLookup = new Map((staff.symbols ?? []).map((symbol) => [symbol.symbolId, symbol]))
   const items = itemsForStaff(measure, staff.staffId, symbolLookup, totalDivisions)
-  const classified = classifyItems(items, totalDivisions)
+  const beatGridRecovery = allowUniformBeatGrid
+    ? recoverUniformBeatGrid(items, totalDivisions, beats)
+    : { items, recoveredCount: 0 }
+  const recovery = recoverApproximateMeasureEnd(beatGridRecovery.items, totalDivisions)
+  const classified = classifyItems(recovery.items, totalDivisions)
   const assignment = assignLanes(classified.valid)
+  const refined = refineApproximatePackedDurations(
+    assignment.lanes.flatMap((lane) => lane.items),
+    totalDivisions,
+  )
+  const refinedById = new Map(refined.items.map((item) => [itemIdentity(item), item]))
+  const lengthen =
+    allowAccompanimentLengthen ||
+    (staff.clefs ?? []).some((clef) => String(clef).toLowerCase().includes('bass'))
+  const solvedLanes = assignment.lanes.map((lane) => {
+    const laneItems = lane.items.map((item) => refinedById.get(itemIdentity(item)) ?? item)
+    return {
+      items: lengthen ? fillApproximateLaneGaps(laneItems, totalDivisions) : laneItems,
+    }
+  })
   const measureContext = { ...measure, totalDivisions }
-  const primary = assignment.lanes.map((lane, laneIndex) =>
+  const primary = solvedLanes.map((lane, laneIndex) =>
     voiceForLane(staff.staffId, measureContext, lane, laneIndex, 0, assignment.ambiguous),
   )
   const alternate =
-    assignment.ambiguous && assignment.lanes.length > 1
-      ? [...assignment.lanes]
+    assignment.ambiguous && solvedLanes.length > 1
+      ? [...solvedLanes]
           .reverse()
           .map((lane, laneIndex) =>
             voiceForLane(staff.staffId, measureContext, lane, laneIndex, 1, true),
@@ -334,6 +773,8 @@ function solveStaffMeasure(measure, staff, totalDivisions) {
     voices: [...primary, ...alternate, ...(unresolved ? [unresolved] : [])],
     ambiguous: assignment.ambiguous || classified.unresolved.length > 0,
     unresolvedCount: classified.unresolved.length,
+    recoveredUniformBeatGridCount: beatGridRecovery.recoveredCount,
+    recoveredMeasureEndCount: recovery.recoveredCount,
     rejected: classified.rejected,
   }
 }
@@ -345,21 +786,108 @@ function pianoStaves(system) {
         group.type === OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF ||
         group.type === OMR_V3_STAFF_GROUP_TYPE.SINGLE_NOTATION,
     )
-    .flatMap((group) => group.staves ?? [])
+    .flatMap((group) =>
+      (group.staves ?? []).map((staff, staffIndex) => ({
+        staff,
+        // A grand staff can legitimately contain simultaneous voices that
+        // merely look like one symbol per beat on an individual staff. Keep
+        // this recovery to structurally single-staff music.
+        allowUniformBeatGrid: group.type === OMR_V3_STAFF_GROUP_TYPE.SINGLE_NOTATION,
+        isGrandStaff: group.type === OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF,
+        isGrandStaffBass:
+          group.type === OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF && staffIndex === 1,
+      })),
+    )
 }
 
-function addVoiceCandidates(document, totalDivisions) {
+/**
+ * Joint onset-column quantization for grand staff measures.
+ * Cross-staff columns already share geometry; when their count and spacing agree
+ * with the detected beat grid, snap column positions once for both staves.
+ * This is not the single-staff uniform item grid (rejected for grand staff).
+ *
+ * Scan-safe note: order-based snap without gap regularity (and MAD nearest-beat
+ * snap) both damaged piano-articulation-scan F1; keep the regularity gate.
+ */
+function quantizeJointGrandStaffOnsetColumns(measure, totalDivisions, beats) {
+  if (!Number.isInteger(beats) || beats < 2 || beats > 12) {
+    return { measure, recoveredCount: 0 }
+  }
+  const columns = (measure.onsetColumns ?? []).filter((column) => !column.grace)
+  const graceColumns = (measure.onsetColumns ?? []).filter((column) => column.grace)
+  if (columns.length !== beats) return { measure, recoveredCount: 0 }
+  if (columns.some((column) => !Number.isFinite(column.measureRelativePosition))) {
+    return { measure, recoveredCount: 0 }
+  }
+  const ordered = [...columns].sort(
+    (left, right) => left.measureRelativePosition - right.measureRelativePosition,
+  )
+  const positions = ordered.map((column) => column.measureRelativePosition * totalDivisions)
+  const gaps = positions.slice(1).map((position, index) => position - positions[index])
+  const meanGap = average(gaps)
+  const expectedGap = totalDivisions / beats
+  if (
+    !Number.isFinite(meanGap) ||
+    meanGap <= EPSILON ||
+    !Number.isFinite(expectedGap) ||
+    expectedGap <= EPSILON ||
+    Math.abs(meanGap - expectedGap) / expectedGap > 0.35 ||
+    gaps.some((gap) => Math.abs(gap - meanGap) / meanGap > 0.35)
+  ) {
+    return { measure, recoveredCount: 0 }
+  }
+  const quantized = ordered.map((column, index) =>
+    createOmrOnsetColumnIR({
+      ...column,
+      measureRelativePosition: index / beats,
+      diagnostics: [
+        ...(column.diagnostics ?? []),
+        createOmrV3Diagnostic({
+          code: 'joint-grand-staff-onset-grid',
+          severity: OMR_V3_DIAGNOSTIC_SEVERITY.INFO,
+          stage: 'piano-voice-assignment',
+          message: 'Snapped a shared grand-staff onset column onto the measure beat grid.',
+        }),
+      ],
+    }),
+  )
+  return {
+    measure: {
+      ...measure,
+      onsetColumns: [...quantized, ...graceColumns],
+    },
+    recoveredCount: quantized.length,
+  }
+}
+
+function addVoiceCandidates(document, totalDivisions, beats) {
   const summaries = []
   const pages = (document.pages ?? []).map((page) => ({
     ...page,
     systems: (page.systems ?? []).map((system) => {
       const staves = pianoStaves(system)
       if (staves.length === 0) return system
+      const isGrandStaff = staves.some((entry) => entry.isGrandStaff)
       const measureColumns = (system.measureColumns ?? []).map((measure) => {
-        const solved = staves.map((staff) => solveStaffMeasure(measure, staff, totalDivisions))
+        const onsetGrid = isGrandStaff
+          ? quantizeJointGrandStaffOnsetColumns(measure, totalDivisions, beats)
+          : { measure, recoveredCount: 0 }
+        const solved = staves.map(({ staff, allowUniformBeatGrid, isGrandStaffBass }) =>
+          solveStaffMeasure(onsetGrid.measure, staff, totalDivisions, beats, allowUniformBeatGrid, {
+            allowAccompanimentLengthen: isGrandStaffBass,
+          }),
+        )
         const voices = solved.flatMap((entry) => entry.voices)
         const rejected = solved.flatMap((entry) => entry.rejected)
         const unresolvedCount = solved.reduce((sum, entry) => sum + entry.unresolvedCount, 0)
+        const recoveredMeasureEndCount = solved.reduce(
+          (sum, entry) => sum + entry.recoveredMeasureEndCount,
+          0,
+        )
+        const recoveredUniformBeatGridCount = solved.reduce(
+          (sum, entry) => sum + entry.recoveredUniformBeatGridCount,
+          0,
+        )
         const ambiguous = solved.some((entry) => entry.ambiguous)
         summaries.push({
           systemId: system.systemId,
@@ -369,13 +897,16 @@ function addVoiceCandidates(document, totalDivisions) {
           alternateVoiceCount: voices.filter((voice) => voice.candidateRank > 0).length,
           rejectedEventGroupCount: rejected.length,
           unresolvedEventGroupCount: unresolvedCount,
+          recoveredUniformBeatGridCount,
+          recoveredMeasureEndCount,
+          recoveredJointOnsetGridCount: onsetGrid.recoveredCount,
           ambiguous,
         })
         return createOmrMeasureColumnIR({
-          ...measure,
+          ...onsetGrid.measure,
           voices,
           diagnostics: [
-            ...(measure.diagnostics ?? []),
+            ...(onsetGrid.measure.diagnostics ?? []),
             ...rejected.map(({ item, reason }) =>
               createOmrV3Diagnostic({
                 code: reason,
@@ -449,6 +980,25 @@ function buildRelationships(document) {
       groups.get(key).members.push(event.eventId)
     }
   }
+  for (const { event } of entries) {
+    const tuplet = event.technical?.tuplet
+    if (!tuplet?.groupId) continue
+    const key = `${OMR_V3_RELATIONSHIP_TYPE.TUPLET}:${event.measureId}:${tuplet.groupId}`
+    if (!groups.has(key)) {
+      groups.set(key, {
+        relationshipType: OMR_V3_RELATIONSHIP_TYPE.TUPLET,
+        groupId: tuplet.groupId,
+        measureId: event.measureId,
+        members: [],
+        metadata: {
+          actualNotes: tuplet.actualNotes,
+          normalNotes: tuplet.normalNotes,
+          writtenDivisions: tuplet.writtenDivisions,
+        },
+      })
+    }
+    groups.get(key).members.push(event.eventId)
+  }
   for (const group of groups.values()) {
     if (group.members.length < 2) continue
     relationships.push(
@@ -461,7 +1011,10 @@ function buildRelationships(document) {
         ),
         type: group.relationshipType,
         members: group.members,
-        metadata: { detectorGroupId: group.groupId },
+        metadata: {
+          detectorGroupId: group.groupId,
+          ...(group.metadata ?? {}),
+        },
       }),
     )
   }
@@ -596,7 +1149,8 @@ export function buildOmrV3PianoVoiceCandidates(
   { measureDurationDivisions = DEFAULT_MEASURE_DIVISIONS } = {},
 ) {
   const before = JSON.stringify(document)
-  const voiced = addVoiceCandidates(document, measureDurationDivisions)
+  const beats = Number(document.metadata?.musical?.timeSignature?.beats ?? 4)
+  const voiced = addVoiceCandidates(document, measureDurationDivisions, beats)
   const relationships = buildRelationships(voiced.document)
   const linked = attachRelationships(voiced.document, relationships)
   const overlapViolations = countOmrV3VoiceOverlapViolations(linked)
@@ -613,6 +1167,14 @@ export function buildOmrV3PianoVoiceCandidates(
       ),
       unresolvedEventGroupCount: voiced.summaries.reduce(
         (sum, summary) => sum + summary.unresolvedEventGroupCount,
+        0,
+      ),
+      recoveredUniformBeatGridCount: voiced.summaries.reduce(
+        (sum, summary) => sum + summary.recoveredUniformBeatGridCount,
+        0,
+      ),
+      recoveredMeasureEndCount: voiced.summaries.reduce(
+        (sum, summary) => sum + summary.recoveredMeasureEndCount,
         0,
       ),
       voiceOverlapViolations: overlapViolations,

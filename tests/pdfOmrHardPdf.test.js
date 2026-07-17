@@ -11,6 +11,9 @@ import {
   OMR_FAILURE_REASON,
 } from '../src/features/omr/assessOmrDifficulty.js'
 import {
+  denoiseImageData,
+  deskewImageData,
+  estimateDeskewAngle,
   estimatePageScanQuality,
   preprocessOmrPageImage,
 } from '../src/features/omr/preprocessOmrPageImage.js'
@@ -35,6 +38,7 @@ import {
   cloneOmrPdfSource,
   describePdfSourceType,
   isPdfBufferAttached,
+  resolveOmrPdfSource,
 } from '../src/features/omr/omrPdfSource.js'
 
 describe('experimental PDF OMR v4 (harder PDFs)', () => {
@@ -49,6 +53,53 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
     expect(applied).toContain('contrast')
   })
 
+  it('leaves already-clean digital pages pixel-identical', () => {
+    const clean = rhythmicPianoPage()
+    const before = clean.data.slice()
+    const result = preprocessOmrPageImage(clean)
+    expect(result.applied).toEqual([])
+    expect(result.imageData).toBe(clean)
+    expect(result.imageData.data.every((value, index) => value === before[index])).toBe(true)
+    expect(clean.data.every((value, index) => value === before[index])).toBe(true)
+  })
+
+  it('removes isolated specks without erasing connected staff ink', () => {
+    const imageData = {
+      width: 9,
+      height: 9,
+      data: new Uint8ClampedArray(9 * 9 * 4).fill(255),
+    }
+    for (let index = 3; index <= 5; index += 1) {
+      const pixel = (4 * imageData.width + index) * 4
+      imageData.data[pixel] = 0
+      imageData.data[pixel + 1] = 0
+      imageData.data[pixel + 2] = 0
+    }
+    const speck = (2 * imageData.width + 2) * 4
+    imageData.data[speck] = 0
+    imageData.data[speck + 1] = 0
+    imageData.data[speck + 2] = 0
+
+    denoiseImageData(imageData)
+
+    expect(imageData.data[speck]).toBeGreaterThanOrEqual(235)
+    expect(imageData.data[(4 * imageData.width + 4) * 4]).toBe(0)
+  })
+
+  it('does not invent deskew on a clean horizontal score', () => {
+    const clean = rhythmicPianoPage()
+    const estimate = estimateDeskewAngle(clean)
+    expect(estimate.angle).toBe(0)
+  })
+
+  it('recovers a conservative skew estimate from repeated staff lines', () => {
+    const skewed = rhythmicPianoPage()
+    deskewImageData(skewed, 0.75)
+    const estimate = estimateDeskewAngle(skewed)
+    expect(estimate.angle).toBe(-0.75)
+    expect(estimate.improvement).toBeGreaterThan(0.025)
+  })
+
   it('produces playback from a scanned synthetic page after preprocessing', async () => {
     const page = scannedPianoPage({ measuresPerSystem: 4 })
     const progress = []
@@ -60,6 +111,16 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
 
     expect(result.noteCount).toBeGreaterThan(0)
     expect(result.diagnostics.preprocessLog?.[0]?.applied?.length).toBeGreaterThan(0)
+    expect(result.diagnostics.omrV3Confidence?.method).toBe(
+      'omr-v3-hierarchical-bottleneck-v1',
+    )
+    expect(result.overallConfidence).toBe(result.diagnostics.omrV3Confidence.overallConfidence)
+    expect(result.diagnostics.legacyOverallConfidence).toBeGreaterThan(0)
+    expect(result.diagnostics.performance.renderedPixelCopiesAvoided).toBe(1)
+    expect(result.diagnostics.performance.preprocessingCopies).toBe(1)
+    expect(
+      result.diagnostics.performance.phases.some(({ phase }) => phase === 'page-1'),
+    ).toBe(true)
     expect(progress.some((event) => event.phase === 'preprocess')).toBe(true)
 
     const timing = parseMusicXml(result.musicXml, 'scanned.omr.musicxml')
@@ -152,12 +213,16 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
       blank.data[i + 2] = 255
     }
 
+    const preprocessed = preprocessOmrPageImage(blank)
+    expect(preprocessed.quality.isLikelyScanned).toBe(false)
+    expect(preprocessed.applied).toEqual([])
+
     await expect(
       runPdfOmrPipeline('synthetic', {
         numPages: 1,
         renderPage: renderPagesFromArray([blank]),
       }),
-    ).rejects.toThrow(/staff systems|noteheads/i)
+    ).rejects.toThrow(OMR_TOO_DIFFICULT_MESSAGE)
   })
 
   it('supports cancellation between pages', async () => {
@@ -177,6 +242,34 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
         signal: controller.signal,
       }),
     ).rejects.toMatchObject({ name: 'AbortError' })
+  })
+
+  it('keeps recognized pages when one page analysis fails', async () => {
+    const pages = [rhythmicPianoPage(), rhythmicPianoPage()]
+    const analyzePage = vi.fn(async (imageData, context) => {
+      if (context.page === 2) throw new Error('damaged page region')
+      return processOmrPageAnalysis(imageData, context)
+    })
+
+    const result = await runPdfOmrPipeline('synthetic', {
+      numPages: 2,
+      renderPage: renderPagesFromArray(pages),
+      analyzePage,
+    })
+
+    expect(result.noteCount).toBeGreaterThan(0)
+    expect(result.diagnostics.partialRecovery).toMatchObject({
+      recovered: true,
+      successfulPages: 1,
+      failedPages: [
+        {
+          page: 2,
+          stage: 'recognition',
+          message: 'damaged page region',
+        },
+      ],
+    })
+    expect(result.warnings.join(' ')).toMatch(/partial recovery kept the recognized music/i)
   })
 
   it('processOmrPageAnalysis enables dense noteheads on scanned pages', () => {
@@ -271,6 +364,28 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
     expect(cloned).not.toBe(source)
     expect(new Uint8Array(cloned)[0]).toBe(37)
     expect(isPdfBufferAttached(source)).toBe(true)
+  })
+
+  it('reuses available app bytes without fetching the duplicate blob URL', async () => {
+    const source = new Uint8Array([37, 80, 68, 70]).buffer
+    const originalFetch = globalThis.fetch
+    let fetchCount = 0
+    globalThis.fetch = async () => {
+      fetchCount += 1
+      throw new Error('unexpected fetch')
+    }
+    try {
+      const resolved = await resolveOmrPdfSource({
+        pdfSource: source,
+        pdfFileUrl: 'blob:duplicate-source',
+      })
+      expect(fetchCount).toBe(0)
+      expect(Array.from(resolved.data)).toEqual([37, 80, 68, 70])
+      expect(resolved.data.buffer).not.toBe(source)
+      expect(isPdfBufferAttached(source)).toBe(true)
+    } finally {
+      globalThis.fetch = originalFetch
+    }
   })
 
   it('cloneArrayBuffer throws a labeled error when the source buffer is detached', () => {
