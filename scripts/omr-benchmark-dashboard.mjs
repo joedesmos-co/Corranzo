@@ -146,7 +146,7 @@ async function makePdfTextExtractor(pdfPath) {
 }
 
 async function generateOmrFromPdf(pdfPath, { maxPages, preprocessPages, promoteScoreGraphClips = false, includeScoreGraph = false, instrumentId = null, stavesPerSystem = null, omrV3Shadow = true }) {
-  const rendered = await renderPdfToPages(pdfPath, { rootDir: ROOT })
+  const rendered = await renderPdfToPages(pdfPath, { rootDir: ROOT, maxPages })
   const extractPageText = await makePdfTextExtractor(pdfPath)
   return runPdfOmrPipeline(pdfPath, {
     renderPage: makeRenderPageCallback(rendered.pages),
@@ -253,8 +253,9 @@ function reportForFixtureCache(report) {
 async function evaluateFixture(fixture, options) {
   const resolved = resolveFixturePaths(fixture, options.manifest)
   const optional = Boolean(fixture.optional) || Boolean(fixture.diagnosticOnly)
+  const importOnly = fixture.expectedOutcome === 'import-only'
   const pdfExists = existsSync(resolved.pdfPath)
-  const truthExists = existsSync(resolved.truthPath)
+  const truthExists = importOnly || existsSync(resolved.truthPath)
 
   if (!pdfExists || !truthExists) {
     // Optional/diagnostic-only fixtures are skipped when absent (no error).
@@ -296,6 +297,34 @@ async function evaluateFixture(fixture, options) {
       instrumentId: resolved.instrumentId ?? null,
       stavesPerSystem: resolved.stavesPerSystem ?? null,
     })
+    const run = {
+      pdfPath: resolved.pdfPath,
+      truthPath: resolved.truthPath,
+      maxPages,
+      preprocessPages,
+      promoteScoreGraphClips,
+      omrNoteCount: omrResult.noteCount ?? null,
+      omrMeasureCount: omrResult.measureCount ?? null,
+      checksums: checksumResults,
+    }
+    if (importOnly) {
+      const partialRecovery = omrResult.diagnostics?.partialRecovery ?? {}
+      return buildFixtureDashboardRecord({
+        fixture: resolved,
+        run,
+        observation: {
+          outcome: 'recognized',
+          pagesProcessed: partialRecovery.successfulPages ?? null,
+          failedPages: partialRecovery.failedPages?.length ?? 0,
+          isolatedRegions: partialRecovery.isolatedRegions?.length ?? 0,
+          noteCount: omrResult.noteCount ?? 0,
+          measureCount: omrResult.measureCount ?? 0,
+          confidence: omrResult.overallConfidence ?? null,
+          processingMs: omrResult.diagnostics?.performance?.totalMs ?? null,
+          warnings: omrResult.warnings ?? [],
+        },
+      })
+    }
     const groundTruthMusicXml = await readScoreXml(resolved.truthPath)
     const report = evaluateOmrAccuracy({
       generatedMusicXml: omrResult.musicXml,
@@ -313,15 +342,7 @@ async function evaluateFixture(fixture, options) {
         `${JSON.stringify(
           {
             ...reportForFixtureCache(report),
-            run: {
-              pdfPath: resolved.pdfPath,
-              truthPath: resolved.truthPath,
-              maxPages,
-              preprocessPages,
-              promoteScoreGraphClips,
-              omrNoteCount: omrResult.noteCount ?? null,
-              omrMeasureCount: omrResult.measureCount ?? null,
-            },
+            run,
           },
           null,
           2,
@@ -332,16 +353,7 @@ async function evaluateFixture(fixture, options) {
     const record = buildFixtureDashboardRecord({
       fixture: resolved,
       report,
-      run: {
-        pdfPath: resolved.pdfPath,
-        truthPath: resolved.truthPath,
-        maxPages,
-        preprocessPages,
-        promoteScoreGraphClips,
-        omrNoteCount: omrResult.noteCount ?? null,
-        omrMeasureCount: omrResult.measureCount ?? null,
-        checksums: checksumResults,
-      },
+      run,
       scoreGraphMeasures: omrResult.diagnostics?.scoreGraphFull?.measures ?? null,
     })
     await attachRhythmShadow(record, report, resolved, {
@@ -366,6 +378,13 @@ async function evaluateFixture(fixture, options) {
     return buildFixtureDashboardRecord({
       fixture: resolved,
       error,
+      observation: importOnly
+        ? {
+            outcome: rejected ? 'rejected' : 'error',
+            confidence: error?.difficulty?.confidence ?? null,
+            failureReasons: error?.difficulty?.reasons ?? [error?.code ?? 'error'],
+          }
+        : null,
       run: {
         pdfPath: resolved.pdfPath,
         truthPath: resolved.truthPath,
@@ -640,12 +659,13 @@ function checkFixtures(manifest) {
   for (const fixture of manifest.fixtures) {
     const resolved = resolveFixturePaths(fixture, manifest)
     const optional = Boolean(fixture.optional) || Boolean(fixture.diagnosticOnly)
+    const importOnly = fixture.expectedOutcome === 'import-only'
     const tag = optional ? ' (optional)' : ''
     console.log(`\n${fixture.id}${tag}: ${fixture.label ?? ''}`)
 
     for (const [kind, pathKey] of [
       ['pdf', 'pdfPath'],
-      ['truth', 'truthPath'],
+      ...(importOnly ? [] : [['truth', 'truthPath']]),
     ]) {
       const filePath = resolved[pathKey]
       const exists = filePath && existsSync(filePath)

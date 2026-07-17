@@ -77,8 +77,86 @@ describe('omrBenchmarkDashboard', () => {
     expect(Array.isArray(manifest.fixtureSearchPaths)).toBe(true)
     for (const fixture of manifest.fixtures) {
       expect(fixture.checksums?.pdf).toMatch(/^sha256:[0-9a-f]{64}$/)
-      expect(fixture.checksums?.truth).toMatch(/^sha256:[0-9a-f]{64}$/)
+      if (fixture.expectedOutcome !== 'import-only') {
+        expect(fixture.checksums?.truth).toMatch(/^sha256:[0-9a-f]{64}$/)
+      }
     }
+  })
+
+  it('tracks truthless public-domain PDFs as non-blocking import observations', () => {
+    const manifest = JSON.parse(
+      readFileSync(join(process.cwd(), 'benchmarks/omr-benchmark.manifest.json'), 'utf8'),
+    )
+    const stressFixtures = manifest.fixtures.filter(
+      (fixture) => fixture.expectedOutcome === 'import-only',
+    )
+    expect(stressFixtures.length).toBeGreaterThanOrEqual(3)
+    expect(stressFixtures.some((fixture) => fixture.categories.includes('orchestral-score'))).toBe(
+      true,
+    )
+    expect(stressFixtures.some((fixture) => fixture.categories.includes('historical-scan'))).toBe(
+      true,
+    )
+    for (const fixture of stressFixtures) {
+      expect(fixture.optional).toBe(true)
+      expect(fixture.diagnosticOnly).toBe(true)
+      expect(fixture.truth).toBeUndefined()
+      expect(fixture.thresholds).toBeUndefined()
+    }
+
+    const record = buildFixtureDashboardRecord({
+      fixture: stressFixtures[0],
+      observation: {
+        outcome: 'recognized',
+        pagesProcessed: 2,
+        failedPages: 0,
+        isolatedRegions: 1,
+        noteCount: 12,
+        measureCount: 4,
+        confidence: 0.72,
+        processingMs: 123,
+      },
+    })
+    expect(record.status).toBe(OMR_BENCHMARK_STATUS.SKIPPED)
+    expect(record.stressObservation?.outcome).toBe('recognized')
+    const markdown = formatOmrBenchmarkMarkdown(summarizeOmrBenchmarkDashboard([record]))
+    expect(markdown).toContain('Import observation: recognized')
+    expect(markdown).toContain('12 note(s), 4 measure(s)')
+  })
+
+  it('requires truth for accuracy fixtures but not import-only diagnostics', () => {
+    const importOnly = validateOmrBenchmarkManifest({
+      fixtures: [
+        {
+          id: 'public-domain-stress',
+          pdf: 'stress.pdf',
+          optional: true,
+          diagnosticOnly: true,
+          expectedOutcome: 'import-only',
+        },
+      ],
+    })
+    expect(importOnly.ok).toBe(true)
+
+    const enforcedImportOnly = validateOmrBenchmarkManifest({
+      fixtures: [
+        {
+          id: 'unsafe-gate',
+          pdf: 'stress.pdf',
+          expectedOutcome: 'import-only',
+        },
+      ],
+    })
+    expect(enforcedImportOnly.ok).toBe(false)
+    expect(
+      enforcedImportOnly.errors.some((error) => error.includes('optional diagnostics')),
+    ).toBe(true)
+
+    const transcribe = validateOmrBenchmarkManifest({
+      fixtures: [{ id: 'accuracy', pdf: 'score.pdf', optional: true }],
+    })
+    expect(transcribe.ok).toBe(false)
+    expect(transcribe.errors.some((error) => error.includes('missing truth'))).toBe(true)
   })
 
   it('extracts dashboard metrics from an accuracy report', () => {

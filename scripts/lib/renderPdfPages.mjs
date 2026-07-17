@@ -22,13 +22,16 @@ export async function loadPdfRenderDependencies(rootDir) {
   return { createCanvas, pdfjs, root }
 }
 
-export async function renderPdfToPages(pdfPath, { analysisWidth = CALIBRATION_ANALYSIS_WIDTH, rootDir } = {}) {
+export async function renderPdfToPages(pdfPath, { analysisWidth = CALIBRATION_ANALYSIS_WIDTH, maxPages = null, rootDir } = {}) {
   const { createCanvas, pdfjs } = await loadPdfRenderDependencies(rootDir)
   const data = new Uint8Array(readFileSync(pdfPath))
   const doc = await pdfjs.getDocument({ data, isEvalSupported: false }).promise
   const pages = []
 
-  for (let pageNumber = 1; pageNumber <= doc.numPages; pageNumber += 1) {
+  const renderCount = Number.isInteger(maxPages)
+    ? Math.min(doc.numPages, Math.max(1, maxPages))
+    : doc.numPages
+  for (let pageNumber = 1; pageNumber <= renderCount; pageNumber += 1) {
     const page = await doc.getPage(pageNumber)
     const base = page.getViewport({ scale: 1 })
     const viewport = page.getViewport({ scale: analysisWidth / base.width })

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Redistributable real-score PDF import stress observations without symbolic ground truth",
+  "records": [
+    {
+      "fixtureId": "real-pd-orchestra-beethoven-7",
+      "title": "Symphony No. 7 in A Major, Op. 92, movement 1",
+      "composer": "Ludwig van Beethoven",
+      "editionMaintainer": "Stelios Samelis",
+      "instrument": "orchestra",
+      "sourcePage": "https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=891",
+      "downloadUrl": "https://www.mutopiaproject.org/ftp/BeethovenLv/O92/Symphony7_1/Symphony7_1-a4.pdf",
+      "downloadDate": "2026-07-16",
+      "sourceRightsStatement": "Mutopia labels the source and contribution Public Domain (CC: No rights reserved).",
+      "editionFileLicense": "Public-Domain",
+      "requiredAttribution": "None required; source and maintainer retained for provenance.",
+      "allowedRedistributionUse": "Download, print, copy, distribute, modify, perform, and record under Mutopia's Public Domain terms.",
+      "sha256": "208791baf0a69548b64456b2c0457daa3ba213a5bad77afb554d6ed110bf86f1",
+      "pageCount": 151,
+      "pagesBenchmarked": 2,
+      "pdfKind": "vector engraving",
+      "truthStatus": "No independently verified MusicXML; import observation only."
+    },
+    {
+      "fixtureId": "real-pd-piano-pathetique",
+      "title": "Sonata No. 8 Pathetique, Op. 13, movement 1",
+      "composer": "Ludwig van Beethoven",
+      "editionMaintainer": "Chris Sawer",
+      "instrument": "piano",
+      "sourcePage": "https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=299",
+      "downloadUrl": "https://www.mutopiaproject.org/ftp/BeethovenLv/O13/pathetique-1/pathetique-1-a4.pdf",
+      "downloadDate": "2026-07-16",
+      "sourceRightsStatement": "Mutopia labels the source and contribution Public Domain (CC: No rights reserved).",
+      "editionFileLicense": "Public-Domain",
+      "requiredAttribution": "None required; source and maintainer retained for provenance.",
+      "allowedRedistributionUse": "Download, print, copy, distribute, modify, perform, and record under Mutopia's Public Domain terms.",
+      "sha256": "024079d0225423b40c07811badbfeed01d2497e759690a3c271d83b3678ab072",
+      "pageCount": 9,
+      "pagesBenchmarked": 2,
+      "pdfKind": "vector engraving",
+      "truthStatus": "No independently verified MusicXML; import observation only."
+    },
+    {
+      "fixtureId": "real-pd-scan-twinkle-1880",
+      "title": "Twinkle, Twinkle Little Stars",
+      "composer": "Eben H. Bailey",
+      "publisherAndDate": "White, Smith & Co., 1880",
+      "instrument": "piano",
+      "sourcePage": "https://www.loc.gov/item/2023836677/",
+      "downloadUrl": "https://tile.loc.gov/storage-services/public/music/mussm-sm1880-10988/mussm-sm1880-10988.pdf",
+      "downloadDate": "2026-07-16",
+      "sourceRightsStatement": "Library of Congress states that Music for the Nation: American Sheet Music, ca. 1870 to 1885 is public domain and free to use and reuse.",
+      "editionFileLicense": "Public-Domain",
+      "requiredAttribution": "Library of Congress requests the credit line: Library of Congress, Music Division.",
+      "allowedRedistributionUse": "Public-domain use and reuse, including redistribution.",
+      "sha256": "52ef03f7381a21991421e2b8b3c2e770181b36589c44a319220ba7d625a59789",
+      "pageCount": 9,
+      "pagesBenchmarked": 2,
+      "pdfKind": "historical image scan",
+      "truthStatus": "No independently verified MusicXML; import observation only."
+    }
+  ]
+}
