@@ -435,6 +435,73 @@ describe('OMR V3 Piano voice candidates', () => {
     expect(events.map((event) => event.duration.divisions)).toEqual([2, 2])
   })
 
+  it('snaps shared grand-staff onset columns onto a joint beat grid', () => {
+    const page = analyzeOmrV3PageStructure({
+      documentId: 'grand-onset-grid',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'treble',
+          space: 'normalized',
+          lineRows: [0.1, 0.11, 0.12, 0.13, 0.14],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['treble'],
+          noteheadCount: 4,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+        {
+          sourceId: 'bass',
+          space: 'normalized',
+          lineRows: [0.18, 0.19, 0.2, 0.21, 0.22],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['bass'],
+          noteheadCount: 4,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+      ],
+    }).page
+    const measured = buildOmrV3DocumentMeasureColumns(
+      createOmrDocumentIR({
+        documentId: 'grand-onset-grid',
+        metadata: { musical: { timeSignature: { beats: 4, beatType: 4 } } },
+        pages: [page],
+      }),
+    ).document
+    const xs = [0.14, 0.32, 0.5, 0.68]
+    const document = assignOmrV3DocumentSymbolOwnership(measured, {
+      symbolsByPage: xs.flatMap((x, index) => [
+        musicalSymbol(`treble-${index}`, 'notehead', x, 0.12, {
+          midi: 72 + index,
+          duration: { divisions: 4, type: 'quarter', dots: 0, exact: false },
+          stemDirection: 'up',
+          measureRelativePositionHint: 0.05 + index * 0.22,
+        }),
+        musicalSymbol(`bass-${index}`, 'notehead', x + 0.005, 0.2, {
+          midi: 48 + index,
+          duration: { divisions: 4, type: 'quarter', dots: 0, exact: false },
+          stemDirection: 'down',
+          measureRelativePositionHint: 0.05 + index * 0.22,
+        }),
+      ]),
+    }).document
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const events = measures(result.document)[0].voices
+      .filter((voice) => voice.candidateRank === 0)
+      .flatMap((voice) => voice.events)
+      .filter((event) => event.kind === 'note')
+      .sort((left, right) => left.onset - right.onset || left.pitch.midi - right.pitch.midi)
+
+    expect([...new Set(events.map((event) => event.onset))].sort((a, b) => a - b)).toEqual([
+      0, 4, 8, 12,
+    ])
+    expect(countOmrV3VoiceOverlapViolations(result.document)).toBe(0)
+  })
+
   it('recovers a uniformly spaced approximate event on each detected beat', () => {
     const page = analyzeOmrV3PageStructure({
       documentId: 'uniform-beat-grid',

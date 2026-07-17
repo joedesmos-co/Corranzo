@@ -3,6 +3,7 @@
 import {
   createOmrDocumentIR,
   createOmrMeasureColumnIR,
+  createOmrOnsetColumnIR,
   createOmrRelationshipIR,
   createOmrV3Diagnostic,
   createOmrV3Id,
@@ -125,8 +126,10 @@ function packedSubdivision(groups) {
   }
   const mean = rawGaps.reduce((sum, gap) => sum + gap, 0) / rawGaps.length
   const target = nearestLadder(mean)
-  // Only short packed subdivisions are safe to impose on approximate writing.
-  if (!Number.isFinite(target) || target > 2 || target < 1) return null
+  // Packed short-to-moderate subdivisions only. Whole-measure packing is too
+  // aggressive for polyphonic writing; eighth/quarter/half families are enough
+  // to correct overlong detector values once onsets are stable.
+  if (!Number.isFinite(target) || target > 8 || target < 1) return null
   if (Math.abs(mean - target) / target > 0.5) return null
   if (rawGaps.some((gap) => Math.abs(gap - target) / target > 0.55)) return null
   return target
@@ -162,7 +165,7 @@ function refineApproximatePackedDurations(items, totalDivisions) {
       (item) =>
         item.duration?.exact === false &&
         Number.isFinite(item.duration?.divisions) &&
-        item.duration.divisions >= 4,
+        item.duration.divisions > packing + EPSILON,
     )
     // Require that packing is correcting sustained detector values, not rewriting
     // an already short family.
@@ -179,7 +182,6 @@ function refineApproximatePackedDurations(items, totalDivisions) {
           item.duration.exact !== false ||
           !Number.isFinite(item.duration.divisions) ||
           item.duration.divisions <= packing + EPSILON ||
-          item.duration.divisions < 4 ||
           !Number.isFinite(capacity) ||
           packing > capacity + EPSILON
         ) {
@@ -595,8 +597,66 @@ function pianoStaves(system) {
         // merely look like one symbol per beat on an individual staff. Keep
         // this recovery to structurally single-staff music.
         allowUniformBeatGrid: group.type === OMR_V3_STAFF_GROUP_TYPE.SINGLE_NOTATION,
+        isGrandStaff: group.type === OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF,
       })),
     )
+}
+
+/**
+ * Joint onset-column quantization for grand staff measures.
+ * Cross-staff columns already share geometry; when their count and spacing agree
+ * with the detected beat grid, snap column positions once for both staves.
+ * This is not the single-staff uniform item grid (rejected for grand staff).
+ */
+function quantizeJointGrandStaffOnsetColumns(measure, totalDivisions, beats) {
+  if (!Number.isInteger(beats) || beats < 2 || beats > 12) {
+    return { measure, recoveredCount: 0 }
+  }
+  const columns = (measure.onsetColumns ?? []).filter((column) => !column.grace)
+  const graceColumns = (measure.onsetColumns ?? []).filter((column) => column.grace)
+  if (columns.length !== beats) return { measure, recoveredCount: 0 }
+  if (columns.some((column) => !Number.isFinite(column.measureRelativePosition))) {
+    return { measure, recoveredCount: 0 }
+  }
+  const ordered = [...columns].sort(
+    (left, right) => left.measureRelativePosition - right.measureRelativePosition,
+  )
+  const positions = ordered.map((column) => column.measureRelativePosition * totalDivisions)
+  const gaps = positions.slice(1).map((position, index) => position - positions[index])
+  const meanGap = average(gaps)
+  const expectedGap = totalDivisions / beats
+  if (
+    !Number.isFinite(meanGap) ||
+    meanGap <= EPSILON ||
+    !Number.isFinite(expectedGap) ||
+    expectedGap <= EPSILON ||
+    Math.abs(meanGap - expectedGap) / expectedGap > 0.35 ||
+    gaps.some((gap) => Math.abs(gap - meanGap) / meanGap > 0.35)
+  ) {
+    return { measure, recoveredCount: 0 }
+  }
+  const quantized = ordered.map((column, index) =>
+    createOmrOnsetColumnIR({
+      ...column,
+      measureRelativePosition: index / beats,
+      diagnostics: [
+        ...(column.diagnostics ?? []),
+        createOmrV3Diagnostic({
+          code: 'joint-grand-staff-onset-grid',
+          severity: OMR_V3_DIAGNOSTIC_SEVERITY.INFO,
+          stage: 'piano-voice-assignment',
+          message: 'Snapped a shared grand-staff onset column onto the measure beat grid.',
+        }),
+      ],
+    }),
+  )
+  return {
+    measure: {
+      ...measure,
+      onsetColumns: [...quantized, ...graceColumns],
+    },
+    recoveredCount: quantized.length,
+  }
 }
 
 function addVoiceCandidates(document, totalDivisions, beats) {
@@ -606,10 +666,14 @@ function addVoiceCandidates(document, totalDivisions, beats) {
     systems: (page.systems ?? []).map((system) => {
       const staves = pianoStaves(system)
       if (staves.length === 0) return system
+      const isGrandStaff = staves.some((entry) => entry.isGrandStaff)
       const measureColumns = (system.measureColumns ?? []).map((measure) => {
+        const onsetGrid = isGrandStaff
+          ? quantizeJointGrandStaffOnsetColumns(measure, totalDivisions, beats)
+          : { measure, recoveredCount: 0 }
         const solved = staves.map(({ staff, allowUniformBeatGrid }) =>
           solveStaffMeasure(
-            measure,
+            onsetGrid.measure,
             staff,
             totalDivisions,
             beats,
@@ -638,13 +702,14 @@ function addVoiceCandidates(document, totalDivisions, beats) {
           unresolvedEventGroupCount: unresolvedCount,
           recoveredUniformBeatGridCount,
           recoveredMeasureEndCount,
+          recoveredJointOnsetGridCount: onsetGrid.recoveredCount,
           ambiguous,
         })
         return createOmrMeasureColumnIR({
-          ...measure,
+          ...onsetGrid.measure,
           voices,
           diagnostics: [
-            ...(measure.diagnostics ?? []),
+            ...(onsetGrid.measure.diagnostics ?? []),
             ...rejected.map(({ item, reason }) =>
               createOmrV3Diagnostic({
                 code: reason,

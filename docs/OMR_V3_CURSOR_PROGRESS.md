@@ -59,6 +59,32 @@ Dense is removed from `productionGate` regressions. Remaining: grand, tuplets, s
 - Packing uses geometric onset means; very irregular engraving may abstain correctly.
 - Phase 2+ blockers untouched.
 
+## Phase 2 — Grand-staff onset and voice — COMPLETE
+
+### Root cause
+
+Shared onset columns used drifted geometric `measureRelativePosition` values (e.g. 0.04/0.24/0.46/0.67 instead of 0/0.25/0.5/0.75). Both staves inherited the same float onsets, so every event was approximately quantized and duration packing could not see true beat gaps.
+
+### Implementation
+
+`quantizeJointGrandStaffOnsetColumns` snaps shared non-grace columns onto the measure beat grid when column count equals beats and spacing is regular (±35%). Applied once per grand-staff measure before per-staff voice solving. Extended packed-duration refine to allow quarter/half packing targets (≤8) so overlong detector values shorten to beat/half gaps after onsets stabilize.
+
+### Qualification impact
+
+| Metric | Before | After | V2 |
+| --- | ---: | ---: | ---: |
+| Independent regressions | 5 | **4** | — |
+| Grand onset | 0.6136 | **1.0000** | 0.9773 |
+| Grand F1 | 0.9432 | **1.0000** | 0.9886 |
+| Grand duration | 0.5568 | **0.8409** | 0.8182 |
+| Grand chord / pitch | 1.0 / 0.66 | 1.0 / 0.625 | 0.9775 / 0.625 |
+
+Beginner, dense, tuplet, and scan independent metrics remain non-regressing vs prior phase.
+
+### Remaining
+
+Tuplets, scanned piano beams, paired-guitar chords, paired-guitar techniques.
+
 ## Next
 
-Phase 2 — Grand-staff onset and voice reasoning.
+Phase 3 — Tuplet duration inference.
