@@ -567,6 +567,10 @@ export function observeOmrV3RejectedImport({
       measureDurationDivisions,
       symbolEvidenceMode,
     })
+  const independentlyEmpty =
+    symbolEvidenceMode === OMR_V3_SYMBOL_EVIDENCE_MODE.RAW_DETECTOR_SYMBOLS &&
+    prepared.evidence?.sourceSymbolCount === 0 &&
+    prepared.evidence?.primaryEventCount === 0
   return {
     status: 'structure-ready',
     engine: shadowEngine(symbolEvidenceMode),
@@ -576,13 +580,22 @@ export function observeOmrV3RejectedImport({
     debugJson: exportOmrV3DebugJson(prepared.document),
     stages: prepared.stages,
     evidence: prepared.evidence,
-    decision: {
-      status: 'observe-production-rejection',
-      ownedBy: 'v2-policy',
-      independent: false,
-      failureReason,
-      productionConfidence,
-    },
+    decision: independentlyEmpty
+      ? {
+          status: 'reject',
+          ownedBy: 'omr-v3',
+          independent: true,
+          failureReason: 'no-independent-symbols',
+          observedProductionFailureReason: failureReason,
+          productionConfidence,
+        }
+      : {
+          status: 'observe-production-rejection',
+          ownedBy: 'v2-policy',
+          independent: false,
+          failureReason,
+          productionConfidence,
+        },
   }
 }
 

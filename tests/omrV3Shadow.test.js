@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  observeOmrV3RejectedImport,
   OMR_V3_SYMBOL_EVIDENCE_MODE,
   runOmrV3Shadow,
 } from '../src/features/omr/v3/omrV3Shadow.js'
@@ -99,5 +100,22 @@ describe('OMR V3 shadow evidence provenance', () => {
       independentPrimaryEventRate: 1,
     })
   })
-})
 
+  it('does not claim an independent rejection when raw musical evidence exists', () => {
+    const result = observeOmrV3RejectedImport({
+      documentId: 'nonempty-rejection-observation',
+      title: 'Nonempty rejection observation',
+      pageInputs: [pageInput()],
+      symbolEvidenceMode: OMR_V3_SYMBOL_EVIDENCE_MODE.RAW_DETECTOR_SYMBOLS,
+      failureReason: 'low-confidence',
+    })
+
+    expect(result.evidence.sourceSymbolCount).toBe(1)
+    expect(result.decision).toMatchObject({
+      status: 'observe-production-rejection',
+      ownedBy: 'v2-policy',
+      independent: false,
+      failureReason: 'low-confidence',
+    })
+  })
+})

@@ -58,7 +58,7 @@ describe('OMR V3 disabled-by-default rollout', () => {
     })
   })
 
-  it('retains V3 structure on a V2-owned rejection without claiming V3 rejection ownership', async () => {
+  it('owns a zero-symbol rejection independently while retaining the V2 observation', async () => {
     const page = rhythmicPianoPage({ measuresPerSystem: 2 })
     let rejection
     try {
@@ -99,7 +99,12 @@ describe('OMR V3 disabled-by-default rollout', () => {
     expect(rejection.omrV3IndependentShadow).toMatchObject({
       status: 'structure-ready',
       engine: 'omr-v3-independent-shadow',
-      decision: { ownedBy: 'v2-policy', independent: false },
+      decision: {
+        status: 'reject',
+        ownedBy: 'omr-v3',
+        independent: true,
+        failureReason: 'no-independent-symbols',
+      },
     })
   })
 
