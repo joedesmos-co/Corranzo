@@ -188,11 +188,18 @@ describe('OMR V3 structure-first page analysis', () => {
       'guitar',
     )
     const unlabeled = analyze([staffBand({ y: 0.2, lines: 2 })], 'guitar')
+    const unpairedPiano = analyze(
+      [staffBand({ y: 0.2, lines: 2, explicitNotation: true, sourceRole: 'notation' })],
+      'piano',
+    )
 
     expect(recovered.page.systems[0].staffGroups[0].type).toBe(
       OMR_V3_STAFF_GROUP_TYPE.SINGLE_NOTATION,
     )
     expect(unlabeled.page.systems[0].staffGroups[0].type).toBe(
+      OMR_V3_STAFF_GROUP_TYPE.UNKNOWN,
+    )
+    expect(unpairedPiano.page.systems[0].staffGroups[0].type).toBe(
       OMR_V3_STAFF_GROUP_TYPE.UNKNOWN,
     )
   })

@@ -129,42 +129,56 @@ function measureForPoint(system, point) {
   )
 }
 
-function ownerForSymbol(page, geometry, sourceStaffId = null) {
-  const point = center(geometry)
-  if (sourceStaffId) {
-    for (const system of page.systems ?? []) {
-      const staffEntry = allStaffEntries(system).find((entry) =>
-        (entry.staff.sourceRefs ?? []).includes(sourceStaffId),
-      )
-      if (!staffEntry) continue
-      const measure = measureForPoint(system, point)
-      if (measure) {
-        return { system, group: staffEntry.group, staff: staffEntry.staff, measure, point }
-      }
+function sourceOwnerForPoint(page, point, sourceStaffId) {
+  if (!sourceStaffId) return null
+  for (const system of page.systems ?? []) {
+    const staffEntry = allStaffEntries(system).find((entry) =>
+      (entry.staff.sourceRefs ?? []).includes(sourceStaffId),
+    )
+    if (!staffEntry) continue
+    const measure = measureForPoint(system, point)
+    if (measure) {
+      return { system, group: staffEntry.group, staff: staffEntry.staff, measure, point }
     }
+  }
+  return null
+}
+
+function ownerForSymbol(
+  page,
+  geometry,
+  sourceStaffId = null,
+  preferSourceStaffOwnership = false,
+) {
+  const point = center(geometry)
+  if (preferSourceStaffOwnership) {
+    const sourceOwner = sourceOwnerForPoint(page, point, sourceStaffId)
+    if (sourceOwner) return sourceOwner
   }
   const systemCandidates = (page.systems ?? [])
     .map((system) => ({ system, distance: pointBoxDistance(point, system.boundingBox) }))
     .filter((entry) => entry.distance <= STAFF_VERTICAL_MARGIN)
     .sort((left, right) => left.distance - right.distance)
   const system = systemCandidates[0]?.system
-  if (!system) return null
-
-  const staffEntry = allStaffEntries(system)
-    .map((entry) => ({
-      ...entry,
-      distance: pointBoxDistance(point, {
-        ...entry.staff.boundingBox,
-        y: entry.staff.boundingBox.y - STAFF_VERTICAL_MARGIN,
-        height: entry.staff.boundingBox.height + STAFF_VERTICAL_MARGIN * 2,
-      }),
-    }))
-    .sort((left, right) => left.distance - right.distance)[0]
-  if (!staffEntry || staffEntry.distance > STAFF_VERTICAL_MARGIN) return null
-
-  const measure = measureForPoint(system, point)
-  if (!measure) return null
-  return { system, group: staffEntry.group, staff: staffEntry.staff, measure, point }
+  if (system) {
+    const staffEntry = allStaffEntries(system)
+      .map((entry) => ({
+        ...entry,
+        distance: pointBoxDistance(point, {
+          ...entry.staff.boundingBox,
+          y: entry.staff.boundingBox.y - STAFF_VERTICAL_MARGIN,
+          height: entry.staff.boundingBox.height + STAFF_VERTICAL_MARGIN * 2,
+        }),
+      }))
+      .sort((left, right) => left.distance - right.distance)[0]
+    if (staffEntry && staffEntry.distance <= STAFF_VERTICAL_MARGIN) {
+      const measure = measureForPoint(system, point)
+      if (measure) {
+        return { system, group: staffEntry.group, staff: staffEntry.staff, measure, point }
+      }
+    }
+  }
+  return sourceOwnerForPoint(page, point, sourceStaffId)
 }
 
 function normalizedSymbol(symbol, geometry, owner, page, index) {
@@ -406,7 +420,14 @@ export function assignOmrV3PageSymbolOwnership(
   const seenSymbolIds = new Set()
   rawSymbols.forEach((rawSymbol, index) => {
     const geometry = normalizedBox(rawSymbol, page)
-    const owner = geometry ? ownerForSymbol(page, geometry, rawSymbol?.sourceStaffId) : null
+    const owner = geometry
+      ? ownerForSymbol(
+          page,
+          geometry,
+          rawSymbol?.sourceStaffId,
+          Boolean(rawSymbol?.preferSourceStaffOwnership),
+        )
+      : null
     if (!geometry || !owner) {
       unassigned.push({
         ...rawSymbol,

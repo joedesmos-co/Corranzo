@@ -160,6 +160,20 @@ describe('OMR V3 symbol ownership and onset columns', () => {
     )
   })
 
+  it('honors a detector-owned Guitar staff even when geometry favors its paired staff', () => {
+    const document = guitarDocument()
+    const result = assignOmrV3PageSymbolOwnership(document.pages[0], [
+      symbol('source-preferred', 'notehead', 0.2, 0.27, {
+        sourceStaffId: 'notation',
+        preferSourceStaffOwnership: true,
+      }),
+    ])
+
+    expect(result.symbols[0].ownership.staffId).toBe(
+      document.pages[0].systems[0].staffGroups[0].staves[0].staffId,
+    )
+  })
+
   it('applies ownership document-wide as a pure, serializable transformation', () => {
     const document = guitarDocument()
     const before = JSON.stringify(document)

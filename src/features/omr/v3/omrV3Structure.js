@@ -233,10 +233,10 @@ function evidenceInBand(glyphs, { top, bottom, pageWidth, pageHeight, xStart, xE
   return evidence
 }
 
-function resolveNotationEvidence(lineCount, evidence) {
+function resolveNotationEvidence(lineCount, evidence, instrumentId) {
   let notationScore = lineCount === 5 ? 0.45 : 0
   let tabScore = lineCount === 6 ? 0.35 : 0
-  if (evidence.explicitNotation) notationScore += 0.62
+  if (evidence.explicitNotation && instrumentId === 'guitar') notationScore += 0.62
   if (evidence.clefs.length > 0) notationScore += 0.32
   if (evidence.noteheadCount >= 2) notationScore += 0.23
   else if (evidence.noteheadCount === 1) notationScore += 0.1
@@ -360,6 +360,7 @@ export function buildOmrV3StaffCandidates({
   contentBounds = { x: 0, y: 0, width: 1, height: 1, space: 'normalized' },
   staffBands = [],
   glyphs = [],
+  instrumentId = null,
 } = {}) {
   const pageId = createOmrV3Id('page', documentId, pageIndex)
   const candidates = []
@@ -436,7 +437,7 @@ export function buildOmrV3StaffCandidates({
         braceCount: localEvidence.braceCount + Number(observation.braceCount ?? 0),
         bracketCount: localEvidence.bracketCount + Number(observation.bracketCount ?? 0),
       }
-      const classification = resolveNotationEvidence(segment.rows.length, evidence)
+      const classification = resolveNotationEvidence(segment.rows.length, evidence, instrumentId)
       const staffId = createOmrV3Id('staff-observation', pageId, sourceId, segmentIndex)
       const spacing = median(
         normalizedLines.slice(1).map((line, index) => line.yStart - normalizedLines[index].yStart),

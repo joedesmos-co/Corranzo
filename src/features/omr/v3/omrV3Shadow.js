@@ -209,6 +209,7 @@ function sourceSymbolsFromPage(pageInput, instrumentId, totalDivisions) {
           id: `legacy-rest-${pageInput.page}-${measure.measureNumber}-${eventIndex}`,
           sourceEventGroupId,
           sourceStaffId: notationStaffSourceId,
+          preferSourceStaffOwnership: instrumentId === 'guitar',
           kind: 'rest',
           geometry: {
             x,
@@ -244,6 +245,7 @@ function sourceSymbolsFromPage(pageInput, instrumentId, totalDivisions) {
             measure.systemIndex,
             legacyStaffIndex(system, note.clef),
           ),
+          preferSourceStaffOwnership: instrumentId === 'guitar',
           geometry: { x, y: noteY, width: 0.006, height: 0.006, space: 'normalized' },
           onsetDivisions: event.startDivision,
           duration: {
@@ -301,6 +303,7 @@ function sourceSymbolsFromPage(pageInput, instrumentId, totalDivisions) {
             fret: note.fret,
             sourceEventGroupId: common.sourceEventGroupId,
             sourceStaffId: tabStaffSourceId(pageInput, measure.systemIndex),
+            preferSourceStaffOwnership: true,
             midi: common.midi,
             pitch: common.pitch,
             onsetDivisions: common.onsetDivisions,
