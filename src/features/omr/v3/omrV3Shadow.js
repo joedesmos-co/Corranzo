@@ -1,7 +1,10 @@
 /** Adapter and orchestrator for running OMR V3 beside the legacy pipeline. */
 
 import { createOmrDocumentIR, exportOmrV3DebugJson } from './omrV3Ir.js'
-import { analyzeOmrV3PageStructure } from './omrV3Structure.js'
+import {
+  analyzeOmrV3PageStructure,
+  recoverOmrV3DocumentStructure,
+} from './omrV3Structure.js'
 import { buildOmrV3DocumentMeasureColumns } from './omrV3Measures.js'
 import { assignOmrV3DocumentSymbolOwnership } from './omrV3Ownership.js'
 import { buildOmrV3PianoVoiceCandidates } from './omrV3Voices.js'
@@ -276,6 +279,8 @@ export function runOmrV3Shadow({
     },
     pages: structurePages.map((result) => result.page),
   })
+  const structuralRecovery = recoverOmrV3DocumentStructure(document)
+  document = structuralRecovery.document
   const measured = buildOmrV3DocumentMeasureColumns(document)
   document = measured.document
   const symbolsByPage = new Map(
@@ -321,6 +326,10 @@ export function runOmrV3Shadow({
         systemCount: result.page.systems.length,
         rejectedPairingCount: result.rejectedPairings.length,
       })),
+      structuralRecovery: {
+        recoveredPairingCount: structuralRecovery.recoveredPairings.length,
+        recoveredPairings: structuralRecovery.recoveredPairings,
+      },
       measures: measured.systems,
       ownership: owned.totals,
       musical: musicalResult.totals,

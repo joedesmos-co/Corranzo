@@ -31,6 +31,14 @@ function median(values) {
   return finite.length ? finite[Math.floor(finite.length / 2)] : 0
 }
 
+function coefficientOfVariation(values) {
+  const finite = values.filter((value) => Number.isFinite(value) && value > 0)
+  const mean = average(finite)
+  if (finite.length === 0 || mean <= 0) return Infinity
+  const variance = finite.reduce((sum, value) => sum + (value - mean) ** 2, 0) / finite.length
+  return Math.sqrt(variance) / mean
+}
+
 function flattenStaves(system) {
   return (system?.staffGroups ?? []).flatMap((group) => group.staves ?? [])
 }
@@ -159,8 +167,12 @@ function recoverMissingBoundaries(
   expectedWidth,
   evidenceCount,
   hasExternalWidthEvidence,
+  hasStrongExternalWidthConsensus,
 ) {
-  const enoughEvidence = evidenceCount >= 3 || (hasExternalWidthEvidence && evidenceCount >= 2)
+  const enoughEvidence =
+    evidenceCount >= 3 ||
+    (hasExternalWidthEvidence && evidenceCount >= 2) ||
+    (hasStrongExternalWidthConsensus && evidenceCount >= 1)
   if (!Number.isFinite(expectedWidth) || expectedWidth <= 0 || !enoughEvidence) {
     return { boundaries, inferred: [] }
   }
@@ -305,11 +317,15 @@ export function buildOmrV3MeasureColumnsForSystem(
   const hasExternalWidthEvidence =
     (Number.isFinite(expectedMeasureWidth) && expectedMeasureWidth > 0) ||
     neighboringMeasureWidths.some((width) => Number.isFinite(width) && width > 0)
+  const hasStrongExternalWidthConsensus =
+    neighboringMeasureWidths.length >= 4 &&
+    coefficientOfVariation(neighboringMeasureWidths) <= 0.1
   const recovered = recoverMissingBoundaries(
     boundaries,
     expectedWidth,
     accepted.length,
     hasExternalWidthEvidence,
+    hasStrongExternalWidthConsensus,
   )
   boundaries = recovered.boundaries
   const trailing = trimInventedTrailingSpan(spansFromBoundaries(boundaries), symbolXs, expectedWidth)
@@ -434,6 +450,7 @@ export function buildOmrV3MeasureColumnsForSystem(
       inferredBoundaryCount: recovered.inferred.length,
       trailingSpanRejected: Boolean(trailing.trimmed),
       expectedMeasureWidth: expectedWidth || null,
+      strongExternalWidthConsensus: hasStrongExternalWidthConsensus,
       measureCount: measureColumns.length,
       perSystemAlignment: staves.length
         ? average(

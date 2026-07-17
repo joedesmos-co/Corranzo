@@ -3,6 +3,7 @@ import {
   analyzeOmrV3PageStructure,
   buildOmrV3StaffCandidates,
   collapseDoubledStaffRows,
+  recoverOmrV3DocumentStructure,
   segmentMergedStaffRows,
   summarizeOmrV3Structure,
 } from '../src/features/omr/v3/omrV3Structure.js'
@@ -242,6 +243,43 @@ describe('OMR V3 structure-first page analysis', () => {
     expect(result.page.systems.map((system) => system.boundingBox.y)).toEqual(
       [...result.page.systems.map((system) => system.boundingBox.y)].sort((a, b) => a - b),
     )
+  })
+
+  it('recovers one incomplete grand staff from repeated document geometry', () => {
+    const analysis = analyze([
+      staffBand({ y: 0.08, sourceId: 'a-t', clefs: ['treble'], noteheadCount: 8 }),
+      staffBand({ y: 0.15, sourceId: 'a-b', clefs: ['bass'], noteheadCount: 7 }),
+      staffBand({ y: 0.36, sourceId: 'b-t', clefs: ['treble'], noteheadCount: 8, barlines: [] }),
+      staffBand({ y: 0.43, sourceId: 'b-b', clefs: ['bass'], noteheadCount: 7, barlines: [] }),
+      staffBand({ y: 0.64, sourceId: 'c-t', clefs: ['treble'], noteheadCount: 8 }),
+      staffBand({ y: 0.71, sourceId: 'c-b', clefs: ['bass'], noteheadCount: 7 }),
+    ])
+    expect(analysis.page.systems).toHaveLength(4)
+    const document = createOmrDocumentIR({
+      documentId: 'fixture-document',
+      pages: [analysis.page],
+    })
+    const original = JSON.stringify(document)
+    const recovered = recoverOmrV3DocumentStructure(document)
+
+    expect(JSON.stringify(document)).toBe(original)
+    expect(recovered.recoveredPairings).toHaveLength(1)
+    expect(recovered.document.pages[0].systems).toHaveLength(3)
+    expect(
+      recovered.document.pages[0].systems.every(
+        (system) =>
+          system.staffGroups[0].type === OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF &&
+          system.staffGroups[0].staves.length === 2,
+      ),
+    ).toBe(true)
+    expect(
+      recovered.document.pages[0].systems[1].diagnostics.map((entry) => entry.code),
+    ).toContain('staff-group-recovered-from-document-continuity')
+    expect(validateOmrDocumentIR(recovered.document)).toEqual({
+      valid: true,
+      errors: [],
+      warnings: [],
+    })
   })
 
   it('produces a document-valid, serializable structure hierarchy', () => {

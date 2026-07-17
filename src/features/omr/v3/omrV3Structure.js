@@ -1,6 +1,7 @@
 /** Structure-first page analysis for the OMR V3 shadow pipeline. */
 
 import {
+  createOmrDocumentIR,
   createOmrPageIR,
   createOmrV3BoundingBox,
   createOmrV3Diagnostic,
@@ -16,6 +17,7 @@ const STAFF_REGULARITY_MAX_CV = 0.28
 const MERGED_STAFF_BOUNDARY_RATIO = 1.22
 const PAIR_THRESHOLD = 0.62
 const BARLINE_X_TOLERANCE = 0.008
+const DOCUMENT_CONTINUITY_MIN_EXAMPLES = 2
 
 function clamp(value, min = 0, max = 1) {
   return Math.min(max, Math.max(min, value))
@@ -823,6 +825,200 @@ export function analyzeOmrV3PageStructure(options = {}) {
     sourceRefs: staffResult.candidates.flatMap((staff) => staff.sourceRefs),
   })
   return { page, staffCandidates: staffResult.candidates, ...grouping }
+}
+
+function evidenceScore(pairing, signal) {
+  return pairing?.evidence?.find((entry) => entry.signal === signal)?.score ?? 0
+}
+
+function evidenceGapRatio(pairing) {
+  return pairing?.evidence?.find((entry) => entry.signal === 'vertical-distance')?.gapRatio ?? null
+}
+
+function acceptedGroupContinuity(document) {
+  const groups = (document?.pages ?? [])
+    .flatMap((page) => page.systems ?? [])
+    .flatMap((system) => system.staffGroups ?? [])
+    .filter(
+      (group) =>
+        group.staves?.length === 2 &&
+        [
+          OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF,
+          OMR_V3_STAFF_GROUP_TYPE.GUITAR_NOTATION_TAB,
+        ].includes(group.type),
+    )
+  const byType = new Map()
+  for (const group of groups) {
+    const gapRatio = evidenceGapRatio({ evidence: group.pairingEvidence })
+    if (!Number.isFinite(gapRatio)) continue
+    const entries = byType.get(group.type) ?? []
+    entries.push({ gapRatio, confidence: group.confidence?.overall ?? 0 })
+    byType.set(group.type, entries)
+  }
+  return byType
+}
+
+function recoveredSystemFromPair(upperSystem, lowerSystem, pairing, continuity) {
+  const upperGroup = upperSystem.staffGroups[0]
+  const lowerGroup = lowerSystem.staffGroups[0]
+  const systemId = upperSystem.systemId
+  const staffGroupId = upperGroup.staffGroupId
+  const selectedStaves = [upperGroup.staves[0], lowerGroup.staves[0]]
+  const consensusConfidence = average(continuity.map((entry) => entry.confidence))
+  const recoveryConfidence = clamp(Math.min(pairing.score, consensusConfidence) * 0.92)
+  const diagnostic = createOmrV3Diagnostic({
+    code: 'staff-group-recovered-from-document-continuity',
+    severity: OMR_V3_DIAGNOSTIC_SEVERITY.WARNING,
+    stage: 'system-grouping',
+    message: 'Recovered an incomplete staff group from repeated document geometry.',
+    sourceRefs: selectedStaves.flatMap((staff) => staff.sourceRefs ?? []),
+    data: {
+      groupType: pairing.kind,
+      pairScore: pairing.score,
+      continuityExamples: continuity.length,
+      gapRatio: evidenceGapRatio(pairing),
+    },
+  })
+  return {
+    ...upperSystem,
+    systemId,
+    boundingBox: unionBox(selectedStaves),
+    staffGroups: [
+      {
+        ...upperGroup,
+        staffGroupId,
+        systemId,
+        type: pairing.kind,
+        staves: selectedStaves.map((staff, verticalOrder) => ({
+          ...staff,
+          systemId,
+          verticalOrder,
+        })),
+        pairingEvidence: [
+          ...(pairing.evidence ?? []),
+          {
+            signal: 'document-structure-continuity',
+            score: 1,
+            examples: continuity.length,
+          },
+        ],
+        rejectedPairings: (upperGroup.rejectedPairings ?? []).filter(
+          (entry) =>
+            entry.upperStaffId !== pairing.upperStaffId ||
+            entry.lowerStaffId !== pairing.lowerStaffId,
+        ),
+        confidence: {
+          overall: recoveryConfidence,
+          stages: {
+            ...(upperGroup.confidence?.stages ?? {}),
+            'system-grouping': recoveryConfidence,
+            'structural-recovery': recoveryConfidence,
+          },
+          evidence: upperGroup.confidence?.evidence ?? [],
+        },
+        diagnostics: [...(upperGroup.diagnostics ?? []), diagnostic],
+        sourceRefs: selectedStaves.flatMap((staff) => staff.sourceRefs ?? []),
+      },
+    ],
+    measureColumns: [],
+    systemBarlines: [],
+    confidence: {
+      overall: recoveryConfidence,
+      stages: {
+        ...(upperSystem.confidence?.stages ?? {}),
+        'system-grouping': recoveryConfidence,
+        'structural-recovery': recoveryConfidence,
+      },
+      evidence: upperSystem.confidence?.evidence ?? [],
+    },
+    diagnostics: [...(upperSystem.diagnostics ?? []), diagnostic],
+    sourceRefs: selectedStaves.flatMap((staff) => staff.sourceRefs ?? []),
+  }
+}
+
+/**
+ * Recover a locally incomplete two-staff group only when the rejected pair
+ * already clears the fixed pair score and at least two accepted groups provide
+ * matching document-level geometry. Detection thresholds remain unchanged.
+ */
+export function recoverOmrV3DocumentStructure(document) {
+  const continuityByType = acceptedGroupContinuity(document)
+  const recoveredPairings = []
+  const pages = (document?.pages ?? []).map((page) => {
+    const systems = page.systems ?? []
+    const recoveredSystems = []
+    for (let index = 0; index < systems.length; index += 1) {
+      const upperSystem = systems[index]
+      const lowerSystem = systems[index + 1]
+      const upperGroup = upperSystem?.staffGroups?.[0]
+      const lowerGroup = lowerSystem?.staffGroups?.[0]
+      const upperStaff = upperGroup?.staves?.[0]
+      const lowerStaff = lowerGroup?.staves?.[0]
+      const pairing = (upperGroup?.rejectedPairings ?? []).find(
+        (entry) =>
+          entry.upperStaffId === upperStaff?.staffId &&
+          entry.lowerStaffId === lowerStaff?.staffId,
+      )
+      const continuity = continuityByType.get(pairing?.kind) ?? []
+      const gapRatio = evidenceGapRatio(pairing)
+      const consensusGap = median(continuity.map((entry) => entry.gapRatio))
+      const geometryMatches =
+        Number.isFinite(gapRatio) &&
+        Number.isFinite(consensusGap) &&
+        Math.abs(gapRatio - consensusGap) <= Math.max(0.25, consensusGap * 0.25)
+      const recoverable =
+        upperGroup?.staves?.length === 1 &&
+        lowerGroup?.staves?.length === 1 &&
+        pairing?.rejectionReason === 'insufficient-spanning-evidence' &&
+        pairing.score >= PAIR_THRESHOLD &&
+        evidenceScore(pairing, 'horizontal-overlap') >= 0.85 &&
+        evidenceScore(pairing, 'left-edge-alignment') >= 0.8 &&
+        continuity.length >= DOCUMENT_CONTINUITY_MIN_EXAMPLES &&
+        geometryMatches
+      if (!recoverable) {
+        recoveredSystems.push(upperSystem)
+        continue
+      }
+
+      recoveredSystems.push(
+        recoveredSystemFromPair(upperSystem, lowerSystem, pairing, continuity),
+      )
+      recoveredPairings.push({
+        pageId: page.pageId,
+        upperStaffId: pairing.upperStaffId,
+        lowerStaffId: pairing.lowerStaffId,
+        groupType: pairing.kind,
+        pairScore: pairing.score,
+        continuityExamples: continuity.length,
+      })
+      index += 1
+    }
+    const renumbered = recoveredSystems.map((system, readingOrder) => ({
+      ...system,
+      readingOrder,
+    }))
+    return {
+      ...page,
+      systems: renumbered,
+      diagnostics: [
+        ...(page.diagnostics ?? []),
+        ...(recoveredPairings.some((entry) => entry.pageId === page.pageId)
+          ? [
+              createOmrV3Diagnostic({
+                code: 'document-structure-continuity-applied',
+                severity: OMR_V3_DIAGNOSTIC_SEVERITY.WARNING,
+                stage: 'system-grouping',
+                message: 'Document continuity recovered one or more incomplete staff groups.',
+              }),
+            ]
+          : []),
+      ],
+    }
+  })
+  return {
+    document: createOmrDocumentIR({ ...document, pages }),
+    recoveredPairings,
+  }
 }
 
 export function summarizeOmrV3Structure(page) {
