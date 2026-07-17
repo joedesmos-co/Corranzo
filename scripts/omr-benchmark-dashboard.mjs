@@ -77,6 +77,7 @@ function usage() {
     '                            (expects clean.json + dense.json or <id>.json per fixture)',
     '  --max-pages <n>           Override per-fixture max pages',
     '  --no-preprocess           Disable OMR preprocessing',
+    '  --no-v3-shadow            Disable both V3 shadows for production-path profiling',
     '  --promote-scoregraph-clips',
     '                            Dev-only: enable default-off ScoreGraph hard-constraint clip promotion',
   '  --allow-missing           Skip fixtures with missing PDF/truth instead of erroring',
@@ -253,6 +254,22 @@ function reportForFixtureCache(report) {
   return { ...report, generatedOmrDiagnostics }
 }
 
+function compactOmrV3ObservationShadow(shadow) {
+  if (!shadow) return null
+  return {
+    status: shadow.status,
+    engine: shadow.engine ?? null,
+    promotedToRuntime: false,
+    rollout: shadow.rollout ?? null,
+    stages: shadow.stages ?? null,
+    evidence: shadow.evidence ?? shadow.stages?.evidence ?? null,
+    serializer: shadow.serializer ?? null,
+    evaluation: shadow.evaluation ?? null,
+    decision: shadow.decision ?? null,
+    error: shadow.error ?? null,
+  }
+}
+
 async function evaluateFixture(fixture, options) {
   const resolved = resolveFixturePaths(fixture, options.manifest)
   const optional = Boolean(fixture.optional) || Boolean(fixture.diagnosticOnly)
@@ -299,6 +316,7 @@ async function evaluateFixture(fixture, options) {
       includeScoreGraph: true,
       instrumentId: resolved.instrumentId ?? null,
       stavesPerSystem: resolved.stavesPerSystem ?? null,
+      omrV3Shadow: options.omrV3Shadow !== false,
     })
     const run = {
       pdfPath: resolved.pdfPath,
@@ -312,7 +330,7 @@ async function evaluateFixture(fixture, options) {
     }
     if (importOnly) {
       const partialRecovery = omrResult.diagnostics?.partialRecovery ?? {}
-      return buildFixtureDashboardRecord({
+      const record = buildFixtureDashboardRecord({
         fixture: resolved,
         run,
         observation: {
@@ -327,6 +345,11 @@ async function evaluateFixture(fixture, options) {
           warnings: omrResult.warnings ?? [],
         },
       })
+      record.omrV3Shadow = compactOmrV3ObservationShadow(omrResult.omrV3Shadow)
+      record.omrV3IndependentShadow = compactOmrV3ObservationShadow(
+        omrResult.omrV3IndependentShadow,
+      )
+      return record
     }
     const groundTruthMusicXml = await readScoreXml(resolved.truthPath)
     const report = evaluateOmrAccuracy({
@@ -398,20 +421,10 @@ async function evaluateFixture(fixture, options) {
         failureReasons: error?.difficulty?.reasons ?? [],
       },
     })
-    const compactRejectionShadow = (shadow) =>
-      shadow
-        ? {
-            status: shadow.status,
-            engine: shadow.engine ?? null,
-            promotedToRuntime: false,
-            stages: shadow.stages ?? null,
-            evidence: shadow.evidence ?? null,
-            decision: shadow.decision ?? null,
-            error: shadow.error ?? null,
-          }
-        : null
-    record.omrV3Shadow = compactRejectionShadow(error?.omrV3Shadow)
-    record.omrV3IndependentShadow = compactRejectionShadow(error?.omrV3IndependentShadow)
+    record.omrV3Shadow = compactOmrV3ObservationShadow(error?.omrV3Shadow)
+    record.omrV3IndependentShadow = compactOmrV3ObservationShadow(
+      error?.omrV3IndependentShadow,
+    )
     return record
   }
 }
@@ -768,6 +781,7 @@ async function main() {
     ? onlyFixturesRaw.split(',').map((entry) => entry.trim()).filter(Boolean)
     : null
   const preprocessPages = !hasFlag(args, '--no-preprocess')
+  const omrV3Shadow = !hasFlag(args, '--no-v3-shadow')
   const promoteScoreGraphClips = hasFlag(args, '--promote-scoregraph-clips')
   const checkFixturesOnly = hasFlag(args, '--check-fixtures')
   const writeQualificationDocs = hasFlag(args, '--write-qualification-docs')
@@ -812,6 +826,7 @@ async function main() {
         maxPages: maxPagesOverride ? Number(maxPagesOverride) : undefined,
         preprocessPages,
         promoteScoreGraphClips,
+        omrV3Shadow,
         outDir,
         saveFixtureReports: true,
       }),
@@ -834,7 +849,7 @@ async function main() {
   summary.pipelineOptions = {
     preprocessPages,
     promoteScoreGraphClips,
-    omrV3Shadow: true,
+    omrV3Shadow,
   }
 
   const omrV3Fixtures = records
