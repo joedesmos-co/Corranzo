@@ -58,7 +58,7 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
     const before = clean.data.slice()
     const result = preprocessOmrPageImage(clean)
     expect(result.applied).toEqual([])
-    expect(result.imageData).not.toBe(clean)
+    expect(result.imageData).toBe(clean)
     expect(result.imageData.data.every((value, index) => value === before[index])).toBe(true)
     expect(clean.data.every((value, index) => value === before[index])).toBe(true)
   })
@@ -116,6 +116,11 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
     )
     expect(result.overallConfidence).toBe(result.diagnostics.omrV3Confidence.overallConfidence)
     expect(result.diagnostics.legacyOverallConfidence).toBeGreaterThan(0)
+    expect(result.diagnostics.performance.renderedPixelCopiesAvoided).toBe(1)
+    expect(result.diagnostics.performance.preprocessingCopies).toBe(1)
+    expect(
+      result.diagnostics.performance.phases.some(({ phase }) => phase === 'page-1'),
+    ).toBe(true)
     expect(progress.some((event) => event.phase === 'preprocess')).toBe(true)
 
     const timing = parseMusicXml(result.musicXml, 'scanned.omr.musicxml')

@@ -273,9 +273,8 @@ export function preprocessOmrPageImage(imageData, options = {}) {
   const quality = estimatePageScanQuality(imageData)
   const shouldPreprocess = force || quality.isLikelyScanned
   if (!shouldPreprocess) {
-    const owned = copyOmrPixels(imageData, 'preprocess:pass-through')
-    omrDebugStep('preprocess:skipped-owned-copy', owned)
-    return { imageData: owned, quality, applied: [] }
+    omrDebugStep('preprocess:skipped-zero-copy', imageData)
+    return { imageData, quality, applied: [] }
   }
 
   const processed = cloneImageData(imageData)

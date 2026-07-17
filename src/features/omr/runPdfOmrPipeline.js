@@ -13,9 +13,8 @@ import { preprocessOmrPageImage } from './preprocessOmrPageImage.js'
 import { processOmrPageAnalysis } from './processOmrPage.js'
 import { assessOmrDifficulty, OMR_FAILURE_REASON } from './assessOmrDifficulty.js'
 import { validateOmrMultiPageLayout } from './validateOmrMultiPage.js'
-import { copyOmrPixels } from './omrPixelBuffer.js'
 import { omrDebugStep } from './omrDebug.js'
-import { omrTrace, createOmrPhaseTracer, omrTracePhaseStart, omrTracePhaseEnd } from './omrTrace.js'
+import { omrTrace, createOmrPhaseTracer } from './omrTrace.js'
 import { buildOmrMeasureGridMetadata } from './omrMeasureGridMeta.js'
 import {
   formatOmrMeasureGridDiagnosticsReport,
@@ -233,7 +232,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   const measureGridDiagnosticsEntries = []
 
   for (let page = 1; page <= pageCount; page += 1) {
-    const pagePhase = omrTracePhaseStart(`page-${page}`, traceRunId)
+    const pagePhase = phaseTracer.start(`page-${page}`)
     omrTrace(`pipeline:page-${page}:loop-start`, null, traceRunId)
     throwIfCancelled(signal)
     onProgress?.({
@@ -259,7 +258,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       if (isAbortError(error, signal) || !allowPartialRecovery || pageCount === 1) throw error
       partialRecovery.failedPages.push(pageFailureEntry(page, 'render', error))
       partialRecovery.recovered = true
-      omrTracePhaseEnd(pagePhase, { recovered: true, stage: 'render' })
+      phaseTracer.end(pagePhase, { recovered: true, stage: 'render' })
       continue
     }
     throwIfCancelled(signal)
@@ -268,8 +267,8 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     const renderedImage = rendered?.imageData ?? rendered
     omrDebugStep(`pipeline:page-${page}:after-pdf-render`, renderedImage)
 
-    let imageData = copyOmrPixels(renderedImage, `pipeline:page-${page}:after-render-copy`)
-    omrDebugStep(`pipeline:page-${page}:owned-render-copy`, imageData)
+    let imageData = renderedImage
+    omrDebugStep(`pipeline:page-${page}:owned-render-buffer`, imageData)
     const pageTempo = parseTempoFromTextItems(pageText, { pageNumber: page })
     const canReplaceTempo =
       (pageTempo.confidence ?? 0) > (tempo.confidence ?? 0) &&
@@ -327,7 +326,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       if (isAbortError(error, signal) || !allowPartialRecovery || pageCount === 1) throw error
       partialRecovery.failedPages.push(pageFailureEntry(page, 'recognition', error))
       partialRecovery.recovered = true
-      omrTracePhaseEnd(pagePhase, { recovered: true, stage: 'recognition' })
+      phaseTracer.end(pagePhase, { recovered: true, stage: 'recognition' })
       continue
     }
 
@@ -453,7 +452,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     if (captureOmrV3Analysis && pageResult.omrV3ShadowInput) {
       omrV3PageInputs.push(pageResult.omrV3ShadowInput)
     }
-    omrTracePhaseEnd(pagePhase, {
+    phaseTracer.end(pagePhase, {
       systems: pageResult.stats?.systems ?? 0,
       measures: pageResult.stats?.measures ?? 0,
       notes: pageResult.stats?.notes ?? 0,
@@ -585,7 +584,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   const beats = timeSignature?.beats ?? 4
   const beatType = timeSignature?.beatType ?? 4
   const measureDivisions = Math.round(beats * OMR_DIVISIONS_PER_QUARTER * (4 / beatType))
-  const postProcessPhase = omrTracePhaseStart('post-process', traceRunId)
+  const postProcessPhase = phaseTracer.start('post-process')
   const openingLeadNoteMerge = applyOpeningLeadNoteMerge(measureRhythms, {
     minStackNotes: OPENING_LEAD_MIN_STACK_NOTES,
   })
@@ -771,7 +770,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     }, traceRunId)
   }
 
-  omrTracePhaseEnd(postProcessPhase, { measureCount: measureRhythms.length })
+  phaseTracer.end(postProcessPhase, { measureCount: measureRhythms.length })
 
   const musicXml = phaseTracer.sync('build-musicxml', () =>
     buildOmrMusicXml({
@@ -906,6 +905,16 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       layoutConsistency,
       preprocessLog,
       partialRecovery,
+      performance: {
+        ...phaseTracer.snapshot(),
+        renderedPixelCopiesAvoided: partialRecovery.successfulPages,
+        passThroughCopiesAvoided: preprocessPages
+          ? preprocessLog.filter((entry) => (entry.applied?.length ?? 0) === 0).length
+          : 0,
+        preprocessingCopies:
+          preprocessLog.filter((entry) => (entry.applied?.length ?? 0) > 0).length,
+        analysisHandoffCopies: analyzePage ? partialRecovery.successfulPages : 0,
+      },
       difficulty,
       failureReasons: difficulty.reasons,
       measureGrid,
