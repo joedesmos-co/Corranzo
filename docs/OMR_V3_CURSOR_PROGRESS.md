@@ -154,6 +154,39 @@ Scan independent metrics unchanged vs Phase 3 baseline (still regressing). Enfor
 
 Clearing `piano-articulation-scan` needs stronger conservative raster stem/beam ink association and/or scan-safe onset clustering that does not repeat the rejected MAD snap.
 
+## Phase 5 — Paired-guitar chord fusion — PARTIAL
+
+### Root cause
+
+Within shared onset columns, pairing used only `soundingMidi` distance ≤ 2. Detector notation midis are often octave-wrong or garbage (e.g. 19/28), while TAB frets are reliable, so pair recall sat at ~0.26. Paired events also skipped approximate measure-end duration recovery, dropping overflow notation notes.
+
+### Implementation
+
+- Octave/written/sounding-aware pitch distance for notation↔TAB.
+- Vertical-rank fallback only when a note has **no** pitch-compatible TAB in the column.
+- Enable `allowApproximateMeasureEndRecovery` for paired notation events.
+
+### Qualification impact
+
+| Metric | Before | After | Target |
+| --- | ---: | ---: | ---: |
+| Pair recall | 0.265 | **~0.82–0.90** | ≥ 0.890 |
+| Events emitted | 68 | **91** | — |
+| F1 | 0.620 | **0.628** | ≥ 0.686 |
+| Onset / duration / chord | still below V2 | still below V2 | V2 floors |
+
+Standard and TAB-only Guitar remain non-regressing. Enforced independent regressions still include this fixture because onset/duration/F1/chord stay below V2 (all approximate geometric onsets; no exact `onsetDivisions` on raw symbols).
+
+### Rejected / remaining
+
+- Unconditional rank pairing (false-matched unpaired-note tests).
+- Joint beat-grid snap on irregular guitar columns (not yet safe).
+- Needs a true joint onset-column timing solver beyond pairing.
+
+## Phase 6 — Paired-guitar techniques — PARTIAL
+
+Same pairing path now yields **pair recall 1.0** and all 25–28 events paired, but F1/onset/duration/chord remain below V2 for the same geometric timing reasons. Technique attachment piggybacks on successful pairs; timing still blocks the gate.
+
 ## Next
 
-Phase 5 — Paired-guitar chord fusion.
+Continue guitar joint onset timing, then revisit scan beam ink, then full production gate / rollout docs.

@@ -147,30 +147,78 @@ function symbolsForColumn(column, collection, lookup, staffId) {
     .filter((symbol) => symbol?.ownership?.staffId === staffId)
 }
 
+function notationSoundingCandidates(symbol) {
+  const pitch = notationPitch(symbol)
+  const written = pitch?.writtenMidi ?? symbol.midi
+  const sounding = pitch?.soundingMidi
+  const candidates = [sounding, written, written - 12, written + 12, symbol.midi, symbol.midi - 12, symbol.midi + 12]
+  return [...new Set(candidates.filter(Number.isFinite))]
+}
+
+function pitchPairDistance(notation, tab) {
+  const tabMidi = tabSoundingMidi(tab)
+  if (!Number.isFinite(tabMidi)) return Number.POSITIVE_INFINITY
+  const distances = notationSoundingCandidates(notation).map((midi) => Math.abs(midi - tabMidi))
+  return distances.length ? Math.min(...distances) : Number.POSITIVE_INFINITY
+}
+
+/**
+ * Pair notation noteheads with TAB digits inside one shared onset column.
+ * Prefer pitch compatibility (including octave/written-sounding ambiguity), then
+ * fall back to vertical rank only for notes that have no pitch-compatible TAB.
+ */
 function pairNotationWithTab(notation, tabs) {
+  const notesOrdered = [...notation].sort(
+    (left, right) =>
+      (left.geometry?.y ?? 0) - (right.geometry?.y ?? 0) ||
+      String(left.symbolId).localeCompare(String(right.symbolId)),
+  )
+  const tabsOrdered = [...tabs].sort(
+    (left, right) =>
+      (Number(left.string) || 99) - (Number(right.string) || 99) ||
+      (left.geometry?.y ?? 0) - (right.geometry?.y ?? 0) ||
+      String(left.symbolId).localeCompare(String(right.symbolId)),
+  )
+  const noteRank = new Map(notesOrdered.map((note, index) => [note, index]))
+  const tabRank = new Map(tabsOrdered.map((tab, index) => [tab, index]))
+
+  const bestPitchByNote = notation.map((note) =>
+    Math.min(...tabs.map((tab) => pitchPairDistance(note, tab)), Number.POSITIVE_INFINITY),
+  )
+
   const candidates = []
   notation.forEach((note, noteIndex) => {
-    const soundingMidi = notationPitch(note)?.soundingMidi
     tabs.forEach((tab, tabIndex) => {
-      const tabMidi = tabSoundingMidi(tab)
-      candidates.push({
-        noteIndex,
-        tabIndex,
-        distance:
-          Number.isFinite(soundingMidi) && Number.isFinite(tabMidi)
-            ? Math.abs(soundingMidi - tabMidi)
-            : 0.5,
-      })
+      const pitchDistance = pitchPairDistance(note, tab)
+      const rankDistance = Math.abs((noteRank.get(note) ?? 0) - (tabRank.get(tab) ?? 0))
+      const xDistance = Math.abs((note.geometry?.x ?? 0) - (tab.geometry?.x ?? 0))
+      let cost = Number.POSITIVE_INFINITY
+      if (pitchDistance <= 2) {
+        cost = pitchDistance + rankDistance * 0.05 + xDistance * 2
+      } else if (
+        bestPitchByNote[noteIndex] > 2 &&
+        rankDistance === 0 &&
+        notation.length <= 6 &&
+        tabs.length <= 6 &&
+        pitchDistance < Number.POSITIVE_INFINITY
+      ) {
+        // Shared onset + identical vertical rank, only when this note has no
+        // pitch-compatible TAB partner in the column.
+        cost = 2.5 + Math.min(24, pitchDistance) * 0.05 + xDistance * 2
+      }
+      if (!Number.isFinite(cost) || cost > 8) return
+      candidates.push({ noteIndex, tabIndex, cost })
     })
   })
   candidates.sort(
     (left, right) =>
-      left.distance - right.distance || left.noteIndex - right.noteIndex || left.tabIndex - right.tabIndex,
+      left.cost - right.cost ||
+      left.noteIndex - right.noteIndex ||
+      left.tabIndex - right.tabIndex,
   )
   const noteMatches = new Map()
   const usedTabs = new Set()
   for (const candidate of candidates) {
-    if (candidate.distance > 2) continue
     if (noteMatches.has(candidate.noteIndex) || usedTabs.has(candidate.tabIndex)) continue
     noteMatches.set(candidate.noteIndex, candidate.tabIndex)
     usedTabs.add(candidate.tabIndex)
@@ -500,6 +548,7 @@ function solveNotationTabMeasure(measure, group, totalDivisions) {
         column,
         notationStaff,
         totalDivisions,
+        allowApproximateMeasureEndRecovery: true,
       })
       if (!event) {
         diagnostics.push(

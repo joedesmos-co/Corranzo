@@ -298,6 +298,38 @@ describe('OMR V3 Guitar notation/TAB fusion', () => {
     expect(primary.every((voice) => voice.overlapConstraints[0].satisfied)).toBe(true)
   })
 
+  it('pairs shared-onset notation and TAB by vertical rank when pitch is unreliable', () => {
+    const document = structuralDocument('notation-tab', { largeGap: true })
+    // Deliberately wrong notation midis; TAB frets carry the true sounding pitches.
+    const symbols = [
+      symbol('note-high', 'notehead', 0.19, 0.08, {
+        midi: 20,
+        onsetDivisions: 0,
+        durationDivisions: 4,
+      }),
+      symbol('note-mid', 'notehead', 0.19, 0.095, {
+        midi: 22,
+        onsetDivisions: 0,
+        durationDivisions: 4,
+      }),
+      symbol('note-low', 'notehead', 0.19, 0.11, {
+        midi: 24,
+        onsetDivisions: 0,
+        durationDivisions: 4,
+      }),
+      symbol('tab-1', 'tab-digit', 0.19, 0.29, { text: '0', string: 1 }),
+      symbol('tab-2', 'tab-digit', 0.19, 0.3, { text: '1', string: 2 }),
+      symbol('tab-3', 'tab-digit', 0.19, 0.31, { text: '0', string: 3 }),
+    ]
+    const result = fuse(document, symbols)
+    const fused = events(result.document)
+
+    expect(fused).toHaveLength(3)
+    expect(result.totals.pairedCount).toBe(3)
+    expect(fused.map((event) => event.string).sort((a, b) => a - b)).toEqual([1, 2, 3])
+    expect(fused.map((event) => event.fret).sort((a, b) => a - b)).toEqual([0, 0, 1])
+  })
+
   it('is pure and emits valid serializable relationships', () => {
     const document = structuralDocument()
     const owned = assignOmrV3DocumentSymbolOwnership(document, {
