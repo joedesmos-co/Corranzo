@@ -56,7 +56,10 @@ import {
   computeDocumentStaffGapReference,
   mergeStaffGapSamples,
 } from './normalizeStaffLineGaps.js'
-import { resolveOmrV3RolloutOptions } from './v3/omrV3Rollout.js'
+import {
+  decideOmrV3RuntimePromotion,
+  resolveOmrV3RolloutOptions,
+} from './v3/omrV3Rollout.js'
 import {
   buildOmrV3AnalysisDocument,
   observeOmrV3RejectedImport,
@@ -64,6 +67,11 @@ import {
   runOmrV3Shadow,
 } from './v3/omrV3Shadow.js'
 import { reasonAboutOmrV3Confidence } from './v3/omrV3Confidence.js'
+import {
+  buildOmrV3DisagreementTelemetry,
+  compareOmrV2V3MusicXml,
+} from './v3/omrV3Comparison.js'
+import { buildOmrV3DeveloperDiagnostics } from './v3/omrV3Diagnostics.js'
 
 const DEFAULT_MAX_PAGES = 24
 
@@ -119,21 +127,43 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     allowPartialRecovery = true,
     /** Disabled by default; developer/benchmark shadow only. */
     omrV3Shadow = false,
+    /**
+     * Comparison mode: run independent V3 beside V2, keep V2 user-visible, and
+     * attach a structured V2↔V3 disagreement report. Does not arm promotions.
+     */
+    omrV3Compare = false,
     /** Production-safe V3 IR confidence reasoning; does not replace recognized notes. */
     omrV3Confidence = true,
     /** Emergency suppression switch for all V3 analysis. */
     omrV3Rollback = false,
-    /** Recorded but never runtime-enabled until a future promotion change. */
+    /**
+     * Default-off runtime candidate arm. Requested promotions resolve only when
+     * this is true and rollback is not engaged.
+     */
+    omrV3RuntimeCandidate = false,
+    /** Category / full-V3 promotion requests (resolved only with runtime candidate). */
     omrV3Promotions = {},
   } = options
 
   const instrument = getInstrument(instrumentId)
+  const comparisonMode = Boolean(omrV3Compare) && !omrV3Rollback
   const omrV3Rollout = resolveOmrV3RolloutOptions({
-    shadow: omrV3Shadow,
+    // Comparison implies shadow capture so both engines run; promotions stay off
+    // unless runtimeCandidate is separately armed.
+    shadow: omrV3Shadow || comparisonMode,
     rollback: omrV3Rollback,
     promotions: omrV3Promotions,
+    runtimeCandidate: omrV3RuntimeCandidate,
   })
-  const captureOmrV3Analysis = !omrV3Rollback && (omrV3Confidence || omrV3Rollout.shadow)
+  const needOmrV3Independent =
+    !omrV3Rollback &&
+    (omrV3Rollout.shadow || omrV3Rollout.promotions.fullV3 || comparisonMode)
+  const captureOmrV3Analysis =
+    !omrV3Rollback &&
+    (omrV3Confidence ||
+      omrV3Rollout.shadow ||
+      omrV3Rollout.anyPromotionEnabled ||
+      comparisonMode)
   // Piano's registry default is the grand staff (2), so omitting both options
   // reproduces the long-standing behavior exactly.
   const stavesPerSystem = stavesPerSystemOverride ?? instrument.omr.stavesPerSystem
@@ -368,7 +398,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
         timeSignature,
         documentStaffGapReference,
         captureOmrV3Shadow: captureOmrV3Analysis,
-        captureOmrV3RawSymbols: omrV3Rollout.shadow,
+        captureOmrV3RawSymbols: needOmrV3Independent,
       }
       pageResult = analyzePage
         ? await analyzePage(imageData, analysisContext)
@@ -409,7 +439,10 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     if ((pageResult.stats.systems ?? 0) === 0 || (pageResult.stats.notes ?? 0) === 0) {
       partialRecovery.isolatedRegions.push({
         page,
-        kind: (pageResult.stats.systems ?? 0) === 0 ? 'no-staff-systems' : 'no-musical-events',
+        kind:
+          pageResult.negativePage?.kind ??
+          ((pageResult.stats.systems ?? 0) === 0 ? 'no-staff-systems' : 'no-musical-events'),
+        reason: pageResult.negativePage?.reason ?? null,
         systems: pageResult.stats.systems ?? 0,
         measures: pageResult.stats.measures ?? 0,
       })
@@ -576,7 +609,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
               OMR_DIVISIONS_PER_QUARTER *
               (4 / (timeSignature?.beatType ?? 4)),
           ),
-          captureEvidence: omrV3Rollout.shadow,
+          captureEvidence: omrV3Rollout.shadow || comparisonMode,
         }),
       )
       const confidenceReasoning = reasonAboutOmrV3Confidence(omrV3Analysis.document, {
@@ -828,7 +861,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
 
   phaseTracer.end(postProcessPhase, { measureCount: measureRhythms.length })
 
-  const musicXml = phaseTracer.sync('build-musicxml', () =>
+  const productionMusicXml = phaseTracer.sync('build-musicxml', () =>
     buildOmrMusicXml({
       title,
       measures: measureRhythms,
@@ -837,70 +870,174 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       instrument,
     }),
   )
+  let musicXml = productionMusicXml
   let omrV3ShadowResult = null
   let omrV3IndependentShadowResult = null
-  if (omrV3Rollout.shadow) {
+  let omrV3RuntimePromotion = null
+  const runIndependentShadow = () =>
+    runOmrV3Shadow({
+      documentId: `independent-shadow-${title}`,
+      title: `${title} — OMR V3 independent shadow`,
+      instrumentId: instrument.id,
+      pageInputs: omrV3PageInputs,
+      musical,
+      runtimeMusicXml: productionMusicXml,
+      measureDurationDivisions: measureDivisions,
+      rollout: omrV3Rollout,
+      symbolEvidenceMode: OMR_V3_SYMBOL_EVIDENCE_MODE.RAW_DETECTOR_SYMBOLS,
+    })
+
+  if (omrV3Rollout.shadow || needOmrV3Independent) {
     if (omrV3PageInputs.length === 0) {
-      omrV3ShadowResult = {
-        status: 'unavailable-no-page-capture',
-        engine: 'omr-v3-shadow',
-        promotedToRuntime: false,
-        rollout: omrV3Rollout,
-      }
-    } else {
-      try {
-        omrV3ShadowResult = phaseTracer.sync('omr-v3-shadow', () =>
-          runOmrV3Shadow({
-            documentId: `shadow-${title}`,
-            title: `${title} — OMR V3 shadow`,
-            instrumentId: instrument.id,
-            pageInputs: omrV3PageInputs,
-            musical,
-            runtimeMusicXml: musicXml,
-            measureDurationDivisions: measureDivisions,
-            rollout: omrV3Rollout,
-            analysis: omrV3Analysis,
-          }),
-        )
-      } catch (error) {
+      if (omrV3Rollout.shadow) {
         omrV3ShadowResult = {
-          status: 'error',
+          status: 'unavailable-no-page-capture',
           engine: 'omr-v3-shadow',
           promotedToRuntime: false,
           rollout: omrV3Rollout,
-          error: error instanceof Error ? error.message : String(error),
         }
       }
-      try {
-        omrV3IndependentShadowResult = phaseTracer.sync('omr-v3-independent-shadow', () =>
-          runOmrV3Shadow({
-            documentId: `independent-shadow-${title}`,
-            title: `${title} — OMR V3 independent shadow`,
-            instrumentId: instrument.id,
-            pageInputs: omrV3PageInputs,
-            musical,
-            runtimeMusicXml: musicXml,
-            measureDurationDivisions: measureDivisions,
-            rollout: omrV3Rollout,
-            symbolEvidenceMode: OMR_V3_SYMBOL_EVIDENCE_MODE.RAW_DETECTOR_SYMBOLS,
-          }),
-        )
-      } catch (error) {
+      if (needOmrV3Independent) {
         omrV3IndependentShadowResult = {
-          status: 'error',
+          status: 'unavailable-no-page-capture',
           engine: 'omr-v3-independent-shadow',
           promotedToRuntime: false,
           rollout: omrV3Rollout,
-          error: error instanceof Error ? error.message : String(error),
+        }
+      }
+    } else {
+      if (omrV3Rollout.shadow) {
+        try {
+          omrV3ShadowResult = phaseTracer.sync('omr-v3-shadow', () =>
+            runOmrV3Shadow({
+              documentId: `shadow-${title}`,
+              title: `${title} — OMR V3 shadow`,
+              instrumentId: instrument.id,
+              pageInputs: omrV3PageInputs,
+              musical,
+              runtimeMusicXml: productionMusicXml,
+              measureDurationDivisions: measureDivisions,
+              rollout: omrV3Rollout,
+              analysis: omrV3Analysis,
+            }),
+          )
+        } catch (error) {
+          omrV3ShadowResult = {
+            status: 'error',
+            engine: 'omr-v3-shadow',
+            promotedToRuntime: false,
+            rollout: omrV3Rollout,
+            error: error instanceof Error ? error.message : String(error),
+          }
+        }
+      }
+      if (needOmrV3Independent) {
+        try {
+          omrV3IndependentShadowResult = phaseTracer.sync('omr-v3-independent-shadow', () =>
+            runIndependentShadow(),
+          )
+        } catch (error) {
+          omrV3IndependentShadowResult = {
+            status: 'error',
+            engine: 'omr-v3-independent-shadow',
+            promotedToRuntime: false,
+            rollout: omrV3Rollout,
+            error: error instanceof Error ? error.message : String(error),
+          }
         }
       }
     }
-  } else if (omrV3Shadow && omrV3Rollback) {
+  } else if ((omrV3Shadow || omrV3Compare || omrV3RuntimeCandidate) && omrV3Rollback) {
     omrV3ShadowResult = {
       status: 'disabled-by-rollback',
       engine: 'omr-v3-shadow',
       promotedToRuntime: false,
       rollout: omrV3Rollout,
+    }
+    if (omrV3RuntimeCandidate || omrV3Promotions?.fullV3) {
+      omrV3IndependentShadowResult = {
+        status: 'disabled-by-rollback',
+        engine: 'omr-v3-independent-shadow',
+        promotedToRuntime: false,
+        rollout: omrV3Rollout,
+      }
+    }
+  }
+
+  const independentLatencyMs =
+    phaseTracer
+      .snapshot()
+      ?.phases?.find((entry) => entry.phase === 'omr-v3-independent-shadow')?.ms ?? null
+  const promotionDecision = decideOmrV3RuntimePromotion({
+    productionMusicXml,
+    independentShadow: omrV3IndependentShadowResult,
+    rollout: omrV3Rollout,
+    latencyMs: independentLatencyMs,
+  })
+  // Comparison mode never swaps user-visible MusicXML; only an armed fullV3
+  // promotion (outside compare-only) may replace production output.
+  musicXml =
+    comparisonMode && !omrV3Rollout.promotions.fullV3
+      ? productionMusicXml
+      : promotionDecision.musicXml
+  omrV3IndependentShadowResult = promotionDecision.independentShadow
+
+  let omrV3Comparison = null
+  if (
+    (comparisonMode || omrV3Rollout.shadow) &&
+    productionMusicXml &&
+    omrV3IndependentShadowResult?.musicXml
+  ) {
+    omrV3Comparison = compareOmrV2V3MusicXml({
+      v2MusicXml: productionMusicXml,
+      v3MusicXml: omrV3IndependentShadowResult.musicXml,
+      v2Confidence: {
+        overall: richDiagnostics?.omrV3Confidence?.legacyConfidence ?? null,
+      },
+      v3Confidence: {
+        overall:
+          richDiagnostics?.omrV3Confidence?.overallConfidence ??
+          omrV3IndependentShadowResult?.evaluation?.confidence?.overall ??
+          null,
+      },
+      v3Serializer: omrV3IndependentShadowResult?.serializer ?? null,
+    })
+  }
+
+  const disagreementTelemetry = buildOmrV3DisagreementTelemetry(omrV3Comparison)
+  const reportRolloutTelemetry =
+    Boolean(omrV3Shadow) ||
+    Boolean(omrV3Compare) ||
+    Boolean(omrV3RuntimeCandidate) ||
+    Boolean(omrV3Rollback) ||
+    omrV3Rollout.anyPromotionRequested
+  omrV3RuntimePromotion = reportRolloutTelemetry
+    ? {
+        ...promotionDecision.telemetry,
+        // Comparison mode keeps V2 visible even if a promotion decision object
+        // would otherwise promote — mirror the musicXml choice above.
+        promotedToRuntime:
+          comparisonMode && !omrV3Rollout.promotions.fullV3
+            ? false
+            : promotionDecision.telemetry.promotedToRuntime,
+        decision:
+          comparisonMode && !omrV3Rollout.promotions.fullV3
+            ? 'hold-comparison-mode'
+            : promotionDecision.telemetry.decision,
+        reason:
+          comparisonMode && !omrV3Rollout.promotions.fullV3
+            ? 'v2-user-visible-compare'
+            : promotionDecision.telemetry.reason,
+        rolloutMode: omrV3Rollout.mode,
+        comparisonMode,
+        // Compact disagreement counts only — never MusicXML or PDF bytes.
+        disagreement: disagreementTelemetry,
+      }
+    : null
+  if (omrV3ShadowResult && omrV3RuntimePromotion?.promotedToRuntime) {
+    omrV3ShadowResult = {
+      ...omrV3ShadowResult,
+      promotedToRuntime: false,
     }
   }
   const measurePlaybackReport = buildOmrMeasurePlaybackReport({
@@ -973,12 +1110,14 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     ),
   }
 
-  return {
+  const pipelineResult = {
     musicXml,
     ...(omrV3ShadowResult ? { omrV3Shadow: omrV3ShadowResult } : {}),
     ...(omrV3IndependentShadowResult
       ? { omrV3IndependentShadow: omrV3IndependentShadowResult }
       : {}),
+    ...(omrV3RuntimePromotion ? { omrV3RuntimePromotion } : {}),
+    ...(omrV3Comparison ? { omrV3Comparison } : {}),
     diagnostics: {
       ...diagnostics,
       ...richDiagnostics,
@@ -1024,4 +1163,10 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     measurePlaybackReport,
     measurePlaybackReportText: formatOmrMeasurePlaybackReport(measurePlaybackReport),
   }
+
+  if (omrV3Comparison || omrV3IndependentShadowResult || omrV3ShadowResult) {
+    pipelineResult.omrV3DeveloperDiagnostics = buildOmrV3DeveloperDiagnostics(pipelineResult)
+  }
+
+  return pipelineResult
 }

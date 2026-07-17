@@ -21,6 +21,55 @@ function compactDiagnostics(diagnostics = {}) {
     warnings: diagnostics.warnings ?? [],
     noteMatching: diagnostics.noteMatching ?? null,
     orphanNoteheads: diagnostics.orphanNoteheads ?? null,
+    omrV3Confidence: diagnostics.omrV3Confidence
+      ? {
+          method: diagnostics.omrV3Confidence.method ?? null,
+          overallConfidence: diagnostics.omrV3Confidence.overallConfidence ?? null,
+          legacyConfidence: diagnostics.omrV3Confidence.legacyConfidence ?? null,
+          structuralConfidence: diagnostics.omrV3Confidence.structuralConfidence ?? null,
+        }
+      : null,
+    omrV3Comparison: diagnostics.omrV3Comparison
+      ? {
+          status: diagnostics.omrV3Comparison.status ?? null,
+          disagreement: diagnostics.omrV3Comparison.disagreement ?? null,
+          measures: diagnostics.omrV3Comparison.measures ?? null,
+          notes: diagnostics.omrV3Comparison.notes ?? null,
+          rhythm: diagnostics.omrV3Comparison.rhythm ?? null,
+          chords: diagnostics.omrV3Comparison.chords ?? null,
+          pitch: diagnostics.omrV3Comparison.pitch ?? null,
+          confidence: diagnostics.omrV3Comparison.confidence ?? null,
+        }
+      : null,
+    omrV3DeveloperDiagnostics: diagnostics.omrV3DeveloperDiagnostics
+      ? {
+          preferredEngine: diagnostics.omrV3DeveloperDiagnostics.preferredEngine ?? null,
+          timing: diagnostics.omrV3DeveloperDiagnostics.timing ?? null,
+          recognition: diagnostics.omrV3DeveloperDiagnostics.recognition ?? null,
+          disagreementTelemetry:
+            diagnostics.omrV3DeveloperDiagnostics.disagreementTelemetry ?? null,
+        }
+      : null,
+    omrV3RuntimePromotion: diagnostics.omrV3RuntimePromotion
+      ? {
+          decision: diagnostics.omrV3RuntimePromotion.decision ?? null,
+          comparisonMode: diagnostics.omrV3RuntimePromotion.comparisonMode ?? null,
+          disagreement: diagnostics.omrV3RuntimePromotion.disagreement ?? null,
+          latencyMs: diagnostics.omrV3RuntimePromotion.latencyMs ?? null,
+          promotedToRuntime: diagnostics.omrV3RuntimePromotion.promotedToRuntime ?? false,
+        }
+      : null,
+    performance: diagnostics.performance
+      ? {
+          totalMs: diagnostics.performance.totalMs ?? null,
+          phases: Array.isArray(diagnostics.performance.phases)
+            ? diagnostics.performance.phases.map((phase) => ({
+                phase: phase.phase,
+                ms: phase.ms,
+              }))
+            : [],
+        }
+      : null,
     scoreGraph: diagnostics.scoreGraph
       ? {
           totalNodes: diagnostics.scoreGraph.totalNodes ?? null,
@@ -75,6 +124,14 @@ export function toggleOmrTrace(enabled) {
 
 export function toggleOmrDebug(enabled) {
   return setOmrDiagnosticFlag(OMR_DIAGNOSTIC_FLAG.DEBUG, enabled)
+}
+
+export function toggleOmrV3Compare(enabled) {
+  return setOmrDiagnosticFlag(OMR_DIAGNOSTIC_FLAG.V3_COMPARE, enabled)
+}
+
+export function toggleOmrV3Prefer(enabled) {
+  return setOmrDiagnosticFlag(OMR_DIAGNOSTIC_FLAG.V3_PREFER, enabled)
 }
 
 export function describeOmrDevTools() {

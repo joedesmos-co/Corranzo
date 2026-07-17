@@ -553,4 +553,4 @@ Pitch is the dominant residual error bucket but is bounded by the shared detecto
 
 ## Next
 
-All handoff §§1–7 algorithmic/regression blockers are cleared under the independent gate. Tuplet (Phase 3+3b), scanned beam/stem (Phase 4+4b), and pitch/accidental (Phase 5) are all resolved or proven out-of-surface. Pitch improvement is detector/V2-bound, not a V3-independent blocker. No further V3 algorithmic blocker is currently proven; V3 stays default-off and V2 authoritative pending a detector-track decision. Theme-scan MusicXML stays human-blocked (separate from `piano-articulation-scan`).
+Production Readiness Campaign complete. **Production Validation & Rollout Preparation** is documented in [`PRODUCTION_VALIDATION_PLAN.md`](./PRODUCTION_VALIDATION_PLAN.md): comparison mode, developer diagnostics, disagreement telemetry, triage, promotion evidence, and rollback criteria. V3 stays default-off; V2 authoritative. Do not begin another V3-independent algorithmic investigation without a newly demonstrated V3-owned first-loss.

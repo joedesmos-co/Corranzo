@@ -11,8 +11,14 @@ import {
   describeOmrDevTools,
   toggleOmrDebug,
   toggleOmrTrace,
+  toggleOmrV3Compare,
+  toggleOmrV3Prefer,
 } from '../../features/omr/omrDevTools.js'
-import { getOmrDiagnosticFlags } from '../../features/omr/omrDiagnosticFlags.js'
+import {
+  getOmrDiagnosticFlags,
+  resolveOmrV3DeveloperPipelineOptions,
+} from '../../features/omr/omrDiagnosticFlags.js'
+import { selectOmrDeveloperMusicXml } from '../../features/omr/v3/omrV3Diagnostics.js'
 
 function resetOmrPanelState(setters) {
   setters.setIsGenerating(false)
@@ -134,10 +140,13 @@ export default function PdfOmrPlaybackPanel({
     let resetInFinally = true
     try {
       omrTrace('ui:handleGenerate:runPdfOmrClient:start', null, runId)
+      const developerOptions = resolveOmrV3DeveloperPipelineOptions(getOmrDiagnosticFlags())
       const result = await runPdfOmrClient(pdfSource, {
         title: pdfFileName?.replace(/\.[^.]+$/, '') ?? 'PDF score',
         pdfFileUrl,
         instrumentId,
+        omrV3Compare: developerOptions.omrV3Compare,
+        omrV3Shadow: developerOptions.omrV3Shadow,
         onStatus: (nextStatus) => {
           if (activeRunRef.current !== runId || controller.signal.aborted) {
             return
@@ -166,19 +175,41 @@ export default function PdfOmrPlaybackPanel({
         return
       }
 
+      if (developerOptions.logV3Telemetry && result.omrV3RuntimePromotion?.disagreement) {
+        omrTrace('ui:omr-v3-disagreement', result.omrV3RuntimePromotion.disagreement, runId)
+      }
+
+      const selectedOutput = selectOmrDeveloperMusicXml(
+        result,
+        developerOptions.preferV3Output ? 'v3' : 'v2',
+      )
+      // Prefer-V3 is a developer evaluation toggle only. Comparison mode keeps
+      // production MusicXml as V2; prefer may swap the accepted library payload
+      // in non-PROD so engineers can audition V3 without arming promotions.
+      const acceptedMusicXml = selectedOutput.musicXml
+
       omrTrace('ui:handleGenerate:success', {
         noteCount: result.noteCount,
         measureCount: result.measureCount,
+        outputEngine: selectedOutput.engine,
+        comparisonStatus: result.omrV3Comparison?.status ?? null,
       }, runId)
 
-      lastDiagnosticsRef.current = result.diagnostics ?? null
-      setHasDiagnostics(Boolean(result.diagnostics))
+      lastDiagnosticsRef.current = {
+        ...(result.diagnostics ?? {}),
+        omrV3Comparison: result.omrV3Comparison ?? null,
+        omrV3DeveloperDiagnostics: result.omrV3DeveloperDiagnostics ?? null,
+        omrV3RuntimePromotion: result.omrV3RuntimePromotion ?? null,
+      }
+      setHasDiagnostics(Boolean(result.diagnostics || result.omrV3Comparison))
       lastRunMetaRef.current = {
         runId,
         noteCount: result.noteCount,
         measureCount: result.measureCount,
         uncertainMeasures: result.uncertainMeasures ?? null,
         overallConfidence: result.overallConfidence ?? null,
+        outputEngine: selectedOutput.engine,
+        comparisonStatus: result.omrV3Comparison?.status ?? null,
       }
 
       cancelActiveOmrWorker()
@@ -188,10 +219,10 @@ export default function PdfOmrPlaybackPanel({
       const fileName = `${(pdfFileName ?? 'score.pdf').replace(/\.pdf$/i, '')}.omr.musicxml`
       const accepted = await onGenerated?.({
         fileName,
-        musicXml: result.musicXml,
+        musicXml: acceptedMusicXml,
         noteCount: result.noteCount,
         measureCount: result.measureCount,
-        diagnostics: result.diagnostics,
+        diagnostics: lastDiagnosticsRef.current,
         warnings: result.warnings ?? [],
         measureGrid: result.measureGrid,
         sourcePdfFileName: pdfFileName ?? null,
@@ -327,6 +358,16 @@ export default function PdfOmrPlaybackPanel({
     setDevFlags(next)
   }, [devFlags.debug])
 
+  const handleToggleV3Compare = useCallback(() => {
+    const next = toggleOmrV3Compare(!devFlags.v3Compare)
+    setDevFlags(next)
+  }, [devFlags.v3Compare])
+
+  const handleToggleV3Prefer = useCallback(() => {
+    const next = toggleOmrV3Prefer(!devFlags.v3Prefer)
+    setDevFlags(next)
+  }, [devFlags.v3Prefer])
+
   const pdfBytesAvailable = Boolean(pdfSource) || Boolean(pdfFileUrl)
   const showDevTools = import.meta.env.DEV
 
@@ -413,6 +454,24 @@ export default function PdfOmrPlaybackPanel({
             aria-pressed={devFlags.debug}
           >
             Debug {devFlags.debug ? 'on' : 'off'}
+          </button>
+          <button
+            type="button"
+            className={`profile-dev-tools__btn${devFlags.v3Compare ? '' : ' profile-dev-tools__btn--muted'}`}
+            onClick={handleToggleV3Compare}
+            aria-pressed={devFlags.v3Compare}
+            title="Run V2 and V3 together; keep V2 user-visible; attach comparison report"
+          >
+            V3 compare {devFlags.v3Compare ? 'on' : 'off'}
+          </button>
+          <button
+            type="button"
+            className={`profile-dev-tools__btn${devFlags.v3Prefer ? '' : ' profile-dev-tools__btn--muted'}`}
+            onClick={handleToggleV3Prefer}
+            aria-pressed={devFlags.v3Prefer}
+            title="Developer-only: accept V3 MusicXML into the library instead of V2"
+          >
+            Prefer V3 {devFlags.v3Prefer ? 'on' : 'off'}
           </button>
           {devCopyStatus && (
             <span className="library-omr-panel__status" role="status">
