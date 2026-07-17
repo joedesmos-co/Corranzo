@@ -276,6 +276,56 @@ describe('OMR V3 Piano voice candidates', () => {
     expect(result.totals.rejectedEventGroupCount).toBe(0)
   })
 
+  it('recovers a uniformly spaced approximate event on each detected beat', () => {
+    const page = analyzeOmrV3PageStructure({
+      documentId: 'uniform-beat-grid',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'solo-staff',
+          space: 'normalized',
+          lineRows: [0.1, 0.11, 0.12, 0.13, 0.14],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['treble'],
+          noteheadCount: 4,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+      ],
+    }).page
+    const measured = buildOmrV3DocumentMeasureColumns(
+      createOmrDocumentIR({
+        documentId: 'uniform-beat-grid',
+        metadata: { musical: { timeSignature: { beats: 4, beatType: 4 } } },
+        pages: [page],
+      }),
+    ).document
+    const document = assignOmrV3DocumentSymbolOwnership(measured, {
+      symbolsByPage: [0.2, 0.4, 0.6, 0.8].map((x, index) =>
+        musicalSymbol(`beat-${index}`, 'notehead', x, 0.12, {
+          midi: 72 + index,
+          duration: { divisions: index + 1, type: null, dots: 0, exact: false },
+        }),
+      ),
+    }).document
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const events = measures(result.document)[0].voices
+      .filter((voice) => voice.candidateRank === 0)
+      .flatMap((voice) => voice.events)
+      .sort((left, right) => left.onset - right.onset)
+
+    expect(events.map((event) => [event.onset, event.duration.divisions])).toEqual([
+      [0, 4],
+      [4, 4],
+      [8, 4],
+      [12, 4],
+    ])
+    expect(result.totals.recoveredUniformBeatGridCount).toBe(4)
+  })
+
   it('is pure and produces a valid serializable IR', () => {
     const input = ownedPianoDocument().document
     const before = JSON.stringify(input)

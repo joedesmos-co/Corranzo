@@ -163,6 +163,57 @@ function classifyItems(items, totalDivisions) {
   return { valid, unresolved, rejected }
 }
 
+function recoverUniformBeatGrid(items, totalDivisions, beats) {
+  if (!Number.isInteger(beats) || beats < 2 || beats > 12 || items.length !== beats) {
+    return { items, recoveredCount: 0 }
+  }
+  if (
+    items.some(
+      (item) =>
+        item.onset.exact ||
+        item.duration?.exact !== false ||
+        !Number.isFinite(item.onset.divisions),
+    )
+  ) {
+    return { items, recoveredCount: 0 }
+  }
+  if (new Set(items.map((item) => item.column.onsetColumnId)).size !== beats) {
+    return { items, recoveredCount: 0 }
+  }
+  const ordered = [...items].sort((left, right) => left.onset.divisions - right.onset.divisions)
+  const gaps = ordered.slice(1).map((item, index) => item.onset.divisions - ordered[index].onset.divisions)
+  const meanGap = average(gaps)
+  if (
+    !Number.isFinite(meanGap) ||
+    meanGap <= EPSILON ||
+    gaps.some((gap) => Math.abs(gap - meanGap) / meanGap > 0.2)
+  ) {
+    return { items, recoveredCount: 0 }
+  }
+  const beatDivisions = totalDivisions / beats
+  if (!Number.isFinite(beatDivisions) || beatDivisions <= EPSILON) {
+    return { items, recoveredCount: 0 }
+  }
+  return {
+    items: ordered.map((item, index) => ({
+      ...item,
+      onset: {
+        divisions: index * beatDivisions,
+        exact: false,
+        recovery: 'uniform-beat-grid',
+      },
+      duration: {
+        divisions: beatDivisions,
+        type: null,
+        dots: 0,
+        exact: false,
+        recovery: 'uniform-beat-grid',
+      },
+    })),
+    recoveredCount: ordered.length,
+  }
+}
+
 function recoverApproximateMeasureEnd(items, totalDivisions) {
   let recoveredCount = 0
   const recovered = items.map((item) => {
@@ -341,10 +392,13 @@ function unresolvedVoice(staffId, measure, items) {
   })
 }
 
-function solveStaffMeasure(measure, staff, totalDivisions) {
+function solveStaffMeasure(measure, staff, totalDivisions, beats, allowUniformBeatGrid) {
   const symbolLookup = new Map((staff.symbols ?? []).map((symbol) => [symbol.symbolId, symbol]))
   const items = itemsForStaff(measure, staff.staffId, symbolLookup, totalDivisions)
-  const recovery = recoverApproximateMeasureEnd(items, totalDivisions)
+  const beatGridRecovery = allowUniformBeatGrid
+    ? recoverUniformBeatGrid(items, totalDivisions, beats)
+    : { items, recoveredCount: 0 }
+  const recovery = recoverApproximateMeasureEnd(beatGridRecovery.items, totalDivisions)
   const classified = classifyItems(recovery.items, totalDivisions)
   const assignment = assignLanes(classified.valid)
   const measureContext = { ...measure, totalDivisions }
@@ -364,6 +418,7 @@ function solveStaffMeasure(measure, staff, totalDivisions) {
     voices: [...primary, ...alternate, ...(unresolved ? [unresolved] : [])],
     ambiguous: assignment.ambiguous || classified.unresolved.length > 0,
     unresolvedCount: classified.unresolved.length,
+    recoveredUniformBeatGridCount: beatGridRecovery.recoveredCount,
     recoveredMeasureEndCount: recovery.recoveredCount,
     rejected: classified.rejected,
   }
@@ -376,10 +431,18 @@ function pianoStaves(system) {
         group.type === OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF ||
         group.type === OMR_V3_STAFF_GROUP_TYPE.SINGLE_NOTATION,
     )
-    .flatMap((group) => group.staves ?? [])
+    .flatMap((group) =>
+      (group.staves ?? []).map((staff) => ({
+        staff,
+        // A grand staff can legitimately contain simultaneous voices that
+        // merely look like one symbol per beat on an individual staff. Keep
+        // this recovery to structurally single-staff music.
+        allowUniformBeatGrid: group.type === OMR_V3_STAFF_GROUP_TYPE.SINGLE_NOTATION,
+      })),
+    )
 }
 
-function addVoiceCandidates(document, totalDivisions) {
+function addVoiceCandidates(document, totalDivisions, beats) {
   const summaries = []
   const pages = (document.pages ?? []).map((page) => ({
     ...page,
@@ -387,12 +450,24 @@ function addVoiceCandidates(document, totalDivisions) {
       const staves = pianoStaves(system)
       if (staves.length === 0) return system
       const measureColumns = (system.measureColumns ?? []).map((measure) => {
-        const solved = staves.map((staff) => solveStaffMeasure(measure, staff, totalDivisions))
+        const solved = staves.map(({ staff, allowUniformBeatGrid }) =>
+          solveStaffMeasure(
+            measure,
+            staff,
+            totalDivisions,
+            beats,
+            allowUniformBeatGrid,
+          ),
+        )
         const voices = solved.flatMap((entry) => entry.voices)
         const rejected = solved.flatMap((entry) => entry.rejected)
         const unresolvedCount = solved.reduce((sum, entry) => sum + entry.unresolvedCount, 0)
         const recoveredMeasureEndCount = solved.reduce(
           (sum, entry) => sum + entry.recoveredMeasureEndCount,
+          0,
+        )
+        const recoveredUniformBeatGridCount = solved.reduce(
+          (sum, entry) => sum + entry.recoveredUniformBeatGridCount,
           0,
         )
         const ambiguous = solved.some((entry) => entry.ambiguous)
@@ -404,6 +479,7 @@ function addVoiceCandidates(document, totalDivisions) {
           alternateVoiceCount: voices.filter((voice) => voice.candidateRank > 0).length,
           rejectedEventGroupCount: rejected.length,
           unresolvedEventGroupCount: unresolvedCount,
+          recoveredUniformBeatGridCount,
           recoveredMeasureEndCount,
           ambiguous,
         })
@@ -632,7 +708,8 @@ export function buildOmrV3PianoVoiceCandidates(
   { measureDurationDivisions = DEFAULT_MEASURE_DIVISIONS } = {},
 ) {
   const before = JSON.stringify(document)
-  const voiced = addVoiceCandidates(document, measureDurationDivisions)
+  const beats = Number(document.metadata?.musical?.timeSignature?.beats ?? 4)
+  const voiced = addVoiceCandidates(document, measureDurationDivisions, beats)
   const relationships = buildRelationships(voiced.document)
   const linked = attachRelationships(voiced.document, relationships)
   const overlapViolations = countOmrV3VoiceOverlapViolations(linked)
@@ -649,6 +726,10 @@ export function buildOmrV3PianoVoiceCandidates(
       ),
       unresolvedEventGroupCount: voiced.summaries.reduce(
         (sum, summary) => sum + summary.unresolvedEventGroupCount,
+        0,
+      ),
+      recoveredUniformBeatGridCount: voiced.summaries.reduce(
+        (sum, summary) => sum + summary.recoveredUniformBeatGridCount,
         0,
       ),
       recoveredMeasureEndCount: voiced.summaries.reduce(
