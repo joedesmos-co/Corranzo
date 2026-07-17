@@ -1,5 +1,7 @@
 # Corranzo OMR V3 Accuracy Campaign — Final Report
 
+> Historical compatibility result: this campaign eliminated six regressions in the V3 adapter that replays V2-owned runtime events. The later detector-independent qualification found six raw-symbol regressions and supersedes the production recommendation here. See [OMR V3 Production Qualification](./OMR_V3_PRODUCTION_QUALIFICATION_REPORT.md).
+
 Date: 2026-07-16
 Branch: `codex/omr-v3-accuracy-campaign`
 
