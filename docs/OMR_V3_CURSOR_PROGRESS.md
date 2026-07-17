@@ -359,6 +359,60 @@ Bass accompaniment lengthen still fires when packing did not rewrite the note (q
 
 Further dense duration gains (toward matched-duration parity with V2’s 0.87 on matched notes) require joint onset/voice/pitch solving: almost all remaining duration mismatches are not pure duration. Do not restore general next-onset lengthening. Theme-scan MusicXML remains human-blocked.
 
+## Phase 2b — Grand-staff simultaneous chord/voice grouping — COMPLETE
+
+### Reproduce (2026-07-17)
+
+Independent grand already met handoff floors vs V2 (onset/F1/chord 1.0; duration ≥ 0.8182). Residual structural failure:
+
+| Symptom | Evidence |
+| --- | --- |
+| All measures marked ambiguous | `ambiguousMeasureCount: 8` |
+| Bass halves emitted as wholes | pure duration wrongs `C2 2→4`, etc. |
+| Chord tones split across voices | MusicXML: no `<chord/>`; unique per-notehead `stemGroupId`s |
+| Measure-end recoveries | 21 |
+
+Onset clustering was already correct (4 beat columns). **First-loss = simultaneous event grouping / voice separation**, not onset snap, cross-staff merge, serialization, or duration refine.
+
+### Root cause (proven)
+
+1. Detector attaches a **unique stem id per notehead**, so `itemKey(stemGroupId:duration)` never formed chords.
+2. Bass chord tones often include a **stemless** head misread as a **whole** (dur 16) beside a stemmed half (dur 8). Duration-keyed grouping kept them apart; bass gap-lengthen then stretched the singleton whole across the measure.
+
+### Implementation
+
+Column-local structural grouping in `itemsForStaff` (`omrV3Voices.js`):
+
+- Ignore singleton stem ids; keep shared stem groups (2+), `voiceHint`, and opposing up/down stems.
+- Do not split approximate stacks by noisy duration keys (`approx` bucket).
+- Chord item duration prefers exact → stemmed → shorter approximate (drops stemless whole inflation).
+
+No change to packed-duration refine or bass lengthen policy beyond receiving correctly merged chord items.
+
+### Tests
+
+`tests/omrV3Voices.test.js`:
+
+- singleton unique stem ids at one onset → one chord
+- stemless approximate whole + stemmed half → one chord at half duration
+- opposing up/down stems stay separate voices
+
+### Qualification impact
+
+| Fixture | Before 2b | After 2b | Notes |
+| --- | ---: | ---: | --- |
+| Grand duration | 0.8409 | **0.8182** (= V2 floor) | correct halves replace inflated wholes |
+| Grand onset/F1/chord | 1 / 1 / 1 | 1 / 1 / 1 | retained |
+| Grand ambiguous / measure-end | 8 / 21 | **7 / 12** | structural cleanup |
+| Dense duration / onset | 0.4735 / 0.3674 | **0.5038 / 0.3712** | improved |
+| Dense chord / F1 | 0.574 / 0.6833 | unchanged | |
+| Scan duration | 0.5946 | 0.5856 | still ≫ V2 0.4685 |
+| Full gate | pass | **pass**, `regressionCount: 0` | `tmp/cursor-full-grandfix/report.json` |
+
+### Remaining risk
+
+Grand pitch stays at **0.625** (same as V2): missing sharps / diatonic errors — pitch-mapping/accidentals, not onset/voice. Residual half→dotted-half (`2→3`) follows detector dur=12 on stemmed heads. Do not add duration heuristics for that without new structural evidence.
+
 ## Next
 
-All handoff §§1–7 algorithmic/regression blockers are cleared under the independent gate. Remaining production blockers are human/visual: independently verified scan MusicXML (Theme crop blocked) and explicit opt-in before any UI cohort. Keep runtime candidate default-off.
+All handoff §§1–7 algorithmic/regression blockers remain cleared under the independent gate. Optional next algorithmic targets are pitch/accidental ownership or tuplet/raster residual polish only if newly proven. Theme-scan MusicXML stays human-blocked. Keep runtime candidate default-off.

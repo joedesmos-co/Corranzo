@@ -198,6 +198,185 @@ describe('OMR V3 Piano voice candidates', () => {
     expect(result.totals.voiceOverlapViolations).toBe(0)
   })
 
+  it('chords same-onset noteheads even when detector stem ids are unique singletons', () => {
+    const page = analyzeOmrV3PageStructure({
+      documentId: 'singleton-stem-chord',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'treble',
+          space: 'normalized',
+          lineRows: [0.1, 0.11, 0.12, 0.13, 0.14],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['treble'],
+          noteheadCount: 3,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+      ],
+    }).page
+    const measured = buildOmrV3DocumentMeasureColumns(
+      createOmrDocumentIR({
+        documentId: 'singleton-stem-chord',
+        metadata: { musical: { timeSignature: { beats: 4, beatType: 4 } } },
+        pages: [page],
+      }),
+    ).document
+    const document = assignOmrV3DocumentSymbolOwnership(measured, {
+      symbolsByPage: [
+        musicalSymbol('c4', 'notehead', 0.2, 0.13, {
+          midi: 60,
+          onsetDivisions: 0,
+          duration: { divisions: 4, type: 'quarter', dots: 0, exact: false },
+          stemDirection: 'up',
+          stemGroupId: 'stem-unique-a',
+        }),
+        musicalSymbol('e4', 'notehead', 0.2, 0.12, {
+          midi: 64,
+          onsetDivisions: 0,
+          duration: { divisions: 4, type: 'quarter', dots: 0, exact: false },
+          stemDirection: 'up',
+          stemGroupId: 'stem-unique-b',
+        }),
+        musicalSymbol('g4', 'notehead', 0.2, 0.11, {
+          midi: 67,
+          onsetDivisions: 0,
+          duration: { divisions: 4, type: 'quarter', dots: 0, exact: false },
+          stemDirection: 'up',
+          stemGroupId: 'stem-unique-c',
+        }),
+      ],
+    }).document
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const events = measures(result.document)[0].voices
+      .filter((voice) => voice.candidateRank === 0)
+      .flatMap((voice) => voice.events)
+      .filter((event) => event.kind === 'note')
+
+    expect(events).toHaveLength(3)
+    expect(new Set(events.map((event) => event.chordGroupId))).toEqual(
+      new Set([events[0].chordGroupId]),
+    )
+    expect(events[0].chordGroupId).toBeTruthy()
+    expect(countOmrV3VoiceOverlapViolations(result.document)).toBe(0)
+  })
+
+  it('chords stemless approximate wholes with stemmed partners at the same onset', () => {
+    const page = analyzeOmrV3PageStructure({
+      documentId: 'stemless-bass-chord',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'bass',
+          space: 'normalized',
+          lineRows: [0.18, 0.19, 0.2, 0.21, 0.22],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['bass'],
+          noteheadCount: 2,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+      ],
+    }).page
+    const measured = buildOmrV3DocumentMeasureColumns(
+      createOmrDocumentIR({
+        documentId: 'stemless-bass-chord',
+        metadata: { musical: { timeSignature: { beats: 4, beatType: 4 } } },
+        pages: [page],
+      }),
+    ).document
+    const document = assignOmrV3DocumentSymbolOwnership(measured, {
+      symbolsByPage: [
+        musicalSymbol('g2', 'notehead', 0.2, 0.19, {
+          midi: 43,
+          onsetDivisions: 0,
+          duration: { divisions: 8, type: 'half', dots: 0, exact: false },
+          stemDirection: 'down',
+          stemGroupId: 'stem-down-g',
+        }),
+        musicalSymbol('c2', 'notehead', 0.2, 0.21, {
+          midi: 36,
+          onsetDivisions: 0,
+          // Detector often marks stemless chord tones as wholes.
+          duration: { divisions: 16, type: 'whole', dots: 0, exact: false },
+          stemDirection: null,
+          stemGroupId: null,
+        }),
+      ],
+    }).document
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const events = measures(result.document)[0].voices
+      .filter((voice) => voice.candidateRank === 0)
+      .flatMap((voice) => voice.events)
+      .filter((event) => event.kind === 'note')
+
+    expect(events).toHaveLength(2)
+    expect(events.every((event) => event.chordGroupId === events[0].chordGroupId)).toBe(true)
+    expect(events[0].chordGroupId).toBeTruthy()
+    expect(events.every((event) => event.duration.divisions === 8)).toBe(true)
+    expect(countOmrV3VoiceOverlapViolations(result.document)).toBe(0)
+  })
+
+  it('keeps opposing stem directions at one onset in separate voices', () => {
+    const page = analyzeOmrV3PageStructure({
+      documentId: 'opposing-stem-voices',
+      pageIndex: 0,
+      pageWidth: 1000,
+      pageHeight: 1400,
+      instrumentId: 'piano',
+      staffBands: [
+        {
+          sourceId: 'treble',
+          space: 'normalized',
+          lineRows: [0.1, 0.11, 0.12, 0.13, 0.14],
+          xStart: 0.1,
+          xEnd: 0.9,
+          clefs: ['treble'],
+          noteheadCount: 2,
+          barlines: [bar(0.1), bar(0.9)],
+        },
+      ],
+    }).page
+    const measured = buildOmrV3DocumentMeasureColumns(
+      createOmrDocumentIR({
+        documentId: 'opposing-stem-voices',
+        metadata: { musical: { timeSignature: { beats: 4, beatType: 4 } } },
+        pages: [page],
+      }),
+    ).document
+    const document = assignOmrV3DocumentSymbolOwnership(measured, {
+      symbolsByPage: [
+        musicalSymbol('upper', 'notehead', 0.2, 0.11, {
+          midi: 72,
+          onsetDivisions: 0,
+          duration: { divisions: 4, type: 'quarter', dots: 0, exact: false },
+          stemDirection: 'up',
+          stemGroupId: 'stem-up-only',
+        }),
+        musicalSymbol('lower', 'notehead', 0.2, 0.13, {
+          midi: 60,
+          onsetDivisions: 0,
+          duration: { divisions: 4, type: 'quarter', dots: 0, exact: false },
+          stemDirection: 'down',
+          stemGroupId: 'stem-down-only',
+        }),
+      ],
+    }).document
+    const result = buildOmrV3PianoVoiceCandidates(document)
+    const primary = measures(result.document)[0].voices.filter((voice) => voice.candidateRank === 0)
+    const events = primary.flatMap((voice) => voice.events).filter((event) => event.kind === 'note')
+
+    expect(primary).toHaveLength(2)
+    expect(events.every((event) => event.chordGroupId == null)).toBe(true)
+    expect(countOmrV3VoiceOverlapViolations(result.document)).toBe(0)
+  })
+
   it('preserves tie, slur, beam, stem-group, and cross-staff relationships', () => {
     const result = buildOmrV3PianoVoiceCandidates(ownedPianoDocument().document)
     const relationshipTypes = new Set(result.relationships.map((relationship) => relationship.type))

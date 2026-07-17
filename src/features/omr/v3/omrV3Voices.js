@@ -267,9 +267,68 @@ function durationKey(duration) {
   return duration ? `${duration.divisions}:${duration.type ?? ''}:${duration.dots}` : 'unresolved'
 }
 
-function itemKey(symbol) {
-  const stemKey = symbol.stemGroupId ?? symbol.stemDirection ?? symbol.voiceHint ?? 'shared'
-  return `${stemKey}:${durationKey(durationFromSymbol(symbol))}`
+/**
+ * Group noteheads that share one staff onset column into chord/voice items.
+ *
+ * Detectors often attach a unique stem id per notehead even when the engraving is
+ * a single chord. Those singleton stem ids are not voice evidence. Structural
+ * cues that do separate simultaneous events:
+ * - explicit voiceHint
+ * - a stemGroupId shared by 2+ noteheads in this column
+ * - opposing stem directions (up vs down) in the same column
+ */
+function columnStemGroupCounts(noteheads) {
+  const counts = new Map()
+  for (const symbol of noteheads) {
+    const stemId = symbol.stemGroupId
+    if (!stemId) continue
+    counts.set(stemId, (counts.get(stemId) ?? 0) + 1)
+  }
+  return counts
+}
+
+function columnHasOpposingStemDirections(noteheads) {
+  const directions = new Set(
+    noteheads
+      .map((symbol) => symbol.stemDirection)
+      .filter((direction) => direction === 'up' || direction === 'down'),
+  )
+  return directions.has('up') && directions.has('down')
+}
+
+function columnItemKey(symbol, stemCounts, opposingStemDirections) {
+  // Approximate detector durations are too noisy to split a vertical stack: stemless
+  // chord tones are often misread as wholes. Exact durations remain separating.
+  const duration = durationFromSymbol(symbol)
+  const durationPart = duration?.exact === true ? durationKey(duration) : 'approx'
+  if (Number.isFinite(symbol.voiceHint)) {
+    return `voice:${Math.round(symbol.voiceHint)}:${durationPart}`
+  }
+  const stemId = symbol.stemGroupId
+  if (stemId && (stemCounts.get(stemId) ?? 0) >= 2) {
+    return `stem:${stemId}:${durationPart}`
+  }
+  if (opposingStemDirections && (symbol.stemDirection === 'up' || symbol.stemDirection === 'down')) {
+    return `dir:${symbol.stemDirection}:${durationPart}`
+  }
+  return `chord:${durationPart}`
+}
+
+function chordDurationFromSymbols(symbols) {
+  const entries = symbols
+    .map((symbol) => ({ symbol, duration: durationFromSymbol(symbol) }))
+    .filter((entry) => entry.duration)
+  if (entries.length === 0) return null
+  const exact = entries.find((entry) => entry.duration.exact === true)
+  if (exact) return exact.duration
+  const stemmed = entries.filter(
+    (entry) => entry.symbol.stemDirection || entry.symbol.stemGroupId,
+  )
+  const pool = stemmed.length > 0 ? stemmed : entries
+  // Prefer the shorter approximate reading: stemless heads are commonly inflated to wholes.
+  return [...pool.map((entry) => entry.duration)].sort(
+    (left, right) => left.divisions - right.divisions,
+  )[0]
 }
 
 function preferredLane(symbols) {
@@ -288,7 +347,14 @@ function symbolsInColumn(column, staffId, symbolLookup, collection) {
 
 function makeNoteItem(symbols, column, totalDivisions) {
   const onset = symbolOnset(symbols[0], column, totalDivisions)
-  const duration = durationFromSymbol(symbols[0])
+  const duration = chordDurationFromSymbols(symbols)
+  const sharedStemId = symbols
+    .map((symbol) => symbol.stemGroupId)
+    .find(
+      (stemId) =>
+        stemId && symbols.filter((symbol) => symbol.stemGroupId === stemId).length >= 2,
+    )
+  const stemmed = symbols.find((symbol) => symbol.stemDirection || symbol.stemGroupId)
   return {
     kind: 'note',
     symbols,
@@ -296,8 +362,8 @@ function makeNoteItem(symbols, column, totalDivisions) {
     onset,
     duration,
     preferredLane: preferredLane(symbols),
-    stemDirection: symbols[0].stemDirection ?? null,
-    stemGroupId: symbols[0].stemGroupId ?? null,
+    stemDirection: stemmed?.stemDirection ?? symbols[0].stemDirection ?? null,
+    stemGroupId: sharedStemId ?? stemmed?.stemGroupId ?? symbols[0].stemGroupId ?? null,
     beamGroupId: symbols[0].beamGroupId ?? null,
   }
 }
@@ -320,9 +386,11 @@ function itemsForStaff(measure, staffId, symbolLookup, totalDivisions) {
   const items = []
   for (const column of measure.onsetColumns ?? []) {
     const noteheads = symbolsInColumn(column, staffId, symbolLookup, 'noteheads')
+    const stemCounts = columnStemGroupCounts(noteheads)
+    const opposingStemDirections = columnHasOpposingStemDirections(noteheads)
     const noteGroups = new Map()
     for (const symbol of noteheads) {
-      const key = itemKey(symbol)
+      const key = columnItemKey(symbol, stemCounts, opposingStemDirections)
       if (!noteGroups.has(key)) noteGroups.set(key, [])
       noteGroups.get(key).push(symbol)
     }

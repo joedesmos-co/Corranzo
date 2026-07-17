@@ -77,6 +77,7 @@ Global handoff still asks for independently verified scan MusicXML before enabli
 1. Independently verified MusicXML for a redistribution-safe scan crop remains **human-blocked** (Theme crop dual transcription disagreed; do not infer truth).
 2. Keep V3 default-off until that truth + visual review are green.
 3. Dense duration residual is research-bound beyond V2 parity (onset/voice/pitch coupled); Phase 1b stopped bass gap-lengthen from undoing packed shorten.
+4. Grand residual pitch (0.625, tied with V2) is accidental/pitch-mapping, not onset/voice; Phase 2b fixed simultaneous chord grouping.
 
 ## Non-negotiables preserved
 
@@ -91,6 +92,7 @@ No threshold lowering, no fixture-name branches, no truth edits, no converting e
 - `3c06e54` — guitar pairing under unreliable pitch  
 - `df1cb8b` — guitar joint onset timing  
 - `ecf1819` — scanned piano clearance  
+- `2a40d2a` — bass gap-lengthen must not undo packed subdivision shorten  
 - (pending) — guarded runtime candidate + rollback verification  
 - (pending) — negative-page classifier + Twinkle cover/music crops  
-- (pending) — bass gap-lengthen must not undo packed subdivision shorten  
+- (pending) — grand-staff column chord grouping (ignore singleton stems / stemless wholes)  
