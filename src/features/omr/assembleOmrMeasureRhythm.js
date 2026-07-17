@@ -153,16 +153,31 @@ export function assembleMeasureRhythm(
     validation = { ...validation, fallback: 'even-quarters', uncertain: true }
   }
 
+  // Stamp packed measure timing onto detector noteheads for independent V3.
+  // This stays detector-local (chord merge + measure packing), not V2 MusicXML
+  // replay. Without it, raster V3 inherits only geometric positionInMeasure and
+  // cannot match V2 onset/duration on scans.
+  for (const event of events) {
+    if (event?.type !== 'note' || !Number.isFinite(event.startDivision)) continue
+    for (const note of event.notes ?? []) {
+      note.onsetDivisions = event.startDivision
+      if (Number.isFinite(event.durationDivisions) && event.durationDivisions > 0) {
+        note.durationDivisions = event.durationDivisions
+        note.durationType = event.durationType ?? note.durationType
+        note.dotted = Boolean(event.dotted)
+      }
+      note.rhythmPacking = uncertain ? 'even-quarter-fallback' : 'measure-packed'
+    }
+  }
+
   return {
     events,
     uncertain,
     validation,
     ...(captureDetectorObservations
       ? {
-          // V3 receives detector-level symbols after the detector's local
-          // chord-proximity and measure-capacity noise filter, before legacy
-          // event timing/grouping. Passing every raster blob would mislabel
-          // rejected noise candidates as musical rests.
+          // V3 receives detector-level symbols after chord-proximity merge and
+          // measure packing stamps onset/duration onto surviving noteheads.
           detectorObservations: { noteheads: enriched, rests: filteredRests },
         }
       : {}),

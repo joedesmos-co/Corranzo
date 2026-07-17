@@ -298,4 +298,22 @@ describe('beam/stem reconstruction diagnostics', () => {
     expect(summarizeBeamStemGraph(graph).beamCandidateCount).toBe(0)
   })
 
+  it('scores typical short rendered stems above the ownership floor without inventing beams', () => {
+    const notes = [
+      note({
+        midi: 72,
+        cx: 40,
+        stem: { x: 44, tipY: 50, length: 10, direction: 'up' },
+        beams: 0,
+        beamStrength: 0,
+        durationDivisions: 4,
+      }),
+    ]
+    const graph = buildBeamStemGraph({ notes, measureBox })
+    const ownership = graph.noteheads[0].beamOwnership
+    expect(ownership.attachedStemId).toBeTruthy()
+    expect(ownership.stemConfidence).toBeGreaterThanOrEqual(0.7)
+    expect(ownership.beamCandidateCount).toBe(0)
+    expect(ownership.beamConfidence).toBeNull()
+  })
 })

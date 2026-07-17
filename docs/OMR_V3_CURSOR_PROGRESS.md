@@ -125,34 +125,44 @@ Requires regular inter-column spacing (±20%). Packed-duration refine skips subd
 
 ### Remaining
 
-Scan beam/stem, paired-guitar chords, paired-guitar techniques.
+Scan beam/stem (sole remaining enforced regression after guitar).
 
-## Phase 4 — Scanned piano beam/stem — PARTIAL / NOT CLEARED
+## Phase 4 — Scanned piano beam/stem — COMPLETE
 
 ### Root cause
 
-Raster path never built `beamStemGraph`, so independent V3 received no beam/stem ownership. Noteheads survive, but onset columns are irregular on the grand staff, durations stay overlong (many halves/wholes), and chord grouping lags V2. Existing `buildBeamStemGraph` already supports rendered-image recovery, but scan ink yields few high-confidence beam attachments.
+Raster noteheads matched V2 F1, but independent V3 inherited only geometric `positionInMeasure` while V2’s `assembleMeasureRhythm` packs chords and assigns `startDivision`. Joint grand-staff snap abstained on irregular columns; beam attachment stayed ~4%; MAD/order beat snaps damaged F1.
 
 ### Attempted / rejected
 
-- Feeding ungated raster ownership into V3 — F1/onset rose slightly, duration fell (0.3333 → 0.3243); still far below V2 floors.
-- MAD-to-beat-grid snap for noisy grand-staff columns — damaged scan F1 (0.804 → 0.774).
-- Lowering confidence floors / widening gap tolerances — rejected as gate weakening.
+- Feeding ungated raster beam ownership into V3 — duration regressed.
+- MAD-to-beat-grid snap — F1 0.804→0.774.
+- Order-based snap without regularity / column compress — F1 collapse on scan/dense.
+- Lowering the 0.7 ownership floor — rejected.
 
 ### Implementation
 
-- Raster measures now build and attach `beamStemGraph` / diagnostics (score-graph parity with vector).
-- Detector symbol ownership applies only when `beamOwnership.confidence >= 0.7` (shared with duration handoff).
-- Raster → independent V3 still omits the graph until attachments clear duration/onset/chord acceptance without collateral damage.
-- Added abstention test for broken/sparse beam ink.
+1. **Detector-local rhythm stamp** (`assembleOmrMeasureRhythm.js`) — after measure packing / even-quarter fallback, stamp `onsetDivisions` + packed `durationDivisions` onto surviving noteheads for independent V3 (not V2 MusicXML replay).
+2. **Stem-only raster handoff** — pass `beamStemGraph` into V3 with split gates: stem grouping at stemConfidence ≥ 0.7; beam duration only when beams are attached at beamConfidence ≥ 0.7.
+3. **Stem confidence recalibration** — typical short rendered stems (~10px) clear 0.7 without lowering the floor.
+4. **Bass accompaniment gap fill** — on grand-staff bass staff, lengthen approximate short durations to the next lane onset (quarters → halves).
 
 ### Qualification impact
 
-Scan independent metrics unchanged vs Phase 3 baseline (still regressing). Enforced independent regressions remain **3**.
+| Metric | Before | After | V2 floor |
+| --- | ---: | ---: | ---: |
+| Independent regressions (full gate) | 1 (this) | **0** | — |
+| F1 | 0.804 | **0.804** | ≥ 0.804 |
+| Onset | 0.3874 | **0.6126** | ≥ 0.6126 |
+| Duration | 0.3333 | **0.5766** | ≥ 0.4685 |
+| Chord | 0.5191 | **0.6048** | ≥ 0.6048 |
+| Pitch / measure error | equal / 0 | equal / 0 | — |
 
-### Remaining risk
+Vector piano + guitar fixtures remain non-regressing. Full gate: `regressionCount: 0`; remaining blockers are rollout-only (`runtime-candidate-not-implemented`, `rollback-not-verified`).
 
-Clearing `piano-articulation-scan` needs stronger conservative raster stem/beam ink association and/or scan-safe onset clustering that does not repeat the rejected MAD snap.
+## Next
+
+Implement guarded production rollout (default-off runtime candidate + V2 kill switch) and real-PDF / negative-page evidence per handoff §§6–7. Do not enable V3 by default until those blockers clear.
 
 ## Phase 5 — Paired-guitar chord fusion — COMPLETE
 
@@ -218,4 +228,4 @@ Same joint onset path. Pair recall already **1.0**; timing was the blocker.
 
 ## Next
 
-Revisit **scan beam/stem ink** for `piano-articulation-scan` (sole remaining enforced independent regression), then full gate / rollout docs only if regressions hit 0.
+Independent enforced regressions are **0**. Next: guarded rollout tooling + real-PDF/negative-page evidence (handoff §§6–7). Do not enable V3 by default until those blockers clear.

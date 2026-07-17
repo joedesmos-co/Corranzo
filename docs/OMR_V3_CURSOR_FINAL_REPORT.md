@@ -8,11 +8,9 @@ Continuation of the Codex production qualification sprint.
 
 ### 1. How many independent regressions remain?
 
-**1** detector-independent enforced regression:
+**0** detector-independent enforced regressions.
 
-- `piano-articulation-scan`
-
-Started at **6**. Cleared: dense piano duration, grand-staff onset/voice, tuplet duration, paired-guitar chords, paired-guitar techniques.
+Started at **6**. Cleared: dense piano duration, grand-staff onset/voice, tuplet duration, paired-guitar chords, paired-guitar techniques, scanned piano articulation.
 
 ### 2. Which blockers were fixed?
 
@@ -21,62 +19,68 @@ Started at **6**. Cleared: dense piano duration, grand-staff onset/voice, tuplet
 | 1 | `piano-dense-advanced-vector` | **Fixed** — packed stem-lane duration refine |
 | 2 | `piano-grand-voices-vector` | **Fixed** — joint grand-staff beat-column snap |
 | 3 | `piano-rhythm-tuplets-vector` | **Fixed** — single-staff subdivision grid + 3:2 tuplet ownership |
-| 4 | `piano-articulation-scan` | **Not cleared** — raster beam graph infrastructure only |
+| 4 | `piano-articulation-scan` | **Fixed** — detector-local packed rhythm stamp + stem-only handoff + bass gap fill |
 | 5 | `guitar-paired-chords-vector` | **Fixed** — pairing + joint notation/TAB onset timing |
 | 6 | `guitar-techniques-paired-vector` | **Fixed** — same joint onset path |
 
 ### 3. What generalized algorithms were added or changed?
 
-1. **Packed approximate duration refine** (`omrV3Voices.js`) — shortens overlong stem/lane families; never lengthens.
-2. **Joint grand-staff onset quantization** — snap shared columns when count==beats and gaps regular (±35%).
-3. **Uniform subdivision recovery** — factors `{1,2,3,4}` for single-notation; factor 3 owns 3:2 tuplet ratio + `TUPLET` relationships.
-4. **Raster `beamStemGraph`** on measures + detector ownership gated at confidence ≥ 0.7 (V3 handoff of weak scan beams withheld).
-5. **Guitar notation/TAB pairing** — octave-aware pitch distance; rank fallback only when no pitch-compatible TAB; paired measure-end duration recovery.
-6. **Guitar joint onset timing** (`omrV3Guitar.js`) — order-based joint grid for approximate paired columns (notation-active only); beats+1 compress; first-N-beats when sparse; beat-length approximate duration fill on-grid.
+1. Packed approximate duration refine (`omrV3Voices.js`).
+2. Joint grand-staff onset quantization (regular spacing only).
+3. Uniform subdivision recovery + 3:2 tuplet ownership.
+4. Raster `beamStemGraph` with split stem/beam confidence gates; stem confidence recalibrated for short rendered stems.
+5. Guitar notation/TAB pairing + joint onset timing.
+6. Detector-local measure-packing onset/duration stamp into independent V3 raw symbols.
+7. Grand-staff bass approximate duration lengthen to next lane onset.
 
 ### 4. Did any diagnostic fixtures worsen?
 
-No intentional diagnostic threshold changes. Enforced non-target fixtures (beginner, grand, dense, tuplet, tab-sparse, standard-chords) remained non-regressing vs V2 after the guitar timing phase. Scan metrics unchanged vs prior baseline.
+No threshold changes. Enforced non-target fixtures remained non-regressing vs V2 on the full gate after the scan phase.
 
 ### 5. Did performance or memory regress?
 
-No dedicated memory profiling this sprint. Full dashboard runtime remained on the order of prior qualification runs (~20–25s for the enforced corpus). No production-path V3 enablement.
+No dedicated memory profiling. Full dashboard ~20–25s. V3 still shadow-only.
 
 ### 6. Does the production gate pass?
 
-**No.** `omrV3Shadow.productionGate`: `pass: false`, `status: blocked`, `regressionCount: 1`, plus `runtime-candidate-not-implemented` and `rollback-not-verified`.
+**Not fully.** `regressionCount: 0`, but still blocked by:
+
+- `runtime-candidate-not-implemented`
+- `rollback-not-verified`
 
 ### 7. Is V3 enabled?
 
-**No.** V2 remains authoritative. Shadow-only; no runtime promotion.
+**No.** V2 remains authoritative.
 
 ### 8. What rollback protection exists?
 
-Existing rollout switches (`omrV3Shadow` / `omrV3Rollback`) remain. Guarded production rollout was **not** added because the gate does not pass.
+Existing `omrV3Shadow` / `omrV3Rollback` switches. Guarded runtime candidate + verified V2 rollback still required.
 
 ### 9. What requires human real-score review?
 
-- Scanned piano beam/stem ink association quality vs false joins.
-- Historical/non-musical scan pages and redistribution-safe real PDF truth (unchanged gap from Codex handoff).
+- Redistribution-safe real PDF truth and decorative/non-musical negative pages (handoff §6).
+- Stem/beam ink quality on broader scan corpora beyond the articulation fixture.
 
 ### 10. What should be worked on next?
 
-1. **Raster beam ink recovery** for `piano-articulation-scan` — increase high-confidence attachments without lowering the 0.7 floor; only then feed ownership into independent V3.
-2. Re-run full gate + stress + browser smoke; if regressions hit 0, implement guarded rollout (flag + immediate V2 rollback) without deleting V2.
+1. Implement default-off runtime candidate + synchronous V2 kill switch; verify byte-identical V2 MusicXML when V3 is off/rolled back.
+2. Add real-PDF / negative-page fixtures per handoff §6.
+3. Only then clear `runtime-candidate-not-implemented` / `rollback-not-verified`.
 
 ## Non-negotiables preserved
 
-No threshold lowering, no fixture-name branches, no truth edits, no converting enforced tests to diagnostics, no V2 weakening, no V3 production enablement.
+No threshold lowering, no fixture-name branches, no truth edits, no converting enforced tests to diagnostics, no V2 weakening, no default V3 enablement.
 
 ## Key commits (this campaign)
 
 - `06072ef` — dense piano packed duration refine  
 - `a53e2d0` — grand-staff joint onset quantization  
 - `96538b4` — tuplet/subdivision duration inference  
-- `33c3ed0` — conservative raster beam/stem graph (no scan promotion)  
+- `33c3ed0` — conservative raster beam/stem graph  
 - `3c06e54` — guitar pairing under unreliable pitch  
-- guitar joint notation/TAB onset timing (this commit)  
+- `df1cb8b` — guitar joint notation/TAB onset timing  
+- (this commit) — scan packed-rhythm stamp + stem-only handoff + bass gap fill  
 
 ## Verdict
 
-**Campaign progress:** blockers reduced **6 → 1**; both paired-Guitar fixtures cleared via structural joint onset timing; V2 remains authoritative; sole remaining enforced regression is scanned piano beam/stem.
+**Recognition gate cleared:** independent enforced regressions **6 → 0**. V2 remains authoritative. Production enablement still blocked until guarded rollout + rollback verification and real-score evidence land.

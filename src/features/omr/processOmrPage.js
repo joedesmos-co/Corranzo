@@ -118,10 +118,19 @@ function detectorSymbolsFromObservations(
   const graphNoteheads = beamStemGraph?.noteheads ?? []
   const noteheads = (observations?.noteheads ?? []).map((note, index) => {
     const rawOwnership = graphNoteheads[index]?.beamOwnership ?? null
-    // Shared confidence floor with independent beam-duration handoff. Weak
-    // raster recoveries abstain rather than reshape stem lanes or durations.
-    const beamOwnership =
-      rawOwnership && Number(rawOwnership.confidence ?? 0) >= 0.7 ? rawOwnership : null
+    // Split stem vs beam gates. Stem continuity may be owned without accepting
+    // weak beam duration handoff (ungated raster beam ownership regressed scan
+    // duration while still missing the acceptance floor).
+    const stemConfidence = Number(rawOwnership?.stemConfidence ?? rawOwnership?.confidence ?? 0)
+    const beamConfidence = Number(rawOwnership?.beamConfidence ?? 0)
+    const stemOwned =
+      Boolean(rawOwnership?.attachedStemId) && stemConfidence >= 0.7 ? rawOwnership : null
+    const beamOwned =
+      stemOwned &&
+      Number(rawOwnership?.beamCandidateCount ?? 0) > 0 &&
+      beamConfidence >= 0.7
+        ? rawOwnership
+        : null
     return {
       id: `detector-${source}-note-${page}-${systemIndex}-${note.measureNumber ?? 'x'}-${index}`,
       kind: 'notehead',
@@ -140,12 +149,14 @@ function detectorSymbolsFromObservations(
       durationType: note.durationType,
       durationDivisions: note.durationDivisions,
       dotted: Boolean(note.dotted),
+      onsetDivisions: Number.isFinite(note.onsetDivisions) ? note.onsetDivisions : null,
+      rhythmPacking: note.rhythmPacking ?? null,
       stemDirection:
-        beamOwnership?.stemDirection ?? note.stem?.direction ?? note.stemDirection ?? null,
-      stemGroupId: beamOwnership?.attachedStemId ?? null,
-      beamGroupId: beamOwnership?.beamGroupId ?? null,
-      beamExpectedDivisions: beamOwnership?.expectedDivisions ?? null,
-      beamOwnershipConfidence: beamOwnership?.confidence ?? rawOwnership?.confidence ?? null,
+        stemOwned?.stemDirection ?? note.stem?.direction ?? note.stemDirection ?? null,
+      stemGroupId: stemOwned?.attachedStemId ?? null,
+      beamGroupId: beamOwned?.beamGroupId ?? null,
+      beamExpectedDivisions: beamOwned?.expectedDivisions ?? null,
+      beamOwnershipConfidence: beamOwned?.confidence ?? stemOwned?.stemConfidence ?? rawOwnership?.confidence ?? null,
       tieStart: Boolean(note.tieStart),
       confidence: note.confidence ?? note.pitchConfidence ?? 0.6,
       articulation: note.articulation ?? null,
@@ -778,15 +789,15 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       })
       const beamStemDiagnostics = summarizeBeamStemGraph(beamStemGraph)
       if (captureOmrV3RawSymbols) {
-        // Keep the raster beam/stem graph on the measure record for score-graph
-        // parity, but do not feed weak scan ownership into independent V3 yet:
-        // gated handoff improved F1/onset slightly while regressing duration and
-        // still missed the scan acceptance floor.
+        // Pass the raster beam/stem graph with split stem/beam gates in
+        // detectorSymbolsFromObservations. Stem-only ownership may reshape lanes;
+        // beam duration handoff still requires attached beams at confidence >= 0.7.
         rawDetectorSymbols.push(
           ...detectorSymbolsFromObservations(rhythm.detectorObservations, {
             page,
             systemIndex,
             source: 'raster',
+            beamStemGraph,
           }),
         )
       }

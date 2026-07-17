@@ -386,6 +386,7 @@ function rawDetectorSymbolsFromPage(pageInput, instrumentId) {
       // positions use raw barline spans, so averaging both coordinate systems
       // would shift paired onsets. TAB-only timing can safely use geometry.
       measureRelativePositionHint: isTab ? null : source.measureRelativePosition,
+      onsetDivisions: Number.isFinite(source.onsetDivisions) ? Number(source.onsetDivisions) : null,
       duration:
         Number.isFinite(durationDivisions) && durationDivisions > 0
           ? {

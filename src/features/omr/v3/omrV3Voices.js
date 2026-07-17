@@ -214,6 +214,30 @@ function refineApproximatePackedDurations(items, totalDivisions) {
   }
 }
 
+/**
+ * Lengthen approximate short durations to the next onset in the same lane.
+ * Used for grand-staff bass accompaniment where detector packing leaves
+ * quarters that should sustain as halves. Never touches exact durations.
+ */
+function fillApproximateLaneGaps(items, totalDivisions) {
+  const groups = onsetGroups(items)
+  if (groups.length < 2) return items
+  const replaced = new Map()
+  for (let index = 0; index < groups.length; index += 1) {
+    const group = groups[index]
+    const nextOnset = index + 1 < groups.length ? groups[index + 1].onset : totalDivisions
+    const gap = Math.max(EPSILON, nextOnset - group.onset)
+    for (const item of group.items) {
+      if (item.kind !== 'note') continue
+      if (item.duration?.exact !== false) continue
+      if (!Number.isFinite(item.duration?.divisions)) continue
+      if (item.duration.divisions >= gap - EPSILON) continue
+      replaced.set(itemIdentity(item), withDuration(item, gap, 'lane-gap-lengthen'))
+    }
+  }
+  return items.map((item) => replaced.get(itemIdentity(item)) ?? item)
+}
+
 function symbolOnset(symbol, column, totalDivisions) {
   if (Number.isFinite(symbol?.onsetDivisions) && symbol.onsetDivisions >= 0) {
     return { divisions: symbol.onsetDivisions, exact: true }
@@ -622,7 +646,14 @@ function unresolvedVoice(staffId, measure, items) {
   })
 }
 
-function solveStaffMeasure(measure, staff, totalDivisions, beats, allowUniformBeatGrid) {
+function solveStaffMeasure(
+  measure,
+  staff,
+  totalDivisions,
+  beats,
+  allowUniformBeatGrid,
+  { allowAccompanimentLengthen = false } = {},
+) {
   const symbolLookup = new Map((staff.symbols ?? []).map((symbol) => [symbol.symbolId, symbol]))
   const items = itemsForStaff(measure, staff.staffId, symbolLookup, totalDivisions)
   const beatGridRecovery = allowUniformBeatGrid
@@ -636,9 +667,15 @@ function solveStaffMeasure(measure, staff, totalDivisions, beats, allowUniformBe
     totalDivisions,
   )
   const refinedById = new Map(refined.items.map((item) => [itemIdentity(item), item]))
-  const solvedLanes = assignment.lanes.map((lane) => ({
-    items: lane.items.map((item) => refinedById.get(itemIdentity(item)) ?? item),
-  }))
+  const lengthen =
+    allowAccompanimentLengthen ||
+    (staff.clefs ?? []).some((clef) => String(clef).toLowerCase().includes('bass'))
+  const solvedLanes = assignment.lanes.map((lane) => {
+    const laneItems = lane.items.map((item) => refinedById.get(itemIdentity(item)) ?? item)
+    return {
+      items: lengthen ? fillApproximateLaneGaps(laneItems, totalDivisions) : laneItems,
+    }
+  })
   const measureContext = { ...measure, totalDivisions }
   const primary = solvedLanes.map((lane, laneIndex) =>
     voiceForLane(staff.staffId, measureContext, lane, laneIndex, 0, assignment.ambiguous),
@@ -670,13 +707,15 @@ function pianoStaves(system) {
         group.type === OMR_V3_STAFF_GROUP_TYPE.SINGLE_NOTATION,
     )
     .flatMap((group) =>
-      (group.staves ?? []).map((staff) => ({
+      (group.staves ?? []).map((staff, staffIndex) => ({
         staff,
         // A grand staff can legitimately contain simultaneous voices that
         // merely look like one symbol per beat on an individual staff. Keep
         // this recovery to structurally single-staff music.
         allowUniformBeatGrid: group.type === OMR_V3_STAFF_GROUP_TYPE.SINGLE_NOTATION,
         isGrandStaff: group.type === OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF,
+        isGrandStaffBass:
+          group.type === OMR_V3_STAFF_GROUP_TYPE.PIANO_GRAND_STAFF && staffIndex === 1,
       })),
     )
 }
@@ -686,6 +725,9 @@ function pianoStaves(system) {
  * Cross-staff columns already share geometry; when their count and spacing agree
  * with the detected beat grid, snap column positions once for both staves.
  * This is not the single-staff uniform item grid (rejected for grand staff).
+ *
+ * Scan-safe note: order-based snap without gap regularity (and MAD nearest-beat
+ * snap) both damaged piano-articulation-scan F1; keep the regularity gate.
  */
 function quantizeJointGrandStaffOnsetColumns(measure, totalDivisions, beats) {
   if (!Number.isInteger(beats) || beats < 2 || beats > 12) {
@@ -750,14 +792,10 @@ function addVoiceCandidates(document, totalDivisions, beats) {
         const onsetGrid = isGrandStaff
           ? quantizeJointGrandStaffOnsetColumns(measure, totalDivisions, beats)
           : { measure, recoveredCount: 0 }
-        const solved = staves.map(({ staff, allowUniformBeatGrid }) =>
-          solveStaffMeasure(
-            onsetGrid.measure,
-            staff,
-            totalDivisions,
-            beats,
-            allowUniformBeatGrid,
-          ),
+        const solved = staves.map(({ staff, allowUniformBeatGrid, isGrandStaffBass }) =>
+          solveStaffMeasure(onsetGrid.measure, staff, totalDivisions, beats, allowUniformBeatGrid, {
+            allowAccompanimentLengthen: isGrandStaffBass,
+          }),
         )
         const voices = solved.flatMap((entry) => entry.voices)
         const rejected = solved.flatMap((entry) => entry.rejected)

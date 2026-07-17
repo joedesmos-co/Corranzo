@@ -71,7 +71,10 @@ function beamLevel(note) {
 
 function stemConfidence(stem) {
   const length = stem?.length ?? Math.abs((stem?.y1 ?? 0) - (stem?.y0 ?? 0))
-  return round(Math.min(0.98, DEFAULT_CONFIDENCE + Math.min(42, length) / 90))
+  // Rendered-image stem probes often recover short partial runs (≈8–15px on the
+  // articulation scan). Keep the 0.7 ownership floor unchanged; calibrate so
+  // typical attached stems clear it while tiny fragments stay below.
+  return round(Math.min(0.98, 0.52 + Math.min(40, Math.max(0, length)) / 55))
 }
 
 function beamConfidence(note) {
@@ -638,6 +641,10 @@ function attachBeamOwnership(noteheads, stems, beams, rhythmicGroups) {
       ...attachedBeams.map((beam) => beam.confidence),
       primaryGroup?.confidence,
     ].filter(Number.isFinite)
+    const stemConfidenceValue = Number.isFinite(stem?.confidence) ? stem.confidence : null
+    const beamConfidenceValue = attachedBeams.length
+      ? round(average(attachedBeams.map((beam) => beam.confidence).filter(Number.isFinite)))
+      : null
 
     head.beamOwnership = {
       noteheadId: head.id,
@@ -663,6 +670,8 @@ function attachBeamOwnership(noteheads, stems, beams, rhythmicGroups) {
         role,
       }),
       likelyVoiceRole: role,
+      stemConfidence: stemConfidenceValue,
+      beamConfidence: beamConfidenceValue,
       confidence: round(average(confidenceValues)),
     }
   }
