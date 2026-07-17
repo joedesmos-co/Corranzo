@@ -31,7 +31,7 @@ describe('OMR viewer recovery', () => {
   it('waits for App validation before marking generated playback ready', () => {
     expect(app).toMatch(/return \{ ok: false, message: playbackValidation\.message \}/)
     expect(app).toMatch(/return \{\s*ok: true,[\s\S]*durationSeconds: playbackValidation\.durationSeconds/)
-    expect(omrPanel).toMatch(/const accepted = await onGenerated/)
+    expect(omrPanel).toMatch(/const accepted = await onGeneratedRef\.current/)
     expect(omrPanel).toMatch(/accepted\?\.ok === false/)
   })
 
