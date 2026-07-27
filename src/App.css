@@ -8,7 +8,8 @@
 
 .topbar {
   position: relative;
-  z-index: 100;
+  /* Above practice input-source modal (2600) so Library/Practice remain reachable. */
+  z-index: 2700;
   flex-shrink: 0;
   height: var(--sf-topbar-height);
   padding: env(safe-area-inset-top, 0px) max(var(--sf-space-3xl), env(safe-area-inset-right, 0px)) 0

@@ -53,7 +53,7 @@ import {
   groupTabNotesByMeasure,
   NOTATION_TAB_PAIRING_LOW_CONFIDENCE_MESSAGE,
   resolveGuitarSystemRoles,
-  systemsContainTablature,
+  hasTabClefNearStaff,
   TAB_APPROXIMATE_RHYTHM_WARNING,
   TAB_COMPRESSED_TIMING_WARNING,
 } from './detectTabNotation.js'
@@ -253,8 +253,18 @@ export function processOmrPageAnalysis(imageData, options = {}) {
 
   const scanQuality = estimatePageScanQuality(imageData)
   const contentBounds = detectContentBounds(imageData)
+  // Resolve glyphs before staff grouping so Guitar + glyph-less piano scans can
+  // use grand-staff-capable pairing instead of guitar's single-staff default.
+  const positionedGlyphs = tabCapable ? textGlyphsToImage(pageText, imageData) : null
+  const vectorGlyphs = hasVectorOmrNoteheads(pageText)
+    ? positionedGlyphs ?? textGlyphsToImage(pageText, imageData)
+    : []
+  const effectiveStavesPerSystem =
+    tabCapable && Array.isArray(positionedGlyphs) && positionedGlyphs.length === 0
+      ? Math.max(Number(stavesPerSystem) || 1, OMR_PIANO_STAVES_PER_SYSTEM)
+      : stavesPerSystem
   const detectedSystems = detectStaffLineSystems(imageData, contentBounds, {
-    stavesPerSystem,
+    stavesPerSystem: effectiveStavesPerSystem,
     countBarlines: true,
   })
   const inkThreshold = detectedSystems.inkThreshold
@@ -278,10 +288,6 @@ export function processOmrPageAnalysis(imageData, options = {}) {
   const measureGrid = []
   const measureGridDiagnostics = []
   const rawDetectorSymbols = []
-  const positionedGlyphs = tabCapable ? textGlyphsToImage(pageText, imageData) : null
-  const vectorGlyphs = hasVectorOmrNoteheads(pageText)
-    ? positionedGlyphs ?? textGlyphsToImage(pageText, imageData)
-    : []
 
   const buildOmrV3ShadowInput = ({ resultMeasureRhythms, resultMeasureGrid, tabDiagnostics }) =>
     captureOmrV3Shadow
@@ -312,6 +318,10 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         imageData,
       })
     : null
+  // Guitar analysis flags (no hairpins, ASCII dynamics reject, skip vector
+  // notehead x-hints) only when a TAB staff is actually confirmed. Otherwise a
+  // Guitar-selected piano PDF must follow the notation path.
+  const tabAnalysisActive = Boolean(systemRoles?.some((role) => role?.tabStave))
 
   for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
     const system = systems[systemIndex]
@@ -335,7 +345,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       imageData,
       measureNumberStart: measureCounter,
       darkThreshold: Math.min(inkThreshold, Math.max(145, inkThreshold - 22)),
-      vectorNoteheadXNorms: (tabCapable ? [] : vectorGlyphs)
+      vectorNoteheadXNorms: (tabAnalysisActive ? [] : vectorGlyphs)
         .filter((glyph) => {
           const yNorm = glyph.y / imageData.height
           return (
@@ -368,14 +378,48 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     }
   }
 
-  // TAB-only pages (no SMuFL noteheads, tablature staves present): assemble
+  // TAB-only pages (no SMuFL noteheads, confirmed tablature staves): assemble
   // note events from fret digits — the raster notehead detector would only
   // misread digit ink. Never reached for piano (tabCapable is false).
-  if (
-    tabCapable &&
-    !hasVectorOmrNoteheads(pageText) &&
-    systemsContainTablature(systems, { stringCount: tabStringCount })
-  ) {
+  // Require affirmative TAB signal (digits, TAB clef, or TAB markers like capo).
+  // Geometry-only 6-line bands — even with stray title/lyric glyphs — must fall
+  // through to notation/raster so Guitar + piano scans are not hard-failed.
+  const tabOnlyCandidateRoles = Boolean(systemRoles?.some((role) => role?.tabStave))
+  let commitTabOnly = false
+  if (tabCapable && !hasVectorOmrNoteheads(pageText) && tabOnlyCandidateRoles) {
+    const tabAnnotations = detectTabTextAnnotations(pageText)
+    let tabDigitCount = 0
+    let hasTabClef = false
+    for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
+      const role = systemRoles[systemIndex]
+      if (!role?.tabStave) continue
+      if (
+        role.source === 'tab-clef-text' ||
+        hasTabClefNearStaff(positionedGlyphs, role.tabStave, imageData)
+      ) {
+        hasTabClef = true
+      }
+      const targetIndex =
+        role.kind === 'tab' && role.pairedWithIndex != null
+          ? role.pairedWithIndex
+          : systemIndex
+      const measureBoxes = systemMeasureBoxes[targetIndex] ?? []
+      tabDigitCount += extractTabDigitNotes(
+        positionedGlyphs,
+        role.tabStave,
+        measureBoxes,
+        imageData,
+        { tuning: tabTuning ?? undefined, fretCount: tabFretCount },
+      ).length
+    }
+    commitTabOnly =
+      tabDigitCount > 0 ||
+      hasTabClef ||
+      Boolean(tabAnnotations.capoText) ||
+      (tabAnnotations.unsupportedMarkers?.length ?? 0) > 0
+  }
+
+  if (commitTabOnly) {
     const beats = inheritedTimeSignature?.beats ?? 4
     const tabAnnotations = detectTabTextAnnotations(pageText)
     const tabDiagnostics = {
@@ -719,9 +763,9 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       pageText,
       imageData,
       inkThreshold,
-      // Ink hairpins FP on guitar beams/slurs; keep geometry for piano pages.
-      detectHairpins: !tabCapable,
-      rejectAsciiLetterDynamics: Boolean(tabCapable),
+      // Ink hairpins FP on guitar TAB beams/slurs; keep geometry for notation pages.
+      detectHairpins: !tabAnalysisActive,
+      rejectAsciiLetterDynamics: tabAnalysisActive,
     })
     attachTemposToMeasureRecords({
       measureRecords: measureRhythms,
@@ -916,8 +960,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     pageText,
     imageData,
     inkThreshold,
-    detectHairpins: !tabCapable,
-    rejectAsciiLetterDynamics: Boolean(tabCapable),
+    detectHairpins: !tabAnalysisActive,
+    rejectAsciiLetterDynamics: tabAnalysisActive,
   })
   attachTemposToMeasureRecords({
     measureRecords: measureRhythms,

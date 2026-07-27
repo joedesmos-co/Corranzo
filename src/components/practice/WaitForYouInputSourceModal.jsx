@@ -5,6 +5,7 @@ import { buildWfyInputModalLayout } from '../../features/practice/wfyInputSource
 export default function WaitForYouInputSourceModal({
   open,
   onChooseSource,
+  onDismiss = null,
   instrumentId = null,
   midiAvailable = false,
   microphoneAvailable = false,
@@ -19,8 +20,17 @@ export default function WaitForYouInputSourceModal({
     const enabledButton = dialogRef.current?.querySelector('button:not(:disabled)')
     enabledButton?.focus()
 
-    return undefined
-  }, [open])
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape' && typeof onDismiss === 'function') {
+        event.preventDefault()
+        onDismiss()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open, onDismiss])
 
   if (!open) {
     return null
@@ -36,7 +46,15 @@ export default function WaitForYouInputSourceModal({
 
   return createPortal(
     <div className="wfy-input-source-modal">
-      <div className="wfy-input-source-modal__scrim" aria-hidden="true" />
+      <div
+        className="wfy-input-source-modal__scrim"
+        aria-hidden="true"
+        onClick={() => {
+          if (typeof onDismiss === 'function') {
+            onDismiss()
+          }
+        }}
+      />
       <section
         ref={dialogRef}
         className="wfy-input-source-modal__dialog"

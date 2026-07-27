@@ -97,9 +97,14 @@ async function waitForPracticeReady(page, label, { previousHash = null, timeoutM
 
 async function goLibraryUploads(page) {
   await dismissOverlays(page)
-  await page.getByRole('button', { name: 'Library', exact: true }).click({
-    timeout: 8000,
-    force: true,
+  // Native click: Playwright force-click on TopBar can miss while the WFY
+  // input modal portal is mounted, even when the topbar is above the scrim.
+  await page.evaluate(() => {
+    const btn = [...document.querySelectorAll('nav[aria-label="Main"] button')].find(
+      (el) => el.textContent?.trim() === 'Library',
+    )
+    if (!btn) throw new Error('Library nav button not found')
+    btn.click()
   })
   await page.waitForTimeout(500)
   await dismissOverlays(page)

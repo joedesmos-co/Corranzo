@@ -1,0 +1,67 @@
+{
+  "s": {
+    "fail": {
+      "scoreId": "score-31d3d06a-fd51-41c4-9343-0a2534c0af69",
+      "runId": 3,
+      "pdfHash": "086cf386",
+      "pageCount": 1,
+      "totalPages": 1,
+      "stage": "low-confidence",
+      "errorName": "Error",
+      "errorMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+      "errorCode": "low-confidence",
+      "stack": "Error: PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.\n    at runPdfOmrPipelineBody (http://127.0.0.1:5173/src/features/omr/runPdfOmrPipeline.js?t=1785153813337:701:17)\n    at async runPdfOmrPipeline (http://127.0.0.1:5173/src/features/omr/runPdfOmrPipeline.js?t=1785153813337:134:10)\n    at async runPdfOmrClient (http://127.0.0.1:5173/src/features/omr/runPdfOmrClient.js?t=1785153813337:153:10)\n    at async Object.<anonymous> (http://127.0.0.1:5173/src/components/library/PdfOmrPlaybackPanel.jsx?t=1785153813337:156:19)",
+      "readablePages": 1,
+      "analysisResultSummary": {
+        "notes": 62,
+        "measures": 23,
+        "pagesWithSystems": 1,
+        "overallConfidence": 0.6724478359646325,
+        "reasons": [
+          "low-confidence"
+        ]
+      },
+      "at": 1785153817518
+    },
+    "job": {
+      "scoreId": "score-31d3d06a-fd51-41c4-9343-0a2534c0af69",
+      "generation": 1,
+      "pdfHash": "086cf386",
+      "runId": 3,
+      "pageCount": 1,
+      "totalPages": 1,
+      "cacheKey": "score:score-31d3d06a-fd51-41c4-9343-0a2534c0af69:pdf:086cf386",
+      "at": 1785153817518,
+      "phase": "failure",
+      "currentPage": 1,
+      "label": "Detecting notes on page 1 of 1…",
+      "stage": "low-confidence",
+      "errorName": "Error",
+      "errorMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+      "errorCode": "low-confidence",
+      "stack": "Error: PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.\n    at runPdfOmrPipelineBody (http://127.0.0.1:5173/src/features/omr/runPdfOmrPipeline.js?t=1785153813337:701:17)\n    at async runPdfOmrPipeline (http://127.0.0.1:5173/src/features/omr/runPdfOmrPipeline.js?t=1785153813337:134:10)\n    at async runPdfOmrClient (http://127.0.0.1:5173/src/features/omr/runPdfOmrClient.js?t=1785153813337:153:10)\n    at async Object.<anonymous> (http://127.0.0.1:5173/src/components/library/PdfOmrPlaybackPanel.jsx?t=1785153813337:156:19)",
+      "readablePages": 1,
+      "analysisResultSummary": {
+        "notes": 62,
+        "measures": 23,
+        "pagesWithSystems": 1,
+        "overallConfidence": 0.6724478359646325,
+        "reasons": [
+          "low-confidence"
+        ]
+      }
+    }
+  },
+  "logs": [
+    "info: ACTIVE SCORE: scoreId=null generation=0 PDF hash=null MusicXML hash=null MusicXML ownerScoreId=null MIDI hash=null OMR runId=null reason=score-id-changed",
+    "info: ACTIVE SCORE: scoreId=null generation=0 PDF hash=null MusicXML hash=null MusicXML ownerScoreId=null MIDI hash=null OMR runId=null reason=score-id-changed",
+    "info: [score-source-content] instrument-switch-score-retained {phase: instrument-switch-score-retained, at: 1785153816302, activePdfIdentity: null, activeEpoch: 0, activeOmrRunId: null}",
+    "info: [score-source-lifecycle] instrument-switch-score-retained {phase: instrument-switch-score-retained, activePdfIdentity: null, activeEpoch: 0, activeOmrRunId: null, fromInstrument: piano}",
+    "info: ACTIVE SCORE: scoreId=score-31d3d06a-fd51-41c4-9343-0a2534c0af69 generation=1 PDF hash=086cf386 MusicXML hash=null MusicXML ownerScoreId=null MIDI hash=null OMR runId=null reason=score-id-changed",
+    "info: [score-source-content] omr-job-start {phase: omr-job-start, at: 1785153817308, scoreId: score-31d3d06a-fd51-41c4-9343-0a2534c0af69, generation: 1, pdfHash: 086cf386}",
+    "error: OMR FAILURE: scoreId=score-31d3d06a-fd51-41c4-9343-0a2534c0af69 runId=3 pdfHash=086cf386 pageCount=1 stage=low-confidence errorName=Error errorMessage=PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. readablePages=1 totalPages=1 {scoreId: score-31d3d06a-fd51-41c4-9343-0a2534c0af69, runId: 3, pdfHash: 086c",
+    "log: [omr-trace] run=3 ui:handleGenerate:catch {name: Error, message: PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL., stack: Error: PDF too difficult for local generation. Try…y/PdfOmrPlaybackPanel.jsx?t=1785153813337:156:19)}",
+    "log: [omr-trace] run=3 ui:setError {message: PDF too difficult for local generation. Try a clea…l export or upload MusicXML/MXL. [low-confidence]}",
+    "log: [omr-trace] run=3 ui:onFeedback:error {message: PDF too difficult for local generation. Try a clea…l export or upload MusicXML/MXL. [low-confidence]}"
+  ]
+}

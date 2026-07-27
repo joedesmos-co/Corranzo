@@ -491,6 +491,12 @@ export default function usePracticeSession({
     [microphone],
   )
 
+  const deferWfyInputSourceModal = useCallback(() => {
+    // Keep the current default source; just clear the blocking modal so main
+    // nav (Library / replace PDF) stays reachable during soak workflows.
+    setWfyInputSourceSelectedThisSession(true)
+  }, [])
+
   useEffect(() => {
     setWfyInputSourceSelectedThisSession(false)
   }, [sourcesRevision])
@@ -919,6 +925,7 @@ export default function usePracticeSession({
       wfyInputSourceSelectedThisSession,
       showWfyInputSourceModal,
       setWfyInputSource: handleWfyInputSourceChange,
+      deferWfyInputSourceModal,
       microphone,
       matchSettings: matchSettingsState.settings,
       rawMatchSettings: matchSettingsState.rawSettings,
@@ -969,6 +976,7 @@ export default function usePracticeSession({
       wfyInputSourceSelectedThisSession,
       showWfyInputSourceModal,
       handleWfyInputSourceChange,
+      deferWfyInputSourceModal,
       microphone,
       matchSettingsState.settings,
       matchSettingsState.rawSettings,

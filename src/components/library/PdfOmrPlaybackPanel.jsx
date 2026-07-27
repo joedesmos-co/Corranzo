@@ -494,7 +494,9 @@ export default function PdfOmrPlaybackPanel({
       </div>
       <p className="library-omr-panel__lede">
         {showRetry
-          ? 'Something went wrong while preparing this PDF.'
+          ? error
+            ? 'Preparation failed — see the details below, then try again or upload MusicXML/MXL.'
+            : 'Preparation failed — try again, or upload MusicXML/MXL.'
           : 'This may take a moment.'}
       </p>
       <div className="library-omr-panel__actions">

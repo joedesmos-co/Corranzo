@@ -2,40 +2,45 @@
   "scenarios": {
     "pianoLibrary": {
       "auth": {
-        "pdfMetaIdentity": "Menuet in F, K.2 - Piano.pdf::189619::1784340442817",
+        "scoreId": "score-3adb69e2-12f3-4e99-bf12-774f0b36a3d0",
+        "ownerScoreId": "score-3adb69e2-12f3-4e99-bf12-774f0b36a3d0",
+        "pdfMetaIdentity": "Menuet in F, K.2 - Piano.pdf::189619::1785154830943",
         "pdfContentHash": "fd1f9cc1",
         "musicXmlHash": "c89ec10f",
         "musicXmlByteLength": 38458,
         "measureCount": null,
         "durationSeconds": null,
-        "ownerPdfIdentity": "Menuet in F, K.2 - Piano.pdf::189619::1784340442817",
+        "ownerPdfIdentity": "Menuet in F, K.2 - Piano.pdf::189619::1785154830943",
         "practiceSessionEpoch": 1,
         "sourceType": "library",
         "libraryPieceId": "piano-mozart-menuet-k2",
-        "at": 1784340442835
+        "at": 1785154830964
       },
       "duration": 72,
       "events": 130
     },
     "guitarLibrary": {
       "auth": {
-        "pdfMetaIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1784340448075",
+        "scoreId": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
+        "ownerScoreId": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
+        "pdfMetaIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785154836364",
         "pdfContentHash": "9bf80570",
         "musicXmlHash": "47817e10",
         "musicXmlByteLength": 135493,
         "measureCount": null,
         "durationSeconds": null,
-        "ownerPdfIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1784340448075",
-        "practiceSessionEpoch": 2,
+        "ownerPdfIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785154836364",
+        "practiceSessionEpoch": 1,
         "sourceType": "library",
         "libraryPieceId": "guitar-aguado-op03-1",
-        "at": 1784340448091
+        "at": 1785154836383
       },
       "duration": 48,
       "events": 325,
       "guitarTrace": {
         "instrumentId": "guitar",
         "timingContentHash": "47817e10",
+        "ownerScoreId": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
         "playableEventCount": 325,
         "firstEvents": [
           {
@@ -90,56 +95,58 @@
         "duration": 48,
         "mappingMethod": "measure-aligned",
         "audioSource": "midi",
-        "at": 1784340448240
+        "at": 1785154836539
       },
       "owners": {
-        "activeScoreIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1784340448075",
-        "authoritativeMusicXmlOwner": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1784340448075",
-        "playbackTimelineOwner": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1784340448075",
-        "guitarMappingOwner": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1784340448075",
-        "practicePromptOwner": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1784340448075",
+        "activeScoreIdentity": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
+        "authoritativeMusicXmlOwner": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
+        "playbackTimelineOwner": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785154836364",
+        "guitarMappingOwner": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
+        "practicePromptOwner": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
         "contentHash": "47817e10",
-        "aligned": true,
-        "at": 1784340448173
+        "aligned": false,
+        "at": 1785154836468
       }
     },
     "reloadGuitarLibrary": {
       "beforeReload": "47817e10",
       "after": {
-        "pdfMetaIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1784340448075",
+        "scoreId": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
+        "ownerScoreId": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
+        "pdfMetaIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785154836364",
         "pdfContentHash": "9bf80570",
         "musicXmlHash": "47817e10",
         "musicXmlByteLength": 135493,
         "measureCount": null,
         "durationSeconds": null,
-        "ownerPdfIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1784340448075",
+        "ownerPdfIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785154836364",
         "practiceSessionEpoch": 1,
         "sourceType": "upload",
-        "at": 1784340451074
+        "at": 1785154839395
       }
     },
     "instrumentSwitchCarry": {
-      "pianoHash": "38abde21",
+      "pianoHash": "a2d7bb82",
       "pianoOwner": "piano-beginner-single-vector.pdf::5584::1784174777906",
-      "afterGuitar": "38abde21",
-      "backToPiano": "38abde21",
+      "afterGuitar": "a2d7bb82",
+      "backToPiano": "a2d7bb82",
       "guitarEvents": 32
     },
     "guitarReplaceWhileActive": {
-      "before": "38abde21",
-      "after": "84956b1b",
+      "before": "a2d7bb82",
+      "after": "0e7583ec",
       "beforeOwner": "piano-beginner-single-vector.pdf::5584::1784174777906",
       "afterOwner": "piano-articulation-scan.pdf::197253::1784174777906"
     },
     "rapidReplaceGuitar": {
-      "hash": "251081c4",
+      "hash": "0e7583ec",
       "owner": "piano-articulation-scan.pdf::197253::1784174777906",
       "gate": "piano-articulation-scan.pdf::197253::1784174777906",
-      "events": 32
+      "events": 224
     },
     "libraryThenUser": {
       "library": "c89ec10f",
-      "user": "56606153",
+      "user": "86f9e9d3",
       "libraryAgain": "c89ec10f"
     }
   },

@@ -1,0 +1,84 @@
+{
+  "generatedAt": "2026-07-27T12:19:32.989Z",
+  "baseUrl": "http://127.0.0.1:5173",
+  "passes": [
+    {
+      "id": "A-clean-launch",
+      "detail": ""
+    },
+    {
+      "id": "A-inert-clear",
+      "detail": ""
+    },
+    {
+      "id": "G-library",
+      "detail": "events=130"
+    },
+    {
+      "id": "G-owners",
+      "detail": "score-bf357639-60e9-44e5-a15f-0e3f591b3847"
+    },
+    {
+      "id": "B-upload-omr",
+      "detail": "events=32"
+    },
+    {
+      "id": "B-play-stop",
+      "detail": ""
+    },
+    {
+      "id": "D-rapid-replace",
+      "detail": "events=224"
+    },
+    {
+      "id": "D-owners",
+      "detail": "score-2f2c7a31-d233-48f2-905b-54c2aa558e7c"
+    },
+    {
+      "id": "C-pagecount-reset",
+      "detail": "mid=4 finalJob=1"
+    },
+    {
+      "id": "L-no-stuck-overlay",
+      "detail": ""
+    },
+    {
+      "id": "E-reload-same-score",
+      "detail": "a2d7bb82"
+    },
+    {
+      "id": "F-instrument-switch-retained",
+      "detail": "score-e16349da-7a6a-49a6-9285-40fcd9ff6573"
+    },
+    {
+      "id": "H-library-roundtrip",
+      "detail": ""
+    },
+    {
+      "id": "I-seek-stop",
+      "detail": ""
+    },
+    {
+      "id": "J-failure-ui",
+      "detail": "Invalid PDF structure."
+    },
+    {
+      "id": "K-mismatched-companions",
+      "detail": "usable overlay=false hash=a2d7bb82"
+    },
+    {
+      "id": "M-guitar-piano-scan",
+      "detail": "events=224"
+    },
+    {
+      "id": "M-owners",
+      "detail": "score-561fb45e-f021-4d47-a978-249eb39a1dd8"
+    }
+  ],
+  "failures": [],
+  "consoleErrors": [
+    "[omr-trace] run=3 error code=phase-failed {code: phase-failed, message: Invalid PDF structure., phase: pdf-load, name: InvalidPDFException}",
+    "OMR FAILURE: scoreId=score-4c412170-4713-4810-b46c-cb4509f9c672 runId=3 pdfHash=e24add6a pageCount=null stage=pipeline errorName=InvalidPDFException errorMessage=Invalid PDF structure. readablePages=null totalPages=null {scoreId: score-4c412170-4713-4810-b46c-cb4509f9c672, runId: 3, pdfHash: e24add6a, pageCount: null, totalPages: null}"
+  ],
+  "pageErrors": []
+}

@@ -239,6 +239,19 @@ export function resolveGuitarSystemRoles(
       return { kind: 'notation', tabStave: null, source: 'notehead-glyphs' }
     }
     if (tabStaves.length > 0) {
+      // Geometry-only 6-line bands need page text before we commit to TAB when
+      // the caller actually searched for glyphs (empty array). Pure raster piano
+      // scans often look six-line from ledger noise; with no glyphs there is no
+      // fret/clef evidence, and a TAB-only early return would skip the raster
+      // notehead path entirely (Guitar + piano PDF fail).
+      // Undefined glyphs keep legacy geometry trust for unit helpers / pairing.
+      if (Array.isArray(glyphs) && glyphs.length === 0) {
+        return {
+          kind: 'notation',
+          tabStave: null,
+          source: 'staff-geometry-unconfirmed',
+        }
+      }
       return { kind: 'tab', tabStave: tabStaves[0], source: 'staff-geometry' }
     }
     return { kind: 'notation', tabStave: null, source: 'staff-geometry' }

@@ -85,6 +85,7 @@ export default memo(function PracticeControlPanel({
       <WaitForYouInputSourceModal
         open={session.showWfyInputSourceModal}
         onChooseSource={session.setWfyInputSource}
+        onDismiss={session.deferWfyInputSourceModal}
         instrumentId={session.instrumentId}
         midiAvailable={isWebMidiSupported()}
         microphoneAvailable={isMicrophoneSupported()}

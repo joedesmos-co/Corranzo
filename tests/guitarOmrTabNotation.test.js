@@ -712,4 +712,92 @@ describe('guitar OMR tablature detection', () => {
       }),
     ).rejects.toThrow(TAB_NO_USABLE_NOTES_MESSAGE)
   })
+
+  it('does not treat glyph-less six-line geometry as confirmed TAB', () => {
+    const system = {
+      y0: 0.2,
+      y1: 0.6,
+      lineCount: 6,
+      lineYs: [0.2, 0.28, 0.36, 0.44, 0.52, 0.6],
+      detectedLineYs: [0.2, 0.28, 0.36, 0.44, 0.52, 0.6],
+      barlineCount: 3,
+    }
+    expect(systemsContainTablature([system], { stringCount: 6 })).toBe(true)
+    const roles = resolveGuitarSystemRoles([system], {
+      stringCount: 6,
+      glyphs: [],
+      imageData: makeWhitePage(),
+    })
+    expect(roles[0]).toMatchObject({
+      kind: 'notation',
+      tabStave: null,
+      source: 'staff-geometry-unconfirmed',
+    })
+  })
+
+  it('still confirms TAB from six-line geometry when page text is present', () => {
+    const page = makeWhitePage()
+    const system = {
+      y0: 0.2,
+      y1: 0.6,
+      lineCount: 6,
+      lineYs: [0.2, 0.28, 0.36, 0.44, 0.52, 0.6],
+      detectedLineYs: [0.2, 0.28, 0.36, 0.44, 0.52, 0.6],
+      barlineCount: 3,
+    }
+    const glyphs = [
+      tabTextItem(page, { text: 'Capo 2', x: 120, y: 90, width: 48 }),
+    ]
+    const roles = resolveGuitarSystemRoles([system], {
+      stringCount: 6,
+      glyphs,
+      imageData: page,
+    })
+    expect(roles[0]).toMatchObject({
+      kind: 'tab',
+      source: 'staff-geometry',
+    })
+    expect(roles[0].tabStave).toBeTruthy()
+  })
+
+  it('falls through glyph-less six-line pages to notation instead of TAB-no-frets', async () => {
+    const page = makeWhitePage()
+    const tabStaff = drawStaff(page, 100, 6)
+    for (const x of [100, 300, 500]) {
+      drawVertical(page, x, tabStaff.top, tabStaff.bottom)
+    }
+
+    await expect(
+      runPdfOmrPipeline('synthetic-six-line-no-glyphs', {
+        renderPage: async () => page,
+        extractPageText: async () => [],
+        numPages: 1,
+        instrumentId: 'guitar',
+        title: 'Six-line geometry without text layer',
+      }),
+    ).rejects.toThrow(/No noteheads detected|No staff systems detected/)
+  })
+
+  it('does not commit TAB-only for six-line geometry with only non-TAB title glyphs', async () => {
+    const page = makeWhitePage()
+    const tabStaff = drawStaff(page, 100, 6)
+    for (const x of [100, 300, 500]) {
+      drawVertical(page, x, tabStaff.top, tabStaff.bottom)
+    }
+    // Title/lyric ink must not lock Guitar into TAB-only with zero frets.
+    const pageText = [
+      tabTextItem(page, { text: 'Sonata', x: 120, y: tabStaff.top - 40, width: 60 }),
+      tabTextItem(page, { text: 'Allegro', x: 200, y: tabStaff.bottom + 28, width: 50 }),
+    ]
+
+    await expect(
+      runPdfOmrPipeline('synthetic-six-line-title-only', {
+        renderPage: async () => page,
+        extractPageText: async () => pageText,
+        numPages: 1,
+        instrumentId: 'guitar',
+        title: 'Six-line geometry with title glyphs only',
+      }),
+    ).rejects.toThrow(/No noteheads detected|No staff systems detected/)
+  })
 })

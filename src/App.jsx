@@ -213,6 +213,8 @@ export default function App() {
   const [pdfSoftWarning, setPdfSoftWarning] = useState(null)
   const [practicePdfReady, setPracticePdfReady] = useState(false)
   const activeViewRef = useRef(activeView)
+  const libraryNavAtRef = useRef(0)
+  const omrRunStartedAtRef = useRef(0)
   const activeDemoPiece = useMemo(
     () => getDemoPieceForInstrument(instrumentId),
     [instrumentId],
@@ -431,6 +433,12 @@ export default function App() {
   }, [activeView])
 
   useEffect(() => {
+    if (autoOmrRequest) {
+      omrRunStartedAtRef.current = Date.now()
+    }
+  }, [autoOmrRequest])
+
+  useEffect(() => {
     if (activeView === 'practice') {
       setPracticePdfReady(false)
     }
@@ -451,6 +459,9 @@ export default function App() {
   const navigateToView = useCallback((view) => {
     releaseOmrUiLocks()
     const nextView = normalizeAppView(view)
+    if (nextView === 'library') {
+      libraryNavAtRef.current = Date.now()
+    }
     setActiveView(nextView)
     const nextPath = pathnameForView(nextView)
     if (window.location.pathname !== nextPath) {
@@ -1250,7 +1261,11 @@ export default function App() {
       type: 'success',
       message: `Ready to practice (${playbackValidation.noteCount} notes, ${Math.round(playbackValidation.durationSeconds)}s).`,
     })
-    navigateToView('practice')
+    // Rapid A→B→C: if the user returned to Library after this OMR started
+    // (to upload a replacement), do not yank them into Practice mid-upload.
+    if (libraryNavAtRef.current <= omrRunStartedAtRef.current) {
+      navigateToView('practice')
+    }
 
     logScoreSourceLifecycle('authoritative-musicxml-changed', {
       ...callbackToken,
