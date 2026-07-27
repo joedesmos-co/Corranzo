@@ -47,6 +47,61 @@ function technicalXml(note) {
   return `<technical><string>${note.string}</string><fret>${note.fret}</fret></technical>`
 }
 
+/** Only join beam tags across events that share a promoted topology group. */
+function eventsShareBeamTopology(left, right) {
+  const leftGroup = left?.beamTopologyGroupId ?? null
+  const rightGroup = right?.beamTopologyGroupId ?? null
+  if (leftGroup == null || rightGroup == null) {
+    return false
+  }
+  return leftGroup === rightGroup
+}
+
+function beamValueForEvent(sortedEvents, index) {
+  const event = sortedEvents[index]
+  if (!event || event.type === 'rest') {
+    return null
+  }
+  const hasBeam =
+    Number(event.beams ?? 0) > 0 || Boolean(event.beamTopologyGroupId)
+  if (!hasBeam) {
+    return null
+  }
+  const previous = sortedEvents
+    .slice(0, index)
+    .reverse()
+    .find((entry) => entry.type === 'note')
+  const next = sortedEvents.slice(index + 1).find((entry) => entry.type === 'note')
+  const sharePrevious = previous && eventsShareBeamTopology(previous, event)
+  const shareNext = next && eventsShareBeamTopology(event, next)
+  if (sharePrevious && shareNext) {
+    return 'continue'
+  }
+  if (sharePrevious) {
+    return 'end'
+  }
+  if (shareNext) {
+    return 'begin'
+  }
+  return null
+}
+
+/** Map each note event to MusicXML beam values, gated by topology group ids. */
+export function buildMeasureBeamValues(events = []) {
+  const sorted = [...events].sort(
+    (left, right) =>
+      (left.startDivision ?? 0) - (right.startDivision ?? 0) ||
+      (left.clef === 'bass' ? 1 : 0) - (right.clef === 'bass' ? 1 : 0),
+  )
+  const values = new Map()
+  for (let index = 0; index < sorted.length; index += 1) {
+    const event = sorted[index]
+    const value = beamValueForEvent(sorted, index)
+    values.set(event, value ? [{ number: 1, value }] : [])
+  }
+  return values
+}
+
 function noteXml(
   note,
   {
@@ -57,6 +112,7 @@ function noteXml(
     tieStart = false,
     tieStop = false,
     beams = 0,
+    beamValue = null,
     articulation = null,
     accentArticulation = null,
     voice = 1,
@@ -66,10 +122,12 @@ function noteXml(
   const dotXml = dotted ? '<dot/>' : ''
   const tieXml =
     (tieStart ? '<tie type="start"/>' : '') + (tieStop ? '<tie type="stop"/>' : '')
-  const beamXml =
-    beams > 0
-      ? `<beam number="1">${chord ? 'continue' : 'begin'}</beam>`
-      : ''
+  // Chord members never carry <beam>; only the first note of the event does.
+  const resolvedBeam =
+    chord || note?.isChord
+      ? null
+      : beamValue ?? (beams > 0 ? 'begin' : null)
+  const beamXml = resolvedBeam ? `<beam number="1">${resolvedBeam}</beam>` : ''
   const articulationParts = []
   if (articulation?.type === 'staccato') {
     articulationParts.push('<staccato/>')
@@ -233,8 +291,10 @@ export function buildOmrMusicXml({
     }
 
     let cursor = 0
+    const sortedEvents = sortMeasureEvents(measure.events)
 
-    for (const event of sortMeasureEvents(measure.events)) {
+    for (let eventIndex = 0; eventIndex < sortedEvents.length; eventIndex += 1) {
+      const event = sortedEvents[eventIndex]
       const duration = event.durationDivisions
       const type = event.durationType ?? durationTypeForDivisions(
         event.dotted ? Math.round((duration * 2) / 3) : duration,
@@ -254,6 +314,7 @@ export function buildOmrMusicXml({
         continue
       }
 
+      const beamValue = beamValueForEvent(sortedEvents, eventIndex)
       const notes = event.notes ?? []
       notes.forEach((note, index) => {
         const voice = note.clef === 'bass' ? 2 : 1
@@ -265,6 +326,7 @@ export function buildOmrMusicXml({
           tieStart: event.tieStart,
           tieStop: event.tieStop,
           beams: event.beams,
+          beamValue,
           articulation: note.articulation,
           accentArticulation: note.accentArticulation,
           voice,

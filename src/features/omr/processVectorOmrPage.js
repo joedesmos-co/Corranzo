@@ -42,6 +42,10 @@ import {
   buildBeamStemGraph,
   summarizeBeamStemGraph,
 } from './beamStemReconstructionDiagnostics.js'
+import {
+  applyVectorPrimaryBeamTopology,
+  summarizeAppliedVectorBeamTopology,
+} from './applyVectorBeamTopology.js'
 
 const HALF_NOTEHEAD_GLYPH = '\ue0a3'
 const WHOLE_NOTEHEAD_GLYPH = '\ue0a2'
@@ -754,20 +758,6 @@ export function splitMixedClefEvents(events) {
 
 function noteClefFromNotes(notes) {
   return notes?.[0]?.clef ?? 'treble'
-}
-
-function groupIncludesClef(group, clef) {
-  return (group.notes ?? []).some((note) => (note.clef ?? 'treble') === clef)
-}
-
-function nextSameClefRhythmStart(groups, index, rhythmStarts, totalDivisions) {
-  const clef = noteClefFromNotes(groups[index]?.notes)
-  for (let offset = index + 1; offset < groups.length; offset += 1) {
-    if (groupIncludesClef(groups[offset], clef)) {
-      return rhythmStarts[offset]
-    }
-  }
-  return totalDivisions
 }
 
 function hasQuarterStemInk(notes) {
@@ -2067,14 +2057,27 @@ export function buildVectorMeasureRecord({
   const vectorChordDiagnostics = summarizeVectorChordGrouping(events)
   const vectorRhythmDiagnostics = summarizeVectorRhythmDiagnostics(events, notes, totalDivisions)
   const musicalEventReconstructionDiagnostics = summarizeMusicalEventReconstruction(events)
-  const beamStemGraph = buildBeamStemGraph({
+  const initialBeamStemGraph = buildBeamStemGraph({
     notes,
     events,
     measureBox,
     imageData,
     inkThreshold,
   })
+  const eventsBeforeBeamTopology = events
+  events = applyVectorPrimaryBeamTopology(events, initialBeamStemGraph)
+  const beamStemGraph =
+    events === eventsBeforeBeamTopology
+      ? initialBeamStemGraph
+      : buildBeamStemGraph({
+          notes,
+          events,
+          measureBox,
+          imageData,
+          inkThreshold,
+        })
   const beamStemDiagnostics = summarizeBeamStemGraph(beamStemGraph)
+  const vectorBeamTopologyDiagnostics = summarizeAppliedVectorBeamTopology(events)
   return {
     measureNumber: measureBox.measureNumber,
     page: measureBox.page,
@@ -2101,6 +2104,7 @@ export function buildVectorMeasureRecord({
     musicalEventReconstructionDiagnostics,
     beamStemGraph,
     beamStemDiagnostics,
+    vectorBeamTopologyDiagnostics,
     ...(captureDetectorObservations
       ? { detectorObservations: { noteheads: notes, rests: detectedRests } }
       : {}),
