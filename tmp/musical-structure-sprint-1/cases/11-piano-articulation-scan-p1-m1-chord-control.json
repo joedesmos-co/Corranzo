@@ -1,0 +1,440 @@
+{
+  "id": "11-piano-articulation-scan-p1-m1-chord-control",
+  "source": "piano-articulation-scan",
+  "sourceLabel": "piano-articulation-scan",
+  "sourcePdf": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf",
+  "page": 1,
+  "measure": 1,
+  "category": "chord control",
+  "manuallyVerified": true,
+  "expectedVoiceEventStructure": {
+    "noteCount": 11,
+    "restCount": 0,
+    "voicesByStaff": {
+      "1": [
+        1
+      ],
+      "2": [
+        2
+      ]
+    },
+    "sameStaffPolyphony": false,
+    "chordColumnCount": 4,
+    "chordToneCount": 9,
+    "stemDirections": {
+      "up": 0,
+      "down": 0,
+      "unspecified": 11
+    },
+    "beamNoteCount": 0,
+    "tupletMemberCount": 0,
+    "crossStaffVoices": [],
+    "balance": {
+      "1": {
+        "writtenQuarters": 4,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "2": {
+        "writtenQuarters": 4,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      }
+    }
+  },
+  "detectedNotesRestsSymbols": {
+    "vectorNoteCount": null,
+    "vectorRestGlyphCount": null,
+    "beamStemCandidateCounts": {
+      "noteheads": 8,
+      "stems": 1,
+      "beams": 0
+    }
+  },
+  "rawVoiceStemCandidates": [
+    {
+      "eventIndex": 0,
+      "startDivision": 0,
+      "splitCandidate": false,
+      "reasons": [
+        "multiple-likely-voices"
+      ],
+      "ownerships": [
+        {
+          "noteheadId": "n-1-0-186-285",
+          "midi": 67,
+          "clef": "treble",
+          "stemDirection": null,
+          "stemConfidence": null,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.5
+        },
+        {
+          "noteheadId": "n-1-1-187-301",
+          "midi": 64,
+          "clef": "treble",
+          "stemDirection": null,
+          "stemConfidence": null,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.5
+        },
+        {
+          "noteheadId": "n-1-2-188-431",
+          "midi": 43,
+          "clef": "bass",
+          "stemDirection": null,
+          "stemConfidence": null,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.5
+        }
+      ]
+    },
+    {
+      "eventIndex": 1,
+      "startDivision": 4,
+      "splitCandidate": false,
+      "reasons": [],
+      "ownerships": [
+        {
+          "noteheadId": "n-1-3-209-305",
+          "midi": 62,
+          "clef": "treble",
+          "stemDirection": null,
+          "stemConfidence": null,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.5
+        }
+      ]
+    },
+    {
+      "eventIndex": 2,
+      "startDivision": 8,
+      "splitCandidate": false,
+      "reasons": [
+        "multiple-likely-voices"
+      ],
+      "ownerships": [
+        {
+          "noteheadId": "n-1-4-234-413",
+          "midi": 48,
+          "clef": "bass",
+          "stemDirection": null,
+          "stemConfidence": null,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.5
+        },
+        {
+          "noteheadId": "n-1-5-239-287",
+          "midi": 67,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.6473,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.6473
+        },
+        {
+          "noteheadId": "n-1-6-240-416",
+          "midi": 47,
+          "clef": "bass",
+          "stemDirection": null,
+          "stemConfidence": null,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.5
+        }
+      ]
+    },
+    {
+      "eventIndex": 3,
+      "startDivision": 12,
+      "splitCandidate": false,
+      "reasons": [],
+      "ownerships": [
+        {
+          "noteheadId": "n-1-7-296-263",
+          "midi": 72,
+          "clef": "treble",
+          "stemDirection": null,
+          "stemConfidence": null,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.5
+        }
+      ]
+    }
+  ],
+  "generatedEventGraph": {
+    "units": [
+      {
+        "eventIndex": 0,
+        "startDivision": 0,
+        "durationDivisions": 4,
+        "voice": 1,
+        "staff": "treble",
+        "stemDirection": null,
+        "emitEventBeams": true,
+        "noteMidis": [
+          67,
+          64,
+          43
+        ]
+      },
+      {
+        "eventIndex": 1,
+        "startDivision": 4,
+        "durationDivisions": 4,
+        "voice": 1,
+        "staff": "treble",
+        "stemDirection": null,
+        "emitEventBeams": true,
+        "noteMidis": [
+          62
+        ]
+      },
+      {
+        "eventIndex": 2,
+        "startDivision": 8,
+        "durationDivisions": 4,
+        "voice": 2,
+        "staff": "bass",
+        "stemDirection": null,
+        "emitEventBeams": true,
+        "noteMidis": [
+          48,
+          67,
+          47
+        ]
+      },
+      {
+        "eventIndex": 3,
+        "startDivision": 12,
+        "durationDivisions": 4,
+        "voice": 1,
+        "staff": "treble",
+        "stemDirection": null,
+        "emitEventBeams": true,
+        "noteMidis": [
+          72
+        ]
+      }
+    ],
+    "diagnostics": {
+      "eventCount": 4,
+      "serializationUnitCount": 4,
+      "splitEventCount": 0,
+      "splitNoteCount": 0,
+      "overlappingVoiceEventCount": 0,
+      "polyphonicStaffs": [],
+      "rejectedReasons": {
+        "no-strong-stem-ownership": 4
+      },
+      "changedPitchCount": 0,
+      "changedOnsetCount": 0,
+      "changedDurationCount": 0,
+      "changedNoteCount": 0
+    }
+  },
+  "generatedBefore": {
+    "noteCount": 8,
+    "restCount": 0,
+    "voicesByStaff": {
+      "1": [
+        1
+      ],
+      "2": [
+        2
+      ]
+    },
+    "sameStaffPolyphony": false,
+    "chordColumnCount": 2,
+    "chordToneCount": 4,
+    "stemDirections": {
+      "up": 0,
+      "down": 0,
+      "unspecified": 8
+    },
+    "beamNoteCount": 0,
+    "tupletMemberCount": 0,
+    "crossStaffVoices": [],
+    "balance": {
+      "1": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 1,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "2": {
+        "writtenQuarters": 1,
+        "implicitGapQuarters": 3,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      }
+    }
+  },
+  "generatedAfter": {
+    "noteCount": 8,
+    "restCount": 0,
+    "voicesByStaff": {
+      "1": [
+        1
+      ],
+      "2": [
+        2
+      ]
+    },
+    "sameStaffPolyphony": false,
+    "chordColumnCount": 2,
+    "chordToneCount": 4,
+    "stemDirections": {
+      "up": 0,
+      "down": 0,
+      "unspecified": 8
+    },
+    "beamNoteCount": 0,
+    "tupletMemberCount": 0,
+    "crossStaffVoices": [],
+    "balance": {
+      "1": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 1,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "2": {
+        "writtenQuarters": 1,
+        "implicitGapQuarters": 3,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      }
+    }
+  },
+  "emittedMusicXml": "<measure number=\"1\"><attributes><divisions>4</divisions><time><beats>4</beats><beat-type>4</beat-type></time><staves>2</staves><clef number=\"1\"><sign>G</sign><line>2</line></clef><clef number=\"2\"><sign>F</sign><line>4</line></clef></attributes><direction><words>Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.</words></direction><barline location=\"left\"><bar-style>heavy-light</bar-style><repeat direction=\"forward\"/></barline><direction><words>OMR rhythm uncertain</words></direction><note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff></note><note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff><notations><articulations><staccato/></articulations></notations></note><note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><dot/><staff>2</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff></note><note><chord/><pitch><step>B</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><dot/><staff>2</staff></note><note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note></measure>",
+  "renderedResult": {
+    "beforeStemCount": 6,
+    "afterStemCount": 6,
+    "visibleImprovement": false
+  },
+  "playbackEventOrder": {
+    "before": [
+      {
+        "measureNumber": 1,
+        "quarterTime": 0,
+        "durationQuarters": 1,
+        "midi": 43
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 0,
+        "durationQuarters": 1,
+        "midi": 64
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 0,
+        "durationQuarters": 1,
+        "midi": 67
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 1,
+        "durationQuarters": 1,
+        "midi": 62
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 2,
+        "durationQuarters": 1,
+        "midi": 47
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 2,
+        "durationQuarters": 1,
+        "midi": 48
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 2,
+        "durationQuarters": 1,
+        "midi": 67
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 3,
+        "durationQuarters": 1,
+        "midi": 72
+      }
+    ],
+    "after": [
+      {
+        "measureNumber": 1,
+        "quarterTime": 0,
+        "durationQuarters": 1,
+        "midi": 43
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 0,
+        "durationQuarters": 1,
+        "midi": 64
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 0,
+        "durationQuarters": 1,
+        "midi": 67
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 1,
+        "durationQuarters": 1,
+        "midi": 62
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 2,
+        "durationQuarters": 1,
+        "midi": 47
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 2,
+        "durationQuarters": 1,
+        "midi": 48
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 2,
+        "durationQuarters": 1,
+        "midi": 67
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 3,
+        "durationQuarters": 1,
+        "midi": 72
+      }
+    ],
+    "unchanged": true
+  },
+  "failureLayerBefore": "none/control",
+  "failureLayerAfter": "none/control",
+  "correctBefore": true,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/musical-structure-sprint-1/source-crops/11-piano-articulation-scan-p1-m1-chord-control.png",
+    "candidateOverlay": "tmp/musical-structure-sprint-1/candidate-overlays/11-piano-articulation-scan-p1-m1-chord-control.png",
+    "musicXmlSnippet": "tmp/musical-structure-sprint-1/musicxml-snippets/11-piano-articulation-scan-p1-m1-chord-control.musicxml",
+    "renderedBefore": "tmp/musical-structure-sprint-1/rendered-before/11-piano-articulation-scan-p1-m1-chord-control.png",
+    "renderedAfter": "tmp/musical-structure-sprint-1/rendered-after/11-piano-articulation-scan-p1-m1-chord-control.png",
+    "gallery": "tmp/musical-structure-sprint-1/gallery/11-piano-articulation-scan-p1-m1-chord-control.png"
+  }
+}

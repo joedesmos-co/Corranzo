@@ -1,0 +1,440 @@
+{
+  "createdAt": "2026-07-18T22:02:28.239Z",
+  "fixtures": [
+    {
+      "id": "piano-articulation-scan",
+      "pathHint": "likely-raster",
+      "glyphStats": {
+        "totalTextItems": 0,
+        "restGlyphCount": 0,
+        "restGlyphs": [],
+        "digitGlyphCount": 0,
+        "digitGlyphs": [],
+        "tupletHintCount": 0,
+        "tupletHintGlyphs": []
+      },
+      "totals": {
+        "truthNoteCount": 88,
+        "generatedNoteCount": 111,
+        "truthRestCount": 0,
+        "generatedRestCount": 11,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 304
+      },
+      "rhythm": {
+        "numerator": 73,
+        "denominator": 91,
+        "truePositives": 73,
+        "falsePositives": 11,
+        "falseNegatives": 7,
+        "ignored": 0,
+        "unsupported": 0,
+        "presentInTruth": 80,
+        "compared": 91,
+        "coverage": 1,
+        "coveragePercent": "100%",
+        "score": 0.8022,
+        "percent": "80%",
+        "reliable": true,
+        "displayPercent": "80%"
+      },
+      "defectRollup": {
+        "extra-rest": 11,
+        "onset-mismatch": 7
+      },
+      "restTaxonomy": {
+        "false-positive-rest": 2,
+        "rest-insertion-from-measure-balancing": 9
+      },
+      "v2HasTimeModification": false,
+      "v3IndependentHasTimeModification": false,
+      "v3ShadowStatus": "ready",
+      "sampleMeasureNumbers": [
+        2,
+        3,
+        4,
+        7
+      ]
+    },
+    {
+      "id": "piano-rhythm-tuplets-vector",
+      "pathHint": "vector-glyphs",
+      "glyphStats": {
+        "totalTextItems": 91,
+        "restGlyphCount": 5,
+        "restGlyphs": [
+          {
+            "text": [
+              "U+E4E6"
+            ],
+            "x": 744.1503267973856,
+            "y": 310.42929292929296
+          },
+          {
+            "text": [
+              "U+E4E7"
+            ],
+            "x": 833.8562091503268,
+            "y": 310.42929292929296
+          },
+          {
+            "text": [
+              "U+E4E6"
+            ],
+            "x": 270.702614379085,
+            "y": 686.2121212121212
+          },
+          {
+            "text": [
+              "U+E4E3"
+            ],
+            "x": 345.4575163398693,
+            "y": 686.2121212121212
+          },
+          {
+            "text": [
+              "U+E4E6"
+            ],
+            "x": 851.797385620915,
+            "y": 686.2121212121212
+          }
+        ],
+        "digitGlyphCount": 12,
+        "digitGlyphs": [
+          {
+            "text": "1",
+            "x": 74,
+            "y": 626,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "2",
+            "x": 196,
+            "y": 626,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "3",
+            "x": 318,
+            "y": 626,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "3",
+            "x": 332.52,
+            "y": 641,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "3",
+            "x": 354.48,
+            "y": 641,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "3",
+            "x": 376.44,
+            "y": 641,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "3",
+            "x": 398.4,
+            "y": 641,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "4",
+            "x": 440,
+            "y": 626,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "5",
+            "x": 74,
+            "y": 396,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "6",
+            "x": 196,
+            "y": 396,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "7",
+            "x": 318,
+            "y": 396,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "8",
+            "x": 440,
+            "y": 396,
+            "fontName": "g_d3_f1"
+          }
+        ],
+        "tupletHintCount": 10,
+        "tupletHintGlyphs": [
+          {
+            "text": "3",
+            "x": 318,
+            "y": 626,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "3",
+            "x": 332.52,
+            "y": 641,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "3",
+            "x": 354.48,
+            "y": 641,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "3",
+            "x": 376.44,
+            "y": 641,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "3",
+            "x": 398.4,
+            "y": 641,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "4",
+            "x": 440,
+            "y": 626,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "5",
+            "x": 74,
+            "y": 396,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "6",
+            "x": 196,
+            "y": 396,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "7",
+            "x": 318,
+            "y": 396,
+            "fontName": "g_d3_f1"
+          },
+          {
+            "text": "8",
+            "x": 440,
+            "y": 396,
+            "fontName": "g_d3_f1"
+          }
+        ]
+      },
+      "totals": {
+        "truthNoteCount": 63,
+        "generatedNoteCount": 63,
+        "truthRestCount": 5,
+        "generatedRestCount": 3,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 120
+      },
+      "rhythm": {
+        "numerator": 66,
+        "denominator": 128,
+        "truePositives": 66,
+        "falsePositives": 1,
+        "falseNegatives": 61,
+        "ignored": 0,
+        "unsupported": 0,
+        "presentInTruth": 127,
+        "compared": 128,
+        "coverage": 1,
+        "coveragePercent": "100%",
+        "score": 0.5156,
+        "percent": "52%",
+        "reliable": true,
+        "displayPercent": "52%"
+      },
+      "defectRollup": {
+        "onset-mismatch": 30,
+        "duration-mismatch": 14,
+        "tuplet-mismatch": 10,
+        "missing-rest": 3,
+        "extra-rest": 1,
+        "rest-duration-error": 1
+      },
+      "restTaxonomy": {
+        "wrong-duration-or-onset": 1,
+        "missed-rest": 2,
+        "rest-insertion-from-measure-balancing": 1,
+        "matched-rest": 1
+      },
+      "v2HasTimeModification": false,
+      "v3IndependentHasTimeModification": false,
+      "v3ShadowStatus": "ready",
+      "sampleMeasureNumbers": [
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "piano-beginner-single-vector",
+      "pathHint": "vector-glyphs",
+      "glyphStats": {
+        "totalTextItems": 52,
+        "restGlyphCount": 1,
+        "restGlyphs": [
+          {
+            "text": [
+              "U+E4E6"
+            ],
+            "x": 616.5686274509803,
+            "y": 686.2121212121212
+          }
+        ],
+        "digitGlyphCount": 8,
+        "digitGlyphs": [
+          {
+            "text": "1",
+            "x": 74,
+            "y": 626,
+            "fontName": "g_d5_f1"
+          },
+          {
+            "text": "2",
+            "x": 196,
+            "y": 626,
+            "fontName": "g_d5_f1"
+          },
+          {
+            "text": "3",
+            "x": 318,
+            "y": 626,
+            "fontName": "g_d5_f1"
+          },
+          {
+            "text": "4",
+            "x": 440,
+            "y": 626,
+            "fontName": "g_d5_f1"
+          },
+          {
+            "text": "5",
+            "x": 74,
+            "y": 396,
+            "fontName": "g_d5_f1"
+          },
+          {
+            "text": "6",
+            "x": 196,
+            "y": 396,
+            "fontName": "g_d5_f1"
+          },
+          {
+            "text": "7",
+            "x": 318,
+            "y": 396,
+            "fontName": "g_d5_f1"
+          },
+          {
+            "text": "8",
+            "x": 440,
+            "y": 396,
+            "fontName": "g_d5_f1"
+          }
+        ],
+        "tupletHintCount": 6,
+        "tupletHintGlyphs": [
+          {
+            "text": "3",
+            "x": 318,
+            "y": 626,
+            "fontName": "g_d5_f1"
+          },
+          {
+            "text": "4",
+            "x": 440,
+            "y": 626,
+            "fontName": "g_d5_f1"
+          },
+          {
+            "text": "5",
+            "x": 74,
+            "y": 396,
+            "fontName": "g_d5_f1"
+          },
+          {
+            "text": "6",
+            "x": 196,
+            "y": 396,
+            "fontName": "g_d5_f1"
+          },
+          {
+            "text": "7",
+            "x": 318,
+            "y": 396,
+            "fontName": "g_d5_f1"
+          },
+          {
+            "text": "8",
+            "x": 440,
+            "y": 396,
+            "fontName": "g_d5_f1"
+          }
+        ]
+      },
+      "totals": {
+        "truthNoteCount": 32,
+        "generatedNoteCount": 32,
+        "truthRestCount": 1,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 36
+      },
+      "rhythm": {
+        "numerator": 53,
+        "denominator": 63,
+        "truePositives": 53,
+        "falsePositives": 0,
+        "falseNegatives": 10,
+        "ignored": 0,
+        "unsupported": 0,
+        "presentInTruth": 63,
+        "compared": 63,
+        "coverage": 1,
+        "coveragePercent": "100%",
+        "score": 0.8413,
+        "percent": "84%",
+        "reliable": true,
+        "displayPercent": "84%"
+      },
+      "defectRollup": {
+        "onset-mismatch": 5,
+        "duration-mismatch": 3,
+        "missing-rest": 1
+      },
+      "restTaxonomy": {
+        "missed-rest": 1
+      },
+      "v2HasTimeModification": false,
+      "v3IndependentHasTimeModification": false,
+      "v3ShadowStatus": "ready",
+      "sampleMeasureNumbers": [
+        7
+      ]
+    }
+  ]
+}

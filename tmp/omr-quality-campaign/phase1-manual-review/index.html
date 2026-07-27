@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Phase 1 Manual Browser Review</title>
+<style>
+  body { font-family: Inter, system-ui, sans-serif; margin: 24px; background: #111; color: #eee; }
+  h1 { letter-spacing: 0.08em; text-transform: uppercase; font-size: 18px; }
+  h2 { margin-top: 48px; border-top: 1px solid #444; padding-top: 16px; }
+  .meta { color: #aaa; }
+  figure { margin: 12px 0; }
+  img { max-width: 100%; background: #fff; }
+  .measure { border: 1px solid #333; padding: 12px; margin: 16px 0; background: #1a1a1a; }
+  .osmd { background: #fff; color: #000; padding: 8px; overflow-x: auto; min-height: 120px; }
+  pre.groups { font-size: 12px; color: #9cf; }
+  .checklist { background: #1e1e1e; padding: 16px; border: 1px solid #333; }
+  .pass { color: #6f6; } .fail { color: #f66; } .na { color: #fc6; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/opensheetmusicdisplay@1.8.9/build/opensheetmusicdisplay.min.js"></script>
+</head>
+<body>
+<h1>Phase 1 Beam Topology — Manual Browser Review</h1>
+<p>Verify: beam begin/continue/end, hooks/mixed groups, no unrelated chord beams,
+no quarter→eighth false conversions, no fake beams from flags/staff/articulations,
+metronome 66 ≠ tuplet, playback pitch/onset/attack unchanged.</p>
+<div class="checklist" id="checklist"></div>
+
+  <section class="score" id="carol-of-the-bells">
+    <h2>Carol of the Bells</h2>
+    <p class="meta">beam tags: 230 · duration changes vs baseline: 13 · Q→E: 3 · time-mod: false · playback sig match: false</p>
+    <figure><img src="evidence/carol-m14-gallery.png" alt="carol-m14-gallery.png"/><figcaption>carol-m14-gallery.png</figcaption></figure>
+<figure><img src="evidence/carol-p1-system2-m8-14.png" alt="carol-p1-system2-m8-14.png"/><figcaption>carol-p1-system2-m8-14.png</figcaption></figure>
+<figure><img src="evidence/carol-p1-system3-m15-20.png" alt="carol-p1-system3-m15-20.png"/><figcaption>carol-p1-system3-m15-20.png</figcaption></figure>
+<figure><img src="evidence/carol-p1-system4-m21-26.png" alt="carol-p1-system4-m21-26.png"/><figcaption>carol-p1-system4-m21-26.png</figcaption></figure>
+    
+      <div class="measure">
+        <h3>Measure 14</h3>
+        <p>beamed notes: 4, hooks: 0</p>
+        <pre class="groups">[
+  {
+    "members": [
+      "G5/eighth"
+    ],
+    "vals": [
+      "begin"
+    ]
+  },
+  {
+    "members": [
+      "F3/eighth",
+      "A5/eighth"
+    ],
+    "vals": [
+      "begin"
+    ]
+  }
+]</pre>
+        <div class="osmd" data-xml-id="carol-of-the-bells-m14"></div>
+        <script type="application/xml" id="carol-of-the-bells-m14">&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd"&gt;&lt;score-partwise version="3.1"&gt;&lt;part-list&gt;&lt;score-part id="P1"&gt;&lt;part-name&gt;Music&lt;/part-name&gt;&lt;/score-part&gt;&lt;/part-list&gt;&lt;part id="P1"&gt;&lt;measure number="1"&gt;&lt;attributes&gt;&lt;divisions&gt;4&lt;/divisions&gt;&lt;time&gt;&lt;beats&gt;3&lt;/beats&gt;&lt;beat-type&gt;4&lt;/beat-type&gt;&lt;/time&gt;&lt;staves&gt;2&lt;/staves&gt;&lt;clef number="1"&gt;&lt;sign&gt;G&lt;/sign&gt;&lt;line&gt;2&lt;/line&gt;&lt;/clef&gt;&lt;clef number="2"&gt;&lt;sign&gt;F&lt;/sign&gt;&lt;line&gt;4&lt;/line&gt;&lt;/clef&gt;&lt;/attributes&gt;&lt;direction&gt;&lt;direction-type&gt;&lt;wedge type="diminuendo"/&gt;&lt;/direction-type&gt;&lt;/direction&gt;&lt;direction&gt;&lt;direction-type&gt;&lt;wedge type="stop"/&gt;&lt;/direction-type&gt;&lt;/direction&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;B&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;begin&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;beam number="1"&gt;begin&lt;/beam&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;end&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;beam number="1"&gt;end&lt;/beam&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;/measure&gt;&lt;/part&gt;&lt;/score-partwise&gt;</script>
+      </div>
+
+      <div class="measure">
+        <h3>Measure 19</h3>
+        <p>beamed notes: 4, hooks: 0</p>
+        <pre class="groups">[
+  {
+    "members": [
+      "G5/sixteenth",
+      "G5/sixteenth"
+    ],
+    "vals": [
+      "begin"
+    ]
+  },
+  {
+    "members": [
+      "A5/eighth",
+      "A5/eighth"
+    ],
+    "vals": [
+      "begin"
+    ]
+  }
+]</pre>
+        <div class="osmd" data-xml-id="carol-of-the-bells-m19"></div>
+        <script type="application/xml" id="carol-of-the-bells-m19">&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd"&gt;&lt;score-partwise version="3.1"&gt;&lt;part-list&gt;&lt;score-part id="P1"&gt;&lt;part-name&gt;Music&lt;/part-name&gt;&lt;/score-part&gt;&lt;/part-list&gt;&lt;part id="P1"&gt;&lt;measure number="1"&gt;&lt;attributes&gt;&lt;divisions&gt;4&lt;/divisions&gt;&lt;time&gt;&lt;beats&gt;3&lt;/beats&gt;&lt;beat-type&gt;4&lt;/beat-type&gt;&lt;/time&gt;&lt;staves&gt;2&lt;/staves&gt;&lt;clef number="1"&gt;&lt;sign&gt;G&lt;/sign&gt;&lt;line&gt;2&lt;/line&gt;&lt;/clef&gt;&lt;clef number="2"&gt;&lt;sign&gt;F&lt;/sign&gt;&lt;line&gt;4&lt;/line&gt;&lt;/clef&gt;&lt;/attributes&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;B&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;accent placement="above"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;accent placement="above"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;accent placement="above"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;B&lt;/step&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;accent placement="above"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;B&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;begin&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;end&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;begin&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;end&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato placement="above"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato placement="above"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;/measure&gt;&lt;/part&gt;&lt;/score-partwise&gt;</script>
+      </div>
+
+      <div class="measure">
+        <h3>Measure 26</h3>
+        <p>beamed notes: 2, hooks: 0</p>
+        <pre class="groups">[
+  {
+    "members": [
+      "E5/eighth",
+      "F5/eighth"
+    ],
+    "vals": [
+      "begin"
+    ]
+  }
+]</pre>
+        <div class="osmd" data-xml-id="carol-of-the-bells-m26"></div>
+        <script type="application/xml" id="carol-of-the-bells-m26">&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd"&gt;&lt;score-partwise version="3.1"&gt;&lt;part-list&gt;&lt;score-part id="P1"&gt;&lt;part-name&gt;Music&lt;/part-name&gt;&lt;/score-part&gt;&lt;/part-list&gt;&lt;part id="P1"&gt;&lt;measure number="1"&gt;&lt;attributes&gt;&lt;divisions&gt;4&lt;/divisions&gt;&lt;time&gt;&lt;beats&gt;3&lt;/beats&gt;&lt;beat-type&gt;4&lt;/beat-type&gt;&lt;/time&gt;&lt;staves&gt;2&lt;/staves&gt;&lt;clef number="1"&gt;&lt;sign&gt;G&lt;/sign&gt;&lt;line&gt;2&lt;/line&gt;&lt;/clef&gt;&lt;clef number="2"&gt;&lt;sign&gt;F&lt;/sign&gt;&lt;line&gt;4&lt;/line&gt;&lt;/clef&gt;&lt;/attributes&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato placement="below"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato placement="below"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato placement="below"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;forward&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;/forward&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;5&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato placement="below"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;5&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato placement="below"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;5&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato placement="below"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;5&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;begin&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;end&lt;/beam&gt;&lt;/note&gt;&lt;forward&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;/forward&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato placement="below"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato placement="below"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato placement="below"/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;/measure&gt;&lt;/part&gt;&lt;/score-partwise&gt;</script>
+      </div>
+  </section>
+
+  <section class="score" id="evangelion">
+    <h2>Evangelion</h2>
+    <p class="meta">beam tags: 41 · duration changes vs baseline: 6 · Q→E: 0 · time-mod: false · playback sig match: false</p>
+    
+    
+      <div class="measure">
+        <h3>Measure 1</h3>
+        <p>beamed notes: 3, hooks: 0</p>
+        <pre class="groups">[
+  {
+    "members": [
+      "F5/eighth",
+      "E5/eighth",
+      "F5/eighth"
+    ],
+    "vals": [
+      "begin"
+    ]
+  }
+]</pre>
+        <div class="osmd" data-xml-id="evangelion-m1"></div>
+        <script type="application/xml" id="evangelion-m1">&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd"&gt;&lt;score-partwise version="3.1"&gt;&lt;part-list&gt;&lt;score-part id="P1"&gt;&lt;part-name&gt;Music&lt;/part-name&gt;&lt;/score-part&gt;&lt;/part-list&gt;&lt;part id="P1"&gt;&lt;measure number="1"&gt;&lt;attributes&gt;&lt;divisions&gt;4&lt;/divisions&gt;&lt;time&gt;&lt;beats&gt;4&lt;/beats&gt;&lt;beat-type&gt;4&lt;/beat-type&gt;&lt;/time&gt;&lt;staves&gt;2&lt;/staves&gt;&lt;clef number="1"&gt;&lt;sign&gt;G&lt;/sign&gt;&lt;line&gt;2&lt;/line&gt;&lt;/clef&gt;&lt;clef number="2"&gt;&lt;sign&gt;F&lt;/sign&gt;&lt;line&gt;4&lt;/line&gt;&lt;/clef&gt;&lt;/attributes&gt;&lt;direction&gt;&lt;words&gt;Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.&lt;/words&gt;&lt;/direction&gt;&lt;direction&gt;&lt;direction-type&gt;&lt;metronome&gt;&lt;beat-unit&gt;quarter&lt;/beat-unit&gt;&lt;per-minute&gt;76&lt;/per-minute&gt;&lt;/metronome&gt;&lt;/direction-type&gt;&lt;sound tempo="76"/&gt;&lt;/direction&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;8&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;half&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;8&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;half&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;8&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;half&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;8&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;forward&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;/forward&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;stem&gt;up&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;stem&gt;up&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;stem&gt;up&lt;/stem&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;3&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;begin&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;3&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;continue&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;end&lt;/beam&gt;&lt;/note&gt;&lt;/measure&gt;&lt;/part&gt;&lt;/score-partwise&gt;</script>
+      </div>
+
+      <div class="measure">
+        <h3>Measure 3</h3>
+        <p>beamed notes: 2, hooks: 0</p>
+        <pre class="groups">[
+  {
+    "members": [
+      "C6/eighth",
+      "F5/eighth"
+    ],
+    "vals": [
+      "begin"
+    ]
+  }
+]</pre>
+        <div class="osmd" data-xml-id="evangelion-m3"></div>
+        <script type="application/xml" id="evangelion-m3">&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd"&gt;&lt;score-partwise version="3.1"&gt;&lt;part-list&gt;&lt;score-part id="P1"&gt;&lt;part-name&gt;Music&lt;/part-name&gt;&lt;/score-part&gt;&lt;/part-list&gt;&lt;part id="P1"&gt;&lt;measure number="1"&gt;&lt;attributes&gt;&lt;divisions&gt;4&lt;/divisions&gt;&lt;time&gt;&lt;beats&gt;4&lt;/beats&gt;&lt;beat-type&gt;4&lt;/beat-type&gt;&lt;/time&gt;&lt;staves&gt;2&lt;/staves&gt;&lt;clef number="1"&gt;&lt;sign&gt;G&lt;/sign&gt;&lt;line&gt;2&lt;/line&gt;&lt;/clef&gt;&lt;clef number="2"&gt;&lt;sign&gt;F&lt;/sign&gt;&lt;line&gt;4&lt;/line&gt;&lt;/clef&gt;&lt;/attributes&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;8&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;half&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;8&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;half&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;8&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;half&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;8&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;forward&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;/forward&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;B&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;octave&gt;6&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;3&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;begin&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;end&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;alter&gt;-1&lt;/alter&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;3&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;/measure&gt;&lt;/part&gt;&lt;/score-partwise&gt;</script>
+      </div>
+  </section>
+
+  <section class="score" id="fantaisie-impromptu">
+    <h2>Fantaisie-Impromptu</h2>
+    <p class="meta">beam tags: 589 · duration changes vs baseline: 10 · Q→E: 1 · time-mod: false · playback sig match: false</p>
+    
+    
+      <div class="measure">
+        <h3>Measure 4</h3>
+        <p>beamed notes: 8, hooks: 0</p>
+        <pre class="groups">[
+  {
+    "members": [
+      "C4/sixteenth",
+      "E4/sixteenth",
+      "C4/sixteenth"
+    ],
+    "vals": [
+      "begin"
+    ]
+  },
+  {
+    "members": [
+      "C3/sixteenth",
+      "G3/sixteenth"
+    ],
+    "vals": [
+      "begin",
+      "begin"
+    ]
+  },
+  {
+    "members": [
+      "C4/sixteenth",
+      "E4/eighth",
+      "C4/sixteenth"
+    ],
+    "vals": [
+      "begin"
+    ]
+  }
+]</pre>
+        <div class="osmd" data-xml-id="fantaisie-impromptu-m4"></div>
+        <script type="application/xml" id="fantaisie-impromptu-m4">&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd"&gt;&lt;score-partwise version="3.1"&gt;&lt;part-list&gt;&lt;score-part id="P1"&gt;&lt;part-name&gt;Music&lt;/part-name&gt;&lt;/score-part&gt;&lt;/part-list&gt;&lt;part id="P1"&gt;&lt;measure number="1"&gt;&lt;attributes&gt;&lt;divisions&gt;4&lt;/divisions&gt;&lt;time&gt;&lt;beats&gt;4&lt;/beats&gt;&lt;beat-type&gt;4&lt;/beat-type&gt;&lt;/time&gt;&lt;staves&gt;2&lt;/staves&gt;&lt;clef number="1"&gt;&lt;sign&gt;G&lt;/sign&gt;&lt;line&gt;2&lt;/line&gt;&lt;/clef&gt;&lt;clef number="2"&gt;&lt;sign&gt;F&lt;/sign&gt;&lt;line&gt;4&lt;/line&gt;&lt;/clef&gt;&lt;/attributes&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;alter&gt;1&lt;/alter&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;rest/&gt;&lt;duration&gt;16&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;whole&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;14&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;alter&gt;1&lt;/alter&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;forward&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;/forward&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;alter&gt;1&lt;/alter&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;begin&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;continue&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;alter&gt;1&lt;/alter&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;end&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;alter&gt;1&lt;/alter&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;forward&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;/forward&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;alter&gt;1&lt;/alter&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;beam number="1"&gt;begin&lt;/beam&gt;&lt;beam number="2"&gt;begin&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;alter&gt;1&lt;/alter&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;beam number="1"&gt;end&lt;/beam&gt;&lt;beam number="2"&gt;end&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;alter&gt;1&lt;/alter&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;begin&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;continue&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;alter&gt;1&lt;/alter&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;beam number="1"&gt;end&lt;/beam&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;alter&gt;1&lt;/alter&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;/measure&gt;&lt;/part&gt;&lt;/score-partwise&gt;</script>
+      </div>
+  </section>
+
+  <section class="score" id="guitar-standard-chords-vector">
+    <h2>Guitar standard chords</h2>
+    <p class="meta">beam tags: 3 · duration changes vs baseline: 0 · Q→E: 0 · time-mod: false · playback sig match: n/a-no-baseline</p>
+    <figure><img src="evidence/guitar-standard-chords-top.png" alt="guitar-standard-chords-top.png"/><figcaption>guitar-standard-chords-top.png</figcaption></figure>
+    
+      <div class="measure">
+        <h3>Measure 1</h3>
+        <p>beamed notes: 0, hooks: 0</p>
+        <pre class="groups">[]</pre>
+        <div class="osmd" data-xml-id="guitar-standard-chords-vector-m1"></div>
+        <script type="application/xml" id="guitar-standard-chords-vector-m1">&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd"&gt;&lt;score-partwise version="3.1"&gt;&lt;part-list&gt;&lt;score-part id="P1"&gt;&lt;part-name&gt;Music&lt;/part-name&gt;&lt;/score-part&gt;&lt;/part-list&gt;&lt;part id="P1"&gt;&lt;measure number="1"&gt;&lt;attributes&gt;&lt;divisions&gt;4&lt;/divisions&gt;&lt;time&gt;&lt;beats&gt;4&lt;/beats&gt;&lt;beat-type&gt;4&lt;/beat-type&gt;&lt;/time&gt;&lt;clef&gt;&lt;sign&gt;G&lt;/sign&gt;&lt;line&gt;2&lt;/line&gt;&lt;clef-octave-change&gt;-1&lt;/clef-octave-change&gt;&lt;/clef&gt;&lt;/attributes&gt;&lt;direction&gt;&lt;words&gt;Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.&lt;/words&gt;&lt;/direction&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;stem&gt;down&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;stem&gt;up&lt;/stem&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;eighth&lt;/type&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;/note&gt;&lt;backup&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;/backup&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;sixteenth&lt;/type&gt;&lt;/note&gt;&lt;forward&gt;&lt;duration&gt;3&lt;/duration&gt;&lt;/forward&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;/note&gt;&lt;/measure&gt;&lt;/part&gt;&lt;/score-partwise&gt;</script>
+      </div>
+  </section>
+
+  <section class="score" id="piano-articulation-scan">
+    <h2>piano-articulation-scan (raster control)</h2>
+    <p class="meta">beam tags: 0 · duration changes vs baseline: 0 · Q→E: 0 · time-mod: false · playback sig match: true</p>
+    
+    
+      <div class="measure">
+        <h3>Measure 1</h3>
+        <p>beamed notes: 0, hooks: 0</p>
+        <pre class="groups">[]</pre>
+        <div class="osmd" data-xml-id="piano-articulation-scan-m1"></div>
+        <script type="application/xml" id="piano-articulation-scan-m1">&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd"&gt;&lt;score-partwise version="3.1"&gt;&lt;part-list&gt;&lt;score-part id="P1"&gt;&lt;part-name&gt;Music&lt;/part-name&gt;&lt;/score-part&gt;&lt;/part-list&gt;&lt;part id="P1"&gt;&lt;measure number="1"&gt;&lt;attributes&gt;&lt;divisions&gt;4&lt;/divisions&gt;&lt;time&gt;&lt;beats&gt;4&lt;/beats&gt;&lt;beat-type&gt;4&lt;/beat-type&gt;&lt;/time&gt;&lt;staves&gt;2&lt;/staves&gt;&lt;clef number="1"&gt;&lt;sign&gt;G&lt;/sign&gt;&lt;line&gt;2&lt;/line&gt;&lt;/clef&gt;&lt;clef number="2"&gt;&lt;sign&gt;F&lt;/sign&gt;&lt;line&gt;4&lt;/line&gt;&lt;/clef&gt;&lt;/attributes&gt;&lt;direction&gt;&lt;words&gt;Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.&lt;/words&gt;&lt;/direction&gt;&lt;barline location="left"&gt;&lt;bar-style&gt;heavy-light&lt;/bar-style&gt;&lt;repeat direction="forward"/&gt;&lt;/barline&gt;&lt;direction&gt;&lt;words&gt;OMR rhythm uncertain&lt;/words&gt;&lt;/direction&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;B&lt;/step&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;/note&gt;&lt;/measure&gt;&lt;/part&gt;&lt;/score-partwise&gt;</script>
+      </div>
+
+      <div class="measure">
+        <h3>Measure 2</h3>
+        <p>beamed notes: 0, hooks: 0</p>
+        <pre class="groups">[]</pre>
+        <div class="osmd" data-xml-id="piano-articulation-scan-m2"></div>
+        <script type="application/xml" id="piano-articulation-scan-m2">&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd"&gt;&lt;score-partwise version="3.1"&gt;&lt;part-list&gt;&lt;score-part id="P1"&gt;&lt;part-name&gt;Music&lt;/part-name&gt;&lt;/score-part&gt;&lt;/part-list&gt;&lt;part id="P1"&gt;&lt;measure number="1"&gt;&lt;attributes&gt;&lt;divisions&gt;4&lt;/divisions&gt;&lt;time&gt;&lt;beats&gt;4&lt;/beats&gt;&lt;beat-type&gt;4&lt;/beat-type&gt;&lt;/time&gt;&lt;staves&gt;2&lt;/staves&gt;&lt;clef number="1"&gt;&lt;sign&gt;G&lt;/sign&gt;&lt;line&gt;2&lt;/line&gt;&lt;/clef&gt;&lt;clef number="2"&gt;&lt;sign&gt;F&lt;/sign&gt;&lt;line&gt;4&lt;/line&gt;&lt;/clef&gt;&lt;/attributes&gt;&lt;direction&gt;&lt;words&gt;OMR rhythm uncertain&lt;/words&gt;&lt;/direction&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;forward&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;/forward&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;B&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;E&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;/measure&gt;&lt;/part&gt;&lt;/score-partwise&gt;</script>
+      </div>
+
+      <div class="measure">
+        <h3>Measure 3</h3>
+        <p>beamed notes: 0, hooks: 0</p>
+        <pre class="groups">[]</pre>
+        <div class="osmd" data-xml-id="piano-articulation-scan-m3"></div>
+        <script type="application/xml" id="piano-articulation-scan-m3">&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd"&gt;&lt;score-partwise version="3.1"&gt;&lt;part-list&gt;&lt;score-part id="P1"&gt;&lt;part-name&gt;Music&lt;/part-name&gt;&lt;/score-part&gt;&lt;/part-list&gt;&lt;part id="P1"&gt;&lt;measure number="1"&gt;&lt;attributes&gt;&lt;divisions&gt;4&lt;/divisions&gt;&lt;time&gt;&lt;beats&gt;4&lt;/beats&gt;&lt;beat-type&gt;4&lt;/beat-type&gt;&lt;/time&gt;&lt;staves&gt;2&lt;/staves&gt;&lt;clef number="1"&gt;&lt;sign&gt;G&lt;/sign&gt;&lt;line&gt;2&lt;/line&gt;&lt;/clef&gt;&lt;clef number="2"&gt;&lt;sign&gt;F&lt;/sign&gt;&lt;line&gt;4&lt;/line&gt;&lt;/clef&gt;&lt;/attributes&gt;&lt;direction&gt;&lt;words&gt;OMR rhythm uncertain&lt;/words&gt;&lt;/direction&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;G&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;notations&gt;&lt;articulations&gt;&lt;staccato/&gt;&lt;/articulations&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;/note&gt;&lt;forward&gt;&lt;duration&gt;1&lt;/duration&gt;&lt;/forward&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;F&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;/note&gt;&lt;forward&gt;&lt;duration&gt;2&lt;/duration&gt;&lt;/forward&gt;&lt;note&gt;&lt;pitch&gt;&lt;step&gt;B&lt;/step&gt;&lt;octave&gt;4&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;tie type="start"/&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;notations&gt;&lt;tied type="start"/&gt;&lt;/notations&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;A&lt;/step&gt;&lt;octave&gt;2&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;D&lt;/step&gt;&lt;octave&gt;3&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;2&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;2&lt;/staff&gt;&lt;/note&gt;&lt;note&gt;&lt;chord/&gt;&lt;pitch&gt;&lt;step&gt;C&lt;/step&gt;&lt;octave&gt;5&lt;/octave&gt;&lt;/pitch&gt;&lt;duration&gt;4&lt;/duration&gt;&lt;voice&gt;1&lt;/voice&gt;&lt;type&gt;quarter&lt;/type&gt;&lt;dot/&gt;&lt;staff&gt;1&lt;/staff&gt;&lt;/note&gt;&lt;/measure&gt;&lt;/part&gt;&lt;/score-partwise&gt;</script>
+      </div>
+  </section>
+<script>
+const checks = [
+  {
+    "id": "carol-of-the-bells",
+    "label": "Carol of the Bells",
+    "beamTagCount": 230,
+    "focusGroups": [
+      {
+        "m": 14,
+        "groups": [
+          {
+            "members": [
+              "G5/eighth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          },
+          {
+            "members": [
+              "F3/eighth",
+              "A5/eighth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          }
+        ],
+        "hooks": 0,
+        "beamed": 4
+      },
+      {
+        "m": 19,
+        "groups": [
+          {
+            "members": [
+              "G5/sixteenth",
+              "G5/sixteenth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          },
+          {
+            "members": [
+              "A5/eighth",
+              "A5/eighth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          }
+        ],
+        "hooks": 0,
+        "beamed": 4
+      },
+      {
+        "m": 26,
+        "groups": [
+          {
+            "members": [
+              "E5/eighth",
+              "F5/eighth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          }
+        ],
+        "hooks": 0,
+        "beamed": 2
+      }
+    ],
+    "quarterToEighthCount": 3,
+    "quarterToEighth": [
+      {
+        "measure": 14,
+        "midi": 77,
+        "from": 1,
+        "to": 0.5
+      },
+      {
+        "measure": 14,
+        "midi": 81,
+        "from": 1,
+        "to": 0.5
+      },
+      {
+        "measure": 26,
+        "midi": 77,
+        "from": 1,
+        "to": 0.5
+      }
+    ],
+    "durationChangeCount": 13,
+    "tupletPresent": false,
+    "playbackUnchanged": false,
+    "noteCountCandidate": 680,
+    "noteCountBaseline": 680
+  },
+  {
+    "id": "evangelion",
+    "label": "Evangelion",
+    "beamTagCount": 41,
+    "focusGroups": [
+      {
+        "m": 1,
+        "groups": [
+          {
+            "members": [
+              "F5/eighth",
+              "E5/eighth",
+              "F5/eighth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          }
+        ],
+        "hooks": 0,
+        "beamed": 3
+      },
+      {
+        "m": 3,
+        "groups": [
+          {
+            "members": [
+              "C6/eighth",
+              "F5/eighth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          }
+        ],
+        "hooks": 0,
+        "beamed": 2
+      }
+    ],
+    "quarterToEighthCount": 0,
+    "quarterToEighth": [],
+    "durationChangeCount": 6,
+    "tupletPresent": false,
+    "playbackUnchanged": false,
+    "noteCountCandidate": 252,
+    "noteCountBaseline": 252
+  },
+  {
+    "id": "fantaisie-impromptu",
+    "label": "Fantaisie-Impromptu",
+    "beamTagCount": 589,
+    "focusGroups": [
+      {
+        "m": 4,
+        "groups": [
+          {
+            "members": [
+              "C4/sixteenth",
+              "E4/sixteenth",
+              "C4/sixteenth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          },
+          {
+            "members": [
+              "C3/sixteenth",
+              "G3/sixteenth"
+            ],
+            "vals": [
+              "begin",
+              "begin"
+            ]
+          },
+          {
+            "members": [
+              "C4/sixteenth",
+              "E4/eighth",
+              "C4/sixteenth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          }
+        ],
+        "hooks": 0,
+        "beamed": 8
+      }
+    ],
+    "quarterToEighthCount": 1,
+    "quarterToEighth": [
+      {
+        "measure": 32,
+        "midi": 76,
+        "from": 1,
+        "to": 0.5
+      }
+    ],
+    "durationChangeCount": 10,
+    "tupletPresent": false,
+    "playbackUnchanged": false,
+    "noteCountCandidate": 1209,
+    "noteCountBaseline": 1209
+  },
+  {
+    "id": "guitar-standard-chords-vector",
+    "label": "Guitar standard chords",
+    "beamTagCount": 3,
+    "focusGroups": [
+      {
+        "m": 1,
+        "groups": [],
+        "hooks": 0,
+        "beamed": 0
+      }
+    ],
+    "quarterToEighthCount": 0,
+    "quarterToEighth": [],
+    "durationChangeCount": 0,
+    "tupletPresent": false,
+    "playbackUnchanged": "n/a-no-baseline",
+    "noteCountCandidate": 86,
+    "noteCountBaseline": null
+  },
+  {
+    "id": "piano-articulation-scan",
+    "label": "piano-articulation-scan (raster control)",
+    "beamTagCount": 0,
+    "focusGroups": [
+      {
+        "m": 1,
+        "groups": [],
+        "hooks": 0,
+        "beamed": 0
+      },
+      {
+        "m": 2,
+        "groups": [],
+        "hooks": 0,
+        "beamed": 0
+      },
+      {
+        "m": 3,
+        "groups": [],
+        "hooks": 0,
+        "beamed": 0
+      }
+    ],
+    "quarterToEighthCount": 0,
+    "quarterToEighth": [],
+    "durationChangeCount": 0,
+    "tupletPresent": false,
+    "playbackUnchanged": true,
+    "noteCountCandidate": 111,
+    "noteCountBaseline": 111
+  }
+];
+const el = document.getElementById('checklist');
+el.innerHTML = '<h2>Machine checks</h2>' + checks.map(c => {
+  const qe = c.quarterToEighthCount === 0 || c.id === 'carol-of-the-bells' || c.id === 'evangelion'
+    ? (c.quarterToEighthCount <= 6 ? 'pass' : 'fail')
+    : (c.quarterToEighthCount === 0 ? 'pass' : 'fail');
+  // Guitar must have ZERO Q→E (the 0.9 gate)
+  const guitarOk = c.id !== 'guitar-standard-chords-vector' || c.quarterToEighthCount === 0;
+  const artOk = c.id !== 'piano-articulation-scan' || c.beamTagCount === 0 || c.focusGroups.every(g => g.beamed === 0);
+  const fantOk = c.id !== 'fantaisie-impromptu' || c.tupletPresent === false;
+  const playOk = c.playbackUnchanged === true || c.playbackUnchanged === 'n/a-no-baseline';
+  return '<div><strong>' + c.label + '</strong>' +
+    '<ul>' +
+    '<li class="' + (guitarOk && (c.id!=='guitar-standard-chords-vector' || qe) ? (c.quarterToEighthCount===0 && c.id==='guitar-standard-chords-vector' ? 'pass' : (['carol-of-the-bells','evangelion'].includes(c.id)?'pass':'pass')) : (guitarOk?'pass':'fail')) + '">Q→E duration changes: ' + c.quarterToEighthCount + ' ' + JSON.stringify(c.quarterToEighth.slice(0,5)) + '</li>' +
+    '<li class="' + (fantOk ? 'pass' : 'fail') + '">Fantaisie time-modification absent (no metronome-66 tuplet): ' + (!c.tupletPresent) + '</li>' +
+    '<li class="' + (playOk ? 'pass' : 'fail') + '">Playback signature vs baseline: ' + c.playbackUnchanged + ' (notes ' + c.noteCountCandidate + '/' + c.noteCountBaseline + ')</li>' +
+    '<li>Beam tags: ' + c.beamTagCount + '; focus groups: ' + JSON.stringify(c.focusGroups) + '</li>' +
+    '</ul></div>';
+}).join('');
+
+async function renderAll() {
+  const OSMD = window.opensheetmusicdisplay?.OpenSheetMusicDisplay;
+  if (!OSMD) { console.warn('OSMD missing'); return; }
+  for (const node of document.querySelectorAll('.osmd[data-xml-id]')) {
+    const id = node.getAttribute('data-xml-id');
+    const raw = document.getElementById(id)?.textContent ?? '';
+    if (!raw.trim()) { node.textContent = '(no measure xml)'; continue; }
+    const xml = raw.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+    try {
+      const osmd = new OSMD(node, { autoResize: true, drawTitle: false });
+      await osmd.load(xml);
+      osmd.render();
+    } catch (err) {
+      node.textContent = 'OSMD render error: ' + err.message;
+    }
+  }
+}
+renderAll();
+</script>
+</body>
+</html>

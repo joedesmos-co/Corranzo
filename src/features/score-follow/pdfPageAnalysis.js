@@ -1,9 +1,19 @@
 // Higher analysis resolution so thin staff lines and barlines survive
 // rasterisation on real high-DPI score PDFs (needed by the staff-line detector).
+import { extractPdfVectorCurvesFromOperatorList } from '../omr/extractPdfVectorCurves.js'
+
 const ANALYSIS_WIDTH = 1000
 
 let cachedDocumentKey = null
 let cachedDocument = null
+/** Generation token so a late destroy() cannot kill a newer cached document. */
+let cacheGeneration = 0
+/**
+ * Active OMR (or analysis) run ids that hold the cached PDFDocumentProxy.
+ * clearPdfAnalysisCache must NOT destroy while any pin remains — that was the
+ * post-pageCount-fix regression (mid-run destroy → empty pages → "could not read").
+ */
+const cachePins = new Set()
 
 /** Optional override for fixture scripts (e.g. pdfjs-dist in Node). */
 let pdfjsLoader = null
@@ -11,9 +21,116 @@ let pdfjsLoader = null
 /** Optional Node/canvas factory for fixture scripts: (width, height) => canvas-like element */
 let analysisCanvasFactory = null
 
+function toBytes(input) {
+  if (input == null) {
+    return null
+  }
+  if (input instanceof ArrayBuffer) {
+    return new Uint8Array(input)
+  }
+  if (ArrayBuffer.isView(input)) {
+    return new Uint8Array(input.buffer, input.byteOffset, input.byteLength)
+  }
+  if (typeof input === 'object' && input.data != null) {
+    return toBytes(input.data)
+  }
+  return null
+}
+
+/** Fast content fingerprint — length alone is NOT unique across PDFs. */
+export function pdfBytesContentHash(bytes) {
+  if (!bytes || bytes.byteLength === 0) {
+    return 'empty'
+  }
+  // Sample head + mid + tail so large PDFs stay cheap but distinct.
+  const length = bytes.byteLength
+  const sampleSize = Math.min(4096, length)
+  let hash = 0x811c9dc5
+  const mix = (offset, count) => {
+    for (let i = 0; i < count; i += 1) {
+      hash ^= bytes[offset + i]
+      hash = Math.imul(hash, 0x01000193)
+    }
+  }
+  mix(0, sampleSize)
+  if (length > sampleSize * 2) {
+    mix(Math.floor(length / 2) - Math.floor(sampleSize / 2), sampleSize)
+  }
+  if (length > sampleSize) {
+    mix(length - sampleSize, sampleSize)
+  }
+  // Fold length so same samples at different sizes cannot collide.
+  hash ^= length >>> 0
+  hash = Math.imul(hash, 0x01000193)
+  return (hash >>> 0).toString(16).padStart(8, '0')
+}
+
+/**
+ * Cache key for a PDF source. MUST distinguish different PDFs.
+ *
+ * Bug history:
+ * 1. `{ data: Uint8Array }` keyed as `'buffer'` → B reused A's proxy (wrong pageCount).
+ * 2. Keying by byteLength alone is still wrong — different PDFs can share a size.
+ */
+export function pdfAnalysisCacheKey(pdfSource, { pdfHash = null, scoreId = null } = {}) {
+  if (scoreId && pdfHash) {
+    return `score:${scoreId}:pdf:${pdfHash}`
+  }
+  if (pdfHash) {
+    return `pdf:${pdfHash}`
+  }
+  if (pdfSource == null) {
+    return 'null'
+  }
+  if (typeof pdfSource === 'string') {
+    return `url:${pdfSource}`
+  }
+  const bytes = toBytes(pdfSource)
+  if (bytes) {
+    return `bytes:${bytes.byteLength}:${pdfBytesContentHash(bytes)}`
+  }
+  if (typeof Blob !== 'undefined' && pdfSource instanceof Blob) {
+    return `blob:${pdfSource.size}`
+  }
+  return `unknown:${typeof pdfSource}`
+}
+
+function logPdfCache(action, extra = {}) {
+  const entry = {
+    action,
+    cacheKey: cachedDocumentKey,
+    pinned: cachePins.size,
+    generation: cacheGeneration,
+    ...extra,
+    at: Date.now(),
+  }
+  if (typeof window !== 'undefined') {
+    const bag = window.__SCOREFLOW_PDF_CACHE_LOG__ ?? { entries: [] }
+    bag.entries = [...(bag.entries ?? []), entry].slice(-60)
+    bag.latest = entry
+    window.__SCOREFLOW_PDF_CACHE_LOG__ = bag
+  }
+  try {
+    console.info(
+      [
+        'PDF CACHE:',
+        `action=${action}`,
+        `scoreId=${extra.scoreId ?? '-'}`,
+        `runId=${extra.runId ?? '-'}`,
+        `pdfHash=${extra.pdfHash ?? '-'}`,
+        `cacheKey=${entry.cacheKey ?? '-'}`,
+      ].join(' '),
+      entry,
+    )
+  } catch {
+    // ignore
+  }
+  return entry
+}
+
 export function setPdfjsLoader(loader) {
   pdfjsLoader = loader ?? null
-  clearPdfAnalysisCache()
+  clearPdfAnalysisCache({ force: true, reason: 'set-pdfjs-loader' })
 }
 
 async function resolvePdfjs() {
@@ -41,32 +158,116 @@ function createAnalysisCanvas(width, height) {
   return canvas
 }
 
-async function loadPdfDocument(pdfSource) {
-  const key = typeof pdfSource === 'string' ? pdfSource : pdfSource?.byteLength ?? 'buffer'
+async function destroyDocument(doc, generation, reason) {
+  if (!doc) {
+    return
+  }
+  try {
+    await doc.destroy?.()
+  } catch {
+    // ignore destroy errors from an already-closed doc
+  }
+  logPdfCache('destroy', { reason, generation })
+}
+
+async function loadPdfDocument(pdfSource, identity = {}) {
+  const key = pdfAnalysisCacheKey(pdfSource, identity)
   if (cachedDocument && cachedDocumentKey === key) {
+    logPdfCache('hit', { ...identity, cacheKey: key })
     return cachedDocument
   }
+  logPdfCache('miss', { ...identity, cacheKey: key, previousKey: cachedDocumentKey })
+
+  // Drop the previous proxy only when nothing has it pinned.
+  if (cachedDocument) {
+    if (cachePins.size > 0) {
+      // Soft-evict: keep the pinned document alive; caller must finish first.
+      // Loading a second document without destroying the pinned one.
+      const pdfjs = await resolvePdfjs()
+      const next = await pdfjs.getDocument(pdfSource).promise
+      // Do not replace the pinned cache entry — return an uncached doc for this call.
+      // (OMR should pin before load so this path is rare.)
+      logPdfCache('miss-uncached-while-pinned', { ...identity, cacheKey: key })
+      return next
+    }
+    const previous = cachedDocument
+    const previousGeneration = cacheGeneration
+    cachedDocument = null
+    cachedDocumentKey = null
+    await destroyDocument(previous, previousGeneration, 'replace-before-load')
+  }
+
   const pdfjs = await resolvePdfjs()
-  cachedDocument = await pdfjs.getDocument(pdfSource).promise
+  const nextGeneration = cacheGeneration + 1
+  cacheGeneration = nextGeneration
+  const loaded = await pdfjs.getDocument(pdfSource).promise
+  // A concurrent clear/pin race: only publish if generation still matches intent.
+  if (cacheGeneration !== nextGeneration) {
+    await destroyDocument(loaded, nextGeneration, 'stale-load-discard')
+    // Retry once against current cache state.
+    return loadPdfDocument(pdfSource, identity)
+  }
+  cachedDocument = loaded
   cachedDocumentKey = key
+  logPdfCache('load', { ...identity, cacheKey: key, generation: nextGeneration })
   return cachedDocument
 }
 
-export function clearPdfAnalysisCache() {
-  cachedDocument = null
-  cachedDocumentKey = null
+/**
+ * Pin the analysis document for an active OMR run. Clears must not destroy
+ * while any pin is held.
+ */
+export function pinPdfAnalysisCache(runId, meta = {}) {
+  if (runId == null) {
+    return
+  }
+  cachePins.add(runId)
+  logPdfCache('pin', { runId, scoreId: meta.scoreId, pdfHash: meta.pdfHash })
 }
 
-export async function getPdfPageCount(pdfSource) {
-  const pdf = await loadPdfDocument(pdfSource)
+export function unpinPdfAnalysisCache(runId, meta = {}) {
+  if (runId == null) {
+    return
+  }
+  cachePins.delete(runId)
+  logPdfCache('unpin', { runId, scoreId: meta.scoreId, pdfHash: meta.pdfHash })
+}
+
+/**
+ * Drop the cached PDFDocumentProxy.
+ * While pins remain, this is a no-op (unless force:true) so an active OMR run
+ * never loses its document mid-analysis.
+ */
+export function clearPdfAnalysisCache({ force = false, reason = 'clear', ...meta } = {}) {
+  if (!force && cachePins.size > 0) {
+    logPdfCache('clear-skipped-pinned', { reason, ...meta, pinned: cachePins.size })
+    return { cleared: false, reason: 'pinned' }
+  }
+  const previous = cachedDocument
+  const previousGeneration = cacheGeneration
+  const previousKey = cachedDocumentKey
+  cachedDocument = null
+  cachedDocumentKey = null
+  if (force) {
+    cachePins.clear()
+  }
+  logPdfCache('clear', { reason, ...meta, cacheKey: previousKey, generation: previousGeneration })
+  // Fire-and-forget destroy after nulling so a late resolve cannot race a newer load
+  // that shares the same generation check in loadPdfDocument.
+  void destroyDocument(previous, previousGeneration, reason)
+  return { cleared: true }
+}
+
+export async function getPdfPageCount(pdfSource, identity = {}) {
+  const pdf = await loadPdfDocument(pdfSource, identity)
   return pdf.numPages
 }
 
 /**
  * Render one PDF page to ImageData for lightweight client-side analysis.
  */
-export async function renderPdfPageImageData(pdfSource, pageNumber, targetWidth = ANALYSIS_WIDTH) {
-  const pdf = await loadPdfDocument(pdfSource)
+export async function renderPdfPageImageData(pdfSource, pageNumber, targetWidth = ANALYSIS_WIDTH, identity = {}) {
+  const pdf = await loadPdfDocument(pdfSource, identity)
   const page = await pdf.getPage(pageNumber)
   // Render the RAW page (rotation: 0), ignoring the PDF's native /Rotate metadata.
   // A page rotated only in Preview/Finder stores /Rotate metadata over unchanged
@@ -103,8 +304,8 @@ export async function renderPdfPageImageData(pdfSource, pageNumber, targetWidth 
  * Extract text items from a PDF page (local pdf.js — no cloud OCR).
  * Returns [] when the page has no text layer.
  */
-export async function extractPdfPageText(pdfSource, pageNumber) {
-  const pdf = await loadPdfDocument(pdfSource)
+export async function extractPdfPageText(pdfSource, pageNumber, identity = {}) {
+  const pdf = await loadPdfDocument(pdfSource, identity)
   const page = await pdf.getPage(pageNumber)
   const viewport = page.getViewport({ scale: 1, rotation: 0 })
   const content = await page.getTextContent()
@@ -120,6 +321,36 @@ export async function extractPdfPageText(pdfSource, pageNumber) {
       pageHeight: viewport.height,
     }))
     .filter((item) => item.text.trim().length > 0)
+}
+
+/**
+ * Extract original vector tie/slur candidates at the same pixel scale used by
+ * OMR. This shares the pinned PDF document and does not alter cache ownership.
+ */
+export async function extractPdfPageVectorCurves(
+  pdfSource,
+  pageNumber,
+  identity = {},
+  targetWidth = ANALYSIS_WIDTH,
+) {
+  const [pdf, pdfjs] = await Promise.all([
+    loadPdfDocument(pdfSource, identity),
+    resolvePdfjs(),
+  ])
+  const page = await pdf.getPage(pageNumber)
+  const baseViewport = page.getViewport({ scale: 1, rotation: 0 })
+  const viewport = page.getViewport({
+    scale: targetWidth / baseViewport.width,
+    rotation: 0,
+  })
+  const operatorList = await page.getOperatorList()
+  return extractPdfVectorCurvesFromOperatorList({
+    operatorList,
+    ops: pdfjs.OPS,
+    viewportTransform: viewport.transform,
+    pageNumber,
+    targetWidth: viewport.width,
+  })
 }
 
 export function getPageInkRatio(imageData) {

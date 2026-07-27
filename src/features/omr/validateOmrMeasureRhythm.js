@@ -14,16 +14,30 @@ function buildRestEvent(startDivision, durationDivisions) {
     type: 'rest',
     startDivision,
     durationDivisions,
-    durationType: durationDivisions === 2 ? 'eighth' : 'quarter',
+    durationType:
+      durationDivisions <= 1
+        ? 'sixteenth'
+        : durationDivisions === 2
+          ? 'eighth'
+          : durationDivisions >= 16
+            ? 'whole'
+            : durationDivisions >= 8
+              ? 'half'
+              : 'quarter',
     confidence: 0.5,
     uncertain: true,
+    source: 'measure-balancing',
   }
 }
 
 /**
- * Validate that rhythmic events fill a 4/4 measure; pad gaps with rests when safe.
+ * Validate rhythmic events against a 4/4 measure grid.
+ *
+ * By default does NOT invent rests to fill gaps — phantom balancing rests were
+ * the dominant extra-rest source on scan PDFs with no rest glyphs. Pass
+ * `inventRests: true` only for explicit legacy/test padding.
  */
-export function validateAndNormalizeMeasureRhythm(events) {
+export function validateAndNormalizeMeasureRhythm(events, { inventRests = false } = {}) {
   const sorted = sortEvents(events)
   const normalized = []
   let cursor = 0
@@ -34,7 +48,9 @@ export function validateAndNormalizeMeasureRhythm(events) {
     const duration = Math.max(1, event.durationDivisions ?? OMR_DURATION_DIVISIONS.quarter)
 
     if (start > cursor) {
-      normalized.push(buildRestEvent(cursor, start - cursor))
+      if (inventRests) {
+        normalized.push(buildRestEvent(cursor, start - cursor))
+      }
       cursor = start
     }
     if (start < cursor) {
@@ -57,7 +73,7 @@ export function validateAndNormalizeMeasureRhythm(events) {
   }
 
   const gapDivisions = OMR_MEASURE_DIVISIONS - cursor
-  if (gapDivisions > 0) {
+  if (gapDivisions > 0 && inventRests) {
     normalized.push(buildRestEvent(cursor, gapDivisions))
   }
 
@@ -74,5 +90,6 @@ export function validateAndNormalizeMeasureRhythm(events) {
     gapDivisions: Math.max(0, gapDivisions),
     overfill: overlap || totalDivisions > OMR_MEASURE_DIVISIONS,
     uncertain: overlap || gapDivisions > 0,
+    inventedRests: inventRests,
   }
 }

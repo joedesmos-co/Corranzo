@@ -23,17 +23,18 @@ describe('practice settings audit', () => {
     expect(options).toContain('buildWfyInputSelectorOptions')
   })
 
-  it('groups Advanced settings into files, playback, setup, and help', () => {
+  it('groups Advanced settings into files, playback, score cursor, and help', () => {
     const panel = readSrc('components', 'practice', 'PracticeControlPanel.jsx')
 
-    expect(panel).toContain('summary="Files, playback, setup"')
-    expect(panel).toContain('aria-label="Practice setup"')
+    expect(panel).toContain('summary="Files, playback, cursor"')
+    expect(panel).toContain('aria-label="Score cursor"')
     expect(panel).toContain('aria-label="Help"')
     expect(panel).not.toContain('aria-label="Troubleshooting"')
+    expect(panel).not.toContain('aria-label="Practice setup"')
 
     const playbackGroup = panel.slice(
       panel.indexOf('aria-label="Playback options"'),
-      panel.indexOf('aria-label="Practice setup"'),
+      panel.indexOf('aria-label="Score cursor"'),
     )
     expect(playbackGroup.indexOf('PracticeMetronomeAdvancedSettings')).toBeLessThan(
       playbackGroup.indexOf('PracticeTracksCompactSection'),

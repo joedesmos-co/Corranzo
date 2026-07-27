@@ -1,0 +1,89 @@
+{
+  "generatedAt": "2026-07-17T03:54:06.262Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "phase": 3,
+  "fixtures": [
+    {
+      "fixtureId": "piano-beginner-single-vector",
+      "label": "CC0 Beginner Line Study",
+      "phase": 3,
+      "totalWrongDurations": 3,
+      "legacyDurationHistogram": {
+        "too-short": 1,
+        "too-long": 0,
+        "beamed-subdivision": 0,
+        "bass-sustain": 0,
+        "melody-accompaniment": 0,
+        "rest-gap": 0,
+        "tie-sustain": 0,
+        "onset-coupled": 2,
+        "other": 0
+      },
+      "writtenSoundingHistogram": {
+        "written-duration-wrong": 1,
+        "sounding-release-wrong": 0,
+        "onset-coupled-duration": 2,
+        "tie-sustain-related": 0,
+        "serialization-artifact": 0
+      },
+      "dominantClass": {
+        "bucket": "onset-coupled-duration",
+        "count": 2
+      },
+      "hotspotMeasures": [],
+      "hotspotTraces": [
+        {
+          "measureNumber": 7,
+          "wrongDurationCount": 2,
+          "histogram": {
+            "written-duration-wrong": 1,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 1,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 0
+          },
+          "samples": [
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": -24,
+              "truthLabel": "E4",
+              "generatedLabel": "E2"
+            },
+            {
+              "bucket": "onset-coupled-duration",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 0,
+              "truthLabel": "G4",
+              "generatedLabel": "G4"
+            }
+          ]
+        },
+        {
+          "measureNumber": 8,
+          "wrongDurationCount": 1,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 1,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 0
+          },
+          "samples": [
+            {
+              "bucket": "onset-coupled-duration",
+              "onsetDiffQuarters": 0.5,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 0,
+              "truthLabel": "G4",
+              "generatedLabel": "G4"
+            }
+          ]
+        }
+      ],
+      "tieChains": null
+    }
+  ]
+}

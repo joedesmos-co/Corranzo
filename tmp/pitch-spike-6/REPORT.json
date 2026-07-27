@@ -1,0 +1,2214 @@
+{
+  "kind": "pitch-research-spike-6",
+  "title": "On-line stacked chord separation",
+  "productionUnchanged": true,
+  "baseline": {
+    "pitch": "29%",
+    "pitchTP": 35,
+    "sustainTP": 1,
+    "sustainDen": 5,
+    "articulationTP": 8,
+    "articulationDen": 61
+  },
+  "realCropCounts": {
+    "total": 9,
+    "collapse": 8,
+    "chordControl": 1,
+    "single": 0
+  },
+  "methodSummary": {
+    "verticalProfileOnSubtracted": {
+      "collapseCrops": 8,
+      "meanCollapseRecall": 0.5208333333333333,
+      "collapseExtraTotal": 8,
+      "singleOnlineExtraHeads": 0,
+      "syntheticChordPass": 3,
+      "syntheticChordTotal": 4,
+      "syntheticSingleStaySingle": 3,
+      "syntheticSingleTotal": 3
+    },
+    "lobesOnSubtracted": {
+      "collapseCrops": 8,
+      "meanCollapseRecall": 0.5625,
+      "collapseExtraTotal": 5,
+      "singleOnlineExtraHeads": 0,
+      "syntheticChordPass": 3,
+      "syntheticChordTotal": 4,
+      "syntheticSingleStaySingle": 3,
+      "syntheticSingleTotal": 3
+    },
+    "staffHypotheses": {
+      "collapseCrops": 8,
+      "meanCollapseRecall": 0.875,
+      "collapseExtraTotal": 33,
+      "singleOnlineExtraHeads": 0,
+      "syntheticChordPass": 3,
+      "syntheticChordTotal": 4,
+      "syntheticSingleStaySingle": 0,
+      "syntheticSingleTotal": 3
+    },
+    "mergePrevention": {
+      "collapseCrops": 8,
+      "meanCollapseRecall": 0.7291666666666666,
+      "collapseExtraTotal": 12,
+      "singleOnlineExtraHeads": 0,
+      "syntheticChordPass": 3,
+      "syntheticChordTotal": 4,
+      "syntheticSingleStaySingle": 3,
+      "syntheticSingleTotal": 3
+    },
+    "ensemble": {
+      "collapseCrops": 8,
+      "meanCollapseRecall": 0.7291666666666666,
+      "collapseExtraTotal": 12,
+      "singleOnlineExtraHeads": 0,
+      "syntheticChordPass": 3,
+      "syntheticChordTotal": 4,
+      "syntheticSingleStaySingle": 3,
+      "syntheticSingleTotal": 3
+    }
+  },
+  "syntheticResults": [
+    {
+      "id": "synth-two-online-filled",
+      "kind": "chord",
+      "label": "Two filled heads on adjacent staff lines",
+      "expectCount": 2,
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 38,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 48,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "lobesOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 40,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 50,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "staffHypotheses": {
+          "count": 5,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 55,
+              "midi": 69
+            },
+            {
+              "cx": 40,
+              "cy": 50,
+              "midi": 71
+            },
+            {
+              "cx": 40,
+              "cy": 45,
+              "midi": 72
+            },
+            {
+              "cx": 40,
+              "cy": 40,
+              "midi": 74
+            },
+            {
+              "cx": 40,
+              "cy": 35,
+              "midi": 76
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 3,
+          "precision": 0.4,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 39,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 49,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "ensemble": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 39,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 49,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/synthetic/synth-two-online-filled.png",
+      "pass": {
+        "ensembleCountOk": true,
+        "ensembleRecall": true,
+        "noExtra": true
+      }
+    },
+    {
+      "id": "synth-three-online-filled",
+      "kind": "chord",
+      "label": "Three filled heads on consecutive lines",
+      "expectCount": 3,
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 38,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 48,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 58,
+              "midi": null
+            }
+          ],
+          "matched": 3,
+          "expected": 3,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "lobesOnSubtracted": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 40,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 50,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 60,
+              "midi": null
+            }
+          ],
+          "matched": 3,
+          "expected": 3,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "staffHypotheses": {
+          "count": 7,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 65,
+              "midi": 65
+            },
+            {
+              "cx": 40,
+              "cy": 60,
+              "midi": 67
+            },
+            {
+              "cx": 40,
+              "cy": 55,
+              "midi": 69
+            },
+            {
+              "cx": 40,
+              "cy": 50,
+              "midi": 71
+            },
+            {
+              "cx": 40,
+              "cy": 45,
+              "midi": 72
+            },
+            {
+              "cx": 40,
+              "cy": 40,
+              "midi": 74
+            },
+            {
+              "cx": 40,
+              "cy": 35,
+              "midi": 76
+            }
+          ],
+          "matched": 3,
+          "expected": 3,
+          "extra": 4,
+          "precision": 0.42857142857142855,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 39,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 49,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 59,
+              "midi": null
+            }
+          ],
+          "matched": 3,
+          "expected": 3,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "ensemble": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 39,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 49,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 59,
+              "midi": null
+            }
+          ],
+          "matched": 3,
+          "expected": 3,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/synthetic/synth-three-online-filled.png",
+      "pass": {
+        "ensembleCountOk": true,
+        "ensembleRecall": true,
+        "noExtra": true
+      }
+    },
+    {
+      "id": "synth-two-online-hollow",
+      "kind": "chord",
+      "label": "Two hollow heads on adjacent staff lines",
+      "expectCount": 2,
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 0,
+          "centers": [],
+          "matched": 0,
+          "expected": 2,
+          "extra": 0,
+          "precision": null,
+          "recall": 0
+        },
+        "lobesOnSubtracted": {
+          "count": 0,
+          "centers": [],
+          "matched": 0,
+          "expected": 2,
+          "extra": 0,
+          "precision": null,
+          "recall": 0
+        },
+        "staffHypotheses": {
+          "count": 0,
+          "centers": [],
+          "matched": 0,
+          "expected": 2,
+          "extra": 0,
+          "precision": null,
+          "recall": 0
+        },
+        "mergePrevention": {
+          "count": 0,
+          "centers": [],
+          "matched": 0,
+          "expected": 2,
+          "extra": 0,
+          "precision": null,
+          "recall": 0
+        },
+        "ensemble": {
+          "count": 0,
+          "centers": [],
+          "matched": 0,
+          "expected": 2,
+          "extra": 0,
+          "precision": null,
+          "recall": 0
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/synthetic/synth-two-online-hollow.png",
+      "pass": {
+        "ensembleCountOk": false,
+        "ensembleRecall": false,
+        "noExtra": true
+      }
+    },
+    {
+      "id": "synth-single-online",
+      "kind": "single",
+      "label": "Single filled head on a staff line",
+      "expectCount": 1,
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 48,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "lobesOnSubtracted": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 50,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "staffHypotheses": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 55,
+              "midi": 69
+            },
+            {
+              "cx": 40,
+              "cy": 50,
+              "midi": 71
+            },
+            {
+              "cx": 40,
+              "cy": 45,
+              "midi": 72
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 2,
+          "precision": 0.3333333333333333,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 49,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "ensemble": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 49,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/synthetic/synth-single-online.png",
+      "pass": {
+        "ensembleCountOk": true,
+        "ensembleRecall": true,
+        "noExtra": true
+      }
+    },
+    {
+      "id": "synth-single-space",
+      "kind": "single",
+      "label": "Single filled head in a staff space",
+      "expectCount": 1,
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 45,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "lobesOnSubtracted": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 45,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "staffHypotheses": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 50,
+              "midi": 71
+            },
+            {
+              "cx": 40,
+              "cy": 45,
+              "midi": 72
+            },
+            {
+              "cx": 40,
+              "cy": 40,
+              "midi": 74
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 2,
+          "precision": 0.3333333333333333,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 45,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "ensemble": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 45,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/synthetic/synth-single-space.png",
+      "pass": {
+        "ensembleCountOk": true,
+        "ensembleRecall": true,
+        "noExtra": true
+      }
+    },
+    {
+      "id": "synth-single-with-staccato",
+      "kind": "single-with-articulation",
+      "label": "Single on-line head with staccato dot",
+      "expectCount": 1,
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 48,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "lobesOnSubtracted": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 50,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "staffHypotheses": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 55,
+              "midi": 69
+            },
+            {
+              "cx": 40,
+              "cy": 50,
+              "midi": 71
+            },
+            {
+              "cx": 40,
+              "cy": 45,
+              "midi": 72
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 2,
+          "precision": 0.3333333333333333,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 49,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "ensemble": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 49,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 1,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/synthetic/synth-single-with-staccato.png",
+      "pass": {
+        "ensembleCountOk": true,
+        "ensembleRecall": true,
+        "noExtra": true
+      }
+    },
+    {
+      "id": "synth-chord-with-beam",
+      "kind": "chord",
+      "label": "Two on-line heads with stem and beam",
+      "expectCount": 2,
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 38,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 48,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "lobesOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 40,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 50,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "staffHypotheses": {
+          "count": 5,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 55,
+              "midi": 69
+            },
+            {
+              "cx": 40,
+              "cy": 50,
+              "midi": 71
+            },
+            {
+              "cx": 40,
+              "cy": 45,
+              "midi": 72
+            },
+            {
+              "cx": 40,
+              "cy": 40,
+              "midi": 74
+            },
+            {
+              "cx": 40,
+              "cy": 35,
+              "midi": 76
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 3,
+          "precision": 0.4,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 39,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 49,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "ensemble": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 40,
+              "cy": 39,
+              "midi": null
+            },
+            {
+              "cx": 40,
+              "cy": 49,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/synthetic/synth-chord-with-beam.png",
+      "pass": {
+        "ensembleCountOk": true,
+        "ensembleRecall": true,
+        "noExtra": true
+      }
+    }
+  ],
+  "realResults": [
+    {
+      "id": "real-m1-s1-o0",
+      "kind": "collapse",
+      "collapsed": true,
+      "truthLabels": [
+        "C4",
+        "E4",
+        "G4"
+      ],
+      "productionMidis": [
+        67,
+        64
+      ],
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 17,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 69,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 3,
+          "extra": 1,
+          "precision": 0.5,
+          "recall": 0.3333333333333333
+        },
+        "lobesOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 43,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 56,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 3,
+          "extra": 0,
+          "precision": 1,
+          "recall": 0.6666666666666666
+        },
+        "staffHypotheses": {
+          "count": 9,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 71,
+              "midi": 60
+            },
+            {
+              "cx": 43,
+              "cy": 64,
+              "midi": 62
+            },
+            {
+              "cx": 43,
+              "cy": 57,
+              "midi": 64
+            },
+            {
+              "cx": 43,
+              "cy": 50,
+              "midi": 65
+            },
+            {
+              "cx": 43,
+              "cy": 43,
+              "midi": 67
+            },
+            {
+              "cx": 43,
+              "cy": 36,
+              "midi": 69
+            },
+            {
+              "cx": 43,
+              "cy": 29,
+              "midi": 71
+            },
+            {
+              "cx": 43,
+              "cy": 21,
+              "midi": 72
+            },
+            {
+              "cx": 43,
+              "cy": 14,
+              "midi": 74
+            }
+          ],
+          "matched": 3,
+          "expected": 3,
+          "extra": 6,
+          "precision": 0.3333333333333333,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 4,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 17,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 43,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 56,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 69,
+              "midi": null
+            }
+          ],
+          "matched": 3,
+          "expected": 3,
+          "extra": 1,
+          "precision": 0.75,
+          "recall": 1
+        },
+        "ensemble": {
+          "count": 4,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 17,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 43,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 56,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 69,
+              "midi": null
+            }
+          ],
+          "matched": 3,
+          "expected": 3,
+          "extra": 1,
+          "precision": 0.75,
+          "recall": 1
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/overlays/real-m1-s1-o0.png"
+    },
+    {
+      "id": "real-m1-s1-o2",
+      "kind": "collapse",
+      "collapsed": true,
+      "truthLabels": [
+        "E4",
+        "G4"
+      ],
+      "productionMidis": [
+        67
+      ],
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 0,
+          "centers": [],
+          "matched": 0,
+          "expected": 2,
+          "extra": 0,
+          "precision": null,
+          "recall": 0
+        },
+        "lobesOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 43,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 56,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "staffHypotheses": {
+          "count": 5,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 57,
+              "midi": 64
+            },
+            {
+              "cx": 43,
+              "cy": 50,
+              "midi": 65
+            },
+            {
+              "cx": 43,
+              "cy": 43,
+              "midi": 67
+            },
+            {
+              "cx": 43,
+              "cy": 36,
+              "midi": 69
+            },
+            {
+              "cx": 43,
+              "cy": 29,
+              "midi": 71
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 3,
+          "precision": 0.4,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 43,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 56,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "ensemble": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 43,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 56,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 1
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/overlays/real-m1-s1-o2.png"
+    },
+    {
+      "id": "real-m3-s1-o0",
+      "kind": "collapse",
+      "collapsed": true,
+      "truthLabels": [
+        "E4",
+        "G#4",
+        "B4"
+      ],
+      "productionMidis": [
+        67,
+        65,
+        65
+      ],
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 41,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 54,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 68,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 1,
+          "precision": 0.6666666666666666,
+          "recall": 1
+        },
+        "lobesOnSubtracted": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 42,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 56,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 69,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 1,
+          "precision": 0.6666666666666666,
+          "recall": 1
+        },
+        "staffHypotheses": {
+          "count": 5,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 71,
+              "midi": 64
+            },
+            {
+              "cx": 43,
+              "cy": 64,
+              "midi": 65
+            },
+            {
+              "cx": 43,
+              "cy": 57,
+              "midi": 67
+            },
+            {
+              "cx": 43,
+              "cy": 50,
+              "midi": 69
+            },
+            {
+              "cx": 43,
+              "cy": 43,
+              "midi": 71
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 3,
+          "precision": 0.4,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 42,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 55,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 69,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 1,
+          "precision": 0.6666666666666666,
+          "recall": 1
+        },
+        "ensemble": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 42,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 55,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 69,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 1,
+          "precision": 0.6666666666666666,
+          "recall": 1
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/overlays/real-m3-s1-o0.png"
+    },
+    {
+      "id": "real-m5-s1-o2",
+      "kind": "collapse",
+      "collapsed": true,
+      "truthLabels": [
+        "B4",
+        "D5"
+      ],
+      "productionMidis": [
+        72,
+        71,
+        71,
+        72,
+        71
+      ],
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 64,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 77,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 1,
+          "precision": 0.5,
+          "recall": 0.5
+        },
+        "lobesOnSubtracted": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 65,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 0.5
+        },
+        "staffHypotheses": {
+          "count": 4,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 78,
+              "midi": 69
+            },
+            {
+              "cx": 52,
+              "cy": 69,
+              "midi": 71
+            },
+            {
+              "cx": 52,
+              "cy": 60,
+              "midi": 72
+            },
+            {
+              "cx": 52,
+              "cy": 52,
+              "midi": 74
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 2,
+          "precision": 0.5,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 65,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 77,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 1,
+          "precision": 0.5,
+          "recall": 0.5
+        },
+        "ensemble": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 65,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 77,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 1,
+          "precision": 0.5,
+          "recall": 0.5
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/overlays/real-m5-s1-o2.png"
+    },
+    {
+      "id": "real-m5-s2-o0",
+      "kind": "chord-control",
+      "collapsed": false,
+      "truthLabels": [
+        "G2",
+        "D3"
+      ],
+      "productionMidis": [
+        50,
+        48,
+        43,
+        50
+      ],
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 22,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 35,
+              "midi": null
+            }
+          ],
+          "matched": 0,
+          "expected": 2,
+          "extra": 2,
+          "precision": 0,
+          "recall": 0
+        },
+        "lobesOnSubtracted": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 49,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 0.5
+        },
+        "staffHypotheses": {
+          "count": 9,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 75,
+              "midi": 43
+            },
+            {
+              "cx": 43,
+              "cy": 68,
+              "midi": 45
+            },
+            {
+              "cx": 43,
+              "cy": 61,
+              "midi": 47
+            },
+            {
+              "cx": 43,
+              "cy": 54,
+              "midi": 48
+            },
+            {
+              "cx": 43,
+              "cy": 47,
+              "midi": 50
+            },
+            {
+              "cx": 43,
+              "cy": 39,
+              "midi": 52
+            },
+            {
+              "cx": 43,
+              "cy": 32,
+              "midi": 53
+            },
+            {
+              "cx": 43,
+              "cy": 25,
+              "midi": 55
+            },
+            {
+              "cx": 43,
+              "cy": 18,
+              "midi": 57
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 7,
+          "precision": 0.2222222222222222,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 22,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 35,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 49,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 2,
+          "precision": 0.3333333333333333,
+          "recall": 0.5
+        },
+        "ensemble": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 22,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 35,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 49,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 2,
+          "precision": 0.3333333333333333,
+          "recall": 0.5
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/overlays/real-m5-s2-o0.png"
+    },
+    {
+      "id": "real-m6-s1-o0",
+      "kind": "collapse",
+      "collapsed": true,
+      "truthLabels": [
+        "A4",
+        "C#5",
+        "E5"
+      ],
+      "productionMidis": [
+        72,
+        71,
+        72,
+        71,
+        69
+      ],
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 72,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 85,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 1,
+          "precision": 0.5,
+          "recall": 0.5
+        },
+        "lobesOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 66,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 79,
+              "midi": null
+            }
+          ],
+          "matched": 0,
+          "expected": 2,
+          "extra": 2,
+          "precision": 0,
+          "recall": 0
+        },
+        "staffHypotheses": {
+          "count": 4,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 87,
+              "midi": 69
+            },
+            {
+              "cx": 52,
+              "cy": 78,
+              "midi": 71
+            },
+            {
+              "cx": 52,
+              "cy": 69,
+              "midi": 72
+            },
+            {
+              "cx": 52,
+              "cy": 61,
+              "midi": 74
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 3,
+          "precision": 0.25,
+          "recall": 0.5
+        },
+        "mergePrevention": {
+          "count": 4,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 66,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 72,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 79,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 85,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 3,
+          "precision": 0.25,
+          "recall": 0.5
+        },
+        "ensemble": {
+          "count": 4,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 66,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 72,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 79,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 85,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 3,
+          "precision": 0.25,
+          "recall": 0.5
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/overlays/real-m6-s1-o0.png"
+    },
+    {
+      "id": "real-m6-s2-o0",
+      "kind": "collapse",
+      "collapsed": true,
+      "truthLabels": [
+        "A2",
+        "E3"
+      ],
+      "productionMidis": [
+        43,
+        50,
+        50,
+        48
+      ],
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 25,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 39,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 1,
+          "precision": 0.5,
+          "recall": 0.5
+        },
+        "lobesOnSubtracted": {
+          "count": 1,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 45,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 0,
+          "precision": 1,
+          "recall": 0.5
+        },
+        "staffHypotheses": {
+          "count": 8,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 72,
+              "midi": 45
+            },
+            {
+              "cx": 43,
+              "cy": 65,
+              "midi": 47
+            },
+            {
+              "cx": 43,
+              "cy": 58,
+              "midi": 48
+            },
+            {
+              "cx": 43,
+              "cy": 51,
+              "midi": 50
+            },
+            {
+              "cx": 43,
+              "cy": 43,
+              "midi": 52
+            },
+            {
+              "cx": 43,
+              "cy": 36,
+              "midi": 53
+            },
+            {
+              "cx": 43,
+              "cy": 29,
+              "midi": 55
+            },
+            {
+              "cx": 43,
+              "cy": 22,
+              "midi": 57
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 6,
+          "precision": 0.25,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 25,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 39,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 45,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 2,
+          "precision": 0.3333333333333333,
+          "recall": 0.5
+        },
+        "ensemble": {
+          "count": 3,
+          "centers": [
+            {
+              "cx": 43,
+              "cy": 25,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 39,
+              "midi": null
+            },
+            {
+              "cx": 43,
+              "cy": 45,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 2,
+          "precision": 0.3333333333333333,
+          "recall": 0.5
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/overlays/real-m6-s2-o0.png"
+    },
+    {
+      "id": "real-m7-s1-o0",
+      "kind": "collapse",
+      "collapsed": true,
+      "truthLabels": [
+        "G4",
+        "B4",
+        "D5"
+      ],
+      "productionMidis": [
+        71,
+        69,
+        67,
+        71,
+        71,
+        67
+      ],
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 62,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 75,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 3,
+          "extra": 1,
+          "precision": 0.5,
+          "recall": 0.3333333333333333
+        },
+        "lobesOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 63,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 75,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 3,
+          "extra": 1,
+          "precision": 0.5,
+          "recall": 0.3333333333333333
+        },
+        "staffHypotheses": {
+          "count": 7,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 87,
+              "midi": 67
+            },
+            {
+              "cx": 52,
+              "cy": 78,
+              "midi": 69
+            },
+            {
+              "cx": 52,
+              "cy": 69,
+              "midi": 71
+            },
+            {
+              "cx": 52,
+              "cy": 60,
+              "midi": 72
+            },
+            {
+              "cx": 52,
+              "cy": 52,
+              "midi": 74
+            },
+            {
+              "cx": 52,
+              "cy": 43,
+              "midi": 76
+            },
+            {
+              "cx": 52,
+              "cy": 34,
+              "midi": 77
+            }
+          ],
+          "matched": 3,
+          "expected": 3,
+          "extra": 4,
+          "precision": 0.42857142857142855,
+          "recall": 1
+        },
+        "mergePrevention": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 63,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 75,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 3,
+          "extra": 1,
+          "precision": 0.5,
+          "recall": 0.3333333333333333
+        },
+        "ensemble": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 63,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 75,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 3,
+          "extra": 1,
+          "precision": 0.5,
+          "recall": 0.3333333333333333
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/overlays/real-m7-s1-o0.png"
+    },
+    {
+      "id": "real-m8-s1-o0",
+      "kind": "collapse",
+      "collapsed": true,
+      "truthLabels": [
+        "E4",
+        "G#4",
+        "B4"
+      ],
+      "productionMidis": [
+        69,
+        65,
+        65,
+        65
+      ],
+      "methods": {
+        "verticalProfileOnSubtracted": {
+          "count": 4,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 31,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 44,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 57,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 84,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 2,
+          "precision": 0.5,
+          "recall": 1
+        },
+        "lobesOnSubtracted": {
+          "count": 2,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 57,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 70,
+              "midi": null
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 1,
+          "precision": 0.5,
+          "recall": 0.5
+        },
+        "staffHypotheses": {
+          "count": 7,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 78,
+              "midi": 65
+            },
+            {
+              "cx": 52,
+              "cy": 70,
+              "midi": 67
+            },
+            {
+              "cx": 52,
+              "cy": 61,
+              "midi": 69
+            },
+            {
+              "cx": 52,
+              "cy": 52,
+              "midi": 71
+            },
+            {
+              "cx": 52,
+              "cy": 43,
+              "midi": 72
+            },
+            {
+              "cx": 52,
+              "cy": 35,
+              "midi": 74
+            },
+            {
+              "cx": 52,
+              "cy": 26,
+              "midi": 76
+            }
+          ],
+          "matched": 1,
+          "expected": 2,
+          "extra": 6,
+          "precision": 0.14285714285714285,
+          "recall": 0.5
+        },
+        "mergePrevention": {
+          "count": 5,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 31,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 44,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 57,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 70,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 84,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 3,
+          "precision": 0.4,
+          "recall": 1
+        },
+        "ensemble": {
+          "count": 5,
+          "centers": [
+            {
+              "cx": 52,
+              "cy": 31,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 44,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 57,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 70,
+              "midi": null
+            },
+            {
+              "cx": 52,
+              "cy": 84,
+              "midi": null
+            }
+          ],
+          "matched": 2,
+          "expected": 2,
+          "extra": 3,
+          "precision": 0.4,
+          "recall": 1
+        }
+      },
+      "overlay": "/Users/ryland/Documents/scoreflow/tmp/pitch-spike-6/overlays/real-m8-s1-o0.png"
+    }
+  ],
+  "integrationDecision": {
+    "recommendedMethod": null,
+    "safeEnough": false,
+    "candidatesPassingAllGates": [],
+    "reason": "No method met isolated safety bar (synth singles stay single, ≥75% synth chords, collapse recall≥0.5, ≤0.5 extras/collapse-crop, ≥3 real single on-line controls). Near-misses: mergePrevention(recall=0.73, extras/crop=1.50), ensemble(recall=0.73, extras/crop=1.50), lobesOnSubtracted(recall=0.56, extras/crop=0.63), verticalProfileOnSubtracted(recall=0.52, extras/crop=1.00). Real single controls collected: 0. Production left unchanged.",
+    "criticalScanFinding": "On the canonical m5 treble opening column, expected upper chord-tone line positions often lack head-like vertical ink (bare staff line only); recoverable ink sits near mid/lower tones. Methods must not invent missing upper tones without ink — and ink-supported recovery still over-proposes extras on real collapses."
+  }
+}

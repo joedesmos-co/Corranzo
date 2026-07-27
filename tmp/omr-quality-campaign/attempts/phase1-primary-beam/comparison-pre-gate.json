@@ -1,0 +1,739 @@
+{
+  "authority": "Frozen semantic evaluator plus exact 1:1 aligned-measure topology audit.",
+  "candidate": "tmp/omr-quality-campaign/attempts/phase1-primary-beam",
+  "aggregate": {
+    "baseline": {
+      "wrongNoteDuration": 418,
+      "wrongRestDuration": 2,
+      "missingRest": 66,
+      "inventedRest": 1,
+      "denseChordSeparation": 190,
+      "tupletGrouping": 12
+    },
+    "candidate": {
+      "wrongNoteDuration": 412,
+      "wrongRestDuration": 2,
+      "missingRest": 66,
+      "inventedRest": 1,
+      "denseChordSeparation": 190,
+      "tupletGrouping": 12
+    },
+    "delta": {
+      "wrongNoteDuration": -6,
+      "wrongRestDuration": 0,
+      "missingRest": 0,
+      "inventedRest": 0,
+      "denseChordSeparation": 0,
+      "tupletGrouping": 0
+    }
+  },
+  "beamTotals": {
+    "baseline": {
+      "comparableNotes": 700,
+      "matchedBeamedTruthNotes": 263,
+      "correctBeamSignatures": 6,
+      "beamMismatches": 257,
+      "falseBeamedNotes": 0
+    },
+    "candidate": {
+      "comparableNotes": 700,
+      "matchedBeamedTruthNotes": 263,
+      "correctBeamSignatures": 144,
+      "beamMismatches": 119,
+      "falseBeamedNotes": 7
+    },
+    "delta": {
+      "comparableNotes": 0,
+      "matchedBeamedTruthNotes": 0,
+      "correctBeamSignatures": 138,
+      "beamMismatches": -138,
+      "falseBeamedNotes": 7
+    }
+  },
+  "bySource": {
+    "minecraft": {
+      "scores": {
+        "overall": [
+          "50%",
+          "50%"
+        ],
+        "rhythm": [
+          "29%",
+          "29%"
+        ],
+        "playback": [
+          "100%",
+          "100%"
+        ]
+      },
+      "taxonomy": {
+        "baseline": {
+          "wrongNoteDuration": 0,
+          "wrongRestDuration": 0,
+          "missingRest": 0,
+          "inventedRest": 0,
+          "denseChordSeparation": 0,
+          "tupletGrouping": 0
+        },
+        "candidate": {
+          "wrongNoteDuration": 0,
+          "wrongRestDuration": 0,
+          "missingRest": 0,
+          "inventedRest": 0,
+          "denseChordSeparation": 0,
+          "tupletGrouping": 0
+        }
+      },
+      "beams": {
+        "baseline": {
+          "comparableNotes": 0,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        },
+        "candidate": {
+          "comparableNotes": 0,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        }
+      },
+      "invariants": {
+        "noteCountBefore": 105,
+        "noteCountAfter": 105,
+        "pitchAttackOrderEqual": true,
+        "pitchInventoryEqual": true,
+        "frozenNotationSemanticsEqual": true
+      }
+    },
+    "evangelion": {
+      "scores": {
+        "overall": [
+          "39%",
+          "39%"
+        ],
+        "rhythm": [
+          "51%",
+          "52%"
+        ],
+        "playback": [
+          "100%",
+          "100%"
+        ]
+      },
+      "taxonomy": {
+        "baseline": {
+          "wrongNoteDuration": 22,
+          "wrongRestDuration": 0,
+          "missingRest": 1,
+          "inventedRest": 0,
+          "denseChordSeparation": 5,
+          "tupletGrouping": 0
+        },
+        "candidate": {
+          "wrongNoteDuration": 19,
+          "wrongRestDuration": 0,
+          "missingRest": 1,
+          "inventedRest": 0,
+          "denseChordSeparation": 5,
+          "tupletGrouping": 0
+        }
+      },
+      "beams": {
+        "baseline": {
+          "comparableNotes": 44,
+          "matchedBeamedTruthNotes": 23,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 23,
+          "falseBeamedNotes": 0
+        },
+        "candidate": {
+          "comparableNotes": 44,
+          "matchedBeamedTruthNotes": 23,
+          "correctBeamSignatures": 10,
+          "beamMismatches": 13,
+          "falseBeamedNotes": 0
+        }
+      },
+      "invariants": {
+        "noteCountBefore": 252,
+        "noteCountAfter": 252,
+        "pitchAttackOrderEqual": true,
+        "pitchInventoryEqual": true,
+        "frozenNotationSemanticsEqual": true
+      }
+    },
+    "gymnopedie": {
+      "scores": {
+        "overall": [
+          "58%",
+          "58%"
+        ],
+        "rhythm": [
+          "87%",
+          "87%"
+        ],
+        "playback": [
+          "100%",
+          "100%"
+        ]
+      },
+      "taxonomy": {
+        "baseline": {
+          "wrongNoteDuration": 2,
+          "wrongRestDuration": 1,
+          "missingRest": 17,
+          "inventedRest": 0,
+          "denseChordSeparation": 0,
+          "tupletGrouping": 0
+        },
+        "candidate": {
+          "wrongNoteDuration": 2,
+          "wrongRestDuration": 1,
+          "missingRest": 17,
+          "inventedRest": 0,
+          "denseChordSeparation": 0,
+          "tupletGrouping": 0
+        }
+      },
+      "beams": {
+        "baseline": {
+          "comparableNotes": 92,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        },
+        "candidate": {
+          "comparableNotes": 92,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        }
+      },
+      "invariants": {
+        "noteCountBefore": 138,
+        "noteCountAfter": 138,
+        "pitchAttackOrderEqual": true,
+        "pitchInventoryEqual": true,
+        "frozenNotationSemanticsEqual": true
+      }
+    },
+    "piano-articulation-scan": {
+      "scores": {
+        "overall": [
+          "46%",
+          "46%"
+        ],
+        "rhythm": [
+          "72%",
+          "72%"
+        ],
+        "playback": [
+          "100%",
+          "100%"
+        ]
+      },
+      "taxonomy": {
+        "baseline": {
+          "wrongNoteDuration": 26,
+          "wrongRestDuration": 0,
+          "missingRest": 0,
+          "inventedRest": 0,
+          "denseChordSeparation": 33,
+          "tupletGrouping": 0
+        },
+        "candidate": {
+          "wrongNoteDuration": 26,
+          "wrongRestDuration": 0,
+          "missingRest": 0,
+          "inventedRest": 0,
+          "denseChordSeparation": 33,
+          "tupletGrouping": 0
+        }
+      },
+      "beams": {
+        "baseline": {
+          "comparableNotes": 29,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        },
+        "candidate": {
+          "comparableNotes": 29,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        }
+      },
+      "invariants": {
+        "noteCountBefore": 111,
+        "noteCountAfter": 111,
+        "pitchAttackOrderEqual": true,
+        "pitchInventoryEqual": true,
+        "frozenNotationSemanticsEqual": true
+      }
+    },
+    "piano-grand-voices-vector": {
+      "scores": {
+        "overall": [
+          "71%",
+          "71%"
+        ],
+        "rhythm": [
+          "82%",
+          "82%"
+        ],
+        "playback": [
+          "100%",
+          "100%"
+        ]
+      },
+      "taxonomy": {
+        "baseline": {
+          "wrongNoteDuration": 29,
+          "wrongRestDuration": 0,
+          "missingRest": 0,
+          "inventedRest": 0,
+          "denseChordSeparation": 16,
+          "tupletGrouping": 0
+        },
+        "candidate": {
+          "wrongNoteDuration": 29,
+          "wrongRestDuration": 0,
+          "missingRest": 0,
+          "inventedRest": 0,
+          "denseChordSeparation": 16,
+          "tupletGrouping": 0
+        }
+      },
+      "beams": {
+        "baseline": {
+          "comparableNotes": 55,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        },
+        "candidate": {
+          "comparableNotes": 55,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        }
+      },
+      "invariants": {
+        "noteCountBefore": 88,
+        "noteCountAfter": 88,
+        "pitchAttackOrderEqual": true,
+        "pitchInventoryEqual": true,
+        "frozenNotationSemanticsEqual": true
+      }
+    },
+    "piano-rhythm-tuplets-vector": {
+      "scores": {
+        "overall": [
+          "65%",
+          "65%"
+        ],
+        "rhythm": [
+          "68%",
+          "68%"
+        ],
+        "playback": [
+          "100%",
+          "100%"
+        ]
+      },
+      "taxonomy": {
+        "baseline": {
+          "wrongNoteDuration": 14,
+          "wrongRestDuration": 1,
+          "missingRest": 3,
+          "inventedRest": 1,
+          "denseChordSeparation": 2,
+          "tupletGrouping": 0
+        },
+        "candidate": {
+          "wrongNoteDuration": 14,
+          "wrongRestDuration": 1,
+          "missingRest": 3,
+          "inventedRest": 1,
+          "denseChordSeparation": 2,
+          "tupletGrouping": 0
+        }
+      },
+      "beams": {
+        "baseline": {
+          "comparableNotes": 0,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        },
+        "candidate": {
+          "comparableNotes": 0,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        }
+      },
+      "invariants": {
+        "noteCountBefore": 63,
+        "noteCountAfter": 63,
+        "pitchAttackOrderEqual": true,
+        "pitchInventoryEqual": true,
+        "frozenNotationSemanticsEqual": true
+      }
+    },
+    "piano-dense-advanced-vector": {
+      "scores": {
+        "overall": [
+          "47%",
+          "47%"
+        ],
+        "rhythm": [
+          "43%",
+          "43%"
+        ],
+        "playback": [
+          "100%",
+          "100%"
+        ]
+      },
+      "taxonomy": {
+        "baseline": {
+          "wrongNoteDuration": 62,
+          "wrongRestDuration": 0,
+          "missingRest": 0,
+          "inventedRest": 0,
+          "denseChordSeparation": 43,
+          "tupletGrouping": 0
+        },
+        "candidate": {
+          "wrongNoteDuration": 62,
+          "wrongRestDuration": 0,
+          "missingRest": 0,
+          "inventedRest": 0,
+          "denseChordSeparation": 43,
+          "tupletGrouping": 0
+        }
+      },
+      "beams": {
+        "baseline": {
+          "comparableNotes": 41,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        },
+        "candidate": {
+          "comparableNotes": 41,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        }
+      },
+      "invariants": {
+        "noteCountBefore": 264,
+        "noteCountAfter": 264,
+        "pitchAttackOrderEqual": true,
+        "pitchInventoryEqual": true,
+        "frozenNotationSemanticsEqual": true
+      }
+    },
+    "la-campanella": {
+      "scores": {
+        "overall": [
+          "23%",
+          "23%"
+        ],
+        "rhythm": [
+          "31%",
+          "31%"
+        ],
+        "playback": [
+          "100%",
+          "100%"
+        ]
+      },
+      "taxonomy": {
+        "baseline": {
+          "wrongNoteDuration": 0,
+          "wrongRestDuration": 0,
+          "missingRest": 0,
+          "inventedRest": 0,
+          "denseChordSeparation": 0,
+          "tupletGrouping": 0
+        },
+        "candidate": {
+          "wrongNoteDuration": 0,
+          "wrongRestDuration": 0,
+          "missingRest": 0,
+          "inventedRest": 0,
+          "denseChordSeparation": 0,
+          "tupletGrouping": 0
+        }
+      },
+      "beams": {
+        "baseline": {
+          "comparableNotes": 0,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        },
+        "candidate": {
+          "comparableNotes": 0,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        }
+      },
+      "invariants": {
+        "noteCountBefore": 802,
+        "noteCountAfter": 802,
+        "pitchAttackOrderEqual": true,
+        "pitchInventoryEqual": true,
+        "frozenNotationSemanticsEqual": true
+      }
+    },
+    "fantaisie-impromptu": {
+      "scores": {
+        "overall": [
+          "27%",
+          "27%"
+        ],
+        "rhythm": [
+          "36%",
+          "36%"
+        ],
+        "playback": [
+          "100%",
+          "100%"
+        ]
+      },
+      "taxonomy": {
+        "baseline": {
+          "wrongNoteDuration": 3,
+          "wrongRestDuration": 0,
+          "missingRest": 2,
+          "inventedRest": 0,
+          "denseChordSeparation": 2,
+          "tupletGrouping": 12
+        },
+        "candidate": {
+          "wrongNoteDuration": 3,
+          "wrongRestDuration": 0,
+          "missingRest": 2,
+          "inventedRest": 0,
+          "denseChordSeparation": 2,
+          "tupletGrouping": 12
+        }
+      },
+      "beams": {
+        "baseline": {
+          "comparableNotes": 27,
+          "matchedBeamedTruthNotes": 21,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 21,
+          "falseBeamedNotes": 0
+        },
+        "candidate": {
+          "comparableNotes": 27,
+          "matchedBeamedTruthNotes": 21,
+          "correctBeamSignatures": 5,
+          "beamMismatches": 16,
+          "falseBeamedNotes": 0
+        }
+      },
+      "invariants": {
+        "noteCountBefore": 1209,
+        "noteCountAfter": 1209,
+        "pitchAttackOrderEqual": true,
+        "pitchInventoryEqual": true,
+        "frozenNotationSemanticsEqual": true
+      }
+    },
+    "moonlight-3": {
+      "scores": {
+        "overall": [
+          "22%",
+          "22%"
+        ],
+        "rhythm": [
+          "31%",
+          "31%"
+        ],
+        "playback": [
+          "100%",
+          "100%"
+        ]
+      },
+      "taxonomy": {
+        "baseline": {
+          "wrongNoteDuration": 0,
+          "wrongRestDuration": 0,
+          "missingRest": 0,
+          "inventedRest": 0,
+          "denseChordSeparation": 0,
+          "tupletGrouping": 0
+        },
+        "candidate": {
+          "wrongNoteDuration": 0,
+          "wrongRestDuration": 0,
+          "missingRest": 0,
+          "inventedRest": 0,
+          "denseChordSeparation": 0,
+          "tupletGrouping": 0
+        }
+      },
+      "beams": {
+        "baseline": {
+          "comparableNotes": 0,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        },
+        "candidate": {
+          "comparableNotes": 0,
+          "matchedBeamedTruthNotes": 0,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 0,
+          "falseBeamedNotes": 0
+        }
+      },
+      "invariants": {
+        "noteCountBefore": 762,
+        "noteCountAfter": 762,
+        "pitchAttackOrderEqual": true,
+        "pitchInventoryEqual": true,
+        "frozenNotationSemanticsEqual": true
+      }
+    },
+    "hungarian-dance-no5": {
+      "scores": {
+        "overall": [
+          "25%",
+          "25%"
+        ],
+        "rhythm": [
+          "28%",
+          "28%"
+        ],
+        "playback": [
+          "100%",
+          "100%"
+        ]
+      },
+      "taxonomy": {
+        "baseline": {
+          "wrongNoteDuration": 40,
+          "wrongRestDuration": 0,
+          "missingRest": 5,
+          "inventedRest": 0,
+          "denseChordSeparation": 34,
+          "tupletGrouping": 0
+        },
+        "candidate": {
+          "wrongNoteDuration": 40,
+          "wrongRestDuration": 0,
+          "missingRest": 5,
+          "inventedRest": 0,
+          "denseChordSeparation": 34,
+          "tupletGrouping": 0
+        }
+      },
+      "beams": {
+        "baseline": {
+          "comparableNotes": 9,
+          "matchedBeamedTruthNotes": 2,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 2,
+          "falseBeamedNotes": 0
+        },
+        "candidate": {
+          "comparableNotes": 9,
+          "matchedBeamedTruthNotes": 2,
+          "correctBeamSignatures": 0,
+          "beamMismatches": 2,
+          "falseBeamedNotes": 0
+        }
+      },
+      "invariants": {
+        "noteCountBefore": 995,
+        "noteCountAfter": 995,
+        "pitchAttackOrderEqual": true,
+        "pitchInventoryEqual": true,
+        "frozenNotationSemanticsEqual": true
+      }
+    },
+    "carol-of-the-bells": {
+      "scores": {
+        "overall": [
+          "50%",
+          "50%"
+        ],
+        "rhythm": [
+          "61%",
+          "61%"
+        ],
+        "playback": [
+          "100%",
+          "100%"
+        ]
+      },
+      "taxonomy": {
+        "baseline": {
+          "wrongNoteDuration": 220,
+          "wrongRestDuration": 0,
+          "missingRest": 38,
+          "inventedRest": 0,
+          "denseChordSeparation": 55,
+          "tupletGrouping": 0
+        },
+        "candidate": {
+          "wrongNoteDuration": 217,
+          "wrongRestDuration": 0,
+          "missingRest": 38,
+          "inventedRest": 0,
+          "denseChordSeparation": 55,
+          "tupletGrouping": 0
+        }
+      },
+      "beams": {
+        "baseline": {
+          "comparableNotes": 403,
+          "matchedBeamedTruthNotes": 217,
+          "correctBeamSignatures": 6,
+          "beamMismatches": 211,
+          "falseBeamedNotes": 0
+        },
+        "candidate": {
+          "comparableNotes": 403,
+          "matchedBeamedTruthNotes": 217,
+          "correctBeamSignatures": 129,
+          "beamMismatches": 88,
+          "falseBeamedNotes": 7
+        }
+      },
+      "invariants": {
+        "noteCountBefore": 680,
+        "noteCountAfter": 680,
+        "pitchAttackOrderEqual": true,
+        "pitchInventoryEqual": true,
+        "frozenNotationSemanticsEqual": true
+      }
+    }
+  }
+}

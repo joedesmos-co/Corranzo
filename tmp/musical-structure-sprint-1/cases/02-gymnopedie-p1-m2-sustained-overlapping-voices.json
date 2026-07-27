@@ -1,0 +1,335 @@
+{
+  "id": "02-gymnopedie-p1-m2-sustained-overlapping-voices",
+  "source": "gymnopedie",
+  "sourceLabel": "Gymnopédie",
+  "sourcePdf": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+  "page": 1,
+  "measure": 2,
+  "category": "sustained overlapping voices",
+  "manuallyVerified": true,
+  "expectedVoiceEventStructure": {
+    "noteCount": 4,
+    "restCount": 2,
+    "voicesByStaff": {
+      "1": [
+        1
+      ],
+      "2": [
+        5,
+        6
+      ]
+    },
+    "sameStaffPolyphony": true,
+    "chordColumnCount": 1,
+    "chordToneCount": 3,
+    "stemDirections": {
+      "up": 3,
+      "down": 1,
+      "unspecified": 0
+    },
+    "beamNoteCount": 0,
+    "tupletMemberCount": 0,
+    "crossStaffVoices": [],
+    "balance": {
+      "1": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "5": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "6": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      }
+    }
+  },
+  "detectedNotesRestsSymbols": {
+    "vectorNoteCount": 4,
+    "vectorRestGlyphCount": 2,
+    "beamStemCandidateCounts": {
+      "noteheads": 4,
+      "stems": 4,
+      "beams": 0
+    }
+  },
+  "rawVoiceStemCandidates": [
+    {
+      "eventIndex": 0,
+      "startDivision": 0,
+      "splitCandidate": false,
+      "reasons": [],
+      "ownerships": [
+        {
+          "noteheadId": "n-2-0-362-325",
+          "midi": 38,
+          "clef": "bass",
+          "stemDirection": "down",
+          "stemConfidence": 0.98,
+          "beamGroupId": null,
+          "beamCount": 1,
+          "confidence": 0.98
+        }
+      ]
+    },
+    {
+      "eventIndex": 2,
+      "startDivision": 4,
+      "splitCandidate": false,
+      "reasons": [
+        "beamed-and-unbeamed-notes",
+        "multiple-likely-voices"
+      ],
+      "ownerships": [
+        {
+          "noteheadId": "n-2-1-414-258",
+          "midi": 66,
+          "clef": "bass",
+          "stemDirection": "down",
+          "stemConfidence": 0.9382,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.9382
+        },
+        {
+          "noteheadId": "n-2-2-414-270",
+          "midi": 61,
+          "clef": "bass",
+          "stemDirection": "down",
+          "stemConfidence": 0.72,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.72
+        },
+        {
+          "noteheadId": "n-2-3-414-279",
+          "midi": 57,
+          "clef": "bass",
+          "stemDirection": "down",
+          "stemConfidence": 0.6836,
+          "beamGroupId": null,
+          "beamCount": 1,
+          "confidence": 0.6836
+        }
+      ]
+    }
+  ],
+  "generatedEventGraph": {
+    "units": [
+      {
+        "eventIndex": 0,
+        "startDivision": 0,
+        "durationDivisions": 12,
+        "voice": 4,
+        "staff": "bass",
+        "stemDirection": "down",
+        "emitEventBeams": true,
+        "noteMidis": [
+          38
+        ]
+      },
+      {
+        "eventIndex": 1,
+        "startDivision": 0,
+        "durationDivisions": 12,
+        "voice": 1,
+        "staff": "treble",
+        "stemDirection": null,
+        "emitEventBeams": true,
+        "noteMidis": []
+      },
+      {
+        "eventIndex": 2,
+        "startDivision": 4,
+        "durationDivisions": 8,
+        "voice": 2,
+        "staff": "bass",
+        "stemDirection": null,
+        "emitEventBeams": true,
+        "noteMidis": [
+          66,
+          61,
+          57
+        ]
+      }
+    ],
+    "diagnostics": {
+      "eventCount": 3,
+      "serializationUnitCount": 3,
+      "splitEventCount": 0,
+      "splitNoteCount": 0,
+      "overlappingVoiceEventCount": 1,
+      "polyphonicStaffs": [
+        "bass"
+      ],
+      "rejectedReasons": {
+        "partial-stem-ownership": 1
+      },
+      "changedPitchCount": 0,
+      "changedOnsetCount": 0,
+      "changedDurationCount": 0,
+      "changedNoteCount": 0
+    }
+  },
+  "generatedBefore": {
+    "noteCount": 4,
+    "restCount": 1,
+    "voicesByStaff": {
+      "1": [
+        1
+      ],
+      "2": [
+        2
+      ]
+    },
+    "sameStaffPolyphony": false,
+    "chordColumnCount": 1,
+    "chordToneCount": 3,
+    "stemDirections": {
+      "up": 0,
+      "down": 0,
+      "unspecified": 4
+    },
+    "beamNoteCount": 0,
+    "tupletMemberCount": 0,
+    "crossStaffVoices": [],
+    "balance": {
+      "1": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "2": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      }
+    }
+  },
+  "generatedAfter": {
+    "noteCount": 4,
+    "restCount": 1,
+    "voicesByStaff": {
+      "1": [
+        1
+      ],
+      "2": [
+        2,
+        4
+      ]
+    },
+    "sameStaffPolyphony": true,
+    "chordColumnCount": 1,
+    "chordToneCount": 3,
+    "stemDirections": {
+      "up": 0,
+      "down": 1,
+      "unspecified": 3
+    },
+    "beamNoteCount": 0,
+    "tupletMemberCount": 0,
+    "crossStaffVoices": [],
+    "balance": {
+      "1": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "2": {
+        "writtenQuarters": 2,
+        "implicitGapQuarters": 1,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "4": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      }
+    }
+  },
+  "emittedMusicXml": "<measure number=\"2\"><note><rest/><duration>12</duration><voice>1</voice><type>half</type><staff>1</staff></note><backup><duration>8</duration></backup><note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><note><chord/><pitch><step>C</step><alter>1</alter><octave>4</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><note><chord/><pitch><step>A</step><octave>3</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><backup><duration>12</duration></backup><note><pitch><step>D</step><octave>2</octave></pitch><duration>12</duration><voice>4</voice><type>half</type><dot/><staff>2</staff><stem>down</stem></note></measure>",
+  "renderedResult": {
+    "beforeStemCount": 2,
+    "afterStemCount": 2,
+    "visibleImprovement": true
+  },
+  "playbackEventOrder": {
+    "before": [
+      {
+        "measureNumber": 2,
+        "quarterTime": 3,
+        "durationQuarters": 3,
+        "midi": 38
+      },
+      {
+        "measureNumber": 2,
+        "quarterTime": 4,
+        "durationQuarters": 2,
+        "midi": 57
+      },
+      {
+        "measureNumber": 2,
+        "quarterTime": 4,
+        "durationQuarters": 2,
+        "midi": 61
+      },
+      {
+        "measureNumber": 2,
+        "quarterTime": 4,
+        "durationQuarters": 2,
+        "midi": 66
+      }
+    ],
+    "after": [
+      {
+        "measureNumber": 2,
+        "quarterTime": 3,
+        "durationQuarters": 3,
+        "midi": 38
+      },
+      {
+        "measureNumber": 2,
+        "quarterTime": 4,
+        "durationQuarters": 2,
+        "midi": 57
+      },
+      {
+        "measureNumber": 2,
+        "quarterTime": 4,
+        "durationQuarters": 2,
+        "midi": 61
+      },
+      {
+        "measureNumber": 2,
+        "quarterTime": 4,
+        "durationQuarters": 2,
+        "midi": 66
+      }
+    ],
+    "unchanged": true
+  },
+  "failureLayerBefore": "1 wrong voice assignment; 6 incorrect rest voice or duration",
+  "failureLayerAfter": "6 incorrect rest voice or duration unchanged; outside shipped slice",
+  "correctBefore": false,
+  "correctAfter": false,
+  "artifacts": {
+    "sourceCrop": "tmp/musical-structure-sprint-1/source-crops/02-gymnopedie-p1-m2-sustained-overlapping-voices.png",
+    "candidateOverlay": "tmp/musical-structure-sprint-1/candidate-overlays/02-gymnopedie-p1-m2-sustained-overlapping-voices.png",
+    "musicXmlSnippet": "tmp/musical-structure-sprint-1/musicxml-snippets/02-gymnopedie-p1-m2-sustained-overlapping-voices.musicxml",
+    "renderedBefore": "tmp/musical-structure-sprint-1/rendered-before/02-gymnopedie-p1-m2-sustained-overlapping-voices.png",
+    "renderedAfter": "tmp/musical-structure-sprint-1/rendered-after/02-gymnopedie-p1-m2-sustained-overlapping-voices.png",
+    "gallery": "tmp/musical-structure-sprint-1/gallery/02-gymnopedie-p1-m2-sustained-overlapping-voices.png"
+  }
+}

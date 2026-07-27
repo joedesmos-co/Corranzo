@@ -80,9 +80,29 @@ function getSetupStatus({
     return { tone: 'setup', title: 'Cursor off', detail: null }
   }
   if (canFollow) {
-    return { tone: 'ready', title: 'Cursor ready', detail: null }
+    return { tone: 'ready', title: 'Following', detail: null }
   }
   return { tone: 'setup', title: 'Almost ready', detail: null }
+}
+
+function shouldShowSetupStatusCard({
+  embedded,
+  alignmentMode,
+  setupPhase,
+  followNeedsSetup,
+  anchors,
+  isSemiAutoAnalyzing,
+  tone,
+}) {
+  if (!embedded) return false
+  if (alignmentMode || isSemiAutoAnalyzing) return true
+  if (setupPhase === 'running' || setupPhase === 'failed' || setupPhase === 'needs-setup') {
+    return true
+  }
+  if (followNeedsSetup && (anchors?.length ?? 0) > 0) return true
+  // Hide idle / ready onboarding cards from the default Advanced panel.
+  if (tone === 'ready' || tone === 'setup') return false
+  return tone === 'active'
 }
 
 export default function ScoreFollowControls({
@@ -160,6 +180,15 @@ export default function ScoreFollowControls({
     experimentalOmrPlayback,
     setupMessage: setupStatus?.message,
   })
+  const showStatusCard = shouldShowSetupStatusCard({
+    embedded,
+    alignmentMode,
+    setupPhase: setupStatus?.phase,
+    followNeedsSetup,
+    anchors,
+    isSemiAutoAnalyzing,
+    tone: cardStatus.tone,
+  })
 
   // Auto setup genuinely failed (ran and produced no usable mapping) — the only
   // time the manual "Mark system starts" rescue path is surfaced up front.
@@ -179,7 +208,7 @@ export default function ScoreFollowControls({
     <Root className={rootClass} aria-label="Score cursor">
       {!embedded && <h4 className="score-follow-controls__title">Score cursor</h4>}
 
-      {embedded && (
+      {showStatusCard && (
         <div
           className={`score-follow-controls__status-card score-follow-controls__status-card--${cardStatus.tone}`}
           role="status"

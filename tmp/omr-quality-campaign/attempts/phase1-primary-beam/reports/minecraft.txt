@@ -1,0 +1,1567 @@
+OMR semantic evaluation
+=======================
+schema v2 · evaluator v2.0.0 · 15aa1db · mode=written
+Alignment confidence: 52% (20 matched, 76 missing, 0 extra)
+
+Overall semantic score
+
+Pitch ........... 1%  (4/678; cov 100%)
+Rhythm .......... 29%  (14/49; cov 89%)
+Sustain ......... 0%  (0/7; cov 100%)
+Articulation .... 100%  (0/0; cov 100%)
+Measure ......... 18%  (40/223; cov 100%)
+Interpretation .. 100%  (1/1; cov 100%)
+Playback ........ 100%  (0/0; cov 100%)
+
+Overall .......... 50%
+First divergence: measure 1 (unmatched)
+
+Worst measures
+- Measure 37 (severity 122): Merged measures 37,38 → 12; Missing note C4; Missing note E4
+- Measure 35 (severity 119): Merged measures 35,36 → 11; Missing note D3; Missing note G3
+- Measure 19 (severity 112): Merged measures 19,20 → 6; Missing note D4; Missing note A4
+- Measure 25 (severity 109): Merged measures 25,26 → 9; Missing note F3; Missing note A3
+- Measure 40 (severity 109): Merged measures 40,1 → 1; Missing note G4; Missing note B4
+
+Per-measure report
+
+Measure 1 [missing]
+- Missing measure 1
+
+Measure 2 [missing]
+- Missing measure 2
+- Merged measures 2,3 → 2
+- Missing note E4
+- Missing note B3
+- Missing note G4
+- Missing note G3
+- Missing note C4
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note F2
+- Missing note A2
+- Missing note D3
+- Missing note B4
+- Missing note E3
+- Missing note G2
+- Extra note E4
+- Extra note B3
+- Extra note G4
+- Extra note G3
+- Incorrect chord
+
+Measure 3 [missing]
+- Missing measure 3
+
+Measure 4 [missing]
+- Missing measure 4
+- Merged measures 4,5 → 3
+- Missing note E4
+- Missing note D4
+- Missing note G3
+- Missing note B3
+- Missing note C2
+- Missing note E3
+- Missing note G4
+- Missing note B4
+- Missing note A4
+- Missing note F3
+- Missing note A3
+- Missing note D3
+- Missing note D2
+- Missing note E2
+- Extra note G4
+- Extra note B4
+- Extra note A4
+- Extra note E4
+- Extra note D3
+- Extra note G3
+- Incorrect chord
+
+Measure 5 [missing]
+- Missing measure 5
+
+Measure 6 [missing]
+- Missing measure 6
+- Missing note E4
+- Missing note B3
+- Missing note G4
+- Missing note G3
+- Missing note C4
+- Missing note F2
+- Missing note A2
+
+Measure 7 [missing]
+- Missing measure 7
+- Merged measures 7,8 → 4
+- Missing note G4
+- Missing note B4
+- Missing note A4
+- Missing note E4
+- Missing note E3
+- Missing note G3
+- Missing note B3
+- Missing note A3
+- Missing note C4
+- Missing note D3
+- Missing note G2
+- Missing note F2
+- Missing note F3
+- Missing note D4
+- Missing note C2
+- Extra note E4
+- Extra note D4
+- Extra note G3
+- Incorrect chord
+
+Measure 8 [missing]
+- Missing measure 8
+
+Measure 9 [missing]
+- Missing measure 9
+- Missing note G4
+- Missing note B4
+- Missing note D4
+- Missing note E4
+- Missing note F3
+- Missing note A3
+- Missing note A4
+- Missing note D3
+- Missing note G3
+- Missing note D2
+- Missing note E2
+
+Measure 10 [missing]
+- Missing measure 10
+- Missing note E4
+- Missing note B3
+- Missing note G4
+- Missing note D4
+- Missing note A4
+- Missing note G3
+- Missing note C4
+- Missing note F2
+- Missing note A2
+- Missing note D3
+- Missing note F3
+
+Measure 11 [missing]
+- Missing measure 11
+- Missing note G4
+- Missing note B4
+- Missing note A4
+- Missing note E4
+- Missing note E3
+- Missing note G3
+- Missing note B3
+- Missing note D3
+- Missing note G2
+- Missing note F2
+
+Measure 12 [missing]
+- Missing measure 12
+- Missing note E4
+- Missing note B4
+- Missing note D5
+- Missing note G3
+- Missing note B3
+- Missing note D4
+- Missing note A3
+- Missing note C2
+- Missing note E3
+
+Measure 13 [missing]
+- Missing measure 13
+- Missing note G4
+- Missing note B4
+- Missing note A4
+- Missing note D5
+- Missing note E5
+- Missing note F3
+- Missing note A3
+- Missing note C5
+- Missing note B3
+- Missing note D3
+- Missing note G3
+- Missing note D2
+- Missing note E2
+- Missing note E3
+
+Measure 14 [missing]
+- Missing measure 14
+- Missing note E5
+- Missing note A4
+- Missing note D5
+- Missing note B4
+- Missing note G3
+- Missing note C4
+- Missing note E4
+- Missing note D4
+- Missing note B3
+- Missing note F2
+- Missing note A2
+- Missing note E3
+
+Measure 15 [missing]
+- Missing measure 15
+- Missing note G4
+- Missing note B4
+- Missing note A4
+- Missing note E4
+- Missing note E3
+- Missing note G3
+- Missing note B3
+- Missing note A3
+- Missing note C4
+- Missing note D3
+- Missing note G2
+- Missing note F2
+- Missing note F3
+
+Measure 16 [missing]
+- Missing measure 16
+- Merged measures 16,17 → 5
+- Missing note E4
+- Missing note B4
+- Missing note G4
+- Missing note G3
+- Missing note B3
+- Missing note D4
+- Missing note A3
+- Missing note C2
+- Missing note F3
+- Missing note A4
+- Missing note D3
+- Missing note D2
+- Missing note E2
+- Extra note G4
+- Extra note B4
+- Extra note A4
+- Extra note E4
+- Extra note D3
+- Extra note G3
+- Incorrect chord
+
+Measure 17 [missing]
+- Missing measure 17
+
+Measure 18 [missing]
+- Missing measure 18
+- Missing note E4
+- Missing note B3
+- Missing note G4
+- Missing note C4
+- Missing note C5
+- Missing note E5
+- Missing note D5
+- Missing note A4
+- Missing note G3
+- Missing note F2
+- Missing note A2
+- Missing note D3
+- Missing note F3
+
+Measure 19 [missing]
+- Missing measure 19
+- Merged measures 19,20 → 6
+- Missing note D4
+- Missing note A4
+- Missing note B4
+- Missing note G4
+- Missing note B3
+- Missing note E4
+- Missing note C5
+- Missing note G3
+- Missing rest (eighth)
+- Missing note D3
+- Missing note G2
+- Missing note F2
+- Missing note E3
+- Missing note A3
+- Missing note C2
+- Extra note E4
+- Extra note B3
+- Extra note G4
+- Extra note G3
+- Incorrect chord
+
+Measure 20 [missing]
+- Missing measure 20
+
+Measure 1 [missing]
+- Missing measure 1
+
+Measure 2 [missing]
+- Missing measure 2
+
+Measure 3 [missing]
+- Missing measure 3
+
+Measure 4 [missing]
+- Missing measure 4
+
+Measure 5 [missing]
+- Missing measure 5
+
+Measure 6 [missing]
+- Missing measure 6
+
+Measure 7 [missing]
+- Missing measure 7
+
+Measure 8 [missing]
+- Missing measure 8
+
+Measure 9 [missing]
+- Missing measure 9
+
+Measure 10 [missing]
+- Missing measure 10
+
+Measure 11 [missing]
+- Missing measure 11
+
+Measure 12 [missing]
+- Missing measure 12
+
+Measure 13 [missing]
+- Missing measure 13
+
+Measure 14 [missing]
+- Missing measure 14
+
+Measure 15 [missing]
+- Missing measure 15
+
+Measure 16 [missing]
+- Missing measure 16
+
+Measure 17 [missing]
+- Missing measure 17
+
+Measure 18 [missing]
+- Missing measure 18
+
+Measure 19 [missing]
+- Missing measure 19
+
+Measure 20 [missing]
+- Missing measure 20
+
+Measure 21 [missing]
+- Missing measure 21
+- Merged measures 21,22 → 7
+- Missing note F3
+- Missing note A3
+- Missing note A4
+- Missing note G4
+- Missing note G3
+- Missing note B3
+- Missing note C5
+- Missing note D2
+- Missing note E2
+- Missing note E3
+- Missing note C4
+- Missing note E4
+- Missing note D4
+- Missing note B4
+- Missing note F2
+- Missing note A2
+- Extra note G4
+- Extra note B4
+- Extra note A4
+- Extra note E4
+- Extra note D3
+- Extra note G3
+- Incorrect chord
+
+Measure 22 [missing]
+- Missing measure 22
+
+Measure 23 [missing]
+- Missing measure 23
+- Merged measures 23,24 → 8
+- Missing note E3
+- Missing note G3
+- Missing note B3
+- Missing note E4
+- Missing note G4
+- Missing note A3
+- Missing note C4
+- Missing rest (eighth)
+- Missing note G2
+- Missing note F2
+- Missing note F3
+- Missing note D4
+- Missing note F4
+- Missing note C2
+- Extra note G4
+- Extra note D4
+- Extra note B3
+- Extra note G3
+- Incorrect chord
+
+Measure 24 [missing]
+- Missing measure 24
+
+Measure 25 [missing]
+- Missing measure 25
+- Merged measures 25,26 → 9
+- Missing note F3
+- Missing note A3
+- Missing note G4
+- Missing note A4
+- Missing note D4
+- Missing note F4
+- Missing note E4
+- Missing note D2
+- Missing note E2
+- Missing note D3
+- Missing note G3
+- Missing note C4
+- Missing rest (half)
+- Missing note F2
+- Missing note A2
+- Extra note G4
+- Extra note B4
+- Extra note D4
+- Extra note E4
+- Extra note D3
+- Extra note G3
+- Incorrect chord
+
+Measure 26 [missing]
+- Missing measure 26
+
+Measure 27 [missing]
+- Missing measure 27
+- Missing note E3
+- Missing note G3
+- Missing note B3
+- Missing note E4
+- Missing note G4
+- Missing note B4
+- Missing note C5
+- Missing note A4
+- Missing note G2
+- Missing note F2
+
+Measure 28 [missing]
+- Missing measure 28
+- Merged measures 28,29 → 10
+- Missing note G3
+- Missing note B3
+- Missing note D4
+- Missing rest (eighth)
+- Missing note G4
+- Missing rest (half)
+- Missing note C2
+- Missing note F3
+- Missing note A3
+- Missing note A4
+- Missing note B4
+- Missing note C5
+- Missing note D2
+- Missing note E2
+- Missing note E3
+- Extra note E4
+- Extra note B3
+- Extra note G4
+- Extra note D4
+- Extra note A4
+- Extra note G3
+- Incorrect chord
+
+Measure 29 [missing]
+- Missing measure 29
+
+Measure 30 [missing]
+- Missing measure 30
+- Missing note C4
+- Missing note E4
+- Missing note C5
+- Missing note D4
+- Missing note B4
+- Missing note G4
+- Missing note F2
+- Missing note A2
+- Missing note B3
+
+Measure 31 [missing]
+- Missing measure 31
+- Missing note B3
+- Missing note E4
+- Missing note B4
+- Missing note E5
+- Missing note G4
+- Missing note F4
+- Missing note G2
+- Missing note F2
+- Missing note F3
+- Missing note A3
+- Missing note C4
+
+Measure 32 [missing]
+- Missing measure 32
+- Missing note G3
+- Missing note B3
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note G4
+- Missing note B4
+- Missing note C2
+- Missing note E3
+
+Measure 33 [missing]
+- Missing measure 33
+- Missing note A3
+- Missing note C4
+- Missing note E4
+- Missing note A4
+- Missing note G4
+- Missing note D4
+- Missing note F4
+- Missing note C5
+- Missing note A1
+- Missing note A2
+- Missing note D3
+
+Measure 34 [missing]
+- Missing measure 34
+- Missing note F#3
+- Missing note A3
+- Missing note D4
+- Missing note C4
+- Missing note A4
+- Missing note G4
+- Missing note D1
+- Missing note D2
+- Missing note F3
+- Missing note G3
+
+Measure 35 [missing]
+- Missing measure 35
+- Merged measures 35,36 → 11
+- Missing note D3
+- Missing note G3
+- Missing note B3
+- Missing note C4
+- Missing note D4
+- Missing note E4
+- Missing note B4
+- Missing note C5
+- Missing note A4
+- Missing note G1
+- Missing note G2
+- Missing note E3
+- Missing note F3
+- Missing note A3
+- Missing rest (eighth)
+- Missing note G4
+- Missing note F1
+- Missing note F2
+- Extra note G4
+- Extra note B4
+- Extra note A4
+- Extra note E4
+- Extra note D3
+- Extra note G3
+- Incorrect chord
+
+Measure 36 [missing]
+- Missing measure 36
+
+Measure 37 [missing]
+- Missing measure 37
+- Merged measures 37,38 → 12
+- Missing note C4
+- Missing note E4
+- Missing note C5
+- Missing note A4
+- Missing note G4
+- Missing note G3
+- Missing note B3
+- Missing note B4
+- Missing note F5
+- Missing note A1
+- Missing note A2
+- Missing note E3
+- Missing note D4
+- Missing note F#4
+- Missing note D5
+- Missing note E5
+- Missing note D1
+- Missing note D2
+- Missing rest (half)
+- Extra note E4
+- Extra note B4
+- Extra note D5
+- Extra note B3
+- Extra note D4
+- Extra rest (quarter)
+- Incorrect chord
+
+Measure 38 [missing]
+- Missing measure 38
+
+Measure 39 [missing]
+- Missing measure 39
+- Missing note B3
+- Missing note D4
+- Missing note B4
+- Missing note C5
+- Missing note G4
+- Missing note E5
+- Missing note F4
+- Missing note E4
+- Missing note G1
+- Missing note G2
+- Missing note F3
+- Missing note A3
+- Missing note C4
+
+Measure 40 [merge]
+- Merged measures 40,1 → 1
+- Missing note G4
+- Missing note B4
+- Missing note A4
+- Missing note E4
+- Missing note F3
+- Missing note A3
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note D3
+- Missing note G3
+- Missing note D2
+- Missing note E2
+- Missing note D3
+- Extra note G4
+- Extra note B4
+- Extra note A4
+- Extra note E4
+- Extra note D3
+- Extra note G3
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Merged measures 40,41 → 13
+- Missing note C4
+- Missing note F1
+- Missing note F2
+- Missing rest (half)
+- Missing note E3
+- Missing note F5
+- Missing note E5
+- Missing note D5
+- Extra note D5
+- Extra note E5
+
+Measure 2 [merge]
+- Merged measures 2,3 → 2
+- Missing note E4
+- Missing note B3
+- Missing note G4
+- Missing note G3
+- Missing note C4
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note G3
+- Missing note F2
+- Missing note A2
+- Missing note D3
+- Missing note G4
+- Missing note B4
+- Missing note A4
+- Missing note E4
+- Missing note E3
+- Missing note B3
+- Missing note E4
+- Missing note D3
+- Missing note G3
+- Missing note G2
+- Missing note F2
+- Missing note E3
+- Extra note E4
+- Extra note B3
+- Extra note G4
+- Extra note G3
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 4 [merge]
+- Merged measures 4,5 → 3
+- Missing note E4
+- Missing note D4
+- Missing note G3
+- Missing note B3
+- Missing note B3
+- Missing note E4
+- Missing note G3
+- Missing note C2
+- Missing note E3
+- Missing note G4
+- Missing note B4
+- Missing note A4
+- Missing note E4
+- Missing note F3
+- Missing note A3
+- Missing note B3
+- Missing note E4
+- Missing note D3
+- Missing note G3
+- Missing note D2
+- Missing note E2
+- Missing note G3
+- Extra note G4
+- Extra note B4
+- Extra note A4
+- Extra note E4
+- Extra note D3
+- Extra note G3
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 6 [missing]
+- Missing measure 6
+- Missing note E4
+- Missing note B3
+- Missing note G4
+- Missing note G3
+- Missing note C4
+- Missing note E4
+- Missing note B3
+- Missing note E4
+- Missing note G3
+- Missing note F2
+- Missing note A2
+- Missing note G3
+
+Measure 7 [merge]
+- Merged measures 7,8 → 4
+- Missing note G4
+- Missing note B4
+- Missing note A4
+- Missing note E4
+- Missing note E3
+- Missing note G3
+- Missing note B3
+- Missing note A3
+- Missing note C4
+- Missing note D3
+- Missing note G3
+- Missing note G2
+- Missing note F2
+- Missing note F3
+- Missing note G4
+- Missing note D4
+- Missing note B3
+- Missing note G3
+- Missing note B3
+- Missing note D4
+- Missing note A3
+- Missing note C4
+- Missing note G3
+- Missing note C2
+- Missing note F3
+- Extra note E4
+- Extra note D4
+- Extra note G3
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 9 [missing]
+- Missing measure 9
+- Missing note G4
+- Missing note B4
+- Missing note D4
+- Missing note E4
+- Missing note F3
+- Missing note A3
+- Missing note G4
+- Missing note A4
+- Missing note A3
+- Missing note D4
+- Missing note D3
+- Missing note G3
+- Missing note D2
+- Missing note E2
+- Missing note D3
+- Missing note F3
+
+Measure 10 [missing]
+- Missing measure 10
+- Missing note E4
+- Missing note B3
+- Missing note G4
+- Missing note D4
+- Missing note A4
+- Missing note G3
+- Missing note C4
+- Missing note E4
+- Missing note C4
+- Missing note D4
+- Missing note C4
+- Missing note G3
+- Missing note F2
+- Missing note A2
+- Missing note D3
+- Missing note F3
+
+Measure 11 [missing]
+- Missing measure 11
+- Missing note G4
+- Missing note B4
+- Missing note A4
+- Missing note E4
+- Missing note B4
+- Missing note E3
+- Missing note G3
+- Missing note B3
+- Missing note E4
+- Missing note G4
+- Missing note B3
+- Missing note G3
+- Missing note D3
+- Missing note G3
+- Missing note G2
+- Missing note F2
+- Missing note E3
+- Missing note G3
+
+Measure 12 [missing]
+- Missing measure 12
+- Missing note E4
+- Missing note B4
+- Missing note D5
+- Missing note G3
+- Missing note B3
+- Missing note D4
+- Missing note A3
+- Missing note E4
+- Missing note B3
+- Missing note D4
+- Missing note C2
+- Missing note E3
+- Missing note G3
+
+Measure 13 [missing]
+- Missing measure 13
+- Missing note G4
+- Missing note B4
+- Missing note A4
+- Missing note D5
+- Missing note E5
+- Missing note F3
+- Missing note A3
+- Missing note C5
+- Missing note A4
+- Missing note G4
+- Missing note B3
+- Missing note D3
+- Missing note G3
+- Missing note D2
+- Missing note E2
+- Missing note E3
+- Missing note G3
+
+Measure 14 [missing]
+- Missing measure 14
+- Missing note E5
+- Missing note A4
+- Missing note D5
+- Missing note B4
+- Missing note A4
+- Missing note G3
+- Missing note C4
+- Missing note E4
+- Missing note C4
+- Missing note D4
+- Missing note B3
+- Missing note G3
+- Missing note B3
+- Missing note F2
+- Missing note A2
+- Missing note E3
+- Missing note G3
+
+Measure 15 [missing]
+- Missing measure 15
+- Missing note G4
+- Missing note B4
+- Missing note A4
+- Missing note E4
+- Missing note B4
+- Missing note E3
+- Missing note G3
+- Missing note B3
+- Missing note G4
+- Missing note E4
+- Missing note A3
+- Missing note C4
+- Missing note A3
+- Missing note D3
+- Missing note G3
+- Missing note G2
+- Missing note F2
+- Missing note F3
+
+Measure 16 [merge]
+- Merged measures 16,17 → 5
+- Missing note E4
+- Missing note B4
+- Missing note G4
+- Missing note G3
+- Missing note B3
+- Missing note D4
+- Missing note A3
+- Missing note G3
+- Missing note C2
+- Missing note F3
+- Missing note D4
+- Missing note E4
+- Missing note F3
+- Missing note A3
+- Missing note G4
+- Missing note A4
+- Missing note D4
+- Missing note D3
+- Missing note G3
+- Missing note D2
+- Missing note E2
+- Missing note D3
+- Missing note F3
+- Extra note G4
+- Extra note B4
+- Extra note A4
+- Extra note E4
+- Extra note D3
+- Extra note G3
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 18 [missing]
+- Missing measure 18
+- Missing note E4
+- Missing note B3
+- Missing note G4
+- Missing note C4
+- Missing note E4
+- Missing note C5
+- Missing note E5
+- Missing note D5
+- Missing note G4
+- Missing note A4
+- Missing note G4
+- Missing note G3
+- Missing note F2
+- Missing note A2
+- Missing note D3
+- Missing note F3
+
+Measure 19 [merge]
+- Merged measures 19,20 → 6
+- Missing note D4
+- Missing note A4
+- Missing note B4
+- Missing note G4
+- Missing note B3
+- Missing note E4
+- Missing note B4
+- Missing note C5
+- Missing note B4
+- Missing note B3
+- Missing note E4
+- Missing note G3
+- Missing rest (eighth)
+- Missing note D3
+- Missing note G3
+- Missing note G2
+- Missing note F2
+- Missing note E3
+- Missing note G4
+- Missing note D4
+- Missing note B3
+- Missing note D4
+- Missing note G4
+- Missing note A3
+- Missing note G3
+- Missing note C2
+- Missing note E3
+- Extra note E4
+- Extra note B3
+- Extra note G4
+- Extra note G3
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 21 [merge]
+- Merged measures 21,22 → 7
+- Missing note F3
+- Missing note A3
+- Missing note A4
+- Missing note G4
+- Missing note G3
+- Missing note B3
+- Missing note C5
+- Missing note D2
+- Missing note E2
+- Missing note E3
+- Missing note G3
+- Missing note C4
+- Missing note E4
+- Missing note C4
+- Missing note D4
+- Missing note B4
+- Missing note G4
+- Missing note D4
+- Missing note F2
+- Missing note A2
+- Missing note E3
+- Extra note G4
+- Extra note B4
+- Extra note A4
+- Extra note E4
+- Extra note D3
+- Extra note G3
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 23 [merge]
+- Merged measures 23,24 → 8
+- Missing note E3
+- Missing note G3
+- Missing note B3
+- Missing note E4
+- Missing note G4
+- Missing note A3
+- Missing note C4
+- Missing note A3
+- Missing rest (eighth)
+- Missing note G2
+- Missing note F2
+- Missing note F3
+- Missing note G3
+- Missing note B3
+- Missing note D4
+- Missing note D4
+- Missing note E4
+- Missing note F4
+- Missing note C2
+- Missing note F3
+- Extra note G4
+- Extra note D4
+- Extra note B3
+- Extra note G3
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 25 [merge]
+- Merged measures 25,26 → 9
+- Missing note F3
+- Missing note A3
+- Missing note G4
+- Missing note A4
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note F4
+- Missing note E4
+- Missing note D4
+- Missing note D2
+- Missing note E2
+- Missing note D3
+- Missing note G3
+- Missing note C4
+- Missing note E4
+- Missing note C4
+- Missing note D4
+- Missing rest (half)
+- Missing note A4
+- Missing note G4
+- Missing note F2
+- Missing note A2
+- Missing note F3
+- Missing note G3
+- Extra note G4
+- Extra note B4
+- Extra note D4
+- Extra note E4
+- Extra note D3
+- Extra note G3
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 27 [missing]
+- Missing measure 27
+- Missing note E3
+- Missing note G3
+- Missing note B3
+- Missing note E4
+- Missing note G4
+- Missing note B3
+- Missing note E4
+- Missing note B4
+- Missing note C5
+- Missing note B4
+- Missing note A4
+- Missing note G2
+- Missing note F2
+- Missing note E3
+- Missing note G3
+
+Measure 28 [merge]
+- Merged measures 28,29 → 10
+- Missing note G3
+- Missing note B3
+- Missing note D4
+- Missing rest (eighth)
+- Missing note G4
+- Missing rest (half)
+- Missing note C2
+- Missing note G3
+- Missing note F3
+- Missing note A3
+- Missing note G4
+- Missing note A4
+- Missing note G3
+- Missing note B3
+- Missing note B4
+- Missing note C5
+- Missing note D2
+- Missing note E2
+- Missing note E3
+- Extra note E4
+- Extra note B3
+- Extra note G4
+- Extra note D4
+- Extra note A4
+- Extra note G3
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 30 [missing]
+- Missing measure 30
+- Missing note C4
+- Missing note E4
+- Missing note C5
+- Missing note C4
+- Missing note D4
+- Missing note B4
+- Missing note G4
+- Missing note D4
+- Missing note B4
+- Missing note C5
+- Missing note F2
+- Missing note A2
+- Missing note B3
+- Missing note C4
+
+Measure 31 [missing]
+- Missing measure 31
+- Missing note B3
+- Missing note E4
+- Missing note B4
+- Missing note E5
+- Missing note E4
+- Missing note G4
+- Missing note F4
+- Missing note E4
+- Missing note G4
+- Missing note G2
+- Missing note F2
+- Missing note F3
+- Missing note A3
+- Missing note C4
+
+Measure 32 [missing]
+- Missing measure 32
+- Missing note G3
+- Missing note B3
+- Missing note D4
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note G4
+- Missing note B4
+- Missing note C2
+- Missing note E3
+
+Measure 33 [missing]
+- Missing measure 33
+- Missing note A3
+- Missing note C4
+- Missing note E4
+- Missing note A4
+- Missing note G4
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note F4
+- Missing note C5
+- Missing note E4
+- Missing note D4
+- Missing note A1
+- Missing note A2
+- Missing note D3
+
+Measure 34 [missing]
+- Missing measure 34
+- Missing note F#3
+- Missing note A3
+- Missing note D4
+- Missing note D4
+- Missing note C4
+- Missing note A4
+- Missing note G4
+- Missing note D1
+- Missing note D2
+- Missing note F3
+- Missing note G3
+
+Measure 35 [merge]
+- Merged measures 35,36 → 11
+- Missing note D3
+- Missing note G3
+- Missing note B3
+- Missing note C4
+- Missing note D4
+- Missing note B3
+- Missing note E4
+- Missing note B4
+- Missing note C5
+- Missing note B4
+- Missing note A4
+- Missing note G1
+- Missing note G2
+- Missing note E3
+- Missing note G3
+- Missing note F3
+- Missing note A3
+- Missing rest (eighth)
+- Missing note G4
+- Missing rest (eighth)
+- Missing note D4
+- Missing note F1
+- Missing note F2
+- Missing note G3
+- Extra note G4
+- Extra note B4
+- Extra note A4
+- Extra note E4
+- Extra note B4
+- Extra note D3
+- Extra note G3
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 37 [merge]
+- Merged measures 37,38 → 12
+- Missing note C4
+- Missing note E4
+- Missing note C5
+- Missing note A4
+- Missing note G4
+- Missing note G3
+- Missing note B3
+- Missing note B4
+- Missing note F5
+- Missing note A1
+- Missing note A2
+- Missing note E3
+- Missing note D4
+- Missing note F#4
+- Missing note A4
+- Missing note D4
+- Missing note D5
+- Missing note E5
+- Missing note C5
+- Missing note A4
+- Missing note B4
+- Missing note C5
+- Missing note D1
+- Missing note D2
+- Missing rest (half)
+- Missing note B3
+- Missing note C4
+- Extra note E4
+- Extra note B4
+- Extra note D5
+- Extra note B3
+- Extra note D4
+- Extra rest (quarter)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 39 [missing]
+- Missing measure 39
+- Missing note B3
+- Missing note D4
+- Missing note B4
+- Missing note C5
+- Missing note G4
+- Missing note E5
+- Missing note F4
+- Missing note E4
+- Missing note G4
+- Missing note G1
+- Missing note G2
+- Missing note F3
+- Missing note A3
+- Missing note C4
+
+Measure 40 [merge]
+- Merged measures 40,41 → 13
+- Missing note A3
+- Missing note C4
+- Missing note A4
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note G4
+- Missing note B4
+- Missing note F1
+- Missing note F2
+- Missing rest (half)
+- Missing note E3
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note F5
+- Missing note E5
+- Missing note D5
+- Missing note G4
+- Missing note D3
+- Extra note G4
+- Extra note B4
+- Extra note A4
+- Extra note D5
+- Extra note E5
+- Extra note D3
+- Extra note G3
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 42 [merge]
+- Merged measures 42,43 → 14
+- Missing note D5
+- Missing note G3
+- Missing note B3
+- Missing note E4
+- Missing note B4
+- Missing note C5
+- Missing note B4
+- Missing note A4
+- Missing note E3
+- Missing note G3
+- Missing note G3
+- Extra note A4
+- Extra note D5
+- Extra note B3
+- Extra rest (dotted eighth)
+- Incorrect pitch A4 (expected G4)
+- Incorrect pitch G3 (expected F3)
+- Half detected as quarter
+- Incorrect pitch B4 (expected E5)
+- Incorrect pitch E5 (expected A4)
+- Half detected as quarter
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 44 [merge]
+- Merged measures 44,45 → 15
+- Missing rest (eighth)
+- Missing rest (eighth)
+- Missing note D4
+- Missing note G3
+- Missing rest (quarter)
+- Missing rest (eighth)
+- Missing note B4
+- Missing note G4
+- Missing note C5
+- Missing note E3
+- Missing note G3
+- Missing note B3
+- Missing rest (quarter)
+- Extra note B4
+- Extra note A4
+- Extra note E4
+- Extra note B4
+- Extra note D3
+- Extra note G3
+- Half detected as dotted half
+- Onset off by 0.5 quarters
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 46 [missing]
+- Missing measure 46
+- Missing note E4
+- Missing note B4
+- Missing note C4
+- Missing note G4
+- Missing note B4
+- Missing note C5
+- Missing note B3
+- Missing note C4
+
+Measure 47 [merge]
+- Merged measures 47,48 → 16
+- Missing rest (quarter)
+- Missing rest (eighth)
+- Missing note G4
+- Missing note A3
+- Missing note C4
+- Missing rest (quarter)
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note E4
+- Missing note B4
+- Missing rest (half)
+- Missing note E3
+- Extra note E4
+- Extra note B4
+- Incorrect pitch G3 (expected F3)
+- dotted quarter detected as dotted half
+- Incorrect pitch G4 (expected E4)
+- Missing dot
+- Onset off by 0.5 quarters
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 49 [merge]
+- Merged measures 49,50 → 17
+- Missing note F4
+- Missing note A4
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note D3
+- Extra note E4
+- Extra note G3
+- 8q detected as dotted half
+- Missing tie
+- 8q detected as quarter
+- Missing tie
+- Incorrect chord
+- Incorrect chord
+
+Measure 51 [merge]
+- Merged measures 51,52 → 18
+- Missing note B3
+- Missing note E3
+- Missing note B3
+- Missing note E4
+- Missing note E3
+- Extra rest (quarter)
+- Extra note B3
+- Extra note G4
+- Extra note G3
+- 8q detected as dotted half
+- Missing tie
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 53 [merge]
+- Merged measures 53,54 → 19
+- Missing note G3
+- Missing note B3
+- Missing note E4
+- Missing note G3
+- Extra note B4
+- Extra note G4
+- Extra note G3
+- Extra note D3
+- Incorrect pitch D4 (expected E4)
+- 8q detected as dotted half
+- Missing tie
+- Incorrect pitch A4 (expected B3)
+- 8q detected as dotted half
+- Missing tie
+- Incorrect chord
+- Incorrect chord
+
+Measure 55 [merge]
+- Merged measures 55,56 → 20
+- Missing note A3
+- Missing note A3
+- Missing note C4
+- Missing note F3
+- Extra note D4
+- Incorrect pitch G3 (expected F3)
+- 8q detected as dotted half
+- Missing tie
+- Incorrect pitch G4 (expected C4)
+- 8q detected as quarter
+- Missing tie
+- Incorrect chord
+- Incorrect chord
+
+Top recurring defects:
+1. Missing note (573)
+2. Extra note (91)
+3. Incorrect chord (87)
+4. Missing measure (76)
+5. Merged measure (20)
+6. Missing rest (18)
+7. Duration mismatch (10)
+8. Incorrect pitch (10)
+9. Missing tie (7)
+10. Extra rest (3)
+11. Onset timing difference (2)
+12. Dotted rhythm error (1)
+13. Missing dot (1)
+
+Top defect classes: Pitch (674), Measure structure (183), Rhythm (35), Sustain (ties) (7)
+
+Totals: 899 defects · 587 truth notes · 105 generated notes · 116→20 measures

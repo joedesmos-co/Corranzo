@@ -1,0 +1,1378 @@
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url' }
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=44 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { page: 1, legacyFontGlyphsApplied: undefined }
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 63,
+  systems: 2,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 63, systems: 2 }
+[omr-trace] phase=page-1 ms=155 end { systems: 2, measures: 8, notes: 63 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=16 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 8 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=1 end
+[omr-trace] phase=omr-v3-shadow start
+[omr-trace] phase=omr-v3-shadow ms=8 end
+[omr-trace] phase=omr-v3-independent-shadow start
+[omr-trace] phase=omr-v3-independent-shadow ms=12 end
+[omr-trace] pipeline:measure-playback-report { firstBadMeasure: 2, flagged: [ 2, 3, 8 ] }
+[omr-trace] pipeline:success { noteCount: 63, measureCount: 8 }
+{
+  "runtime": {
+    "metrics": {
+      "pitchAccuracy": 0.4127,
+      "matchedPitchAccuracy": 0.4643,
+      "durationAccuracy": 0.7778,
+      "matchedDurationAccuracy": 0.875,
+      "onsetAccuracy": 0.5556,
+      "matchedOnsetAccuracy": 0.625,
+      "timeAccuracy": 0.0159,
+      "matchedTimeAccuracy": 0.0179,
+      "measureCountAccuracy": 1,
+      "noteDetectionPrecision": 0.8889,
+      "noteDetectionRecall": 0.8889,
+      "noteDetectionF1": 0.8889,
+      "chordGroupingAccuracy": 0.7746,
+      "pitchAccuracyAtCorrectOnset": 0.4286,
+      "orderSensitivePitchRecovery": 0.2222
+    },
+    "wrongDurationCount": 7,
+    "wrongDurations": [
+      {
+        "measureNumber": 1,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 0.545,
+        "durationDiffQuarters": 0.5,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m1-n6",
+          "measureNumber": 1,
+          "onsetQuarters": 3,
+          "durationQuarters": 0.5,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m1-n7",
+          "measureNumber": 1,
+          "onsetQuarters": 3,
+          "durationQuarters": 1,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 2
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 0.977,
+        "durationDiffQuarters": 0.5,
+        "pitchDeltaSemitones": 7,
+        "truth": {
+          "id": "P1-m2-n19",
+          "measureNumber": 2,
+          "onsetQuarters": 2.75,
+          "durationQuarters": 0.25,
+          "midi": 69,
+          "label": "A4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m2-n22",
+          "measureNumber": 2,
+          "onsetQuarters": 3.25,
+          "durationQuarters": 0.75,
+          "midi": 76,
+          "label": "E5",
+          "partId": "P1",
+          "voice": 2
+        }
+      },
+      {
+        "measureNumber": 2,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 1.489,
+        "durationDiffQuarters": 0.5,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m2-n22",
+          "measureNumber": 2,
+          "onsetQuarters": 3.5,
+          "durationQuarters": 0.25,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m2-n23",
+          "measureNumber": 2,
+          "onsetQuarters": 3.25,
+          "durationQuarters": 0.75,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 2
+        }
+      },
+      {
+        "measureNumber": 3,
+        "onsetDiffQuarters": 0.083,
+        "timeDiffSeconds": 2.102,
+        "durationDiffQuarters": 0.417,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m3-n34",
+          "measureNumber": 3,
+          "onsetQuarters": 3.333,
+          "durationQuarters": 0.333,
+          "midi": 67,
+          "label": "G4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m3-n35",
+          "measureNumber": 3,
+          "onsetQuarters": 3.25,
+          "durationQuarters": 0.75,
+          "midi": 67,
+          "label": "G4",
+          "partId": "P1",
+          "voice": 2
+        }
+      },
+      {
+        "measureNumber": 3,
+        "onsetDiffQuarters": 0.667,
+        "timeDiffSeconds": 2.455,
+        "durationDiffQuarters": 0.667,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m3-n35",
+          "measureNumber": 3,
+          "onsetQuarters": 3.667,
+          "durationQuarters": 0.333,
+          "midi": 67,
+          "label": "G4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m3-n34",
+          "measureNumber": 3,
+          "onsetQuarters": 3,
+          "durationQuarters": 1,
+          "midi": 67,
+          "label": "G4",
+          "partId": "P1",
+          "voice": 2
+        }
+      },
+      {
+        "measureNumber": 4,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 2.557,
+        "durationDiffQuarters": 0.75,
+        "pitchDeltaSemitones": 8,
+        "truth": {
+          "id": "P1-m4-n40",
+          "measureNumber": 4,
+          "onsetQuarters": 2.75,
+          "durationQuarters": 0.25,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m4-n39",
+          "measureNumber": 4,
+          "onsetQuarters": 3,
+          "durationQuarters": 1,
+          "midi": 79,
+          "label": "G5",
+          "partId": "P1",
+          "voice": 2
+        }
+      },
+      {
+        "measureNumber": 5,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 2.909,
+        "durationDiffQuarters": 2,
+        "pitchDeltaSemitones": 7,
+        "truth": {
+          "id": "P1-m5-n42",
+          "measureNumber": 5,
+          "onsetQuarters": 0,
+          "durationQuarters": 3,
+          "midi": 72,
+          "label": "C5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m5-n41",
+          "measureNumber": 5,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 79,
+          "label": "G5",
+          "partId": "P1",
+          "voice": 2
+        }
+      }
+    ]
+  },
+  "v3Independent": {
+    "status": "ready",
+    "metrics": {
+      "pitchAccuracy": 0.4444,
+      "matchedPitchAccuracy": 0.459,
+      "durationAccuracy": 0.9206,
+      "matchedDurationAccuracy": 0.9508,
+      "onsetAccuracy": 0.7302,
+      "matchedOnsetAccuracy": 0.7541,
+      "timeAccuracy": 0,
+      "matchedTimeAccuracy": 0,
+      "measureCountAccuracy": 1,
+      "noteDetectionPrecision": 0.9683,
+      "noteDetectionRecall": 0.9683,
+      "noteDetectionF1": 0.9683,
+      "chordGroupingAccuracy": 0.9688,
+      "pitchAccuracyAtCorrectOnset": 0.4783,
+      "orderSensitivePitchRecovery": 0.1587
+    },
+    "wrongDurationCount": 3,
+    "wrongDurations": [
+      {
+        "measureNumber": 4,
+        "onsetDiffQuarters": 0.5,
+        "timeDiffSeconds": 2.114,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 2,
+        "truth": {
+          "id": "P1-m4-n38",
+          "measureNumber": 4,
+          "onsetQuarters": 1,
+          "durationQuarters": 1.5,
+          "midi": 69,
+          "label": "A4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m4-n39",
+          "measureNumber": 4,
+          "onsetQuarters": 1.5,
+          "durationQuarters": 0.5,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 2
+        }
+      },
+      {
+        "measureNumber": 5,
+        "onsetDiffQuarters": 0.25,
+        "timeDiffSeconds": 3.398,
+        "durationDiffQuarters": 0.5,
+        "pitchDeltaSemitones": 7,
+        "truth": {
+          "id": "P1-m5-n43",
+          "measureNumber": 5,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 72,
+          "label": "C5",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m5-n41",
+          "measureNumber": 5,
+          "onsetQuarters": 1.75,
+          "durationQuarters": 1.5,
+          "midi": 79,
+          "label": "G5",
+          "partId": "P1",
+          "voice": 1
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0.75,
+        "timeDiffSeconds": 4.716,
+        "durationDiffQuarters": 0.75,
+        "pitchDeltaSemitones": -1,
+        "truth": {
+          "id": "P1-m8-n62",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 0.75,
+          "midi": 65,
+          "label": "F4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m8-n61",
+          "measureNumber": 8,
+          "onsetQuarters": 0.75,
+          "durationQuarters": 1.5,
+          "midi": 64,
+          "label": "E4",
+          "partId": "P1",
+          "voice": 1
+        }
+      }
+    ],
+    "stages": {
+      "pianoMeasureCount": 8,
+      "ambiguousMeasureCount": 2,
+      "rejectedEventGroupCount": 0,
+      "unresolvedEventGroupCount": 0,
+      "recoveredUniformBeatGridCount": 44,
+      "recoveredMeasureEndCount": 2,
+      "voiceOverlapViolations": 0,
+      "inputMutated": false
+    },
+    "measureTraces": [
+      {
+        "measureNumber": 1,
+        "onsetColumnCount": 8,
+        "onsetColumns": [
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:0.18868872549019605:false:0",
+            "position": 0.02912156740234334,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:0.20214460784313726:false:1",
+            "position": 0.13421280727223725,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:0.21560049019607844:false:2",
+            "position": 0.23930404714213074,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:0.22905637254901962:false:3",
+            "position": 0.34439528701202443,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:0.2425122549019608:false:4",
+            "position": 0.44948652688191815,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:0.255968137254902:false:5",
+            "position": 0.5545777667518116,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:0.26942401960784307:false:6",
+            "position": 0.6596690066217049,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:0.2847303921568627:false:7",
+            "position": 0.779212684761502,
+            "grace": false
+          }
+        ],
+        "voices": [
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0",
+            "ambiguous": false,
+            "events": [
+              {
+                "pitch": {
+                  "midi": 40,
+                  "writtenMidi": 40,
+                  "soundingMidi": 40,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 2,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 64,
+                  "writtenMidi": 64,
+                  "soundingMidi": 64,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 2,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 79,
+                  "writtenMidi": 79,
+                  "soundingMidi": 79,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 2,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:1",
+            "ambiguous": false,
+            "events": [
+              {
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 2,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 2,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 76,
+                  "writtenMidi": 76,
+                  "soundingMidi": 76,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 2,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 76,
+                  "writtenMidi": 76,
+                  "soundingMidi": 76,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 2,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 2,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "measureNumber": 2,
+        "onsetColumnCount": 16,
+        "onsetColumns": [
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.3460294117647059:false:0",
+            "position": 0.16597694354123574,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.355:false:1",
+            "position": 0.21105527638190955,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.3639705882352941:false:2",
+            "position": 0.2561336092225834,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.3729411764705882:false:3",
+            "position": 0.30121194206325747,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.38191176470588234:false:4",
+            "position": 0.34629027490393127,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.39088235294117646:false:5",
+            "position": 0.39136860774460536,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.39985294117647063:false:6",
+            "position": 0.43644694058527944,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.4088235294117647:false:7",
+            "position": 0.48152527342595325,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.41779411764705876:false:8",
+            "position": 0.5266036062666271,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.42676470588235293:false:9",
+            "position": 0.5716819391073011,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.43573529411764705:false:10",
+            "position": 0.6167602719479752,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.44470588235294123:false:11",
+            "position": 0.6618386047886493,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.45367647058823524:false:12",
+            "position": 0.7069169376293228,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.4626470588235294:false:13",
+            "position": 0.7519952704699969,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.47161764705882353:false:14",
+            "position": 0.797073603310671,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:0.48058823529411765:false:15",
+            "position": 0.8421519361513449,
+            "grace": false
+          }
+        ],
+        "voices": [
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0",
+            "ambiguous": false,
+            "events": [
+              {
+                "pitch": {
+                  "midi": 40,
+                  "writtenMidi": 40,
+                  "soundingMidi": 40,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 64,
+                  "writtenMidi": 64,
+                  "soundingMidi": 64,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 79,
+                  "writtenMidi": 79,
+                  "soundingMidi": 79,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 76,
+                  "writtenMidi": 76,
+                  "soundingMidi": 76,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 40,
+                  "writtenMidi": 40,
+                  "soundingMidi": 40,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 64,
+                  "writtenMidi": 64,
+                  "soundingMidi": 64,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 79,
+                  "writtenMidi": 79,
+                  "soundingMidi": 79,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 76,
+                  "writtenMidi": 76,
+                  "soundingMidi": 76,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:1",
+            "ambiguous": false,
+            "events": [
+              {
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 76,
+                  "writtenMidi": 76,
+                  "soundingMidi": 76,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 76,
+                  "writtenMidi": 76,
+                  "soundingMidi": 76,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": null,
+                "stemGroupId": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "measureNumber": 3,
+        "onsetColumnCount": 12,
+        "onsetColumns": [
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:0.545375816993464:false:0",
+            "position": 0.16771767333399,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:0.5573366013071895:false:1",
+            "position": 0.22782211712155548,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:0.569297385620915:false:2",
+            "position": 0.28792656090912094,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:0.5812581699346406:false:3",
+            "position": 0.3480310046966864,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:0.593218954248366:false:4",
+            "position": 0.40813544848425126,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:0.6051797385620915:false:5",
+            "position": 0.4682398922718167,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:0.617140522875817:false:6",
+            "position": 0.5283443360593816,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:0.6291013071895425:false:7",
+            "position": 0.5884487798469471,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:0.6410620915032679:false:8",
+            "position": 0.648553223634512,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:0.6530228758169934:false:9",
+            "position": 0.7086576674220774,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:0.664983660130719:false:10",
+            "position": 0.7687621112096429,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:0.6769444444444445:false:11",
+            "position": 0.8288665549972083,
+            "grace": false
+          }
+        ],
+        "voices": [
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0",
+            "ambiguous": false,
+            "events": [
+              {
+                "pitch": {
+                  "midi": 40,
+                  "writtenMidi": 40,
+                  "soundingMidi": 40,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1.3333333333333333,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": {
+                  "actualNotes": 3,
+                  "normalNotes": 2,
+                  "writtenDivisions": 2,
+                  "groupId": "tuplet:0:4:12",
+                  "slotIndex": 0
+                },
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 40,
+                  "writtenMidi": 40,
+                  "soundingMidi": 40,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1.3333333333333333,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": {
+                  "actualNotes": 3,
+                  "normalNotes": 2,
+                  "writtenDivisions": 2,
+                  "groupId": "tuplet:0:4:12",
+                  "slotIndex": 1
+                },
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 40,
+                  "writtenMidi": 40,
+                  "soundingMidi": 40,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1.3333333333333333,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": {
+                  "actualNotes": 3,
+                  "normalNotes": 2,
+                  "writtenDivisions": 2,
+                  "groupId": "tuplet:0:4:12",
+                  "slotIndex": 2
+                },
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 40,
+                  "writtenMidi": 40,
+                  "soundingMidi": 40,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1.3333333333333333,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": {
+                  "actualNotes": 3,
+                  "normalNotes": 2,
+                  "writtenDivisions": 2,
+                  "groupId": "tuplet:1:4:12",
+                  "slotIndex": 0
+                },
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 64,
+                  "writtenMidi": 64,
+                  "soundingMidi": 64,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1.3333333333333333,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": {
+                  "actualNotes": 3,
+                  "normalNotes": 2,
+                  "writtenDivisions": 2,
+                  "groupId": "tuplet:1:4:12",
+                  "slotIndex": 1
+                },
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 64,
+                  "writtenMidi": 64,
+                  "soundingMidi": 64,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1.3333333333333333,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": {
+                  "actualNotes": 3,
+                  "normalNotes": 2,
+                  "writtenDivisions": 2,
+                  "groupId": "tuplet:1:4:12",
+                  "slotIndex": 2
+                },
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 64,
+                  "writtenMidi": 64,
+                  "soundingMidi": 64,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1.3333333333333333,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": {
+                  "actualNotes": 3,
+                  "normalNotes": 2,
+                  "writtenDivisions": 2,
+                  "groupId": "tuplet:2:4:12",
+                  "slotIndex": 0
+                },
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 64,
+                  "writtenMidi": 64,
+                  "soundingMidi": 64,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1.3333333333333333,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": {
+                  "actualNotes": 3,
+                  "normalNotes": 2,
+                  "writtenDivisions": 2,
+                  "groupId": "tuplet:2:4:12",
+                  "slotIndex": 1
+                },
+                "stemGroupId": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:1",
+            "ambiguous": false,
+            "events": [
+              {
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1.3333333333333333,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": {
+                  "actualNotes": 3,
+                  "normalNotes": 2,
+                  "writtenDivisions": 2,
+                  "groupId": "tuplet:2:4:12",
+                  "slotIndex": 2
+                },
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1.3333333333333333,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": {
+                  "actualNotes": 3,
+                  "normalNotes": 2,
+                  "writtenDivisions": 2,
+                  "groupId": "tuplet:3:4:12",
+                  "slotIndex": 0
+                },
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1.3333333333333333,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": {
+                  "actualNotes": 3,
+                  "normalNotes": 2,
+                  "writtenDivisions": 2,
+                  "groupId": "tuplet:3:4:12",
+                  "slotIndex": 1
+                },
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1.3333333333333333,
+                "durationRecovery": "uniform-subdivision-grid",
+                "tuplet": {
+                  "actualNotes": 3,
+                  "normalNotes": 2,
+                  "writtenDivisions": 2,
+                  "groupId": "tuplet:3:4:12",
+                  "slotIndex": 2
+                },
+                "stemGroupId": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "measureNumber": 4,
+        "onsetColumnCount": 5,
+        "onsetColumns": [
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:0.7441503267973856:false:0",
+            "position": 0.1657516339869278,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:0.7630555555555556:false:1",
+            "position": 0.2602777777777777,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:0.7806045751633988:false:2",
+            "position": 0.34802287581699376,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:0.8433986928104577:false:3",
+            "position": 0.6619934640522882,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:0.8523692810457516:false:4",
+            "position": 0.7068464052287579,
+            "grace": false
+          }
+        ],
+        "voices": [
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0",
+            "ambiguous": false,
+            "events": [
+              {
+                "pitch": null,
+                "duration": 2,
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 79,
+                  "writtenMidi": 79,
+                  "soundingMidi": 79,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 4.690457516339874,
+                "durationRecovery": "clip-approximate-to-measure-end",
+                "tuplet": null,
+                "stemGroupId": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:1",
+            "ambiguous": false,
+            "events": [
+              {
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 2,
+                "tuplet": null,
+                "stemGroupId": null
+              },
+              {
+                "pitch": {
+                  "midi": 76,
+                  "writtenMidi": 76,
+                  "soundingMidi": 76,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 1,
+                "tuplet": null,
+                "stemGroupId": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "measureNumber": 5,
+        "onsetColumnCount": 3,
+        "onsetColumns": [
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:0.1905392156862745:false:0",
+            "position": 0.04357400567224692,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:0.24436274509803924:false:1",
+            "position": 0.4639389651518215,
+            "grace": false
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:0.270702614379085:false:2",
+            "position": 0.6696549076779521,
+            "grace": false
+          }
+        ],
+        "voices": [
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0",
+            "ambiguous": true,
+            "events": [
+              {
+                "pitch": {
+                  "midi": 79,
+                  "writtenMidi": 79,
+                  "soundingMidi": 79,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 6,
+                "tuplet": null,
+                "stemGroupId": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:1",
+            "ambiguous": true,
+            "events": [
+              {
+                "pitch": {
+                  "midi": 79,
+                  "writtenMidi": 79,
+                  "soundingMidi": 79,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "duration": 12,
+                "tuplet": null,
+                "stemGroupId": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:2",
+            "ambiguous": true,
+            "events": [
+              {
+                "pitch": null,
+                "duration": 2,
+                "tuplet": null,
+                "stemGroupId": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

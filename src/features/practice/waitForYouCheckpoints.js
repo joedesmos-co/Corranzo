@@ -9,6 +9,7 @@ import {
   buildChordCheckpointModel,
   isPlayableCheckpointKind,
 } from './chordCheckpoint.js'
+import { NOTE_TIME_GROUP_SECONDS } from './noteTimeGrouping.js'
 
 export const CHECKPOINT_KIND = {
   BEAT: 'beat',
@@ -21,7 +22,7 @@ export const CHECKPOINT_KIND = {
 export { isPlayableCheckpointKind }
 
 /** Notes within this window (seconds) form one checkpoint — hands may be slightly apart. */
-export const NOTE_TIME_GROUP_SECONDS = 0.18
+export { NOTE_TIME_GROUP_SECONDS }
 
 const LOOP_TIME_EPSILON = 0.001
 const TIME_GROUP_EPSILON = NOTE_TIME_GROUP_SECONDS
@@ -56,10 +57,26 @@ function groupNotesByTime(notes) {
   return groups
 }
 
+function isAttackNote(note) {
+  if (!note) {
+    return false
+  }
+  if (note.suppressPlaybackAttack) {
+    return false
+  }
+  if (note.tieStop && !note.tieStart) {
+    return false
+  }
+  return true
+}
+
 function uniqueMidis(notes) {
   const seen = new Set()
   const midis = []
   for (const note of notes) {
+    if (!isAttackNote(note)) {
+      continue
+    }
     const candidates =
       note.expectedMidis?.length > 0
         ? note.expectedMidis.filter((midi) => Number.isFinite(midi))
@@ -128,10 +145,29 @@ function mergeTiedContinuations(notes) {
           ...(head.tiedContinuations ?? []),
           {
             id: note.id ?? null,
+            partId: note.partId ?? null,
+            voice: note.voice ?? 1,
+            staff: note.staff ?? null,
+            midi: note.midi,
+            label: note.label ?? null,
+            writtenPitch: note.writtenPitch ?? null,
+            accidental: note.accidental ?? null,
+            keySignature: note.keySignature ?? null,
+            measureNumber: note.measureNumber ?? null,
             timeSeconds: note.timeSeconds,
             quarterTime: note.quarterTime,
             durationSeconds: note.durationSeconds,
             durationQuarters: note.durationQuarters,
+            noteType: note.noteType ?? null,
+            dots: note.dots ?? 0,
+            beams: note.beams ?? [],
+            tieStart: Boolean(note.tieStart),
+            tieStop: Boolean(note.tieStop),
+            tiePlacement: note.tiePlacement ?? null,
+            slurs: note.slurs ?? [],
+            staccato: Boolean(note.staccato),
+            accent: Boolean(note.accent),
+            tenuto: Boolean(note.tenuto),
           },
         ]
         continue
@@ -152,6 +188,9 @@ function expectedStringFretsForNotes(notes) {
   const result = []
   const seen = new Set()
   for (const note of notes ?? []) {
+    if (!isAttackNote(note)) {
+      continue
+    }
     const string = Number(note?.string)
     const fret = Number(note?.fret)
     if (!Number.isFinite(string) || !Number.isFinite(fret)) {

@@ -51,6 +51,10 @@ Important files:
 The dashboard does not intentionally change OMR runtime logic. It runs the
 current runtime pipeline and evaluator against the manifest fixtures.
 
+Semantic defect classes (Rhythm, Sustain, Articulation, Measure structure,
+Playback, Pitch) are rolled up in `semanticDefectClasses` for prioritization.
+See [`OMR_SEMANTIC_DEFECT_TAXONOMY.md`](./OMR_SEMANTIC_DEFECT_TAXONOMY.md).
+
 ## Current Baseline
 
 Last known checkpoint from `tmp/omr-benchmark-dashboard/report.md`:

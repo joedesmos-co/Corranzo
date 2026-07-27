@@ -1,0 +1,1315 @@
+{
+  "onsetTotal": 132,
+  "taxonomyCounts": {
+    "A_duration_cascade": 106,
+    "B_voice_separation": 0,
+    "C_chord_sequentialized": 19,
+    "D_rests": 7,
+    "E_tuplets": 0,
+    "F_beam_grouping": 0,
+    "G_measure_packing": 0
+  },
+  "taxonomyShares": {
+    "A_duration_cascade": 0.803,
+    "B_voice_separation": 0,
+    "C_chord_sequentialized": 0.144,
+    "D_rests": 0.053,
+    "E_tuplets": 0,
+    "F_beam_grouping": 0,
+    "G_measure_packing": 0
+  },
+  "perFixture": {
+    "piano-dense-advanced-vector": {
+      "source": "vector-glyphs",
+      "rhythm": "30%",
+      "onset": 59,
+      "dur": 61,
+      "sampleWeighted": {
+        "A_duration_cascade": 31,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 15,
+        "D_rests": 0,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      },
+      "scaledToFixture": {
+        "A_duration_cascade": 40,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 19,
+        "D_rests": 0,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      },
+      "samples": [
+        {
+          "measureNumber": 2,
+          "onsetCount": 15,
+          "primary": "C_chord_sequentialized",
+          "scores": {
+            "A_duration_cascade": 7,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 9,
+            "D_rests": 0,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            6,
+            12,
+            18,
+            24,
+            30,
+            36,
+            42
+          ],
+          "genAttacks": [
+            0,
+            3,
+            5,
+            7,
+            9,
+            12
+          ],
+          "truthTypes": [
+            "0:eighth:D4",
+            "6:eighth:E4",
+            "12:eighth:F#4",
+            "18:eighth:G4",
+            "24:eighth:A4",
+            "30:eighth:G4",
+            "36:eighth:F#4",
+            "42:eighth:E4",
+            "0:quarter:D2",
+            "12:quarter:E2",
+            "24:quarter:F#2",
+            "36:quarter:G2"
+          ],
+          "genTypes": [
+            "0:eighth:E5",
+            "3:eighth:G5",
+            "5:eighth:E5",
+            "5:eighth:F4",
+            "7:eighth:G5",
+            "9:quarter:E5",
+            "12:quarter:B4"
+          ],
+          "multiChords": 11,
+          "chordSeqScore": 9,
+          "voices": {
+            "truth": [
+              "1:1",
+              "2:2"
+            ],
+            "gen": [
+              "2:null",
+              "1:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 0
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "split-measure": 1,
+            "missing-note": 12,
+            "extra-note": 27,
+            "duration-mismatch": 13,
+            "onset-mismatch": 15,
+            "missing-accent": 4,
+            "incorrect-pitch": 13,
+            "missing-voice": 1,
+            "incorrect-chord": 20
+          }
+        },
+        {
+          "measureNumber": 3,
+          "onsetCount": 13,
+          "primary": "A_duration_cascade",
+          "scores": {
+            "A_duration_cascade": 11,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 3,
+            "D_rests": 0,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            6,
+            12,
+            18,
+            24,
+            30,
+            36,
+            42
+          ],
+          "genAttacks": [
+            3,
+            4,
+            6,
+            7,
+            8,
+            10,
+            11,
+            13
+          ],
+          "truthTypes": [
+            "0:eighth:E4",
+            "6:eighth:F#4",
+            "12:eighth:G#4",
+            "18:eighth:A4",
+            "24:eighth:B4",
+            "30:eighth:A4",
+            "36:eighth:G#4",
+            "42:eighth:F#4",
+            "0:quarter:E2",
+            "12:quarter:F#2",
+            "24:quarter:G#2",
+            "36:quarter:A2"
+          ],
+          "genTypes": [
+            "3:sixteenth:B4",
+            "4:eighth:E5",
+            "6:sixteenth:G5",
+            "7:sixteenth:E5",
+            "7:sixteenth:F4",
+            "8:eighth:G5",
+            "8:eighth:A4",
+            "10:sixteenth:E5",
+            "10:sixteenth:F4",
+            "11:eighth:G5",
+            "13:eighth:E5"
+          ],
+          "multiChords": 11,
+          "chordSeqScore": 3,
+          "voices": {
+            "truth": [
+              "1:1",
+              "2:2"
+            ],
+            "gen": [
+              "2:null",
+              "1:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 0
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "split-measure": 1,
+            "missing-note": 17,
+            "extra-note": 15,
+            "duration-mismatch": 9,
+            "onset-mismatch": 13,
+            "missing-accent": 5,
+            "incorrect-pitch": 11,
+            "missing-voice": 1,
+            "incorrect-chord": 16
+          }
+        },
+        {
+          "measureNumber": 4,
+          "onsetCount": 7,
+          "primary": "A_duration_cascade",
+          "scores": {
+            "A_duration_cascade": 11,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 7,
+            "D_rests": 0,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            6,
+            12,
+            18,
+            24,
+            30,
+            36,
+            42
+          ],
+          "genAttacks": [
+            3,
+            4,
+            6,
+            7,
+            8,
+            10,
+            11,
+            12,
+            13
+          ],
+          "truthTypes": [
+            "0:eighth:F4",
+            "6:eighth:G4",
+            "12:eighth:A4",
+            "18:eighth:A#4",
+            "24:eighth:C5",
+            "30:eighth:A#4",
+            "36:eighth:A4",
+            "42:eighth:G4",
+            "0:quarter:F2",
+            "12:quarter:G2",
+            "24:quarter:A2",
+            "36:quarter:A#2"
+          ],
+          "genTypes": [
+            "3:sixteenth:E5",
+            "4:eighth:G5",
+            "6:sixteenth:G5",
+            "6:sixteenth:F4",
+            "7:sixteenth:G5",
+            "7:sixteenth:A4",
+            "8:eighth:E5",
+            "8:eighth:C5",
+            "10:sixteenth:G5",
+            "10:eighth:A4",
+            "11:sixteenth:G5",
+            "12:sixteenth:F4"
+          ],
+          "multiChords": 11,
+          "chordSeqScore": 7,
+          "voices": {
+            "truth": [
+              "1:1",
+              "2:2"
+            ],
+            "gen": [
+              "2:null",
+              "1:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 0
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "split-measure": 1,
+            "missing-note": 22,
+            "extra-note": 7,
+            "incorrect-pitch": 11,
+            "duration-mismatch": 11,
+            "missing-accent": 2,
+            "onset-mismatch": 7,
+            "missing-voice": 1,
+            "incorrect-chord": 14
+          }
+        },
+        {
+          "measureNumber": 6,
+          "onsetCount": 11,
+          "primary": "A_duration_cascade",
+          "scores": {
+            "A_duration_cascade": 6,
+            "B_voice_separation": 2,
+            "C_chord_sequentialized": 1,
+            "D_rests": 0,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            6,
+            12,
+            18,
+            24,
+            30,
+            36,
+            42
+          ],
+          "genAttacks": [
+            0,
+            4,
+            7,
+            8,
+            11
+          ],
+          "truthTypes": [
+            "0:eighth:A4",
+            "6:eighth:B4",
+            "12:eighth:C#5",
+            "18:eighth:D5",
+            "24:eighth:E5",
+            "30:eighth:D5",
+            "36:eighth:C#5",
+            "42:eighth:B4",
+            "0:quarter:A2",
+            "12:quarter:B2",
+            "24:quarter:C#3",
+            "36:quarter:D3"
+          ],
+          "genTypes": [
+            "0:quarter:D3",
+            "4:quarter:G2",
+            "7:sixteenth:B2",
+            "8:quarter:G1",
+            "11:eighth:D3"
+          ],
+          "multiChords": 11,
+          "chordSeqScore": 1,
+          "voices": {
+            "truth": [
+              "1:1",
+              "2:2"
+            ],
+            "gen": [
+              "2:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 0
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "split-measure": 1,
+            "missing-note": 15,
+            "extra-note": 30,
+            "duration-mismatch": 13,
+            "onset-mismatch": 11,
+            "incorrect-pitch": 13,
+            "missing-accent": 4,
+            "missing-voice": 1,
+            "incorrect-chord": 21
+          }
+        }
+      ]
+    },
+    "guitar-tab-sparse-vector": {
+      "source": "tab-vector",
+      "rhythm": "17%",
+      "onset": 23,
+      "dur": 30,
+      "sampleWeighted": {
+        "A_duration_cascade": 9,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 0,
+        "D_rests": 0,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      },
+      "scaledToFixture": {
+        "A_duration_cascade": 23,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 0,
+        "D_rests": 0,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      },
+      "samples": [
+        {
+          "measureNumber": 2,
+          "onsetCount": 3,
+          "primary": "A_duration_cascade",
+          "scores": {
+            "A_duration_cascade": 7,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 0,
+            "D_rests": 0,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            12,
+            24,
+            36
+          ],
+          "genAttacks": [
+            1,
+            2,
+            5,
+            8,
+            11
+          ],
+          "truthTypes": [
+            "0:quarter:E5",
+            "12:quarter:A4",
+            "24:quarter:G4",
+            "36:quarter:C4"
+          ],
+          "genTypes": [
+            "1:16th:F#4",
+            "2:eighth:E5",
+            "5:eighth:A4",
+            "8:eighth:G4",
+            "11:quarter:C4"
+          ],
+          "multiChords": 0,
+          "chordSeqScore": 0,
+          "voices": {
+            "truth": [
+              "1:1"
+            ],
+            "gen": [
+              "1:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 0
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "extra-note": 1,
+            "duration-mismatch": 4,
+            "onset-mismatch": 3
+          }
+        },
+        {
+          "measureNumber": 3,
+          "onsetCount": 3,
+          "primary": "A_duration_cascade",
+          "scores": {
+            "A_duration_cascade": 7,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 0,
+            "D_rests": 0,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            12,
+            24,
+            36
+          ],
+          "genAttacks": [
+            1,
+            2,
+            5,
+            8,
+            11
+          ],
+          "truthTypes": [
+            "0:quarter:G4",
+            "12:quarter:D4",
+            "24:quarter:B3",
+            "36:quarter:G3"
+          ],
+          "genTypes": [
+            "1:16th:G4",
+            "2:eighth:G4",
+            "5:eighth:D4",
+            "8:eighth:B3",
+            "11:quarter:G3"
+          ],
+          "multiChords": 0,
+          "chordSeqScore": 0,
+          "voices": {
+            "truth": [
+              "1:1"
+            ],
+            "gen": [
+              "1:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 0
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "extra-note": 1,
+            "duration-mismatch": 4,
+            "onset-mismatch": 3
+          }
+        },
+        {
+          "measureNumber": 6,
+          "onsetCount": 3,
+          "primary": "A_duration_cascade",
+          "scores": {
+            "A_duration_cascade": 7,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 0,
+            "D_rests": 0,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            12,
+            24,
+            36
+          ],
+          "genAttacks": [
+            1,
+            2,
+            5,
+            8,
+            11
+          ],
+          "truthTypes": [
+            "0:quarter:E5",
+            "12:quarter:A4",
+            "24:quarter:G4",
+            "36:quarter:C4"
+          ],
+          "genTypes": [
+            "1:16th:A#4",
+            "2:eighth:E5",
+            "5:eighth:A4",
+            "8:eighth:G4",
+            "11:quarter:C4"
+          ],
+          "multiChords": 0,
+          "chordSeqScore": 0,
+          "voices": {
+            "truth": [
+              "1:1"
+            ],
+            "gen": [
+              "1:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 0
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "extra-note": 1,
+            "duration-mismatch": 4,
+            "onset-mismatch": 3
+          }
+        }
+      ]
+    },
+    "piano-rhythm-tuplets-vector": {
+      "source": "vector-glyphs",
+      "rhythm": "48%",
+      "onset": 33,
+      "dur": 16,
+      "sampleWeighted": {
+        "A_duration_cascade": 21,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 0,
+        "D_rests": 0,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      },
+      "scaledToFixture": {
+        "A_duration_cascade": 33,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 0,
+        "D_rests": 0,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      },
+      "samples": [
+        {
+          "measureNumber": 2,
+          "onsetCount": 12,
+          "primary": "A_duration_cascade",
+          "scores": {
+            "A_duration_cascade": 14,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 0,
+            "D_rests": 0,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            3,
+            6,
+            9,
+            12,
+            15,
+            18,
+            21,
+            24,
+            27,
+            30,
+            33,
+            36,
+            39,
+            42,
+            45
+          ],
+          "genAttacks": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "truthTypes": [
+            "0:16th:E4",
+            "3:16th:F4",
+            "6:16th:G4",
+            "9:16th:A4",
+            "12:16th:B4",
+            "15:16th:C5",
+            "18:16th:B4",
+            "21:16th:A4",
+            "24:16th:E4",
+            "27:16th:F4",
+            "30:16th:G4",
+            "33:16th:A4"
+          ],
+          "genTypes": [
+            "3:sixteenth:E4",
+            "4:sixteenth:G4",
+            "5:sixteenth:B4",
+            "6:sixteenth:G5",
+            "7:sixteenth:E5",
+            "8:sixteenth:B4",
+            "9:sixteenth:E4",
+            "10:sixteenth:G4",
+            "11:sixteenth:E5",
+            "12:sixteenth:G5",
+            "13:eighth:E5"
+          ],
+          "multiChords": 0,
+          "chordSeqScore": 0,
+          "voices": {
+            "truth": [
+              "1:1"
+            ],
+            "gen": [
+              "2:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 0
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "onset-mismatch": 12,
+            "duration-mismatch": 2,
+            "incorrect-pitch": 8
+          }
+        },
+        {
+          "measureNumber": 3,
+          "onsetCount": 2,
+          "primary": "A_duration_cascade",
+          "scores": {
+            "A_duration_cascade": 14,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 0,
+            "D_rests": 0,
+            "E_tuplets": 13,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            4,
+            8,
+            12,
+            16,
+            20,
+            24,
+            28,
+            32,
+            36,
+            40,
+            44
+          ],
+          "genAttacks": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "truthTypes": [
+            "0:eighth:E4",
+            "4:eighth:E4",
+            "8:eighth:E4",
+            "12:eighth:E4",
+            "16:eighth:F4",
+            "20:eighth:F4",
+            "24:eighth:F4",
+            "28:eighth:F4",
+            "32:eighth:G4",
+            "36:eighth:G4",
+            "40:eighth:G4",
+            "44:eighth:G4"
+          ],
+          "genTypes": [
+            "3:sixteenth:E2",
+            "4:sixteenth:E2",
+            "5:sixteenth:E2",
+            "6:sixteenth:E2",
+            "7:sixteenth:E4",
+            "8:sixteenth:E4",
+            "9:sixteenth:E4",
+            "10:sixteenth:G4",
+            "11:sixteenth:G4",
+            "12:sixteenth:G4",
+            "13:eighth:G4"
+          ],
+          "multiChords": 0,
+          "chordSeqScore": 0,
+          "voices": {
+            "truth": [
+              "1:1"
+            ],
+            "gen": [
+              "2:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 0
+          },
+          "tuplets": {
+            "truth": 12,
+            "gen": 0
+          },
+          "defectCodes": {
+            "missing-note": 2,
+            "extra-note": 2,
+            "tuplet-mismatch": 10,
+            "duration-mismatch": 3,
+            "incorrect-tie": 3,
+            "incorrect-pitch": 6,
+            "onset-mismatch": 2
+          }
+        },
+        {
+          "measureNumber": 7,
+          "onsetCount": 7,
+          "primary": "A_duration_cascade",
+          "scores": {
+            "A_duration_cascade": 11,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 7,
+            "D_rests": 0,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            6,
+            12,
+            18,
+            24,
+            30,
+            36,
+            42
+          ],
+          "genAttacks": [
+            3,
+            4,
+            6,
+            7,
+            8,
+            10,
+            11,
+            13
+          ],
+          "truthTypes": [
+            "0:eighth:E4",
+            "6:eighth:E4",
+            "12:eighth:E4",
+            "18:eighth:E4",
+            "24:eighth:E4",
+            "30:eighth:E4",
+            "36:eighth:E4",
+            "42:eighth:E4"
+          ],
+          "genTypes": [
+            "3:sixteenth:G4",
+            "4:eighth:G4",
+            "6:sixteenth:G4",
+            "7:sixteenth:G4",
+            "8:eighth:G4",
+            "10:sixteenth:G4",
+            "11:eighth:G4",
+            "13:eighth:G4"
+          ],
+          "multiChords": 7,
+          "chordSeqScore": 7,
+          "voices": {
+            "truth": [
+              "1:1"
+            ],
+            "gen": [
+              "2:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 0
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "missing-note": 2,
+            "extra-note": 2,
+            "duration-mismatch": 8,
+            "onset-mismatch": 7,
+            "incorrect-pitch": 7,
+            "incorrect-chord": 8
+          }
+        }
+      ]
+    },
+    "piano-articulation-scan": {
+      "rhythm": "80%",
+      "onset": 7,
+      "dur": 0,
+      "sampleWeighted": {
+        "A_duration_cascade": 0,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 0,
+        "D_rests": 7,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      },
+      "scaledToFixture": {
+        "A_duration_cascade": 0,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 0,
+        "D_rests": 7,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      },
+      "samples": [
+        {
+          "measureNumber": 3,
+          "onsetCount": 4,
+          "primary": "D_rests",
+          "scores": {
+            "A_duration_cascade": 2,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 0,
+            "D_rests": 5,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            12,
+            24,
+            36
+          ],
+          "genAttacks": [
+            0,
+            5,
+            11
+          ],
+          "truthTypes": [
+            "0:quarter:E4",
+            "12:quarter:F#4",
+            "24:quarter:G#4",
+            "36:quarter:A4",
+            "0:half:E2",
+            "24:half:A2"
+          ],
+          "genTypes": [
+            "0:quarter:G4",
+            "5:quarter:F4",
+            "11:quarter:B4"
+          ],
+          "multiChords": 3,
+          "chordSeqScore": 0,
+          "voices": {
+            "truth": [
+              "1:1",
+              "2:2"
+            ],
+            "gen": [
+              "1:null",
+              "2:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 3
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "missing-note": 4,
+            "extra-rest": 3,
+            "extra-note": 2,
+            "incorrect-pitch": 6,
+            "incorrect-tie": 6,
+            "onset-mismatch": 4,
+            "missing-staccato": 2,
+            "missing-voice": 1,
+            "incorrect-chord": 5
+          }
+        },
+        {
+          "measureNumber": 7,
+          "onsetCount": 2,
+          "primary": "D_rests",
+          "scores": {
+            "A_duration_cascade": 2,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 2,
+            "D_rests": 5,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            12,
+            24,
+            36
+          ],
+          "genAttacks": [
+            0,
+            5,
+            11
+          ],
+          "truthTypes": [
+            "0:quarter:G4",
+            "12:quarter:A4",
+            "24:quarter:B4",
+            "36:quarter:C5",
+            "0:half:G2",
+            "24:half:C3"
+          ],
+          "genTypes": [
+            "0:quarter:B4",
+            "5:quarter:G4",
+            "11:quarter:B4"
+          ],
+          "multiChords": 3,
+          "chordSeqScore": 2,
+          "voices": {
+            "truth": [
+              "1:1",
+              "2:2"
+            ],
+            "gen": [
+              "1:null",
+              "2:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 3
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "missing-note": 6,
+            "extra-note": 13,
+            "extra-rest": 3,
+            "incorrect-pitch": 5,
+            "incorrect-tie": 5,
+            "onset-mismatch": 2,
+            "missing-staccato": 2,
+            "missing-voice": 1,
+            "incorrect-chord": 7,
+            "volta-mismatch": 1
+          }
+        },
+        {
+          "measureNumber": 4,
+          "onsetCount": 1,
+          "primary": "D_rests",
+          "scores": {
+            "A_duration_cascade": 2,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 2,
+            "D_rests": 5,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            12,
+            24,
+            36
+          ],
+          "genAttacks": [
+            0,
+            5,
+            11
+          ],
+          "truthTypes": [
+            "0:quarter:F4",
+            "12:quarter:G4",
+            "24:quarter:A4",
+            "36:quarter:A#4",
+            "0:half:F2",
+            "24:half:A#2"
+          ],
+          "genTypes": [
+            "0:quarter:F4",
+            "5:quarter:A2",
+            "11:quarter:C5"
+          ],
+          "multiChords": 3,
+          "chordSeqScore": 2,
+          "voices": {
+            "truth": [
+              "1:1",
+              "2:2"
+            ],
+            "gen": [
+              "1:null",
+              "2:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 3
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "missing-note": 8,
+            "extra-note": 10,
+            "extra-rest": 3,
+            "incorrect-pitch": 3,
+            "incorrect-tie": 3,
+            "missing-accent": 2,
+            "missing-staccato": 2,
+            "onset-mismatch": 1,
+            "missing-voice": 1,
+            "incorrect-chord": 7
+          }
+        }
+      ]
+    },
+    "guitar-standard-chords-vector": {
+      "source": "vector-glyphs",
+      "rhythm": "45%",
+      "onset": 10,
+      "dur": 9,
+      "sampleWeighted": {
+        "A_duration_cascade": 10,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 0,
+        "D_rests": 0,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      },
+      "scaledToFixture": {
+        "A_duration_cascade": 10,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 0,
+        "D_rests": 0,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      },
+      "samples": [
+        {
+          "measureNumber": 1,
+          "onsetCount": 8,
+          "primary": "A_duration_cascade",
+          "scores": {
+            "A_duration_cascade": 6,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 0,
+            "D_rests": 0,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            6,
+            12,
+            24,
+            36
+          ],
+          "genAttacks": [
+            0,
+            1,
+            2,
+            4,
+            7,
+            11
+          ],
+          "truthTypes": [
+            "0:eighth:E4",
+            "6:eighth:F#4",
+            "12:quarter:E4",
+            "24:quarter:E4",
+            "36:quarter:E4"
+          ],
+          "genTypes": [
+            "0:sixteenth:G3",
+            "1:sixteenth:E1",
+            "2:eighth:B3",
+            "4:quarter:G3",
+            "7:eighth:G3",
+            "11:quarter:G3"
+          ],
+          "multiChords": 4,
+          "chordSeqScore": 0,
+          "voices": {
+            "truth": [
+              "1:1"
+            ],
+            "gen": [
+              "2:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 0
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "split-measure": 1,
+            "extra-note": 6,
+            "incorrect-pitch": 10,
+            "onset-mismatch": 8,
+            "duration-mismatch": 4,
+            "incorrect-chord": 6,
+            "tempo-mismatch": 1
+          }
+        },
+        {
+          "measureNumber": 2,
+          "onsetCount": 2,
+          "primary": "A_duration_cascade",
+          "scores": {
+            "A_duration_cascade": 8,
+            "B_voice_separation": 0,
+            "C_chord_sequentialized": 0,
+            "D_rests": 0,
+            "E_tuplets": 0,
+            "F_beam_grouping": 0,
+            "G_measure_packing": 1
+          },
+          "truthAttacks": [
+            0,
+            6,
+            12,
+            24,
+            36
+          ],
+          "genAttacks": [
+            3,
+            4,
+            6,
+            8,
+            11
+          ],
+          "truthTypes": [
+            "0:eighth:B3",
+            "6:eighth:C#4",
+            "12:quarter:B3",
+            "24:quarter:B3",
+            "36:quarter:B3"
+          ],
+          "genTypes": [
+            "3:sixteenth:E1",
+            "4:eighth:E3",
+            "6:eighth:E1",
+            "8:quarter:E1",
+            "11:quarter:E1"
+          ],
+          "multiChords": 4,
+          "chordSeqScore": 0,
+          "voices": {
+            "truth": [
+              "1:1"
+            ],
+            "gen": [
+              "2:null"
+            ]
+          },
+          "rests": {
+            "truth": 0,
+            "gen": 0
+          },
+          "tuplets": {
+            "truth": 0,
+            "gen": 0
+          },
+          "defectCodes": {
+            "split-measure": 1,
+            "missing-note": 6,
+            "extra-note": 4,
+            "incorrect-pitch": 4,
+            "duration-mismatch": 1,
+            "incorrect-tie": 2,
+            "onset-mismatch": 2,
+            "incorrect-chord": 6
+          }
+        }
+      ]
+    }
+  }
+}

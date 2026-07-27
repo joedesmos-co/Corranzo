@@ -1,0 +1,84 @@
+{
+  "pitch": {
+    "numerator": 44,
+    "denominator": 143,
+    "truePositives": 44,
+    "falsePositives": 27,
+    "falseNegatives": 72,
+    "ignored": 0,
+    "unsupported": 0,
+    "presentInTruth": 116,
+    "compared": 143,
+    "coverage": 1,
+    "coveragePercent": "100%",
+    "score": 0.3077,
+    "percent": "31%",
+    "reliable": true,
+    "displayPercent": "31%"
+  },
+  "topDefects": [
+    {
+      "code": "missing-note",
+      "class": "pitch",
+      "label": "Missing note",
+      "count": 40
+    },
+    {
+      "code": "incorrect-chord",
+      "class": "measure-structure",
+      "label": "Incorrect chord",
+      "count": 32
+    },
+    {
+      "code": "incorrect-pitch",
+      "class": "pitch",
+      "label": "Incorrect pitch",
+      "count": 32
+    },
+    {
+      "code": "extra-note",
+      "class": "pitch",
+      "label": "Extra note",
+      "count": 27
+    },
+    {
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "label": "Duration mismatch",
+      "count": 22
+    },
+    {
+      "code": "onset-mismatch",
+      "class": "rhythm",
+      "label": "Onset timing difference",
+      "count": 8
+    },
+    {
+      "code": "repeat-mismatch",
+      "class": "interpretation",
+      "label": "Repeat mismatch",
+      "count": 2
+    },
+    {
+      "code": "split-measure",
+      "class": "measure-structure",
+      "label": "Split measure",
+      "count": 2
+    },
+    {
+      "code": "tempo-mismatch",
+      "class": "interpretation",
+      "label": "Tempo change mismatch",
+      "count": 1
+    }
+  ],
+  "totals": {
+    "truthNoteCount": 116,
+    "generatedNoteCount": 103,
+    "truthRestCount": 0,
+    "generatedRestCount": 0,
+    "truthMeasureCount": 8,
+    "generatedMeasureCount": 10,
+    "defectCount": 166
+  }
+}

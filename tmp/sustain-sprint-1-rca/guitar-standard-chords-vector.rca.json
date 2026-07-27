@@ -1,0 +1,175 @@
+{
+  "id": "guitar-standard-chords-vector",
+  "sustainPercent": "0%",
+  "tieDefects": [
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "label": "Incorrect tie",
+      "count": 6
+    }
+  ],
+  "truthTieCount": 0,
+  "genTieCount": 17,
+  "truthTies": [],
+  "genTies": [
+    {
+      "pitch": "E1",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "E1",
+      "start": false,
+      "stop": true,
+      "chord": false
+    },
+    {
+      "pitch": "E1",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "E1",
+      "start": false,
+      "stop": true,
+      "chord": false
+    },
+    {
+      "pitch": "E1",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "E1",
+      "start": false,
+      "stop": true,
+      "chord": false
+    },
+    {
+      "pitch": "E1",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "E1",
+      "start": false,
+      "stop": true,
+      "chord": false
+    },
+    {
+      "pitch": "A1",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "A1",
+      "start": false,
+      "stop": true,
+      "chord": false
+    },
+    {
+      "pitch": "A1",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "A1",
+      "start": false,
+      "stop": true,
+      "chord": false
+    },
+    {
+      "pitch": "E1",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "E1",
+      "start": false,
+      "stop": true,
+      "chord": false
+    },
+    {
+      "pitch": "E1",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "E1",
+      "start": true,
+      "stop": true,
+      "chord": false
+    },
+    {
+      "pitch": "E1",
+      "start": false,
+      "stop": true,
+      "chord": false
+    }
+  ],
+  "smuflTieGlyphCount": 0,
+  "tieGlyphSamples": [],
+  "samples": [
+    {
+      "measure": 2,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    },
+    {
+      "measure": 3,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    },
+    {
+      "measure": 6,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    },
+    {
+      "measure": 6,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    }
+  ],
+  "tieDiagnostics": null,
+  "pipelineKeys": [
+    "ties"
+  ]
+}

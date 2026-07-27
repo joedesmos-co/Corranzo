@@ -3,11 +3,13 @@ import { OMR_DIVISIONS_PER_QUARTER, OMR_DURATION_DIVISIONS } from './omrRhythmCo
 
 /**
  * SMuFL rest glyphs for vector PDF text layers (Bravura / Bravura Text).
- * U+E4E5 is staccatissimo in Bravura Text — never treat it as a rest glyph.
+ * U+E4E5 is the SMuFL quarter rest. Articulations live in U+E4A0–U+E4BF,
+ * so rest glyphs must never be reused as articulation evidence.
  */
 const VECTOR_REST_GLYPHS = new Map([
   ['\ue4e3', { durationType: 'whole' }],
   ['\ue4e4', { durationType: 'half' }],
+  ['\ue4e5', { durationType: 'quarter' }],
   ['\ue4e6', { durationType: 'eighth' }],
   ['\ue4e7', { durationType: 'sixteenth' }],
 ])
@@ -135,6 +137,7 @@ function createRestEvent(rest, startDivision, durationDivisions, measureBox) {
     clef: rest.clef,
     vector: true,
     source: 'vector-glyph',
+    notationArticulations: rest.notationArticulations ?? [],
   }
 }
 
@@ -185,10 +188,16 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
     return { applied: false, reason: VECTOR_REST_SKIP_REASONS.NO_STAFF_GAP }
   }
 
-  const durationDivisions = gap.gapEnd - startDivision
-  if (durationDivisions < 1) {
+  const gapDuration = gap.gapEnd - startDivision
+  if (gapDuration < 1) {
     return { applied: false, reason: VECTOR_REST_SKIP_REASONS.GAP_TOO_SMALL }
   }
+
+  // Prefer the glyph's written duration when it fits the staff gap. Stretching
+  // every rest to the full gap invents long rests and shifts later onsets.
+  const glyphDuration =
+    OMR_DURATION_DIVISIONS[rest.durationType] ?? OMR_DIVISIONS_PER_QUARTER
+  const durationDivisions = Math.min(gapDuration, Math.max(1, glyphDuration))
 
   if (overlapsRest(startDivision, durationDivisions, restsOnStaff)) {
     return { applied: false, reason: VECTOR_REST_SKIP_REASONS.DUPLICATE_REST }

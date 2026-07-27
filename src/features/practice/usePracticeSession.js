@@ -10,6 +10,7 @@ import { idleFeedbackForCheckpoint } from './waitForYouInputFeedback.js'
 import useWaitForYouMicInput from './useWaitForYouMicInput.js'
 import useScorePlayback from '../playback/useScorePlayback.js'
 import useMusicXmlTiming from '../musicxml/useMusicXmlTiming.js'
+import { musicXmlSourceKey } from '../import/musicXmlSource.js'
 import usePracticeClock from './usePracticeClock.js'
 import useAlignmentDiagnostics from './useAlignmentDiagnostics.js'
 import useMeasureNavigation from './useMeasureNavigation.js'
@@ -136,6 +137,7 @@ export default function usePracticeSession({
     musicXmlSource?.fileName ?? '',
     musicXmlSource?.data?.byteLength ?? 0,
     musicXmlSource?.source ?? '',
+    musicXmlSourceKey(musicXmlSource) ?? '',
   ].join('|')
   const sourcesRevision = useMemo(
     () => ({

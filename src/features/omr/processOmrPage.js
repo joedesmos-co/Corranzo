@@ -3,18 +3,19 @@ import { detectStaffLineSystems } from '../score-follow/detectStaffLines.js'
 import { buildMeasureBoxesForSystemWithDiagnostics } from './buildOmrMeasureGrid.js'
 import { detectNoteheadsInMeasure } from './detectOmrNoteheads.js'
 import { assembleMeasureRhythm } from './assembleOmrMeasureRhythm.js'
+import { finalizeRasterPageTies } from './finalizeRasterPageTies.js'
 import { refineMeasurePitches } from './detectOmrAccidentals.js'
 import { detectKeySignature } from './detectOmrKeySignature.js'
 import {
-  detectRepeatBarline,
-  detectVoltaEnding,
+  detectMeasureStructureMarkings,
+  finalizeEndingStops,
 } from './detectOmrRepeatBarline.js'
 import {
-  detectDynamicNearMeasure,
-  detectDynamicsFromTextItems,
   detectPedalFromText,
   detectStaccatoOnNote,
 } from './detectOmrExpression.js'
+import { attachDynamicsToMeasureRecords } from './detectOmrDynamics.js'
+import { attachTemposToMeasureRecords } from './parseOmrTempoMarking.js'
 import {
   measureConfidenceBreakdown,
   measureConfidenceFromRhythm,
@@ -43,6 +44,7 @@ import { serializeOmrMeasureBox } from './omrMeasureGridMeta.js'
 import { computeOmrMeasureVisualExtents } from './omrMeasureVisualExtents.js'
 import { normalizePageStaffLineGaps } from './normalizeStaffLineGaps.js'
 import { normalizeLegacyMusicFontGlyphs } from './normalizeLegacyMusicFontGlyphs.js'
+import { normalizeNoncanonicalArticulationGlyphs } from './normalizeNoncanonicalArticulationGlyphs.js'
 import {
   attachTabPositionsToEvents,
   buildTabMeasureEvents,
@@ -213,6 +215,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     page = 1,
     measureNumberStart = 1,
     pageText: rawPageText = [],
+    vectorCurves = [],
     stavesPerSystem = OMR_PIANO_STAVES_PER_SYSTEM,
     dense = false,
     keySignature: inheritedKeySignature = null,
@@ -236,11 +239,15 @@ export function processOmrPageAnalysis(imageData, options = {}) {
   // pages take the vector path instead of the weak raster fallback. Identity
   // for pages that already contain SMuFL noteheads.
   const legacyFontNormalization = normalizeLegacyMusicFontGlyphs(rawPageText)
-  const pageText = legacyFontNormalization.items
+  const articulationGlyphNormalization =
+    normalizeNoncanonicalArticulationGlyphs(legacyFontNormalization.items)
+  const pageText = articulationGlyphNormalization.items
 
   omrDebugStep('processOmrPage:start', imageData, {
     page,
     legacyFontGlyphsApplied: legacyFontNormalization.applied || undefined,
+    articulationGlyphsNormalized:
+      articulationGlyphNormalization.applied || undefined,
   })
   assertPixelViewReadable(imageData.data, `processOmrPage:page-${page}-input`)
 
@@ -266,7 +273,6 @@ export function processOmrPageAnalysis(imageData, options = {}) {
   let uncertainMeasures = 0
   let keySignature = { fifths: 0, mode: 'major', confidence: 0 }
 
-  const systemTextDynamic = detectDynamicsFromTextItems(pageText)
   const noteheadOptions = { dense: dense || scanQuality.isLikelyScanned }
   const systemMeasureBoxes = []
   const measureGrid = []
@@ -547,6 +553,9 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       legacyFontNormalization: legacyFontNormalization.applied
         ? legacyFontNormalization.diagnostics
         : null,
+      articulationGlyphNormalization: articulationGlyphNormalization.applied
+        ? articulationGlyphNormalization.diagnostics
+        : null,
     }
     if (captureOmrV3Shadow) {
       result.omrV3ShadowInput = buildOmrV3ShadowInput({
@@ -567,6 +576,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     const vector = processVectorPageSystems({
       imageData,
       pageText,
+      vectorCurves,
       systems,
       systemMeasureBoxes,
       inheritedKeySignature,
@@ -648,8 +658,26 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     }
 
     for (let systemIndex = 0; systemIndex < systemMeasureBoxes.length; systemIndex += 1) {
+      const boxes = systemMeasureBoxes[systemIndex] ?? []
       const systemMeasures = vector.measureRecordsBySystem[systemIndex] ?? []
-      for (const measureRecord of systemMeasures) {
+      for (let boxIndex = 0; boxIndex < systemMeasures.length; boxIndex += 1) {
+        const measureRecord = systemMeasures[boxIndex]
+        const measureBox =
+          boxes.find((box) => box.measureNumber === measureRecord.measureNumber) ??
+          boxes[boxIndex]
+        if (measureBox) {
+          const structure = detectMeasureStructureMarkings(
+            imageData,
+            measureBox,
+            inkThreshold,
+            {
+              isFirstInSystem: boxIndex === 0,
+              pageText,
+            },
+          )
+          measureRecord.repeatMarking = structure.repeatMarking
+          measureRecord.endingMarking = structure.endingMarking
+        }
         if (captureOmrV3RawSymbols) {
           rawDetectorSymbols.push(
             ...detectorSymbolsFromObservations(measureRecord.detectorObservations, {
@@ -669,6 +697,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
           uncertainMeasures += 1
         }
       }
+      finalizeEndingStops(systemMeasures)
       pageEntry.systems.push({
         systemIndex,
         confidence: vectorSystemConfidenceFromMeasures(systemMeasures),
@@ -676,13 +705,30 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       })
       measureGrid.push(
         ...measureGridEntriesForSystem(
-          systemMeasureBoxes[systemIndex] ?? [],
+          boxes,
           systemMeasures,
           vector.source,
           imageData.width,
         ),
       )
     }
+
+    attachDynamicsToMeasureRecords({
+      measureRecords: measureRhythms,
+      systemMeasureBoxes,
+      pageText,
+      imageData,
+      inkThreshold,
+      // Ink hairpins FP on guitar beams/slurs; keep geometry for piano pages.
+      detectHairpins: !tabCapable,
+      rejectAsciiLetterDynamics: Boolean(tabCapable),
+    })
+    attachTemposToMeasureRecords({
+      measureRecords: measureRhythms,
+      systemMeasureBoxes,
+      pageText,
+      pageNumber: page,
+    })
 
     const result = {
       pageEntry,
@@ -706,10 +752,15 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       restDiagnostics: vector.restDiagnostics,
       staccatoDiagnostics: vector.staccatoDiagnostics,
       accentDiagnostics: vector.accentDiagnostics,
+      notationArticulationDiagnostics:
+        vector.notationArticulationDiagnostics,
       orphanDiagnostics: vector.orphanDiagnostics,
       staffGapNormalization: staffGapNormalizationResult.staffGapNormalization,
       legacyFontNormalization: legacyFontNormalization.applied
         ? legacyFontNormalization.diagnostics
+        : null,
+      articulationGlyphNormalization: articulationGlyphNormalization.applied
+        ? articulationGlyphNormalization.diagnostics
         : null,
     }
     if (captureOmrV3Shadow) {
@@ -724,6 +775,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       systems: systems.length,
       source: vector.source,
       legacyFontGlyphsApplied: legacyFontNormalization.applied || undefined,
+      articulationGlyphsNormalized:
+        articulationGlyphNormalization.applied || undefined,
     })
     return result
   }
@@ -806,23 +859,16 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         uncertainMeasures += 1
       }
 
-      const repeatRight = detectRepeatBarline(imageData, measureBox, inkThreshold, 'right')
-      const repeatLeft =
-        boxIndex === 0
-          ? detectRepeatBarline(imageData, measureBox, inkThreshold, 'left')
-          : null
-      const repeatMarking =
-        repeatRight || repeatLeft
-          ? {
-              ...(repeatLeft ?? {}),
-              ...(repeatRight ?? {}),
-              confidence: Math.max(repeatLeft?.confidence ?? 0, repeatRight?.confidence ?? 0),
-            }
-          : null
-
-      const endingMarking = detectVoltaEnding(imageData, measureBox, inkThreshold)
-      const dynamic =
-        systemTextDynamic ?? detectDynamicNearMeasure(imageData, measureBox, inkThreshold)
+      const { repeatMarking, endingMarking } = detectMeasureStructureMarkings(
+        imageData,
+        measureBox,
+        inkThreshold,
+        {
+          isFirstInSystem: boxIndex === 0,
+          pageText,
+        },
+      )
+      const dynamic = null
       const pedal = detectPedalFromText(pageText)
 
       const confidenceBreakdown = measureConfidenceBreakdown(rhythm, noteheads)
@@ -847,6 +893,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       measureRhythms.push(measureRecord)
     }
 
+    finalizeEndingStops(systemMeasures)
+
     pageEntry.systems.push({
       systemIndex,
       confidence: systemConfidenceFromMeasures(systemMeasures),
@@ -861,6 +909,24 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       ),
     )
   }
+
+  attachDynamicsToMeasureRecords({
+    measureRecords: measureRhythms,
+    systemMeasureBoxes,
+    pageText,
+    imageData,
+    inkThreshold,
+    detectHairpins: !tabCapable,
+    rejectAsciiLetterDynamics: Boolean(tabCapable),
+  })
+  attachTemposToMeasureRecords({
+    measureRecords: measureRhythms,
+    systemMeasureBoxes,
+    pageText,
+    pageNumber: page,
+  })
+
+  const rasterTieResult = finalizeRasterPageTies(measureRhythms)
 
   const result = {
     pageEntry,
@@ -878,6 +944,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     inkThreshold,
     dense: noteheadOptions.dense,
     staffGapNormalization: staffGapNormalizationResult.staffGapNormalization,
+    rasterTieDiagnostics: rasterTieResult.diagnostics,
   }
   if (captureOmrV3Shadow) {
     result.omrV3ShadowInput = buildOmrV3ShadowInput({

@@ -19,6 +19,11 @@ import {
   resolveOmrV3DeveloperPipelineOptions,
 } from '../../features/omr/omrDiagnosticFlags.js'
 import { selectOmrDeveloperMusicXml } from '../../features/omr/v3/omrV3Diagnostics.js'
+import {
+  getActiveScoreSourceGeneration,
+  noteOmrWorkerSettled,
+  registerOmrRunStart,
+} from '../../features/library/scoreSourceGenerationGate.js'
 
 function resetOmrPanelState(setters) {
   setters.setIsGenerating(false)
@@ -28,6 +33,12 @@ function resetOmrPanelState(setters) {
 
 function formatOmrFailureMessage(error) {
   const rawMessage = error?.message ?? ''
+  // DEV: never swallow the underlying exception — operators need the real cause.
+  if (import.meta.env.DEV && rawMessage) {
+    const stage = error?.code ?? error?.stage ?? error?.difficulty?.reasons?.[0]
+    const stageHint = stage ? ` [${stage}]` : ''
+    return `${rawMessage}${stageHint}`
+  }
   if (/TAB staff lines were detected/i.test(rawMessage)) {
     return rawMessage
   }
@@ -41,6 +52,8 @@ export default function PdfOmrPlaybackPanel({
   pdfSource = null,
   pdfFileUrl = null,
   pdfFileName = null,
+  pdfIdentity = null,
+  practiceSessionEpoch = null,
   disabled = false,
   onGenerated = null,
   onFeedback = null,
@@ -71,6 +84,21 @@ export default function PdfOmrPlaybackPanel({
     releaseOmrUiLocks()
   }, [])
 
+  // New PDF / session epoch must wipe prior panel UI. A discarded Piece-A
+  // failure must never leave FAILED and block Piece-B auto-start.
+  useEffect(() => {
+    completedRunRef.current = false
+    abortRef.current?.abort()
+    activeRunRef.current = nextOmrTraceRunId()
+    setError(null)
+    setSummary(null)
+    setHasDiagnostics(false)
+    resetOmrPanelState({ setIsGenerating, setStatus, setProgressLabel })
+    endOmrUiBlock()
+    releaseOmrUiLocks()
+    autoStartedKeyRef.current = null
+  }, [pdfIdentity, practiceSessionEpoch])
+
   const handleCancel = useCallback(() => {
     omrTrace('ui:handleCancel')
     completedRunRef.current = false
@@ -93,12 +121,24 @@ export default function PdfOmrPlaybackPanel({
     const runId = nextOmrTraceRunId()
     activeRunRef.current = runId
     completedRunRef.current = false
+    // Capture ownership at generate start — late callbacks must not apply to a
+    // newer PDF/session after replacement.
+    const runPdfIdentity = pdfIdentity
+    const runPracticeSessionEpoch = practiceSessionEpoch
+    const runScoreId =
+      typeof window !== 'undefined'
+        ? window.__SCOREFLOW_ACTIVE_SCORE__?.scoreId ??
+          getActiveScoreSourceGeneration().activeScoreId
+        : getActiveScoreSourceGeneration().activeScoreId
 
     omrTrace('ui:handleGenerate:enter', {
       pdfSource: Boolean(pdfSource),
       pdfFileUrl: Boolean(pdfFileUrl),
       isGenerating,
       disabled,
+      pdfIdentity: runPdfIdentity,
+      practiceSessionEpoch: runPracticeSessionEpoch,
+      scoreId: runScoreId,
     }, runId)
 
     if ((!pdfSource && !pdfFileUrl) || isGenerating || disabled) {
@@ -109,6 +149,17 @@ export default function PdfOmrPlaybackPanel({
             ? 'busy'
             : 'disabled',
       }, runId)
+      return
+    }
+
+    const registered = registerOmrRunStart({
+      runId,
+      pdfIdentity: runPdfIdentity,
+      epoch: runPracticeSessionEpoch,
+      scoreId: runScoreId,
+    })
+    if (!registered.ok) {
+      omrTrace('ui:handleGenerate:register-rejected', registered, runId)
       return
     }
 
@@ -150,6 +201,12 @@ export default function PdfOmrPlaybackPanel({
         title: pdfFileName?.replace(/\.[^.]+$/, '') ?? 'PDF score',
         pdfFileUrl,
         instrumentId,
+        scoreId: runScoreId,
+        generation: runPracticeSessionEpoch,
+        pdfHash:
+          typeof window !== 'undefined'
+            ? window.__SCOREFLOW_ACTIVE_SCORE__?.pdfHash ?? null
+            : null,
         omrV3Compare: developerOptions.omrV3Compare,
         omrV3Shadow: developerOptions.omrV3Shadow,
         onStatus: (nextStatus) => {
@@ -168,6 +225,13 @@ export default function PdfOmrPlaybackPanel({
         signal: controller.signal,
         useWorker: true,
         traceRunId: runId,
+      })
+
+      noteOmrWorkerSettled({
+        runId,
+        pdfIdentity: runPdfIdentity,
+        epoch: runPracticeSessionEpoch,
+        outcome: 'resolved',
       })
 
       if (activeRunRef.current !== runId) {
@@ -221,6 +285,11 @@ export default function PdfOmrPlaybackPanel({
       endOmrUiBlock()
 
       await yieldToBrowser()
+      if (activeRunRef.current !== runId || controller.signal.aborted) {
+        omrTrace('ui:handleGenerate:stale-run-before-onGenerated', null, runId)
+        return
+      }
+
       const fileName = `${(pdfFileName ?? 'score.pdf').replace(/\.pdf$/i, '')}.omr.musicxml`
       const accepted = await onGeneratedRef.current?.({
         fileName,
@@ -233,18 +302,31 @@ export default function PdfOmrPlaybackPanel({
         sourcePdfFileName: pdfFileName ?? null,
         sourcePdfFileUrl: pdfFileUrl ?? null,
         sourceInstrumentId: instrumentId,
+        sourcePdfIdentity: runPdfIdentity,
+        sourcePracticeSessionEpoch: runPracticeSessionEpoch,
+        sourceOmrRunId: runId,
+        sourceScoreId: registered.scoreId ?? runScoreId,
       })
 
+      // Stale / discarded results must not mutate panel UI (FAILED would block
+      // the newer PDF's auto-start queue).
       if (activeRunRef.current !== runId || controller.signal.aborted) {
         omrTrace('ui:handleGenerate:stale-run-after-onGenerated', null, runId)
+        return
+      }
+      if (accepted?.discarded) {
+        omrTrace('ui:handleGenerate:discarded-zero-side-effects', {
+          message: accepted?.message,
+          reason: accepted?.reason,
+        }, runId)
         return
       }
 
       completedRunRef.current = true
       resetInFinally = false
 
-      if (accepted?.ok === false) {
-        const message = accepted.message ?? 'Generated playback failed.'
+      if (accepted?.ok !== true) {
+        const message = accepted?.message ?? 'Generated playback failed.'
         setError(message)
         setSummary(null)
         setIsGenerating(false)
@@ -272,6 +354,14 @@ export default function PdfOmrPlaybackPanel({
       setProgressLabel('')
       setStatus(OMR_STATUS.READY)
     } catch (err) {
+      noteOmrWorkerSettled({
+        runId,
+        pdfIdentity: runPdfIdentity,
+        epoch: runPracticeSessionEpoch,
+        outcome: 'rejected',
+        errorName: err?.name ?? null,
+      })
+
       if (activeRunRef.current !== runId) {
         omrTrace('ui:handleGenerate:stale-run-catch-ignored', {
           message: err?.message,
@@ -311,7 +401,7 @@ export default function PdfOmrPlaybackPanel({
         completed: completedRunRef.current,
       }, runId)
     }
-  }, [pdfSource, pdfFileUrl, pdfFileName, instrumentId, isGenerating, disabled])
+  }, [pdfSource, pdfFileUrl, pdfFileName, pdfIdentity, practiceSessionEpoch, instrumentId, isGenerating, disabled])
 
   // Keep the latest start helpers in refs so this effect can stay Strict Mode
   // safe without re-arming whenever callback identities churn.

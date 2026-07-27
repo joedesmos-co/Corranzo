@@ -1,0 +1,23 @@
+OMR semantic corpus — before/after
+=================================
+before: before-vector (15aa1db)
+after:  after (15aa1db)
+ACCEPT: YES
+
+Mean class deltas
+- pitch: 0  (0.1648 → 0.1648)
+- rhythm: +0.0194  (0.5481 → 0.5675)
+- sustain: 0  (0.5585 → 0.5585)
+- articulation: 0  (0.6852 → 0.6852)
+- measureStructure: 0  (0.5062 → 0.5062)
+- interpretation: 0  (0.0000 → 0.0000)
+- playback: 0  (1.0000 → 1.0000)
+- overall: +0.0028
+
+Largest rhythm improvements
+- guitar-standard-chords-vector: rhythm +0.1191
+- piano-beginner-single-vector: rhythm +0.0318
+- piano-grand-voices-vector: rhythm +0.0313
+
+Regressions / gate failures
+- piano-rhythm-tuplets-vector: rhythm -0.0078 (within 1% budget)

@@ -54,6 +54,8 @@ export default function LibraryPanel({
   onDeleteUploadedPiece = null,
   pdfSource = null,
   pdfFileUrl = null,
+  pdfIdentity = null,
+  practiceSessionEpoch = null,
   onOmrGenerated = null,
   autoOmrRequest = null,
   onAutoOmrRequestConsumed = null,
@@ -69,7 +71,7 @@ export default function LibraryPanel({
   const hasPdf = Boolean(pdfFileUrl || pdfSource || fileName)
   const hasMusicXml = isLibraryScoreTimingReady(musicXmlSource)
   const hasMidi = Boolean(midiFileName)
-  const showOmrPanel = shouldShowLibraryOmrPanel({ hasPdf, musicXmlSource })
+  const showOmrPanel = shouldShowLibraryOmrPanel({ hasPdf, musicXmlSource, pdfIdentity })
   const autoOmrRequestForCurrentPdf =
     autoOmrRequest?.instrumentId === instrumentId &&
     autoOmrRequest?.pdfFileName === fileName
@@ -354,6 +356,8 @@ export default function LibraryPanel({
                   pdfSource={pdfSource}
                   pdfFileUrl={pdfFileUrl}
                   pdfFileName={fileName}
+                  pdfIdentity={pdfIdentity}
+                  practiceSessionEpoch={practiceSessionEpoch}
                   disabled={uploadsDisabled}
                   onGenerated={onOmrGenerated}
                   onFeedback={onImportFeedback}

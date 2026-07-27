@@ -1,0 +1,20 @@
+OMR semantic corpus (before-vector)
+mode=written fixtures=9/9
+overall=0.4947
+pitch=0.1648
+rhythm=0.5481
+sustain=0.5585
+articulation=0.6852
+measureStructure=0.5062
+interpretation=0.0000
+playback=1.0000
+
+piano-beginner-single-vector: R=81% P=24% M=100%
+piano-grand-voices-vector: R=50% P=0% M=30%
+piano-rhythm-tuplets-vector: R=48% P=37% M=73%
+piano-articulation-scan: R=80% P=1% M=30%
+piano-dense-advanced-vector: R=28% P=5% M=5%
+guitar-tab-sparse-vector: R=17% P=70% M=92%
+guitar-standard-chords-vector: R=33% P=0% M=14%
+guitar-paired-chords-vector: R=73% P=6% M=32%
+guitar-techniques-paired-vector: R=83% P=5% M=80%

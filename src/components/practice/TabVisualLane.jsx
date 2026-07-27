@@ -157,7 +157,8 @@ function TabVisualLane({
               const radius =
                 note.status === 'current' ? FRET_DISC_RADIUS * CURRENT_DISC_SCALE : FRET_DISC_RADIUS
               const noteClass = resolveLaneNoteClass(note.status, note.laneOutcome)
-              const showSustain = note.sustainWidth > radius * 1.15
+              const showSustain =
+                Boolean(note.hasTiedSustain) || note.sustainWidth > radius * 1.6
               return (
                 <g
                   key={note.id}
@@ -167,9 +168,9 @@ function TabVisualLane({
                     <rect
                       className="tab-lane__sustain"
                       x={note.x - radius * 0.12}
-                      y={note.y - radius * 0.42}
-                      width={note.sustainWidth}
-                      height={radius * 0.84}
+                      y={note.y - radius * 0.28}
+                      width={Math.max(radius, note.sustainWidth - radius * 0.5)}
+                      height={radius * 0.56}
                     />
                   ) : null}
                   <circle className="tab-lane__disc" cx={note.x} cy={note.y} r={radius} />

@@ -1,0 +1,308 @@
+{
+  "kind": "guitar-mapping-benchmark",
+  "label": "after",
+  "createdAt": "2026-07-26T19:33:30.983Z",
+  "stage1PitchFrozen": true,
+  "fixtures": [
+    {
+      "id": "guitar-standard-chords-vector",
+      "truthDerived": {
+        "events": 40,
+        "notes": 115,
+        "invalidAssignments": 0,
+        "sameStringConflicts": 0,
+        "impossibleChords": 0,
+        "overMaxFret": 0,
+        "avgJump": 0.4074074074074074,
+        "p95Jump": 2,
+        "maxJump": 3,
+        "avgSpan": 0.45,
+        "maxSpan": 2,
+        "repeatedNoteSameStringPct": 97.97979797979798,
+        "failureCounts": {
+          "same-string-conflict": 0,
+          "impossible-chord": 0,
+          "excessive-fret-span": 0,
+          "unnecessary-position-jump": 0,
+          "pitch-outside-fret-range": 0,
+          "invalid-assignment": 0,
+          "missing-assignment": 0,
+          "midi-fret-mismatch": 0
+        }
+      },
+      "omrAsEmitted": {
+        "events": 48,
+        "notes": 86,
+        "invalidAssignments": 86,
+        "sameStringConflicts": 0,
+        "impossibleChords": 24,
+        "overMaxFret": 0,
+        "avgJump": null,
+        "p95Jump": null,
+        "maxJump": null,
+        "avgSpan": 0,
+        "maxSpan": 0,
+        "repeatedNoteSameStringPct": null,
+        "failureCounts": {
+          "same-string-conflict": 0,
+          "impossible-chord": 24,
+          "excessive-fret-span": 0,
+          "unnecessary-position-jump": 0,
+          "pitch-outside-fret-range": 0,
+          "invalid-assignment": 0,
+          "missing-assignment": 86,
+          "midi-fret-mismatch": 0
+        }
+      },
+      "omrDerivedFromMidi": {
+        "events": 48,
+        "notes": 86,
+        "invalidAssignments": 0,
+        "sameStringConflicts": 0,
+        "impossibleChords": 0,
+        "overMaxFret": 0,
+        "avgJump": 1,
+        "p95Jump": 5,
+        "maxJump": 6,
+        "avgSpan": 0.75,
+        "maxSpan": 5,
+        "repeatedNoteSameStringPct": 92.20779220779221,
+        "failureCounts": {
+          "same-string-conflict": 0,
+          "impossible-chord": 0,
+          "excessive-fret-span": 1,
+          "unnecessary-position-jump": 3,
+          "pitch-outside-fret-range": 0,
+          "invalid-assignment": 0,
+          "missing-assignment": 0,
+          "midi-fret-mismatch": 0
+        }
+      }
+    },
+    {
+      "id": "guitar-paired-chords-vector",
+      "truthDerived": {
+        "events": 32,
+        "notes": 116,
+        "invalidAssignments": 0,
+        "sameStringConflicts": 0,
+        "impossibleChords": 0,
+        "overMaxFret": 0,
+        "avgJump": 0.7741935483870968,
+        "p95Jump": 4,
+        "maxJump": 7,
+        "avgSpan": 1.125,
+        "maxSpan": 3,
+        "repeatedNoteSameStringPct": 85.85858585858585,
+        "failureCounts": {
+          "same-string-conflict": 0,
+          "impossible-chord": 0,
+          "excessive-fret-span": 0,
+          "unnecessary-position-jump": 1,
+          "pitch-outside-fret-range": 0,
+          "invalid-assignment": 0,
+          "missing-assignment": 0,
+          "midi-fret-mismatch": 0
+        }
+      },
+      "omrAsEmitted": {
+        "events": 33,
+        "notes": 103,
+        "invalidAssignments": 1,
+        "sameStringConflicts": 0,
+        "impossibleChords": 0,
+        "overMaxFret": 0,
+        "avgJump": 1.032258064516129,
+        "p95Jump": 7,
+        "maxJump": 8,
+        "avgSpan": 0.875,
+        "maxSpan": 3,
+        "repeatedNoteSameStringPct": 81.81818181818181,
+        "failureCounts": {
+          "same-string-conflict": 0,
+          "impossible-chord": 0,
+          "excessive-fret-span": 0,
+          "unnecessary-position-jump": 3,
+          "pitch-outside-fret-range": 0,
+          "invalid-assignment": 0,
+          "missing-assignment": 1,
+          "midi-fret-mismatch": 0
+        }
+      },
+      "omrDerivedFromMidi": {
+        "events": 33,
+        "notes": 103,
+        "invalidAssignments": 0,
+        "sameStringConflicts": 0,
+        "impossibleChords": 0,
+        "overMaxFret": 0,
+        "avgJump": 0.90625,
+        "p95Jump": 2,
+        "maxJump": 11,
+        "avgSpan": 0.78125,
+        "maxSpan": 3,
+        "repeatedNoteSameStringPct": 95.50561797752809,
+        "failureCounts": {
+          "same-string-conflict": 0,
+          "impossible-chord": 0,
+          "excessive-fret-span": 0,
+          "unnecessary-position-jump": 1,
+          "pitch-outside-fret-range": 0,
+          "invalid-assignment": 0,
+          "missing-assignment": 0,
+          "midi-fret-mismatch": 0
+        }
+      }
+    },
+    {
+      "id": "guitar-techniques-paired-vector",
+      "truthDerived": {
+        "events": 32,
+        "notes": 32,
+        "invalidAssignments": 0,
+        "sameStringConflicts": 0,
+        "impossibleChords": 0,
+        "overMaxFret": 0,
+        "avgJump": 1.6521739130434783,
+        "p95Jump": 4,
+        "maxJump": 4,
+        "avgSpan": null,
+        "maxSpan": null,
+        "repeatedNoteSameStringPct": 100,
+        "failureCounts": {
+          "same-string-conflict": 0,
+          "impossible-chord": 0,
+          "excessive-fret-span": 0,
+          "unnecessary-position-jump": 0,
+          "pitch-outside-fret-range": 0,
+          "invalid-assignment": 0,
+          "missing-assignment": 0,
+          "midi-fret-mismatch": 0
+        }
+      },
+      "omrAsEmitted": {
+        "events": 32,
+        "notes": 32,
+        "invalidAssignments": 0,
+        "sameStringConflicts": 0,
+        "impossibleChords": 0,
+        "overMaxFret": 0,
+        "avgJump": 1.8387096774193548,
+        "p95Jump": 3,
+        "maxJump": 7,
+        "avgSpan": null,
+        "maxSpan": null,
+        "repeatedNoteSameStringPct": 57.142857142857146,
+        "failureCounts": {
+          "same-string-conflict": 0,
+          "impossible-chord": 0,
+          "excessive-fret-span": 0,
+          "unnecessary-position-jump": 1,
+          "pitch-outside-fret-range": 0,
+          "invalid-assignment": 0,
+          "missing-assignment": 0,
+          "midi-fret-mismatch": 0
+        }
+      },
+      "omrDerivedFromMidi": {
+        "events": 32,
+        "notes": 32,
+        "invalidAssignments": 0,
+        "sameStringConflicts": 0,
+        "impossibleChords": 0,
+        "overMaxFret": 0,
+        "avgJump": 1.6521739130434783,
+        "p95Jump": 4,
+        "maxJump": 4,
+        "avgSpan": null,
+        "maxSpan": null,
+        "repeatedNoteSameStringPct": 100,
+        "failureCounts": {
+          "same-string-conflict": 0,
+          "impossible-chord": 0,
+          "excessive-fret-span": 0,
+          "unnecessary-position-jump": 0,
+          "pitch-outside-fret-range": 0,
+          "invalid-assignment": 0,
+          "missing-assignment": 0,
+          "midi-fret-mismatch": 0
+        }
+      }
+    },
+    {
+      "id": "guitar-tab-sparse-vector",
+      "truthDerived": {
+        "events": 32,
+        "notes": 32,
+        "invalidAssignments": 0,
+        "sameStringConflicts": 0,
+        "impossibleChords": 0,
+        "overMaxFret": 0,
+        "avgJump": 2.260869565217391,
+        "p95Jump": 10,
+        "maxJump": 10,
+        "avgSpan": null,
+        "maxSpan": null,
+        "repeatedNoteSameStringPct": 95.23809523809524,
+        "failureCounts": {
+          "same-string-conflict": 0,
+          "impossible-chord": 0,
+          "excessive-fret-span": 0,
+          "unnecessary-position-jump": 2,
+          "pitch-outside-fret-range": 0,
+          "invalid-assignment": 0,
+          "missing-assignment": 0,
+          "midi-fret-mismatch": 0
+        }
+      },
+      "omrAsEmitted": {
+        "events": 34,
+        "notes": 40,
+        "invalidAssignments": 0,
+        "sameStringConflicts": 6,
+        "impossibleChords": 6,
+        "overMaxFret": 0,
+        "avgJump": 2.3225806451612905,
+        "p95Jump": 10,
+        "maxJump": 10,
+        "avgSpan": 4,
+        "maxSpan": 10,
+        "repeatedNoteSameStringPct": 29.166666666666668,
+        "failureCounts": {
+          "same-string-conflict": 6,
+          "impossible-chord": 6,
+          "excessive-fret-span": 2,
+          "unnecessary-position-jump": 3,
+          "pitch-outside-fret-range": 0,
+          "invalid-assignment": 0,
+          "missing-assignment": 0,
+          "midi-fret-mismatch": 0
+        }
+      },
+      "omrDerivedFromMidi": {
+        "events": 34,
+        "notes": 40,
+        "invalidAssignments": 0,
+        "sameStringConflicts": 0,
+        "impossibleChords": 0,
+        "overMaxFret": 0,
+        "avgJump": 2.76,
+        "p95Jump": 7,
+        "maxJump": 10,
+        "avgSpan": 1.8333333333333333,
+        "maxSpan": 4,
+        "repeatedNoteSameStringPct": 54.166666666666664,
+        "failureCounts": {
+          "same-string-conflict": 0,
+          "impossible-chord": 0,
+          "excessive-fret-span": 0,
+          "unnecessary-position-jump": 5,
+          "pitch-outside-fret-range": 0,
+          "invalid-assignment": 0,
+          "missing-assignment": 0,
+          "midi-fret-mismatch": 0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,4274 @@
+{
+  "kind": "semantic-corpus-evaluation",
+  "label": "after-pitch-sprint-3",
+  "mode": "written",
+  "evaluatorVersion": "2.0.0",
+  "schemaVersion": 2,
+  "frozen": true,
+  "gitCommit": "15aa1db",
+  "createdAt": "2026-07-26T15:35:55.628Z",
+  "fixtures": [
+    {
+      "id": "piano-beginner-single-vector",
+      "ok": true,
+      "instrumentId": "piano",
+      "tier": "piano-clean",
+      "overall": 0.8258,
+      "overallPercent": "83%",
+      "classes": {
+        "pitch": {
+          "score": 0.9394,
+          "percent": "94%",
+          "numerator": 31,
+          "denominator": 33,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.8413,
+          "percent": "84%",
+          "numerator": 53,
+          "denominator": 63,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 24,
+          "denominator": 24,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 32,
+        "generatedNoteCount": 32,
+        "truthRestCount": 1,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 13
+      },
+      "alignmentConfidence": 0.9978,
+      "topDefects": [
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 5
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 3
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 1
+        },
+        {
+          "code": "missing-dot",
+          "class": "rhythm",
+          "label": "Missing dot",
+          "count": 1
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 1
+        },
+        {
+          "code": "missing-rest",
+          "class": "rhythm",
+          "label": "Missing rest",
+          "count": 1
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 10
+        },
+        {
+          "class": "pitch",
+          "label": "Pitch",
+          "count": 2
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 1
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 8,
+          "severity": 24,
+          "summary": [
+            "Onset off by 0.25 quarters",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Eighth detected as 16th",
+            "Onset off by 0.75 quarters"
+          ],
+          "defectCodes": [
+            "onset-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "severity": 22,
+          "summary": [
+            "Missing rest (quarter)",
+            "Missing note A4",
+            "Extra note A4",
+            "Missing dot",
+            "Eighth detected as quarter",
+            "Onset off by 0.5 quarters"
+          ],
+          "defectCodes": [
+            "missing-rest",
+            "missing-note",
+            "extra-note",
+            "missing-dot",
+            "duration-mismatch",
+            "onset-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 1,
+          "severity": 2,
+          "summary": [
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "tempo-mismatch"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 1
+      }
+    },
+    {
+      "id": "piano-grand-voices-vector",
+      "ok": true,
+      "instrumentId": "piano",
+      "tier": "piano-grand",
+      "overall": 0.5985,
+      "overallPercent": "60%",
+      "classes": {
+        "pitch": {
+          "score": 0.618,
+          "percent": "62%",
+          "numerator": 55,
+          "denominator": 89,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.8218,
+          "percent": "82%",
+          "numerator": 143,
+          "denominator": 174,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 2,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 24,
+          "denominator": 24,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.75,
+          "percent": "75%",
+          "numerator": 48,
+          "denominator": 64,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 5,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 88,
+        "generatedNoteCount": 88,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 88
+      },
+      "alignmentConfidence": 0.9557,
+      "topDefects": [
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 32
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 29
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 16
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "label": "Missing tie",
+          "count": 2
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 2
+        },
+        {
+          "code": "repeat-mismatch",
+          "class": "interpretation",
+          "label": "Repeat mismatch",
+          "count": 2
+        },
+        {
+          "code": "volta-mismatch",
+          "class": "interpretation",
+          "label": "Volta mismatch",
+          "count": 2
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 1
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 1
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "pitch",
+          "label": "Pitch",
+          "count": 34
+        },
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 31
+        },
+        {
+          "class": "measure-structure",
+          "label": "Measure structure",
+          "count": 16
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 5
+        },
+        {
+          "class": "sustain",
+          "label": "Sustain (ties)",
+          "count": 2
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 5,
+          "severity": 58,
+          "summary": [
+            "Missing note C5",
+            "Extra note A4",
+            "Onset off by 0.75 quarters",
+            "Incorrect pitch F4 (expected G4)",
+            "Incorrect pitch G4 (expected A4)",
+            "Half detected as eighth",
+            "Half detected as eighth",
+            "Half detected as eighth",
+            "Incorrect pitch F3 (expected G3)",
+            "Half detected as eighth",
+            "Incorrect pitch B4 (expected D5)",
+            "Quarter detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch A4 (expected D5)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "extra-note",
+            "onset-mismatch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 6,
+          "severity": 49,
+          "summary": [
+            "Incorrect pitch C5 (expected C#5)",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Incorrect pitch G4 (expected A4)",
+            "Incorrect pitch A4 (expected B4)",
+            "Incorrect pitch G3 (expected A3)",
+            "Incorrect pitch C5 (expected C#5)",
+            "Quarter detected as half",
+            "Incorrect pitch B4 (expected D5)",
+            "Incorrect pitch B4 (expected E5)",
+            "Incorrect pitch B4 (expected E5)",
+            "Quarter detected as half",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "incorrect-pitch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "severity": 45,
+          "summary": [
+            "Incorrect pitch B4 (expected C5)",
+            "Quarter detected as half",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Incorrect pitch F4 (expected G4)",
+            "Incorrect pitch G4 (expected A4)",
+            "Incorrect pitch F3 (expected G3)",
+            "Incorrect pitch A4 (expected D5)",
+            "Incorrect pitch A4 (expected D5)",
+            "Quarter detected as half",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Volta mismatch"
+          ],
+          "defectCodes": [
+            "incorrect-pitch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch"
+          ]
+        },
+        {
+          "measureNumber": 8,
+          "severity": 44,
+          "summary": [
+            "Incorrect pitch A4 (expected G#4)",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Incorrect pitch E4 (expected F#4)",
+            "Incorrect pitch G4 (expected A4)",
+            "Incorrect pitch A4 (expected G#4)",
+            "Quarter detected as half",
+            "Incorrect pitch F4 (expected B4)",
+            "Incorrect pitch F4 (expected B4)",
+            "Quarter detected as half",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Repeat mismatch",
+            "Volta mismatch"
+          ],
+          "defectCodes": [
+            "incorrect-pitch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "duration-mismatch",
+            "incorrect-pitch"
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "severity": 35,
+          "summary": [
+            "Missing tie",
+            "Incorrect pitch G4 (expected G#4)",
+            "Incorrect pitch F4 (expected F#4)",
+            "Quarter detected as half",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Incorrect pitch G4 (expected G#4)",
+            "Quarter detected as half",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-tie",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "incorrect-pitch",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "severity": 29,
+          "summary": [
+            "Incorrect pitch A4 (expected A#4)",
+            "Missing tie",
+            "Incorrect pitch A2 (expected A#2)",
+            "Quarter detected as half",
+            "Quarter detected as half",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "incorrect-pitch",
+            "missing-tie",
+            "incorrect-pitch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "incorrect-chord"
+          ]
+        },
+        {
+          "measureNumber": 2,
+          "severity": 20,
+          "summary": [
+            "Incorrect pitch F4 (expected F#4)",
+            "Quarter detected as half",
+            "Incorrect pitch F4 (expected F#4)",
+            "Quarter detected as half",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "incorrect-pitch",
+            "duration-mismatch",
+            "incorrect-pitch",
+            "duration-mismatch",
+            "incorrect-chord",
+            "incorrect-chord"
+          ]
+        },
+        {
+          "measureNumber": 1,
+          "severity": 12,
+          "summary": [
+            "Quarter detected as half",
+            "Quarter detected as half",
+            "Repeat mismatch",
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "duration-mismatch",
+            "duration-mismatch",
+            "repeat-mismatch",
+            "tempo-mismatch"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 4
+      }
+    },
+    {
+      "id": "piano-rhythm-tuplets-vector",
+      "ok": true,
+      "instrumentId": "piano",
+      "tier": "piano-rhythm",
+      "overall": 0.6468,
+      "overallPercent": "65%",
+      "classes": {
+        "pitch": {
+          "score": 0.9091,
+          "percent": "91%",
+          "numerator": 60,
+          "denominator": 66,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.6812,
+          "percent": "68%",
+          "numerator": 94,
+          "denominator": 138,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.9375,
+          "percent": "94%",
+          "numerator": 30,
+          "denominator": 32,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 63,
+        "generatedNoteCount": 63,
+        "truthRestCount": 5,
+        "generatedRestCount": 3,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 54
+      },
+      "alignmentConfidence": 0.9913,
+      "topDefects": [
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 25
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 11
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 3
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 3
+        },
+        {
+          "code": "missing-rest",
+          "class": "rhythm",
+          "label": "Missing rest",
+          "count": 3
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 2
+        },
+        {
+          "code": "missing-dot",
+          "class": "rhythm",
+          "label": "Missing dot",
+          "count": 2
+        },
+        {
+          "code": "dotted-rhythm-error",
+          "class": "rhythm",
+          "label": "Dotted rhythm error",
+          "count": 1
+        },
+        {
+          "code": "extra-rest",
+          "class": "rhythm",
+          "label": "Extra rest",
+          "count": 1
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "label": "Missing tie",
+          "count": 1
+        },
+        {
+          "code": "rest-duration-error",
+          "class": "rhythm",
+          "label": "Rest duration incorrect",
+          "count": 1
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 44
+        },
+        {
+          "class": "pitch",
+          "label": "Pitch",
+          "count": 6
+        },
+        {
+          "class": "measure-structure",
+          "label": "Measure structure",
+          "count": 2
+        },
+        {
+          "class": "sustain",
+          "label": "Sustain (ties)",
+          "count": 1
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 1
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 2,
+          "severity": 64,
+          "summary": [
+            "16th detected as eighth",
+            "Onset off by 0.25 quarters",
+            "Onset off by 0.25 quarters",
+            "Onset off by 0.25 quarters",
+            "Onset off by 0.25 quarters",
+            "16th detected as eighth",
+            "Onset off by 0.25 quarters",
+            "16th detected as eighth",
+            "Onset off by 0.25 quarters",
+            "Onset off by 0.5 quarters",
+            "16th detected as eighth",
+            "Onset off by 0.5 quarters",
+            "16th detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Onset off by 0.75 quarters",
+            "Onset off by 0.75 quarters"
+          ],
+          "defectCodes": [
+            "duration-mismatch",
+            "onset-mismatch",
+            "onset-mismatch",
+            "onset-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "severity": 42,
+          "summary": [
+            "Missing note E4",
+            "Missing note G4",
+            "Extra note E4",
+            "Extra note G4",
+            "Onset off by 0.25 quarters",
+            "Onset off by 0.25 quarters",
+            "Eighth detected as dotted eighth",
+            "Onset off by 0.25 quarters",
+            "Eighth detected as dotted eighth",
+            "Onset off by 0.25 quarters",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "extra-note",
+            "extra-note",
+            "onset-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "severity": 32,
+          "summary": [
+            "Missing rest (eighth)",
+            "Missing rest (16th)",
+            "Extra rest (16th)",
+            "Onset off by 0.5 quarters",
+            "16th detected as quarter",
+            "Onset off by 0.25 quarters",
+            "Missing dot",
+            "Onset off by 0.5 quarters"
+          ],
+          "defectCodes": [
+            "missing-rest",
+            "missing-rest",
+            "extra-rest",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "missing-dot",
+            "onset-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 8,
+          "severity": 28,
+          "summary": [
+            "Missing rest (quarter)",
+            "16th detected as eighth",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Missing dot",
+            "Onset off by 0.75 quarters"
+          ],
+          "defectCodes": [
+            "missing-rest",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "missing-dot",
+            "onset-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 1,
+          "severity": 22,
+          "summary": [
+            "Onset off by 0.25 quarters",
+            "Onset off by 0.25 quarters",
+            "Eighth detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Onset off by 0.5 quarters",
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "onset-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "onset-mismatch",
+            "tempo-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "severity": 18,
+          "summary": [
+            "Missing note C5",
+            "Extra note C5",
+            "Rest duration incorrect (eighth; expected quarter)",
+            "dotted half detected as quarter",
+            "Missing tie"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "extra-note",
+            "rest-duration-error",
+            "dotted-rhythm-error",
+            "missing-tie"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 6
+      }
+    },
+    {
+      "id": "piano-articulation-scan",
+      "ok": true,
+      "instrumentId": "piano",
+      "tier": "piano-scan",
+      "overall": 0.484,
+      "overallPercent": "48%",
+      "classes": {
+        "pitch": {
+          "score": 0.0126,
+          "percent": "1%",
+          "numerator": 2,
+          "denominator": 159,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.9125,
+          "percent": "91%",
+          "numerator": 73,
+          "denominator": 80,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 1,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 0.1667,
+          "percent": "17%",
+          "numerator": 6,
+          "denominator": 36,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.2963,
+          "percent": "30%",
+          "numerator": 24,
+          "denominator": 81,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 5,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 88,
+        "generatedNoteCount": 111,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 256
+      },
+      "alignmentConfidence": 0.8984,
+      "topDefects": [
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 71
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 49
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 48
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 38
+        },
+        {
+          "code": "missing-staccato",
+          "class": "articulation",
+          "label": "Missing staccato",
+          "count": 19
+        },
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "label": "Missing accent",
+          "count": 11
+        },
+        {
+          "code": "missing-voice",
+          "class": "measure-structure",
+          "label": "Missing voice",
+          "count": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 7
+        },
+        {
+          "code": "repeat-mismatch",
+          "class": "interpretation",
+          "label": "Repeat mismatch",
+          "count": 2
+        },
+        {
+          "code": "volta-mismatch",
+          "class": "interpretation",
+          "label": "Volta mismatch",
+          "count": 2
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "pitch",
+          "label": "Pitch",
+          "count": 157
+        },
+        {
+          "class": "measure-structure",
+          "label": "Measure structure",
+          "count": 57
+        },
+        {
+          "class": "articulation",
+          "label": "Articulation",
+          "count": 30
+        },
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 7
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 5
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 6,
+          "severity": 110,
+          "summary": [
+            "Missing note B4",
+            "Missing note D5",
+            "Missing note A2",
+            "Missing note E3",
+            "Missing note D3",
+            "Missing note A3",
+            "Extra note A4",
+            "Extra note B4",
+            "Extra note B4",
+            "Extra note C5",
+            "Extra note C5",
+            "Extra note B4",
+            "Extra note B4",
+            "Extra note B4",
+            "Extra note B4",
+            "Extra note C5",
+            "Extra note C5",
+            "Extra note B4",
+            "Extra note G2",
+            "Incorrect pitch D3 (expected A4)",
+            "Missing accent",
+            "Incorrect pitch E3 (expected C#5)",
+            "Unexpected staccato",
+            "Incorrect pitch D3 (expected C#5)",
+            "Unexpected staccato",
+            "Missing accent",
+            "Incorrect pitch C3 (expected E5)",
+            "Unexpected staccato",
+            "Missing accent",
+            "Incorrect pitch C3 (expected E5)",
+            "Unexpected staccato",
+            "Missing staff/voice lane (staff 2)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "extra-note",
+            "extra-note"
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "severity": 110,
+          "summary": [
+            "Missing note A4",
+            "Missing note D5",
+            "Missing note G2",
+            "Missing note D3",
+            "Missing note C3",
+            "Missing note G3",
+            "Extra note G4",
+            "Extra note G4",
+            "Extra note A4",
+            "Extra note B4",
+            "Extra note B4",
+            "Extra note B4",
+            "Extra note G4",
+            "Extra note A4",
+            "Extra note B4",
+            "Extra note B4",
+            "Extra note B4",
+            "Extra note C5",
+            "Extra note G2",
+            "Incorrect pitch C3 (expected G4)",
+            "Incorrect pitch F3 (expected B4)",
+            "Onset off by 0.75 quarters",
+            "Incorrect pitch C3 (expected C5)",
+            "Onset off by 0.25 quarters",
+            "Unexpected staccato",
+            "Incorrect pitch A2 (expected B4)",
+            "Incorrect pitch A2 (expected D5)",
+            "Missing staccato",
+            "Missing staff/voice lane (staff 2)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Volta mismatch"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "extra-note",
+            "extra-note"
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "severity": 99,
+          "summary": [
+            "Missing note C5",
+            "Missing note A4",
+            "Missing note C5",
+            "Missing note A#4",
+            "Missing note F2",
+            "Missing note C3",
+            "Missing note A#2",
+            "Missing note F3",
+            "Extra note F4",
+            "Extra note A4",
+            "Extra note C5",
+            "Extra note C5",
+            "Extra note A4",
+            "Extra note B4",
+            "Extra note C5",
+            "Extra note C5",
+            "Extra note B4",
+            "Extra note C5",
+            "Incorrect pitch C3 (expected F4)",
+            "Missing accent",
+            "Incorrect pitch C3 (expected A4)",
+            "Unexpected staccato",
+            "Missing accent",
+            "Incorrect pitch A2 (expected G4)",
+            "Onset off by 0.25 quarters",
+            "Unexpected staccato",
+            "Missing staff/voice lane (staff 2)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 8,
+          "severity": 93,
+          "summary": [
+            "Missing note E2",
+            "Missing note B2",
+            "Missing note A2",
+            "Missing note E3",
+            "Extra note F4",
+            "Extra note F4",
+            "Extra note A2",
+            "Extra note B2",
+            "Extra note C3",
+            "Extra note E3",
+            "Extra note E3",
+            "Extra note E3",
+            "Unexpected staccato",
+            "Incorrect pitch F4 (expected E4)",
+            "Unexpected staccato",
+            "Missing accent",
+            "Incorrect pitch A4 (expected G#4)",
+            "Missing accent",
+            "Incorrect pitch F4 (expected F#4)",
+            "Unexpected staccato",
+            "Incorrect pitch B4 (expected A4)",
+            "Incorrect pitch B4 (expected G#4)",
+            "Incorrect pitch F4 (expected B4)",
+            "Unexpected staccato",
+            "Missing accent",
+            "Missing staff/voice lane (staff 2)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Repeat mismatch",
+            "Volta mismatch"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "extra-note"
+          ]
+        },
+        {
+          "measureNumber": 2,
+          "severity": 92,
+          "summary": [
+            "Missing note E4",
+            "Missing note G4",
+            "Missing note D2",
+            "Missing note A2",
+            "Missing note G2",
+            "Missing note D3",
+            "Extra note E4",
+            "Extra note A4",
+            "Extra note A4",
+            "Extra note F4",
+            "Extra note A4",
+            "Extra note A4",
+            "Extra note B4",
+            "Extra note A2",
+            "Extra note A2",
+            "Extra note C3",
+            "Incorrect pitch C3 (expected D4)",
+            "Missing accent",
+            "Incorrect pitch E3 (expected F#4)",
+            "Incorrect pitch D3 (expected A4)",
+            "Unexpected staccato",
+            "Incorrect pitch A2 (expected F#4)",
+            "Missing accent",
+            "Incorrect pitch A2 (expected A4)",
+            "Missing accent",
+            "Missing staff/voice lane (staff 2)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "extra-note",
+            "extra-note"
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "severity": 88,
+          "summary": [
+            "Missing note A4",
+            "Missing note C5",
+            "Missing note G2",
+            "Missing note D3",
+            "Missing note C3",
+            "Missing note G3",
+            "Extra note C5",
+            "Extra note C5",
+            "Extra note A4",
+            "Extra note B4",
+            "Extra note B4",
+            "Extra note B4",
+            "Extra note C5",
+            "Extra note C5",
+            "Extra note B4",
+            "Extra note G2",
+            "Incorrect pitch D3 (expected G4)",
+            "Incorrect pitch D3 (expected B4)",
+            "Missing staccato",
+            "Incorrect pitch C3 (expected B4)",
+            "Unexpected staccato",
+            "Incorrect pitch C3 (expected D5)",
+            "Incorrect pitch C3 (expected D5)",
+            "Missing staff/voice lane (staff 2)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "extra-note",
+            "extra-note"
+          ]
+        },
+        {
+          "measureNumber": 1,
+          "severity": 74,
+          "summary": [
+            "Missing note E4",
+            "Missing note G4",
+            "Missing note D4",
+            "Missing note F4",
+            "Missing note C2",
+            "Missing note G2",
+            "Missing note F2",
+            "Missing note C3",
+            "Extra note E4",
+            "Extra note G4",
+            "Extra note D4",
+            "Extra note G4",
+            "Extra note C5",
+            "Incorrect pitch C3 (expected E4)",
+            "Unexpected staccato",
+            "Incorrect pitch G2 (expected C4)",
+            "Missing staccato",
+            "Incorrect pitch B2 (expected G4)",
+            "Missing staff/voice lane (staff 2)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Repeat mismatch",
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "severity": 74,
+          "summary": [
+            "Missing note E2",
+            "Missing note B2",
+            "Missing note A2",
+            "Missing note E3",
+            "Extra note A2",
+            "Extra note D3",
+            "Incorrect pitch F4 (expected E4)",
+            "Incorrect pitch G4 (expected G#4)",
+            "Onset off by 0.75 quarters",
+            "Incorrect pitch F4 (expected F#4)",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch C5 (expected A4)",
+            "Onset off by 0.25 quarters",
+            "Unexpected staccato",
+            "Incorrect pitch C5 (expected G#4)",
+            "Onset off by 0.75 quarters",
+            "Incorrect pitch F4 (expected B4)",
+            "Missing staccato",
+            "Missing staff/voice lane (staff 2)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "extra-note",
+            "extra-note",
+            "incorrect-pitch",
+            "incorrect-pitch"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 26
+      }
+    },
+    {
+      "id": "piano-dense-advanced-vector",
+      "ok": true,
+      "instrumentId": "piano",
+      "tier": "piano-dense",
+      "overall": 0.4727,
+      "overallPercent": "47%",
+      "classes": {
+        "pitch": {
+          "score": 0.2665,
+          "percent": "27%",
+          "numerator": 97,
+          "denominator": 364,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.4268,
+          "percent": "43%",
+          "numerator": 140,
+          "denominator": 328,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 0.4186,
+          "percent": "42%",
+          "numerator": 18,
+          "denominator": 43,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.1969,
+          "percent": "20%",
+          "numerator": 25,
+          "denominator": 127,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 264,
+        "generatedNoteCount": 264,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 6,
+        "defectCount": 583
+      },
+      "alignmentConfidence": 0.894,
+      "topDefects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 117
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 100
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 100
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 100
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 71
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 67
+        },
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "label": "Missing accent",
+          "count": 25
+        },
+        {
+          "code": "merged-measure",
+          "class": "measure-structure",
+          "label": "Merged measure",
+          "count": 2
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "pitch",
+          "label": "Pitch",
+          "count": 267
+        },
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 188
+        },
+        {
+          "class": "measure-structure",
+          "label": "Measure structure",
+          "count": 102
+        },
+        {
+          "class": "articulation",
+          "label": "Articulation",
+          "count": 25
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 1
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 2,
+          "severity": 732,
+          "summary": [
+            "Merged measures 2,3 → 2",
+            "Missing note G#4",
+            "Missing note C5",
+            "Missing note D#5",
+            "Missing note A4",
+            "Missing note C#5",
+            "Missing note E5",
+            "Missing note B4",
+            "Missing note D#5",
+            "Missing note F#5",
+            "Missing note A4",
+            "Missing note C#5",
+            "Missing note E5",
+            "Missing note G#4",
+            "Missing note C5",
+            "Missing note D#5",
+            "Missing note F#4",
+            "Missing note A#4",
+            "Missing note C#5",
+            "Missing note F#2",
+            "Missing note C#3",
+            "Missing note G#2",
+            "Missing note D#3",
+            "Missing note A2",
+            "Missing note E3",
+            "Extra note E4",
+            "Extra note G4",
+            "Extra note B4",
+            "Extra note F4",
+            "Extra note F4",
+            "Extra note G4",
+            "Extra note A4",
+            "Extra note A4",
+            "Extra note B4",
+            "Extra note C5",
+            "Extra note C5",
+            "Extra note D5",
+            "Extra note D4",
+            "Extra note F4",
+            "Extra note A4",
+            "Extra note D4",
+            "Extra note F4",
+            "Extra note A4",
+            "Extra note E4",
+            "Extra note G4",
+            "Extra note B4",
+            "Extra note G4",
+            "Extra note G4",
+            "Extra note A4",
+            "Extra note B4",
+            "Extra note B4",
+            "Extra note C5",
+            "Extra note D5",
+            "Extra note E5",
+            "Extra note E4",
+            "Extra note F4",
+            "Extra note A4",
+            "Extra note C5",
+            "Extra note E4",
+            "Extra note F4",
+            "Extra note G4",
+            "Extra note B4",
+            "Extra note G4",
+            "Extra note A4",
+            "Extra note C5",
+            "Extra note C5",
+            "Extra note D5",
+            "Extra note D5",
+            "Extra note E5",
+            "Extra note A4",
+            "Extra note C5",
+            "Extra note C5",
+            "Extra note E5",
+            "Extra note A4",
+            "Extra note C5",
+            "Extra note A4",
+            "Extra note A4",
+            "Extra note C5",
+            "Extra note D5",
+            "Extra note D5",
+            "Extra note E5",
+            "Extra note E5",
+            "Extra note C5",
+            "Extra note D5",
+            "Extra note E5",
+            "Extra note E5",
+            "Extra note F5",
+            "Extra note E5",
+            "Extra note E2",
+            "Extra note B2",
+            "Extra note D2",
+            "Extra note F2",
+            "Extra note A2",
+            "Extra note C3",
+            "Extra note F2",
+            "Extra note C3",
+            "Extra note G2",
+            "Extra note D3",
+            "Extra note E2",
+            "Extra note G2",
+            "Extra note B2",
+            "Extra note D3",
+            "Extra note E3",
+            "Extra note A2",
+            "Extra note E3",
+            "Extra note F2",
+            "Extra note C3",
+            "Extra note F3",
+            "Extra note F3",
+            "Eighth detected as 16th",
+            "Missing accent",
+            "Eighth detected as 16th",
+            "Missing accent",
+            "Eighth detected as 16th",
+            "Eighth detected as 16th",
+            "Eighth detected as 16th",
+            "Missing accent",
+            "Eighth detected as 16th",
+            "Eighth detected as 16th",
+            "Quarter detected as eighth",
+            "Quarter detected as eighth",
+            "Quarter detected as eighth",
+            "Quarter detected as eighth",
+            "Eighth detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Eighth detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Missing accent",
+            "Eighth detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Unexpected accent",
+            "Eighth detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Eighth detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Missing accent",
+            "Quarter detected as 16th",
+            "Quarter detected as 16th",
+            "Incorrect pitch F4 (expected F#4)",
+            "Eighth detected as 16th",
+            "Missing accent",
+            "Incorrect pitch G4 (expected G#4)",
+            "Eighth detected as 16th",
+            "Incorrect pitch F4 (expected F#4)",
+            "Eighth detected as 16th",
+            "Incorrect pitch A4 (expected A#4)",
+            "Eighth detected as 16th",
+            "Incorrect pitch C5 (expected C#5)",
+            "Eighth detected as 16th",
+            "Incorrect pitch C5 (expected C#5)",
+            "Eighth detected as 16th",
+            "Missing accent",
+            "Incorrect pitch F4 (expected F#4)",
+            "Eighth detected as 16th",
+            "Unexpected accent",
+            "Incorrect pitch A4 (expected A#4)",
+            "Eighth detected as 16th",
+            "Unexpected accent",
+            "Incorrect pitch C5 (expected C#5)",
+            "Eighth detected as 16th",
+            "Unexpected accent",
+            "Incorrect pitch A4 (expected G#4)",
+            "Eighth detected as 16th",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch F2 (expected F#2)",
+            "Quarter detected as eighth",
+            "Incorrect pitch C3 (expected C#3)",
+            "Quarter detected as eighth",
+            "Incorrect pitch G4 (expected G#4)",
+            "Eighth detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Missing accent",
+            "Incorrect pitch F4 (expected E4)",
+            "Eighth detected as 16th",
+            "Onset off by 0.75 quarters",
+            "Incorrect pitch A4 (expected A#4)",
+            "Eighth detected as 16th",
+            "Onset off by 0.75 quarters",
+            "Incorrect pitch C5 (expected C#5)",
+            "Eighth detected as 16th",
+            "Onset off by 0.75 quarters",
+            "Incorrect pitch A2 (expected B2)",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch G4 (expected E4)",
+            "Eighth detected as 16th",
+            "Onset off by 0.75 quarters",
+            "Missing accent",
+            "Incorrect pitch A2 (expected E2)",
+            "Quarter detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch D5 (expected F#4)",
+            "Eighth detected as 16th",
+            "Onset off by 0.75 quarters",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "merged-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 6,
+          "severity": 352,
+          "summary": [
+            "Merged measures 6,7 → 5",
+            "Missing note A4",
+            "Missing note F#5",
+            "Missing note B4",
+            "Missing note F#5",
+            "Missing note A2",
+            "Missing note B4",
+            "Missing note D#5",
+            "Missing note F#5",
+            "Missing note C#5",
+            "Missing note F5",
+            "Missing note G#5",
+            "Missing note D#5",
+            "Missing note G5",
+            "Missing note A#5",
+            "Missing note E5",
+            "Missing note G#5",
+            "Missing note B5",
+            "Missing note F#5",
+            "Missing note A#5",
+            "Missing note C#6",
+            "Missing note E5",
+            "Missing note G#5",
+            "Missing note B5",
+            "Missing note D#5",
+            "Missing note G5",
+            "Missing note A#5",
+            "Missing note C#5",
+            "Missing note F5",
+            "Missing note G#5",
+            "Missing note B2",
+            "Missing note F#3",
+            "Missing note B3",
+            "Missing note C#3",
+            "Missing note G#3",
+            "Missing note D#3",
+            "Missing note A#3",
+            "Missing note E3",
+            "Missing note B3",
+            "Extra note C5",
+            "Extra note F5",
+            "Extra note C5",
+            "Extra note F5",
+            "Extra note C3",
+            "Unexpected accent",
+            "Eighth detected as 16th",
+            "Eighth detected as 16th",
+            "Eighth detected as quarter",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch C5 (expected C#5)",
+            "Incorrect pitch F5 (expected F#5)",
+            "Incorrect pitch G5 (expected G#5)",
+            "Incorrect pitch F5 (expected F#5)",
+            "Incorrect pitch G5 (expected G#5)",
+            "Eighth detected as 16th",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch C5 (expected C#5)",
+            "Eighth detected as quarter",
+            "Incorrect pitch D3 (expected C#3)",
+            "Quarter detected as eighth",
+            "Incorrect pitch G3 (expected G#3)",
+            "Quarter detected as eighth",
+            "Incorrect pitch C5 (expected C#5)",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch E5 (expected D#5)",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch G5 (expected G#5)",
+            "Eighth detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch E5 (expected D#5)",
+            "Eighth detected as quarter",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch F3 (expected F#3)",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch E3 (expected D3)",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "merged-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "severity": 246,
+          "summary": [
+            "Missing note F4",
+            "Extra note B4",
+            "Eighth detected as 16th",
+            "Eighth detected as 16th",
+            "Eighth detected as 16th",
+            "Eighth detected as 16th",
+            "Eighth detected as 16th",
+            "Eighth detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as eighth",
+            "Eighth detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Eighth detected as dotted eighth",
+            "Onset off by 0.25 quarters",
+            "Eighth detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Eighth detected as dotted eighth",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.25 quarters",
+            "Eighth detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Unexpected accent",
+            "Eighth detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Unexpected accent",
+            "Incorrect pitch C5 (expected C#5)",
+            "Eighth detected as 16th",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Eighth detected as 16th",
+            "Onset off by 0.75 quarters",
+            "Incorrect pitch C5 (expected C#5)",
+            "Eighth detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch C5 (expected A#4)",
+            "Incorrect pitch C5 (expected A#4)",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch G2 (expected F2)",
+            "Quarter detected as eighth",
+            "Incorrect pitch D3 (expected C3)",
+            "Quarter detected as eighth",
+            "Incorrect pitch A2 (expected G2)",
+            "Quarter detected as eighth",
+            "Incorrect pitch E3 (expected D3)",
+            "Quarter detected as eighth",
+            "Incorrect pitch B2 (expected A2)",
+            "Quarter detected as eighth",
+            "Incorrect pitch C3 (expected A#2)",
+            "Quarter detected as eighth",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch C5 (expected A4)",
+            "Eighth detected as 16th",
+            "Onset off by 0.75 quarters",
+            "Missing accent",
+            "Incorrect pitch C5 (expected G4)",
+            "Eighth detected as dotted eighth",
+            "Onset off by 0.25 quarters",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "extra-note",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 8,
+          "severity": 238,
+          "summary": [
+            "Missing note E5",
+            "Missing note G5",
+            "Missing note F#5",
+            "Missing note A5",
+            "Missing note C4",
+            "Extra note D5",
+            "Extra note E5",
+            "Extra note D5",
+            "Extra note E5",
+            "Extra note A3",
+            "Unexpected accent",
+            "Eighth detected as 16th",
+            "Eighth detected as 16th",
+            "Eighth detected as quarter",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Onset off by 0.5 quarters",
+            "Onset off by 0.5 quarters",
+            "Unexpected accent",
+            "Onset off by 0.5 quarters",
+            "Missing accent",
+            "Incorrect pitch F5 (expected F#5)",
+            "Unexpected accent",
+            "Incorrect pitch G5 (expected G#5)",
+            "Eighth detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Missing accent",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as dotted quarter",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch G5 (expected G#5)",
+            "Eighth detected as quarter",
+            "Incorrect pitch B3 (expected C4)",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch E3 (expected F3)",
+            "Quarter detected as dotted quarter",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch C5 (expected D5)",
+            "Eighth detected as quarter",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch F3 (expected G3)",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch G3 (expected A3)",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch A5 (expected C6)",
+            "Onset off by 0.5 quarters",
+            "Unexpected accent",
+            "Incorrect pitch G5 (expected B5)",
+            "Eighth detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch F5 (expected D6)",
+            "Incorrect pitch C5 (expected A5)",
+            "Onset off by 0.5 quarters",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "extra-note",
+            "extra-note",
+            "extra-note"
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "severity": 206,
+          "summary": [
+            "Missing note G4",
+            "Missing note B4",
+            "Missing note A4",
+            "Missing note G2",
+            "Missing note D3",
+            "Extra note C5",
+            "Extra note C5",
+            "Extra note C5",
+            "Extra note E3",
+            "Extra note C3",
+            "Unexpected accent",
+            "Eighth detected as 16th",
+            "Eighth detected as quarter",
+            "Onset off by 0.5 quarters",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch C5 (expected C#5)",
+            "Unexpected accent",
+            "Incorrect pitch F5 (expected F#5)",
+            "Incorrect pitch F5 (expected F#5)",
+            "Eighth detected as 16th",
+            "Eighth detected as quarter",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch F3 (expected F#3)",
+            "Quarter detected as eighth",
+            "Incorrect pitch E5 (expected D#5)",
+            "Eighth detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch F5 (expected F#5)",
+            "Eighth detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch E5 (expected D#5)",
+            "Eighth detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch C5 (expected C#5)",
+            "Eighth detected as quarter",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch D3 (expected C3)",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "extra-note",
+            "extra-note",
+            "extra-note"
+          ]
+        },
+        {
+          "measureNumber": 1,
+          "severity": 137,
+          "summary": [
+            "Missing note D4",
+            "Missing note F#4",
+            "Missing note A4",
+            "Missing note E4",
+            "Missing note G#4",
+            "Missing note B4",
+            "Missing note F4",
+            "Missing note A4",
+            "Missing note C5",
+            "Missing note G4",
+            "Missing note B4",
+            "Missing note D5",
+            "Missing note F4",
+            "Missing note A4",
+            "Missing note C5",
+            "Missing note E4",
+            "Missing note G#4",
+            "Missing note B4",
+            "Missing note D4",
+            "Missing note F#4",
+            "Missing note A4",
+            "Missing note D2",
+            "Missing note A2",
+            "Missing note E2",
+            "Missing note B2",
+            "Missing note F2",
+            "Missing note C3",
+            "Quarter detected as whole",
+            "Quarter detected as whole",
+            "Quarter detected as whole",
+            "Eighth detected as whole",
+            "Eighth detected as whole",
+            "Eighth detected as whole",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 44
+      }
+    },
+    {
+      "id": "guitar-tab-sparse-vector",
+      "ok": true,
+      "instrumentId": "guitar",
+      "tier": "guitar-tab",
+      "overall": 0.685,
+      "overallPercent": "69%",
+      "classes": {
+        "pitch": {
+          "score": 0.7,
+          "percent": "70%",
+          "numerator": 28,
+          "denominator": 40,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.1719,
+          "percent": "17%",
+          "numerator": 11,
+          "denominator": 64,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.9231,
+          "percent": "92%",
+          "numerator": 24,
+          "denominator": 26,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 5,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 32,
+        "generatedNoteCount": 40,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 72
+      },
+      "alignmentConfidence": 0.9636,
+      "topDefects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 30
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 23
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 8
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 4
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 2
+        },
+        {
+          "code": "repeat-mismatch",
+          "class": "interpretation",
+          "label": "Repeat mismatch",
+          "count": 2
+        },
+        {
+          "code": "volta-mismatch",
+          "class": "interpretation",
+          "label": "Volta mismatch",
+          "count": 2
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 53
+        },
+        {
+          "class": "pitch",
+          "label": "Pitch",
+          "count": 12
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 5
+        },
+        {
+          "class": "measure-structure",
+          "label": "Measure structure",
+          "count": 2
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 1,
+          "severity": 40,
+          "summary": [
+            "Extra note C4",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch F4 (expected E4)",
+            "Quarter detected as 1.25q",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch E4 (expected C4)",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect chord",
+            "Repeat mismatch",
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "extra-note",
+            "duration-mismatch",
+            "onset-mismatch",
+            "incorrect-pitch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "incorrect-pitch",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 8,
+          "severity": 35,
+          "summary": [
+            "Extra note C5",
+            "Quarter detected as dotted eighth",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as 1.25q",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.5 quarters",
+            "Repeat mismatch",
+            "Volta mismatch"
+          ],
+          "defectCodes": [
+            "extra-note",
+            "duration-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "severity": 33,
+          "summary": [
+            "Extra note B4",
+            "Quarter detected as dotted eighth",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as 1.25q",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.5 quarters",
+            "Volta mismatch"
+          ],
+          "defectCodes": [
+            "extra-note",
+            "duration-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "severity": 32,
+          "summary": [
+            "Extra note C4",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch E4 (expected C4)",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch A4 (expected E4)",
+            "Quarter detected as 1.25q",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "extra-note",
+            "duration-mismatch",
+            "onset-mismatch",
+            "incorrect-pitch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "incorrect-pitch",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 2,
+          "severity": 31,
+          "summary": [
+            "Extra note F#4",
+            "Quarter detected as dotted eighth",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as 1.25q",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.5 quarters"
+          ],
+          "defectCodes": [
+            "extra-note",
+            "duration-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "severity": 31,
+          "summary": [
+            "Extra note G4",
+            "Quarter detected as dotted eighth",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as 1.25q",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.5 quarters"
+          ],
+          "defectCodes": [
+            "extra-note",
+            "duration-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "severity": 31,
+          "summary": [
+            "Extra note G#4",
+            "Quarter detected as dotted eighth",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as 1.25q",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.5 quarters"
+          ],
+          "defectCodes": [
+            "extra-note",
+            "duration-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 6,
+          "severity": 31,
+          "summary": [
+            "Extra note A#4",
+            "Quarter detected as dotted eighth",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as 1.25q",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as dotted eighth",
+            "Onset off by 0.5 quarters"
+          ],
+          "defectCodes": [
+            "extra-note",
+            "duration-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch",
+            "onset-mismatch"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 12
+      }
+    },
+    {
+      "id": "guitar-standard-chords-vector",
+      "ok": true,
+      "instrumentId": "guitar",
+      "tier": "guitar-standard",
+      "overall": 0.5068,
+      "overallPercent": "51%",
+      "classes": {
+        "pitch": {
+          "score": 0.0244,
+          "percent": "2%",
+          "numerator": 4,
+          "denominator": 164,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.4054,
+          "percent": "41%",
+          "numerator": 30,
+          "denominator": 74,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.1176,
+          "percent": "12%",
+          "numerator": 8,
+          "denominator": 68,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 115,
+        "generatedNoteCount": 86,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 16,
+        "defectCount": 265
+      },
+      "alignmentConfidence": 0.7678,
+      "topDefects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 78
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 52
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 49
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 33
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 26
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 18
+        },
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "label": "Split measure",
+          "count": 8
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "pitch",
+          "label": "Pitch",
+          "count": 160
+        },
+        {
+          "class": "measure-structure",
+          "label": "Measure structure",
+          "count": 60
+        },
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 44
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 1
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 2,
+          "severity": 161,
+          "summary": [
+            "Split measure 2 → 3,4",
+            "Extra note G2",
+            "Extra note G2",
+            "Extra note G2",
+            "Extra note G2",
+            "Extra note B2",
+            "Extra note E3",
+            "Extra note A2",
+            "Extra note C3",
+            "Extra note G2",
+            "Extra note B2",
+            "Extra note E3",
+            "Extra note G2",
+            "Extra note G2",
+            "Extra note B2",
+            "Extra note E3",
+            "Incorrect pitch E3 (expected B3)",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch E3 (expected B3)",
+            "Quarter detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch E3 (expected B3)",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch B2 (expected B3)",
+            "Eighth detected as 16th",
+            "Onset off by 0.75 quarters",
+            "Incorrect pitch C3 (expected C#4)",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch B2 (expected E4)",
+            "Incorrect pitch B2 (expected E4)",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch B2 (expected E4)",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch A2 (expected F#4)",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch G2 (expected E4)",
+            "Eighth detected as 16th",
+            "Onset off by 0.75 quarters",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "extra-note"
+          ]
+        },
+        {
+          "measureNumber": 1,
+          "severity": 143,
+          "summary": [
+            "Split measure 1 → 1,2",
+            "Extra note B2",
+            "Extra note E3",
+            "Extra note C3",
+            "Extra note F3",
+            "Extra note B2",
+            "Extra note E3",
+            "Extra note B2",
+            "Extra note E3",
+            "Extra note B2",
+            "Extra note E3",
+            "Incorrect pitch A3 (expected E4)",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch G3 (expected E4)",
+            "Incorrect pitch G3 (expected E4)",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch G3 (expected E4)",
+            "Quarter detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch G3 (expected F#4)",
+            "Eighth detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch F3 (expected G4)",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch E3 (expected G4)",
+            "Incorrect pitch E3 (expected G4)",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch E3 (expected G4)",
+            "Quarter detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch E3 (expected A4)",
+            "Eighth detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "extra-note"
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "severity": 139,
+          "summary": [
+            "Split measure 4 → 7,8",
+            "Missing note E3",
+            "Missing note G3",
+            "Missing note B3",
+            "Missing note E4",
+            "Missing note C#4",
+            "Missing note B3",
+            "Missing note E4",
+            "Missing note G3",
+            "Missing note B3",
+            "Missing note E4",
+            "Extra note G2",
+            "Extra note A2",
+            "Extra note B2",
+            "Extra note C3",
+            "Extra note E3",
+            "Extra note G2",
+            "Extra note B2",
+            "Extra note E3",
+            "Extra note G2",
+            "Extra note B2",
+            "Extra note E3",
+            "Incorrect pitch B2 (expected E3)",
+            "Incorrect pitch B2 (expected E3)",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch B2 (expected F#3)",
+            "Eighth detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch G2 (expected E3)",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch A2 (expected G3)",
+            "Quarter detected as eighth",
+            "Incorrect pitch G2 (expected G3)",
+            "Incorrect pitch G2 (expected A3)",
+            "Eighth detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 8,
+          "severity": 110,
+          "summary": [
+            "Split measure 8 → 15,16",
+            "Missing note E2",
+            "Missing note B2",
+            "Missing note E3",
+            "Missing note G3",
+            "Missing note B3",
+            "Missing note E4",
+            "Missing note F#2",
+            "Missing note F#3",
+            "Missing note A3",
+            "Missing note C#4",
+            "Missing note E2",
+            "Missing note B2",
+            "Missing note E3",
+            "Missing note G3",
+            "Missing note B3",
+            "Missing note E4",
+            "Missing note E2",
+            "Missing note B2",
+            "Missing note E2",
+            "Missing note B2",
+            "Missing note E3",
+            "Missing note G3",
+            "Missing note B3",
+            "Missing note E4",
+            "Extra note D3",
+            "Extra note D3",
+            "Extra note D3",
+            "Incorrect pitch D3 (expected C#3)",
+            "Eighth detected as whole",
+            "Onset off by 0.5 quarters",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "severity": 90,
+          "summary": [
+            "Split measure 3 → 5,6",
+            "Missing note B3",
+            "Missing note E4",
+            "Missing note C#4",
+            "Missing note B3",
+            "Missing note E4",
+            "Missing note B3",
+            "Missing note B3",
+            "Missing note E4",
+            "Extra note A2",
+            "Extra note A2",
+            "Extra note A2",
+            "Incorrect pitch A2 (expected G3)",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch G2 (expected G3)",
+            "Incorrect pitch G2 (expected G3)",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch G2 (expected G3)",
+            "Quarter detected as 16th",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch G2 (expected A3)",
+            "Eighth detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "severity": 82,
+          "summary": [
+            "Split measure 7 → 13,14",
+            "Missing note B2",
+            "Missing note G3",
+            "Missing note B3",
+            "Missing note C#3",
+            "Missing note E3",
+            "Missing note A3",
+            "Missing note B2",
+            "Missing note D3",
+            "Missing note G3",
+            "Missing note B3",
+            "Missing note B2",
+            "Missing note D3",
+            "Missing note B2",
+            "Missing note D3",
+            "Missing note G3",
+            "Missing note B3",
+            "Extra note D3",
+            "Extra note D3",
+            "Extra note D3",
+            "Extra note D3",
+            "Eighth detected as whole",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 6,
+          "severity": 62,
+          "summary": [
+            "Split measure 6 → 11,12",
+            "Missing note A2",
+            "Missing note A3",
+            "Missing note B2",
+            "Missing note F#3",
+            "Missing note A2",
+            "Missing note A3",
+            "Missing note A2",
+            "Missing note A2",
+            "Missing note E3",
+            "Missing note A3",
+            "Extra note E3",
+            "Extra note E3",
+            "Eighth detected as quarter",
+            "Quarter detected as half",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "severity": 51,
+          "summary": [
+            "Split measure 5 → 9,10",
+            "Missing note D3",
+            "Missing note G3",
+            "Missing note E3",
+            "Missing note A3",
+            "Missing note D3",
+            "Missing note G3",
+            "Missing note D3",
+            "Missing note G3",
+            "Missing note D3",
+            "Missing note G3",
+            "Extra note E3",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1,
+          2
+        ],
+        "alignment": "split",
+        "unmatched": false,
+        "defectCount": 44
+      }
+    },
+    {
+      "id": "guitar-paired-chords-vector",
+      "ok": true,
+      "instrumentId": "guitar",
+      "tier": "guitar-paired-dense",
+      "overall": 0.6491,
+      "overallPercent": "65%",
+      "classes": {
+        "pitch": {
+          "score": 0.3077,
+          "percent": "31%",
+          "numerator": 44,
+          "denominator": 143,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.8026,
+          "percent": "80%",
+          "numerator": 122,
+          "denominator": 152,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.4333,
+          "percent": "43%",
+          "numerator": 26,
+          "denominator": 60,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 3,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 116,
+        "generatedNoteCount": 103,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 10,
+        "defectCount": 166
+      },
+      "alignmentConfidence": 0.9005,
+      "topDefects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 40
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 32
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 32
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 27
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 8
+        },
+        {
+          "code": "repeat-mismatch",
+          "class": "interpretation",
+          "label": "Repeat mismatch",
+          "count": 2
+        },
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "label": "Split measure",
+          "count": 2
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "pitch",
+          "label": "Pitch",
+          "count": 99
+        },
+        {
+          "class": "measure-structure",
+          "label": "Measure structure",
+          "count": 34
+        },
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 30
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 3
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 6,
+          "severity": 114,
+          "summary": [
+            "Split measure 6 → 6,7",
+            "Missing note D4",
+            "Missing note E4",
+            "Missing note A4",
+            "Missing note D5",
+            "Missing note E4",
+            "Missing note D4",
+            "Missing note E4",
+            "Missing note A4",
+            "Missing note D5",
+            "Extra note D4",
+            "Extra note E4",
+            "Extra note E4",
+            "Extra note A4",
+            "Extra note D5",
+            "Extra note E4",
+            "Extra note A4",
+            "Extra note D5",
+            "Extra note D3",
+            "Extra note A4",
+            "Extra note D5",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch G4 (expected A4)",
+            "Quarter detected as half",
+            "Incorrect pitch B4 (expected D5)",
+            "Quarter detected as half",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 1,
+          "severity": 107,
+          "summary": [
+            "Extra note F4",
+            "Extra note F4",
+            "Extra note G3",
+            "Extra note A4",
+            "Quarter detected as eighth",
+            "Quarter detected as eighth",
+            "Onset off by 0.25 quarters",
+            "Quarter detected as half",
+            "Incorrect pitch B3 (expected C4)",
+            "Quarter detected as eighth",
+            "Quarter detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Quarter detected as 16th",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch B3 (expected C4)",
+            "Quarter detected as eighth",
+            "Onset off by 0.25 quarters",
+            "Incorrect pitch F4 (expected C4)",
+            "Quarter detected as half",
+            "Incorrect pitch E4 (expected G3)",
+            "Quarter detected as eighth",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch F4 (expected G3)",
+            "Quarter detected as eighth",
+            "Onset off by 0.75 quarters",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Repeat mismatch",
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "duration-mismatch",
+            "duration-mismatch",
+            "onset-mismatch",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "severity": 66,
+          "summary": [
+            "Split measure 7 → 8,9",
+            "Missing note D3",
+            "Missing note F#3",
+            "Missing note F#3",
+            "Missing note D3",
+            "Missing note F#3",
+            "Missing note D4",
+            "Missing note F#4",
+            "Extra note D4",
+            "Extra note F4",
+            "Incorrect pitch F4 (expected F#4)",
+            "Incorrect pitch F4 (expected F#4)",
+            "Quarter detected as half",
+            "Quarter detected as half",
+            "Incorrect pitch F4 (expected F#4)",
+            "Quarter detected as half",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 2,
+          "severity": 63,
+          "summary": [
+            "Missing note D3",
+            "Missing note D3",
+            "Missing note A3",
+            "Extra note E4",
+            "Extra note A3",
+            "Extra note E4",
+            "Extra note B4",
+            "Incorrect pitch C4 (expected D4)",
+            "Incorrect pitch A4 (expected G4)",
+            "Incorrect pitch G3 (expected A3)",
+            "Incorrect pitch C4 (expected D4)",
+            "Incorrect pitch A4 (expected G4)",
+            "Incorrect pitch E4 (expected D4)",
+            "Incorrect pitch A4 (expected G4)",
+            "Incorrect pitch C4 (expected D4)",
+            "Incorrect pitch F4 (expected G4)",
+            "Incorrect pitch E4 (expected A3)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "incorrect-pitch"
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "severity": 62,
+          "summary": [
+            "Missing note E3",
+            "Missing note E3",
+            "Missing note B3",
+            "Missing note E4",
+            "Missing note G4",
+            "Missing note B4",
+            "Missing note E5",
+            "Extra note D4",
+            "Incorrect pitch F4 (expected E4)",
+            "Incorrect pitch F4 (expected E4)",
+            "Quarter detected as half",
+            "Quarter detected as half",
+            "Incorrect pitch A4 (expected G4)",
+            "Incorrect pitch A3 (expected B3)",
+            "Incorrect pitch A4 (expected G4)",
+            "Incorrect pitch D4 (expected B3)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "extra-note"
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "severity": 57,
+          "summary": [
+            "Missing note E3",
+            "Missing note E3",
+            "Missing note A3",
+            "Missing note C4",
+            "Extra note F4",
+            "Extra note A3",
+            "Extra note D4",
+            "Extra note B4",
+            "Extra note E5",
+            "Incorrect pitch F4 (expected E4)",
+            "Incorrect pitch F4 (expected E4)",
+            "Incorrect pitch B4 (expected A4)",
+            "Incorrect pitch B4 (expected A4)",
+            "Incorrect pitch B4 (expected A4)",
+            "Incorrect pitch F4 (expected A3)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "extra-note"
+          ]
+        },
+        {
+          "measureNumber": 8,
+          "severity": 35,
+          "summary": [
+            "Missing note G2",
+            "Missing note C3",
+            "Missing note E3",
+            "Missing note C3",
+            "Missing note E3",
+            "Missing note G2",
+            "Missing note C3",
+            "Missing note E3",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Repeat mismatch"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "severity": 21,
+          "summary": [
+            "Missing note G4",
+            "Missing note B4",
+            "Quarter detected as half",
+            "Quarter detected as half",
+            "Quarter detected as half",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "incorrect-chord"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 31
+      }
+    },
+    {
+      "id": "guitar-techniques-paired-vector",
+      "ok": true,
+      "instrumentId": "guitar",
+      "tier": "guitar-paired-sparse",
+      "overall": 0.6358,
+      "overallPercent": "64%",
+      "classes": {
+        "pitch": {
+          "score": 0.7222,
+          "percent": "72%",
+          "numerator": 26,
+          "denominator": 36,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.9286,
+          "percent": "93%",
+          "numerator": 52,
+          "denominator": 56,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 2,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.8,
+          "percent": "80%",
+          "numerator": 16,
+          "denominator": 20,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 32,
+        "generatedNoteCount": 32,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 12,
+        "defectCount": 21
+      },
+      "alignmentConfidence": 0.943,
+      "topDefects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 4
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 4
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 4
+        },
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "label": "Split measure",
+          "count": 4
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 2
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "label": "Missing tie",
+          "count": 2
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "pitch",
+          "label": "Pitch",
+          "count": 10
+        },
+        {
+          "class": "measure-structure",
+          "label": "Measure structure",
+          "count": 4
+        },
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 4
+        },
+        {
+          "class": "sustain",
+          "label": "Sustain (ties)",
+          "count": 2
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 1
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 2,
+          "severity": 16,
+          "summary": [
+            "Split measure 2 → 2,3",
+            "Missing note A4",
+            "Extra note A4",
+            "Incorrect pitch F4 (expected F#4)",
+            "Quarter detected as half"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "extra-note",
+            "incorrect-pitch",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 6,
+          "severity": 16,
+          "summary": [
+            "Split measure 6 → 8,9",
+            "Missing note A4",
+            "Extra note A4",
+            "Incorrect pitch F4 (expected F#4)",
+            "Quarter detected as half"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "extra-note",
+            "incorrect-pitch",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "severity": 13,
+          "summary": [
+            "Split measure 3 → 4,5",
+            "Missing note E4",
+            "Extra note E4",
+            "Quarter detected as half"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "extra-note",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "severity": 13,
+          "summary": [
+            "Split measure 7 → 10,11",
+            "Missing note E4",
+            "Extra note E4",
+            "Quarter detected as half"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "extra-note",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "severity": 4,
+          "summary": [
+            "Missing tie"
+          ],
+          "defectCodes": [
+            "missing-tie"
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "severity": 4,
+          "summary": [
+            "Missing tie"
+          ],
+          "defectCodes": [
+            "missing-tie"
+          ]
+        },
+        {
+          "measureNumber": 1,
+          "severity": 2,
+          "summary": [
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "tempo-mismatch"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 1
+      }
+    }
+  ],
+  "aggregate": {
+    "fixtureCount": 9,
+    "okCount": 9,
+    "failedCount": 0,
+    "meanOverall": 0.6116111111111111,
+    "classes": {
+      "pitch": {
+        "meanScore": 0.4999888888888889,
+        "meanCoverage": 1
+      },
+      "rhythm": {
+        "meanScore": 0.665788888888889,
+        "meanCoverage": 1
+      },
+      "sustain": {
+        "meanScore": 0.6666666666666666,
+        "meanCoverage": 1
+      },
+      "articulation": {
+        "meanScore": 0.8428111111111112,
+        "meanCoverage": 1
+      },
+      "measureStructure": {
+        "meanScore": 0.6060777777777777,
+        "meanCoverage": 1
+      },
+      "interpretation": {
+        "meanScore": 0,
+        "meanCoverage": 1
+      },
+      "playback": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      }
+    },
+    "topDefects": [
+      {
+        "code": "missing-note",
+        "class": "pitch",
+        "count": 275,
+        "fixtureCount": 8,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-techniques-paired-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "extra-note",
+        "class": "pitch",
+        "count": 264,
+        "fixtureCount": 9,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-techniques-paired-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "incorrect-chord",
+        "class": "measure-structure",
+        "count": 253,
+        "fixtureCount": 7,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "piano-articulation-scan",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "duration-mismatch",
+        "class": "rhythm",
+        "count": 234,
+        "fixtureCount": 8,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-techniques-paired-vector",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "incorrect-pitch",
+        "class": "pitch",
+        "count": 208,
+        "fixtureCount": 7,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-techniques-paired-vector",
+          "piano-articulation-scan",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "onset-mismatch",
+        "class": "rhythm",
+        "count": 167,
+        "fixtureCount": 8,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "missing-accent",
+        "class": "articulation",
+        "count": 36,
+        "fixtureCount": 2,
+        "fixtures": [
+          "piano-articulation-scan",
+          "piano-dense-advanced-vector"
+        ]
+      },
+      {
+        "code": "missing-staccato",
+        "class": "articulation",
+        "count": 19,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "split-measure",
+        "class": "measure-structure",
+        "count": 14,
+        "fixtureCount": 3,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-techniques-paired-vector"
+        ]
+      },
+      {
+        "code": "tempo-mismatch",
+        "class": "interpretation",
+        "count": 9,
+        "fixtureCount": 9,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-techniques-paired-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "missing-voice",
+        "class": "measure-structure",
+        "count": 8,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "repeat-mismatch",
+        "class": "interpretation",
+        "count": 8,
+        "fixtureCount": 4,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-tab-sparse-vector",
+          "piano-articulation-scan",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "volta-mismatch",
+        "class": "interpretation",
+        "count": 6,
+        "fixtureCount": 3,
+        "fixtures": [
+          "guitar-tab-sparse-vector",
+          "piano-articulation-scan",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "missing-tie",
+        "class": "sustain",
+        "count": 5,
+        "fixtureCount": 3,
+        "fixtures": [
+          "guitar-techniques-paired-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "missing-rest",
+        "class": "rhythm",
+        "count": 4,
+        "fixtureCount": 2,
+        "fixtures": [
+          "piano-beginner-single-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "missing-dot",
+        "class": "rhythm",
+        "count": 3,
+        "fixtureCount": 2,
+        "fixtures": [
+          "piano-beginner-single-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "merged-measure",
+        "class": "measure-structure",
+        "count": 2,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-dense-advanced-vector"
+        ]
+      },
+      {
+        "code": "dotted-rhythm-error",
+        "class": "rhythm",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "extra-rest",
+        "class": "rhythm",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "rest-duration-error",
+        "class": "rhythm",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-rhythm-tuplets-vector"
+        ]
+      }
+    ]
+  }
+}

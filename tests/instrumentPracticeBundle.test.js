@@ -16,6 +16,7 @@ import {
   createEmptyInstrumentBundle,
   createInstrumentBundleStore,
   snapshotInstrumentBundle,
+  resolveInstrumentSwitchBundle,
 } from '../src/features/instruments/instrumentPracticeBundle.js'
 import { DEFAULT_INSTRUMENT_ID } from '../src/features/instruments/instruments.js'
 
@@ -42,7 +43,8 @@ function makeBundle(overrides = {}) {
 /**
  * Minimal, faithful model of App.jsx instrument-switch handling: the live
  * (currently selected) bundle plus a store for the others. On switch we save
- * the outgoing bundle and load the incoming one (empty when none exists).
+ * the outgoing bundle and load the incoming one, carrying the active score
+ * when the destination is empty.
  */
 function makeSwitchHarness(startInstrument = DEFAULT_INSTRUMENT_ID) {
   const store = createInstrumentBundleStore()
@@ -62,8 +64,16 @@ function makeSwitchHarness(startInstrument = DEFAULT_INSTRUMENT_ID) {
     switchTo(nextInstrument) {
       if (nextInstrument === active) return
       store.set(active, live)
+      const { bundle: nextBundle, carried } = resolveInstrumentSwitchBundle({
+        outgoingBundle: live,
+        incomingBundle: store.get(nextInstrument),
+        nextInstrumentId: nextInstrument,
+      })
       active = nextInstrument
-      live = snapshotInstrumentBundle(store.get(nextInstrument) ?? createEmptyInstrumentBundle())
+      if (carried) {
+        store.set(nextInstrument, nextBundle)
+      }
+      live = snapshotInstrumentBundle(nextBundle)
     },
   }
 }
@@ -125,23 +135,23 @@ describe('instrument practice bundle', () => {
 })
 
 describe('instrument switch state separation', () => {
-  it('load Piano files → switch to Guitar → Guitar shows empty state', () => {
+  it('load Piano files → switch to Guitar → carries the active score identity', () => {
     const harness = makeSwitchHarness('piano')
-    harness.load(makeBundle({ fileName: 'piano-piece.pdf' }))
+    harness.load(makeBundle({ fileName: 'piano-piece.pdf', pdfFile: 'blob:piano', pdfBuffer: new ArrayBuffer(8) }))
 
     harness.switchTo('guitar')
 
     expect(harness.instrument).toBe('guitar')
-    expect(bundleHasActiveFile(harness.live)).toBe(false)
-    expect(harness.live.fileName).toBe('')
+    expect(bundleHasActiveFile(harness.live)).toBe(true)
+    expect(harness.live.fileName).toBe('piano-piece.pdf')
   })
 
   it('load Guitar file → switch to Piano → Piano file restored → switch back → Guitar restored', () => {
     const harness = makeSwitchHarness('piano')
-    harness.load(makeBundle({ fileName: 'piano-piece.pdf', pdfFile: 'blob:piano' }))
+    harness.load(makeBundle({ fileName: 'piano-piece.pdf', pdfFile: 'blob:piano', pdfBuffer: new ArrayBuffer(4) }))
 
     harness.switchTo('guitar')
-    harness.load(makeBundle({ fileName: 'guitar-piece.pdf', pdfFile: 'blob:guitar' }))
+    harness.load(makeBundle({ fileName: 'guitar-piece.pdf', pdfFile: 'blob:guitar', pdfBuffer: new ArrayBuffer(4) }))
 
     harness.switchTo('piano')
     expect(harness.live.fileName).toBe('piano-piece.pdf')
@@ -162,6 +172,7 @@ describe('instrument switch state separation', () => {
     // Simulate a fresh Piano PDF upload clearing companion timing/sound.
     harness.load(snapshotInstrumentBundle({
       pdfFile: 'blob:piano-new',
+      pdfBuffer: new ArrayBuffer(8),
       fileName: 'piano-new.pdf',
       midiSource: null,
       musicXmlSource: null,
@@ -197,11 +208,12 @@ describe('instrument switch state separation', () => {
     // mount-time state inside usePracticeSession. Without a remount keyed on
     // the bundle epoch, switching instruments leaked the previous instrument's
     // WFY mode and input source into the incoming one.
+    // ActiveScore: instrument switch retains scoreId and remounts derived view
+    // without calling applyInstrumentBundle / resolveInstrumentSwitchBundle.
     const app = readSrc('App.jsx')
-    expect(app).toMatch(
-      /const applyInstrumentBundle = useCallback\(\(bundle\) => \{[\s\S]*?setPracticeSessionEpoch\(\(value\) => value \+ 1\)[\s\S]*?\}, \[resetPdfViewerRuntime\]\)/,
-    )
-    expect(app).toMatch(/<PracticeSessionProvider\s+key=\{practiceSessionEpoch\}/)
+    expect(app).toContain('setPracticeRemountKey')
+    expect(app).toContain('instrument-switch-score-retained')
+    expect(app).toMatch(/key=\{`\$\{practiceSessionEpoch\}:\$\{practiceRemountKey\}`\}/)
   })
 
   it('legacy session (no instrumentId) restores onto Piano', () => {

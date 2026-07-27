@@ -117,6 +117,35 @@ describe('experimental PDF OMR musical details (v3)', () => {
     expect(staffLines.splitY).toBeCloseTo(0.19)
   })
 
+  it('maps a short single-staff band as one staff, not a phantom grand staff', () => {
+    const staffLines = estimateGrandStaffLines({
+      y0: 0.214,
+      y1: 0.255,
+      staveCount: 1,
+    })
+
+    expect(staffLines.singleStaff).toBe(true)
+    expect(staffLines.bass).toEqual([])
+    expect(staffLines.treble[0]).toBeCloseTo(0.214)
+    expect(staffLines.treble[4]).toBeCloseTo(0.255)
+    // Bottom line is E4 in treble — not E2 from a phantom lower half-staff.
+    expect(midiFromStaffPosition(0.255, staffLines.treble, 'treble')).toBe(64)
+    expect(midiFromStaffPosition(0.24475, staffLines.treble, 'treble')).toBe(67) // G4 mid-staff
+  })
+
+  it('still invents a grand staff for a tall merged single band', () => {
+    const staffLines = estimateGrandStaffLines({
+      y0: 0.19,
+      y1: 0.33,
+      staveCount: 1,
+    })
+
+    expect(staffLines.singleStaff).toBeUndefined()
+    expect(staffLines.bass).toHaveLength(5)
+    expect(staffLines.treble[0]).toBeCloseTo(0.19)
+    expect(staffLines.bass[4]).toBeCloseTo(0.33)
+  })
+
   it('maps vector notehead glyphs through staff geometry and key signature', () => {
     const measureBox = {
       measureNumber: 1,
@@ -144,9 +173,11 @@ describe('experimental PDF OMR musical details (v3)', () => {
     expect(record.vectorNoteCount).toBe(1)
     expect(record.events[0].notes[0].midi).toBe(66)
     expect(record.events[0].notes[0].alter).toBe(1)
+    // 3/4 measure fill can extend a half-note event to 12 divisions without a
+    // visual augmentation dot on the lone notehead glyph.
     expect(record.events[0].durationDivisions).toBe(12)
     expect(record.events[0].durationType).toBe('half')
-    expect(record.events[0].dotted).toBe(true)
+    expect(record.events[0].dotted).toBe(false)
   })
 
   it('uses vector natural accidentals to cancel key signature within a measure', () => {

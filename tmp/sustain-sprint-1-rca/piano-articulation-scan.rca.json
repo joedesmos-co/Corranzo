@@ -1,0 +1,406 @@
+{
+  "id": "piano-articulation-scan",
+  "sustainPercent": "3%",
+  "tieDefects": [
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "label": "Incorrect tie",
+      "count": 37
+    }
+  ],
+  "truthTieCount": 2,
+  "genTieCount": 102,
+  "truthTies": [
+    {
+      "pitch": "A4",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "A4",
+      "start": false,
+      "stop": true,
+      "chord": false
+    }
+  ],
+  "genTies": [
+    {
+      "pitch": "C3",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "G4",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "B2",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "A4",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "A2",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "A4",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "E4",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "C3",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "A2",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "A4",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "D3",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "C3",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "F4",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "A2",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "B4",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "A4",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "E3",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "A2",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "G4",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "F4",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "F4",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "F4",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "B4",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "C5",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "A2",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "D3",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "C5",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "F4",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "C3",
+      "start": true,
+      "stop": false,
+      "chord": true
+    },
+    {
+      "pitch": "C5",
+      "start": true,
+      "stop": false,
+      "chord": true
+    }
+  ],
+  "smuflTieGlyphCount": 0,
+  "tieGlyphSamples": [],
+  "samples": [
+    {
+      "measure": 1,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    },
+    {
+      "measure": 2,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    },
+    {
+      "measure": 3,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    },
+    {
+      "measure": 4,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    },
+    {
+      "measure": 5,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    },
+    {
+      "measure": 6,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    },
+    {
+      "measure": 7,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    },
+    {
+      "measure": 8,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    }
+  ],
+  "tieDiagnostics": null,
+  "pipelineKeys": [
+    "ties"
+  ]
+}

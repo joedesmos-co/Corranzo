@@ -1,0 +1,55 @@
+{
+  "id": "01-gymnopedie-quarter-rest-control-p1-m25-u+e4e5-811",
+  "source": "gymnopedie",
+  "sourcePdf": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+  "page": 1,
+  "measure": 25,
+  "expectedArticulation": "staccato",
+  "expectAbsent": true,
+  "sourcePriority": "PDF text / SMuFL glyph",
+  "rawArticulationCandidate": {
+    "glyph": "",
+    "codepoint": "U+E4E5",
+    "originalGlyph": "",
+    "originalCodepoint": "U+E4E5",
+    "x": 811.217088142185,
+    "y": 1226.7595385035631,
+    "width": 7.831937628907563,
+    "height": 33.61047214489311,
+    "candidateType": "quarter-rest-control",
+    "placement": "above",
+    "normalization": null
+  },
+  "candidateType": "quarter-rest-control",
+  "staffSystem": {
+    "page": 1,
+    "systemIndex": 4,
+    "clef": null
+  },
+  "selectedNoteOrChord": null,
+  "classification": "U+E4E5 is a quarter rest/no-articulation control",
+  "placement": "above",
+  "musicXmlSnippet": "<measure number=\"25\"><note><pitch><step>D</step><octave>2</octave></pitch><duration>12</duration><voice>2</voice><type>half</type><dot/><staff>2</staff></note><backup><duration>12</duration></backup><note><pitch><step>D</step><octave>5</octave></pitch><duration>12</duration><voice>1</voice><type>half</type><dot/><staff>1</staff></note><backup><duration>8</duration></backup><note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><note><chord/><pitch><step>A</step><octave>3</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><note><chord/><pitch><step>E</step><octave>3</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><note><chord/><pitch><step>C</step><octave>3</octave></pitch><accidental>natural</accidental><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note></measure>",
+  "renderedResult": {
+    "present": false,
+    "geometry": null,
+    "restFermataWrittenOnly": false
+  },
+  "playbackSemanticTrace": {
+    "attackCount": 0,
+    "articulationSource": "none",
+    "midi": null
+  },
+  "notationPlaybackAgree": true,
+  "failureLayerBefore": "2 detected but misclassified as staccato",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-5/source-crops/01-gymnopedie-quarter-rest-control-p1-m25-u+e4e5-811.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-5/candidate-overlays/01-gymnopedie-quarter-rest-control-p1-m25-u+e4e5-811.png",
+    "musicXmlSnippet": "tmp/notation-fidelity-sprint-5/musicxml-snippets/01-gymnopedie-quarter-rest-control-p1-m25-u+e4e5-811.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-5/rendered-before/01-gymnopedie-quarter-rest-control-p1-m25-u+e4e5-811.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-5/rendered-after/01-gymnopedie-quarter-rest-control-p1-m25-u+e4e5-811.png"
+  }
+}

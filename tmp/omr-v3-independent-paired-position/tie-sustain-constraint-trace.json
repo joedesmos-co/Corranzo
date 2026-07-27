@@ -1,0 +1,151 @@
+{
+  "generatedAt": "2026-07-17T04:02:30.237Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "phase": 4,
+  "fixtures": [
+    {
+      "fixtureId": "guitar-paired-chords-vector",
+      "label": "CC0 Paired Notation and TAB Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 1,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 1,
+        "sounding-release-too-short": 1,
+        "written-correct-sustain-wrong": 3,
+        "slur-like-arc-pitch-differs": 0
+      },
+      "dominantConstraint": {
+        "bucket": "written-correct-sustain-wrong",
+        "count": 3
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 0,
+        "appliedTieCount": 0,
+        "slurLikeArcPitchDiffers": 0,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [
+        {
+          "measureNumber": 1,
+          "midi": 64,
+          "label": "E4",
+          "onsetQuarters": 3,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.25,
+          "sustainDeficitQuarters": 0.75,
+          "alreadyTied": false
+        }
+      ],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": [
+          {
+            "measureNumber": 9,
+            "midi": 64,
+            "label": "E4",
+            "onsetQuarters": 0,
+            "durationQuarters": 4,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 8,
+              "midi": 64,
+              "label": "E4",
+              "onsetQuarters": 3,
+              "durationQuarters": 1,
+              "voice": 1,
+              "partId": "P1"
+            }
+          }
+        ]
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 4,
+          "midi": 59,
+          "label": "B3",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 5,
+          "midi": 67,
+          "label": "G4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 8,
+          "midi": 64,
+          "label": "E4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "guitar-techniques-paired-vector",
+      "label": "CC0 Guitar Technique Pairing Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 0,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 0,
+        "written-correct-sustain-wrong": 1,
+        "slur-like-arc-pitch-differs": 0
+      },
+      "dominantConstraint": {
+        "bucket": "written-correct-sustain-wrong",
+        "count": 1
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 0,
+        "appliedTieCount": 0,
+        "slurLikeArcPitchDiffers": 0,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 2,
+          "midi": 67,
+          "label": "G4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    }
+  ]
+}

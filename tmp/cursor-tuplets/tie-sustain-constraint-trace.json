@@ -1,0 +1,292 @@
+{
+  "generatedAt": "2026-07-17T13:18:40.631Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "phase": 4,
+  "fixtures": [
+    {
+      "fixtureId": "piano-beginner-single-vector",
+      "label": "CC0 Beginner Line Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 1,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 1,
+        "written-correct-sustain-wrong": 0,
+        "slur-like-arc-pitch-differs": 0
+      },
+      "dominantConstraint": {
+        "bucket": "expected-cross-measure-tie",
+        "count": 1
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 0,
+        "appliedTieCount": 0,
+        "slurLikeArcPitchDiffers": 0,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [
+        {
+          "measureNumber": 8,
+          "midi": 67,
+          "label": "G4",
+          "onsetQuarters": 1,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.5,
+          "sustainDeficitQuarters": 0.5,
+          "alreadyTied": false
+        }
+      ],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "piano-grand-voices-vector",
+      "label": "CC0 Grand Staff Voice Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 0,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 0,
+        "written-correct-sustain-wrong": 7,
+        "slur-like-arc-pitch-differs": 1
+      },
+      "dominantConstraint": {
+        "bucket": "written-correct-sustain-wrong",
+        "count": 7
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 1,
+        "appliedTieCount": 0,
+        "slurLikeArcPitchDiffers": 1,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 1,
+          "midi": 64,
+          "label": "E4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 1,
+          "midi": 67,
+          "label": "G4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 2,
+          "midi": 69,
+          "label": "A4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 3,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 4,
+          "midi": 69,
+          "label": "A4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 4,
+          "midi": 72,
+          "label": "C5",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 7,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "piano-rhythm-tuplets-vector",
+      "label": "CC0 Rhythm and Tuplet Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 0,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 0,
+        "written-correct-sustain-wrong": 1,
+        "slur-like-arc-pitch-differs": 2
+      },
+      "dominantConstraint": {
+        "bucket": "slur-like-arc-pitch-differs",
+        "count": 2
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 4,
+        "appliedTieCount": 2,
+        "slurLikeArcPitchDiffers": 2,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 1,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 3,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "piano-dense-advanced-vector",
+      "label": "CC0 Dense Advanced Texture Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 1,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 1,
+        "written-correct-sustain-wrong": 3,
+        "slur-like-arc-pitch-differs": 46
+      },
+      "dominantConstraint": {
+        "bucket": "slur-like-arc-pitch-differs",
+        "count": 46
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 50,
+        "appliedTieCount": 3,
+        "slurLikeArcPitchDiffers": 46,
+        "unresolvedArcCount": 1
+      },
+      "expectedCrossMeasureTies": [
+        {
+          "measureNumber": 6,
+          "midi": 47,
+          "label": "B2",
+          "onsetQuarters": 1,
+          "durationQuarters": 1,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.25,
+          "sustainDeficitQuarters": 0.75,
+          "alreadyTied": false
+        }
+      ],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 1,
+          "midi": 67,
+          "label": "G4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 1,
+          "midi": 64,
+          "label": "E4",
+          "onsetQuarters": 1,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 1,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 1,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    }
+  ]
+}

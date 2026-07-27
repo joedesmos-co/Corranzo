@@ -20,7 +20,7 @@ export const SHARP_ORDER_SEMITONES = [5, 0, 7, 2, 9, 4, 11]
 /** Flats in key-signature order. */
 export const FLAT_ORDER_SEMITONES = [11, 4, 9, 2, 7, 0, 5]
 
-/** Common tempo words → quarter BPM (safe defaults). */
+/** Common tempo words → quarter BPM (Corranzo explicit mapping policy). */
 export const TEMPO_WORD_BPM = {
   grave: 45,
   largo: 50,

@@ -45,18 +45,60 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}
           voice: note.voice ?? null,
           midi: note.midi,
           label: note.label ?? midiToNoteLabel(note.midi),
+          writtenPitch: note.writtenPitch ?? null,
+          accidental: note.accidental ?? null,
+          keySignature: note.keySignature ?? null,
           staff: note.staff ?? null,
           measureNumber: note.measureNumber ?? checkpoint.measureNumber,
           quarterTime: note.quarterTime ?? checkpoint.quarterTime ?? null,
           timeSeconds: note.timeSeconds ?? checkpoint.timeSeconds,
           durationSeconds: sanitizeVisualDurationSeconds(note.durationSeconds, null),
+          durationQuarters: note.durationQuarters ?? null,
+          noteType: note.noteType ?? null,
+          stemDirection: note.stemDirection ?? null,
+          dots: Math.max(0, Math.round(Number(note.dots) || 0)),
+          beams: note.beams ?? [],
           tieStart: Boolean(note.tieStart),
           tieStop: Boolean(note.tieStop),
+          tiePlacement: note.tiePlacement ?? null,
           staccato: Boolean(note.staccato),
           accent: Boolean(note.accent),
           tenuto: Boolean(note.tenuto),
+          marcato: Boolean(note.marcato),
+          fermata: Boolean(note.fermata),
+          articulationPlacements: note.articulationPlacements ?? {},
           slurs: note.slurs ?? [],
           guitarTechniques: note.guitarTechniques ?? [],
+          tiedContinuations: (note.tiedContinuations ?? []).map(
+            (continuation, continuationIndex) => {
+              const visualContinuation = {
+                ...continuation,
+                visualNoteId:
+                  continuation.visualNoteId ??
+                  continuation.id ??
+                  `${checkpoint.id}-n${noteIndex}-tie-${continuationIndex}`,
+                sourceNoteId: continuation.id ?? null,
+                partId: continuation.partId ?? note.partId ?? null,
+                voice: continuation.voice ?? note.voice ?? 1,
+                staff: continuation.staff ?? note.staff ?? null,
+                midi: continuation.midi ?? note.midi,
+                label:
+                  continuation.label ??
+                  midiToNoteLabel(continuation.midi ?? note.midi),
+                writtenPitch:
+                  continuation.writtenPitch ?? note.writtenPitch ?? null,
+                accidental: continuation.accidental ?? null,
+                keySignature:
+                  continuation.keySignature ?? note.keySignature ?? null,
+              }
+              return {
+                ...visualContinuation,
+                markings: buildVisualNoteMarkings(visualContinuation, {
+                  groupId: checkpoint.id,
+                }),
+              }
+            },
+          ),
           // Fretted-instrument position when the score provides one; derived
           // positions come from getTabPositionsForTimingMap via the note id.
           string: note.string ?? null,
@@ -338,6 +380,29 @@ export function buildBarlineTimes(timingMap) {
     return timingMap.measures.map((measure) => measure.startTimeSeconds)
   }
   return times
+}
+
+export function resolveVisualKeySignature(
+  timingMap,
+  currentTimeSeconds = 0,
+  currentMeasureNumber = null,
+) {
+  const events = timingMap?.keySignatures ?? []
+  let active = { fifths: 0, mode: null, cancelFifths: null, measureNumber: null }
+  for (const event of events) {
+    if ((event.timeSeconds ?? 0) > currentTimeSeconds + 1e-6) {
+      break
+    }
+    active = event
+  }
+  return {
+    ...active,
+    cancelFifths:
+      currentMeasureNumber != null &&
+      active.measureNumber === currentMeasureNumber
+        ? active.cancelFifths ?? null
+        : null,
+  }
 }
 
 /**

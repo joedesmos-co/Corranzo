@@ -120,4 +120,22 @@ describe('notation + TAB pairing engine', () => {
     expect(paired[0].startDivision).toBe(8)
     expect(paired[0].notes[0].fret).toBe(3)
   })
+
+  it('uses TAB sounding midi as authoritative pitch when paired', () => {
+    const events = [noteEvent(0, [{ midi: 65, cx: 120 }], 120)]
+    const tabNotes = [tabNote({ string: 1, fret: 0, midi: 64, x: 120, positionInMeasure: 0.05 })]
+
+    const { events: paired, diagnostics } = pairNotationTabInMeasure(events, tabNotes)
+    expect(diagnostics.pairedNotes).toBe(1)
+    expect(paired[0].notes[0]).toEqual(
+      expect.objectContaining({
+        midi: 64,
+        notationMidi: 65,
+        tabMidi: 64,
+        string: 1,
+        fret: 0,
+        soundingPitch: true,
+      }),
+    )
+  })
 })

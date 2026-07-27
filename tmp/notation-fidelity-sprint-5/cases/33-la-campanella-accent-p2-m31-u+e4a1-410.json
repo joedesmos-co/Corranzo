@@ -1,0 +1,89 @@
+{
+  "id": "33-la-campanella-accent-p2-m31-u+e4a1-410",
+  "source": "la-campanella",
+  "sourcePdf": "/Users/ryland/Downloads/etude-s-1413-in-g-minor-la-campanella-liszt.pdf",
+  "page": 2,
+  "measure": 31,
+  "expectedArticulation": "accent",
+  "expectAbsent": false,
+  "sourcePriority": "PDF text / SMuFL glyph",
+  "rawArticulationCandidate": {
+    "glyph": "",
+    "codepoint": "U+E4A1",
+    "originalGlyph": "",
+    "originalCodepoint": "U+E4A1",
+    "x": 409.5583029065844,
+    "y": 650.1488214728683,
+    "width": 9.798775150617285,
+    "height": 27.20655556899225,
+    "candidateType": "accent",
+    "placement": "below",
+    "normalization": null
+  },
+  "candidateType": "accent",
+  "staffSystem": {
+    "page": 2,
+    "systemIndex": 2,
+    "clef": "bass"
+  },
+  "selectedNoteOrChord": {
+    "kind": "note",
+    "noteIndex": 7,
+    "restIndex": null,
+    "midi": 67,
+    "cx": 409.57212544307276,
+    "cy": 635.4849132170543,
+    "chordBroadcastCount": 1
+  },
+  "classification": "U+E4A1 pipeline=accent; manually verified=accent",
+  "placement": "below",
+  "musicXmlSnippet": "<measure number=\"31\"><note><pitch><step>C</step><alter>1</alter><octave>5</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>E</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><backup><duration>4</duration></backup><note><pitch><step>E</step><octave>6</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><forward><duration>1</duration></forward><note><pitch><step>G</step><alter>1</alter><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff></note><note><pitch><step>E</step><octave>5</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><backup><duration>2</duration></backup><note><pitch><step>C</step><alter>1</alter><octave>6</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>G</step><alter>1</alter><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><backup><duration>3</duration></backup><note><pitch><step>G</step><octave>4</octave></pitch><accidental>natural</accidental><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/><accent placement=\"below\"/></articulations></notations></note><note><pitch><step>G</step><octave>5</octave></pitch><accidental>natural</accidental><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><backup><duration>2</duration></backup><note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><chord/><pitch><step>F</step><alter>1</alter><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><backup><duration>2</duration></backup><note><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><strong-accent type=\"up\" placement=\"above\"/></articulations></notations></note><note><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff></note><note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><chord/><pitch><step>E</step><octave>2</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><backup><duration>1</duration></backup><note><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note></measure>",
+  "renderedResult": {
+    "present": true,
+    "geometry": {
+      "id": "note-accent-note-m31-t65.090-209-n1-staff-accent",
+      "kind": "accent",
+      "scope": "note",
+      "noteId": "note-m31-t65.090-209-n1",
+      "groupId": "note-m31-t65.090-209",
+      "symbol": null,
+      "source": "musicxml",
+      "placement": "below",
+      "chordNoteIds": [
+        "note-m31-t65.090-209-n1"
+      ],
+      "status": "upcoming",
+      "shape": "text",
+      "text": ">",
+      "x": 7159.900000000001,
+      "y": 141.24,
+      "fontSize": 16.200000000000003
+    },
+    "restFermataWrittenOnly": false
+  },
+  "playbackSemanticTrace": {
+    "id": "P1-m31-n614",
+    "measureNumber": 31,
+    "midi": 67,
+    "quarterTime": 121.5,
+    "voice": 2,
+    "staff": 2,
+    "attackCount": 1,
+    "articulationSource": "staccato+accent",
+    "writtenDurationSeconds": 0.1339285714285836,
+    "baseDurationSeconds": 0.0669642857142918,
+    "velocity": 0.5800000000000001
+  },
+  "notationPlaybackAgree": true,
+  "failureLayerBefore": "2 detected but misclassified as staccato",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-5/source-crops/33-la-campanella-accent-p2-m31-u+e4a1-410.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-5/candidate-overlays/33-la-campanella-accent-p2-m31-u+e4a1-410.png",
+    "musicXmlSnippet": "tmp/notation-fidelity-sprint-5/musicxml-snippets/33-la-campanella-accent-p2-m31-u+e4a1-410.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-5/rendered-before/33-la-campanella-accent-p2-m31-u+e4a1-410.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-5/rendered-after/33-la-campanella-accent-p2-m31-u+e4a1-410.png"
+  }
+}

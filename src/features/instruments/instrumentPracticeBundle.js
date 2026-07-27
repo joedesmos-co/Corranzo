@@ -1,15 +1,13 @@
 /**
  * Instrument-scoped active practice state.
  *
- * Each instrument (piano, guitar) keeps its own "active file bundle": the
- * loaded PDF, MIDI, timing (MusicXML/MXL/OMR), page position, practice prefs
- * (loop region, Wait For You settings, scrub time), and demo flag. The bundle
- * lets the app save the current instrument's state and restore another
- * instrument's state when the user switches, so nothing bleeds between the two.
+ * Each instrument keeps its own bundle (PDF/MIDI/MusicXML/prefs). Switching
+ * instruments restores that instrument's saved bundle when one exists.
  *
- * These are plain snapshots of App-level React state — no timing, playback, or
- * Wait For You matching logic lives here. Legacy (pre-instrument) sessions have
- * no instrument key and always resolve to Piano via normalizeInstrumentId.
+ * When the destination instrument has no score yet, the active score is
+ * carried forward so Piano↔Guitar keep the same score identity. Instrument-
+ * specific derived state (fret maps, WFY prefs) is still reset via the App
+ * epoch/remount path.
  */
 
 import { normalizeInstrumentId } from './instruments.js'
@@ -56,7 +54,73 @@ export function snapshotInstrumentBundle(state = {}) {
 
 /** True when the bundle has at least a loaded PDF to open in Practice. */
 export function bundleHasActiveFile(bundle) {
-  return Boolean(bundle?.pdfFile)
+  return Boolean(bundle?.pdfFile && bundle?.pdfBuffer)
+}
+
+/**
+ * Carry an active score into an empty instrument slot.
+ * Clones PDF blob URL + ArrayBuffers so each instrument can clear independently.
+ * Practice prefs are not carried — those stay instrument-specific.
+ */
+export function carryScoreBundleToInstrument(sourceBundle, nextInstrumentId) {
+  if (!bundleHasActiveFile(sourceBundle)) {
+    return createEmptyInstrumentBundle()
+  }
+  const pdfBuffer = sourceBundle.pdfBuffer.slice(0)
+  let pdfFile = sourceBundle.pdfFile
+  if (typeof URL !== 'undefined' && typeof Blob !== 'undefined') {
+    pdfFile = URL.createObjectURL(new Blob([pdfBuffer], { type: 'application/pdf' }))
+  }
+  const cloneCompanion = (companion) => {
+    if (!companion?.data) {
+      return companion ?? null
+    }
+    return {
+      ...companion,
+      data: companion.data.slice(0),
+    }
+  }
+  return snapshotInstrumentBundle({
+    ...sourceBundle,
+    instrumentId: normalizeInstrumentId(nextInstrumentId),
+    pdfFile,
+    pdfBuffer,
+    midiSource: cloneCompanion(sourceBundle.midiSource),
+    musicXmlSource: cloneCompanion(sourceBundle.musicXmlSource),
+    practicePrefs: null,
+  })
+}
+
+/**
+ * Resolve which bundle to apply on an instrument switch.
+ * - Destination has its own score → use it
+ * - Destination empty + source has score → carry source score
+ * - Otherwise → empty
+ */
+export function resolveInstrumentSwitchBundle({
+  outgoingBundle = null,
+  incomingBundle = null,
+  nextInstrumentId = null,
+} = {}) {
+  if (bundleHasActiveFile(incomingBundle)) {
+    return {
+      bundle: snapshotInstrumentBundle({
+        ...incomingBundle,
+        instrumentId: normalizeInstrumentId(nextInstrumentId),
+      }),
+      carried: false,
+    }
+  }
+  if (bundleHasActiveFile(outgoingBundle)) {
+    return {
+      bundle: carryScoreBundleToInstrument(outgoingBundle, nextInstrumentId),
+      carried: true,
+    }
+  }
+  return {
+    bundle: createEmptyInstrumentBundle(),
+    carried: false,
+  }
 }
 
 /**

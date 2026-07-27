@@ -1,0 +1,66 @@
+{
+  "report": {
+    "runs": [
+      {
+        "id": "minecraft",
+        "ok": true,
+        "reason": "playback",
+        "scoreId": "score-cb67b38a-c7e3-438e-ab96-67ceb3cd66fc",
+        "pdfHash": "e7b316a8",
+        "pageCount": 3,
+        "runId": 3,
+        "failure": null,
+        "destroyViolations": [],
+        "panelSnippet": "",
+        "cacheActions": [
+          "clear",
+          "pin",
+          "miss",
+          "load",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "unpin"
+        ]
+      },
+      {
+        "id": "evangelion",
+        "ok": true,
+        "reason": "playback",
+        "scoreId": "score-8f5028d4-34cc-4b85-86a4-24c7e36d8dfb",
+        "pdfHash": "577e5712",
+        "pageCount": 8,
+        "runId": 3,
+        "failure": null,
+        "destroyViolations": [],
+        "panelSnippet": "",
+        "cacheActions": [
+          "pin",
+          "miss",
+          "load",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "unpin"
+        ]
+      }
+    ]
+  },
+  "failures": []
+}

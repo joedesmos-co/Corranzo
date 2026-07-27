@@ -303,5 +303,51 @@ export function assignLocalAccidentals(glyphs, imageData, measureBox, notes, acc
     })
   }
 
+  assignments.diagnostics = {
+    detectedCandidates: candidates.map((candidate) => ({
+      glyphIndex: candidate.glyphIndex,
+      noteIndex: candidate.noteIndex,
+      score: Number(candidate.score.toFixed(2)),
+      type: candidate.accidental.type,
+      alter: candidate.accidental.alter,
+      glyph: {
+        text: candidate.glyph.text,
+        x: candidate.glyph.x,
+        y: candidate.glyph.y,
+        fontName: candidate.glyph.fontName ?? null,
+      },
+      note: {
+        measureNumber: notes[candidate.noteIndex]?.measureNumber ?? null,
+        clef: notes[candidate.noteIndex]?.clef ?? null,
+        naturalMidi: notes[candidate.noteIndex]?.naturalMidi ?? null,
+        cx: notes[candidate.noteIndex]?.cx ?? null,
+        cy: notes[candidate.noteIndex]?.cy ?? null,
+      },
+    })),
+    selectedAttachments: [...assignments.entries()].map(
+      ([noteIndex, accidental]) => ({
+        noteIndex,
+        type: accidental.type,
+        alter: accidental.alter,
+        score: Number(accidental.score.toFixed(2)),
+        glyph: {
+          text: accidental.glyph.text,
+          x: accidental.glyph.x,
+          y: accidental.glyph.y,
+        },
+        note: {
+          measureNumber: notes[noteIndex]?.measureNumber ?? null,
+          clef: notes[noteIndex]?.clef ?? null,
+          naturalMidi: notes[noteIndex]?.naturalMidi ?? null,
+          cx: notes[noteIndex]?.cx ?? null,
+          cy: notes[noteIndex]?.cy ?? null,
+        },
+      }),
+    ),
+    rejectedGlyphCount:
+      new Set(candidates.map((candidate) => candidate.glyphIndex)).size -
+      usedGlyphs.size,
+  }
+
   return assignments
 }

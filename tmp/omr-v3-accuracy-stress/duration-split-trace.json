@@ -1,0 +1,138 @@
+{
+  "generatedAt": "2026-07-17T03:20:47.919Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "phase": 3,
+  "fixtures": [
+    {
+      "fixtureId": "dense",
+      "label": "A Cruel Angel's Thesis (legacy copyrighted diagnostic)",
+      "phase": 3,
+      "totalWrongDurations": 77,
+      "legacyDurationHistogram": {
+        "too-short": 20,
+        "too-long": 9,
+        "beamed-subdivision": 4,
+        "bass-sustain": 0,
+        "melody-accompaniment": 0,
+        "rest-gap": 0,
+        "tie-sustain": 0,
+        "onset-coupled": 44,
+        "other": 0
+      },
+      "writtenSoundingHistogram": {
+        "written-duration-wrong": 33,
+        "sounding-release-wrong": 0,
+        "onset-coupled-duration": 44,
+        "tie-sustain-related": 0,
+        "serialization-artifact": 0
+      },
+      "dominantClass": {
+        "bucket": "onset-coupled-duration",
+        "count": 44
+      },
+      "hotspotMeasures": [
+        7,
+        9,
+        121
+      ],
+      "hotspotTraces": [
+        {
+          "measureNumber": 7,
+          "wrongDurationCount": 2,
+          "histogram": {
+            "written-duration-wrong": 0,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 2,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 0
+          },
+          "samples": [
+            {
+              "bucket": "onset-coupled-duration",
+              "onsetDiffQuarters": 0.75,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 0,
+              "truthLabel": "A#1",
+              "generatedLabel": "A#1"
+            },
+            {
+              "bucket": "onset-coupled-duration",
+              "onsetDiffQuarters": 0.75,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 0,
+              "truthLabel": "F4",
+              "generatedLabel": "F4"
+            }
+          ]
+        },
+        {
+          "measureNumber": 9,
+          "wrongDurationCount": 3,
+          "histogram": {
+            "written-duration-wrong": 1,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 2,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 0
+          },
+          "samples": [
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 0,
+              "truthLabel": "D4",
+              "generatedLabel": "D4"
+            },
+            {
+              "bucket": "onset-coupled-duration",
+              "onsetDiffQuarters": 0.25,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 0,
+              "truthLabel": "D#4",
+              "generatedLabel": "D#4"
+            },
+            {
+              "bucket": "onset-coupled-duration",
+              "onsetDiffQuarters": 0.25,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 0,
+              "truthLabel": "C5",
+              "generatedLabel": "C5"
+            }
+          ]
+        },
+        {
+          "measureNumber": 121,
+          "wrongDurationCount": 2,
+          "histogram": {
+            "written-duration-wrong": 2,
+            "sounding-release-wrong": 0,
+            "onset-coupled-duration": 0,
+            "tie-sustain-related": 0,
+            "serialization-artifact": 0
+          },
+          "samples": [
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 0,
+              "truthLabel": "D#5",
+              "generatedLabel": "D#5"
+            },
+            {
+              "bucket": "written-duration-wrong",
+              "onsetDiffQuarters": 0,
+              "durationDiffQuarters": 0.5,
+              "pitchDeltaSemitones": 0,
+              "truthLabel": "C6",
+              "generatedLabel": "C6"
+            }
+          ]
+        }
+      ],
+      "tieChains": null
+    }
+  ]
+}

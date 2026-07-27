@@ -11,6 +11,11 @@ import {
   cancelInFlightOmrGeneration,
   pdfPreparingScoreMessage,
 } from '../src/features/library/autoOmrOrchestration.js'
+import {
+  activatePdfScoreSource,
+  registerOmrRunStart,
+  resetScoreSourceGenerationGateForTests,
+} from '../src/features/library/scoreSourceGenerationGate.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const readSrc = (...parts) => readFileSync(join(root, 'src', ...parts), 'utf8')
@@ -21,9 +26,20 @@ vi.mock('../src/features/omr/runPdfOmrClient.js', () => ({
 
 import { cancelActiveOmrWorker } from '../src/features/omr/runPdfOmrClient.js'
 
+function seedOwningRun({
+  pdfIdentity = 'score.pdf::1::1',
+  epoch = 1,
+  runId = 7,
+} = {}) {
+  activatePdfScoreSource({ pdfIdentity, epoch })
+  registerOmrRunStart({ runId, pdfIdentity, epoch })
+  return { pdfIdentity, epoch, runId }
+}
+
 describe('auto OMR orchestration helpers', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    resetScoreSourceGenerationGateForTests()
   })
 
   it('documents source precedence with MusicXML before MIDI before OMR', () => {
@@ -126,9 +142,38 @@ describe('auto OMR orchestration helpers', () => {
         currentPdfFileName: 'a.pdf',
       }).reason,
     ).toBe('pdf-url-mismatch')
+
+    seedOwningRun({ pdfIdentity: 'b.pdf::2::2', epoch: 2, runId: 9 })
+    expect(
+      shouldAcceptOmrGeneratedResult({
+        musicXmlSource: null,
+        sourceInstrumentId: 'piano',
+        currentInstrumentId: 'piano',
+        sourcePdfIdentity: 'a.pdf::1::1',
+        currentPdfIdentity: 'b.pdf::2::2',
+        sourcePracticeSessionEpoch: 2,
+        currentPracticeSessionEpoch: 2,
+        sourceOmrRunId: 9,
+      }).reason,
+    ).toBe('pdf-identity-mismatch')
+
+    seedOwningRun({ pdfIdentity: 'a.pdf::1::1', epoch: 2, runId: 4 })
+    expect(
+      shouldAcceptOmrGeneratedResult({
+        musicXmlSource: null,
+        sourceInstrumentId: 'piano',
+        currentInstrumentId: 'piano',
+        sourcePdfIdentity: 'a.pdf::1::1',
+        currentPdfIdentity: 'a.pdf::1::1',
+        sourcePracticeSessionEpoch: 1,
+        currentPracticeSessionEpoch: 2,
+        sourceOmrRunId: 4,
+      }).reason,
+    ).toBe('session-epoch-mismatch')
   })
 
   it('accepts OMR when the session still needs generated timing', () => {
+    const owned = seedOwningRun()
     const accepted = shouldAcceptOmrGeneratedResult({
       musicXmlSource: null,
       sourceInstrumentId: 'piano',
@@ -137,8 +182,53 @@ describe('auto OMR orchestration helpers', () => {
       currentPdfFileName: 'score.pdf',
       sourcePdfFileUrl: 'blob:1',
       currentPdfFileUrl: 'blob:1',
+      sourcePdfIdentity: owned.pdfIdentity,
+      currentPdfIdentity: owned.pdfIdentity,
+      sourcePracticeSessionEpoch: owned.epoch,
+      currentPracticeSessionEpoch: owned.epoch,
+      sourceOmrRunId: owned.runId,
     })
     expect(accepted).toEqual({ ok: true })
+  })
+
+  it('fails closed when the session has identity but OMR omitted source ownership', () => {
+    seedOwningRun()
+    expect(
+      shouldAcceptOmrGeneratedResult({
+        musicXmlSource: null,
+        sourceInstrumentId: 'piano',
+        currentInstrumentId: 'piano',
+        currentPdfIdentity: 'score.pdf::1::1',
+        sourcePdfIdentity: null,
+        currentPracticeSessionEpoch: 1,
+        sourcePracticeSessionEpoch: 1,
+        sourceOmrRunId: 7,
+      }).reason,
+    ).toBe('missing-source-pdf-identity')
+    expect(
+      shouldAcceptOmrGeneratedResult({
+        musicXmlSource: null,
+        sourceInstrumentId: 'piano',
+        currentInstrumentId: 'piano',
+        sourcePdfIdentity: 'score.pdf::1::1',
+        currentPdfIdentity: 'score.pdf::1::1',
+        currentPracticeSessionEpoch: 1,
+        sourcePracticeSessionEpoch: null,
+        sourceOmrRunId: 7,
+      }).reason,
+    ).toBe('missing-source-session-epoch')
+    expect(
+      shouldAcceptOmrGeneratedResult({
+        musicXmlSource: null,
+        sourceInstrumentId: 'piano',
+        currentInstrumentId: 'piano',
+        sourcePdfIdentity: 'score.pdf::1::1',
+        currentPdfIdentity: 'score.pdf::1::1',
+        currentPracticeSessionEpoch: 1,
+        sourcePracticeSessionEpoch: 1,
+        sourceOmrRunId: null,
+      }).reason,
+    ).toBe('missing-source-omr-run-id')
   })
 
   it('cancels in-flight workers and clears the auto-request queue', () => {
@@ -173,7 +263,7 @@ describe('auto OMR upload wiring', () => {
 
   it('never queues OMR when uploaded MusicXML timing is present', () => {
     expect(app).toMatch(
-      /handleMusicXmlSelect[\s\S]*cancelInFlightOmrGeneration\(setAutoOmrRequest\)[\s\S]*source: 'upload'/,
+      /handleMusicXmlSelect[\s\S]*cancelInFlightOmrGeneration\(setAutoOmrRequest[\s\S]*source: 'upload'/,
     )
     expect(app).toMatch(
       /if \(classified\.pdf\[0\]\) \{[\s\S]*if \(loadedXml\?\.data \|\| !shouldQueueAutoOmr/,
@@ -195,6 +285,21 @@ describe('auto OMR upload wiring', () => {
     expect(app).toContain('sourcePdfFileName = null')
     expect(app).toContain('sourcePdfFileUrl = null')
     expect(app).toContain('sourceInstrumentId = null')
+  })
+
+  it('re-checks PDF ownership after awaiting PDF refresh before applying MusicXML', () => {
+    expect(app).toContain('await refreshOwnedPdfFromBlobUrl')
+    expect(app).toContain('liveAfterRefresh')
+    expect(app).toContain('stillOwnsSession')
+    expect(app).toContain('liveBeforeApply')
+    expect(app).toContain('reacceptance')
+    expect(app).toContain('discardStale')
+    expect(app).toMatch(
+      /await refreshOwnedPdfFromBlobUrl[\s\S]*stillOwnsSession[\s\S]*setMusicXmlSource\(nextMusicXmlSource\)/,
+    )
+    expect(app).toMatch(
+      /if \(!stillOwnsSession\.ok\) \{[\s\S]*revokeObjectURL\(refreshed\.pdfFile\)/,
+    )
   })
 
   it('opens Practice after App accepts generated MusicXML without requiring MIDI', () => {

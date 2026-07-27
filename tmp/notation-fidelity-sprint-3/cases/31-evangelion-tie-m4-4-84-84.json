@@ -1,0 +1,120 @@
+{
+  "id": "31-evangelion-tie-m4-4-84-84",
+  "source": "evangelion",
+  "sourcePdf": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+  "page": 1,
+  "measures": [
+    4,
+    4
+  ],
+  "expectedSymbol": "tie",
+  "sourceCrop": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/source-crops/31-evangelion-tie-m4-4-84-84.png",
+  "candidateOverlay": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/candidate-overlays/31-evangelion-tie-m4-4-84-84.png",
+  "rawCurveCandidates": [
+    {
+      "candidateId": "pdf-path-p1-op78",
+      "source": "pdf-vector-path",
+      "start": {
+        "x": 353.05219020959163,
+        "y": 402.41174795824566,
+        "tangent": {
+          "dx": 0.7059161688857363,
+          "dy": -0.7082953921251252
+        }
+      },
+      "end": {
+        "x": 373.15949470653885,
+        "y": 402.41174795824566,
+        "tangent": {
+          "dx": 0.7059161688857313,
+          "dy": 0.7082953921251302
+        }
+      },
+      "bounds": {
+        "x0": 353.05219020959163,
+        "x1": 373.15949470653885,
+        "y0": 398.3763708139113,
+        "y1": 402.41174795824566,
+        "width": 20.107304496947222,
+        "height": 4.035377144334348
+      },
+      "archDirection": "above",
+      "startCandidates": [
+        {
+          "measureNumber": 4,
+          "systemIndex": 1,
+          "eventIndex": 8,
+          "noteIndex": 0,
+          "startDivision": 12,
+          "midi": 84,
+          "clef": "treble",
+          "cx": 351.6030799684483,
+          "cy": 408.6777456057008,
+          "score": 9.74,
+          "dx": 1.45,
+          "dy": 6.27,
+          "anchor": "notehead",
+          "anchorY": 408.6777456057008
+        }
+      ],
+      "endCandidates": [
+        {
+          "measureNumber": 4,
+          "systemIndex": 1,
+          "eventIndex": 9,
+          "noteIndex": 0,
+          "startDivision": 13,
+          "midi": 84,
+          "clef": "treble",
+          "cx": 374.5704001273257,
+          "cy": 408.6777456057008,
+          "score": 9.65,
+          "dx": 1.41,
+          "dy": 6.27,
+          "anchor": "notehead",
+          "anchorY": 408.6777456057008
+        }
+      ]
+    }
+  ],
+  "selectedAttachments": {
+    "fromMeasure": 4,
+    "toMeasure": 4,
+    "fromMidi": 84,
+    "toMidi": 84,
+    "clef": "treble",
+    "candidateIds": [
+      "pdf-path-p1-op78"
+    ]
+  },
+  "classificationResult": "tie",
+  "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/31-evangelion-tie-m4-4-84-84.musicxml",
+  "renderedResult": {
+    "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/31-evangelion-tie-m4-4-84-84.png",
+    "markingFound": true,
+    "path": "M 1308.92 1.4399999999999995 Q 1314.92 -9.360000000000001 1320.92 1.4399999999999995",
+    "placement": "above"
+  },
+  "playbackAttackTrace": [
+    {
+      "measureNumber": 4,
+      "midi": 84,
+      "quarterTime": 15,
+      "tieStart": true,
+      "tieStop": true,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 4,
+      "midi": 84,
+      "quarterTime": 15.25,
+      "tieStart": true,
+      "tieStop": true,
+      "suppressPlaybackAttack": true
+    }
+  ],
+  "correctBefore": false,
+  "correctAfter": true,
+  "failureLayerBefore": "symbol-not-detected",
+  "failureLayerAfter": "none"
+}

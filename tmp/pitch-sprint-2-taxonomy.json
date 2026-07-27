@@ -1,0 +1,528 @@
+{
+  "total": 273,
+  "taxonomy": {
+    "accidental-or-alter": 32,
+    "one-diatonic-step": 36,
+    "octave-error": 39,
+    "larger-interval": 146,
+    "small-interval-other": 20
+  },
+  "byFixture": {
+    "piano-beginner-single-vector": {
+      "accidental-or-alter": 6,
+      "one-diatonic-step": 6,
+      "octave-error": 7,
+      "larger-interval": 4
+    },
+    "piano-grand-voices-vector": {
+      "accidental-or-alter": 12,
+      "one-diatonic-step": 11,
+      "small-interval-other": 2,
+      "larger-interval": 7
+    },
+    "piano-rhythm-tuplets-vector": {
+      "small-interval-other": 6,
+      "larger-interval": 11,
+      "accidental-or-alter": 4,
+      "octave-error": 9,
+      "one-diatonic-step": 1
+    },
+    "piano-articulation-scan": {
+      "larger-interval": 26,
+      "octave-error": 2,
+      "accidental-or-alter": 6,
+      "small-interval-other": 3,
+      "one-diatonic-step": 1
+    },
+    "piano-dense-advanced-vector": {
+      "accidental-or-alter": 3,
+      "one-diatonic-step": 5,
+      "larger-interval": 32,
+      "small-interval-other": 3,
+      "octave-error": 6
+    },
+    "guitar-tab-sparse-vector": {
+      "accidental-or-alter": 1,
+      "small-interval-other": 2,
+      "larger-interval": 1
+    },
+    "guitar-standard-chords-vector": {
+      "larger-interval": 22,
+      "octave-error": 6
+    },
+    "guitar-paired-chords-vector": {
+      "small-interval-other": 3,
+      "larger-interval": 29,
+      "octave-error": 6,
+      "one-diatonic-step": 10
+    },
+    "guitar-techniques-paired-vector": {
+      "one-diatonic-step": 2,
+      "larger-interval": 14,
+      "octave-error": 3,
+      "small-interval-other": 1
+    }
+  },
+  "samples": {
+    "accidental-or-alter": [
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 1,
+        "truth": "F4",
+        "gen": "E4",
+        "delta": -1,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 2,
+        "truth": "F4",
+        "gen": "E4",
+        "delta": -1,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 4,
+        "truth": "F4",
+        "gen": "E4",
+        "delta": -1,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 5,
+        "truth": "F4",
+        "gen": "E4",
+        "delta": -1,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 6,
+        "truth": "F4",
+        "gen": "E4",
+        "delta": -1,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 8,
+        "truth": "F4",
+        "gen": "E4",
+        "delta": -1,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 2,
+        "truth": "F#4",
+        "gen": "F4",
+        "delta": -1,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 2,
+        "truth": "F#4",
+        "gen": "F4",
+        "delta": -1,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 3,
+        "truth": "G#4",
+        "gen": "G4",
+        "delta": -1,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 3,
+        "truth": "F#4",
+        "gen": "F4",
+        "delta": -1,
+        "tStaff": 1,
+        "gStaff": 1
+      }
+    ],
+    "one-diatonic-step": [
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 1,
+        "truth": "A4",
+        "gen": "B4",
+        "delta": 2,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 2,
+        "truth": "A4",
+        "gen": "B4",
+        "delta": 2,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 3,
+        "truth": "A4",
+        "gen": "B4",
+        "delta": 2,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 5,
+        "truth": "A4",
+        "gen": "B4",
+        "delta": 2,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 6,
+        "truth": "A4",
+        "gen": "B4",
+        "delta": 2,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 8,
+        "truth": "A4",
+        "gen": "B4",
+        "delta": 2,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 5,
+        "truth": "G4",
+        "gen": "A4",
+        "delta": 2,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 5,
+        "truth": "A4",
+        "gen": "G4",
+        "delta": -2,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 5,
+        "truth": "G3",
+        "gen": "F3",
+        "delta": -2,
+        "tStaff": 2,
+        "gStaff": 2
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 6,
+        "truth": "A4",
+        "gen": "B4",
+        "delta": 2,
+        "tStaff": 1,
+        "gStaff": 1
+      }
+    ],
+    "octave-error": [
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 1,
+        "truth": "E4",
+        "gen": "E2",
+        "delta": -24,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 3,
+        "truth": "E4",
+        "gen": "E2",
+        "delta": -24,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 4,
+        "truth": "E4",
+        "gen": "E2",
+        "delta": -24,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 4,
+        "truth": "E4",
+        "gen": "E2",
+        "delta": -24,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 5,
+        "truth": "E4",
+        "gen": "E2",
+        "delta": -24,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 7,
+        "truth": "E4",
+        "gen": "E2",
+        "delta": -24,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 8,
+        "truth": "E4",
+        "gen": "E2",
+        "delta": -24,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-rhythm-tuplets-vector",
+        "measure": 3,
+        "truth": "E4",
+        "gen": "E2",
+        "delta": -24,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-rhythm-tuplets-vector",
+        "measure": 3,
+        "truth": "E4",
+        "gen": "E2",
+        "delta": -24,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-rhythm-tuplets-vector",
+        "measure": 3,
+        "truth": "E4",
+        "gen": "E2",
+        "delta": -24,
+        "tStaff": 1,
+        "gStaff": 1
+      }
+    ],
+    "larger-interval": [
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 2,
+        "truth": "B4",
+        "gen": "E5",
+        "delta": 5,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 4,
+        "truth": "D4",
+        "gen": "C2",
+        "delta": -26,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 6,
+        "truth": "B4",
+        "gen": "E5",
+        "delta": 5,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-beginner-single-vector",
+        "measure": 8,
+        "truth": "B4",
+        "gen": "E5",
+        "delta": 5,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 5,
+        "truth": "D5",
+        "gen": "F4",
+        "delta": -9,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 6,
+        "truth": "E5",
+        "gen": "B4",
+        "delta": -5,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 6,
+        "truth": "E5",
+        "gen": "G4",
+        "delta": -9,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 7,
+        "truth": "D5",
+        "gen": "A4",
+        "delta": -5,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 7,
+        "truth": "D5",
+        "gen": "F4",
+        "delta": -9,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 8,
+        "truth": "B4",
+        "gen": "F4",
+        "delta": -6,
+        "tStaff": 1,
+        "gStaff": 1
+      }
+    ],
+    "small-interval-other": [
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 5,
+        "truth": "D5",
+        "gen": "B4",
+        "delta": -3,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "measure": 6,
+        "truth": "D5",
+        "gen": "B4",
+        "delta": -3,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-rhythm-tuplets-vector",
+        "measure": 1,
+        "truth": "C5",
+        "gen": "E5",
+        "delta": 4,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-rhythm-tuplets-vector",
+        "measure": 2,
+        "truth": "C5",
+        "gen": "E5",
+        "delta": 4,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-rhythm-tuplets-vector",
+        "measure": 2,
+        "truth": "C5",
+        "gen": "E5",
+        "delta": 4,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-rhythm-tuplets-vector",
+        "measure": 4,
+        "truth": "C5",
+        "gen": "E5",
+        "delta": 4,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-rhythm-tuplets-vector",
+        "measure": 7,
+        "truth": "E4",
+        "gen": "G4",
+        "delta": 3,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-rhythm-tuplets-vector",
+        "measure": 8,
+        "truth": "C5",
+        "gen": "E5",
+        "delta": 4,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-articulation-scan",
+        "measure": 3,
+        "truth": "A4",
+        "gen": "C5",
+        "delta": 3,
+        "tStaff": 1,
+        "gStaff": 1
+      },
+      {
+        "id": "piano-articulation-scan",
+        "measure": 3,
+        "truth": "G#4",
+        "gen": "C5",
+        "delta": 4,
+        "tStaff": 1,
+        "gStaff": 1
+      }
+    ]
+  }
+}

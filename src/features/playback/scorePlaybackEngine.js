@@ -589,7 +589,10 @@ export class ScorePlaybackEngine {
         }
         const velocity = softenVelocity(event.velocity ?? 0.75)
         duration = sanitizePlaybackDurationSeconds(duration)
-        this.voice.triggerAttackRelease(name, duration, at, velocity)
+        this.voice.triggerAttackRelease(name, duration, at, velocity, {
+          midi: event.midi ?? null,
+          tieChainId: event.tieChainId ?? null,
+        })
         this.scheduledEvents.add(event)
         continue
       }

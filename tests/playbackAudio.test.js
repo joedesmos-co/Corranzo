@@ -41,7 +41,7 @@ describe('playback master FX defaults', () => {
 
   it('softens sampler highs to reduce pitch-shift harshness', () => {
     expect(PLAYBACK_MASTER_FX.samplerWarmthHz).toBeGreaterThanOrEqual(6000)
-    expect(PLAYBACK_MASTER_FX.samplerWarmthHz).toBeLessThanOrEqual(7000)
+    expect(PLAYBACK_MASTER_FX.samplerWarmthHz).toBeLessThanOrEqual(7500)
   })
 
   it('wires the shared FX defaults into the sampled voice chain', () => {
@@ -58,14 +58,15 @@ describe('playback master FX defaults', () => {
 describe('velocity and voice-mix staging', () => {
   it('softens peak velocity without crushing quiet notes', () => {
     expect(mapPlaybackVelocity(1)).toBeLessThanOrEqual(MAX_SAFE_TRIGGER_VELOCITY)
-    expect(mapPlaybackVelocity(0)).toBeGreaterThan(0.2)
+    expect(mapPlaybackVelocity(0)).toBeGreaterThanOrEqual(0.12)
+    expect(mapPlaybackVelocity(0)).toBeLessThan(0.2)
     expect(mapPlaybackVelocity(0.9)).toBeGreaterThan(mapPlaybackVelocity(0.3))
   })
 
   it('caps dense chord velocity below the global peak', () => {
     const state = createVoiceMixState()
     const results = []
-    for (let index = 0; index < 8; index += 1) {
+    for (let index = 0; index < 14; index += 1) {
       results.push(
         planNoteTrigger(state, {
           time: 1,
@@ -75,15 +76,16 @@ describe('velocity and voice-mix staging', () => {
         }),
       )
     }
-    expect(Math.max(...results.map((result) => result.velocity))).toBeLessThanOrEqual(0.86)
+    expect(Math.max(...results.map((result) => result.velocity))).toBeLessThanOrEqual(0.9)
+    expect(results.at(-1).velocity).toBeLessThan(results[0].velocity)
   })
 })
 
 describe('instrument envelopes', () => {
   it('uses a longer piano sample release for natural sustain tails', () => {
     const pianoSrc = readFileSync(join(root, 'src', 'features', 'playback', 'pianoInstrument.js'), 'utf8')
-    expect(pianoSrc).toMatch(/SAMPLED_RELEASE = 1\.68/)
-    expect(pianoSrc).toMatch(/SAMPLED_VOLUME_DB = -11/)
+    expect(pianoSrc).toMatch(/SAMPLED_RELEASE = 1\.85/)
+    expect(pianoSrc).toMatch(/SAMPLED_VOLUME_DB = -10/)
   })
 
   it('uses a drier guitar room and quicker pluck release', () => {

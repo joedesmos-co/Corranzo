@@ -1,0 +1,89 @@
+{
+  "id": "36-la-campanella-tenuto-p4-m87-u+e4a4-360",
+  "source": "la-campanella",
+  "sourcePdf": "/Users/ryland/Downloads/etude-s-1413-in-g-minor-la-campanella-liszt.pdf",
+  "page": 4,
+  "measure": 87,
+  "expectedArticulation": "tenuto",
+  "expectAbsent": false,
+  "sourcePriority": "PDF text / SMuFL glyph",
+  "rawArticulationCandidate": {
+    "glyph": "",
+    "codepoint": "U+E4A4",
+    "originalGlyph": "",
+    "originalCodepoint": "U+E4A4",
+    "x": 360.11178611624143,
+    "y": 449.6429951453488,
+    "width": 8.601147076652952,
+    "height": 27.20655556899225,
+    "candidateType": "tenuto",
+    "placement": "above",
+    "normalization": null
+  },
+  "candidateType": "tenuto",
+  "staffSystem": {
+    "page": 4,
+    "systemIndex": 4,
+    "clef": "treble"
+  },
+  "selectedNoteOrChord": {
+    "kind": "note",
+    "noteIndex": 13,
+    "restIndex": null,
+    "midi": 68,
+    "cx": 358.0881309300412,
+    "cy": 505.7565148546512,
+    "chordBroadcastCount": 1
+  },
+  "classification": "U+E4A4 pipeline=tenuto; manually verified=tenuto",
+  "placement": "above",
+  "musicXmlSnippet": "<measure number=\"87\"><barline location=\"right\"><bar-style>light-heavy</bar-style><repeat direction=\"backward\"/></barline><note><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><beam number=\"1\">begin</beam><beam number=\"2\">begin</beam></note><note><pitch><step>G</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><beam number=\"1\">continue</beam><beam number=\"2\">continue</beam></note><note><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><beam number=\"1\">end</beam><beam number=\"2\">end</beam></note><forward><duration>1</duration></forward><note><pitch><step>G</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><beam number=\"1\">begin</beam><beam number=\"2\">begin</beam><notations><articulations><tenuto placement=\"above\"/></articulations></notations></note><note><pitch><step>G</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><beam number=\"1\">continue</beam><beam number=\"2\">end</beam></note><note><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff><beam number=\"1\">end</beam></note><note><pitch><step>F</step><alter>2</alter><octave>4</octave></pitch><accidental>double-sharp</accidental><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><tenuto placement=\"above\"/></articulations></notations></note><note><pitch><step>F</step><alter>2</alter><octave>5</octave></pitch><accidental>double-sharp</accidental><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><beam number=\"1\">begin</beam><beam number=\"2\">begin</beam></note><note><pitch><step>G</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><beam number=\"1\">end</beam><beam number=\"2\">end</beam></note><note><pitch><step>G</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>G</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><tenuto placement=\"above\"/></articulations></notations></note></measure>",
+  "renderedResult": {
+    "present": true,
+    "geometry": {
+      "id": "note-tenuto-note-m87-t186.294-541-n0-staff-tenuto",
+      "kind": "tenuto",
+      "scope": "note",
+      "noteId": "note-m87-t186.294-541-n0",
+      "groupId": "note-m87-t186.294-541",
+      "symbol": null,
+      "source": "musicxml",
+      "placement": "above",
+      "chordNoteIds": [
+        "note-m87-t186.294-541-n0"
+      ],
+      "status": "upcoming",
+      "shape": "line",
+      "x1": 20486.74,
+      "x2": 20497.94,
+      "y1": 58.2,
+      "y2": 58.2
+    },
+    "restFermataWrittenOnly": false
+  },
+  "playbackSemanticTrace": {
+    "id": "P1-m87-n1518",
+    "measureNumber": 87,
+    "midi": 68,
+    "quarterTime": 347.75,
+    "voice": 1,
+    "staff": 1,
+    "attackCount": 1,
+    "articulationSource": "tenuto",
+    "writtenDurationSeconds": 0.1339285714285552,
+    "baseDurationSeconds": 0.14062499999998296,
+    "velocity": 0.46
+  },
+  "notationPlaybackAgree": true,
+  "failureLayerBefore": "2 detected but misclassified as accent",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-5/source-crops/36-la-campanella-tenuto-p4-m87-u+e4a4-360.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-5/candidate-overlays/36-la-campanella-tenuto-p4-m87-u+e4a4-360.png",
+    "musicXmlSnippet": "tmp/notation-fidelity-sprint-5/musicxml-snippets/36-la-campanella-tenuto-p4-m87-u+e4a4-360.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-5/rendered-before/36-la-campanella-tenuto-p4-m87-u+e4a4-360.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-5/rendered-after/36-la-campanella-tenuto-p4-m87-u+e4a4-360.png"
+  }
+}

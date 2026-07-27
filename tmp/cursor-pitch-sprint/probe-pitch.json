@@ -1,0 +1,2256 @@
+[
+  {
+    "id": "piano-beginner-single-vector",
+    "instrumentId": "piano",
+    "v2PitchAccuracy": 0.25,
+    "v3PitchAccuracy": 0.25,
+    "v3PitchAtCorrectOnset": 0.25,
+    "wrongPitchCount": 24,
+    "rootCauses": [
+      {
+        "bucket": "staff/clef/register",
+        "count": 8
+      },
+      {
+        "bucket": "grouping-artifact",
+        "count": 6
+      },
+      {
+        "bucket": "key-signature",
+        "count": 5
+      },
+      {
+        "bucket": "diatonic-step",
+        "count": 5
+      }
+    ],
+    "atCorrectOnsetHistogram": {
+      "grouping-artifact": 1,
+      "staff/clef/register": 8,
+      "accidental-miss": 0,
+      "courtesy-accidental": 0,
+      "key-signature": 5,
+      "ledger-line": 0,
+      "diatonic-step": 5,
+      "other": 0
+    },
+    "atCorrectOnsetCount": 19,
+    "deltaHistogram": {
+      "±1-accidental": 6,
+      "±2-diatonic": 7,
+      "±octave": 7,
+      "±octave-other": 0,
+      "other": 4
+    },
+    "signedDeltas": {
+      "2": 7,
+      "5": 3,
+      "-24": 7,
+      "-1": 6,
+      "-26": 1
+    },
+    "pitchSources": {
+      "detector-staff-pitch": 32,
+      "none": 1
+    },
+    "samples": [
+      {
+        "m": 1,
+        "delta": -24,
+        "onsetDiff": 0,
+        "truth": "E4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "F4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": 2,
+        "onsetDiff": 0,
+        "truth": "A4",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": 5,
+        "onsetDiff": 0,
+        "truth": "B4",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": 2,
+        "onsetDiff": 0,
+        "truth": "A4",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "F4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -24,
+        "onsetDiff": 0,
+        "truth": "E4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": 2,
+        "onsetDiff": 0,
+        "truth": "A4",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 4,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "F4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 4,
+        "delta": -24,
+        "onsetDiff": 0,
+        "truth": "E4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 4,
+        "delta": -26,
+        "onsetDiff": 0,
+        "truth": "D4",
+        "gen": "C2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 4,
+        "delta": -24,
+        "onsetDiff": 0,
+        "truth": "E4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 5,
+        "delta": -24,
+        "onsetDiff": 0,
+        "truth": "E4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 5,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "F4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 5,
+        "delta": 2,
+        "onsetDiff": 0,
+        "truth": "A4",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 6,
+        "delta": 5,
+        "onsetDiff": 0,
+        "truth": "B4",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 6,
+        "delta": 2,
+        "onsetDiff": 0,
+        "truth": "A4",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 6,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "F4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 7,
+        "delta": -24,
+        "onsetDiff": 0.75,
+        "truth": "E4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 7,
+        "delta": 2,
+        "onsetDiff": 0.25,
+        "truth": "A4",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 8,
+        "delta": 5,
+        "onsetDiff": 0.75,
+        "truth": "B4",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 8,
+        "delta": 2,
+        "onsetDiff": 0.5,
+        "truth": "A4",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 8,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "F4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 8,
+        "delta": -24,
+        "onsetDiff": 0.25,
+        "truth": "E4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 2
+      }
+    ]
+  },
+  {
+    "id": "piano-grand-voices-vector",
+    "instrumentId": "piano",
+    "v2PitchAccuracy": 0.625,
+    "v3PitchAccuracy": 0.625,
+    "v3PitchAtCorrectOnset": 0.625,
+    "wrongPitchCount": 33,
+    "rootCauses": [
+      {
+        "bucket": "staff/clef/register",
+        "count": 8
+      },
+      {
+        "bucket": "diatonic-step",
+        "count": 8
+      },
+      {
+        "bucket": "accidental-miss",
+        "count": 7
+      },
+      {
+        "bucket": "grouping-artifact",
+        "count": 5
+      },
+      {
+        "bucket": "key-signature",
+        "count": 4
+      },
+      {
+        "bucket": "other",
+        "count": 1
+      }
+    ],
+    "atCorrectOnsetHistogram": {
+      "grouping-artifact": 5,
+      "staff/clef/register": 8,
+      "accidental-miss": 7,
+      "courtesy-accidental": 0,
+      "key-signature": 4,
+      "ledger-line": 0,
+      "diatonic-step": 8,
+      "other": 1
+    },
+    "atCorrectOnsetCount": 33,
+    "deltaHistogram": {
+      "±1-accidental": 13,
+      "±2-diatonic": 11,
+      "±octave": 0,
+      "±octave-other": 0,
+      "other": 9
+    },
+    "signedDeltas": {
+      "1": 2,
+      "-1": 11,
+      "-2": 11,
+      "-5": 6,
+      "-3": 1,
+      "-6": 2
+    },
+    "pitchSources": {
+      "detector-staff-pitch": 88
+    },
+    "samples": [
+      {
+        "m": 2,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "F#4",
+        "gen": "F4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "F#4",
+        "gen": "F4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "G#4",
+        "gen": "G4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "F#4",
+        "gen": "F4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "G#4",
+        "gen": "G4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 4,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "A#2",
+        "gen": "A2",
+        "truthVoice": 2,
+        "genVoice": 5
+      },
+      {
+        "m": 4,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "A#4",
+        "gen": "A4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 5,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "G4",
+        "gen": "F4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 5,
+        "delta": -5,
+        "onsetDiff": 0,
+        "truth": "D5",
+        "gen": "A4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 5,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "A4",
+        "gen": "G4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 5,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "G3",
+        "gen": "F3",
+        "truthVoice": 2,
+        "genVoice": 5
+      },
+      {
+        "m": 5,
+        "delta": -5,
+        "onsetDiff": 0,
+        "truth": "D5",
+        "gen": "A4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 5,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "C5",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 6,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "A4",
+        "gen": "G4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 6,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "C#5",
+        "gen": "C5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 6,
+        "delta": -5,
+        "onsetDiff": 0,
+        "truth": "E5",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 6,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "B4",
+        "gen": "A4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 6,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "A3",
+        "gen": "G3",
+        "truthVoice": 2,
+        "genVoice": 5
+      },
+      {
+        "m": 6,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "C#5",
+        "gen": "C5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 6,
+        "delta": -5,
+        "onsetDiff": 0,
+        "truth": "E5",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 6,
+        "delta": -3,
+        "onsetDiff": 0,
+        "truth": "D5",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 7,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "G4",
+        "gen": "F4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 7,
+        "delta": -5,
+        "onsetDiff": 0,
+        "truth": "D5",
+        "gen": "A4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 7,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "A4",
+        "gen": "G4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 7,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "G3",
+        "gen": "F3",
+        "truthVoice": 2,
+        "genVoice": 5
+      }
+    ]
+  },
+  {
+    "id": "piano-rhythm-tuplets-vector",
+    "instrumentId": "piano",
+    "v2PitchAccuracy": 0.4127,
+    "v3PitchAccuracy": 0.4444,
+    "v3PitchAtCorrectOnset": 0.4783,
+    "wrongPitchCount": 33,
+    "rootCauses": [
+      {
+        "bucket": "grouping-artifact",
+        "count": 22
+      },
+      {
+        "bucket": "staff/clef/register",
+        "count": 10
+      },
+      {
+        "bucket": "key-signature",
+        "count": 1
+      }
+    ],
+    "atCorrectOnsetHistogram": {
+      "grouping-artifact": 0,
+      "staff/clef/register": 10,
+      "accidental-miss": 0,
+      "courtesy-accidental": 0,
+      "key-signature": 1,
+      "ledger-line": 0,
+      "diatonic-step": 0,
+      "other": 0
+    },
+    "atCorrectOnsetCount": 11,
+    "deltaHistogram": {
+      "±1-accidental": 4,
+      "±2-diatonic": 1,
+      "±octave": 11,
+      "±octave-other": 0,
+      "other": 17
+    },
+    "signedDeltas": {
+      "2": 1,
+      "4": 4,
+      "5": 1,
+      "7": 6,
+      "10": 2,
+      "-25": 4,
+      "-24": 11,
+      "-1": 4
+    },
+    "pitchSources": {
+      "detector-staff-pitch": 63,
+      "none": 4
+    },
+    "samples": [
+      {
+        "m": 1,
+        "delta": -25,
+        "onsetDiff": 0.5,
+        "truth": "F4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": 4,
+        "onsetDiff": 0.5,
+        "truth": "C5",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": 7,
+        "onsetDiff": 0.5,
+        "truth": "A4",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": -25,
+        "onsetDiff": 0.25,
+        "truth": "F4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": 10,
+        "onsetDiff": 0.5,
+        "truth": "A4",
+        "gen": "G5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": 4,
+        "onsetDiff": 0.25,
+        "truth": "C5",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": 7,
+        "onsetDiff": 0.25,
+        "truth": "A4",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -25,
+        "onsetDiff": 0.25,
+        "truth": "F4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": 10,
+        "onsetDiff": 0.5,
+        "truth": "A4",
+        "gen": "G5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": 4,
+        "onsetDiff": 0.25,
+        "truth": "C5",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": 7,
+        "onsetDiff": 0.25,
+        "truth": "A4",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -24,
+        "onsetDiff": 0,
+        "truth": "E4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -24,
+        "onsetDiff": 0.083,
+        "truth": "E4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -24,
+        "onsetDiff": 0.083,
+        "truth": "E4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -25,
+        "onsetDiff": 0.333,
+        "truth": "F4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -1,
+        "onsetDiff": 0.083,
+        "truth": "F4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "F4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -1,
+        "onsetDiff": 0.083,
+        "truth": "F4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 4,
+        "delta": 2,
+        "onsetDiff": 0.5,
+        "truth": "A4",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 4,
+        "delta": 5,
+        "onsetDiff": 0,
+        "truth": "B4",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 4,
+        "delta": 7,
+        "onsetDiff": 0.25,
+        "truth": "C5",
+        "gen": "G5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 5,
+        "delta": 7,
+        "onsetDiff": 0.25,
+        "truth": "C5",
+        "gen": "G5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 5,
+        "delta": 7,
+        "onsetDiff": 0.25,
+        "truth": "C5",
+        "gen": "G5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 7,
+        "delta": -24,
+        "onsetDiff": 0,
+        "truth": "E4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 7,
+        "delta": -24,
+        "onsetDiff": 0,
+        "truth": "E4",
+        "gen": "E2",
+        "truthVoice": 1,
+        "genVoice": 1
+      }
+    ]
+  },
+  {
+    "id": "piano-articulation-scan",
+    "instrumentId": "piano",
+    "v2PitchAccuracy": 0.3153,
+    "v3PitchAccuracy": 0.3153,
+    "v3PitchAtCorrectOnset": 0.4265,
+    "wrongPitchCount": 40,
+    "rootCauses": [
+      {
+        "bucket": "grouping-artifact",
+        "count": 14
+      },
+      {
+        "bucket": "diatonic-step",
+        "count": 7
+      },
+      {
+        "bucket": "staff/clef/register",
+        "count": 6
+      },
+      {
+        "bucket": "other",
+        "count": 5
+      },
+      {
+        "bucket": "accidental-miss",
+        "count": 4
+      },
+      {
+        "bucket": "key-signature",
+        "count": 4
+      }
+    ],
+    "atCorrectOnsetHistogram": {
+      "grouping-artifact": 4,
+      "staff/clef/register": 6,
+      "accidental-miss": 4,
+      "courtesy-accidental": 0,
+      "key-signature": 4,
+      "ledger-line": 0,
+      "diatonic-step": 7,
+      "other": 5
+    },
+    "atCorrectOnsetCount": 30,
+    "deltaHistogram": {
+      "±1-accidental": 11,
+      "±2-diatonic": 10,
+      "±octave": 0,
+      "±octave-other": 0,
+      "other": 19
+    },
+    "signedDeltas": {
+      "1": 4,
+      "2": 2,
+      "3": 2,
+      "4": 2,
+      "6": 1,
+      "7": 3,
+      "18": 1,
+      "19": 1,
+      "-1": 7,
+      "-6": 1,
+      "-2": 8,
+      "-17": 1,
+      "-7": 1,
+      "-4": 2,
+      "-5": 1,
+      "-3": 3
+    },
+    "pitchSources": {
+      "detector-staff-pitch": 111
+    },
+    "samples": [
+      {
+        "m": 1,
+        "delta": 6,
+        "onsetDiff": 0,
+        "truth": "F2",
+        "gen": "B2",
+        "truthVoice": 2,
+        "genVoice": 5
+      },
+      {
+        "m": 1,
+        "delta": 7,
+        "onsetDiff": 0,
+        "truth": "F4",
+        "gen": "C5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": 7,
+        "onsetDiff": 0,
+        "truth": "D2",
+        "gen": "A2",
+        "truthVoice": 2,
+        "genVoice": 6
+      },
+      {
+        "m": 2,
+        "delta": 2,
+        "onsetDiff": 0,
+        "truth": "D4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": 3,
+        "onsetDiff": 0,
+        "truth": "F#4",
+        "gen": "A4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": 2,
+        "onsetDiff": 0,
+        "truth": "G2",
+        "gen": "A2",
+        "truthVoice": 2,
+        "genVoice": 6
+      },
+      {
+        "m": 2,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "F#4",
+        "gen": "F4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": 1,
+        "onsetDiff": 0,
+        "truth": "E4",
+        "gen": "F4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "G#4",
+        "gen": "G4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -6,
+        "onsetDiff": 0,
+        "truth": "B4",
+        "gen": "F4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 3,
+        "delta": -1,
+        "onsetDiff": 0.25,
+        "truth": "F#4",
+        "gen": "F4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -2,
+        "onsetDiff": 0.75,
+        "truth": "E3",
+        "gen": "D3",
+        "truthVoice": 2,
+        "genVoice": 5
+      },
+      {
+        "m": 3,
+        "delta": 4,
+        "onsetDiff": 0.75,
+        "truth": "G#4",
+        "gen": "C5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 3,
+        "delta": 3,
+        "onsetDiff": 0.25,
+        "truth": "A4",
+        "gen": "C5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 4,
+        "delta": 7,
+        "onsetDiff": 0,
+        "truth": "F2",
+        "gen": "C3",
+        "truthVoice": 2,
+        "genVoice": 6
+      },
+      {
+        "m": 4,
+        "delta": 4,
+        "onsetDiff": 0.25,
+        "truth": "G4",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 4,
+        "delta": -1,
+        "onsetDiff": 0.75,
+        "truth": "A#2",
+        "gen": "A2",
+        "truthVoice": 2,
+        "genVoice": 5
+      },
+      {
+        "m": 4,
+        "delta": 19,
+        "onsetDiff": 0.75,
+        "truth": "F3",
+        "gen": "C5",
+        "truthVoice": 2,
+        "genVoice": 2
+      },
+      {
+        "m": 4,
+        "delta": 1,
+        "onsetDiff": 0.25,
+        "truth": "A#4",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 5,
+        "delta": -17,
+        "onsetDiff": 0,
+        "truth": "G4",
+        "gen": "D3",
+        "truthVoice": 1,
+        "genVoice": 6
+      },
+      {
+        "m": 5,
+        "delta": 1,
+        "onsetDiff": 0,
+        "truth": "B4",
+        "gen": "C5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 5,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "D5",
+        "gen": "C5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 5,
+        "delta": -7,
+        "onsetDiff": 0,
+        "truth": "G3",
+        "gen": "C3",
+        "truthVoice": 2,
+        "genVoice": 6
+      },
+      {
+        "m": 5,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "D5",
+        "gen": "C5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 5,
+        "delta": -1,
+        "onsetDiff": 0,
+        "truth": "C5",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 1
+      }
+    ]
+  },
+  {
+    "id": "piano-dense-advanced-vector",
+    "instrumentId": "piano",
+    "v2PitchAccuracy": 0.1477,
+    "v3PitchAccuracy": 0.2045,
+    "v3PitchAtCorrectOnset": 0.3265,
+    "wrongPitchCount": 40,
+    "rootCauses": [
+      {
+        "bucket": "grouping-artifact",
+        "count": 39
+      },
+      {
+        "bucket": "staff/clef/register",
+        "count": 1
+      }
+    ],
+    "atCorrectOnsetHistogram": {
+      "grouping-artifact": 6,
+      "staff/clef/register": 1,
+      "accidental-miss": 0,
+      "courtesy-accidental": 0,
+      "key-signature": 0,
+      "ledger-line": 0,
+      "diatonic-step": 0,
+      "other": 0
+    },
+    "atCorrectOnsetCount": 7,
+    "deltaHistogram": {
+      "±1-accidental": 11,
+      "±2-diatonic": 8,
+      "±octave": 0,
+      "±octave-other": 0,
+      "other": 21
+    },
+    "signedDeltas": {
+      "1": 5,
+      "2": 5,
+      "3": 1,
+      "5": 2,
+      "6": 2,
+      "7": 3,
+      "8": 1,
+      "10": 1,
+      "-5": 4,
+      "-1": 6,
+      "-27": 1,
+      "-31": 1,
+      "-3": 2,
+      "-2": 3,
+      "-21": 1,
+      "-6": 1,
+      "-7": 1
+    },
+    "pitchSources": {
+      "detector-staff-pitch": 262
+    },
+    "samples": [
+      {
+        "m": 1,
+        "delta": 7,
+        "onsetDiff": 0,
+        "truth": "A4",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": 2,
+        "onsetDiff": 0.5,
+        "truth": "D2",
+        "gen": "E2",
+        "truthVoice": 2,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -5,
+        "onsetDiff": 0.75,
+        "truth": "A2",
+        "gen": "E2",
+        "truthVoice": 2,
+        "genVoice": 5
+      },
+      {
+        "m": 1,
+        "delta": -1,
+        "onsetDiff": 0.75,
+        "truth": "G#4",
+        "gen": "G4",
+        "truthVoice": 1,
+        "genVoice": 4
+      },
+      {
+        "m": 1,
+        "delta": 10,
+        "onsetDiff": 0.75,
+        "truth": "A4",
+        "gen": "G5",
+        "truthVoice": 1,
+        "genVoice": 4
+      },
+      {
+        "m": 1,
+        "delta": 7,
+        "onsetDiff": 0.25,
+        "truth": "C5",
+        "gen": "G5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": 2,
+        "onsetDiff": 0.5,
+        "truth": "D5",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": -1,
+        "onsetDiff": 0.5,
+        "truth": "F4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": 7,
+        "onsetDiff": 0,
+        "truth": "A4",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": -1,
+        "onsetDiff": 0.5,
+        "truth": "C5",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -1,
+        "onsetDiff": 0.5,
+        "truth": "F2",
+        "gen": "E2",
+        "truthVoice": 2,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": 2,
+        "onsetDiff": 0.5,
+        "truth": "C3",
+        "gen": "D3",
+        "truthVoice": 2,
+        "genVoice": 6
+      },
+      {
+        "m": 1,
+        "delta": -1,
+        "onsetDiff": 0.5,
+        "truth": "G#4",
+        "gen": "G4",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": -27,
+        "onsetDiff": 0,
+        "truth": "D4",
+        "gen": "B1",
+        "truthVoice": 1,
+        "genVoice": 3
+      },
+      {
+        "m": 1,
+        "delta": -31,
+        "onsetDiff": 0.5,
+        "truth": "F#4",
+        "gen": "B1",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -3,
+        "onsetDiff": 0.75,
+        "truth": "D2",
+        "gen": "B1",
+        "truthVoice": 2,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": -2,
+        "onsetDiff": 0.75,
+        "truth": "A2",
+        "gen": "G2",
+        "truthVoice": 2,
+        "genVoice": 5
+      },
+      {
+        "m": 2,
+        "delta": 5,
+        "onsetDiff": 0.75,
+        "truth": "D3",
+        "gen": "G3",
+        "truthVoice": 2,
+        "genVoice": 5
+      },
+      {
+        "m": 2,
+        "delta": 1,
+        "onsetDiff": 0,
+        "truth": "F#4",
+        "gen": "G4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -5,
+        "onsetDiff": 0.75,
+        "truth": "A#4",
+        "gen": "F4",
+        "truthVoice": 1,
+        "genVoice": 4
+      },
+      {
+        "m": 2,
+        "delta": 6,
+        "onsetDiff": 0.5,
+        "truth": "C#5",
+        "gen": "G5",
+        "truthVoice": 1,
+        "genVoice": 3
+      },
+      {
+        "m": 2,
+        "delta": 2,
+        "onsetDiff": 0.5,
+        "truth": "D5",
+        "gen": "E5",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -2,
+        "onsetDiff": 0.75,
+        "truth": "F#2",
+        "gen": "E2",
+        "truthVoice": 2,
+        "genVoice": 5
+      },
+      {
+        "m": 2,
+        "delta": 1,
+        "onsetDiff": 0,
+        "truth": "C#3",
+        "gen": "D3",
+        "truthVoice": 2,
+        "genVoice": 5
+      },
+      {
+        "m": 2,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "C#5",
+        "gen": "B4",
+        "truthVoice": 1,
+        "genVoice": 6
+      }
+    ]
+  },
+  {
+    "id": "guitar-tab-sparse-vector",
+    "instrumentId": "guitar",
+    "v2PitchAccuracy": 0.7,
+    "v3PitchAccuracy": 0.7,
+    "v3PitchAtCorrectOnset": 0.8696,
+    "wrongPitchCount": 4,
+    "rootCauses": [
+      {
+        "bucket": "grouping-artifact",
+        "count": 4
+      }
+    ],
+    "atCorrectOnsetHistogram": {
+      "grouping-artifact": 1,
+      "staff/clef/register": 0,
+      "accidental-miss": 0,
+      "courtesy-accidental": 0,
+      "key-signature": 0,
+      "ledger-line": 0,
+      "diatonic-step": 0,
+      "other": 0
+    },
+    "atCorrectOnsetCount": 1,
+    "deltaHistogram": {
+      "±1-accidental": 1,
+      "±2-diatonic": 0,
+      "±octave": 0,
+      "±octave-other": 0,
+      "other": 3
+    },
+    "signedDeltas": {
+      "1": 1,
+      "4": 2,
+      "5": 1
+    },
+    "pitchSources": {
+      "detector-sounding-pitch": 40
+    },
+    "samples": [
+      {
+        "m": 1,
+        "delta": 1,
+        "onsetDiff": 0.25,
+        "truth": "E4",
+        "gen": "F4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": 4,
+        "onsetDiff": 0.5,
+        "truth": "C4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 5,
+        "delta": 5,
+        "onsetDiff": 0,
+        "truth": "E4",
+        "gen": "A4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 5,
+        "delta": 4,
+        "onsetDiff": 0.25,
+        "truth": "C4",
+        "gen": "E4",
+        "truthVoice": 1,
+        "genVoice": 1
+      }
+    ]
+  },
+  {
+    "id": "guitar-standard-chords-vector",
+    "instrumentId": "guitar",
+    "v2PitchAccuracy": 0,
+    "v3PitchAccuracy": 0,
+    "v3PitchAtCorrectOnset": 0,
+    "wrongPitchCount": 28,
+    "rootCauses": [
+      {
+        "bucket": "grouping-artifact",
+        "count": 24
+      },
+      {
+        "bucket": "staff/clef/register",
+        "count": 4
+      }
+    ],
+    "atCorrectOnsetHistogram": {
+      "grouping-artifact": 1,
+      "staff/clef/register": 4,
+      "accidental-miss": 0,
+      "courtesy-accidental": 0,
+      "key-signature": 0,
+      "ledger-line": 0,
+      "diatonic-step": 0,
+      "other": 0
+    },
+    "atCorrectOnsetCount": 5,
+    "deltaHistogram": {
+      "±1-accidental": 0,
+      "±2-diatonic": 0,
+      "±octave": 9,
+      "±octave-other": 0,
+      "other": 19
+    },
+    "signedDeltas": {
+      "-9": 3,
+      "-39": 3,
+      "-14": 1,
+      "-41": 1,
+      "-5": 1,
+      "-12": 4,
+      "-31": 3,
+      "-42": 1,
+      "-7": 1,
+      "-36": 2,
+      "-38": 1,
+      "-27": 3,
+      "-24": 3,
+      "-23": 1
+    },
+    "pitchSources": {
+      "detector-staff-pitch": 43
+    },
+    "samples": [
+      {
+        "m": 1,
+        "delta": -9,
+        "onsetDiff": 0.25,
+        "truth": "E4",
+        "gen": "G3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -39,
+        "onsetDiff": 0.25,
+        "truth": "G4",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -14,
+        "onsetDiff": 0,
+        "truth": "F#4",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": -41,
+        "onsetDiff": 0.5,
+        "truth": "A4",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -5,
+        "onsetDiff": 0.5,
+        "truth": "E4",
+        "gen": "B3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": -12,
+        "onsetDiff": 0,
+        "truth": "G4",
+        "gen": "G3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -9,
+        "onsetDiff": 0.25,
+        "truth": "E4",
+        "gen": "G3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": -39,
+        "onsetDiff": 0.25,
+        "truth": "G4",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": -9,
+        "onsetDiff": 0.25,
+        "truth": "E4",
+        "gen": "G3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -39,
+        "onsetDiff": 0.25,
+        "truth": "G4",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -31,
+        "onsetDiff": 0.75,
+        "truth": "B3",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -42,
+        "onsetDiff": 0.5,
+        "truth": "C#4",
+        "gen": "G0",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": -7,
+        "onsetDiff": 0,
+        "truth": "B3",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": -36,
+        "onsetDiff": 0.5,
+        "truth": "E4",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -31,
+        "onsetDiff": 0,
+        "truth": "B3",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": -31,
+        "onsetDiff": 0.25,
+        "truth": "B3",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -38,
+        "onsetDiff": 0.5,
+        "truth": "A3",
+        "gen": "G0",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 3,
+        "delta": -27,
+        "onsetDiff": 0.25,
+        "truth": "G3",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -27,
+        "onsetDiff": 0.5,
+        "truth": "G3",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 3
+      },
+      {
+        "m": 3,
+        "delta": -27,
+        "onsetDiff": 0.25,
+        "truth": "G3",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 4,
+        "delta": -24,
+        "onsetDiff": 0.75,
+        "truth": "E3",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 4,
+        "delta": -24,
+        "onsetDiff": 0.5,
+        "truth": "E3",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 4,
+        "delta": -36,
+        "onsetDiff": 0,
+        "truth": "G3",
+        "gen": "G0",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 4,
+        "delta": -24,
+        "onsetDiff": 0.25,
+        "truth": "E3",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 8,
+        "delta": -12,
+        "onsetDiff": 0.75,
+        "truth": "E2",
+        "gen": "E1",
+        "truthVoice": 1,
+        "genVoice": 1
+      }
+    ]
+  },
+  {
+    "id": "guitar-paired-chords-vector",
+    "instrumentId": "guitar",
+    "v2PitchAccuracy": 0.1034,
+    "v3PitchAccuracy": 0.069,
+    "v3PitchAtCorrectOnset": 0.16,
+    "wrongPitchCount": 39,
+    "rootCauses": [
+      {
+        "bucket": "grouping-artifact",
+        "count": 37
+      },
+      {
+        "bucket": "staff/clef/register",
+        "count": 1
+      },
+      {
+        "bucket": "diatonic-step",
+        "count": 1
+      }
+    ],
+    "atCorrectOnsetHistogram": {
+      "grouping-artifact": 5,
+      "staff/clef/register": 1,
+      "accidental-miss": 0,
+      "courtesy-accidental": 0,
+      "key-signature": 0,
+      "ledger-line": 0,
+      "diatonic-step": 1,
+      "other": 0
+    },
+    "atCorrectOnsetCount": 7,
+    "deltaHistogram": {
+      "±1-accidental": 4,
+      "±2-diatonic": 6,
+      "±octave": 2,
+      "±octave-other": 0,
+      "other": 27
+    },
+    "signedDeltas": {
+      "1": 2,
+      "2": 1,
+      "-2": 5,
+      "-8": 2,
+      "-17": 4,
+      "-7": 2,
+      "-12": 2,
+      "-5": 4,
+      "-19": 2,
+      "-15": 3,
+      "-10": 2,
+      "-9": 1,
+      "-4": 1,
+      "-1": 2,
+      "-11": 2,
+      "-21": 1,
+      "-16": 1,
+      "-26": 1,
+      "-14": 1
+    },
+    "pitchSources": {
+      "detector-staff-pitch": 113,
+      "detector-sounding-pitch": 4
+    },
+    "samples": [
+      {
+        "m": 1,
+        "delta": -2,
+        "onsetDiff": 0.25,
+        "truth": "G3",
+        "gen": "F3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -8,
+        "onsetDiff": 0.25,
+        "truth": "C4",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -17,
+        "onsetDiff": 0.25,
+        "truth": "E4",
+        "gen": "B2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -7,
+        "onsetDiff": 0,
+        "truth": "C4",
+        "gen": "F3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": -12,
+        "onsetDiff": 0,
+        "truth": "E4",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": -2,
+        "onsetDiff": 0.25,
+        "truth": "G3",
+        "gen": "F3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -8,
+        "onsetDiff": 0.25,
+        "truth": "C4",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -17,
+        "onsetDiff": 0.25,
+        "truth": "E4",
+        "gen": "B2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -7,
+        "onsetDiff": 0.25,
+        "truth": "C4",
+        "gen": "F3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": -12,
+        "onsetDiff": 0.25,
+        "truth": "E4",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": -2,
+        "onsetDiff": 0.75,
+        "truth": "D3",
+        "gen": "C3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -5,
+        "onsetDiff": 0.75,
+        "truth": "A3",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -19,
+        "onsetDiff": 0.75,
+        "truth": "D4",
+        "gen": "G2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -5,
+        "onsetDiff": 0.5,
+        "truth": "D4",
+        "gen": "A3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": -15,
+        "onsetDiff": 0.5,
+        "truth": "G4",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": -2,
+        "onsetDiff": 0,
+        "truth": "D3",
+        "gen": "C3",
+        "truthVoice": 1,
+        "genVoice": 3
+      },
+      {
+        "m": 2,
+        "delta": -10,
+        "onsetDiff": 0,
+        "truth": "D4",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 3
+      },
+      {
+        "m": 2,
+        "delta": -19,
+        "onsetDiff": 0.5,
+        "truth": "G4",
+        "gen": "C3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": -5,
+        "onsetDiff": 0.25,
+        "truth": "D4",
+        "gen": "A3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -15,
+        "onsetDiff": 0.25,
+        "truth": "G4",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -9,
+        "onsetDiff": 0.75,
+        "truth": "A3",
+        "gen": "C3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -15,
+        "onsetDiff": 0.75,
+        "truth": "C4",
+        "gen": "A2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -4,
+        "onsetDiff": 0.25,
+        "truth": "A3",
+        "gen": "F3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -1,
+        "onsetDiff": 0.25,
+        "truth": "C4",
+        "gen": "B3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -11,
+        "onsetDiff": 0.5,
+        "truth": "E4",
+        "gen": "F3",
+        "truthVoice": 1,
+        "genVoice": 2
+      }
+    ]
+  },
+  {
+    "id": "guitar-techniques-paired-vector",
+    "instrumentId": "guitar",
+    "v2PitchAccuracy": 0.9375,
+    "v3PitchAccuracy": 0,
+    "v3PitchAtCorrectOnset": 0,
+    "wrongPitchCount": 14,
+    "rootCauses": [
+      {
+        "bucket": "grouping-artifact",
+        "count": 13
+      },
+      {
+        "bucket": "staff/clef/register",
+        "count": 1
+      }
+    ],
+    "atCorrectOnsetHistogram": {
+      "grouping-artifact": 1,
+      "staff/clef/register": 1,
+      "accidental-miss": 0,
+      "courtesy-accidental": 0,
+      "key-signature": 0,
+      "ledger-line": 0,
+      "diatonic-step": 0,
+      "other": 0
+    },
+    "atCorrectOnsetCount": 2,
+    "deltaHistogram": {
+      "±1-accidental": 0,
+      "±2-diatonic": 0,
+      "±octave": 11,
+      "±octave-other": 0,
+      "other": 3
+    },
+    "signedDeltas": {
+      "-12": 11,
+      "-13": 1,
+      "-10": 2
+    },
+    "pitchSources": {
+      "detector-staff-pitch": 32,
+      "detector-sounding-pitch": 32
+    },
+    "samples": [
+      {
+        "m": 1,
+        "delta": -12,
+        "onsetDiff": 0.25,
+        "truth": "A4",
+        "gen": "A3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -12,
+        "onsetDiff": 0,
+        "truth": "B4",
+        "gen": "B3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 1,
+        "delta": -12,
+        "onsetDiff": 0.25,
+        "truth": "C5",
+        "gen": "C4",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 1,
+        "delta": -12,
+        "onsetDiff": 0.25,
+        "truth": "B4",
+        "gen": "B3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": -12,
+        "onsetDiff": 0.75,
+        "truth": "E4",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 2,
+        "delta": -13,
+        "onsetDiff": 0.5,
+        "truth": "F#4",
+        "gen": "F3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 2,
+        "delta": -10,
+        "onsetDiff": 0.75,
+        "truth": "G4",
+        "gen": "A3",
+        "truthVoice": 1,
+        "genVoice": 3
+      },
+      {
+        "m": 3,
+        "delta": -12,
+        "onsetDiff": 0.75,
+        "truth": "D4",
+        "gen": "D3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -12,
+        "onsetDiff": 0.5,
+        "truth": "E4",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 3,
+        "delta": -12,
+        "onsetDiff": 0,
+        "truth": "F4",
+        "gen": "F3",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 3,
+        "delta": -12,
+        "onsetDiff": 0.25,
+        "truth": "E4",
+        "gen": "E3",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 4,
+        "delta": -12,
+        "onsetDiff": 0.5,
+        "truth": "A3",
+        "gen": "A2",
+        "truthVoice": 1,
+        "genVoice": 1
+      },
+      {
+        "m": 4,
+        "delta": -12,
+        "onsetDiff": 0.25,
+        "truth": "B3",
+        "gen": "B2",
+        "truthVoice": 1,
+        "genVoice": 2
+      },
+      {
+        "m": 4,
+        "delta": -10,
+        "onsetDiff": 0.5,
+        "truth": "C4",
+        "gen": "D3",
+        "truthVoice": 1,
+        "genVoice": 3
+      }
+    ]
+  }
+]

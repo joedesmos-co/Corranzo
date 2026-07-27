@@ -1,0 +1,204 @@
+{
+  "title": "Rhythm Sprint 2 — Recognition RCA",
+  "date": "2026-07-18",
+  "fixtures": {
+    "piano-dense-advanced-vector": {
+      "rhythm": "28%",
+      "duration": 65,
+      "onset": 59,
+      "source": "vector-glyphs"
+    },
+    "guitar-tab-sparse-vector": {
+      "rhythm": "17%",
+      "duration": 30,
+      "onset": 23,
+      "source": "tab-vector"
+    },
+    "piano-grand-voices-vector": {
+      "rhythm": "53%",
+      "duration": 30,
+      "onset": 0,
+      "source": "vector-glyphs"
+    },
+    "piano-rhythm-tuplets-vector": {
+      "rhythm": "47%",
+      "duration": 17,
+      "onset": 33,
+      "tuplet": 10,
+      "source": "vector-glyphs"
+    }
+  },
+  "taxonomy": [
+    {
+      "id": "saturated-beam-as-sixteenth",
+      "label": "Saturated beamStrength misread as sixteenth (and beams dropped when strength>22)",
+      "count": {
+        "durationMessages": {
+          "Eighth→16th": 38,
+          "noteheads typed sixteenth via strength≥14": "60 dense + 28 tuplets"
+        },
+        "beamStrengthRejectedHigh": {
+          "dense": 60,
+          "tuplets": 28,
+          "grandHollowSafe": 17
+        },
+        "currentlyAcceptedBeams": {
+          "dense": 9,
+          "tuplets": 2
+        }
+      },
+      "fixtures": [
+        "piano-dense-advanced-vector",
+        "piano-rhythm-tuplets-vector"
+      ],
+      "examples": [
+        "dense m2–4: truth 8 eighths; gen mix of 16th/eighth; noteDur often sixteenth with beams=0 while raw strength=29",
+        "tuplets m7: truth eighths; gen 16th/eighth; strength=29 rejected by countBeams"
+      ],
+      "recognition": true,
+      "mechanism": "measureBeamStrength saturates at BEAM_SCAN_X (~29) for continuous beams. inferNoteDuration maps beamStrength≥14→sixteenth before the eighth branch. countBeams returns 0 when strength>22, so beams=0 and beamStrength is not persisted — gap quantization then emits 16ths/quarters without beam caps."
+    },
+    {
+      "id": "penultimate-half-stretch",
+      "label": "extendPenultimateHalfBeforeFinalQuarter promotes quarters→halves",
+      "count": {
+        "Quarter→half": 30,
+        "onsetCoupled": 0
+      },
+      "fixtures": [
+        "piano-grand-voices-vector"
+      ],
+      "examples": [
+        "grand m1–3: treble onsets @0,@4,@8,@12 with noteDur=quarter, but event @8 becomes half when bass+treble share beat before lone final quarter"
+      ],
+      "recognition": true,
+      "mechanism": "Heuristic extends shared penultimate-beat quarters to half. Fires on simple 4-quarter+2-half grand texture; no onset errors (pure duration)."
+    },
+    {
+      "id": "gap-override-missing-beam-cap",
+      "label": "Gap duration stretch to quarter when beam evidence missing (Eighth→quarter)",
+      "count": {
+        "Eighth→quarter": 28
+      },
+      "fixtures": [
+        "piano-dense-advanced-vector",
+        "piano-rhythm-tuplets-vector"
+      ],
+      "examples": [
+        "dense m2/m4: events with noteDur=quarter, beams=0, gap-assigned quarter/eighth"
+      ],
+      "recognition": true,
+      "mechanism": "Downstream of saturated-beam bug: without beams/beamStrength on notes, refineEventDurationsFromBeamEvidence and hasBeamEvidenceForNotes cannot cap gap stretches.",
+      "coupledTo": "saturated-beam-as-sixteenth"
+    },
+    {
+      "id": "tab-approximate-slot-packing",
+      "label": "TAB positional slots invent 0.75q / spurious leading 16th",
+      "count": {
+        "Quarter→dotted eighth": 19,
+        "Quarter→1.25q": 8,
+        "Quarter→eighth": 3
+      },
+      "fixtures": [
+        "guitar-tab-sparse-vector"
+      ],
+      "examples": [
+        "tab m2/m3/m6: truth 4 quarters; gen @1:16th + three dotted-eighths + stretched quarter (starts 1,2,5,8,11)"
+      ],
+      "recognition": true,
+      "mechanism": "detectTabNotation buildTabTimingBuckets / assignMonotonicSlots — separate tab-vector path; no stems/flags. Extra onset + uneven slots → d=3 (0.75q).",
+      "trap": "Do not fix via processVectorOmrPage; tab path is detectTabNotation.js"
+    },
+    {
+      "id": "onset-coupled-cascade",
+      "label": "Duration defects co-located with onset defects (dense/tab/tuplets)",
+      "count": {
+        "dense": "67/67 duration in onset measures",
+        "tab": "30/30",
+        "tuplets": "17/17",
+        "grand": "0/30 (pure duration)"
+      },
+      "recognition": "symptom",
+      "mechanism": "Gap-primary duration makes onset errors look like duration errors."
+    },
+    {
+      "id": "tuplet-unrecognized",
+      "label": "No tuplet time-modification recognition",
+      "count": {
+        "tupletDefects": 10
+      },
+      "fixtures": [
+        "piano-rhythm-tuplets-vector"
+      ],
+      "examples": [
+        "m3: truth 3:2 eighth triplets; gen 16ths with no time-modification"
+      ],
+      "recognition": true,
+      "note": "Separate from beam bug; lower volume."
+    }
+  ],
+  "recommendedFix": {
+    "priority": 1,
+    "title": "Stop treating saturated beamStrength as sixteenth; accept long beams as eighths",
+    "files": [
+      {
+        "path": "src/features/omr/detectNoteRhythmFeatures.js",
+        "functions": [
+          "inferNoteDuration",
+          "countBeams",
+          "enrichNoteheadRhythm"
+        ],
+        "changes": [
+          "Remove or demote `beamStrength >= 14 → sixteenth` in inferNoteDuration (require real secondary-beam evidence for 16ths).",
+          "In countBeams: treat strength >= 8 as beamed even when strength > 22 (long continuous beams). Keep hollow/half guarded by hollow branch order.",
+          "Persist beamStrength on the object returned by enrichNoteheadRhythm so hasBeamEvidenceForNotes / inferredBeamDurationCap work."
+        ]
+      },
+      {
+        "path": "src/features/omr/processVectorOmrPage.js",
+        "functions": [
+          "refineEventDurationsFromBeamEvidence",
+          "hasBeamEvidenceForNotes",
+          "inferredBeamDurationCap"
+        ],
+        "changes": [
+          "No logic change required once beamStrength/beams are correct; gap caps will start firing."
+        ]
+      }
+    ],
+    "expectedImpact": {
+      "piano-dense-advanced-vector": "Primary: Eighth→16th ×30; secondary: Eighth→quarter ×27 via beam caps; onset 0.25/0.5 may improve",
+      "piano-rhythm-tuplets-vector": "Eighth→16th ×8; partial onset improvement; tuplet×10 NOT fixed",
+      "piano-grand-voices-vector": "Little/no change (hollow branch protects halves; Quarter→half is separate heuristic)",
+      "guitar-tab-sparse-vector": "None (tab-vector path)"
+    },
+    "whySmallest": "Three tightly related edits in one file (detectNoteRhythmFeatures.js), no evaluator/balancing changes. Directly addresses the highest-volume duration message (Eighth→16th) and unblocks existing beam-cap machinery for Eighth→quarter."
+  },
+  "secondaryFix": {
+    "title": "Guard extendPenultimateHalfBeforeFinalQuarter with confident quarter stem evidence",
+    "file": "src/features/omr/processVectorOmrPage.js",
+    "function": "extendPenultimateHalfBeforeFinalQuarter",
+    "expectedImpact": {
+      "piano-grand-voices-vector": "Quarter→half ×30"
+    }
+  },
+  "traps": [
+    "Vector event duration is gap-primary (buildNoteEventsFromGroups); notehead durationType is often ignored except as evidence for caps/heuristics.",
+    "Measure balancing / clampMeasureEventDurations can hide underfull measures; dense flagged playback measures [2,6,12,13,16].",
+    "beamStrength was never persisted — diagnostics and hasBeamEvidenceForNotes silently see 0.",
+    "countBeams upper bound >22 was likely meant to reject staff-line saturation; hollow-first in inferNoteDuration protects grand halves if long beams are accepted.",
+    "guitar-tab-sparse uses source=tab-vector (detectTabNotation.js), not processVectorOmrPage durationMeta.",
+    "All dense/tab/tuplet duration defects are onset-coupled; grand is the only pure-duration fixture.",
+    "Pitch/clef errors on dense are severe — rhythm pairing can attribute wrong durations to wrong notes; still, beam misclassification is independently visible on noteheads.",
+    "Do not modify frozen semantic evaluator."
+  ],
+  "artifacts": [
+    "tmp/rhythm-sprint-2-rca/*.eval.json",
+    "tmp/rhythm-sprint-2-rca/*.omr.musicxml",
+    "tmp/rhythm-sprint-2-rca/defect-taxonomy-v2.json",
+    "tmp/rhythm-sprint-2-rca/measure-compare.json",
+    "tmp/rhythm-sprint-2-rca/beam-strength-hist.json",
+    "tmp/rhythm-sprint-2-rca/*.page-diag.json",
+    "tmp/rhythm-sprint-2-rca/coupling.json"
+  ]
+}

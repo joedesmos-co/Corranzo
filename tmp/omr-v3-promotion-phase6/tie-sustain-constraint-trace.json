@@ -1,0 +1,4948 @@
+{
+  "generatedAt": "2026-07-17T02:18:57.066Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "phase": 4,
+  "fixtures": [
+    {
+      "fixtureId": "piano-beginner-single-vector",
+      "label": "CC0 Beginner Line Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 1,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 1,
+        "written-correct-sustain-wrong": 0,
+        "slur-like-arc-pitch-differs": 0
+      },
+      "dominantConstraint": {
+        "bucket": "expected-cross-measure-tie",
+        "count": 1
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 0,
+        "appliedTieCount": 0,
+        "slurLikeArcPitchDiffers": 0,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [
+        {
+          "measureNumber": 8,
+          "midi": 67,
+          "label": "G4",
+          "onsetQuarters": 1,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.5,
+          "sustainDeficitQuarters": 0.5,
+          "alreadyTied": false
+        }
+      ],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "piano-grand-voices-vector",
+      "label": "CC0 Grand Staff Voice Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 0,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 0,
+        "written-correct-sustain-wrong": 7,
+        "slur-like-arc-pitch-differs": 1
+      },
+      "dominantConstraint": {
+        "bucket": "written-correct-sustain-wrong",
+        "count": 7
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 1,
+        "appliedTieCount": 0,
+        "slurLikeArcPitchDiffers": 1,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 1,
+          "midi": 64,
+          "label": "E4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 1,
+          "midi": 67,
+          "label": "G4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 2,
+          "midi": 69,
+          "label": "A4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 3,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 4,
+          "midi": 69,
+          "label": "A4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 4,
+          "midi": 72,
+          "label": "C5",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 7,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "piano-rhythm-tuplets-vector",
+      "label": "CC0 Rhythm and Tuplet Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 0,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 0,
+        "written-correct-sustain-wrong": 1,
+        "slur-like-arc-pitch-differs": 2
+      },
+      "dominantConstraint": {
+        "bucket": "slur-like-arc-pitch-differs",
+        "count": 2
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 4,
+        "appliedTieCount": 2,
+        "slurLikeArcPitchDiffers": 2,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 1,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 3,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "piano-articulation-scan",
+      "label": "CC0 Articulation Scan Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 13,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 13,
+        "written-correct-sustain-wrong": 11,
+        "slur-like-arc-pitch-differs": 0
+      },
+      "dominantConstraint": {
+        "bucket": "expected-cross-measure-tie",
+        "count": 13
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 0,
+        "appliedTieCount": 0,
+        "slurLikeArcPitchDiffers": 0,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [
+        {
+          "measureNumber": 1,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 1,
+          "midi": 48,
+          "label": "C3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 2,
+          "midi": 45,
+          "label": "A2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 2,
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 3,
+          "midi": 45,
+          "label": "A2",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 4,
+          "midi": 48,
+          "label": "C3",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 5,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 5,
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 5,
+          "midi": 48,
+          "label": "C3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 7,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 7,
+          "midi": 48,
+          "label": "C3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 8,
+          "midi": 45,
+          "label": "A2",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        }
+      ],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 1,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 1,
+          "midi": 48,
+          "label": "C3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 2,
+          "midi": 45,
+          "label": "A2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 2,
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 4,
+          "midi": 48,
+          "label": "C3",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 5,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 5,
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 5,
+          "midi": 48,
+          "label": "C3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 7,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 8,
+          "midi": 45,
+          "label": "A2",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 8,
+          "midi": 52,
+          "label": "E3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "piano-dense-advanced-vector",
+      "label": "CC0 Dense Advanced Texture Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 1,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 1,
+        "written-correct-sustain-wrong": 3,
+        "slur-like-arc-pitch-differs": 46
+      },
+      "dominantConstraint": {
+        "bucket": "slur-like-arc-pitch-differs",
+        "count": 46
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 50,
+        "appliedTieCount": 3,
+        "slurLikeArcPitchDiffers": 46,
+        "unresolvedArcCount": 1
+      },
+      "expectedCrossMeasureTies": [
+        {
+          "measureNumber": 6,
+          "midi": 47,
+          "label": "B2",
+          "onsetQuarters": 1,
+          "durationQuarters": 1,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.25,
+          "sustainDeficitQuarters": 0.75,
+          "alreadyTied": false
+        }
+      ],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 1,
+          "midi": 67,
+          "label": "G4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 1,
+          "midi": 64,
+          "label": "E4",
+          "onsetQuarters": 1,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 1,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 1,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "guitar-tab-sparse-vector",
+      "label": "CC0 Sparse TAB Technique Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 2,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 2,
+        "written-correct-sustain-wrong": 0,
+        "slur-like-arc-pitch-differs": 0
+      },
+      "dominantConstraint": {
+        "bucket": "expected-cross-measure-tie",
+        "count": 2
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 0,
+        "appliedTieCount": 0,
+        "slurLikeArcPitchDiffers": 0,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [
+        {
+          "measureNumber": 1,
+          "midi": 57,
+          "label": "A3",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.5,
+          "sustainDeficitQuarters": 0.5,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 5,
+          "midi": 57,
+          "label": "A3",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.5,
+          "sustainDeficitQuarters": 0.5,
+          "alreadyTied": false
+        }
+      ],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "guitar-standard-chords-vector",
+      "label": "CC0 Standard Guitar Chord Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 0,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 0,
+        "written-correct-sustain-wrong": 0,
+        "slur-like-arc-pitch-differs": 1
+      },
+      "dominantConstraint": {
+        "bucket": "slur-like-arc-pitch-differs",
+        "count": 1
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 10,
+        "appliedTieCount": 9,
+        "slurLikeArcPitchDiffers": 1,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "guitar-paired-chords-vector",
+      "label": "CC0 Paired Notation and TAB Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 1,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 1,
+        "sounding-release-too-short": 1,
+        "written-correct-sustain-wrong": 3,
+        "slur-like-arc-pitch-differs": 0
+      },
+      "dominantConstraint": {
+        "bucket": "written-correct-sustain-wrong",
+        "count": 3
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 0,
+        "appliedTieCount": 0,
+        "slurLikeArcPitchDiffers": 0,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [
+        {
+          "measureNumber": 1,
+          "midi": 64,
+          "label": "E4",
+          "onsetQuarters": 3,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.25,
+          "sustainDeficitQuarters": 0.75,
+          "alreadyTied": false
+        }
+      ],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": [
+          {
+            "measureNumber": 9,
+            "midi": 64,
+            "label": "E4",
+            "onsetQuarters": 0,
+            "durationQuarters": 4,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 8,
+              "midi": 64,
+              "label": "E4",
+              "onsetQuarters": 3,
+              "durationQuarters": 1,
+              "voice": 1,
+              "partId": "P1"
+            }
+          }
+        ]
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 4,
+          "midi": 59,
+          "label": "B3",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 5,
+          "midi": 67,
+          "label": "G4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 8,
+          "midi": 64,
+          "label": "E4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "guitar-techniques-paired-vector",
+      "label": "CC0 Guitar Technique Pairing Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 0,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 0,
+        "written-correct-sustain-wrong": 1,
+        "slur-like-arc-pitch-differs": 0
+      },
+      "dominantConstraint": {
+        "bucket": "written-correct-sustain-wrong",
+        "count": 1
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 0,
+        "appliedTieCount": 0,
+        "slurLikeArcPitchDiffers": 0,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 2,
+          "midi": 67,
+          "label": "G4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "clean",
+      "label": "Gymnopedie No. 1 (legacy local diagnostic)",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 0,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 0,
+        "written-correct-sustain-wrong": 0,
+        "slur-like-arc-pitch-differs": 0
+      },
+      "dominantConstraint": null,
+      "tieGlyphOrphans": {
+        "detectedTieCount": 6,
+        "appliedTieCount": 6,
+        "slurLikeArcPitchDiffers": 0,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [],
+      "tieChainTraces": {
+        "fixtureId": "clean",
+        "measureCount": 78,
+        "totalChains": 370,
+        "malformedChains": 5,
+        "perMeasure": [
+          {
+            "measureNumber": 1,
+            "chainCount": 4,
+            "chains": [
+              {
+                "pitchKey": "43|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "62|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 2,
+            "chainCount": 4,
+            "chains": [
+              {
+                "pitchKey": "38|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "61|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "57|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 3,
+            "chainCount": 4,
+            "chains": [
+              {
+                "pitchKey": "43|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "62|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 4,
+            "chainCount": 4,
+            "chains": [
+              {
+                "pitchKey": "38|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "61|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "57|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 5,
+            "chainCount": 6,
+            "chains": [
+              {
+                "pitchKey": "43|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "62|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "78|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 8,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "81|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 8,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 6,
+            "chainCount": 6,
+            "chains": [
+              {
+                "pitchKey": "38|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "79|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 4,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "61|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "57|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "78|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 8,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 7,
+            "chainCount": 4,
+            "chains": [
+              {
+                "pitchKey": "71|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 4,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "62|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 8,
+            "chainCount": 5,
+            "chains": [
+              {
+                "pitchKey": "38|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "69|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "61|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "57|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 9,
+            "chainCount": 3,
+            "chains": [
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "62|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 10,
+            "chainCount": 4,
+            "chains": [
+              {
+                "pitchKey": "38|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "61|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "57|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 11,
+            "chainCount": 4,
+            "chains": [
+              {
+                "pitchKey": "43|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "62|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 12,
+            "chainCount": 4,
+            "chains": [
+              {
+                "pitchKey": "38|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "61|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 13,
+            "chainCount": 5,
+            "chains": [
+              {
+                "pitchKey": "43|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "62|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "81|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 8,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 14,
+            "chainCount": 6,
+            "chains": [
+              {
+                "pitchKey": "38|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "79|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 4,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "61|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "78|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 8,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "73|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 8,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 15,
+            "chainCount": 7,
+            "chains": [
+              {
+                "pitchKey": "43|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "71|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 4,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "62|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "73|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 8,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 16,
+            "chainCount": 5,
+            "chains": [
+              {
+                "pitchKey": "38|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "69|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "61|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "57|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 17,
+            "chainCount": 4,
+            "chains": [
+              {
+                "pitchKey": "73|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "61|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "57|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 18,
+            "chainCount": 4,
+            "chains": [
+              {
+                "pitchKey": "35|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "66|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "62|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 19,
+            "chainCount": 4,
+            "chains": [
+              {
+                "pitchKey": "40|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "64|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "55|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 20,
+            "chainCount": 4,
+            "chains": [
+              {
+                "pitchKey": "40|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "67|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "62|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 21,
+            "chainCount": 3,
+            "chains": [
+              {
+                "pitchKey": "38|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "62|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "53|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 22,
+            "chainCount": 5,
+            "chains": [
+              {
+                "pitchKey": "33|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "69|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 4,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "64|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "60|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "71|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 8,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 23,
+            "chainCount": 6,
+            "chains": [
+              {
+                "pitchKey": "38|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "76|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 4,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "64|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "74|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 8,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "71|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 8,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "measureNumber": 24,
+            "chainCount": 5,
+            "chains": [
+              {
+                "pitchKey": "38|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 0,
+                    "writtenDurationDivisions": 12,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "64|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "59|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "50|2",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 4,
+                    "writtenDurationDivisions": 8,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              },
+              {
+                "pitchKey": "71|1",
+                "linkCount": 1,
+                "hasStart": true,
+                "hasStop": false,
+                "wellFormed": true,
+                "sustainViaTie": true,
+                "links": [
+                  {
+                    "onsetDivision": 8,
+                    "writtenDurationDivisions": 4,
+                    "soundingReleaseDivision": 12,
+                    "releaseSource": "tie-sustain",
+                    "tieSustainSource": "tie-start",
+                    "sustainExtendsBeyondWritten": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "dense",
+      "label": "A Cruel Angel's Thesis (legacy copyrighted diagnostic)",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 42,
+        "tie-start-without-continuation": 8,
+        "continuation-without-tie-start": 4,
+        "sounding-release-too-short": 42,
+        "written-correct-sustain-wrong": 31,
+        "slur-like-arc-pitch-differs": 16
+      },
+      "dominantConstraint": {
+        "bucket": "expected-cross-measure-tie",
+        "count": 42
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 27,
+        "appliedTieCount": 11,
+        "slurLikeArcPitchDiffers": 16,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [
+        {
+          "measureNumber": 2,
+          "midi": 63,
+          "label": "D#4",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 5,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.25,
+          "sustainDeficitQuarters": 1.75,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 2,
+          "midi": 70,
+          "label": "A#4",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 5,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.25,
+          "sustainDeficitQuarters": 1.75,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 4,
+          "midi": 63,
+          "label": "D#4",
+          "onsetQuarters": 2,
+          "durationQuarters": 4,
+          "voice": 5,
+          "partId": "P1",
+          "generatedDurationQuarters": 1.75,
+          "sustainDeficitQuarters": 2.25,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 5,
+          "midi": 84,
+          "label": "C6",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 16,
+          "midi": 72,
+          "label": "C5",
+          "onsetQuarters": 3,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.5,
+          "sustainDeficitQuarters": 0.5,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 23,
+          "midi": 67,
+          "label": "G4",
+          "onsetQuarters": 2,
+          "durationQuarters": 1.5,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 0.5,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 23,
+          "midi": 72,
+          "label": "C5",
+          "onsetQuarters": 2,
+          "durationQuarters": 1.5,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 0.5,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 23,
+          "midi": 75,
+          "label": "D#5",
+          "onsetQuarters": 2,
+          "durationQuarters": 1.5,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 0.5,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 35,
+          "midi": 75,
+          "label": "D#5",
+          "onsetQuarters": 2.75,
+          "durationQuarters": 1.25,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.5,
+          "sustainDeficitQuarters": 0.75,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 35,
+          "midi": 75,
+          "label": "D#5",
+          "onsetQuarters": 3,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.5,
+          "sustainDeficitQuarters": 0.5,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 35,
+          "midi": 79,
+          "label": "G5",
+          "onsetQuarters": 3,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.5,
+          "sustainDeficitQuarters": 0.5,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 43,
+          "midi": 75,
+          "label": "D#5",
+          "onsetQuarters": 2.75,
+          "durationQuarters": 1.25,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.25,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        }
+      ],
+      "brokenContinuations": {
+        "startWithoutContinuation": [
+          {
+            "measureNumber": 7,
+            "midi": 63,
+            "label": "D#4",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 7,
+              "midi": 63,
+              "label": "D#4",
+              "onsetQuarters": 2,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 7,
+            "midi": 67,
+            "label": "G4",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 7,
+              "midi": 67,
+              "label": "G4",
+              "onsetQuarters": 2,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 7,
+            "midi": 39,
+            "label": "D#2",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 7,
+              "midi": 39,
+              "label": "D#2",
+              "onsetQuarters": 2.5,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 8,
+            "midi": 36,
+            "label": "C2",
+            "onsetQuarters": 2.25,
+            "durationQuarters": 0.5,
+            "voice": 2,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 8,
+              "midi": 36,
+              "label": "C2",
+              "onsetQuarters": 0,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 61,
+            "midi": 46,
+            "label": "A#2",
+            "onsetQuarters": 1.5,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 61,
+              "midi": 46,
+              "label": "A#2",
+              "onsetQuarters": 3,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 61,
+            "midi": 53,
+            "label": "F3",
+            "onsetQuarters": 1.5,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 61,
+              "midi": 53,
+              "label": "F3",
+              "onsetQuarters": 3,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 61,
+            "midi": 58,
+            "label": "A#3",
+            "onsetQuarters": 1.5,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 61,
+              "midi": 58,
+              "label": "A#3",
+              "onsetQuarters": 3,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 70,
+            "midi": 39,
+            "label": "D#2",
+            "onsetQuarters": 1,
+            "durationQuarters": 0.75,
+            "voice": 2,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 70,
+              "midi": 39,
+              "label": "D#2",
+              "onsetQuarters": 2.5,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          }
+        ],
+        "continuationWithoutStart": [
+          {
+            "measureNumber": 8,
+            "midi": 41,
+            "label": "F2",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 7,
+              "midi": 41,
+              "label": "F2",
+              "onsetQuarters": 1,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 8,
+            "midi": 51,
+            "label": "D#3",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 7,
+              "midi": 51,
+              "label": "D#3",
+              "onsetQuarters": 2,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 9,
+            "midi": 48,
+            "label": "C3",
+            "onsetQuarters": 3,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 8,
+              "midi": 48,
+              "label": "C3",
+              "onsetQuarters": 0,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 9,
+            "midi": 70,
+            "label": "A#4",
+            "onsetQuarters": 2.25,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 8,
+              "midi": 70,
+              "label": "A#4",
+              "onsetQuarters": 1,
+              "durationQuarters": 1,
+              "voice": 1,
+              "partId": "P1"
+            }
+          }
+        ]
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 5,
+          "midi": 84,
+          "label": "C6",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 9,
+          "midi": 62,
+          "label": "D4",
+          "onsetQuarters": 2,
+          "durationQuarters": 0.75,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.75,
+          "generatedDurationQuarters": 0.25,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 10,
+          "midi": 70,
+          "label": "A#4",
+          "onsetQuarters": 1.75,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 1.75,
+          "sustainDiffQuarters": 0.75
+        },
+        {
+          "measureNumber": 13,
+          "midi": 72,
+          "label": "C5",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 1.5,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 14,
+          "midi": 74,
+          "label": "D5",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 1.5,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 15,
+          "midi": 75,
+          "label": "D#5",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 1.5,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 16,
+          "midi": 72,
+          "label": "C5",
+          "onsetQuarters": 3,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 0.5,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 18,
+          "midi": 70,
+          "label": "A#4",
+          "onsetQuarters": 1.75,
+          "durationQuarters": 1,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 1,
+          "generatedDurationQuarters": 1.75,
+          "sustainDiffQuarters": 0.75
+        },
+        {
+          "measureNumber": 39,
+          "midi": 75,
+          "label": "D#5",
+          "onsetQuarters": 2.75,
+          "durationQuarters": 0.75,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.75,
+          "generatedDurationQuarters": 0.25,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 39,
+          "midi": 79,
+          "label": "G5",
+          "onsetQuarters": 2.75,
+          "durationQuarters": 0.75,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.75,
+          "generatedDurationQuarters": 0.25,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 59,
+          "midi": 77,
+          "label": "F5",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 59,
+          "midi": 84,
+          "label": "C6",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "simple",
+      "label": "Twinkle Twinkle (legacy local diagnostic)",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 2,
+        "tie-start-without-continuation": 0,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 2,
+        "written-correct-sustain-wrong": 1,
+        "slur-like-arc-pitch-differs": 0
+      },
+      "dominantConstraint": {
+        "bucket": "expected-cross-measure-tie",
+        "count": 2
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 0,
+        "appliedTieCount": 0,
+        "slurLikeArcPitchDiffers": 0,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [
+        {
+          "measureNumber": 10,
+          "midi": 60,
+          "label": "C4",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 5,
+          "partId": "P1",
+          "generatedDurationQuarters": 1.25,
+          "sustainDeficitQuarters": 0.75,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 10,
+          "midi": 67,
+          "label": "G4",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 1,
+          "partId": "P1",
+          "generatedDurationQuarters": 1.25,
+          "sustainDeficitQuarters": 0.75,
+          "alreadyTied": false
+        }
+      ],
+      "brokenContinuations": {
+        "startWithoutContinuation": [],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 10,
+          "midi": 53,
+          "label": "F3",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": {
+        "fixtureId": "simple",
+        "appliedTieCount": 0,
+        "falseTiesApplied": 0,
+        "clean": true
+      }
+    },
+    {
+      "fixtureId": "wet-hands-guitar",
+      "label": "Wet Hands (legacy copyrighted guitar diagnostic)",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 0,
+        "tie-start-without-continuation": 4,
+        "continuation-without-tie-start": 0,
+        "sounding-release-too-short": 0,
+        "written-correct-sustain-wrong": 2,
+        "slur-like-arc-pitch-differs": 1
+      },
+      "dominantConstraint": {
+        "bucket": "tie-start-without-continuation",
+        "count": 4
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 15,
+        "appliedTieCount": 14,
+        "slurLikeArcPitchDiffers": 1,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [],
+      "brokenContinuations": {
+        "startWithoutContinuation": [
+          {
+            "measureNumber": 9,
+            "midi": 50,
+            "label": "D3",
+            "onsetQuarters": 1.25,
+            "durationQuarters": 0.75,
+            "voice": 2,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 10,
+              "midi": 50,
+              "label": "D3",
+              "onsetQuarters": 0.5,
+              "durationQuarters": 0.5,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 9,
+            "midi": 50,
+            "label": "D3",
+            "onsetQuarters": 1.25,
+            "durationQuarters": 0.75,
+            "voice": 2,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 10,
+              "midi": 50,
+              "label": "D3",
+              "onsetQuarters": 2.5,
+              "durationQuarters": 0.5,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 9,
+            "midi": 57,
+            "label": "A3",
+            "onsetQuarters": 2,
+            "durationQuarters": 0.5,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 10,
+              "midi": 57,
+              "label": "A3",
+              "onsetQuarters": 3,
+              "durationQuarters": 0.5,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 21,
+            "midi": 43,
+            "label": "G2",
+            "onsetQuarters": 1,
+            "durationQuarters": 1,
+            "voice": 2,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 22,
+              "midi": 43,
+              "label": "G2",
+              "onsetQuarters": 0,
+              "durationQuarters": 0.5,
+              "voice": 1,
+              "partId": "P1"
+            }
+          }
+        ],
+        "continuationWithoutStart": []
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 17,
+          "midi": 59,
+          "label": "B3",
+          "onsetQuarters": 1.5,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1.25,
+          "sustainDiffQuarters": 0.75
+        },
+        {
+          "measureNumber": 22,
+          "midi": 55,
+          "label": "G3",
+          "onsetQuarters": 1,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "campanella-grandes",
+      "label": "La Campanella (legacy local diagnostic)",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 1,
+        "tie-start-without-continuation": 130,
+        "continuation-without-tie-start": 43,
+        "sounding-release-too-short": 1,
+        "written-correct-sustain-wrong": 37,
+        "slur-like-arc-pitch-differs": 340
+      },
+      "dominantConstraint": {
+        "bucket": "slur-like-arc-pitch-differs",
+        "count": 340
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 359,
+        "appliedTieCount": 19,
+        "slurLikeArcPitchDiffers": 340,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [
+        {
+          "measureNumber": 114,
+          "midi": 78,
+          "label": "F#5",
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 0.25,
+          "sustainDeficitQuarters": 0.75,
+          "alreadyTied": false
+        }
+      ],
+      "brokenContinuations": {
+        "startWithoutContinuation": [
+          {
+            "measureNumber": 1,
+            "midi": 75,
+            "label": "D#5",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.5,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 1,
+              "midi": 75,
+              "label": "D#5",
+              "onsetQuarters": 0.5,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 5,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 2.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 5,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 0.25,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 5,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 2.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 5,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 0.5,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 5,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 2.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 5,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 0.5,
+              "durationQuarters": 0.5,
+              "voice": 2,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 5,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 2.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 5,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 1,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 7,
+            "midi": 73,
+            "label": "C#5",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 7,
+              "midi": 73,
+              "label": "C#5",
+              "onsetQuarters": 2.5,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 7,
+            "midi": 73,
+            "label": "C#5",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 7,
+              "midi": 73,
+              "label": "C#5",
+              "onsetQuarters": 2.5,
+              "durationQuarters": 0.5,
+              "voice": 2,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 7,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 8,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 0.75,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 8,
+            "midi": 68,
+            "label": "G#4",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 8,
+              "midi": 68,
+              "label": "G#4",
+              "onsetQuarters": 1.5,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 8,
+            "midi": 68,
+            "label": "G#4",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 8,
+              "midi": 68,
+              "label": "G#4",
+              "onsetQuarters": 1.5,
+              "durationQuarters": 0.5,
+              "voice": 2,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 8,
+            "midi": 68,
+            "label": "G#4",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 8,
+              "midi": 68,
+              "label": "G#4",
+              "onsetQuarters": 2.5,
+              "durationQuarters": 0.5,
+              "voice": 2,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 8,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 9,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 1.25,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          }
+        ],
+        "continuationWithoutStart": [
+          {
+            "measureNumber": 19,
+            "midi": 44,
+            "label": "G#2",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 18,
+              "midi": 44,
+              "label": "G#2",
+              "onsetQuarters": 0,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 24,
+            "midi": 71,
+            "label": "B4",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.5,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 23,
+              "midi": 71,
+              "label": "B4",
+              "onsetQuarters": 0.125,
+              "durationQuarters": 0.125,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 28,
+            "midi": 70,
+            "label": "A#4",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 27,
+              "midi": 70,
+              "label": "A#4",
+              "onsetQuarters": 0.5,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 36,
+            "midi": 73,
+            "label": "C#5",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.5,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 35,
+              "midi": 73,
+              "label": "C#5",
+              "onsetQuarters": 0.25,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 47,
+            "midi": 52,
+            "label": "E3",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 46,
+              "midi": 52,
+              "label": "E3",
+              "onsetQuarters": 1.5,
+              "durationQuarters": 0.5,
+              "voice": 6,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 50,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 49,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 0.25,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 50,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 49,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 1.25,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 50,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 49,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 1.75,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 58,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.5,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 57,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 0.833,
+              "durationQuarters": 0.167,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 64,
+            "midi": 66,
+            "label": "F#4",
+            "onsetQuarters": 3.25,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 63,
+              "midi": 66,
+              "label": "F#4",
+              "onsetQuarters": 0.5,
+              "durationQuarters": 0.5,
+              "voice": 2,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 64,
+            "midi": 66,
+            "label": "F#4",
+            "onsetQuarters": 3.25,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 63,
+              "midi": 66,
+              "label": "F#4",
+              "onsetQuarters": 1,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 64,
+            "midi": 66,
+            "label": "F#4",
+            "onsetQuarters": 3.25,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 63,
+              "midi": 66,
+              "label": "F#4",
+              "onsetQuarters": 2.5,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          }
+        ]
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 4,
+          "midi": 87,
+          "label": "D#6",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 4,
+          "sustainDiffQuarters": 3.5
+        },
+        {
+          "measureNumber": 8,
+          "midi": 68,
+          "label": "G#4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 2.25,
+          "sustainDiffQuarters": 1.75
+        },
+        {
+          "measureNumber": 12,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1.5
+        },
+        {
+          "measureNumber": 19,
+          "midi": 51,
+          "label": "D#3",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 22,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 2.5,
+          "durationQuarters": 0.25,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.25,
+          "generatedDurationQuarters": 0.75,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 24,
+          "midi": 75,
+          "label": "D#5",
+          "onsetQuarters": 1.5,
+          "durationQuarters": 0.25,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.25,
+          "generatedDurationQuarters": 0.75,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 30,
+          "midi": 70,
+          "label": "A#4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 32,
+          "midi": 73,
+          "label": "C#5",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 33,
+          "midi": 66,
+          "label": "F#4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 34,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 37,
+          "midi": 70,
+          "label": "A#4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 38,
+          "midi": 75,
+          "label": "D#5",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    },
+    {
+      "fixtureId": "campanella-etude",
+      "label": "La Campanella alternate engraving (legacy local diagnostic)",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 0,
+        "tie-start-without-continuation": 98,
+        "continuation-without-tie-start": 20,
+        "sounding-release-too-short": 0,
+        "written-correct-sustain-wrong": 22,
+        "slur-like-arc-pitch-differs": 173
+      },
+      "dominantConstraint": {
+        "bucket": "slur-like-arc-pitch-differs",
+        "count": 173
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 238,
+        "appliedTieCount": 65,
+        "slurLikeArcPitchDiffers": 173,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [],
+      "brokenContinuations": {
+        "startWithoutContinuation": [
+          {
+            "measureNumber": 1,
+            "midi": 75,
+            "label": "D#5",
+            "onsetQuarters": 3,
+            "durationQuarters": 0.5,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 1,
+              "midi": 75,
+              "label": "D#5",
+              "onsetQuarters": 0.5,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 1,
+            "midi": 75,
+            "label": "D#5",
+            "onsetQuarters": 3,
+            "durationQuarters": 0.5,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 1,
+              "midi": 75,
+              "label": "D#5",
+              "onsetQuarters": 1,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 4,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 2.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 4,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": -3,
+              "durationQuarters": 0.5,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 3,
+            "midi": 75,
+            "label": "D#5",
+            "onsetQuarters": 2.5,
+            "durationQuarters": 0.75,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 4,
+              "midi": 75,
+              "label": "D#5",
+              "onsetQuarters": 0,
+              "durationQuarters": 0.25,
+              "voice": 2,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 4,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 2.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 4,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 0.25,
+              "durationQuarters": 0.25,
+              "voice": 2,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 4,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 2.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 4,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 0.5,
+              "durationQuarters": 0.5,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 4,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 2.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 4,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 0.5,
+              "durationQuarters": 0.25,
+              "voice": 2,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 4,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 2.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 4,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 1,
+              "durationQuarters": 0.5,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 6,
+            "midi": 73,
+            "label": "C#5",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 6,
+              "midi": 73,
+              "label": "C#5",
+              "onsetQuarters": 2.5,
+              "durationQuarters": 0.5,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 6,
+            "midi": 73,
+            "label": "C#5",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 6,
+              "midi": 73,
+              "label": "C#5",
+              "onsetQuarters": 2.5,
+              "durationQuarters": 0.25,
+              "voice": 2,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 6,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 7,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 0.75,
+              "durationQuarters": 0.25,
+              "voice": 2,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 7,
+            "midi": 68,
+            "label": "G#4",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 7,
+              "midi": 68,
+              "label": "G#4",
+              "onsetQuarters": 1.5,
+              "durationQuarters": 0.5,
+              "voice": 1,
+              "partId": "P1"
+            }
+          }
+        ],
+        "continuationWithoutStart": [
+          {
+            "measureNumber": 23,
+            "midi": 71,
+            "label": "B4",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 22,
+              "midi": 71,
+              "label": "B4",
+              "onsetQuarters": 0.125,
+              "durationQuarters": 0.125,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 23,
+            "midi": 54,
+            "label": "F#3",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 22,
+              "midi": 54,
+              "label": "F#3",
+              "onsetQuarters": 1,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 27,
+            "midi": 70,
+            "label": "A#4",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 26,
+              "midi": 70,
+              "label": "A#4",
+              "onsetQuarters": 0.5,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 43,
+            "midi": 75,
+            "label": "D#5",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 42,
+              "midi": 75,
+              "label": "D#5",
+              "onsetQuarters": 1.5,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 44,
+            "midi": 71,
+            "label": "B4",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 43,
+              "midi": 71,
+              "label": "B4",
+              "onsetQuarters": 0,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 44,
+            "midi": 71,
+            "label": "B4",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 43,
+              "midi": 71,
+              "label": "B4",
+              "onsetQuarters": 0.5,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 44,
+            "midi": 87,
+            "label": "D#6",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 43,
+              "midi": 87,
+              "label": "D#6",
+              "onsetQuarters": 0.75,
+              "durationQuarters": 0.25,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 57,
+            "midi": 51,
+            "label": "D#3",
+            "onsetQuarters": 0,
+            "durationQuarters": 0.75,
+            "voice": 2,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 56,
+              "midi": 51,
+              "label": "D#3",
+              "onsetQuarters": 0,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 66,
+            "midi": 71,
+            "label": "B4",
+            "onsetQuarters": 3.5,
+            "durationQuarters": 0.5,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 65,
+              "midi": 71,
+              "label": "B4",
+              "onsetQuarters": 2,
+              "durationQuarters": 0.5,
+              "voice": 5,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 96,
+            "midi": 92,
+            "label": "G#6",
+            "onsetQuarters": 2.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 95,
+              "midi": 92,
+              "label": "G#6",
+              "onsetQuarters": 1.087,
+              "durationQuarters": 0.06,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 102,
+            "midi": 70,
+            "label": "A#4",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 101,
+              "midi": 70,
+              "label": "A#4",
+              "onsetQuarters": 0.25,
+              "durationQuarters": 0.25,
+              "voice": 6,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 102,
+            "midi": 70,
+            "label": "A#4",
+            "onsetQuarters": 3.75,
+            "durationQuarters": 0.25,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 101,
+              "midi": 70,
+              "label": "A#4",
+              "onsetQuarters": 0.75,
+              "durationQuarters": 0.25,
+              "voice": 6,
+              "partId": "P1"
+            }
+          }
+        ]
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 3,
+          "midi": 87,
+          "label": "D#6",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1.25,
+          "sustainDiffQuarters": 0.75
+        },
+        {
+          "measureNumber": 7,
+          "midi": 68,
+          "label": "G#4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 2.25,
+          "sustainDiffQuarters": 1.75
+        },
+        {
+          "measureNumber": 11,
+          "midi": 68,
+          "label": "G#4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 2.25,
+          "sustainDiffQuarters": 1.75
+        },
+        {
+          "measureNumber": 11,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 2.25,
+          "sustainDiffQuarters": 1.75
+        },
+        {
+          "measureNumber": 19,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 2,
+          "sustainDiffQuarters": 1.5
+        },
+        {
+          "measureNumber": 21,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 1,
+          "durationQuarters": 0.25,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.25,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.75
+        },
+        {
+          "measureNumber": 21,
+          "midi": 71,
+          "label": "B4",
+          "onsetQuarters": 2.5,
+          "durationQuarters": 0.25,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.25,
+          "generatedDurationQuarters": 0.75,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 23,
+          "midi": 73,
+          "label": "C#5",
+          "onsetQuarters": 1.75,
+          "durationQuarters": 0.25,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.25,
+          "generatedDurationQuarters": 0.75,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 31,
+          "midi": 73,
+          "label": "C#5",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 32,
+          "midi": 66,
+          "label": "F#4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.5,
+          "voice": 5,
+          "partId": "P1",
+          "truthDurationQuarters": 0.5,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.5
+        },
+        {
+          "measureNumber": 35,
+          "midi": 70,
+          "label": "A#4",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.25,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 0.25,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.75
+        },
+        {
+          "measureNumber": 42,
+          "midi": 75,
+          "label": "D#5",
+          "onsetQuarters": 0,
+          "durationQuarters": 0.25,
+          "voice": 1,
+          "partId": "P1",
+          "truthDurationQuarters": 0.25,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 0.75
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    }
+  ]
+}

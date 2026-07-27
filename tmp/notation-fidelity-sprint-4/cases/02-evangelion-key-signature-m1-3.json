@@ -1,0 +1,110 @@
+{
+  "id": "02-evangelion-key-signature-m1-3",
+  "source": "evangelion",
+  "sourcePdf": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+  "page": 1,
+  "measure": 1,
+  "expectedSymbol": "3-flat key signature",
+  "rawDetectedCandidates": [],
+  "selectedAttachment": [],
+  "staffPosition": [],
+  "measureAccidentalState": "initial",
+  "keySignatureContext": {
+    "expectedFifths": -3,
+    "detectedFifths": -3
+  },
+  "musicXmlSnippet": "<measure number=\"1\"><attributes><divisions>4</divisions><key><fifths>-3</fifths><mode>major</mode></key><time><beats>4</beats><beat-type>4</beat-type></time><staves>2</staves><clef number=\"1\"><sign>G</sign><line>2</line></clef><clef number=\"2\"><sign>F</sign><line>4</line></clef></attributes><direction><words>Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.</words></direction><direction><direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>76</per-minute></metronome></direction-type><sound tempo=\"76\"/></direction><note><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><note><chord/><pitch><step>E</step><alter>-1</alter><octave>4</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><note><chord/><pitch><step>E</step><alter>-1</alter><octave>2</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><backup><duration>8</duration></backup><note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><forward><duration>1</duration></forward><note><pitch><step>E</step><alter>-1</alter><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><backup><duration>1</duration></backup><note><pitch><step>A</step><alter>-1</alter><octave>4</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff></note><note><chord/><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff></note><note><chord/><pitch><step>E</step><alter>-1</alter><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff></note><backup><duration>4</duration></backup><note><pitch><step>F</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><staccato/></articulations></notations></note><backup><duration>1</duration></backup><note><pitch><step>E</step><alter>-1</alter><octave>5</octave></pitch><duration>3</duration><voice>1</voice><type>eighth</type><dot/><staff>1</staff></note><note><pitch><step>F</step><octave>5</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff></note></measure>",
+  "renderedResult": "3 flats on both staves",
+  "soundingMidiBefore": [
+    67,
+    63,
+    39,
+    72,
+    75,
+    68,
+    65,
+    39,
+    77,
+    75,
+    77,
+    70
+  ],
+  "soundingMidiAfter": [
+    67,
+    63,
+    39,
+    72,
+    75,
+    68,
+    65,
+    39,
+    77,
+    75,
+    77,
+    70
+  ],
+  "playbackSignatureUnchanged": true,
+  "failureLayerBefore": "renderer geometry/data loss",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "classification": "key signature",
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-4/source-crops/02-evangelion-key-signature-m1-3.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-4/candidate-overlays/02-evangelion-key-signature-m1-3.png",
+    "musicXmlSnippetFile": "tmp/notation-fidelity-sprint-4/musicxml-snippets/02-evangelion-key-signature-m1-3.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-4/rendered-before/02-evangelion-key-signature-m1-3.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-4/rendered-after/02-evangelion-key-signature-m1-3.png",
+    "beforeRenderer": {
+      "keyMarks": [],
+      "notes": []
+    },
+    "afterRenderer": {
+      "keyMarks": [
+        {
+          "staff": "treble",
+          "type": "flat",
+          "column": 0,
+          "y": 60,
+          "cancellation": false
+        },
+        {
+          "staff": "treble",
+          "type": "flat",
+          "column": 1,
+          "y": 42,
+          "cancellation": false
+        },
+        {
+          "staff": "treble",
+          "type": "flat",
+          "column": 2,
+          "y": 66,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "flat",
+          "column": 0,
+          "y": 192,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "flat",
+          "column": 1,
+          "y": 174,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "flat",
+          "column": 2,
+          "y": 198,
+          "cancellation": false
+        }
+      ],
+      "notes": []
+    }
+  }
+}

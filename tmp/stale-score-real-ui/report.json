@@ -1,0 +1,34 @@
+{
+  "report": {
+    "A": {
+      "scoreId": "score-ff3e1af4-2d55-4f89-b76d-f99bce45c67a",
+      "pdfHash": "eb6a162e",
+      "musicXmlHash": "38abde21",
+      "duration": 16,
+      "events": 32,
+      "firstMidi": 40,
+      "measureCount": 8
+    },
+    "B": {
+      "scoreId": "score-6b2f0185-875d-4838-9d81-4fe9b60ceb9d",
+      "pdfHash": "086cf386",
+      "musicXmlHash": "84956b1b",
+      "duration": 16,
+      "events": 32,
+      "firstMidi": 40,
+      "measureCount": 8
+    },
+    "reload": {
+      "scoreId": "score-6b2f0185-875d-4838-9d81-4fe9b60ceb9d",
+      "musicXmlHash": "84956b1b"
+    },
+    "instrumentSwitch": {
+      "before": "score-6b2f0185-875d-4838-9d81-4fe9b60ceb9d",
+      "afterGuitar": "score-6b2f0185-875d-4838-9d81-4fe9b60ceb9d",
+      "afterPiano": "score-6b2f0185-875d-4838-9d81-4fe9b60ceb9d",
+      "guitarXml": "84956b1b",
+      "pianoXml": "84956b1b"
+    }
+  },
+  "failures": []
+}

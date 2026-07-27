@@ -1,0 +1,36 @@
+{
+  "truth": {
+    "staccato": 0,
+    "accent": 48,
+    "tenuto": 0,
+    "marcato": 0,
+    "fermata": 0
+  },
+  "gen": {
+    "staccato": 0,
+    "accent": 0,
+    "tenuto": 0,
+    "marcato": 0,
+    "fermata": 0
+  },
+  "art": {
+    "numerator": 0,
+    "denominator": 16,
+    "truePositives": 0,
+    "falsePositives": 0,
+    "falseNegatives": 16,
+    "ignored": 0,
+    "unsupported": 0,
+    "presentInTruth": 16,
+    "compared": 16,
+    "coverage": 1,
+    "coveragePercent": "100%",
+    "score": 0,
+    "percent": "0%",
+    "reliable": true,
+    "displayPercent": "0%"
+  },
+  "byCode": {
+    "missing-accent": 32
+  }
+}

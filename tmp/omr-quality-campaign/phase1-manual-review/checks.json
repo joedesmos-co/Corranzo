@@ -1,0 +1,257 @@
+[
+  {
+    "id": "carol-of-the-bells",
+    "label": "Carol of the Bells",
+    "beamTagCount": 230,
+    "focusGroups": [
+      {
+        "m": 14,
+        "groups": [
+          {
+            "members": [
+              "G5/eighth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          },
+          {
+            "members": [
+              "F3/eighth",
+              "A5/eighth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          }
+        ],
+        "hooks": 0,
+        "beamed": 4
+      },
+      {
+        "m": 19,
+        "groups": [
+          {
+            "members": [
+              "G5/sixteenth",
+              "G5/sixteenth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          },
+          {
+            "members": [
+              "A5/eighth",
+              "A5/eighth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          }
+        ],
+        "hooks": 0,
+        "beamed": 4
+      },
+      {
+        "m": 26,
+        "groups": [
+          {
+            "members": [
+              "E5/eighth",
+              "F5/eighth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          }
+        ],
+        "hooks": 0,
+        "beamed": 2
+      }
+    ],
+    "quarterToEighthCount": 3,
+    "quarterToEighth": [
+      {
+        "measure": 14,
+        "midi": 77,
+        "from": 1,
+        "to": 0.5
+      },
+      {
+        "measure": 14,
+        "midi": 81,
+        "from": 1,
+        "to": 0.5
+      },
+      {
+        "measure": 26,
+        "midi": 77,
+        "from": 1,
+        "to": 0.5
+      }
+    ],
+    "durationChangeCount": 13,
+    "tupletPresent": false,
+    "playbackUnchanged": false,
+    "noteCountCandidate": 680,
+    "noteCountBaseline": 680
+  },
+  {
+    "id": "evangelion",
+    "label": "Evangelion",
+    "beamTagCount": 41,
+    "focusGroups": [
+      {
+        "m": 1,
+        "groups": [
+          {
+            "members": [
+              "F5/eighth",
+              "E5/eighth",
+              "F5/eighth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          }
+        ],
+        "hooks": 0,
+        "beamed": 3
+      },
+      {
+        "m": 3,
+        "groups": [
+          {
+            "members": [
+              "C6/eighth",
+              "F5/eighth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          }
+        ],
+        "hooks": 0,
+        "beamed": 2
+      }
+    ],
+    "quarterToEighthCount": 0,
+    "quarterToEighth": [],
+    "durationChangeCount": 6,
+    "tupletPresent": false,
+    "playbackUnchanged": false,
+    "noteCountCandidate": 252,
+    "noteCountBaseline": 252
+  },
+  {
+    "id": "fantaisie-impromptu",
+    "label": "Fantaisie-Impromptu",
+    "beamTagCount": 589,
+    "focusGroups": [
+      {
+        "m": 4,
+        "groups": [
+          {
+            "members": [
+              "C4/sixteenth",
+              "E4/sixteenth",
+              "C4/sixteenth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          },
+          {
+            "members": [
+              "C3/sixteenth",
+              "G3/sixteenth"
+            ],
+            "vals": [
+              "begin",
+              "begin"
+            ]
+          },
+          {
+            "members": [
+              "C4/sixteenth",
+              "E4/eighth",
+              "C4/sixteenth"
+            ],
+            "vals": [
+              "begin"
+            ]
+          }
+        ],
+        "hooks": 0,
+        "beamed": 8
+      }
+    ],
+    "quarterToEighthCount": 1,
+    "quarterToEighth": [
+      {
+        "measure": 32,
+        "midi": 76,
+        "from": 1,
+        "to": 0.5
+      }
+    ],
+    "durationChangeCount": 10,
+    "tupletPresent": false,
+    "playbackUnchanged": false,
+    "noteCountCandidate": 1209,
+    "noteCountBaseline": 1209
+  },
+  {
+    "id": "guitar-standard-chords-vector",
+    "label": "Guitar standard chords",
+    "beamTagCount": 3,
+    "focusGroups": [
+      {
+        "m": 1,
+        "groups": [],
+        "hooks": 0,
+        "beamed": 0
+      }
+    ],
+    "quarterToEighthCount": 0,
+    "quarterToEighth": [],
+    "durationChangeCount": 0,
+    "tupletPresent": false,
+    "playbackUnchanged": "n/a-no-baseline",
+    "noteCountCandidate": 86,
+    "noteCountBaseline": null
+  },
+  {
+    "id": "piano-articulation-scan",
+    "label": "piano-articulation-scan (raster control)",
+    "beamTagCount": 0,
+    "focusGroups": [
+      {
+        "m": 1,
+        "groups": [],
+        "hooks": 0,
+        "beamed": 0
+      },
+      {
+        "m": 2,
+        "groups": [],
+        "hooks": 0,
+        "beamed": 0
+      },
+      {
+        "m": 3,
+        "groups": [],
+        "hooks": 0,
+        "beamed": 0
+      }
+    ],
+    "quarterToEighthCount": 0,
+    "quarterToEighth": [],
+    "durationChangeCount": 0,
+    "tupletPresent": false,
+    "playbackUnchanged": true,
+    "noteCountCandidate": 111,
+    "noteCountBaseline": 111
+  }
+]

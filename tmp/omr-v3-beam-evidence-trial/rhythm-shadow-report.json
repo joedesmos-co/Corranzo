@@ -1,0 +1,2170 @@
+{
+  "generatedAt": "2026-07-17T04:21:15.510Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "promoted": false,
+  "engine": "v2-rhythm-shadow-prototype",
+  "fixtures": [
+    {
+      "fixtureId": "piano-rhythm-tuplets-vector",
+      "label": "CC0 Rhythm and Tuplet Study",
+      "engine": "v2-rhythm-shadow-prototype",
+      "constraintVersion": "phase-2c",
+      "promoted": false,
+      "solverDiagnostics": {
+        "measureCount": 8,
+        "candidateMeasures": 5,
+        "changedMeasures": 1,
+        "rejectedMeasures": 7,
+        "rejectReasons": {
+          "constraints-failed": 4,
+          "not-in-family": 3
+        },
+        "variantCounts": {
+          "bass-minus-2": 1
+        },
+        "changedMeasureNumbers": [
+          8
+        ],
+        "rejectedMeasureNumbers": [
+          1,
+          2,
+          3,
+          7
+        ],
+        "changedMeasureLog": [
+          {
+            "measureNumber": 8,
+            "variantId": "bass-minus-2",
+            "variantLabel": "-0.5q bass",
+            "softScoreDelta": 0.05
+          }
+        ],
+        "acceptedCandidateMeasures": [
+          {
+            "measureNumber": 8,
+            "variantId": "bass-minus-2",
+            "variantLabel": "-0.5q bass",
+            "softScoreDelta": 0.05,
+            "familyReasons": [
+              "bass-late-sixteenth-phase"
+            ],
+            "coalescedCount": 0
+          }
+        ],
+        "rejectedCandidateMeasures": [
+          {
+            "measureNumber": 1,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 2,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 3,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 7,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          }
+        ],
+        "coalescedChordCount": 0,
+        "coalescedChordLog": [],
+        "constraintVersion": "phase-2c"
+      },
+      "structurallyAppliedCount": 1,
+      "changedMeasures": [],
+      "acceptedCandidateMeasures": [],
+      "rejectedCandidateMeasures": [
+        {
+          "measureNumber": 1,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 2,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 8,
+          "rejectReason": "chord-regression",
+          "bestVariantId": "bass-minus-2",
+          "familyReasons": [],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "chord-regression+pitch-regression+duration-regression",
+              "violations": [
+                "chord-regression",
+                "pitch-regression",
+                "duration-regression"
+              ],
+              "coalescedCount": 0
+            }
+          ],
+          "truthGateDelta": {
+            "wrongOnsetDelta": -2,
+            "wrongDurationDelta": 2,
+            "chordMismatchDelta": 2,
+            "wrongPitchDelta": 2,
+            "generatedNoteCountDelta": 0
+          }
+        }
+      ],
+      "rejectedMeasures": [
+        {
+          "measureNumber": 1,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 2,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        }
+      ],
+      "rejectedByTruth": [
+        {
+          "measureNumber": 8,
+          "variantId": "bass-minus-2",
+          "variantLabel": "-0.5q bass",
+          "coalescedCount": 0,
+          "rejections": [
+            "chord-regression",
+            "pitch-regression",
+            "duration-regression"
+          ],
+          "delta": {
+            "wrongOnsetDelta": -2,
+            "wrongDurationDelta": 2,
+            "chordMismatchDelta": 2,
+            "wrongPitchDelta": 2,
+            "generatedNoteCountDelta": 0
+          }
+        }
+      ],
+      "coalescedChords": [],
+      "coalescedChordCount": 0,
+      "hotspotMeasures": [],
+      "runtimeXmlBytes": 9172,
+      "shadowXmlBytes": 9172,
+      "identicalToRuntime": true,
+      "scoreGraphSource": "passed",
+      "status": "shadow-no-qualifying-measures",
+      "regressionReason": "No measures passed Phase 2C preservation + truth gates — shadow identical to runtime.",
+      "runtime": {
+        "wrongOnset": 21,
+        "wrongDuration": 7,
+        "chordMismatch": 16,
+        "wrongPitch": 30,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0.4127,
+        "durationAccuracy": 0.7778,
+        "onsetAccuracy": 0.5556,
+        "chordGroupingAccuracy": 0.7746,
+        "noteDetectionF1": 0.8889
+      },
+      "shadow": {
+        "wrongOnset": 21,
+        "wrongDuration": 7,
+        "chordMismatch": 16,
+        "wrongPitch": 30,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0.4127,
+        "durationAccuracy": 0.7778,
+        "onsetAccuracy": 0.5556,
+        "chordGroupingAccuracy": 0.7746,
+        "noteDetectionF1": 0.8889
+      },
+      "delta": {
+        "wrongOnset": 0,
+        "wrongDuration": 0,
+        "chordMismatch": 0,
+        "wrongPitch": 0,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0
+      },
+      "perMeasureDelta": [
+        {
+          "measureNumber": 1,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 2,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 3,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 4,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 5,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 6,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 7,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 8,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        }
+      ],
+      "hotspotDelta": [],
+      "runtimeAttribution": {
+        "buckets": {
+          "onset-phase-shift": 19,
+          "voice-serialization-shift": 11,
+          "onset-coupled-duration": 2,
+          "chord-grouping-symptom": 16,
+          "pitch-grouping-symptom": 25,
+          "balanced-missing-extra-serialization": 14
+        },
+        "ranked": [
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 25
+          },
+          {
+            "bucket": "onset-phase-shift",
+            "count": 19
+          },
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 16
+          },
+          {
+            "bucket": "balanced-missing-extra-serialization",
+            "count": 14
+          },
+          {
+            "bucket": "voice-serialization-shift",
+            "count": 11
+          },
+          {
+            "bucket": "onset-coupled-duration",
+            "count": 2
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "pitch-grouping-symptom",
+          "count": 25
+        },
+        "supporting": {
+          "totalWrongOnsets": 21,
+          "chordMismatchTotal": 16,
+          "chordCoupledShare": 1,
+          "missingCount": 7,
+          "extraCount": 7,
+          "balancedMismatch": true,
+          "onsetStrictIndependent": 7,
+          "voicePhasePrimaryClass": "serialization-voice-shift"
+        }
+      },
+      "shadowAttribution": {
+        "buckets": {
+          "onset-phase-shift": 19,
+          "voice-serialization-shift": 11,
+          "onset-coupled-duration": 2,
+          "chord-grouping-symptom": 16,
+          "pitch-grouping-symptom": 25,
+          "balanced-missing-extra-serialization": 14
+        },
+        "ranked": [
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 25
+          },
+          {
+            "bucket": "onset-phase-shift",
+            "count": 19
+          },
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 16
+          },
+          {
+            "bucket": "balanced-missing-extra-serialization",
+            "count": 14
+          },
+          {
+            "bucket": "voice-serialization-shift",
+            "count": 11
+          },
+          {
+            "bucket": "onset-coupled-duration",
+            "count": 2
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "pitch-grouping-symptom",
+          "count": 25
+        },
+        "supporting": {
+          "totalWrongOnsets": 21,
+          "chordMismatchTotal": 16,
+          "chordCoupledShare": 1,
+          "missingCount": 7,
+          "extraCount": 7,
+          "balancedMismatch": true,
+          "onsetStrictIndependent": 7,
+          "voicePhasePrimaryClass": "serialization-voice-shift"
+        }
+      }
+    },
+    {
+      "fixtureId": "piano-dense-advanced-vector",
+      "label": "CC0 Dense Advanced Texture Study",
+      "engine": "v2-rhythm-shadow-prototype",
+      "constraintVersion": "phase-2c",
+      "promoted": false,
+      "solverDiagnostics": {
+        "measureCount": 19,
+        "candidateMeasures": 14,
+        "changedMeasures": 0,
+        "rejectedMeasures": 19,
+        "rejectReasons": {
+          "not-in-family": 5,
+          "constraints-failed": 13,
+          "no-improvement": 1
+        },
+        "variantCounts": {},
+        "changedMeasureNumbers": [],
+        "rejectedMeasureNumbers": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          9,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "changedMeasureLog": [],
+        "acceptedCandidateMeasures": [],
+        "rejectedCandidateMeasures": [
+          {
+            "measureNumber": 2,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 3,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 4,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split",
+                  "onset-group-regression"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split",
+                  "onset-group-regression"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 5,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split",
+                  "onset-group-regression"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split",
+                  "onset-group-regression"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 6,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 9,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 12,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 13,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split",
+                  "onset-group-regression"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 14,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split",
+                  "onset-group-regression"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 15,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split",
+                  "onset-group-regression"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split",
+                  "onset-group-regression"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 16,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 17,
+            "rejectReason": "no-improvement",
+            "bestVariantId": "identity",
+            "familyReasons": [
+              "grand-staff",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 18,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 19,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          }
+        ],
+        "coalescedChordCount": 0,
+        "coalescedChordLog": [],
+        "constraintVersion": "phase-2c"
+      },
+      "structurallyAppliedCount": 0,
+      "changedMeasures": [],
+      "acceptedCandidateMeasures": [],
+      "rejectedCandidateMeasures": [
+        {
+          "measureNumber": 2,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 6,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 9,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 12,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 13,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 14,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 15,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 16,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 17,
+          "rejectReason": "no-improvement",
+          "bestVariantId": "identity",
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 18,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 19,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "rejectedMeasures": [
+        {
+          "measureNumber": 2,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 6,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 9,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 12,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 13,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 14,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 15,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "bass-minus-3",
+              "variantLabel": "-0.75q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "onset-group-regression"
+              ],
+              "coalescedCount": 0
+            },
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 16,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 17,
+          "rejectReason": "no-improvement",
+          "bestVariantId": "identity",
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 18,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 19,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "rejectedByTruth": [],
+      "coalescedChords": [],
+      "coalescedChordCount": 0,
+      "hotspotMeasures": [],
+      "runtimeXmlBytes": 36135,
+      "shadowXmlBytes": 36135,
+      "identicalToRuntime": true,
+      "scoreGraphSource": "passed",
+      "status": "shadow-no-qualifying-measures",
+      "regressionReason": "No measures passed Phase 2C preservation + truth gates — shadow identical to runtime.",
+      "runtime": {
+        "wrongOnset": 32,
+        "wrongDuration": 16,
+        "chordMismatch": 290,
+        "wrongPitch": 81,
+        "noteCountDiff": -2,
+        "measureCountDiff": 11,
+        "pitchAccuracy": 0.1477,
+        "durationAccuracy": 0.3939,
+        "onsetAccuracy": 0.3333,
+        "chordGroupingAccuracy": 0.2892,
+        "noteDetectionF1": 0.4563
+      },
+      "shadow": {
+        "wrongOnset": 32,
+        "wrongDuration": 16,
+        "chordMismatch": 290,
+        "wrongPitch": 81,
+        "noteCountDiff": -2,
+        "measureCountDiff": 11,
+        "pitchAccuracy": 0.1477,
+        "durationAccuracy": 0.3939,
+        "onsetAccuracy": 0.3333,
+        "chordGroupingAccuracy": 0.2892,
+        "noteDetectionF1": 0.4563
+      },
+      "delta": {
+        "wrongOnset": 0,
+        "wrongDuration": 0,
+        "chordMismatch": 0,
+        "wrongPitch": 0,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0
+      },
+      "perMeasureDelta": [
+        {
+          "measureNumber": 1,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 2,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 3,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 4,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 5,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 6,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 7,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 8,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 9,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 10,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 11,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 12,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 13,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 14,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 15,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 16,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 17,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 18,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 19,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        }
+      ],
+      "hotspotDelta": [],
+      "runtimeAttribution": {
+        "buckets": {
+          "onset-phase-shift": 32,
+          "voice-serialization-shift": 8,
+          "onset-coupled-duration": 4,
+          "chord-grouping-symptom": 106,
+          "pitch-grouping-symptom": 55,
+          "balanced-missing-extra-serialization": 0
+        },
+        "ranked": [
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 106
+          },
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 55
+          },
+          {
+            "bucket": "onset-phase-shift",
+            "count": 32
+          },
+          {
+            "bucket": "voice-serialization-shift",
+            "count": 8
+          },
+          {
+            "bucket": "onset-coupled-duration",
+            "count": 4
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "chord-grouping-symptom",
+          "count": 106
+        },
+        "supporting": {
+          "totalWrongOnsets": 32,
+          "chordMismatchTotal": 290,
+          "chordCoupledShare": 1,
+          "missingCount": 144,
+          "extraCount": 142,
+          "balancedMismatch": false,
+          "onsetStrictIndependent": 7,
+          "voicePhasePrimaryClass": "cross-voice-matcher"
+        }
+      },
+      "shadowAttribution": {
+        "buckets": {
+          "onset-phase-shift": 32,
+          "voice-serialization-shift": 8,
+          "onset-coupled-duration": 4,
+          "chord-grouping-symptom": 106,
+          "pitch-grouping-symptom": 55,
+          "balanced-missing-extra-serialization": 0
+        },
+        "ranked": [
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 106
+          },
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 55
+          },
+          {
+            "bucket": "onset-phase-shift",
+            "count": 32
+          },
+          {
+            "bucket": "voice-serialization-shift",
+            "count": 8
+          },
+          {
+            "bucket": "onset-coupled-duration",
+            "count": 4
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "chord-grouping-symptom",
+          "count": 106
+        },
+        "supporting": {
+          "totalWrongOnsets": 32,
+          "chordMismatchTotal": 290,
+          "chordCoupledShare": 1,
+          "missingCount": 144,
+          "extraCount": 142,
+          "balancedMismatch": false,
+          "onsetStrictIndependent": 7,
+          "voicePhasePrimaryClass": "cross-voice-matcher"
+        }
+      }
+    }
+  ]
+}

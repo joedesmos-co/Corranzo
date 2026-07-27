@@ -1,0 +1,35 @@
+{
+  "dedicatedRealScoreCases": {
+    "total": 45,
+    "correctBefore": 8,
+    "correctAfter": 45,
+    "rendererOnlyFailuresAfter": 0,
+    "notationPlaybackDisagreementsAfter": 0,
+    "noiseFalsePositivesAfter": 0
+  },
+  "frozenSemanticCorpusDeltas": {
+    "overall": 0,
+    "pitch": 0,
+    "rhythm": 0,
+    "sustain": 0,
+    "articulation": 0,
+    "measureStructure": 0,
+    "interpretation": 0,
+    "playback": 0,
+    "regressions": [],
+    "gateFailures": []
+  },
+  "focusedTests": {
+    "passed": 126,
+    "failed": 0
+  },
+  "fullDirtyWorktreeTests": {
+    "passed": 2619,
+    "skipped": 5,
+    "failed": 9,
+    "failuresMatchSprint4PreExistingSet": true
+  },
+  "productionBuild": "passed",
+  "audioRendererChanged": false,
+  "playbackExpressionPolicyChanged": false
+}

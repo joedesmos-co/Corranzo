@@ -16,7 +16,8 @@ import {
   analyzeChordSheetScore,
   buildChordSheetNoteEvents,
 } from './chordSymbolSheet.js'
-import { DEFAULT_MUSICXML_VELOCITY, dynamicsFromDirection } from './dynamicsMap.js'
+import { DEFAULT_MUSICXML_VELOCITY, dynamicsFromDirection, wedgeFromDirection, staffFromDirection } from './dynamicsMap.js'
+import { WEDGE_ENDPOINT_FALLBACK_DELTA } from '../playback/playbackExpressionPolicy.js'
 
 const DEFAULT_BPM = 120
 const DEFAULT_DIVISIONS = 1
@@ -54,6 +55,44 @@ function pitchNodeToMidi(pitchNode) {
   }
   const alter = numberOf(childText(pitchNode, 'alter'), 0)
   return Math.round((octave + 1) * 12 + STEP_TO_SEMITONE[step] + alter)
+}
+
+function readWrittenPitch(pitchNode) {
+  if (!pitchNode) {
+    return null
+  }
+  const step = childText(pitchNode, 'step')
+  const octave = numberOf(childText(pitchNode, 'octave'), NaN)
+  if (!step || !Number.isFinite(octave) || !(step in STEP_TO_SEMITONE)) {
+    return null
+  }
+  const alterNode = findChild(pitchNode, 'alter')
+  const alter = alterNode ? numberOf(textOf(alterNode), 0) : null
+  return {
+    step: String(step).toUpperCase(),
+    alter: Number.isFinite(alter) ? alter : null,
+    octave,
+  }
+}
+
+function readPrintedAccidental(noteNode) {
+  const accidental = findChild(noteNode, 'accidental')
+  if (!accidental) {
+    return null
+  }
+  const type = String(textOf(accidental) ?? '').trim().toLowerCase()
+  if (!type) {
+    return null
+  }
+  return {
+    type: type === 'flat-flat' ? 'double-flat' : type,
+    printed: true,
+    cautionary: attr(accidental, 'cautionary') === 'yes',
+    editorial: attr(accidental, 'editorial') === 'yes',
+    parentheses: attr(accidental, 'parentheses') === 'yes',
+    bracket: attr(accidental, 'bracket') === 'yes',
+    smufl: attr(accidental, 'smufl') ?? null,
+  }
 }
 
 function midiToLabel(midi) {
@@ -221,6 +260,7 @@ function readTieFlags(noteNode) {
   const tieNodes = findChildren(noteNode, 'tie')
   let tieStart = tieNodes.some((tie) => attr(tie, 'type') === 'start')
   let tieStop = tieNodes.some((tie) => attr(tie, 'type') === 'stop')
+  let tiePlacement = null
   const notations = findChild(noteNode, 'notations')
   if (notations) {
     for (const tied of findChildren(notations, 'tied')) {
@@ -230,9 +270,10 @@ function readTieFlags(noteNode) {
       if (attr(tied, 'type') === 'stop') {
         tieStop = true
       }
+      tiePlacement ??= attr(tied, 'placement') ?? null
     }
   }
-  return { tieStart, tieStop }
+  return { tieStart, tieStop, tiePlacement }
 }
 
 function readHarmonySymbol(harmonyNode) {
@@ -266,20 +307,139 @@ function readHarmonySymbol(harmonyNode) {
   return symbol
 }
 
+function emptyArticulations() {
+  return {
+    staccato: false,
+    accent: false,
+    tenuto: false,
+    marcato: false,
+    fermata: false,
+    articulationPlacements: {},
+  }
+}
+
+function notationPlacement(node, { orientation = false } = {}) {
+  if (!node) {
+    return null
+  }
+  const placement = String(attr(node, 'placement') ?? '').toLowerCase()
+  if (placement === 'above' || placement === 'below') {
+    return placement
+  }
+  if (orientation) {
+    const type = String(attr(node, 'type') ?? '').toLowerCase()
+    if (type === 'inverted' || type === 'down') {
+      return 'below'
+    }
+    if (type === 'upright' || type === 'up') {
+      return 'above'
+    }
+  }
+  return null
+}
+
 function readArticulations(noteNode) {
   const notations = findChild(noteNode, 'notations')
   if (!notations) {
-    return { staccato: false, accent: false, tenuto: false }
+    return emptyArticulations()
   }
   const articulations = findChild(notations, 'articulations')
+  const fermataNode = findChild(notations, 'fermata')
+  const fermata = fermataNode != null
   if (!articulations) {
-    return { staccato: false, accent: false, tenuto: false }
+    return {
+      ...emptyArticulations(),
+      fermata,
+      articulationPlacements: fermata
+        ? { fermata: notationPlacement(fermataNode, { orientation: true }) }
+        : {},
+    }
+  }
+  const staccatoNode = findChild(articulations, 'staccato')
+  const accentNode = findChild(articulations, 'accent')
+  const tenutoNode = findChild(articulations, 'tenuto')
+  const marcatoNode =
+    findChild(articulations, 'strong-accent') ??
+    findChild(articulations, 'marcato')
+  const articulationPlacements = {}
+  for (const [type, node, orientation] of [
+    ['staccato', staccatoNode, false],
+    ['accent', accentNode, false],
+    ['tenuto', tenutoNode, false],
+    ['marcato', marcatoNode, true],
+    ['fermata', fermataNode, true],
+  ]) {
+    const placement = notationPlacement(node, { orientation })
+    if (placement) {
+      articulationPlacements[type] = placement
+    }
   }
   return {
-    staccato: findChild(articulations, 'staccato') != null,
-    accent: findChild(articulations, 'accent') != null,
-    tenuto: findChild(articulations, 'tenuto') != null,
+    staccato: staccatoNode != null,
+    accent: accentNode != null,
+    tenuto: tenutoNode != null,
+    marcato: marcatoNode != null,
+    fermata,
+    articulationPlacements,
   }
+}
+
+function resolveNoteVelocity(activeVelocity, velocityByStaff, staff) {
+  if (staff != null && velocityByStaff.has(staff)) {
+    return velocityByStaff.get(staff)
+  }
+  return activeVelocity
+}
+
+/**
+ * Apply crescendo/diminuendo spans onto note velocities (performed property only).
+ */
+export function applyWedgeVelocitiesToNotes(notes, wedgeSpans = []) {
+  if (!wedgeSpans.length) {
+    return notes
+  }
+  for (const note of notes) {
+    if (note.isRest || note.midi == null) {
+      continue
+    }
+    for (const span of wedgeSpans) {
+      if (span.partId && note.partId && span.partId !== note.partId) {
+        continue
+      }
+      if (span.staff != null && note.staff != null && span.staff !== note.staff) {
+        continue
+      }
+      if (note.quarterTime < span.startQuarter - 1e-9 || note.quarterTime > span.endQuarter + 1e-9) {
+        continue
+      }
+      const spanLen = Math.max(1e-9, span.endQuarter - span.startQuarter)
+      const t = Math.min(1, Math.max(0, (note.quarterTime - span.startQuarter) / spanLen))
+      note.velocity = span.startVelocity + (span.endVelocity - span.startVelocity) * t
+      note.activeDynamic = note.activeDynamic ?? 'wedge'
+      note.wedgeType = span.type
+    }
+  }
+  return notes
+}
+
+function clampVelocity(value) {
+  if (!Number.isFinite(value)) {
+    return DEFAULT_MUSICXML_VELOCITY
+  }
+  return Math.min(1, Math.max(0.05, value))
+}
+
+function readTimeModification(noteNode) {
+  const node = findChild(noteNode, 'time-modification')
+  if (!node) {
+    return null
+  }
+  const actualNotes = numberOf(childText(node, 'actual-notes'), NaN)
+  const normalNotes = numberOf(childText(node, 'normal-notes'), NaN)
+  if (!Number.isFinite(actualNotes) || !Number.isFinite(normalNotes)) {
+    return null
+  }
+  return { actualNotes, normalNotes }
 }
 
 function readSlurs(noteNode) {
@@ -429,6 +589,54 @@ function readStaffDetails(attributesNode, staffDetailsByStaff) {
   }
 }
 
+function readKeyDeclarations(
+  attributesNode,
+  activeKeySignatures,
+  {
+    keySignatureEvents = null,
+    isPrimary = false,
+    partId = null,
+    quarterTime = 0,
+    measureNumber = null,
+  } = {},
+) {
+  for (const keyNode of findChildren(attributesNode, 'key')) {
+    const fifths = numberOf(childText(keyNode, 'fifths'), NaN)
+    if (!Number.isFinite(fifths)) {
+      continue
+    }
+    const staffNumber = numberOf(attr(keyNode, 'number'), NaN)
+    const staff = Number.isFinite(staffNumber) && staffNumber > 0 ? staffNumber : null
+    const cancelNode = findChild(keyNode, 'cancel')
+    const cancelFifths = cancelNode ? numberOf(textOf(cancelNode), NaN) : null
+    const keySignature = {
+      fifths: Math.max(-7, Math.min(7, Math.round(fifths))),
+      mode: childText(keyNode, 'mode') ?? null,
+      cancelFifths: Number.isFinite(cancelFifths)
+        ? Math.max(-7, Math.min(7, Math.round(cancelFifths)))
+        : null,
+      staff,
+    }
+    activeKeySignatures.set(staff, keySignature)
+    if (isPrimary && Array.isArray(keySignatureEvents)) {
+      keySignatureEvents.push({
+        ...keySignature,
+        partId,
+        quarterTime,
+        measureNumber,
+      })
+    }
+  }
+}
+
+function activeKeySignatureForStaff(activeKeySignatures, staff) {
+  return (
+    activeKeySignatures.get(staff ?? null) ??
+    activeKeySignatures.get(null) ??
+    { fifths: 0, mode: null, cancelFifths: null, staff: staff ?? null }
+  )
+}
+
 /**
  * Mixed notation+TAB parts engrave every note twice (once per staff). Mark the
  * TAB-staff copies as mirrors — playback and checkpoints skip them — and copy
@@ -493,10 +701,12 @@ function walkPart({
   measureBoundaries,
   tempoEvents,
   timeSignatureEvents,
+  keySignatureEvents,
   notes,
   rawTimingEvents,
   harmonyEvents,
   partNotation = null,
+  wedgeSpans = null,
 }) {
   const measureNodes = findChildren(partNode, 'measure')
   let divisions = DEFAULT_DIVISIONS
@@ -505,6 +715,11 @@ function walkPart({
   const boundaries = []
 
   let measureStartQuarters = 0
+  // Sticky across measures until a later direction changes them.
+  let activeVelocity = DEFAULT_MUSICXML_VELOCITY
+  const velocityByStaff = new Map()
+  const openWedges = []
+  const activeKeySignatures = new Map()
 
   measureNodes.forEach((measureNode, index) => {
     const measureNumber = getMeasureNumberOrdered(measureNode, index)
@@ -522,7 +737,6 @@ function walkPart({
     let maxCursorDivisions = 0
     let measureBeats = beats
     let measureBeatType = beatType
-    let activeVelocity = DEFAULT_MUSICXML_VELOCITY
 
     for (const child of childNodes(measureNode)) {
       switch (child.tag) {
@@ -535,6 +749,13 @@ function walkPart({
             readClefDeclarations(child, partNotation.clefs)
             readStaffDetails(child, partNotation.staffDetails)
           }
+          readKeyDeclarations(child, activeKeySignatures, {
+            keySignatureEvents,
+            isPrimary,
+            partId,
+            quarterTime: measureStartQuarters + cursorDivisions / divisions,
+            measureNumber,
+          })
           const timeNode = findChild(child, 'time')
           if (timeNode) {
             const newBeats = numberOf(childText(timeNode, 'beats'), NaN)
@@ -560,21 +781,67 @@ function walkPart({
         }
 
         case 'direction': {
-          const dynamicsVelocity = dynamicsFromDirection(child, {
-            findChildren,
-            childNodes,
-            childText,
-          })
+          const helpers = { findChildren, childNodes, childText, attr }
+          const directionStaff = staffFromDirection(child, helpers)
+          const dynamicsVelocity = dynamicsFromDirection(child, helpers)
+          const quarterTime = measureStartQuarters + cursorDivisions / divisions
           if (dynamicsVelocity != null) {
-            activeVelocity = dynamicsVelocity
+            if (directionStaff != null) {
+              velocityByStaff.set(directionStaff, dynamicsVelocity)
+            } else {
+              activeVelocity = dynamicsVelocity
+              velocityByStaff.clear()
+            }
           }
+
+          const wedge = wedgeFromDirection(child, helpers)
+          if (wedge && Array.isArray(wedgeSpans)) {
+            if (wedge.stage === 'start' && wedge.type) {
+              const startVelocity = resolveNoteVelocity(
+                activeVelocity,
+                velocityByStaff,
+                directionStaff,
+              )
+              openWedges.push({
+                type: wedge.type,
+                startQuarter: quarterTime,
+                startVelocity,
+                staff: directionStaff,
+                partId,
+                velocityAtOpen: startVelocity,
+              })
+            } else if (wedge.stage === 'stop' && openWedges.length) {
+              const open = openWedges.pop()
+              let endVelocity = resolveNoteVelocity(
+                activeVelocity,
+                velocityByStaff,
+                open.staff ?? directionStaff,
+              )
+              if (Math.abs(endVelocity - open.velocityAtOpen) < 1e-6) {
+                endVelocity =
+                  open.type === 'crescendo'
+                    ? clampVelocity(open.startVelocity + WEDGE_ENDPOINT_FALLBACK_DELTA)
+                    : clampVelocity(open.startVelocity - WEDGE_ENDPOINT_FALLBACK_DELTA)
+              }
+              wedgeSpans.push({
+                type: open.type,
+                startQuarter: open.startQuarter,
+                endQuarter: quarterTime,
+                startVelocity: open.startVelocity,
+                endVelocity,
+                staff: open.staff,
+                partId: open.partId,
+              })
+            }
+          }
+
           if (!isPrimary) {
             break
           }
           const bpm = tempoFromDirection(child)
           if (bpm != null && bpm > 0) {
             tempoEvents.push({
-              quarterTime: measureStartQuarters + cursorDivisions / divisions,
+              quarterTime,
               bpm,
               measureNumber,
             })
@@ -637,16 +904,44 @@ function walkPart({
 
           if (!isGrace) {
             const layout = readNoteLayoutOrdered(child)
-            const midi = isRest ? null : pitchNodeToMidi(findChild(child, 'pitch'))
-            const { tieStart, tieStop } = readTieFlags(child)
-            const { staccato, accent, tenuto } = readArticulations(child)
+            const pitchNode = isRest ? null : findChild(child, 'pitch')
+            const midi = isRest ? null : pitchNodeToMidi(pitchNode)
+            const writtenPitch = isRest ? null : readWrittenPitch(pitchNode)
+            const accidental = isRest ? null : readPrintedAccidental(child)
+            const keySignature = isRest
+              ? null
+              : activeKeySignatureForStaff(activeKeySignatures, layout.staff)
+            const { tieStart, tieStop, tiePlacement } = readTieFlags(child)
+            const {
+              staccato,
+              accent,
+              tenuto,
+              marcato,
+              fermata,
+              articulationPlacements,
+            } = readArticulations(child)
             const slurs = readSlurs(child)
             const guitarTechniques = isRest ? [] : readGuitarTechniques(child)
             const technicalPosition = isRest ? null : readTechnicalPosition(child)
+            const timeModification = readTimeModification(child)
+            const dots = findChildren(child, 'dot').length
+            const noteType = childText(child, 'type') ?? null
+            const rawStemDirection = String(childText(child, 'stem') ?? '').toLowerCase()
+            const stemDirection =
+              rawStemDirection === 'up' || rawStemDirection === 'down'
+                ? rawStemDirection
+                : null
+            const beams = findChildren(child, 'beam')
+              .map((beam) => ({
+                number: Math.max(1, Math.round(numberOf(attr(beam, 'number'), 1))),
+                value: String(textOf(beam) ?? '').trim().toLowerCase(),
+              }))
+              .filter((beam) => beam.value)
             notes.push({
               ...(technicalPosition ?? {}),
               ...(slurs.length ? { slurs } : {}),
               ...(guitarTechniques.length ? { guitarTechniques } : {}),
+              ...(timeModification ? { timeModification } : {}),
               id: `${partId}-m${measureNumber}-n${notes.length}`,
               partId,
               measureNumber,
@@ -655,16 +950,27 @@ function walkPart({
               durationDivisions: duration,
               midi,
               label: midiToLabel(midi),
+              writtenPitch,
+              accidental,
+              keySignature,
               isRest,
               isChord,
               isGrace,
               tieStart,
               tieStop,
+              tiePlacement,
               staccato,
               accent,
               tenuto,
+              marcato,
+              fermata,
+              articulationPlacements,
+              dots,
+              noteType,
+              stemDirection,
+              beams,
               voice: Number.isFinite(voice) && voice > 0 ? voice : 1,
-              velocity: activeVelocity,
+              velocity: resolveNoteVelocity(activeVelocity, velocityByStaff, layout.staff),
               ...layout,
             })
 
@@ -729,6 +1035,28 @@ function walkPart({
     }
   })
 
+  if (Array.isArray(wedgeSpans) && openWedges.length) {
+    const endQuarter = boundaries.length
+      ? boundaries[boundaries.length - 1].endQuarters
+      : measureStartQuarters
+    while (openWedges.length) {
+      const open = openWedges.pop()
+      const endVelocity =
+        open.type === 'crescendo'
+          ? clampVelocity(open.startVelocity + WEDGE_ENDPOINT_FALLBACK_DELTA)
+          : clampVelocity(open.startVelocity - WEDGE_ENDPOINT_FALLBACK_DELTA)
+      wedgeSpans.push({
+        type: open.type,
+        startQuarter: open.startQuarter,
+        endQuarter,
+        startVelocity: open.startVelocity,
+        endVelocity,
+        staff: open.staff,
+        partId: open.partId,
+      })
+    }
+  }
+
   return boundaries
 }
 
@@ -763,9 +1091,11 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
 
   const tempoEvents = []
   const timeSignatureEvents = []
+  const keySignatureEvents = []
   const notes = []
   const rawTimingEvents = []
   const harmonyEvents = []
+  const wedgeSpans = []
   const partNotationById = new Map()
 
   const notationForPart = (partId) => {
@@ -787,10 +1117,12 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     measureBoundaries: null,
     tempoEvents,
     timeSignatureEvents,
+    keySignatureEvents,
     notes,
     rawTimingEvents,
     harmonyEvents,
     partNotation: notationForPart(primaryId),
+    wedgeSpans,
   })
 
   partNodes.slice(1).forEach((partNode, index) => {
@@ -802,10 +1134,12 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       measureBoundaries,
       tempoEvents,
       timeSignatureEvents,
+      keySignatureEvents,
       notes,
       rawTimingEvents,
       harmonyEvents,
       partNotation: notationForPart(partId),
+      wedgeSpans,
     })
   })
 
@@ -813,6 +1147,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   // are derived. No-op for scores without a TAB staff.
   reconcileTabMirrorNotes(notes, partNotationById)
 
+  applyWedgeVelocitiesToNotes(notes, wedgeSpans)
   applyTieSustainToNotes(notes)
   rawTimingEvents.length = 0
   for (const note of notes) {
@@ -848,6 +1183,36 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
 
   const toSeconds = (quarterTime) => quartersToSeconds(quarterTime, tempoChanges)
 
+  const keySignatures = []
+  for (const event of keySignatureEvents.sort(
+    (left, right) => left.quarterTime - right.quarterTime,
+  )) {
+    const previous = keySignatures[keySignatures.length - 1]
+    const sameTime =
+      previous && Math.abs(previous.quarterTime - event.quarterTime) < 1e-9
+    const sameStaff = previous?.staff === event.staff
+    if (sameTime && sameStaff) {
+      keySignatures[keySignatures.length - 1] = {
+        ...event,
+        timeSeconds: toSeconds(event.quarterTime),
+      }
+      continue
+    }
+    if (
+      previous &&
+      previous.fifths === event.fifths &&
+      previous.mode === event.mode &&
+      previous.staff === event.staff &&
+      event.cancelFifths == null
+    ) {
+      continue
+    }
+    keySignatures.push({
+      ...event,
+      timeSeconds: toSeconds(event.quarterTime),
+    })
+  }
+
   // --- Time signatures ---
   const timeSignatures = [{ quarterTime: 0, beats: DEFAULT_BEATS, beatType: DEFAULT_BEAT_TYPE }]
   for (const event of timeSignatureEvents) {
@@ -869,6 +1234,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   // --- Measures and beats in seconds ---
   const measures = measureBoundaries.map((boundary) => ({
     number: boundary.number,
+    index: boundary.index,
     startQuarters: boundary.startQuarters,
     endQuarters: boundary.endQuarters,
     startTimeSeconds: toSeconds(boundary.startQuarters),
@@ -882,6 +1248,8 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     implicit: boundary.implicit,
     notatedLengthQuarters: boundary.notatedLengthQuarters,
     engravedWidth: boundary.engravedWidth,
+    // Repeat / volta markings for written-score evaluation (not playback expansion).
+    marking: boundary.marking ?? null,
   }))
 
   const beats = []
@@ -1015,9 +1383,11 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     performedMeasureTimeline,
     tempoChanges,
     timeSignatures,
+    keySignatures,
     notes,
     timingEvents,
     harmonyEvents,
+    wedgeSpans,
     chordSheet: chordSheetAnalysis.isChordSheet
       ? {
           isChordSheet: true,

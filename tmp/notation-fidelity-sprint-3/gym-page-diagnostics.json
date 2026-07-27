@@ -1,0 +1,3555 @@
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 1, legacyFontGlyphsApplied: undefined }
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  notes: 138,
+  systems: 5,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined
+}
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 2, legacyFontGlyphsApplied: undefined }
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  notes: 157,
+  systems: 5,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined
+}
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { page: 3, legacyFontGlyphsApplied: undefined }
+[omr-debug] processOmrPage:done:page-3 {
+  label: 'processOmrPage:done:page-3',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  notes: 174,
+  systems: 5,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined
+}
+[
+  {
+    "page": 1,
+    "diagnostics": {
+      "detectedTieCount": 5,
+      "appliedTieCount": 5,
+      "appliedTiePairs": [
+        {
+          "fromMeasure": 19,
+          "toMeasure": 20,
+          "midi": 64,
+          "clef": "treble",
+          "source": "pdf-vector-path",
+          "candidateIds": [
+            "pdf-path-p1-op475"
+          ],
+          "archDirection": "below"
+        },
+        {
+          "fromMeasure": 11,
+          "toMeasure": 12,
+          "midi": 66,
+          "clef": "treble",
+          "source": "pdf-vector-path",
+          "candidateIds": [
+            "pdf-path-p1-op511"
+          ],
+          "archDirection": "below"
+        },
+        {
+          "fromMeasure": 9,
+          "toMeasure": 10,
+          "midi": 66,
+          "clef": "treble",
+          "source": "pdf-vector-path",
+          "candidateIds": [
+            "pdf-path-p1-op565"
+          ],
+          "archDirection": "below"
+        },
+        {
+          "fromMeasure": 10,
+          "toMeasure": 11,
+          "midi": 66,
+          "clef": "treble",
+          "source": "pdf-vector-path-system-continuation",
+          "candidateIds": [
+            "pdf-path-p1-op547",
+            "pdf-path-p1-op529"
+          ],
+          "archDirection": "below"
+        },
+        {
+          "fromMeasure": 20,
+          "toMeasure": 21,
+          "midi": 64,
+          "clef": "treble",
+          "source": "pdf-vector-path-system-continuation",
+          "candidateIds": [
+            "pdf-path-p1-op457",
+            "pdf-path-p1-op493"
+          ],
+          "archDirection": "below"
+        }
+      ],
+      "appliedSlurCount": 2,
+      "appliedSlurPairs": [
+        {
+          "fromMeasure": 13,
+          "toMeasure": 19,
+          "fromMidi": 78,
+          "toMidi": 64,
+          "source": "pdf-vector-path-system-continuation",
+          "candidateIds": [
+            "pdf-path-p1-op349",
+            "pdf-path-p1-op385"
+          ],
+          "archDirection": "above"
+        },
+        {
+          "fromMeasure": 5,
+          "toMeasure": 9,
+          "fromMidi": 78,
+          "toMidi": 66,
+          "source": "pdf-vector-path-system-continuation",
+          "candidateIds": [
+            "pdf-path-p1-op403",
+            "pdf-path-p1-op421"
+          ],
+          "archDirection": "above"
+        }
+      ],
+      "uncertainSlurCount": 0,
+      "tieControlGlyphCount": 0,
+      "vectorCurveCandidateCount": 13,
+      "vectorCurveAppliedCount": 7,
+      "vectorCurveDiagnostics": [
+        {
+          "candidateId": "pdf-path-p1-op349",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 508.9710594852942,
+            "y": 634.5360257642216,
+            "tangent": {
+              "dx": 0.9154215084043056,
+              "dy": -0.4024965365699258
+            }
+          },
+          "end": {
+            "x": 952.822736875,
+            "y": 634.5360257642216,
+            "tangent": {
+              "dx": 0.9154215084043055,
+              "dy": 0.4024965365699264
+            }
+          },
+          "bounds": {
+            "x0": 508.9710594852942,
+            "x1": 952.822736875,
+            "y0": 605.2628230444129,
+            "y1": 634.5360257642216,
+            "width": 443.85167738970586,
+            "height": 29.273202719808637
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 13,
+              "systemIndex": 2,
+              "eventIndex": 3,
+              "noteIndex": 0,
+              "startDivision": 4,
+              "midi": 78,
+              "clef": "treble",
+              "cx": 508.9387697522689,
+              "cy": 642.0418613657957,
+              "score": 7.58,
+              "dx": 0.03,
+              "dy": 7.51,
+              "anchor": "notehead",
+              "anchorY": 642.0418613657957
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 13,
+            "systemIndex": 2,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 4,
+            "midi": 78,
+            "clef": "treble",
+            "cx": 508.9387697522689,
+            "cy": 642.0418613657957,
+            "score": 7.58,
+            "dx": 0.03,
+            "dy": 7.51,
+            "anchor": "notehead",
+            "anchorY": 642.0418613657957
+          },
+          "selectedEnd": {
+            "measureNumber": 19,
+            "systemIndex": 3,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 638.7227932816807,
+            "cy": 912.4367220665083,
+            "score": 7.58,
+            "dx": 0.03,
+            "dy": 7.5,
+            "anchor": "stem-tip",
+            "anchorY": 882.4367220665083
+          },
+          "classification": "slur-start-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p1-op367",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 309.3944075354517,
+            "y": 1124.5578364206522,
+            "tangent": {
+              "dx": 0.9395544693210991,
+              "dy": -0.34239947309940155
+            }
+          },
+          "end": {
+            "x": 949.4128104044119,
+            "y": 1098.1314326377035,
+            "tangent": {
+              "dx": 0.964583520150305,
+              "dy": 0.2637776196997125
+            }
+          },
+          "bounds": {
+            "x0": 309.3944075354517,
+            "x1": 949.4128104044119,
+            "y0": 1071.5331809102547,
+            "y1": 1124.5578364206522,
+            "width": 640.0184028689602,
+            "height": 53.02465551039745
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 22,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 69,
+              "clef": "treble",
+              "cx": 301.380216474958,
+              "cy": 1138.321988087886,
+              "score": 33,
+              "dx": 8.01,
+              "dy": 13.76,
+              "anchor": "notehead",
+              "anchorY": 1138.321988087886
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 22,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 69,
+            "clef": "treble",
+            "cx": 301.380216474958,
+            "cy": 1138.321988087886,
+            "score": 33,
+            "dx": 8.01,
+            "dy": 13.76,
+            "anchor": "notehead",
+            "anchorY": 1138.321988087886
+          },
+          "selectedEnd": null,
+          "classification": "outgoing-page-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p1-op385",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 121.858607082458,
+            "y": 874.9357906440797,
+            "tangent": {
+              "dx": 0.8799046416748981,
+              "dy": -0.475150314699432
+            }
+          },
+          "end": {
+            "x": 638.7551078702732,
+            "y": 874.9357906440797,
+            "tangent": {
+              "dx": 0.8799047468046561,
+              "dy": 0.47515012001538404
+            }
+          },
+          "bounds": {
+            "x0": 121.858607082458,
+            "x1": 638.7551078702732,
+            "y0": 833.0670191791949,
+            "y1": 874.9357906440797,
+            "width": 516.8965007878152,
+            "height": 41.868771464884844
+          },
+          "archDirection": "above",
+          "startCandidates": [],
+          "endCandidates": [
+            {
+              "measureNumber": 19,
+              "systemIndex": 3,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 64,
+              "clef": "treble",
+              "cx": 638.7227932816807,
+              "cy": 912.4367220665083,
+              "score": 7.58,
+              "dx": 0.03,
+              "dy": 7.5,
+              "anchor": "stem-tip",
+              "anchorY": 882.4367220665083
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 13,
+            "systemIndex": 2,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 4,
+            "midi": 78,
+            "clef": "treble",
+            "cx": 508.9387697522689,
+            "cy": 642.0418613657957,
+            "score": 7.58,
+            "dx": 0.03,
+            "dy": 7.51,
+            "anchor": "notehead",
+            "anchorY": 642.0418613657957
+          },
+          "selectedEnd": {
+            "measureNumber": 19,
+            "systemIndex": 3,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 638.7227932816807,
+            "cy": 912.4367220665083,
+            "score": 7.58,
+            "dx": 0.03,
+            "dy": 7.5,
+            "anchor": "stem-tip",
+            "anchorY": 882.4367220665083
+          },
+          "classification": "slur-stop-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p1-op403",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 857.3528379779412,
+            "y": 182.93533231884342,
+            "tangent": {
+              "dx": 0.7265640935211476,
+              "dy": -0.6870986959715418
+            }
+          },
+          "end": {
+            "x": 952.822736875,
+            "y": 182.93533231884342,
+            "tangent": {
+              "dx": 0.7265640935211455,
+              "dy": 0.6870986959715439
+            }
+          },
+          "bounds": {
+            "x0": 857.3528379779412,
+            "x1": 952.822736875,
+            "y0": 164.87846537650984,
+            "y1": 182.93533231884342,
+            "width": 95.46989889705878,
+            "height": 18.056866942333585
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 5,
+              "systemIndex": 0,
+              "eventIndex": 3,
+              "noteIndex": 0,
+              "startDivision": 4,
+              "midi": 78,
+              "clef": "treble",
+              "cx": 857.3205680715965,
+              "cy": 190.4813936353919,
+              "score": 7.62,
+              "dx": 0.03,
+              "dy": 7.55,
+              "anchor": "notehead",
+              "anchorY": 190.4813936353919
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 5,
+            "systemIndex": 0,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 4,
+            "midi": 78,
+            "clef": "treble",
+            "cx": 857.3205680715965,
+            "cy": 190.4813936353919,
+            "score": 7.62,
+            "dx": 0.03,
+            "dy": 7.55,
+            "anchor": "notehead",
+            "anchorY": 190.4813936353919
+          },
+          "selectedEnd": {
+            "measureNumber": 9,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 647.9643932816806,
+            "cy": 432.96183108076025,
+            "score": 7.33,
+            "dx": 0.03,
+            "dy": 7.25,
+            "anchor": "stem-tip",
+            "anchorY": 401.96183108076025
+          },
+          "classification": "slur-start-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p1-op421",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 121.858607082458,
+            "y": 394.71226667275306,
+            "tangent": {
+              "dx": 0.873037502229229,
+              "dy": -0.48765307309741085
+            }
+          },
+          "end": {
+            "x": 647.9967127153362,
+            "y": 394.71226667275306,
+            "tangent": {
+              "dx": 0.8730375561997721,
+              "dy": 0.48765297647479794
+            }
+          },
+          "bounds": {
+            "x0": 121.858607082458,
+            "x1": 647.9967127153362,
+            "y0": 350.6294769711791,
+            "y1": 394.71226667275306,
+            "width": 526.1381056328783,
+            "height": 44.08278970157397
+          },
+          "archDirection": "above",
+          "startCandidates": [],
+          "endCandidates": [
+            {
+              "measureNumber": 9,
+              "systemIndex": 1,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 647.9643932816806,
+              "cy": 432.96183108076025,
+              "score": 7.33,
+              "dx": 0.03,
+              "dy": 7.25,
+              "anchor": "stem-tip",
+              "anchorY": 401.96183108076025
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 5,
+            "systemIndex": 0,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 4,
+            "midi": 78,
+            "clef": "treble",
+            "cx": 857.3205680715965,
+            "cy": 190.4813936353919,
+            "score": 7.62,
+            "dx": 0.03,
+            "dy": 7.55,
+            "anchor": "notehead",
+            "anchorY": 190.4813936353919
+          },
+          "selectedEnd": {
+            "measureNumber": 9,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 647.9643932816806,
+            "cy": 432.96183108076025,
+            "score": 7.33,
+            "dx": 0.03,
+            "dy": 7.25,
+            "anchor": "stem-tip",
+            "anchorY": 401.96183108076025
+          },
+          "classification": "slur-stop-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p1-op439",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 814.4002546008404,
+            "y": 1119.5158164083016,
+            "tangent": {
+              "dx": 0.9162923369601237,
+              "dy": -0.4005101162619435
+            }
+          },
+          "end": {
+            "x": 952.822736875,
+            "y": 1119.5158164083016,
+            "tangent": {
+              "dx": 0.9162923369601229,
+              "dy": 0.40051011626194477
+            }
+          },
+          "bounds": {
+            "x0": 814.4002546008404,
+            "x1": 952.822736875,
+            "y0": 1107.41496837866,
+            "y1": 1119.5158164083016,
+            "width": 138.42248227415962,
+            "height": 12.100848029641611
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 25,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 812.7296941220169,
+              "cy": 1125.7180587648459,
+              "score": 10.21,
+              "dx": 1.67,
+              "dy": 6.2,
+              "anchor": "notehead",
+              "anchorY": 1125.7180587648459
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 25,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 812.7296941220169,
+            "cy": 1125.7180587648459,
+            "score": 10.21,
+            "dx": 1.67,
+            "dy": 6.2,
+            "anchor": "notehead",
+            "anchorY": 1125.7180587648459
+          },
+          "selectedEnd": null,
+          "classification": "outgoing-page-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p1-op457",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 806.6702289968488,
+            "y": 918.8205264853597,
+            "tangent": {
+              "dx": 0.9486403603836702,
+              "dy": 0.31635654987867723
+            }
+          },
+          "end": {
+            "x": 952.822736875,
+            "y": 918.8205264853597,
+            "tangent": {
+              "dx": 0.9486406269287505,
+              "dy": -0.3163557506040109
+            }
+          },
+          "bounds": {
+            "x0": 806.6702289968488,
+            "x1": 952.822736875,
+            "y0": 918.8205264853597,
+            "y1": 930.9213719504988,
+            "width": 146.15250787815125,
+            "height": 12.100845465139173
+          },
+          "archDirection": "below",
+          "startCandidates": [
+            {
+              "measureNumber": 20,
+              "systemIndex": 3,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 64,
+              "clef": "treble",
+              "cx": 804.9996470631932,
+              "cy": 912.4367220665083,
+              "score": 10.39,
+              "dx": 1.67,
+              "dy": 6.38,
+              "anchor": "notehead",
+              "anchorY": 912.4367220665083
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 20,
+            "systemIndex": 3,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 804.9996470631932,
+            "cy": 912.4367220665083,
+            "score": 10.39,
+            "dx": 1.67,
+            "dy": 6.38,
+            "anchor": "notehead",
+            "anchorY": 912.4367220665083
+          },
+          "selectedEnd": {
+            "measureNumber": 21,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 142.8334094161345,
+            "cy": 1150.9259140498814,
+            "score": 10.26,
+            "dx": 1.61,
+            "dy": 6.41,
+            "anchor": "notehead",
+            "anchorY": 1150.9259140498814
+          },
+          "classification": "tie-start-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p1-op475",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 640.3933530120798,
+            "y": 918.8205264853597,
+            "tangent": {
+              "dx": 0.9580856945502969,
+              "dy": 0.2864817653849457
+            }
+          },
+          "end": {
+            "x": 803.3936566491598,
+            "y": 918.8205264853597,
+            "tangent": {
+              "dx": 0.9580855955803046,
+              "dy": -0.2864820963717151
+            }
+          },
+          "bounds": {
+            "x0": 640.3933530120798,
+            "x1": 803.3936566491598,
+            "y0": 918.8205264853597,
+            "y1": 930.9213719504988,
+            "width": 163.00030363707992,
+            "height": 12.100845465139173
+          },
+          "archDirection": "below",
+          "startCandidates": [
+            {
+              "measureNumber": 19,
+              "systemIndex": 3,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 64,
+              "clef": "treble",
+              "cx": 638.7227932816807,
+              "cy": 912.4367220665083,
+              "score": 10.39,
+              "dx": 1.67,
+              "dy": 6.38,
+              "anchor": "notehead",
+              "anchorY": 912.4367220665083
+            }
+          ],
+          "endCandidates": [
+            {
+              "measureNumber": 20,
+              "systemIndex": 3,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 64,
+              "clef": "treble",
+              "cx": 804.9996470631932,
+              "cy": 912.4367220665083,
+              "score": 10.24,
+              "dx": 1.61,
+              "dy": 6.38,
+              "anchor": "notehead",
+              "anchorY": 912.4367220665083
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 19,
+            "systemIndex": 3,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 638.7227932816807,
+            "cy": 912.4367220665083,
+            "score": 10.39,
+            "dx": 1.67,
+            "dy": 6.38,
+            "anchor": "notehead",
+            "anchorY": 912.4367220665083
+          },
+          "selectedEnd": {
+            "measureNumber": 20,
+            "systemIndex": 3,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 804.9996470631932,
+            "cy": 912.4367220665083,
+            "score": 10.24,
+            "dx": 1.61,
+            "dy": 6.38,
+            "anchor": "notehead",
+            "anchorY": 912.4367220665083
+          },
+          "classification": "tie",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p1-op493",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 121.858607082458,
+            "y": 1157.3309668214943,
+            "tangent": {
+              "dx": 0.87101007586115,
+              "dy": 0.49126515014638883
+            }
+          },
+          "end": {
+            "x": 141.2274420187763,
+            "y": 1157.3309668214943,
+            "tangent": {
+              "dx": 0.871009797534215,
+              "dy": -0.491265643617998
+            }
+          },
+          "bounds": {
+            "x0": 121.858607082458,
+            "x1": 141.2274420187763,
+            "y0": 1157.3309668214943,
+            "y1": 1161.8687819475447,
+            "width": 19.368834936318294,
+            "height": 4.537815126050418
+          },
+          "archDirection": "below",
+          "startCandidates": [],
+          "endCandidates": [
+            {
+              "measureNumber": 21,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 64,
+              "clef": "treble",
+              "cx": 142.8334094161345,
+              "cy": 1150.9259140498814,
+              "score": 10.26,
+              "dx": 1.61,
+              "dy": 6.41,
+              "anchor": "notehead",
+              "anchorY": 1150.9259140498814
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 20,
+            "systemIndex": 3,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 804.9996470631932,
+            "cy": 912.4367220665083,
+            "score": 10.39,
+            "dx": 1.67,
+            "dy": 6.38,
+            "anchor": "notehead",
+            "anchorY": 912.4367220665083
+          },
+          "selectedEnd": {
+            "measureNumber": 21,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 142.8334094161345,
+            "cy": 1150.9259140498814,
+            "score": 10.26,
+            "dx": 1.61,
+            "dy": 6.41,
+            "anchor": "notehead",
+            "anchorY": 1150.9259140498814
+          },
+          "classification": "tie-stop-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p1-op511",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 141.5627968638393,
+            "y": 677.8133642569918,
+            "tangent": {
+              "dx": 0.9546952393838534,
+              "dy": 0.2975852817224111
+            }
+          },
+          "end": {
+            "x": 297.9260350301996,
+            "y": 677.8133642569918,
+            "tangent": {
+              "dx": 0.9546952393838534,
+              "dy": -0.2975852817224111
+            }
+          },
+          "bounds": {
+            "x0": 141.5627968638393,
+            "x1": 297.9260350301996,
+            "y0": 677.8133642569918,
+            "y1": 689.9142122866333,
+            "width": 156.3632381663603,
+            "height": 12.100848029641497
+          },
+          "archDirection": "below",
+          "startCandidates": [
+            {
+              "measureNumber": 11,
+              "systemIndex": 2,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 139.8922309287395,
+              "cy": 671.4510264251783,
+              "score": 10.37,
+              "dx": 1.67,
+              "dy": 6.36,
+              "anchor": "notehead",
+              "anchorY": 671.4510264251783
+            }
+          ],
+          "endCandidates": [
+            {
+              "measureNumber": 12,
+              "systemIndex": 2,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 299.53200101277315,
+              "cy": 671.4510264251783,
+              "score": 10.22,
+              "dx": 1.61,
+              "dy": 6.36,
+              "anchor": "notehead",
+              "anchorY": 671.4510264251783
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 11,
+            "systemIndex": 2,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 139.8922309287395,
+            "cy": 671.4510264251783,
+            "score": 10.37,
+            "dx": 1.67,
+            "dy": 6.36,
+            "anchor": "notehead",
+            "anchorY": 671.4510264251783
+          },
+          "selectedEnd": {
+            "measureNumber": 12,
+            "systemIndex": 2,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 299.53200101277315,
+            "cy": 671.4510264251783,
+            "score": 10.22,
+            "dx": 1.61,
+            "dy": 6.36,
+            "anchor": "notehead",
+            "anchorY": 671.4510264251783
+          },
+          "classification": "tie",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p1-op529",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 121.858607082458,
+            "y": 677.8133642569918,
+            "tangent": {
+              "dx": 0.8326908909372314,
+              "dy": 0.5537380970731198
+            }
+          },
+          "end": {
+            "x": 138.28626554818806,
+            "y": 677.8133642569918,
+            "tangent": {
+              "dx": 0.8326904923525289,
+              "dy": -0.5537386964496006
+            }
+          },
+          "bounds": {
+            "x0": 121.858607082458,
+            "x1": 138.28626554818806,
+            "y0": 677.8133642569918,
+            "y1": 682.3511819475445,
+            "width": 16.42765846573006,
+            "height": 4.5378176905527425
+          },
+          "archDirection": "below",
+          "startCandidates": [],
+          "endCandidates": [
+            {
+              "measureNumber": 11,
+              "systemIndex": 2,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 139.8922309287395,
+              "cy": 671.4510264251783,
+              "score": 10.22,
+              "dx": 1.61,
+              "dy": 6.36,
+              "anchor": "notehead",
+              "anchorY": 671.4510264251783
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 10,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 809.6204470631933,
+            "cy": 432.96183108076025,
+            "score": 10.35,
+            "dx": 1.67,
+            "dy": 6.34,
+            "anchor": "notehead",
+            "anchorY": 432.96183108076025
+          },
+          "selectedEnd": {
+            "measureNumber": 11,
+            "systemIndex": 2,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 139.8922309287395,
+            "cy": 671.4510264251783,
+            "score": 10.22,
+            "dx": 1.61,
+            "dy": 6.36,
+            "anchor": "notehead",
+            "anchorY": 671.4510264251783
+          },
+          "classification": "tie-stop-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p1-op547",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 811.2910109033614,
+            "y": 439.3029272822018,
+            "tangent": {
+              "dx": 0.9455057741724007,
+              "dy": 0.325605330126288
+            }
+          },
+          "end": {
+            "x": 952.822736875,
+            "y": 439.3029272822018,
+            "tangent": {
+              "dx": 0.9455057741724003,
+              "dy": -0.3256053301262892
+            }
+          },
+          "bounds": {
+            "x0": 811.2910109033614,
+            "x1": 952.822736875,
+            "y0": 439.3029272822018,
+            "y1": 451.40377531184333,
+            "width": 141.5317259716386,
+            "height": 12.100848029641554
+          },
+          "archDirection": "below",
+          "startCandidates": [
+            {
+              "measureNumber": 10,
+              "systemIndex": 1,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 809.6204470631933,
+              "cy": 432.96183108076025,
+              "score": 10.35,
+              "dx": 1.67,
+              "dy": 6.34,
+              "anchor": "notehead",
+              "anchorY": 432.96183108076025
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 10,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 809.6204470631933,
+            "cy": 432.96183108076025,
+            "score": 10.35,
+            "dx": 1.67,
+            "dy": 6.34,
+            "anchor": "notehead",
+            "anchorY": 432.96183108076025
+          },
+          "selectedEnd": {
+            "measureNumber": 11,
+            "systemIndex": 2,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 139.8922309287395,
+            "cy": 671.4510264251783,
+            "score": 10.22,
+            "dx": 1.61,
+            "dy": 6.36,
+            "anchor": "notehead",
+            "anchorY": 671.4510264251783
+          },
+          "classification": "tie-start-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p1-op565",
+          "source": "pdf-vector-path",
+          "page": 1,
+          "start": {
+            "x": 649.6349578571429,
+            "y": 439.3029272822018,
+            "tangent": {
+              "dx": 0.955766521740995,
+              "dy": 0.2941264284608243
+            }
+          },
+          "end": {
+            "x": 808.0145206197479,
+            "y": 439.3029272822018,
+            "tangent": {
+              "dx": 0.955766521740995,
+              "dy": -0.2941264284608243
+            }
+          },
+          "bounds": {
+            "x0": 649.6349578571429,
+            "x1": 808.0145206197479,
+            "y0": 439.3029272822018,
+            "y1": 451.40377531184333,
+            "width": 158.37956276260502,
+            "height": 12.100848029641554
+          },
+          "archDirection": "below",
+          "startCandidates": [
+            {
+              "measureNumber": 9,
+              "systemIndex": 1,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 647.9643932816806,
+              "cy": 432.96183108076025,
+              "score": 10.35,
+              "dx": 1.67,
+              "dy": 6.34,
+              "anchor": "notehead",
+              "anchorY": 432.96183108076025
+            }
+          ],
+          "endCandidates": [
+            {
+              "measureNumber": 10,
+              "systemIndex": 1,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 809.6204470631933,
+              "cy": 432.96183108076025,
+              "score": 10.2,
+              "dx": 1.61,
+              "dy": 6.34,
+              "anchor": "notehead",
+              "anchorY": 432.96183108076025
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 9,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 647.9643932816806,
+            "cy": 432.96183108076025,
+            "score": 10.35,
+            "dx": 1.67,
+            "dy": 6.34,
+            "anchor": "notehead",
+            "anchorY": 432.96183108076025
+          },
+          "selectedEnd": {
+            "measureNumber": 10,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 809.6204470631933,
+            "cy": 432.96183108076025,
+            "score": 10.2,
+            "dx": 1.61,
+            "dy": 6.34,
+            "anchor": "notehead",
+            "anchorY": 432.96183108076025
+          },
+          "classification": "tie",
+          "failureReason": null
+        }
+      ],
+      "openVectorCurveFragments": [
+        {
+          "role": "start",
+          "page": 1,
+          "candidateId": "pdf-path-p1-op367",
+          "archDirection": "above",
+          "ref": {
+            "measureNumber": 22,
+            "page": 1,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 69,
+            "clef": "treble",
+            "cx": 301.380216474958,
+            "cy": 1138.321988087886
+          },
+          "endpointOffset": -13.764151667233818
+        },
+        {
+          "role": "start",
+          "page": 1,
+          "candidateId": "pdf-path-p1-op439",
+          "archDirection": "above",
+          "ref": {
+            "measureNumber": 25,
+            "page": 1,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 812.7296941220169,
+            "cy": 1125.7180587648459
+          },
+          "endpointOffset": -6.202242356544275
+        }
+      ]
+    }
+  },
+  {
+    "page": 2,
+    "diagnostics": {
+      "detectedTieCount": 3,
+      "appliedTieCount": 3,
+      "appliedTiePairs": [
+        {
+          "fromMeasure": 50,
+          "toMeasure": 51,
+          "midi": 66,
+          "clef": "treble",
+          "source": "pdf-vector-path",
+          "candidateIds": [
+            "pdf-path-p2-op285"
+          ],
+          "archDirection": "below"
+        },
+        {
+          "fromMeasure": 49,
+          "toMeasure": 50,
+          "midi": 66,
+          "clef": "treble",
+          "source": "pdf-vector-path",
+          "candidateIds": [
+            "pdf-path-p2-op303"
+          ],
+          "archDirection": "below"
+        },
+        {
+          "fromMeasure": 48,
+          "toMeasure": 49,
+          "midi": 66,
+          "clef": "treble",
+          "source": "pdf-vector-path",
+          "candidateIds": [
+            "pdf-path-p2-op321"
+          ],
+          "archDirection": "below"
+        }
+      ],
+      "appliedSlurCount": 3,
+      "appliedSlurPairs": [
+        {
+          "fromMeasure": 26,
+          "toMeasure": 31,
+          "fromMidi": 74,
+          "toMidi": 74,
+          "source": "pdf-vector-path-system-continuation",
+          "candidateIds": [
+            "pdf-path-p2-op249",
+            "pdf-path-p2-op357"
+          ],
+          "archDirection": "above"
+        },
+        {
+          "fromMeasure": 31,
+          "toMeasure": 38,
+          "fromMidi": 74,
+          "toMidi": 69,
+          "source": "pdf-vector-path-system-continuation",
+          "candidateIds": [
+            "pdf-path-p2-op213",
+            "pdf-path-p2-op195"
+          ],
+          "archDirection": "above"
+        },
+        {
+          "fromMeasure": 44,
+          "toMeasure": 48,
+          "fromMidi": 78,
+          "toMidi": 66,
+          "source": "pdf-vector-path-system-continuation",
+          "candidateIds": [
+            "pdf-path-p2-op159",
+            "pdf-path-p2-op177"
+          ],
+          "archDirection": "above"
+        }
+      ],
+      "uncertainSlurCount": 0,
+      "tieControlGlyphCount": 0,
+      "vectorCurveCandidateCount": 11,
+      "vectorCurveAppliedCount": 6,
+      "vectorCurveDiagnostics": [
+        {
+          "candidateId": "pdf-path-p2-op159",
+          "source": "pdf-vector-path",
+          "page": 2,
+          "start": {
+            "x": 675.3318049553573,
+            "y": 861.2023787053981,
+            "tangent": {
+              "dx": 0.8495534713432923,
+              "dy": -0.5275025112059295
+            }
+          },
+          "end": {
+            "x": 952.822736875,
+            "y": 861.2023787053981,
+            "tangent": {
+              "dx": 0.8495537043791753,
+              "dy": 0.5275021358967383
+            }
+          },
+          "bounds": {
+            "x0": 675.3318049553573,
+            "x1": 952.822736875,
+            "y0": 835.3575643086922,
+            "y1": 861.2023787053981,
+            "width": 277.4909319196428,
+            "height": 25.844814396705942
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 44,
+              "systemIndex": 3,
+              "eventIndex": 3,
+              "noteIndex": 0,
+              "startDivision": 4,
+              "midi": 78,
+              "clef": "treble",
+              "cx": 675.299482357311,
+              "cy": 868.688024311164,
+              "score": 7.56,
+              "dx": 0.03,
+              "dy": 7.49,
+              "anchor": "notehead",
+              "anchorY": 868.688024311164
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 44,
+            "systemIndex": 3,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 4,
+            "midi": 78,
+            "clef": "treble",
+            "cx": 675.299482357311,
+            "cy": 868.688024311164,
+            "score": 7.56,
+            "dx": 0.03,
+            "dy": 7.49,
+            "anchor": "notehead",
+            "anchorY": 868.688024311164
+          },
+          "selectedEnd": {
+            "measureNumber": 48,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 424.7216537858823,
+            "cy": 1139.1137662945368,
+            "score": 8.91,
+            "dx": 0.03,
+            "dy": 8.83,
+            "anchor": "stem-tip",
+            "anchorY": 1108.1137662945368
+          },
+          "classification": "slur-start-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p2-op177",
+          "source": "pdf-vector-path",
+          "page": 2,
+          "start": {
+            "x": 121.858607082458,
+            "y": 1116.9463170929212,
+            "tangent": {
+              "dx": 0.8639372391585007,
+              "dy": -0.5035994904635901
+            }
+          },
+          "end": {
+            "x": 424.7539507668068,
+            "y": 1116.9463170929212,
+            "tangent": {
+              "dx": 0.8639372391585007,
+              "dy": 0.50359949046359
+            }
+          },
+          "bounds": {
+            "x0": 121.858607082458,
+            "x1": 424.7539507668068,
+            "y0": 1090.4621107089517,
+            "y1": 1116.9463170929212,
+            "width": 302.8953436843488,
+            "height": 26.484206383969422
+          },
+          "archDirection": "above",
+          "startCandidates": [],
+          "endCandidates": [
+            {
+              "measureNumber": 48,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 424.7216537858823,
+              "cy": 1139.1137662945368,
+              "score": 8.91,
+              "dx": 0.03,
+              "dy": 8.83,
+              "anchor": "stem-tip",
+              "anchorY": 1108.1137662945368
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 44,
+            "systemIndex": 3,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 4,
+            "midi": 78,
+            "clef": "treble",
+            "cx": 675.299482357311,
+            "cy": 868.688024311164,
+            "score": 7.56,
+            "dx": 0.03,
+            "dy": 7.49,
+            "anchor": "notehead",
+            "anchorY": 868.688024311164
+          },
+          "selectedEnd": {
+            "measureNumber": 48,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 424.7216537858823,
+            "cy": 1139.1137662945368,
+            "score": 8.91,
+            "dx": 0.03,
+            "dy": 8.83,
+            "anchor": "stem-tip",
+            "anchorY": 1108.1137662945368
+          },
+          "classification": "slur-stop-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p2-op195",
+          "source": "pdf-vector-path",
+          "page": 2,
+          "start": {
+            "x": 121.858607082458,
+            "y": 596.3996994023684,
+            "tangent": {
+              "dx": 0.8978792949274439,
+              "dy": -0.44024171967294995
+            }
+          },
+          "end": {
+            "x": 505.3805510162816,
+            "y": 596.3996994023684,
+            "tangent": {
+              "dx": 0.8978792328673897,
+              "dy": 0.4402418462452969
+            }
+          },
+          "bounds": {
+            "x0": 121.858607082458,
+            "x1": 505.3805510162816,
+            "y0": 568.1928411280527,
+            "y1": 596.3996994023684,
+            "width": 383.5219439338236,
+            "height": 28.206858274315664
+          },
+          "archDirection": "above",
+          "startCandidates": [],
+          "endCandidates": [
+            {
+              "measureNumber": 38,
+              "systemIndex": 2,
+              "eventIndex": 1,
+              "noteIndex": 1,
+              "startDivision": 0,
+              "midi": 69,
+              "clef": "treble",
+              "cx": 505.3482689119328,
+              "cy": 614.4122050118766,
+              "score": 4.09,
+              "dx": 0.03,
+              "dy": 4.01,
+              "anchor": "stem-tip",
+              "anchorY": 600.4122050118766
+            },
+            {
+              "measureNumber": 38,
+              "systemIndex": 2,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 72,
+              "clef": "treble",
+              "cx": 505.3482689119328,
+              "cy": 606.0095854631829,
+              "score": 9.69,
+              "dx": 0.03,
+              "dy": 9.61,
+              "anchor": "notehead",
+              "anchorY": 606.0095854631829
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 31,
+            "systemIndex": 1,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 8,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 252.5018716010084,
+            "cy": 352.32841571258905,
+            "score": 12.42,
+            "dx": 0.03,
+            "dy": 12.35,
+            "anchor": "notehead",
+            "anchorY": 352.32841571258905
+          },
+          "selectedEnd": {
+            "measureNumber": 38,
+            "systemIndex": 2,
+            "eventIndex": 1,
+            "noteIndex": 1,
+            "startDivision": 0,
+            "midi": 69,
+            "clef": "treble",
+            "cx": 505.3482689119328,
+            "cy": 614.4122050118766,
+            "score": 4.09,
+            "dx": 0.03,
+            "dy": 4.01,
+            "anchor": "stem-tip",
+            "anchorY": 600.4122050118766
+          },
+          "classification": "slur-stop-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p2-op213",
+          "source": "pdf-vector-path",
+          "page": 2,
+          "start": {
+            "x": 252.53417906906515,
+            "y": 339.9814929979597,
+            "tangent": {
+              "dx": 0.960121197422081,
+              "dy": -0.27958413091731316
+            }
+          },
+          "end": {
+            "x": 952.822736875,
+            "y": 339.9814929979597,
+            "tangent": {
+              "dx": 0.9601212413961708,
+              "dy": 0.2795839799056369
+            }
+          },
+          "bounds": {
+            "x0": 252.53417906906515,
+            "x1": 952.822736875,
+            "y0": 309.3932391913406,
+            "y1": 339.9814929979597,
+            "width": 700.2885578059349,
+            "height": 30.588253806619093
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 31,
+              "systemIndex": 1,
+              "eventIndex": 3,
+              "noteIndex": 0,
+              "startDivision": 8,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 252.5018716010084,
+              "cy": 352.32841571258905,
+              "score": 12.42,
+              "dx": 0.03,
+              "dy": 12.35,
+              "anchor": "notehead",
+              "anchorY": 352.32841571258905
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 31,
+            "systemIndex": 1,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 8,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 252.5018716010084,
+            "cy": 352.32841571258905,
+            "score": 12.42,
+            "dx": 0.03,
+            "dy": 12.35,
+            "anchor": "notehead",
+            "anchorY": 352.32841571258905
+          },
+          "selectedEnd": {
+            "measureNumber": 38,
+            "systemIndex": 2,
+            "eventIndex": 1,
+            "noteIndex": 1,
+            "startDivision": 0,
+            "midi": 69,
+            "clef": "treble",
+            "cx": 505.3482689119328,
+            "cy": 614.4122050118766,
+            "score": 4.09,
+            "dx": 0.03,
+            "dy": 4.01,
+            "anchor": "stem-tip",
+            "anchorY": 600.4122050118766
+          },
+          "classification": "slur-start-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p2-op249",
+          "source": "pdf-vector-path",
+          "page": 2,
+          "start": {
+            "x": 244.8314397702206,
+            "y": 107.305032493758,
+            "tangent": {
+              "dx": 0.9557923461811315,
+              "dy": -0.29404249859768194
+            }
+          },
+          "end": {
+            "x": 952.822736875,
+            "y": 94.51805001354057,
+            "tangent": {
+              "dx": 0.9657869225056553,
+              "dy": 0.25933688576262176
+            }
+          },
+          "bounds": {
+            "x0": 244.8314397702206,
+            "x1": 952.822736875,
+            "y0": 65.8528311794249,
+            "y1": 107.305032493758,
+            "width": 707.9912971047794,
+            "height": 41.45220131433311
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 26,
+              "systemIndex": 0,
+              "eventIndex": 3,
+              "noteIndex": 0,
+              "startDivision": 8,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 244.79913546655465,
+              "cy": 114.85783046912115,
+              "score": 7.63,
+              "dx": 0.03,
+              "dy": 7.55,
+              "anchor": "notehead",
+              "anchorY": 114.85783046912115
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 26,
+            "systemIndex": 0,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 8,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 244.79913546655465,
+            "cy": 114.85783046912115,
+            "score": 7.63,
+            "dx": 0.03,
+            "dy": 7.55,
+            "anchor": "notehead",
+            "anchorY": 114.85783046912115
+          },
+          "selectedEnd": {
+            "measureNumber": 31,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 142.8334094161345,
+            "cy": 352.32841571258905,
+            "score": 13.02,
+            "dx": 1.61,
+            "dy": 9.17,
+            "anchor": "notehead",
+            "anchorY": 352.32841571258905
+          },
+          "classification": "slur-start-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p2-op285",
+          "source": "pdf-vector-path",
+          "page": 2,
+          "start": {
+            "x": 698.1990416938025,
+            "y": 1145.517764256992,
+            "tangent": {
+              "dx": 0.9398457200154325,
+              "dy": 0.34159921336073523
+            }
+          },
+          "end": {
+            "x": 832.2965420220589,
+            "y": 1145.517764256992,
+            "tangent": {
+              "dx": 0.9398457200154325,
+              "dy": -0.34159921336073523
+            }
+          },
+          "bounds": {
+            "x0": 698.1990416938025,
+            "x1": 832.2965420220589,
+            "y0": 1145.517764256992,
+            "y1": 1157.6186122866334,
+            "width": 134.0975003282564,
+            "height": 12.100848029641384
+          },
+          "archDirection": "below",
+          "startCandidates": [
+            {
+              "measureNumber": 50,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 696.5284873993277,
+              "cy": 1139.1137662945368,
+              "score": 10.41,
+              "dx": 1.67,
+              "dy": 6.4,
+              "anchor": "notehead",
+              "anchorY": 1139.1137662945368
+            }
+          ],
+          "endCandidates": [
+            {
+              "measureNumber": 51,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 833.9024941220168,
+              "cy": 1139.1137662945368,
+              "score": 10.26,
+              "dx": 1.61,
+              "dy": 6.4,
+              "anchor": "notehead",
+              "anchorY": 1139.1137662945368
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 50,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 696.5284873993277,
+            "cy": 1139.1137662945368,
+            "score": 10.41,
+            "dx": 1.67,
+            "dy": 6.4,
+            "anchor": "notehead",
+            "anchorY": 1139.1137662945368
+          },
+          "selectedEnd": {
+            "measureNumber": 51,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 833.9024941220168,
+            "cy": 1139.1137662945368,
+            "score": 10.26,
+            "dx": 1.61,
+            "dy": 6.4,
+            "anchor": "notehead",
+            "anchorY": 1139.1137662945368
+          },
+          "classification": "tie",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p2-op303",
+          "source": "pdf-vector-path",
+          "page": 2,
+          "start": {
+            "x": 563.7662275525211,
+            "y": 1145.517764256992,
+            "tangent": {
+              "dx": 0.9373684364359914,
+              "dy": 0.34833951021029
+            }
+          },
+          "end": {
+            "x": 694.9225103781513,
+            "y": 1145.517764256992,
+            "tangent": {
+              "dx": 0.9373684364359911,
+              "dy": -0.34833951021029136
+            }
+          },
+          "bounds": {
+            "x0": 563.7662275525211,
+            "x1": 694.9225103781513,
+            "y0": 1145.517764256992,
+            "y1": 1157.6186122866334,
+            "width": 131.15628282563023,
+            "height": 12.100848029641384
+          },
+          "archDirection": "below",
+          "startCandidates": [
+            {
+              "measureNumber": 49,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 562.0956605085714,
+              "cy": 1139.1137662945368,
+              "score": 10.41,
+              "dx": 1.67,
+              "dy": 6.4,
+              "anchor": "notehead",
+              "anchorY": 1139.1137662945368
+            }
+          ],
+          "endCandidates": [
+            {
+              "measureNumber": 50,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 696.5284873993277,
+              "cy": 1139.1137662945368,
+              "score": 10.26,
+              "dx": 1.61,
+              "dy": 6.4,
+              "anchor": "notehead",
+              "anchorY": 1139.1137662945368
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 49,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 562.0956605085714,
+            "cy": 1139.1137662945368,
+            "score": 10.41,
+            "dx": 1.67,
+            "dy": 6.4,
+            "anchor": "notehead",
+            "anchorY": 1139.1137662945368
+          },
+          "selectedEnd": {
+            "measureNumber": 50,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 696.5284873993277,
+            "cy": 1139.1137662945368,
+            "score": 10.26,
+            "dx": 1.61,
+            "dy": 6.4,
+            "anchor": "notehead",
+            "anchorY": 1139.1137662945368
+          },
+          "classification": "tie",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p2-op321",
+          "source": "pdf-vector-path",
+          "page": 2,
+          "start": {
+            "x": 426.3922369406513,
+            "y": 1145.517764256992,
+            "tangent": {
+              "dx": 0.93984555222655,
+              "dy": 0.34159967499980337
+            }
+          },
+          "end": {
+            "x": 560.4896962368698,
+            "y": 1145.517764256992,
+            "tangent": {
+              "dx": 0.9398455522265502,
+              "dy": -0.34159967499980276
+            }
+          },
+          "bounds": {
+            "x0": 426.3922369406513,
+            "x1": 560.4896962368698,
+            "y0": 1145.517764256992,
+            "y1": 1157.6186122866334,
+            "width": 134.09745929621852,
+            "height": 12.100848029641384
+          },
+          "archDirection": "below",
+          "startCandidates": [
+            {
+              "measureNumber": 48,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 424.7216537858823,
+              "cy": 1139.1137662945368,
+              "score": 10.41,
+              "dx": 1.67,
+              "dy": 6.4,
+              "anchor": "notehead",
+              "anchorY": 1139.1137662945368
+            }
+          ],
+          "endCandidates": [
+            {
+              "measureNumber": 49,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 66,
+              "clef": "treble",
+              "cx": 562.0956605085714,
+              "cy": 1139.1137662945368,
+              "score": 10.26,
+              "dx": 1.61,
+              "dy": 6.4,
+              "anchor": "notehead",
+              "anchorY": 1139.1137662945368
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 48,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 424.7216537858823,
+            "cy": 1139.1137662945368,
+            "score": 10.41,
+            "dx": 1.67,
+            "dy": 6.4,
+            "anchor": "notehead",
+            "anchorY": 1139.1137662945368
+          },
+          "selectedEnd": {
+            "measureNumber": 49,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 66,
+            "clef": "treble",
+            "cx": 562.0956605085714,
+            "cy": 1139.1137662945368,
+            "score": 10.26,
+            "dx": 1.61,
+            "dy": 6.4,
+            "anchor": "notehead",
+            "anchorY": 1139.1137662945368
+          },
+          "classification": "tie",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p2-op339",
+          "source": "pdf-vector-path",
+          "page": 2,
+          "start": {
+            "x": 818.4832706197479,
+            "y": 108.56553741670496,
+            "tangent": {
+              "dx": 0.9117905154179665,
+              "dy": -0.41065564161939744
+            }
+          },
+          "end": {
+            "x": 952.822736875,
+            "y": 108.56553741670496,
+            "tangent": {
+              "dx": 0.9117909850622075,
+              "dy": 0.4106545988532084
+            }
+          },
+          "bounds": {
+            "x0": 818.4832706197479,
+            "x1": 952.822736875,
+            "y0": 96.46468938706342,
+            "y1": 108.56553741670496,
+            "width": 134.3394662552521,
+            "height": 12.10084802964154
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 30,
+              "systemIndex": 0,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 816.8126789959664,
+              "cy": 114.85783046912115,
+              "score": 10.3,
+              "dx": 1.67,
+              "dy": 6.29,
+              "anchor": "notehead",
+              "anchorY": 114.85783046912115
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 30,
+            "systemIndex": 0,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 816.8126789959664,
+            "cy": 114.85783046912115,
+            "score": 10.3,
+            "dx": 1.67,
+            "dy": 6.29,
+            "anchor": "notehead",
+            "anchorY": 114.85783046912115
+          },
+          "selectedEnd": null,
+          "classification": "outgoing-system-fragment",
+          "failureReason": "orphan-system-fragment"
+        },
+        {
+          "candidateId": "pdf-path-p2-op357",
+          "source": "pdf-vector-path",
+          "page": 2,
+          "start": {
+            "x": 121.858607082458,
+            "y": 343.1581138048701,
+            "tangent": {
+              "dx": 0.6492644224519032,
+              "dy": -0.7605627585795904
+            }
+          },
+          "end": {
+            "x": 141.2274420187763,
+            "y": 343.1581138048701,
+            "tangent": {
+              "dx": 0.6492639251826909,
+              "dy": 0.7605631830797261
+            }
+          },
+          "bounds": {
+            "x0": 121.858607082458,
+            "x1": 141.2274420187763,
+            "y0": 338.6202959540359,
+            "y1": 343.1581138048701,
+            "width": 19.368834936318294,
+            "height": 4.5378178508341875
+          },
+          "archDirection": "above",
+          "startCandidates": [],
+          "endCandidates": [
+            {
+              "measureNumber": 31,
+              "systemIndex": 1,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 142.8334094161345,
+              "cy": 352.32841571258905,
+              "score": 13.02,
+              "dx": 1.61,
+              "dy": 9.17,
+              "anchor": "notehead",
+              "anchorY": 352.32841571258905
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 26,
+            "systemIndex": 0,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 8,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 244.79913546655465,
+            "cy": 114.85783046912115,
+            "score": 7.63,
+            "dx": 0.03,
+            "dy": 7.55,
+            "anchor": "notehead",
+            "anchorY": 114.85783046912115
+          },
+          "selectedEnd": {
+            "measureNumber": 31,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 142.8334094161345,
+            "cy": 352.32841571258905,
+            "score": 13.02,
+            "dx": 1.61,
+            "dy": 9.17,
+            "anchor": "notehead",
+            "anchorY": 352.32841571258905
+          },
+          "classification": "slur-stop-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p2-op375",
+          "source": "pdf-vector-path",
+          "page": 2,
+          "start": {
+            "x": 121.858607082458,
+            "y": 105.66637598974404,
+            "tangent": {
+              "dx": 0.6492644224519032,
+              "dy": -0.7605627585795904
+            }
+          },
+          "end": {
+            "x": 141.2274420187763,
+            "y": 105.66637598974404,
+            "tangent": {
+              "dx": 0.6492639251826909,
+              "dy": 0.7605631830797261
+            }
+          },
+          "bounds": {
+            "x0": 121.858607082458,
+            "x1": 141.2274420187763,
+            "y0": 101.12855813890985,
+            "y1": 105.66637598974404,
+            "width": 19.368834936318294,
+            "height": 4.5378178508341875
+          },
+          "archDirection": "above",
+          "startCandidates": [],
+          "endCandidates": [
+            {
+              "measureNumber": 26,
+              "systemIndex": 0,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 142.8334094161345,
+              "cy": 114.85783046912115,
+              "score": 13.05,
+              "dx": 1.61,
+              "dy": 9.19,
+              "anchor": "notehead",
+              "anchorY": 114.85783046912115
+            }
+          ],
+          "selectedStart": null,
+          "selectedEnd": {
+            "measureNumber": 26,
+            "systemIndex": 0,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 142.8334094161345,
+            "cy": 114.85783046912115,
+            "score": 13.05,
+            "dx": 1.61,
+            "dy": 9.19,
+            "anchor": "notehead",
+            "anchorY": 114.85783046912115
+          },
+          "classification": "incoming-page-fragment",
+          "failureReason": null
+        }
+      ],
+      "openVectorCurveFragments": [
+        {
+          "role": "stop",
+          "page": 2,
+          "candidateId": "pdf-path-p2-op375",
+          "archDirection": "above",
+          "ref": {
+            "measureNumber": 26,
+            "page": 2,
+            "systemIndex": 0,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 142.8334094161345,
+            "cy": 114.85783046912115
+          },
+          "endpointOffset": -9.191454479377114
+        }
+      ]
+    }
+  },
+  {
+    "page": 3,
+    "diagnostics": {
+      "detectedTieCount": 4,
+      "appliedTieCount": 4,
+      "appliedTiePairs": [
+        {
+          "fromMeasure": 69,
+          "toMeasure": 70,
+          "midi": 74,
+          "clef": "treble",
+          "source": "pdf-vector-path",
+          "candidateIds": [
+            "pdf-path-p3-op303"
+          ],
+          "archDirection": "above"
+        },
+        {
+          "fromMeasure": 64,
+          "toMeasure": 65,
+          "midi": 74,
+          "clef": "treble",
+          "source": "pdf-vector-path",
+          "candidateIds": [
+            "pdf-path-p3-op321"
+          ],
+          "archDirection": "above"
+        },
+        {
+          "fromMeasure": 59,
+          "toMeasure": 60,
+          "midi": 64,
+          "clef": "treble",
+          "source": "pdf-vector-path",
+          "candidateIds": [
+            "pdf-path-p3-op339"
+          ],
+          "archDirection": "below"
+        },
+        {
+          "fromMeasure": 58,
+          "toMeasure": 59,
+          "midi": 64,
+          "clef": "treble",
+          "source": "pdf-vector-path",
+          "candidateIds": [
+            "pdf-path-p3-op357"
+          ],
+          "archDirection": "below"
+        }
+      ],
+      "appliedSlurCount": 1,
+      "appliedSlurPairs": [
+        {
+          "fromMeasure": 65,
+          "toMeasure": 70,
+          "fromMidi": 74,
+          "toMidi": 74,
+          "source": "pdf-vector-path-system-continuation",
+          "candidateIds": [
+            "pdf-path-p3-op159",
+            "pdf-path-p3-op213"
+          ],
+          "archDirection": "above"
+        }
+      ],
+      "uncertainSlurCount": 3,
+      "tieControlGlyphCount": 0,
+      "vectorCurveCandidateCount": 12,
+      "vectorCurveAppliedCount": 8,
+      "vectorCurveDiagnostics": [
+        {
+          "candidateId": "pdf-path-p3-op159",
+          "source": "pdf-vector-path",
+          "page": 3,
+          "start": {
+            "x": 558.8052900525211,
+            "y": 607.8852106450184,
+            "tangent": {
+              "dx": 0.8828770369823842,
+              "dy": -0.4696042350418124
+            }
+          },
+          "end": {
+            "x": 950.2652920220589,
+            "y": 592.5408307551536,
+            "tangent": {
+              "dx": 0.9169266461629955,
+              "dy": 0.39905579253568135
+            }
+          },
+          "bounds": {
+            "x0": 558.8052900525211,
+            "x1": 950.2652920220589,
+            "y0": 566.5022585880055,
+            "y1": 607.8852106450184,
+            "width": 391.46000196953787,
+            "height": 41.38295205701297
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 65,
+              "systemIndex": 2,
+              "eventIndex": 3,
+              "noteIndex": 0,
+              "startDivision": 8,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 558.7729983236975,
+              "cy": 615.3934218052257,
+              "score": 7.59,
+              "dx": 0.03,
+              "dy": 7.51,
+              "anchor": "notehead",
+              "anchorY": 615.3934218052257
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 65,
+            "systemIndex": 2,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 8,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 558.7729983236975,
+            "cy": 615.3934218052257,
+            "score": 7.59,
+            "dx": 0.03,
+            "dy": 7.51,
+            "anchor": "notehead",
+            "anchorY": 615.3934218052257
+          },
+          "selectedEnd": {
+            "measureNumber": 70,
+            "systemIndex": 3,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 408.5469243741177,
+            "cy": 865.6612149524942,
+            "score": 7.56,
+            "dx": 0.03,
+            "dy": 7.49,
+            "anchor": "notehead",
+            "anchorY": 865.6612149524942
+          },
+          "classification": "slur-start-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p3-op177",
+          "source": "pdf-vector-path",
+          "page": 3,
+          "start": {
+            "x": 121.858607082458,
+            "y": 1098.1145450988,
+            "tangent": {
+              "dx": 0.9606022477807584,
+              "dy": -0.27792682770570143
+            }
+          },
+          "end": {
+            "x": 826.6758914180673,
+            "y": 1098.1145450988,
+            "tangent": {
+              "dx": 0.960602262179671,
+              "dy": 0.27792677793853987
+            }
+          },
+          "bounds": {
+            "x0": 121.858607082458,
+            "x1": 826.6758914180673,
+            "y0": 1067.5262912921808,
+            "y1": 1098.1145450988,
+            "width": 704.8172843356093,
+            "height": 30.58825380661915
+          },
+          "archDirection": "above",
+          "startCandidates": [],
+          "endCandidates": [
+            {
+              "measureNumber": 78,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 1,
+              "startDivision": 0,
+              "midi": 69,
+              "clef": "treble",
+              "cx": 826.6435663909243,
+              "cy": 1136.9355569714965,
+              "score": 0.9,
+              "dx": 0.03,
+              "dy": 0.82,
+              "anchor": "stem-tip",
+              "anchorY": 1098.9355569714965
+            },
+            {
+              "measureNumber": 78,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 826.6435663909243,
+              "cy": 1124.3316310095013,
+              "score": 1.29,
+              "dx": 0.03,
+              "dy": 1.22,
+              "anchor": "stem-tip",
+              "anchorY": 1099.3316310095013
+            },
+            {
+              "measureNumber": 78,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 2,
+              "startDivision": 0,
+              "midi": 65,
+              "clef": "treble",
+              "cx": 826.6435663909243,
+              "cy": 1145.33817652019,
+              "score": 4.3,
+              "dx": 0.03,
+              "dy": 4.22,
+              "anchor": "stem-tip",
+              "anchorY": 1102.33817652019
+            },
+            {
+              "measureNumber": 78,
+              "systemIndex": 4,
+              "eventIndex": 1,
+              "noteIndex": 3,
+              "startDivision": 0,
+              "midi": 62,
+              "clef": "treble",
+              "cx": 826.6435663909243,
+              "cy": 1153.7407927078384,
+              "score": 12.7,
+              "dx": 0.03,
+              "dy": 12.63,
+              "anchor": "stem-tip",
+              "anchorY": 1110.7407927078384
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 70,
+            "systemIndex": 3,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 8,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 494.91484034050416,
+            "cy": 865.6612149524942,
+            "score": 19.67,
+            "dx": 2.59,
+            "dy": 13.45,
+            "anchor": "notehead",
+            "anchorY": 865.6612149524942
+          },
+          "selectedEnd": {
+            "measureNumber": 78,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 1,
+            "startDivision": 0,
+            "midi": 69,
+            "clef": "treble",
+            "cx": 826.6435663909243,
+            "cy": 1136.9355569714965,
+            "score": 0.9,
+            "dx": 0.03,
+            "dy": 0.82,
+            "anchor": "stem-tip",
+            "anchorY": 1098.9355569714965
+          },
+          "classification": "slur-stop-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p3-op195",
+          "source": "pdf-vector-path",
+          "page": 3,
+          "start": {
+            "x": 497.5045262394958,
+            "y": 852.2080442584637,
+            "tangent": {
+              "dx": 0.9023401109025484,
+              "dy": -0.43102473740653974
+            }
+          },
+          "end": {
+            "x": 951.1178074894958,
+            "y": 835.1587062623095,
+            "tangent": {
+              "dx": 0.9321493655810561,
+              "dy": 0.36207397068393965
+            }
+          },
+          "bounds": {
+            "x0": 497.5045262394958,
+            "x1": 951.1178074894958,
+            "y0": 808.2997318375786,
+            "y1": 852.2080442584637,
+            "width": 453.61328125,
+            "height": 43.90831242088507
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 70,
+              "systemIndex": 3,
+              "eventIndex": 3,
+              "noteIndex": 0,
+              "startDivision": 8,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 494.91484034050416,
+              "cy": 865.6612149524942,
+              "score": 19.67,
+              "dx": 2.59,
+              "dy": 13.45,
+              "anchor": "notehead",
+              "anchorY": 865.6612149524942
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 70,
+            "systemIndex": 3,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 8,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 494.91484034050416,
+            "cy": 865.6612149524942,
+            "score": 19.67,
+            "dx": 2.59,
+            "dy": 13.45,
+            "anchor": "notehead",
+            "anchorY": 865.6612149524942
+          },
+          "selectedEnd": {
+            "measureNumber": 78,
+            "systemIndex": 4,
+            "eventIndex": 1,
+            "noteIndex": 1,
+            "startDivision": 0,
+            "midi": 69,
+            "clef": "treble",
+            "cx": 826.6435663909243,
+            "cy": 1136.9355569714965,
+            "score": 0.9,
+            "dx": 0.03,
+            "dy": 0.82,
+            "anchor": "stem-tip",
+            "anchorY": 1098.9355569714965
+          },
+          "classification": "slur-start-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p3-op213",
+          "source": "pdf-vector-path",
+          "page": 3,
+          "start": {
+            "x": 121.858607082458,
+            "y": 858.1753014013209,
+            "tangent": {
+              "dx": 0.8550380034158944,
+              "dy": -0.5185653408342685
+            }
+          },
+          "end": {
+            "x": 408.5792445561975,
+            "y": 858.1753014013209,
+            "tangent": {
+              "dx": 0.8550381679387541,
+              "dy": 0.5185650695601652
+            }
+          },
+          "bounds": {
+            "x0": 121.858607082458,
+            "x1": 408.5792445561975,
+            "y0": 832.0916601086527,
+            "y1": 858.1753014013209,
+            "width": 286.72063747373954,
+            "height": 26.083641292668176
+          },
+          "archDirection": "above",
+          "startCandidates": [],
+          "endCandidates": [
+            {
+              "measureNumber": 70,
+              "systemIndex": 3,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 408.5469243741177,
+              "cy": 865.6612149524942,
+              "score": 7.56,
+              "dx": 0.03,
+              "dy": 7.49,
+              "anchor": "notehead",
+              "anchorY": 865.6612149524942
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 65,
+            "systemIndex": 2,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 8,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 558.7729983236975,
+            "cy": 615.3934218052257,
+            "score": 7.59,
+            "dx": 0.03,
+            "dy": 7.51,
+            "anchor": "notehead",
+            "anchorY": 615.3934218052257
+          },
+          "selectedEnd": {
+            "measureNumber": 70,
+            "systemIndex": 3,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 408.5469243741177,
+            "cy": 865.6612149524942,
+            "score": 7.56,
+            "dx": 0.03,
+            "dy": 7.49,
+            "anchor": "notehead",
+            "anchorY": 865.6612149524942
+          },
+          "classification": "slur-stop-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p3-op231",
+          "source": "pdf-vector-path",
+          "page": 3,
+          "start": {
+            "x": 121.858607082458,
+            "y": 607.8852106450184,
+            "tangent": {
+              "dx": 0.8794603158869683,
+              "dy": -0.47597221849598953
+            }
+          },
+          "end": {
+            "x": 457.25871048319334,
+            "y": 607.8852106450184,
+            "tangent": {
+              "dx": 0.8794604377604218,
+              "dy": 0.47597199330868945
+            }
+          },
+          "bounds": {
+            "x0": 121.858607082458,
+            "x1": 457.25871048319334,
+            "y0": 580.6569601414784,
+            "y1": 607.8852106450184,
+            "width": 335.40010340073536,
+            "height": 27.22825050354004
+          },
+          "archDirection": "above",
+          "startCandidates": [],
+          "endCandidates": [
+            {
+              "measureNumber": 65,
+              "systemIndex": 2,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 457.2263899203361,
+              "cy": 615.3934218052257,
+              "score": 7.59,
+              "dx": 0.03,
+              "dy": 7.51,
+              "anchor": "notehead",
+              "anchorY": 615.3934218052257
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 61,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 69,
+            "clef": "treble",
+            "cx": 666.361277315294,
+            "cy": 377.72955125890735,
+            "score": 33.07,
+            "dx": 8.01,
+            "dy": 13.83,
+            "anchor": "notehead",
+            "anchorY": 377.72955125890735
+          },
+          "selectedEnd": {
+            "measureNumber": 65,
+            "systemIndex": 2,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 457.2263899203361,
+            "cy": 615.3934218052257,
+            "score": 7.59,
+            "dx": 0.03,
+            "dy": 7.51,
+            "anchor": "notehead",
+            "anchorY": 615.3934218052257
+          },
+          "classification": "slur-stop-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p3-op249",
+          "source": "pdf-vector-path",
+          "page": 3,
+          "start": {
+            "x": 674.37547125,
+            "y": 363.8976448240135,
+            "tangent": {
+              "dx": 0.8501365791125388,
+              "dy": -0.526562244046067
+            }
+          },
+          "end": {
+            "x": 952.822736875,
+            "y": 363.8976448240135,
+            "tangent": {
+              "dx": 0.8501365791125383,
+              "dy": 0.526562244046068
+            }
+          },
+          "bounds": {
+            "x0": 674.37547125,
+            "x1": 952.822736875,
+            "y0": 338.02771882016475,
+            "y1": 363.8976448240135,
+            "width": 278.447265625,
+            "height": 25.869926003848775
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 61,
+              "systemIndex": 1,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 69,
+              "clef": "treble",
+              "cx": 666.361277315294,
+              "cy": 377.72955125890735,
+              "score": 33.07,
+              "dx": 8.01,
+              "dy": 13.83,
+              "anchor": "notehead",
+              "anchorY": 377.72955125890735
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 61,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 69,
+            "clef": "treble",
+            "cx": 666.361277315294,
+            "cy": 377.72955125890735,
+            "score": 33.07,
+            "dx": 8.01,
+            "dy": 13.83,
+            "anchor": "notehead",
+            "anchorY": 377.72955125890735
+          },
+          "selectedEnd": {
+            "measureNumber": 65,
+            "systemIndex": 2,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 457.2263899203361,
+            "cy": 615.3934218052257,
+            "score": 7.59,
+            "dx": 0.03,
+            "dy": 7.51,
+            "anchor": "notehead",
+            "anchorY": 615.3934218052257
+          },
+          "classification": "slur-start-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p3-op267",
+          "source": "pdf-vector-path",
+          "page": 3,
+          "start": {
+            "x": 121.858607082458,
+            "y": 343.8343548290605,
+            "tangent": {
+              "dx": 0.8895446700153241,
+              "dy": -0.45684820241227614
+            }
+          },
+          "end": {
+            "x": 399.9079850367647,
+            "y": 365.99848644239916,
+            "tangent": {
+              "dx": 0.8059377462514343,
+              "dy": 0.5920002949046216
+            }
+          },
+          "bounds": {
+            "x0": 121.858607082458,
+            "x1": 399.9079850367647,
+            "y0": 321.35821111229643,
+            "y1": 365.99848644239916,
+            "width": 278.04937795430675,
+            "height": 44.640275330102725
+          },
+          "archDirection": "above",
+          "startCandidates": [],
+          "endCandidates": [
+            {
+              "measureNumber": 59,
+              "systemIndex": 1,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 64,
+              "clef": "treble",
+              "cx": 399.87570084470593,
+              "cy": 390.3334805819477,
+              "score": 5.74,
+              "dx": 0.03,
+              "dy": 5.67,
+              "anchor": "stem-tip",
+              "anchorY": 360.3334805819477
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 52,
+            "systemIndex": 0,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 4,
+            "midi": 78,
+            "clef": "treble",
+            "cx": 192.60041042453787,
+            "cy": 106.45521260095029,
+            "score": 14.45,
+            "dx": 0.03,
+            "dy": 14.37,
+            "anchor": "notehead",
+            "anchorY": 106.45521260095029
+          },
+          "selectedEnd": {
+            "measureNumber": 59,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 399.87570084470593,
+            "cy": 390.3334805819477,
+            "score": 5.74,
+            "dx": 0.03,
+            "dy": 5.67,
+            "anchor": "stem-tip",
+            "anchorY": 360.3334805819477
+          },
+          "classification": "slur-stop-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p3-op285",
+          "source": "pdf-vector-path",
+          "page": 3,
+          "start": {
+            "x": 192.63270724986873,
+            "y": 92.08193904153248,
+            "tangent": {
+              "dx": 0.9658529207186192,
+              "dy": -0.25909097927043484
+            }
+          },
+          "end": {
+            "x": 952.822736875,
+            "y": 92.08193904153248,
+            "tangent": {
+              "dx": 0.9658529382165372,
+              "dy": 0.2590909140407711
+            }
+          },
+          "bounds": {
+            "x0": 192.63270724986873,
+            "x1": 952.822736875,
+            "y0": 61.4936851547727,
+            "y1": 92.08193904153248,
+            "width": 760.1900296251313,
+            "height": 30.58825388675978
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 52,
+              "systemIndex": 0,
+              "eventIndex": 3,
+              "noteIndex": 0,
+              "startDivision": 4,
+              "midi": 78,
+              "clef": "treble",
+              "cx": 192.60041042453787,
+              "cy": 106.45521260095029,
+              "score": 14.45,
+              "dx": 0.03,
+              "dy": 14.37,
+              "anchor": "notehead",
+              "anchorY": 106.45521260095029
+            }
+          ],
+          "endCandidates": [],
+          "selectedStart": {
+            "measureNumber": 52,
+            "systemIndex": 0,
+            "eventIndex": 3,
+            "noteIndex": 0,
+            "startDivision": 4,
+            "midi": 78,
+            "clef": "treble",
+            "cx": 192.60041042453787,
+            "cy": 106.45521260095029,
+            "score": 14.45,
+            "dx": 0.03,
+            "dy": 14.37,
+            "anchor": "notehead",
+            "anchorY": 106.45521260095029
+          },
+          "selectedEnd": {
+            "measureNumber": 59,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 399.87570084470593,
+            "cy": 390.3334805819477,
+            "score": 5.74,
+            "dx": 0.03,
+            "dy": 5.67,
+            "anchor": "stem-tip",
+            "anchorY": 360.3334805819477
+          },
+          "classification": "slur-start-fragment",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p3-op303",
+          "source": "pdf-vector-path",
+          "page": 3,
+          "start": {
+            "x": 279.15039000656515,
+            "y": 859.4358063242679,
+            "tangent": {
+              "dx": 0.9038148332273032,
+              "dy": -0.42792376334845217
+            }
+          },
+          "end": {
+            "x": 406.94095838235296,
+            "y": 859.4358063242679,
+            "tangent": {
+              "dx": 0.9038148332273032,
+              "dy": 0.42792376334845217
+            }
+          },
+          "bounds": {
+            "x0": 279.15039000656515,
+            "x1": 406.94095838235296,
+            "y0": 847.3349582946264,
+            "y1": 859.4358063242679,
+            "width": 127.79056837578781,
+            "height": 12.100848029641497
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 69,
+              "systemIndex": 3,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 277.47982252537815,
+              "cy": 865.6612149524942,
+              "score": 10.23,
+              "dx": 1.67,
+              "dy": 6.23,
+              "anchor": "notehead",
+              "anchorY": 865.6612149524942
+            }
+          ],
+          "endCandidates": [
+            {
+              "measureNumber": 70,
+              "systemIndex": 3,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 408.5469243741177,
+              "cy": 865.6612149524942,
+              "score": 10.08,
+              "dx": 1.61,
+              "dy": 6.23,
+              "anchor": "notehead",
+              "anchorY": 865.6612149524942
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 69,
+            "systemIndex": 3,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 277.47982252537815,
+            "cy": 865.6612149524942,
+            "score": 10.23,
+            "dx": 1.67,
+            "dy": 6.23,
+            "anchor": "notehead",
+            "anchorY": 865.6612149524942
+          },
+          "selectedEnd": {
+            "measureNumber": 70,
+            "systemIndex": 3,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 408.5469243741177,
+            "cy": 865.6612149524942,
+            "score": 10.08,
+            "dx": 1.61,
+            "dy": 6.23,
+            "anchor": "notehead",
+            "anchorY": 865.6612149524942
+          },
+          "classification": "tie",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p3-op321",
+          "source": "pdf-vector-path",
+          "page": 3,
+          "start": {
+            "x": 305.06181414653366,
+            "y": 609.1457155679655,
+            "tangent": {
+              "dx": 0.9278787085324821,
+              "dy": -0.37288215598509555
+            }
+          },
+          "end": {
+            "x": 455.6204243093488,
+            "y": 609.1457155679655,
+            "tangent": {
+              "dx": 0.9278787964330549,
+              "dy": 0.3728819372535299
+            }
+          },
+          "bounds": {
+            "x0": 305.06181414653366,
+            "x1": 455.6204243093488,
+            "y0": 597.044867538324,
+            "y1": 609.1457155679655,
+            "width": 150.5586101628151,
+            "height": 12.100848029641497
+          },
+          "archDirection": "above",
+          "startCandidates": [
+            {
+              "measureNumber": 64,
+              "systemIndex": 2,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 303.39124739932777,
+              "cy": 615.3934218052257,
+              "score": 10.26,
+              "dx": 1.67,
+              "dy": 6.25,
+              "anchor": "notehead",
+              "anchorY": 615.3934218052257
+            }
+          ],
+          "endCandidates": [
+            {
+              "measureNumber": 65,
+              "systemIndex": 2,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 74,
+              "clef": "treble",
+              "cx": 457.2263899203361,
+              "cy": 615.3934218052257,
+              "score": 10.1,
+              "dx": 1.61,
+              "dy": 6.25,
+              "anchor": "notehead",
+              "anchorY": 615.3934218052257
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 64,
+            "systemIndex": 2,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 303.39124739932777,
+            "cy": 615.3934218052257,
+            "score": 10.26,
+            "dx": 1.67,
+            "dy": 6.25,
+            "anchor": "notehead",
+            "anchorY": 615.3934218052257
+          },
+          "selectedEnd": {
+            "measureNumber": 65,
+            "systemIndex": 2,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 74,
+            "clef": "treble",
+            "cx": 457.2263899203361,
+            "cy": 615.3934218052257,
+            "score": 10.1,
+            "dx": 1.61,
+            "dy": 6.25,
+            "anchor": "notehead",
+            "anchorY": 615.3934218052257
+          },
+          "classification": "tie",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p3-op339",
+          "source": "pdf-vector-path",
+          "page": 3,
+          "start": {
+            "x": 401.5462712106093,
+            "y": 396.6707752248555,
+            "tangent": {
+              "dx": 0.931920928477298,
+              "dy": 0.36266152686218445
+            }
+          },
+          "end": {
+            "x": 526.7909042200631,
+            "y": 396.6707752248555,
+            "tangent": {
+              "dx": 0.9319211292549451,
+              "dy": -0.3626610109291978
+            }
+          },
+          "bounds": {
+            "x0": 401.5462712106093,
+            "x1": 526.7909042200631,
+            "y0": 396.6707752248555,
+            "y1": 408.77162068999473,
+            "width": 125.24463300945382,
+            "height": 12.10084546513923
+          },
+          "archDirection": "below",
+          "startCandidates": [
+            {
+              "measureNumber": 59,
+              "systemIndex": 1,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 64,
+              "clef": "treble",
+              "cx": 399.87570084470593,
+              "cy": 390.3334805819477,
+              "score": 10.35,
+              "dx": 1.67,
+              "dy": 6.34,
+              "anchor": "notehead",
+              "anchorY": 390.3334805819477
+            }
+          ],
+          "endCandidates": [
+            {
+              "measureNumber": 60,
+              "systemIndex": 1,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 64,
+              "clef": "treble",
+              "cx": 528.3968470631933,
+              "cy": 390.3334805819477,
+              "score": 10.19,
+              "dx": 1.61,
+              "dy": 6.34,
+              "anchor": "notehead",
+              "anchorY": 390.3334805819477
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 59,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 399.87570084470593,
+            "cy": 390.3334805819477,
+            "score": 10.35,
+            "dx": 1.67,
+            "dy": 6.34,
+            "anchor": "notehead",
+            "anchorY": 390.3334805819477
+          },
+          "selectedEnd": {
+            "measureNumber": 60,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 528.3968470631933,
+            "cy": 390.3334805819477,
+            "score": 10.19,
+            "dx": 1.61,
+            "dy": 6.34,
+            "anchor": "notehead",
+            "anchorY": 390.3334805819477
+          },
+          "classification": "tie",
+          "failureReason": null
+        },
+        {
+          "candidateId": "pdf-path-p3-op357",
+          "source": "pdf-vector-path",
+          "page": 3,
+          "start": {
+            "x": 273.02512740152315,
+            "y": 396.6707752248555,
+            "tangent": {
+              "dx": 0.931920928477298,
+              "dy": 0.36266152686218445
+            }
+          },
+          "end": {
+            "x": 398.26973989495804,
+            "y": 396.6707752248555,
+            "tangent": {
+              "dx": 0.9319210288662287,
+              "dy": -0.3626612688955215
+            }
+          },
+          "bounds": {
+            "x0": 273.02512740152315,
+            "x1": 398.26973989495804,
+            "y0": 396.6707752248555,
+            "y1": 408.77162068999473,
+            "width": 125.24461249343489,
+            "height": 12.10084546513923
+          },
+          "archDirection": "below",
+          "startCandidates": [
+            {
+              "measureNumber": 58,
+              "systemIndex": 1,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 64,
+              "clef": "treble",
+              "cx": 271.35455597075634,
+              "cy": 390.3334805819477,
+              "score": 10.35,
+              "dx": 1.67,
+              "dy": 6.34,
+              "anchor": "notehead",
+              "anchorY": 390.3334805819477
+            }
+          ],
+          "endCandidates": [
+            {
+              "measureNumber": 59,
+              "systemIndex": 1,
+              "eventIndex": 1,
+              "noteIndex": 0,
+              "startDivision": 0,
+              "midi": 64,
+              "clef": "treble",
+              "cx": 399.87570084470593,
+              "cy": 390.3334805819477,
+              "score": 10.19,
+              "dx": 1.61,
+              "dy": 6.34,
+              "anchor": "notehead",
+              "anchorY": 390.3334805819477
+            }
+          ],
+          "selectedStart": {
+            "measureNumber": 58,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 271.35455597075634,
+            "cy": 390.3334805819477,
+            "score": 10.35,
+            "dx": 1.67,
+            "dy": 6.34,
+            "anchor": "notehead",
+            "anchorY": 390.3334805819477
+          },
+          "selectedEnd": {
+            "measureNumber": 59,
+            "systemIndex": 1,
+            "eventIndex": 1,
+            "noteIndex": 0,
+            "startDivision": 0,
+            "midi": 64,
+            "clef": "treble",
+            "cx": 399.87570084470593,
+            "cy": 390.3334805819477,
+            "score": 10.19,
+            "dx": 1.61,
+            "dy": 6.34,
+            "anchor": "notehead",
+            "anchorY": 390.3334805819477
+          },
+          "classification": "tie",
+          "failureReason": null
+        }
+      ],
+      "openVectorCurveFragments": []
+    }
+  }
+]

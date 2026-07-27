@@ -1,0 +1,295 @@
+{
+  "scoreboard": {
+    "before": {
+      "overall": 60.9,
+      "pitch": 48.2,
+      "rhythm": 66.9,
+      "sustain": 66.7,
+      "articulation": 85.3,
+      "measureStructure": 59.1
+    },
+    "after": {
+      "overall": 61.2,
+      "pitch": 50,
+      "rhythm": 66.6,
+      "sustain": 66.7,
+      "articulation": 84.3,
+      "measureStructure": 60.6
+    }
+  },
+  "defects": {
+    "incorrectPitch": {
+      "before": 224,
+      "after": 208
+    },
+    "missingNote": {
+      "before": 314,
+      "after": 275
+    },
+    "extraNote": {
+      "before": 304,
+      "after": 264
+    }
+  },
+  "buckets": {
+    "before": {
+      "one-diatonic-step": 64,
+      "small-interval-other": 14,
+      "larger-interval": 94,
+      "accidental-or-alter": 44,
+      "octave-error": 8
+    },
+    "after": {
+      "one-diatonic-step": 65,
+      "small-interval-other": 13,
+      "larger-interval": 71,
+      "accidental-or-alter": 52,
+      "octave-error": 7
+    }
+  },
+  "fixtures": [
+    {
+      "id": "piano-beginner-single-vector",
+      "pitchBefore": "94%",
+      "pitchAfter": "94%",
+      "pitchDeltaPp": 0,
+      "classDeltas": {
+        "rhythm": 0,
+        "sustain": 0,
+        "articulation": 0,
+        "measureStructure": 0,
+        "overall": 0
+      }
+    },
+    {
+      "id": "piano-grand-voices-vector",
+      "pitchBefore": "62%",
+      "pitchAfter": "62%",
+      "pitchDeltaPp": 0,
+      "classDeltas": {
+        "rhythm": 0,
+        "sustain": 0,
+        "articulation": 0,
+        "measureStructure": 0,
+        "overall": 0
+      }
+    },
+    {
+      "id": "piano-rhythm-tuplets-vector",
+      "pitchBefore": "91%",
+      "pitchAfter": "91%",
+      "pitchDeltaPp": 0,
+      "classDeltas": {
+        "rhythm": 0,
+        "sustain": 0,
+        "articulation": 0,
+        "measureStructure": 0,
+        "overall": 0
+      }
+    },
+    {
+      "id": "piano-articulation-scan",
+      "pitchBefore": "1%",
+      "pitchAfter": "1%",
+      "pitchDeltaPp": 0,
+      "classDeltas": {
+        "rhythm": 0,
+        "sustain": 0,
+        "articulation": 0,
+        "measureStructure": 0,
+        "overall": 0
+      }
+    },
+    {
+      "id": "piano-dense-advanced-vector",
+      "pitchBefore": "10%",
+      "pitchAfter": "27%",
+      "pitchDeltaPp": 16.3,
+      "classDeltas": {
+        "rhythm": -2.9,
+        "sustain": 0,
+        "articulation": -9.4,
+        "measureStructure": 13.5,
+        "overall": 2.5
+      }
+    },
+    {
+      "id": "guitar-tab-sparse-vector",
+      "pitchBefore": "70%",
+      "pitchAfter": "70%",
+      "pitchDeltaPp": 0,
+      "classDeltas": {
+        "rhythm": 0,
+        "sustain": 0,
+        "articulation": 0,
+        "measureStructure": 0,
+        "overall": 0
+      }
+    },
+    {
+      "id": "guitar-standard-chords-vector",
+      "pitchBefore": "2%",
+      "pitchAfter": "2%",
+      "pitchDeltaPp": 0,
+      "classDeltas": {
+        "rhythm": 0,
+        "sustain": 0,
+        "articulation": 0,
+        "measureStructure": 0,
+        "overall": 0
+      }
+    },
+    {
+      "id": "guitar-paired-chords-vector",
+      "pitchBefore": "31%",
+      "pitchAfter": "31%",
+      "pitchDeltaPp": 0,
+      "classDeltas": {
+        "rhythm": 0,
+        "sustain": 0,
+        "articulation": 0,
+        "measureStructure": 0,
+        "overall": 0
+      }
+    },
+    {
+      "id": "guitar-techniques-paired-vector",
+      "pitchBefore": "72%",
+      "pitchAfter": "72%",
+      "pitchDeltaPp": 0,
+      "classDeltas": {
+        "rhythm": 0,
+        "sustain": 0,
+        "articulation": 0,
+        "measureStructure": 0,
+        "overall": 0
+      }
+    }
+  ],
+  "taxonomySummary": {
+    "livePairedTotal": 270,
+    "rollupIncorrectPitch": 224,
+    "byFamily": {
+      "piano": {
+        "total": 146,
+        "buckets": {
+          "accidental-or-alter": 30,
+          "one-diatonic-step": 29,
+          "small-interval-other": 11,
+          "larger-interval": 73,
+          "octave-error": 3
+        }
+      },
+      "guitar": {
+        "total": 124,
+        "buckets": {
+          "one-diatonic-step": 37,
+          "small-interval-other": 11,
+          "larger-interval": 65,
+          "octave-error": 9,
+          "accidental-or-alter": 2
+        }
+      }
+    },
+    "byRecognition": {
+      "vector": {
+        "total": 232,
+        "buckets": {
+          "accidental-or-alter": 29,
+          "one-diatonic-step": 62,
+          "small-interval-other": 19,
+          "larger-interval": 112,
+          "octave-error": 10
+        }
+      },
+      "raster": {
+        "total": 38,
+        "buckets": {
+          "larger-interval": 26,
+          "octave-error": 2,
+          "one-diatonic-step": 4,
+          "accidental-or-alter": 3,
+          "small-interval-other": 3
+        }
+      }
+    },
+    "byStaffLayout": {
+      "single": {
+        "total": 124,
+        "buckets": {
+          "one-diatonic-step": 37,
+          "small-interval-other": 11,
+          "larger-interval": 65,
+          "octave-error": 9,
+          "accidental-or-alter": 2
+        }
+      },
+      "grand": {
+        "total": 146,
+        "buckets": {
+          "accidental-or-alter": 30,
+          "one-diatonic-step": 29,
+          "small-interval-other": 11,
+          "larger-interval": 73,
+          "octave-error": 3
+        }
+      }
+    },
+    "pianoVector": {
+      "total": 108,
+      "buckets": {
+        "accidental-or-alter": 27,
+        "one-diatonic-step": 25,
+        "small-interval-other": 8,
+        "larger-interval": 47,
+        "octave-error": 1
+      },
+      "byChord": {
+        "chord": 99,
+        "single": 9
+      },
+      "byClef": {
+        "treble-staff": 104,
+        "bass-staff": 4
+      },
+      "byAccidentalLabel": {
+        "truthHasAccidental": 55,
+        "truthNatural": 53
+      },
+      "byKey": {
+        "keyPresent": 0,
+        "noKey": 108
+      }
+    },
+    "pianoRaster": {
+      "total": 38,
+      "buckets": {
+        "larger-interval": 26,
+        "octave-error": 2,
+        "one-diatonic-step": 4,
+        "accidental-or-alter": 3,
+        "small-interval-other": 3
+      }
+    },
+    "plusMinus1Proof": {
+      "pianoVectorAccidentalBucket": 27,
+      "trueSameLetterMissingAlter": 27,
+      "staffDegreeMisfiledAsAccidental": 0,
+      "allTrueAccHaveSharpInTruthMissingInGen": 27,
+      "note": "True accidental failures exist (F#→F) but PDFs contain zero SMuFL accidental glyphs — not an association bug."
+    },
+    "targetChoice": {
+      "rejected": [
+        "Accidentals: 27 true missing-# on piano vector, but no glyphs/ink to bind — cannot fix via association",
+        "Raster scan: 38 errors, grand pairing already correct — Y/register mapping, larger than one fix"
+      ],
+      "accepted": "Dense grand-staff pairing blocked by degenerate stave (h≈0.0008) making stave count odd"
+    }
+  },
+  "rca": "filterViableStaves before groupStavesIntoSystems when stavesPerSystem>=2",
+  "remainingDominant": [
+    "Missing local accidentals (no SMuFL glyphs in vector PDFs)",
+    "Dense residual larger-interval / chord association",
+    "Raster articulation-scan pitch mapping"
+  ]
+}

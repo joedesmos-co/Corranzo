@@ -6,6 +6,7 @@ import {
   validateOmrGeneratedPlayback,
 } from '../omr/validateOmrGeneratedPlayback.js'
 import { normalizeOmrMeasureGridMetadata } from '../omr/omrMeasureGridMeta.js'
+import { fnv1aHashHex } from '../library/scoreSourceContentIdentity.js'
 
 function isFinitePositive(value) {
   return Number.isFinite(Number(value)) && Number(value) > 0
@@ -29,7 +30,11 @@ function cloneOmrMeta(meta) {
   return cloned
 }
 
-export function createMusicXmlSource(fileName, musicXmlString, { source = 'upload', omrMeta = null } = {}) {
+export function createMusicXmlSource(
+  fileName,
+  musicXmlString,
+  { source = 'upload', omrMeta = null, ownerPdfIdentity = null } = {},
+) {
   const encoded = new TextEncoder().encode(musicXmlString ?? '')
   const data = encoded.buffer.slice(encoded.byteOffset, encoded.byteOffset + encoded.byteLength)
   const clonedOmrMeta = cloneOmrMeta(omrMeta)
@@ -37,6 +42,7 @@ export function createMusicXmlSource(fileName, musicXmlString, { source = 'uploa
     fileName,
     data,
     source,
+    ...(ownerPdfIdentity ? { ownerPdfIdentity } : {}),
     ...(clonedOmrMeta ? { omrMeta: clonedOmrMeta } : {}),
   }
 }
@@ -77,10 +83,13 @@ export function musicXmlSourceKey(source) {
   if (!summary.ready) {
     return null
   }
+  const contentHash = fnv1aHashHex(source.data) ?? '0'
+  const owner = source?.ownerPdfIdentity ?? 'unowned'
   const omrDuration = source?.omrMeta?.durationSeconds
   const omrSuffix =
     summary.source === 'omr' && omrDuration != null ? `:dur${omrDuration}` : ''
-  return `${summary.fileName ?? 'score.musicxml'}:${summary.byteLength}:${summary.source ?? 'upload'}${omrSuffix}`
+  // Content hash is required — filename + byteLength alone can collide across pieces.
+  return `${summary.fileName ?? 'score.musicxml'}:${summary.byteLength}:${summary.source ?? 'upload'}:${contentHash}:${owner}${omrSuffix}`
 }
 
 export function isOmrGeneratedPlayback(source) {
@@ -186,12 +195,20 @@ export function isLibraryScoreTimingReady(musicXmlSource) {
  * Experimental OMR panel: PDF-only, failed OMR retry, or invalid generated playback.
  * Hidden when uploaded MusicXML/MXL is ready, or valid OMR playback already exists.
  */
-export function shouldShowLibraryOmrPanel({ hasPdf, musicXmlSource }) {
+export function shouldShowLibraryOmrPanel({ hasPdf, musicXmlSource, pdfIdentity = null }) {
   if (!hasPdf) {
     return false
   }
   if (hasUploadedScoreTiming(musicXmlSource)) {
     return false
+  }
+  // Stale OMR owned by a different PDF must not hide prepare — re-run for the active PDF.
+  if (
+    musicXmlSource?.ownerPdfIdentity &&
+    pdfIdentity &&
+    musicXmlSource.ownerPdfIdentity !== pdfIdentity
+  ) {
+    return true
   }
   if (isOmrGeneratedPlayback(musicXmlSource) && isLibraryScoreTimingReady(musicXmlSource)) {
     return false
@@ -209,6 +226,7 @@ export function cloneMusicXmlSource(source) {
       fileName: source.fileName ?? null,
       data,
       source: source.source ?? 'upload',
+      ...(source.ownerPdfIdentity ? { ownerPdfIdentity: source.ownerPdfIdentity } : {}),
       ...(source.omrMeta ? { omrMeta: cloneOmrMeta(source.omrMeta) } : {}),
     }
   } catch {
@@ -225,6 +243,9 @@ export function rebuildMusicXmlSourceFromSessionMeta(fileName, data, meta = {}) 
     fileName,
     data: data.slice(0),
     source,
+    ...(meta.ownerPdfIdentity || meta.musicXmlOwnerPdfIdentity
+      ? { ownerPdfIdentity: meta.ownerPdfIdentity ?? meta.musicXmlOwnerPdfIdentity }
+      : {}),
     ...(meta.omrMeta ? { omrMeta: cloneOmrMeta(meta.omrMeta) } : {}),
   }
 }

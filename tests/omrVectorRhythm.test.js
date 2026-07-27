@@ -10,6 +10,7 @@ import {
   hasConfidentQuarterInference,
   hasBeamEvidenceForNotes,
   isDenseSubdivisionRun,
+  normalizeDenseVectorLaneSpacing,
   openingBassSubdivisionCap,
   openingBassChordSustainSpan,
   refineEventDurationsFromBeamEvidence,
@@ -21,6 +22,7 @@ import {
   terminalSameClefChordQuarterSpan,
   shouldInferRhythmFromPositions,
   unsupportedUpperChordOverhangCap,
+  resnapFlooredBeamOnsets,
 } from '../src/features/omr/processVectorOmrPage.js'
 import { summarizeVectorRhythmDiagnostics } from '../src/features/omr/vectorRhythmDiagnostics.js'
 import { buildOmrMusicXml } from '../src/features/omr/buildOmrMusicXml.js'
@@ -44,7 +46,11 @@ function durations(events) {
 
 describe('durationMeta snaps a division span to the nearest note value', () => {
   it('maps exact standard spans', () => {
-    expect(durationMeta(12)).toMatchObject({ durationType: 'half', dotted: true })
+    expect(durationMeta(12, { allowDotted: true })).toMatchObject({
+      durationType: 'half',
+      dotted: true,
+    })
+    expect(durationMeta(12)).toMatchObject({ durationType: 'half', dotted: false })
     expect(durationMeta(4)).toMatchObject({ durationType: 'quarter', dotted: false })
   })
 })
@@ -68,6 +74,65 @@ describe('shouldInferRhythmFromPositions', () => {
       { notes: [{ positionInMeasure: 0.375 }] },
     ]
     expect(shouldInferRhythmFromPositions(groups, 4)).toBe(true)
+  })
+})
+
+describe('normalizeDenseVectorLaneSpacing', () => {
+  it('recovers a quarter plus four eighths from shifted 3/4 vector columns', () => {
+    const events = normalizeDenseVectorLaneSpacing(
+      [
+        { type: 'note', cx: 10, startDivision: 0, durationDivisions: 4, notes: [{ clef: 'treble' }] },
+        { type: 'note', cx: 42, startDivision: 5, durationDivisions: 2, notes: [{ clef: 'treble' }] },
+        { type: 'note', cx: 62, startDivision: 7, durationDivisions: 2, notes: [{ clef: 'treble' }] },
+        { type: 'note', cx: 82, startDivision: 9, durationDivisions: 2, notes: [{ clef: 'treble' }] },
+        { type: 'note', cx: 102, startDivision: 11, durationDivisions: 1, notes: [{ clef: 'treble' }] },
+      ],
+      12,
+    )
+
+    expect(events.map((event) => event.startDivision)).toEqual([0, 4, 6, 8, 10])
+    expect(events.map((event) => event.durationDivisions)).toEqual([4, 2, 2, 2, 2])
+    expect(events.every((event) => event.vectorLaneSpacingAdjusted)).toBe(true)
+  })
+
+  it('leaves explicit beam evidence authoritative', () => {
+    const input = [
+      { type: 'note', cx: 10, startDivision: 0, durationDivisions: 4, notes: [{ clef: 'treble' }] },
+      { type: 'note', cx: 42, startDivision: 5, durationDivisions: 2, notes: [{ clef: 'treble', beams: 1 }] },
+      { type: 'note', cx: 62, startDivision: 7, durationDivisions: 2, notes: [{ clef: 'treble' }] },
+      { type: 'note', cx: 82, startDivision: 9, durationDivisions: 3, notes: [{ clef: 'treble' }] },
+    ]
+
+    expect(normalizeDenseVectorLaneSpacing(input, 12)).toBe(input)
+  })
+
+  it('does not erase a late opening or a long rest-sized gap', () => {
+    const lateOpening = [
+      { type: 'note', cx: 10, startDivision: 2, durationDivisions: 2, notes: [{ clef: 'treble' }] },
+      { type: 'note', cx: 30, startDivision: 4, durationDivisions: 2, notes: [{ clef: 'treble' }] },
+      { type: 'note', cx: 50, startDivision: 6, durationDivisions: 2, notes: [{ clef: 'treble' }] },
+      { type: 'note', cx: 70, startDivision: 8, durationDivisions: 4, notes: [{ clef: 'treble' }] },
+    ]
+    const longGap = lateOpening.map((event, index) => ({
+      ...event,
+      cx: [10, 30, 90, 110][index],
+      startDivision: [0, 2, 8, 10][index],
+    }))
+
+    expect(normalizeDenseVectorLaneSpacing(lateOpening, 12)).toBe(lateOpening)
+    expect(normalizeDenseVectorLaneSpacing(longGap, 12)).toBe(longGap)
+  })
+
+  it('leaves ambiguous complete-looking 4/4 lanes unchanged', () => {
+    const input = Array.from({ length: 8 }, (_, index) => ({
+      type: 'note',
+      cx: 10 + index * 20,
+      startDivision: Math.min(15, index * 2 + (index === 7 ? 1 : 0)),
+      durationDivisions: index === 7 ? 1 : 2,
+      notes: [{ clef: 'treble' }],
+    }))
+
+    expect(normalizeDenseVectorLaneSpacing(input, 16)).toBe(input)
   })
 })
 
@@ -1100,6 +1165,55 @@ describe('refineEventDurationsFromBeamEvidence', () => {
     expect(events[0].beamDurationAdjusted).toBe(true)
   })
 
+  it('floors primary-beamed notes that were gap-compressed to sixteenths', () => {
+    const events = refineEventDurationsFromBeamEvidence(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 1,
+          notes: [{ clef: 'treble', midi: 72, beams: 1, beamStrength: 20, durationDivisions: 2 }],
+        },
+      ],
+      16,
+    )
+    expect(events[0].durationDivisions).toBe(2)
+    expect(events[0].durationType).toBe('eighth')
+    expect(events[0].beamDurationAdjusted).toBe(true)
+  })
+
+  it('does not floor from tip-row strength alone without beams', () => {
+    const events = refineEventDurationsFromBeamEvidence(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 1,
+          notes: [{ clef: 'treble', midi: 72, beams: 0, beamStrength: 20, durationDivisions: 1 }],
+        },
+      ],
+      16,
+    )
+    expect(events[0].durationDivisions).toBe(1)
+    expect(events[0].beamDurationAdjusted).toBeUndefined()
+  })
+
+  it('allows sixteenth floor when secondary beams are present', () => {
+    const events = refineEventDurationsFromBeamEvidence(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 1,
+          notes: [{ clef: 'treble', midi: 72, beams: 2, beamStrength: 12, durationDivisions: 1 }],
+        },
+      ],
+      16,
+    )
+    expect(events[0].durationDivisions).toBe(1)
+    expect(events[0].beamDurationAdjusted).toBeUndefined()
+  })
+
   it('leaves non-beamed durations unchanged', () => {
     const events = refineEventDurationsFromBeamEvidence(
       [
@@ -1114,6 +1228,26 @@ describe('refineEventDurationsFromBeamEvidence', () => {
     )
     expect(events[0].durationDivisions).toBe(4)
     expect(events[0].beamDurationAdjusted).toBeUndefined()
+  })
+})
+
+describe('resnapFlooredBeamOnsets', () => {
+  it('snaps odd sixteenth onsets back to the eighth grid after flooring', () => {
+    const floored = refineEventDurationsFromBeamEvidence(
+      [
+        {
+          type: 'note',
+          startDivision: 3,
+          durationDivisions: 1,
+          notes: [{ clef: 'treble', midi: 72, beams: 1, durationDivisions: 2 }],
+        },
+      ],
+      16,
+    )
+    const events = resnapFlooredBeamOnsets(floored)
+    expect(events[0].durationDivisions).toBe(2)
+    expect(events[0].startDivision).toBe(2)
+    expect(events[0].beamOnsetResnapped).toBe(true)
   })
 })
 
@@ -1325,5 +1459,130 @@ describe('buildOmrMusicXml overlapping grand-staff rhythm', () => {
     const treble = timing.notes.find((note) => note.label === 'F#4')
     expect(bass?.durationQuarters).toBe(3)
     expect(treble?.durationQuarters).toBe(2)
+  })
+
+  it('emits MusicXML staff numbers from recognized clefs so grand-staff pairing works', () => {
+    const events = buildVectorEvents(
+      onsets([
+        { x: 4, positionInMeasure: 0.1, clef: 'bass', midi: 43, source: 'vector-glyph' },
+        { x: 120, positionInMeasure: 0.45, clef: 'treble', midi: 66, source: 'vector-glyph' },
+      ]),
+      measureBox,
+      { beats: 3, beatType: 4 },
+    )
+    // Preserve vector source through event building for MusicXML staff gating.
+    for (const event of events) {
+      for (const note of event.notes ?? []) {
+        note.source = 'vector-glyph'
+      }
+    }
+    const xml = buildOmrMusicXml({
+      measures: [{ measureNumber: 1, uncertain: false, events }],
+      includeDisclaimer: false,
+      instrument: { id: 'piano', notation: { grandStaff: true } },
+    })
+    expect(xml).toContain('<staves>2</staves>')
+    expect(xml).toContain('<clef number="1"><sign>G</sign><line>2</line></clef>')
+    expect(xml).toContain('<clef number="2"><sign>F</sign><line>4</line></clef>')
+    expect(xml).toMatch(/<staff>1<\/staff>/)
+    expect(xml).toMatch(/<staff>2<\/staff>/)
+
+    const timing = parseMusicXml(xml, 'grand-staff-staff-tags.omr.musicxml')
+    const bass = timing.notes.find((note) => note.midi === 43)
+    const treble = timing.notes.find((note) => note.midi === 66)
+    expect(bass?.staff).toBe(2)
+    expect(treble?.staff).toBe(1)
+  })
+
+  it('emits grand-staff staff tags for balanced raster dual-clef pages', () => {
+    const notes = []
+    for (let i = 0; i < 6; i += 1) {
+      notes.push({
+        type: 'note',
+        startDivision: i * 4,
+        durationDivisions: 4,
+        durationType: 'quarter',
+        clef: 'treble',
+        notes: [{ midi: 64 + (i % 3), clef: 'treble', naturalMidi: 64 + (i % 3) }],
+      })
+      notes.push({
+        type: 'note',
+        startDivision: i * 4,
+        durationDivisions: 4,
+        durationType: 'quarter',
+        clef: 'bass',
+        notes: [{ midi: 43 + (i % 3), clef: 'bass', naturalMidi: 43 + (i % 3) }],
+      })
+    }
+    const xml = buildOmrMusicXml({
+      measures: [{ measureNumber: 1, uncertain: false, events: notes }],
+      includeDisclaimer: false,
+      instrument: { id: 'piano', notation: { grandStaff: true } },
+    })
+    expect(xml).toContain('<staves>2</staves>')
+    expect(xml).toMatch(/<staff>1<\/staff>/)
+    expect(xml).toMatch(/<staff>2<\/staff>/)
+  })
+
+  it('does not emit grand staff for a lone miscleffed bass head on a treble page', () => {
+    const events = []
+    for (let i = 0; i < 12; i += 1) {
+      events.push({
+        type: 'note',
+        startDivision: i * 4,
+        durationDivisions: 4,
+        durationType: 'quarter',
+        clef: 'treble',
+        notes: [{ midi: 64, clef: 'treble', naturalMidi: 64 }],
+      })
+    }
+    events.push({
+      type: 'note',
+      startDivision: 48,
+      durationDivisions: 4,
+      durationType: 'quarter',
+      clef: 'bass',
+      notes: [{ midi: 43, clef: 'bass', naturalMidi: 43 }],
+    })
+    const xml = buildOmrMusicXml({
+      measures: [{ measureNumber: 1, uncertain: false, events }],
+      includeDisclaimer: false,
+      instrument: { id: 'piano', notation: { grandStaff: true } },
+    })
+    expect(xml).not.toContain('<staves>2</staves>')
+    expect(xml).not.toMatch(/<staff>2<\/staff>/)
+  })
+})
+
+describe('buildOmrMusicXml guitar sounding pitch', () => {
+  it('emits staff-derived midi as sounding pitch without a second 8vb shift', () => {
+    const xml = buildOmrMusicXml({
+      measures: [
+        {
+          measureNumber: 1,
+          uncertain: false,
+          events: [
+            {
+              type: 'note',
+              startDivision: 0,
+              durationDivisions: 4,
+              durationType: 'quarter',
+              clef: 'treble',
+              notes: [{ midi: 64, clef: 'treble', naturalMidi: 64 }],
+            },
+          ],
+        },
+      ],
+      includeDisclaimer: false,
+      instrument: {
+        id: 'guitar',
+        notation: { grandStaff: false, writtenOctaveOffset: -1 },
+        omr: { partName: 'Guitar' },
+      },
+    })
+    expect(xml).toContain('<clef-octave-change>-1</clef-octave-change>')
+    expect(xml).toContain('<step>E</step><octave>4</octave>')
+    expect(xml).not.toContain('<step>E</step><octave>3</octave>')
+    expect(xml).not.toContain('<staves>')
   })
 })

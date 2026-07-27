@@ -18,6 +18,11 @@ import {
   isOmrGeneratedPlayback,
 } from '../import/musicXmlSource.js'
 import { normalizeInstrumentId } from '../instruments/instruments.js'
+import {
+  assertScoreSourceMutationAllowed,
+  getActiveScoreSourceGeneration,
+  requestOmrCancellation,
+} from './scoreSourceGenerationGate.js'
 
 export const AUTO_OMR_PRECEDENCE = Object.freeze({
   uploadedMusicXml: 1,
@@ -65,15 +70,31 @@ export function shouldQueueAutoOmr({ musicXmlSource } = {}) {
 /**
  * Cancel any in-flight worker and clear the queued auto-request so a late
  * OMR result cannot apply after a user-supplied MusicXML/MXL takes over.
+ *
+ * Invalidates the active OMR run id so late callbacks fail the hard gate.
+ * Does not touch a newer PDF's preparation UI — callers must only clear the
+ * queue when intentionally abandoning the active auto-OMR request.
  */
-export function cancelInFlightOmrGeneration(setAutoOmrRequest) {
+export function cancelInFlightOmrGeneration(setAutoOmrRequest, {
+  previousPdfIdentity = null,
+  reason = 'cancel-in-flight',
+  clearAutoRequest = true,
+} = {}) {
+  requestOmrCancellation({ previousPdfIdentity, reason })
   cancelActiveOmrWorker()
-  setAutoOmrRequest?.(null)
+  if (clearAutoRequest) {
+    setAutoOmrRequest?.(null)
+  }
 }
 
 /**
  * Reject stale OMR acceptance when uploaded timing already owns the session,
- * or when the PDF/instrument identity no longer matches the run.
+ * or when the PDF/instrument/run identity no longer matches the run.
+ *
+ * Hard rule (when a session identity is active):
+ *   callbackPdfIdentity === activePdfIdentity
+ *   AND callbackEpoch === activeEpoch
+ *   AND callbackRunId === activeOmrRunId
  */
 export function shouldAcceptOmrGeneratedResult({
   musicXmlSource,
@@ -83,12 +104,132 @@ export function shouldAcceptOmrGeneratedResult({
   sourcePdfFileUrl,
   currentPdfFileName,
   currentPdfFileUrl,
+  sourcePdfIdentity = null,
+  currentPdfIdentity = null,
+  sourcePracticeSessionEpoch = null,
+  currentPracticeSessionEpoch = null,
+  sourceOmrRunId = null,
+  currentOmrRunId = null,
+  enforceGenerationGate = true,
 } = {}) {
+  const liveGate = getActiveScoreSourceGeneration()
+  const resolvedCurrentPdfIdentity = currentPdfIdentity ?? liveGate.activePdfIdentity
+  const resolvedCurrentEpoch =
+    currentPracticeSessionEpoch ?? liveGate.activeEpoch
+  const resolvedCurrentRunId =
+    currentOmrRunId !== undefined && currentOmrRunId !== null
+      ? currentOmrRunId
+      : liveGate.activeOmrRunId
+
+  // Fail closed once the session has an active identity/epoch/run: OMR must
+  // declare which PDF + run it belongs to.
+  if (resolvedCurrentPdfIdentity && !sourcePdfIdentity) {
+    return {
+      ok: false,
+      reason: 'missing-source-pdf-identity',
+      message: 'That PDF changed before timing finished. Upload it again or retry.',
+      discarded: true,
+    }
+  }
+  if (
+    resolvedCurrentEpoch != null &&
+    sourcePracticeSessionEpoch == null &&
+    resolvedCurrentPdfIdentity
+  ) {
+    return {
+      ok: false,
+      reason: 'missing-source-session-epoch',
+      message: 'That PDF changed before timing finished. Upload it again or retry.',
+      discarded: true,
+    }
+  }
+  if (resolvedCurrentPdfIdentity && sourceOmrRunId == null) {
+    return {
+      ok: false,
+      reason: 'missing-source-omr-run-id',
+      message: 'That PDF changed before timing finished. Upload it again or retry.',
+      discarded: true,
+    }
+  }
+  if (resolvedCurrentPdfIdentity && resolvedCurrentRunId == null) {
+    return {
+      ok: false,
+      reason: 'no-active-omr-run',
+      message: 'That PDF changed before timing finished. Upload it again or retry.',
+      discarded: true,
+    }
+  }
+
+  if (enforceGenerationGate && resolvedCurrentPdfIdentity) {
+    const gate = assertScoreSourceMutationAllowed({
+      callbackPdfIdentity: sourcePdfIdentity,
+      callbackEpoch: sourcePracticeSessionEpoch,
+      callbackRunId: sourceOmrRunId,
+      phase: 'omr-result-apply-attempt',
+    })
+    if (!gate.ok) {
+      return gate
+    }
+  } else {
+    if (
+      sourcePracticeSessionEpoch != null &&
+      resolvedCurrentEpoch != null &&
+      sourcePracticeSessionEpoch !== resolvedCurrentEpoch
+    ) {
+      return {
+        ok: false,
+        reason: 'session-epoch-mismatch',
+        message: 'That PDF changed before timing finished. Upload it again or retry.',
+        discarded: true,
+      }
+    }
+
+    if (
+      sourcePdfIdentity &&
+      resolvedCurrentPdfIdentity &&
+      sourcePdfIdentity !== resolvedCurrentPdfIdentity
+    ) {
+      return {
+        ok: false,
+        reason: 'pdf-identity-mismatch',
+        message: 'That PDF changed before timing finished. Upload it again or retry.',
+        discarded: true,
+      }
+    }
+
+    if (
+      sourceOmrRunId != null &&
+      resolvedCurrentRunId != null &&
+      sourceOmrRunId !== resolvedCurrentRunId
+    ) {
+      return {
+        ok: false,
+        reason: 'omr-run-mismatch',
+        message: 'That PDF changed before timing finished. Upload it again or retry.',
+        discarded: true,
+      }
+    }
+  }
+
   if (hasUploadedScoreTiming(musicXmlSource)) {
     return {
       ok: false,
       reason: 'uploaded-timing-owns-session',
       message: 'A timing file is already loaded — prepared score was discarded.',
+    }
+  }
+
+  // OMR-generated timing that belongs to a different PDF must not stick.
+  if (
+    musicXmlSource?.data &&
+    musicXmlSource.ownerPdfIdentity &&
+    currentPdfIdentity &&
+    musicXmlSource.ownerPdfIdentity !== currentPdfIdentity
+  ) {
+    return {
+      ok: false,
+      reason: 'companion-owner-mismatch',
+      message: 'That PDF changed before timing finished. Upload it again or retry.',
     }
   }
 

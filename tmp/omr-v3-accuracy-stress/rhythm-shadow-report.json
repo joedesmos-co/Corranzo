@@ -1,0 +1,5994 @@
+{
+  "generatedAt": "2026-07-17T03:20:47.919Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "promoted": false,
+  "engine": "v2-rhythm-shadow-prototype",
+  "fixtures": [
+    {
+      "fixtureId": "dense",
+      "label": "A Cruel Angel's Thesis (legacy copyrighted diagnostic)",
+      "engine": "v2-rhythm-shadow-prototype",
+      "constraintVersion": "phase-2c",
+      "promoted": false,
+      "solverDiagnostics": {
+        "measureCount": 125,
+        "candidateMeasures": 125,
+        "changedMeasures": 0,
+        "rejectedMeasures": 125,
+        "rejectReasons": {
+          "constraints-failed": 125
+        },
+        "variantCounts": {},
+        "changedMeasureNumbers": [],
+        "rejectedMeasureNumbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89,
+          90,
+          91,
+          92,
+          93,
+          94,
+          95,
+          96,
+          97,
+          98,
+          99,
+          100,
+          101,
+          102,
+          103,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125
+        ],
+        "changedMeasureLog": [],
+        "acceptedCandidateMeasures": [],
+        "rejectedCandidateMeasures": [
+          {
+            "measureNumber": 1,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 2,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 3,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 4,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 5,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "hard-constraint-violation"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 6,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 7,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 8,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 9,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 10,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 11,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 12,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 13,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 14,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 15,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 16,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 17,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 18,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 19,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 20,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 21,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 22,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 23,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 24,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 25,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 26,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 27,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 28,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 29,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 30,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 31,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 32,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 33,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 34,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 35,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 36,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 37,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 38,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 39,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 40,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 41,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 42,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 43,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 44,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 45,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 46,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 47,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 48,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 49,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 50,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 51,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 52,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 53,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 54,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "constraints-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 55,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 56,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 57,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 58,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 59,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 60,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 61,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "constraints-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 62,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 63,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 64,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 65,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 66,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 67,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 68,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 69,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 70,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 71,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 72,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 73,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 74,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 75,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 76,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 77,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 78,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 79,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 80,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 81,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 82,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 83,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 84,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 85,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 86,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 87,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 88,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 89,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 90,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 91,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 92,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 93,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 94,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 95,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 96,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 97,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 98,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 99,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 100,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 101,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 102,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 103,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 104,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 105,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 106,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 107,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 108,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 109,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 110,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 111,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 112,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 113,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 114,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 115,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 116,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 117,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 118,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 119,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 120,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 121,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 122,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 123,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 124,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "bass-late-sixteenth-phase",
+              "mixed-beam-ownership-column",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 125,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          }
+        ],
+        "coalescedChordCount": 0,
+        "coalescedChordLog": [],
+        "constraintVersion": "phase-2c"
+      },
+      "structurallyAppliedCount": 0,
+      "changedMeasures": [],
+      "acceptedCandidateMeasures": [],
+      "rejectedCandidateMeasures": [
+        {
+          "measureNumber": 1,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 2,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 3,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 4,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 5,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 6,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 7,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 8,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 9,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 10,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 11,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 12,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 13,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 14,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 15,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 16,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 17,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 18,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 19,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 20,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 21,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 22,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 23,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 24,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 25,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 26,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 27,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 28,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 29,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 30,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 31,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 32,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 33,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 34,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 35,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 36,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 37,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 38,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 39,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 40,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 41,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 42,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 43,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 44,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 45,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 46,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 47,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 48,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 49,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 50,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 51,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 52,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 53,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 54,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 55,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 56,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 57,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 58,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 59,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 60,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 61,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 62,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 63,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 64,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 65,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 66,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 67,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 68,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 69,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 70,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 71,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 72,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 73,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 74,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 75,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 76,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 77,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 78,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 79,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 80,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 81,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 82,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 83,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 84,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 85,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 86,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 87,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 88,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 89,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 90,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 91,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 92,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 93,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 94,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 95,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 96,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 97,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 98,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 99,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 100,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 101,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 102,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 103,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 104,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 105,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 106,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 107,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 108,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 109,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 110,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 111,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 112,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 113,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 114,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 115,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 116,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 117,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 118,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 119,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 120,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 121,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 122,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 123,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 124,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 125,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "rejectedMeasures": [
+        {
+          "measureNumber": 1,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 2,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 3,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 4,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 5,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 6,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 7,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 8,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 9,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 10,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 11,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 12,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 13,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 14,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 15,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 16,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 17,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 18,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 19,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 20,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 21,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 22,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 23,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 24,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 25,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 26,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 27,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 28,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 29,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 30,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 31,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 32,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 33,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 34,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 35,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 36,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 37,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 38,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 39,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 40,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 41,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 42,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 43,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 44,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 45,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 46,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 47,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 48,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 49,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 50,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 51,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 52,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 53,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 54,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 55,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 56,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 57,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 58,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 59,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 60,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 61,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "treble-minus-2",
+              "variantLabel": "-0.5q treble",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0
+            }
+          ]
+        },
+        {
+          "measureNumber": 62,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 63,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 64,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 65,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 66,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 67,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 68,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 69,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 70,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 71,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 72,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 73,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 74,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 75,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 76,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 77,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 78,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 79,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 80,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 81,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 82,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 83,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 84,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 85,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 86,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 87,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 88,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 89,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 90,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 91,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 92,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 93,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 94,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 95,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 96,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 97,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 98,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 99,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 100,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 101,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 102,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 103,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 104,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 105,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 106,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 107,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 108,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 109,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 110,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 111,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 112,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 113,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 114,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 115,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 116,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 117,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 118,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 119,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 120,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 121,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 122,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 123,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 124,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "bass-late-sixteenth-phase",
+            "mixed-beam-ownership-column",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 125,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "rejectedByTruth": [],
+      "coalescedChords": [],
+      "coalescedChordCount": 0,
+      "hotspotMeasures": [
+        7,
+        9,
+        121
+      ],
+      "runtimeXmlBytes": 431363,
+      "shadowXmlBytes": 431363,
+      "identicalToRuntime": true,
+      "scoreGraphSource": "passed",
+      "status": "shadow-no-qualifying-measures",
+      "regressionReason": "No measures passed Phase 2C preservation + truth gates — shadow identical to runtime.",
+      "runtime": {
+        "wrongOnset": 94,
+        "wrongDuration": 77,
+        "chordMismatch": 170,
+        "wrongPitch": 147,
+        "noteCountDiff": -2,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0.9377,
+        "durationAccuracy": 0.9626,
+        "onsetAccuracy": 0.9566,
+        "chordGroupingAccuracy": 0.9413,
+        "noteDetectionF1": 0.9904
+      },
+      "shadow": {
+        "wrongOnset": 94,
+        "wrongDuration": 77,
+        "chordMismatch": 170,
+        "wrongPitch": 147,
+        "noteCountDiff": -2,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0.9377,
+        "durationAccuracy": 0.9626,
+        "onsetAccuracy": 0.9566,
+        "chordGroupingAccuracy": 0.9413,
+        "noteDetectionF1": 0.9904
+      },
+      "delta": {
+        "wrongOnset": 0,
+        "wrongDuration": 0,
+        "chordMismatch": 0,
+        "wrongPitch": 0,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0
+      },
+      "perMeasureDelta": [
+        {
+          "measureNumber": 1,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 2,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 3,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 4,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 5,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 6,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 7,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 8,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 9,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 10,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 11,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 12,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 13,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 14,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 15,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 16,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 17,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 18,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 19,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 20,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 21,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 22,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 23,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 24,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 25,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 26,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 27,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 28,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 29,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 30,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 31,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 32,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 33,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 34,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 35,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 36,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 37,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 38,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 39,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 40,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 41,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 42,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 43,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 44,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 45,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 46,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 47,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 48,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 49,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 50,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 51,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 52,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 53,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 54,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 55,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 56,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 57,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 58,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 59,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 60,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 61,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 62,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 63,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 64,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 65,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 66,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 67,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 68,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 69,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 70,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 71,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 72,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 73,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 74,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 75,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 76,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 77,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 78,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 79,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 80,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 81,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 82,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 83,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 84,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 85,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 86,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 87,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 88,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 89,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 90,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 91,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 92,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 93,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 94,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 95,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 96,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 97,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 98,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 99,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 100,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 101,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 102,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 103,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 104,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 105,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 106,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 107,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 108,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 109,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 110,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 111,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 112,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 113,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 114,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 115,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 116,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 117,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 118,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 119,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 120,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 121,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 122,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 123,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 124,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 125,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        }
+      ],
+      "hotspotDelta": [
+        {
+          "measureNumber": 7,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 9,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 121,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        }
+      ],
+      "runtimeAttribution": {
+        "buckets": {
+          "onset-phase-shift": 94,
+          "voice-serialization-shift": 35,
+          "onset-coupled-duration": 44,
+          "chord-grouping-symptom": 79,
+          "pitch-grouping-symptom": 90,
+          "balanced-missing-extra-serialization": 0
+        },
+        "ranked": [
+          {
+            "bucket": "onset-phase-shift",
+            "count": 94
+          },
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 90
+          },
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 79
+          },
+          {
+            "bucket": "onset-coupled-duration",
+            "count": 44
+          },
+          {
+            "bucket": "voice-serialization-shift",
+            "count": 35
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "onset-phase-shift",
+          "count": 94
+        },
+        "supporting": {
+          "totalWrongOnsets": 94,
+          "chordMismatchTotal": 170,
+          "chordCoupledShare": 0.8876,
+          "missingCount": 28,
+          "extraCount": 26,
+          "balancedMismatch": false,
+          "onsetStrictIndependent": 19,
+          "voicePhasePrimaryClass": "cross-voice-matcher"
+        }
+      },
+      "shadowAttribution": {
+        "buckets": {
+          "onset-phase-shift": 94,
+          "voice-serialization-shift": 35,
+          "onset-coupled-duration": 44,
+          "chord-grouping-symptom": 79,
+          "pitch-grouping-symptom": 90,
+          "balanced-missing-extra-serialization": 0
+        },
+        "ranked": [
+          {
+            "bucket": "onset-phase-shift",
+            "count": 94
+          },
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 90
+          },
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 79
+          },
+          {
+            "bucket": "onset-coupled-duration",
+            "count": 44
+          },
+          {
+            "bucket": "voice-serialization-shift",
+            "count": 35
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "onset-phase-shift",
+          "count": 94
+        },
+        "supporting": {
+          "totalWrongOnsets": 94,
+          "chordMismatchTotal": 170,
+          "chordCoupledShare": 0.8876,
+          "missingCount": 28,
+          "extraCount": 26,
+          "balancedMismatch": false,
+          "onsetStrictIndependent": 19,
+          "voicePhasePrimaryClass": "cross-voice-matcher"
+        }
+      }
+    }
+  ]
+}

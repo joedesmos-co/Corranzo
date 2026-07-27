@@ -1,0 +1,91 @@
+{
+  "before": {
+    "total": 20,
+    "correct": 7,
+    "accuracy": 0.35,
+    "tp": 3,
+    "fp": 0,
+    "fn": 13,
+    "tn": 4,
+    "byKind": {
+      "staccato": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 3,
+        "tn": 2
+      },
+      "slur": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 0
+      },
+      "accent": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 6,
+        "tn": 0
+      },
+      "tie": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 2
+      }
+    },
+    "byLayer": {
+      "undetected": 13,
+      "wrong-attachment": 0,
+      "emission": 0,
+      "renderer": 0,
+      "none": 7
+    }
+  },
+  "after": {
+    "total": 20,
+    "correct": 7,
+    "accuracy": 0.35,
+    "tp": 3,
+    "fp": 0,
+    "fn": 13,
+    "tn": 4,
+    "byKind": {
+      "staccato": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 3,
+        "tn": 2
+      },
+      "slur": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 0
+      },
+      "accent": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 6,
+        "tn": 0
+      },
+      "tie": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 2
+      }
+    },
+    "byLayer": {
+      "undetected": 13,
+      "wrong-attachment": 0,
+      "emission": 0,
+      "renderer": 0,
+      "none": 7
+    }
+  },
+  "delta": {
+    "correct": 0,
+    "fn": 0,
+    "fp": 0
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "shippedFix": "Conservative relative-column repacking for complete, evidence-light 3/4 vector lanes.",
+  "changedProductFiles": [
+    "src/features/omr/processVectorOmrPage.js",
+    "tests/omrVectorRhythm.test.js"
+  ],
+  "realScoreResult": {
+    "wrongNoteDurationBefore": 382,
+    "wrongNoteDurationAfter": 356,
+    "reduction": 26,
+    "reductionPercent": 6.8,
+    "carolOverallBefore": "49%",
+    "carolOverallAfter": "50%",
+    "carolRhythmBefore": "51%",
+    "carolRhythmAfter": "61%",
+    "carolPerformedPlaybackBefore": "91%",
+    "carolPerformedPlaybackAfter": "91%"
+  },
+  "representativeMeasure": {
+    "before": [
+      {
+        "midi": 77,
+        "onsetQuarters": 0,
+        "durationQuarters": 1
+      },
+      {
+        "midi": 76,
+        "onsetQuarters": 1.25,
+        "durationQuarters": 0.5
+      },
+      {
+        "midi": 77,
+        "onsetQuarters": 1.75,
+        "durationQuarters": 0.5
+      },
+      {
+        "midi": 74,
+        "onsetQuarters": 2.25,
+        "durationQuarters": 0.5
+      },
+      {
+        "midi": 69,
+        "onsetQuarters": 2.75,
+        "durationQuarters": 0.25
+      }
+    ],
+    "after": [
+      {
+        "midi": 77,
+        "onsetQuarters": 0,
+        "durationQuarters": 1
+      },
+      {
+        "midi": 76,
+        "onsetQuarters": 1,
+        "durationQuarters": 0.5
+      },
+      {
+        "midi": 77,
+        "onsetQuarters": 1.5,
+        "durationQuarters": 0.5
+      },
+      {
+        "midi": 74,
+        "onsetQuarters": 2,
+        "durationQuarters": 0.5
+      },
+      {
+        "midi": 69,
+        "onsetQuarters": 2.5,
+        "durationQuarters": 0.5
+      }
+    ],
+    "truth": [
+      {
+        "midi": 77,
+        "onsetQuarters": 0,
+        "durationQuarters": 1
+      },
+      {
+        "midi": 76,
+        "onsetQuarters": 1,
+        "durationQuarters": 0.5
+      },
+      {
+        "midi": 77,
+        "onsetQuarters": 1.5,
+        "durationQuarters": 0.5
+      },
+      {
+        "midi": 74,
+        "onsetQuarters": 2,
+        "durationQuarters": 0.5
+      },
+      {
+        "midi": 69,
+        "onsetQuarters": 2.5,
+        "durationQuarters": 0.5
+      }
+    ]
+  },
+  "playback": {
+    "minecraft": {
+      "noteCountBefore": 105,
+      "noteCountAfter": 105,
+      "pitchInventoryEqual": true,
+      "parsedAttackOrderEqual": true,
+      "frozenNotationSemanticsEqual": true,
+      "changedMeasures": []
+    },
+    "evangelion": {
+      "noteCountBefore": 252,
+      "noteCountAfter": 252,
+      "pitchInventoryEqual": true,
+      "parsedAttackOrderEqual": true,
+      "frozenNotationSemanticsEqual": true,
+      "changedMeasures": []
+    },
+    "gymnopedie": {
+      "noteCountBefore": 138,
+      "noteCountAfter": 138,
+      "pitchInventoryEqual": true,
+      "parsedAttackOrderEqual": true,
+      "frozenNotationSemanticsEqual": true,
+      "changedMeasures": []
+    },
+    "piano-articulation-scan": {
+      "noteCountBefore": 111,
+      "noteCountAfter": 111,
+      "pitchInventoryEqual": true,
+      "parsedAttackOrderEqual": true,
+      "frozenNotationSemanticsEqual": true,
+      "changedMeasures": []
+    },
+    "piano-grand-voices-vector": {
+      "noteCountBefore": 88,
+      "noteCountAfter": 88,
+      "pitchInventoryEqual": true,
+      "parsedAttackOrderEqual": true,
+      "frozenNotationSemanticsEqual": true,
+      "changedMeasures": []
+    },
+    "piano-rhythm-tuplets-vector": {
+      "noteCountBefore": 63,
+      "noteCountAfter": 63,
+      "pitchInventoryEqual": true,
+      "parsedAttackOrderEqual": true,
+      "frozenNotationSemanticsEqual": true,
+      "changedMeasures": []
+    },
+    "la-campanella": {
+      "noteCountBefore": 802,
+      "noteCountAfter": 802,
+      "pitchInventoryEqual": true,
+      "parsedAttackOrderEqual": true,
+      "frozenNotationSemanticsEqual": true,
+      "changedMeasures": []
+    },
+    "fantaisie-impromptu": {
+      "noteCountBefore": 1209,
+      "noteCountAfter": 1209,
+      "pitchInventoryEqual": true,
+      "parsedAttackOrderEqual": true,
+      "frozenNotationSemanticsEqual": true,
+      "changedMeasures": []
+    },
+    "moonlight-3": {
+      "noteCountBefore": 762,
+      "noteCountAfter": 762,
+      "pitchInventoryEqual": true,
+      "parsedAttackOrderEqual": true,
+      "frozenNotationSemanticsEqual": true,
+      "changedMeasures": []
+    },
+    "hungarian-dance-no5": {
+      "noteCountBefore": 995,
+      "noteCountAfter": 995,
+      "pitchInventoryEqual": true,
+      "parsedAttackOrderEqual": true,
+      "frozenNotationSemanticsEqual": true,
+      "changedMeasures": []
+    },
+    "carol-of-the-bells": {
+      "noteCountBefore": 680,
+      "noteCountAfter": 680,
+      "pitchInventoryEqual": true,
+      "parsedAttackOrderEqual": false,
+      "frozenNotationSemanticsEqual": true,
+      "changedMeasures": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        17,
+        18,
+        23,
+        33,
+        35,
+        45,
+        46,
+        47,
+        48,
+        49,
+        51,
+        53
+      ]
+    }
+  },
+  "frozenCorpus": {
+    "accept": false,
+    "overallDelta": 0,
+    "classDeltas": {
+      "pitch": 0,
+      "rhythm": 0,
+      "sustain": 0,
+      "articulation": 0,
+      "measureStructure": 0,
+      "interpretation": 0,
+      "playback": 0
+    },
+    "regressions": [],
+    "note": "Comparator ACCEPT is neutral/NO because all frozen scored deltas are exactly zero; the real-score taxonomy supplies the required improvement."
+  },
+  "gallery": "tmp/omr-quality-dense-rhythm/evidence/carol-measure-1-gallery.png"
+}

@@ -5,6 +5,7 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
+import { extractPdfVectorCurvesFromOperatorList } from '../../src/features/omr/extractPdfVectorCurves.js'
 
 export const CALIBRATION_ANALYSIS_WIDTH = 1000
 
@@ -60,4 +61,56 @@ export function makeRenderPageCallback(pages) {
       data: pages[pageNumber - 1].data,
     },
   })
+}
+
+/**
+ * Node-safe PDF text extractor using pdfjs-dist legacy build.
+ * Required when runPdfOmrPipeline is given numPages (skips default extractPdfPageText).
+ */
+export async function makePdfTextExtractor(pdfPath, { rootDir } = {}) {
+  const { pdfjs } = await loadPdfRenderDependencies(rootDir)
+  const data = new Uint8Array(readFileSync(pdfPath))
+  const doc = await pdfjs.getDocument({ data, isEvalSupported: false }).promise
+  return async (_pdfSource, pageNumber) => {
+    const page = await doc.getPage(pageNumber)
+    const viewport = page.getViewport({ scale: 1, rotation: 0 })
+    const content = await page.getTextContent()
+    return (content.items ?? [])
+      .map((item) => ({
+        text: item.str ?? '',
+        x: item.transform?.[4] ?? 0,
+        y: item.transform?.[5] ?? 0,
+        width: item.width ?? 0,
+        height: item.height ?? 0,
+        fontName: item.fontName ?? '',
+        pageWidth: viewport.width,
+        pageHeight: viewport.height,
+      }))
+      .filter((item) => item.text.trim().length > 0)
+  }
+}
+
+/** Node-safe original PDF tie/slur path extractor for real-score probes. */
+export async function makePdfCurveExtractor(
+  pdfPath,
+  { analysisWidth = CALIBRATION_ANALYSIS_WIDTH, rootDir } = {},
+) {
+  const { pdfjs } = await loadPdfRenderDependencies(rootDir)
+  const data = new Uint8Array(readFileSync(pdfPath))
+  const doc = await pdfjs.getDocument({ data, isEvalSupported: false }).promise
+  return async (_pdfSource, pageNumber) => {
+    const page = await doc.getPage(pageNumber)
+    const base = page.getViewport({ scale: 1, rotation: 0 })
+    const viewport = page.getViewport({
+      scale: analysisWidth / base.width,
+      rotation: 0,
+    })
+    return extractPdfVectorCurvesFromOperatorList({
+      operatorList: await page.getOperatorList(),
+      ops: pdfjs.OPS,
+      viewportTransform: viewport.transform,
+      pageNumber,
+      targetWidth: viewport.width,
+    })
+  }
 }

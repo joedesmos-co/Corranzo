@@ -1,0 +1,120 @@
+{
+  "id": "25-minecraft-tie-m1-2-55-55",
+  "source": "minecraft",
+  "sourcePdf": "/Users/ryland/Downloads/beginner-minecraft-piano-themes-in-c-minecraft.pdf",
+  "page": 1,
+  "measures": [
+    1,
+    2
+  ],
+  "expectedSymbol": "tie",
+  "sourceCrop": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/source-crops/25-minecraft-tie-m1-2-55-55.png",
+  "candidateOverlay": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/candidate-overlays/25-minecraft-tie-m1-2-55-55.png",
+  "rawCurveCandidates": [
+    {
+      "candidateId": "pdf-path-p1-op73",
+      "source": "pdf-vector-path",
+      "start": {
+        "x": 330.0336052389706,
+        "y": 376.29751509978973,
+        "tangent": {
+          "dx": 0.7587856130097674,
+          "dy": -0.651340458968573
+        }
+      },
+      "end": {
+        "x": 389.3226841517857,
+        "y": 376.29751509978973,
+        "tangent": {
+          "dx": 0.7588312806504495,
+          "dy": 0.6512872542176753
+        }
+      },
+      "bounds": {
+        "x0": 330.0336052389706,
+        "x1": 389.3226841517857,
+        "y0": 366.1193539915964,
+        "y1": 376.29751509978973,
+        "width": 59.289078912815114,
+        "height": 10.178161108193308
+      },
+      "archDirection": "above",
+      "startCandidates": [
+        {
+          "measureNumber": 1,
+          "systemIndex": 0,
+          "eventIndex": 3,
+          "noteIndex": 0,
+          "startDivision": 8,
+          "midi": 55,
+          "clef": "bass",
+          "cx": 328.40981176470603,
+          "cy": 382.51642903800484,
+          "score": 10.12,
+          "dx": 1.62,
+          "dy": 6.22,
+          "anchor": "notehead",
+          "anchorY": 382.51642903800484
+        }
+      ],
+      "endCandidates": [
+        {
+          "measureNumber": 2,
+          "systemIndex": 0,
+          "eventIndex": 0,
+          "noteIndex": 0,
+          "startDivision": 0,
+          "midi": 55,
+          "clef": "bass",
+          "cx": 391.1888138655464,
+          "cy": 382.51642903800484,
+          "score": 10.7,
+          "dx": 1.87,
+          "dy": 6.22,
+          "anchor": "notehead",
+          "anchorY": 382.51642903800484
+        }
+      ]
+    }
+  ],
+  "selectedAttachments": {
+    "fromMeasure": 1,
+    "toMeasure": 2,
+    "fromMidi": 55,
+    "toMidi": 55,
+    "clef": "bass",
+    "candidateIds": [
+      "pdf-path-p1-op73"
+    ]
+  },
+  "classificationResult": "tie",
+  "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/25-minecraft-tie-m1-2-55-55.musicxml",
+  "renderedResult": {
+    "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/25-minecraft-tie-m1-2-55-55.png",
+    "markingFound": true,
+    "path": "M 116.3 151.44 Q 165 135.856 213.7 151.44",
+    "placement": "above"
+  },
+  "playbackAttackTrace": [
+    {
+      "measureNumber": 1,
+      "midi": 55,
+      "quarterTime": 2,
+      "tieStart": true,
+      "tieStop": true,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 2,
+      "midi": 55,
+      "quarterTime": 4,
+      "tieStart": false,
+      "tieStop": true,
+      "suppressPlaybackAttack": true
+    }
+  ],
+  "correctBefore": false,
+  "correctAfter": true,
+  "failureLayerBefore": "symbol-not-detected",
+  "failureLayerAfter": "none"
+}

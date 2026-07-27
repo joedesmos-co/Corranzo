@@ -4,10 +4,17 @@ import { analyzeMidiImport } from './midiImportWarnings.js'
 import { buildFilePairWarnings } from './filePairWarnings.js'
 import { buildPracticeGuidance } from './practiceGuidance.js'
 import { buildLibraryAccuracyWarnings } from './accuracyGuide.js'
+import { OMR_DISCLAIMER } from '../omr/omrMusicalConstants.js'
 import { isApproximationImportMessage } from './importWarningCategories.js'
 
 function omrWarningStrength(message) {
   return isApproximationImportMessage(message) ? 'mild' : 'strong'
+}
+
+/** Engineering disclaimer — keep in diagnostics/MusicXML, not Practice UI. */
+function isPracticeUiNoiseWarning(message) {
+  const text = String(message ?? '')
+  return text === OMR_DISCLAIMER || text.startsWith('Generated from PDF')
 }
 
 export function buildOmrGeneratedWarnings(musicXmlSource) {
@@ -16,6 +23,7 @@ export function buildOmrGeneratedWarnings(musicXmlSource) {
   }
   return (musicXmlSource.omrMeta?.warnings ?? [])
     .filter(Boolean)
+    .filter((message) => !isPracticeUiNoiseWarning(message))
     .map((message, index) => ({
       id: `omr-generated-${index}`,
       strength: omrWarningStrength(message),

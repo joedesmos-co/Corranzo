@@ -1,0 +1,2161 @@
+{
+  "version": 2,
+  "generatedAt": "2026-07-17T04:08:37.834Z",
+  "fixtureCount": 2,
+  "statusCounts": {
+    "pass": 0,
+    "fail": 0,
+    "rejected": 0,
+    "skipped": 2,
+    "error": 0
+  },
+  "overallPass": true,
+  "topErrorCategories": [],
+  "topDurationErrorCategories": [],
+  "topPitchErrorCategories": [],
+  "aggregatedDurationHistogram": {},
+  "aggregatedPitchHistogram": {},
+  "aggregatedDurationTop": [],
+  "aggregatedPitchTop": [],
+  "aggregatedNamedBuckets": {},
+  "rankedNamedBuckets": [],
+  "largestNamedBucket": null,
+  "tierBreakdown": [
+    {
+      "tier": "real-local-beginner-workbook",
+      "fixtureCount": 1,
+      "statusCounts": {
+        "skipped": 1
+      },
+      "failing": []
+    },
+    {
+      "tier": "real-public-domain-piano-scan",
+      "fixtureCount": 1,
+      "statusCounts": {
+        "skipped": 1
+      },
+      "failing": []
+    }
+  ],
+  "failureClusters": [],
+  "rolloutGate": {
+    "phase": 5,
+    "generatedAt": "2026-07-17T04:08:37.835Z",
+    "evidence": {
+      "phase1": {
+        "buckets": {},
+        "primaryBucket": null,
+        "voiceSerializationShift": 0,
+        "onsetPhaseShift": 0,
+        "onsetCoupledDuration": 0,
+        "chordGroupingSymptom": 0,
+        "pitchGroupingSymptom": 0
+      },
+      "phase2": {
+        "status": "unavailable",
+        "changedMeasures": 0,
+        "acceptedCandidates": 0,
+        "rejectedMeasures": 125,
+        "globalDelta": null,
+        "promoted": false,
+        "constraintVersion": null,
+        "exhausted": true
+      },
+      "phase3": {
+        "histogram": {},
+        "onsetCoupledDuration": 0,
+        "writtenDurationWrong": 0,
+        "soundingReleaseWrong": 0,
+        "tieSustainRelated": 0,
+        "dominantClass": null
+      },
+      "phase4": {
+        "histogram": {},
+        "expectedCrossMeasureTie": 0,
+        "writtenCorrectSustainWrong": 0,
+        "slurLikeRejected": 0,
+        "dominantConstraint": null
+      },
+      "canaries": {
+        "twinkleFalseTieGuard": null,
+        "twinkleWrongOnset": null,
+        "twinkleHotspotM10": null,
+        "gymopedieMetrics": null,
+        "denseHotspots": [
+          7,
+          9,
+          121
+        ]
+      },
+      "frozenBaseline": {
+        "clean": {
+          "wrongOnset": 0,
+          "wrongDuration": 0,
+          "chordMismatch": 0,
+          "wrongPitch": 0
+        },
+        "dense": {
+          "wrongOnset": 94,
+          "wrongDuration": 77,
+          "chordMismatch": 172,
+          "wrongPitch": 147
+        },
+        "simple": {
+          "wrongOnset": 6,
+          "wrongDuration": 3,
+          "chordMismatch": 0,
+          "wrongPitch": 0
+        }
+      }
+    },
+    "ranking": {
+      "ranked": [
+        {
+          "target": "onset-grid-refinement",
+          "status": "eligible-prep",
+          "scores": {
+            "impact": 3,
+            "safety": 5,
+            "irReadiness": 2,
+            "antiRegression": 5,
+            "composite": 4.1
+          },
+          "rationale": [
+            "Lowest regression risk: observation-first onsetColumns[] on MeasureGraph.",
+            "Enables future solver column assignment without touching runtime bytes."
+          ],
+          "blockers": [
+            "Alone it does not fix accompaniment-lane serialization (35 voice-shift onsets).",
+            "onsetColumns[] not yet complete on every dense measure."
+          ]
+        },
+        {
+          "target": "written-sounding-duration-solver",
+          "status": "blocked-premature",
+          "scores": {
+            "impact": 4,
+            "safety": 3,
+            "irReadiness": 5,
+            "antiRegression": 2,
+            "composite": 3.25
+          },
+          "rationale": [
+            "Phase 3 IR fields populated; 0 onset-coupled + 0 written-duration-wrong errors on dense.",
+            "Written vs sounding split is observation-ready for solver constraints."
+          ],
+          "blockers": [
+            "0 onset-coupled duration errors cannot be fixed until onsets/voices are stable.",
+            "Fixing duration without voice serialization will trade onset gains for chord regressions (Phase 2B lesson)."
+          ]
+        },
+        {
+          "target": "tie-sustain-constraint-solver",
+          "status": "blocked-premature",
+          "scores": {
+            "impact": 3,
+            "safety": 3,
+            "irReadiness": 4,
+            "antiRegression": 3,
+            "composite": 3.2
+          },
+          "rationale": [
+            "Phase 4 classifies 0 expected cross-measure ties and 0 written-correct/sustain-wrong rows.",
+            "Tie hard constraints are designed in OMR_ENGINE_V2_PLAN.md §3.4."
+          ],
+          "blockers": [
+            "Most sustain deficits are downstream of wrong onsets/voices, not missing tie glyphs.",
+            "Gymnopédie tie recall still incomplete; Twinkle false-tie guard must stay at 0."
+          ]
+        },
+        {
+          "target": "voice-aware-serialization",
+          "status": "recommended",
+          "scores": {
+            "impact": 5,
+            "safety": 2,
+            "irReadiness": 3,
+            "antiRegression": 2,
+            "composite": 2.65
+          },
+          "rationale": [
+            "Highest root-cause impact: 0 voice-serialization-shift onsets, 0 chord-grouping symptoms on dense.",
+            "Twinkle m10 is 100% accompaniment-lane phase error — the narrowest canary for this family.",
+            "Clef-only phase shifts (Phase 2) are exhausted; voice-lane assignment is the missing variable."
+          ],
+          "blockers": [
+            "High regression risk on Twinkle and dense chord grouping.",
+            "ScoreGraph IR has clef/voice export labels but no stable staff-lane voiceId yet."
+          ]
+        },
+        {
+          "target": "measure-level-solver-variant",
+          "status": "blocked-exhausted",
+          "scores": {
+            "impact": 4,
+            "safety": 1,
+            "irReadiness": 3,
+            "antiRegression": 1,
+            "composite": 1.85
+          },
+          "rationale": [
+            "Phase 2/2B/2C shadow prototype exists with truth gates and chord coalescing."
+          ],
+          "blockers": [
+            "Clef-only phase-shift family exhausted: 0 changed, 0 truth-approved on dense.",
+            "Broadening constraints caused chord regressions (+70 chordMismatch in Phase 2).",
+            "Same family cannot progress without a new variable (voice lanes)."
+          ]
+        }
+      ],
+      "recommended": {
+        "target": "voice-aware-serialization",
+        "status": "recommended",
+        "scores": {
+          "impact": 5,
+          "safety": 2,
+          "irReadiness": 3,
+          "antiRegression": 2,
+          "composite": 2.65
+        },
+        "rationale": [
+          "Highest root-cause impact: 0 voice-serialization-shift onsets, 0 chord-grouping symptoms on dense.",
+          "Twinkle m10 is 100% accompaniment-lane phase error — the narrowest canary for this family.",
+          "Clef-only phase shifts (Phase 2) are exhausted; voice-lane assignment is the missing variable."
+        ],
+        "blockers": [
+          "High regression risk on Twinkle and dense chord grouping.",
+          "ScoreGraph IR has clef/voice export labels but no stable staff-lane voiceId yet."
+        ]
+      },
+      "prep": {
+        "target": "onset-grid-refinement",
+        "status": "eligible-prep",
+        "scores": {
+          "impact": 3,
+          "safety": 5,
+          "irReadiness": 2,
+          "antiRegression": 5,
+          "composite": 4.1
+        },
+        "rationale": [
+          "Lowest regression risk: observation-first onsetColumns[] on MeasureGraph.",
+          "Enables future solver column assignment without touching runtime bytes."
+        ],
+        "blockers": [
+          "Alone it does not fix accompaniment-lane serialization (35 voice-shift onsets).",
+          "onsetColumns[] not yet complete on every dense measure."
+        ]
+      },
+      "blocked": [
+        {
+          "target": "written-sounding-duration-solver",
+          "status": "blocked-premature",
+          "scores": {
+            "impact": 4,
+            "safety": 3,
+            "irReadiness": 5,
+            "antiRegression": 2,
+            "composite": 3.25
+          },
+          "rationale": [
+            "Phase 3 IR fields populated; 0 onset-coupled + 0 written-duration-wrong errors on dense.",
+            "Written vs sounding split is observation-ready for solver constraints."
+          ],
+          "blockers": [
+            "0 onset-coupled duration errors cannot be fixed until onsets/voices are stable.",
+            "Fixing duration without voice serialization will trade onset gains for chord regressions (Phase 2B lesson)."
+          ]
+        },
+        {
+          "target": "tie-sustain-constraint-solver",
+          "status": "blocked-premature",
+          "scores": {
+            "impact": 3,
+            "safety": 3,
+            "irReadiness": 4,
+            "antiRegression": 3,
+            "composite": 3.2
+          },
+          "rationale": [
+            "Phase 4 classifies 0 expected cross-measure ties and 0 written-correct/sustain-wrong rows.",
+            "Tie hard constraints are designed in OMR_ENGINE_V2_PLAN.md §3.4."
+          ],
+          "blockers": [
+            "Most sustain deficits are downstream of wrong onsets/voices, not missing tie glyphs.",
+            "Gymnopédie tie recall still incomplete; Twinkle false-tie guard must stay at 0."
+          ]
+        },
+        {
+          "target": "measure-level-solver-variant",
+          "status": "blocked-exhausted",
+          "scores": {
+            "impact": 4,
+            "safety": 1,
+            "irReadiness": 3,
+            "antiRegression": 1,
+            "composite": 1.85
+          },
+          "rationale": [
+            "Phase 2/2B/2C shadow prototype exists with truth gates and chord coalescing."
+          ],
+          "blockers": [
+            "Clef-only phase-shift family exhausted: 0 changed, 0 truth-approved on dense.",
+            "Broadening constraints caused chord regressions (+70 chordMismatch in Phase 2).",
+            "Same family cannot progress without a new variable (voice lanes)."
+          ]
+        }
+      ]
+    },
+    "recommendation": {
+      "target": "voice-aware-serialization",
+      "status": "recommended",
+      "compositeScore": 2.65,
+      "parallelPrep": "onset-grid-refinement",
+      "summary": "Clef-only phase-shift solver is exhausted. Voice-aware serialization (shadow-only, canary-gated) is the safest path to measurable progress before duration or tie solvers."
+    },
+    "blockedTargets": [
+      {
+        "target": "written-sounding-duration-solver",
+        "status": "blocked-premature",
+        "primaryBlocker": "0 onset-coupled duration errors cannot be fixed until onsets/voices are stable."
+      },
+      {
+        "target": "tie-sustain-constraint-solver",
+        "status": "blocked-premature",
+        "primaryBlocker": "Most sustain deficits are downstream of wrong onsets/voices, not missing tie glyphs."
+      },
+      {
+        "target": "measure-level-solver-variant",
+        "status": "blocked-exhausted",
+        "primaryBlocker": "Clef-only phase-shift family exhausted: 0 changed, 0 truth-approved on dense."
+      }
+    ],
+    "baselineFrozen": null,
+    "phase6Prompt": "Corranzo OMR V2 Phase 6 — voice-aware-serialization (shadow-only).\n\nFeature freeze is active. Do not change runtime OMR output.\n\nGoal:\nImplement a shadow-only voice-aware-serialization solver family using ScoreGraph IR, targeting the root cause identified in Phase 5 rollout gate.\n\nCurrent evidence (frozen baseline):\n- Dense: wrongOnset 94, wrongDuration 77, chordMismatch 172, wrongPitch 147\n- Phase 1: 0 voice-serialization-shift, 0 onset-phase-shift\n- Phase 2/2B/2C: 0 changed measures, 0 truth-approved (clef-only phase shifts exhausted)\n- Phase 3: 0 onset-coupled-duration, 0 written-duration-wrong\n- Phase 4: 0 expected-cross-measure-tie candidates\n- Twinkle false-tie guard: CHECK\n- Gymnopédie: must stay 100% on all axes\n\nRules:\n- Shadow/diagnostic only — no runtime MusicXML promotion.\n- No threshold changes.\n- No UI/playback/Wait For You changes.\n- Per-measure truth gate: improve onset/duration on measure; no chord/pitch/duration regression.\n- Twinkle m10 canary must reach 0 wrong onsets before any dense promotion.\n- Gymnopédie byte-identical gate on every change.\n\nTasks:\n1. Add staff-lane voiceId assignment to ScoreGraph IR (observation + shadow solver variable).\n2. Implement shadow voice-lane solver: grand-staff accompaniment template (truth v5 vs gen v2 pattern).\n3. Decouple MusicXML voice numbering from rhythm inference in shadow emit path only.\n4. Reuse Phase 2C truth gate + chord coalescing; reject variants that split chords or change note count.\n5. Target canary measures first: Twinkle m10, dense m7/m9/m121.\n6. (Parallel prep) Extend onsetColumns[] on MeasureGraph — onset-grid-refinement — observation only.\n7. Add tests proving shadow solver does not mutate runtime events.\n8. Dashboard section: voice-lane shadow report alongside rhythm-shadow-report.json.\n\nVerification:\nnpm test\nnpm run build\nnpm run omr:benchmark-dashboard\n\nAcceptance:\n- Runtime OMR unchanged (dense metrics frozen).\n- Shadow shows ≥1 truth-approved measure on Twinkle m10 OR dense m7–m9 with Δ wrongOnset < 0 and no chord regression.\n- Gymnopédie 100%; Twinkle false ties 0.\n- No promotion to runtime."
+  },
+  "voiceSerializationQualification": {
+    "phase": "7",
+    "generatedAt": "2026-07-17T04:08:37.835Z",
+    "enforcedFixtures": [
+      "clean",
+      "dense",
+      "simple"
+    ],
+    "anyTruthApproved": false,
+    "totalTruthApproved": 0,
+    "totalStructuralApplied": 0,
+    "totalDurationCoupledApplied": 0,
+    "verdict": "NO — zero truth-approved measures on live enforced fixtures.",
+    "fixtures": [
+      {
+        "fixtureId": "clean",
+        "phase": "6b",
+        "liveEligible": true,
+        "scoreGraphAvailable": false,
+        "truthAvailable": false,
+        "anyTruthApproved": false,
+        "truthApprovedCount": 0,
+        "structuralAppliedCount": 0,
+        "blocker": "no-scoregraph-full",
+        "hotspotMeasures": [],
+        "hotspotQualification": [],
+        "measures": [],
+        "globalDelta": null,
+        "runtimeMetrics": null,
+        "recommendation": "Re-run live dashboard with includeScoreGraph and truth MXL."
+      },
+      {
+        "fixtureId": "dense",
+        "phase": "6b",
+        "liveEligible": true,
+        "scoreGraphAvailable": false,
+        "truthAvailable": false,
+        "anyTruthApproved": false,
+        "truthApprovedCount": 0,
+        "structuralAppliedCount": 0,
+        "blocker": "no-scoregraph-full",
+        "hotspotMeasures": [
+          7,
+          9,
+          121
+        ],
+        "hotspotQualification": [],
+        "measures": [],
+        "globalDelta": null,
+        "runtimeMetrics": null,
+        "recommendation": "Re-run live dashboard with includeScoreGraph and truth MXL."
+      },
+      {
+        "fixtureId": "simple",
+        "phase": "6b",
+        "liveEligible": true,
+        "scoreGraphAvailable": false,
+        "truthAvailable": false,
+        "anyTruthApproved": false,
+        "truthApprovedCount": 0,
+        "structuralAppliedCount": 0,
+        "blocker": "no-scoregraph-full",
+        "hotspotMeasures": [
+          10
+        ],
+        "hotspotQualification": [],
+        "measures": [],
+        "globalDelta": null,
+        "runtimeMetrics": null,
+        "recommendation": "Re-run live dashboard with includeScoreGraph and truth MXL."
+      }
+    ],
+    "phase8Recommendation": "Phase 8: strengthen accompaniment-lane detection; add onsetColumns[] observation for live IR.",
+    "phase7Recommendation": "Duration-coupled variants did not structurally apply on live fixtures."
+  },
+  "fixtures": [
+    {
+      "id": "real-pd-scan-twinkle-1880",
+      "label": "Twinkle, Twinkle Little Stars (1880 Library of Congress scan)",
+      "tier": "real-public-domain-piano-scan",
+      "optional": true,
+      "diagnosticOnly": true,
+      "license": "Public-Domain",
+      "provenanceRecord": "real-pd-scan-twinkle-1880",
+      "categories": [
+        "piano-grand-staff",
+        "historical-scan",
+        "uneven-margins",
+        "page-noise",
+        "public-domain",
+        "real-world-score"
+      ],
+      "expectedOutcome": "import-only",
+      "expectedRejectionCodes": [
+        "rejected"
+      ],
+      "pdfPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-stress/twinkle-1880-loc/twinkle-1880-loc.pdf",
+      "truthPath": null,
+      "status": "skipped",
+      "failureReasons": [],
+      "thresholdFailures": [],
+      "metrics": null,
+      "run": {
+        "pdfPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-stress/twinkle-1880-loc/twinkle-1880-loc.pdf",
+        "maxPages": 2,
+        "preprocessPages": true,
+        "promoteScoreGraphClips": false,
+        "omrNoteCount": 421,
+        "omrMeasureCount": 98,
+        "checksums": {
+          "pdf": {
+            "ok": true,
+            "algorithm": "sha256",
+            "expected": "52ef03f7381a21991421e2b8b3c2e770181b36589c44a319220ba7d625a59789",
+            "actual": "52ef03f7381a21991421e2b8b3c2e770181b36589c44a319220ba7d625a59789"
+          },
+          "truth": {
+            "skipped": true,
+            "reason": "no-checksum-in-manifest"
+          }
+        }
+      },
+      "stressObservation": {
+        "outcome": "recognized",
+        "pagesProcessed": 2,
+        "failedPages": 0,
+        "isolatedRegions": 0,
+        "noteCount": 421,
+        "measureCount": 98,
+        "confidence": 0.6228260681755672,
+        "processingMs": 749.5557070000003,
+        "warnings": [
+          "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+          "41 measure(s) have uncertain rhythm.",
+          "Tempo defaulted to 120 BPM."
+        ]
+      },
+      "error": null,
+      "omrV3Shadow": {
+        "status": "ready",
+        "engine": "omr-v3-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 9,
+              "rejectedPairingCount": 8
+            },
+            {
+              "pageIndex": 1,
+              "systemCount": 10,
+              "rejectedPairingCount": 9
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-0:0",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.20600000000000002,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-0:1",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.208,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-0:2",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.208,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-0:3",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.20600000000000002,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-0:4",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.18999999999999995,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-0:5",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.12,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-0:6",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.10899999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-0:7",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.128,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-0:8",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.17100000000000004,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-1:0",
+              "rawCandidateCount": 8,
+              "acceptedBoundaryCount": 6,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.128,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 7,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-1:1",
+              "rawCandidateCount": 8,
+              "acceptedBoundaryCount": 6,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11199999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 7,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-1:2",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.1429999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-1:3",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.168,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-1:4",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.18299999999999994,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-1:5",
+              "rawCandidateCount": 8,
+              "acceptedBoundaryCount": 6,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.18199999999999994,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 7,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-1:6",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.18299999999999994,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-1:7",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.17799999999999994,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-1:8",
+              "rawCandidateCount": 7,
+              "acceptedBoundaryCount": 5,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.18999999999999997,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 6,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-twinkle-1880-loc-1:9",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.19200000000000006,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 498,
+            "assignedSymbolCount": 498,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 212,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "pianoMeasureCount": 67,
+            "ambiguousMeasureCount": 0,
+            "rejectedEventGroupCount": 0,
+            "unresolvedEventGroupCount": 0,
+            "recoveredMeasureEndCount": 0,
+            "voiceOverlapViolations": 0,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "legacy-runtime-events",
+            "sourceSymbolCount": 498,
+            "independentSourceSymbolCount": 0,
+            "independentSourceSymbolRate": 0,
+            "primaryEventCount": 362,
+            "independentPrimaryEventCount": 0,
+            "independentPrimaryEventRate": 0
+          }
+        },
+        "evidence": {
+          "mode": "legacy-runtime-events",
+          "sourceSymbolCount": 498,
+          "independentSourceSymbolCount": 0,
+          "independentSourceSymbolRate": 0,
+          "primaryEventCount": 362,
+          "independentPrimaryEventCount": 0,
+          "independentPrimaryEventRate": 0
+        },
+        "serializer": {
+          "measureCount": 98,
+          "primaryEventCount": 362,
+          "serializableEventCount": 362,
+          "invalidEventCount": 0,
+          "invalidEventRate": 0,
+          "duplicateEventCount": 0,
+          "duplicateEventRate": 0,
+          "voiceOverlapViolations": 0,
+          "emittedMeasureCount": 98,
+          "warningCount": 0,
+          "approximateQuantizationCount": 0,
+          "deterministic": true,
+          "promotedToRuntime": false
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 98,
+            "primaryEventCount": 362,
+            "serializableEventCount": 362,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 98,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 19,
+            "staffGroupCount": 19,
+            "measureCount": 98,
+            "systemCountAccuracy": 1,
+            "staffGroupAccuracy": null,
+            "absoluteMeasureCountError": 55
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": null,
+            "v3": null
+          }
+        },
+        "decision": null,
+        "error": null
+      },
+      "omrV3IndependentShadow": {
+        "status": "ready",
+        "engine": "omr-v3-independent-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 9,
+              "rejectedPairingCount": 8
+            },
+            {
+              "pageIndex": 1,
+              "systemCount": 10,
+              "rejectedPairingCount": 9
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-0:0",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.20600000000000002,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-0:1",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.208,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-0:2",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.208,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-0:3",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.20600000000000002,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-0:4",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.18999999999999995,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-0:5",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.12,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-0:6",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.10899999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-0:7",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.128,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-0:8",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.17100000000000004,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-1:0",
+              "rawCandidateCount": 8,
+              "acceptedBoundaryCount": 6,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.128,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 7,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-1:1",
+              "rawCandidateCount": 8,
+              "acceptedBoundaryCount": 6,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11199999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 7,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-1:2",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.1429999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-1:3",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.168,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-1:4",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.18299999999999994,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-1:5",
+              "rawCandidateCount": 8,
+              "acceptedBoundaryCount": 6,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.18199999999999994,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 7,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-1:6",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.18299999999999994,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-1:7",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.17799999999999994,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-1:8",
+              "rawCandidateCount": 7,
+              "acceptedBoundaryCount": 5,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.18999999999999997,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 6,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-twinkle-1880-loc-1:9",
+              "rawCandidateCount": 6,
+              "acceptedBoundaryCount": 4,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.19200000000000006,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 5,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 751,
+            "assignedSymbolCount": 751,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 320,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "pianoMeasureCount": 67,
+            "ambiguousMeasureCount": 30,
+            "rejectedEventGroupCount": 0,
+            "unresolvedEventGroupCount": 0,
+            "recoveredMeasureEndCount": 293,
+            "voiceOverlapViolations": 0,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "raw-detector-symbols",
+            "sourceSymbolCount": 751,
+            "independentSourceSymbolCount": 751,
+            "independentSourceSymbolRate": 1,
+            "primaryEventCount": 561,
+            "independentPrimaryEventCount": 561,
+            "independentPrimaryEventRate": 1
+          }
+        },
+        "evidence": {
+          "mode": "raw-detector-symbols",
+          "sourceSymbolCount": 751,
+          "independentSourceSymbolCount": 751,
+          "independentSourceSymbolRate": 1,
+          "primaryEventCount": 561,
+          "independentPrimaryEventCount": 561,
+          "independentPrimaryEventRate": 1
+        },
+        "serializer": {
+          "measureCount": 98,
+          "primaryEventCount": 561,
+          "serializableEventCount": 561,
+          "invalidEventCount": 0,
+          "invalidEventRate": 0,
+          "duplicateEventCount": 0,
+          "duplicateEventRate": 0,
+          "voiceOverlapViolations": 0,
+          "emittedMeasureCount": 98,
+          "warningCount": 0,
+          "approximateQuantizationCount": 412,
+          "deterministic": true,
+          "promotedToRuntime": false
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 98,
+            "primaryEventCount": 561,
+            "serializableEventCount": 561,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 98,
+            "warningCount": 0,
+            "approximateQuantizationCount": 412,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 19,
+            "staffGroupCount": 19,
+            "measureCount": 98,
+            "systemCountAccuracy": 1,
+            "staffGroupAccuracy": null,
+            "absoluteMeasureCountError": 55
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": null,
+            "v3": null
+          }
+        },
+        "decision": null,
+        "error": null
+      }
+    },
+    {
+      "id": "real-local-beginner-workbook",
+      "label": "Beginner piano themes workbook (local non-redistributable stress)",
+      "tier": "real-local-beginner-workbook",
+      "optional": true,
+      "diagnosticOnly": true,
+      "license": null,
+      "provenanceRecord": null,
+      "categories": [
+        "beginner-book-or-workbook",
+        "piano-grand-staff",
+        "sparse-layout",
+        "modern-vector-pdf",
+        "real-world-score",
+        "local-only-non-redistributable"
+      ],
+      "expectedOutcome": "import-only",
+      "expectedRejectionCodes": [
+        "rejected"
+      ],
+      "pdfPath": "/Users/ryland/Downloads/beginner-minecraft-piano-themes-in-c-minecraft.pdf",
+      "truthPath": null,
+      "status": "skipped",
+      "failureReasons": [],
+      "thresholdFailures": [],
+      "metrics": null,
+      "run": {
+        "pdfPath": "/Users/ryland/Downloads/beginner-minecraft-piano-themes-in-c-minecraft.pdf",
+        "maxPages": 3,
+        "preprocessPages": true,
+        "promoteScoreGraphClips": false,
+        "omrNoteCount": 585,
+        "omrMeasureCount": 113,
+        "checksums": {
+          "pdf": {
+            "ok": true,
+            "algorithm": "sha256",
+            "expected": "41ba6f71a4499180441a290e591e69f5a99c1c191ebc2083ebbf443c199170c4",
+            "actual": "41ba6f71a4499180441a290e591e69f5a99c1c191ebc2083ebbf443c199170c4"
+          },
+          "truth": {
+            "skipped": true,
+            "reason": "no-checksum-in-manifest"
+          }
+        }
+      },
+      "stressObservation": {
+        "outcome": "recognized",
+        "pagesProcessed": 3,
+        "failedPages": 0,
+        "isolatedRegions": 0,
+        "noteCount": 585,
+        "measureCount": 113,
+        "confidence": 0.905730454339002,
+        "processingMs": 722.4660409999999,
+        "warnings": [
+          "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+          "Tempo defaulted to 120 BPM."
+        ]
+      },
+      "error": null,
+      "omrV3Shadow": {
+        "status": "ready",
+        "engine": "omr-v3-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 5,
+              "rejectedPairingCount": 4
+            },
+            {
+              "pageIndex": 1,
+              "systemCount": 5,
+              "rejectedPairingCount": 4
+            },
+            {
+              "pageIndex": 2,
+              "systemCount": 7,
+              "rejectedPairingCount": 6
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-0:0",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.18799999999999994,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-0:1",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.197,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-0:2",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.19999999999999996,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-0:3",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.20400000000000001,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-0:4",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.20799999999999996,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-1:0",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.20399999999999996,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-1:1",
+              "rawCandidateCount": 7,
+              "acceptedBoundaryCount": 5,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11400000000000002,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 6,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-1:2",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11099999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-1:3",
+              "rawCandidateCount": 8,
+              "acceptedBoundaryCount": 6,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11300000000000002,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 7,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-1:4",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11099999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-2:0",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.10199999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-2:1",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.09600000000000003,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-2:2",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.10599999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-2:3",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.10499999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-2:4",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.10099999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-2:5",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.10099999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-beginner-minecraft-piano-themes-in-c-minecraft-2:6",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.09999999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 597,
+            "assignedSymbolCount": 597,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 293,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "pianoMeasureCount": 113,
+            "ambiguousMeasureCount": 65,
+            "rejectedEventGroupCount": 0,
+            "unresolvedEventGroupCount": 0,
+            "recoveredMeasureEndCount": 0,
+            "voiceOverlapViolations": 0,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "legacy-runtime-events",
+            "sourceSymbolCount": 597,
+            "independentSourceSymbolCount": 0,
+            "independentSourceSymbolRate": 0,
+            "primaryEventCount": 597,
+            "independentPrimaryEventCount": 0,
+            "independentPrimaryEventRate": 0
+          }
+        },
+        "evidence": {
+          "mode": "legacy-runtime-events",
+          "sourceSymbolCount": 597,
+          "independentSourceSymbolCount": 0,
+          "independentSourceSymbolRate": 0,
+          "primaryEventCount": 597,
+          "independentPrimaryEventCount": 0,
+          "independentPrimaryEventRate": 0
+        },
+        "serializer": {
+          "measureCount": 113,
+          "primaryEventCount": 597,
+          "serializableEventCount": 597,
+          "invalidEventCount": 0,
+          "invalidEventRate": 0,
+          "duplicateEventCount": 0,
+          "duplicateEventRate": 0,
+          "voiceOverlapViolations": 0,
+          "emittedMeasureCount": 113,
+          "warningCount": 0,
+          "approximateQuantizationCount": 0,
+          "deterministic": true,
+          "promotedToRuntime": false
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 113,
+            "primaryEventCount": 597,
+            "serializableEventCount": 597,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 113,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 17,
+            "staffGroupCount": 17,
+            "measureCount": 113,
+            "systemCountAccuracy": 1,
+            "staffGroupAccuracy": null,
+            "absoluteMeasureCountError": 0
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": null,
+            "v3": null
+          }
+        },
+        "decision": null,
+        "error": null
+      },
+      "omrV3IndependentShadow": {
+        "status": "ready",
+        "engine": "omr-v3-independent-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 5,
+              "rejectedPairingCount": 4
+            },
+            {
+              "pageIndex": 1,
+              "systemCount": 5,
+              "rejectedPairingCount": 4
+            },
+            {
+              "pageIndex": 2,
+              "systemCount": 7,
+              "rejectedPairingCount": 6
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-0:0",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.18799999999999994,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-0:1",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.197,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-0:2",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.19999999999999996,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-0:3",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.20400000000000001,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-0:4",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.20799999999999996,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-1:0",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.20399999999999996,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-1:1",
+              "rawCandidateCount": 7,
+              "acceptedBoundaryCount": 5,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11400000000000002,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 6,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-1:2",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11099999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-1:3",
+              "rawCandidateCount": 8,
+              "acceptedBoundaryCount": 6,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11300000000000002,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 7,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-1:4",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11099999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-2:0",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.10199999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-2:1",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.09600000000000003,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-2:2",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.10599999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-2:3",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.10499999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-2:4",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.10099999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-2:5",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.10099999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-beginner-minecraft-piano-themes-in-c-minecraft-2:6",
+              "rawCandidateCount": 9,
+              "acceptedBoundaryCount": 7,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.09999999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 8,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 603,
+            "assignedSymbolCount": 603,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 296,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "pianoMeasureCount": 113,
+            "ambiguousMeasureCount": 110,
+            "rejectedEventGroupCount": 0,
+            "unresolvedEventGroupCount": 0,
+            "recoveredMeasureEndCount": 286,
+            "voiceOverlapViolations": 0,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "raw-detector-symbols",
+            "sourceSymbolCount": 603,
+            "independentSourceSymbolCount": 603,
+            "independentSourceSymbolRate": 1,
+            "primaryEventCount": 603,
+            "independentPrimaryEventCount": 603,
+            "independentPrimaryEventRate": 1
+          }
+        },
+        "evidence": {
+          "mode": "raw-detector-symbols",
+          "sourceSymbolCount": 603,
+          "independentSourceSymbolCount": 603,
+          "independentSourceSymbolRate": 1,
+          "primaryEventCount": 603,
+          "independentPrimaryEventCount": 603,
+          "independentPrimaryEventRate": 1
+        },
+        "serializer": {
+          "measureCount": 113,
+          "primaryEventCount": 603,
+          "serializableEventCount": 603,
+          "invalidEventCount": 0,
+          "invalidEventRate": 0,
+          "duplicateEventCount": 0,
+          "duplicateEventRate": 0,
+          "voiceOverlapViolations": 0,
+          "emittedMeasureCount": 113,
+          "warningCount": 0,
+          "approximateQuantizationCount": 520,
+          "deterministic": true,
+          "promotedToRuntime": false
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 113,
+            "primaryEventCount": 603,
+            "serializableEventCount": 603,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 113,
+            "warningCount": 0,
+            "approximateQuantizationCount": 520,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 17,
+            "staffGroupCount": 17,
+            "measureCount": 113,
+            "systemCountAccuracy": 1,
+            "staffGroupAccuracy": null,
+            "absoluteMeasureCountError": 0
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": null,
+            "v3": null
+          }
+        },
+        "decision": null,
+        "error": null
+      }
+    }
+  ],
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "mode": "live",
+  "pipelineOptions": {
+    "preprocessPages": true,
+    "promoteScoreGraphClips": false,
+    "omrV3Shadow": true
+  },
+  "omrV3Shadow": {
+    "fixtureCount": 2,
+    "readyFixtureCount": 2,
+    "independentReadyFixtureCount": 2,
+    "gate": {
+      "pass": false,
+      "status": "shadow-only",
+      "improvedFixtureCount": 0,
+      "requiredImprovedFixtureCount": 2,
+      "regressionCount": 0,
+      "policyViolations": [],
+      "comparisons": [
+        {
+          "id": "real-pd-scan-twinkle-1880",
+          "enforced": false,
+          "current": {
+            "pitchAccuracy": null,
+            "durationAccuracy": null,
+            "onsetAccuracy": null,
+            "chordGroupingAccuracy": null,
+            "noteDetectionF1": null,
+            "absoluteMeasureCountError": null,
+            "systemCountAccuracy": null,
+            "staffGroupAccuracy": null,
+            "notationTabPairingRecall": null,
+            "duplicateEventRate": 0,
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          },
+          "v3": {
+            "pitchAccuracy": null,
+            "durationAccuracy": null,
+            "onsetAccuracy": null,
+            "chordGroupingAccuracy": null,
+            "noteDetectionF1": null,
+            "absoluteMeasureCountError": null,
+            "systemCountAccuracy": null,
+            "staffGroupAccuracy": null,
+            "notationTabPairingRecall": null,
+            "duplicateEventRate": 0,
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          },
+          "improvements": [],
+          "regressions": []
+        },
+        {
+          "id": "real-local-beginner-workbook",
+          "enforced": false,
+          "current": {
+            "pitchAccuracy": null,
+            "durationAccuracy": null,
+            "onsetAccuracy": null,
+            "chordGroupingAccuracy": null,
+            "noteDetectionF1": null,
+            "absoluteMeasureCountError": null,
+            "systemCountAccuracy": null,
+            "staffGroupAccuracy": null,
+            "notationTabPairingRecall": null,
+            "duplicateEventRate": 0,
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          },
+          "v3": {
+            "pitchAccuracy": null,
+            "durationAccuracy": null,
+            "onsetAccuracy": null,
+            "chordGroupingAccuracy": null,
+            "noteDetectionF1": null,
+            "absoluteMeasureCountError": null,
+            "systemCountAccuracy": null,
+            "staffGroupAccuracy": null,
+            "notationTabPairingRecall": null,
+            "duplicateEventRate": 0,
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          },
+          "improvements": [],
+          "regressions": []
+        }
+      ],
+      "promotedToRuntime": false,
+      "candidates": {
+        "structure": "not-promoted",
+        "measureGeometry": "not-promoted",
+        "pianoGrouping": "not-promoted",
+        "guitarFusion": "not-promoted",
+        "fullV3": "not-promoted"
+      },
+      "unavailableEnforcedFixtures": [],
+      "unavailableEnforcedFixtureCount": 0
+    },
+    "productionGate": {
+      "pass": false,
+      "status": "blocked",
+      "promotedToRuntime": false,
+      "enforcedFixtureCount": 0,
+      "recognitionFixtureCount": 0,
+      "rejectionFixtureCount": 0,
+      "evaluatedRecognitionFixtureCount": 0,
+      "independentRecognitionFixtureCount": 0,
+      "independentlyRejectedFixtureCount": 0,
+      "regressionCount": 0,
+      "policyViolations": [],
+      "runtimeCandidateImplemented": false,
+      "rollbackVerified": false,
+      "blockers": [
+        {
+          "code": "runtime-candidate-not-implemented"
+        },
+        {
+          "code": "rollback-not-verified"
+        }
+      ]
+    },
+    "promoted": false
+  }
+}

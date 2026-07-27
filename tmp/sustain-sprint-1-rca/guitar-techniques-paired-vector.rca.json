@@ -1,0 +1,46 @@
+{
+  "id": "guitar-techniques-paired-vector",
+  "sustainPercent": "0%",
+  "tieDefects": [
+    {
+      "code": "missing-tie",
+      "class": "sustain",
+      "label": "Missing tie",
+      "count": 1
+    }
+  ],
+  "truthTieCount": 2,
+  "genTieCount": 0,
+  "truthTies": [
+    {
+      "pitch": "D4",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "A4",
+      "start": false,
+      "stop": true,
+      "chord": false
+    }
+  ],
+  "genTies": [],
+  "smuflTieGlyphCount": 0,
+  "tieGlyphSamples": [],
+  "samples": [
+    {
+      "measure": 5,
+      "defects": [
+        {
+          "code": "missing-tie",
+          "message": "Missing tie"
+        }
+      ]
+    }
+  ],
+  "tieDiagnostics": null,
+  "pipelineKeys": [
+    "ties"
+  ]
+}

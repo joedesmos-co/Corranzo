@@ -611,14 +611,13 @@ describe('guitar chord mic acceptance', () => {
 })
 
 describe('guitar chord visual TAB grouping', () => {
-  it('builds one overlay band for a current multi-string chord', () => {
+  it('does not draw rectangular overlay bands for multi-string chords', () => {
     const overlays = buildTabChordShapeOverlays([
       { groupId: 'g1', status: 'current', isChord: true, x: 100, y: 10, string: 1, fret: 8, sustainWidth: 40 },
       { groupId: 'g1', status: 'current', isChord: true, x: 100, y: 25, string: 2, fret: 8, sustainWidth: 40 },
       { groupId: 'g1', status: 'current', isChord: true, x: 100, y: 40, string: 3, fret: 8, sustainWidth: 40 },
     ])
-    expect(overlays).toHaveLength(1)
-    expect(overlays[0].maxY - overlays[0].minY).toBeGreaterThan(0)
+    expect(overlays).toEqual([])
   })
 
   it('marks visual lane groups as guitar chord shapes', () => {

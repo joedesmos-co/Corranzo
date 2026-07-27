@@ -1,0 +1,911 @@
+{
+  "generatedAt": "2026-07-17T03:20:47.919Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "engine": "omr-v3-shadow",
+  "promoted": false,
+  "gate": {
+    "pass": false,
+    "status": "shadow-only",
+    "improvedFixtureCount": 0,
+    "requiredImprovedFixtureCount": 2,
+    "regressionCount": 0,
+    "policyViolations": [],
+    "comparisons": [
+      {
+        "id": "dense",
+        "enforced": false,
+        "current": {
+          "pitchAccuracy": 0.9377,
+          "durationAccuracy": 0.9626,
+          "onsetAccuracy": 0.9566,
+          "chordGroupingAccuracy": 0.9413,
+          "noteDetectionF1": 0.9904,
+          "absoluteMeasureCountError": 0,
+          "systemCountAccuracy": 1,
+          "staffGroupAccuracy": null,
+          "notationTabPairingRecall": null,
+          "duplicateEventRate": 0,
+          "invalidEventRate": 0,
+          "voiceOverlapViolations": 0
+        },
+        "v3": {
+          "pitchAccuracy": 0.1964,
+          "durationAccuracy": 0.7338,
+          "onsetAccuracy": 0.6655,
+          "chordGroupingAccuracy": 0.6176,
+          "noteDetectionF1": 0.8718,
+          "absoluteMeasureCountError": 3,
+          "systemCountAccuracy": 1,
+          "staffGroupAccuracy": null,
+          "notationTabPairingRecall": null,
+          "duplicateEventRate": 0,
+          "invalidEventRate": 0,
+          "voiceOverlapViolations": 0
+        },
+        "improvements": [],
+        "regressions": [
+          "pitchAccuracy",
+          "durationAccuracy",
+          "onsetAccuracy",
+          "chordGroupingAccuracy",
+          "noteDetectionF1",
+          "absoluteMeasureCountError"
+        ]
+      }
+    ],
+    "promotedToRuntime": false,
+    "candidates": {
+      "structure": "not-promoted",
+      "measureGeometry": "not-promoted",
+      "pianoGrouping": "not-promoted",
+      "guitarFusion": "not-promoted",
+      "fullV3": "not-promoted"
+    },
+    "unavailableEnforcedFixtures": [],
+    "unavailableEnforcedFixtureCount": 0
+  },
+  "fixtures": [
+    {
+      "fixtureId": "dense",
+      "label": "A Cruel Angel's Thesis (legacy copyrighted diagnostic)",
+      "enforced": false,
+      "shadow": {
+        "status": "ready",
+        "engine": "omr-v3-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 5,
+              "rejectedPairingCount": 4
+            },
+            {
+              "pageIndex": 1,
+              "systemCount": 6,
+              "rejectedPairingCount": 5
+            },
+            {
+              "pageIndex": 2,
+              "systemCount": 6,
+              "rejectedPairingCount": 5
+            },
+            {
+              "pageIndex": 3,
+              "systemCount": 6,
+              "rejectedPairingCount": 5
+            },
+            {
+              "pageIndex": 4,
+              "systemCount": 6,
+              "rejectedPairingCount": 5
+            },
+            {
+              "pageIndex": 5,
+              "systemCount": 6,
+              "rejectedPairingCount": 5
+            },
+            {
+              "pageIndex": 6,
+              "systemCount": 6,
+              "rejectedPairingCount": 5
+            },
+            {
+              "pageIndex": 7,
+              "systemCount": 3,
+              "rejectedPairingCount": 2
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-0:0",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2879999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-0:1",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2799999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-0:2",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2799999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-0:3",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2799999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-0:4",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.27699999999999997,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-1:0",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.27699999999999997,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-1:1",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2869999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-1:2",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2919999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-1:3",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2949999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-1:4",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2969999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-1:5",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2949999999999998,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-2:0",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2949999999999998,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-2:1",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2949999999999998,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-2:2",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.29799999999999993,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-2:3",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2909999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-2:4",
+              "rawCandidateCount": 3,
+              "acceptedBoundaryCount": 1,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.3009999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 2,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-2:5",
+              "rawCandidateCount": 3,
+              "acceptedBoundaryCount": 1,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.329,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 2,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-3:0",
+              "rawCandidateCount": 3,
+              "acceptedBoundaryCount": 1,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.36299999999999993,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 2,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-3:1",
+              "rawCandidateCount": 3,
+              "acceptedBoundaryCount": 1,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.4149999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 2,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-3:2",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.4149999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-3:3",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.4149999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-3:4",
+              "rawCandidateCount": 3,
+              "acceptedBoundaryCount": 1,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.4149999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 2,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-3:5",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.34,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-4:0",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.30199999999999994,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-4:1",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.29999999999999993,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-4:2",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.29999999999999993,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-4:3",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2969999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-4:4",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2969999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-4:5",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2919999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-5:0",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2919999999999998,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-5:1",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.291,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-5:2",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.291,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-5:3",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2869999999999998,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-5:4",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2869999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-5:5",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2869999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-6:0",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2889999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-6:1",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.3009999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-6:2",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.3009999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-6:3",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.3009999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-6:4",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.3009999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-6:5",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.3009999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-7:0",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.2989999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-7:1",
+              "rawCandidateCount": 4,
+              "acceptedBoundaryCount": 2,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.3009999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 3,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-a-cruel-angels-thesis-neon-genesis-evangelion-7:2",
+              "rawCandidateCount": 2,
+              "acceptedBoundaryCount": 0,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.3049999999999998,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": false,
+              "measureCount": 1,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 2827,
+            "assignedSymbolCount": 2827,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 1159,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "pianoMeasureCount": 128,
+            "ambiguousMeasureCount": 5,
+            "rejectedEventGroupCount": 0,
+            "unresolvedEventGroupCount": 0,
+            "voiceOverlapViolations": 0,
+            "inputMutated": false
+          }
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 128,
+            "primaryEventCount": 2827,
+            "serializableEventCount": 2827,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 128,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 44,
+            "staffGroupCount": 44,
+            "measureCount": 128,
+            "systemCountAccuracy": 1,
+            "staffGroupAccuracy": null,
+            "absoluteMeasureCountError": 3
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.9377,
+              "matchedPitchAccuracy": 0.9472,
+              "durationAccuracy": 0.9626,
+              "matchedDurationAccuracy": 0.9723,
+              "onsetAccuracy": 0.9566,
+              "matchedOnsetAccuracy": 0.9662,
+              "timeAccuracy": 0.0014,
+              "matchedTimeAccuracy": 0.0014,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.9907,
+              "noteDetectionRecall": 0.99,
+              "noteDetectionF1": 0.9904,
+              "chordGroupingAccuracy": 0.9413,
+              "pitchAccuracyAtCorrectOnset": 0.9613,
+              "orderSensitivePitchRecovery": 0.0409
+            },
+            "v3": {
+              "pitchAccuracy": 0.1964,
+              "matchedPitchAccuracy": 0.2254,
+              "durationAccuracy": 0.7338,
+              "matchedDurationAccuracy": 0.842,
+              "onsetAccuracy": 0.6655,
+              "matchedOnsetAccuracy": 0.7636,
+              "timeAccuracy": 0.0014,
+              "matchedTimeAccuracy": 0.0016,
+              "measureCountAccuracy": 0.9766,
+              "noteDetectionPrecision": 0.8722,
+              "noteDetectionRecall": 0.8715,
+              "noteDetectionF1": 0.8718,
+              "chordGroupingAccuracy": 0.6176,
+              "pitchAccuracyAtCorrectOnset": 0.2016,
+              "orderSensitivePitchRecovery": 0.1064
+            }
+          }
+        },
+        "current": {
+          "metrics": {
+            "pitchAccuracy": 0.9377,
+            "matchedPitchAccuracy": 0.9472,
+            "durationAccuracy": 0.9626,
+            "matchedDurationAccuracy": 0.9723,
+            "onsetAccuracy": 0.9566,
+            "matchedOnsetAccuracy": 0.9662,
+            "timeAccuracy": 0.0014,
+            "matchedTimeAccuracy": 0.0014,
+            "measureCountAccuracy": 1,
+            "noteDetectionPrecision": 0.9907,
+            "noteDetectionRecall": 0.99,
+            "noteDetectionF1": 0.9904,
+            "chordGroupingAccuracy": 0.9413,
+            "pitchAccuracyAtCorrectOnset": 0.9613,
+            "orderSensitivePitchRecovery": 0.0409
+          },
+          "structure": {
+            "absoluteMeasureCountError": 0,
+            "systemCountAccuracy": 1
+          },
+          "fusion": {
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          }
+        },
+        "v3": {
+          "serializer": {
+            "measureCount": 128,
+            "primaryEventCount": 2827,
+            "serializableEventCount": 2827,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 128,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 44,
+            "staffGroupCount": 44,
+            "measureCount": 128,
+            "systemCountAccuracy": 1,
+            "staffGroupAccuracy": null,
+            "absoluteMeasureCountError": 3
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.9377,
+              "matchedPitchAccuracy": 0.9472,
+              "durationAccuracy": 0.9626,
+              "matchedDurationAccuracy": 0.9723,
+              "onsetAccuracy": 0.9566,
+              "matchedOnsetAccuracy": 0.9662,
+              "timeAccuracy": 0.0014,
+              "matchedTimeAccuracy": 0.0014,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.9907,
+              "noteDetectionRecall": 0.99,
+              "noteDetectionF1": 0.9904,
+              "chordGroupingAccuracy": 0.9413,
+              "pitchAccuracyAtCorrectOnset": 0.9613,
+              "orderSensitivePitchRecovery": 0.0409
+            },
+            "v3": {
+              "pitchAccuracy": 0.1964,
+              "matchedPitchAccuracy": 0.2254,
+              "durationAccuracy": 0.7338,
+              "matchedDurationAccuracy": 0.842,
+              "onsetAccuracy": 0.6655,
+              "matchedOnsetAccuracy": 0.7636,
+              "timeAccuracy": 0.0014,
+              "matchedTimeAccuracy": 0.0016,
+              "measureCountAccuracy": 0.9766,
+              "noteDetectionPrecision": 0.8722,
+              "noteDetectionRecall": 0.8715,
+              "noteDetectionF1": 0.8718,
+              "chordGroupingAccuracy": 0.6176,
+              "pitchAccuracyAtCorrectOnset": 0.2016,
+              "orderSensitivePitchRecovery": 0.1064
+            }
+          }
+        }
+      }
+    }
+  ]
+}

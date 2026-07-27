@@ -1,0 +1,47 @@
+{
+  "id": "45-piano-articulation-scan-m3-augmentation-dot-control",
+  "source": "piano-articulation-scan",
+  "sourcePdf": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf",
+  "page": 1,
+  "measure": 3,
+  "expectedArticulation": "staccato",
+  "expectAbsent": true,
+  "sourcePriority": "raster inference (no vector text/path evidence)",
+  "rawArticulationCandidate": {
+    "source": "raster-ink",
+    "x": 610.5,
+    "y": 329.5,
+    "classification": "augmentation-dot/noise control"
+  },
+  "candidateType": "diagnostic-only control",
+  "staffSystem": {
+    "page": 1,
+    "systemIndex": 0,
+    "clef": null
+  },
+  "selectedNoteOrChord": null,
+  "classification": "Augmentation-dot/tie region remains free of staccato",
+  "placement": "above",
+  "musicXmlSnippet": "<measure number=\"3\"><direction><words>OMR rhythm uncertain</words></direction><note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><forward><duration>1</duration></forward><note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><forward><duration>2</duration></forward><note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff></note><note><chord/><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><tie type=\"start\"/><voice>1</voice><type>quarter</type><dot/><staff>1</staff><notations><tied type=\"start\"/></notations></note><note><chord/><pitch><step>A</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><dot/><staff>2</staff></note><note><chord/><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><dot/><staff>2</staff></note><note><chord/><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff></note></measure>",
+  "renderedResult": {
+    "present": false,
+    "geometry": null
+  },
+  "playbackSemanticTrace": {
+    "attackCount": 0,
+    "articulationSource": "none",
+    "midi": null
+  },
+  "notationPlaybackAgree": true,
+  "failureLayerBefore": "none",
+  "failureLayerAfter": "none",
+  "correctBefore": true,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-5/source-crops/45-piano-articulation-scan-m3-augmentation-dot-control.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-5/candidate-overlays/45-piano-articulation-scan-m3-augmentation-dot-control.png",
+    "musicXmlSnippet": "tmp/notation-fidelity-sprint-5/musicxml-snippets/45-piano-articulation-scan-m3-augmentation-dot-control.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-5/rendered-before/45-piano-articulation-scan-m3-augmentation-dot-control.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-5/rendered-after/45-piano-articulation-scan-m3-augmentation-dot-control.png"
+  }
+}

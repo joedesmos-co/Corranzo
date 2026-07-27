@@ -1,0 +1,44 @@
+{
+  "id": "34-piano-grand-voices-vector-none-m2-3-60-62",
+  "source": "piano-grand-voices-vector",
+  "sourcePdf": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf",
+  "page": 1,
+  "measures": [
+    2,
+    3
+  ],
+  "expectedSymbol": "no-curve",
+  "sourceCrop": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/source-crops/34-piano-grand-voices-vector-none-m2-3-60-62.png",
+  "candidateOverlay": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/candidate-overlays/34-piano-grand-voices-vector-none-m2-3-60-62.png",
+  "rawCurveCandidates": [],
+  "selectedAttachments": {
+    "fromMeasure": 2,
+    "toMeasure": 3,
+    "fromMidi": 60,
+    "toMidi": 62,
+    "clef": null,
+    "candidateIds": []
+  },
+  "classificationResult": "no-curve-control",
+  "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/34-piano-grand-voices-vector-none-m2-3-60-62.musicxml",
+  "renderedResult": {
+    "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/34-piano-grand-voices-vector-none-m2-3-60-62.png",
+    "markingFound": false,
+    "path": null,
+    "placement": null
+  },
+  "playbackAttackTrace": [
+    {
+      "measureNumber": 2,
+      "midi": 62,
+      "quarterTime": 4,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    }
+  ],
+  "correctBefore": true,
+  "correctAfter": true,
+  "failureLayerBefore": "none",
+  "failureLayerAfter": "none"
+}

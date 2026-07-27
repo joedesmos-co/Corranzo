@@ -1,0 +1,160 @@
+{
+  "id": "14-gymnopedie-tie-m25-26-74-74",
+  "source": "gymnopedie",
+  "sourcePdf": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+  "page": 1,
+  "measures": [
+    25,
+    26
+  ],
+  "expectedSymbol": "tie",
+  "sourceCrop": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/source-crops/14-gymnopedie-tie-m25-26-74-74.png",
+  "candidateOverlay": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/candidate-overlays/14-gymnopedie-tie-m25-26-74-74.png",
+  "rawCurveCandidates": [
+    {
+      "candidateId": "pdf-path-p1-op439",
+      "source": "pdf-vector-path",
+      "start": {
+        "x": 814.4002546008404,
+        "y": 1119.5158164083016,
+        "tangent": {
+          "dx": 0.9162923369601237,
+          "dy": -0.4005101162619435
+        }
+      },
+      "end": {
+        "x": 952.822736875,
+        "y": 1119.5158164083016,
+        "tangent": {
+          "dx": 0.9162923369601229,
+          "dy": 0.40051011626194477
+        }
+      },
+      "bounds": {
+        "x0": 814.4002546008404,
+        "x1": 952.822736875,
+        "y0": 1107.41496837866,
+        "y1": 1119.5158164083016,
+        "width": 138.42248227415962,
+        "height": 12.100848029641611
+      },
+      "archDirection": "above",
+      "startCandidates": [
+        {
+          "measureNumber": 25,
+          "systemIndex": 4,
+          "eventIndex": 1,
+          "noteIndex": 0,
+          "startDivision": 0,
+          "midi": 74,
+          "clef": "treble",
+          "cx": 812.7296941220169,
+          "cy": 1125.7180587648459,
+          "score": 10.21,
+          "dx": 1.67,
+          "dy": 6.2,
+          "anchor": "notehead",
+          "anchorY": 1125.7180587648459
+        }
+      ],
+      "endCandidates": []
+    },
+    {
+      "candidateId": "pdf-path-p2-op375",
+      "source": "pdf-vector-path",
+      "start": {
+        "x": 121.858607082458,
+        "y": 105.66637598974404,
+        "tangent": {
+          "dx": 0.6492644224519032,
+          "dy": -0.7605627585795904
+        }
+      },
+      "end": {
+        "x": 141.2274420187763,
+        "y": 105.66637598974404,
+        "tangent": {
+          "dx": 0.6492639251826909,
+          "dy": 0.7605631830797261
+        }
+      },
+      "bounds": {
+        "x0": 121.858607082458,
+        "x1": 141.2274420187763,
+        "y0": 101.12855813890985,
+        "y1": 105.66637598974404,
+        "width": 19.368834936318294,
+        "height": 4.5378178508341875
+      },
+      "archDirection": "above",
+      "startCandidates": [],
+      "endCandidates": [
+        {
+          "measureNumber": 26,
+          "systemIndex": 0,
+          "eventIndex": 1,
+          "noteIndex": 0,
+          "startDivision": 0,
+          "midi": 74,
+          "clef": "treble",
+          "cx": 142.8334094161345,
+          "cy": 114.85783046912115,
+          "score": 13.05,
+          "dx": 1.61,
+          "dy": 9.19,
+          "anchor": "notehead",
+          "anchorY": 114.85783046912115
+        }
+      ]
+    }
+  ],
+  "selectedAttachments": {
+    "fromMeasure": 25,
+    "toMeasure": 26,
+    "fromMidi": 74,
+    "toMidi": 74,
+    "clef": "treble",
+    "candidateIds": [
+      "pdf-path-p1-op439",
+      "pdf-path-p2-op375"
+    ]
+  },
+  "classificationResult": "tie",
+  "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/14-gymnopedie-tie-m25-26-74-74.musicxml",
+  "renderedResult": {
+    "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/14-gymnopedie-tie-m25-26-74-74.png",
+    "markingFound": true,
+    "path": "M 8806.3 37.44 Q 8983.333333333332 8.64 9160.366666666667 37.44",
+    "placement": "above"
+  },
+  "playbackAttackTrace": [
+    {
+      "measureNumber": 25,
+      "midi": 74,
+      "quarterTime": 72,
+      "tieStart": true,
+      "tieStop": true,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 26,
+      "midi": 74,
+      "quarterTime": 75,
+      "tieStart": false,
+      "tieStop": true,
+      "suppressPlaybackAttack": true
+    },
+    {
+      "measureNumber": 26,
+      "midi": 74,
+      "quarterTime": 77,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    }
+  ],
+  "correctBefore": false,
+  "correctAfter": true,
+  "failureLayerBefore": "symbol-not-detected",
+  "failureLayerAfter": "none"
+}

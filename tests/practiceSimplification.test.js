@@ -16,13 +16,14 @@ describe('Practice page simplification', () => {
     expect(panel).not.toMatch(/title="Setup"/)
     expect(panel).toContain('aria-label="Files"')
     expect(panel).toContain('aria-label="Playback options"')
-    expect(panel).toContain('aria-label="Practice setup"')
+    expect(panel).toContain('aria-label="Score cursor"')
     expect(panel).toContain('aria-label="Help"')
+    expect(panel).not.toContain('aria-label="Practice setup"')
     expect(panel).toMatch(/PracticeScoreCursorSection/)
     expect(panel).toMatch(/PracticeMetronomeAdvancedSettings/)
   })
 
-  it('keeps custom marker management out of Practice setup', () => {
+  it('keeps custom marker management out of Score cursor advanced controls', () => {
     const setup = readSrc('components', 'practice', 'PracticeSetupPanel.jsx')
     const scoreFollowControls = readSrc('components', 'pdf', 'ScoreFollowControls.jsx')
 

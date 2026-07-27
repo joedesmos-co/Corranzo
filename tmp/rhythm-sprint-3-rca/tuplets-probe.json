@@ -1,0 +1,139 @@
+{
+  "threes": [
+    {
+      "text": "3",
+      "sourceText": "3",
+      "sourceIndex": 0,
+      "sourceLength": 1,
+      "x": 522.7875816993464,
+      "y": 271.2171717171717,
+      "width": 6.359477124183006,
+      "height": 11.436868686868687,
+      "fontName": "g_d1_f1"
+    },
+    {
+      "text": "3",
+      "sourceText": "3",
+      "sourceIndex": 0,
+      "sourceLength": 1,
+      "x": 546.5130718954248,
+      "y": 246.70959595959584,
+      "width": 6.359477124183006,
+      "height": 11.436868686868687,
+      "fontName": "g_d1_f1"
+    },
+    {
+      "text": "3",
+      "sourceText": "3",
+      "sourceIndex": 0,
+      "sourceLength": 1,
+      "x": 582.3954248366014,
+      "y": 246.70959595959584,
+      "width": 6.359477124183006,
+      "height": 11.436868686868687,
+      "fontName": "g_d1_f1"
+    },
+    {
+      "text": "3",
+      "sourceText": "3",
+      "sourceIndex": 0,
+      "sourceLength": 1,
+      "x": 618.2777777777778,
+      "y": 246.70959595959584,
+      "width": 6.359477124183006,
+      "height": 11.436868686868687,
+      "fontName": "g_d1_f1"
+    },
+    {
+      "text": "3",
+      "sourceText": "3",
+      "sourceIndex": 0,
+      "sourceLength": 1,
+      "x": 654.1601307189543,
+      "y": 246.70959595959584,
+      "width": 6.359477124183006,
+      "height": 11.436868686868687,
+      "fontName": "g_d1_f1"
+    }
+  ],
+  "tmCount": 0,
+  "rhythm": {
+    "numerator": 66,
+    "denominator": 128,
+    "truePositives": 66,
+    "falsePositives": 1,
+    "falseNegatives": 61,
+    "ignored": 0,
+    "unsupported": 0,
+    "presentInTruth": 127,
+    "compared": 128,
+    "coverage": 1,
+    "coveragePercent": "100%",
+    "score": 0.5156,
+    "percent": "52%",
+    "reliable": true,
+    "displayPercent": "52%"
+  },
+  "topDefects": [
+    {
+      "code": "incorrect-pitch",
+      "class": "pitch",
+      "label": "Incorrect pitch",
+      "count": 30
+    },
+    {
+      "code": "onset-mismatch",
+      "class": "rhythm",
+      "label": "Onset timing difference",
+      "count": 30
+    },
+    {
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "label": "Duration mismatch",
+      "count": 14
+    },
+    {
+      "code": "tuplet-mismatch",
+      "class": "rhythm",
+      "label": "Tuplet mismatch",
+      "count": 10
+    },
+    {
+      "code": "incorrect-chord",
+      "class": "measure-structure",
+      "label": "Incorrect chord",
+      "count": 9
+    },
+    {
+      "code": "extra-note",
+      "class": "pitch",
+      "label": "Extra note",
+      "count": 7
+    },
+    {
+      "code": "missing-note",
+      "class": "pitch",
+      "label": "Missing note",
+      "count": 7
+    },
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "label": "Incorrect tie",
+      "count": 3
+    },
+    {
+      "code": "missing-rest",
+      "class": "rhythm",
+      "label": "Missing rest",
+      "count": 3
+    },
+    {
+      "code": "missing-dot",
+      "class": "rhythm",
+      "label": "Missing dot",
+      "count": 2
+    }
+  ]
+}

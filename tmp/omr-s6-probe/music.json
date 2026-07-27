@@ -1,0 +1,23 @@
+{
+  "label": "music",
+  "error": true,
+  "code": "low-confidence",
+  "message": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+  "noteCount": 0,
+  "measureCount": 0,
+  "pagesWithSystems": 1,
+  "systems": 10,
+  "measures": 54,
+  "isolatedRegions": null,
+  "confidence": 0.617058088021139,
+  "reasons": [
+    "low-confidence"
+  ],
+  "independentDecision": {
+    "status": "observe-production-rejection",
+    "ownedBy": "v2-policy",
+    "independent": false,
+    "failureReason": "low-confidence",
+    "productionConfidence": 0.617058088021139
+  }
+}

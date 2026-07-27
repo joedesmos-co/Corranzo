@@ -64,6 +64,11 @@ export function yForString(stringNumber, geometry) {
   return geometry.lines[index]
 }
 
+/** Cap trailing sustain bars — long ties stay readable without spanning the lane. */
+export const TAB_SUSTAIN_MAX_SECONDS = 0.85
+/** Only draw a sustain stub when the note is meaningfully longer than a disc. */
+export const TAB_SUSTAIN_MIN_SECONDS = 0.45
+
 /**
  * Flatten visual lane groups into positioned tab notes.
  *
@@ -85,11 +90,6 @@ export function buildTabLaneNotes(
 
   for (const group of groups ?? []) {
     const x = group.timeSeconds * pixelsPerSecond
-    const durations = (group.notes ?? []).map((note) =>
-      sanitizeVisualDurationSeconds(note.durationSeconds, 0.25),
-    )
-    const groupDuration = durations.length ? Math.max(...durations, 0.25) : 0.25
-    const groupSustainWidth = Math.max(FRET_DISC_RADIUS * 1.6, groupDuration * pixelsPerSecond)
     for (let index = 0; index < (group.notes?.length ?? 0); index += 1) {
       const note = group.notes[index]
       if (!isFiniteMidi(note.midi)) {
@@ -105,9 +105,12 @@ export function buildTabLaneNotes(
         continue
       }
       const durationSeconds = sanitizeVisualDurationSeconds(note.durationSeconds, 0.25)
-      const sustainWidth = group.isChord
-        ? groupSustainWidth
-        : Math.max(FRET_DISC_RADIUS * 1.6, durationSeconds * pixelsPerSecond)
+      const meaningfulSustain =
+        Boolean(note.hasTiedSustain || note.tieStart) || durationSeconds >= TAB_SUSTAIN_MIN_SECONDS
+      const cappedDuration = Math.min(durationSeconds, TAB_SUSTAIN_MAX_SECONDS)
+      const sustainWidth = meaningfulSustain
+        ? Math.max(FRET_DISC_RADIUS * 1.35, cappedDuration * pixelsPerSecond * 0.55)
+        : FRET_DISC_RADIUS * 1.15
       notes.push({
         id: `${group.id}-s${position.string}-${index}`,
         groupId: group.id,
@@ -122,6 +125,7 @@ export function buildTabLaneNotes(
         durationSeconds,
         sustainWidth,
         isChord: Boolean(group.isChord),
+        hasTiedSustain: Boolean(note.hasTiedSustain || note.tieStart),
         visualNoteId: note.visualNoteId ?? note.id ?? `${group.id}-${index}`,
         sourceNoteId: note.sourceNoteId ?? note.id ?? null,
         markings: note.markings ?? [],
@@ -133,34 +137,12 @@ export function buildTabLaneNotes(
   return notes
 }
 
-/** Vertical band behind guitar chord / double-stop sustain shapes. */
-export function buildTabChordShapeOverlays(notes = []) {
-  const byGroup = new Map()
-  for (const note of notes) {
-    if (!note.isChord) {
-      continue
-    }
-    const list = byGroup.get(note.groupId) ?? []
-    list.push(note)
-    byGroup.set(note.groupId, list)
-  }
-  const overlays = []
-  for (const [groupId, groupNotes] of byGroup.entries()) {
-    if (groupNotes.length < 2) {
-      continue
-    }
-    const sustainWidth = Math.max(...groupNotes.map((note) => note.sustainWidth ?? 0))
-    overlays.push({
-      id: `${groupId}-shape`,
-      x: groupNotes[0].x,
-      minY: Math.min(...groupNotes.map((note) => note.y)),
-      maxY: Math.max(...groupNotes.map((note) => note.y)),
-      width: Math.max(FRET_DISC_RADIUS * 2.4, sustainWidth),
-      status: groupNotes[0].status ?? 'upcoming',
-      laneOutcome: groupNotes[0].laneOutcome ?? null,
-    })
-  }
-  return overlays
+/**
+ * Chord group boxes disabled — fret discs + playhead already show simultaneous
+ * attacks. Kept as a no-op for call-site / test compatibility.
+ */
+export function buildTabChordShapeOverlays(_notes = []) {
+  return []
 }
 
 /**

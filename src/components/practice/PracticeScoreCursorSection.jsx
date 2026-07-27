@@ -74,7 +74,7 @@ export default function PracticeScoreCursorSection({ scoreFollow, disabled = fal
 
       {setupPhase === 'failed' && (
         <p className="practice-section__hint practice-score-cursor__hint">
-          Cursor setup failed — open Advanced → Practice setup.
+          Cursor setup failed — open Advanced → Score cursor.
         </p>
       )}
     </section>

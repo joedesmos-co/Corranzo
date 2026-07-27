@@ -1,32 +1,41 @@
 import { OMR_MUSICAL_CONFIDENCE } from './omrMusicalConstants.js'
+import {
+  broadcastArticulationToChordMates,
+  staffSpacePixelsForArticulation,
+} from './articulationGeometry.js'
 
 /**
  * SMuFL articulation glyphs in vector PDF text (Bravura / Bravura Text).
- * U+E4E5 is staccatissimo wedge in Bravura Text — treated as staccato for playback.
+ * U+E4A2/E4A3 are the authoritative above/below staccato glyphs.
+ *
+ * Keep rest glyphs (U+E4E3–U+E4E7) out of this set. In particular, U+E4E5 is
+ * a quarter rest, not a staccatissimo wedge.
  */
-const VECTOR_STACCATO_GLYPHS = new Set(['\ue4a0', '\ue4a1', '\ue4a2', '\ue4e5'])
+const VECTOR_STACCATO_GLYPHS = new Set(['\ue4a2', '\ue4a3'])
 
-/** SMuFL rhythm dot — only staccato when above/below a notehead, not beside it. */
+/** SMuFL augmentation dot. It is never authoritative staccato evidence. */
 const RHYTHM_DOT_GLYPH = '\ue1e7'
 
 function glyphInMeasureBox(glyph, measureBox, imageData, { yPad = 0.025 } = {}) {
   const xNorm = glyph.x / imageData.width
   const yNorm = glyph.y / imageData.height
+  const x0 = measureBox.playableX0 ?? measureBox.x0 ?? measureBox.xStart
+  const x1 = measureBox.x1 ?? measureBox.xEnd
+  const y0 = measureBox.y0 ?? measureBox.yTop
+  const y1 = measureBox.y1 ?? measureBox.yBottom
+  if (![x0, x1, y0, y1].every(Number.isFinite)) {
+    return false
+  }
   return (
-    xNorm >= (measureBox.playableX0 ?? measureBox.x0) &&
-    xNorm <= measureBox.x1 &&
-    yNorm >= measureBox.y0 - yPad &&
-    yNorm <= measureBox.y1 + yPad
+    xNorm >= x0 &&
+    xNorm <= x1 &&
+    yNorm >= y0 - yPad &&
+    yNorm <= y1 + yPad
   )
 }
 
 function staffSpacePixels(measureBox, imageData, clef) {
-  const lines =
-    clef === 'treble' ? measureBox.staffLines?.treble : measureBox.staffLines?.bass
-  if (!lines?.length || lines.length < 2) {
-    return 8
-  }
-  return Math.max(4, (lines[1] - lines[0]) * imageData.height)
+  return staffSpacePixelsForArticulation(measureBox, imageData, clef)
 }
 
 function isAugmentationDotRelativeToNote(glyph, note) {
@@ -47,22 +56,38 @@ function isStaccatoRelativeToNote(glyph, note, staffSpace) {
   if (dx > staffSpace * 1.25) {
     return false
   }
-  if (absDy > staffSpace * 3) {
+  // Column-aligned marks may sit farther when staff-gap estimation is tight.
+  const maxDy = Math.max(staffSpace * 3.2, dx < staffSpace * 0.5 ? 40 : staffSpace * 3.2)
+  if (absDy > maxDy) {
     return false
   }
   return true
 }
 
 function isStaccatoCandidateGlyph(glyph) {
-  if (VECTOR_STACCATO_GLYPHS.has(glyph.text)) {
-    return true
+  return VECTOR_STACCATO_GLYPHS.has(glyph.text)
+}
+
+function staccatoPlacementForGlyph(glyph) {
+  if (glyph?.text === '\ue4a2') {
+    return 'above'
   }
-  return glyph.text === RHYTHM_DOT_GLYPH
+  if (glyph?.text === '\ue4a3') {
+    return 'below'
+  }
+  return null
 }
 
 function staccatoMatchScore(note, glyph, measureBox, imageData) {
   const staffSpace = staffSpacePixels(measureBox, imageData, note.clef)
   if (!isStaccatoRelativeToNote(glyph, note, staffSpace)) {
+    return null
+  }
+  const placement = staccatoPlacementForGlyph(glyph)
+  if (placement === 'above' && glyph.y >= note.cy) {
+    return null
+  }
+  if (placement === 'below' && glyph.y <= note.cy) {
     return null
   }
   const dx = Math.abs(glyph.x - note.cx)
@@ -77,6 +102,9 @@ export function assignVectorStaccato(glyphs, notes, measureBox, imageData) {
   const assignments = new Map()
   let detectedStaccatoCount = 0
   const claimedGlyphs = new Set()
+  const detectedCandidates = []
+  const selectedAttachments = []
+  const rejectedCandidates = []
 
   for (const glyph of glyphs ?? []) {
     if (!isStaccatoCandidateGlyph(glyph)) {
@@ -85,6 +113,12 @@ export function assignVectorStaccato(glyphs, notes, measureBox, imageData) {
     if (!glyphInMeasureBox(glyph, measureBox, imageData)) {
       continue
     }
+    detectedCandidates.push({
+      glyph,
+      type: 'staccato',
+      placement: staccatoPlacementForGlyph(glyph),
+      source: 'vector-glyph',
+    })
 
     let bestIndex = null
     let bestScore = Infinity
@@ -98,6 +132,12 @@ export function assignVectorStaccato(glyphs, notes, measureBox, imageData) {
     }
 
     if (bestIndex == null) {
+      rejectedCandidates.push({
+        glyph,
+        type: 'staccato',
+        placement: staccatoPlacementForGlyph(glyph),
+        reason: 'no-compatible-note-on-staff',
+      })
       continue
     }
 
@@ -109,11 +149,29 @@ export function assignVectorStaccato(glyphs, notes, measureBox, imageData) {
     claimedGlyphs.add(glyphKey)
 
     if (!assignments.has(bestIndex)) {
-      assignments.set(bestIndex, {
+      const articulation = {
         type: 'staccato',
+        placement: staccatoPlacementForGlyph(glyph),
         confidence: 0.82,
         source: 'vector-glyph',
         glyph: glyph.text,
+      }
+      assignments.set(bestIndex, articulation)
+      const staffSpace = staffSpacePixels(measureBox, imageData, notes[bestIndex]?.clef)
+      broadcastArticulationToChordMates(
+        assignments,
+        notes,
+        bestIndex,
+        articulation,
+        staffSpace,
+      )
+      selectedAttachments.push({
+        glyph,
+        type: 'staccato',
+        placement: articulation.placement,
+        noteIndex: bestIndex,
+        note: notes[bestIndex],
+        score: bestScore,
       })
     }
   }
@@ -122,7 +180,14 @@ export function assignVectorStaccato(glyphs, notes, measureBox, imageData) {
     (articulation) => (articulation.confidence ?? 0) >= OMR_MUSICAL_CONFIDENCE.ARTICULATION,
   ).length
 
-  return { assignments, detectedStaccatoCount, appliedStaccatoCount }
+  return {
+    assignments,
+    detectedStaccatoCount,
+    appliedStaccatoCount,
+    detectedCandidates,
+    selectedAttachments,
+    rejectedCandidates,
+  }
 }
 
 export function summarizeVectorStaccatoDiagnostics(measureRecords = []) {
@@ -137,3 +202,54 @@ export function summarizeVectorStaccatoDiagnostics(measureRecords = []) {
 }
 
 export { VECTOR_STACCATO_GLYPHS, RHYTHM_DOT_GLYPH, isAugmentationDotRelativeToNote, isStaccatoRelativeToNote }
+
+function isAugmentationDotGlyph(glyph) {
+  const text = glyph?.text ?? ''
+  return text === RHYTHM_DOT_GLYPH || text === '.'
+}
+
+/**
+ * Bind SMuFL / period augmentation dots to the nearest notehead beside them.
+ * Vector scores should not rely on ink detectDot, which false-triggers on
+ * neighboring noteheads and articulation marks.
+ */
+export function assignVectorAugmentationDots(glyphs, notes, measureBox, imageData) {
+  const assignments = new Map()
+  const claimed = new Set()
+
+  for (const glyph of glyphs ?? []) {
+    if (!isAugmentationDotGlyph(glyph)) {
+      continue
+    }
+    if (!glyphInMeasureBox(glyph, measureBox, imageData)) {
+      continue
+    }
+
+    let bestIndex = null
+    let bestScore = Infinity
+    for (let index = 0; index < notes.length; index += 1) {
+      const note = notes[index]
+      if (!isAugmentationDotRelativeToNote(glyph, note)) {
+        continue
+      }
+      const score = Math.abs(glyph.x - note.cx) + Math.abs(glyph.y - note.cy) * 0.5
+      if (score >= bestScore) {
+        continue
+      }
+      bestScore = score
+      bestIndex = index
+    }
+
+    if (bestIndex == null) {
+      continue
+    }
+    const glyphKey = `${glyph.text}:${Math.round(glyph.x)}:${Math.round(glyph.y)}`
+    if (claimed.has(glyphKey) || assignments.has(bestIndex)) {
+      continue
+    }
+    claimed.add(glyphKey)
+    assignments.set(bestIndex, true)
+  }
+
+  return assignments
+}

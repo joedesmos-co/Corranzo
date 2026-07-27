@@ -214,6 +214,13 @@ describe('musicXmlSource', () => {
     expect(
       shouldShowLibraryOmrPanel({ hasPdf: true, musicXmlSource: validOmr }),
     ).toBe(false)
+    expect(
+      shouldShowLibraryOmrPanel({
+        hasPdf: true,
+        musicXmlSource: { ...validOmr, ownerPdfIdentity: 'old.pdf::1::1' },
+        pdfIdentity: 'new.pdf::2::2',
+      }),
+    ).toBe(true)
 
     const invalidOmr = createMusicXmlSource('score.omr.musicxml', sampleOmrXml, {
       source: 'omr',

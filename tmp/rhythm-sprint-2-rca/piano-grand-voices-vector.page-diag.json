@@ -1,0 +1,624 @@
+{
+  "id": "piano-grand-voices-vector",
+  "source": "vector-glyphs",
+  "stats": {
+    "systems": 2,
+    "measures": 8,
+    "notes": 88,
+    "uncertainMeasures": 0
+  },
+  "measures": [
+    {
+      "measureNumber": 1,
+      "events": [
+        {
+          "type": "note",
+          "start": 0,
+          "dur": 8,
+          "dtype": "half",
+          "dotted": false,
+          "clef": "bass",
+          "midi": [
+            43,
+            36
+          ],
+          "noteDur": [
+            "half",
+            "whole"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            null,
+            null
+          ],
+          "stem": [
+            21,
+            null
+          ],
+          "hollowG": [
+            true,
+            true
+          ],
+          "pos": 0.04357400567224692,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 0,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            67,
+            64,
+            60
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            null,
+            null,
+            null
+          ],
+          "stem": [
+            10,
+            10,
+            10
+          ],
+          "hollowG": [
+            false,
+            false,
+            false
+          ],
+          "pos": 0.04357400567224692,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 4,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            62
+          ],
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            11
+          ],
+          "hollowG": [
+            false
+          ],
+          "pos": 0.23930404714213074,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 8,
+          "dur": 8,
+          "dtype": "half",
+          "dotted": false,
+          "clef": "bass",
+          "midi": [
+            48,
+            41
+          ],
+          "noteDur": [
+            "half",
+            "whole"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            null,
+            null
+          ],
+          "stem": [
+            14,
+            null
+          ],
+          "hollowG": [
+            true,
+            true
+          ],
+          "pos": 0.44948652688191815,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 8,
+          "dur": 8,
+          "dtype": "half",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            67,
+            64
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            null,
+            null
+          ],
+          "stem": [
+            11,
+            11
+          ],
+          "hollowG": [
+            false,
+            false
+          ],
+          "pos": 0.44948652688191815,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 12,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            65
+          ],
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            10
+          ],
+          "hollowG": [
+            false
+          ],
+          "pos": 0.6741214448916089,
+          "adj": {}
+        }
+      ],
+      "noteheads": []
+    },
+    {
+      "measureNumber": 2,
+      "events": [
+        {
+          "type": "note",
+          "start": 0,
+          "dur": 8,
+          "dtype": "half",
+          "dotted": false,
+          "clef": "bass",
+          "midi": [
+            45,
+            38
+          ],
+          "noteDur": [
+            "half",
+            "whole"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            null,
+            null
+          ],
+          "stem": [
+            22,
+            null
+          ],
+          "hollowG": [
+            true,
+            true
+          ],
+          "pos": 0.16597694354123574,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 0,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            69,
+            65,
+            62
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            null,
+            null,
+            null
+          ],
+          "stem": [
+            10,
+            10,
+            10
+          ],
+          "hollowG": [
+            false,
+            false,
+            false
+          ],
+          "pos": 0.16597694354123574,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 4,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            64
+          ],
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            10
+          ],
+          "hollowG": [
+            false
+          ],
+          "pos": 0.34629027490393127,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 8,
+          "dur": 8,
+          "dtype": "half",
+          "dotted": false,
+          "clef": "bass",
+          "midi": [
+            50,
+            43
+          ],
+          "noteDur": [
+            "half",
+            "whole"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            null,
+            null
+          ],
+          "stem": [
+            7,
+            null
+          ],
+          "hollowG": [
+            true,
+            true
+          ],
+          "pos": 0.5266036062666271,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 8,
+          "dur": 8,
+          "dtype": "half",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            69,
+            65
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            null,
+            null
+          ],
+          "stem": [
+            10,
+            10
+          ],
+          "hollowG": [
+            false,
+            false
+          ],
+          "pos": 0.5266036062666271,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 12,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            67
+          ],
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            10
+          ],
+          "hollowG": [
+            false
+          ],
+          "pos": 0.7069169376293228,
+          "adj": {}
+        }
+      ],
+      "noteheads": []
+    },
+    {
+      "measureNumber": 3,
+      "events": [
+        {
+          "type": "note",
+          "start": 0,
+          "dur": 8,
+          "dtype": "half",
+          "dotted": false,
+          "clef": "bass",
+          "midi": [
+            47,
+            40
+          ],
+          "noteDur": [
+            "half",
+            "whole"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            null,
+            null
+          ],
+          "stem": [
+            7,
+            null
+          ],
+          "hollowG": [
+            true,
+            true
+          ],
+          "pos": 0.16687908496732007,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 0,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            71,
+            67,
+            64
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            null,
+            null,
+            null
+          ],
+          "stem": [
+            11,
+            11,
+            11
+          ],
+          "hollowG": [
+            false,
+            false,
+            false
+          ],
+          "pos": 0.16687908496732007,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 4,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            65
+          ],
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            10
+          ],
+          "hollowG": [
+            false
+          ],
+          "pos": 0.34629084967320295,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 8,
+          "dur": 8,
+          "dtype": "half",
+          "dotted": false,
+          "clef": "bass",
+          "midi": [
+            52,
+            45
+          ],
+          "noteDur": [
+            "half",
+            "whole"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            null,
+            null
+          ],
+          "stem": [
+            14,
+            null
+          ],
+          "hollowG": [
+            true,
+            true
+          ],
+          "pos": 0.5257026143790847,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 8,
+          "dur": 8,
+          "dtype": "half",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            71,
+            67
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            null,
+            null
+          ],
+          "stem": [
+            11,
+            11
+          ],
+          "hollowG": [
+            false,
+            false
+          ],
+          "pos": 0.5257026143790847,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 12,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            69
+          ],
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            10
+          ],
+          "hollowG": [
+            false
+          ],
+          "pos": 0.705114379084967,
+          "adj": {}
+        }
+      ],
+      "noteheads": []
+    }
+  ]
+}

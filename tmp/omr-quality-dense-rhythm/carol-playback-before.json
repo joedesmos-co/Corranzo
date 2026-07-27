@@ -1,0 +1,1060 @@
+{
+  "schemaVersion": 2,
+  "evaluatorVersion": "2.0.0",
+  "kind": "semantic-musicxml-evaluation",
+  "mode": "performed",
+  "gitCommit": "15aa1db",
+  "scores": {
+    "pitch": 1,
+    "rhythm": 1,
+    "sustain": 1,
+    "articulation": 1,
+    "measureStructure": 1,
+    "interpretation": 1,
+    "playback": 0.9104
+  },
+  "scorePercents": {
+    "pitch": "100%",
+    "rhythm": "100%",
+    "sustain": "100%",
+    "articulation": "100%",
+    "measureStructure": "100%",
+    "interpretation": "100%",
+    "playback": "91%"
+  },
+  "classes": {
+    "pitch": {
+      "numerator": 0,
+      "denominator": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "ignored": 1,
+      "unsupported": 0,
+      "presentInTruth": 0,
+      "compared": 0,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 1,
+      "percent": "100%",
+      "reliable": true,
+      "displayPercent": "100%"
+    },
+    "rhythm": {
+      "numerator": 0,
+      "denominator": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "ignored": 1,
+      "unsupported": 0,
+      "presentInTruth": 0,
+      "compared": 0,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 1,
+      "percent": "100%",
+      "reliable": true,
+      "displayPercent": "100%"
+    },
+    "sustain": {
+      "numerator": 0,
+      "denominator": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "ignored": 1,
+      "unsupported": 0,
+      "presentInTruth": 0,
+      "compared": 0,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 1,
+      "percent": "100%",
+      "reliable": true,
+      "displayPercent": "100%"
+    },
+    "articulation": {
+      "numerator": 0,
+      "denominator": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "ignored": 1,
+      "unsupported": 0,
+      "presentInTruth": 0,
+      "compared": 0,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 1,
+      "percent": "100%",
+      "reliable": true,
+      "displayPercent": "100%"
+    },
+    "measureStructure": {
+      "numerator": 0,
+      "denominator": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "ignored": 1,
+      "unsupported": 0,
+      "presentInTruth": 0,
+      "compared": 0,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 1,
+      "percent": "100%",
+      "reliable": true,
+      "displayPercent": "100%"
+    },
+    "interpretation": {
+      "numerator": 0,
+      "denominator": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "ignored": 1,
+      "unsupported": 0,
+      "presentInTruth": 0,
+      "compared": 0,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 1,
+      "percent": "100%",
+      "reliable": true,
+      "displayPercent": "100%"
+    },
+    "playback": {
+      "numerator": 61,
+      "denominator": 67,
+      "truePositives": 61,
+      "falsePositives": 0,
+      "falseNegatives": 6,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 67,
+      "compared": 67,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.9104,
+      "percent": "91%",
+      "reliable": true,
+      "displayPercent": "91%"
+    }
+  },
+  "overall": 0.9872,
+  "overallPercent": "99%",
+  "labels": {
+    "pitch": "Pitch",
+    "rhythm": "Rhythm",
+    "sustain": "Sustain (ties)",
+    "articulation": "Articulation",
+    "measureStructure": "Measure structure",
+    "interpretation": "Interpretation",
+    "playback": "Playback"
+  },
+  "alignment": {
+    "confidence": 0.9602,
+    "matchedCount": 61,
+    "unmatchedTruthCount": 0,
+    "unmatchedGeneratedCount": 0,
+    "totalCost": 34.7232,
+    "pairs": [
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "cost": 0.35
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          2
+        ],
+        "generatedMeasureNumbers": [
+          2
+        ],
+        "cost": 0.35
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          3
+        ],
+        "generatedMeasureNumbers": [
+          3
+        ],
+        "cost": 0.35
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          4
+        ],
+        "generatedMeasureNumbers": [
+          4
+        ],
+        "cost": 0.35
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          5
+        ],
+        "generatedMeasureNumbers": [
+          5
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          6
+        ],
+        "generatedMeasureNumbers": [
+          6
+        ],
+        "cost": 0.35
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          7
+        ],
+        "generatedMeasureNumbers": [
+          7
+        ],
+        "cost": 0.75
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          8
+        ],
+        "generatedMeasureNumbers": [
+          8
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          9
+        ],
+        "generatedMeasureNumbers": [
+          9
+        ],
+        "cost": 0.3111
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          10
+        ],
+        "generatedMeasureNumbers": [
+          10
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          11
+        ],
+        "generatedMeasureNumbers": [
+          11
+        ],
+        "cost": 0.56
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          12
+        ],
+        "generatedMeasureNumbers": [
+          12
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          13
+        ],
+        "generatedMeasureNumbers": [
+          13
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          14
+        ],
+        "generatedMeasureNumbers": [
+          14
+        ],
+        "cost": 0.2
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          15
+        ],
+        "generatedMeasureNumbers": [
+          15
+        ],
+        "cost": 0.2
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          16
+        ],
+        "generatedMeasureNumbers": [
+          16
+        ],
+        "cost": 0.4
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          17
+        ],
+        "generatedMeasureNumbers": [
+          17
+        ],
+        "cost": 0.28
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          18
+        ],
+        "generatedMeasureNumbers": [
+          18
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          19
+        ],
+        "generatedMeasureNumbers": [
+          19
+        ],
+        "cost": 1.285
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          20
+        ],
+        "generatedMeasureNumbers": [
+          20
+        ],
+        "cost": 0.9286
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          21
+        ],
+        "generatedMeasureNumbers": [
+          21
+        ],
+        "cost": 0.3733
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          22
+        ],
+        "generatedMeasureNumbers": [
+          22
+        ],
+        "cost": 0.28
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          23
+        ],
+        "generatedMeasureNumbers": [
+          23
+        ],
+        "cost": 0.28
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          24
+        ],
+        "generatedMeasureNumbers": [
+          24
+        ],
+        "cost": 0.75
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          25
+        ],
+        "generatedMeasureNumbers": [
+          25
+        ],
+        "cost": 1.1455
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          26
+        ],
+        "generatedMeasureNumbers": [
+          26
+        ],
+        "cost": 1.1455
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          27
+        ],
+        "generatedMeasureNumbers": [
+          27
+        ],
+        "cost": 0.525
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          28
+        ],
+        "generatedMeasureNumbers": [
+          28
+        ],
+        "cost": 0.8842
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          29
+        ],
+        "generatedMeasureNumbers": [
+          29
+        ],
+        "cost": 0.525
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          30
+        ],
+        "generatedMeasureNumbers": [
+          30
+        ],
+        "cost": 0.8842
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          31
+        ],
+        "generatedMeasureNumbers": [
+          31
+        ],
+        "cost": 1.1423
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          32
+        ],
+        "generatedMeasureNumbers": [
+          32
+        ],
+        "cost": 0.98
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          33
+        ],
+        "generatedMeasureNumbers": [
+          33
+        ],
+        "cost": 0.84
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          34
+        ],
+        "generatedMeasureNumbers": [
+          34
+        ],
+        "cost": 0.1867
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          35
+        ],
+        "generatedMeasureNumbers": [
+          35
+        ],
+        "cost": 0.6222
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          36
+        ],
+        "generatedMeasureNumbers": [
+          36
+        ],
+        "cost": 0.6
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          37
+        ],
+        "generatedMeasureNumbers": [
+          37
+        ],
+        "cost": 0.56
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          38
+        ],
+        "generatedMeasureNumbers": [
+          38
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          39
+        ],
+        "generatedMeasureNumbers": [
+          39
+        ],
+        "cost": 0.3111
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          40
+        ],
+        "generatedMeasureNumbers": [
+          40
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "merge",
+        "truthMeasureNumbers": [
+          41,
+          42
+        ],
+        "generatedMeasureNumbers": [
+          41
+        ],
+        "cost": 1.9
+      },
+      {
+        "kind": "merge",
+        "truthMeasureNumbers": [
+          43,
+          44
+        ],
+        "generatedMeasureNumbers": [
+          42
+        ],
+        "cost": 1.969
+      },
+      {
+        "kind": "merge",
+        "truthMeasureNumbers": [
+          45,
+          46
+        ],
+        "generatedMeasureNumbers": [
+          43
+        ],
+        "cost": 2.4579
+      },
+      {
+        "kind": "merge",
+        "truthMeasureNumbers": [
+          47,
+          48
+        ],
+        "generatedMeasureNumbers": [
+          44
+        ],
+        "cost": 2.5909
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          49
+        ],
+        "generatedMeasureNumbers": [
+          45
+        ],
+        "cost": 0.525
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          50
+        ],
+        "generatedMeasureNumbers": [
+          46
+        ],
+        "cost": 0.525
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          51
+        ],
+        "generatedMeasureNumbers": [
+          47
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          52
+        ],
+        "generatedMeasureNumbers": [
+          48
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          53
+        ],
+        "generatedMeasureNumbers": [
+          49
+        ],
+        "cost": 0.4
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          54
+        ],
+        "generatedMeasureNumbers": [
+          50
+        ],
+        "cost": 0.6
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          55
+        ],
+        "generatedMeasureNumbers": [
+          51
+        ],
+        "cost": 0.6462
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          56
+        ],
+        "generatedMeasureNumbers": [
+          52
+        ],
+        "cost": 0.56
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          57
+        ],
+        "generatedMeasureNumbers": [
+          53
+        ],
+        "cost": 0.8615
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          58
+        ],
+        "generatedMeasureNumbers": [
+          54
+        ],
+        "cost": 0.56
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          59
+        ],
+        "generatedMeasureNumbers": [
+          55
+        ],
+        "cost": 0.7
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          60
+        ],
+        "generatedMeasureNumbers": [
+          56
+        ],
+        "cost": 0.3111
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          61
+        ],
+        "generatedMeasureNumbers": [
+          57
+        ],
+        "cost": 0.9722
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          62
+        ],
+        "generatedMeasureNumbers": [
+          58
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          63
+        ],
+        "generatedMeasureNumbers": [
+          59
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          64
+        ],
+        "generatedMeasureNumbers": [
+          60
+        ],
+        "cost": 0.28
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          65
+        ],
+        "generatedMeasureNumbers": [
+          61
+        ],
+        "cost": 0.1647
+      }
+    ]
+  },
+  "measures": [
+    {
+      "measureNumber": 62,
+      "truthMeasureNumbers": [
+        62
+      ],
+      "generatedMeasureNumbers": [],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 62 missing from generated timeline",
+          "measureNumber": 62
+        }
+      ],
+      "summary": [
+        "Measure 62 missing from generated timeline"
+      ],
+      "severity": 1
+    },
+    {
+      "measureNumber": 63,
+      "truthMeasureNumbers": [
+        63
+      ],
+      "generatedMeasureNumbers": [],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 63 missing from generated timeline",
+          "measureNumber": 63
+        }
+      ],
+      "summary": [
+        "Measure 63 missing from generated timeline"
+      ],
+      "severity": 1
+    },
+    {
+      "measureNumber": 64,
+      "truthMeasureNumbers": [
+        64
+      ],
+      "generatedMeasureNumbers": [],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 64 missing from generated timeline",
+          "measureNumber": 64
+        }
+      ],
+      "summary": [
+        "Measure 64 missing from generated timeline"
+      ],
+      "severity": 1
+    },
+    {
+      "measureNumber": 65,
+      "truthMeasureNumbers": [
+        65
+      ],
+      "generatedMeasureNumbers": [],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 65 missing from generated timeline",
+          "measureNumber": 65
+        }
+      ],
+      "summary": [
+        "Measure 65 missing from generated timeline"
+      ],
+      "severity": 1
+    }
+  ],
+  "worstMeasures": [
+    {
+      "measureNumber": 62,
+      "truthMeasureNumbers": [
+        62
+      ],
+      "generatedMeasureNumbers": [],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 62 missing from generated timeline",
+          "measureNumber": 62
+        }
+      ],
+      "summary": [
+        "Measure 62 missing from generated timeline"
+      ],
+      "severity": 1
+    },
+    {
+      "measureNumber": 63,
+      "truthMeasureNumbers": [
+        63
+      ],
+      "generatedMeasureNumbers": [],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 63 missing from generated timeline",
+          "measureNumber": 63
+        }
+      ],
+      "summary": [
+        "Measure 63 missing from generated timeline"
+      ],
+      "severity": 1
+    },
+    {
+      "measureNumber": 64,
+      "truthMeasureNumbers": [
+        64
+      ],
+      "generatedMeasureNumbers": [],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 64 missing from generated timeline",
+          "measureNumber": 64
+        }
+      ],
+      "summary": [
+        "Measure 64 missing from generated timeline"
+      ],
+      "severity": 1
+    },
+    {
+      "measureNumber": 65,
+      "truthMeasureNumbers": [
+        65
+      ],
+      "generatedMeasureNumbers": [],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 65 missing from generated timeline",
+          "measureNumber": 65
+        }
+      ],
+      "summary": [
+        "Measure 65 missing from generated timeline"
+      ],
+      "severity": 1
+    }
+  ],
+  "firstDivergence": {
+    "measureNumber": 62,
+    "truthMeasureNumbers": [
+      62
+    ],
+    "generatedMeasureNumbers": [],
+    "alignment": "match",
+    "unmatched": false,
+    "defectCount": 1
+  },
+  "topDefects": [
+    {
+      "code": "measure-timing-mismatch",
+      "class": "playback",
+      "label": "Measure timing mismatch",
+      "count": 4
+    },
+    {
+      "code": "playback-duration-mismatch",
+      "class": "playback",
+      "label": "Playback duration mismatch",
+      "count": 1
+    },
+    {
+      "code": "timeline-mismatch",
+      "class": "playback",
+      "label": "Timeline mismatch",
+      "count": 1
+    }
+  ],
+  "topDefectClasses": [
+    {
+      "class": "playback",
+      "label": "Playback",
+      "count": 6
+    }
+  ],
+  "totals": {
+    "truthNoteCount": 681,
+    "generatedNoteCount": 680,
+    "truthRestCount": 42,
+    "generatedRestCount": 0,
+    "truthMeasureCount": 65,
+    "generatedMeasureCount": 61,
+    "defectCount": 6
+  },
+  "tolerances": {
+    "onsetToleranceQuarters": 0.125,
+    "durationToleranceQuarters": 0.125,
+    "matchWindowQuarters": 0.75,
+    "restMatchWindowQuarters": 0.5,
+    "chordOnsetToleranceQuarters": 0.08,
+    "measureLengthToleranceQuarters": 0.125,
+    "tempoToleranceBpm": 2,
+    "tempoOnsetToleranceQuarters": 0.5,
+    "playbackDurationToleranceSeconds": 0.35,
+    "measureTimingToleranceSeconds": 0.2,
+    "quarterEpsilon": 0.000001,
+    "units": "Primary comparison uses normalized quarter-note units (MusicXML duration/divisions). Seconds are used only in performed-playback mode."
+  },
+  "unsupportedFeatures": [
+    "ornaments (trills, turns, mordents)",
+    "fermata / breath marks",
+    "dynamics as scored values (p/f continuum)",
+    "hairpins / wedges",
+    "octave-shift (ottava)",
+    "cue notes / grace-note playback semantics",
+    "cross-staff beaming encoding details",
+    "figured bass / harmony realization",
+    "lyrics / text directions (except D.C./D.S./Fine words)",
+    "multiple <part> alignment beyond primary written sequence",
+    "score-timewise documents",
+    "microtonal / non-MIDI pitch systems"
+  ],
+  "playback": {
+    "truthDurationSeconds": 120.96397058823528,
+    "generatedDurationSeconds": 60,
+    "truthWrittenDurationSeconds": 65.9639705882353,
+    "generatedWrittenDurationSeconds": 61
+  },
+  "options": {
+    "onsetToleranceQuarters": 0.125,
+    "durationToleranceQuarters": 0.125,
+    "matchWindowQuarters": 0.75,
+    "restMatchWindowQuarters": 0.5,
+    "chordOnsetToleranceQuarters": 0.08,
+    "measureLengthToleranceQuarters": 0.125,
+    "tempoToleranceBpm": 2,
+    "tempoOnsetToleranceQuarters": 0.5,
+    "playbackDurationToleranceSeconds": 0.35,
+    "measureTimingToleranceSeconds": 0.2,
+    "quarterEpsilon": 0.000001,
+    "alignmentGapPenalty": 2.5,
+    "alignmentMaxPairCost": 4.5,
+    "minReliableCoverage": 0.25,
+    "mode": "performed",
+    "topDefectLimit": 20,
+    "worstMeasureLimit": 10,
+    "enharmonicPolicy": "midi"
+  }
+}

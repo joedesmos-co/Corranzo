@@ -1,0 +1,3466 @@
+{
+  "version": 2,
+  "generatedAt": "2026-07-17T15:53:39.590Z",
+  "fixtureCount": 1,
+  "statusCounts": {
+    "pass": 1,
+    "fail": 0,
+    "rejected": 0,
+    "skipped": 0,
+    "error": 0
+  },
+  "overallPass": true,
+  "topErrorCategories": [
+    {
+      "category": "rhythm-inference",
+      "count": 1
+    }
+  ],
+  "topDurationErrorCategories": [
+    {
+      "category": "beamed-subdivision",
+      "count": 1
+    }
+  ],
+  "topPitchErrorCategories": [
+    {
+      "category": "other",
+      "count": 1
+    }
+  ],
+  "aggregatedDurationHistogram": {
+    "too-short": 1,
+    "too-long": 0,
+    "beamed-subdivision": 4,
+    "bass-sustain": 0,
+    "melody-accompaniment": 0,
+    "rest-gap": 0,
+    "tie-sustain": 0,
+    "onset-coupled": 2,
+    "other": 0
+  },
+  "aggregatedPitchHistogram": {
+    "±1-accidental": 4,
+    "±2-diatonic": 1,
+    "±octave": 7,
+    "±octave-other": 0,
+    "other": 18
+  },
+  "aggregatedDurationTop": [
+    {
+      "category": "beamed-subdivision",
+      "count": 4
+    },
+    {
+      "category": "onset-coupled",
+      "count": 2
+    },
+    {
+      "category": "too-short",
+      "count": 1
+    }
+  ],
+  "aggregatedPitchTop": [
+    {
+      "category": "other",
+      "count": 18
+    },
+    {
+      "category": "±octave",
+      "count": 7
+    },
+    {
+      "category": "±1-accidental",
+      "count": 4
+    },
+    {
+      "category": "±2-diatonic",
+      "count": 1
+    }
+  ],
+  "aggregatedNamedBuckets": {
+    "pitch": 30,
+    "duration": 7,
+    "onset": 21,
+    "chord": 16,
+    "ties": 2,
+    "slurs": 8,
+    "tuplets": 0,
+    "accidentals": 4,
+    "rests": 2,
+    "extra/missing-notes": 14
+  },
+  "rankedNamedBuckets": [
+    {
+      "category": "pitch",
+      "count": 30
+    },
+    {
+      "category": "onset",
+      "count": 21
+    },
+    {
+      "category": "chord",
+      "count": 16
+    },
+    {
+      "category": "extra/missing-notes",
+      "count": 14
+    },
+    {
+      "category": "slurs",
+      "count": 8
+    },
+    {
+      "category": "duration",
+      "count": 7
+    },
+    {
+      "category": "accidentals",
+      "count": 4
+    },
+    {
+      "category": "rests",
+      "count": 2
+    },
+    {
+      "category": "ties",
+      "count": 2
+    }
+  ],
+  "largestNamedBucket": {
+    "bucket": "pitch",
+    "count": 30,
+    "share": 0.2885
+  },
+  "tierBreakdown": [
+    {
+      "tier": "piano-rhythm",
+      "fixtureCount": 1,
+      "statusCounts": {
+        "pass": 1
+      },
+      "failing": []
+    }
+  ],
+  "failureClusters": [],
+  "rolloutGate": {
+    "phase": 5,
+    "generatedAt": "2026-07-17T15:53:39.591Z",
+    "evidence": {
+      "phase1": {
+        "buckets": {},
+        "primaryBucket": null,
+        "voiceSerializationShift": 0,
+        "onsetPhaseShift": 0,
+        "onsetCoupledDuration": 0,
+        "chordGroupingSymptom": 0,
+        "pitchGroupingSymptom": 0
+      },
+      "phase2": {
+        "status": "unavailable",
+        "changedMeasures": 0,
+        "acceptedCandidates": 0,
+        "rejectedMeasures": 125,
+        "globalDelta": null,
+        "promoted": false,
+        "constraintVersion": null,
+        "exhausted": true
+      },
+      "phase3": {
+        "histogram": {},
+        "onsetCoupledDuration": 0,
+        "writtenDurationWrong": 0,
+        "soundingReleaseWrong": 0,
+        "tieSustainRelated": 0,
+        "dominantClass": null
+      },
+      "phase4": {
+        "histogram": {},
+        "expectedCrossMeasureTie": 0,
+        "writtenCorrectSustainWrong": 0,
+        "slurLikeRejected": 0,
+        "dominantConstraint": null
+      },
+      "canaries": {
+        "twinkleFalseTieGuard": null,
+        "twinkleWrongOnset": null,
+        "twinkleHotspotM10": null,
+        "gymopedieMetrics": null,
+        "denseHotspots": [
+          7,
+          9,
+          121
+        ]
+      },
+      "frozenBaseline": {
+        "clean": {
+          "wrongOnset": 0,
+          "wrongDuration": 0,
+          "chordMismatch": 0,
+          "wrongPitch": 0
+        },
+        "dense": {
+          "wrongOnset": 94,
+          "wrongDuration": 77,
+          "chordMismatch": 172,
+          "wrongPitch": 147
+        },
+        "simple": {
+          "wrongOnset": 6,
+          "wrongDuration": 3,
+          "chordMismatch": 0,
+          "wrongPitch": 0
+        }
+      }
+    },
+    "ranking": {
+      "ranked": [
+        {
+          "target": "onset-grid-refinement",
+          "status": "eligible-prep",
+          "scores": {
+            "impact": 3,
+            "safety": 5,
+            "irReadiness": 2,
+            "antiRegression": 5,
+            "composite": 4.1
+          },
+          "rationale": [
+            "Lowest regression risk: observation-first onsetColumns[] on MeasureGraph.",
+            "Enables future solver column assignment without touching runtime bytes."
+          ],
+          "blockers": [
+            "Alone it does not fix accompaniment-lane serialization (35 voice-shift onsets).",
+            "onsetColumns[] not yet complete on every dense measure."
+          ]
+        },
+        {
+          "target": "written-sounding-duration-solver",
+          "status": "blocked-premature",
+          "scores": {
+            "impact": 4,
+            "safety": 3,
+            "irReadiness": 5,
+            "antiRegression": 2,
+            "composite": 3.25
+          },
+          "rationale": [
+            "Phase 3 IR fields populated; 0 onset-coupled + 0 written-duration-wrong errors on dense.",
+            "Written vs sounding split is observation-ready for solver constraints."
+          ],
+          "blockers": [
+            "0 onset-coupled duration errors cannot be fixed until onsets/voices are stable.",
+            "Fixing duration without voice serialization will trade onset gains for chord regressions (Phase 2B lesson)."
+          ]
+        },
+        {
+          "target": "tie-sustain-constraint-solver",
+          "status": "blocked-premature",
+          "scores": {
+            "impact": 3,
+            "safety": 3,
+            "irReadiness": 4,
+            "antiRegression": 3,
+            "composite": 3.2
+          },
+          "rationale": [
+            "Phase 4 classifies 0 expected cross-measure ties and 0 written-correct/sustain-wrong rows.",
+            "Tie hard constraints are designed in OMR_ENGINE_V2_PLAN.md §3.4."
+          ],
+          "blockers": [
+            "Most sustain deficits are downstream of wrong onsets/voices, not missing tie glyphs.",
+            "Gymnopédie tie recall still incomplete; Twinkle false-tie guard must stay at 0."
+          ]
+        },
+        {
+          "target": "voice-aware-serialization",
+          "status": "recommended",
+          "scores": {
+            "impact": 5,
+            "safety": 2,
+            "irReadiness": 3,
+            "antiRegression": 2,
+            "composite": 2.65
+          },
+          "rationale": [
+            "Highest root-cause impact: 0 voice-serialization-shift onsets, 0 chord-grouping symptoms on dense.",
+            "Twinkle m10 is 100% accompaniment-lane phase error — the narrowest canary for this family.",
+            "Clef-only phase shifts (Phase 2) are exhausted; voice-lane assignment is the missing variable."
+          ],
+          "blockers": [
+            "High regression risk on Twinkle and dense chord grouping.",
+            "ScoreGraph IR has clef/voice export labels but no stable staff-lane voiceId yet."
+          ]
+        },
+        {
+          "target": "measure-level-solver-variant",
+          "status": "blocked-exhausted",
+          "scores": {
+            "impact": 4,
+            "safety": 1,
+            "irReadiness": 3,
+            "antiRegression": 1,
+            "composite": 1.85
+          },
+          "rationale": [
+            "Phase 2/2B/2C shadow prototype exists with truth gates and chord coalescing."
+          ],
+          "blockers": [
+            "Clef-only phase-shift family exhausted: 0 changed, 0 truth-approved on dense.",
+            "Broadening constraints caused chord regressions (+70 chordMismatch in Phase 2).",
+            "Same family cannot progress without a new variable (voice lanes)."
+          ]
+        }
+      ],
+      "recommended": {
+        "target": "voice-aware-serialization",
+        "status": "recommended",
+        "scores": {
+          "impact": 5,
+          "safety": 2,
+          "irReadiness": 3,
+          "antiRegression": 2,
+          "composite": 2.65
+        },
+        "rationale": [
+          "Highest root-cause impact: 0 voice-serialization-shift onsets, 0 chord-grouping symptoms on dense.",
+          "Twinkle m10 is 100% accompaniment-lane phase error — the narrowest canary for this family.",
+          "Clef-only phase shifts (Phase 2) are exhausted; voice-lane assignment is the missing variable."
+        ],
+        "blockers": [
+          "High regression risk on Twinkle and dense chord grouping.",
+          "ScoreGraph IR has clef/voice export labels but no stable staff-lane voiceId yet."
+        ]
+      },
+      "prep": {
+        "target": "onset-grid-refinement",
+        "status": "eligible-prep",
+        "scores": {
+          "impact": 3,
+          "safety": 5,
+          "irReadiness": 2,
+          "antiRegression": 5,
+          "composite": 4.1
+        },
+        "rationale": [
+          "Lowest regression risk: observation-first onsetColumns[] on MeasureGraph.",
+          "Enables future solver column assignment without touching runtime bytes."
+        ],
+        "blockers": [
+          "Alone it does not fix accompaniment-lane serialization (35 voice-shift onsets).",
+          "onsetColumns[] not yet complete on every dense measure."
+        ]
+      },
+      "blocked": [
+        {
+          "target": "written-sounding-duration-solver",
+          "status": "blocked-premature",
+          "scores": {
+            "impact": 4,
+            "safety": 3,
+            "irReadiness": 5,
+            "antiRegression": 2,
+            "composite": 3.25
+          },
+          "rationale": [
+            "Phase 3 IR fields populated; 0 onset-coupled + 0 written-duration-wrong errors on dense.",
+            "Written vs sounding split is observation-ready for solver constraints."
+          ],
+          "blockers": [
+            "0 onset-coupled duration errors cannot be fixed until onsets/voices are stable.",
+            "Fixing duration without voice serialization will trade onset gains for chord regressions (Phase 2B lesson)."
+          ]
+        },
+        {
+          "target": "tie-sustain-constraint-solver",
+          "status": "blocked-premature",
+          "scores": {
+            "impact": 3,
+            "safety": 3,
+            "irReadiness": 4,
+            "antiRegression": 3,
+            "composite": 3.2
+          },
+          "rationale": [
+            "Phase 4 classifies 0 expected cross-measure ties and 0 written-correct/sustain-wrong rows.",
+            "Tie hard constraints are designed in OMR_ENGINE_V2_PLAN.md §3.4."
+          ],
+          "blockers": [
+            "Most sustain deficits are downstream of wrong onsets/voices, not missing tie glyphs.",
+            "Gymnopédie tie recall still incomplete; Twinkle false-tie guard must stay at 0."
+          ]
+        },
+        {
+          "target": "measure-level-solver-variant",
+          "status": "blocked-exhausted",
+          "scores": {
+            "impact": 4,
+            "safety": 1,
+            "irReadiness": 3,
+            "antiRegression": 1,
+            "composite": 1.85
+          },
+          "rationale": [
+            "Phase 2/2B/2C shadow prototype exists with truth gates and chord coalescing."
+          ],
+          "blockers": [
+            "Clef-only phase-shift family exhausted: 0 changed, 0 truth-approved on dense.",
+            "Broadening constraints caused chord regressions (+70 chordMismatch in Phase 2).",
+            "Same family cannot progress without a new variable (voice lanes)."
+          ]
+        }
+      ]
+    },
+    "recommendation": {
+      "target": "voice-aware-serialization",
+      "status": "recommended",
+      "compositeScore": 2.65,
+      "parallelPrep": "onset-grid-refinement",
+      "summary": "Clef-only phase-shift solver is exhausted. Voice-aware serialization (shadow-only, canary-gated) is the safest path to measurable progress before duration or tie solvers."
+    },
+    "blockedTargets": [
+      {
+        "target": "written-sounding-duration-solver",
+        "status": "blocked-premature",
+        "primaryBlocker": "0 onset-coupled duration errors cannot be fixed until onsets/voices are stable."
+      },
+      {
+        "target": "tie-sustain-constraint-solver",
+        "status": "blocked-premature",
+        "primaryBlocker": "Most sustain deficits are downstream of wrong onsets/voices, not missing tie glyphs."
+      },
+      {
+        "target": "measure-level-solver-variant",
+        "status": "blocked-exhausted",
+        "primaryBlocker": "Clef-only phase-shift family exhausted: 0 changed, 0 truth-approved on dense."
+      }
+    ],
+    "baselineFrozen": null,
+    "phase6Prompt": "Corranzo OMR V2 Phase 6 — voice-aware-serialization (shadow-only).\n\nFeature freeze is active. Do not change runtime OMR output.\n\nGoal:\nImplement a shadow-only voice-aware-serialization solver family using ScoreGraph IR, targeting the root cause identified in Phase 5 rollout gate.\n\nCurrent evidence (frozen baseline):\n- Dense: wrongOnset 94, wrongDuration 77, chordMismatch 172, wrongPitch 147\n- Phase 1: 0 voice-serialization-shift, 0 onset-phase-shift\n- Phase 2/2B/2C: 0 changed measures, 0 truth-approved (clef-only phase shifts exhausted)\n- Phase 3: 0 onset-coupled-duration, 0 written-duration-wrong\n- Phase 4: 0 expected-cross-measure-tie candidates\n- Twinkle false-tie guard: CHECK\n- Gymnopédie: must stay 100% on all axes\n\nRules:\n- Shadow/diagnostic only — no runtime MusicXML promotion.\n- No threshold changes.\n- No UI/playback/Wait For You changes.\n- Per-measure truth gate: improve onset/duration on measure; no chord/pitch/duration regression.\n- Twinkle m10 canary must reach 0 wrong onsets before any dense promotion.\n- Gymnopédie byte-identical gate on every change.\n\nTasks:\n1. Add staff-lane voiceId assignment to ScoreGraph IR (observation + shadow solver variable).\n2. Implement shadow voice-lane solver: grand-staff accompaniment template (truth v5 vs gen v2 pattern).\n3. Decouple MusicXML voice numbering from rhythm inference in shadow emit path only.\n4. Reuse Phase 2C truth gate + chord coalescing; reject variants that split chords or change note count.\n5. Target canary measures first: Twinkle m10, dense m7/m9/m121.\n6. (Parallel prep) Extend onsetColumns[] on MeasureGraph — onset-grid-refinement — observation only.\n7. Add tests proving shadow solver does not mutate runtime events.\n8. Dashboard section: voice-lane shadow report alongside rhythm-shadow-report.json.\n\nVerification:\nnpm test\nnpm run build\nnpm run omr:benchmark-dashboard\n\nAcceptance:\n- Runtime OMR unchanged (dense metrics frozen).\n- Shadow shows ≥1 truth-approved measure on Twinkle m10 OR dense m7–m9 with Δ wrongOnset < 0 and no chord regression.\n- Gymnopédie 100%; Twinkle false ties 0.\n- No promotion to runtime."
+  },
+  "voiceSerializationQualification": {
+    "phase": "7",
+    "generatedAt": "2026-07-17T15:53:39.591Z",
+    "enforcedFixtures": [
+      "clean",
+      "dense",
+      "simple"
+    ],
+    "anyTruthApproved": false,
+    "totalTruthApproved": 0,
+    "totalStructuralApplied": 0,
+    "totalDurationCoupledApplied": 0,
+    "verdict": "NO — zero truth-approved measures on live enforced fixtures.",
+    "fixtures": [
+      {
+        "fixtureId": "clean",
+        "phase": "6b",
+        "liveEligible": true,
+        "scoreGraphAvailable": false,
+        "truthAvailable": false,
+        "anyTruthApproved": false,
+        "truthApprovedCount": 0,
+        "structuralAppliedCount": 0,
+        "blocker": "no-scoregraph-full",
+        "hotspotMeasures": [],
+        "hotspotQualification": [],
+        "measures": [],
+        "globalDelta": null,
+        "runtimeMetrics": null,
+        "recommendation": "Re-run live dashboard with includeScoreGraph and truth MXL."
+      },
+      {
+        "fixtureId": "dense",
+        "phase": "6b",
+        "liveEligible": true,
+        "scoreGraphAvailable": false,
+        "truthAvailable": false,
+        "anyTruthApproved": false,
+        "truthApprovedCount": 0,
+        "structuralAppliedCount": 0,
+        "blocker": "no-scoregraph-full",
+        "hotspotMeasures": [
+          7,
+          9,
+          121
+        ],
+        "hotspotQualification": [],
+        "measures": [],
+        "globalDelta": null,
+        "runtimeMetrics": null,
+        "recommendation": "Re-run live dashboard with includeScoreGraph and truth MXL."
+      },
+      {
+        "fixtureId": "simple",
+        "phase": "6b",
+        "liveEligible": true,
+        "scoreGraphAvailable": false,
+        "truthAvailable": false,
+        "anyTruthApproved": false,
+        "truthApprovedCount": 0,
+        "structuralAppliedCount": 0,
+        "blocker": "no-scoregraph-full",
+        "hotspotMeasures": [
+          10
+        ],
+        "hotspotQualification": [],
+        "measures": [],
+        "globalDelta": null,
+        "runtimeMetrics": null,
+        "recommendation": "Re-run live dashboard with includeScoreGraph and truth MXL."
+      }
+    ],
+    "phase8Recommendation": "Phase 8: strengthen accompaniment-lane detection; add onsetColumns[] observation for live IR.",
+    "phase7Recommendation": "Duration-coupled variants did not structurally apply on live fixtures."
+  },
+  "fixtures": [
+    {
+      "id": "piano-rhythm-tuplets-vector",
+      "label": "CC0 Rhythm and Tuplet Study",
+      "tier": "piano-rhythm",
+      "optional": false,
+      "diagnosticOnly": false,
+      "license": "CC0-1.0",
+      "provenanceRecord": "piano-rhythm-tuplets-vector",
+      "categories": [
+        "eighth-sixteenth-rhythms",
+        "tuplets",
+        "rests-dotted-rhythms",
+        "ties",
+        "modern-vector-pdf"
+      ],
+      "expectedOutcome": "transcribe",
+      "expectedRejectionCodes": [
+        "rejected"
+      ],
+      "pdfPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf",
+      "truthPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.musicxml",
+      "status": "pass",
+      "failureReasons": [],
+      "thresholdFailures": [],
+      "metrics": {
+        "pitchAccuracy": 0.4127,
+        "durationAccuracy": 0.7778,
+        "onsetAccuracy": 0.5556,
+        "chordGroupingAccuracy": 0.7746,
+        "noteDetectionF1": 0.8889,
+        "measureCountDiff": 0,
+        "noteCountDiff": 0,
+        "wrongPitch": 30,
+        "wrongDuration": 7,
+        "wrongOnset": 21,
+        "chordMismatch": 16,
+        "topErrorCategory": {
+          "source": "rhythm-inference",
+          "label": "Rhythm inference",
+          "confidence": 0.884
+        },
+        "topDurationErrorCategory": {
+          "category": "beamed-subdivision",
+          "count": 4
+        },
+        "topPitchErrorCategory": {
+          "category": "other",
+          "count": 18
+        },
+        "durationErrorHistogram": {
+          "too-short": 1,
+          "too-long": 0,
+          "beamed-subdivision": 4,
+          "bass-sustain": 0,
+          "melody-accompaniment": 0,
+          "rest-gap": 0,
+          "tie-sustain": 0,
+          "onset-coupled": 2,
+          "other": 0
+        },
+        "pitchErrorHistogram": {
+          "±1-accidental": 4,
+          "±2-diatonic": 1,
+          "±octave": 7,
+          "±octave-other": 0,
+          "other": 18
+        },
+        "errorGrouping": {
+          "primarySource": "rhythm-inference",
+          "primaryLabel": "Rhythm inference",
+          "primaryConfidence": 0.884,
+          "rankedSources": [
+            {
+              "source": "rhythm-inference",
+              "score": 0.8839
+            },
+            {
+              "source": "pitch-mapping",
+              "score": 0.5089
+            },
+            {
+              "source": "measure-allocation",
+              "score": 0.3811
+            },
+            {
+              "source": "chord-grouping",
+              "score": 0.2029
+            },
+            {
+              "source": "notehead-detection",
+              "score": 0.1222
+            }
+          ],
+          "namedBuckets": {
+            "buckets": {
+              "pitch": 30,
+              "duration": 7,
+              "onset": 21,
+              "chord": 16,
+              "ties": 2,
+              "slurs": 8,
+              "tuplets": 0,
+              "accidentals": 4,
+              "rests": 2,
+              "extra/missing-notes": 14
+            },
+            "total": 104,
+            "ranked": [
+              {
+                "bucket": "pitch",
+                "count": 30
+              },
+              {
+                "bucket": "onset",
+                "count": 21
+              },
+              {
+                "bucket": "chord",
+                "count": 16
+              },
+              {
+                "bucket": "extra/missing-notes",
+                "count": 14
+              },
+              {
+                "bucket": "slurs",
+                "count": 8
+              },
+              {
+                "bucket": "duration",
+                "count": 7
+              },
+              {
+                "bucket": "accidentals",
+                "count": 4
+              },
+              {
+                "bucket": "ties",
+                "count": 2
+              },
+              {
+                "bucket": "rests",
+                "count": 2
+              }
+            ],
+            "largestBucket": {
+              "bucket": "pitch",
+              "count": 30,
+              "share": 0.2885
+            }
+          },
+          "pitch": {
+            "total": 30,
+            "histogram": {
+              "±1-accidental": 4,
+              "±2-diatonic": 1,
+              "±octave": 7,
+              "±octave-other": 0,
+              "other": 18
+            },
+            "top": [
+              {
+                "category": "other",
+                "count": 18
+              },
+              {
+                "category": "±octave",
+                "count": 7
+              },
+              {
+                "category": "±1-accidental",
+                "count": 4
+              },
+              {
+                "category": "±2-diatonic",
+                "count": 1
+              }
+            ],
+            "truncated": 0
+          },
+          "duration": {
+            "total": 7,
+            "histogram": {
+              "too-short": 1,
+              "too-long": 0,
+              "beamed-subdivision": 4,
+              "bass-sustain": 0,
+              "melody-accompaniment": 0,
+              "rest-gap": 0,
+              "tie-sustain": 0,
+              "onset-coupled": 2,
+              "other": 0
+            },
+            "top": [
+              {
+                "category": "beamed-subdivision",
+                "count": 4
+              },
+              {
+                "category": "onset-coupled",
+                "count": 2
+              },
+              {
+                "category": "too-short",
+                "count": 1
+              }
+            ],
+            "truncated": 0
+          },
+          "detection": {
+            "total": 30,
+            "buckets": {
+              "missing-notes": 7,
+              "extra-notes": 7,
+              "chord-grouping": 16
+            },
+            "top": [
+              {
+                "category": "chord-grouping",
+                "count": 16
+              },
+              {
+                "category": "extra-notes",
+                "count": 7
+              },
+              {
+                "category": "missing-notes",
+                "count": 7
+              }
+            ]
+          },
+          "matchedErrors": {
+            "wrongPitch": 30,
+            "wrongDuration": 7,
+            "wrongOnset": 21,
+            "wrongTime": 55
+          }
+        },
+        "rhythmErrorAttribution": {
+          "buckets": {
+            "onset-phase-shift": 19,
+            "voice-serialization-shift": 11,
+            "onset-coupled-duration": 2,
+            "chord-grouping-symptom": 16,
+            "pitch-grouping-symptom": 25,
+            "balanced-missing-extra-serialization": 14
+          },
+          "ranked": [
+            {
+              "bucket": "pitch-grouping-symptom",
+              "count": 25
+            },
+            {
+              "bucket": "onset-phase-shift",
+              "count": 19
+            },
+            {
+              "bucket": "chord-grouping-symptom",
+              "count": 16
+            },
+            {
+              "bucket": "balanced-missing-extra-serialization",
+              "count": 14
+            },
+            {
+              "bucket": "voice-serialization-shift",
+              "count": 11
+            },
+            {
+              "bucket": "onset-coupled-duration",
+              "count": 2
+            }
+          ],
+          "primaryBucket": {
+            "bucket": "pitch-grouping-symptom",
+            "count": 25
+          },
+          "supporting": {
+            "totalWrongOnsets": 21,
+            "chordMismatchTotal": 16,
+            "chordCoupledShare": 1,
+            "missingCount": 7,
+            "extraCount": 7,
+            "balancedMismatch": true,
+            "onsetStrictIndependent": 7,
+            "voicePhasePrimaryClass": "serialization-voice-shift"
+          }
+        },
+        "namedErrorBuckets": {
+          "buckets": {
+            "pitch": 30,
+            "duration": 7,
+            "onset": 21,
+            "chord": 16,
+            "ties": 2,
+            "slurs": 8,
+            "tuplets": 0,
+            "accidentals": 4,
+            "rests": 2,
+            "extra/missing-notes": 14
+          },
+          "total": 104,
+          "ranked": [
+            {
+              "bucket": "pitch",
+              "count": 30
+            },
+            {
+              "bucket": "onset",
+              "count": 21
+            },
+            {
+              "bucket": "chord",
+              "count": 16
+            },
+            {
+              "bucket": "extra/missing-notes",
+              "count": 14
+            },
+            {
+              "bucket": "slurs",
+              "count": 8
+            },
+            {
+              "bucket": "duration",
+              "count": 7
+            },
+            {
+              "bucket": "accidentals",
+              "count": 4
+            },
+            {
+              "bucket": "ties",
+              "count": 2
+            },
+            {
+              "bucket": "rests",
+              "count": 2
+            }
+          ],
+          "largestBucket": {
+            "bucket": "pitch",
+            "count": 30,
+            "share": 0.2885
+          }
+        },
+        "truncatedWrongDurations": 0,
+        "truncatedWrongPitches": 0
+      },
+      "run": {
+        "pdfPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf",
+        "truthPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.musicxml",
+        "maxPages": 1,
+        "preprocessPages": true,
+        "promoteScoreGraphClips": false,
+        "omrNoteCount": 63,
+        "omrMeasureCount": 8,
+        "checksums": {
+          "pdf": {
+            "ok": true,
+            "algorithm": "sha256",
+            "expected": "baa943ebc62bbcb81f616fa0b48b46bf80b61691735418f72fbcc5afea635934",
+            "actual": "baa943ebc62bbcb81f616fa0b48b46bf80b61691735418f72fbcc5afea635934"
+          },
+          "truth": {
+            "ok": true,
+            "algorithm": "sha256",
+            "expected": "cd1812a1e8b757f6de61f3aaa9946ef83e96f6b95d37ccd96cd053fb4a6fdc7b",
+            "actual": "cd1812a1e8b757f6de61f3aaa9946ef83e96f6b95d37ccd96cd053fb4a6fdc7b"
+          }
+        }
+      },
+      "stressObservation": null,
+      "error": null,
+      "hotspotDiagnostics": null,
+      "writtenSoundingDuration": {
+        "fixtureId": "piano-rhythm-tuplets-vector",
+        "phase": 3,
+        "totalWrongDurations": 7,
+        "legacyDurationHistogram": {
+          "too-short": 1,
+          "too-long": 0,
+          "beamed-subdivision": 4,
+          "bass-sustain": 0,
+          "melody-accompaniment": 0,
+          "rest-gap": 0,
+          "tie-sustain": 0,
+          "onset-coupled": 2,
+          "other": 0
+        },
+        "writtenSoundingHistogram": {
+          "written-duration-wrong": 3,
+          "sounding-release-wrong": 0,
+          "onset-coupled-duration": 2,
+          "tie-sustain-related": 0,
+          "serialization-artifact": 2
+        },
+        "dominantClass": {
+          "bucket": "written-duration-wrong",
+          "count": 3
+        },
+        "hotspotMeasures": [],
+        "hotspotTraces": [
+          {
+            "measureNumber": 1,
+            "wrongDurationCount": 1,
+            "histogram": {
+              "written-duration-wrong": 1,
+              "sounding-release-wrong": 0,
+              "onset-coupled-duration": 0,
+              "tie-sustain-related": 0,
+              "serialization-artifact": 0
+            },
+            "samples": [
+              {
+                "bucket": "written-duration-wrong",
+                "onsetDiffQuarters": 0,
+                "durationDiffQuarters": 0.5,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "B4",
+                "generatedLabel": "B4"
+              }
+            ]
+          },
+          {
+            "measureNumber": 2,
+            "wrongDurationCount": 2,
+            "histogram": {
+              "written-duration-wrong": 0,
+              "sounding-release-wrong": 0,
+              "onset-coupled-duration": 1,
+              "tie-sustain-related": 0,
+              "serialization-artifact": 1
+            },
+            "samples": [
+              {
+                "bucket": "serialization-artifact",
+                "onsetDiffQuarters": 0.5,
+                "durationDiffQuarters": 0.5,
+                "pitchDeltaSemitones": 7,
+                "truthLabel": "A4",
+                "generatedLabel": "E5"
+              },
+              {
+                "bucket": "onset-coupled-duration",
+                "onsetDiffQuarters": 0.25,
+                "durationDiffQuarters": 0.5,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "B4",
+                "generatedLabel": "B4"
+              }
+            ]
+          },
+          {
+            "measureNumber": 3,
+            "wrongDurationCount": 2,
+            "histogram": {
+              "written-duration-wrong": 1,
+              "sounding-release-wrong": 0,
+              "onset-coupled-duration": 1,
+              "tie-sustain-related": 0,
+              "serialization-artifact": 0
+            },
+            "samples": [
+              {
+                "bucket": "written-duration-wrong",
+                "onsetDiffQuarters": 0.083,
+                "durationDiffQuarters": 0.417,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "G4",
+                "generatedLabel": "G4"
+              },
+              {
+                "bucket": "onset-coupled-duration",
+                "onsetDiffQuarters": 0.667,
+                "durationDiffQuarters": 0.667,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "G4",
+                "generatedLabel": "G4"
+              }
+            ]
+          },
+          {
+            "measureNumber": 4,
+            "wrongDurationCount": 1,
+            "histogram": {
+              "written-duration-wrong": 0,
+              "sounding-release-wrong": 0,
+              "onset-coupled-duration": 0,
+              "tie-sustain-related": 0,
+              "serialization-artifact": 1
+            },
+            "samples": [
+              {
+                "bucket": "serialization-artifact",
+                "onsetDiffQuarters": 0.25,
+                "durationDiffQuarters": 0.75,
+                "pitchDeltaSemitones": 8,
+                "truthLabel": "B4",
+                "generatedLabel": "G5"
+              }
+            ]
+          },
+          {
+            "measureNumber": 5,
+            "wrongDurationCount": 1,
+            "histogram": {
+              "written-duration-wrong": 1,
+              "sounding-release-wrong": 0,
+              "onset-coupled-duration": 0,
+              "tie-sustain-related": 0,
+              "serialization-artifact": 0
+            },
+            "samples": [
+              {
+                "bucket": "written-duration-wrong",
+                "onsetDiffQuarters": 0,
+                "durationDiffQuarters": 2,
+                "pitchDeltaSemitones": 7,
+                "truthLabel": "C5",
+                "generatedLabel": "G5"
+              }
+            ]
+          }
+        ],
+        "tieChains": null
+      },
+      "tieSustainConstraints": {
+        "fixtureId": "piano-rhythm-tuplets-vector",
+        "phase": 4,
+        "constraintHistogram": {
+          "expected-cross-measure-tie": 0,
+          "tie-start-without-continuation": 0,
+          "continuation-without-tie-start": 0,
+          "sounding-release-too-short": 0,
+          "written-correct-sustain-wrong": 1,
+          "slur-like-arc-pitch-differs": 2
+        },
+        "dominantConstraint": {
+          "bucket": "slur-like-arc-pitch-differs",
+          "count": 2
+        },
+        "tieGlyphOrphans": {
+          "detectedTieCount": 4,
+          "appliedTieCount": 2,
+          "slurLikeArcPitchDiffers": 2,
+          "unresolvedArcCount": 0
+        },
+        "expectedCrossMeasureTies": [],
+        "brokenContinuations": {
+          "startWithoutContinuation": [],
+          "continuationWithoutStart": []
+        },
+        "writtenCorrectSustainWrong": [
+          {
+            "measureNumber": 1,
+            "midi": 71,
+            "label": "B4",
+            "onsetQuarters": 3,
+            "durationQuarters": 0.5,
+            "voice": 1,
+            "partId": "P1",
+            "truthDurationQuarters": 0.5,
+            "generatedDurationQuarters": 1,
+            "sustainDiffQuarters": 0.5
+          }
+        ],
+        "tieChainTraces": null,
+        "falseTieGuard": null
+      },
+      "pipelineStageDiagnostics": {
+        "dominantStage": "pitch-inference",
+        "rankedStages": [
+          {
+            "stage": "pitch-inference",
+            "status": "issue",
+            "errorCount": 30,
+            "evidence": [
+              "30 wrong pitch match(es)"
+            ]
+          },
+          {
+            "stage": "onset-rhythm-inference",
+            "status": "issue",
+            "errorCount": 28,
+            "evidence": [
+              "7 duration; 21 onset error(s)"
+            ]
+          },
+          {
+            "stage": "voice-serialization",
+            "status": "issue",
+            "errorCount": 16,
+            "evidence": [
+              "16 chord/voice grouping mismatch(es)"
+            ]
+          },
+          {
+            "stage": "symbol-detection",
+            "status": "issue",
+            "errorCount": 14,
+            "evidence": [
+              "7 missing; 7 extra note(s)"
+            ]
+          }
+        ],
+        "stages": [
+          {
+            "stage": "page-rasterization",
+            "status": "ok",
+            "errorCount": 0,
+            "evidence": [
+              "1 page(s) rasterized"
+            ]
+          },
+          {
+            "stage": "staff-system-detection",
+            "status": "ok",
+            "errorCount": 0,
+            "evidence": [
+              "2 system(s) on 1/0 page(s)"
+            ]
+          },
+          {
+            "stage": "notation-vs-tab-classification",
+            "status": "ok",
+            "errorCount": 0,
+            "evidence": [
+              "notation-only fixture"
+            ]
+          },
+          {
+            "stage": "measure-barline-segmentation",
+            "status": "ok",
+            "errorCount": 0,
+            "evidence": [
+              "measure count 8/8 (Δ0)"
+            ]
+          },
+          {
+            "stage": "symbol-detection",
+            "status": "issue",
+            "errorCount": 14,
+            "evidence": [
+              "7 missing; 7 extra note(s)"
+            ]
+          },
+          {
+            "stage": "pitch-inference",
+            "status": "issue",
+            "errorCount": 30,
+            "evidence": [
+              "30 wrong pitch match(es)"
+            ]
+          },
+          {
+            "stage": "onset-rhythm-inference",
+            "status": "issue",
+            "errorCount": 28,
+            "evidence": [
+              "7 duration; 21 onset error(s)"
+            ]
+          },
+          {
+            "stage": "voice-serialization",
+            "status": "issue",
+            "errorCount": 16,
+            "evidence": [
+              "16 chord/voice grouping mismatch(es)"
+            ]
+          },
+          {
+            "stage": "notation-tab-pairing",
+            "status": "ok",
+            "errorCount": 0,
+            "evidence": [
+              "not a paired notation+TAB fixture"
+            ]
+          },
+          {
+            "stage": "tie-repeat-handling",
+            "status": "ok",
+            "errorCount": 0,
+            "evidence": [
+              "4 tie candidate(s); 2 applied"
+            ]
+          },
+          {
+            "stage": "musicxml-serialization",
+            "status": "ok",
+            "errorCount": 0,
+            "evidence": [
+              "runtime/ScoreGraph note parity ok; rest parity ok"
+            ]
+          }
+        ],
+        "perMeasure": [
+          {
+            "measureNumber": 1,
+            "truthNoteCount": 8,
+            "generatedNoteCount": 8,
+            "errorCount": 15,
+            "primaryStage": "onset-rhythm-inference",
+            "stageErrorCounts": {
+              "measure-barline-segmentation": 0,
+              "symbol-detection": 2,
+              "pitch-inference": 3,
+              "onset-rhythm-inference": 4,
+              "voice-serialization": 0
+            }
+          },
+          {
+            "measureNumber": 2,
+            "truthNoteCount": 16,
+            "generatedNoteCount": 16,
+            "errorCount": 44,
+            "primaryStage": "onset-rhythm-inference",
+            "stageErrorCounts": {
+              "measure-barline-segmentation": 0,
+              "symbol-detection": 0,
+              "pitch-inference": 8,
+              "onset-rhythm-inference": 10,
+              "voice-serialization": 10
+            }
+          },
+          {
+            "measureNumber": 3,
+            "truthNoteCount": 12,
+            "generatedNoteCount": 12,
+            "errorCount": 27,
+            "primaryStage": "pitch-inference",
+            "stageErrorCounts": {
+              "measure-barline-segmentation": 0,
+              "symbol-detection": 2,
+              "pitch-inference": 6,
+              "onset-rhythm-inference": 6,
+              "voice-serialization": 2
+            }
+          },
+          {
+            "measureNumber": 4,
+            "truthNoteCount": 4,
+            "generatedNoteCount": 4,
+            "errorCount": 12,
+            "primaryStage": "pitch-inference",
+            "stageErrorCounts": {
+              "measure-barline-segmentation": 0,
+              "symbol-detection": 0,
+              "pitch-inference": 3,
+              "onset-rhythm-inference": 3,
+              "voice-serialization": 2
+            }
+          },
+          {
+            "measureNumber": 5,
+            "truthNoteCount": 2,
+            "generatedNoteCount": 2,
+            "errorCount": 7,
+            "primaryStage": "symbol-detection",
+            "stageErrorCounts": {
+              "measure-barline-segmentation": 0,
+              "symbol-detection": 2,
+              "pitch-inference": 1,
+              "onset-rhythm-inference": 1,
+              "voice-serialization": 2
+            }
+          },
+          {
+            "measureNumber": 6,
+            "truthNoteCount": 0,
+            "generatedNoteCount": 0,
+            "errorCount": 0,
+            "primaryStage": null,
+            "stageErrorCounts": {
+              "measure-barline-segmentation": 0,
+              "symbol-detection": 0,
+              "pitch-inference": 0,
+              "onset-rhythm-inference": 0,
+              "voice-serialization": 0
+            }
+          },
+          {
+            "measureNumber": 7,
+            "truthNoteCount": 16,
+            "generatedNoteCount": 16,
+            "errorCount": 26,
+            "primaryStage": "pitch-inference",
+            "stageErrorCounts": {
+              "measure-barline-segmentation": 0,
+              "symbol-detection": 6,
+              "pitch-inference": 7,
+              "onset-rhythm-inference": 0,
+              "voice-serialization": 0
+            }
+          },
+          {
+            "measureNumber": 8,
+            "truthNoteCount": 5,
+            "generatedNoteCount": 5,
+            "errorCount": 12,
+            "primaryStage": "onset-rhythm-inference",
+            "stageErrorCounts": {
+              "measure-barline-segmentation": 0,
+              "symbol-detection": 2,
+              "pitch-inference": 2,
+              "onset-rhythm-inference": 4,
+              "voice-serialization": 0
+            }
+          }
+        ]
+      },
+      "rhythmShadow": {
+        "engine": "v2-rhythm-shadow-prototype",
+        "constraintVersion": "phase-2c",
+        "promoted": false,
+        "fixtureId": "piano-rhythm-tuplets-vector",
+        "solverDiagnostics": {
+          "measureCount": 8,
+          "candidateMeasures": 5,
+          "changedMeasures": 1,
+          "rejectedMeasures": 7,
+          "rejectReasons": {
+            "constraints-failed": 4,
+            "not-in-family": 3
+          },
+          "variantCounts": {
+            "bass-minus-2": 1
+          },
+          "changedMeasureNumbers": [
+            8
+          ],
+          "rejectedMeasureNumbers": [
+            1,
+            2,
+            3,
+            7
+          ],
+          "changedMeasureLog": [
+            {
+              "measureNumber": 8,
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "softScoreDelta": 0.05
+            }
+          ],
+          "acceptedCandidateMeasures": [
+            {
+              "measureNumber": 8,
+              "variantId": "bass-minus-2",
+              "variantLabel": "-0.5q bass",
+              "softScoreDelta": 0.05,
+              "familyReasons": [
+                "bass-late-sixteenth-phase"
+              ],
+              "coalescedCount": 0
+            }
+          ],
+          "rejectedCandidateMeasures": [
+            {
+              "measureNumber": 1,
+              "rejectReason": "constraints-failed",
+              "bestVariantId": null,
+              "familyReasons": [
+                "bass-late-sixteenth-phase",
+                "dense-multi-column"
+              ],
+              "rejectedVariants": [
+                {
+                  "variantId": "treble-minus-2",
+                  "variantLabel": "-0.5q treble",
+                  "rejectReason": "preservation-failed",
+                  "violations": [
+                    "duration-changed"
+                  ],
+                  "coalescedCount": 0
+                }
+              ]
+            },
+            {
+              "measureNumber": 2,
+              "rejectReason": "constraints-failed",
+              "bestVariantId": null,
+              "familyReasons": [
+                "bass-late-sixteenth-phase",
+                "dense-multi-column"
+              ],
+              "rejectedVariants": [
+                {
+                  "variantId": "bass-minus-2",
+                  "variantLabel": "-0.5q bass",
+                  "rejectReason": "preservation-failed",
+                  "violations": [
+                    "duration-changed",
+                    "chord-split"
+                  ],
+                  "coalescedCount": 0
+                },
+                {
+                  "variantId": "bass-minus-3",
+                  "variantLabel": "-0.75q bass",
+                  "rejectReason": "preservation-failed",
+                  "violations": [
+                    "duration-changed",
+                    "chord-split"
+                  ],
+                  "coalescedCount": 0
+                },
+                {
+                  "variantId": "treble-minus-2",
+                  "variantLabel": "-0.5q treble",
+                  "rejectReason": "preservation-failed",
+                  "violations": [
+                    "duration-changed",
+                    "chord-split"
+                  ],
+                  "coalescedCount": 0
+                }
+              ]
+            },
+            {
+              "measureNumber": 3,
+              "rejectReason": "constraints-failed",
+              "bestVariantId": null,
+              "familyReasons": [
+                "bass-late-sixteenth-phase",
+                "dense-multi-column"
+              ],
+              "rejectedVariants": [
+                {
+                  "variantId": "bass-minus-2",
+                  "variantLabel": "-0.5q bass",
+                  "rejectReason": "preservation-failed",
+                  "violations": [
+                    "duration-changed",
+                    "chord-split"
+                  ],
+                  "coalescedCount": 0
+                },
+                {
+                  "variantId": "bass-minus-3",
+                  "variantLabel": "-0.75q bass",
+                  "rejectReason": "preservation-failed",
+                  "violations": [
+                    "duration-changed",
+                    "chord-split"
+                  ],
+                  "coalescedCount": 0
+                },
+                {
+                  "variantId": "treble-minus-2",
+                  "variantLabel": "-0.5q treble",
+                  "rejectReason": "preservation-failed",
+                  "violations": [
+                    "duration-changed",
+                    "chord-split"
+                  ],
+                  "coalescedCount": 0
+                }
+              ]
+            },
+            {
+              "measureNumber": 7,
+              "rejectReason": "constraints-failed",
+              "bestVariantId": null,
+              "familyReasons": [
+                "bass-late-sixteenth-phase",
+                "dense-multi-column"
+              ],
+              "rejectedVariants": [
+                {
+                  "variantId": "bass-minus-2",
+                  "variantLabel": "-0.5q bass",
+                  "rejectReason": "preservation-failed",
+                  "violations": [
+                    "duration-changed",
+                    "chord-split"
+                  ],
+                  "coalescedCount": 0
+                },
+                {
+                  "variantId": "bass-minus-3",
+                  "variantLabel": "-0.75q bass",
+                  "rejectReason": "preservation-failed",
+                  "violations": [
+                    "duration-changed",
+                    "chord-split"
+                  ],
+                  "coalescedCount": 0
+                },
+                {
+                  "variantId": "treble-minus-2",
+                  "variantLabel": "-0.5q treble",
+                  "rejectReason": "preservation-failed",
+                  "violations": [
+                    "duration-changed",
+                    "chord-split"
+                  ],
+                  "coalescedCount": 0
+                }
+              ]
+            }
+          ],
+          "coalescedChordCount": 0,
+          "coalescedChordLog": [],
+          "constraintVersion": "phase-2c"
+        },
+        "structurallyAppliedCount": 1,
+        "changedMeasures": [],
+        "acceptedCandidateMeasures": [],
+        "rejectedCandidateMeasures": [
+          {
+            "measureNumber": 1,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 2,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 3,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 7,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 8,
+            "rejectReason": "chord-regression",
+            "bestVariantId": "bass-minus-2",
+            "familyReasons": [],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "chord-regression+pitch-regression+duration-regression",
+                "violations": [
+                  "chord-regression",
+                  "pitch-regression",
+                  "duration-regression"
+                ],
+                "coalescedCount": 0
+              }
+            ],
+            "truthGateDelta": {
+              "wrongOnsetDelta": -2,
+              "wrongDurationDelta": 2,
+              "chordMismatchDelta": 2,
+              "wrongPitchDelta": 2,
+              "generatedNoteCountDelta": 0
+            }
+          }
+        ],
+        "rejectedMeasures": [
+          {
+            "measureNumber": 1,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 2,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 3,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          },
+          {
+            "measureNumber": 7,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "bass-late-sixteenth-phase",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": [
+              {
+                "variantId": "bass-minus-2",
+                "variantLabel": "-0.5q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "bass-minus-3",
+                "variantLabel": "-0.75q bass",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              },
+              {
+                "variantId": "treble-minus-2",
+                "variantLabel": "-0.5q treble",
+                "rejectReason": "preservation-failed",
+                "violations": [
+                  "duration-changed",
+                  "chord-split"
+                ],
+                "coalescedCount": 0
+              }
+            ]
+          }
+        ],
+        "rejectedByTruth": [
+          {
+            "measureNumber": 8,
+            "variantId": "bass-minus-2",
+            "variantLabel": "-0.5q bass",
+            "coalescedCount": 0,
+            "rejections": [
+              "chord-regression",
+              "pitch-regression",
+              "duration-regression"
+            ],
+            "delta": {
+              "wrongOnsetDelta": -2,
+              "wrongDurationDelta": 2,
+              "chordMismatchDelta": 2,
+              "wrongPitchDelta": 2,
+              "generatedNoteCountDelta": 0
+            }
+          }
+        ],
+        "coalescedChords": [],
+        "coalescedChordCount": 0,
+        "hotspotMeasures": [],
+        "runtimeXmlBytes": 9172,
+        "shadowXmlBytes": 9172,
+        "identicalToRuntime": true,
+        "scoreGraphSource": "passed",
+        "status": "shadow-no-qualifying-measures",
+        "regressionReason": "No measures passed Phase 2C preservation + truth gates — shadow identical to runtime.",
+        "runtime": {
+          "wrongOnset": 21,
+          "wrongDuration": 7,
+          "chordMismatch": 16,
+          "wrongPitch": 30,
+          "noteCountDiff": 0,
+          "measureCountDiff": 0,
+          "pitchAccuracy": 0.4127,
+          "durationAccuracy": 0.7778,
+          "onsetAccuracy": 0.5556,
+          "chordGroupingAccuracy": 0.7746,
+          "noteDetectionF1": 0.8889
+        },
+        "shadow": {
+          "wrongOnset": 21,
+          "wrongDuration": 7,
+          "chordMismatch": 16,
+          "wrongPitch": 30,
+          "noteCountDiff": 0,
+          "measureCountDiff": 0,
+          "pitchAccuracy": 0.4127,
+          "durationAccuracy": 0.7778,
+          "onsetAccuracy": 0.5556,
+          "chordGroupingAccuracy": 0.7746,
+          "noteDetectionF1": 0.8889
+        },
+        "delta": {
+          "wrongOnset": 0,
+          "wrongDuration": 0,
+          "chordMismatch": 0,
+          "wrongPitch": 0,
+          "noteCountDiff": 0,
+          "measureCountDiff": 0,
+          "pitchAccuracy": 0,
+          "durationAccuracy": 0,
+          "onsetAccuracy": 0,
+          "chordGroupingAccuracy": 0,
+          "noteDetectionF1": 0
+        },
+        "perMeasureDelta": [
+          {
+            "measureNumber": 1,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 2,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 3,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 4,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 5,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 6,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 7,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 8,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          }
+        ],
+        "hotspotDelta": [],
+        "runtimeAttribution": {
+          "buckets": {
+            "onset-phase-shift": 19,
+            "voice-serialization-shift": 11,
+            "onset-coupled-duration": 2,
+            "chord-grouping-symptom": 16,
+            "pitch-grouping-symptom": 25,
+            "balanced-missing-extra-serialization": 14
+          },
+          "ranked": [
+            {
+              "bucket": "pitch-grouping-symptom",
+              "count": 25
+            },
+            {
+              "bucket": "onset-phase-shift",
+              "count": 19
+            },
+            {
+              "bucket": "chord-grouping-symptom",
+              "count": 16
+            },
+            {
+              "bucket": "balanced-missing-extra-serialization",
+              "count": 14
+            },
+            {
+              "bucket": "voice-serialization-shift",
+              "count": 11
+            },
+            {
+              "bucket": "onset-coupled-duration",
+              "count": 2
+            }
+          ],
+          "primaryBucket": {
+            "bucket": "pitch-grouping-symptom",
+            "count": 25
+          },
+          "supporting": {
+            "totalWrongOnsets": 21,
+            "chordMismatchTotal": 16,
+            "chordCoupledShare": 1,
+            "missingCount": 7,
+            "extraCount": 7,
+            "balancedMismatch": true,
+            "onsetStrictIndependent": 7,
+            "voicePhasePrimaryClass": "serialization-voice-shift"
+          }
+        },
+        "shadowAttribution": {
+          "buckets": {
+            "onset-phase-shift": 19,
+            "voice-serialization-shift": 11,
+            "onset-coupled-duration": 2,
+            "chord-grouping-symptom": 16,
+            "pitch-grouping-symptom": 25,
+            "balanced-missing-extra-serialization": 14
+          },
+          "ranked": [
+            {
+              "bucket": "pitch-grouping-symptom",
+              "count": 25
+            },
+            {
+              "bucket": "onset-phase-shift",
+              "count": 19
+            },
+            {
+              "bucket": "chord-grouping-symptom",
+              "count": 16
+            },
+            {
+              "bucket": "balanced-missing-extra-serialization",
+              "count": 14
+            },
+            {
+              "bucket": "voice-serialization-shift",
+              "count": 11
+            },
+            {
+              "bucket": "onset-coupled-duration",
+              "count": 2
+            }
+          ],
+          "primaryBucket": {
+            "bucket": "pitch-grouping-symptom",
+            "count": 25
+          },
+          "supporting": {
+            "totalWrongOnsets": 21,
+            "chordMismatchTotal": 16,
+            "chordCoupledShare": 1,
+            "missingCount": 7,
+            "extraCount": 7,
+            "balancedMismatch": true,
+            "onsetStrictIndependent": 7,
+            "voicePhasePrimaryClass": "serialization-voice-shift"
+          }
+        }
+      },
+      "voiceSerializationShadow": {
+        "engine": "v2-voice-serialization-shadow",
+        "constraintVersion": "phase-7-duration-coupled",
+        "promoted": false,
+        "fixtureId": "piano-rhythm-tuplets-vector",
+        "solverDiagnostics": {
+          "measureCount": 8,
+          "candidateMeasures": 0,
+          "changedMeasures": 0,
+          "rejectedMeasures": 8,
+          "rejectReasons": {
+            "not-in-family": 8
+          },
+          "variantCounts": {},
+          "changedMeasureNumbers": [],
+          "rejectedMeasureNumbers": [],
+          "changedMeasureLog": [],
+          "acceptedCandidateMeasures": [],
+          "rejectedCandidateMeasures": [],
+          "coalescedChordCount": 0,
+          "coalescedChordLog": [],
+          "durationCoupledAppliedCount": 0,
+          "constraintVersion": "phase-7-duration-coupled"
+        },
+        "structurallyAppliedCount": 0,
+        "structuralAppliedMeasures": [],
+        "changedMeasures": [],
+        "acceptedCandidateMeasures": [],
+        "rejectedCandidateMeasures": [],
+        "rejectedMeasures": [],
+        "rejectedByTruth": [],
+        "coalescedChords": [],
+        "coalescedChordCount": 0,
+        "hotspotMeasures": [],
+        "runtimeXmlBytes": 9172,
+        "shadowXmlBytes": 9172,
+        "identicalToRuntime": true,
+        "scoreGraphSource": "passed",
+        "status": "shadow-no-qualifying-measures",
+        "regressionReason": "No measures passed Phase 6 preservation + truth gates — shadow identical to runtime.",
+        "runtime": {
+          "wrongOnset": 21,
+          "wrongDuration": 7,
+          "chordMismatch": 16,
+          "wrongPitch": 30,
+          "noteCountDiff": 0,
+          "measureCountDiff": 0,
+          "pitchAccuracy": 0.4127,
+          "durationAccuracy": 0.7778,
+          "onsetAccuracy": 0.5556,
+          "chordGroupingAccuracy": 0.7746,
+          "noteDetectionF1": 0.8889
+        },
+        "shadow": {
+          "wrongOnset": 21,
+          "wrongDuration": 7,
+          "chordMismatch": 16,
+          "wrongPitch": 30,
+          "noteCountDiff": 0,
+          "measureCountDiff": 0,
+          "pitchAccuracy": 0.4127,
+          "durationAccuracy": 0.7778,
+          "onsetAccuracy": 0.5556,
+          "chordGroupingAccuracy": 0.7746,
+          "noteDetectionF1": 0.8889
+        },
+        "delta": {
+          "wrongOnset": 0,
+          "wrongDuration": 0,
+          "chordMismatch": 0,
+          "wrongPitch": 0,
+          "noteCountDiff": 0,
+          "measureCountDiff": 0,
+          "pitchAccuracy": 0,
+          "durationAccuracy": 0,
+          "onsetAccuracy": 0,
+          "chordGroupingAccuracy": 0,
+          "noteDetectionF1": 0
+        },
+        "perMeasureDelta": [
+          {
+            "measureNumber": 1,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 2,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 3,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 4,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 5,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 6,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 7,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          {
+            "measureNumber": 8,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          }
+        ],
+        "hotspotDelta": [],
+        "runtimeAttribution": {
+          "buckets": {
+            "onset-phase-shift": 19,
+            "voice-serialization-shift": 11,
+            "onset-coupled-duration": 2,
+            "chord-grouping-symptom": 16,
+            "pitch-grouping-symptom": 25,
+            "balanced-missing-extra-serialization": 14
+          },
+          "ranked": [
+            {
+              "bucket": "pitch-grouping-symptom",
+              "count": 25
+            },
+            {
+              "bucket": "onset-phase-shift",
+              "count": 19
+            },
+            {
+              "bucket": "chord-grouping-symptom",
+              "count": 16
+            },
+            {
+              "bucket": "balanced-missing-extra-serialization",
+              "count": 14
+            },
+            {
+              "bucket": "voice-serialization-shift",
+              "count": 11
+            },
+            {
+              "bucket": "onset-coupled-duration",
+              "count": 2
+            }
+          ],
+          "primaryBucket": {
+            "bucket": "pitch-grouping-symptom",
+            "count": 25
+          },
+          "supporting": {
+            "totalWrongOnsets": 21,
+            "chordMismatchTotal": 16,
+            "chordCoupledShare": 1,
+            "missingCount": 7,
+            "extraCount": 7,
+            "balancedMismatch": true,
+            "onsetStrictIndependent": 7,
+            "voicePhasePrimaryClass": "serialization-voice-shift"
+          }
+        },
+        "shadowAttribution": {
+          "buckets": {
+            "onset-phase-shift": 19,
+            "voice-serialization-shift": 11,
+            "onset-coupled-duration": 2,
+            "chord-grouping-symptom": 16,
+            "pitch-grouping-symptom": 25,
+            "balanced-missing-extra-serialization": 14
+          },
+          "ranked": [
+            {
+              "bucket": "pitch-grouping-symptom",
+              "count": 25
+            },
+            {
+              "bucket": "onset-phase-shift",
+              "count": 19
+            },
+            {
+              "bucket": "chord-grouping-symptom",
+              "count": 16
+            },
+            {
+              "bucket": "balanced-missing-extra-serialization",
+              "count": 14
+            },
+            {
+              "bucket": "voice-serialization-shift",
+              "count": 11
+            },
+            {
+              "bucket": "onset-coupled-duration",
+              "count": 2
+            }
+          ],
+          "primaryBucket": {
+            "bucket": "pitch-grouping-symptom",
+            "count": 25
+          },
+          "supporting": {
+            "totalWrongOnsets": 21,
+            "chordMismatchTotal": 16,
+            "chordCoupledShare": 1,
+            "missingCount": 7,
+            "extraCount": 7,
+            "balancedMismatch": true,
+            "onsetStrictIndependent": 7,
+            "voicePhasePrimaryClass": "serialization-voice-shift"
+          }
+        }
+      },
+      "generatedTitle": "piano-rhythm-tuplets-vector",
+      "groundTruthTitle": "CC0 Rhythm and Tuplet Study",
+      "scoreGraph": {
+        "version": 2,
+        "measureCount": 8,
+        "measuresWithBeamStemGraph": 8,
+        "nodeCounts": {
+          "notehead": 63,
+          "stem": 50,
+          "rest": 3,
+          "beam": 1
+        },
+        "edgeCounts": {
+          "note_in_voice": 63,
+          "tie_links": 18,
+          "head_geometry_link": 63,
+          "stem_owns_head": 50,
+          "head_in_chord": 15,
+          "beam_links_stem": 8
+        },
+        "totalNodes": 117,
+        "totalEdges": 217,
+        "onsetColumns": 48,
+        "voiceBudgetDiagnostics": {
+          "measuresWithOverflow": 0,
+          "measuresWithUnderflow": 0,
+          "totalOverflowEvents": 0
+        },
+        "durationObservation": {
+          "nodesWithWrittenSoundingSplit": 3,
+          "tieNodes": 18,
+          "gapToNextNodes": 0,
+          "beamLadderNodes": 0,
+          "tieChainCount": 14,
+          "tieChains": [
+            {
+              "pitchKey": "76|bass",
+              "segmentCount": 1,
+              "segments": [
+                {
+                  "measureNumber": 1,
+                  "onsetDivision": 7,
+                  "writtenDurationDivisions": 2,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 76,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "71|bass",
+              "segmentCount": 1,
+              "segments": [
+                {
+                  "measureNumber": 1,
+                  "onsetDivision": 12,
+                  "writtenDurationDivisions": 4,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 71,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "64|bass",
+              "segmentCount": 2,
+              "segments": [
+                {
+                  "measureNumber": 2,
+                  "onsetDivision": 3,
+                  "writtenDurationDivisions": 1,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 64,
+                  "clef": "bass"
+                },
+                {
+                  "measureNumber": 2,
+                  "onsetDivision": 9,
+                  "writtenDurationDivisions": 1,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 64,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "71|bass",
+              "segmentCount": 3,
+              "segments": [
+                {
+                  "measureNumber": 2,
+                  "onsetDivision": 5,
+                  "writtenDurationDivisions": 1,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 71,
+                  "clef": "bass"
+                },
+                {
+                  "measureNumber": 2,
+                  "onsetDivision": 11,
+                  "writtenDurationDivisions": 1,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 71,
+                  "clef": "bass"
+                },
+                {
+                  "measureNumber": 2,
+                  "onsetDivision": 13,
+                  "writtenDurationDivisions": 3,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 71,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "40|bass",
+              "segmentCount": 1,
+              "segments": [
+                {
+                  "measureNumber": 3,
+                  "onsetDivision": 5,
+                  "writtenDurationDivisions": 1,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 40,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "64|bass",
+              "segmentCount": 1,
+              "segments": [
+                {
+                  "measureNumber": 3,
+                  "onsetDivision": 9,
+                  "writtenDurationDivisions": 1,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 64,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "67|bass",
+              "segmentCount": 1,
+              "segments": [
+                {
+                  "measureNumber": 3,
+                  "onsetDivision": 12,
+                  "writtenDurationDivisions": 1,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 67,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "71|bass",
+              "segmentCount": 1,
+              "segments": [
+                {
+                  "measureNumber": 4,
+                  "onsetDivision": 6,
+                  "writtenDurationDivisions": 6,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 71,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "79|bass",
+              "segmentCount": 1,
+              "segments": [
+                {
+                  "measureNumber": 4,
+                  "onsetDivision": 12,
+                  "writtenDurationDivisions": 4,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 79,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "76|bass",
+              "segmentCount": 1,
+              "segments": [
+                {
+                  "measureNumber": 4,
+                  "onsetDivision": 12,
+                  "writtenDurationDivisions": 4,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 76,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "79|bass",
+              "segmentCount": 2,
+              "segments": [
+                {
+                  "measureNumber": 5,
+                  "onsetDivision": 0,
+                  "writtenDurationDivisions": 4,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 79,
+                  "clef": "bass"
+                },
+                {
+                  "measureNumber": 5,
+                  "onsetDivision": 4,
+                  "writtenDurationDivisions": 4,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 79,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "67|bass",
+              "segmentCount": 1,
+              "segments": [
+                {
+                  "measureNumber": 7,
+                  "onsetDivision": 13,
+                  "writtenDurationDivisions": 3,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 67,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "40|bass",
+              "segmentCount": 1,
+              "segments": [
+                {
+                  "measureNumber": 7,
+                  "onsetDivision": 13,
+                  "writtenDurationDivisions": 3,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 40,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            },
+            {
+              "pitchKey": "71|bass",
+              "segmentCount": 1,
+              "segments": [
+                {
+                  "measureNumber": 8,
+                  "onsetDivision": 6,
+                  "writtenDurationDivisions": 2,
+                  "tieStart": true,
+                  "tieStop": false,
+                  "midi": 71,
+                  "clef": "bass"
+                }
+              ],
+              "spansBar": false
+            }
+          ]
+        },
+        "staffLaneObservation": {
+          "grandStaffMeasures": 0,
+          "accompanimentNodes": 0,
+          "latePhaseNodes": 0,
+          "crossStaffPairs": 0
+        },
+        "geometryBridge": {
+          "matched": 63,
+          "total": 63,
+          "coverage": 1
+        }
+      },
+      "runtimeVsScoreGraph": {
+        "runtime": {
+          "noteCount": 63,
+          "restCount": 3,
+          "noteEventCount": 48
+        },
+        "scoreGraph": {
+          "noteheadNodes": 63,
+          "restNodes": 3,
+          "stemNodes": 50,
+          "beamNodes": 1
+        },
+        "parity": {
+          "noteheads": true,
+          "rests": true
+        },
+        "geometryBridge": {
+          "matched": 63,
+          "total": 63,
+          "coverage": 1
+        }
+      },
+      "omrConfidence": 0.8841652135875923,
+      "omrFailureReasons": [],
+      "rejectedOrphanCount": 0,
+      "voiceSerializationQualification": {
+        "fixtureId": "piano-rhythm-tuplets-vector",
+        "phase": "7",
+        "constraintVersion": "phase-7-duration-coupled",
+        "durationCoupledAppliedCount": 0,
+        "liveEligible": false,
+        "scoreGraphAvailable": true,
+        "truthAvailable": true,
+        "shadowStatus": "shadow-no-qualifying-measures",
+        "promoted": false,
+        "anyTruthApproved": false,
+        "truthApprovedCount": 0,
+        "structuralAppliedCount": 0,
+        "rejectedByTruthCount": 0,
+        "structurallyRejectedCount": 0,
+        "dominantBlocker": null,
+        "blockerHistogram": {},
+        "hotspotMeasures": [],
+        "hotspotQualification": [],
+        "measures": [],
+        "truthApprovedMeasures": [],
+        "structuralAppliedMeasures": [],
+        "rejectedMeasures": [],
+        "globalDelta": {
+          "wrongOnset": 0,
+          "wrongDuration": 0,
+          "chordMismatch": 0,
+          "wrongPitch": 0,
+          "noteCountDiff": 0,
+          "measureCountDiff": 0,
+          "pitchAccuracy": 0,
+          "durationAccuracy": 0,
+          "onsetAccuracy": 0,
+          "chordGroupingAccuracy": 0,
+          "noteDetectionF1": 0
+        },
+        "hotspotDelta": [],
+        "runtimeMetrics": {
+          "wrongOnset": 21,
+          "wrongDuration": 7,
+          "chordMismatch": 16,
+          "wrongPitch": 30,
+          "noteCountDiff": 0,
+          "measureCountDiff": 0,
+          "pitchAccuracy": 0.4127,
+          "durationAccuracy": 0.7778,
+          "onsetAccuracy": 0.5556,
+          "chordGroupingAccuracy": 0.7746,
+          "noteDetectionF1": 0.8889
+        },
+        "shadowMetrics": {
+          "wrongOnset": 21,
+          "wrongDuration": 7,
+          "chordMismatch": 16,
+          "wrongPitch": 30,
+          "noteCountDiff": 0,
+          "measureCountDiff": 0,
+          "pitchAccuracy": 0.4127,
+          "durationAccuracy": 0.7778,
+          "onsetAccuracy": 0.5556,
+          "chordGroupingAccuracy": 0.7746,
+          "noteDetectionF1": 0.8889
+        },
+        "runtimeFrozenMatch": null,
+        "recommendation": "No structural candidates on live fixtures — extend lane detection or onset-column IR."
+      },
+      "omrV3Shadow": {
+        "status": "ready",
+        "engine": "omr-v3-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "runtimeCandidate": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 2,
+              "rejectedPairingCount": 1
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-analysis-piano-rhythm-tuplets-vector-0:0",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.19899999999999995,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-piano-rhythm-tuplets-vector-0:1",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.199,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 66,
+            "assignedSymbolCount": 66,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 51,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "pianoMeasureCount": 8,
+            "ambiguousMeasureCount": 0,
+            "rejectedEventGroupCount": 0,
+            "unresolvedEventGroupCount": 0,
+            "recoveredUniformBeatGridCount": 0,
+            "recoveredMeasureEndCount": 0,
+            "voiceOverlapViolations": 0,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "legacy-runtime-events",
+            "sourceSymbolCount": 66,
+            "independentSourceSymbolCount": 0,
+            "independentSourceSymbolRate": 0,
+            "primaryEventCount": 66,
+            "independentPrimaryEventCount": 0,
+            "independentPrimaryEventRate": 0
+          }
+        },
+        "evidence": {
+          "mode": "legacy-runtime-events",
+          "sourceSymbolCount": 66,
+          "independentSourceSymbolCount": 0,
+          "independentSourceSymbolRate": 0,
+          "primaryEventCount": 66,
+          "independentPrimaryEventCount": 0,
+          "independentPrimaryEventRate": 0
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 8,
+            "primaryEventCount": 66,
+            "serializableEventCount": 66,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 8,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 8,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 0
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.4127,
+              "matchedPitchAccuracy": 0.4643,
+              "durationAccuracy": 0.7778,
+              "matchedDurationAccuracy": 0.875,
+              "onsetAccuracy": 0.5556,
+              "matchedOnsetAccuracy": 0.625,
+              "timeAccuracy": 0.0159,
+              "matchedTimeAccuracy": 0.0179,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8889,
+              "noteDetectionRecall": 0.8889,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.7746,
+              "pitchAccuracyAtCorrectOnset": 0.4286,
+              "orderSensitivePitchRecovery": 0.2222
+            },
+            "v3": {
+              "pitchAccuracy": 0.4127,
+              "matchedPitchAccuracy": 0.4643,
+              "durationAccuracy": 0.7778,
+              "matchedDurationAccuracy": 0.875,
+              "onsetAccuracy": 0.5556,
+              "matchedOnsetAccuracy": 0.625,
+              "timeAccuracy": 0.0159,
+              "matchedTimeAccuracy": 0.0179,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8889,
+              "noteDetectionRecall": 0.8889,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.7746,
+              "pitchAccuracyAtCorrectOnset": 0.4286,
+              "orderSensitivePitchRecovery": 0.2222
+            }
+          }
+        },
+        "current": {
+          "metrics": {
+            "pitchAccuracy": 0.4127,
+            "matchedPitchAccuracy": 0.4643,
+            "durationAccuracy": 0.7778,
+            "matchedDurationAccuracy": 0.875,
+            "onsetAccuracy": 0.5556,
+            "matchedOnsetAccuracy": 0.625,
+            "timeAccuracy": 0.0159,
+            "matchedTimeAccuracy": 0.0179,
+            "measureCountAccuracy": 1,
+            "noteDetectionPrecision": 0.8889,
+            "noteDetectionRecall": 0.8889,
+            "noteDetectionF1": 0.8889,
+            "chordGroupingAccuracy": 0.7746,
+            "pitchAccuracyAtCorrectOnset": 0.4286,
+            "orderSensitivePitchRecovery": 0.2222
+          },
+          "structure": {
+            "absoluteMeasureCountError": 0,
+            "systemCountAccuracy": 0
+          },
+          "fusion": {
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          }
+        },
+        "v3": {
+          "serializer": {
+            "measureCount": 8,
+            "primaryEventCount": 66,
+            "serializableEventCount": 66,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 8,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 8,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 0
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.4127,
+              "matchedPitchAccuracy": 0.4643,
+              "durationAccuracy": 0.7778,
+              "matchedDurationAccuracy": 0.875,
+              "onsetAccuracy": 0.5556,
+              "matchedOnsetAccuracy": 0.625,
+              "timeAccuracy": 0.0159,
+              "matchedTimeAccuracy": 0.0179,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8889,
+              "noteDetectionRecall": 0.8889,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.7746,
+              "pitchAccuracyAtCorrectOnset": 0.4286,
+              "orderSensitivePitchRecovery": 0.2222
+            },
+            "v3": {
+              "pitchAccuracy": 0.4127,
+              "matchedPitchAccuracy": 0.4643,
+              "durationAccuracy": 0.7778,
+              "matchedDurationAccuracy": 0.875,
+              "onsetAccuracy": 0.5556,
+              "matchedOnsetAccuracy": 0.625,
+              "timeAccuracy": 0.0159,
+              "matchedTimeAccuracy": 0.0179,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8889,
+              "noteDetectionRecall": 0.8889,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.7746,
+              "pitchAccuracyAtCorrectOnset": 0.4286,
+              "orderSensitivePitchRecovery": 0.2222
+            }
+          }
+        }
+      },
+      "omrV3IndependentShadow": {
+        "status": "ready",
+        "engine": "omr-v3-independent-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "runtimeCandidate": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 2,
+              "rejectedPairingCount": 1
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-piano-rhythm-tuplets-vector-0:0",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.19899999999999995,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-piano-rhythm-tuplets-vector-0:1",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.199,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 67,
+            "assignedSymbolCount": 67,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 59,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "pianoMeasureCount": 8,
+            "ambiguousMeasureCount": 2,
+            "rejectedEventGroupCount": 0,
+            "unresolvedEventGroupCount": 0,
+            "recoveredUniformBeatGridCount": 44,
+            "recoveredMeasureEndCount": 2,
+            "voiceOverlapViolations": 0,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "raw-detector-symbols",
+            "sourceSymbolCount": 67,
+            "independentSourceSymbolCount": 67,
+            "independentSourceSymbolRate": 1,
+            "primaryEventCount": 67,
+            "independentPrimaryEventCount": 67,
+            "independentPrimaryEventRate": 1
+          }
+        },
+        "evidence": {
+          "mode": "raw-detector-symbols",
+          "sourceSymbolCount": 67,
+          "independentSourceSymbolCount": 67,
+          "independentSourceSymbolRate": 1,
+          "primaryEventCount": 67,
+          "independentPrimaryEventCount": 67,
+          "independentPrimaryEventRate": 1
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 8,
+            "primaryEventCount": 67,
+            "serializableEventCount": 67,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 8,
+            "warningCount": 0,
+            "approximateQuantizationCount": 27,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 8,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 0
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.4127,
+              "matchedPitchAccuracy": 0.4643,
+              "durationAccuracy": 0.7778,
+              "matchedDurationAccuracy": 0.875,
+              "onsetAccuracy": 0.5556,
+              "matchedOnsetAccuracy": 0.625,
+              "timeAccuracy": 0.0159,
+              "matchedTimeAccuracy": 0.0179,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8889,
+              "noteDetectionRecall": 0.8889,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.7746,
+              "pitchAccuracyAtCorrectOnset": 0.4286,
+              "orderSensitivePitchRecovery": 0.2222
+            },
+            "v3": {
+              "pitchAccuracy": 0.4444,
+              "matchedPitchAccuracy": 0.459,
+              "durationAccuracy": 0.9206,
+              "matchedDurationAccuracy": 0.9508,
+              "onsetAccuracy": 0.7302,
+              "matchedOnsetAccuracy": 0.7541,
+              "timeAccuracy": 0,
+              "matchedTimeAccuracy": 0,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.9683,
+              "noteDetectionRecall": 0.9683,
+              "noteDetectionF1": 0.9683,
+              "chordGroupingAccuracy": 0.9688,
+              "pitchAccuracyAtCorrectOnset": 0.4783,
+              "orderSensitivePitchRecovery": 0.1587
+            }
+          }
+        },
+        "current": {
+          "metrics": {
+            "pitchAccuracy": 0.4127,
+            "matchedPitchAccuracy": 0.4643,
+            "durationAccuracy": 0.7778,
+            "matchedDurationAccuracy": 0.875,
+            "onsetAccuracy": 0.5556,
+            "matchedOnsetAccuracy": 0.625,
+            "timeAccuracy": 0.0159,
+            "matchedTimeAccuracy": 0.0179,
+            "measureCountAccuracy": 1,
+            "noteDetectionPrecision": 0.8889,
+            "noteDetectionRecall": 0.8889,
+            "noteDetectionF1": 0.8889,
+            "chordGroupingAccuracy": 0.7746,
+            "pitchAccuracyAtCorrectOnset": 0.4286,
+            "orderSensitivePitchRecovery": 0.2222
+          },
+          "structure": {
+            "absoluteMeasureCountError": 0,
+            "systemCountAccuracy": 0
+          },
+          "fusion": {
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          }
+        },
+        "v3": {
+          "serializer": {
+            "measureCount": 8,
+            "primaryEventCount": 67,
+            "serializableEventCount": 67,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 8,
+            "warningCount": 0,
+            "approximateQuantizationCount": 27,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 8,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 0
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.4127,
+              "matchedPitchAccuracy": 0.4643,
+              "durationAccuracy": 0.7778,
+              "matchedDurationAccuracy": 0.875,
+              "onsetAccuracy": 0.5556,
+              "matchedOnsetAccuracy": 0.625,
+              "timeAccuracy": 0.0159,
+              "matchedTimeAccuracy": 0.0179,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8889,
+              "noteDetectionRecall": 0.8889,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.7746,
+              "pitchAccuracyAtCorrectOnset": 0.4286,
+              "orderSensitivePitchRecovery": 0.2222
+            },
+            "v3": {
+              "pitchAccuracy": 0.4444,
+              "matchedPitchAccuracy": 0.459,
+              "durationAccuracy": 0.9206,
+              "matchedDurationAccuracy": 0.9508,
+              "onsetAccuracy": 0.7302,
+              "matchedOnsetAccuracy": 0.7541,
+              "timeAccuracy": 0,
+              "matchedTimeAccuracy": 0,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.9683,
+              "noteDetectionRecall": 0.9683,
+              "noteDetectionF1": 0.9683,
+              "chordGroupingAccuracy": 0.9688,
+              "pitchAccuracyAtCorrectOnset": 0.4783,
+              "orderSensitivePitchRecovery": 0.1587
+            }
+          }
+        }
+      }
+    }
+  ],
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "mode": "live",
+  "pipelineOptions": {
+    "preprocessPages": true,
+    "promoteScoreGraphClips": false,
+    "omrV3Shadow": true
+  },
+  "omrV3Shadow": {
+    "fixtureCount": 1,
+    "readyFixtureCount": 1,
+    "independentReadyFixtureCount": 1,
+    "gate": {
+      "pass": false,
+      "status": "shadow-only",
+      "improvedFixtureCount": 0,
+      "requiredImprovedFixtureCount": 2,
+      "regressionCount": 0,
+      "policyViolations": [],
+      "comparisons": [
+        {
+          "id": "piano-rhythm-tuplets-vector",
+          "enforced": true,
+          "current": {
+            "pitchAccuracy": 0.4127,
+            "durationAccuracy": 0.7778,
+            "onsetAccuracy": 0.5556,
+            "chordGroupingAccuracy": 0.7746,
+            "noteDetectionF1": 0.8889,
+            "absoluteMeasureCountError": 0,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": null,
+            "notationTabPairingRecall": null,
+            "duplicateEventRate": 0,
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          },
+          "v3": {
+            "pitchAccuracy": 0.4127,
+            "durationAccuracy": 0.7778,
+            "onsetAccuracy": 0.5556,
+            "chordGroupingAccuracy": 0.7746,
+            "noteDetectionF1": 0.8889,
+            "absoluteMeasureCountError": 0,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "notationTabPairingRecall": null,
+            "duplicateEventRate": 0,
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          },
+          "improvements": [],
+          "regressions": []
+        }
+      ],
+      "promotedToRuntime": false,
+      "candidates": {
+        "structure": "not-promoted",
+        "measureGeometry": "not-promoted",
+        "pianoGrouping": "not-promoted",
+        "guitarFusion": "not-promoted",
+        "fullV3": "not-promoted"
+      },
+      "unavailableEnforcedFixtures": [],
+      "unavailableEnforcedFixtureCount": 0
+    },
+    "productionGate": {
+      "pass": true,
+      "status": "eligible-for-production-rollout",
+      "promotedToRuntime": false,
+      "enforcedFixtureCount": 1,
+      "recognitionFixtureCount": 1,
+      "rejectionFixtureCount": 0,
+      "evaluatedRecognitionFixtureCount": 1,
+      "independentRecognitionFixtureCount": 1,
+      "independentlyRejectedFixtureCount": 0,
+      "regressionCount": 0,
+      "policyViolations": [],
+      "runtimeCandidateImplemented": true,
+      "rollbackVerified": true,
+      "blockers": []
+    },
+    "rollout": {
+      "runtimeCandidateImplemented": true,
+      "rollbackVerified": true,
+      "readiness": {
+        "implemented": true,
+        "defaultOff": true,
+        "promotionsStayOffWithoutCandidate": true,
+        "canEnableWhenRequested": true,
+        "killSwitchHonored": true,
+        "evidence": {
+          "defaults": {
+            "shadow": false,
+            "rollback": false,
+            "runtimeCandidate": false,
+            "requestedPromotions": {
+              "structure": false,
+              "measureGeometry": false,
+              "pianoGrouping": false,
+              "guitarFusion": false,
+              "fullV3": false
+            },
+            "promotions": {
+              "structure": false,
+              "measureGeometry": false,
+              "pianoGrouping": false,
+              "guitarFusion": false,
+              "fullV3": false
+            },
+            "anyPromotionRequested": false,
+            "anyPromotionEnabled": false,
+            "promotedToRuntime": false,
+            "mode": "off"
+          },
+          "promotionsOnly": {
+            "shadow": false,
+            "rollback": false,
+            "runtimeCandidate": false,
+            "requestedPromotions": {
+              "structure": true,
+              "measureGeometry": true,
+              "pianoGrouping": true,
+              "guitarFusion": true,
+              "fullV3": true
+            },
+            "promotions": {
+              "structure": false,
+              "measureGeometry": false,
+              "pianoGrouping": false,
+              "guitarFusion": false,
+              "fullV3": false
+            },
+            "anyPromotionRequested": true,
+            "anyPromotionEnabled": false,
+            "promotedToRuntime": false,
+            "mode": "off"
+          },
+          "candidateArmed": {
+            "shadow": false,
+            "rollback": false,
+            "runtimeCandidate": true,
+            "requestedPromotions": {
+              "structure": false,
+              "measureGeometry": false,
+              "pianoGrouping": false,
+              "guitarFusion": true,
+              "fullV3": true
+            },
+            "promotions": {
+              "structure": false,
+              "measureGeometry": false,
+              "pianoGrouping": false,
+              "guitarFusion": true,
+              "fullV3": true
+            },
+            "anyPromotionRequested": true,
+            "anyPromotionEnabled": true,
+            "promotedToRuntime": false,
+            "mode": "runtime-candidate"
+          },
+          "killSwitch": {
+            "shadow": false,
+            "rollback": true,
+            "runtimeCandidate": false,
+            "requestedPromotions": {
+              "structure": false,
+              "measureGeometry": false,
+              "pianoGrouping": false,
+              "guitarFusion": false,
+              "fullV3": true
+            },
+            "promotions": {
+              "structure": false,
+              "measureGeometry": false,
+              "pianoGrouping": false,
+              "guitarFusion": false,
+              "fullV3": false
+            },
+            "anyPromotionRequested": true,
+            "anyPromotionEnabled": false,
+            "promotedToRuntime": false,
+            "mode": "rollback"
+          }
+        }
+      },
+      "rollback": {
+        "verified": true,
+        "checks": {
+          "shadowPreservesProduction": true,
+          "rollbackPreservesProduction": true,
+          "runtimeCandidateIdlePreservesProduction": true,
+          "promotionsWithoutCandidatePreserveProduction": true,
+          "rollbackSuppressesShadow": true,
+          "rollbackSuppressesIndependent": true,
+          "candidateIdleDoesNotPromote": true
+        }
+      }
+    },
+    "promoted": false
+  }
+}

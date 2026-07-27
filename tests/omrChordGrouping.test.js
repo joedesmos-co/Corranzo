@@ -4,6 +4,7 @@ import { reconstructMusicalEvents } from '../src/features/omr/reconstructMusical
 import {
   buildVectorEvents,
   coalesceSameOnsetChordEvents,
+  resnapDenseChordOnsets,
 } from '../src/features/omr/processVectorOmrPage.js'
 
 const measureBox = { measureNumber: 12, page: 1 }
@@ -144,6 +145,129 @@ describe('vector chord grouping regressions', () => {
     ])
     expect(events.filter((event) => event.type === 'note')).toHaveLength(2)
   })
+
+  it('coalesces same-onset near-x fragments even when gap durations differ', () => {
+    const events = coalesceSameOnsetChordEvents([
+      {
+        type: 'note',
+        startDivision: 5,
+        durationDivisions: 1,
+        notes: [
+          { midi: 76, clef: 'treble', cx: 244 },
+          { midi: 67, clef: 'treble', cx: 244 },
+        ],
+      },
+      {
+        type: 'note',
+        startDivision: 5,
+        durationDivisions: 2,
+        notes: [{ midi: 65, clef: 'treble', cx: 244 }],
+      },
+    ])
+    const noteEvents = events.filter((event) => event.type === 'note')
+    expect(noteEvents).toHaveLength(1)
+    expect(noteEvents[0].notes).toHaveLength(3)
+    expect(noteEvents[0].durationDivisions).toBe(2)
+  })
+
+  it('does not coalesce cross-clef same-column fragments (voices stay split)', () => {
+    const events = coalesceSameOnsetChordEvents([
+      {
+        type: 'note',
+        startDivision: 5,
+        durationDivisions: 1,
+        notes: [
+          { midi: 76, clef: 'bass', cx: 244 },
+          { midi: 67, clef: 'bass', cx: 244 },
+        ],
+      },
+      {
+        type: 'note',
+        startDivision: 5,
+        durationDivisions: 2,
+        notes: [{ midi: 65, clef: 'treble', cx: 244 }],
+      },
+    ])
+    const noteEvents = events.filter((event) => event.type === 'note')
+    expect(noteEvents).toHaveLength(2)
+    expect(noteEvents.map((event) => event.durationDivisions).sort()).toEqual([1, 2])
+  })
+
+  it('resnaps odd-onset dense chords onto the eighth grid', () => {
+    const events = resnapDenseChordOnsets(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 2,
+          notes: [
+            { midi: 76, clef: 'treble', cx: 100 },
+            { midi: 67, clef: 'treble', cx: 100 },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 4,
+          notes: [{ midi: 40, clef: 'bass', cx: 100 }],
+        },
+        {
+          type: 'note',
+          startDivision: 3,
+          durationDivisions: 1,
+          notes: [
+            { midi: 79, clef: 'treble', cx: 120 },
+            { midi: 71, clef: 'treble', cx: 120 },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 5,
+          durationDivisions: 1,
+          notes: [
+            { midi: 76, clef: 'treble', cx: 140 },
+            { midi: 67, clef: 'treble', cx: 140 },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 7,
+          durationDivisions: 1,
+          notes: [
+            { midi: 79, clef: 'treble', cx: 160 },
+            { midi: 71, clef: 'treble', cx: 160 },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 9,
+          durationDivisions: 1,
+          notes: [
+            { midi: 76, clef: 'treble', cx: 180 },
+            { midi: 67, clef: 'treble', cx: 180 },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 12,
+          durationDivisions: 4,
+          notes: [
+            { midi: 71, clef: 'treble', cx: 200 },
+            { midi: 64, clef: 'treble', cx: 200 },
+          ],
+        },
+      ],
+      16,
+    )
+    const trebleStarts = events
+      .filter((event) => event.type === 'note' && event.notes?.[0]?.clef === 'treble')
+      .map((event) => event.startDivision)
+    expect(trebleStarts.every((start) => start % 2 === 0)).toBe(true)
+    expect(trebleStarts).toContain(2)
+    expect(trebleStarts).toContain(4)
+    expect(trebleStarts).toContain(6)
+    expect(trebleStarts).toContain(8)
+  })
 })
 
 describe('reconstructMusicalEvents', () => {
@@ -174,6 +298,59 @@ describe('reconstructMusicalEvents', () => {
     expect(noteEvents[0].notes).toHaveLength(4)
     expect(noteEvents[0].durationDivisions).toBe(16)
     expect(noteEvents[0].musicalEventReconstructionReasons).toContain('split-chord-tone')
+  })
+
+  it('reattaches a two-note chord orphan on the next sixteenth slot', () => {
+    const events = reconstructMusicalEvents(
+      [
+        {
+          type: 'note',
+          startDivision: 6,
+          durationDivisions: 2,
+          notes: [
+            { midi: 76, clef: 'treble', cx: 400, beams: 0 },
+            { midi: 67, clef: 'treble', cx: 400, beams: 0 },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 7,
+          durationDivisions: 1,
+          notes: [{ midi: 65, clef: 'treble', cx: 400, beams: 0 }],
+        },
+      ],
+      { totalDivisions: 16 },
+    )
+    const noteEvents = events.filter((event) => event.type === 'note')
+    expect(noteEvents).toHaveLength(1)
+    expect(noteEvents[0].notes.map((note) => note.midi).sort((a, b) => b - a)).toEqual([
+      76, 67, 65,
+    ])
+    expect(noteEvents[0].musicalEventReconstructionReasons).toContain('split-chord-tone')
+  })
+
+  it('does not reattach a cross-clef orphan (staff voices stay separate)', () => {
+    const events = reconstructMusicalEvents(
+      [
+        {
+          type: 'note',
+          startDivision: 6,
+          durationDivisions: 2,
+          notes: [
+            { midi: 76, clef: 'bass', cx: 400, beams: 0 },
+            { midi: 67, clef: 'bass', cx: 400, beams: 0 },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 7,
+          durationDivisions: 1,
+          notes: [{ midi: 65, clef: 'treble', cx: 400, beams: 0 }],
+        },
+      ],
+      { totalDivisions: 16 },
+    )
+    expect(events.filter((event) => event.type === 'note')).toHaveLength(2)
   })
 
   it('does not merge beamed or wider neighboring subdivision notes', () => {

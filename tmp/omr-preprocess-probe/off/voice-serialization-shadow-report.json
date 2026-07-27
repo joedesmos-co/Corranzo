@@ -1,0 +1,534 @@
+{
+  "generatedAt": "2026-07-17T01:53:57.168Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "promoted": false,
+  "engine": "v2-voice-serialization-shadow",
+  "phase": 6,
+  "fixtures": [
+    {
+      "fixtureId": "piano-articulation-scan",
+      "label": "CC0 Articulation Scan Study",
+      "engine": "v2-voice-serialization-shadow",
+      "constraintVersion": "phase-7-duration-coupled",
+      "promoted": false,
+      "solverDiagnostics": {
+        "measureCount": 8,
+        "candidateMeasures": 8,
+        "changedMeasures": 0,
+        "rejectedMeasures": 8,
+        "rejectReasons": {
+          "constraints-failed": 7,
+          "no-improvement": 1
+        },
+        "variantCounts": {},
+        "changedMeasureNumbers": [],
+        "rejectedMeasureNumbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "changedMeasureLog": [],
+        "acceptedCandidateMeasures": [],
+        "rejectedCandidateMeasures": [
+          {
+            "measureNumber": 1,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "accompaniment-lane",
+              "late-phase-figures",
+              "cross-staff-pairing"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 2,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "accompaniment-lane",
+              "late-phase-figures",
+              "cross-staff-pairing"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 3,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "accompaniment-lane",
+              "late-phase-figures",
+              "cross-staff-pairing"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 4,
+            "rejectReason": "no-improvement",
+            "bestVariantId": "identity",
+            "familyReasons": [
+              "grand-staff",
+              "accompaniment-lane",
+              "late-phase-figures",
+              "cross-staff-pairing"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 5,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "accompaniment-lane",
+              "late-phase-figures",
+              "cross-staff-pairing"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 6,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "accompaniment-lane",
+              "late-phase-figures",
+              "cross-staff-pairing"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 7,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "accompaniment-lane",
+              "late-phase-figures",
+              "cross-staff-pairing"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 8,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "accompaniment-lane",
+              "late-phase-figures",
+              "cross-staff-pairing"
+            ],
+            "rejectedVariants": []
+          }
+        ],
+        "coalescedChordCount": 0,
+        "coalescedChordLog": [],
+        "durationCoupledAppliedCount": 0,
+        "constraintVersion": "phase-7-duration-coupled"
+      },
+      "structurallyAppliedCount": 0,
+      "structuralAppliedMeasures": [],
+      "changedMeasures": [],
+      "acceptedCandidateMeasures": [],
+      "rejectedCandidateMeasures": [
+        {
+          "measureNumber": 1,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 2,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 3,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 4,
+          "rejectReason": "no-improvement",
+          "bestVariantId": "identity",
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 5,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 6,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 7,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 8,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "rejectedMeasures": [
+        {
+          "measureNumber": 1,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 2,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 3,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 4,
+          "rejectReason": "no-improvement",
+          "bestVariantId": "identity",
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 5,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 6,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 7,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 8,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "rejectedByTruth": [],
+      "coalescedChords": [],
+      "coalescedChordCount": 0,
+      "hotspotMeasures": [],
+      "runtimeXmlBytes": 31754,
+      "shadowXmlBytes": 31754,
+      "identicalToRuntime": true,
+      "scoreGraphSource": "passed",
+      "status": "shadow-no-qualifying-measures",
+      "regressionReason": "No measures passed Phase 6 preservation + truth gates — shadow identical to runtime.",
+      "runtime": {
+        "wrongOnset": 15,
+        "wrongDuration": 32,
+        "chordMismatch": 71,
+        "wrongPitch": 39,
+        "noteCountDiff": 43,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0.2901,
+        "durationAccuracy": 0.3435,
+        "onsetAccuracy": 0.4733,
+        "chordGroupingAccuracy": 0.5103,
+        "noteDetectionF1": 0.7032
+      },
+      "shadow": {
+        "wrongOnset": 15,
+        "wrongDuration": 32,
+        "chordMismatch": 71,
+        "wrongPitch": 39,
+        "noteCountDiff": 43,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0.2901,
+        "durationAccuracy": 0.3435,
+        "onsetAccuracy": 0.4733,
+        "chordGroupingAccuracy": 0.5103,
+        "noteDetectionF1": 0.7032
+      },
+      "delta": {
+        "wrongOnset": 0,
+        "wrongDuration": 0,
+        "chordMismatch": 0,
+        "wrongPitch": 0,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0
+      },
+      "perMeasureDelta": [
+        {
+          "measureNumber": 1,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 2,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 3,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 4,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 5,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 6,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 7,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 8,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        }
+      ],
+      "hotspotDelta": [],
+      "runtimeAttribution": {
+        "buckets": {
+          "onset-phase-shift": 15,
+          "voice-serialization-shift": 0,
+          "onset-coupled-duration": 6,
+          "chord-grouping-symptom": 25,
+          "pitch-grouping-symptom": 20,
+          "balanced-missing-extra-serialization": 0
+        },
+        "ranked": [
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 25
+          },
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 20
+          },
+          {
+            "bucket": "onset-phase-shift",
+            "count": 15
+          },
+          {
+            "bucket": "onset-coupled-duration",
+            "count": 6
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "chord-grouping-symptom",
+          "count": 25
+        },
+        "supporting": {
+          "totalWrongOnsets": 15,
+          "chordMismatchTotal": 71,
+          "chordCoupledShare": 1,
+          "missingCount": 11,
+          "extraCount": 54,
+          "balancedMismatch": false,
+          "onsetStrictIndependent": 3,
+          "voicePhasePrimaryClass": "cross-voice-matcher"
+        }
+      },
+      "shadowAttribution": {
+        "buckets": {
+          "onset-phase-shift": 15,
+          "voice-serialization-shift": 0,
+          "onset-coupled-duration": 6,
+          "chord-grouping-symptom": 25,
+          "pitch-grouping-symptom": 20,
+          "balanced-missing-extra-serialization": 0
+        },
+        "ranked": [
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 25
+          },
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 20
+          },
+          {
+            "bucket": "onset-phase-shift",
+            "count": 15
+          },
+          {
+            "bucket": "onset-coupled-duration",
+            "count": 6
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "chord-grouping-symptom",
+          "count": 25
+        },
+        "supporting": {
+          "totalWrongOnsets": 15,
+          "chordMismatchTotal": 71,
+          "chordCoupledShare": 1,
+          "missingCount": 11,
+          "extraCount": 54,
+          "balancedMismatch": false,
+          "onsetStrictIndependent": 3,
+          "voicePhasePrimaryClass": "cross-voice-matcher"
+        }
+      }
+    }
+  ]
+}

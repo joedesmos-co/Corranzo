@@ -22,8 +22,14 @@ export { defaultLoadSampler, createCachedSamplerSync }
 /** Registry id (playback/instrumentVoices.js). */
 export const VOICE_ID = 'piano'
 
-/** Public, CORS-enabled Salamander Grand Piano samples (no server required). */
-export const DEFAULT_PIANO_SAMPLE_BASE_URL = 'https://tonejs.github.io/audio/salamander/'
+/** Public, CORS-enabled Salamander Grand Piano samples (CDN fallback). */
+export const CDN_PIANO_SAMPLE_BASE_URL = 'https://tonejs.github.io/audio/salamander/'
+
+/** Same-origin mirror under `public/audio/salamander/` (preferred when present). */
+export const LOCAL_PIANO_SAMPLE_BASE_URL = '/audio/salamander/'
+
+/** @deprecated Prefer LOCAL then CDN — kept for existing imports/tests. */
+export const DEFAULT_PIANO_SAMPLE_BASE_URL = LOCAL_PIANO_SAMPLE_BASE_URL
 
 /**
  * Salamander "lite" map: minor-third spacing (A, C, D#, F# per octave).
@@ -70,18 +76,21 @@ export const PIANO_SAMPLE_URLS = {
   C8: 'C8.mp3',
 }
 
-const SAMPLED_VOLUME_DB = -11
+const SAMPLED_VOLUME_DB = -10
 const SYNTH_VOLUME_DB = -17
-const SAMPLED_RELEASE = 1.68
-const SAMPLE_ATTACK = 0.003
+/** Natural piano release tail (seconds). */
+const SAMPLED_RELEASE = 1.85
+/** Soft attack avoids electronic click without delaying perceived onset. */
+const SAMPLE_ATTACK = 0.008
 const PIANO_EFFECTS = {
-  reverbDecay: 1.95,
-  reverbWet: 0.1,
+  reverbDecay: 2.15,
+  reverbWet: 0.09,
 }
 
 /**
  * Optional self-hosting override. Set VITE_PIANO_SAMPLE_BASE_URL to serve the
- * Salamander samples from your own origin; otherwise the public CDN is used.
+ * Salamander samples from your own origin; otherwise prefer same-origin mirror
+ * then the public CDN.
  */
 function resolveSampleBaseUrl(explicit) {
   if (explicit) {
@@ -95,7 +104,15 @@ function resolveSampleBaseUrl(explicit) {
   } catch {
     // import.meta.env is unavailable outside a bundler context; ignore.
   }
-  return DEFAULT_PIANO_SAMPLE_BASE_URL
+  return LOCAL_PIANO_SAMPLE_BASE_URL
+}
+
+export function resolvePianoSampleBaseUrl(explicit) {
+  return resolveSampleBaseUrl(explicit)
+}
+
+export function getPianoSampleFallbackBaseUrl() {
+  return CDN_PIANO_SAMPLE_BASE_URL
 }
 
 /**
@@ -179,6 +196,7 @@ export const preloadSampleBuffers = preloadPianoSampleBuffers
 export function createPianoInstrument(options = {}) {
   const {
     sampleBaseUrl,
+    sampleFallbackBaseUrl = getPianoSampleFallbackBaseUrl(),
     sampleUrls = PIANO_SAMPLE_URLS,
     sampledVolume = SAMPLED_VOLUME_DB,
     synthVolume = SYNTH_VOLUME_DB,
@@ -189,11 +207,15 @@ export function createPianoInstrument(options = {}) {
   return createSampledInstrumentVoice({
     ...rest,
     sampleBaseUrl: resolveSampleBaseUrl(sampleBaseUrl),
+    sampleFallbackBaseUrl,
     sampleUrls,
+    sampleSetName: 'salamander-lite',
+    voiceId: VOICE_ID,
     sampledVolume,
     synthVolume,
     sampledRelease: SAMPLED_RELEASE,
     sampleAttack: SAMPLE_ATTACK,
+    velocityLayers: 1,
     effects: { ...PIANO_EFFECTS, ...effects },
     createFallbackVoice: createSynthVoice,
   })

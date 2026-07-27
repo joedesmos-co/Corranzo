@@ -1,0 +1,1731 @@
+{
+  "fixture": "piano-articulation-scan",
+  "sprint4Pitch": {
+    "numerator": 35,
+    "denominator": 122,
+    "truePositives": 35,
+    "falsePositives": 34,
+    "falseNegatives": 53,
+    "ignored": 0,
+    "unsupported": 0,
+    "presentInTruth": 88,
+    "compared": 122,
+    "coverage": 1,
+    "coveragePercent": "100%",
+    "score": 0.2869,
+    "percent": "29%",
+    "reliable": true,
+    "displayPercent": "29%"
+  },
+  "buckets": {
+    "accidental-or-alter": 14,
+    "one-diatonic-step": 12,
+    "small-interval-other": 8,
+    "larger-interval": 7,
+    "octave-error": 1
+  },
+  "failureClasses": {
+    "other-staff-position": 12,
+    "missing-accidental": 6,
+    "notehead-center-or-chord-collapse": 18,
+    "onset-alignment": 6
+  },
+  "totalIncorrect": 42,
+  "estimates": {
+    "impossibleWithoutAccidentals": 6,
+    "staffPositionOrChordCollapse": 30,
+    "onsetAlignment": 6,
+    "wrongChordPairing": 0,
+    "realisticStaffPositionCeiling": "If all 30 staff-position/collapse errors were fixed and accidentals left untouched, paired incorrect would drop from 42 to ~12. Pitch % ceiling depends on missing/extra too."
+  },
+  "rca": {
+    "staffGeometry": "System-level lineYs (4 unique sets for 2 systems × 2 staves). Local x-column line drift up to ~0.28 spaces observed; remapping with local lines globally hurt Pitch.",
+    "noteheadCenter": "Pitch uses merge-seed cy average. m5 onset0 truth B4+D5 detected as two C5s at midpoint cy≈696 (lines at 687.5/705). Exact truth pitches never present as separate heads.",
+    "staffLineSkip": "isLikelyStaffLine rejects on-line seed rows; stacked on-line chord tones lose centers and collapse into the intervening space.",
+    "mergeChaining": "Step-grid merge without diameter cap bridges adjacent heads through midpoint seeds.",
+    "attemptedFixes": "Diameter-capped merge, staff-line seed exceptions, body-centroid Y, local staff lines, stem-aware centers — all either failed to recover scan chords or dropped Sustain TP (1→0) / Artic TP.",
+    "verdict": "No Sprint 5 recognition change shipped. Staff-emission Sprint 4 remains frozen. Residual raster pitch needs a chord-aware on-line notehead detector that preserves Sustain/Artic TP."
+  },
+  "samples": {
+    "oneStep": [
+      {
+        "measure": 3,
+        "truth": "A4",
+        "gen": "B4",
+        "delta": 2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": -0.395,
+        "cy": 272,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": null,
+        "chordSize": 1,
+        "chordTruth": [
+          "A4"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": false,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 5,
+        "truth": "D5",
+        "gen": "C5",
+        "delta": -2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": 0.543,
+        "cy": 697,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": "staccato",
+        "chordSize": 3,
+        "chordTruth": [
+          "G4",
+          "B4",
+          "D5"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": true,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 5,
+        "truth": "D5",
+        "gen": "C5",
+        "delta": -2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": 0.543,
+        "cy": 697,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": "staccato",
+        "chordSize": 2,
+        "chordTruth": [
+          "B4",
+          "D5"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": true,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 7,
+        "truth": "D5",
+        "gen": "C5",
+        "delta": -2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": 0.371,
+        "cy": 694,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": true,
+        "articulation": "staccato",
+        "chordSize": 3,
+        "chordTruth": [
+          "G4",
+          "B4",
+          "D5"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": true,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 7,
+        "truth": "D5",
+        "gen": "C5",
+        "delta": -2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": 0.371,
+        "cy": 694,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": true,
+        "articulation": "staccato",
+        "chordSize": 2,
+        "chordTruth": [
+          "B4",
+          "D5"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": true,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 8,
+        "truth": "A4",
+        "gen": "B4",
+        "delta": 2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": -0.443,
+        "cy": 706,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": true,
+        "articulation": "staccato",
+        "chordSize": 1,
+        "chordTruth": [
+          "A4"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": false,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 3,
+        "truth": "B2",
+        "gen": "C3",
+        "delta": 1,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 2,
+        "yErrSpaces": null,
+        "articulation": null,
+        "chordSize": 2,
+        "chordTruth": [
+          "E2",
+          "B2"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": false,
+        "failureClass": "other-staff-position"
+      },
+      {
+        "measure": 6,
+        "truth": "D5",
+        "gen": "C5",
+        "delta": -2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": false,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": 0.543,
+        "cy": 697,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": null,
+        "chordSize": 1,
+        "chordTruth": [
+          "D5"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": false,
+        "failureClass": "onset-alignment"
+      }
+    ],
+    "accidental": [
+      {
+        "measure": 2,
+        "truth": "F#4",
+        "gen": "F4",
+        "delta": -1,
+        "bucket": "accidental-or-alter",
+        "sameLetter": true,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": null,
+        "cy": 293,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": "staccato",
+        "chordSize": 3,
+        "chordTruth": [
+          "D4",
+          "F#4",
+          "A4"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": true,
+        "failureClass": "missing-accidental"
+      },
+      {
+        "measure": 3,
+        "truth": "F#4",
+        "gen": "F4",
+        "delta": -1,
+        "bucket": "accidental-or-alter",
+        "sameLetter": true,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": null,
+        "cy": 293,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": "staccato",
+        "chordSize": 1,
+        "chordTruth": [
+          "F#4"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": false,
+        "failureClass": "missing-accidental"
+      },
+      {
+        "measure": 6,
+        "truth": "C#5",
+        "gen": "C5",
+        "delta": -1,
+        "bucket": "accidental-or-alter",
+        "sameLetter": true,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": null,
+        "cy": 697,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": null,
+        "chordSize": 3,
+        "chordTruth": [
+          "A4",
+          "C#5",
+          "E5"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": true,
+        "failureClass": "missing-accidental"
+      },
+      {
+        "measure": 6,
+        "truth": "C#5",
+        "gen": "C5",
+        "delta": -1,
+        "bucket": "accidental-or-alter",
+        "sameLetter": true,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": null,
+        "cy": 697,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": null,
+        "chordSize": 2,
+        "chordTruth": [
+          "C#5",
+          "E5"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": false,
+        "failureClass": "missing-accidental"
+      },
+      {
+        "measure": 8,
+        "truth": "G#4",
+        "gen": "G4",
+        "delta": -1,
+        "bucket": "accidental-or-alter",
+        "sameLetter": true,
+        "onsetOk": true,
+        "staff": 1,
+        "yErrSpaces": null,
+        "articulation": null,
+        "chordSize": 3,
+        "chordTruth": [
+          "E4",
+          "G#4",
+          "B4"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": false,
+        "failureClass": "missing-accidental"
+      },
+      {
+        "measure": 8,
+        "truth": "F#4",
+        "gen": "F4",
+        "delta": -1,
+        "bucket": "accidental-or-alter",
+        "sameLetter": true,
+        "onsetOk": false,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": null,
+        "cy": 727,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": "staccato",
+        "chordSize": 1,
+        "chordTruth": [
+          "F#4"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": false,
+        "failureClass": "missing-accidental"
+      }
+    ],
+    "collapse": [
+      {
+        "measure": 2,
+        "truth": "E4",
+        "gen": "F4",
+        "delta": 1,
+        "bucket": "accidental-or-alter",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": -0.421,
+        "cy": 293,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": "staccato",
+        "chordSize": 1,
+        "chordTruth": [
+          "E4"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": false,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 8,
+        "truth": "E4",
+        "gen": "F4",
+        "delta": 1,
+        "bucket": "accidental-or-alter",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": -0.743,
+        "cy": 727,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": "staccato",
+        "chordSize": 3,
+        "chordTruth": [
+          "E4",
+          "G#4",
+          "B4"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": true,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 3,
+        "truth": "A4",
+        "gen": "B4",
+        "delta": 2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": -0.395,
+        "cy": 272,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": null,
+        "chordSize": 1,
+        "chordTruth": [
+          "A4"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": false,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 5,
+        "truth": "D5",
+        "gen": "C5",
+        "delta": -2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": 0.543,
+        "cy": 697,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": "staccato",
+        "chordSize": 3,
+        "chordTruth": [
+          "G4",
+          "B4",
+          "D5"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": true,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 5,
+        "truth": "D5",
+        "gen": "C5",
+        "delta": -2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": 0.543,
+        "cy": 697,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": "staccato",
+        "chordSize": 2,
+        "chordTruth": [
+          "B4",
+          "D5"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": true,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 7,
+        "truth": "D5",
+        "gen": "C5",
+        "delta": -2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": 0.371,
+        "cy": 694,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": true,
+        "articulation": "staccato",
+        "chordSize": 3,
+        "chordTruth": [
+          "G4",
+          "B4",
+          "D5"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": true,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 7,
+        "truth": "D5",
+        "gen": "C5",
+        "delta": -2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": 0.371,
+        "cy": 694,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": true,
+        "articulation": "staccato",
+        "chordSize": 2,
+        "chordTruth": [
+          "B4",
+          "D5"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": true,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 8,
+        "truth": "A4",
+        "gen": "B4",
+        "delta": 2,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": -0.443,
+        "cy": 706,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": true,
+        "articulation": "staccato",
+        "chordSize": 1,
+        "chordTruth": [
+          "A4"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": false,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 8,
+        "truth": "B2",
+        "gen": "C3",
+        "delta": 1,
+        "bucket": "one-diatonic-step",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 2,
+        "clef": "bass",
+        "yErrSpaces": -0.544,
+        "cy": 852,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": true,
+        "articulation": null,
+        "chordSize": 2,
+        "chordTruth": [
+          "E2",
+          "B2"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": false,
+        "failureClass": "notehead-center-or-chord-collapse"
+      },
+      {
+        "measure": 2,
+        "truth": "D4",
+        "gen": "F4",
+        "delta": 3,
+        "bucket": "small-interval-other",
+        "sameLetter": false,
+        "onsetOk": true,
+        "staff": 1,
+        "clef": "treble",
+        "yErrSpaces": -0.921,
+        "cy": 293,
+        "ledger": {
+          "direction": null,
+          "count": 0
+        },
+        "hollow": false,
+        "articulation": "staccato",
+        "chordSize": 3,
+        "chordTruth": [
+          "D4",
+          "F#4",
+          "A4"
+        ],
+        "exactPitchDetectedNearby": false,
+        "midpointCollapse": true,
+        "failureClass": "notehead-center-or-chord-collapse"
+      }
+    ]
+  },
+  "incorrect": [
+    {
+      "measure": 1,
+      "truth": "E4",
+      "gen": "F4",
+      "delta": 1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "E4",
+        "G4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "other-staff-position"
+    },
+    {
+      "measure": 2,
+      "truth": "F#4",
+      "gen": "F4",
+      "delta": -1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": true,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": null,
+      "cy": 293,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": "staccato",
+      "chordSize": 3,
+      "chordTruth": [
+        "D4",
+        "F#4",
+        "A4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": true,
+      "failureClass": "missing-accidental"
+    },
+    {
+      "measure": 2,
+      "truth": "E4",
+      "gen": "F4",
+      "delta": 1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": -0.421,
+      "cy": 293,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": "staccato",
+      "chordSize": 1,
+      "chordTruth": [
+        "E4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 3,
+      "truth": "G#4",
+      "gen": "A4",
+      "delta": 1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 3,
+      "chordTruth": [
+        "E4",
+        "G#4",
+        "B4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "other-staff-position"
+    },
+    {
+      "measure": 3,
+      "truth": "F#4",
+      "gen": "F4",
+      "delta": -1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": true,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": null,
+      "cy": 293,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": "staccato",
+      "chordSize": 1,
+      "chordTruth": [
+        "F#4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "missing-accidental"
+    },
+    {
+      "measure": 4,
+      "truth": "A#4",
+      "gen": "B4",
+      "delta": 1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": null,
+      "cy": 272,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": "staccato",
+      "chordSize": 1,
+      "chordTruth": [
+        "A#4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "other-staff-position"
+    },
+    {
+      "measure": 6,
+      "truth": "C#5",
+      "gen": "C5",
+      "delta": -1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": true,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": null,
+      "cy": 697,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": null,
+      "chordSize": 3,
+      "chordTruth": [
+        "A4",
+        "C#5",
+        "E5"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": true,
+      "failureClass": "missing-accidental"
+    },
+    {
+      "measure": 6,
+      "truth": "C#5",
+      "gen": "C5",
+      "delta": -1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": true,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": null,
+      "cy": 697,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "C#5",
+        "E5"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "missing-accidental"
+    },
+    {
+      "measure": 8,
+      "truth": "E4",
+      "gen": "F4",
+      "delta": 1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": -0.743,
+      "cy": 727,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": "staccato",
+      "chordSize": 3,
+      "chordTruth": [
+        "E4",
+        "G#4",
+        "B4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": true,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 8,
+      "truth": "G#4",
+      "gen": "G4",
+      "delta": -1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": true,
+      "onsetOk": true,
+      "staff": 1,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 3,
+      "chordTruth": [
+        "E4",
+        "G#4",
+        "B4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "missing-accidental"
+    },
+    {
+      "measure": 8,
+      "truth": "F#4",
+      "gen": "F4",
+      "delta": -1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": true,
+      "onsetOk": false,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": null,
+      "cy": 727,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": "staccato",
+      "chordSize": 1,
+      "chordTruth": [
+        "F#4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "missing-accidental"
+    },
+    {
+      "measure": 3,
+      "truth": "A4",
+      "gen": "B4",
+      "delta": 2,
+      "bucket": "one-diatonic-step",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": -0.395,
+      "cy": 272,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": null,
+      "chordSize": 1,
+      "chordTruth": [
+        "A4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 5,
+      "truth": "D5",
+      "gen": "C5",
+      "delta": -2,
+      "bucket": "one-diatonic-step",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": 0.543,
+      "cy": 697,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": "staccato",
+      "chordSize": 3,
+      "chordTruth": [
+        "G4",
+        "B4",
+        "D5"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": true,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 5,
+      "truth": "D5",
+      "gen": "C5",
+      "delta": -2,
+      "bucket": "one-diatonic-step",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": 0.543,
+      "cy": 697,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": "staccato",
+      "chordSize": 2,
+      "chordTruth": [
+        "B4",
+        "D5"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": true,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 7,
+      "truth": "D5",
+      "gen": "C5",
+      "delta": -2,
+      "bucket": "one-diatonic-step",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": 0.371,
+      "cy": 694,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": "staccato",
+      "chordSize": 3,
+      "chordTruth": [
+        "G4",
+        "B4",
+        "D5"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": true,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 7,
+      "truth": "D5",
+      "gen": "C5",
+      "delta": -2,
+      "bucket": "one-diatonic-step",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": 0.371,
+      "cy": 694,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": "staccato",
+      "chordSize": 2,
+      "chordTruth": [
+        "B4",
+        "D5"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": true,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 8,
+      "truth": "A4",
+      "gen": "B4",
+      "delta": 2,
+      "bucket": "one-diatonic-step",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": -0.443,
+      "cy": 706,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": "staccato",
+      "chordSize": 1,
+      "chordTruth": [
+        "A4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 3,
+      "truth": "G#4",
+      "gen": "A4",
+      "delta": 1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": false,
+      "onsetOk": false,
+      "staff": 1,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "G#4",
+        "B4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "onset-alignment"
+    },
+    {
+      "measure": 3,
+      "truth": "B2",
+      "gen": "C3",
+      "delta": 1,
+      "bucket": "one-diatonic-step",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 2,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "E2",
+        "B2"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "other-staff-position"
+    },
+    {
+      "measure": 4,
+      "truth": "A#2",
+      "gen": "B2",
+      "delta": 1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 2,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "A#2",
+        "F3"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "other-staff-position"
+    },
+    {
+      "measure": 4,
+      "truth": "F3",
+      "gen": "E3",
+      "delta": -1,
+      "bucket": "accidental-or-alter",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 2,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "A#2",
+        "F3"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "other-staff-position"
+    },
+    {
+      "measure": 6,
+      "truth": "D5",
+      "gen": "C5",
+      "delta": -2,
+      "bucket": "one-diatonic-step",
+      "sameLetter": false,
+      "onsetOk": false,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": 0.543,
+      "cy": 697,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": null,
+      "chordSize": 1,
+      "chordTruth": [
+        "D5"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "onset-alignment"
+    },
+    {
+      "measure": 8,
+      "truth": "B2",
+      "gen": "C3",
+      "delta": 1,
+      "bucket": "one-diatonic-step",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 2,
+      "clef": "bass",
+      "yErrSpaces": -0.544,
+      "cy": 852,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "E2",
+        "B2"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 2,
+      "truth": "D4",
+      "gen": "F4",
+      "delta": 3,
+      "bucket": "small-interval-other",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": -0.921,
+      "cy": 293,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": "staccato",
+      "chordSize": 3,
+      "chordTruth": [
+        "D4",
+        "F#4",
+        "A4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": true,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 8,
+      "truth": "G#4",
+      "gen": "B4",
+      "delta": 3,
+      "bucket": "small-interval-other",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": null,
+      "cy": 706,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": "staccato",
+      "chordSize": 2,
+      "chordTruth": [
+        "G#4",
+        "B4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "other-staff-position"
+    },
+    {
+      "measure": 2,
+      "truth": "G2",
+      "gen": "A2",
+      "delta": 2,
+      "bucket": "one-diatonic-step",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 2,
+      "clef": "bass",
+      "yErrSpaces": -0.351,
+      "cy": 428,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "G2",
+        "D3"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 4,
+      "truth": "F2",
+      "gen": "G2",
+      "delta": 2,
+      "bucket": "one-diatonic-step",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 2,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "F2",
+        "C3"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "other-staff-position"
+    },
+    {
+      "measure": 6,
+      "truth": "E3",
+      "gen": "D3",
+      "delta": -2,
+      "bucket": "one-diatonic-step",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 2,
+      "clef": "bass",
+      "yErrSpaces": 0.395,
+      "cy": 844,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "A2",
+        "E3"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 6,
+      "truth": "E5",
+      "gen": "C5",
+      "delta": -4,
+      "bucket": "small-interval-other",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": 1.043,
+      "cy": 697,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": null,
+      "chordSize": 3,
+      "chordTruth": [
+        "A4",
+        "C#5",
+        "E5"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": true,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 2,
+      "truth": "G4",
+      "gen": "B4",
+      "delta": 4,
+      "bucket": "small-interval-other",
+      "sameLetter": false,
+      "onsetOk": false,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": -1.246,
+      "cy": 267,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": "staccato",
+      "chordSize": 1,
+      "chordTruth": [
+        "G4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "onset-alignment"
+    },
+    {
+      "measure": 5,
+      "truth": "G3",
+      "gen": "E3",
+      "delta": -3,
+      "bucket": "small-interval-other",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 2,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "C3",
+        "G3"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "other-staff-position"
+    },
+    {
+      "measure": 7,
+      "truth": "G3",
+      "gen": "E3",
+      "delta": -3,
+      "bucket": "small-interval-other",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 2,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "C3",
+        "G3"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "other-staff-position"
+    },
+    {
+      "measure": 1,
+      "truth": "C4",
+      "gen": "F4",
+      "delta": 5,
+      "bucket": "larger-interval",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 3,
+      "chordTruth": [
+        "C4",
+        "E4",
+        "G4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "other-staff-position"
+    },
+    {
+      "measure": 2,
+      "truth": "F#4",
+      "gen": "B4",
+      "delta": 5,
+      "bucket": "larger-interval",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": null,
+      "cy": 267,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": "staccato",
+      "chordSize": 2,
+      "chordTruth": [
+        "F#4",
+        "A4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "other-staff-position"
+    },
+    {
+      "measure": 6,
+      "truth": "E5",
+      "gen": "B4",
+      "delta": -5,
+      "bucket": "larger-interval",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 1,
+      "clef": "treble",
+      "yErrSpaces": 1.729,
+      "cy": 709,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": false,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "C#5",
+        "E5"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 3,
+      "truth": "E2",
+      "gen": "A2",
+      "delta": 5,
+      "bucket": "larger-interval",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 2,
+      "clef": "bass",
+      "yErrSpaces": -1.351,
+      "cy": 428,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "E2",
+        "B2"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 8,
+      "truth": "E2",
+      "gen": "A2",
+      "delta": 5,
+      "bucket": "larger-interval",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 2,
+      "clef": "bass",
+      "yErrSpaces": -1.421,
+      "cy": 868,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "E2",
+        "B2"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 1,
+      "truth": "F4",
+      "gen": "B4",
+      "delta": 6,
+      "bucket": "larger-interval",
+      "sameLetter": false,
+      "onsetOk": false,
+      "staff": 1,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 1,
+      "chordTruth": [
+        "F4"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "onset-alignment"
+    },
+    {
+      "measure": 1,
+      "truth": "F2",
+      "gen": "A2",
+      "delta": 4,
+      "bucket": "small-interval-other",
+      "sameLetter": false,
+      "onsetOk": false,
+      "staff": 2,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "F2",
+        "C3"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "onset-alignment"
+    },
+    {
+      "measure": 6,
+      "truth": "A3",
+      "gen": "F3",
+      "delta": -4,
+      "bucket": "small-interval-other",
+      "sameLetter": false,
+      "onsetOk": false,
+      "staff": 2,
+      "yErrSpaces": null,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "D3",
+        "A3"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "onset-alignment"
+    },
+    {
+      "measure": 2,
+      "truth": "D2",
+      "gen": "C3",
+      "delta": 10,
+      "bucket": "larger-interval",
+      "sameLetter": false,
+      "onsetOk": true,
+      "staff": 2,
+      "clef": "bass",
+      "yErrSpaces": -2.833,
+      "cy": 414,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": null,
+      "chordSize": 2,
+      "chordTruth": [
+        "D2",
+        "A2"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "notehead-center-or-chord-collapse"
+    },
+    {
+      "measure": 1,
+      "truth": "C2",
+      "gen": "C3",
+      "delta": 12,
+      "bucket": "octave-error",
+      "sameLetter": true,
+      "onsetOk": true,
+      "staff": 2,
+      "clef": "bass",
+      "yErrSpaces": -3.404,
+      "cy": 413,
+      "ledger": {
+        "direction": null,
+        "count": 0
+      },
+      "hollow": true,
+      "articulation": "staccato",
+      "chordSize": 2,
+      "chordTruth": [
+        "C2",
+        "G2"
+      ],
+      "exactPitchDetectedNearby": false,
+      "midpointCollapse": false,
+      "failureClass": "notehead-center-or-chord-collapse"
+    }
+  ]
+}

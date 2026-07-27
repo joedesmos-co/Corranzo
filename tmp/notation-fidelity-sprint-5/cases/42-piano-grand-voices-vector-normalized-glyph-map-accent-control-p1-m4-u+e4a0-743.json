@@ -1,0 +1,100 @@
+{
+  "id": "42-piano-grand-voices-vector-normalized-glyph-map-accent-control-p1-m4-u+e4a0-743",
+  "source": "piano-grand-voices-vector",
+  "sourcePdf": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf",
+  "page": 1,
+  "measure": 4,
+  "expectedArticulation": "accent",
+  "expectAbsent": false,
+  "sourcePriority": "PDF text glyph / conservative page-font normalization",
+  "rawArticulationCandidate": {
+    "glyph": "",
+    "codepoint": "U+E4A0",
+    "originalGlyph": "",
+    "originalCodepoint": "U+E4A3",
+    "x": 742.9248366013071,
+    "y": 240.1742424242425,
+    "width": 10.294117647058824,
+    "height": 14.704545454545455,
+    "candidateType": "accent",
+    "placement": "above",
+    "normalization": {
+      "matchingFonts": [
+        "g_d9_f3"
+      ],
+      "mappedGlyphCount": 8,
+      "mapping": {
+        "U+E4A0": "U+E4A2",
+        "U+E4A3": "U+E4A0"
+      }
+    }
+  },
+  "candidateType": "accent",
+  "staffSystem": {
+    "page": 1,
+    "systemIndex": 0,
+    "clef": "treble"
+  },
+  "selectedNoteOrChord": {
+    "kind": "note",
+    "noteIndex": 0,
+    "restIndex": null,
+    "midi": 72,
+    "cx": 744.7222222222222,
+    "cy": 271.2171717171717,
+    "chordBroadcastCount": 3
+  },
+  "classification": "U+E4A0 pipeline=accent; manually verified=accent",
+  "placement": "above",
+  "musicXmlSnippet": "<measure number=\"4\"><note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff></note><note><chord/><pitch><step>F</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff></note><backup><duration>4</duration></backup><note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><accent placement=\"above\"/></articulations></notations></note><note><chord/><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><accent placement=\"above\"/></articulations></notations></note><note><chord/><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><accent placement=\"above\"/></articulations></notations></note><note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><note><pitch><step>F</step><octave>3</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><note><chord/><pitch><step>A</step><octave>2</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><backup><duration>8</duration></backup><note><pitch><step>C</step><octave>5</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note><note><chord/><pitch><step>A</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note><backup><duration>4</duration></backup><note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note></measure>",
+  "renderedResult": {
+    "present": true,
+    "geometry": {
+      "id": "note-accent-note-m4-t6.000-12-n0-staff-accent",
+      "kind": "accent",
+      "scope": "note",
+      "noteId": "note-m4-t6.000-12-n0",
+      "groupId": "note-m4-t6.000-12",
+      "symbol": null,
+      "source": "musicxml",
+      "placement": "above",
+      "chordNoteIds": [
+        "note-m4-t6.000-12-n0",
+        "note-m4-t6.000-12-n1",
+        "note-m4-t6.000-12-n2"
+      ],
+      "status": "upcoming",
+      "shape": "text",
+      "text": ">",
+      "x": 660,
+      "y": 40.2,
+      "fontSize": 16.200000000000003
+    },
+    "restFermataWrittenOnly": false
+  },
+  "playbackSemanticTrace": {
+    "id": "P1-m4-n35",
+    "measureNumber": 4,
+    "midi": 72,
+    "quarterTime": 12,
+    "voice": 1,
+    "staff": 1,
+    "attackCount": 1,
+    "articulationSource": "accent",
+    "writtenDurationSeconds": 0.5,
+    "baseDurationSeconds": 0.5,
+    "velocity": 0.82
+  },
+  "notationPlaybackAgree": true,
+  "failureLayerBefore": "2 detected but misclassified as staccato",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-5/source-crops/42-piano-grand-voices-vector-normalized-glyph-map-accent-control-p1-m4-u+e4a0-743.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-5/candidate-overlays/42-piano-grand-voices-vector-normalized-glyph-map-accent-control-p1-m4-u+e4a0-743.png",
+    "musicXmlSnippet": "tmp/notation-fidelity-sprint-5/musicxml-snippets/42-piano-grand-voices-vector-normalized-glyph-map-accent-control-p1-m4-u+e4a0-743.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-5/rendered-before/42-piano-grand-voices-vector-normalized-glyph-map-accent-control-p1-m4-u+e4a0-743.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-5/rendered-after/42-piano-grand-voices-vector-normalized-glyph-map-accent-control-p1-m4-u+e4a0-743.png"
+  }
+}

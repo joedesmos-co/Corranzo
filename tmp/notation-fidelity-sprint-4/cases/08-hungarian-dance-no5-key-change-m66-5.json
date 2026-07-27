@@ -1,0 +1,169 @@
+{
+  "id": "08-hungarian-dance-no5-key-change-m66-5",
+  "source": "hungarian-dance-no5",
+  "sourcePdf": "/Users/ryland/Downloads/hungarian-dance-no5.pdf",
+  "page": 2,
+  "measure": 66,
+  "expectedSymbol": "5 sharp key signature",
+  "rawDetectedCandidates": [
+    {
+      "source": "clean MusicXML/SMuFL control",
+      "fifths": 5,
+      "measureNumber": 66
+    }
+  ],
+  "selectedAttachment": {
+    "partId": "P1",
+    "staff": "all staves"
+  },
+  "staffPosition": "standard key-signature order on each active staff",
+  "measureAccidentalState": "reset at key change",
+  "keySignatureContext": {
+    "fifths": 5,
+    "mode": null,
+    "cancelFifths": null,
+    "staff": null,
+    "partId": "P1",
+    "quarterTime": 130,
+    "measureNumber": 66,
+    "timeSeconds": 61.51531279178338
+  },
+  "musicXmlSnippet": "<measure number=\"66\" width=\"213.02\">\n      <attributes>\n        <key>\n          <fifths>5</fifths>\n          </key>\n        </attributes>\n      <note default-x=\"86.87\" default-y=\"-15.00\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <accidental>natural</accidental>\n        <stem>down</stem>\n        <staff>1</staff>\n        <beam number=\"1\">begin</beam>\n        </note>\n      <note default-x=\"86.87\" default-y=\"10.00\">\n        <chord/>\n        <pitch>\n          <step>A</step>\n          <alter>1</alter>\n          <octave>5</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <stem>down</stem>\n        <staff>1</staff>\n        </note>\n      <note default-x=\"86.87\" default-y=\"20.00\">\n        <chord/>\n        <pitch>\n          <step>C</step>\n          <octave>6</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <accidental>natural</accidental>\n        <stem>down</stem>\n        <staff>1</staff>\n        </note>\n      <note default-x=\"118.01\" default-y=\"0.00\">\n        <pitch>\n          <step>F</step>\n          <alter>1</alter>\n          <octave>5</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <stem>down</stem>\n        <staff>1</staff>\n        <beam number=\"1\">end</beam>\n        </note>\n      <note default-x=\"118.01\" default-y=\"10.00\">\n        <chord/>\n        <pitch>\n          <step>A</step>\n          <alter>1</alter>\n          <octave>5</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <stem>down</stem>\n        <staff>1</staff>\n        </note>\n      <note default-x=\"118.01\" default-y=\"35.00\">\n        <chord/>\n        <pitch>\n          <step>F</step>\n          <alter>1</alter>\n          <octave>6</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <stem>down</stem>\n        <staff>1</staff>\n        </note>\n      <note default-x=\"149.15\" default-y=\"-15.00\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n          </pitch>\n        <duration>40</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <stem>down</stem>\n        <staff>1</staff>\n        </note>\n      <note default-x=\"149.15\" default-y=\"10.00\">\n        <chord/>\n        <pitch>\n          <step>A</step>\n          <alter>1</alter>\n          <octave>5</octave>\n          </pitch>\n        <duration>40</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <stem>down</stem>\n        <staff>1</staff>\n        </note>\n      <note default-x=\"149.15\" default-y=\"20.00\">\n        <chord/>\n        <pitch>\n          <step>C</step>\n          <octave>6</octave>\n          </pitch>\n        <duration>40</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <stem>down</stem>\n        <staff>1</staff>\n        </note>\n      <backup>\n        <duration>80</duration>\n        </backup>\n      <note default-x=\"86.87\" default-y=\"-150.00\">\n        <pitch>\n          <step>F</step>\n          <alter>1</alter>\n          <octave>2</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <stem>up</stem>\n        <staff>2</staff>\n        <beam number=\"1\">begin</beam>\n        </note>\n      <note default-x=\"86.87\" default-y=\"-115.00\">\n        <chord/>\n        <pitch>\n          <step>F</step>\n          <alter>1</alter>\n          <octave>3</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <stem>up</stem>\n        <staff>2</staff>\n        </note>\n      <note default-x=\"118.01\" default-y=\"-115.00\">\n        <pitch>\n          <step>F</step>\n          <alter>1</alter>\n          <octave>3</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <stem>up</stem>\n        <staff>2</staff>\n        <beam number=\"1\">end</beam>\n        <notations>\n          <articulations>\n            <staccato/>\n            </articulations>\n          </notations>\n        </note>\n      <note default-x=\"118.01\" default-y=\"-105.00\">\n        <chord/>\n        <pitch>\n          <step>A</step>\n          <alter>1</alter>\n          <octave>3</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <stem>up</stem>\n        <staff>2</staff>\n        </note>\n      <note default-x=\"118.01\" default-y=\"-95.00\">\n        <chord/>\n        <pitch>\n          <step>C</step>\n          <octave>4</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <accidental>natural</accidental>\n        <stem>up</stem>\n        <staff>2</staff>\n        </note>\n      <note default-x=\"118.01\" default-y=\"-80.00\">\n        <chord/>\n        <pitch>\n          <step>F</step>\n          <alter>1</alter>\n          <octave>4</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <stem>up</stem>\n        <staff>2</staff>\n        </note>\n      <note>\n        <rest/>\n        <duration>20</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n        </note>\n      <note default-x=\"180.29\" default-y=\"-115.00\">\n        <pitch>\n          <step>F</step>\n          <alter>1</alter>\n          <octave>3</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <stem>down</stem>\n        <staff>2</staff>\n        <notations>\n          <articulations>\n            <staccato/>\n            </articulations>\n          </notations>\n        </note>\n      <note default-x=\"180.29\" default-y=\"-105.00\">\n        <chord/>\n        <pitch>\n          <step>A</step>\n          <alter>1</alter>\n          <octave>3</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <stem>down</stem>\n        <staff>2</staff>\n        </note>\n      <note default-x=\"180.29\" default-y=\"-95.00\">\n        <chord/>\n        <pitch>\n          <step>C</step>\n          <octave>4</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <stem>down</stem>\n        <staff>2</staff>\n        </note>\n      <note default-x=\"180.29\" default-y=\"-80.00\">\n        <chord/>\n        <pitch>\n          <step>F</step>\n          <alter>1</alter>\n          <octave>4</octave>\n          </pitch>\n        <duration>20</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <stem>down</stem>\n        <staff>2</staff>\n        </note>\n      </measure>",
+  "renderedResult": "10 visible key glyphs on grand staff",
+  "soundingMidiBefore": [
+    72,
+    82,
+    84,
+    42,
+    54,
+    78,
+    82,
+    90,
+    54,
+    58,
+    60,
+    66,
+    72,
+    82,
+    84,
+    null,
+    54,
+    58,
+    60,
+    66
+  ],
+  "soundingMidiAfter": [
+    72,
+    82,
+    84,
+    42,
+    54,
+    78,
+    82,
+    90,
+    54,
+    58,
+    60,
+    66,
+    72,
+    82,
+    84,
+    null,
+    54,
+    58,
+    60,
+    66
+  ],
+  "playbackSignatureUnchanged": true,
+  "failureLayerBefore": "MusicXML correct but renderer omitted key signature",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "classification": "key-signature change",
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-4/source-crops/08-hungarian-dance-no5-key-change-m66-5.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-4/candidate-overlays/08-hungarian-dance-no5-key-change-m66-5.png",
+    "musicXmlSnippetFile": "tmp/notation-fidelity-sprint-4/musicxml-snippets/08-hungarian-dance-no5-key-change-m66-5.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-4/rendered-before/08-hungarian-dance-no5-key-change-m66-5.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-4/rendered-after/08-hungarian-dance-no5-key-change-m66-5.png",
+    "beforeRenderer": {
+      "keyMarks": [],
+      "notes": []
+    },
+    "afterRenderer": {
+      "keyMarks": [
+        {
+          "staff": "treble",
+          "type": "sharp",
+          "column": 0,
+          "y": 36,
+          "cancellation": false
+        },
+        {
+          "staff": "treble",
+          "type": "sharp",
+          "column": 1,
+          "y": 54,
+          "cancellation": false
+        },
+        {
+          "staff": "treble",
+          "type": "sharp",
+          "column": 2,
+          "y": 30,
+          "cancellation": false
+        },
+        {
+          "staff": "treble",
+          "type": "sharp",
+          "column": 3,
+          "y": 48,
+          "cancellation": false
+        },
+        {
+          "staff": "treble",
+          "type": "sharp",
+          "column": 4,
+          "y": 66,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "sharp",
+          "column": 0,
+          "y": 168,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "sharp",
+          "column": 1,
+          "y": 186,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "sharp",
+          "column": 2,
+          "y": 162,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "sharp",
+          "column": 3,
+          "y": 180,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "sharp",
+          "column": 4,
+          "y": 198,
+          "cancellation": false
+        }
+      ],
+      "notes": []
+    }
+  }
+}

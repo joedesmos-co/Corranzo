@@ -1,0 +1,1026 @@
+{
+  "generatedAt": "2026-07-17T15:55:33.592Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "hotspots": [
+    {
+      "fixtureId": "dense",
+      "label": "A Cruel Angel's Thesis (legacy copyrighted diagnostic)",
+      "measureNumbers": [
+        7,
+        9,
+        121
+      ],
+      "rhythmAttribution": {
+        "buckets": {
+          "onset-phase-shift": 94,
+          "voice-serialization-shift": 35,
+          "onset-coupled-duration": 44,
+          "chord-grouping-symptom": 79,
+          "pitch-grouping-symptom": 90,
+          "balanced-missing-extra-serialization": 0
+        },
+        "ranked": [
+          {
+            "bucket": "onset-phase-shift",
+            "count": 94
+          },
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 90
+          },
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 79
+          },
+          {
+            "bucket": "onset-coupled-duration",
+            "count": 44
+          },
+          {
+            "bucket": "voice-serialization-shift",
+            "count": 35
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "onset-phase-shift",
+          "count": 94
+        },
+        "supporting": {
+          "totalWrongOnsets": 94,
+          "chordMismatchTotal": 170,
+          "chordCoupledShare": 0.8876,
+          "missingCount": 28,
+          "extraCount": 26,
+          "balancedMismatch": false,
+          "onsetStrictIndependent": 19,
+          "voicePhasePrimaryClass": "cross-voice-matcher"
+        }
+      },
+      "durationSplit": {
+        "fixtureId": "dense",
+        "phase": 3,
+        "totalWrongDurations": 77,
+        "legacyDurationHistogram": {
+          "too-short": 20,
+          "too-long": 9,
+          "beamed-subdivision": 4,
+          "bass-sustain": 0,
+          "melody-accompaniment": 0,
+          "rest-gap": 0,
+          "tie-sustain": 0,
+          "onset-coupled": 44,
+          "other": 0
+        },
+        "writtenSoundingHistogram": {
+          "written-duration-wrong": 33,
+          "sounding-release-wrong": 0,
+          "onset-coupled-duration": 44,
+          "tie-sustain-related": 0,
+          "serialization-artifact": 0
+        },
+        "dominantClass": {
+          "bucket": "onset-coupled-duration",
+          "count": 44
+        },
+        "hotspotMeasures": [
+          7,
+          9,
+          121
+        ],
+        "hotspotTraces": [
+          {
+            "measureNumber": 7,
+            "wrongDurationCount": 2,
+            "histogram": {
+              "written-duration-wrong": 0,
+              "sounding-release-wrong": 0,
+              "onset-coupled-duration": 2,
+              "tie-sustain-related": 0,
+              "serialization-artifact": 0
+            },
+            "samples": [
+              {
+                "bucket": "onset-coupled-duration",
+                "onsetDiffQuarters": 0.75,
+                "durationDiffQuarters": 0.5,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "A#1",
+                "generatedLabel": "A#1"
+              },
+              {
+                "bucket": "onset-coupled-duration",
+                "onsetDiffQuarters": 0.75,
+                "durationDiffQuarters": 0.5,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "F4",
+                "generatedLabel": "F4"
+              }
+            ]
+          },
+          {
+            "measureNumber": 9,
+            "wrongDurationCount": 3,
+            "histogram": {
+              "written-duration-wrong": 1,
+              "sounding-release-wrong": 0,
+              "onset-coupled-duration": 2,
+              "tie-sustain-related": 0,
+              "serialization-artifact": 0
+            },
+            "samples": [
+              {
+                "bucket": "written-duration-wrong",
+                "onsetDiffQuarters": 0,
+                "durationDiffQuarters": 0.5,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "D4",
+                "generatedLabel": "D4"
+              },
+              {
+                "bucket": "onset-coupled-duration",
+                "onsetDiffQuarters": 0.25,
+                "durationDiffQuarters": 0.5,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "D#4",
+                "generatedLabel": "D#4"
+              },
+              {
+                "bucket": "onset-coupled-duration",
+                "onsetDiffQuarters": 0.25,
+                "durationDiffQuarters": 0.5,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "C5",
+                "generatedLabel": "C5"
+              }
+            ]
+          },
+          {
+            "measureNumber": 121,
+            "wrongDurationCount": 2,
+            "histogram": {
+              "written-duration-wrong": 2,
+              "sounding-release-wrong": 0,
+              "onset-coupled-duration": 0,
+              "tie-sustain-related": 0,
+              "serialization-artifact": 0
+            },
+            "samples": [
+              {
+                "bucket": "written-duration-wrong",
+                "onsetDiffQuarters": 0,
+                "durationDiffQuarters": 0.5,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "D#5",
+                "generatedLabel": "D#5"
+              },
+              {
+                "bucket": "written-duration-wrong",
+                "onsetDiffQuarters": 0,
+                "durationDiffQuarters": 0.5,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "C6",
+                "generatedLabel": "C6"
+              }
+            ]
+          }
+        ],
+        "tieChains": null
+      },
+      "onsetVoicePhase": {
+        "totalWrongOnsets": 94,
+        "strictIndependent": 19,
+        "errorClassHistogram": {
+          "duplicate-pitch-instance": 2,
+          "unique-pitch-slot-shift": 14,
+          "cross-voice-matcher": 43,
+          "serialization-voice-shift": 35,
+          "other": 0
+        },
+        "signedDeltaHistogram": {
+          "0.75": 32,
+          "0.5": 62
+        },
+        "perMeasure": [
+          {
+            "measureNumber": 7,
+            "wrongOnsetCount": 8,
+            "errorClassHistogram": {
+              "duplicate-pitch-instance": 0,
+              "unique-pitch-slot-shift": 1,
+              "cross-voice-matcher": 2,
+              "serialization-voice-shift": 5,
+              "other": 0
+            },
+            "dominantDelta": null,
+            "rows": [
+              {
+                "truthOnsetQuarters": 0.5,
+                "generatedOnsetQuarters": 1.25,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "A#1",
+                "generatedLabel": "A#1",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 0.5,
+                "generatedOnsetQuarters": 1.25,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "F4",
+                "generatedLabel": "F4",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 1,
+                "generatedVoice": 1,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 1,
+                "errorClass": "unique-pitch-slot-shift"
+              },
+              {
+                "truthOnsetQuarters": 1.5,
+                "generatedOnsetQuarters": 2.25,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "G#4",
+                "generatedLabel": "A#4",
+                "pitchDeltaSemitones": 2,
+                "truthVoice": 1,
+                "generatedVoice": 1,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 1,
+                "errorClass": "cross-voice-matcher"
+              },
+              {
+                "truthOnsetQuarters": 2.75,
+                "generatedOnsetQuarters": 2.25,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "D#4",
+                "generatedLabel": "D4",
+                "pitchDeltaSemitones": -1,
+                "truthVoice": 1,
+                "generatedVoice": 1,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 1,
+                "errorClass": "cross-voice-matcher"
+              },
+              {
+                "truthOnsetQuarters": 3,
+                "generatedOnsetQuarters": 3.75,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "A#2",
+                "generatedLabel": "A#2",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 3,
+                "generatedOnsetQuarters": 3.75,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "D#3",
+                "generatedLabel": "D#3",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 3.5,
+                "generatedOnsetQuarters": 3,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "D2",
+                "generatedLabel": "D2",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 3.5,
+                "generatedOnsetQuarters": 3,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "D3",
+                "generatedLabel": "D3",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              }
+            ]
+          },
+          {
+            "measureNumber": 9,
+            "wrongOnsetCount": 18,
+            "errorClassHistogram": {
+              "duplicate-pitch-instance": 2,
+              "unique-pitch-slot-shift": 0,
+              "cross-voice-matcher": 5,
+              "serialization-voice-shift": 11,
+              "other": 0
+            },
+            "dominantDelta": null,
+            "rows": [
+              {
+                "truthOnsetQuarters": 0,
+                "generatedOnsetQuarters": 0.75,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "A#1",
+                "generatedLabel": "C2",
+                "pitchDeltaSemitones": 2,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "cross-voice-matcher"
+              },
+              {
+                "truthOnsetQuarters": 0,
+                "generatedOnsetQuarters": 0.75,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "A#2",
+                "generatedLabel": "C3",
+                "pitchDeltaSemitones": 2,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "cross-voice-matcher"
+              },
+              {
+                "truthOnsetQuarters": 0,
+                "generatedOnsetQuarters": 0.5,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "D4",
+                "generatedLabel": "F3",
+                "pitchDeltaSemitones": -9,
+                "truthVoice": 1,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "cross-voice-matcher"
+              },
+              {
+                "truthOnsetQuarters": 0,
+                "generatedOnsetQuarters": 0.5,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "A#4",
+                "generatedLabel": "C3",
+                "pitchDeltaSemitones": -22,
+                "truthVoice": 1,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "cross-voice-matcher"
+              },
+              {
+                "truthOnsetQuarters": 0.5,
+                "generatedOnsetQuarters": 1.25,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "A#1",
+                "generatedLabel": "A#1",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 0.5,
+                "generatedOnsetQuarters": 1.25,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "F2",
+                "generatedLabel": "F2",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 0.5,
+                "generatedOnsetQuarters": 1.25,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "A#2",
+                "generatedLabel": "A#2",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 0.5,
+                "generatedOnsetQuarters": 1.25,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "A#4",
+                "generatedLabel": "A#4",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 1,
+                "generatedVoice": 1,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 1,
+                "errorClass": "duplicate-pitch-instance"
+              },
+              {
+                "truthOnsetQuarters": 1,
+                "generatedOnsetQuarters": 1.5,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "A#1",
+                "generatedLabel": "A#1",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 1,
+                "generatedOnsetQuarters": 1.5,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "F2",
+                "generatedLabel": "F2",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 1,
+                "generatedOnsetQuarters": 1.5,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "A#2",
+                "generatedLabel": "A#2",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 1,
+                "generatedOnsetQuarters": 0.5,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "G4",
+                "generatedLabel": "F4",
+                "pitchDeltaSemitones": -2,
+                "truthVoice": 1,
+                "generatedVoice": 1,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 1,
+                "errorClass": "cross-voice-matcher"
+              }
+            ]
+          },
+          {
+            "measureNumber": 121,
+            "wrongOnsetCount": 9,
+            "errorClassHistogram": {
+              "duplicate-pitch-instance": 0,
+              "unique-pitch-slot-shift": 0,
+              "cross-voice-matcher": 7,
+              "serialization-voice-shift": 2,
+              "other": 0
+            },
+            "dominantDelta": null,
+            "rows": [
+              {
+                "truthOnsetQuarters": 0.5,
+                "generatedOnsetQuarters": 1.25,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "A#2",
+                "generatedLabel": "F1",
+                "pitchDeltaSemitones": -17,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "cross-voice-matcher"
+              },
+              {
+                "truthOnsetQuarters": 1,
+                "generatedOnsetQuarters": 1.5,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "A#1",
+                "generatedLabel": "C#2",
+                "pitchDeltaSemitones": 3,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "cross-voice-matcher"
+              },
+              {
+                "truthOnsetQuarters": 1,
+                "generatedOnsetQuarters": 1.5,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "F2",
+                "generatedLabel": "F2",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 1,
+                "generatedOnsetQuarters": 1.5,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "A#2",
+                "generatedLabel": "F1",
+                "pitchDeltaSemitones": -17,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "cross-voice-matcher"
+              },
+              {
+                "truthOnsetQuarters": 1.5,
+                "generatedOnsetQuarters": 0.75,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "B1",
+                "generatedLabel": "C2",
+                "pitchDeltaSemitones": 1,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "cross-voice-matcher"
+              },
+              {
+                "truthOnsetQuarters": 1.5,
+                "generatedOnsetQuarters": 2,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "B2",
+                "generatedLabel": "D2",
+                "pitchDeltaSemitones": -9,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "cross-voice-matcher"
+              },
+              {
+                "truthOnsetQuarters": 2,
+                "generatedOnsetQuarters": 1.25,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "C2",
+                "generatedLabel": "C2",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 2.5,
+                "generatedOnsetQuarters": 3,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "C3",
+                "generatedLabel": "E2",
+                "pitchDeltaSemitones": -8,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "cross-voice-matcher"
+              },
+              {
+                "truthOnsetQuarters": 3,
+                "generatedOnsetQuarters": 2.5,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "A#2",
+                "generatedLabel": "G2",
+                "pitchDeltaSemitones": -3,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "cross-voice-matcher"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fixtureId": "simple",
+      "label": "Twinkle Twinkle (legacy local diagnostic)",
+      "measureNumbers": [
+        10
+      ],
+      "rhythmAttribution": {
+        "buckets": {
+          "onset-phase-shift": 6,
+          "voice-serialization-shift": 4,
+          "onset-coupled-duration": 2,
+          "chord-grouping-symptom": 0,
+          "pitch-grouping-symptom": 0,
+          "balanced-missing-extra-serialization": 0
+        },
+        "ranked": [
+          {
+            "bucket": "onset-phase-shift",
+            "count": 6
+          },
+          {
+            "bucket": "voice-serialization-shift",
+            "count": 4
+          },
+          {
+            "bucket": "onset-coupled-duration",
+            "count": 2
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "onset-phase-shift",
+          "count": 6
+        },
+        "supporting": {
+          "totalWrongOnsets": 6,
+          "chordMismatchTotal": 0,
+          "chordCoupledShare": null,
+          "missingCount": 0,
+          "extraCount": 0,
+          "balancedMismatch": true,
+          "onsetStrictIndependent": 2,
+          "voicePhasePrimaryClass": "serialization-voice-shift"
+        }
+      },
+      "durationSplit": {
+        "fixtureId": "simple",
+        "phase": 3,
+        "totalWrongDurations": 3,
+        "legacyDurationHistogram": {
+          "too-short": 0,
+          "too-long": 0,
+          "beamed-subdivision": 1,
+          "bass-sustain": 0,
+          "melody-accompaniment": 0,
+          "rest-gap": 0,
+          "tie-sustain": 0,
+          "onset-coupled": 2,
+          "other": 0
+        },
+        "writtenSoundingHistogram": {
+          "written-duration-wrong": 1,
+          "sounding-release-wrong": 0,
+          "onset-coupled-duration": 2,
+          "tie-sustain-related": 0,
+          "serialization-artifact": 0
+        },
+        "dominantClass": {
+          "bucket": "onset-coupled-duration",
+          "count": 2
+        },
+        "hotspotMeasures": [
+          10
+        ],
+        "hotspotTraces": [
+          {
+            "measureNumber": 10,
+            "wrongDurationCount": 3,
+            "histogram": {
+              "written-duration-wrong": 1,
+              "sounding-release-wrong": 0,
+              "onset-coupled-duration": 2,
+              "tie-sustain-related": 0,
+              "serialization-artifact": 0
+            },
+            "samples": [
+              {
+                "bucket": "written-duration-wrong",
+                "onsetDiffQuarters": 0,
+                "durationDiffQuarters": 0.5,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "F3",
+                "generatedLabel": "F3"
+              },
+              {
+                "bucket": "onset-coupled-duration",
+                "onsetDiffQuarters": 0.75,
+                "durationDiffQuarters": 0.75,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "C4",
+                "generatedLabel": "C4"
+              },
+              {
+                "bucket": "onset-coupled-duration",
+                "onsetDiffQuarters": 0.75,
+                "durationDiffQuarters": 0.75,
+                "pitchDeltaSemitones": 0,
+                "truthLabel": "G4",
+                "generatedLabel": "G4"
+              }
+            ]
+          }
+        ],
+        "tieChains": null
+      },
+      "onsetVoicePhase": {
+        "totalWrongOnsets": 6,
+        "strictIndependent": 2,
+        "errorClassHistogram": {
+          "duplicate-pitch-instance": 0,
+          "unique-pitch-slot-shift": 2,
+          "cross-voice-matcher": 0,
+          "serialization-voice-shift": 4,
+          "other": 0
+        },
+        "signedDeltaHistogram": {
+          "0.5": 3,
+          "0.75": 3
+        },
+        "perMeasure": [
+          {
+            "measureNumber": 10,
+            "wrongOnsetCount": 6,
+            "errorClassHistogram": {
+              "duplicate-pitch-instance": 0,
+              "unique-pitch-slot-shift": 2,
+              "cross-voice-matcher": 0,
+              "serialization-voice-shift": 4,
+              "other": 0
+            },
+            "dominantDelta": null,
+            "rows": [
+              {
+                "truthOnsetQuarters": 0.5,
+                "generatedOnsetQuarters": 1,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "G3",
+                "generatedLabel": "G3",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 1,
+                "generatedOnsetQuarters": 1.5,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "A3",
+                "generatedLabel": "A3",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 1,
+                "generatedOnsetQuarters": 1.5,
+                "onsetDiffQuarters": 0.5,
+                "truthLabel": "A4",
+                "generatedLabel": "A4",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 1,
+                "generatedVoice": 1,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 1,
+                "errorClass": "unique-pitch-slot-shift"
+              },
+              {
+                "truthOnsetQuarters": 1.5,
+                "generatedOnsetQuarters": 2.25,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "B3",
+                "generatedLabel": "B3",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 2,
+                "generatedOnsetQuarters": 2.75,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "C4",
+                "generatedLabel": "C4",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 5,
+                "generatedVoice": 2,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 2,
+                "errorClass": "serialization-voice-shift"
+              },
+              {
+                "truthOnsetQuarters": 2,
+                "generatedOnsetQuarters": 2.75,
+                "onsetDiffQuarters": 0.75,
+                "truthLabel": "G4",
+                "generatedLabel": "G4",
+                "pitchDeltaSemitones": 0,
+                "truthVoice": 1,
+                "generatedVoice": 1,
+                "truthClef": null,
+                "generatedClef": null,
+                "columnXNorm": null,
+                "columnXPx": null,
+                "assignedDivision": null,
+                "assignedOnsetQuarters": null,
+                "serializationVoice": 1,
+                "errorClass": "unique-pitch-slot-shift"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,250 @@
+{
+  "id": "guitar-standard-chords-vector",
+  "source": "vector-glyphs",
+  "pageHist": {
+    "beams": {},
+    "bStr": {},
+    "dtype": {},
+    "stem": 0,
+    "noStem": 0
+  },
+  "eventDtype": {
+    "sixteenth": 6,
+    "eighth": 8,
+    "quarter": 20,
+    "whole": 3,
+    "half": 1
+  },
+  "beamedButSixteenth": 4,
+  "beamedEighth": 3,
+  "samples": [
+    {
+      "m": 1,
+      "events": [
+        {
+          "start": 0,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "eighth"
+          ],
+          "beams": [
+            1
+          ],
+          "bStr": [
+            8
+          ],
+          "midi": [
+            67
+          ],
+          "pos": 0.02912156740234334
+        },
+        {
+          "start": 1,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            0
+          ],
+          "midi": [
+            40
+          ],
+          "pos": 0.04357400567224692
+        },
+        {
+          "start": 2,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            0
+          ],
+          "midi": [
+            71,
+            64
+          ],
+          "pos": 0.13421280727223725
+        },
+        {
+          "start": 4,
+          "dur": 4,
+          "dtype": "quarter",
+          "noteDur": [
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            7,
+            0
+          ],
+          "midi": [
+            67,
+            40
+          ],
+          "pos": 0.23930404714213074
+        },
+        {
+          "start": 7,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "eighth",
+            "quarter"
+          ],
+          "beams": [
+            1,
+            0
+          ],
+          "bStr": [
+            9,
+            0
+          ],
+          "midi": [
+            67,
+            40
+          ],
+          "pos": 0.44948652688191815
+        },
+        {
+          "start": 11,
+          "dur": 4,
+          "dtype": "quarter",
+          "noteDur": [
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            0,
+            0
+          ],
+          "midi": [
+            67,
+            40
+          ],
+          "pos": 0.6741214448916089
+        }
+      ]
+    },
+    {
+      "m": 2,
+      "events": [
+        {
+          "start": 3,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "eighth"
+          ],
+          "beams": [
+            1
+          ],
+          "bStr": [
+            28
+          ],
+          "midi": [
+            40
+          ],
+          "pos": 0.16794758104246701
+        },
+        {
+          "start": 4,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter",
+            "eighth"
+          ],
+          "beams": [
+            0,
+            1
+          ],
+          "bStr": [
+            1,
+            28
+          ],
+          "midi": [
+            64,
+            31
+          ],
+          "pos": 0.2561336092225834
+        },
+        {
+          "start": 6,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            4
+          ],
+          "midi": [
+            40
+          ],
+          "pos": 0.34629027490393127
+        },
+        {
+          "start": 8,
+          "dur": 4,
+          "dtype": "quarter",
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            4
+          ],
+          "midi": [
+            40
+          ],
+          "pos": 0.5266036062666271
+        },
+        {
+          "start": 11,
+          "dur": 4,
+          "dtype": "quarter",
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            0
+          ],
+          "midi": [
+            40
+          ],
+          "pos": 0.7069169376293228
+        }
+      ]
+    }
+  ]
+}

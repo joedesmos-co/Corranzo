@@ -1,0 +1,5 @@
+Guitar mapping benchmark — after
+- guitar-standard-chords-vector: invalid=0 sameString=0 impossible=0 avgJump=0.889 p95=3 maxSpan=3 repeatRetain=96.0%
+- guitar-paired-chords-vector: invalid=0 sameString=0 impossible=0 avgJump=0.774 p95=4 maxSpan=3 repeatRetain=85.9%
+- guitar-techniques-paired-vector: invalid=0 sameString=0 impossible=0 avgJump=1.478 p95=3 maxSpan=null repeatRetain=100.0%
+- guitar-tab-sparse-vector: invalid=0 sameString=0 impossible=0 avgJump=2.261 p95=10 maxSpan=null repeatRetain=71.4%

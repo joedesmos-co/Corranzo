@@ -1,0 +1,334 @@
+{
+  "dense": {
+    "id": "piano-dense-advanced-vector",
+    "stemmed": 230,
+    "hist": {
+      "0": 20,
+      "1-7": 141,
+      "8-22": 9,
+      "23+": 60
+    },
+    "rejectedHighCount": 60,
+    "wouldAcceptNoUpperBound": 69,
+    "currentlyAccept8to22": 9,
+    "rejectedHighSample": [
+      {
+        "m": 2,
+        "midi": 67,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "eighth"
+      },
+      {
+        "m": 3,
+        "midi": 67,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 3,
+        "midi": 71,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "eighth"
+      },
+      {
+        "m": 3,
+        "midi": 67,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 4,
+        "midi": 67,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 4,
+        "midi": 71,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 4,
+        "midi": 76,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "eighth"
+      },
+      {
+        "m": 4,
+        "midi": 71,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 4,
+        "midi": 67,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "eighth"
+      },
+      {
+        "m": 5,
+        "midi": 67,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "eighth"
+      },
+      {
+        "m": 5,
+        "midi": 71,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 5,
+        "midi": 71,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      }
+    ]
+  },
+  "tuplets": {
+    "id": "piano-rhythm-tuplets-vector",
+    "stemmed": 36,
+    "hist": {
+      "0": 2,
+      "23+": 28,
+      "1-7": 4,
+      "8-22": 2
+    },
+    "rejectedHighCount": 28,
+    "wouldAcceptNoUpperBound": 30,
+    "currentlyAccept8to22": 2,
+    "rejectedHighSample": [
+      {
+        "m": 1,
+        "midi": 67,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "eighth"
+      },
+      {
+        "m": 1,
+        "midi": 71,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 1,
+        "midi": 76,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "eighth"
+      },
+      {
+        "m": 1,
+        "midi": 76,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 1,
+        "midi": 71,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "quarter"
+      },
+      {
+        "m": 2,
+        "midi": 67,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 2,
+        "midi": 71,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 2,
+        "midi": 76,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 2,
+        "midi": 67,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 2,
+        "midi": 76,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 2,
+        "midi": 71,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "sixteenth"
+      },
+      {
+        "m": 2,
+        "midi": 71,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "sixteenth",
+        "eventDur": "eighth"
+      }
+    ]
+  },
+  "grand": {
+    "id": "piano-grand-voices-vector",
+    "stemmed": 75,
+    "hist": {
+      "0": 2,
+      "1-7": 56,
+      "23+": 17
+    },
+    "rejectedHighCount": 17,
+    "wouldAcceptNoUpperBound": 17,
+    "currentlyAccept8to22": 0,
+    "rejectedHighSample": [
+      {
+        "m": 1,
+        "midi": 48,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "half",
+        "eventDur": "half"
+      },
+      {
+        "m": 2,
+        "midi": 50,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "half",
+        "eventDur": "half"
+      },
+      {
+        "m": 3,
+        "midi": 47,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "half",
+        "eventDur": "half"
+      },
+      {
+        "m": 3,
+        "midi": 52,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "half",
+        "eventDur": "half"
+      },
+      {
+        "m": 4,
+        "midi": 48,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "half",
+        "eventDur": "half"
+      },
+      {
+        "m": 4,
+        "midi": 53,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "half",
+        "eventDur": "half"
+      },
+      {
+        "m": 5,
+        "midi": 50,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "half",
+        "eventDur": "half"
+      },
+      {
+        "m": 5,
+        "midi": 53,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "half",
+        "eventDur": "quarter"
+      },
+      {
+        "m": 5,
+        "midi": 48,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "half",
+        "eventDur": "quarter"
+      },
+      {
+        "m": 6,
+        "midi": 52,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "half",
+        "eventDur": "half"
+      },
+      {
+        "m": 6,
+        "midi": 55,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "half",
+        "eventDur": "half"
+      },
+      {
+        "m": 6,
+        "midi": 50,
+        "strength": 29,
+        "storedBeams": 0,
+        "type": "half",
+        "eventDur": "half"
+      }
+    ]
+  }
+}

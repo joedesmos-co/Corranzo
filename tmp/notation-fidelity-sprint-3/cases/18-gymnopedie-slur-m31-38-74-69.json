@@ -1,0 +1,176 @@
+{
+  "id": "18-gymnopedie-slur-m31-38-74-69",
+  "source": "gymnopedie",
+  "sourcePdf": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+  "page": 2,
+  "measures": [
+    31,
+    38
+  ],
+  "expectedSymbol": "slur",
+  "sourceCrop": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/source-crops/18-gymnopedie-slur-m31-38-74-69.png",
+  "candidateOverlay": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/candidate-overlays/18-gymnopedie-slur-m31-38-74-69.png",
+  "rawCurveCandidates": [
+    {
+      "candidateId": "pdf-path-p2-op213",
+      "source": "pdf-vector-path",
+      "start": {
+        "x": 252.53417906906515,
+        "y": 339.9814929979597,
+        "tangent": {
+          "dx": 0.960121197422081,
+          "dy": -0.27958413091731316
+        }
+      },
+      "end": {
+        "x": 952.822736875,
+        "y": 339.9814929979597,
+        "tangent": {
+          "dx": 0.9601212413961708,
+          "dy": 0.2795839799056369
+        }
+      },
+      "bounds": {
+        "x0": 252.53417906906515,
+        "x1": 952.822736875,
+        "y0": 309.3932391913406,
+        "y1": 339.9814929979597,
+        "width": 700.2885578059349,
+        "height": 30.588253806619093
+      },
+      "archDirection": "above",
+      "startCandidates": [
+        {
+          "measureNumber": 31,
+          "systemIndex": 1,
+          "eventIndex": 3,
+          "noteIndex": 0,
+          "startDivision": 8,
+          "midi": 74,
+          "clef": "treble",
+          "cx": 252.5018716010084,
+          "cy": 352.32841571258905,
+          "score": 12.42,
+          "dx": 0.03,
+          "dy": 12.35,
+          "anchor": "notehead",
+          "anchorY": 352.32841571258905
+        }
+      ],
+      "endCandidates": []
+    },
+    {
+      "candidateId": "pdf-path-p2-op195",
+      "source": "pdf-vector-path",
+      "start": {
+        "x": 121.858607082458,
+        "y": 596.3996994023684,
+        "tangent": {
+          "dx": 0.8978792949274439,
+          "dy": -0.44024171967294995
+        }
+      },
+      "end": {
+        "x": 505.3805510162816,
+        "y": 596.3996994023684,
+        "tangent": {
+          "dx": 0.8978792328673897,
+          "dy": 0.4402418462452969
+        }
+      },
+      "bounds": {
+        "x0": 121.858607082458,
+        "x1": 505.3805510162816,
+        "y0": 568.1928411280527,
+        "y1": 596.3996994023684,
+        "width": 383.5219439338236,
+        "height": 28.206858274315664
+      },
+      "archDirection": "above",
+      "startCandidates": [],
+      "endCandidates": [
+        {
+          "measureNumber": 38,
+          "systemIndex": 2,
+          "eventIndex": 1,
+          "noteIndex": 1,
+          "startDivision": 0,
+          "midi": 69,
+          "clef": "treble",
+          "cx": 505.3482689119328,
+          "cy": 614.4122050118766,
+          "score": 4.09,
+          "dx": 0.03,
+          "dy": 4.01,
+          "anchor": "stem-tip",
+          "anchorY": 600.4122050118766
+        },
+        {
+          "measureNumber": 38,
+          "systemIndex": 2,
+          "eventIndex": 1,
+          "noteIndex": 0,
+          "startDivision": 0,
+          "midi": 72,
+          "clef": "treble",
+          "cx": 505.3482689119328,
+          "cy": 606.0095854631829,
+          "score": 9.69,
+          "dx": 0.03,
+          "dy": 9.61,
+          "anchor": "notehead",
+          "anchorY": 606.0095854631829
+        }
+      ]
+    }
+  ],
+  "selectedAttachments": {
+    "fromMeasure": 31,
+    "toMeasure": 38,
+    "fromMidi": 74,
+    "toMidi": 69,
+    "clef": null,
+    "candidateIds": [
+      "pdf-path-p2-op213",
+      "pdf-path-p2-op195"
+    ]
+  },
+  "classificationResult": "slur",
+  "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/18-gymnopedie-slur-m31-38-74-69.musicxml",
+  "renderedResult": {
+    "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/18-gymnopedie-slur-m31-38-74-69.png",
+    "markingFound": true,
+    "path": "M 11250.72 31.799999999999997 Q 12405.58 3 13560.44 31.799999999999997",
+    "placement": "above"
+  },
+  "playbackAttackTrace": [
+    {
+      "measureNumber": 31,
+      "midi": 74,
+      "quarterTime": 90,
+      "tieStart": false,
+      "tieStop": true,
+      "suppressPlaybackAttack": true
+    },
+    {
+      "measureNumber": 31,
+      "midi": 74,
+      "quarterTime": 92,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 38,
+      "midi": 69,
+      "quarterTime": 111,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    }
+  ],
+  "correctBefore": false,
+  "correctAfter": true,
+  "failureLayerBefore": "symbol-not-detected",
+  "failureLayerAfter": "none"
+}

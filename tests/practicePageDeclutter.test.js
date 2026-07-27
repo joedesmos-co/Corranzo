@@ -151,7 +151,7 @@ describe('expanded sections keep full functionality', () => {
     const cursor = readSrc('components', 'practice', 'PracticeScoreCursorSection.jsx')
     expect(cursor).toContain('scoreFollow.setEnabled(event.target.checked)')
     expect(cursor).toContain('targetPreference.setTarget(option.target)')
-    expect(cursor).toContain('Cursor setup failed — open Advanced → Practice setup.')
+    expect(cursor).toContain('Cursor setup failed — open Advanced → Score cursor.')
   })
 
   it('collapsible sections stay accessible', () => {

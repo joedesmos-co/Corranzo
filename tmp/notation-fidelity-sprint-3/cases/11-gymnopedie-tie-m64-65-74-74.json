@@ -1,0 +1,128 @@
+{
+  "id": "11-gymnopedie-tie-m64-65-74-74",
+  "source": "gymnopedie",
+  "sourcePdf": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+  "page": 3,
+  "measures": [
+    64,
+    65
+  ],
+  "expectedSymbol": "tie",
+  "sourceCrop": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/source-crops/11-gymnopedie-tie-m64-65-74-74.png",
+  "candidateOverlay": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/candidate-overlays/11-gymnopedie-tie-m64-65-74-74.png",
+  "rawCurveCandidates": [
+    {
+      "candidateId": "pdf-path-p3-op321",
+      "source": "pdf-vector-path",
+      "start": {
+        "x": 305.06181414653366,
+        "y": 609.1457155679655,
+        "tangent": {
+          "dx": 0.9278787085324821,
+          "dy": -0.37288215598509555
+        }
+      },
+      "end": {
+        "x": 455.6204243093488,
+        "y": 609.1457155679655,
+        "tangent": {
+          "dx": 0.9278787964330549,
+          "dy": 0.3728819372535299
+        }
+      },
+      "bounds": {
+        "x0": 305.06181414653366,
+        "x1": 455.6204243093488,
+        "y0": 597.044867538324,
+        "y1": 609.1457155679655,
+        "width": 150.5586101628151,
+        "height": 12.100848029641497
+      },
+      "archDirection": "above",
+      "startCandidates": [
+        {
+          "measureNumber": 64,
+          "systemIndex": 2,
+          "eventIndex": 1,
+          "noteIndex": 0,
+          "startDivision": 0,
+          "midi": 74,
+          "clef": "treble",
+          "cx": 303.39124739932777,
+          "cy": 615.3934218052257,
+          "score": 10.26,
+          "dx": 1.67,
+          "dy": 6.25,
+          "anchor": "notehead",
+          "anchorY": 615.3934218052257
+        }
+      ],
+      "endCandidates": [
+        {
+          "measureNumber": 65,
+          "systemIndex": 2,
+          "eventIndex": 1,
+          "noteIndex": 0,
+          "startDivision": 0,
+          "midi": 74,
+          "clef": "treble",
+          "cx": 457.2263899203361,
+          "cy": 615.3934218052257,
+          "score": 10.1,
+          "dx": 1.61,
+          "dy": 6.25,
+          "anchor": "notehead",
+          "anchorY": 615.3934218052257
+        }
+      ]
+    }
+  ],
+  "selectedAttachments": {
+    "fromMeasure": 64,
+    "toMeasure": 65,
+    "fromMidi": 74,
+    "toMidi": 74,
+    "clef": "treble",
+    "candidateIds": [
+      "pdf-path-p3-op321"
+    ]
+  },
+  "classificationResult": "tie",
+  "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/11-gymnopedie-tie-m64-65-74-74.musicxml",
+  "renderedResult": {
+    "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/11-gymnopedie-tie-m64-65-74-74.png",
+    "markingFound": true,
+    "path": "M 23106.3 37.44 Q 23283.333333333336 8.64 23460.36666666667 37.44",
+    "placement": "above"
+  },
+  "playbackAttackTrace": [
+    {
+      "measureNumber": 64,
+      "midi": 74,
+      "quarterTime": 189,
+      "tieStart": true,
+      "tieStop": true,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 65,
+      "midi": 74,
+      "quarterTime": 192,
+      "tieStart": false,
+      "tieStop": true,
+      "suppressPlaybackAttack": true
+    },
+    {
+      "measureNumber": 65,
+      "midi": 74,
+      "quarterTime": 194,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    }
+  ],
+  "correctBefore": false,
+  "correctAfter": true,
+  "failureLayerBefore": "symbol-not-detected",
+  "failureLayerAfter": "none"
+}

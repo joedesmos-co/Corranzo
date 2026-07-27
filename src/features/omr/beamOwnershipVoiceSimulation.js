@@ -430,11 +430,35 @@ function barlineXml(marking) {
   return xml
 }
 
-function dynamicXml(mark) {
+function dynamicXml(mark, { staff = null, onsetDivision = 0 } = {}) {
   if (!mark) {
     return ''
   }
-  return `<direction><direction-type><dynamics><${mark}/></dynamics></direction-type></direction>`
+  const offset =
+    Number.isFinite(onsetDivision) && onsetDivision > 0
+      ? `<offset>${Math.round(onsetDivision)}</offset>`
+      : ''
+  const staffXml = Number.isFinite(staff) ? `<staff>${staff}</staff>` : ''
+  return `<direction><direction-type><dynamics><${mark}/></dynamics></direction-type>${offset}${staffXml}</direction>`
+}
+
+function wedgeXml(wedge) {
+  if (!wedge || (wedge.confidence ?? 0) < 0.7) {
+    return ''
+  }
+  if (wedge.type !== 'crescendo' && wedge.type !== 'diminuendo') {
+    return ''
+  }
+  if (wedge.stage !== 'start' && wedge.stage !== 'stop' && wedge.stage !== 'continue') {
+    return ''
+  }
+  const type = wedge.stage === 'stop' ? 'stop' : wedge.type
+  const offset =
+    Number.isFinite(wedge.onsetDivision) && wedge.onsetDivision > 0
+      ? `<offset>${Math.round(wedge.onsetDivision)}</offset>`
+      : ''
+  const staffXml = Number.isFinite(wedge.staff) ? `<staff>${wedge.staff}</staff>` : ''
+  return `<direction><direction-type><wedge type="${type}"/></direction-type>${offset}${staffXml}</direction>`
 }
 
 function pedalXml() {
@@ -620,8 +644,19 @@ export function buildVoiceSerializedOmrMusicXml({
     if (measure.uncertain) {
       inner += '<direction><words>OMR rhythm uncertain</words></direction>'
     }
-    if (measure.dynamic && shouldEmitDynamic(measure.dynamic)) {
-      inner += dynamicXml(measure.dynamic.mark)
+    const dynamics = Array.isArray(measure.dynamics)
+      ? measure.dynamics.filter((entry) => shouldEmitDynamic(entry))
+      : measure.dynamic && shouldEmitDynamic(measure.dynamic)
+        ? [measure.dynamic]
+        : []
+    for (const dynamic of dynamics) {
+      inner += dynamicXml(dynamic.mark, {
+        staff: dynamic.staff,
+        onsetDivision: dynamic.onsetDivision,
+      })
+    }
+    for (const wedge of measure.wedges ?? []) {
+      inner += wedgeXml(wedge)
     }
     if (measure.pedal && shouldEmitPedal(measure.pedal)) {
       inner += pedalXml()

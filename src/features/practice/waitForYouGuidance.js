@@ -4,9 +4,34 @@ import { getExpectedMidis } from './waitForYouNoteMatch.js'
 import { chordLabel, missingLabels } from './waitForYouLabels.js'
 import { describeTabPosition } from '../instruments/fretboard.js'
 import { HINT_AFTER_WRONG_ATTEMPTS, WFY_GUIDANCE } from './waitForYouGuidanceConstants.js'
+import {
+  buildPianoPracticeInstruction,
+  isPianoInstrumentId,
+} from './pianoPracticeInstructions.js'
 
 export { chordLabel, missingLabels } from './waitForYouLabels.js'
 export { HINT_AFTER_WRONG_ATTEMPTS, WFY_GUIDANCE } from './waitForYouGuidanceConstants.js'
+
+function isPianoGuidanceContext(checkpoint, instrument = null) {
+  return (
+    Boolean(checkpoint?.isPianoChordMic) ||
+    isPianoInstrumentId(instrument?.id) ||
+    Boolean(instrument?.notation?.grandStaff && checkpoint?.pianoHandTexture)
+  )
+}
+
+function pianoOrFallbackInstruction(checkpoint, expectedMidis, instrument = null) {
+  if (isPianoGuidanceContext(checkpoint, instrument) || isPianoInstrumentId(instrument?.id)) {
+    return (
+      checkpoint?.displayLabel ??
+      buildPianoPracticeInstruction({
+        ...checkpoint,
+        expectedMidis: expectedMidis ?? checkpoint?.expectedMidis,
+      })
+    )
+  }
+  return null
+}
 
 /**
  * Wait For You guidance layer (pure). Turns the current checkpoint + the latest
@@ -23,7 +48,11 @@ export function expectedLabelFor(expectedMidis, checkpoint = null) {
   return expectedMidis.length > 1 ? chordLabel(expectedMidis) : midiToNoteLabel(expectedMidis[0])
 }
 
-function conciseChordName(expectedMidis, checkpoint = null) {
+function conciseChordName(expectedMidis, checkpoint = null, instrument = null) {
+  const pianoInstruction = pianoOrFallbackInstruction(checkpoint, expectedMidis, instrument)
+  if (pianoInstruction) {
+    return pianoInstruction.replace(/^Play\s+/i, '')
+  }
   if (checkpoint?.chordSymbol) {
     return `${checkpoint.chordSymbol} chord`
   }
@@ -110,13 +139,23 @@ export function buildEscalatingHint({
     return position ? `${fallback} (${position.replace(/ \+ /g, ', ')})` : fallback
   }
   if (wrongAttempts === 1) return 'Not quite — try again.'
-  if (wrongAttempts === 2) return `Expected ${label}.`
+  if (wrongAttempts === 2) {
+    const pianoInstruction = pianoOrFallbackInstruction(checkpoint, expectedMidis, instrument)
+    if (pianoInstruction) {
+      return `${pianoInstruction.replace(/^Play\s+/i, 'Expected ')}.`
+    }
+    return `Expected ${label}.`
+  }
   const position = positionHintForCheckpoint(checkpoint, { strings, tabPositions })
   if (position) {
     if (isChord && chordAsSequence) {
       return `Play ${label} one at a time (${position}).`
     }
     return isChord ? `Play ${label} together (${position}).` : `Play ${label} (${position}).`
+  }
+  const pianoInstruction = pianoOrFallbackInstruction(checkpoint, expectedMidis, instrument)
+  if (pianoInstruction) {
+    return /[.!?]$/.test(pianoInstruction) ? pianoInstruction : `${pianoInstruction}.`
   }
   const hand = staffHandHint(checkpoint, instrument)
   if (isChord && chordAsSequence) {
@@ -133,7 +172,12 @@ export function buildTargetHint({
   checkpoint = null,
   guitarChordShapeMode = false,
   rollingChordMicMode = false,
+  instrument = null,
 }) {
+  const pianoInstruction = pianoOrFallbackInstruction(checkpoint, expectedMidis, instrument)
+  if (pianoInstruction && !guitarChordShapeMode) {
+    return pianoInstruction
+  }
   if (guitarChordShapeMode || rollingChordMicMode) {
     return checkpoint?.displayLabel ?? (guitarChordShapeMode ? 'Play this shape' : 'Play this chord')
   }
@@ -143,7 +187,7 @@ export function buildTargetHint({
   const label = expectedLabelFor(expectedMidis, checkpoint)
   if (!label) return null
   return chordAsSequence && expectedMidis.length > 1
-    ? `Chord practice sequence: ${conciseChordName(expectedMidis, checkpoint)}`
+    ? `Chord practice sequence: ${conciseChordName(expectedMidis, checkpoint, instrument)}`
     : `Play ${label}`
 }
 
@@ -265,7 +309,14 @@ export function buildGuidance({
       ...base,
       state: WFY_GUIDANCE.HINT,
       tone: 'hint',
-      primary: buildTargetHint({ expectedMidis, chordAsSequence, checkpoint, guitarChordShapeMode, rollingChordMicMode }),
+      primary: buildTargetHint({
+        expectedMidis,
+        chordAsSequence,
+        checkpoint,
+        guitarChordShapeMode,
+        rollingChordMicMode,
+        instrument,
+      }),
       hint:
         buildEscalatingHint({
           expectedMidis,
@@ -282,26 +333,32 @@ export function buildGuidance({
     }
   }
 
+  const pianoWaiting = pianoOrFallbackInstruction(checkpoint, expectedMidis, instrument)
+
   return {
     ...base,
     state: WFY_GUIDANCE.WAITING,
     tone: 'neutral',
     primary: matchingActive
-      ? isChord
-        ? guitarChordShapeMode
-          ? checkpoint?.displayLabel ?? 'Play this shape'
-          : rollingChordMicMode
-            ? checkpoint?.displayLabel ?? 'Play this chord'
-            : chordAsSequence
-              ? checkpoint?.chordSymbol
-                ? `Play ${checkpoint.chordSymbol} tones one at a time`
-                : `Chord sequence: ${conciseChordName(expectedMidis, checkpoint)}`
-              : checkpoint?.displayLabel
-                ? checkpoint.displayLabel
-                : checkpoint?.chordSymbol
-                  ? `Play the ${checkpoint.chordSymbol} chord`
-                  : `Play ${expectedMidis.length}-note chord`
-        : `Play ${expectedLabel}`
-      : `Play ${expectedLabel}, or tap Continue`,
+      ? pianoWaiting && !guitarChordShapeMode
+        ? pianoWaiting
+        : isChord
+          ? guitarChordShapeMode
+            ? checkpoint?.displayLabel ?? 'Play this shape'
+            : rollingChordMicMode
+              ? checkpoint?.displayLabel ?? 'Play this chord'
+              : chordAsSequence
+                ? checkpoint?.chordSymbol
+                  ? `Play ${checkpoint.chordSymbol} tones one at a time`
+                  : `Chord sequence: ${conciseChordName(expectedMidis, checkpoint, instrument)}`
+                : checkpoint?.displayLabel
+                  ? checkpoint.displayLabel
+                  : checkpoint?.chordSymbol
+                    ? `Play the ${checkpoint.chordSymbol} chord`
+                    : `Play ${expectedMidis.length}-note chord`
+          : `Play ${expectedLabel}`
+      : pianoWaiting && !guitarChordShapeMode
+        ? `${pianoWaiting}, or tap Continue`
+        : `Play ${expectedLabel}, or tap Continue`,
   }
 }

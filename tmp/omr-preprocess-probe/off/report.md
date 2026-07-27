@@ -1,0 +1,151 @@
+# OMR benchmark dashboard
+
+Generated: 2026-07-17T01:53:57.168Z
+Fixtures: 1
+Overall: FAIL
+Largest remaining error bucket: chord = 71 (30%)
+
+## Status
+- pass: 0
+- fail: 1
+- rejected: 0
+- skipped: 0
+- error: 0
+
+## Fixtures
+
+### CC0 Articulation Scan Study (`fail`)
+- PDF: `/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf`
+- Truth: `/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.musicxml`
+- License: CC0-1.0 (piano-articulation-scan)
+- Categories: scanned-score, grand-staff, ties-slurs-articulations, chords-multiple-voices
+  pitch 29% | duration 34% | onset 47% | chord 51% | F1 70%
+  measureΔ 0 | noteΔ 43 | wrongPitch 39 | wrongDuration 32 | wrongOnset 15 | chordMismatch 71
+  top error category: Rhythm inference (rhythm-inference)
+  top duration error category: too-short (26 sampled)
+  top pitch error category: ±1-accidental (13 sampled)
+  - Primary: Rhythm inference (rhythm-inference, confidence 0.83)
+  - Source scores: rhythm-inference=0.8299, notehead-detection=0.5355, pitch-mapping=0.4812, chord-grouping=0.4407, measure-allocation=0.3772
+  - Pitch errors (39): ±1-accidental=13, ±2-diatonic=13, other=13
+  - Duration errors (32): too-short=26, onset-coupled=6
+  - Detection: chord-grouping=71, extra-notes=54, missing-notes=11
+  - Error buckets: chord=71, extra/missing-notes=65, pitch=39, duration=32, onset=15, accidentals=13
+  - Largest remaining error bucket: chord = 71 (30%)
+  Rhythm/voice attribution (V2 Phase 1):
+  - chord-grouping-symptom: 25
+  - pitch-grouping-symptom: 20
+  - onset-phase-shift: 15
+  - onset-coupled-duration: 6
+  - chord symptom coupled share: 100%
+  Written vs sounding duration (V2 Phase 3):
+  - written-duration-wrong: 22
+  - onset-coupled-duration: 6
+  - serialization-artifact: 4
+  - Dominant: written-duration-wrong (22)
+  - Hotspot duration traces:
+    - m1: 4 wrong durations (written-duration-wrong=2, onset-coupled-duration=1, serialization-artifact=1)
+    - m2: 4 wrong durations (written-duration-wrong=4)
+    - m3: 4 wrong durations (written-duration-wrong=2, onset-coupled-duration=1, serialization-artifact=1)
+    - m4: 4 wrong durations (written-duration-wrong=2, onset-coupled-duration=2)
+    - m5: 3 wrong durations (written-duration-wrong=2, onset-coupled-duration=1)
+    - m6: 4 wrong durations (written-duration-wrong=4)
+    - m7: 4 wrong durations (written-duration-wrong=4)
+    - m8: 5 wrong durations (written-duration-wrong=2, onset-coupled-duration=1, serialization-artifact=2)
+  Tie/sustain constraints (V2 Phase 4):
+  - expected-cross-measure-tie: 17
+  - sounding-release-too-short: 17
+  - written-correct-sustain-wrong: 13
+  - continuation-without-tie-start: 3
+  - tie-start-without-continuation: 1
+  - Dominant: expected-cross-measure-tie (17)
+  - Tie glyphs: detected 0, applied 0, slur-like rejected 0, unresolved 0
+  Pipeline attribution: voice-serialization
+  - voice-serialization: 71 (71 chord/voice grouping mismatch(es))
+  - symbol-detection: 65 (11 missing; 54 extra note(s))
+  - onset-rhythm-inference: 47 (32 duration; 15 onset error(s))
+  - pitch-inference: 39 (39 wrong pitch match(es))
+  - tie-repeat-handling: 1 (0 tie candidate(s); 0 applied)
+  - measure hotspots: m6 symbol-detection (60), m7 symbol-detection (46), m2 symbol-detection (41), m5 symbol-detection (35), m3 onset-rhythm-inference (34), m8 pitch-inference (30), m4 onset-rhythm-inference (24), m1 onset-rhythm-inference (23)
+
+### Rhythm shadow solver (V2 Phase 2 — diagnostic only)
+
+- Status: **shadow-improved**
+- Promoted: **no**
+- Constraints: **phase-2c**
+- Solver: 1 accepted / 4 candidates / 3 rejected
+- Runtime vs shadow: wrongOnset 15 → 13 (Δ -2), wrongDuration 32 → 32 (Δ 0), chord 71 → 71 (Δ 0)
+- Accepted measures: m4:bass-minus-3
+- Rejected candidates: m1:chord-split, m3:chord-split, m8:duration-changed+chord-split
+
+### Voice serialization shadow (V2 Phase 7 — diagnostic only)
+
+- Status: **shadow-no-qualifying-measures**
+- Promoted: **no**
+- Constraints: **phase-7-duration-coupled**
+- Note: No measures passed Phase 6 preservation + truth gates — shadow identical to runtime.
+- Solver: 0 structurally applied (0 duration-coupled) / 0 truth-approved / 8 candidates
+- Shadow XML identical to runtime (no qualifying measures)
+- Runtime vs shadow: wrongOnset 15 → 15 (Δ 0), wrongDuration 32 → 32 (Δ 0), chord 71 → 71 (Δ 0)
+- Rejected measures: m1:constraints-failed, m2:constraints-failed, m3:constraints-failed, m4:no-improvement, m5:constraints-failed, m6:constraints-failed, m7:constraints-failed, m8:constraints-failed
+  ScoreGraph IR (observation): 145 nodes, 288 edges across 8 measures; geometry bridge n/a
+  IR voice budget: 0 overflow measure(s), 0 overflow event(s), 0 underfill measure(s)
+  IR duration split: 1 node(s) sounding≠written; 52 tie; 0 gap-to-next
+  IR ↔ runtime parity: noteheads ok, rests ok
+- reasons: pitchAccuracy: 0.2901 (need ≥0.3153); durationAccuracy: 0.3435 (need ≥0.4685); onsetAccuracy: 0.4733 (need ≥0.6126); chordGroupingAccuracy: 0.5103 (need ≥0.6048); noteDetectionF1: 0.7032 (need ≥0.804); noteCountDiff: 43 (need |diff|≤23)
+
+## Top error categories (across fixtures)
+- rhythm-inference: 1
+
+## Aggregated duration error histogram
+- too-short: 26
+- onset-coupled: 6
+
+## Aggregated pitch error histogram
+- ±1-accidental: 13
+- ±2-diatonic: 13
+- other: 13
+
+## Error buckets (across fixtures)
+Buckets: pitch, duration, onset, chord, ties, slurs, tuplets, accidentals, rests, extra/missing notes
+- chord: 71
+- extra/missing-notes: 65
+- pitch: 39
+- duration: 32
+- onset: 15
+- accidentals: 13
+- **Largest remaining error bucket: chord = 71 (30% of counted errors)**
+
+## Tier breakdown
+- piano-scan: 1 fixture(s) (fail=1)
+  failing: piano-articulation-scan
+
+## Failure clusters
+- fail | source=rhythm-inference | duration=too-short | pitch=±1-accidental: piano-articulation-scan
+  reasons: pitchAccuracy: 0.2901 (need ≥0.3153); durationAccuracy: 0.3435 (need ≥0.4685); onsetAccuracy: 0.4733 (need ≥0.6126); chordGroupingAccuracy: 0.5103 (need ≥0.6048); noteDetectionF1: 0.7032 (need ≥0.804); noteCountDiff: 43 (need |diff|≤23)
+
+## V2 rollout gate
+V2 rollout gate (Phase 5):
+- Recommended: **voice-aware-serialization** (composite 2.65)
+- Parallel prep: onset-grid-refinement
+- Target ranking:
+  - onset-grid-refinement: composite=4.1, status=eligible-prep
+  - written-sounding-duration-solver: composite=3.25, status=blocked-premature
+  - tie-sustain-constraint-solver: composite=3.2, status=blocked-premature
+  - voice-aware-serialization: composite=2.65, status=recommended
+  - measure-level-solver-variant: composite=1.85, status=blocked-exhausted
+- Blocked:
+  - written-sounding-duration-solver (blocked-premature): 0 onset-coupled duration errors cannot be fixed until onsets/voices are stable.
+  - tie-sustain-constraint-solver (blocked-premature): Most sustain deficits are downstream of wrong onsets/voices, not missing tie glyphs.
+  - measure-level-solver-variant (blocked-exhausted): Clef-only phase-shift family exhausted: 0 changed, 0 truth-approved on dense.
+
+## Voice serialization qualification (Phase 6B)
+**NO — zero truth-approved measures on live enforced fixtures.**
+Voice serialization qualification (Phase 6b):
+- Verdict: Re-run live dashboard with includeScoreGraph and truth MXL.
+- Truth-approved: 0 | Structural: 0
+Voice serialization qualification (Phase 6b):
+- Verdict: Re-run live dashboard with includeScoreGraph and truth MXL.
+- Truth-approved: 0 | Structural: 0
+Voice serialization qualification (Phase 6b):
+- Verdict: Re-run live dashboard with includeScoreGraph and truth MXL.
+- Truth-approved: 0 | Structural: 0

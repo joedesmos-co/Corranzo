@@ -1,0 +1,295 @@
+{
+  "phase": 5,
+  "generatedAt": "2026-07-17T15:44:11.336Z",
+  "evidence": {
+    "phase1": {
+      "buckets": {},
+      "primaryBucket": null,
+      "voiceSerializationShift": 0,
+      "onsetPhaseShift": 0,
+      "onsetCoupledDuration": 0,
+      "chordGroupingSymptom": 0,
+      "pitchGroupingSymptom": 0
+    },
+    "phase2": {
+      "status": "unavailable",
+      "changedMeasures": 0,
+      "acceptedCandidates": 0,
+      "rejectedMeasures": 125,
+      "globalDelta": null,
+      "promoted": false,
+      "constraintVersion": null,
+      "exhausted": true
+    },
+    "phase3": {
+      "histogram": {},
+      "onsetCoupledDuration": 0,
+      "writtenDurationWrong": 0,
+      "soundingReleaseWrong": 0,
+      "tieSustainRelated": 0,
+      "dominantClass": null
+    },
+    "phase4": {
+      "histogram": {},
+      "expectedCrossMeasureTie": 0,
+      "writtenCorrectSustainWrong": 0,
+      "slurLikeRejected": 0,
+      "dominantConstraint": null
+    },
+    "canaries": {
+      "twinkleFalseTieGuard": null,
+      "twinkleWrongOnset": null,
+      "twinkleHotspotM10": null,
+      "gymopedieMetrics": null,
+      "denseHotspots": [
+        7,
+        9,
+        121
+      ]
+    },
+    "frozenBaseline": {
+      "clean": {
+        "wrongOnset": 0,
+        "wrongDuration": 0,
+        "chordMismatch": 0,
+        "wrongPitch": 0
+      },
+      "dense": {
+        "wrongOnset": 94,
+        "wrongDuration": 77,
+        "chordMismatch": 172,
+        "wrongPitch": 147
+      },
+      "simple": {
+        "wrongOnset": 6,
+        "wrongDuration": 3,
+        "chordMismatch": 0,
+        "wrongPitch": 0
+      }
+    }
+  },
+  "ranking": {
+    "ranked": [
+      {
+        "target": "onset-grid-refinement",
+        "status": "eligible-prep",
+        "scores": {
+          "impact": 3,
+          "safety": 5,
+          "irReadiness": 2,
+          "antiRegression": 5,
+          "composite": 4.1
+        },
+        "rationale": [
+          "Lowest regression risk: observation-first onsetColumns[] on MeasureGraph.",
+          "Enables future solver column assignment without touching runtime bytes."
+        ],
+        "blockers": [
+          "Alone it does not fix accompaniment-lane serialization (35 voice-shift onsets).",
+          "onsetColumns[] not yet complete on every dense measure."
+        ]
+      },
+      {
+        "target": "written-sounding-duration-solver",
+        "status": "blocked-premature",
+        "scores": {
+          "impact": 4,
+          "safety": 3,
+          "irReadiness": 5,
+          "antiRegression": 2,
+          "composite": 3.25
+        },
+        "rationale": [
+          "Phase 3 IR fields populated; 0 onset-coupled + 0 written-duration-wrong errors on dense.",
+          "Written vs sounding split is observation-ready for solver constraints."
+        ],
+        "blockers": [
+          "0 onset-coupled duration errors cannot be fixed until onsets/voices are stable.",
+          "Fixing duration without voice serialization will trade onset gains for chord regressions (Phase 2B lesson)."
+        ]
+      },
+      {
+        "target": "tie-sustain-constraint-solver",
+        "status": "blocked-premature",
+        "scores": {
+          "impact": 3,
+          "safety": 3,
+          "irReadiness": 4,
+          "antiRegression": 3,
+          "composite": 3.2
+        },
+        "rationale": [
+          "Phase 4 classifies 0 expected cross-measure ties and 0 written-correct/sustain-wrong rows.",
+          "Tie hard constraints are designed in OMR_ENGINE_V2_PLAN.md §3.4."
+        ],
+        "blockers": [
+          "Most sustain deficits are downstream of wrong onsets/voices, not missing tie glyphs.",
+          "Gymnopédie tie recall still incomplete; Twinkle false-tie guard must stay at 0."
+        ]
+      },
+      {
+        "target": "voice-aware-serialization",
+        "status": "recommended",
+        "scores": {
+          "impact": 5,
+          "safety": 2,
+          "irReadiness": 3,
+          "antiRegression": 2,
+          "composite": 2.65
+        },
+        "rationale": [
+          "Highest root-cause impact: 0 voice-serialization-shift onsets, 0 chord-grouping symptoms on dense.",
+          "Twinkle m10 is 100% accompaniment-lane phase error — the narrowest canary for this family.",
+          "Clef-only phase shifts (Phase 2) are exhausted; voice-lane assignment is the missing variable."
+        ],
+        "blockers": [
+          "High regression risk on Twinkle and dense chord grouping.",
+          "ScoreGraph IR has clef/voice export labels but no stable staff-lane voiceId yet."
+        ]
+      },
+      {
+        "target": "measure-level-solver-variant",
+        "status": "blocked-exhausted",
+        "scores": {
+          "impact": 4,
+          "safety": 1,
+          "irReadiness": 3,
+          "antiRegression": 1,
+          "composite": 1.85
+        },
+        "rationale": [
+          "Phase 2/2B/2C shadow prototype exists with truth gates and chord coalescing."
+        ],
+        "blockers": [
+          "Clef-only phase-shift family exhausted: 0 changed, 0 truth-approved on dense.",
+          "Broadening constraints caused chord regressions (+70 chordMismatch in Phase 2).",
+          "Same family cannot progress without a new variable (voice lanes)."
+        ]
+      }
+    ],
+    "recommended": {
+      "target": "voice-aware-serialization",
+      "status": "recommended",
+      "scores": {
+        "impact": 5,
+        "safety": 2,
+        "irReadiness": 3,
+        "antiRegression": 2,
+        "composite": 2.65
+      },
+      "rationale": [
+        "Highest root-cause impact: 0 voice-serialization-shift onsets, 0 chord-grouping symptoms on dense.",
+        "Twinkle m10 is 100% accompaniment-lane phase error — the narrowest canary for this family.",
+        "Clef-only phase shifts (Phase 2) are exhausted; voice-lane assignment is the missing variable."
+      ],
+      "blockers": [
+        "High regression risk on Twinkle and dense chord grouping.",
+        "ScoreGraph IR has clef/voice export labels but no stable staff-lane voiceId yet."
+      ]
+    },
+    "prep": {
+      "target": "onset-grid-refinement",
+      "status": "eligible-prep",
+      "scores": {
+        "impact": 3,
+        "safety": 5,
+        "irReadiness": 2,
+        "antiRegression": 5,
+        "composite": 4.1
+      },
+      "rationale": [
+        "Lowest regression risk: observation-first onsetColumns[] on MeasureGraph.",
+        "Enables future solver column assignment without touching runtime bytes."
+      ],
+      "blockers": [
+        "Alone it does not fix accompaniment-lane serialization (35 voice-shift onsets).",
+        "onsetColumns[] not yet complete on every dense measure."
+      ]
+    },
+    "blocked": [
+      {
+        "target": "written-sounding-duration-solver",
+        "status": "blocked-premature",
+        "scores": {
+          "impact": 4,
+          "safety": 3,
+          "irReadiness": 5,
+          "antiRegression": 2,
+          "composite": 3.25
+        },
+        "rationale": [
+          "Phase 3 IR fields populated; 0 onset-coupled + 0 written-duration-wrong errors on dense.",
+          "Written vs sounding split is observation-ready for solver constraints."
+        ],
+        "blockers": [
+          "0 onset-coupled duration errors cannot be fixed until onsets/voices are stable.",
+          "Fixing duration without voice serialization will trade onset gains for chord regressions (Phase 2B lesson)."
+        ]
+      },
+      {
+        "target": "tie-sustain-constraint-solver",
+        "status": "blocked-premature",
+        "scores": {
+          "impact": 3,
+          "safety": 3,
+          "irReadiness": 4,
+          "antiRegression": 3,
+          "composite": 3.2
+        },
+        "rationale": [
+          "Phase 4 classifies 0 expected cross-measure ties and 0 written-correct/sustain-wrong rows.",
+          "Tie hard constraints are designed in OMR_ENGINE_V2_PLAN.md §3.4."
+        ],
+        "blockers": [
+          "Most sustain deficits are downstream of wrong onsets/voices, not missing tie glyphs.",
+          "Gymnopédie tie recall still incomplete; Twinkle false-tie guard must stay at 0."
+        ]
+      },
+      {
+        "target": "measure-level-solver-variant",
+        "status": "blocked-exhausted",
+        "scores": {
+          "impact": 4,
+          "safety": 1,
+          "irReadiness": 3,
+          "antiRegression": 1,
+          "composite": 1.85
+        },
+        "rationale": [
+          "Phase 2/2B/2C shadow prototype exists with truth gates and chord coalescing."
+        ],
+        "blockers": [
+          "Clef-only phase-shift family exhausted: 0 changed, 0 truth-approved on dense.",
+          "Broadening constraints caused chord regressions (+70 chordMismatch in Phase 2).",
+          "Same family cannot progress without a new variable (voice lanes)."
+        ]
+      }
+    ]
+  },
+  "recommendation": {
+    "target": "voice-aware-serialization",
+    "status": "recommended",
+    "compositeScore": 2.65,
+    "parallelPrep": "onset-grid-refinement",
+    "summary": "Clef-only phase-shift solver is exhausted. Voice-aware serialization (shadow-only, canary-gated) is the safest path to measurable progress before duration or tie solvers."
+  },
+  "blockedTargets": [
+    {
+      "target": "written-sounding-duration-solver",
+      "status": "blocked-premature",
+      "primaryBlocker": "0 onset-coupled duration errors cannot be fixed until onsets/voices are stable."
+    },
+    {
+      "target": "tie-sustain-constraint-solver",
+      "status": "blocked-premature",
+      "primaryBlocker": "Most sustain deficits are downstream of wrong onsets/voices, not missing tie glyphs."
+    },
+    {
+      "target": "measure-level-solver-variant",
+      "status": "blocked-exhausted",
+      "primaryBlocker": "Clef-only phase-shift family exhausted: 0 changed, 0 truth-approved on dense."
+    }
+  ],
+  "baselineFrozen": null,
+  "phase6Prompt": "Corranzo OMR V2 Phase 6 — voice-aware-serialization (shadow-only).\n\nFeature freeze is active. Do not change runtime OMR output.\n\nGoal:\nImplement a shadow-only voice-aware-serialization solver family using ScoreGraph IR, targeting the root cause identified in Phase 5 rollout gate.\n\nCurrent evidence (frozen baseline):\n- Dense: wrongOnset 94, wrongDuration 77, chordMismatch 172, wrongPitch 147\n- Phase 1: 0 voice-serialization-shift, 0 onset-phase-shift\n- Phase 2/2B/2C: 0 changed measures, 0 truth-approved (clef-only phase shifts exhausted)\n- Phase 3: 0 onset-coupled-duration, 0 written-duration-wrong\n- Phase 4: 0 expected-cross-measure-tie candidates\n- Twinkle false-tie guard: CHECK\n- Gymnopédie: must stay 100% on all axes\n\nRules:\n- Shadow/diagnostic only — no runtime MusicXML promotion.\n- No threshold changes.\n- No UI/playback/Wait For You changes.\n- Per-measure truth gate: improve onset/duration on measure; no chord/pitch/duration regression.\n- Twinkle m10 canary must reach 0 wrong onsets before any dense promotion.\n- Gymnopédie byte-identical gate on every change.\n\nTasks:\n1. Add staff-lane voiceId assignment to ScoreGraph IR (observation + shadow solver variable).\n2. Implement shadow voice-lane solver: grand-staff accompaniment template (truth v5 vs gen v2 pattern).\n3. Decouple MusicXML voice numbering from rhythm inference in shadow emit path only.\n4. Reuse Phase 2C truth gate + chord coalescing; reject variants that split chords or change note count.\n5. Target canary measures first: Twinkle m10, dense m7/m9/m121.\n6. (Parallel prep) Extend onsetColumns[] on MeasureGraph — onset-grid-refinement — observation only.\n7. Add tests proving shadow solver does not mutate runtime events.\n8. Dashboard section: voice-lane shadow report alongside rhythm-shadow-report.json.\n\nVerification:\nnpm test\nnpm run build\nnpm run omr:benchmark-dashboard\n\nAcceptance:\n- Runtime OMR unchanged (dense metrics frozen).\n- Shadow shows ≥1 truth-approved measure on Twinkle m10 OR dense m7–m9 with Δ wrongOnset < 0 and no chord regression.\n- Gymnopédie 100%; Twinkle false ties 0.\n- No promotion to runtime."
+}

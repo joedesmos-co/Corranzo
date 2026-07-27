@@ -52,8 +52,51 @@ export function soundTempo(bpm) {
   return `<direction><sound tempo="${bpm}"/></direction>`
 }
 
-export function dynamicsDirection(mark) {
-  return `<direction><direction-type><dynamics><${mark}/></dynamics></direction-type></direction>`
+export function dynamicsDirection(mark, { staff = null } = {}) {
+  const staffXml = staff != null ? `<staff>${staff}</staff>` : ''
+  return `<direction><direction-type><dynamics><${mark}/></dynamics></direction-type>${staffXml}</direction>`
+}
+
+export function wedgeDirection(type, { staff = null } = {}) {
+  const staffXml = staff != null ? `<staff>${staff}</staff>` : ''
+  return `<direction><direction-type><wedge type="${type}"/></direction-type>${staffXml}</direction>`
+}
+
+export function tenutoNote(step = 'C', octave = 4, duration = 1, extra = '') {
+  return note(
+    step,
+    octave,
+    duration,
+    `<notations><articulations><tenuto/></articulations></notations>${extra}`,
+  )
+}
+
+export function marcatoNote(step = 'C', octave = 4, duration = 1, extra = '') {
+  return note(
+    step,
+    octave,
+    duration,
+    `<notations><articulations><strong-accent/></articulations></notations>${extra}`,
+  )
+}
+
+export function fermataNote(step = 'C', octave = 4, duration = 1, extra = '') {
+  return note(
+    step,
+    octave,
+    duration,
+    `<notations><fermata/><articulations></articulations></notations>${extra}`,
+  )
+}
+
+export function tiedNote(step, octave, duration, { start = false, stop = false, chord = false } = {}) {
+  const ties = `${start ? '<tie type="start"/>' : ''}${stop ? '<tie type="stop"/>' : ''}`
+  const tied = `${start ? '<tied type="start"/>' : ''}${stop ? '<tied type="stop"/>' : ''}`
+  const extra =
+    (chord ? '<chord/>' : '') +
+    ties +
+    (start || stop ? `<notations>${tied}</notations>` : '')
+  return note(step, octave, duration, extra)
 }
 
 export function metronomeDirection(beatUnit, perMinute, { dot = false } = {}) {
@@ -149,6 +192,27 @@ export function secondSectionVoltas() {
     `<measure number="3">${forwardRepeat}${fourQuarters()}</measure>` +
     `<measure number="4">${endingStart(1)}${fourQuarters()}<barline location="right">${endingStop(1)}<repeat direction="backward"/></barline></measure>` +
     `<measure number="5">${endingStart(2)}${fourQuarters()}<barline location="right">${endingStop(2)}</barline></measure>`
+  return scoreWrap(`<part id="P1">${xml}</part>`)
+}
+
+/** Volta where backward sits on the second ending (common MuseScore export). */
+export function voltaBackwardOnSecondEnding() {
+  const xml =
+    `<measure number="1">${attributes()}${soundTempo(120)}${forwardRepeat}${fourQuarters()}</measure>` +
+    `<measure number="2">${fourQuarters()}</measure>` +
+    `<measure number="3">${endingStart(1)}${fourQuarters()}<barline location="right">${endingStop(1)}</barline></measure>` +
+    `<measure number="4">${endingStart(2)}${fourQuarters()}<barline location="right">${endingStop(2)}<repeat direction="backward"/></barline></measure>` +
+    `<measure number="5">${fourQuarters()}</measure>`
+  return scoreWrap(`<part id="P1">${xml}</part>`)
+}
+
+/** Pickup (incomplete) then a repeated two-measure section. */
+export function pickupThenRepeat() {
+  const xml =
+    `<measure number="1">${attributes({ beats: 4 })}${soundTempo(120)}${note('G')}${note('A')}</measure>` +
+    `<measure number="2">${forwardRepeat}${fourQuarters()}</measure>` +
+    `<measure number="3">${fourQuarters()}${backwardRepeat()}</measure>` +
+    `<measure number="4">${fourQuarters()}</measure>`
   return scoreWrap(`<part id="P1">${xml}</part>`)
 }
 

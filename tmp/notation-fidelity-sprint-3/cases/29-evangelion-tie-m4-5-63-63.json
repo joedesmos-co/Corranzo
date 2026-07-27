@@ -1,0 +1,160 @@
+{
+  "id": "29-evangelion-tie-m4-5-63-63",
+  "source": "evangelion",
+  "sourcePdf": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+  "page": 1,
+  "measures": [
+    4,
+    5
+  ],
+  "expectedSymbol": "tie",
+  "sourceCrop": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/source-crops/29-evangelion-tie-m4-5-63-63.png",
+  "candidateOverlay": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/candidate-overlays/29-evangelion-tie-m4-5-63-63.png",
+  "rawCurveCandidates": [
+    {
+      "candidateId": "pdf-path-p1-op62",
+      "source": "pdf-vector-path",
+      "start": {
+        "x": 312.92670155412947,
+        "y": 552.3342194631366,
+        "tangent": {
+          "dx": 0.9209136244031186,
+          "dy": 0.3897667204735567
+        }
+      },
+      "end": {
+        "x": 434.04435987477024,
+        "y": 552.3342194631366,
+        "tangent": {
+          "dx": 0.9209137428936356,
+          "dy": -0.38976644051230824
+        }
+      },
+      "bounds": {
+        "x0": 312.92670155412947,
+        "x1": 434.04435987477024,
+        "y0": 552.3342194631366,
+        "y1": 563.9326974478071,
+        "width": 121.11765832064077,
+        "height": 11.598477984670467
+      },
+      "archDirection": "below",
+      "startCandidates": [
+        {
+          "measureNumber": 4,
+          "systemIndex": 1,
+          "eventIndex": 6,
+          "noteIndex": 2,
+          "startDivision": 9,
+          "midi": 63,
+          "clef": "bass",
+          "cx": 305.68834622673916,
+          "cy": 548.7790298693586,
+          "score": 20.93,
+          "dx": 7.24,
+          "dy": 3.56,
+          "anchor": "notehead",
+          "anchorY": 548.7790298693586
+        },
+        {
+          "measureNumber": 4,
+          "systemIndex": 1,
+          "eventIndex": 6,
+          "noteIndex": 1,
+          "startDivision": 9,
+          "midi": 67,
+          "clef": "bass",
+          "cx": 305.68834622673916,
+          "cy": 540.3751062351545,
+          "score": 29.33,
+          "dx": 7.24,
+          "dy": 11.96,
+          "anchor": "notehead",
+          "anchorY": 540.3751062351545
+        }
+      ],
+      "endCandidates": [
+        {
+          "measureNumber": 5,
+          "systemIndex": 1,
+          "eventIndex": 0,
+          "noteIndex": 2,
+          "startDivision": 0,
+          "midi": 63,
+          "clef": "bass",
+          "cx": 441.2768185507728,
+          "cy": 548.7789122327791,
+          "score": 20.91,
+          "dx": 7.23,
+          "dy": 3.56,
+          "anchor": "notehead",
+          "anchorY": 548.7789122327791
+        },
+        {
+          "measureNumber": 5,
+          "systemIndex": 1,
+          "eventIndex": 0,
+          "noteIndex": 1,
+          "startDivision": 0,
+          "midi": 67,
+          "clef": "bass",
+          "cx": 441.2768185507728,
+          "cy": 540.374988598575,
+          "score": 29.32,
+          "dx": 7.23,
+          "dy": 11.96,
+          "anchor": "notehead",
+          "anchorY": 540.374988598575
+        }
+      ]
+    }
+  ],
+  "selectedAttachments": {
+    "fromMeasure": 4,
+    "toMeasure": 5,
+    "fromMidi": 63,
+    "toMidi": 63,
+    "clef": "bass",
+    "candidateIds": [
+      "pdf-path-p1-op62"
+    ]
+  },
+  "classificationResult": "tie",
+  "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/29-evangelion-tie-m4-5-63-63.musicxml",
+  "renderedResult": {
+    "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/29-evangelion-tie-m4-5-63-63.png",
+    "markingFound": true,
+    "path": "M 1243.8 148.56 Q 1313.4868421052631 170.8597894736842 1383.1736842105263 148.56",
+    "placement": "below"
+  },
+  "playbackAttackTrace": [
+    {
+      "measureNumber": 4,
+      "midi": 63,
+      "quarterTime": 14.25,
+      "tieStart": true,
+      "tieStop": true,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 5,
+      "midi": 63,
+      "quarterTime": 16,
+      "tieStart": false,
+      "tieStop": true,
+      "suppressPlaybackAttack": true
+    },
+    {
+      "measureNumber": 5,
+      "midi": 63,
+      "quarterTime": 17,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    }
+  ],
+  "correctBefore": false,
+  "correctAfter": true,
+  "failureLayerBefore": "symbol-not-detected",
+  "failureLayerAfter": "none"
+}

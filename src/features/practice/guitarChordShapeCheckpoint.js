@@ -77,22 +77,43 @@ export function minimumGuitarChordTonesRequired(toneCount) {
   return Math.max(3, Math.ceil(count * 0.66))
 }
 
-export function guitarShapeTargetLabel(toneCount) {
+export function guitarShapeTargetLabel(toneCount, { distinctStrings = null } = {}) {
   const count = Number(toneCount) || 0
-  if (count === 2) {
+  const strings =
+    distinctStrings != null && Number.isFinite(Number(distinctStrings))
+      ? Number(distinctStrings)
+      : count
+  // Double-stop only when two distinct strings are newly attacked together.
+  if (count === 2 && strings >= 2) {
     return 'Play this double-stop'
   }
-  if (count >= 3) {
+  if (count >= 3 || strings >= 3) {
     return 'Play this chord'
   }
+  if (count === 1 || strings === 1) {
+    return 'Play this note'
+  }
   return 'Play this shape'
+}
+
+function isGuitarAttackNote(note) {
+  if (!note) {
+    return false
+  }
+  if (note.suppressPlaybackAttack) {
+    return false
+  }
+  if (note.tieStop && !note.tieStart) {
+    return false
+  }
+  return true
 }
 
 export function resolveGuitarShapePositions(checkpoint, tabPositions = null) {
   const positions = []
   const seenStrings = new Set()
   for (const note of checkpoint?.notes ?? []) {
-    if (note?.midi == null) {
+    if (!isGuitarAttackNote(note) || note?.midi == null) {
       continue
     }
     const explicit =
@@ -115,10 +136,13 @@ export function resolveGuitarShapePositions(checkpoint, tabPositions = null) {
 }
 
 export function isGuitarChordShapeCandidate(checkpoint, { instrumentId = null } = {}) {
+  const attackCount =
+    checkpoint?.expectedMidis?.length ??
+    (checkpoint?.notes ?? []).filter(isGuitarAttackNote).length
   return (
     instrumentId === INSTRUMENT_IDS.GUITAR &&
     Boolean(checkpoint?.isChord) &&
-    (checkpoint?.notes?.length ?? 0) > 1
+    attackCount > 1
   )
 }
 
@@ -162,10 +186,11 @@ export function buildGuitarChordShape(checkpoint, tabPositions = null) {
 
 export function guitarChordDisplayLabel(checkpoint, shape) {
   const toneCount = shape?.positions?.length ?? checkpoint?.expectedMidis?.length ?? 0
+  const distinctStrings = shape?.stringCount ?? toneCount
   if (shape?.chordSymbol && toneCount >= 3) {
     return `Play ${shape.chordSymbol} chord`
   }
-  return guitarShapeTargetLabel(toneCount)
+  return guitarShapeTargetLabel(toneCount, { distinctStrings })
 }
 
 export function enrichGuitarChordCheckpoint(checkpoint, { instrumentId = null, tabPositions = null } = {}) {

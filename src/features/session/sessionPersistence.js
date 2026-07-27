@@ -116,6 +116,20 @@ export function clearSessionMeta() {
   }
 }
 
+export async function clearSessionCompanionFiles() {
+  const db = await openDatabase()
+  try {
+    await deleteFile(db, 'midi')
+    await deleteFile(db, 'musicXml')
+    for (const instrumentId of SUPPORTED_INSTRUMENT_IDS) {
+      await deleteFile(db, instrumentFileKey(instrumentId, 'midi'))
+      await deleteFile(db, instrumentFileKey(instrumentId, 'musicXml'))
+    }
+  } finally {
+    db.close()
+  }
+}
+
 export async function saveSessionFiles({ pdf, midi, musicXml, instrumentFiles = null }) {
   const db = await openDatabase()
   try {
@@ -227,7 +241,11 @@ export function validateRestoredSession(meta, files) {
     } else if (meta.midiSize != null && files.midi.byteLength !== meta.midiSize) {
       issues.push('midi-size-mismatch')
     } else {
-      midiSource = { fileName: meta.midiFileName, data: files.midi }
+      midiSource = {
+        fileName: meta.midiFileName,
+        data: files.midi,
+        ...(meta.midiOwnerPdfIdentity ? { ownerPdfIdentity: meta.midiOwnerPdfIdentity } : {}),
+      }
     }
   }
 
@@ -247,6 +265,30 @@ export function validateRestoredSession(meta, files) {
         issues.push('stale-omr-session')
         musicXmlSource = null
       }
+    }
+  }
+
+  // Drop companions that do not belong to the restored PDF identity.
+  const pdfIdentity =
+    meta.pdfIdentity ??
+    (pdfMeta?.fileName
+      ? `${pdfMeta.fileName}::${pdfMeta.size ?? ''}::${pdfMeta.lastModified ?? ''}`
+      : null)
+  if (pdfIdentity) {
+    if (musicXmlSource?.data && musicXmlSource.ownerPdfIdentity && musicXmlSource.ownerPdfIdentity !== pdfIdentity) {
+      issues.push('musicxml-owner-mismatch')
+      musicXmlSource = null
+    }
+    if (midiSource?.data && midiSource.ownerPdfIdentity && midiSource.ownerPdfIdentity !== pdfIdentity) {
+      issues.push('midi-owner-mismatch')
+      midiSource = null
+    }
+    // Legacy sessions without owner stamps: attach ownership to the restored PDF.
+    if (musicXmlSource?.data && !musicXmlSource.ownerPdfIdentity) {
+      musicXmlSource = { ...musicXmlSource, ownerPdfIdentity: pdfIdentity }
+    }
+    if (midiSource?.data && !midiSource.ownerPdfIdentity) {
+      midiSource = { ...midiSource, ownerPdfIdentity: pdfIdentity }
     }
   }
 
@@ -275,9 +317,11 @@ export function buildSessionBundleMeta(bundle = {}) {
     pdfMeta: bundle.pdfMeta ?? null,
     midiFileName: bundle.midiSource?.fileName ?? null,
     midiSize: bundle.midiSource?.data?.byteLength ?? null,
+    midiOwnerPdfIdentity: bundle.midiSource?.ownerPdfIdentity ?? null,
     musicXmlFileName: bundle.musicXmlSource?.fileName ?? null,
     musicXmlSize: bundle.musicXmlSource?.data?.byteLength ?? null,
     musicXmlSourceKind: bundle.musicXmlSource?.source ?? null,
+    musicXmlOwnerPdfIdentity: bundle.musicXmlSource?.ownerPdfIdentity ?? null,
     omrMeta: bundle.musicXmlSource?.omrMeta ?? null,
     pageNumber: bundle.pageNumber ?? 1,
     practicePrefs: bundle.practicePrefs ?? null,
@@ -347,14 +391,23 @@ export function buildSessionMeta({
   practicePrefs,
   instrumentId = null,
   instrumentBundles = null,
+  scoreId = null,
 }) {
   return {
+    scoreId: scoreId ?? musicXmlSource?.ownerScoreId ?? null,
     pdfMeta,
+    pdfIdentity: pdfMeta
+      ? `${pdfMeta.fileName ?? ''}::${pdfMeta.size ?? ''}::${pdfMeta.lastModified ?? ''}`
+      : null,
     midiFileName: midiSource?.fileName ?? null,
     midiSize: midiSource?.data?.byteLength ?? null,
+    midiOwnerPdfIdentity: midiSource?.ownerPdfIdentity ?? null,
+    midiOwnerScoreId: midiSource?.ownerScoreId ?? null,
     musicXmlFileName: musicXmlSource?.fileName ?? null,
     musicXmlSize: musicXmlSource?.data?.byteLength ?? null,
     musicXmlSourceKind: musicXmlSource?.source ?? null,
+    musicXmlOwnerPdfIdentity: musicXmlSource?.ownerPdfIdentity ?? null,
+    musicXmlOwnerScoreId: musicXmlSource?.ownerScoreId ?? null,
     omrMeta: musicXmlSource?.omrMeta ?? null,
     activeView,
     pageNumber,

@@ -30,8 +30,11 @@ describe('piano chord WFY UI', () => {
         isChord: true,
         chordSymbol: 'C',
         expectedMidis: [60, 64, 67],
-        displayLabel: 'Play C chord',
-        notes: [{ midi: 60 }, { midi: 64 }, { midi: 67 }],
+        notes: [
+          { midi: 60, staff: 1 },
+          { midi: 64, staff: 1 },
+          { midi: 67, staff: 1 },
+        ],
       },
       { instrumentId: INSTRUMENT_IDS.PIANO },
     )
@@ -43,7 +46,9 @@ describe('piano chord WFY UI', () => {
       chordAsSequence: false,
       instrument: { id: 'piano', notation: { grandStaff: true } },
     })
-    expect(guidance.primary).toBe('Play C chord')
+    expect(guidance.primary).toBe('Play the C chord')
     expect(guidance.primary).not.toContain('one at a time')
+    expect(guidance.primary.toLowerCase()).not.toContain('double-stop')
+    expect(guidance.primary).not.toMatch(/\d+-note chord/)
   })
 })

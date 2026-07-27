@@ -1,0 +1,827 @@
+OMR semantic evaluation
+=======================
+schema v2 · evaluator v2.0.0 · 15aa1db · mode=written
+Alignment confidence: 75% (8 matched, 0 missing, 3 extra)
+
+Overall semantic score
+
+Pitch ........... 5%  (22/440; cov 100%)
+Rhythm .......... 28%  (48/172; cov 100%)
+Sustain ......... 100%  (0/0; cov 100%)
+Articulation .... 0%  (0/20; cov 100%)
+Measure ......... 5%  (8/170; cov 100%)
+Interpretation .. 0%  (0/1; cov 100%)
+Playback ........ 100%  (0/0; cov 100%)
+
+Overall .......... 34%
+First divergence: measure 1
+
+Worst measures
+- Measure 6 (severity 347): Split measure 6 → 13,14; Missing note C#5; Missing note E5
+- Measure 2 (severity 342): Split measure 2 → 3,4; Missing note F#4; Missing note A4
+- Measure 3 (severity 289): Split measure 3 → 5,6; Missing note G#4; Missing note F#4
+- Measure 7 (severity 279): Split measure 7 → 15,16; Missing note B4; Missing note D#5
+- Measure 5 (severity 250): Split measure 5 → 11,12; Missing note B4; Missing note D5
+
+Per-measure report
+
+Measure 1 [split]
+- Split measure 1 → 1,2
+- Missing note F#4
+- Missing note A4
+- Missing note G#4
+- Missing note F4
+- Missing note A4
+- Missing note C5
+- Missing note G4
+- Missing note B4
+- Missing note D5
+- Missing note F4
+- Missing note A4
+- Missing note C5
+- Missing note E4
+- Missing note G#4
+- Missing note B4
+- Missing note C2
+- Missing note G2
+- Missing note C3
+- Missing note D2
+- Missing note A2
+- Missing note E2
+- Missing note B2
+- Missing note F2
+- Missing note C3
+- Extra note F4
+- Extra note E4
+- Extra note B4
+- Extra note G5
+- Extra note G4
+- Extra note E5
+- Extra note E4
+- Extra note B4
+- Extra note G5
+- Extra note E2
+- Extra note G4
+- Extra note E5
+- Extra note B1
+- Extra note E4
+- Extra note B4
+- Eighth detected as quarter
+- Missing accent
+- Eighth detected as quarter
+- Eighth detected as quarter
+- Incorrect pitch G4 (expected F#4)
+- Onset off by 0.5 quarters
+- Incorrect pitch E5 (expected A4)
+- Onset off by 0.5 quarters
+- Incorrect pitch E2 (expected C4)
+- Eighth detected as quarter
+- Missing accent
+- Incorrect pitch E2 (expected D4)
+- Onset off by 0.5 quarters
+- Incorrect pitch B1 (expected D4)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch G1 (expected E4)
+- Eighth detected as quarter
+- Missing accent
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Tempo 88 BPM missing or wrong at q=0
+
+Measure 2 [split]
+- Split measure 2 → 3,4
+- Missing note F#4
+- Missing note A4
+- Missing note A#4
+- Missing note D2
+- Missing note A2
+- Missing note D3
+- Missing note E2
+- Missing note B2
+- Missing note F#2
+- Missing note C#3
+- Missing note G2
+- Missing note D3
+- Extra note F4
+- Extra note A4
+- Extra note F4
+- Extra note F4
+- Extra note A4
+- Extra note F4
+- Extra note C5
+- Extra note A4
+- Extra note F4
+- Extra note E2
+- Extra note G4
+- Extra note E5
+- Extra note E4
+- Extra note B4
+- Extra note G5
+- Extra note G4
+- Extra note G5
+- Extra note B4
+- Extra note G5
+- Extra note E5
+- Extra note B4
+- Extra note G5
+- Extra note G4
+- Extra note G5
+- Extra note E4
+- Extra note B4
+- Extra note G5
+- Eighth detected as 16th
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Missing accent
+- Incorrect pitch G4 (expected F#4)
+- Onset off by 0.75 quarters
+- Incorrect pitch G4 (expected F#4)
+- Eighth detected as dotted eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch B4 (expected A4)
+- Missing accent
+- Incorrect pitch E5 (expected D5)
+- Eighth detected as 16th
+- Incorrect pitch E5 (expected D5)
+- Onset off by 0.5 quarters
+- Incorrect pitch E5 (expected C#5)
+- Eighth detected as dotted eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch G5 (expected C#5)
+- Missing accent
+- Incorrect pitch E4 (expected A#4)
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch G5 (expected C#5)
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch G5 (expected B4)
+- Onset off by 0.75 quarters
+- Incorrect pitch B1 (expected D4)
+- Eighth detected as 16th
+- Onset off by 0.75 quarters
+- Missing accent
+- Incorrect pitch E2 (expected G#4)
+- Eighth detected as dotted eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch E2 (expected G#4)
+- Onset off by 0.5 quarters
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 3 [split]
+- Split measure 3 → 5,6
+- Missing note G#4
+- Missing note F#4
+- Missing note A#4
+- Missing note C#5
+- Missing note A4
+- Missing note C#5
+- Missing note C#5
+- Missing note C#5
+- Missing note E2
+- Missing note B2
+- Missing note E3
+- Missing note F#2
+- Missing note C#3
+- Missing note G#2
+- Missing note D#3
+- Missing note A2
+- Missing note E3
+- Extra note F4
+- Extra note A4
+- Extra note F4
+- Extra note C5
+- Extra note A4
+- Extra note F5
+- Extra note F4
+- Extra note C5
+- Extra note A4
+- Extra note F4
+- Extra note G2
+- Extra note B2
+- Extra note G1
+- Extra note B1
+- Extra note D3
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Missing accent
+- Onset off by 0.5 quarters
+- Incorrect pitch G4 (expected G#4)
+- Incorrect pitch G5 (expected F#5)
+- Missing accent
+- Incorrect pitch B4 (expected C5)
+- Onset off by 0.25 quarters
+- Eighth detected as 16th
+- Onset off by 0.75 quarters
+- Missing accent
+- Eighth detected as 16th
+- Onset off by 0.75 quarters
+- Missing accent
+- Eighth detected as dotted eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch G4 (expected G#4)
+- Eighth detected as dotted eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch B4 (expected C5)
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch B4 (expected A4)
+- Eighth detected as 16th
+- Incorrect pitch G5 (expected D#5)
+- Onset off by 0.25 quarters
+- Incorrect pitch G5 (expected D#5)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch G5 (expected D#5)
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch D3 (expected F#4)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch E2 (expected A#4)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 7 [extra]
+- Extra measure 7
+- Extra note G2
+- Extra note G3
+- Extra note G1
+- Extra note B2
+- Extra note B1
+- Extra note D3
+- Extra note E2
+- Extra note G3
+- Split measure 7 → 15,16
+- Missing note B4
+- Missing note D#5
+- Missing note F#5
+- Missing note C#5
+- Missing note F5
+- Missing note G#5
+- Missing note A#5
+- Missing note E5
+- Missing note B5
+- Missing note C#6
+- Missing note G5
+- Missing note B2
+- Missing note F#3
+- Missing note B3
+- Missing note C#3
+- Missing note G#3
+- Missing note D#3
+- Missing note A#3
+- Missing note E3
+- Extra note A4
+- Extra note F5
+- Extra note F4
+- Extra note C5
+- Extra note A5
+- Extra note C6
+- Extra note E6
+- Extra note G6
+- Extra note B3
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch F3 (expected C#5)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch E2 (expected F5)
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+
+Measure 4 [split]
+- Split measure 4 → 8,9
+- Missing note C5
+- Missing note D5
+- Missing note C#5
+- Missing note E5
+- Missing note D5
+- Missing note F5
+- Missing note C5
+- Missing note E5
+- Missing note G5
+- Missing note D5
+- Missing note F5
+- Missing note C#5
+- Missing note E5
+- Missing note F2
+- Missing note C3
+- Missing note F3
+- Missing note G2
+- Missing note D3
+- Missing note A2
+- Missing note E3
+- Missing note A#2
+- Missing note F3
+- Extra note F4
+- Extra note F4
+- Extra note E2
+- Extra note G3
+- Extra note G2
+- Extra note B3
+- Extra note G2
+- Incorrect pitch B3 (expected F4)
+- Eighth detected as quarter
+- Missing accent
+- Incorrect pitch B3 (expected G4)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch G3 (expected A#4)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch D3 (expected G4)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch D3 (expected B4)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch B2 (expected A4)
+- Eighth detected as quarter
+- Missing accent
+- Incorrect pitch G2 (expected A4)
+- Eighth detected as quarter
+- Incorrect pitch E2 (expected A#4)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch B1 (expected A4)
+- Eighth detected as quarter
+- Incorrect pitch B1 (expected D5)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch G1 (expected B4)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 10 [extra]
+- Extra measure 10
+
+Measure 5 [split]
+- Split measure 5 → 11,12
+- Missing note B4
+- Missing note D5
+- Missing note A4
+- Missing note C#5
+- Missing note E5
+- Missing note B4
+- Missing note D#5
+- Missing note F#5
+- Missing note C5
+- Missing note E5
+- Missing note G5
+- Missing note D5
+- Missing note F#5
+- Missing note A5
+- Missing note C5
+- Missing note E5
+- Missing note G5
+- Missing note B4
+- Missing note D#5
+- Missing note F#5
+- Missing note E5
+- Missing note G2
+- Missing note D3
+- Missing note G3
+- Missing note A2
+- Missing note E3
+- Missing note B2
+- Missing note F#3
+- Missing note C3
+- Missing note G3
+- Extra note F4
+- Extra note A4
+- Extra note F4
+- Extra note C5
+- Extra note A4
+- Extra note F5
+- Extra note F4
+- Extra note C5
+- Extra note A5
+- Extra note A4
+- Extra note F5
+- Extra note F4
+- Extra note C5
+- Extra note A4
+- Extra note B4
+- Extra note G5
+- Extra note D5
+- Extra note G5
+- Extra note G5
+- Extra note D5
+- Extra note B4
+- Extra note G5
+- Incorrect pitch D5 (expected C#5)
+- Eighth detected as dotted eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch G4 (expected A4)
+- Eighth detected as dotted eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch F2 (expected G4)
+- Eighth detected as whole
+- Missing accent
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 6 [split]
+- Split measure 6 → 13,14
+- Missing note C#5
+- Missing note E5
+- Missing note D#5
+- Missing note F#5
+- Missing note G#5
+- Missing note F#5
+- Missing note A2
+- Missing note E3
+- Missing note A3
+- Missing note B2
+- Missing note F#3
+- Missing note C#3
+- Missing note G#3
+- Missing note D3
+- Missing note A3
+- Extra note B4
+- Extra note G5
+- Extra note D5
+- Extra note G5
+- Extra note G5
+- Extra note D5
+- Extra note F4
+- Extra note C5
+- Extra note C5
+- Extra note F5
+- Extra note F4
+- Extra note F5
+- Extra note A5
+- Extra note A4
+- Extra note F5
+- Extra note C6
+- Extra note C5
+- Extra note A5
+- Extra note E6
+- Extra note A4
+- Extra note F5
+- Extra note C6
+- Extra note F4
+- Extra note F5
+- Extra note A5
+- Extra note C5
+- Extra note F5
+- Extra note D5
+- Extra note G5
+- Extra note G5
+- Eighth detected as 16th
+- Eighth detected as 16th
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch C5 (expected C#5)
+- Incorrect pitch F5 (expected E5)
+- Missing accent
+- Incorrect pitch C6 (expected B5)
+- Missing accent
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Eighth detected as 16th
+- Onset off by 0.75 quarters
+- Missing accent
+- Incorrect pitch C5 (expected C#5)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch C5 (expected B4)
+- Eighth detected as dotted eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch C5 (expected D5)
+- Eighth detected as 16th
+- Incorrect pitch C5 (expected D5)
+- Eighth detected as 16th
+- Incorrect pitch C5 (expected F#5)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch F4 (expected B4)
+- Onset off by 0.5 quarters
+- Incorrect pitch A4 (expected F#5)
+- Onset off by 0.5 quarters
+- Incorrect pitch F4 (expected D#5)
+- Eighth detected as dotted eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch F4 (expected G#5)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Missing accent
+- Incorrect pitch F4 (expected G#5)
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 7 [split]
+- Split measure 7 → 15,16
+- Missing note B4
+- Missing note D#5
+- Missing note F#5
+- Missing note C#5
+- Missing note F5
+- Missing note G#5
+- Missing note D#5
+- Missing note A#5
+- Missing note E5
+- Missing note G#5
+- Missing note B5
+- Missing note F#5
+- Missing note A#5
+- Missing note C#6
+- Missing note E5
+- Missing note G#5
+- Missing note B5
+- Missing note D#5
+- Missing note G5
+- Missing note A#5
+- Missing note G#5
+- Missing note B2
+- Missing note F#3
+- Missing note B3
+- Missing note C#3
+- Missing note G#3
+- Missing note D#3
+- Missing note A#3
+- Missing note E3
+- Missing note B3
+- Extra note A4
+- Extra note F5
+- Extra note F4
+- Extra note C5
+- Extra note A5
+- Extra note A4
+- Extra note F5
+- Extra note C6
+- Extra note C5
+- Extra note A5
+- Extra note E6
+- Extra note F5
+- Extra note C6
+- Extra note G6
+- Extra note C5
+- Extra note A5
+- Extra note E6
+- Extra note A4
+- Extra note F5
+- Extra note C6
+- Extra note F4
+- Extra note C5
+- Extra note A5
+- Extra note A4
+- Extra note F4
+- Extra note A4
+- Extra note G2
+- Extra note B3
+- Extra note B2
+- Extra note D3
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch F3 (expected C#5)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch E2 (expected F5)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 17 [extra]
+- Extra measure 17
+- Extra note C5
+- Extra note F4
+- Extra note A4
+- Extra note C5
+- Extra note G2
+- Extra note B3
+- Extra note B2
+- Extra note D3
+- Extra note F3
+
+Measure 8 [split]
+- Split measure 8 → 18,19
+- Missing note E5
+- Missing note G5
+- Missing note F#5
+- Missing note A5
+- Missing note E5
+- Missing note G#5
+- Missing note B5
+- Missing note A5
+- Missing note C6
+- Missing note G5
+- Missing note B5
+- Missing note D6
+- Missing note F5
+- Missing note A5
+- Missing note C6
+- Missing note E5
+- Missing note G#5
+- Missing note B5
+- Missing note A5
+- Missing note C3
+- Missing note G3
+- Missing note C4
+- Missing note D3
+- Missing note A3
+- Missing note E3
+- Missing note B3
+- Missing note F3
+- Missing note C4
+- Extra note F4
+- Extra note F5
+- Extra note A4
+- Extra note C5
+- Extra note F5
+- Extra note A4
+- Extra note A5
+- Extra note C5
+- Extra note F5
+- Extra note F4
+- Extra note A5
+- Extra note F3
+- Extra note B3
+- Incorrect pitch B3 (expected D5)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch D3 (expected D5)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch F3 (expected F5)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch B2 (expected C5)
+- Eighth detected as quarter
+- Missing accent
+- Incorrect pitch D3 (expected F#5)
+- Eighth detected as quarter
+- Onset off by 0.5 quarters
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Top recurring defects:
+1. Missing note (178)
+2. Extra note (176)
+3. Incorrect chord (143)
+4. Duration mismatch (65)
+5. Incorrect pitch (64)
+6. Onset timing difference (59)
+7. Missing accent (20)
+8. Missing voice (8)
+9. Split measure (8)
+10. Extra measure (3)
+11. Tempo change mismatch (1)
+
+Top defect classes: Pitch (418), Measure structure (162), Rhythm (124), Articulation (20), Interpretation (1)
+
+Totals: 725 defects · 264 truth notes · 262 generated notes · 8→19 measures

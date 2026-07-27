@@ -1,0 +1,96 @@
+{
+  "id": "01-gymnopedie-key-signature-m1-2",
+  "source": "gymnopedie",
+  "sourcePdf": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+  "page": 1,
+  "measure": 1,
+  "expectedSymbol": "2-sharp key signature",
+  "rawDetectedCandidates": [],
+  "selectedAttachment": [],
+  "staffPosition": [],
+  "measureAccidentalState": "initial",
+  "keySignatureContext": {
+    "expectedFifths": 2,
+    "detectedFifths": 2
+  },
+  "musicXmlSnippet": "<measure number=\"1\"><attributes><divisions>4</divisions><key><fifths>2</fifths><mode>major</mode></key><time><beats>3</beats><beat-type>4</beat-type></time><staves>2</staves><clef number=\"1\"><sign>G</sign><line>2</line></clef><clef number=\"2\"><sign>F</sign><line>4</line></clef></attributes><direction><words>Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.</words></direction><direction><direction-type><words>Lent</words></direction-type><sound tempo=\"54\"/><offset>7</offset></direction><direction><direction-type><dynamics><pp/></dynamics></direction-type><offset>3</offset></direction><note><pitch><step>G</step><octave>2</octave></pitch><duration>12</duration><voice>2</voice><type>half</type><dot/><staff>2</staff><notations><articulations><staccato/></articulations></notations></note><backup><duration>12</duration></backup><note><rest/><duration>12</duration><voice>1</voice><type>half</type><staff>1</staff></note><backup><duration>8</duration></backup><note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><note><chord/><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><note><chord/><pitch><step>B</step><octave>3</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note></measure>",
+  "renderedResult": "2 sharps on both staves",
+  "soundingMidiBefore": [
+    43,
+    null,
+    66,
+    62,
+    59,
+    38,
+    null,
+    66,
+    61,
+    57,
+    43,
+    null
+  ],
+  "soundingMidiAfter": [
+    43,
+    null,
+    66,
+    62,
+    59,
+    38,
+    null,
+    66,
+    61,
+    57,
+    43,
+    null
+  ],
+  "playbackSignatureUnchanged": true,
+  "failureLayerBefore": "renderer geometry/data loss",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "classification": "key signature",
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-4/source-crops/01-gymnopedie-key-signature-m1-2.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-4/candidate-overlays/01-gymnopedie-key-signature-m1-2.png",
+    "musicXmlSnippetFile": "tmp/notation-fidelity-sprint-4/musicxml-snippets/01-gymnopedie-key-signature-m1-2.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-4/rendered-before/01-gymnopedie-key-signature-m1-2.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-4/rendered-after/01-gymnopedie-key-signature-m1-2.png",
+    "beforeRenderer": {
+      "keyMarks": [],
+      "notes": []
+    },
+    "afterRenderer": {
+      "keyMarks": [
+        {
+          "staff": "treble",
+          "type": "sharp",
+          "column": 0,
+          "y": 36,
+          "cancellation": false
+        },
+        {
+          "staff": "treble",
+          "type": "sharp",
+          "column": 1,
+          "y": 54,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "sharp",
+          "column": 0,
+          "y": 168,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "sharp",
+          "column": 1,
+          "y": 186,
+          "cancellation": false
+        }
+      ],
+      "notes": []
+    }
+  }
+}

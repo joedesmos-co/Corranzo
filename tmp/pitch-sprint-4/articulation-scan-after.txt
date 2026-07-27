@@ -1,0 +1,111 @@
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf',
+  at: 1785080467021
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 246
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 246
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 246
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 251
+} {
+  applied: [ 'contrast', 'background-cleanup' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0.6362821316418906 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 251
+} { applied: [ 'contrast', 'background-cleanup' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 251
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 251
+} { page: 1, legacyFontGlyphsApplied: undefined }
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 251
+} { notes: 111, systems: 2 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 111, systems: 2 }
+[omr-trace] phase=page-1 ms=281 end { systems: 2, measures: 8, notes: 111 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=10 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 8 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 111, measureCount: 8 }
+semantic 41% [P:29% R:72% S:20% A:13% M:50% I:0% Pb:100%] align:90% defects:225 first:1
+Wrote JSON: tmp/pitch-sprint-4/articulation-scan-after.json

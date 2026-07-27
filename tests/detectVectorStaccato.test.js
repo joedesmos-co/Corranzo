@@ -43,10 +43,10 @@ function trebleNote(cx, cy, midi = 60) {
 }
 
 describe('vector staccato glyph audit', () => {
-  it('tracks Bravura staccato and Bravura Text staccatissimo glyphs', () => {
-    expect(VECTOR_STACCATO_GLYPHS.has('\ue4a0')).toBe(true)
-    expect(VECTOR_STACCATO_GLYPHS.has('\ue4a1')).toBe(true)
-    expect(VECTOR_STACCATO_GLYPHS.has('\ue4e5')).toBe(true)
+  it('tracks authoritative SMuFL staccato glyphs and excludes rest glyphs', () => {
+    expect(VECTOR_STACCATO_GLYPHS.has('\ue4a2')).toBe(true)
+    expect(VECTOR_STACCATO_GLYPHS.has('\ue4a3')).toBe(true)
+    expect(VECTOR_STACCATO_GLYPHS.has('\ue4e5')).toBe(false)
     expect(RHYTHM_DOT_GLYPH).toBe('\ue1e7')
   })
 })
@@ -55,7 +55,7 @@ describe('assignVectorStaccato', () => {
   it('binds a staccato glyph above a notehead', () => {
     const notes = [trebleNote(300, 170)]
     const { assignments, detectedStaccatoCount, appliedStaccatoCount } = assignVectorStaccato(
-      [{ text: '\ue4a0', x: 300, y: 140 }],
+      [{ text: '\ue4a2', x: 300, y: 140 }],
       notes,
       measureBox,
       imageData,
@@ -63,6 +63,21 @@ describe('assignVectorStaccato', () => {
     expect(detectedStaccatoCount).toBe(1)
     expect(appliedStaccatoCount).toBe(1)
     expect(assignments.get(0)?.type).toBe('staccato')
+  })
+
+  it('broadcasts one staccato glyph across a chord column', () => {
+    const notes = [
+      trebleNote(300, 170, 67),
+      trebleNote(300, 183, 64),
+      trebleNote(300, 196, 60),
+    ]
+    const { appliedStaccatoCount } = assignVectorStaccato(
+      [{ text: '\ue4a2', x: 300, y: 140 }],
+      notes,
+      measureBox,
+      imageData,
+    )
+    expect(appliedStaccatoCount).toBe(3)
   })
 
   it('does not treat an augmentation dot beside a notehead as staccato', () => {
@@ -90,13 +105,24 @@ describe('assignVectorStaccato', () => {
     expect(detectedStaccatoCount).toBe(0)
     expect(assignments.size).toBe(0)
   })
+
+  it('never treats a quarter-rest glyph as staccato', () => {
+    const { assignments, detectedStaccatoCount } = assignVectorStaccato(
+      [{ text: '\ue4e5', x: 300, y: 140 }],
+      [trebleNote(300, 170)],
+      measureBox,
+      imageData,
+    )
+    expect(detectedStaccatoCount).toBe(0)
+    expect(assignments.size).toBe(0)
+  })
 })
 
 describe('buildVectorMeasureRecord staccato playback path', () => {
   it('emits MusicXML staccato and shortens playback without changing written duration', () => {
     const record = buildVectorMeasureRecord({
       glyphs: [
-        { text: '\ue4a0', x: 300, y: 140 },
+        { text: '\ue4a2', x: 300, y: 140 },
         { text: '\ue0a4', x: 300, y: 170 },
       ],
       imageData,
@@ -112,7 +138,7 @@ describe('buildVectorMeasureRecord staccato playback path', () => {
       measures: [record],
       includeDisclaimer: false,
     })
-    expect(xml).toContain('<staccato/>')
+    expect(xml).toContain('<staccato placement="above"/>')
 
     const timing = parseMusicXml(xml, 'vector-staccato.omr.musicxml')
     const expectedMidi = record.events[0].notes[0].midi

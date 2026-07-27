@@ -1,0 +1,748 @@
+{
+  "pipeline": {
+    "notes": 262,
+    "measures": 19,
+    "confidence": 0.8338121197818507
+  },
+  "v2": {
+    "durationAccuracy": 0.3939,
+    "f1": 0.4563,
+    "onset": 0.3333,
+    "chord": 0.2892,
+    "wrongDuration": 16
+  },
+  "v3i": {
+    "durationAccuracy": 0.4811,
+    "f1": 0.6756,
+    "onset": 0.3674,
+    "chord": 0.393,
+    "wrongDuration": 49,
+    "serializer": {
+      "measureCount": 10,
+      "primaryEventCount": 257,
+      "serializableEventCount": 257,
+      "invalidEventCount": 0,
+      "invalidEventRate": 0,
+      "duplicateEventCount": 0,
+      "duplicateEventRate": 0,
+      "voiceOverlapViolations": 0,
+      "emittedMeasureCount": 10,
+      "warningCount": 0,
+      "approximateQuantizationCount": 243,
+      "deterministic": true,
+      "promotedToRuntime": false
+    },
+    "musical": {
+      "pianoMeasureCount": 8,
+      "ambiguousMeasureCount": 8,
+      "rejectedEventGroupCount": 0,
+      "unresolvedEventGroupCount": 0,
+      "recoveredUniformBeatGridCount": 0,
+      "recoveredMeasureEndCount": 31,
+      "voiceOverlapViolations": 0,
+      "inputMutated": false
+    },
+    "evidence": {
+      "mode": "raw-detector-symbols",
+      "sourceSymbolCount": 262,
+      "independentSourceSymbolCount": 262,
+      "independentSourceSymbolRate": 1,
+      "primaryEventCount": 257,
+      "independentPrimaryEventCount": 257,
+      "independentPrimaryEventRate": 1
+    }
+  },
+  "v3Wrong": {
+    "total": 49,
+    "onsetOk": 24,
+    "onsetAndPitchOk": 1,
+    "hist": {
+      "onset-coupled": 13,
+      "beamed-subdivision": 19,
+      "too-long": 11,
+      "too-short": 6
+    },
+    "topPairs": [
+      [
+        "0.5->1",
+        19
+      ],
+      [
+        "1->1.5",
+        6
+      ],
+      [
+        "0.5->1.5",
+        5
+      ],
+      [
+        "0.5->1.25",
+        4
+      ],
+      [
+        "1->0.5",
+        4
+      ],
+      [
+        "1->2.25",
+        2
+      ],
+      [
+        "1->2",
+        2
+      ],
+      [
+        "1->0.25",
+        2
+      ],
+      [
+        "0.5->2",
+        2
+      ],
+      [
+        "1->2.5",
+        1
+      ],
+      [
+        "0.5->1.75",
+        1
+      ],
+      [
+        "0.5->2.25",
+        1
+      ]
+    ],
+    "onsetOkPairs": [
+      [
+        "0.5->1",
+        9
+      ],
+      [
+        "1->1.5",
+        4
+      ],
+      [
+        "1->0.5",
+        3
+      ],
+      [
+        "0.5->1.25",
+        2
+      ],
+      [
+        "1->0.25",
+        2
+      ],
+      [
+        "1->2.25",
+        1
+      ],
+      [
+        "1->2",
+        1
+      ],
+      [
+        "1->2.5",
+        1
+      ],
+      [
+        "0.5->1.75",
+        1
+      ]
+    ],
+    "samplesOnsetOk": [
+      {
+        "m": 1,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 0.5,
+        "gOn": 0.5,
+        "dPitch": 7,
+        "tv": 1,
+        "gv": 2,
+        "label": "A4->E5"
+      },
+      {
+        "m": 1,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 1.5,
+        "gOn": 1.5,
+        "dPitch": 0,
+        "tv": 1,
+        "gv": 1,
+        "label": "F4->F4"
+      },
+      {
+        "m": 1,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 1.5,
+        "gOn": 1.75,
+        "dPitch": 7,
+        "tv": 1,
+        "gv": 3,
+        "label": "C5->G5"
+      },
+      {
+        "m": 1,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 2.5,
+        "gOn": 2.5,
+        "dPitch": 7,
+        "tv": 1,
+        "gv": 2,
+        "label": "A4->E5"
+      },
+      {
+        "m": 2,
+        "tDur": 0.5,
+        "gDur": 1.25,
+        "tOn": 3.5,
+        "gOn": 3.25,
+        "dPitch": -13,
+        "tv": 1,
+        "gv": 6,
+        "label": "G#4->G3"
+      },
+      {
+        "m": 3,
+        "tDur": 1,
+        "gDur": 1.5,
+        "tOn": 1,
+        "gOn": 1.25,
+        "dPitch": -11,
+        "tv": 2,
+        "gv": 7,
+        "label": "F#2->G1"
+      },
+      {
+        "m": 3,
+        "tDur": 1,
+        "gDur": 0.25,
+        "tOn": 2,
+        "gOn": 2,
+        "dPitch": 14,
+        "tv": 2,
+        "gv": 6,
+        "label": "D#3->F4"
+      },
+      {
+        "m": 4,
+        "tDur": 1,
+        "gDur": 2.25,
+        "tOn": 1,
+        "gOn": 1.25,
+        "dPitch": -8,
+        "tv": 2,
+        "gv": 7,
+        "label": "G2->B1"
+      },
+      {
+        "m": 4,
+        "tDur": 1,
+        "gDur": 2,
+        "tOn": 2,
+        "gOn": 2.25,
+        "dPitch": -2,
+        "tv": 2,
+        "gv": 5,
+        "label": "A2->G2"
+      },
+      {
+        "m": 7,
+        "tDur": 1,
+        "gDur": 2.5,
+        "tOn": 0,
+        "gOn": 0.25,
+        "dPitch": -7,
+        "tv": 2,
+        "gv": 7,
+        "label": "B2->E2"
+      },
+      {
+        "m": 7,
+        "tDur": 1,
+        "gDur": 0.5,
+        "tOn": 0,
+        "gOn": 0.25,
+        "dPitch": 6,
+        "tv": 2,
+        "gv": 1,
+        "label": "B3->F4"
+      },
+      {
+        "m": 7,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 0,
+        "gOn": 0.25,
+        "dPitch": -1,
+        "tv": 1,
+        "gv": 2,
+        "label": "D#5->D5"
+      },
+      {
+        "m": 7,
+        "tDur": 0.5,
+        "gDur": 1.75,
+        "tOn": 0,
+        "gOn": 0.25,
+        "dPitch": -9,
+        "tv": 1,
+        "gv": 5,
+        "label": "F#5->A4"
+      },
+      {
+        "m": 7,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 0.5,
+        "gOn": 0.75,
+        "dPitch": -1,
+        "tv": 1,
+        "gv": 4,
+        "label": "G#5->G5"
+      },
+      {
+        "m": 7,
+        "tDur": 1,
+        "gDur": 1.5,
+        "tOn": 1,
+        "gOn": 1,
+        "dPitch": -6,
+        "tv": 2,
+        "gv": 8,
+        "label": "C#3->G2"
+      },
+      {
+        "m": 7,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 1.5,
+        "gOn": 1.5,
+        "dPitch": 1,
+        "tv": 1,
+        "gv": 2,
+        "label": "E5->F5"
+      },
+      {
+        "m": 7,
+        "tDur": 1,
+        "gDur": 0.5,
+        "tOn": 2,
+        "gOn": 2,
+        "dPitch": 7,
+        "tv": 2,
+        "gv": 6,
+        "label": "A#3->F4"
+      },
+      {
+        "m": 7,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 2,
+        "gOn": 2,
+        "dPitch": -1,
+        "tv": 1,
+        "gv": 1,
+        "label": "A#5->A5"
+      },
+      {
+        "m": 7,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 2.5,
+        "gOn": 2.25,
+        "dPitch": 1,
+        "tv": 1,
+        "gv": 5,
+        "label": "E5->F5"
+      },
+      {
+        "m": 7,
+        "tDur": 1,
+        "gDur": 0.5,
+        "tOn": 3,
+        "gOn": 2.75,
+        "dPitch": 6,
+        "tv": 2,
+        "gv": 3,
+        "label": "B3->F4"
+      },
+      {
+        "m": 7,
+        "tDur": 0.5,
+        "gDur": 1.25,
+        "tOn": 3,
+        "gOn": 2.75,
+        "dPitch": -13,
+        "tv": 1,
+        "gv": 6,
+        "label": "A#5->A4"
+      },
+      {
+        "m": 8,
+        "tDur": 1,
+        "gDur": 1.5,
+        "tOn": 1,
+        "gOn": 1.25,
+        "dPitch": -7,
+        "tv": 2,
+        "gv": 7,
+        "label": "D3->G2"
+      },
+      {
+        "m": 8,
+        "tDur": 1,
+        "gDur": 1.5,
+        "tOn": 2,
+        "gOn": 1.75,
+        "dPitch": 6,
+        "tv": 2,
+        "gv": 6,
+        "label": "B3->F4"
+      },
+      {
+        "m": 8,
+        "tDur": 1,
+        "gDur": 0.25,
+        "tOn": 3,
+        "gOn": 3.25,
+        "dPitch": 5,
+        "tv": 2,
+        "gv": 10,
+        "label": "C4->F4"
+      }
+    ],
+    "samplesPitchOk": [
+      {
+        "m": 1,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 1.5,
+        "gOn": 1.5,
+        "tv": 1,
+        "gv": 1,
+        "label": "F4"
+      }
+    ]
+  },
+  "v2Wrong": {
+    "total": 16,
+    "onsetOk": 8,
+    "onsetAndPitchOk": 3,
+    "hist": {
+      "beamed-subdivision": 3,
+      "too-short": 9,
+      "onset-coupled": 4
+    },
+    "topPairs": [
+      [
+        "1->0.25",
+        7
+      ],
+      [
+        "0.5->1",
+        5
+      ],
+      [
+        "1->0.5",
+        4
+      ]
+    ],
+    "onsetOkPairs": [
+      [
+        "1->0.5",
+        4
+      ],
+      [
+        "0.5->1",
+        3
+      ],
+      [
+        "1->0.25",
+        1
+      ]
+    ],
+    "samplesOnsetOk": [
+      {
+        "m": 1,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 0,
+        "gOn": 0,
+        "dPitch": 0,
+        "tv": 1,
+        "gv": 2,
+        "label": "G4->G4"
+      },
+      {
+        "m": 1,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 1,
+        "gOn": 1,
+        "dPitch": 0,
+        "tv": 1,
+        "gv": 2,
+        "label": "E4->E4"
+      },
+      {
+        "m": 1,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 1,
+        "gOn": 1,
+        "dPitch": 0,
+        "tv": 1,
+        "gv": 2,
+        "label": "B4->B4"
+      },
+      {
+        "m": 2,
+        "tDur": 1,
+        "gDur": 0.5,
+        "tOn": 0,
+        "gOn": 0,
+        "dPitch": 2,
+        "tv": 2,
+        "gv": 2,
+        "label": "D2->E2"
+      },
+      {
+        "m": 3,
+        "tDur": 1,
+        "gDur": 0.5,
+        "tOn": 1,
+        "gOn": 1,
+        "dPitch": -2,
+        "tv": 2,
+        "gv": 2,
+        "label": "F#2->E2"
+      },
+      {
+        "m": 4,
+        "tDur": 1,
+        "gDur": 0.5,
+        "tOn": 1,
+        "gOn": 1,
+        "dPitch": 14,
+        "tv": 2,
+        "gv": 2,
+        "label": "D3->E4"
+      },
+      {
+        "m": 4,
+        "tDur": 1,
+        "gDur": 0.5,
+        "tOn": 2,
+        "gOn": 2,
+        "dPitch": 13,
+        "tv": 2,
+        "gv": 1,
+        "label": "E3->F4"
+      },
+      {
+        "m": 5,
+        "tDur": 1,
+        "gDur": 0.25,
+        "tOn": 2,
+        "gOn": 1.75,
+        "dPitch": 11,
+        "tv": 2,
+        "gv": 1,
+        "label": "F#3->F4"
+      }
+    ],
+    "samplesPitchOk": [
+      {
+        "m": 1,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 2,
+        "label": "G4"
+      },
+      {
+        "m": 1,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 1,
+        "gOn": 1,
+        "tv": 1,
+        "gv": 2,
+        "label": "E4"
+      },
+      {
+        "m": 1,
+        "tDur": 0.5,
+        "gDur": 1,
+        "tOn": 1,
+        "gOn": 1,
+        "tv": 1,
+        "gv": 2,
+        "label": "B4"
+      }
+    ]
+  },
+  "itemCount": 1028,
+  "recoveryHist": {
+    "none": 670,
+    "clip-approximate-to-measure-end": 24,
+    "lane-gap-lengthen": 106,
+    "lane-gap-shorten": 198,
+    "lane-subdivision-continuity": 30
+  },
+  "durHist": [
+    [
+      "undefined",
+      514
+    ],
+    [
+      "1",
+      260
+    ],
+    [
+      "4",
+      62
+    ],
+    [
+      "2",
+      46
+    ],
+    [
+      "6",
+      16
+    ],
+    [
+      "4.71402765461294",
+      8
+    ],
+    [
+      "4.706337525753494",
+      6
+    ],
+    [
+      "7.599040956416072",
+      6
+    ],
+    [
+      "4.434448289119578",
+      4
+    ],
+    [
+      "2.0083615352157533",
+      4
+    ],
+    [
+      "4.659741641685921",
+      4
+    ],
+    [
+      "5.770026603606265",
+      4
+    ],
+    [
+      "8.655039905409398",
+      4
+    ],
+    [
+      "3.323510003971138",
+      4
+    ],
+    [
+      "5.083050427419327",
+      4
+    ],
+    [
+      "4.623641081223113",
+      4
+    ],
+    [
+      "8.677124183006534",
+      4
+    ],
+    [
+      "4.652810457516345",
+      4
+    ],
+    [
+      "4.430308747259424",
+      2
+    ],
+    [
+      "3.889327452332793",
+      2
+    ],
+    [
+      "5.960325130598639",
+      2
+    ],
+    [
+      "3.278785198289844",
+      2
+    ],
+    [
+      "8.642024807807275",
+      2
+    ],
+    [
+      "2.8869651713281588",
+      2
+    ],
+    [
+      "2.874384700543355",
+      2
+    ]
+  ],
+  "exactHist": {
+    "exact": 0,
+    "approx": 514,
+    "missing": 514
+  },
+  "beamByRecovery": [
+    [
+      "nobeam|none|undefined",
+      514
+    ],
+    [
+      "nobeam|lane-gap-shorten|false",
+      164
+    ],
+    [
+      "nobeam|none|false",
+      142
+    ],
+    [
+      "nobeam|lane-gap-lengthen|false",
+      106
+    ],
+    [
+      "beam|lane-gap-shorten|false",
+      34
+    ],
+    [
+      "nobeam|lane-subdivision-continuity|false",
+      30
+    ],
+    [
+      "nobeam|clip-approximate-to-measure-end|false",
+      24
+    ],
+    [
+      "beam|none|false",
+      14
+    ]
+  ],
+  "rawSymbolCount": 0,
+  "rawDur": [],
+  "rawExact": {
+    "exact": 0,
+    "approx": 0,
+    "other": 0
+  }
+}

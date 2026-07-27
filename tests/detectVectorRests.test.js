@@ -71,8 +71,19 @@ describe('restsForMeasure', () => {
     expect(rests[0].positionInMeasure).toBeLessThan(1)
   })
 
-  it('does not treat staccatissimo glyphs as rests', () => {
-    const rests = restsForMeasure([{ text: '\ue4e5', x: 520, y: 170 }], imageData, measureBox, [])
+  it('treats free-standing U+E4E5 glyphs as quarter rests', () => {
+    const rests = restsForMeasure([{ text: '\ue4e5', x: 400, y: 160 }], imageData, measureBox, [])
+    expect(rests).toHaveLength(1)
+    expect(rests[0].durationType).toBe('quarter')
+  })
+
+  it('does not treat staccatissimo glyphs parked on noteheads as rests', () => {
+    const rests = restsForMeasure(
+      [{ text: '\ue4e5', x: 300, y: 170 }],
+      imageData,
+      measureBox,
+      [{ cx: 300, cy: 170 }],
+    )
     expect(rests).toHaveLength(0)
   })
 
@@ -84,6 +95,12 @@ describe('restsForMeasure', () => {
       measureBox,
       noteheads,
     )
+    expect(rests).toHaveLength(0)
+  })
+
+  it('does not treat isolated non-rest articulation codepoints as rests', () => {
+    // U+E4A2 staccato (not the quarter-rest codepoint) must stay ignored.
+    const rests = restsForMeasure([{ text: '\ue4a2', x: 520, y: 170 }], imageData, measureBox, [])
     expect(rests).toHaveLength(0)
   })
 })

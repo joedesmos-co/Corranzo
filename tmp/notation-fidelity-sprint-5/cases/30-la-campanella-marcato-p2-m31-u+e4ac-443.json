@@ -1,0 +1,89 @@
+{
+  "id": "30-la-campanella-marcato-p2-m31-u+e4ac-443",
+  "source": "la-campanella",
+  "sourcePdf": "/Users/ryland/Downloads/etude-s-1413-in-g-minor-la-campanella-liszt.pdf",
+  "page": 2,
+  "measure": 31,
+  "expectedArticulation": "marcato",
+  "expectAbsent": false,
+  "sourcePriority": "PDF text / SMuFL glyph",
+  "rawArticulationCandidate": {
+    "glyph": "",
+    "codepoint": "U+E4AC",
+    "originalGlyph": "",
+    "originalCodepoint": "U+E4AC",
+    "x": 442.69016735253774,
+    "y": 539.8878779360465,
+    "width": 8.029551859533608,
+    "height": 27.20655556899225,
+    "candidateType": "marcato",
+    "placement": "above",
+    "normalization": null
+  },
+  "candidateType": "marcato",
+  "staffSystem": {
+    "page": 2,
+    "systemIndex": 2,
+    "clef": "treble"
+  },
+  "selectedNoteOrChord": {
+    "kind": "note",
+    "noteIndex": 10,
+    "restIndex": null,
+    "midi": 78,
+    "cx": 458.23080857064474,
+    "cy": 543.6627880620155,
+    "chordBroadcastCount": 1
+  },
+  "classification": "U+E4AC pipeline=marcato; manually verified=marcato",
+  "placement": "above",
+  "musicXmlSnippet": "<measure number=\"31\"><note><pitch><step>C</step><alter>1</alter><octave>5</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>E</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><backup><duration>4</duration></backup><note><pitch><step>E</step><octave>6</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><forward><duration>1</duration></forward><note><pitch><step>G</step><alter>1</alter><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff></note><note><pitch><step>E</step><octave>5</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><backup><duration>2</duration></backup><note><pitch><step>C</step><alter>1</alter><octave>6</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>G</step><alter>1</alter><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><backup><duration>3</duration></backup><note><pitch><step>G</step><octave>4</octave></pitch><accidental>natural</accidental><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/><accent placement=\"below\"/></articulations></notations></note><note><pitch><step>G</step><octave>5</octave></pitch><accidental>natural</accidental><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><backup><duration>2</duration></backup><note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><chord/><pitch><step>F</step><alter>1</alter><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><backup><duration>2</duration></backup><note><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><strong-accent type=\"up\" placement=\"above\"/></articulations></notations></note><note><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff></note><note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><chord/><pitch><step>E</step><octave>2</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><backup><duration>1</duration></backup><note><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note></measure>",
+  "renderedResult": {
+    "present": true,
+    "geometry": {
+      "id": "note-marcato-note-m31-t65.492-210-n0-staff-marcato",
+      "kind": "marcato",
+      "scope": "note",
+      "noteId": "note-m31-t65.492-210-n0",
+      "groupId": "note-m31-t65.492-210",
+      "symbol": null,
+      "source": "musicxml",
+      "placement": "above",
+      "chordNoteIds": [
+        "note-m31-t65.492-210-n0"
+      ],
+      "status": "upcoming",
+      "shape": "text",
+      "text": "⌃",
+      "x": 7204.120000000001,
+      "y": 22.200000000000003,
+      "fontSize": 18
+    },
+    "restFermataWrittenOnly": false
+  },
+  "playbackSemanticTrace": {
+    "id": "P1-m31-n619",
+    "measureNumber": 31,
+    "midi": 78,
+    "quarterTime": 122.5,
+    "voice": 1,
+    "staff": 1,
+    "attackCount": 1,
+    "articulationSource": "marcato",
+    "writtenDurationSeconds": 0.1339285714285694,
+    "baseDurationSeconds": 0.0870535714285701,
+    "velocity": 0.66
+  },
+  "notationPlaybackAgree": true,
+  "failureLayerBefore": "1 articulation not detected",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-5/source-crops/30-la-campanella-marcato-p2-m31-u+e4ac-443.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-5/candidate-overlays/30-la-campanella-marcato-p2-m31-u+e4ac-443.png",
+    "musicXmlSnippet": "tmp/notation-fidelity-sprint-5/musicxml-snippets/30-la-campanella-marcato-p2-m31-u+e4ac-443.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-5/rendered-before/30-la-campanella-marcato-p2-m31-u+e4ac-443.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-5/rendered-after/30-la-campanella-marcato-p2-m31-u+e4ac-443.png"
+  }
+}

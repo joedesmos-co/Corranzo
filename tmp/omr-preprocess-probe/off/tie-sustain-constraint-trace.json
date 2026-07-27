@@ -1,0 +1,402 @@
+{
+  "generatedAt": "2026-07-17T01:53:57.168Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "phase": 4,
+  "fixtures": [
+    {
+      "fixtureId": "piano-articulation-scan",
+      "label": "CC0 Articulation Scan Study",
+      "phase": 4,
+      "constraintHistogram": {
+        "expected-cross-measure-tie": 17,
+        "tie-start-without-continuation": 1,
+        "continuation-without-tie-start": 3,
+        "sounding-release-too-short": 17,
+        "written-correct-sustain-wrong": 13,
+        "slur-like-arc-pitch-differs": 0
+      },
+      "dominantConstraint": {
+        "bucket": "expected-cross-measure-tie",
+        "count": 17
+      },
+      "tieGlyphOrphans": {
+        "detectedTieCount": 0,
+        "appliedTieCount": 0,
+        "slurLikeArcPitchDiffers": 0,
+        "unresolvedArcCount": 0
+      },
+      "expectedCrossMeasureTies": [
+        {
+          "measureNumber": 1,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 1,
+          "midi": 48,
+          "label": "C3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 2,
+          "midi": 45,
+          "label": "A2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 2,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 2,
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 3,
+          "midi": 47,
+          "label": "B2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 3,
+          "midi": 45,
+          "label": "A2",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 4,
+          "midi": 48,
+          "label": "C3",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 5,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 5,
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 5,
+          "midi": 48,
+          "label": "C3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        },
+        {
+          "measureNumber": 6,
+          "midi": 45,
+          "label": "A2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "generatedDurationQuarters": 1,
+          "sustainDeficitQuarters": 1,
+          "alreadyTied": false
+        }
+      ],
+      "brokenContinuations": {
+        "startWithoutContinuation": [
+          {
+            "measureNumber": 7,
+            "midi": 71,
+            "label": "B4",
+            "onsetQuarters": 1,
+            "durationQuarters": 1,
+            "voice": 1,
+            "partId": "P1",
+            "missingContinuation": {
+              "measureNumber": 8,
+              "midi": 71,
+              "label": "B4",
+              "onsetQuarters": 2,
+              "durationQuarters": 1,
+              "voice": 1,
+              "partId": "P1"
+            }
+          }
+        ],
+        "continuationWithoutStart": [
+          {
+            "measureNumber": 2,
+            "midi": 65,
+            "label": "F4",
+            "onsetQuarters": 2,
+            "durationQuarters": 1,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 1,
+              "midi": 65,
+              "label": "F4",
+              "onsetQuarters": 3,
+              "durationQuarters": 1,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 5,
+            "midi": 69,
+            "label": "A4",
+            "onsetQuarters": 0,
+            "durationQuarters": 1,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 4,
+              "midi": 69,
+              "label": "A4",
+              "onsetQuarters": 2,
+              "durationQuarters": 1,
+              "voice": 1,
+              "partId": "P1"
+            }
+          },
+          {
+            "measureNumber": 5,
+            "midi": 72,
+            "label": "C5",
+            "onsetQuarters": 0,
+            "durationQuarters": 1,
+            "voice": 1,
+            "partId": "P1",
+            "missingStart": {
+              "measureNumber": 4,
+              "midi": 72,
+              "label": "C5",
+              "onsetQuarters": 2,
+              "durationQuarters": 1,
+              "voice": 1,
+              "partId": "P1"
+            }
+          }
+        ]
+      },
+      "writtenCorrectSustainWrong": [
+        {
+          "measureNumber": 1,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 2,
+          "midi": 45,
+          "label": "A2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 2,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 2,
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 3,
+          "midi": 47,
+          "label": "B2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 4,
+          "midi": 48,
+          "label": "C3",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 5,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 5,
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 6,
+          "midi": 45,
+          "label": "A2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 6,
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 7,
+          "midi": 43,
+          "label": "G2",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        },
+        {
+          "measureNumber": 7,
+          "midi": 48,
+          "label": "C3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 2,
+          "partId": "P1",
+          "truthDurationQuarters": 2,
+          "generatedDurationQuarters": 1,
+          "sustainDiffQuarters": 1
+        }
+      ],
+      "tieChainTraces": null,
+      "falseTieGuard": null
+    }
+  ]
+}

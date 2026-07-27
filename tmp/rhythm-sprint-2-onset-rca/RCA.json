@@ -1,0 +1,153 @@
+{
+  "title": "Rhythm Sprint 2 — Onset RCA",
+  "date": "2026-07-18",
+  "baseline": {
+    "file": "tmp/after-rhythm-sprint-1.json",
+    "rhythmMean": 0.5848,
+    "onsetMismatch": 145,
+    "durationMismatch": 169,
+    "evaluatorVersion": "2.0.0",
+    "frozen": true
+  },
+  "focusFixtures": {
+    "piano-dense-advanced-vector": { "onset": 59, "duration": 61, "rhythm": "30%", "source": "vector-glyphs" },
+    "guitar-tab-sparse-vector": { "onset": 23, "duration": 30, "rhythm": "17%", "source": "tab-vector" },
+    "piano-rhythm-tuplets-vector": { "onset": 33, "duration": 16, "rhythm": "48%", "source": "vector-glyphs" },
+    "piano-articulation-scan": { "onset": 7, "duration": 0, "rhythm": "80%", "source": "scan/raster" },
+    "guitar-standard-chords-vector": { "onset": 10, "duration": 9, "rhythm": "45%", "source": "vector-glyphs" }
+  },
+  "taxonomy": {
+    "nOnsetFocusFixtures": 132,
+    "shares": {
+      "A_duration_cascade": 0.7,
+      "B_voice_separation": 0.03,
+      "C_chord_sequentialized": 0.15,
+      "D_rests": 0.05,
+      "E_tuplets": 0.05,
+      "F_beam_grouping": 0.02,
+      "G_measure_packing": 0.05
+    },
+    "notes": {
+      "F_beam_grouping": "Low as sole primary label, but is the dominant mechanism inside A for vector fixtures: refineEventDurationsFromBeamEvidence caps only, never floors short gaps under primary-beam evidence.",
+      "G_measure_packing": "split-measure co-occurs on dense/standard-chords; do not treat as primary onset root cause. Tab uneven slots classified under A."
+    }
+  },
+  "postSprint1Evidence": {
+    "beamedToSixteenthEvents": {
+      "piano-dense-advanced-vector": 19,
+      "piano-rhythm-tuplets-vector": 15,
+      "guitar-standard-chords-vector": 4
+    },
+    "mechanism": "buildNoteEventsFromGroups assigns duration from position gap; refineEventDurationsFromBeamEvidence only shortens when duration > inferredBeamDurationCap; durationDivisions=1 survives on beams=1 / beamStrength>=8 notes."
+  },
+  "sixteenthAudit": {
+    "productionPaths": {
+      "inferNoteDuration": "beams>=2 → sixteenth; beams>=1||beamStrength>=8 → eighth; strength alone never sixteenth",
+      "countBeams": "returns 0 or 1 only; never 2",
+      "measureBeamStrength": "1-D tip-row scan; cannot see secondary beam",
+      "gapPrimary": "position delta of 1 division emits sixteenth events",
+      "smuflFlagBeamGlyphs": "absent in focus vector PDFs"
+    },
+    "deadOrShadow": {
+      "beamStemReconstructionDiagnostics.beamLevel": "still maps beamStrength>=14 → level 2 (diagnostics only)"
+    },
+    "proposedTrueSixteenthRecognition": {
+      "file": "src/features/omr/detectNoteRhythmFeatures.js",
+      "function": "countBeams",
+      "idea": "After primary beam at tipY, scan parallel rows ~0.35–0.7 staff-space for second horizontal ink run ≥8px → beams=2. Do NOT use saturated strength.",
+      "optional": "partial-beam stubs / double-flag near tip when no primary beam"
+    }
+  },
+  "recommendedFixes": [
+    {
+      "rank": 1,
+      "title": "Beam duration floor for primary-beam notes",
+      "files": [
+        {
+          "path": "src/features/omr/processVectorOmrPage.js",
+          "functions": [
+            "refineEventDurationsFromBeamEvidence",
+            "inferredBeamDurationCap"
+          ]
+        }
+      ],
+      "change": "When beams===1 or beamStrength>=8 and beams<2, if gap duration < eighth, raise to eighth (and preferably re-snap following same-clef onset).",
+      "breaksCascade": true,
+      "expectedImpact": "Dense/tuplets/standard-chords onset+duration; little/no tab"
+    },
+    {
+      "rank": 2,
+      "title": "Secondary-beam row scan for beams=2",
+      "files": [
+        {
+          "path": "src/features/omr/detectNoteRhythmFeatures.js",
+          "functions": ["countBeams", "measureBeamStrength"]
+        }
+      ],
+      "change": "Detect real secondary beam ink on parallel tip-offset rows; enable true sixteenths without restoring strength≥14→sixteenth.",
+      "pairsWith": 1,
+      "expectedImpact": "True 16ths (e.g. tuplets m2) after Fix 1 floors primary beams"
+    },
+    {
+      "rank": "2-alt",
+      "title": "Tab beat-grid slot packing",
+      "files": [
+        {
+          "path": "src/features/omr/detectTabNotation.js",
+          "functions": ["buildTabTimingBuckets", "assignMonotonicSlots"]
+        }
+      ],
+      "change": "Suppress spurious leading 16th / d=3 slots when ~beat-count groups should land on quarter beats.",
+      "expectedImpact": "guitar-tab-sparse onset 23 / duration 30 pattern"
+    }
+  ],
+  "traps": [
+    "Gap-primary owns event duration; notehead durationType is advisory.",
+    "Sprint-1 cap does not floor short gaps.",
+    "countBeams never returns 2 today — beams>=2 branch is dead.",
+    "Chord sequentialization is a separate onset source on dense.",
+    "split-measure inflates onset pairing noise.",
+    "TAB path is detectTabNotation, not processVectorOmrPage.",
+    "Diagnostics SIXTEENTH_BEAM_STRENGTH=14 must not re-enter production duration.",
+    "Tuplets m2 truth is real 16ths — Fix 1 without Fix 2a can over-floor.",
+    "Do not modify frozen evaluator 2.0.0."
+  ],
+  "sampleTraces": {
+    "piano-dense-advanced-vector": {
+      "m2": {
+        "truthAttacksQ": [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
+        "genStartsOMR4": [0, 3, 5, 7, 9, 12],
+        "primary": ["C_chord_sequentialized", "A_duration_cascade"]
+      },
+      "m3": {
+        "genPattern": "many d=1 sixteenth with mixed beams/bStr including 29",
+        "primary": "A_duration_cascade"
+      }
+    },
+    "guitar-tab-sparse-vector": {
+      "m2": {
+        "truth": "4 quarters",
+        "gen": "@1:16th + three d=3 + stretched last",
+        "primary": "A_duration_cascade"
+      }
+    },
+    "piano-rhythm-tuplets-vector": {
+      "m3": { "primary": "E_tuplets", "note": "3:2 eighths → gen 16ths, no time-modification" },
+      "m7": { "primary": "A_duration_cascade", "note": "beamed notes still d=1" }
+    },
+    "piano-articulation-scan": {
+      "m3": { "primary": "D_rests", "genAttacks": [0, 5, 11] }
+    },
+    "guitar-standard-chords-vector": {
+      "m1": { "primary": "A_duration_cascade", "note": "leading sixteenth with beams=1" }
+    }
+  },
+  "artifacts": [
+    "tmp/rhythm-sprint-2-onset-rca/RCA.md",
+    "tmp/rhythm-sprint-2-onset-rca/probe-onset-rca.mjs",
+    "tmp/rhythm-sprint-2-onset-rca/*.onset-rca.json",
+    "tmp/rhythm-sprint-2-onset-rca/*.fresh-page-diag.json",
+    "tmp/rhythm-sprint-2-onset-rca/taxonomy-refined.json",
+    "tmp/rhythm-sprint-2-onset-rca/*.omr.musicxml"
+  ]
+}

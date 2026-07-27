@@ -1,0 +1,143 @@
+[
+  {
+    "id": "guitar-techniques-paired-vector",
+    "pitch": {
+      "numerator": 26,
+      "denominator": 36,
+      "truePositives": 26,
+      "falsePositives": 4,
+      "falseNegatives": 6,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 32,
+      "compared": 36,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.7222,
+      "percent": "72%",
+      "reliable": true,
+      "displayPercent": "72%"
+    },
+    "buckets": {
+      "accidental-or-alter": 2
+    },
+    "fretConsistency": {
+      "withFret": 32,
+      "fretMatch": 30,
+      "fretOff": 2,
+      "deltas": {
+        "-1": 2
+      }
+    }
+  },
+  {
+    "id": "guitar-paired-chords-vector",
+    "pitch": {
+      "numerator": 44,
+      "denominator": 143,
+      "truePositives": 44,
+      "falsePositives": 27,
+      "falseNegatives": 72,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 116,
+      "compared": 143,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.3077,
+      "percent": "31%",
+      "reliable": true,
+      "displayPercent": "31%"
+    },
+    "buckets": {
+      "accidental-or-alter": 9,
+      "larger-interval": 5,
+      "one-diatonic-step": 16,
+      "small-interval-other": 2
+    },
+    "fretConsistency": {
+      "withFret": 102,
+      "fretMatch": 50,
+      "fretOff": 52,
+      "deltas": {
+        "1": 7,
+        "3": 1,
+        "4": 6,
+        "5": 5,
+        "6": 1,
+        "7": 2,
+        "11": 3,
+        "12": 5,
+        "13": 2,
+        "-3": 4,
+        "-2": 5,
+        "-9": 2,
+        "-5": 4,
+        "-4": 1,
+        "-1": 4
+      }
+    }
+  },
+  {
+    "id": "guitar-standard-chords-vector",
+    "pitch": {
+      "numerator": 4,
+      "denominator": 164,
+      "truePositives": 4,
+      "falsePositives": 49,
+      "falseNegatives": 111,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 115,
+      "compared": 164,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.0244,
+      "percent": "2%",
+      "reliable": true,
+      "displayPercent": "2%"
+    },
+    "buckets": {
+      "larger-interval": 27,
+      "octave-error": 5,
+      "accidental-or-alter": 1
+    },
+    "fretConsistency": {
+      "withFret": 0,
+      "fretMatch": 0,
+      "fretOff": 0,
+      "deltas": {}
+    }
+  },
+  {
+    "id": "guitar-tab-sparse-vector",
+    "pitch": {
+      "numerator": 28,
+      "denominator": 40,
+      "truePositives": 28,
+      "falsePositives": 8,
+      "falseNegatives": 4,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 32,
+      "compared": 40,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.7,
+      "percent": "70%",
+      "reliable": true,
+      "displayPercent": "70%"
+    },
+    "buckets": {
+      "accidental-or-alter": 1,
+      "small-interval-other": 2,
+      "larger-interval": 1
+    },
+    "fretConsistency": {
+      "withFret": 40,
+      "fretMatch": 40,
+      "fretOff": 0,
+      "deltas": {}
+    }
+  }
+]

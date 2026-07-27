@@ -1,0 +1,79 @@
+{
+  "id": "38-piano-articulation-scan-noise-control-m1-sharp-bass-1-120",
+  "source": "piano-articulation-scan",
+  "sourcePdf": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf",
+  "page": 1,
+  "measure": 1,
+  "expectedSymbol": "no accidental/key signature",
+  "rawDetectedCandidates": [
+    {
+      "type": "sharp",
+      "staff": "bass",
+      "orderIndex": 1,
+      "yNorm": 0.3068006182380216,
+      "cx": 120
+    }
+  ],
+  "selectedAttachment": null,
+  "staffPosition": {
+    "staff": "bass",
+    "orderIndex": 1,
+    "yNorm": 0.3068006182380216
+  },
+  "measureAccidentalState": "unchanged",
+  "keySignatureContext": {
+    "expectedFifths": 0,
+    "emittedFifths": 0
+  },
+  "musicXmlSnippet": "<measure number=\"1\"><attributes><divisions>4</divisions><time><beats>4</beats><beat-type>4</beat-type></time><staves>2</staves><clef number=\"1\"><sign>G</sign><line>2</line></clef><clef number=\"2\"><sign>F</sign><line>4</line></clef></attributes><direction><words>Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.</words></direction><barline location=\"left\"><bar-style>heavy-light</bar-style><repeat direction=\"forward\"/></barline><direction><words>OMR rhythm uncertain</words></direction><note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff></note><note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff><notations><articulations><staccato/></articulations></notations></note><note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><dot/><staff>2</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff></note><note><chord/><pitch><step>B</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><dot/><staff>2</staff></note><note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note></measure>",
+  "renderedResult": "diagnostic only; no accidental glyph",
+  "soundingMidiBefore": [
+    67,
+    64,
+    43,
+    62,
+    48,
+    67,
+    47,
+    72,
+    69,
+    45,
+    69,
+    64
+  ],
+  "soundingMidiAfter": [
+    67,
+    64,
+    43,
+    62,
+    48,
+    67,
+    47,
+    72,
+    69,
+    45,
+    69,
+    64
+  ],
+  "playbackSignatureUnchanged": true,
+  "failureLayerBefore": "clef/staff fragment selected as raster key signature",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "classification": "uncertain scan mark retained as diagnostics only",
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-4/source-crops/38-piano-articulation-scan-noise-control-m1-sharp-bass-1-120.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-4/candidate-overlays/38-piano-articulation-scan-noise-control-m1-sharp-bass-1-120.png",
+    "musicXmlSnippetFile": "tmp/notation-fidelity-sprint-4/musicxml-snippets/38-piano-articulation-scan-noise-control-m1-sharp-bass-1-120.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-4/rendered-before/38-piano-articulation-scan-noise-control-m1-sharp-bass-1-120.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-4/rendered-after/38-piano-articulation-scan-noise-control-m1-sharp-bass-1-120.png",
+    "beforeRenderer": {
+      "keyMarks": [],
+      "notes": []
+    },
+    "afterRenderer": {
+      "keyMarks": [],
+      "notes": []
+    }
+  }
+}

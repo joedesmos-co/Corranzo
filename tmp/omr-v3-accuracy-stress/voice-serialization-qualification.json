@@ -1,0 +1,4938 @@
+{
+  "phase": "7",
+  "generatedAt": "2026-07-17T03:20:47.920Z",
+  "enforcedFixtures": [
+    "clean",
+    "dense",
+    "simple"
+  ],
+  "anyTruthApproved": false,
+  "totalTruthApproved": 0,
+  "totalStructuralApplied": 0,
+  "totalDurationCoupledApplied": 0,
+  "verdict": "NO — zero truth-approved measures on live enforced fixtures.",
+  "fixtures": [
+    {
+      "fixtureId": "clean",
+      "phase": "6b",
+      "liveEligible": true,
+      "scoreGraphAvailable": false,
+      "truthAvailable": false,
+      "anyTruthApproved": false,
+      "truthApprovedCount": 0,
+      "structuralAppliedCount": 0,
+      "blocker": "no-scoregraph-full",
+      "hotspotMeasures": [],
+      "hotspotQualification": [],
+      "measures": [],
+      "globalDelta": null,
+      "runtimeMetrics": null,
+      "recommendation": "Re-run live dashboard with includeScoreGraph and truth MXL."
+    },
+    {
+      "fixtureId": "dense",
+      "phase": "7",
+      "constraintVersion": "phase-7-duration-coupled",
+      "durationCoupledAppliedCount": 0,
+      "liveEligible": true,
+      "scoreGraphAvailable": true,
+      "truthAvailable": true,
+      "shadowStatus": "shadow-no-qualifying-measures",
+      "promoted": false,
+      "anyTruthApproved": false,
+      "truthApprovedCount": 0,
+      "structuralAppliedCount": 0,
+      "rejectedByTruthCount": 0,
+      "structurallyRejectedCount": 115,
+      "dominantBlocker": {
+        "bucket": "hard-constraints",
+        "count": 115
+      },
+      "blockerHistogram": {
+        "hard-constraints": 115
+      },
+      "hotspotMeasures": [
+        7,
+        9,
+        121
+      ],
+      "hotspotQualification": [
+        {
+          "measureNumber": 7,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 7,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 9,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 9,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 121,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 121,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "measures": [
+        {
+          "measureNumber": 2,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 2,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "accompaniment-adaptive-phase",
+              "variantLabel": "accompaniment adaptive phase",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-adaptive-phase-coupled",
+              "variantLabel": "accompaniment adaptive phase + duration couple",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-2",
+              "variantLabel": "accompaniment -0.5q",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-2-coupled",
+              "variantLabel": "accompaniment -0.5q + duration couple",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-3",
+              "variantLabel": "accompaniment -0.75q",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-3-coupled",
+              "variantLabel": "accompaniment -0.75q + duration couple",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            }
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 4,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "accompaniment-adaptive-phase",
+              "variantLabel": "accompaniment adaptive phase",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-adaptive-phase-coupled",
+              "variantLabel": "accompaniment adaptive phase + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-2",
+              "variantLabel": "accompaniment -0.5q",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-2-coupled",
+              "variantLabel": "accompaniment -0.5q + duration couple",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-3",
+              "variantLabel": "accompaniment -0.75q",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-3-coupled",
+              "variantLabel": "accompaniment -0.75q + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            }
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 5,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "accompaniment-adaptive-phase",
+              "variantLabel": "accompaniment adaptive phase",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-adaptive-phase-coupled",
+              "variantLabel": "accompaniment adaptive phase + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-2",
+              "variantLabel": "accompaniment -0.5q",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-2-coupled",
+              "variantLabel": "accompaniment -0.5q + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-3",
+              "variantLabel": "accompaniment -0.75q",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-3-coupled",
+              "variantLabel": "accompaniment -0.75q + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            }
+          ]
+        },
+        {
+          "measureNumber": 6,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 6,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 7,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 7,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 8,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 8,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "accompaniment-adaptive-phase",
+              "variantLabel": "accompaniment adaptive phase",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 1,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-adaptive-phase-coupled",
+              "variantLabel": "accompaniment adaptive phase + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 1,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-2",
+              "variantLabel": "accompaniment -0.5q",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-2-coupled",
+              "variantLabel": "accompaniment -0.5q + duration couple",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            }
+          ]
+        },
+        {
+          "measureNumber": 9,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 9,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 10,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 10,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 11,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 11,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 12,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 12,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 13,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 13,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 14,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 14,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 15,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 15,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 16,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 16,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 17,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 17,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 18,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 18,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 19,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 19,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 20,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 20,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 21,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 21,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 22,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 22,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 23,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 23,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 24,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 24,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 25,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 25,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 26,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 26,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 27,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 27,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 28,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 28,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 29,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 29,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 30,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 30,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 31,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 31,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 32,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 32,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 33,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 33,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 34,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 34,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 35,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 35,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 36,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 36,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 37,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 37,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 38,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 38,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 39,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 39,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 40,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 40,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 41,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 41,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 42,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 42,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 43,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 43,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 44,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 44,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 45,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 45,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 54,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 54,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 55,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 55,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "accompaniment-adaptive-phase",
+              "variantLabel": "accompaniment adaptive phase",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "same-start-collision"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-adaptive-phase-coupled",
+              "variantLabel": "accompaniment adaptive phase + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split",
+                "same-start-collision"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-2",
+              "variantLabel": "accompaniment -0.5q",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-2-coupled",
+              "variantLabel": "accompaniment -0.5q + duration couple",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            }
+          ]
+        },
+        {
+          "measureNumber": 56,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 56,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 57,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 57,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 58,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 58,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 59,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 59,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 60,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 60,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 61,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 61,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 62,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 62,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 63,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 63,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 64,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 64,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 65,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 65,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 66,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 66,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 67,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 67,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 68,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 68,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 69,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 69,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 70,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 70,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 71,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 71,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 72,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 72,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 73,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 73,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 74,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 74,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 75,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 75,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 76,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 76,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 77,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 77,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 78,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 78,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 79,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 79,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 80,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 80,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 81,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 81,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 82,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 82,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 83,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 83,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 84,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 84,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 85,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 85,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 86,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 86,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 87,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 87,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 88,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 88,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 89,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 89,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 90,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 90,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 91,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 91,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 92,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 92,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 93,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 93,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 94,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 94,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 95,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 95,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 96,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 96,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 97,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 97,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 98,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 98,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 99,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 99,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 100,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 100,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 101,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 101,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 102,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 102,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 103,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 103,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 104,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 104,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 105,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 105,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 106,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 106,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 107,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 107,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 108,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 108,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 109,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 109,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 110,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 110,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 111,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 111,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 112,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 112,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 113,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 113,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 114,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 114,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 115,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 115,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 116,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 116,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 117,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 117,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 118,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 118,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 119,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 119,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 120,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 120,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 121,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 121,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 122,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 122,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 123,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 123,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 124,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 124,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 125,
+          "status": "structurally-rejected",
+          "blocker": "hard-constraints",
+          "variantId": null,
+          "structuralVariantId": null,
+          "truthGateDelta": null,
+          "perMeasureDelta": {
+            "measureNumber": 125,
+            "wrongOnsetDelta": 0,
+            "wrongDurationDelta": 0,
+            "chordMismatchDelta": 0,
+            "wrongPitchDelta": 0
+          },
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "truthApprovedMeasures": [],
+      "structuralAppliedMeasures": [],
+      "rejectedMeasures": [
+        {
+          "measureNumber": 2,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "accompaniment-adaptive-phase",
+              "variantLabel": "accompaniment adaptive phase",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-adaptive-phase-coupled",
+              "variantLabel": "accompaniment adaptive phase + duration couple",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-2",
+              "variantLabel": "accompaniment -0.5q",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-2-coupled",
+              "variantLabel": "accompaniment -0.5q + duration couple",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-3",
+              "variantLabel": "accompaniment -0.75q",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-3-coupled",
+              "variantLabel": "accompaniment -0.75q + duration couple",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            }
+          ]
+        },
+        {
+          "measureNumber": 4,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "accompaniment-adaptive-phase",
+              "variantLabel": "accompaniment adaptive phase",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-adaptive-phase-coupled",
+              "variantLabel": "accompaniment adaptive phase + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-2",
+              "variantLabel": "accompaniment -0.5q",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-2-coupled",
+              "variantLabel": "accompaniment -0.5q + duration couple",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-3",
+              "variantLabel": "accompaniment -0.75q",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-3-coupled",
+              "variantLabel": "accompaniment -0.75q + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            }
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "accompaniment-adaptive-phase",
+              "variantLabel": "accompaniment adaptive phase",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-adaptive-phase-coupled",
+              "variantLabel": "accompaniment adaptive phase + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-2",
+              "variantLabel": "accompaniment -0.5q",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-2-coupled",
+              "variantLabel": "accompaniment -0.5q + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-3",
+              "variantLabel": "accompaniment -0.75q",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-3-coupled",
+              "variantLabel": "accompaniment -0.75q + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            }
+          ]
+        },
+        {
+          "measureNumber": 6,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 7,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 8,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "accompaniment-adaptive-phase",
+              "variantLabel": "accompaniment adaptive phase",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 1,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-adaptive-phase-coupled",
+              "variantLabel": "accompaniment adaptive phase + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 1,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-2",
+              "variantLabel": "accompaniment -0.5q",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-2-coupled",
+              "variantLabel": "accompaniment -0.5q + duration couple",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            }
+          ]
+        },
+        {
+          "measureNumber": 9,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 10,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 11,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 12,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 13,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 14,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 15,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 16,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 17,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 18,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 19,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 20,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 21,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 22,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 23,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 24,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 25,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 26,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 27,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 28,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 29,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 30,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 31,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 32,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 33,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 34,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 35,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 36,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 37,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 38,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 39,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 40,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 41,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 42,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 43,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 44,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 45,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 54,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 55,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": [
+            {
+              "variantId": "accompaniment-adaptive-phase",
+              "variantLabel": "accompaniment adaptive phase",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split",
+                "same-start-collision"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-adaptive-phase-coupled",
+              "variantLabel": "accompaniment adaptive phase + duration couple",
+              "rejectReason": "constraints-failed",
+              "violations": [
+                "chord-split",
+                "same-start-collision"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            },
+            {
+              "variantId": "accompaniment-minus-2",
+              "variantLabel": "accompaniment -0.5q",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "duration-changed",
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": false
+            },
+            {
+              "variantId": "accompaniment-minus-2-coupled",
+              "variantLabel": "accompaniment -0.5q + duration couple",
+              "rejectReason": "preservation-failed",
+              "violations": [
+                "chord-split"
+              ],
+              "coalescedCount": 0,
+              "target": "accompaniment",
+              "durationCoupled": true
+            }
+          ]
+        },
+        {
+          "measureNumber": 56,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 57,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 58,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 59,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 60,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 61,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 62,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 63,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 64,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 65,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 66,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 67,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 68,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 69,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 70,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 71,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 72,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 73,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 74,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 75,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 76,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 77,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 78,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 79,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 80,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 81,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 82,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 83,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 84,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 85,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 86,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 87,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 88,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 89,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 90,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 91,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 92,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 93,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 94,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 95,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 96,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 97,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 98,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 99,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 100,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 101,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 102,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 103,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 104,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 105,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 106,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 107,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 108,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 109,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 110,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 111,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 112,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 113,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 114,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 115,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 116,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 117,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 118,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 119,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 120,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 121,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 122,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 123,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 124,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing",
+            "beam-mixed-ownership"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 125,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "accompaniment-lane",
+            "late-phase-figures",
+            "cross-staff-pairing"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "globalDelta": {
+        "wrongOnset": 0,
+        "wrongDuration": 0,
+        "chordMismatch": 0,
+        "wrongPitch": 0,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0
+      },
+      "hotspotDelta": [
+        {
+          "measureNumber": 7,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 9,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 121,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        }
+      ],
+      "runtimeMetrics": {
+        "wrongOnset": 94,
+        "wrongDuration": 77,
+        "chordMismatch": 170,
+        "wrongPitch": 147,
+        "noteCountDiff": -2,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0.9377,
+        "durationAccuracy": 0.9626,
+        "onsetAccuracy": 0.9566,
+        "chordGroupingAccuracy": 0.9413,
+        "noteDetectionF1": 0.9904
+      },
+      "shadowMetrics": {
+        "wrongOnset": 94,
+        "wrongDuration": 77,
+        "chordMismatch": 170,
+        "wrongPitch": 147,
+        "noteCountDiff": -2,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0.9377,
+        "durationAccuracy": 0.9626,
+        "onsetAccuracy": 0.9566,
+        "chordGroupingAccuracy": 0.9413,
+        "noteDetectionF1": 0.9904
+      },
+      "runtimeFrozenMatch": {
+        "wrongOnset": true,
+        "wrongDuration": true,
+        "chordMismatch": false,
+        "wrongPitch": true
+      },
+      "recommendation": "Blocker is hard constraints (voice overlap) — duration coupling insufficient; inspect gapToNextOnset IR or multi-voice overlap."
+    },
+    {
+      "fixtureId": "simple",
+      "phase": "6b",
+      "liveEligible": true,
+      "scoreGraphAvailable": false,
+      "truthAvailable": false,
+      "anyTruthApproved": false,
+      "truthApprovedCount": 0,
+      "structuralAppliedCount": 0,
+      "blocker": "no-scoregraph-full",
+      "hotspotMeasures": [
+        10
+      ],
+      "hotspotQualification": [],
+      "measures": [],
+      "globalDelta": null,
+      "runtimeMetrics": null,
+      "recommendation": "Re-run live dashboard with includeScoreGraph and truth MXL."
+    }
+  ],
+  "phase8Recommendation": "Phase 8: paired cross-staff lane moves + sustain-aware release IR; duration coupling alone did not clear voice overlap on hotspots.",
+  "phase7Recommendation": "Duration-coupled lane shadow ran but hotspots still blocked by hard constraints — see per-measure rejectedVariants."
+}

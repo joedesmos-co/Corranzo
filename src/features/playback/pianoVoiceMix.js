@@ -5,14 +5,17 @@
 
 const CHORD_TIME_EPSILON = 0.004
 
-/** High but finite simultaneous voice budget (sampler has no built-in cap). */
-export const MAX_SIMULTANEOUS_VOICES = 48
+/** Align with PolySynth maxPolyphony — dense chords must not steal early. */
+export const MAX_SIMULTANEOUS_VOICES = 72
 
 /** Start gentle velocity ducking above this many overlapping voices. */
-const DENSITY_DUCK_THRESHOLD = 5
+const DENSITY_DUCK_THRESHOLD = 8
 
 /** Extra global-load ducking when sustained tails stack up. */
-const GLOBAL_LOAD_DUCK_THRESHOLD = 12
+const GLOBAL_LOAD_DUCK_THRESHOLD = 18
+
+/** Softest allowed gain after density ducking (keeps pp quieter than p). */
+const MIN_TRIGGER_VELOCITY = 0.12
 
 export function createVoiceMixState() {
   return {
@@ -117,7 +120,8 @@ export function planNoteTrigger(state, { time, velocity, duration, note = null }
     )
     if (duplicate) {
       state.duplicatesSkipped += 1
-      const density = Math.max(countAllOverlapping(state, time), countChordBucketOverlapping(state, time)) + 1
+      const density =
+        Math.max(countAllOverlapping(state, time), countChordBucketOverlapping(state, time)) + 1
       return { velocity: 0, density, reduced: false, skipped: true, release: [] }
     }
   }
@@ -130,17 +134,17 @@ export function planNoteTrigger(state, { time, velocity, duration, note = null }
   let reduced = false
 
   if (density > DENSITY_DUCK_THRESHOLD) {
-    adjusted *= (DENSITY_DUCK_THRESHOLD / density) ** 0.4
+    adjusted *= (DENSITY_DUCK_THRESHOLD / density) ** 0.35
     reduced = true
     state.densityReduced += 1
   }
 
   if (density > GLOBAL_LOAD_DUCK_THRESHOLD) {
-    adjusted *= (GLOBAL_LOAD_DUCK_THRESHOLD / density) ** 0.25
+    adjusted *= (GLOBAL_LOAD_DUCK_THRESHOLD / density) ** 0.22
     reduced = true
   }
 
-  adjusted = Math.min(0.86, Math.max(0.32, adjusted))
+  adjusted = Math.min(0.92, Math.max(MIN_TRIGGER_VELOCITY, adjusted))
 
   const victims = note ? findVoicesToSteal(state, time, 1) : []
   if (victims.length > 0) {

@@ -141,15 +141,16 @@ Do **not** invent MusicXML truth for ambiguous historical scans (Theme crop rema
 
 ## 7. How to triage V2 ↔ V3 disagreements
 
-1. **Read `disagreement.categories`** — measures / notes / rhythm / chords / pitch / confidence.
-2. **Check serializer validity** — `invalidEventCount`, duplicates, voice overlaps must stay 0 on V3.
-3. **Separate evaluator coupling from ownership loss** — different-voice pitch matches are often grouping artifacts, not pitch ownership.
-4. **Attribute to owner:**
+1. **Assign a semantic defect class** — Rhythm / Sustain (ties) / Articulation / Measure structure / Playback / Pitch per [`OMR_SEMANTIC_DEFECT_TAXONOMY.md`](./OMR_SEMANTIC_DEFECT_TAXONOMY.md). When pitches look fine but playback sounds wrong, start with Rhythm → Sustain → Articulation.
+2. **Read `disagreement.categories`** — measures / notes / rhythm / chords / pitch / confidence.
+3. **Check serializer validity** — `invalidEventCount`, duplicates, voice overlaps must stay 0 on V3.
+4. **Separate evaluator coupling from ownership loss** — different-voice pitch matches are often grouping artifacts, not pitch ownership.
+5. **Attribute to owner:**
    - **V3 structure** (onset / voice / duration packing / guitar fusion) → file as V3-owned defect with first-loss proof before any algorithm change.
    - **Shared detector** (pitch / accidentals / staff register) → detector track; do not “fix” in V3 by inventing pitch.
    - **Ambiguous scan / missing GT** → human truth queue; do not change algorithms.
-5. **Reproduce** with `omrV3Compare` and the same PDF render settings; store comparison JSON only.
-6. **Do not** tune thresholds or special-case fixture IDs during triage.
+6. **Reproduce** with `omrV3Compare` and the same PDF render settings; store comparison JSON only.
+7. **Do not** tune thresholds or special-case fixture IDs during triage.
 
 ---
 

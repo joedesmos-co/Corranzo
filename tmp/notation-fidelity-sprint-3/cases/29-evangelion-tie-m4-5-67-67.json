@@ -1,0 +1,192 @@
+{
+  "id": "29-evangelion-tie-m4-5-67-67",
+  "source": "evangelion",
+  "sourcePdf": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+  "page": 1,
+  "measures": [
+    4,
+    5
+  ],
+  "expectedSymbol": "tie",
+  "sourceCrop": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/source-crops/29-evangelion-tie-m4-5-67-67.png",
+  "candidateOverlay": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/candidate-overlays/29-evangelion-tie-m4-5-67-67.png",
+  "rawCurveCandidates": [
+    {
+      "candidateId": "pdf-path-p1-op66",
+      "source": "pdf-vector-path",
+      "start": {
+        "x": 312.92670155412947,
+        "y": 543.92913278706,
+        "tangent": {
+          "dx": 0.9208912259753834,
+          "dy": 0.38981963768075495
+        }
+      },
+      "end": {
+        "x": 434.04435987477024,
+        "y": 543.92913278706,
+        "tangent": {
+          "dx": 0.9208913444951942,
+          "dy": -0.38981935769511733
+        }
+      },
+      "bounds": {
+        "x0": 312.92670155412947,
+        "x1": 434.04435987477024,
+        "y0": 543.92913278706,
+        "y1": 555.5275287068341,
+        "width": 121.11765832064077,
+        "height": 11.598395919774134
+      },
+      "archDirection": "below",
+      "startCandidates": [
+        {
+          "measureNumber": 4,
+          "systemIndex": 1,
+          "eventIndex": 6,
+          "noteIndex": 1,
+          "startDivision": 9,
+          "midi": 67,
+          "clef": "bass",
+          "cx": 305.68834622673916,
+          "cy": 540.3751062351545,
+          "score": 20.93,
+          "dx": 7.24,
+          "dy": 3.55,
+          "anchor": "notehead",
+          "anchorY": 540.3751062351545
+        },
+        {
+          "measureNumber": 4,
+          "systemIndex": 1,
+          "eventIndex": 6,
+          "noteIndex": 2,
+          "startDivision": 9,
+          "midi": 63,
+          "clef": "bass",
+          "cx": 305.68834622673916,
+          "cy": 548.7790298693586,
+          "score": 22.22,
+          "dx": 7.24,
+          "dy": 4.85,
+          "anchor": "notehead",
+          "anchorY": 548.7790298693586
+        },
+        {
+          "measureNumber": 4,
+          "systemIndex": 1,
+          "eventIndex": 6,
+          "noteIndex": 0,
+          "startDivision": 9,
+          "midi": 72,
+          "clef": "bass",
+          "cx": 305.68834622673916,
+          "cy": 527.7705315914488,
+          "score": 24.21,
+          "dx": 7.24,
+          "dy": 6.84,
+          "anchor": "stem-tip",
+          "anchorY": 550.7705315914488
+        }
+      ],
+      "endCandidates": [
+        {
+          "measureNumber": 5,
+          "systemIndex": 1,
+          "eventIndex": 0,
+          "noteIndex": 1,
+          "startDivision": 0,
+          "midi": 67,
+          "clef": "bass",
+          "cx": 441.2768185507728,
+          "cy": 540.374988598575,
+          "score": 20.91,
+          "dx": 7.23,
+          "dy": 3.55,
+          "anchor": "notehead",
+          "anchorY": 540.374988598575
+        },
+        {
+          "measureNumber": 5,
+          "systemIndex": 1,
+          "eventIndex": 0,
+          "noteIndex": 2,
+          "startDivision": 0,
+          "midi": 63,
+          "clef": "bass",
+          "cx": 441.2768185507728,
+          "cy": 548.7789122327791,
+          "score": 22.21,
+          "dx": 7.23,
+          "dy": 4.85,
+          "anchor": "notehead",
+          "anchorY": 548.7789122327791
+        },
+        {
+          "measureNumber": 5,
+          "systemIndex": 1,
+          "eventIndex": 0,
+          "noteIndex": 0,
+          "startDivision": 0,
+          "midi": 72,
+          "clef": "bass",
+          "cx": 441.2768185507728,
+          "cy": 527.7704139548695,
+          "score": 33.52,
+          "dx": 7.23,
+          "dy": 16.16,
+          "anchor": "notehead",
+          "anchorY": 527.7704139548695
+        }
+      ]
+    }
+  ],
+  "selectedAttachments": {
+    "fromMeasure": 4,
+    "toMeasure": 5,
+    "fromMidi": 67,
+    "toMidi": 67,
+    "clef": "bass",
+    "candidateIds": [
+      "pdf-path-p1-op66"
+    ]
+  },
+  "classificationResult": "tie",
+  "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/29-evangelion-tie-m4-5-67-67.musicxml",
+  "renderedResult": {
+    "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/29-evangelion-tie-m4-5-67-67.png",
+    "markingFound": true,
+    "path": "M 1243.8 130.56 Q 1313.4868421052631 152.8597894736842 1383.1736842105263 130.56",
+    "placement": "below"
+  },
+  "playbackAttackTrace": [
+    {
+      "measureNumber": 4,
+      "midi": 67,
+      "quarterTime": 12.25,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 4,
+      "midi": 67,
+      "quarterTime": 14.25,
+      "tieStart": true,
+      "tieStop": true,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 5,
+      "midi": 67,
+      "quarterTime": 16,
+      "tieStart": false,
+      "tieStop": true,
+      "suppressPlaybackAttack": true
+    }
+  ],
+  "correctBefore": false,
+  "correctAfter": true,
+  "failureLayerBefore": "symbol-not-detected",
+  "failureLayerAfter": "none"
+}

@@ -132,7 +132,7 @@ describe('guitar sustain rendering', () => {
     expect(tabLane).toContain('tab-lane__sustain')
   })
 
-  it('shows held chord shapes across their duration', () => {
+  it('does not draw rectangular chord group boxes in the tab lane', () => {
     const timingMap = parseMusicXml(
       F.scoreWrap(
         `<part id="P1"><measure number="1">${F.attributes()}${F.soundTempo(120)}` +
@@ -148,8 +148,8 @@ describe('guitar sustain rendering', () => {
       geometry,
     )
     const overlays = buildTabChordShapeOverlays(notes)
-    expect(overlays.length).toBe(1)
-    expect(overlays[0].width).toBeGreaterThan(30)
+    expect(overlays).toEqual([])
+    expect(notes.every((note) => note.sustainWidth < 100)).toBe(true)
   })
 })
 

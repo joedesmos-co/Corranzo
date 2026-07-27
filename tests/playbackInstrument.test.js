@@ -262,6 +262,7 @@ describe('piano instrument — graceful fallback', () => {
         // Real loader, but the fake buffers never fire onload → timeout path.
         loadSampler: defaultLoadSampler,
         createSamplerSync: () => null,
+        sampleFallbackBaseUrl: null,
         sampleLoadTimeoutMs: 50,
       })
 
@@ -270,6 +271,7 @@ describe('piano instrument — graceful fallback', () => {
       await inst.whenReady()
 
       expect(inst.status).toBe(INSTRUMENT_STATUS.SYNTH)
+      expect(inst.getLastLoadError()).toMatch(/timed out/i)
       // A buffers object was created (load was attempted) but never resolved.
       expect(created.buffers.length).toBeGreaterThan(0)
     } finally {

@@ -551,6 +551,29 @@ No code change. Focused pitch tests (`pitchFromStaffPosition`, `omrPitchAlterati
 
 Pitch is the dominant residual error bucket but is bounded by the shared detector, not by V3 structure. Meaningful pitch gains require detector-level accidental/staff-position work under a V2 re-qualification effort — a separate track from the detector-independent V3 campaign. Do not add V3 pitch heuristics without new structural evidence that the detector surfaces re-ownable pitch evidence into the V3 stream.
 
-## Next
+## Next — semantic playback priorities
+
+Real-score listening shows pitches are often correct while playback still sounds wrong.
+Future OMR validation and sprints use the semantic defect taxonomy in
+[`OMR_SEMANTIC_DEFECT_TAXONOMY.md`](./OMR_SEMANTIC_DEFECT_TAXONOMY.md):
+
+1. **Rhythm** — durations, dotted values, multi-voice consistency, rests, measure balancing  
+2. **Sustain (ties)** — detection, cross-measure sustain, tie vs slur  
+3. **Articulation** — staccato, accent, tenuto, marcato  
+4. Measure structure → Playback → Pitch
+
+Dashboard reports now include `semanticDefectClasses` roll-ups. Do not default to
+pitch-first investigations when rhythm/sustain/articulation explain the perceived failure.
+
+## Semantic MusicXML validation framework (2026-07-17)
+
+Primary measurement tool for future OMR improvements (recognition unchanged).
+
+**Hardened** (schema v2 / evaluator v2.0.0): measure-sequence alignment, voice/staff
+matching, error-independent class scores with TP/FP/FN + coverage, written vs
+performed modes, golden fixtures, `--self-check` / `--equivalent` CLI.
+
+- Docs: [`OMR_SEMANTIC_EVALUATOR.md`](./OMR_SEMANTIC_EVALUATOR.md)
+- Do **not** begin rhythm/tie recognition sprints until self-check + golden fixtures pass.
 
 Production Readiness Campaign complete. **Production Validation & Rollout Preparation** is documented in [`PRODUCTION_VALIDATION_PLAN.md`](./PRODUCTION_VALIDATION_PLAN.md): comparison mode, developer diagnostics, disagreement telemetry, triage, promotion evidence, and rollback criteria. V3 stays default-off; V2 authoritative. Do not begin another V3-independent algorithmic investigation without a newly demonstrated V3-owned first-loss.

@@ -30,7 +30,13 @@ import {
   releaseVoiceFromMix,
   resetVoiceMix,
 } from './pianoVoiceMix.js'
-import { logPianoDiagnostics, warnDensePlayback } from './pianoPlaybackDiagnostics.js'
+import {
+  logPianoDiagnostics,
+  warnDensePlayback,
+  logPianoAudioEngine,
+  logPianoTrigger,
+  logPianoSampleFallback,
+} from './pianoPlaybackDiagnostics.js'
 
 const DEFAULT_SAMPLE_LOAD_TIMEOUT_MS = 15000
 const DEFAULT_SAMPLED_RELEASE = 1.55
@@ -243,14 +249,64 @@ export function createPolyphonicFallbackVoice(
   }
 }
 
+function countLoadedBuffers(buffers, urls) {
+  let loaded = 0
+  let missing = 0
+  for (const note of Object.keys(urls ?? {})) {
+    try {
+      const buffer = buffers?.get?.(note)
+      if (buffer) {
+        loaded += 1
+      } else {
+        missing += 1
+      }
+    } catch {
+      missing += 1
+    }
+  }
+  return { loaded, missing }
+}
+
 /**
  * Default sampler loader: resolves the shared decoded buffers, then builds a
  * Tone.Sampler from them (instant, no extra network). Returns a promise so the
  * voice can fall back to the synth on rejection.
+ * Retries `fallbackBaseUrl` once when the primary base URL fails.
  */
-export async function defaultLoadSampler({ tone, baseUrl, urls, volume, release, attack, timeoutMs }) {
-  const buffers = await loadSharedBuffers({ tone, baseUrl, urls, timeoutMs })
-  return buildSamplerFromBuffers({ tone, buffers, urls, volume, release, attack })
+export async function defaultLoadSampler({
+  tone,
+  baseUrl,
+  urls,
+  volume,
+  release,
+  attack,
+  timeoutMs,
+  fallbackBaseUrl = null,
+}) {
+  try {
+    const buffers = await loadSharedBuffers({ tone, baseUrl, urls, timeoutMs })
+    return {
+      sampler: buildSamplerFromBuffers({ tone, buffers, urls, volume, release, attack }),
+      baseUrl,
+      buffers,
+    }
+  } catch (primaryError) {
+    if (!fallbackBaseUrl || fallbackBaseUrl === baseUrl) {
+      throw primaryError
+    }
+    const buffers = await loadSharedBuffers({
+      tone,
+      baseUrl: fallbackBaseUrl,
+      urls,
+      timeoutMs,
+    })
+    return {
+      sampler: buildSamplerFromBuffers({ tone, buffers, urls, volume, release, attack }),
+      baseUrl: fallbackBaseUrl,
+      buffers,
+      primaryError,
+    }
+  }
 }
 
 /**
@@ -308,7 +364,11 @@ export function createSampledInstrumentVoice(options = {}) {
     onStatus = null,
     createFallbackVoice,
     sampleBaseUrl,
+    sampleFallbackBaseUrl = null,
     sampleUrls,
+    sampleSetName = 'samples',
+    voiceId = 'instrument',
+    velocityLayers = 1,
     loadSampler = defaultLoadSampler,
     createSamplerSync = createCachedSamplerSync,
     autoload = true,
@@ -382,12 +442,41 @@ export function createSampledInstrumentVoice(options = {}) {
   let disposed = false
   let status = INSTRUMENT_STATUS.LOADING
   let readyPromise = null
+  let activeSampleBaseUrl = sampleBaseUrl
+  let lastLoadError = null
+  let loadedSampleCount = 0
+  let missingSampleCount = Object.keys(sampleUrls ?? {}).length
+  let nextVoiceSerial = 0
+
+  function audioContextState() {
+    try {
+      return tone.getContext?.()?.rawContext?.state ?? tone.context?.state ?? null
+    } catch {
+      return null
+    }
+  }
+
+  function reportEngine(extra = {}) {
+    logPianoAudioEngine({
+      engineType: usingSampler ? 'sampler' : status === INSTRUMENT_STATUS.LOADING ? 'loading' : 'synth',
+      sampleSet: sampleSetName,
+      sampleLoadState: status,
+      loadedSampleCount,
+      missingSampleCount,
+      velocityLayers,
+      audioContextState: audioContextState(),
+      sampleBaseUrl: activeSampleBaseUrl,
+      loadError: lastLoadError,
+      ...extra,
+    })
+  }
 
   const setStatus = (next) => {
     if (status === next) {
       return
     }
     status = next
+    reportEngine()
     if (onStatus) {
       try {
         onStatus(next)
@@ -413,6 +502,10 @@ export function createSampledInstrumentVoice(options = {}) {
         sampler = cached
         connectSamplerToChain(sampler)
         usingSampler = true
+        const buffers = sharedBuffersResolved.get(sampleBaseUrl)
+        const counts = countLoadedBuffers(buffers, sampleUrls)
+        loadedSampleCount = counts.loaded
+        missingSampleCount = counts.missing
         status = INSTRUMENT_STATUS.SAMPLED
         readyPromise = Promise.resolve(INSTRUMENT_STATUS.SAMPLED)
       }
@@ -422,6 +515,7 @@ export function createSampledInstrumentVoice(options = {}) {
   }
 
   // Emit the initial status so a listener can show it right away.
+  reportEngine()
   if (onStatus) {
     try {
       onStatus(status)
@@ -444,6 +538,7 @@ export function createSampledInstrumentVoice(options = {}) {
       samplerLoad = loadSampler({
         tone,
         baseUrl: sampleBaseUrl,
+        fallbackBaseUrl: sampleFallbackBaseUrl,
         urls: sampleUrls,
         volume: sampledVolume,
         release: sampledRelease,
@@ -457,17 +552,45 @@ export function createSampledInstrumentVoice(options = {}) {
     readyPromise = Promise.resolve(samplerLoad)
       .then(async (loaded) => {
         if (disposed) {
-          loaded?.dispose?.()
+          const disposable = loaded?.sampler ?? loaded
+          disposable?.dispose?.()
           return INSTRUMENT_STATUS.SYNTH
         }
-        sampler = loaded
+        // Support both legacy (Sampler) and new ({ sampler, buffers, baseUrl }) loaders.
+        if (loaded?.sampler) {
+          sampler = loaded.sampler
+          activeSampleBaseUrl = loaded.baseUrl ?? sampleBaseUrl
+          const counts = countLoadedBuffers(loaded.buffers, sampleUrls)
+          loadedSampleCount = counts.loaded
+          missingSampleCount = counts.missing
+          if (loaded.primaryError) {
+            lastLoadError = String(loaded.primaryError?.message ?? loaded.primaryError)
+            logPianoSampleFallback('primary sample base failed; using fallback URL', {
+              primaryBaseUrl: sampleBaseUrl,
+              fallbackBaseUrl: activeSampleBaseUrl,
+              reason: lastLoadError,
+            })
+          }
+        } else {
+          sampler = loaded
+          activeSampleBaseUrl = sampleBaseUrl
+          const buffers = sharedBuffersResolved.get(sampleBaseUrl)
+          const counts = countLoadedBuffers(buffers, sampleUrls)
+          loadedSampleCount = counts.loaded
+          missingSampleCount = counts.missing
+        }
         connectSamplerToChain(sampler)
         usingSampler = true
         await reverbReady
         setStatus(INSTRUMENT_STATUS.SAMPLED)
         return INSTRUMENT_STATUS.SAMPLED
       })
-      .catch(() => {
+      .catch((error) => {
+        lastLoadError = String(error?.message ?? error ?? 'sample load failed')
+        logPianoSampleFallback(lastLoadError, {
+          sampleBaseUrl,
+          sampleFallbackBaseUrl,
+        })
         if (!disposed) {
           setStatus(INSTRUMENT_STATUS.SYNTH)
         }
@@ -490,13 +613,21 @@ export function createSampledInstrumentVoice(options = {}) {
       return status
     },
     isUsingSampler: () => usingSampler,
+    getLastLoadError: () => lastLoadError,
+    getSampleCoverage: () => ({
+      loadedSampleCount,
+      missingSampleCount,
+      sampleBaseUrl: activeSampleBaseUrl,
+      sampleSet: sampleSetName,
+      velocityLayers,
+    }),
     load,
     whenReady: async () => {
       const base = await (readyPromise ?? Promise.resolve(status))
       await reverbReady
       return base
     },
-    triggerAttackRelease(note, duration, time, velocity) {
+    triggerAttackRelease(note, duration, time, velocity, meta = {}) {
       if (disposed) {
         return
       }
@@ -515,7 +646,23 @@ export function createSampledInstrumentVoice(options = {}) {
       for (const release of plan.release ?? []) {
         target.triggerRelease?.(release.note, release.time)
       }
+      nextVoiceSerial += 1
+      const assignedVoiceId = `${voiceId}-${nextVoiceSerial}`
       target.triggerAttackRelease(note, safeDuration, time, plan.velocity)
+      logPianoTrigger({
+        midi: meta.midi ?? null,
+        velocity: plan.velocity,
+        performedOnset: time,
+        performedDuration: safeDuration,
+        sampleSelected: usingSampler ? note : 'synth',
+        velocityLayer: 0,
+        gain: plan.velocity,
+        attack: sampleAttack,
+        release: sampledRelease,
+        tieChainId: meta.tieChainId ?? null,
+        voiceId: assignedVoiceId,
+        engineType: usingSampler ? 'sampler' : 'synth',
+      })
       const diagnostics = getVoiceMixDiagnostics(voiceMix)
       if (plan.density >= 6) {
         logDiagnostics('dense trigger', {
@@ -572,7 +719,15 @@ export function createSampledInstrumentVoice(options = {}) {
       sampler?.releaseAll?.(now)
     },
     getVoiceDiagnostics() {
-      return getVoiceMixDiagnostics(voiceMix)
+      return {
+        ...getVoiceMixDiagnostics(voiceMix),
+        engineType: usingSampler ? 'sampler' : 'synth',
+        sampleLoadState: status,
+        loadedSampleCount,
+        missingSampleCount,
+        loadError: lastLoadError,
+        sampleBaseUrl: activeSampleBaseUrl,
+      }
     },
     setSampledVolume(db) {
       if (sampler?.volume) {

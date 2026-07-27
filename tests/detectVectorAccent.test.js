@@ -45,8 +45,8 @@ function trebleNote(cx, cy, midi = 60) {
 
 describe('vector accent glyph audit', () => {
   it('tracks Bravura accent glyphs and hairpin exclusions', () => {
-    expect(VECTOR_ACCENT_GLYPHS.has('\ue4a3')).toBe(true)
-    expect(VECTOR_ACCENT_GLYPHS.has('\ue4a4')).toBe(true)
+    expect(VECTOR_ACCENT_GLYPHS.has('\ue4a0')).toBe(true)
+    expect(VECTOR_ACCENT_GLYPHS.has('\ue4a1')).toBe(true)
     expect(VECTOR_HAIRPIN_GLYPHS.has('\ue53e')).toBe(true)
   })
 })
@@ -55,7 +55,7 @@ describe('assignVectorAccent', () => {
   it('binds an accent glyph above a notehead', () => {
     const notes = [trebleNote(300, 170)]
     const { assignments, detectedAccentCount, appliedAccentCount } = assignVectorAccent(
-      [{ text: '\ue4a3', x: 300, y: 140 }],
+      [{ text: '\ue4a0', x: 300, y: 140 }],
       notes,
       measureBox,
       imageData,
@@ -63,6 +63,42 @@ describe('assignVectorAccent', () => {
     expect(detectedAccentCount).toBe(1)
     expect(appliedAccentCount).toBe(1)
     expect(assignments.get(0)?.type).toBe('accent')
+  })
+
+  it('broadcasts one accent glyph to vertically stacked chord mates', () => {
+    const notes = [
+      trebleNote(300, 170, 67),
+      trebleNote(300, 183, 64),
+      trebleNote(300, 196, 60),
+    ]
+    const { assignments, detectedAccentCount, appliedAccentCount } = assignVectorAccent(
+      [{ text: '\ue4a0', x: 300, y: 140 }],
+      notes,
+      measureBox,
+      imageData,
+    )
+    expect(detectedAccentCount).toBe(1)
+    expect(appliedAccentCount).toBe(3)
+    expect([...assignments.keys()].sort()).toEqual([0, 1, 2])
+  })
+
+  it('still binds accents when the nearest head is mis-cleffed onto a tiny bass gap', () => {
+    const tightBassBox = {
+      ...measureBox,
+      staffLines: {
+        treble: [0.1, 0.12, 0.14, 0.16, 0.18],
+        bass: [0.3, 0.3001, 0.3002, 0.3003, 0.3004],
+        splitY: 0.24,
+      },
+    }
+    const notes = [{ ...trebleNote(300, 170, 67), clef: 'bass' }]
+    const { appliedAccentCount } = assignVectorAccent(
+      [{ text: '\ue4a0', x: 300, y: 140 }],
+      notes,
+      tightBassBox,
+      imageData,
+    )
+    expect(appliedAccentCount).toBe(1)
   })
 
   it('ignores hairpin glyphs even when vertically near a notehead', () => {
@@ -77,7 +113,7 @@ describe('assignVectorAccent', () => {
 
   it('ignores wide hairpin-like glyphs spanning horizontally', () => {
     const note = trebleNote(300, 170)
-    const wide = { text: '\ue4a3', x: 300, y: 140, width: 60 }
+    const wide = { text: '\ue4a0', x: 300, y: 140, width: 60 }
     expect(looksLikeHairpinGlyph(wide, 20)).toBe(true)
 
     const { appliedAccentCount } = assignVectorAccent([wide], [note], measureBox, imageData)
@@ -89,7 +125,7 @@ describe('buildVectorMeasureRecord accent playback path', () => {
   it('emits MusicXML accent and boosts playback velocity without changing timing', () => {
     const record = buildVectorMeasureRecord({
       glyphs: [
-        { text: '\ue4a3', x: 300, y: 140 },
+        { text: '\ue4a0', x: 300, y: 140 },
         { text: '\ue0a4', x: 300, y: 170 },
       ],
       imageData,
@@ -105,7 +141,7 @@ describe('buildVectorMeasureRecord accent playback path', () => {
       measures: [record],
       includeDisclaimer: false,
     })
-    expect(xml).toContain('<accent/>')
+    expect(xml).toContain('<accent placement="above"/>')
 
     const timing = parseMusicXml(xml, 'vector-accent.omr.musicxml')
     const expectedMidi = record.events[0].notes[0].midi

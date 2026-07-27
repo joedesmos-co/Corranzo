@@ -50,7 +50,7 @@ export const GUIDED_TUTORIAL_STEPS = [
   {
     id: 'advanced',
     title: 'Advanced',
-    body: 'Advanced holds files, playback options, cursor setup, and note matching.',
+    body: 'Advanced holds files, playback options, score cursor controls, and note matching.',
     targetId: 'practice-advanced',
     view: 'practice',
   },

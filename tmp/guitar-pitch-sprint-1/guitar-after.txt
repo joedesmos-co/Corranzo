@@ -1,0 +1,42 @@
+OMR semantic corpus — baseline
+==============================
+label: guitar-pitch-sprint-1-after
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 15aa1db
+createdAt: 2026-07-26T19:25:05.571Z
+fixtures: 4/4 ok
+
+Scoreboard (mean across fixtures)
+- overall: 61.3%
+- pitch: 55.9%
+- rhythm: 59.4%
+- sustain: 50.0%
+- articulation: 100.0%
+- measureStructure: 64.0%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- missing-note [pitch] ×100 across 3 fixtures
+- duration-mismatch [rhythm] ×80 across 4 fixtures
+- onset-mismatch [rhythm] ×69 across 3 fixtures
+- extra-note [pitch] ×66 across 4 fixtures
+- incorrect-chord [measure-structure] ×66 across 3 fixtures
+- incorrect-pitch [pitch] ×31 across 3 fixtures
+- split-measure [measure-structure] ×11 across 3 fixtures
+- repeat-mismatch [interpretation] ×4 across 2 fixtures
+- tempo-mismatch [interpretation] ×4 across 4 fixtures
+- extra-measure [measure-structure] ×3 across 1 fixtures
+- incorrect-tie [sustain] ×2 across 1 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+
+Per-fixture summary
+- guitar-tab-sparse-vector: overall=68.5% R=17% P=70% S=100% A=100% M=92% I=0%
+  worst measures: #1(extra-note|duration-mismatch|onset-mismatch), #8(extra-note|duration-mismatch|duration-mismatch), #7(extra-note|duration-mismatch|duration-mismatch)
+- guitar-standard-chords-vector: overall=44.6% R=47% P=27% S=0% A=100% M=38% I=0%
+  worst measures: #8(split-measure|missing-note|missing-note), #4(split-measure|missing-note|missing-note), #5(split-measure|missing-note|missing-note)
+- guitar-paired-chords-vector: overall=67.9% R=81% P=48% S=100% A=100% M=46% I=0%
+  worst measures: #6(split-measure|missing-note|missing-note), #1(extra-note|extra-note|extra-note), #7(split-measure|missing-note|missing-note)
+- guitar-techniques-paired-vector: overall=64.4% R=93% P=78% S=0% A=100% M=80% I=0%
+  worst measures: #2(split-measure|missing-note|extra-note), #3(split-measure|missing-note|extra-note), #6(split-measure|missing-note|extra-note)

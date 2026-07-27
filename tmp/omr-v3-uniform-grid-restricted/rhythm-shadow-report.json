@@ -1,0 +1,774 @@
+{
+  "generatedAt": "2026-07-17T04:15:00.278Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "promoted": false,
+  "engine": "v2-rhythm-shadow-prototype",
+  "fixtures": [
+    {
+      "fixtureId": "piano-beginner-single-vector",
+      "label": "CC0 Beginner Line Study",
+      "engine": "v2-rhythm-shadow-prototype",
+      "constraintVersion": "phase-2c",
+      "promoted": false,
+      "solverDiagnostics": {
+        "measureCount": 8,
+        "candidateMeasures": 1,
+        "changedMeasures": 0,
+        "rejectedMeasures": 8,
+        "rejectReasons": {
+          "not-in-family": 7,
+          "no-improvement": 1
+        },
+        "variantCounts": {},
+        "changedMeasureNumbers": [],
+        "rejectedMeasureNumbers": [
+          8
+        ],
+        "changedMeasureLog": [],
+        "acceptedCandidateMeasures": [],
+        "rejectedCandidateMeasures": [
+          {
+            "measureNumber": 8,
+            "rejectReason": "no-improvement",
+            "bestVariantId": "identity",
+            "familyReasons": [
+              "bass-late-sixteenth-phase"
+            ],
+            "rejectedVariants": []
+          }
+        ],
+        "coalescedChordCount": 0,
+        "coalescedChordLog": [],
+        "constraintVersion": "phase-2c"
+      },
+      "structurallyAppliedCount": 0,
+      "changedMeasures": [],
+      "acceptedCandidateMeasures": [],
+      "rejectedCandidateMeasures": [
+        {
+          "measureNumber": 8,
+          "rejectReason": "no-improvement",
+          "bestVariantId": "identity",
+          "familyReasons": [
+            "bass-late-sixteenth-phase"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "rejectedMeasures": [
+        {
+          "measureNumber": 8,
+          "rejectReason": "no-improvement",
+          "bestVariantId": "identity",
+          "familyReasons": [
+            "bass-late-sixteenth-phase"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "rejectedByTruth": [],
+      "coalescedChords": [],
+      "coalescedChordCount": 0,
+      "hotspotMeasures": [],
+      "runtimeXmlBytes": 4619,
+      "shadowXmlBytes": 4619,
+      "identicalToRuntime": true,
+      "scoreGraphSource": "passed",
+      "status": "shadow-no-qualifying-measures",
+      "regressionReason": "No measures passed Phase 2C preservation + truth gates — shadow identical to runtime.",
+      "runtime": {
+        "wrongOnset": 4,
+        "wrongDuration": 3,
+        "chordMismatch": 2,
+        "wrongPitch": 23,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0.25,
+        "durationAccuracy": 0.875,
+        "onsetAccuracy": 0.8438,
+        "chordGroupingAccuracy": 0.9394,
+        "noteDetectionF1": 0.9688
+      },
+      "shadow": {
+        "wrongOnset": 4,
+        "wrongDuration": 3,
+        "chordMismatch": 2,
+        "wrongPitch": 23,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0.25,
+        "durationAccuracy": 0.875,
+        "onsetAccuracy": 0.8438,
+        "chordGroupingAccuracy": 0.9394,
+        "noteDetectionF1": 0.9688
+      },
+      "delta": {
+        "wrongOnset": 0,
+        "wrongDuration": 0,
+        "chordMismatch": 0,
+        "wrongPitch": 0,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0
+      },
+      "perMeasureDelta": [
+        {
+          "measureNumber": 1,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 2,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 3,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 4,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 5,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 6,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 7,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 8,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        }
+      ],
+      "hotspotDelta": [],
+      "runtimeAttribution": {
+        "buckets": {
+          "onset-phase-shift": 4,
+          "voice-serialization-shift": 2,
+          "onset-coupled-duration": 2,
+          "chord-grouping-symptom": 2,
+          "pitch-grouping-symptom": 5,
+          "balanced-missing-extra-serialization": 2
+        },
+        "ranked": [
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 5
+          },
+          {
+            "bucket": "onset-phase-shift",
+            "count": 4
+          },
+          {
+            "bucket": "voice-serialization-shift",
+            "count": 2
+          },
+          {
+            "bucket": "onset-coupled-duration",
+            "count": 2
+          },
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 2
+          },
+          {
+            "bucket": "balanced-missing-extra-serialization",
+            "count": 2
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "pitch-grouping-symptom",
+          "count": 5
+        },
+        "supporting": {
+          "totalWrongOnsets": 4,
+          "chordMismatchTotal": 2,
+          "chordCoupledShare": 1,
+          "missingCount": 1,
+          "extraCount": 1,
+          "balancedMismatch": true,
+          "onsetStrictIndependent": 0,
+          "voicePhasePrimaryClass": "cross-voice-matcher"
+        }
+      },
+      "shadowAttribution": {
+        "buckets": {
+          "onset-phase-shift": 4,
+          "voice-serialization-shift": 2,
+          "onset-coupled-duration": 2,
+          "chord-grouping-symptom": 2,
+          "pitch-grouping-symptom": 5,
+          "balanced-missing-extra-serialization": 2
+        },
+        "ranked": [
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 5
+          },
+          {
+            "bucket": "onset-phase-shift",
+            "count": 4
+          },
+          {
+            "bucket": "voice-serialization-shift",
+            "count": 2
+          },
+          {
+            "bucket": "onset-coupled-duration",
+            "count": 2
+          },
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 2
+          },
+          {
+            "bucket": "balanced-missing-extra-serialization",
+            "count": 2
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "pitch-grouping-symptom",
+          "count": 5
+        },
+        "supporting": {
+          "totalWrongOnsets": 4,
+          "chordMismatchTotal": 2,
+          "chordCoupledShare": 1,
+          "missingCount": 1,
+          "extraCount": 1,
+          "balancedMismatch": true,
+          "onsetStrictIndependent": 0,
+          "voicePhasePrimaryClass": "cross-voice-matcher"
+        }
+      }
+    },
+    {
+      "fixtureId": "piano-grand-voices-vector",
+      "label": "CC0 Grand Staff Voice Study",
+      "engine": "v2-rhythm-shadow-prototype",
+      "constraintVersion": "phase-2c",
+      "promoted": false,
+      "solverDiagnostics": {
+        "measureCount": 8,
+        "candidateMeasures": 8,
+        "changedMeasures": 0,
+        "rejectedMeasures": 8,
+        "rejectReasons": {
+          "constraints-failed": 8
+        },
+        "variantCounts": {},
+        "changedMeasureNumbers": [],
+        "rejectedMeasureNumbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "changedMeasureLog": [],
+        "acceptedCandidateMeasures": [],
+        "rejectedCandidateMeasures": [
+          {
+            "measureNumber": 1,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 2,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 3,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 4,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 5,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 6,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 7,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          },
+          {
+            "measureNumber": 8,
+            "rejectReason": "constraints-failed",
+            "bestVariantId": null,
+            "familyReasons": [
+              "grand-staff",
+              "hard-constraint-violation",
+              "dense-multi-column"
+            ],
+            "rejectedVariants": []
+          }
+        ],
+        "coalescedChordCount": 0,
+        "coalescedChordLog": [],
+        "constraintVersion": "phase-2c"
+      },
+      "structurallyAppliedCount": 0,
+      "changedMeasures": [],
+      "acceptedCandidateMeasures": [],
+      "rejectedCandidateMeasures": [
+        {
+          "measureNumber": 1,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 2,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 3,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 4,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 5,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 6,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 7,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 8,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "rejectedMeasures": [
+        {
+          "measureNumber": 1,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 2,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 3,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 4,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 5,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 6,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 7,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        },
+        {
+          "measureNumber": 8,
+          "rejectReason": "constraints-failed",
+          "bestVariantId": null,
+          "familyReasons": [
+            "grand-staff",
+            "hard-constraint-violation",
+            "dense-multi-column"
+          ],
+          "rejectedVariants": []
+        }
+      ],
+      "rejectedByTruth": [],
+      "coalescedChords": [],
+      "coalescedChordCount": 0,
+      "hotspotMeasures": [],
+      "runtimeXmlBytes": 12832,
+      "shadowXmlBytes": 12832,
+      "identicalToRuntime": true,
+      "scoreGraphSource": "passed",
+      "status": "shadow-no-qualifying-measures",
+      "regressionReason": "No measures passed Phase 2C preservation + truth gates — shadow identical to runtime.",
+      "runtime": {
+        "wrongOnset": 1,
+        "wrongDuration": 15,
+        "chordMismatch": 2,
+        "wrongPitch": 32,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0.625,
+        "durationAccuracy": 0.8182,
+        "onsetAccuracy": 0.9773,
+        "chordGroupingAccuracy": 0.9775,
+        "noteDetectionF1": 0.9886
+      },
+      "shadow": {
+        "wrongOnset": 1,
+        "wrongDuration": 15,
+        "chordMismatch": 2,
+        "wrongPitch": 32,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0.625,
+        "durationAccuracy": 0.8182,
+        "onsetAccuracy": 0.9773,
+        "chordGroupingAccuracy": 0.9775,
+        "noteDetectionF1": 0.9886
+      },
+      "delta": {
+        "wrongOnset": 0,
+        "wrongDuration": 0,
+        "chordMismatch": 0,
+        "wrongPitch": 0,
+        "noteCountDiff": 0,
+        "measureCountDiff": 0,
+        "pitchAccuracy": 0,
+        "durationAccuracy": 0,
+        "onsetAccuracy": 0,
+        "chordGroupingAccuracy": 0,
+        "noteDetectionF1": 0
+      },
+      "perMeasureDelta": [
+        {
+          "measureNumber": 1,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 2,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 3,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 4,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 5,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 6,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 7,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        },
+        {
+          "measureNumber": 8,
+          "wrongOnsetDelta": 0,
+          "wrongDurationDelta": 0,
+          "chordMismatchDelta": 0,
+          "wrongPitchDelta": 0
+        }
+      ],
+      "hotspotDelta": [],
+      "runtimeAttribution": {
+        "buckets": {
+          "onset-phase-shift": 1,
+          "voice-serialization-shift": 0,
+          "onset-coupled-duration": 0,
+          "chord-grouping-symptom": 2,
+          "pitch-grouping-symptom": 11,
+          "balanced-missing-extra-serialization": 2
+        },
+        "ranked": [
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 11
+          },
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 2
+          },
+          {
+            "bucket": "balanced-missing-extra-serialization",
+            "count": 2
+          },
+          {
+            "bucket": "onset-phase-shift",
+            "count": 1
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "pitch-grouping-symptom",
+          "count": 11
+        },
+        "supporting": {
+          "totalWrongOnsets": 1,
+          "chordMismatchTotal": 2,
+          "chordCoupledShare": 1,
+          "missingCount": 1,
+          "extraCount": 1,
+          "balancedMismatch": true,
+          "onsetStrictIndependent": 0,
+          "voicePhasePrimaryClass": "unique-pitch-slot-shift"
+        }
+      },
+      "shadowAttribution": {
+        "buckets": {
+          "onset-phase-shift": 1,
+          "voice-serialization-shift": 0,
+          "onset-coupled-duration": 0,
+          "chord-grouping-symptom": 2,
+          "pitch-grouping-symptom": 11,
+          "balanced-missing-extra-serialization": 2
+        },
+        "ranked": [
+          {
+            "bucket": "pitch-grouping-symptom",
+            "count": 11
+          },
+          {
+            "bucket": "chord-grouping-symptom",
+            "count": 2
+          },
+          {
+            "bucket": "balanced-missing-extra-serialization",
+            "count": 2
+          },
+          {
+            "bucket": "onset-phase-shift",
+            "count": 1
+          }
+        ],
+        "primaryBucket": {
+          "bucket": "pitch-grouping-symptom",
+          "count": 11
+        },
+        "supporting": {
+          "totalWrongOnsets": 1,
+          "chordMismatchTotal": 2,
+          "chordCoupledShare": 1,
+          "missingCount": 1,
+          "extraCount": 1,
+          "balancedMismatch": true,
+          "onsetStrictIndependent": 0,
+          "voicePhasePrimaryClass": "unique-pitch-slot-shift"
+        }
+      }
+    }
+  ]
+}

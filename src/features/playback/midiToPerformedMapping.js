@@ -30,6 +30,7 @@ function mapByMidiBarPosition(note, entries) {
     scoreTimeSeconds: scoreStart + localT * scoreSpan,
     durationSeconds: Math.max(note.duration, 0.03),
     name: note.name,
+    midi: Number.isFinite(note.midi) ? note.midi : null,
     velocity: note.velocity,
     source: 'midi',
     measureNumber: entry.writtenMeasureNumber,
@@ -113,6 +114,7 @@ export function mapMidiEventsMeasureAligned(midiNotes, midiDuration, timingMap) 
       scoreTimeSeconds,
       durationSeconds: Math.max(note.duration * (scoreSpan / sliceSpan), 0.03),
       name: note.name,
+      midi: Number.isFinite(note.midi) ? note.midi : null,
       velocity: note.velocity,
       source: 'midi',
       measureNumber: measure.number,
@@ -133,6 +135,7 @@ export function mapMidiEventsProportional(midiNotes, midiDuration, performedDura
     scoreTimeSeconds: note.time * scale,
     durationSeconds: Math.max(note.duration * scale, 0.03),
     name: note.name,
+    midi: Number.isFinite(note.midi) ? note.midi : null,
     velocity: note.velocity,
     source: 'midi',
   }))

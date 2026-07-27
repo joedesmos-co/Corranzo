@@ -44,6 +44,7 @@ import {
   summarizeTierBreakdown,
   topHistogramEntries,
 } from './omrDiagnosticGrouping.js'
+import { summarizeSemanticDefectClasses } from './omrSemanticDefectClass.js'
 
 export const OMR_BENCHMARK_MANIFEST_VERSION = 2
 
@@ -261,6 +262,7 @@ export function extractFixtureMetrics(report = {}) {
     errorGrouping,
     rhythmErrorAttribution,
     namedErrorBuckets: errorGrouping?.namedBuckets ?? null,
+    semanticDefectClasses: errorGrouping?.semanticDefectClasses ?? null,
     truncatedWrongDurations: report.debug?.truncated?.wrongDurations ?? 0,
     truncatedWrongPitches: report.debug?.truncated?.wrongPitches ?? 0,
   }
@@ -548,6 +550,10 @@ export function summarizeOmrBenchmarkDashboard(records = []) {
             : null,
       }
     : null
+  const semanticDefectClasses = summarizeSemanticDefectClasses({
+    namedBuckets: { buckets: aggregatedNamedBuckets },
+    durationErrorHistogram: aggregatedDurationHistogram,
+  })
 
   return {
     version: 2,
@@ -571,6 +577,7 @@ export function summarizeOmrBenchmarkDashboard(records = []) {
     aggregatedNamedBuckets,
     rankedNamedBuckets,
     largestNamedBucket,
+    semanticDefectClasses,
     tierBreakdown: summarizeTierBreakdown(records),
     failureClusters: clusterFixtureFailures(records),
     rolloutGate: buildRolloutGateReport(records),
@@ -812,6 +819,23 @@ export function formatOmrBenchmarkMarkdown(summary) {
           : ''
       lines.push(
         `- **Largest remaining error bucket: ${summary.largestNamedBucket.bucket} = ${summary.largestNamedBucket.count}${share}**`,
+      )
+    }
+  }
+
+  if (summary.semanticDefectClasses?.ranked?.length) {
+    lines.push('')
+    lines.push('## Semantic defect classes (across fixtures)')
+    lines.push(summary.semanticDefectClasses.priorityGuidance)
+    lines.push('Classes: Rhythm, Sustain (ties), Articulation, Measure structure, Playback, Pitch')
+    for (const entry of summary.semanticDefectClasses.ranked) {
+      const share = entry.share != null ? ` (${Math.round(entry.share * 100)}%)` : ''
+      lines.push(`- ${entry.label}: ${entry.count}${share} (priority ${entry.priority})`)
+    }
+    if (summary.semanticDefectClasses.largestClass) {
+      const largest = summary.semanticDefectClasses.largestClass
+      lines.push(
+        `- **Largest semantic class: ${largest.label} = ${largest.count}**`,
       )
     }
   }

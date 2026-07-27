@@ -15,7 +15,11 @@ import {
   extractSustainSpans,
 } from './sustainPedal.js'
 import { buildMetronomeSchedule } from './metronomeSchedule.js'
-import { playbackDurationSecondsForNote, playbackVelocityForNote } from './staccatoPlayback.js'
+import {
+  playbackDurationSecondsForNote,
+  playbackVelocityForNote,
+  articulationSourceForNote,
+} from './staccatoPlayback.js'
 
 /**
  * Pure performed-timeline note schedule for tests and the playback engine.
@@ -31,21 +35,36 @@ export function buildScoreNoteSchedule(timingMap, { rate = 1 } = {}) {
     .filter(isPlayableTimingNote)
     .map((note) => {
       const writtenDurationSeconds = sanitizePlaybackDurationSeconds(note.durationSeconds)
+      const performedDurationSeconds = playbackDurationSecondsForNote({
+        ...note,
+        durationSeconds: writtenDurationSeconds,
+      })
+      const velocity = playbackVelocityForNote(note)
       return {
         type: 'note',
         scoreTimeSeconds: note.performedSeconds,
+        writtenOnsetSeconds: note.timeSeconds ?? note.performedSeconds,
         writtenDurationSeconds,
-        baseDurationSeconds: playbackDurationSecondsForNote({
-          ...note,
-          durationSeconds: writtenDurationSeconds,
-        }),
+        baseDurationSeconds: performedDurationSeconds,
+        performedDurationSeconds,
         staccato: Boolean(note.staccato),
         accent: Boolean(note.accent),
+        tenuto: Boolean(note.tenuto),
+        marcato: Boolean(note.marcato),
+        fermata: Boolean(note.fermata),
+        articulationSource: articulationSourceForNote(note),
+        tieChainId: note.tieChainId ?? null,
+        attackCount: 1,
         midi: note.midi,
         label: note.label,
         measureNumber: note.measureNumber,
         repeatPass: note.repeatPass ?? 1,
-        velocity: playbackVelocityForNote(note),
+        velocity,
+        activeDynamicVelocity: note.velocity ?? null,
+        activeTempoBpm: getTempoAtTime(timingMap, note.performedSeconds) ?? 120,
+        partId: note.partId ?? null,
+        staff: note.staff ?? null,
+        ownerScoreId: timingMap.fileName ?? null,
       }
     })
     .sort((a, b) => a.scoreTimeSeconds - b.scoreTimeSeconds)
@@ -118,6 +137,7 @@ export async function buildCombinedPlaybackSchedule(
         time: note.time,
         duration: note.duration,
         name: note.name,
+        midi: Number.isFinite(note.midi) ? note.midi : null,
         velocity: note.velocity,
         measurePosition:
           ticksToMeasures && Number.isFinite(note.ticks) ? ticksToMeasures(note.ticks) : null,
@@ -140,6 +160,7 @@ export async function buildCombinedPlaybackSchedule(
         scoreTimeSeconds: event.scoreTimeSeconds,
         baseDurationSeconds: Math.max(event.durationSeconds, 0.03),
         name: event.name,
+        midi: Number.isFinite(event.midi) ? event.midi : null,
         velocity: event.velocity,
         source: event.source,
         measureNumber: event.measureNumber,

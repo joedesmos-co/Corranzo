@@ -108,7 +108,7 @@ describe('balanced instrument levels', () => {
       join(root, 'src/features/playback/guitarInstrument.js'),
       'utf8',
     )
-    expect(pianoSrc).toMatch(/SAMPLED_VOLUME_DB = -11/)
+    expect(pianoSrc).toMatch(/SAMPLED_VOLUME_DB = -10/)
     expect(guitarSrc).toMatch(/SAMPLED_VOLUME_DB = -11/)
     expect(pianoSrc).toMatch(/SYNTH_VOLUME_DB = -17/)
     expect(guitarSrc).toMatch(/SYNTH_VOLUME_DB = -17/)

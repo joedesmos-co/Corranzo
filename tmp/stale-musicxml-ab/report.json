@@ -1,0 +1,382 @@
+{
+  "scenarios": {
+    "aThenB": {
+      "pieceA": {
+        "pdfMetaIdentity": "piano-beginner-single-vector.pdf::5584::1784174777906",
+        "pdfContentHash": "eb6a162e",
+        "musicXmlHash": "38abde21",
+        "musicXmlByteLength": 4655,
+        "measureCount": 8,
+        "durationSeconds": 16,
+        "ownerPdfIdentity": "piano-beginner-single-vector.pdf::5584::1784174777906",
+        "practiceSessionEpoch": 1,
+        "sourceOmrRunId": 3,
+        "sourceType": "omr",
+        "at": 1784337712928
+      },
+      "pieceB": {
+        "pdfMetaIdentity": "piano-articulation-scan.pdf::197253::1784174777906",
+        "pdfContentHash": "086cf386",
+        "musicXmlHash": "84956b1b",
+        "musicXmlByteLength": 4650,
+        "measureCount": 8,
+        "durationSeconds": 16,
+        "ownerPdfIdentity": "piano-articulation-scan.pdf::197253::1784174777906",
+        "practiceSessionEpoch": 2,
+        "sourceOmrRunId": 6,
+        "sourceType": "omr",
+        "at": 1784337715428
+      },
+      "pieceBPlayback": {
+        "timingContentHash": "84956b1b",
+        "timingRevision": "piano-articulation-scan.omr.musicxml:4650:omr:84956b1b:piano-articulation-scan.pdf::197253::1784174777906:dur16",
+        "duration": 16,
+        "events": {
+          "count": 32,
+          "first": [
+            {
+              "midi": 40,
+              "scoreTimeSeconds": 0,
+              "measureNumber": 1
+            },
+            {
+              "midi": 64,
+              "scoreTimeSeconds": 0.5,
+              "measureNumber": 1
+            },
+            {
+              "midi": 67,
+              "scoreTimeSeconds": 1,
+              "measureNumber": 1
+            },
+            {
+              "midi": 71,
+              "scoreTimeSeconds": 1.5,
+              "measureNumber": 1
+            },
+            {
+              "midi": 76,
+              "scoreTimeSeconds": 2,
+              "measureNumber": 2
+            },
+            {
+              "midi": 71,
+              "scoreTimeSeconds": 2.5,
+              "measureNumber": 2
+            },
+            {
+              "midi": 67,
+              "scoreTimeSeconds": 3,
+              "measureNumber": 2
+            },
+            {
+              "midi": 64,
+              "scoreTimeSeconds": 3.5,
+              "measureNumber": 2
+            }
+          ]
+        },
+        "playbackInputIdentity": "84956b1b",
+        "at": 1784337715379
+      },
+      "discardedSeen": false
+    },
+    "lateADiscarded": {
+      "auth": {
+        "pdfMetaIdentity": "piano-articulation-scan.pdf::197253::1784174777906",
+        "pdfContentHash": "086cf386",
+        "musicXmlHash": "84956b1b",
+        "musicXmlByteLength": 4650,
+        "measureCount": 8,
+        "durationSeconds": 16,
+        "ownerPdfIdentity": "piano-articulation-scan.pdf::197253::1784174777906",
+        "practiceSessionEpoch": 2,
+        "sourceOmrRunId": 6,
+        "sourceType": "omr",
+        "at": 1784337721925
+      },
+      "snap": {
+        "timingContentHash": "84956b1b",
+        "timingRevision": "piano-articulation-scan.omr.musicxml:4650:omr:84956b1b:piano-articulation-scan.pdf::197253::1784174777906:dur16",
+        "duration": 16,
+        "events": {
+          "count": 32,
+          "first": [
+            {
+              "midi": 40,
+              "scoreTimeSeconds": 0,
+              "measureNumber": 1
+            },
+            {
+              "midi": 64,
+              "scoreTimeSeconds": 0.5,
+              "measureNumber": 1
+            },
+            {
+              "midi": 67,
+              "scoreTimeSeconds": 1,
+              "measureNumber": 1
+            },
+            {
+              "midi": 71,
+              "scoreTimeSeconds": 1.5,
+              "measureNumber": 1
+            },
+            {
+              "midi": 76,
+              "scoreTimeSeconds": 2,
+              "measureNumber": 2
+            },
+            {
+              "midi": 71,
+              "scoreTimeSeconds": 2.5,
+              "measureNumber": 2
+            },
+            {
+              "midi": 67,
+              "scoreTimeSeconds": 3,
+              "measureNumber": 2
+            },
+            {
+              "midi": 64,
+              "scoreTimeSeconds": 3.5,
+              "measureNumber": 2
+            }
+          ]
+        },
+        "playbackInputIdentity": "84956b1b",
+        "at": 1784337721874
+      },
+      "gate": {
+        "activePdfIdentity": "piano-articulation-scan.pdf::197253::1784174777906",
+        "activeEpoch": 2,
+        "activeOmrRunId": 6
+      },
+      "sawDiscard": false,
+      "sawCancellation": true,
+      "sawBStart": true
+    },
+    "rapidABC": {
+      "auth": {
+        "pdfMetaIdentity": "piano-rhythm-tuplets-vector.pdf::6944::1784174777907",
+        "pdfContentHash": "9d9f5125",
+        "musicXmlHash": "3e892586",
+        "musicXmlByteLength": 4654,
+        "measureCount": 8,
+        "durationSeconds": 16,
+        "ownerPdfIdentity": "piano-rhythm-tuplets-vector.pdf::6944::1784174777907",
+        "practiceSessionEpoch": 3,
+        "sourceOmrRunId": 9,
+        "sourceType": "omr",
+        "at": 1784337729117
+      },
+      "snap": {
+        "timingContentHash": "3e892586",
+        "timingRevision": "piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:3e892586:piano-rhythm-tuplets-vector.pdf::6944::1784174777907:dur16",
+        "duration": 16,
+        "events": {
+          "count": 32,
+          "first": [
+            {
+              "midi": 40,
+              "scoreTimeSeconds": 0,
+              "measureNumber": 1
+            },
+            {
+              "midi": 64,
+              "scoreTimeSeconds": 0.5,
+              "measureNumber": 1
+            },
+            {
+              "midi": 67,
+              "scoreTimeSeconds": 1,
+              "measureNumber": 1
+            },
+            {
+              "midi": 71,
+              "scoreTimeSeconds": 1.5,
+              "measureNumber": 1
+            },
+            {
+              "midi": 76,
+              "scoreTimeSeconds": 2,
+              "measureNumber": 2
+            },
+            {
+              "midi": 71,
+              "scoreTimeSeconds": 2.5,
+              "measureNumber": 2
+            },
+            {
+              "midi": 67,
+              "scoreTimeSeconds": 3,
+              "measureNumber": 2
+            },
+            {
+              "midi": 64,
+              "scoreTimeSeconds": 3.5,
+              "measureNumber": 2
+            }
+          ]
+        },
+        "playbackInputIdentity": "3e892586",
+        "at": 1784337729066
+      },
+      "gate": {
+        "activePdfIdentity": "piano-rhythm-tuplets-vector.pdf::6944::1784174777907",
+        "activeEpoch": 3,
+        "activeOmrRunId": 9
+      }
+    },
+    "reloadAfterC": {
+      "beforeReloadHash": "3e892586",
+      "afterReload": {
+        "pdfMetaIdentity": "piano-rhythm-tuplets-vector.pdf::6944::1784174777907",
+        "pdfContentHash": "9d9f5125",
+        "musicXmlHash": "3e892586",
+        "musicXmlByteLength": 4654,
+        "measureCount": 8,
+        "durationSeconds": 16,
+        "ownerPdfIdentity": "piano-rhythm-tuplets-vector.pdf::6944::1784174777907",
+        "practiceSessionEpoch": 1,
+        "sourceType": "omr",
+        "at": 1784337730138
+      },
+      "afterReloadPlayback": {
+        "timingContentHash": "3e892586",
+        "timingRevision": "piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:3e892586:piano-rhythm-tuplets-vector.pdf::6944::1784174777907:dur16",
+        "duration": 16,
+        "events": {
+          "count": 32,
+          "first": [
+            {
+              "midi": 40,
+              "scoreTimeSeconds": 0,
+              "measureNumber": 1
+            },
+            {
+              "midi": 64,
+              "scoreTimeSeconds": 0.5,
+              "measureNumber": 1
+            },
+            {
+              "midi": 67,
+              "scoreTimeSeconds": 1,
+              "measureNumber": 1
+            },
+            {
+              "midi": 71,
+              "scoreTimeSeconds": 1.5,
+              "measureNumber": 1
+            },
+            {
+              "midi": 76,
+              "scoreTimeSeconds": 2,
+              "measureNumber": 2
+            },
+            {
+              "midi": 71,
+              "scoreTimeSeconds": 2.5,
+              "measureNumber": 2
+            },
+            {
+              "midi": 67,
+              "scoreTimeSeconds": 3,
+              "measureNumber": 2
+            },
+            {
+              "midi": 64,
+              "scoreTimeSeconds": 3.5,
+              "measureNumber": 2
+            }
+          ]
+        },
+        "playbackInputIdentity": "3e892586",
+        "at": 1784337730225
+      }
+    }
+  },
+  "contentLogs": [
+    "[score-source] persistence-after-omr {pdfIdentity: piano-articulation-scan.pdf::197253::1784174777906, pdfFileName: piano-articulation-scan.pdf, pdfUrlPresent: true, musicXmlIdentity: Object, midiIdentity: null}",
+    "[score-source-content] persistence-run {phase: persistence-run, at: 1784337727559, activePdfIdentity: piano-articulation-scan.pdf::197253::1784174777906, activeEpoch: 2, activeOmrRunId: 6}",
+    "[score-source-lifecycle] persistence-run {phase: persistence-run, activePdfIdentity: piano-articulation-scan.pdf::197253::1784174777906, activeEpoch: 2, activeOmrRunId: 6, callbackPdfIdentity: piano-articulation-scan.pdf::197253::1784174777906}",
+    "[score-source-content] playback-engine-cleared {phase: playback-engine-cleared, at: 1784337727577, timingRevision: null}",
+    "[score-source-content] playback-engine-cleared {phase: playback-engine-cleared, at: 1784337727578, timingRevision: null}",
+    "[score-source-content] playback-engine-cleared {phase: playback-engine-cleared, at: 1784337727586, timingRevision: null}",
+    "[score-source-content] timing-parser-input {phase: timing-parser-input, at: 1784337727598, xmlSourceKey: piano-articulation-scan.omr.musicxml:4650:omr:8495…rticulation-scan.pdf::197253::1784174777906:dur16, xmlContentHash: 84956b1b, parserInputHash: 84956b1b}",
+    "[score-source-content] timing-parse-stale-discard {phase: timing-parse-stale-discard, at: 1784337727599, expectedHash: 84956b1b, parserInputHash: 84956b1b, loadGeneration: 1}",
+    "[score-source-content] timing-parser-input {phase: timing-parser-input, at: 1784337727599, xmlSourceKey: piano-articulation-scan.omr.musicxml:4650:omr:8495…rticulation-scan.pdf::197253::1784174777906:dur16, xmlContentHash: 84956b1b, parserInputHash: 84956b1b}",
+    "[score-source-content] timing-parse-applied {phase: timing-parse-applied, at: 1784337727599, xmlSourceKey: piano-articulation-scan.omr.musicxml:4650:omr:8495…rticulation-scan.pdf::197253::1784174777906:dur16, xmlContentHash: 84956b1b, parserInputHash: 84956b1b}",
+    "[score-source-content] playback-engine-load-start {phase: playback-engine-load-start, at: 1784337727609, timingRevision: piano-articulation-scan.omr.musicxml:4650:omr:8495…rticulation-scan.pdf::197253::1784174777906:dur16, timingContentHash: 84956b1b, measureCount: 8}",
+    "[score-source-content] playback-engine-events {phase: playback-engine-events, at: 1784337727626, timingRevision: piano-articulation-scan.omr.musicxml:4650:omr:8495…rticulation-scan.pdf::197253::1784174777906:dur16, timingContentHash: 84956b1b, duration: 16}",
+    "[score-source-content] playback-timeline-rebuild {phase: playback-timeline-rebuild, at: 1784337727626, timingRevision: piano-articulation-scan.omr.musicxml:4650:omr:8495…rticulation-scan.pdf::197253::1784174777906:dur16, timingContentHash: 84956b1b, duration: 16}",
+    "[score-source-content] persistence-after-await {phase: persistence-after-await, at: 1784337727676, activePdfIdentity: piano-articulation-scan.pdf::197253::1784174777906, activeEpoch: 2, activeOmrRunId: 6}",
+    "[score-source-lifecycle] persistence-after-await {phase: persistence-after-await, activePdfIdentity: piano-articulation-scan.pdf::197253::1784174777906, activeEpoch: 2, activeOmrRunId: 6, callbackPdfIdentity: piano-articulation-scan.pdf::197253::1784174777906}",
+    "[score-source-content] persistence-run {phase: persistence-run, at: 1784337727676, activePdfIdentity: piano-articulation-scan.pdf::197253::1784174777906, activeEpoch: 2, activeOmrRunId: 6}",
+    "[score-source-lifecycle] persistence-run {phase: persistence-run, activePdfIdentity: piano-articulation-scan.pdf::197253::1784174777906, activeEpoch: 2, activeOmrRunId: 6, callbackPdfIdentity: piano-articulation-scan.pdf::197253::1784174777906}",
+    "[score-source-content] indexeddb-persistence {phase: indexeddb-persistence, at: 1784337727676, pdf: Object, musicXml: Object, practiceSessionEpoch: 2}",
+    "[score-source] before-pdf-replacement {pdfIdentity: piano-articulation-scan.pdf::197253::1784174777906, pdfFileName: piano-articulation-scan.pdf, pdfUrlPresent: false, musicXmlIdentity: Object, midiIdentity: null}",
+    "[score-source-content] before-pdf-replacement {phase: before-pdf-replacement, at: 1784337728874, pdf: Object, musicXml: Object, midiHash: null}",
+    "[score-source-content] omr-cancellation-requested {phase: omr-cancellation-requested, at: 1784337728874, activePdfIdentity: piano-articulation-scan.pdf::197253::1784174777906, activeEpoch: 2, activeOmrRunId: null}",
+    "[score-source-lifecycle] omr-cancellation-requested {phase: omr-cancellation-requested, activePdfIdentity: piano-articulation-scan.pdf::197253::1784174777906, activeEpoch: 2, activeOmrRunId: null, reason: pdf-replacement}",
+    "[score-source-content] pdf-selected {phase: pdf-selected, at: 1784337728875, activePdfIdentity: null, activeEpoch: 3, activeOmrRunId: null}",
+    "[score-source-lifecycle] pdf-selected {phase: pdf-selected, activePdfIdentity: null, activeEpoch: 3, activeOmrRunId: null, reason: pdf-replacement-clear}",
+    "[score-source] after-companions-cleared {pdfIdentity: piano-articulation-scan.pdf::197253::1784174777906, pdfFileName: piano-articulation-scan.pdf, pdfUrlPresent: false, musicXmlIdentity: null, midiIdentity: null}",
+    "[score-source-content] after-companions-cleared {phase: after-companions-cleared, at: 1784337728875, musicXml: Object, midiHash: null, practiceSessionEpoch: 3}",
+    "[score-source-content] pdf-selected {phase: pdf-selected, at: 1784337728875, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: null}",
+    "[score-source-lifecycle] pdf-selected {phase: pdf-selected, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: null, reason: classified-pdf-upload}",
+    "[score-source] before-omr-queue {pdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, pdfFileName: piano-rhythm-tuplets-vector.pdf, pdfUrlPresent: true, musicXmlIdentity: null, midiIdentity: null}",
+    "[score-source-content] omr-run-start {phase: omr-run-start, at: 1784337728892, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9}",
+    "[score-source-lifecycle] omr-run-start {phase: omr-run-start, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9, callbackPdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907}",
+    "[score-source-content] omr-worker-settled {phase: omr-worker-settled, at: 1784337729001, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9}",
+    "[score-source-lifecycle] omr-worker-settled {phase: omr-worker-settled, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9, callbackPdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907}",
+    "[score-source-content] omr-result-apply-attempt {phase: omr-result-apply-attempt, at: 1784337729001, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9}",
+    "[score-source-lifecycle] omr-result-apply-attempt {phase: omr-result-apply-attempt, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9, callbackPdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907}",
+    "[score-source] omr-complete {pdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, pdfFileName: piano-rhythm-tuplets-vector.pdf, pdfUrlPresent: true, musicXmlIdentity: null, midiIdentity: null}",
+    "[score-source-content] omr-result-apply-attempt {phase: omr-result-apply-attempt, at: 1784337729001, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9}",
+    "[score-source-lifecycle] omr-result-apply-attempt {phase: omr-result-apply-attempt, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9, callbackPdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907}",
+    "[score-source-content] omr-result-apply-attempt {phase: omr-result-apply-attempt, at: 1784337729002, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9}",
+    "[score-source-lifecycle] omr-result-apply-attempt {phase: omr-result-apply-attempt, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9, callbackPdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907}",
+    "[score-source-content] omr-generated-input {phase: omr-generated-input, at: 1784337729002, pdf: Object, musicXml: Object, practiceSessionEpoch: 3}",
+    "[score-source-content] authoritative-musicxml-changed {phase: authoritative-musicxml-changed, at: 1784337729002, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9}",
+    "[score-source-lifecycle] authoritative-musicxml-changed {phase: authoritative-musicxml-changed, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9, callbackPdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907}",
+    "[score-source-content] app-state-after-onGenerated {phase: app-state-after-onGenerated, at: 1784337729002, pdf: Object, musicXml: Object, practiceSessionEpoch: 3}",
+    "[score-source-content] instrument-bundle-update-gate {phase: instrument-bundle-update-gate, at: 1784337729002, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9}",
+    "[score-source-lifecycle] instrument-bundle-update-gate {phase: instrument-bundle-update-gate, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9, callbackPdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907}",
+    "[score-source-content] instrument-bundle-update {phase: instrument-bundle-update, at: 1784337729002, pdf: Object, musicXml: Object, practiceSessionEpoch: 3}",
+    "[score-source] persistence-after-omr {pdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, pdfFileName: piano-rhythm-tuplets-vector.pdf, pdfUrlPresent: true, musicXmlIdentity: Object, midiIdentity: null}",
+    "[score-source-content] persistence-run {phase: persistence-run, at: 1784337729002, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9}",
+    "[score-source-lifecycle] persistence-run {phase: persistence-run, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9, callbackPdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907}",
+    "[score-source-content] playback-engine-cleared {phase: playback-engine-cleared, at: 1784337729018, timingRevision: null}",
+    "[score-source-content] playback-engine-cleared {phase: playback-engine-cleared, at: 1784337729019, timingRevision: null}",
+    "[score-source-content] playback-engine-cleared {phase: playback-engine-cleared, at: 1784337729027, timingRevision: null}",
+    "[score-source-content] timing-parser-input {phase: timing-parser-input, at: 1784337729039, xmlSourceKey: piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:…thm-tuplets-vector.pdf::6944::1784174777907:dur16, xmlContentHash: 3e892586, parserInputHash: 3e892586}",
+    "[score-source-content] timing-parse-stale-discard {phase: timing-parse-stale-discard, at: 1784337729040, expectedHash: 3e892586, parserInputHash: 3e892586, loadGeneration: 1}",
+    "[score-source-content] timing-parser-input {phase: timing-parser-input, at: 1784337729040, xmlSourceKey: piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:…thm-tuplets-vector.pdf::6944::1784174777907:dur16, xmlContentHash: 3e892586, parserInputHash: 3e892586}",
+    "[score-source-content] timing-parse-applied {phase: timing-parse-applied, at: 1784337729040, xmlSourceKey: piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:…thm-tuplets-vector.pdf::6944::1784174777907:dur16, xmlContentHash: 3e892586, parserInputHash: 3e892586}",
+    "[score-source-content] playback-engine-load-start {phase: playback-engine-load-start, at: 1784337729050, timingRevision: piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:…thm-tuplets-vector.pdf::6944::1784174777907:dur16, timingContentHash: 3e892586, measureCount: 8}",
+    "[score-source-content] playback-engine-events {phase: playback-engine-events, at: 1784337729066, timingRevision: piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:…thm-tuplets-vector.pdf::6944::1784174777907:dur16, timingContentHash: 3e892586, duration: 16}",
+    "[score-source-content] playback-timeline-rebuild {phase: playback-timeline-rebuild, at: 1784337729066, timingRevision: piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:…thm-tuplets-vector.pdf::6944::1784174777907:dur16, timingContentHash: 3e892586, duration: 16}",
+    "[score-source-content] persistence-after-await {phase: persistence-after-await, at: 1784337729117, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9}",
+    "[score-source-lifecycle] persistence-after-await {phase: persistence-after-await, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9, callbackPdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907}",
+    "[score-source-content] persistence-run {phase: persistence-run, at: 1784337729117, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9}",
+    "[score-source-lifecycle] persistence-run {phase: persistence-run, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 3, activeOmrRunId: 9, callbackPdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907}",
+    "[score-source-content] indexeddb-persistence {phase: indexeddb-persistence, at: 1784337729117, pdf: Object, musicXml: Object, practiceSessionEpoch: 3}",
+    "[score-source-content] pdf-selected {phase: pdf-selected, at: 1784337730138, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 1, activeOmrRunId: null}",
+    "[score-source-lifecycle] pdf-selected {phase: pdf-selected, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 1, activeOmrRunId: null, reason: session-restore}",
+    "[score-source-content] authoritative-musicxml-changed {phase: authoritative-musicxml-changed, at: 1784337730138, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 1, activeOmrRunId: null}",
+    "[score-source-lifecycle] authoritative-musicxml-changed {phase: authoritative-musicxml-changed, activePdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, activeEpoch: 1, activeOmrRunId: null, reason: session-restore}",
+    "[score-source-content] playback-engine-cleared {phase: playback-engine-cleared, at: 1784337730160, timingRevision: null}",
+    "[score-source-content] playback-engine-cleared {phase: playback-engine-cleared, at: 1784337730161, timingRevision: null}",
+    "[score-source-content] playback-engine-cleared {phase: playback-engine-cleared, at: 1784337730172, timingRevision: null}",
+    "[score-source-content] timing-parser-input {phase: timing-parser-input, at: 1784337730191, xmlSourceKey: piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:…thm-tuplets-vector.pdf::6944::1784174777907:dur16, xmlContentHash: 3e892586, parserInputHash: 3e892586}",
+    "[score-source-content] timing-parse-stale-discard {phase: timing-parse-stale-discard, at: 1784337730192, expectedHash: 3e892586, parserInputHash: 3e892586, loadGeneration: 1}",
+    "[score-source-content] timing-parser-input {phase: timing-parser-input, at: 1784337730192, xmlSourceKey: piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:…thm-tuplets-vector.pdf::6944::1784174777907:dur16, xmlContentHash: 3e892586, parserInputHash: 3e892586}",
+    "[score-source-content] timing-parse-applied {phase: timing-parse-applied, at: 1784337730192, xmlSourceKey: piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:…thm-tuplets-vector.pdf::6944::1784174777907:dur16, xmlContentHash: 3e892586, parserInputHash: 3e892586}",
+    "[score-source-content] playback-engine-load-start {phase: playback-engine-load-start, at: 1784337730207, timingRevision: piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:…thm-tuplets-vector.pdf::6944::1784174777907:dur16, timingContentHash: 3e892586, measureCount: 8}",
+    "[score-source-content] playback-engine-events {phase: playback-engine-events, at: 1784337730225, timingRevision: piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:…thm-tuplets-vector.pdf::6944::1784174777907:dur16, timingContentHash: 3e892586, duration: 16}",
+    "[score-source-content] playback-timeline-rebuild {phase: playback-timeline-rebuild, at: 1784337730225, timingRevision: piano-rhythm-tuplets-vector.omr.musicxml:4654:omr:…thm-tuplets-vector.pdf::6944::1784174777907:dur16, timingContentHash: 3e892586, duration: 16}",
+    "[score-source] persistence-save {pdfIdentity: piano-rhythm-tuplets-vector.pdf::6944::1784174777907, pdfFileName: piano-rhythm-tuplets-vector.pdf, pdfUrlPresent: false, musicXmlIdentity: Object, midiIdentity: null}"
+  ],
+  "failures": []
+}

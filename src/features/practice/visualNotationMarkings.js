@@ -14,6 +14,8 @@ export const VISUAL_MARKING_KIND = {
   STACCATO: 'staccato',
   ACCENT: 'accent',
   TENUTO: 'tenuto',
+  MARCATO: 'marcato',
+  FERMATA: 'fermata',
   HAMMER_ON: 'hammer-on',
   PULL_OFF: 'pull-off',
   SLIDE: 'slide',
@@ -38,6 +40,8 @@ const NOTE_MARKING_KINDS = new Set([
   VISUAL_MARKING_KIND.STACCATO,
   VISUAL_MARKING_KIND.ACCENT,
   VISUAL_MARKING_KIND.TENUTO,
+  VISUAL_MARKING_KIND.MARCATO,
+  VISUAL_MARKING_KIND.FERMATA,
   VISUAL_MARKING_KIND.BEND,
   VISUAL_MARKING_KIND.VIBRATO,
 ])
@@ -96,13 +100,29 @@ export function buildVisualNoteMarkings(note, { groupId = null } = {}) {
   }
 
   if (note.staccato) {
-    push(VISUAL_MARKING_KIND.STACCATO)
+    push(VISUAL_MARKING_KIND.STACCATO, {
+      placement: note.articulationPlacements?.staccato ?? null,
+    })
   }
   if (note.accent) {
-    push(VISUAL_MARKING_KIND.ACCENT)
+    push(VISUAL_MARKING_KIND.ACCENT, {
+      placement: note.articulationPlacements?.accent ?? null,
+    })
   }
   if (note.tenuto) {
-    push(VISUAL_MARKING_KIND.TENUTO)
+    push(VISUAL_MARKING_KIND.TENUTO, {
+      placement: note.articulationPlacements?.tenuto ?? null,
+    })
+  }
+  if (note.marcato) {
+    push(VISUAL_MARKING_KIND.MARCATO, {
+      placement: note.articulationPlacements?.marcato ?? null,
+    })
+  }
+  if (note.fermata) {
+    push(VISUAL_MARKING_KIND.FERMATA, {
+      placement: note.articulationPlacements?.fermata ?? null,
+    })
   }
 
   for (const technique of note.guitarTechniques ?? []) {
@@ -126,14 +146,45 @@ function orderedNoteRefs(groups) {
       if (!isFiniteMidi(note?.midi)) {
         return
       }
+      const continuations = note.tiedContinuations ?? []
+      const writtenHead =
+        continuations.length > 0
+          ? {
+              ...note,
+              // Playback merge stamps the chain head as start+stop. Written
+              // notation still starts at the head and stops on continuations.
+              tieStop: false,
+              hasWrittenTieContinuations: true,
+            }
+          : note
       refs.push({
-        note,
+        note: writtenHead,
         noteId: visualNoteId(note, group, noteIndex),
         groupId: group.id ?? null,
         group,
         noteIndex,
         timeSeconds: group.timeSeconds ?? note.timeSeconds ?? 0,
         status: group.status ?? null,
+      })
+      continuations.forEach((continuation, continuationIndex) => {
+        if (!isFiniteMidi(continuation?.midi)) {
+          return
+        }
+        refs.push({
+          note: {
+            ...continuation,
+            isWrittenTieContinuation: true,
+          },
+          noteId:
+            continuation.visualNoteId ??
+            continuation.id ??
+            `${visualNoteId(note, group, noteIndex)}-tie-${continuationIndex}`,
+          groupId: group.id ?? null,
+          group,
+          noteIndex: noteIndex + (continuationIndex + 1) / 100,
+          timeSeconds: continuation.timeSeconds ?? group.timeSeconds ?? 0,
+          status: group.status ?? null,
+        })
       })
     })
   }
@@ -186,6 +237,10 @@ function makeSpan(kind, start, end, extra = {}) {
     toGroupId: end.groupId,
     fromTimeSeconds: start.timeSeconds,
     toTimeSeconds: end.timeSeconds,
+    fromMeasureNumber: start.note.measureNumber ?? null,
+    toMeasureNumber: end.note.measureNumber ?? null,
+    fromMidi: start.note.midi ?? null,
+    toMidi: end.note.midi ?? null,
     status: spanStatus(start.status, end.status),
     source: 'musicxml',
     ...extra,
@@ -210,7 +265,13 @@ export function buildVisualSpanMarkings(groups) {
   for (const ref of orderedNoteRefs(groups)) {
     const note = ref.note
 
-    if (note.tieStart && note.tieStop && sanitizeVisualDurationSeconds(note.durationSeconds, 0) > 0) {
+    if (
+      note.tieStart &&
+      note.tieStop &&
+      !note.isWrittenTieContinuation &&
+      !note.hasWrittenTieContinuations &&
+      sanitizeVisualDurationSeconds(note.durationSeconds, 0) > 0
+    ) {
       spans.push(
         makeSpan(VISUAL_MARKING_KIND.TIE, ref, {
           ...ref,
@@ -222,7 +283,16 @@ export function buildVisualSpanMarkings(groups) {
     }
 
     if (note.tieStop) {
-      const span = closeOpenSpan(openTies, tieKey(note), ref, VISUAL_MARKING_KIND.TIE)
+      const openTie = openTies.get(tieKey(note))
+      const span = closeOpenSpan(
+        openTies,
+        tieKey(note),
+        ref,
+        VISUAL_MARKING_KIND.TIE,
+        {
+          placement: openTie?.note?.tiePlacement ?? note.tiePlacement ?? null,
+        },
+      )
       if (span) {
         spans.push(span)
       }

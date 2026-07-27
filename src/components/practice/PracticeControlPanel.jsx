@@ -36,13 +36,10 @@ export default memo(function PracticeControlPanel({
   const { session, scoreFollow, practicePiece, practiceStats } = usePracticeSessionContext()
   const diagnosticsSummary = buildDiagnosticsSummary(session)
 
-  const needsScoreFollowSetup =
-    Boolean(session.timing.timingMap) &&
-    (scoreFollow?.anchors?.length ?? 0) === 0 &&
-    !scoreFollow?.alignmentMode &&
-    !scoreFollow?.semiAutoPreview
-
-  const openSetupByDefault = needsScoreFollowSetup && !session.isDemoPiece
+  // Only auto-expand Advanced when cursor setup actually failed — not for the
+  // normal “preparing / ready” path after a PDF upload.
+  const openSetupByDefault =
+    !session.isDemoPiece && scoreFollow?.setupStatus?.phase === 'failed'
 
   const filesReady = Boolean(pdfFileName && session.hasMusicXml)
   const omrWaitForYouDisabled =
@@ -110,7 +107,7 @@ export default memo(function PracticeControlPanel({
           waitForYouDisabled={omrWaitForYouDisabled}
           waitForYouDisabledReason={
             omrWaitForYouDisabled
-              ? 'Set up score cursor in Advanced first.'
+              ? 'Set up the score cursor in Advanced first.'
               : ''
           }
           compact
@@ -195,7 +192,7 @@ export default memo(function PracticeControlPanel({
       <div className="practice-control-panel__footer">
         <PracticeCollapsibleSection
           title="Advanced"
-          summary="Files, playback, setup"
+          summary="Files, playback, cursor"
           defaultOpen={openSetupByDefault}
           dataTourId="practice-advanced"
         >
@@ -217,8 +214,8 @@ export default memo(function PracticeControlPanel({
               <PracticePositionTick collapsible />
             </section>
 
-            <section className="practice-more__group" aria-label="Practice setup">
-              <h4 className="practice-more__group-title">Practice setup</h4>
+            <section className="practice-more__group" aria-label="Score cursor">
+              <h4 className="practice-more__group-title">Score cursor</h4>
               <PracticeEnvironmentNotices />
               <PracticeSetupPanel
                 session={session}
@@ -280,10 +277,13 @@ export default memo(function PracticeControlPanel({
 
             <section className="practice-more__group" aria-label="Help">
               <h4 className="practice-more__group-title">Help</h4>
-              <p className="practice-shortcuts-hint" aria-label="Keyboard shortcuts">
-                <kbd>Space</kbd> play · <kbd>Enter</kbd> continue · <kbd>←</kbd>
-                <kbd>→</kbd> pages · <kbd>F</kbd> fullscreen
-              </p>
+              <details className="practice-shortcuts">
+                <summary className="practice-shortcuts__summary">Keyboard shortcuts</summary>
+                <p className="practice-shortcuts-hint" aria-label="Keyboard shortcuts">
+                  <kbd>Space</kbd> play · <kbd>Enter</kbd> continue · <kbd>←</kbd>
+                  <kbd>→</kbd> pages · <kbd>F</kbd> fullscreen
+                </p>
+              </details>
               <PracticeCollapsibleSection
                 title="Diagnostics"
                 summary={diagnosticsSummary}

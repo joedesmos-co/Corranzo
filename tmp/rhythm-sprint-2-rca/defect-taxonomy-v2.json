@@ -1,0 +1,2148 @@
+{
+  "crossFixtureDuration": [
+    [
+      "double-of-truth",
+      {
+        "total": 58,
+        "fixtures": {
+          "piano-dense-advanced-vector": 27,
+          "piano-grand-voices-vector": 30,
+          "piano-rhythm-tuplets-vector": 1
+        }
+      }
+    ],
+    [
+      "half-of-truth",
+      {
+        "total": 41,
+        "fixtures": {
+          "piano-dense-advanced-vector": 30,
+          "guitar-tab-sparse-vector": 3,
+          "piano-rhythm-tuplets-vector": 8
+        }
+      }
+    ],
+    [
+      "false-dot",
+      {
+        "total": 32,
+        "fixtures": {
+          "piano-dense-advanced-vector": 9,
+          "guitar-tab-sparse-vector": 19,
+          "piano-rhythm-tuplets-vector": 4
+        }
+      }
+    ],
+    [
+      "quarter→1.25q",
+      {
+        "total": 8,
+        "fixtures": {
+          "guitar-tab-sparse-vector": 8
+        }
+      }
+    ],
+    [
+      "too-long",
+      {
+        "total": 2,
+        "fixtures": {
+          "piano-dense-advanced-vector": 1,
+          "piano-rhythm-tuplets-vector": 1
+        }
+      }
+    ],
+    [
+      "0.333q→dotted eighth",
+      {
+        "total": 1,
+        "fixtures": {
+          "piano-rhythm-tuplets-vector": 1
+        }
+      }
+    ],
+    [
+      "0.333q→quarter",
+      {
+        "total": 1,
+        "fixtures": {
+          "piano-rhythm-tuplets-vector": 1
+        }
+      }
+    ],
+    [
+      "0.333q→eighth",
+      {
+        "total": 1,
+        "fixtures": {
+          "piano-rhythm-tuplets-vector": 1
+        }
+      }
+    ]
+  ],
+  "byFixture": {
+    "piano-dense-advanced-vector": {
+      "durationCount": 67,
+      "onsetCount": 61,
+      "tupletCount": 0,
+      "durationPairs": [
+        [
+          "Eighth→16th",
+          30
+        ],
+        [
+          "Eighth→quarter",
+          27
+        ],
+        [
+          "Eighth→dotted eighth",
+          9
+        ],
+        [
+          "Eighth→whole",
+          1
+        ]
+      ],
+      "durationSubclass": [
+        [
+          "half-of-truth",
+          30
+        ],
+        [
+          "double-of-truth",
+          27
+        ],
+        [
+          "false-dot",
+          9
+        ],
+        [
+          "too-long",
+          1
+        ]
+      ],
+      "onsetMessages": [
+        [
+          "Onset off by 0.5 quarters",
+          33
+        ],
+        [
+          "Onset off by 0.25 quarters",
+          21
+        ],
+        [
+          "Onset off by 0.75 quarters",
+          7
+        ]
+      ],
+      "samplesByMeasure": {
+        "1": {
+          "duration": [
+            {
+              "measureNumber": 1,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 1,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "2": {
+          "duration": [
+            {
+              "measureNumber": 2,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Eighth detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "dotted eighth",
+              "pair": "Eighth→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.75 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.75 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "3": {
+          "duration": [
+            {
+              "measureNumber": 3,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Eighth detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "dotted eighth",
+              "pair": "Eighth→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Eighth detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "dotted eighth",
+              "pair": "Eighth→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.75 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.75 quarters"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.75 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.75 quarters"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.75 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.75 quarters"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "4": {
+          "duration": [
+            {
+              "measureNumber": 4,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "6": {
+          "duration": [
+            {
+              "measureNumber": 6,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Eighth detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "dotted eighth",
+              "pair": "Eighth→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 6,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Onset off by 0.75 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.75 quarters"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "7": {
+          "duration": [
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        }
+      }
+    },
+    "guitar-tab-sparse-vector": {
+      "durationCount": 30,
+      "onsetCount": 23,
+      "tupletCount": 0,
+      "durationPairs": [
+        [
+          "Quarter→dotted eighth",
+          19
+        ],
+        [
+          "Quarter→1.25q",
+          8
+        ],
+        [
+          "Quarter→eighth",
+          3
+        ]
+      ],
+      "durationSubclass": [
+        [
+          "false-dot",
+          19
+        ],
+        [
+          "quarter→1.25q",
+          8
+        ],
+        [
+          "half-of-truth",
+          3
+        ]
+      ],
+      "onsetMessages": [
+        [
+          "Onset off by 0.25 quarters",
+          14
+        ],
+        [
+          "Onset off by 0.5 quarters",
+          9
+        ]
+      ],
+      "samplesByMeasure": {
+        "1": {
+          "duration": [
+            {
+              "measureNumber": 1,
+              "message": "Quarter detected as eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "eighth",
+              "pair": "Quarter→eighth",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Quarter detected as 1.25q",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "1.25q",
+              "pair": "Quarter→1.25q",
+              "subclass": "quarter→1.25q"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Quarter detected as eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "eighth",
+              "pair": "Quarter→eighth",
+              "subclass": "half-of-truth"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 1,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "2": {
+          "duration": [
+            {
+              "measureNumber": 2,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Quarter detected as 1.25q",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "1.25q",
+              "pair": "Quarter→1.25q",
+              "subclass": "quarter→1.25q"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "3": {
+          "duration": [
+            {
+              "measureNumber": 3,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Quarter detected as 1.25q",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "1.25q",
+              "pair": "Quarter→1.25q",
+              "subclass": "quarter→1.25q"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "4": {
+          "duration": [
+            {
+              "measureNumber": 4,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Quarter detected as 1.25q",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "1.25q",
+              "pair": "Quarter→1.25q",
+              "subclass": "quarter→1.25q"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "6": {
+          "duration": [
+            {
+              "measureNumber": 6,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Quarter detected as 1.25q",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "1.25q",
+              "pair": "Quarter→1.25q",
+              "subclass": "quarter→1.25q"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 6,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "7": {
+          "duration": [
+            {
+              "measureNumber": 7,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Quarter detected as 1.25q",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "1.25q",
+              "pair": "Quarter→1.25q",
+              "subclass": "quarter→1.25q"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Quarter detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "dotted eighth",
+              "pair": "Quarter→dotted eighth",
+              "subclass": "false-dot"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        }
+      }
+    },
+    "piano-grand-voices-vector": {
+      "durationCount": 30,
+      "onsetCount": 0,
+      "tupletCount": 0,
+      "durationPairs": [
+        [
+          "Quarter→half",
+          30
+        ]
+      ],
+      "durationSubclass": [
+        [
+          "double-of-truth",
+          30
+        ]
+      ],
+      "onsetMessages": [],
+      "samplesByMeasure": {
+        "1": {
+          "duration": [
+            {
+              "measureNumber": 1,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            }
+          ],
+          "onset": [],
+          "tuplet": []
+        },
+        "2": {
+          "duration": [
+            {
+              "measureNumber": 2,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            }
+          ],
+          "onset": [],
+          "tuplet": []
+        },
+        "3": {
+          "duration": [
+            {
+              "measureNumber": 3,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            }
+          ],
+          "onset": [],
+          "tuplet": []
+        },
+        "4": {
+          "duration": [
+            {
+              "measureNumber": 4,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            }
+          ],
+          "onset": [],
+          "tuplet": []
+        },
+        "6": {
+          "duration": [
+            {
+              "measureNumber": 6,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 6,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            }
+          ],
+          "onset": [],
+          "tuplet": []
+        },
+        "7": {
+          "duration": [
+            {
+              "measureNumber": 7,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Quarter detected as half",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Quarter",
+              "gen": "half",
+              "pair": "Quarter→half",
+              "subclass": "double-of-truth"
+            }
+          ],
+          "onset": [],
+          "tuplet": []
+        }
+      }
+    },
+    "piano-rhythm-tuplets-vector": {
+      "durationCount": 17,
+      "onsetCount": 33,
+      "tupletCount": 10,
+      "durationPairs": [
+        [
+          "Eighth→16th",
+          8
+        ],
+        [
+          "16th→dotted eighth",
+          2
+        ],
+        [
+          "Eighth→dotted eighth",
+          2
+        ],
+        [
+          "Eighth→quarter",
+          1
+        ],
+        [
+          "0.333q→dotted eighth",
+          1
+        ],
+        [
+          "0.333q→quarter",
+          1
+        ],
+        [
+          "0.333q→eighth",
+          1
+        ],
+        [
+          "16th→quarter",
+          1
+        ]
+      ],
+      "durationSubclass": [
+        [
+          "half-of-truth",
+          8
+        ],
+        [
+          "false-dot",
+          4
+        ],
+        [
+          "double-of-truth",
+          1
+        ],
+        [
+          "0.333q→dotted eighth",
+          1
+        ],
+        [
+          "0.333q→quarter",
+          1
+        ],
+        [
+          "0.333q→eighth",
+          1
+        ],
+        [
+          "too-long",
+          1
+        ]
+      ],
+      "onsetMessages": [
+        [
+          "Onset off by 0.25 quarters",
+          16
+        ],
+        [
+          "Onset off by 0.5 quarters",
+          11
+        ],
+        [
+          "Onset off by 0.75 quarters",
+          5
+        ],
+        [
+          "Onset off by 0.667 quarters",
+          1
+        ]
+      ],
+      "samplesByMeasure": {
+        "1": {
+          "duration": [
+            {
+              "measureNumber": 1,
+              "message": "Eighth detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "quarter",
+              "pair": "Eighth→quarter",
+              "subclass": "double-of-truth"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 1,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 1,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "2": {
+          "duration": [
+            {
+              "measureNumber": 2,
+              "message": "16th detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "16th",
+              "gen": "dotted eighth",
+              "pair": "16th→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 2,
+              "message": "16th detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "16th",
+              "gen": "dotted eighth",
+              "pair": "16th→dotted eighth",
+              "subclass": "false-dot"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.75 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.75 quarters"
+            },
+            {
+              "measureNumber": 2,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "3": {
+          "duration": [
+            {
+              "measureNumber": 3,
+              "message": "0.333q detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "0.333q",
+              "gen": "dotted eighth",
+              "pair": "0.333q→dotted eighth",
+              "subclass": "0.333q→dotted eighth"
+            },
+            {
+              "measureNumber": 3,
+              "message": "0.333q detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "0.333q",
+              "gen": "quarter",
+              "pair": "0.333q→quarter",
+              "subclass": "0.333q→quarter"
+            },
+            {
+              "measureNumber": 3,
+              "message": "0.333q detected as eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "0.333q",
+              "gen": "eighth",
+              "pair": "0.333q→eighth",
+              "subclass": "0.333q→eighth"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.75 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.75 quarters"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Onset off by 0.667 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.667 quarters"
+            }
+          ],
+          "tuplet": [
+            {
+              "measureNumber": 3,
+              "message": "Tuplet none (expected 3:2)",
+              "code": "tuplet-mismatch"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Tuplet none (expected 3:2)",
+              "code": "tuplet-mismatch"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Tuplet none (expected 3:2)",
+              "code": "tuplet-mismatch"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Tuplet none (expected 3:2)",
+              "code": "tuplet-mismatch"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Tuplet none (expected 3:2)",
+              "code": "tuplet-mismatch"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Tuplet none (expected 3:2)",
+              "code": "tuplet-mismatch"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Tuplet none (expected 3:2)",
+              "code": "tuplet-mismatch"
+            },
+            {
+              "measureNumber": 3,
+              "message": "Tuplet none (expected 3:2)",
+              "code": "tuplet-mismatch"
+            }
+          ]
+        },
+        "4": {
+          "duration": [
+            {
+              "measureNumber": 4,
+              "message": "16th detected as quarter",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "16th",
+              "gen": "quarter",
+              "pair": "16th→quarter",
+              "subclass": "too-long"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.5 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.5 quarters"
+            },
+            {
+              "measureNumber": 4,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            }
+          ],
+          "tuplet": []
+        },
+        "6": {
+          "duration": [],
+          "onset": [],
+          "tuplet": []
+        },
+        "7": {
+          "duration": [
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "dotted eighth",
+              "pair": "Eighth→dotted eighth",
+              "subclass": "false-dot"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as 16th",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "16th",
+              "pair": "Eighth→16th",
+              "subclass": "half-of-truth"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Eighth detected as dotted eighth",
+              "code": "duration-mismatch",
+              "kind": "detected-as",
+              "truth": "Eighth",
+              "gen": "dotted eighth",
+              "pair": "Eighth→dotted eighth",
+              "subclass": "false-dot"
+            }
+          ],
+          "onset": [
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            },
+            {
+              "measureNumber": 7,
+              "message": "Onset off by 0.25 quarters",
+              "code": "onset-mismatch",
+              "kind": "onset-msg",
+              "pair": "Onset off by 0.25 quarters"
+            }
+          ],
+          "tuplet": []
+        }
+      }
+    }
+  }
+}

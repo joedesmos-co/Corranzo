@@ -1,0 +1,128 @@
+OMR semantic evaluation
+=======================
+schema v2 · evaluator v2.0.0 · 15aa1db · mode=written
+Alignment confidence: 96% (8 matched, 0 missing, 0 extra)
+
+Overall semantic score
+
+Pitch ........... 70%  (28/40; cov 100%)
+Rhythm .......... 17%  (11/64; cov 100%)
+Sustain ......... 100%  (0/0; cov 100%)
+Articulation .... 100%  (0/0; cov 100%)
+Measure ......... 92%  (24/26; cov 100%)
+Interpretation .. 0%  (0/5; cov 100%)
+Playback ........ 100%  (0/0; cov 100%)
+
+Overall .......... 69%
+First divergence: measure 1
+
+Worst measures
+- Measure 1 (severity 40): Extra note C4; Quarter detected as eighth; Onset off by 0.5 quarters
+- Measure 8 (severity 35): Extra note C5; Quarter detected as dotted eighth; Quarter detected as dotted eighth
+- Measure 7 (severity 33): Extra note B4; Quarter detected as dotted eighth; Quarter detected as dotted eighth
+- Measure 5 (severity 32): Extra note C4; Quarter detected as eighth; Onset off by 0.5 quarters
+- Measure 2 (severity 31): Extra note F#4; Quarter detected as dotted eighth; Quarter detected as dotted eighth
+
+Per-measure report
+
+Measure 1
+- Extra note C4
+- Quarter detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch F4 (expected E4)
+- Quarter detected as 1.25q
+- Onset off by 0.25 quarters
+- Incorrect pitch E4 (expected C4)
+- Quarter detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect chord
+- Repeat mismatch
+- Tempo 88 BPM missing or wrong at q=0
+
+Measure 2
+- Extra note F#4
+- Quarter detected as dotted eighth
+- Quarter detected as dotted eighth
+- Onset off by 0.25 quarters
+- Quarter detected as 1.25q
+- Onset off by 0.25 quarters
+- Quarter detected as dotted eighth
+- Onset off by 0.5 quarters
+
+Measure 3
+- Extra note G4
+- Quarter detected as dotted eighth
+- Quarter detected as dotted eighth
+- Onset off by 0.25 quarters
+- Quarter detected as 1.25q
+- Onset off by 0.25 quarters
+- Quarter detected as dotted eighth
+- Onset off by 0.5 quarters
+
+Measure 4
+- Extra note G#4
+- Quarter detected as dotted eighth
+- Quarter detected as dotted eighth
+- Onset off by 0.25 quarters
+- Quarter detected as 1.25q
+- Onset off by 0.25 quarters
+- Quarter detected as dotted eighth
+- Onset off by 0.5 quarters
+
+Measure 5
+- Extra note C4
+- Quarter detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch E4 (expected C4)
+- Quarter detected as dotted eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch A4 (expected E4)
+- Quarter detected as 1.25q
+- Incorrect chord
+
+Measure 6
+- Extra note A#4
+- Quarter detected as dotted eighth
+- Quarter detected as dotted eighth
+- Onset off by 0.25 quarters
+- Quarter detected as 1.25q
+- Onset off by 0.25 quarters
+- Quarter detected as dotted eighth
+- Onset off by 0.5 quarters
+
+Measure 7
+- Extra note B4
+- Quarter detected as dotted eighth
+- Quarter detected as dotted eighth
+- Onset off by 0.25 quarters
+- Quarter detected as 1.25q
+- Onset off by 0.25 quarters
+- Quarter detected as dotted eighth
+- Onset off by 0.5 quarters
+- Volta mismatch
+
+Measure 8
+- Extra note C5
+- Quarter detected as dotted eighth
+- Quarter detected as dotted eighth
+- Onset off by 0.25 quarters
+- Quarter detected as 1.25q
+- Onset off by 0.25 quarters
+- Quarter detected as dotted eighth
+- Onset off by 0.5 quarters
+- Repeat mismatch
+- Volta mismatch
+
+Top recurring defects:
+1. Duration mismatch (30)
+2. Onset timing difference (23)
+3. Extra note (8)
+4. Incorrect pitch (4)
+5. Incorrect chord (2)
+6. Repeat mismatch (2)
+7. Volta mismatch (2)
+8. Tempo change mismatch (1)
+
+Top defect classes: Rhythm (53), Pitch (12), Interpretation (5), Measure structure (2)
+
+Totals: 72 defects · 32 truth notes · 40 generated notes · 8→8 measures

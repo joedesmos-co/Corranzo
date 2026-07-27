@@ -1,0 +1,453 @@
+{
+  "id": "piano-beginner-single-vector",
+  "pathHint": "vector-glyphs",
+  "glyphStats": {
+    "totalTextItems": 52,
+    "restGlyphCount": 1,
+    "restGlyphs": [
+      {
+        "text": [
+          "U+E4E6"
+        ],
+        "x": 616.5686274509803,
+        "y": 686.2121212121212
+      }
+    ],
+    "digitGlyphCount": 8,
+    "digitGlyphs": [
+      {
+        "text": "1",
+        "x": 74,
+        "y": 626,
+        "fontName": "g_d5_f1"
+      },
+      {
+        "text": "2",
+        "x": 196,
+        "y": 626,
+        "fontName": "g_d5_f1"
+      },
+      {
+        "text": "3",
+        "x": 318,
+        "y": 626,
+        "fontName": "g_d5_f1"
+      },
+      {
+        "text": "4",
+        "x": 440,
+        "y": 626,
+        "fontName": "g_d5_f1"
+      },
+      {
+        "text": "5",
+        "x": 74,
+        "y": 396,
+        "fontName": "g_d5_f1"
+      },
+      {
+        "text": "6",
+        "x": 196,
+        "y": 396,
+        "fontName": "g_d5_f1"
+      },
+      {
+        "text": "7",
+        "x": 318,
+        "y": 396,
+        "fontName": "g_d5_f1"
+      },
+      {
+        "text": "8",
+        "x": 440,
+        "y": 396,
+        "fontName": "g_d5_f1"
+      }
+    ],
+    "tupletHintCount": 6,
+    "tupletHintGlyphs": [
+      {
+        "text": "3",
+        "x": 318,
+        "y": 626,
+        "fontName": "g_d5_f1"
+      },
+      {
+        "text": "4",
+        "x": 440,
+        "y": 626,
+        "fontName": "g_d5_f1"
+      },
+      {
+        "text": "5",
+        "x": 74,
+        "y": 396,
+        "fontName": "g_d5_f1"
+      },
+      {
+        "text": "6",
+        "x": 196,
+        "y": 396,
+        "fontName": "g_d5_f1"
+      },
+      {
+        "text": "7",
+        "x": 318,
+        "y": 396,
+        "fontName": "g_d5_f1"
+      },
+      {
+        "text": "8",
+        "x": 440,
+        "y": 396,
+        "fontName": "g_d5_f1"
+      }
+    ]
+  },
+  "totals": {
+    "truthNoteCount": 32,
+    "generatedNoteCount": 32,
+    "truthRestCount": 1,
+    "generatedRestCount": 0,
+    "truthMeasureCount": 8,
+    "generatedMeasureCount": 8,
+    "defectCount": 36
+  },
+  "rhythm": {
+    "numerator": 53,
+    "denominator": 63,
+    "truePositives": 53,
+    "falsePositives": 0,
+    "falseNegatives": 10,
+    "ignored": 0,
+    "unsupported": 0,
+    "presentInTruth": 63,
+    "compared": 63,
+    "coverage": 1,
+    "coveragePercent": "100%",
+    "score": 0.8413,
+    "percent": "84%",
+    "reliable": true,
+    "displayPercent": "84%"
+  },
+  "defectRollup": {
+    "onset-mismatch": 5,
+    "duration-mismatch": 3,
+    "missing-rest": 1
+  },
+  "restTaxonomy": {
+    "missed-rest": 1
+  },
+  "v2HasTimeModification": false,
+  "v3IndependentHasTimeModification": false,
+  "v3ShadowStatus": "ready",
+  "measureSamples": [
+    {
+      "measureNumber": 7,
+      "pathHint": "vector-glyphs",
+      "eventCount": 3,
+      "restEventCount": 0,
+      "events": [
+        {
+          "type": "note",
+          "start": 0,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "bass",
+          "source": null,
+          "uncertain": false,
+          "confidence": 0.9,
+          "pos": 0.16771767333399,
+          "cx": 545.375816993464,
+          "pitches": [
+            ""
+          ],
+          "midi": [
+            40
+          ],
+          "beams": [
+            0
+          ],
+          "noteDur": [
+            "quarter"
+          ]
+        },
+        {
+          "type": "note",
+          "start": 4,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "bass",
+          "source": null,
+          "uncertain": false,
+          "confidence": 0.9,
+          "pos": 0.438187670378034,
+          "cx": 599.1993464052288,
+          "pitches": [
+            ""
+          ],
+          "midi": [
+            67
+          ],
+          "beams": [
+            1
+          ],
+          "noteDur": [
+            "eighth"
+          ]
+        },
+        {
+          "type": "note",
+          "start": 8,
+          "dur": 8,
+          "dtype": "half",
+          "dotted": false,
+          "clef": "bass",
+          "source": null,
+          "uncertain": false,
+          "confidence": 0.9,
+          "pos": 0.7086576674220774,
+          "cx": 653.0228758169934,
+          "pitches": [
+            ""
+          ],
+          "midi": [
+            71
+          ],
+          "beams": [
+            1
+          ],
+          "noteDur": [
+            "eighth"
+          ]
+        }
+      ],
+      "rests": [],
+      "detectorRests": [],
+      "vectorRestDiagnostics": {
+        "appliedCount": 0,
+        "skipped": [
+          {
+            "reason": "overlaps-staff-notes",
+            "clef": "bass",
+            "positionInMeasure": 0.5254704897034187,
+            "durationType": "eighth"
+          }
+        ]
+      },
+      "validation": null,
+      "localVectorRests": null,
+      "truthNotes": [
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 18,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "E4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "eighth",
+          "dur": 6,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "G4",
+          "tuplet": null,
+          "onset": 18
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 36
+        }
+      ],
+      "genNotes": [
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "E2",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "G4",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "half",
+          "dur": 8,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 8
+        }
+      ],
+      "truthRests": [
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 24
+        }
+      ],
+      "genRests": [],
+      "xmlRestClasses": [],
+      "missingRestClasses": [
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 24,
+          "class": "missed-rest"
+        }
+      ],
+      "truthTuplets": [],
+      "genTuplets": [],
+      "v3Trace": {
+        "measureNumber": 7,
+        "onsetColumnCount": 4,
+        "onsetColumns": [
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-beginner-single-vector-0-1-7:0.545375816993464:false:0",
+            "position": 0.16771767333399
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-beginner-single-vector-0-1-7:0.5991993464052288:false:1",
+            "position": 0.438187670378034
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-beginner-single-vector-0-1-7:0.6165686274509803:false:2",
+            "position": 0.5254704897034187
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-beginner-single-vector-0-1-7:0.6530228758169934:false:3",
+            "position": 0.7086576674220774
+          }
+        ],
+        "voices": [
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-beginner-single-vector-0-1-7:omr3-staff-observation-omr3-page-independent-shadow-piano-beginner-single-vector-0-legacy-page-1-system-1-staff-0-0:0:0",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-beginner-single-vector-0:legacy-page-1-system-1-staff-0:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 40,
+                  "writtenMidi": 40,
+                  "soundingMidi": 40,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 2.68348277334384,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "rest",
+                "pitch": null,
+                "onset": 8.4075278352547,
+                "duration": 2,
+                "durationType": "eighth",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-beginner-single-vector-0-1-7:omr3-staff-observation-omr3-page-independent-shadow-piano-beginner-single-vector-0-legacy-page-1-system-1-staff-0-0:0:1",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-beginner-single-vector-0:legacy-page-1-system-1-staff-0:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 7.011002726048544,
+                "duration": 2,
+                "durationType": "eighth",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11.338522678753238,
+                "duration": 2,
+                "durationType": "eighth",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          }
+        ]
+      },
+      "v3TupletEventCount": 0,
+      "v3TupletSample": []
+    }
+  ],
+  "musicXmlPath": "/Users/ryland/Documents/scoreflow/tmp/rhythm-sprint-3-rca/piano-beginner-single-vector.omr.musicxml"
+}

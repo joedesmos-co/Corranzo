@@ -1,0 +1,180 @@
+{
+  "kind": "rhythm-sprint-3-rca",
+  "createdAt": "2026-07-18T22:10:00.000Z",
+  "baseline": {
+    "path": "tmp/after-rhythm-sprint-2.json",
+    "rhythmMean": 0.5983777777777778,
+    "durationMismatch": 148,
+    "onsetMismatch": 132,
+    "extraRest": 16,
+    "tupletMismatch": 10,
+    "missingRest": 4
+  },
+  "evaluator": { "version": "2.0.0", "schemaVersion": 2, "frozen": true },
+  "scope": "analysis-only",
+  "verdict": {
+    "extraRests": "Almost entirely invented by validateAndNormalizeMeasureRhythm/buildRestEvent on raster path; artic is zero-glyph scan.",
+    "tuplets": "V2 has no time-modification path; V3 recoverUniformBeatGrid already recovers m3 3:2 but omrV3MusicXml never emits markup; production ships V2.",
+    "missingRests": "Secondary; vector glyph skipped (overlaps-staff-notes) or wrong staff/onset/gap-clip."
+  },
+  "taxonomy": {
+    "restPlusTupletTotal": 30,
+    "classes": [
+      {
+        "id": "rest-insertion-from-measure-balancing",
+        "share": 0.5,
+        "countEst": 15,
+        "codes": ["extra-rest"],
+        "fixtures": ["piano-articulation-scan", "guitar-standard-chords-vector"]
+      },
+      {
+        "id": "tuplet-none-no-time-modification",
+        "share": 0.33,
+        "countEst": 10,
+        "codes": ["tuplet-mismatch"],
+        "fixtures": ["piano-rhythm-tuplets-vector"]
+      },
+      {
+        "id": "missed-rest",
+        "share": 0.1,
+        "countEst": 3,
+        "codes": ["missing-rest"],
+        "fixtures": ["piano-beginner-single-vector", "piano-rhythm-tuplets-vector"]
+      },
+      {
+        "id": "wrong-duration-onset-or-staff-on-glyph",
+        "share": 0.07,
+        "countEst": 2,
+        "codes": ["extra-rest", "missing-rest"],
+        "fixtures": ["piano-rhythm-tuplets-vector"]
+      }
+    ]
+  },
+  "fixtures": {
+    "piano-articulation-scan": {
+      "path": "raster",
+      "textItems": 0,
+      "restGlyphs": 0,
+      "truthRestCount": 0,
+      "generatedRestCount": 11,
+      "extraRest": 11,
+      "onsetMismatch": 7,
+      "sampleMeasures": [2, 3, 4, 7],
+      "dominantClass": "rest-insertion-from-measure-balancing",
+      "eventSignature": "uncertain:true confidence:0.5 (buildRestEvent)"
+    },
+    "piano-rhythm-tuplets-vector": {
+      "path": "vector-glyphs",
+      "restGlyphs": ["U+E4E6", "U+E4E7", "U+E4E6", "U+E4E3", "U+E4E6"],
+      "tupletDigitEvidence": [
+        { "text": "3", "x": 332.52, "y": 641 },
+        { "text": "3", "x": 354.48, "y": 641 },
+        { "text": "3", "x": 376.44, "y": 641 },
+        { "text": "3", "x": 398.4, "y": 641 }
+      ],
+      "m3": {
+        "truth": "12 eighths with time-modification 3:2",
+        "v2": {
+          "starts": [3, 4, 5, 6, 7, 8, 9, 10, 10, 12, 13],
+          "timeModification": false,
+          "typicalDuration": "sixteenth"
+        },
+        "v3Independent": {
+          "tupletEventCount": 12,
+          "recovery": "uniform-subdivision-grid",
+          "tuplet": { "actualNotes": 3, "normalNotes": 2, "writtenDivisions": 2 },
+          "serializedTimeModification": false
+        }
+      },
+      "restSamples": {
+        "m4": "wrong-onset-duration (vector glyph applied)",
+        "m5": "wrong-onset-duration (vector glyph applied)",
+        "m6": "matched whole rest"
+      },
+      "defects": {
+        "tupletMismatch": 10,
+        "onsetMismatch": 30,
+        "durationMismatch": 14,
+        "missingRest": 3,
+        "extraRest": 1
+      }
+    },
+    "piano-beginner-single-vector": {
+      "path": "vector-glyphs",
+      "m7": {
+        "truth": "dotted-quarter, eighth, quarter-rest, quarter",
+        "detectedRest": {
+          "durationType": "eighth",
+          "clef": "bass",
+          "positionInMeasure": 0.5254704897034187,
+          "skipReason": "overlaps-staff-notes"
+        },
+        "class": "missed-rest"
+      }
+    }
+  },
+  "recommendedFixes": [
+    {
+      "rank": 1,
+      "title": "Stop inventing rests without detector evidence",
+      "files": [
+        "src/features/omr/validateOmrMeasureRhythm.js",
+        "src/features/omr/assembleOmrMeasureRhythm.js"
+      ],
+      "functions": [
+        "validateAndNormalizeMeasureRhythm",
+        "buildRestEvent",
+        "assembleMeasureRhythm"
+      ],
+      "change": "Do not emit rest events for start/tail gaps unless detectRestsInMeasure or vector rests justify the span.",
+      "avoids": "measure-balancing inventing rests",
+      "expectedImpact": {
+        "piano-articulation-scan": { "extraRest": "11→~0", "onsetMismatch": "7→~0-2" },
+        "guitar-standard-chords-vector": { "extraRest": "4→~0" },
+        "corpusExtraRest": "16→~1-2"
+      }
+    },
+    {
+      "rank": 2,
+      "title": "Digit-gated 3:2 recovery on V2 + emit time-modification",
+      "files": [
+        "src/features/omr/processVectorOmrPage.js",
+        "src/features/omr/buildOmrMusicXml.js",
+        "src/features/omr/v3/omrV3Voices.js",
+        "src/features/omr/v3/omrV3MusicXml.js"
+      ],
+      "functions": [
+        "buildNoteEventsFromGroups (or new helper mirroring recoverUniformBeatGrid)",
+        "recoverUniformBeatGrid",
+        "noteXml"
+      ],
+      "change": "When equal columns/beats===3 and nearby tuplet digit '3' glyphs exist, stamp timeModification 3:2 and emit MusicXML time-modification. Do not invent tuplets from balancing alone.",
+      "avoids": "measure-balancing inventing tuplets; score-specific hardcoding",
+      "expectedImpact": {
+        "piano-rhythm-tuplets-vector": {
+          "tupletMismatch": "10→~0",
+          "onsetMismatch": "m3 cascade sharply reduced",
+          "rhythmClass": "52% → mid-60s+ likely"
+        }
+      }
+    }
+  ],
+  "traps": [
+    "Balancing rests look like recognition but use uncertain/confidence 0.5",
+    "buildRestEvent labels dur=1 as type=quarter",
+    "V3 IR can recover tuplets while both V2 and V3 MusicXML omit time-modification",
+    "Tuplet digit '3' vs measure number '3' (use y proximity to note columns)",
+    "Wrong-staff rest glyphs + gap clipping create paired extra+missing defects",
+    "Scan preprocess changes packing vs raw pageAnalysis",
+    "Do not retune frozen evaluator"
+  ],
+  "artifacts": [
+    "tmp/rhythm-sprint-3-rca/RCA.md",
+    "tmp/rhythm-sprint-3-rca/RCA.json",
+    "tmp/rhythm-sprint-3-rca/probe-rest-tuplet-rca.mjs",
+    "tmp/rhythm-sprint-3-rca/probe-summary.json",
+    "tmp/rhythm-sprint-3-rca/piano-articulation-scan.rca.json",
+    "tmp/rhythm-sprint-3-rca/piano-rhythm-tuplets-vector.rca.json",
+    "tmp/rhythm-sprint-3-rca/piano-beginner-single-vector.rca.json"
+  ]
+}

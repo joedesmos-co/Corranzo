@@ -6,6 +6,10 @@
 import { OMR_ACCURACY_SOURCE } from './omrAccuracyEvaluator.js'
 import { summarizeDurationErrors } from './omrDurationErrorAnalysis.js'
 import { summarizePitchErrors } from './omrPitchErrorAnalysis.js'
+import {
+  articulationGapFromDiagnostics,
+  summarizeSemanticDefectClasses,
+} from './omrSemanticDefectClass.js'
 
 export const DETECTION_ERROR_BUCKET = {
   MISSING: 'missing-notes',
@@ -129,7 +133,7 @@ export function summarizeNamedErrorBuckets(report = {}) {
     [NAMED_ERROR_BUCKET.ONSET]: toCount(totals.wrongOnsetCount),
     [NAMED_ERROR_BUCKET.CHORD]: toCount(totals.chordMismatchCount),
     [NAMED_ERROR_BUCKET.TIES]: tieGap,
-    // Slurs are not modeled; uncertainSlurCount is the observed slur backlog.
+    // Slur backlog: unpaired slur glyphs / rejected arcs after applied slur pairs.
     [NAMED_ERROR_BUCKET.SLURS]: toCount(ties.uncertainSlurCount),
     [NAMED_ERROR_BUCKET.TUPLETS]: tupletGap,
     // Accidental-sized pitch deltas (±1 semitone) are the observable accidental signal.
@@ -366,6 +370,11 @@ export function groupAccuracyReportErrors(report = {}) {
     }))
 
   const namedBuckets = summarizeNamedErrorBuckets(report)
+  const semanticDefectClasses = summarizeSemanticDefectClasses({
+    namedBuckets,
+    durationErrorHistogram: durationHistogram,
+    articulationGap: articulationGapFromDiagnostics(report.generatedOmrDiagnostics),
+  })
 
   return {
     primarySource: primary?.source ?? OMR_ACCURACY_SOURCE.NONE,
@@ -373,6 +382,7 @@ export function groupAccuracyReportErrors(report = {}) {
     primaryConfidence: round(primary?.confidence),
     rankedSources,
     namedBuckets,
+    semanticDefectClasses,
     pitch: {
       total: pitch.total,
       histogram: pitch.histogram,
@@ -499,6 +509,22 @@ export function formatErrorGroupingMarkdown(grouping, { title = 'Error grouping'
     if (largest) {
       const share = largest.share != null ? ` (${Math.round(largest.share * 100)}%)` : ''
       lines.push(`- Largest remaining error bucket: ${largest.bucket} = ${largest.count}${share}`)
+    }
+  }
+  if (grouping.semanticDefectClasses?.ranked?.length) {
+    lines.push(
+      `- Semantic defect classes: ${grouping.semanticDefectClasses.ranked
+        .map((entry) => `${entry.label}=${entry.count}`)
+        .join(', ')}`,
+    )
+    lines.push(`- ${grouping.semanticDefectClasses.priorityGuidance}`)
+    const largestClass = grouping.semanticDefectClasses.largestClass
+    if (largestClass) {
+      const share =
+        largestClass.share != null ? ` (${Math.round(largestClass.share * 100)}%)` : ''
+      lines.push(
+        `- Largest semantic class: ${largestClass.label} = ${largestClass.count}${share} (priority ${largestClass.priority})`,
+      )
     }
   }
   lines.push('')

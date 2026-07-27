@@ -1,0 +1,167 @@
+{
+  "total": 252,
+  "buckets": {
+    "accidental-or-alter": 114,
+    "one-diatonic-step": 35,
+    "larger-interval": 64,
+    "small-interval-other": 31,
+    "octave-error": 8
+  },
+  "byFixture": {
+    "piano-beginner-single-vector": {
+      "buckets": {},
+      "incorrect": 0,
+      "missingNotes": 1,
+      "extraNotes": 1,
+      "staffTags": {
+        "staves2": false,
+        "staff1": 0,
+        "staff2": 0
+      }
+    },
+    "piano-grand-voices-vector": {
+      "buckets": {
+        "accidental-or-alter": 12,
+        "one-diatonic-step": 3,
+        "larger-interval": 7,
+        "small-interval-other": 1
+      },
+      "incorrect": 23,
+      "missingNotes": 1,
+      "extraNotes": 1,
+      "staffTags": {
+        "staves2": true,
+        "staff1": 56,
+        "staff2": 32
+      }
+    },
+    "piano-rhythm-tuplets-vector": {
+      "buckets": {
+        "larger-interval": 1
+      },
+      "incorrect": 1,
+      "missingNotes": 2,
+      "extraNotes": 2,
+      "staffTags": {
+        "staves2": false,
+        "staff1": 0,
+        "staff2": 0
+      }
+    },
+    "piano-articulation-scan": {
+      "buckets": {
+        "accidental-or-alter": 14,
+        "one-diatonic-step": 12,
+        "small-interval-other": 8,
+        "larger-interval": 7,
+        "octave-error": 1
+      },
+      "incorrect": 42,
+      "missingNotes": 0,
+      "extraNotes": 23,
+      "staffTags": {
+        "staves2": true,
+        "staff1": 71,
+        "staff2": 40
+      }
+    },
+    "piano-dense-advanced-vector": {
+      "buckets": {
+        "accidental-or-alter": 71,
+        "one-diatonic-step": 9,
+        "small-interval-other": 4,
+        "larger-interval": 19,
+        "octave-error": 2
+      },
+      "incorrect": 105,
+      "missingNotes": 7,
+      "extraNotes": 7,
+      "staffTags": {
+        "staves2": true,
+        "staff1": 192,
+        "staff2": 72
+      }
+    },
+    "guitar-tab-sparse-vector": {
+      "buckets": {
+        "accidental-or-alter": 1,
+        "one-diatonic-step": 1,
+        "small-interval-other": 2
+      },
+      "incorrect": 4,
+      "missingNotes": 0,
+      "extraNotes": 8,
+      "staffTags": {
+        "staves2": false,
+        "staff1": 0,
+        "staff2": 0
+      }
+    },
+    "guitar-standard-chords-vector": {
+      "buckets": {
+        "accidental-or-alter": 5,
+        "one-diatonic-step": 2,
+        "small-interval-other": 13,
+        "larger-interval": 23,
+        "octave-error": 5
+      },
+      "incorrect": 48,
+      "missingNotes": 29,
+      "extraNotes": 0,
+      "staffTags": {
+        "staves2": false,
+        "staff1": 0,
+        "staff2": 0
+      }
+    },
+    "guitar-paired-chords-vector": {
+      "buckets": {
+        "accidental-or-alter": 9,
+        "one-diatonic-step": 8,
+        "small-interval-other": 3,
+        "larger-interval": 7
+      },
+      "incorrect": 27,
+      "missingNotes": 19,
+      "extraNotes": 6,
+      "staffTags": {
+        "staves2": false,
+        "staff1": 0,
+        "staff2": 0
+      }
+    },
+    "guitar-techniques-paired-vector": {
+      "buckets": {
+        "accidental-or-alter": 2
+      },
+      "incorrect": 2,
+      "missingNotes": 4,
+      "extraNotes": 4,
+      "staffTags": {
+        "staves2": false,
+        "staff1": 0,
+        "staff2": 0
+      }
+    }
+  },
+  "byRaster": {
+    "total": 42,
+    "buckets": {
+      "accidental-or-alter": 14,
+      "one-diatonic-step": 12,
+      "small-interval-other": 8,
+      "larger-interval": 7,
+      "octave-error": 1
+    }
+  },
+  "byVector": {
+    "total": 210,
+    "buckets": {
+      "accidental-or-alter": 100,
+      "one-diatonic-step": 23,
+      "larger-interval": 57,
+      "small-interval-other": 23,
+      "octave-error": 7
+    }
+  }
+}

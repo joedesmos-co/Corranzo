@@ -35,7 +35,7 @@ describe('experimental PDF OMR (local-only)', () => {
     expect(timing.durationSeconds).toBeGreaterThan(0)
   })
 
-  it('validateAndNormalizeMeasureRhythm pads gaps with rests', () => {
+  it('validateAndNormalizeMeasureRhythm does not invent rests by default', () => {
     const result = validateAndNormalizeMeasureRhythm([
       {
         type: 'note',
@@ -50,6 +50,29 @@ describe('experimental PDF OMR (local-only)', () => {
         notes: [{ midi: 62 }],
       },
     ])
+    expect(result.normalizedEvents.some((event) => event.type === 'rest')).toBe(false)
+    expect(result.totalDivisions).toBe(8)
+    expect(result.valid).toBe(false)
+  })
+
+  it('validateAndNormalizeMeasureRhythm can still pad gaps when inventRests is on', () => {
+    const result = validateAndNormalizeMeasureRhythm(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 4,
+          notes: [{ midi: 60 }],
+        },
+        {
+          type: 'note',
+          startDivision: 8,
+          durationDivisions: 4,
+          notes: [{ midi: 62 }],
+        },
+      ],
+      { inventRests: true },
+    )
     expect(result.valid).toBe(true)
     expect(result.totalDivisions).toBe(OMR_MEASURE_DIVISIONS)
     expect(result.normalizedEvents.some((event) => event.type === 'rest')).toBe(true)
@@ -117,7 +140,7 @@ describe('experimental PDF OMR rhythm (v2)', () => {
     expect(halfish.length).toBeGreaterThanOrEqual(1)
   })
 
-  it('measure rhythm assembly fills each measure to the time signature', () => {
+  it('measure rhythm assembly does not invent phantom balancing rests', () => {
     const page = rhythmicPianoPage({ measuresPerSystem: 2 })
     const imageData = page
     const contentBounds = detectContentBounds(imageData)
@@ -139,8 +162,11 @@ describe('experimental PDF OMR rhythm (v2)', () => {
     expect(noteheads.length).toBeGreaterThan(0)
 
     const rhythm = assembleMeasureRhythm(imageData, measureBox, noteheads, inkThreshold)
-    const total = rhythm.events.reduce((sum, event) => sum + event.durationDivisions, 0)
-    expect(total).toBe(OMR_MEASURE_DIVISIONS)
+    const invented = rhythm.events.filter(
+      (event) => event.type === 'rest' && event.source === 'measure-balancing',
+    )
+    expect(invented).toHaveLength(0)
+    expect(rhythm.events.some((event) => event.type === 'note')).toBe(true)
   })
 
   it('buildOmrMusicXml emits dotted notes and tie markup when present', () => {

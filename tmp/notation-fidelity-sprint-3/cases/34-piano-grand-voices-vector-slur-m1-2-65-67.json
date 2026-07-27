@@ -1,0 +1,84 @@
+{
+  "id": "34-piano-grand-voices-vector-slur-m1-2-65-67",
+  "source": "piano-grand-voices-vector",
+  "sourcePdf": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf",
+  "page": 1,
+  "measures": [
+    1,
+    2
+  ],
+  "expectedSymbol": "slur",
+  "sourceCrop": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/source-crops/34-piano-grand-voices-vector-slur-m1-2-65-67.png",
+  "candidateOverlay": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/candidate-overlays/34-piano-grand-voices-vector-slur-m1-2-65-67.png",
+  "rawCurveCandidates": [],
+  "selectedAttachments": {
+    "fromMeasure": 1,
+    "toMeasure": 2,
+    "fromMidi": 65,
+    "toMidi": 67,
+    "clef": null,
+    "candidateIds": []
+  },
+  "classificationResult": "unresolved",
+  "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/34-piano-grand-voices-vector-slur-m1-2-65-67.musicxml",
+  "renderedResult": {
+    "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/34-piano-grand-voices-vector-slur-m1-2-65-67.png",
+    "markingFound": false,
+    "path": null,
+    "placement": null
+  },
+  "playbackAttackTrace": [
+    {
+      "measureNumber": 1,
+      "midi": 67,
+      "quarterTime": 0,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 1,
+      "midi": 67,
+      "quarterTime": 2,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 1,
+      "midi": 65,
+      "quarterTime": 3,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 2,
+      "midi": 65,
+      "quarterTime": 4,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 2,
+      "midi": 65,
+      "quarterTime": 6,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    },
+    {
+      "measureNumber": 2,
+      "midi": 67,
+      "quarterTime": 7,
+      "tieStart": false,
+      "tieStop": false,
+      "suppressPlaybackAttack": false
+    }
+  ],
+  "correctBefore": false,
+  "correctAfter": false,
+  "failureLayerBefore": "symbol-not-detected",
+  "failureLayerAfter": "symbol-not-detected"
+}

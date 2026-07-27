@@ -1,0 +1,288 @@
+{
+  "summary": {
+    "total": 20,
+    "correct": 7,
+    "accuracy": 0.35,
+    "tp": 3,
+    "fp": 0,
+    "fn": 13,
+    "tn": 4,
+    "byKind": {
+      "staccato": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 3,
+        "tn": 2
+      },
+      "slur": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 0
+      },
+      "accent": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 6,
+        "tn": 0
+      },
+      "tie": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 2
+      }
+    },
+    "byLayer": {
+      "undetected": 13,
+      "wrong-attachment": 0,
+      "emission": 0,
+      "renderer": 0,
+      "none": 7
+    }
+  },
+  "results": [
+    {
+      "caseId": "artic-m1-staccato-c4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "staccato",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": "Chord-tone staccato on C4"
+    },
+    {
+      "caseId": "artic-m1-staccato-e4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "staccato",
+      "status": "tp",
+      "failureLayer": "none",
+      "matched": {
+        "kind": "staccato",
+        "role": "mark",
+        "measureNumber": 1,
+        "midi": 64,
+        "onsetDivision": null
+      },
+      "detected": [
+        {
+          "kind": "staccato",
+          "role": "mark",
+          "measureNumber": 1,
+          "midi": 64,
+          "onsetDivision": null
+        }
+      ],
+      "notes": "Chord-tone staccato on E4"
+    },
+    {
+      "caseId": "artic-m1-staccato-g4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "staccato",
+      "status": "tp",
+      "failureLayer": "none",
+      "matched": {
+        "kind": "staccato",
+        "role": "mark",
+        "measureNumber": 1,
+        "midi": 67,
+        "onsetDivision": null
+      },
+      "detected": [
+        {
+          "kind": "staccato",
+          "role": "mark",
+          "measureNumber": 1,
+          "midi": 67,
+          "onsetDivision": null
+        }
+      ],
+      "notes": "Chord-tone staccato on G4"
+    },
+    {
+      "caseId": "artic-m1-slur-start-f4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "slur",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": "Two-note/phrase slur start on F4 (different pitch from stop)"
+    },
+    {
+      "caseId": "artic-m2-accent-d4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "accent",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": null
+    },
+    {
+      "caseId": "artic-m2-accent-fsharp4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "accent",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": null
+    },
+    {
+      "caseId": "artic-m2-accent-a4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "accent",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": null
+    },
+    {
+      "caseId": "artic-m2-slur-stop-g4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "slur",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": "Slur destination still attacks"
+    },
+    {
+      "caseId": "artic-m3-staccato-chord",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "staccato",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": null
+    },
+    {
+      "caseId": "artic-m3-tie-start-a4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "tie",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": "Written tie start (truth MusicXML); verify not slur-confused"
+    },
+    {
+      "caseId": "artic-m4-tie-stop",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "tie",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": "Truth marks stop on Bb4 — same-pitch ownership audit case"
+    },
+    {
+      "caseId": "artic-m4-accent-f4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "accent",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": null
+    },
+    {
+      "caseId": "artic-m5-staccato-g4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "staccato",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": null
+    },
+    {
+      "caseId": "artic-m6-accent-a4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "accent",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": null
+    },
+    {
+      "caseId": "artic-m7-staccato-g4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "staccato",
+      "status": "tp",
+      "failureLayer": "none",
+      "matched": {
+        "kind": "staccato",
+        "role": "mark",
+        "measureNumber": 7,
+        "midi": 67,
+        "onsetDivision": null
+      },
+      "detected": [
+        {
+          "kind": "staccato",
+          "role": "mark",
+          "measureNumber": 7,
+          "midi": 67,
+          "onsetDivision": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "caseId": "artic-m8-accent-e4",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "accent",
+      "status": "fn",
+      "failureLayer": "undetected",
+      "matched": null,
+      "detected": [],
+      "notes": null
+    },
+    {
+      "caseId": "artic-m1-no-tie-on-staccato-chord",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "tie",
+      "status": "tn",
+      "failureLayer": "none",
+      "matched": null,
+      "detected": [],
+      "notes": "Staccato chord must not emit a false tie"
+    },
+    {
+      "caseId": "confusable-augdot-not-staccato",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "staccato",
+      "status": "tn",
+      "failureLayer": "none",
+      "matched": null,
+      "detected": [],
+      "notes": "Augmentation/dot-like region on tied A4 must not add staccato"
+    },
+    {
+      "caseId": "confusable-slur-not-tie-m1",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "tie",
+      "status": "tn",
+      "failureLayer": "none",
+      "matched": null,
+      "detected": [],
+      "notes": "Slur start on F4 must not emit a tie"
+    },
+    {
+      "caseId": "no-articulation-plain-note",
+      "source": "piano-articulation-scan",
+      "expectedSymbol": "staccato",
+      "status": "tn",
+      "failureLayer": "none",
+      "matched": null,
+      "detected": [],
+      "notes": "Slurred F4 has no staccato"
+    }
+  ]
+}

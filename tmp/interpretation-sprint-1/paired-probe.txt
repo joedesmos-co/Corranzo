@@ -1,0 +1,117 @@
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf',
+  at: 1785094794248
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { page: 1, legacyFontGlyphsApplied: undefined }
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 113,
+  systems: 2,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 113, systems: 2 }
+[omr-trace] phase=page-1 ms=267 end { systems: 2, measures: 5, notes: 113 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=19 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 5 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=1 end
+[omr-trace] pipeline:measure-playback-report { firstBadMeasure: 5, flagged: [ 5 ] }
+[omr-trace] pipeline:success { noteCount: 113, measureCount: 5 }
+semantic 45% [P:17% R:77% S:100% A:100% M:20% I:0% Pb:0%] align:87% defects:213 first:1

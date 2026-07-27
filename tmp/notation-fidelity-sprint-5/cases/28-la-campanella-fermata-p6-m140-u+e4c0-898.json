@@ -1,0 +1,89 @@
+{
+  "id": "28-la-campanella-fermata-p6-m140-u+e4c0-898",
+  "source": "la-campanella",
+  "sourcePdf": "/Users/ryland/Downloads/etude-s-1413-in-g-minor-la-campanella-liszt.pdf",
+  "page": 6,
+  "measure": 140,
+  "expectedArticulation": "fermata",
+  "expectAbsent": false,
+  "sourcePriority": "PDF text / SMuFL glyph",
+  "rawArticulationCandidate": {
+    "glyph": "",
+    "codepoint": "U+E4C0",
+    "originalGlyph": "",
+    "originalCodepoint": "U+E4C0",
+    "x": 898.1797615328945,
+    "y": 998.7941815503877,
+    "width": 16.930105954677643,
+    "height": 27.20655556899225,
+    "candidateType": "fermata",
+    "placement": "above",
+    "normalization": null
+  },
+  "candidateType": "fermata",
+  "staffSystem": {
+    "page": 6,
+    "systemIndex": 5,
+    "clef": "treble"
+  },
+  "selectedNoteOrChord": {
+    "kind": "note",
+    "noteIndex": 12,
+    "restIndex": null,
+    "midi": 80,
+    "cx": 898.1788046790124,
+    "cy": 1010.790784641473,
+    "chordBroadcastCount": 1
+  },
+  "classification": "U+E4C0 pipeline=fermata; manually verified=fermata",
+  "placement": "above",
+  "musicXmlSnippet": "<measure number=\"140\"><direction><direction-type><dynamics><pp/></dynamics></direction-type><offset>1</offset><staff>1</staff></direction><note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff></note><forward><duration>1</duration></forward><note><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff></note><note><pitch><step>E</step><octave>5</octave></pitch><duration>3</duration><voice>2</voice><type>eighth</type><staff>2</staff></note><backup><duration>2</duration></backup><note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>D</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>D</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff></note><note><chord/><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff></note><backup><duration>1</duration></backup><note><pitch><step>G</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>G</step><alter>1</alter><octave>5</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff></note><note><pitch><step>D</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><beam number=\"1\">begin</beam><beam number=\"2\">forward hook</beam></note><note><chord/><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>B</step><octave>5</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff><beam number=\"1\">end</beam></note><backup><duration>1</duration></backup><note><pitch><step>G</step><alter>1</alter><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><fermata type=\"upright\" placement=\"above\"/></notations></note></measure>",
+  "renderedResult": {
+    "present": true,
+    "geometry": {
+      "id": "note-fermata-note-m140-t485.758-1373-n0-staff-fermata",
+      "kind": "fermata",
+      "scope": "note",
+      "noteId": "note-m140-t485.758-1373-n0",
+      "groupId": "note-m140-t485.758-1373",
+      "symbol": null,
+      "source": "musicxml",
+      "placement": "above",
+      "chordNoteIds": [
+        "note-m140-t485.758-1373-n0"
+      ],
+      "status": "upcoming",
+      "shape": "text",
+      "text": "𝄐",
+      "x": 53433.380000000005,
+      "y": 10.8,
+      "fontSize": 21.6
+    },
+    "restFermataWrittenOnly": false
+  },
+  "playbackSemanticTrace": {
+    "id": "P1-m140-n2504",
+    "measureNumber": 140,
+    "midi": 80,
+    "quarterTime": 558.75,
+    "voice": 1,
+    "staff": 1,
+    "attackCount": 1,
+    "articulationSource": "fermata",
+    "writtenDurationSeconds": 0.5357142857142776,
+    "baseDurationSeconds": 0.9374999999999858,
+    "velocity": 0.30385
+  },
+  "notationPlaybackAgree": true,
+  "failureLayerBefore": "1 articulation not detected",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-5/source-crops/28-la-campanella-fermata-p6-m140-u+e4c0-898.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-5/candidate-overlays/28-la-campanella-fermata-p6-m140-u+e4c0-898.png",
+    "musicXmlSnippet": "tmp/notation-fidelity-sprint-5/musicxml-snippets/28-la-campanella-fermata-p6-m140-u+e4c0-898.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-5/rendered-before/28-la-campanella-fermata-p6-m140-u+e4c0-898.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-5/rendered-after/28-la-campanella-fermata-p6-m140-u+e4c0-898.png"
+  }
+}

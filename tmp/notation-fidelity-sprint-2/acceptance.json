@@ -1,0 +1,289 @@
+{
+  "version": 1,
+  "sprint": "omr-notation-fidelity-sprint-2",
+  "focus": "note-values-dots-beams",
+  "caseSummary": {
+    "total": 42,
+    "correctBefore": 2,
+    "correctAfter": 27,
+    "byFailureLayerBefore": {
+      "musicxml-emission": 6,
+      "wrong-attachment": 2,
+      "renderer": 20,
+      "split-semantics": 5,
+      "symbol-not-detected": 7,
+      "none": 2
+    },
+    "byFailureLayerAfter": {
+      "none": 27,
+      "wrong-attachment": 1,
+      "renderer": 6,
+      "symbol-not-detected": 7,
+      "split-semantics": 1
+    },
+    "byCategory": {
+      "beams": {
+        "total": 5,
+        "correctBefore": 0,
+        "correctAfter": 4
+      },
+      "noise-rejection": {
+        "total": 5,
+        "correctBefore": 0,
+        "correctAfter": 5
+      },
+      "note-values": {
+        "total": 9,
+        "correctBefore": 0,
+        "correctAfter": 8
+      },
+      "dots": {
+        "total": 8,
+        "correctBefore": 0,
+        "correctAfter": 8
+      },
+      "rests": {
+        "total": 4,
+        "correctBefore": 0,
+        "correctAfter": 0
+      },
+      "accidentals": {
+        "total": 6,
+        "correctBefore": 1,
+        "correctAfter": 1
+      },
+      "ties": {
+        "total": 2,
+        "correctBefore": 0,
+        "correctAfter": 0
+      },
+      "slurs": {
+        "total": 1,
+        "correctBefore": 0,
+        "correctAfter": 0
+      },
+      "articulations": {
+        "total": 2,
+        "correctBefore": 1,
+        "correctAfter": 1
+      }
+    }
+  },
+  "outputComparisons": {
+    "piano-articulation-scan": {
+      "before": {
+        "notes": 111,
+        "eighths": 0,
+        "sixteenths": 0,
+        "quarters": 111,
+        "halves": 0,
+        "wholes": 0,
+        "dots": 51,
+        "beams": 99,
+        "beamBegins": 19,
+        "beamContinues": 80,
+        "beamEnds": 0,
+        "ties": 4,
+        "slurs": 0,
+        "staccatos": 58,
+        "accents": 0
+      },
+      "after": {
+        "notes": 111,
+        "eighths": 0,
+        "sixteenths": 0,
+        "quarters": 111,
+        "halves": 0,
+        "wholes": 0,
+        "dots": 51,
+        "beams": 0,
+        "beamBegins": 0,
+        "beamContinues": 0,
+        "beamEnds": 0,
+        "ties": 4,
+        "slurs": 0,
+        "staccatos": 58,
+        "accents": 0
+      },
+      "playbackSemanticEqual": true,
+      "durationSecondsBefore": 32,
+      "durationSecondsAfter": 32,
+      "renderedAfter": {
+        "visualNotes": 222,
+        "hollowNotes": 0,
+        "stemlessNotes": 0,
+        "beamSpans": 0,
+        "flags": 0,
+        "dots": 102
+      }
+    },
+    "minecraft": {
+      "before": {
+        "notes": 108,
+        "eighths": 1,
+        "sixteenths": 0,
+        "quarters": 44,
+        "halves": 63,
+        "wholes": 0,
+        "dots": 39,
+        "beams": 0,
+        "beamBegins": 0,
+        "beamContinues": 0,
+        "beamEnds": 0,
+        "ties": 0,
+        "slurs": 0,
+        "staccatos": 12,
+        "accents": 0
+      },
+      "after": {
+        "notes": 108,
+        "eighths": 1,
+        "sixteenths": 0,
+        "quarters": 44,
+        "halves": 63,
+        "wholes": 0,
+        "dots": 39,
+        "beams": 0,
+        "beamBegins": 0,
+        "beamContinues": 0,
+        "beamEnds": 0,
+        "ties": 0,
+        "slurs": 0,
+        "staccatos": 12,
+        "accents": 0
+      },
+      "playbackSemanticEqual": true,
+      "durationSecondsBefore": 40,
+      "durationSecondsAfter": 40,
+      "renderedAfter": {
+        "visualNotes": 105,
+        "hollowNotes": 63,
+        "stemlessNotes": 0,
+        "beamSpans": 0,
+        "flags": 0,
+        "dots": 39
+      }
+    },
+    "evangelion": {
+      "before": {
+        "notes": 254,
+        "eighths": 144,
+        "sixteenths": 46,
+        "quarters": 53,
+        "halves": 11,
+        "wholes": 0,
+        "dots": 10,
+        "beams": 0,
+        "beamBegins": 0,
+        "beamContinues": 0,
+        "beamEnds": 0,
+        "ties": 0,
+        "slurs": 0,
+        "staccatos": 39,
+        "accents": 0
+      },
+      "after": {
+        "notes": 254,
+        "eighths": 144,
+        "sixteenths": 46,
+        "quarters": 53,
+        "halves": 11,
+        "wholes": 0,
+        "dots": 10,
+        "beams": 3,
+        "beamBegins": 1,
+        "beamContinues": 0,
+        "beamEnds": 1,
+        "ties": 0,
+        "slurs": 0,
+        "staccatos": 39,
+        "accents": 0
+      },
+      "playbackSemanticEqual": true,
+      "durationSecondsBefore": 33.583959899749374,
+      "durationSecondsAfter": 33.583959899749374,
+      "renderedAfter": {
+        "visualNotes": 252,
+        "hollowNotes": 10,
+        "stemlessNotes": 0,
+        "beamSpans": 2,
+        "flags": 140,
+        "dots": 10
+      }
+    },
+    "gymnopedie": {
+      "before": {
+        "notes": 144,
+        "eighths": 2,
+        "sixteenths": 0,
+        "quarters": 25,
+        "halves": 117,
+        "wholes": 0,
+        "dots": 37,
+        "beams": 0,
+        "beamBegins": 0,
+        "beamContinues": 0,
+        "beamEnds": 0,
+        "ties": 0,
+        "slurs": 0,
+        "staccatos": 17,
+        "accents": 0
+      },
+      "after": {
+        "notes": 144,
+        "eighths": 2,
+        "sixteenths": 0,
+        "quarters": 25,
+        "halves": 117,
+        "wholes": 0,
+        "dots": 37,
+        "beams": 0,
+        "beamBegins": 0,
+        "beamContinues": 0,
+        "beamEnds": 0,
+        "ties": 0,
+        "slurs": 0,
+        "staccatos": 17,
+        "accents": 0
+      },
+      "playbackSemanticEqual": true,
+      "durationSecondsBefore": 83.33333333333333,
+      "durationSecondsAfter": 83.33333333333333,
+      "renderedAfter": {
+        "visualNotes": 138,
+        "hollowNotes": 113,
+        "stemlessNotes": 0,
+        "beamSpans": 0,
+        "flags": 0,
+        "dots": 37
+      }
+    },
+    "minuet-clean-engraved": {
+      "source": {
+        "notes": 207,
+        "eighths": 85,
+        "sixteenths": 0,
+        "quarters": 91,
+        "halves": 30,
+        "wholes": 0,
+        "dots": 17,
+        "beams": 84,
+        "beamBegins": 42,
+        "beamContinues": 0,
+        "beamEnds": 42,
+        "ties": 0,
+        "slurs": 0,
+        "staccatos": 0,
+        "accents": 0
+      },
+      "renderedAfter": {
+        "visualNotes": 204,
+        "hollowNotes": 29,
+        "stemlessNotes": 0,
+        "beamSpans": 40,
+        "flags": 2,
+        "dots": 16
+      }
+    }
+  }
+}

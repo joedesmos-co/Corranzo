@@ -1,0 +1,62 @@
+{
+  "piano-dense-advanced-vector": {
+    "coupledDurationInOnsetMeasures": 67,
+    "durationOnly": 0,
+    "onsetOnly": 0,
+    "durH": {
+      "Eighth detected as quarter": 27,
+      "Eighth detected as 16th": 30,
+      "Eighth detected as dotted eighth": 9,
+      "Eighth detected as whole": 1
+    },
+    "onH": {
+      "Onset off by 0.5 quarters": 33,
+      "Onset off by 0.25 quarters": 21,
+      "Onset off by 0.75 quarters": 7
+    }
+  },
+  "guitar-tab-sparse-vector": {
+    "coupledDurationInOnsetMeasures": 30,
+    "durationOnly": 0,
+    "onsetOnly": 0,
+    "durH": {
+      "Quarter detected as eighth": 3,
+      "Quarter detected as 1.25q": 8,
+      "Quarter detected as dotted eighth": 19
+    },
+    "onH": {
+      "Onset off by 0.5 quarters": 9,
+      "Onset off by 0.25 quarters": 14
+    }
+  },
+  "piano-grand-voices-vector": {
+    "coupledDurationInOnsetMeasures": 0,
+    "durationOnly": 30,
+    "onsetOnly": 0,
+    "durH": {
+      "Quarter detected as half": 30
+    },
+    "onH": {}
+  },
+  "piano-rhythm-tuplets-vector": {
+    "coupledDurationInOnsetMeasures": 17,
+    "durationOnly": 0,
+    "onsetOnly": 4,
+    "durH": {
+      "Eighth detected as quarter": 1,
+      "Eighth detected as 16th": 8,
+      "16th detected as dotted eighth": 2,
+      "0.333q detected as dotted eighth": 1,
+      "0.333q detected as quarter": 1,
+      "0.333q detected as eighth": 1,
+      "16th detected as quarter": 1,
+      "Eighth detected as dotted eighth": 2
+    },
+    "onH": {
+      "Onset off by 0.5 quarters": 11,
+      "Onset off by 0.25 quarters": 16,
+      "Onset off by 0.75 quarters": 5,
+      "Onset off by 0.667 quarters": 1
+    }
+  }
+}

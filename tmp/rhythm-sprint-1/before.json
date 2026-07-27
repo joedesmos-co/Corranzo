@@ -1,0 +1,1274 @@
+{
+  "kind": "semantic-corpus-evaluation",
+  "label": "before-vector",
+  "mode": "written",
+  "gitCommit": "15aa1db",
+  "createdAt": "2026-07-18T00:16:10.319Z",
+  "fixtures": [
+    {
+      "id": "piano-beginner-single-vector",
+      "ok": true,
+      "instrumentId": "piano",
+      "tier": "piano-clean",
+      "overall": 0.7217,
+      "classes": {
+        "pitch": {
+          "score": 0.2424,
+          "percent": "24%",
+          "numerator": 8,
+          "denominator": 33,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.8095,
+          "percent": "81%",
+          "numerator": 51,
+          "denominator": 63,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 24,
+          "denominator": 24,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 32,
+        "generatedNoteCount": 32,
+        "truthRestCount": 1,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 38
+      },
+      "alignmentConfidence": 0.9319,
+      "topDefects": [
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 23
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 5
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 1
+        },
+        {
+          "code": "missing-dot",
+          "class": "rhythm",
+          "label": "Missing dot",
+          "count": 1
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 1
+        },
+        {
+          "code": "missing-rest",
+          "class": "rhythm",
+          "label": "Missing rest",
+          "count": 1
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 4
+      }
+    },
+    {
+      "id": "piano-grand-voices-vector",
+      "ok": true,
+      "instrumentId": "piano",
+      "tier": "piano-grand",
+      "overall": 0.4005,
+      "classes": {
+        "pitch": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 144,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.5,
+          "percent": "50%",
+          "numerator": 32,
+          "denominator": 64,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 16,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.3038,
+          "percent": "30%",
+          "numerator": 24,
+          "denominator": 79,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 5,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 88,
+        "generatedNoteCount": 88,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 252
+      },
+      "alignmentConfidence": 0.9578,
+      "topDefects": [
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 56
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 56
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 47
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 32
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 32
+        },
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "label": "Missing accent",
+          "count": 8
+        },
+        {
+          "code": "missing-staccato",
+          "class": "articulation",
+          "label": "Missing staccato",
+          "count": 8
+        },
+        {
+          "code": "missing-voice",
+          "class": "measure-structure",
+          "label": "Missing voice",
+          "count": 8
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 33
+      }
+    },
+    {
+      "id": "piano-rhythm-tuplets-vector",
+      "ok": true,
+      "instrumentId": "piano",
+      "tier": "piano-rhythm",
+      "overall": 0.5108,
+      "classes": {
+        "pitch": {
+          "score": 0.3714,
+          "percent": "37%",
+          "numerator": 26,
+          "denominator": 70,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.4766,
+          "percent": "48%",
+          "numerator": 61,
+          "denominator": 128,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 4,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.7273,
+          "percent": "73%",
+          "numerator": 24,
+          "denominator": 33,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 63,
+        "generatedNoteCount": 63,
+        "truthRestCount": 5,
+        "generatedRestCount": 3,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 125
+      },
+      "alignmentConfidence": 0.9398,
+      "topDefects": [
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 33
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 30
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 17
+        },
+        {
+          "code": "tuplet-mismatch",
+          "class": "rhythm",
+          "label": "Tuplet mismatch",
+          "count": 10
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 9
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 7
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 7
+        },
+        {
+          "code": "incorrect-tie",
+          "class": "sustain",
+          "label": "Incorrect tie",
+          "count": 3
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 14
+      }
+    },
+    {
+      "id": "piano-articulation-scan",
+      "ok": true,
+      "instrumentId": "piano",
+      "tier": "piano-scan",
+      "overall": 0.3292,
+      "classes": {
+        "pitch": {
+          "score": 0.0126,
+          "percent": "1%",
+          "numerator": 2,
+          "denominator": 159,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.8022,
+          "percent": "80%",
+          "numerator": 73,
+          "denominator": 91,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 0.0263,
+          "percent": "3%",
+          "numerator": 1,
+          "denominator": 38,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 0.1667,
+          "percent": "17%",
+          "numerator": 6,
+          "denominator": 36,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.2963,
+          "percent": "30%",
+          "numerator": 24,
+          "denominator": 81,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 5,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 88,
+        "generatedNoteCount": 111,
+        "truthRestCount": 0,
+        "generatedRestCount": 11,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 304
+      },
+      "alignmentConfidence": 0.9071,
+      "topDefects": [
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 71
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 49
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 48
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 38
+        },
+        {
+          "code": "incorrect-tie",
+          "class": "sustain",
+          "label": "Incorrect tie",
+          "count": 37
+        },
+        {
+          "code": "missing-staccato",
+          "class": "articulation",
+          "label": "Missing staccato",
+          "count": 19
+        },
+        {
+          "code": "extra-rest",
+          "class": "rhythm",
+          "label": "Extra rest",
+          "count": 11
+        },
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "label": "Missing accent",
+          "count": 11
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 28
+      }
+    },
+    {
+      "id": "piano-dense-advanced-vector",
+      "ok": true,
+      "instrumentId": "piano",
+      "tier": "piano-dense",
+      "overall": 0.3395,
+      "classes": {
+        "pitch": {
+          "score": 0.05,
+          "percent": "5%",
+          "numerator": 22,
+          "denominator": 440,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.2791,
+          "percent": "28%",
+          "numerator": 48,
+          "denominator": 172,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 20,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.0471,
+          "percent": "5%",
+          "numerator": 8,
+          "denominator": 170,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 264,
+        "generatedNoteCount": 262,
+        "truthRestCount": 0,
+        "generatedRestCount": 1,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 19,
+        "defectCount": 725
+      },
+      "alignmentConfidence": 0.7524,
+      "topDefects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 178
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 176
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 143
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 65
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 64
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 59
+        },
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "label": "Missing accent",
+          "count": 20
+        },
+        {
+          "code": "missing-voice",
+          "class": "measure-structure",
+          "label": "Missing voice",
+          "count": 8
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1,
+          2
+        ],
+        "alignment": "split",
+        "unmatched": false,
+        "defectCount": 78
+      }
+    },
+    {
+      "id": "guitar-tab-sparse-vector",
+      "ok": true,
+      "instrumentId": "guitar",
+      "tier": "guitar-tab",
+      "overall": 0.685,
+      "classes": {
+        "pitch": {
+          "score": 0.7,
+          "percent": "70%",
+          "numerator": 28,
+          "denominator": 40,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.1719,
+          "percent": "17%",
+          "numerator": 11,
+          "denominator": 64,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.9231,
+          "percent": "92%",
+          "numerator": 24,
+          "denominator": 26,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 5,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 32,
+        "generatedNoteCount": 40,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 72
+      },
+      "alignmentConfidence": 0.9636,
+      "topDefects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 30
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 23
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 8
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 4
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 2
+        },
+        {
+          "code": "repeat-mismatch",
+          "class": "interpretation",
+          "label": "Repeat mismatch",
+          "count": 2
+        },
+        {
+          "code": "volta-mismatch",
+          "class": "interpretation",
+          "label": "Volta mismatch",
+          "count": 2
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 12
+      }
+    },
+    {
+      "id": "guitar-standard-chords-vector",
+      "ok": true,
+      "instrumentId": "guitar",
+      "tier": "guitar-standard",
+      "overall": 0.3527,
+      "classes": {
+        "pitch": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 139,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.3333,
+          "percent": "33%",
+          "numerator": 14,
+          "denominator": 42,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 4,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.1356,
+          "percent": "14%",
+          "numerator": 8,
+          "denominator": 59,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 115,
+        "generatedNoteCount": 43,
+        "truthRestCount": 0,
+        "generatedRestCount": 4,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 16,
+        "defectCount": 223
+      },
+      "alignmentConfidence": 0.7508,
+      "topDefects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 96
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 43
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 24
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 19
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 14
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 10
+        },
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "label": "Split measure",
+          "count": 8
+        },
+        {
+          "code": "extra-rest",
+          "class": "rhythm",
+          "label": "Extra rest",
+          "count": 4
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1,
+          2
+        ],
+        "alignment": "split",
+        "unmatched": false,
+        "defectCount": 40
+      }
+    },
+    {
+      "id": "guitar-paired-chords-vector",
+      "ok": true,
+      "instrumentId": "guitar",
+      "tier": "guitar-paired-dense",
+      "overall": 0.587,
+      "classes": {
+        "pitch": {
+          "score": 0.0592,
+          "percent": "6%",
+          "numerator": 9,
+          "denominator": 152,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.7273,
+          "percent": "73%",
+          "numerator": 80,
+          "denominator": 110,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.3226,
+          "percent": "32%",
+          "numerator": 20,
+          "denominator": 62,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 2,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 116,
+        "generatedNoteCount": 91,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 10,
+        "defectCount": 217
+      },
+      "alignmentConfidence": 0.8527,
+      "topDefects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 61
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 46
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 40
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 36
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 8
+        },
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "label": "Split measure",
+          "count": 2
+        },
+        {
+          "code": "repeat-mismatch",
+          "class": "interpretation",
+          "label": "Repeat mismatch",
+          "count": 1
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 34
+      }
+    },
+    {
+      "id": "guitar-techniques-paired-vector",
+      "ok": true,
+      "instrumentId": "guitar",
+      "tier": "guitar-paired-sparse",
+      "overall": 0.5258,
+      "classes": {
+        "pitch": {
+          "score": 0.0476,
+          "percent": "5%",
+          "numerator": 2,
+          "denominator": 42,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.8333,
+          "percent": "83%",
+          "numerator": 30,
+          "denominator": 36,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.8,
+          "percent": "80%",
+          "numerator": 16,
+          "denominator": 20,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 32,
+        "generatedNoteCount": 28,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 12,
+        "defectCount": 52
+      },
+      "alignmentConfidence": 0.8611,
+      "topDefects": [
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 16
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 14
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 10
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 6
+        },
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "label": "Split measure",
+          "count": 4
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "label": "Missing tie",
+          "count": 1
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 5
+      }
+    }
+  ],
+  "aggregate": {
+    "fixtureCount": 9,
+    "okCount": 9,
+    "failedCount": 0,
+    "meanOverall": 0.49468888888888896,
+    "classes": {
+      "pitch": {
+        "meanScore": 0.1648,
+        "meanCoverage": 1
+      },
+      "rhythm": {
+        "meanScore": 0.5481333333333334,
+        "meanCoverage": 1
+      },
+      "sustain": {
+        "meanScore": 0.5584777777777777,
+        "meanCoverage": 1
+      },
+      "articulation": {
+        "meanScore": 0.685188888888889,
+        "meanCoverage": 1
+      },
+      "measureStructure": {
+        "meanScore": 0.5062000000000001,
+        "meanCoverage": 1
+      },
+      "interpretation": {
+        "meanScore": 0,
+        "meanCoverage": 1
+      },
+      "playback": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      }
+    }
+  }
+}

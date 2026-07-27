@@ -1,0 +1,140 @@
+{
+  "id": "34-tchaikovsky-old-french-song-flat-m4-null-58-8",
+  "source": "tchaikovsky-old-french-song",
+  "sourcePdf": "/Users/ryland/Documents/scoreflow/benchmarks/cache/tchaikovsky-old-french-song/score.pdf",
+  "page": 1,
+  "measure": 4,
+  "expectedSymbol": "flat",
+  "rawDetectedCandidates": [
+    {
+      "source": "clean MusicXML/SMuFL control",
+      "type": "flat",
+      "writtenPitch": {
+        "step": "B",
+        "alter": -1,
+        "octave": 3
+      }
+    }
+  ],
+  "selectedAttachment": {
+    "noteId": "P531a132cf1829508d25db9625c17646f-m4-n126",
+    "midi": 58,
+    "staff": null,
+    "voice": 1,
+    "quarterTime": 8
+  },
+  "staffPosition": {
+    "staff": null,
+    "writtenPitch": {
+      "step": "B",
+      "alter": -1,
+      "octave": 3
+    }
+  },
+  "measureAccidentalState": "explicit printed accidental",
+  "keySignatureContext": {
+    "fifths": -2,
+    "mode": "minor",
+    "cancelFifths": null,
+    "staff": null,
+    "partId": "Pe58dd16b23f2599f0acc17429e02842c",
+    "quarterTime": 0,
+    "measureNumber": 1,
+    "timeSeconds": 0
+  },
+  "musicXmlSnippet": "<note dynamics=\"100.00\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>5040</duration>\n        <instrument id=\"I147dcd40ac628488c5cfec02c00293fc\" />\n        <type>eighth</type>\n      </note>",
+  "renderedResult": {
+    "writtenPitch": {
+      "step": "B",
+      "alter": -1,
+      "octave": 3
+    },
+    "accidental": {
+      "type": "flat",
+      "printed": true,
+      "cautionary": false,
+      "editorial": false,
+      "parentheses": false,
+      "bracket": false,
+      "smufl": null
+    }
+  },
+  "soundingMidiBefore": 58,
+  "soundingMidiAfter": 58,
+  "playbackSignatureUnchanged": true,
+  "failureLayerBefore": "parser discarded flat spelling; renderer respelled sounding MIDI as sharp",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "classification": "MusicXML correct; parser/renderer shared semantics restored",
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-4/source-crops/34-tchaikovsky-old-french-song-flat-m4-null-58-8.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-4/candidate-overlays/34-tchaikovsky-old-french-song-flat-m4-null-58-8.png",
+    "musicXmlSnippetFile": "tmp/notation-fidelity-sprint-4/musicxml-snippets/34-tchaikovsky-old-french-song-flat-m4-null-58-8.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-4/rendered-before/34-tchaikovsky-old-french-song-flat-m4-null-58-8.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-4/rendered-after/34-tchaikovsky-old-french-song-flat-m4-null-58-8.png",
+    "beforeRenderer": {
+      "keyMarks": [],
+      "notes": [
+        {
+          "midi": 58,
+          "writtenPitch": null,
+          "accidentalType": "sharp",
+          "accidentalGlyph": "♯",
+          "accidentalDisplayGlyph": "♯",
+          "accidentalColumn": 0,
+          "staff": "bass",
+          "diatonic": 26
+        }
+      ]
+    },
+    "afterRenderer": {
+      "keyMarks": [
+        {
+          "staff": "treble",
+          "type": "flat",
+          "column": 0,
+          "y": 60,
+          "cancellation": false
+        },
+        {
+          "staff": "treble",
+          "type": "flat",
+          "column": 1,
+          "y": 42,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "flat",
+          "column": 0,
+          "y": 192,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "flat",
+          "column": 1,
+          "y": 174,
+          "cancellation": false
+        }
+      ],
+      "notes": [
+        {
+          "midi": 58,
+          "writtenPitch": {
+            "step": "B",
+            "alter": -1,
+            "octave": 3
+          },
+          "accidentalType": "flat",
+          "accidentalGlyph": "♭",
+          "accidentalDisplayGlyph": "♭",
+          "accidentalColumn": 0,
+          "staff": "bass",
+          "diatonic": 27
+        }
+      ]
+    }
+  }
+}

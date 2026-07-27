@@ -6,9 +6,19 @@
  * Returns a Map note.id → { string, fret, derived } for instant lookup by
  * checkpoints, visual lanes, and labels. Instruments without strings (piano)
  * return an empty map — callers can treat that as "no tab concept".
+ *
+ * Cache entries are owned by activePdfIdentity + epoch + contentHash. A source
+ * change that leaves a stale WeakMap hit must rebuild, never reuse.
  */
 
 import { deriveTabPositions } from './fretboard.js'
+import {
+  guitarMappingOwnersMatch,
+  publishSourceOwnershipParity,
+  resolveGuitarMappingOwner,
+} from './guitarMappingOwnership.js'
+import { getActiveScoreSourceGeneration } from '../library/scoreSourceGenerationGate.js'
+import { assertDerivedBelongsToActiveScore } from '../score/activeScore.js'
 
 /** Effective string config: score-declared tuning overrides the default. */
 export function resolveStringsForTimingMap(timingMap, instrument) {
@@ -29,22 +39,24 @@ export function resolveStringsForTimingMap(timingMap, instrument) {
   }
 }
 
-const positionCache = new WeakMap() // timingMap → Map(instrumentId → positions)
+const positionCache = new WeakMap() // timingMap → Map(instrumentId → { owner, positions })
 
-export function getTabPositionsForTimingMap(timingMap, instrument) {
+export function getTabPositionsForTimingMap(timingMap, instrument, ownership = {}) {
   const strings = resolveStringsForTimingMap(timingMap, instrument)
   if (!strings || !timingMap?.notes?.length) {
     return new Map()
   }
 
+  const owner = resolveGuitarMappingOwner(timingMap, ownership)
   let byInstrument = positionCache.get(timingMap)
   if (!byInstrument) {
     byInstrument = new Map()
     positionCache.set(timingMap, byInstrument)
   }
   const cached = byInstrument.get(instrument.id)
-  if (cached) {
-    return cached
+  if (cached && guitarMappingOwnersMatch(cached.owner, owner)) {
+    publishGuitarOwners(owner)
+    return cached.positions
   }
 
   // Mirrors already carry explicit positions; derive over sounding notes only
@@ -65,6 +77,39 @@ export function getTabPositionsForTimingMap(timingMap, instrument) {
     }
   }
 
-  byInstrument.set(instrument.id, positions)
+  byInstrument.set(instrument.id, { owner, positions })
+  publishGuitarOwners(owner)
   return positions
+}
+
+function publishGuitarOwners(owner) {
+  const generation = getActiveScoreSourceGeneration()
+  const auth = typeof window !== 'undefined' ? window.__SCOREFLOW_AUTHORITATIVE_SOURCE__ : null
+  const snap = typeof window !== 'undefined' ? window.__SCOREFLOW_PLAYBACK_SNAPSHOT__ : null
+  const activeScore =
+    typeof window !== 'undefined' ? window.__SCOREFLOW_ACTIVE_SCORE__ : null
+  const activeScoreIdentity =
+    activeScore?.scoreId ?? generation.activeScoreId ?? owner.ownerPdfIdentity ?? null
+  if (activeScore?.scoreId && owner.ownerScoreId) {
+    assertDerivedBelongsToActiveScore(
+      { ownerScoreId: owner.ownerScoreId },
+      { scoreId: activeScore.scoreId },
+      'guitar-mapping',
+    )
+  }
+  publishSourceOwnershipParity({
+    activeScoreIdentity,
+    authoritativeMusicXmlOwner: auth?.ownerScoreId ?? auth?.ownerPdfIdentity ?? activeScoreIdentity,
+    playbackTimelineOwner: snap?.ownerScoreId ?? auth?.ownerPdfIdentity ?? activeScoreIdentity,
+    guitarMappingOwner: owner.ownerScoreId ?? owner.ownerPdfIdentity,
+    practicePromptOwner: owner.ownerScoreId ?? owner.ownerPdfIdentity,
+    contentHash: owner.contentHash ?? snap?.timingContentHash ?? auth?.musicXmlHash ?? null,
+  })
+}
+
+/** Test helper: drop all cached fret maps for a timing map object. */
+export function clearTabPositionCacheForTimingMap(timingMap) {
+  if (timingMap) {
+    positionCache.delete(timingMap)
+  }
 }

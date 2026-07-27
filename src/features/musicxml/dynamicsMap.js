@@ -59,3 +59,46 @@ export function dynamicsFromDirection(directionNode, { findChildren, childNodes,
 
   return null
 }
+
+/**
+ * Parse wedge start/stop from a <direction> node.
+ * @returns {{ type: 'crescendo'|'diminuendo'|null, stage: 'start'|'stop'|'continue' } | null}
+ */
+export function wedgeFromDirection(directionNode, { findChildren, attr } = {}) {
+  if (!directionNode || typeof findChildren !== 'function') {
+    return null
+  }
+  for (const directionType of findChildren(directionNode, 'direction-type')) {
+    const wedges = findChildren(directionType, 'wedge')
+    for (const wedge of wedges) {
+      const typeAttr = String(
+        (typeof attr === 'function' ? attr(wedge, 'type') : null) ??
+          wedge.attrs?.type ??
+          '',
+      ).toLowerCase()
+      if (typeAttr === 'crescendo' || typeAttr === 'diminuendo') {
+        return { type: typeAttr, stage: 'start' }
+      }
+      if (typeAttr === 'stop') {
+        return { type: null, stage: 'stop' }
+      }
+      if (typeAttr === 'continue') {
+        return { type: null, stage: 'continue' }
+      }
+    }
+  }
+  return null
+}
+
+/** Staff number from a direction, if present. */
+export function staffFromDirection(directionNode, { findChildren, childText } = {}) {
+  if (!directionNode || typeof findChildren !== 'function') {
+    return null
+  }
+  const staffNodes = findChildren(directionNode, 'staff')
+  if (!staffNodes.length) {
+    return null
+  }
+  const value = Number(childText?.(staffNodes[0]) ?? staffNodes[0]?.text ?? NaN)
+  return Number.isFinite(value) && value > 0 ? value : null
+}

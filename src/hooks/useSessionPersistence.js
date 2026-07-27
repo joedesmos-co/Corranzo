@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   buildSessionMeta,
+  clearSessionCompanionFiles,
   clearSessionStorage,
   loadSessionFiles,
   loadSessionMeta,
@@ -11,6 +12,10 @@ import {
 } from '../features/session/sessionPersistence.js'
 import { shouldDeferSessionRestore } from '../features/session/sessionRestoreRouting.js'
 import { withTimeout } from '../utils/asyncWithTimeout.js'
+import {
+  describeScoreSourceIdentities,
+  logScoreSourceIdentities,
+} from '../features/library/scoreSourceReplacement.js'
 
 const SAVE_DEBOUNCE_MS = 1200
 const RESTORE_TIMEOUT_MS = 30_000
@@ -56,15 +61,33 @@ export default function useSessionPersistence({
   getInstrumentSessionBundles = null,
   onRestore,
   restoreSuspended = false,
+  sessionSaveGeneration = 0,
+  sessionSaveGenerationRef = null,
 }) {
   const [restoreStatus, setRestoreStatus] = useState(() => initialRestoreStatus(restoreSuspended))
   const [restoreMessage, setRestoreMessage] = useState(null)
   const restoreAttemptedRef = useRef(false)
   const saveTimerRef = useRef(null)
+  const saveGenerationRef = useRef(sessionSaveGeneration)
   const deferredRestoreRef = useRef(
     restoreSuspended || shouldDeferSessionRestore(window.location.pathname),
   )
   const mountedRef = useRef(true)
+
+  const readSaveGeneration = useCallback(() => {
+    if (sessionSaveGenerationRef) {
+      return sessionSaveGenerationRef.current
+    }
+    return saveGenerationRef.current
+  }, [sessionSaveGenerationRef])
+
+  useEffect(() => {
+    saveGenerationRef.current = sessionSaveGeneration
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current)
+      saveTimerRef.current = null
+    }
+  }, [sessionSaveGeneration])
 
   useEffect(() => {
     // Must re-arm on every effect setup: StrictMode dev runs setup→cleanup→setup
@@ -152,6 +175,7 @@ export default function useSessionPersistence({
                 practicePrefs: loaded.meta.practicePrefs ?? null,
                 instrumentId: loaded.meta.instrumentId ?? null,
                 instrumentBundles,
+                scoreId: loaded.meta.scoreId ?? null,
                 issues: result.issues ?? [],
               },
         ),
@@ -212,7 +236,11 @@ export default function useSessionPersistence({
     if (saveTimerRef.current) {
       clearTimeout(saveTimerRef.current)
     }
+    const generationAtSchedule = readSaveGeneration()
     saveTimerRef.current = window.setTimeout(async () => {
+      if (readSaveGeneration() !== generationAtSchedule) {
+        return
+      }
       if (!pdfMeta?.fileName || !pdfBuffer) {
         return
       }
@@ -226,8 +254,30 @@ export default function useSessionPersistence({
         practicePrefs: practicePrefsRef?.current ?? null,
         instrumentId,
         instrumentBundles: getInstrumentSessionBundles?.() ?? null,
+        scoreId:
+          musicXmlSource?.ownerScoreId ??
+          (typeof window !== 'undefined'
+            ? window.__SCOREFLOW_ACTIVE_SCORE__?.scoreId ?? null
+            : null),
       })
 
+      if (readSaveGeneration() !== generationAtSchedule) {
+        return
+      }
+      logScoreSourceIdentities(
+        'persistence-save',
+        describeScoreSourceIdentities({
+          pdfMeta,
+          musicXmlSource,
+          midiSource,
+          practiceSessionEpoch: null,
+          bundle: {
+            pdfMeta,
+            musicXmlSource,
+            midiSource,
+          },
+        }),
+      )
       saveSessionMeta(meta)
 
       try {
@@ -248,6 +298,11 @@ export default function useSessionPersistence({
             ]),
           ),
         })
+        // A superseded save may have finished after a newer PDF replacement and
+        // re-put Piece A's MusicXML. Wipe companions when this writer is stale.
+        if (readSaveGeneration() !== generationAtSchedule) {
+          await clearSessionCompanionFiles()
+        }
       } catch {
         // Private browsing / quota — metadata still helps user know what they had
       }
@@ -263,6 +318,7 @@ export default function useSessionPersistence({
     instrumentId,
     getInstrumentSessionBundles,
     restoreGateOpen,
+    readSaveGeneration,
   ])
 
   useEffect(() => {

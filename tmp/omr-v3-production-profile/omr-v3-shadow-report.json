@@ -1,0 +1,286 @@
+{
+  "generatedAt": "2026-07-17T04:10:35.515Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "engine": "omr-v3-shadow",
+  "promoted": false,
+  "gate": {
+    "pass": false,
+    "status": "shadow-only",
+    "improvedFixtureCount": 0,
+    "requiredImprovedFixtureCount": 2,
+    "regressionCount": 0,
+    "policyViolations": [],
+    "comparisons": [],
+    "promotedToRuntime": false,
+    "candidates": {
+      "structure": "not-promoted",
+      "measureGeometry": "not-promoted",
+      "pianoGrouping": "not-promoted",
+      "guitarFusion": "not-promoted",
+      "fullV3": "not-promoted"
+    },
+    "unavailableEnforcedFixtures": [
+      {
+        "fixtureId": "piano-beginner-single-vector",
+        "status": "unavailable",
+        "error": null
+      },
+      {
+        "fixtureId": "piano-grand-voices-vector",
+        "status": "unavailable",
+        "error": null
+      },
+      {
+        "fixtureId": "piano-rhythm-tuplets-vector",
+        "status": "unavailable",
+        "error": null
+      },
+      {
+        "fixtureId": "piano-articulation-scan",
+        "status": "unavailable",
+        "error": null
+      },
+      {
+        "fixtureId": "piano-dense-advanced-vector",
+        "status": "unavailable",
+        "error": null
+      },
+      {
+        "fixtureId": "guitar-tab-sparse-vector",
+        "status": "unavailable",
+        "error": null
+      },
+      {
+        "fixtureId": "guitar-standard-chords-vector",
+        "status": "unavailable",
+        "error": null
+      },
+      {
+        "fixtureId": "guitar-paired-chords-vector",
+        "status": "unavailable",
+        "error": null
+      },
+      {
+        "fixtureId": "guitar-techniques-paired-vector",
+        "status": "unavailable",
+        "error": null
+      },
+      {
+        "fixtureId": "guitar-paired-scan",
+        "status": "unavailable",
+        "error": null
+      }
+    ],
+    "unavailableEnforcedFixtureCount": 10
+  },
+  "productionGate": {
+    "pass": false,
+    "status": "blocked",
+    "promotedToRuntime": false,
+    "enforcedFixtureCount": 10,
+    "recognitionFixtureCount": 9,
+    "rejectionFixtureCount": 1,
+    "evaluatedRecognitionFixtureCount": 0,
+    "independentRecognitionFixtureCount": 0,
+    "independentlyRejectedFixtureCount": 0,
+    "regressionCount": 0,
+    "policyViolations": [],
+    "runtimeCandidateImplemented": false,
+    "rollbackVerified": false,
+    "blockers": [
+      {
+        "code": "incomplete-enforced-recognition-coverage",
+        "expected": 9,
+        "actual": 0,
+        "fixtures": [
+          "piano-beginner-single-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector",
+          "piano-articulation-scan",
+          "piano-dense-advanced-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-standard-chords-vector",
+          "guitar-paired-chords-vector",
+          "guitar-techniques-paired-vector"
+        ]
+      },
+      {
+        "code": "legacy-derived-symbol-evidence",
+        "expected": 9,
+        "actual": 0,
+        "fixtures": [
+          "piano-beginner-single-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector",
+          "piano-articulation-scan",
+          "piano-dense-advanced-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-standard-chords-vector",
+          "guitar-paired-chords-vector",
+          "guitar-techniques-paired-vector"
+        ]
+      },
+      {
+        "code": "v3-rejection-ownership-incomplete",
+        "expected": 1,
+        "actual": 0,
+        "fixtures": [
+          "guitar-paired-scan"
+        ]
+      },
+      {
+        "code": "runtime-candidate-not-implemented"
+      },
+      {
+        "code": "rollback-not-verified"
+      }
+    ]
+  },
+  "fixtures": [
+    {
+      "fixtureId": "piano-beginner-single-vector",
+      "label": "CC0 Beginner Line Study",
+      "enforced": true,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "piano-grand-voices-vector",
+      "label": "CC0 Grand Staff Voice Study",
+      "enforced": true,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "piano-rhythm-tuplets-vector",
+      "label": "CC0 Rhythm and Tuplet Study",
+      "enforced": true,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "piano-articulation-scan",
+      "label": "CC0 Articulation Scan Study",
+      "enforced": true,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "piano-dense-advanced-vector",
+      "label": "CC0 Dense Advanced Texture Study",
+      "enforced": true,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "guitar-tab-sparse-vector",
+      "label": "CC0 Sparse TAB Technique Study",
+      "enforced": true,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "guitar-standard-chords-vector",
+      "label": "CC0 Standard Guitar Chord Study",
+      "enforced": true,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "guitar-paired-chords-vector",
+      "label": "CC0 Paired Notation and TAB Study",
+      "enforced": true,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "guitar-techniques-paired-vector",
+      "label": "CC0 Guitar Technique Pairing Study",
+      "enforced": true,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "guitar-paired-scan",
+      "label": "CC0 Paired Guitar Scan Study",
+      "enforced": true,
+      "expectedOutcome": "reject-honestly",
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "real-pd-orchestra-beethoven-7",
+      "label": "Beethoven Symphony No. 7, movement 1 (Mutopia public-domain stress)",
+      "enforced": false,
+      "expectedOutcome": "import-only",
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "real-pd-piano-pathetique",
+      "label": "Beethoven Pathetique, movement 1 (Mutopia public-domain stress)",
+      "enforced": false,
+      "expectedOutcome": "import-only",
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "real-pd-scan-twinkle-1880",
+      "label": "Twinkle, Twinkle Little Stars (1880 Library of Congress scan)",
+      "enforced": false,
+      "expectedOutcome": "import-only",
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "real-local-beginner-workbook",
+      "label": "Beginner piano themes workbook (local non-redistributable stress)",
+      "enforced": false,
+      "expectedOutcome": "import-only",
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "clean",
+      "label": "Gymnopedie No. 1 (legacy local diagnostic)",
+      "enforced": false,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "dense",
+      "label": "A Cruel Angel's Thesis (legacy copyrighted diagnostic)",
+      "enforced": false,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "simple",
+      "label": "Twinkle Twinkle (legacy local diagnostic)",
+      "enforced": false,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "wet-hands-guitar",
+      "label": "Wet Hands (legacy copyrighted guitar diagnostic)",
+      "enforced": false,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "campanella-grandes",
+      "label": "La Campanella (legacy local diagnostic)",
+      "enforced": false,
+      "shadow": null,
+      "independentShadow": null
+    },
+    {
+      "fixtureId": "campanella-etude",
+      "label": "La Campanella alternate engraving (legacy local diagnostic)",
+      "enforced": false,
+      "shadow": null,
+      "independentShadow": null
+    }
+  ]
+}

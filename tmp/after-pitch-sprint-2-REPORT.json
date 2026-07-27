@@ -1,0 +1,134 @@
+{
+  "baseline": "after-pitch-sprint-1 (accepted Pitch Sprint 1)",
+  "after": "after-pitch-sprint-2",
+  "scoreboard": {
+    "before": {
+      "overall": 56.4,
+      "pitch": 23.5,
+      "rhythm": 64.9,
+      "sustain": 66.7,
+      "articulation": 83.5,
+      "measureStructure": 56.5
+    },
+    "after": {
+      "overall": 60.9,
+      "pitch": 48.2,
+      "rhythm": 66.9,
+      "sustain": 66.7,
+      "articulation": 85.3,
+      "measureStructure": 59.1
+    }
+  },
+  "defects": {
+    "incorrectPitch": {
+      "before": 305,
+      "after": 224
+    },
+    "missingNote": {},
+    "extraNote": {}
+  },
+  "taxonomySampleClassified": {
+    "before": {
+      "incorrectPitchDefectCount": 305,
+      "classifiedFromSamples": {
+        "one-diatonic-step": 0,
+        "octave-error": 0,
+        "accidental-or-alter": 0,
+        "larger-interval": 0,
+        "small-interval-other": 0
+      },
+      "samples": {}
+    },
+    "after": {
+      "incorrectPitchDefectCount": 224,
+      "classifiedFromSamples": {
+        "one-diatonic-step": 0,
+        "octave-error": 0,
+        "accidental-or-alter": 0,
+        "larger-interval": 0,
+        "small-interval-other": 0
+      },
+      "samples": {}
+    }
+  },
+  "fixturePitchDeltas": [
+    {
+      "id": "piano-beginner-single-vector",
+      "pitchBefore": "24%",
+      "pitchAfter": "94%",
+      "pitchDelta": null,
+      "overallBefore": "73%",
+      "overallAfter": "83%"
+    },
+    {
+      "id": "piano-grand-voices-vector",
+      "pitchBefore": "62%",
+      "pitchAfter": "62%",
+      "pitchDelta": null,
+      "overallBefore": "60%",
+      "overallAfter": "60%"
+    },
+    {
+      "id": "piano-rhythm-tuplets-vector",
+      "pitchBefore": "40%",
+      "pitchAfter": "91%",
+      "pitchDelta": null,
+      "overallBefore": "54%",
+      "overallAfter": "65%"
+    },
+    {
+      "id": "piano-articulation-scan",
+      "pitchBefore": "1%",
+      "pitchAfter": "1%",
+      "pitchDelta": null,
+      "overallBefore": "48%",
+      "overallAfter": "48%"
+    },
+    {
+      "id": "piano-dense-advanced-vector",
+      "pitchBefore": "4%",
+      "pitchAfter": "10%",
+      "pitchDelta": null,
+      "overallBefore": "41%",
+      "overallAfter": "45%"
+    },
+    {
+      "id": "guitar-tab-sparse-vector",
+      "pitchBefore": "70%",
+      "pitchAfter": "70%",
+      "pitchDelta": null,
+      "overallBefore": "69%",
+      "overallAfter": "69%"
+    },
+    {
+      "id": "guitar-standard-chords-vector",
+      "pitchBefore": "0%",
+      "pitchAfter": "2%",
+      "pitchDelta": null,
+      "overallBefore": "52%",
+      "overallAfter": "51%"
+    },
+    {
+      "id": "guitar-paired-chords-vector",
+      "pitchBefore": "6%",
+      "pitchAfter": "31%",
+      "pitchDelta": null,
+      "overallBefore": "59%",
+      "overallAfter": "65%"
+    },
+    {
+      "id": "guitar-techniques-paired-vector",
+      "pitchBefore": "5%",
+      "pitchAfter": "72%",
+      "pitchDelta": null,
+      "overallBefore": "53%",
+      "overallAfter": "64%"
+    }
+  ],
+  "knownExamples": {
+    "F4→E4 (expected F4 got E4)": "corrected — beginner m1+ now exact",
+    "A4→B4": "corrected",
+    "E4→E2": "corrected — was phantom bass half-staff"
+  },
+  "rca": "estimateGrandStaffLines split short single-staff bands into phantom treble/bass halves; notes mapped on lower half with wrong degree/octave anchors."
+}

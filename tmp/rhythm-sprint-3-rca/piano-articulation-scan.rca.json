@@ -1,0 +1,3422 @@
+{
+  "id": "piano-articulation-scan",
+  "pathHint": "likely-raster",
+  "glyphStats": {
+    "totalTextItems": 0,
+    "restGlyphCount": 0,
+    "restGlyphs": [],
+    "digitGlyphCount": 0,
+    "digitGlyphs": [],
+    "tupletHintCount": 0,
+    "tupletHintGlyphs": []
+  },
+  "totals": {
+    "truthNoteCount": 88,
+    "generatedNoteCount": 111,
+    "truthRestCount": 0,
+    "generatedRestCount": 11,
+    "truthMeasureCount": 8,
+    "generatedMeasureCount": 8,
+    "defectCount": 304
+  },
+  "rhythm": {
+    "numerator": 73,
+    "denominator": 91,
+    "truePositives": 73,
+    "falsePositives": 11,
+    "falseNegatives": 7,
+    "ignored": 0,
+    "unsupported": 0,
+    "presentInTruth": 80,
+    "compared": 91,
+    "coverage": 1,
+    "coveragePercent": "100%",
+    "score": 0.8022,
+    "percent": "80%",
+    "reliable": true,
+    "displayPercent": "80%"
+  },
+  "defectRollup": {
+    "extra-rest": 11,
+    "onset-mismatch": 7
+  },
+  "restTaxonomy": {
+    "false-positive-rest": 2,
+    "rest-insertion-from-measure-balancing": 9
+  },
+  "v2HasTimeModification": false,
+  "v3IndependentHasTimeModification": false,
+  "v3ShadowStatus": "ready",
+  "measureSamples": [
+    {
+      "measureNumber": 2,
+      "pathHint": "likely-raster",
+      "eventCount": 4,
+      "restEventCount": 2,
+      "events": [
+        {
+          "type": "note",
+          "start": 0,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": true,
+          "clef": "treble",
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.58,
+          "pos": 0.13,
+          "cx": 347,
+          "pitches": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "midi": [
+            65,
+            76,
+            69,
+            43,
+            69,
+            48,
+            45,
+            71,
+            64,
+            43
+          ],
+          "beams": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter"
+          ]
+        },
+        {
+          "type": "rest",
+          "start": 4,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": []
+        },
+        {
+          "type": "note",
+          "start": 8,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": true,
+          "clef": "treble",
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.58,
+          "pos": 0.495,
+          "cx": 417,
+          "pitches": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "midi": [
+            65,
+            48,
+            69,
+            50,
+            65,
+            43,
+            50,
+            71,
+            69
+          ],
+          "beams": [
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter"
+          ]
+        },
+        {
+          "type": "rest",
+          "start": 12,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": []
+        }
+      ],
+      "rests": [
+        {
+          "type": "rest",
+          "start": 4,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": [],
+          "class": "rest-insertion-from-measure-balancing"
+        },
+        {
+          "type": "rest",
+          "start": 12,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": [],
+          "class": "rest-insertion-from-measure-balancing"
+        }
+      ],
+      "detectorRests": [],
+      "vectorRestDiagnostics": null,
+      "validation": null,
+      "localVectorRests": null,
+      "truthNotes": [
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "D4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "F4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "E4",
+          "tuplet": null,
+          "onset": 12
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "F4",
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "G4",
+          "tuplet": null,
+          "onset": 36
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "D2",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "A2",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "G2",
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "D3",
+          "tuplet": null,
+          "onset": 24
+        }
+      ],
+      "genNotes": [
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "A2",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "E4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "C3",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "A2",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 8
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "D3",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "C3",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "F4",
+          "tuplet": null,
+          "onset": 8
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "A2",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 8
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 8
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "E3",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "A2",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 12
+        }
+      ],
+      "truthRests": [],
+      "genRests": [
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 12
+        }
+      ],
+      "xmlRestClasses": [
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 4,
+          "class": "false-positive-rest"
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 12,
+          "class": "false-positive-rest"
+        }
+      ],
+      "missingRestClasses": [],
+      "truthTuplets": [],
+      "genTuplets": [],
+      "v3Trace": {
+        "measureNumber": 2,
+        "onsetColumnCount": 4,
+        "onsetColumns": [
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-2:0.341:false:0",
+            "position": 0.145
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-2:0.35039999999999993:false:1",
+            "position": 0.19200000000000003
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-2:0.4144:false:2",
+            "position": 0.512
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-2:0.4235:false:3",
+            "position": 0.5575
+          }
+        ],
+        "voices": [
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-2:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-0-staff-0-0:0:0",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-0-staff-0:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 69,
+                  "writtenMidi": 69,
+                  "soundingMidi": 69,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 69,
+                  "writtenMidi": 69,
+                  "soundingMidi": 69,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 8,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 65,
+                  "writtenMidi": 65,
+                  "soundingMidi": 65,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 8,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-2:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-0-staff-0-0:0:1",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-0-staff-0:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 69,
+                  "writtenMidi": 69,
+                  "soundingMidi": 69,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 64,
+                  "writtenMidi": 64,
+                  "soundingMidi": 64,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 8,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 69,
+                  "writtenMidi": 69,
+                  "soundingMidi": 69,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 8,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-2:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-0-staff-1-0:0:0",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-0-staff-1:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 45,
+                  "writtenMidi": 45,
+                  "soundingMidi": 45,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 8,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-2:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-0-staff-1-0:0:1",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-0-staff-1:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 45,
+                  "writtenMidi": 45,
+                  "soundingMidi": 45,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 8,
+                "durationType": "half",
+                "onsetRecovery": null,
+                "durationRecovery": "lane-gap-lengthen",
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 48,
+                  "writtenMidi": 48,
+                  "soundingMidi": 48,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 8,
+                "durationType": "half",
+                "onsetRecovery": null,
+                "durationRecovery": "lane-gap-lengthen",
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 45,
+                  "writtenMidi": 45,
+                  "soundingMidi": 45,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 8,
+                "durationType": "half",
+                "onsetRecovery": null,
+                "durationRecovery": "lane-gap-lengthen",
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 50,
+                  "writtenMidi": 50,
+                  "soundingMidi": 50,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 8,
+                "duration": 8,
+                "durationType": "half",
+                "onsetRecovery": null,
+                "durationRecovery": "lane-gap-lengthen",
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 48,
+                  "writtenMidi": 48,
+                  "soundingMidi": 48,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 8,
+                "duration": 8,
+                "durationType": "half",
+                "onsetRecovery": null,
+                "durationRecovery": "lane-gap-lengthen",
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 45,
+                  "writtenMidi": 45,
+                  "soundingMidi": 45,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 8,
+                "duration": 8,
+                "durationType": "half",
+                "onsetRecovery": null,
+                "durationRecovery": "lane-gap-lengthen",
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-2:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-0-staff-1-0:0:2",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-0-staff-1:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 52,
+                  "writtenMidi": 52,
+                  "soundingMidi": 52,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 8,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          }
+        ]
+      },
+      "v3TupletEventCount": 0,
+      "v3TupletSample": []
+    },
+    {
+      "measureNumber": 3,
+      "pathHint": "likely-raster",
+      "eventCount": 5,
+      "restEventCount": 2,
+      "events": [
+        {
+          "type": "note",
+          "start": 0,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": true,
+          "clef": "treble",
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.58,
+          "pos": 0.135,
+          "cx": 545,
+          "pitches": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "midi": [
+            67,
+            71,
+            65,
+            47,
+            74,
+            65,
+            45
+          ],
+          "beams": [
+            0,
+            0,
+            0,
+            1,
+            1,
+            2,
+            0
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter"
+          ]
+        },
+        {
+          "type": "rest",
+          "start": 4,
+          "dur": 2,
+          "dtype": "eighth",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": []
+        },
+        {
+          "type": "note",
+          "start": 6,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.58,
+          "pos": 0.38,
+          "cx": 587,
+          "pitches": [
+            ""
+          ],
+          "midi": [
+            67
+          ],
+          "beams": [
+            0
+          ],
+          "noteDur": [
+            "quarter"
+          ]
+        },
+        {
+          "type": "note",
+          "start": 10,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": true,
+          "clef": "bass",
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.58,
+          "pos": 0.495,
+          "cx": 614,
+          "pitches": [
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "midi": [
+            45,
+            71,
+            71,
+            45,
+            50
+          ],
+          "beams": [
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter"
+          ]
+        },
+        {
+          "type": "rest",
+          "start": 14,
+          "dur": 2,
+          "dtype": "eighth",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": []
+        }
+      ],
+      "rests": [
+        {
+          "type": "rest",
+          "start": 4,
+          "dur": 2,
+          "dtype": "eighth",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": [],
+          "class": "rest-insertion-from-measure-balancing"
+        },
+        {
+          "type": "rest",
+          "start": 14,
+          "dur": 2,
+          "dtype": "eighth",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": [],
+          "class": "rest-insertion-from-measure-balancing"
+        }
+      ],
+      "detectorRests": [],
+      "vectorRestDiagnostics": null,
+      "validation": null,
+      "localVectorRests": null,
+      "truthNotes": [
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "E4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "G4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "F4",
+          "tuplet": null,
+          "onset": 12
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "G4",
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 36
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "E2",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "B2",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "A2",
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "E3",
+          "tuplet": null,
+          "onset": 24
+        }
+      ],
+      "genNotes": [
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "G4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "F4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "F4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "F4",
+          "tuplet": null,
+          "onset": 5
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "eighth",
+          "dur": 2,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 9
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 11
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "C5",
+          "tuplet": null,
+          "onset": 11
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "A2",
+          "tuplet": null,
+          "onset": 15
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "D3",
+          "tuplet": null,
+          "onset": 15
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "C5",
+          "tuplet": null,
+          "onset": 11
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 15
+        }
+      ],
+      "truthRests": [],
+      "genRests": [
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "eighth",
+          "dur": 2,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 9
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 15
+        }
+      ],
+      "xmlRestClasses": [
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 4,
+          "class": "rest-insertion-from-measure-balancing"
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "eighth",
+          "dur": 2,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 9,
+          "class": "rest-insertion-from-measure-balancing"
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 15,
+          "class": "rest-insertion-from-measure-balancing"
+        }
+      ],
+      "missingRestClasses": [],
+      "truthTuplets": [],
+      "genTuplets": [],
+      "v3Trace": {
+        "measureNumber": 3,
+        "onsetColumnCount": 5,
+        "onsetColumns": [
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-3:0.54:false:0",
+            "position": 0.145
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-3:0.549:false:1",
+            "position": 0.19
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-3:0.577:false:2",
+            "position": 0.33
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-3:0.613:false:3",
+            "position": 0.51
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-3:0.621:false:4",
+            "position": 0.55
+          }
+        ],
+        "voices": [
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-3:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-0-staff-0-0:0:0",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-0-staff-0:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 65,
+                  "writtenMidi": 65,
+                  "soundingMidi": 65,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 65,
+                  "writtenMidi": 65,
+                  "soundingMidi": 65,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 5,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 72,
+                  "writtenMidi": 72,
+                  "soundingMidi": 72,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-3:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-0-staff-0-0:0:1",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-0-staff-0:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 65,
+                  "writtenMidi": 65,
+                  "soundingMidi": 65,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 72,
+                  "writtenMidi": 72,
+                  "soundingMidi": 72,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-3:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-0-staff-1-0:0:0",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-0-staff-1:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 45,
+                  "writtenMidi": 45,
+                  "soundingMidi": 45,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 50,
+                  "writtenMidi": 50,
+                  "soundingMidi": 50,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          }
+        ]
+      },
+      "v3TupletEventCount": 0,
+      "v3TupletSample": []
+    },
+    {
+      "measureNumber": 4,
+      "pathHint": "likely-raster",
+      "eventCount": 6,
+      "restEventCount": 3,
+      "events": [
+        {
+          "type": "note",
+          "start": 0,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": true,
+          "clef": "treble",
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.58,
+          "pos": 0.09375,
+          "cx": 738,
+          "pitches": [
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "midi": [
+            71,
+            65,
+            48,
+            72,
+            64
+          ],
+          "beams": [
+            2,
+            0,
+            0,
+            0,
+            1
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter"
+          ]
+        },
+        {
+          "type": "rest",
+          "start": 4,
+          "dur": 1,
+          "dtype": "quarter",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": []
+        },
+        {
+          "type": "note",
+          "start": 5,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.58,
+          "pos": 0.29910714285714285,
+          "cx": 777,
+          "pitches": [
+            ""
+          ],
+          "midi": [
+            67
+          ],
+          "beams": [
+            0
+          ],
+          "noteDur": [
+            "quarter"
+          ]
+        },
+        {
+          "type": "rest",
+          "start": 9,
+          "dur": 2,
+          "dtype": "eighth",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": []
+        },
+        {
+          "type": "note",
+          "start": 11,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "bass",
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.58,
+          "pos": 0.5089285714285714,
+          "cx": 824,
+          "pitches": [
+            "",
+            ""
+          ],
+          "midi": [
+            52,
+            47
+          ],
+          "beams": [
+            0,
+            1
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter"
+          ]
+        },
+        {
+          "type": "rest",
+          "start": 15,
+          "dur": 1,
+          "dtype": "quarter",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": []
+        }
+      ],
+      "rests": [
+        {
+          "type": "rest",
+          "start": 4,
+          "dur": 1,
+          "dtype": "quarter",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": [],
+          "class": "rest-insertion-from-measure-balancing"
+        },
+        {
+          "type": "rest",
+          "start": 9,
+          "dur": 2,
+          "dtype": "eighth",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": [],
+          "class": "rest-insertion-from-measure-balancing"
+        },
+        {
+          "type": "rest",
+          "start": 15,
+          "dur": 1,
+          "dtype": "quarter",
+          "dotted": false,
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.5,
+          "pitches": [],
+          "midi": [],
+          "beams": [],
+          "noteDur": [],
+          "class": "rest-insertion-from-measure-balancing"
+        }
+      ],
+      "detectorRests": [],
+      "vectorRestDiagnostics": null,
+      "validation": null,
+      "localVectorRests": null,
+      "truthNotes": [
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "F4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "C5",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "G4",
+          "tuplet": null,
+          "onset": 12
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "C5",
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 36
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "F2",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "C3",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "A2",
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "F3",
+          "tuplet": null,
+          "onset": 24
+        }
+      ],
+      "genNotes": [
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "F4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "C3",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "C5",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "C5",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "C3",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "A2",
+          "tuplet": null,
+          "onset": 5
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "C5",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "C5",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "eighth",
+          "dur": 2,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 9
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "C5",
+          "tuplet": null,
+          "onset": 11
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 11
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 15
+        }
+      ],
+      "truthRests": [],
+      "genRests": [
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "eighth",
+          "dur": 2,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 9
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 15
+        }
+      ],
+      "xmlRestClasses": [
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 4,
+          "class": "rest-insertion-from-measure-balancing"
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "eighth",
+          "dur": 2,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 9,
+          "class": "rest-insertion-from-measure-balancing"
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 15,
+          "class": "rest-insertion-from-measure-balancing"
+        }
+      ],
+      "missingRestClasses": [],
+      "truthTuplets": [],
+      "genTuplets": [],
+      "v3Trace": {
+        "measureNumber": 4,
+        "onsetColumnCount": 5,
+        "onsetColumns": [
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-4:0.7386666666666667:false:0",
+            "position": 0.1274074074074074
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-4:0.7493333333333334:false:1",
+            "position": 0.17481481481481484
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-4:0.8140000000000001:false:2",
+            "position": 0.46222222222222226
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-4:0.821:false:3",
+            "position": 0.49333333333333335
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-4:0.857:false:4",
+            "position": 0.6533333333333333
+          }
+        ],
+        "voices": [
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-4:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-0-staff-0-0:0:0",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-0-staff-0:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 65,
+                  "writtenMidi": 65,
+                  "soundingMidi": 65,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 72,
+                  "writtenMidi": 72,
+                  "soundingMidi": 72,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 69,
+                  "writtenMidi": 69,
+                  "soundingMidi": 69,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 5,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 72,
+                  "writtenMidi": 72,
+                  "soundingMidi": 72,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 5,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 72,
+                  "writtenMidi": 72,
+                  "soundingMidi": 72,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-4:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-0-staff-0-0:0:1",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-0-staff-0:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 72,
+                  "writtenMidi": 72,
+                  "soundingMidi": 72,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 69,
+                  "writtenMidi": 69,
+                  "soundingMidi": 69,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 72,
+                  "writtenMidi": 72,
+                  "soundingMidi": 72,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 5,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 5,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-4:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-0-staff-1-0:0:0",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-0-staff-1:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 48,
+                  "writtenMidi": 48,
+                  "soundingMidi": 48,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 45,
+                  "writtenMidi": 45,
+                  "soundingMidi": 45,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 5,
+                "duration": 8,
+                "durationType": "half",
+                "onsetRecovery": null,
+                "durationRecovery": "lane-gap-lengthen",
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-0-4:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-0-staff-1-0:0:1",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-0-staff-1:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 48,
+                  "writtenMidi": 48,
+                  "soundingMidi": 48,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          }
+        ]
+      },
+      "v3TupletEventCount": 0,
+      "v3TupletSample": []
+    },
+    {
+      "measureNumber": 7,
+      "pathHint": "likely-raster",
+      "eventCount": 4,
+      "restEventCount": 0,
+      "events": [
+        {
+          "type": "note",
+          "start": 0,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.58,
+          "pos": 0.12935323383084577,
+          "cx": 546,
+          "pitches": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "midi": [
+            69,
+            43,
+            67,
+            71,
+            65,
+            48,
+            43,
+            71,
+            67,
+            45,
+            48
+          ],
+          "beams": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            2,
+            0,
+            0
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter"
+          ]
+        },
+        {
+          "type": "note",
+          "start": 4,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.58,
+          "pos": 0.30845771144278605,
+          "cx": 583,
+          "pitches": [
+            "",
+            "",
+            "",
+            ""
+          ],
+          "midi": [
+            67,
+            67,
+            69,
+            71
+          ],
+          "beams": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter"
+          ]
+        },
+        {
+          "type": "note",
+          "start": 8,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": true,
+          "clef": "treble",
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.58,
+          "pos": 0.48756218905472637,
+          "cx": 616,
+          "pitches": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "midi": [
+            71,
+            48,
+            72,
+            71,
+            71,
+            69,
+            53,
+            71
+          ],
+          "beams": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter",
+            "quarter"
+          ]
+        },
+        {
+          "type": "note",
+          "start": 12,
+          "dur": 4,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "source": null,
+          "uncertain": true,
+          "confidence": 0.58,
+          "pos": 0.736318407960199,
+          "cx": 661,
+          "pitches": [
+            ""
+          ],
+          "midi": [
+            71
+          ],
+          "beams": [
+            0
+          ],
+          "noteDur": [
+            "quarter"
+          ]
+        }
+      ],
+      "rests": [],
+      "detectorRests": [],
+      "vectorRestDiagnostics": null,
+      "validation": null,
+      "localVectorRests": null,
+      "truthNotes": [
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "G4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "D5",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 12
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "D5",
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 12,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "C5",
+          "tuplet": null,
+          "onset": 36
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "G2",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "D3",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "C3",
+          "tuplet": null,
+          "onset": 24
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "half",
+          "dur": 24,
+          "voice": 2,
+          "staff": 2,
+          "pitch": "G3",
+          "tuplet": null,
+          "onset": 24
+        }
+      ],
+      "genNotes": [
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "G4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "C3",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "G2",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "A2",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "G4",
+          "tuplet": null,
+          "onset": 0
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "A2",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "G4",
+          "tuplet": null,
+          "onset": 5
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 5
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "A4",
+          "tuplet": null,
+          "onset": 5
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "eighth",
+          "dur": 2,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 9
+        },
+        {
+          "rest": false,
+          "chord": false,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 11
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "C3",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "B4",
+          "tuplet": null,
+          "onset": 11
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 1,
+          "staff": 1,
+          "pitch": "C5",
+          "tuplet": null,
+          "onset": 11
+        },
+        {
+          "rest": false,
+          "chord": true,
+          "type": "quarter",
+          "dur": 4,
+          "voice": 2,
+          "staff": 1,
+          "pitch": "F3",
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 15
+        }
+      ],
+      "truthRests": [],
+      "genRests": [
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 4
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "eighth",
+          "dur": 2,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 9
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 15
+        }
+      ],
+      "xmlRestClasses": [
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 4,
+          "class": "rest-insertion-from-measure-balancing"
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "eighth",
+          "dur": 2,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 9,
+          "class": "rest-insertion-from-measure-balancing"
+        },
+        {
+          "rest": true,
+          "chord": false,
+          "type": "quarter",
+          "dur": 1,
+          "voice": 1,
+          "staff": 1,
+          "pitch": null,
+          "tuplet": null,
+          "onset": 15,
+          "class": "rest-insertion-from-measure-balancing"
+        }
+      ],
+      "missingRestClasses": [],
+      "truthTuplets": [],
+      "genTuplets": [],
+      "v3Trace": {
+        "measureNumber": 7,
+        "onsetColumnCount": 5,
+        "onsetColumns": [
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-1-7:0.543:false:0",
+            "position": 0.14925373134328357
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-1-7:0.552:false:1",
+            "position": 0.19402985074626866
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-1-7:0.579:false:2",
+            "position": 0.3283582089552239
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-1-7:0.588:false:3",
+            "position": 0.373134328358209
+          },
+          {
+            "id": "omr3:onset:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-1-7:0.6144000000000001:false:4",
+            "position": 0.5044776119402985
+          }
+        ],
+        "voices": [
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-1-7:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-1-staff-0-0:0:0",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-1-staff-0:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 69,
+                  "writtenMidi": 69,
+                  "soundingMidi": 69,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 5,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 72,
+                  "writtenMidi": 72,
+                  "soundingMidi": 72,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-1-7:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-1-staff-0-0:0:1",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-1-staff-0:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 67,
+                  "writtenMidi": 67,
+                  "soundingMidi": 67,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 71,
+                  "writtenMidi": 71,
+                  "soundingMidi": 71,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 5,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 69,
+                  "writtenMidi": 69,
+                  "soundingMidi": 69,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 5,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-1-7:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-1-staff-1-0:0:0",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-1-staff-1:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 45,
+                  "writtenMidi": 45,
+                  "soundingMidi": 45,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 8,
+                "durationType": "half",
+                "onsetRecovery": null,
+                "durationRecovery": "lane-gap-lengthen",
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 48,
+                  "writtenMidi": 48,
+                  "soundingMidi": 48,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 53,
+                  "writtenMidi": 53,
+                  "soundingMidi": 53,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 11,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          },
+          {
+            "voiceId": "omr3:voice:omr3-measure-omr3-system-omr3-page-independent-shadow-piano-articulation-scan-0-1-7:omr3-staff-observation-omr3-page-independent-shadow-piano-articulation-scan-0-legacy-page-1-system-1-staff-1-0:0:1",
+            "staffId": "omr3:staff-observation:omr3-page-independent-shadow-piano-articulation-scan-0:legacy-page-1-system-1-staff-1:0",
+            "events": [
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 48,
+                  "writtenMidi": 48,
+                  "soundingMidi": 48,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 43,
+                  "writtenMidi": 43,
+                  "soundingMidi": 43,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              },
+              {
+                "kind": "note",
+                "pitch": {
+                  "midi": 45,
+                  "writtenMidi": 45,
+                  "soundingMidi": 45,
+                  "transpositionSemitones": 0,
+                  "source": "detector-staff-pitch"
+                },
+                "onset": 0,
+                "duration": 4,
+                "durationType": "quarter",
+                "onsetRecovery": null,
+                "durationRecovery": null,
+                "tuplet": null
+              }
+            ]
+          }
+        ]
+      },
+      "v3TupletEventCount": 0,
+      "v3TupletSample": []
+    }
+  ],
+  "musicXmlPath": "/Users/ryland/Documents/scoreflow/tmp/rhythm-sprint-3-rca/piano-articulation-scan.omr.musicxml"
+}

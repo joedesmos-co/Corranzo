@@ -1,7 +1,18 @@
 import { isInk } from './omrInk.js'
 import { OMR_MUSICAL_CONFIDENCE } from './omrMusicalConstants.js'
+import {
+  detectDynamicNearMeasure,
+  detectDynamicsFromTextItems,
+  shouldEmitDynamic,
+  shouldEmitWedge,
+} from './detectOmrDynamics.js'
 
-const DYNAMIC_MARKS = ['ppp', 'pp', 'p', 'mp', 'mf', 'f', 'ff', 'fff']
+export {
+  detectDynamicNearMeasure,
+  detectDynamicsFromTextItems,
+  shouldEmitDynamic,
+  shouldEmitWedge,
+}
 
 function inkAt(imageData, x, y, threshold) {
   const { data, width, height } = imageData
@@ -11,62 +22,6 @@ function inkAt(imageData, x, y, threshold) {
     return false
   }
   return isInk(data, (py * width + px) * 4, threshold)
-}
-
-function matchDynamicFromText(text) {
-  const normalized = String(text ?? '').trim().toLowerCase()
-  if (!normalized) {
-    return null
-  }
-  for (const mark of DYNAMIC_MARKS) {
-    if (normalized === mark) {
-      return { mark, confidence: 0.82 }
-    }
-  }
-  if (/^p+$/.test(normalized) && normalized.length <= 3) {
-    return { mark: normalized, confidence: 0.74 }
-  }
-  if (/^f+$/.test(normalized) && normalized.length <= 3) {
-    return { mark: normalized, confidence: 0.74 }
-  }
-  return null
-}
-
-export function detectDynamicsFromTextItems(textItems = []) {
-  for (const item of textItems) {
-    const dynamic = matchDynamicFromText(item.text)
-    if (dynamic) {
-      return dynamic
-    }
-  }
-  return null
-}
-
-/**
- * Very conservative pixel dynamic detection (single-letter glyphs near staff).
- */
-export function detectDynamicNearMeasure(imageData, measureBox, inkThreshold) {
-  const { width, height } = imageData
-  const cx = Math.floor((measureBox.x0 + measureBox.x1) * 0.5 * width)
-  const cy = Math.floor(measureBox.y1 * height + 10)
-  let dark = 0
-  for (let y = cy; y <= cy + 10; y += 1) {
-    for (let x = cx - 6; x <= cx + 6; x += 1) {
-      if (inkAt(imageData, x, y, inkThreshold)) {
-        dark += 1
-      }
-    }
-  }
-  if (dark < 8 || dark > 40) {
-    return null
-  }
-  if (dark < 16) {
-    return { mark: 'p', confidence: 0.7 }
-  }
-  if (dark > 28) {
-    return { mark: 'f', confidence: 0.7 }
-  }
-  return { mark: 'mf', confidence: 0.65 }
 }
 
 export function detectStaccatoOnNote(imageData, notehead, inkThreshold) {
@@ -102,10 +57,6 @@ export function detectPedalFromText(textItems = []) {
     return { type: 'pedal', confidence: 0.78 }
   }
   return null
-}
-
-export function shouldEmitDynamic(dynamic) {
-  return dynamic && (dynamic.confidence ?? 0) >= OMR_MUSICAL_CONFIDENCE.DYNAMIC
 }
 
 export function shouldEmitArticulation(articulation) {

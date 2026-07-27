@@ -9,7 +9,7 @@ import {
   summarizePitchErrorRootCauses,
   summarizePitchErrors,
 } from '../src/features/omr/omrPitchErrorAnalysis.js'
-import { normalizedStaffLineYs } from '../src/features/score-follow/detectStaffLines.js'
+import { normalizedStaffLineYs, filterViableStaves, groupStavesIntoSystems } from '../src/features/score-follow/detectStaffLines.js'
 import {
   midiFromStaffPosition,
   resolveNoteheadYNorm,
@@ -35,6 +35,24 @@ describe('normalizedStaffLineYs', () => {
 
   it('returns null when fewer than five rows are available', () => {
     expect(normalizedStaffLineYs([134, 140, 146, 152], 1000)).toBeNull()
+  })
+})
+
+describe('filterViableStaves', () => {
+  it('drops a degenerate ink band so grand-staff pairing can run', () => {
+    const staves = [
+      { y0: 0.1886, y1: 0.2295, center: 0.209, lineCount: 10 },
+      { y0: 0.2921, y1: 0.3331, center: 0.3126, lineCount: 10 },
+      { y0: 0.5093, y1: 0.51, center: 0.5097, lineCount: 2 },
+      { y0: 0.5294, y1: 0.5703, center: 0.5498, lineCount: 7 },
+      { y0: 0.6329, y1: 0.6739, center: 0.6534, lineCount: 8 },
+    ]
+    const viable = filterViableStaves(staves)
+    expect(viable).toHaveLength(4)
+    expect(viable.some((stave) => stave.y1 - stave.y0 < 0.01)).toBe(false)
+    const systems = groupStavesIntoSystems(viable, 2)
+    expect(systems).toHaveLength(2)
+    expect(systems.every((system) => system.staveCount === 2)).toBe(true)
   })
 })
 

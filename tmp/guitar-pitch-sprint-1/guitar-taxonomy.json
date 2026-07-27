@@ -1,0 +1,520 @@
+{
+  "kind": "guitar-pitch-sprint-1-taxonomy",
+  "sprint4Baseline": true,
+  "spike6": "frozen-no-ship",
+  "fixtures": [
+    {
+      "id": "guitar-tab-sparse-vector",
+      "pitchBefore": "70%",
+      "pitchAfter": "70%",
+      "pitchScoreBefore": 0.7,
+      "pitchScoreAfter": 0.7,
+      "incorrectBucketsAfter": {
+        "accidental-or-alter": 1,
+        "small-interval-other": 2,
+        "larger-interval": 1
+      },
+      "incorrectSamples": [
+        {
+          "measure": 1,
+          "gen": "F4",
+          "truth": "E4",
+          "delta": 1,
+          "bucket": "accidental-or-alter"
+        },
+        {
+          "measure": 1,
+          "gen": "E4",
+          "truth": "C4",
+          "delta": 4,
+          "bucket": "small-interval-other"
+        },
+        {
+          "measure": 5,
+          "gen": "E4",
+          "truth": "C4",
+          "delta": 4,
+          "bucket": "small-interval-other"
+        },
+        {
+          "measure": 5,
+          "gen": "A4",
+          "truth": "E4",
+          "delta": 5,
+          "bucket": "larger-interval"
+        }
+      ],
+      "missing": 0,
+      "extra": 8,
+      "onsetMismatch": 23,
+      "grandStaff": {
+        "staves": 0,
+        "staffTags": 0,
+        "clefOctave": "-1",
+        "ok": true
+      },
+      "eventShape": {
+        "chordEvents": 0,
+        "singleEvents": 40
+      },
+      "fretMapping": {
+        "withFret": 40,
+        "validStringFretForMidi": 40,
+        "midiMismatchCount": 0,
+        "sameStringConflicts": 0,
+        "largePositionJumpCount": 4,
+        "largePositionJumps": [
+          {
+            "m": 2,
+            "from": 2,
+            "to": 12
+          },
+          {
+            "m": 3,
+            "from": 10,
+            "to": 3
+          },
+          {
+            "m": 5,
+            "from": 5,
+            "to": 0
+          },
+          {
+            "m": 6,
+            "from": 6,
+            "to": 12
+          }
+        ],
+        "mismatchSamples": []
+      },
+      "tablature": {
+        "tabStaves": 2,
+        "tabNotes": 40,
+        "tabPositionalMeasures": 8,
+        "tabApproximateRhythmMeasures": 8,
+        "tabCompressedTimingMeasures": 0,
+        "tabEmptyMeasures": 0,
+        "attachedPositions": 0,
+        "pairedNotes": 0,
+        "unpairedNotationNotes": 0,
+        "unusedTabDigits": 0,
+        "lowConfidenceMeasures": 0,
+        "pairingConfidence": 1,
+        "tabOnly": true,
+        "rhythmApproximate": true,
+        "unsupportedMarkers": [
+          "capo",
+          "d-s-coda",
+          "coda",
+          "repeat-ending"
+        ],
+        "capoText": "Capo 2",
+        "warnings": [
+          "TAB notes detected — rhythm is approximate. Playback uses even spacing within each measure.",
+          "Capo marking detected — playback sounds at written TAB pitch; capo transposition is not applied. (Capo 2)",
+          "Repeat/coda markings were detected but not fully expanded. Playback follows the written measure order."
+        ]
+      }
+    },
+    {
+      "id": "guitar-standard-chords-vector",
+      "pitchBefore": "2%",
+      "pitchAfter": "27%",
+      "pitchScoreBefore": 0.0244,
+      "pitchScoreAfter": 0.2746,
+      "incorrectBucketsAfter": {
+        "accidental-or-alter": 7,
+        "one-diatonic-step": 3,
+        "small-interval-other": 1,
+        "larger-interval": 8,
+        "octave-error": 1
+      },
+      "incorrectSamples": [
+        {
+          "measure": 1,
+          "gen": "F4",
+          "truth": "F#4",
+          "delta": -1,
+          "bucket": "accidental-or-alter"
+        },
+        {
+          "measure": 2,
+          "gen": "C4",
+          "truth": "C#4",
+          "delta": -1,
+          "bucket": "accidental-or-alter"
+        },
+        {
+          "measure": 2,
+          "gen": "F4",
+          "truth": "F#4",
+          "delta": -1,
+          "bucket": "accidental-or-alter"
+        },
+        {
+          "measure": 3,
+          "gen": "C4",
+          "truth": "C#4",
+          "delta": -1,
+          "bucket": "accidental-or-alter"
+        },
+        {
+          "measure": 4,
+          "gen": "C4",
+          "truth": "C#4",
+          "delta": -1,
+          "bucket": "accidental-or-alter"
+        },
+        {
+          "measure": 5,
+          "gen": "A3",
+          "truth": "G3",
+          "delta": 2,
+          "bucket": "one-diatonic-step"
+        },
+        {
+          "measure": 5,
+          "gen": "A3",
+          "truth": "G3",
+          "delta": 2,
+          "bucket": "one-diatonic-step"
+        },
+        {
+          "measure": 6,
+          "gen": "G3",
+          "truth": "A3",
+          "delta": -2,
+          "bucket": "one-diatonic-step"
+        },
+        {
+          "measure": 6,
+          "gen": "G3",
+          "truth": "F#3",
+          "delta": 1,
+          "bucket": "accidental-or-alter"
+        },
+        {
+          "measure": 6,
+          "gen": "G3",
+          "truth": "E3",
+          "delta": 3,
+          "bucket": "small-interval-other"
+        },
+        {
+          "measure": 6,
+          "gen": "B3",
+          "truth": "E3",
+          "delta": 7,
+          "bucket": "larger-interval"
+        },
+        {
+          "measure": 6,
+          "gen": "B3",
+          "truth": "E3",
+          "delta": 7,
+          "bucket": "larger-interval"
+        },
+        {
+          "measure": 6,
+          "gen": "B3",
+          "truth": "B2",
+          "delta": 12,
+          "bucket": "octave-error"
+        },
+        {
+          "measure": 6,
+          "gen": "C4",
+          "truth": "A2",
+          "delta": 15,
+          "bucket": "larger-interval"
+        },
+        {
+          "measure": 6,
+          "gen": "E4",
+          "truth": "A2",
+          "delta": 19,
+          "bucket": "larger-interval"
+        }
+      ],
+      "missing": 56,
+      "extra": 27,
+      "onsetMismatch": 39,
+      "grandStaff": {
+        "staves": 0,
+        "staffTags": 0,
+        "clefOctave": "-1",
+        "ok": true
+      },
+      "eventShape": {
+        "chordEvents": 25,
+        "singleEvents": 27
+      },
+      "fretMapping": {
+        "withFret": 0,
+        "validStringFretForMidi": 0,
+        "midiMismatchCount": 0,
+        "sameStringConflicts": 0,
+        "largePositionJumpCount": 0,
+        "largePositionJumps": [],
+        "mismatchSamples": []
+      },
+      "tablature": {
+        "tabStaves": 0,
+        "tabNotes": 0,
+        "tabPositionalMeasures": 0,
+        "tabApproximateRhythmMeasures": 0,
+        "tabCompressedTimingMeasures": 0,
+        "tabEmptyMeasures": 0,
+        "attachedPositions": 0,
+        "pairedNotes": 0,
+        "unpairedNotationNotes": 0,
+        "unusedTabDigits": 0,
+        "lowConfidenceMeasures": 0,
+        "pairingConfidence": 1,
+        "tabOnly": false,
+        "rhythmApproximate": false,
+        "unsupportedMarkers": [],
+        "capoText": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "guitar-paired-chords-vector",
+      "pitchBefore": "31%",
+      "pitchAfter": "48%",
+      "pitchScoreBefore": 0.3077,
+      "pitchScoreAfter": 0.4825,
+      "incorrectBucketsAfter": {
+        "one-diatonic-step": 5,
+        "small-interval-other": 2
+      },
+      "incorrectSamples": [
+        {
+          "measure": 1,
+          "gen": "D4",
+          "truth": "C4",
+          "delta": 2,
+          "bucket": "one-diatonic-step"
+        },
+        {
+          "measure": 1,
+          "gen": "G4",
+          "truth": "E4",
+          "delta": 3,
+          "bucket": "small-interval-other"
+        },
+        {
+          "measure": 2,
+          "gen": "C4",
+          "truth": "D4",
+          "delta": -2,
+          "bucket": "one-diatonic-step"
+        },
+        {
+          "measure": 2,
+          "gen": "A4",
+          "truth": "G4",
+          "delta": 2,
+          "bucket": "one-diatonic-step"
+        },
+        {
+          "measure": 3,
+          "gen": "G4",
+          "truth": "A4",
+          "delta": -2,
+          "bucket": "one-diatonic-step"
+        },
+        {
+          "measure": 6,
+          "gen": "G4",
+          "truth": "A4",
+          "delta": -2,
+          "bucket": "one-diatonic-step"
+        },
+        {
+          "measure": 6,
+          "gen": "B4",
+          "truth": "D5",
+          "delta": -3,
+          "bucket": "small-interval-other"
+        }
+      ],
+      "missing": 40,
+      "extra": 27,
+      "onsetMismatch": 7,
+      "grandStaff": {
+        "staves": 0,
+        "staffTags": 0,
+        "clefOctave": "-1",
+        "ok": true
+      },
+      "eventShape": {
+        "chordEvents": 32,
+        "singleEvents": 1
+      },
+      "fretMapping": {
+        "withFret": 102,
+        "validStringFretForMidi": 102,
+        "midiMismatchCount": 0,
+        "sameStringConflicts": 0,
+        "largePositionJumpCount": 2,
+        "largePositionJumps": [
+          {
+            "m": 3,
+            "from": 5,
+            "to": 14
+          },
+          {
+            "m": 8,
+            "from": 10,
+            "to": 3
+          }
+        ],
+        "mismatchSamples": []
+      },
+      "tablature": {
+        "tabStaves": 2,
+        "tabNotes": 116,
+        "tabPositionalMeasures": 0,
+        "tabApproximateRhythmMeasures": 0,
+        "tabCompressedTimingMeasures": 0,
+        "tabEmptyMeasures": 0,
+        "attachedPositions": 102,
+        "pairedNotes": 102,
+        "unpairedNotationNotes": 1,
+        "unusedTabDigits": 14,
+        "lowConfidenceMeasures": 0,
+        "pairingConfidence": 0.8942810498439059,
+        "tabOnly": false,
+        "rhythmApproximate": false,
+        "unsupportedMarkers": [],
+        "capoText": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "guitar-techniques-paired-vector",
+      "pitchBefore": "72%",
+      "pitchAfter": "78%",
+      "pitchScoreBefore": 0.7222,
+      "pitchScoreAfter": 0.7778,
+      "incorrectBucketsAfter": {},
+      "incorrectSamples": [],
+      "missing": 4,
+      "extra": 4,
+      "onsetMismatch": 0,
+      "grandStaff": {
+        "staves": 0,
+        "staffTags": 0,
+        "clefOctave": "-1",
+        "ok": true
+      },
+      "eventShape": {
+        "chordEvents": 0,
+        "singleEvents": 32
+      },
+      "fretMapping": {
+        "withFret": 32,
+        "validStringFretForMidi": 32,
+        "midiMismatchCount": 0,
+        "sameStringConflicts": 0,
+        "largePositionJumpCount": 1,
+        "largePositionJumps": [
+          {
+            "m": 7,
+            "from": 12,
+            "to": 5
+          }
+        ],
+        "mismatchSamples": []
+      },
+      "tablature": {
+        "tabStaves": 2,
+        "tabNotes": 32,
+        "tabPositionalMeasures": 0,
+        "tabApproximateRhythmMeasures": 0,
+        "tabCompressedTimingMeasures": 0,
+        "tabEmptyMeasures": 0,
+        "attachedPositions": 32,
+        "pairedNotes": 32,
+        "unpairedNotationNotes": 0,
+        "unusedTabDigits": 0,
+        "lowConfidenceMeasures": 0,
+        "pairingConfidence": 0.8900702614379083,
+        "tabOnly": false,
+        "rhythmApproximate": false,
+        "unsupportedMarkers": [],
+        "capoText": null,
+        "warnings": []
+      }
+    }
+  ],
+  "corpusMeans": {
+    "before": {
+      "overall": 0.6028888888888889,
+      "classes": {
+        "pitch": {
+          "meanScore": 0.5304666666666666,
+          "meanCoverage": 1
+        },
+        "rhythm": {
+          "meanScore": 0.644488888888889,
+          "meanCoverage": 1
+        },
+        "sustain": {
+          "meanScore": 0.5777777777777778,
+          "meanCoverage": 1
+        },
+        "articulation": {
+          "meanScore": 0.8388555555555555,
+          "meanCoverage": 1
+        },
+        "measureStructure": {
+          "meanScore": 0.6287111111111111,
+          "meanCoverage": 1
+        },
+        "interpretation": {
+          "meanScore": 0,
+          "meanCoverage": 1
+        },
+        "playback": {
+          "meanScore": 1,
+          "meanCoverage": 1
+        }
+      }
+    },
+    "after": {
+      "overall": 0.6002666666666667,
+      "classes": {
+        "pitch": {
+          "meanScore": 0.5838666666666668,
+          "meanCoverage": 1
+        },
+        "rhythm": {
+          "meanScore": 0.6519666666666667,
+          "meanCoverage": 1
+        },
+        "sustain": {
+          "meanScore": 0.4666666666666667,
+          "meanCoverage": 1
+        },
+        "articulation": {
+          "meanScore": 0.8388555555555555,
+          "meanCoverage": 1
+        },
+        "measureStructure": {
+          "meanScore": 0.6605888888888889,
+          "meanCoverage": 1
+        },
+        "interpretation": {
+          "meanScore": 0,
+          "meanCoverage": 1
+        },
+        "playback": {
+          "meanScore": 1,
+          "meanCoverage": 1
+        }
+      }
+    }
+  }
+}

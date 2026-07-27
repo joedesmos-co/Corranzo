@@ -1,0 +1,2416 @@
+{
+  "coverage": {
+    "sampleCount": 30,
+    "midiLow": 21,
+    "midiHigh": 108,
+    "coveredCount": 88,
+    "missingMidi": [],
+    "extremeTranspose": [],
+    "maxTransposeSemitones": 1.5
+  },
+  "sampleUrlCount": 30,
+  "preferredSampleBaseUrl": "/audio/salamander/",
+  "cdnFallbackBaseUrl": "https://tonejs.github.io/audio/salamander/",
+  "results": [
+    {
+      "fixtureId": "single-note-scale",
+      "description": "Scale across low, middle, and high registers",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 1.176124999999999,
+      "firstNoteLatencyMs": 1.2058329999999984,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 12,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 1,
+      "peakPolyphony": 1,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.6495112152624049,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 0,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 33,
+          "name": "A1",
+          "performedOnset": 0,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "A1",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 36,
+          "name": "C2",
+          "performedOnset": 0.4,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "C2",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 40,
+          "name": "E2",
+          "performedOnset": 0.8,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "D#2",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 45,
+          "name": "A2",
+          "performedOnset": 1.2000000000000002,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "A2",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 1.6,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 64,
+          "name": "E4",
+          "performedOnset": 2,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "D#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 2.4000000000000004,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 72,
+          "name": "C5",
+          "performedOnset": 2.8000000000000003,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "C5",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 84,
+          "name": "C6",
+          "performedOnset": 3.2,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "C6",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 88,
+          "name": "E6",
+          "performedOnset": 3.6,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "D#6",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 91,
+          "name": "G6",
+          "performedOnset": 4,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "F#6",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 96,
+          "name": "C7",
+          "performedOnset": 4.4,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "C7",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 33,
+          "onset": 0,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 36,
+          "onset": 0.4,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 40,
+          "onset": 0.8,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 45,
+          "onset": 1.2000000000000002,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 1.6,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 64,
+          "onset": 2,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 2.4000000000000004,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 72,
+          "onset": 2.8000000000000003,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 84,
+          "onset": 3.2,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 88,
+          "onset": 3.6,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 91,
+          "onset": 4,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 96,
+          "onset": 4.4,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        }
+      ]
+    },
+    {
+      "fixtureId": "repeated-notes",
+      "description": "Same pitch re-attacked",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.13437499999999858,
+      "firstNoteLatencyMs": 0.14283400000000057,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 4,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 1,
+      "peakPolyphony": 1,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.6694246819145385,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 0,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0,
+          "performedDuration": 0.28,
+          "semanticVelocity": 0.72,
+          "mappedGain": 0.6694246819145385,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0.35,
+          "performedDuration": 0.28,
+          "semanticVelocity": 0.72,
+          "mappedGain": 0.6694246819145385,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0.7,
+          "performedDuration": 0.28,
+          "semanticVelocity": 0.72,
+          "mappedGain": 0.6694246819145385,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 1.05,
+          "performedDuration": 0.28,
+          "semanticVelocity": 0.72,
+          "mappedGain": 0.6694246819145385,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 60,
+          "onset": 0,
+          "duration": 0.28,
+          "velocity": 0.72,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 0.35,
+          "duration": 0.28,
+          "velocity": 0.72,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 0.7,
+          "duration": 0.28,
+          "velocity": 0.72,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 1.05,
+          "duration": 0.28,
+          "velocity": 0.72,
+          "tieChainId": null
+        }
+      ]
+    },
+    {
+      "fixtureId": "soft-loud",
+      "description": "Soft then loud single notes",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.0934999999999988,
+      "firstNoteLatencyMs": 0.10133299999999679,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 2,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 1,
+      "peakPolyphony": 1,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.7707733466570511,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 0,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0,
+          "performedDuration": 0.5,
+          "semanticVelocity": 0.46,
+          "mappedGain": 0.4212300162290475,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0.7,
+          "performedDuration": 0.5,
+          "semanticVelocity": 0.82,
+          "mappedGain": 0.7707733466570511,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 60,
+          "onset": 0,
+          "duration": 0.5,
+          "velocity": 0.46,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 0.7,
+          "duration": 0.5,
+          "velocity": 0.82,
+          "tieChainId": null
+        }
+      ]
+    },
+    {
+      "fixtureId": "dynamic-ladder",
+      "description": "pp → mp → mf → ff",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.07391599999999698,
+      "firstNoteLatencyMs": 0.0799999999999983,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 4,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 1,
+      "peakPolyphony": 1,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.8643559055620866,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 0,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0,
+          "performedDuration": 0.45,
+          "semanticVelocity": 0.36,
+          "mappedGain": 0.33302982963757,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0.55,
+          "performedDuration": 0.45,
+          "semanticVelocity": 0.56,
+          "mappedGain": 0.513782537676468,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 1.1,
+          "performedDuration": 0.45,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 1.65,
+          "performedDuration": 0.45,
+          "semanticVelocity": 0.91,
+          "mappedGain": 0.8643559055620866,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 60,
+          "onset": 0,
+          "duration": 0.45,
+          "velocity": 0.36,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 0.55,
+          "duration": 0.45,
+          "velocity": 0.56,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 1.1,
+          "duration": 0.45,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 1.65,
+          "duration": 0.45,
+          "velocity": 0.91,
+          "tieChainId": null
+        }
+      ]
+    },
+    {
+      "fixtureId": "chords-2-3-6",
+      "description": "Two-, three-, and six-note chords",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.1294159999999991,
+      "firstNoteLatencyMs": 0.1396659999999983,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 11,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 6,
+      "peakPolyphony": 6,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.6995229702542041,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 0,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0,
+          "performedDuration": 0.8,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 64,
+          "name": "E4",
+          "performedOnset": 0,
+          "performedDuration": 0.8,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "D#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 1,
+          "performedDuration": 0.8,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 64,
+          "name": "E4",
+          "performedOnset": 1,
+          "performedDuration": 0.8,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "D#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 1,
+          "performedDuration": 0.8,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 48,
+          "name": "C3",
+          "performedOnset": 2,
+          "performedDuration": 1,
+          "semanticVelocity": 0.75,
+          "mappedGain": 0.6995229702542041,
+          "sampleSelected": "C3",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 52,
+          "name": "E3",
+          "performedOnset": 2,
+          "performedDuration": 1,
+          "semanticVelocity": 0.75,
+          "mappedGain": 0.6995229702542041,
+          "sampleSelected": "D#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 55,
+          "name": "G3",
+          "performedOnset": 2,
+          "performedDuration": 1,
+          "semanticVelocity": 0.75,
+          "mappedGain": 0.6995229702542041,
+          "sampleSelected": "F#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 2,
+          "performedDuration": 1,
+          "semanticVelocity": 0.75,
+          "mappedGain": 0.6995229702542041,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 64,
+          "name": "E4",
+          "performedOnset": 2,
+          "performedDuration": 1,
+          "semanticVelocity": 0.75,
+          "mappedGain": 0.6995229702542041,
+          "sampleSelected": "D#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 2,
+          "performedDuration": 1,
+          "semanticVelocity": 0.75,
+          "mappedGain": 0.6995229702542041,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 60,
+          "onset": 0,
+          "duration": 0.8,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 64,
+          "onset": 0,
+          "duration": 0.8,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 1,
+          "duration": 0.8,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 64,
+          "onset": 1,
+          "duration": 0.8,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 1,
+          "duration": 0.8,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 48,
+          "onset": 2,
+          "duration": 1,
+          "velocity": 0.75,
+          "tieChainId": null
+        },
+        {
+          "midi": 52,
+          "onset": 2,
+          "duration": 1,
+          "velocity": 0.75,
+          "tieChainId": null
+        },
+        {
+          "midi": 55,
+          "onset": 2,
+          "duration": 1,
+          "velocity": 0.75,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 2,
+          "duration": 1,
+          "velocity": 0.75,
+          "tieChainId": null
+        },
+        {
+          "midi": 64,
+          "onset": 2,
+          "duration": 1,
+          "velocity": 0.75,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 2,
+          "duration": 1,
+          "velocity": 0.75,
+          "tieChainId": null
+        }
+      ]
+    },
+    {
+      "fixtureId": "dense-chord-passage",
+      "description": "Dense overlapping chords",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.09833299999999667,
+      "firstNoteLatencyMs": 0.105792000000001,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 48,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 18,
+      "peakPolyphony": 18,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.7298873558166354,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 0,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 48,
+          "name": "C3",
+          "performedOnset": 0,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C3",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 52,
+          "name": "E3",
+          "performedOnset": 0,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 55,
+          "name": "G3",
+          "performedOnset": 0,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 59,
+          "name": "B3",
+          "performedOnset": 0,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 62,
+          "name": "D4",
+          "performedOnset": 0,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 0,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 48,
+          "name": "C3",
+          "performedOnset": 0.22,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C3",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 52,
+          "name": "E3",
+          "performedOnset": 0.22,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 55,
+          "name": "G3",
+          "performedOnset": 0.22,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 59,
+          "name": "B3",
+          "performedOnset": 0.22,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 62,
+          "name": "D4",
+          "performedOnset": 0.22,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 0.22,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 48,
+          "name": "C3",
+          "performedOnset": 0.44,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C3",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 52,
+          "name": "E3",
+          "performedOnset": 0.44,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 55,
+          "name": "G3",
+          "performedOnset": 0.44,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 59,
+          "name": "B3",
+          "performedOnset": 0.44,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 62,
+          "name": "D4",
+          "performedOnset": 0.44,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 0.44,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 48,
+          "name": "C3",
+          "performedOnset": 0.66,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C3",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 52,
+          "name": "E3",
+          "performedOnset": 0.66,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 55,
+          "name": "G3",
+          "performedOnset": 0.66,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 59,
+          "name": "B3",
+          "performedOnset": 0.66,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 62,
+          "name": "D4",
+          "performedOnset": 0.66,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 0.66,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 48,
+          "name": "C3",
+          "performedOnset": 0.88,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C3",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 52,
+          "name": "E3",
+          "performedOnset": 0.88,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 55,
+          "name": "G3",
+          "performedOnset": 0.88,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 59,
+          "name": "B3",
+          "performedOnset": 0.88,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 62,
+          "name": "D4",
+          "performedOnset": 0.88,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 0.88,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 48,
+          "name": "C3",
+          "performedOnset": 1.1,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C3",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 52,
+          "name": "E3",
+          "performedOnset": 1.1,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 55,
+          "name": "G3",
+          "performedOnset": 1.1,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 59,
+          "name": "B3",
+          "performedOnset": 1.1,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 62,
+          "name": "D4",
+          "performedOnset": 1.1,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 1.1,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 48,
+          "name": "C3",
+          "performedOnset": 1.32,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C3",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 52,
+          "name": "E3",
+          "performedOnset": 1.32,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 55,
+          "name": "G3",
+          "performedOnset": 1.32,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 59,
+          "name": "B3",
+          "performedOnset": 1.32,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 62,
+          "name": "D4",
+          "performedOnset": 1.32,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 1.32,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 48,
+          "name": "C3",
+          "performedOnset": 1.54,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C3",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 52,
+          "name": "E3",
+          "performedOnset": 1.54,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 55,
+          "name": "G3",
+          "performedOnset": 1.54,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#3",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 59,
+          "name": "B3",
+          "performedOnset": 1.54,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "C4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 62,
+          "name": "D4",
+          "performedOnset": 1.54,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "D#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 1.54,
+          "performedDuration": 0.55,
+          "semanticVelocity": 0.78,
+          "mappedGain": 0.7298873558166354,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 48,
+          "onset": 0,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 52,
+          "onset": 0,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 55,
+          "onset": 0,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 59,
+          "onset": 0,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 62,
+          "onset": 0,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 0,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 48,
+          "onset": 0.22,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 52,
+          "onset": 0.22,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 55,
+          "onset": 0.22,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 59,
+          "onset": 0.22,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 62,
+          "onset": 0.22,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 0.22,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 48,
+          "onset": 0.44,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 52,
+          "onset": 0.44,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 55,
+          "onset": 0.44,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 59,
+          "onset": 0.44,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 62,
+          "onset": 0.44,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 0.44,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 48,
+          "onset": 0.66,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 52,
+          "onset": 0.66,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 55,
+          "onset": 0.66,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 59,
+          "onset": 0.66,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 62,
+          "onset": 0.66,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 0.66,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 48,
+          "onset": 0.88,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 52,
+          "onset": 0.88,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 55,
+          "onset": 0.88,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 59,
+          "onset": 0.88,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 62,
+          "onset": 0.88,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 0.88,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 48,
+          "onset": 1.1,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 52,
+          "onset": 1.1,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 55,
+          "onset": 1.1,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 59,
+          "onset": 1.1,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 62,
+          "onset": 1.1,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 1.1,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 48,
+          "onset": 1.32,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 52,
+          "onset": 1.32,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 55,
+          "onset": 1.32,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 59,
+          "onset": 1.32,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 62,
+          "onset": 1.32,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 1.32,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 48,
+          "onset": 1.54,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 52,
+          "onset": 1.54,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 55,
+          "onset": 1.54,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 59,
+          "onset": 1.54,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 62,
+          "onset": 1.54,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 1.54,
+          "duration": 0.55,
+          "velocity": 0.78,
+          "tieChainId": null
+        }
+      ]
+    },
+    {
+      "fixtureId": "staccato",
+      "description": "Staccato passage (short performed durations)",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.0903330000000011,
+      "firstNoteLatencyMs": 0.09741600000000261,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 5,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 1,
+      "peakPolyphony": 1,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.6694246819145385,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 0,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0,
+          "performedDuration": 0.1,
+          "semanticVelocity": 0.72,
+          "mappedGain": 0.6694246819145385,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 62,
+          "name": "D4",
+          "performedOnset": 0.25,
+          "performedDuration": 0.1,
+          "semanticVelocity": 0.72,
+          "mappedGain": 0.6694246819145385,
+          "sampleSelected": "D#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 64,
+          "name": "E4",
+          "performedOnset": 0.5,
+          "performedDuration": 0.1,
+          "semanticVelocity": 0.72,
+          "mappedGain": 0.6694246819145385,
+          "sampleSelected": "D#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 65,
+          "name": "F4",
+          "performedOnset": 0.75,
+          "performedDuration": 0.1,
+          "semanticVelocity": 0.72,
+          "mappedGain": 0.6694246819145385,
+          "sampleSelected": "F#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 1,
+          "performedDuration": 0.1,
+          "semanticVelocity": 0.72,
+          "mappedGain": 0.6694246819145385,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 60,
+          "onset": 0,
+          "duration": 0.1,
+          "velocity": 0.72,
+          "tieChainId": null
+        },
+        {
+          "midi": 62,
+          "onset": 0.25,
+          "duration": 0.1,
+          "velocity": 0.72,
+          "tieChainId": null
+        },
+        {
+          "midi": 64,
+          "onset": 0.5,
+          "duration": 0.1,
+          "velocity": 0.72,
+          "tieChainId": null
+        },
+        {
+          "midi": 65,
+          "onset": 0.75,
+          "duration": 0.1,
+          "velocity": 0.72,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 1,
+          "duration": 0.1,
+          "velocity": 0.72,
+          "tieChainId": null
+        }
+      ]
+    },
+    {
+      "fixtureId": "accent-marcato",
+      "description": "Accent and marcato accents",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.06300000000000239,
+      "firstNoteLatencyMs": 0.06862499999999727,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 2,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 1,
+      "peakPolyphony": 1,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.7707733466570511,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 0,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0,
+          "performedDuration": 0.4,
+          "semanticVelocity": 0.7799999999999999,
+          "mappedGain": 0.7298873558166353,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 62,
+          "name": "D4",
+          "performedOnset": 0.5,
+          "performedDuration": 0.28,
+          "semanticVelocity": 0.82,
+          "mappedGain": 0.7707733466570511,
+          "sampleSelected": "D#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 60,
+          "onset": 0,
+          "duration": 0.4,
+          "velocity": 0.7799999999999999,
+          "tieChainId": null
+        },
+        {
+          "midi": 62,
+          "onset": 0.5,
+          "duration": 0.28,
+          "velocity": 0.82,
+          "tieChainId": null
+        }
+      ]
+    },
+    {
+      "fixtureId": "tied-across-bar",
+      "description": "Tied note across a barline (single attack)",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.08549999999999613,
+      "firstNoteLatencyMs": 0.09074999999999989,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 1,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 1,
+      "peakPolyphony": 1,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.6495112152624049,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 1,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0,
+          "performedDuration": 1,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": "tie-c4",
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 60,
+          "onset": 0,
+          "duration": 1,
+          "velocity": 0.7,
+          "tieChainId": "tie-c4"
+        }
+      ]
+    },
+    {
+      "fixtureId": "partial-tied-chord",
+      "description": "Partially tied chord",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.539082999999998,
+      "firstNoteLatencyMs": 0.5457499999999982,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 3,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 2,
+      "peakPolyphony": 2,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.6495112152624049,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 1,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0,
+          "performedDuration": 1,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": "tie-c",
+          "attackCount": 1
+        },
+        {
+          "midi": 64,
+          "name": "E4",
+          "performedOnset": 0,
+          "performedDuration": 0.5,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "D#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 64,
+          "name": "E4",
+          "performedOnset": 0.5,
+          "performedDuration": 0.5,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "D#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 60,
+          "onset": 0,
+          "duration": 1,
+          "velocity": 0.7,
+          "tieChainId": "tie-c"
+        },
+        {
+          "midi": 64,
+          "onset": 0,
+          "duration": 0.5,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 64,
+          "onset": 0.5,
+          "duration": 0.5,
+          "velocity": 0.7,
+          "tieChainId": null
+        }
+      ]
+    },
+    {
+      "fixtureId": "fermata",
+      "description": "Fermata sustain",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.08099999999999596,
+      "firstNoteLatencyMs": 0.08620799999999917,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 1,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 1,
+      "peakPolyphony": 1,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.6495112152624049,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 0,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0,
+          "performedDuration": 1.5,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 60,
+          "onset": 0,
+          "duration": 1.5,
+          "velocity": 0.7,
+          "tieChainId": null
+        }
+      ]
+    },
+    {
+      "fixtureId": "crescendo-diminuendo",
+      "description": "Wedge-interpolated dynamics",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.052416000000000906,
+      "firstNoteLatencyMs": 0.05895799999999696,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 5,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 1,
+      "peakPolyphony": 1,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.7707733466570511,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 0,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0,
+          "performedDuration": 0.3,
+          "semanticVelocity": 0.46,
+          "mappedGain": 0.4212300162290475,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0.35,
+          "performedDuration": 0.3,
+          "semanticVelocity": 0.55,
+          "mappedGain": 0.5043509251411724,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0.7,
+          "performedDuration": 0.3,
+          "semanticVelocity": 0.64,
+          "mappedGain": 0.5905311438293188,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 1.0499999999999998,
+          "performedDuration": 0.3,
+          "semanticVelocity": 0.73,
+          "mappedGain": 0.6794273595692155,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 1.4,
+          "performedDuration": 0.3,
+          "semanticVelocity": 0.82,
+          "mappedGain": 0.7707733466570511,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 60,
+          "onset": 0,
+          "duration": 0.3,
+          "velocity": 0.46,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 0.35,
+          "duration": 0.3,
+          "velocity": 0.55,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 0.7,
+          "duration": 0.3,
+          "velocity": 0.64,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 1.0499999999999998,
+          "duration": 0.3,
+          "velocity": 0.73,
+          "tieChainId": null
+        },
+        {
+          "midi": 60,
+          "onset": 1.4,
+          "duration": 0.3,
+          "velocity": 0.82,
+          "tieChainId": null
+        }
+      ]
+    },
+    {
+      "fixtureId": "tempo-change",
+      "description": "Tempo change on performed timeline (onsets already mapped)",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.053083999999998355,
+      "firstNoteLatencyMs": 0.05825000000000102,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 4,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 1,
+      "peakPolyphony": 2,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": null,
+      "peakOutputLevel": 0.6495112152624049,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 0,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0,
+          "performedDuration": 0.5,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 62,
+          "name": "D4",
+          "performedOnset": 0.5,
+          "performedDuration": 0.5,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "D#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 64,
+          "name": "E4",
+          "performedOnset": 0.9,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "D#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 65,
+          "name": "F4",
+          "performedOnset": 1.25,
+          "performedDuration": 0.35,
+          "semanticVelocity": 0.7,
+          "mappedGain": 0.6495112152624049,
+          "sampleSelected": "F#4",
+          "transposeSemitones": -1,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 60,
+          "onset": 0,
+          "duration": 0.5,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 62,
+          "onset": 0.5,
+          "duration": 0.5,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 64,
+          "onset": 0.9,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        },
+        {
+          "midi": 65,
+          "onset": 1.25,
+          "duration": 0.35,
+          "velocity": 0.7,
+          "tieChainId": null
+        }
+      ]
+    },
+    {
+      "fixtureId": "stop-seek-loop-cleanup",
+      "description": "Stop / seek / loop cleanup (stuck-voice check)",
+      "engineType": "sampler",
+      "sampleLoadState": "sampled",
+      "sampleReadyMs": 0.06920900000000074,
+      "firstNoteLatencyMs": 0.07733400000000046,
+      "sampleSet": "salamander-lite",
+      "loadedSampleCount": 30,
+      "missingSampleCount": 0,
+      "loadError": null,
+      "triggerCount": 3,
+      "missingTriggers": 0,
+      "duplicateTriggers": 0,
+      "activeVoiceCount": 3,
+      "peakPolyphony": 3,
+      "voiceSteals": 0,
+      "stuckVoicesAfterStop": 0,
+      "peakOutputLevel": 0.6995229702542041,
+      "clippingEvents": 0,
+      "dynamicLevelOrdered": true,
+      "tieContinuationAttackCount": 0,
+      "tieContinuationReattacks": 0,
+      "triggers": [
+        {
+          "midi": 60,
+          "name": "C4",
+          "performedOnset": 0,
+          "performedDuration": 2,
+          "semanticVelocity": 0.75,
+          "mappedGain": 0.6995229702542041,
+          "sampleSelected": "C4",
+          "transposeSemitones": 0,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 64,
+          "name": "E4",
+          "performedOnset": 0,
+          "performedDuration": 2,
+          "semanticVelocity": 0.75,
+          "mappedGain": 0.6995229702542041,
+          "sampleSelected": "D#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        },
+        {
+          "midi": 67,
+          "name": "G4",
+          "performedOnset": 0,
+          "performedDuration": 2,
+          "semanticVelocity": 0.75,
+          "mappedGain": 0.6995229702542041,
+          "sampleSelected": "F#4",
+          "transposeSemitones": 1,
+          "tieChainId": null,
+          "attackCount": 1
+        }
+      ],
+      "performedEventTrace": [
+        {
+          "midi": 60,
+          "onset": 0,
+          "duration": 2,
+          "velocity": 0.75,
+          "tieChainId": null
+        },
+        {
+          "midi": 64,
+          "onset": 0,
+          "duration": 2,
+          "velocity": 0.75,
+          "tieChainId": null
+        },
+        {
+          "midi": 67,
+          "onset": 0,
+          "duration": 2,
+          "velocity": 0.75,
+          "tieChainId": null
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "fixtureCount": 14,
+    "samplerFixtures": 14,
+    "synthFixtures": 0,
+    "totalMissingTriggers": 0,
+    "totalDuplicates": 0,
+    "totalVoiceSteals": 0,
+    "totalClipping": 0,
+    "maxPeakPolyphony": 18,
+    "stuckVoiceFailures": 0,
+    "dynamicLadderOk": true,
+    "tieReattacks": 0
+  }
+}

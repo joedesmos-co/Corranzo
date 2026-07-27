@@ -1,0 +1,93 @@
+{
+  "id": "11-evangelion-accent-p1-m9-u+e4a1-716",
+  "source": "evangelion",
+  "sourcePdf": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+  "page": 1,
+  "measure": 9,
+  "expectedArticulation": "accent",
+  "expectAbsent": false,
+  "sourcePriority": "PDF text / SMuFL glyph",
+  "rawArticulationCandidate": {
+    "glyph": "",
+    "codepoint": "U+E4A1",
+    "originalGlyph": "",
+    "originalCodepoint": "U+E4A1",
+    "x": 715.6284669863845,
+    "y": 708.6330083135391,
+    "width": 15.093448127921343,
+    "height": 33.61364429928741,
+    "candidateType": "accent",
+    "placement": "below",
+    "normalization": null
+  },
+  "candidateType": "accent",
+  "staffSystem": {
+    "page": 1,
+    "systemIndex": 2,
+    "clef": "treble"
+  },
+  "selectedNoteOrChord": {
+    "kind": "note",
+    "noteIndex": 13,
+    "restIndex": null,
+    "midi": 62,
+    "cx": 715.6074932952858,
+    "cy": 699.7285578384799,
+    "chordBroadcastCount": 2
+  },
+  "classification": "U+E4A1 pipeline=accent; manually verified=accent",
+  "placement": "below",
+  "musicXmlSnippet": "<measure number=\"9\"><note><pitch><step>F</step><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff></note><note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff></note><note><chord/><pitch><step>C</step><octave>3</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff></note><backup><duration>1</duration></backup><note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff></note><note><chord/><pitch><step>C</step><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff></note><backup><duration>2</duration></backup><note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>E</step><alter>-1</alter><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff></note><note><pitch><step>B</step><alter>-1</alter><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>F</step><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>B</step><alter>-1</alter><octave>1</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><backup><duration>2</duration></backup><note><pitch><step>B</step><alter>-1</alter><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff><beam number=\"1\">begin</beam><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>D</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><pitch><step>B</step><alter>-1</alter><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>F</step><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>B</step><alter>-1</alter><octave>1</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><backup><duration>2</duration></backup><note><pitch><step>B</step><alter>-1</alter><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><beam number=\"1\">end</beam><beam number=\"2\">backward hook</beam><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><forward><duration>1</duration></forward><note><pitch><step>B</step><alter>-1</alter><octave>2</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>F</step><octave>2</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>B</step><alter>-1</alter><octave>1</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><backup><duration>1</duration></backup><note><pitch><step>B</step><octave>2</octave></pitch><accidental>natural</accidental><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>F</step><alter>1</alter><octave>2</octave></pitch><accidental>sharp</accidental><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>B</step><octave>1</octave></pitch><accidental>natural</accidental><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><backup><duration>2</duration></backup><note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><backup><duration>1</duration></backup><note><pitch><step>B</step><alter>-1</alter><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>D</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff></note><note><chord/><pitch><step>G</step><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff></note><note><chord/><pitch><step>C</step><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff></note><backup><duration>2</duration></backup><note><pitch><step>B</step><alter>-1</alter><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><forward><duration>1</duration></forward><note><pitch><step>C</step><octave>3</octave></pitch><duration>1</duration><voice>2</voice><type>sixteenth</type><staff>2</staff></note><backup><duration>1</duration></backup><note><pitch><step>B</step><alter>-1</alter><octave>2</octave></pitch><accidental>flat</accidental><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff></note><note><chord/><pitch><step>B</step><alter>-1</alter><octave>1</octave></pitch><accidental>flat</accidental><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff></note><backup><duration>2</duration></backup><note><pitch><step>C</step><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>E</step><alter>-1</alter><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note><forward><duration>1</duration></forward><note><pitch><step>A</step><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff></note><backup><duration>2</duration></backup><note><rest/><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff></note></measure>",
+  "renderedResult": {
+    "present": true,
+    "geometry": {
+      "id": "note-accent-note-m9-t20.726-51-n0-staff-accent",
+      "kind": "accent",
+      "scope": "note",
+      "noteId": "note-m9-t20.726-51-n0",
+      "groupId": "note-m9-t20.726-51",
+      "symbol": null,
+      "source": "musicxml",
+      "placement": "below",
+      "chordNoteIds": [
+        "note-m9-t20.726-51-n0",
+        "note-m9-t20.726-51-n1",
+        "note-m9-t20.726-51-n2",
+        "note-m9-t20.726-51-n3",
+        "note-m9-t20.726-51-n4"
+      ],
+      "status": "upcoming",
+      "shape": "text",
+      "text": ">",
+      "x": 2279.8599999999997,
+      "y": 247.8,
+      "fontSize": 16.200000000000003
+    },
+    "restFermataWrittenOnly": false
+  },
+  "playbackSemanticTrace": {
+    "id": "P1-m9-n138",
+    "measureNumber": 9,
+    "midi": 62,
+    "quarterTime": 33,
+    "voice": 1,
+    "staff": 1,
+    "attackCount": 1,
+    "articulationSource": "accent",
+    "writtenDurationSeconds": 0.23809523809523725,
+    "baseDurationSeconds": 0.23809523809523725,
+    "velocity": 0.82
+  },
+  "notationPlaybackAgree": true,
+  "failureLayerBefore": "2 detected but misclassified as staccato",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-5/source-crops/11-evangelion-accent-p1-m9-u+e4a1-716.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-5/candidate-overlays/11-evangelion-accent-p1-m9-u+e4a1-716.png",
+    "musicXmlSnippet": "tmp/notation-fidelity-sprint-5/musicxml-snippets/11-evangelion-accent-p1-m9-u+e4a1-716.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-5/rendered-before/11-evangelion-accent-p1-m9-u+e4a1-716.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-5/rendered-after/11-evangelion-accent-p1-m9-u+e4a1-716.png"
+  }
+}

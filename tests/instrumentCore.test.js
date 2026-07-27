@@ -176,6 +176,26 @@ describe('fretboard math', () => {
     expect(new Set(strings).size).toBe(4)
   })
 
+  it('groups near-simultaneous onsets within the practice checkpoint window', () => {
+    const notes = [
+      { midi: 48, timeSeconds: 1.0 },
+      { midi: 52, timeSeconds: 1.1 },
+      { midi: 55, timeSeconds: 1.15 },
+    ]
+    const derived = deriveTabPositions(notes, GUITAR_STRINGS)
+    expect(new Set(derived.map((note) => note.string)).size).toBe(3)
+  })
+
+  it('assigns distinct strings to unison pitches in one chord', () => {
+    const notes = [
+      { midi: 60, timeSeconds: 0, id: 'a' },
+      { midi: 60, timeSeconds: 0, id: 'b' },
+    ]
+    const derived = deriveTabPositions(notes, GUITAR_STRINGS)
+    expect(derived[0].string).not.toBe(derived[1].string)
+    expect(derived.every((note) => note.string != null)).toBe(true)
+  })
+
   it('describes positions in player terms', () => {
     expect(describeTabPosition({ string: 6, fret: 0 }, GUITAR_STRINGS)).toBe('open E string')
     expect(describeTabPosition({ string: 5, fret: 3 }, GUITAR_STRINGS)).toBe(

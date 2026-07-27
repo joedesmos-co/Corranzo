@@ -1,0 +1,85 @@
+{
+  "id": "10-mozart-menuet-k2-key-signature-m1-1",
+  "source": "mozart-menuet-k2",
+  "sourcePdf": "/Users/ryland/Documents/scoreflow/benchmarks/cache/mozart-menuet-k2/score.pdf",
+  "page": 1,
+  "measure": 1,
+  "expectedSymbol": "1 flat key signature",
+  "rawDetectedCandidates": [
+    {
+      "source": "clean MusicXML/SMuFL control",
+      "fifths": -1,
+      "measureNumber": 1
+    }
+  ],
+  "selectedAttachment": {
+    "partId": "Pc91f6a3e6160a7371565e0a615672eaf",
+    "staff": "all staves"
+  },
+  "staffPosition": "standard key-signature order on each active staff",
+  "measureAccidentalState": "initial",
+  "keySignatureContext": {
+    "fifths": -1,
+    "mode": "major",
+    "cancelFifths": null,
+    "staff": null,
+    "partId": "Pc91f6a3e6160a7371565e0a615672eaf",
+    "quarterTime": 0,
+    "measureNumber": 1,
+    "timeSeconds": 0
+  },
+  "musicXmlSnippet": "<measure implicit=\"no\" number=\"1\">\n      <attributes>\n        <divisions>10080</divisions>\n        <key>\n          <fifths>-1</fifths>\n          <mode>major</mode>\n        </key>\n        <time>\n          <beats>3</beats>\n          <beat-type>4</beat-type>\n        </time>\n        <clef>\n          <sign>G</sign>\n          <line>2</line>\n        </clef>\n      </attributes>\n      <direction>\n        <direction-type>\n          <metronome parentheses=\"no\">\n            <beat-unit>quarter</beat-unit>\n            <per-minute>60</per-minute>\n          </metronome>\n        </direction-type>\n        <sound tempo=\"60\" />\n      </direction>\n      <note dynamics=\"100.00\">\n        <pitch>\n          <step>F</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>5040</duration>\n        <type>eighth</type>\n        <stem>down</stem>\n        <beam number=\"1\">begin</beam>\n      </note>\n      <note dynamics=\"100.00\">\n        <pitch>\n          <step>A</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>5040</duration>\n        <type>eighth</type>\n        <stem>down</stem>\n        <beam number=\"1\">end</beam>\n      </note>\n      <note dynamics=\"100.00\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>10080</duration>\n        <type>quarter</type>\n      </note>\n      <note dynamics=\"100.00\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>10080</duration>\n        <type>quarter</type>\n      </note>\n    </measure>",
+  "renderedResult": "2 visible key glyphs on grand staff",
+  "soundingMidiBefore": [
+    77,
+    53,
+    81,
+    72,
+    72,
+    57
+  ],
+  "soundingMidiAfter": [
+    77,
+    53,
+    81,
+    72,
+    72,
+    57
+  ],
+  "playbackSignatureUnchanged": true,
+  "failureLayerBefore": "MusicXML correct but renderer omitted key signature",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "classification": "key signature",
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-4/source-crops/10-mozart-menuet-k2-key-signature-m1-1.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-4/candidate-overlays/10-mozart-menuet-k2-key-signature-m1-1.png",
+    "musicXmlSnippetFile": "tmp/notation-fidelity-sprint-4/musicxml-snippets/10-mozart-menuet-k2-key-signature-m1-1.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-4/rendered-before/10-mozart-menuet-k2-key-signature-m1-1.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-4/rendered-after/10-mozart-menuet-k2-key-signature-m1-1.png",
+    "beforeRenderer": {
+      "keyMarks": [],
+      "notes": []
+    },
+    "afterRenderer": {
+      "keyMarks": [
+        {
+          "staff": "treble",
+          "type": "flat",
+          "column": 0,
+          "y": 60,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "flat",
+          "column": 0,
+          "y": 192,
+          "cancellation": false
+        }
+      ],
+      "notes": []
+    }
+  }
+}

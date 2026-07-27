@@ -1,0 +1,89 @@
+{
+  "id": "19-la-campanella-staccato-p1-m2-u+e4a2-313",
+  "source": "la-campanella",
+  "sourcePdf": "/Users/ryland/Downloads/etude-s-1413-in-g-minor-la-campanella-liszt.pdf",
+  "page": 1,
+  "measure": 2,
+  "expectedArticulation": "staccato",
+  "expectAbsent": false,
+  "sourcePriority": "PDF text / SMuFL glyph",
+  "rawArticulationCandidate": {
+    "glyph": "",
+    "codepoint": "U+E4A2",
+    "originalGlyph": "",
+    "originalCodepoint": "U+E4A2",
+    "x": 312.99707194625523,
+    "y": 190.72871600193798,
+    "width": 2.123067949300412,
+    "height": 27.20655556899225,
+    "candidateType": "staccato",
+    "placement": "above",
+    "normalization": null
+  },
+  "candidateType": "staccato",
+  "staffSystem": {
+    "page": 1,
+    "systemIndex": 0,
+    "clef": "treble"
+  },
+  "selectedNoteOrChord": {
+    "kind": "note",
+    "noteIndex": 0,
+    "restIndex": null,
+    "midi": 87,
+    "cx": 313.0040897777778,
+    "cy": 197.73334114147292,
+    "chordBroadcastCount": 2
+  },
+  "classification": "U+E4A2 pipeline=staccato; manually verified=staccato",
+  "placement": "above",
+  "musicXmlSnippet": "<measure number=\"2\"><note><pitch><step>D</step><alter>1</alter><octave>6</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><chord/><pitch><step>D</step><alter>1</alter><octave>5</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><rest/><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff></note><note><pitch><step>D</step><alter>1</alter><octave>5</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><beam number=\"1\">begin</beam><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>F</step><alter>1</alter><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><backup><duration>2</duration></backup><note><rest/><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff></note><note><pitch><step>D</step><alter>1</alter><octave>5</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><beam number=\"1\">end</beam><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>F</step><alter>1</alter><octave>2</octave></pitch><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><backup><duration>1</duration></backup><note><rest/><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff></note><backup><duration>1</duration></backup><note><pitch><step>D</step><alter>1</alter><octave>5</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><note><chord/><pitch><step>F</step><alter>1</alter><octave>2</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff><notations><articulations><staccato placement=\"below\"/></articulations></notations></note><backup><duration>7</duration></backup><note><rest/><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff></note><forward><duration>1</duration></forward><note><pitch><step>D</step><alter>1</alter><octave>6</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><chord/><pitch><step>D</step><alter>1</alter><octave>5</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><pitch><step>D</step><alter>1</alter><octave>6</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><chord/><pitch><step>D</step><alter>1</alter><octave>5</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note></measure>",
+  "renderedResult": {
+    "present": true,
+    "geometry": {
+      "id": "note-staccato-note-m2-t2.142-5-n0-staff-dot",
+      "kind": "staccato",
+      "scope": "note",
+      "noteId": "note-m2-t2.142-5-n0",
+      "groupId": "note-m2-t2.142-5",
+      "symbol": null,
+      "source": "musicxml",
+      "placement": "above",
+      "chordNoteIds": [
+        "note-m2-t2.142-5-n0",
+        "note-m2-t2.142-5-n1"
+      ],
+      "status": "upcoming",
+      "shape": "dot",
+      "x": 235.61999999999998,
+      "y": -7.799999999999999,
+      "r": 2.2
+    },
+    "restFermataWrittenOnly": false
+  },
+  "playbackSemanticTrace": {
+    "id": "P1-m2-n16",
+    "measureNumber": 2,
+    "midi": 87,
+    "quarterTime": 4,
+    "voice": 1,
+    "staff": 1,
+    "attackCount": 1,
+    "articulationSource": "staccato",
+    "writtenDurationSeconds": 0.2678571428571428,
+    "baseDurationSeconds": 0.1339285714285714,
+    "velocity": 0.46
+  },
+  "notationPlaybackAgree": true,
+  "failureLayerBefore": "none",
+  "failureLayerAfter": "none",
+  "correctBefore": true,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-5/source-crops/19-la-campanella-staccato-p1-m2-u+e4a2-313.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-5/candidate-overlays/19-la-campanella-staccato-p1-m2-u+e4a2-313.png",
+    "musicXmlSnippet": "tmp/notation-fidelity-sprint-5/musicxml-snippets/19-la-campanella-staccato-p1-m2-u+e4a2-313.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-5/rendered-before/19-la-campanella-staccato-p1-m2-u+e4a2-313.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-5/rendered-after/19-la-campanella-staccato-p1-m2-u+e4a2-313.png"
+  }
+}

@@ -307,10 +307,12 @@ describe('Fix E: setup panel has no long instruction blocks', () => {
       join(__dir, '..', 'src', 'components', 'pdf', 'ScoreFollowControls.jsx'),
       'utf8',
     )
-    // Ready title is a short label ("Cursor ready") — not a long sentence.
+    // Ready title is a short label ("Following") — not a long sentence.
     const match = src.match(/title: '(Cursor ready|Following)'/)
     expect(match).toBeTruthy()
     expect(match[1].length).toBeLessThan(20)
+    expect(src).toContain('shouldShowSetupStatusCard')
+    expect(src).toMatch(/tone === 'ready'[\s\S]*return false/)
   })
 
   it('no PracticeHelpTip component used in PracticeSetupPanel', () => {

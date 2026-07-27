@@ -32,7 +32,7 @@ describe('OMR viewer recovery', () => {
     expect(app).toMatch(/return \{ ok: false, message: playbackValidation\.message \}/)
     expect(app).toMatch(/return \{\s*ok: true,[\s\S]*durationSeconds: playbackValidation\.durationSeconds/)
     expect(omrPanel).toMatch(/const accepted = await onGeneratedRef\.current/)
-    expect(omrPanel).toMatch(/accepted\?\.ok === false/)
+    expect(omrPanel).toMatch(/accepted\?\.ok !== true/)
   })
 
   it('keeps Library picker-only while OMR cleanup clears PDF runtime state', () => {

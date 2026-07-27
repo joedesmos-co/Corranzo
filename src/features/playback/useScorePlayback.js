@@ -5,6 +5,14 @@ import { quantizePracticeTime } from '../../context/PracticeTickContext.jsx'
 import { displayTempoAtTime } from './scorePlaybackSchedule.js'
 import { METRONOME_COUNT_IN, METRONOME_SUBDIVISION } from './metronomeConstants.js'
 import { ScorePlaybackEngine } from './scorePlaybackEngine.js'
+import {
+  describePlaybackEvents,
+  pushScoreSourceContentTrace,
+} from '../library/scoreSourceContentIdentity.js'
+import {
+  assertDerivedBelongsToActiveScore,
+  logPlaybackSourceCheck,
+} from '../score/activeScore.js'
 
 /** React display rate for transport time — wall-clock playback stays accurate via getScoreTime(). */
 const TIME_UPDATE_INTERVAL_MS = 100
@@ -129,7 +137,11 @@ export default function useScorePlayback({
 
   const midiData = midiSource?.data
   const midiFileName = midiSource?.fileName
-  const timingRevision = timingMap?.fileName ?? timingMap?.durationSeconds ?? null
+  // Key playback rebuilds by MusicXML *content*, not filename/duration alone.
+  const timingRevision =
+    timingMap?.sourceContentKey ??
+    timingMap?.contentHash ??
+    `${timingMap?.fileName ?? ''}:${timingMap?.durationSeconds ?? ''}:${timingMap?.noteCount ?? ''}`
 
   useEffect(() => {
     const engine = engineRef.current
@@ -147,6 +159,9 @@ export default function useScorePlayback({
         setError((previous) => (previous == null ? previous : null))
         setMappingWarning((previous) => (previous == null ? previous : null))
         setAudioSource((previous) => (previous === 'musicxml' ? previous : 'musicxml'))
+        pushScoreSourceContentTrace('playback-engine-cleared', {
+          timingRevision: null,
+        })
       }
       setIsLoading((previous) => {
         const next = Boolean(timingLoading)
@@ -157,6 +172,7 @@ export default function useScorePlayback({
 
     const loadGeneration = loadGenerationRef.current + 1
     loadGenerationRef.current = loadGeneration
+    const expectedContentHash = timingMap.contentHash ?? null
 
     async function load() {
       setIsLoading(true)
@@ -170,6 +186,14 @@ export default function useScorePlayback({
       engine.stop()
 
       try {
+        pushScoreSourceContentTrace('playback-engine-load-start', {
+          timingRevision,
+          timingContentHash: expectedContentHash,
+          measureCount: timingMap.measures?.length ?? null,
+          durationSeconds: timingMap.durationSeconds ?? null,
+          noteCount: timingMap.noteCount ?? timingMap.notes?.length ?? null,
+          instrumentId,
+        })
         const result = await engine.load({
           timingMap,
           midiArrayBuffer: midiData ?? null,
@@ -177,6 +201,12 @@ export default function useScorePlayback({
           instrumentId,
         })
         if (loadGenerationRef.current !== loadGeneration) {
+          pushScoreSourceContentTrace('playback-engine-load-stale', {
+            expectedContentHash,
+            loadGeneration,
+            currentGeneration: loadGenerationRef.current,
+            instrumentId,
+          })
           return
         }
         if (!result) {
@@ -186,6 +216,74 @@ export default function useScorePlayback({
           setIsPlaying(false)
           return
         }
+        const eventSummary = describePlaybackEvents(engine.noteEvents)
+        const ownerScoreId =
+          timingMap.ownerScoreId ??
+          (typeof window !== 'undefined'
+            ? window.__SCOREFLOW_ACTIVE_SCORE__?.scoreId ?? null
+            : null)
+        const activeScoreSnapshot =
+          typeof window !== 'undefined' ? window.__SCOREFLOW_ACTIVE_SCORE__ : null
+        if (ownerScoreId && activeScoreSnapshot?.scoreId) {
+          assertDerivedBelongsToActiveScore(
+            { ownerScoreId },
+            { scoreId: activeScoreSnapshot.scoreId },
+            'playback-timeline',
+          )
+        }
+        logPlaybackSourceCheck({
+          activeScore: {
+            scoreId: activeScoreSnapshot?.scoreId ?? ownerScoreId,
+            musicXml: { hash: expectedContentHash },
+          },
+          playbackOwnerScoreId: ownerScoreId,
+          musicXmlHash: expectedContentHash,
+        })
+        pushScoreSourceContentTrace('playback-engine-events', {
+          timingRevision,
+          timingContentHash: expectedContentHash,
+          ownerScoreId,
+          duration: result.duration,
+          events: eventSummary,
+          instrumentId,
+        })
+        pushScoreSourceContentTrace('playback-timeline-rebuild', {
+          timingRevision,
+          timingContentHash: expectedContentHash,
+          ownerScoreId,
+          duration: result.duration,
+          playbackInputIdentity: expectedContentHash,
+          events: eventSummary,
+          instrumentId,
+          playableEventCount: eventSummary.count,
+        })
+        // Expose for browser automation assertions.
+        if (typeof window !== 'undefined') {
+          window.__SCOREFLOW_PLAYBACK_SNAPSHOT__ = {
+            timingContentHash: expectedContentHash,
+            timingRevision,
+            ownerScoreId,
+            duration: result.duration,
+            events: eventSummary,
+            playbackInputIdentity: expectedContentHash,
+            instrumentId,
+            playableEventCount: eventSummary.count,
+            firstMidi: eventSummary.first?.[0]?.midi ?? null,
+            measureCount: timingMap.measures?.length ?? null,
+            at: Date.now(),
+          }
+          window.__SCOREFLOW_GUITAR_PLAYBACK_TRACE__ = {
+            instrumentId,
+            timingContentHash: expectedContentHash,
+            ownerScoreId,
+            playableEventCount: eventSummary.count,
+            firstEvents: eventSummary.first,
+            duration: result.duration,
+            mappingMethod: result.mappingMethod ?? null,
+            audioSource: result.mappingMethod && result.mappingMethod !== 'none' ? 'midi' : 'musicxml',
+            at: Date.now(),
+          }
+        }
         setTracks(result.tracks)
         setDuration(result.duration)
         setMappingWarning(result.mappingWarning ?? null)
@@ -194,8 +292,6 @@ export default function useScorePlayback({
         )
         setCurrentTime(0)
         setIsPlaying(false)
-        // Decode samples and create the voice while the user reads the score so
-        // status shows loading/ready and the first Play note is sampled.
         await engine.preload?.()
         try {
           await engine.ensureVoices?.()
@@ -327,9 +423,6 @@ export default function useScorePlayback({
     )
   }, [])
 
-  // Stable callback: returns the engine's real-time score position (wall-clock
-  // interpolated).  Used by the display-cursor RAF loop so the cursor position
-  // updates every animation frame instead of only every SCHEDULE_TICK_MS (200 ms).
   const getScoreTime = useCallback(
     () => engineRef.current?.getCurrentScoreTime() ?? 0,
     [],

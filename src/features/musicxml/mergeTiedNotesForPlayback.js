@@ -20,29 +20,55 @@ export function applyTieSustainToNotes(notes) {
         left.midi - right.midi,
     )
 
-  let chainHead = null
+  // Track one open chain head per part/voice/midi so untied chord mates
+  // (same onset, different pitch) do not clear a sibling's in-progress tie.
+  const chainByKey = new Map()
+  let chainSerial = 0
   for (const note of playable) {
     note.suppressPlaybackAttack = false
+    const key = `${note.partId}:${note.voice}:${note.midi}`
 
     if (!note.tieStart && !note.tieStop) {
-      chainHead = null
       continue
     }
 
-    if (note.tieStart && !chainHead) {
-      chainHead = note
+    if (note.tieStart) {
+      const existing = chainByKey.get(key)
+      if (
+        existing &&
+        note.tieStop &&
+        note !== existing &&
+        sameTieVoice(existing, note)
+      ) {
+        // Middle of a multi-note chain: absorb into the head and keep the head open.
+        existing.durationQuarters += note.durationQuarters
+        existing.durationDivisions += note.durationDivisions
+        note.suppressPlaybackAttack = true
+        note.tieChainId = existing.tieChainId
+        continue
+      }
+      if (!note.tieChainId) {
+        chainSerial += 1
+        note.tieChainId = `tie-${chainSerial}`
+      }
+      chainByKey.set(key, note)
       if (!note.tieStop) {
         continue
       }
     }
 
+    const chainHead = chainByKey.get(key)
     if (chainHead && note !== chainHead && note.tieStop && sameTieVoice(chainHead, note)) {
       chainHead.durationQuarters += note.durationQuarters
       chainHead.durationDivisions += note.durationDivisions
       chainHead.tieStop = !note.tieStart || note.tieStop
       note.suppressPlaybackAttack = true
+      note.tieChainId = chainHead.tieChainId
       if (!note.tieStart) {
-        chainHead = null
+        chainByKey.delete(key)
+      } else if (!note.tieChainId) {
+        note.tieChainId = chainHead.tieChainId
+        chainByKey.set(key, note)
       }
     }
   }

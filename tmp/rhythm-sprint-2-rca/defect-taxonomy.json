@@ -1,0 +1,2026 @@
+{
+  "piano-dense-advanced-vector": {
+    "topDefects": [
+      {
+        "code": "duration-mismatch",
+        "class": "rhythm",
+        "label": "Duration mismatch",
+        "count": 65
+      },
+      {
+        "code": "onset-mismatch",
+        "class": "rhythm",
+        "label": "Onset timing difference",
+        "count": 59
+      }
+    ],
+    "durationCount": 67,
+    "onsetCount": 61,
+    "tupletCount": 0,
+    "durationClasses": [
+      [
+        "unparsed",
+        67
+      ]
+    ],
+    "onsetClasses": [
+      [
+        "unparsed",
+        61
+      ]
+    ],
+    "durationPairs": [
+      [
+        "null",
+        67
+      ]
+    ],
+    "worstMeasures": [
+      {
+        "measure": 2,
+        "duration": 13,
+        "onset": 15,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          }
+        ],
+        "total": 28
+      },
+      {
+        "measure": 3,
+        "duration": 11,
+        "onset": 13,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          }
+        ],
+        "total": 24
+      },
+      {
+        "measure": 6,
+        "duration": 13,
+        "onset": 11,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          }
+        ],
+        "total": 24
+      },
+      {
+        "measure": 4,
+        "duration": 11,
+        "onset": 7,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          }
+        ],
+        "total": 18
+      },
+      {
+        "measure": 1,
+        "duration": 6,
+        "onset": 4,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          }
+        ],
+        "total": 10
+      },
+      {
+        "measure": 7,
+        "duration": 5,
+        "onset": 5,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          }
+        ],
+        "total": 10
+      },
+      {
+        "measure": 8,
+        "duration": 5,
+        "onset": 4,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          }
+        ],
+        "total": 9
+      },
+      {
+        "measure": 5,
+        "duration": 3,
+        "onset": 2,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as whole"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          }
+        ],
+        "total": 5
+      }
+    ],
+    "sampleDuration": [
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Eighth detected as quarter",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Eighth detected as quarter",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Eighth detected as quarter",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Eighth detected as quarter",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Eighth detected as quarter",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Eighth detected as quarter",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Eighth detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 3,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      }
+    ],
+    "sampleOnset": [
+      {
+        "class": "unparsed",
+        "measureNumber": 1,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 1,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 1,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 1,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.75 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      }
+    ]
+  },
+  "guitar-tab-sparse-vector": {
+    "topDefects": [
+      {
+        "code": "duration-mismatch",
+        "class": "rhythm",
+        "label": "Duration mismatch",
+        "count": 30
+      },
+      {
+        "code": "onset-mismatch",
+        "class": "rhythm",
+        "label": "Onset timing difference",
+        "count": 23
+      }
+    ],
+    "durationCount": 30,
+    "onsetCount": 23,
+    "tupletCount": 0,
+    "durationClasses": [
+      [
+        "unparsed",
+        30
+      ]
+    ],
+    "onsetClasses": [
+      [
+        "unparsed",
+        23
+      ]
+    ],
+    "durationPairs": [
+      [
+        "null",
+        30
+      ]
+    ],
+    "worstMeasures": [
+      {
+        "measure": 2,
+        "duration": 4,
+        "onset": 3,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as 1.25q"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          }
+        ],
+        "total": 7
+      },
+      {
+        "measure": 3,
+        "duration": 4,
+        "onset": 3,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as 1.25q"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          }
+        ],
+        "total": 7
+      },
+      {
+        "measure": 4,
+        "duration": 4,
+        "onset": 3,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as 1.25q"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          }
+        ],
+        "total": 7
+      },
+      {
+        "measure": 6,
+        "duration": 4,
+        "onset": 3,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as 1.25q"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          }
+        ],
+        "total": 7
+      },
+      {
+        "measure": 7,
+        "duration": 4,
+        "onset": 3,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as 1.25q"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          }
+        ],
+        "total": 7
+      },
+      {
+        "measure": 8,
+        "duration": 4,
+        "onset": 3,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as 1.25q"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          }
+        ],
+        "total": 7
+      },
+      {
+        "measure": 1,
+        "duration": 3,
+        "onset": 3,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as 1.25q"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as eighth"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          }
+        ],
+        "total": 6
+      },
+      {
+        "measure": 5,
+        "duration": 3,
+        "onset": 2,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as 1.25q"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          }
+        ],
+        "total": 5
+      }
+    ],
+    "sampleDuration": [
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Quarter detected as eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Quarter detected as 1.25q",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Quarter detected as eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Quarter detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Quarter detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Quarter detected as 1.25q",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Quarter detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 3,
+        "message": "Quarter detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 3,
+        "message": "Quarter detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 3,
+        "message": "Quarter detected as 1.25q",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 3,
+        "message": "Quarter detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 4,
+        "message": "Quarter detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 4,
+        "message": "Quarter detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 4,
+        "message": "Quarter detected as 1.25q",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 4,
+        "message": "Quarter detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 5,
+        "message": "Quarter detected as eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 5,
+        "message": "Quarter detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 5,
+        "message": "Quarter detected as 1.25q",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 6,
+        "message": "Quarter detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 6,
+        "message": "Quarter detected as dotted eighth",
+        "code": "duration-mismatch"
+      }
+    ],
+    "sampleOnset": [
+      {
+        "class": "unparsed",
+        "measureNumber": 1,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 1,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 1,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 3,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 3,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 3,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 4,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 4,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 4,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 5,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 5,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 6,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      }
+    ]
+  },
+  "piano-grand-voices-vector": {
+    "topDefects": [
+      {
+        "code": "duration-mismatch",
+        "class": "rhythm",
+        "label": "Duration mismatch",
+        "count": 30
+      }
+    ],
+    "durationCount": 30,
+    "onsetCount": 0,
+    "tupletCount": 0,
+    "durationClasses": [
+      [
+        "unparsed",
+        30
+      ]
+    ],
+    "onsetClasses": [],
+    "durationPairs": [
+      [
+        "null",
+        30
+      ]
+    ],
+    "worstMeasures": [
+      {
+        "measure": 1,
+        "duration": 4,
+        "onset": 0,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          }
+        ],
+        "total": 4
+      },
+      {
+        "measure": 2,
+        "duration": 4,
+        "onset": 0,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          }
+        ],
+        "total": 4
+      },
+      {
+        "measure": 3,
+        "duration": 4,
+        "onset": 0,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          }
+        ],
+        "total": 4
+      },
+      {
+        "measure": 4,
+        "duration": 4,
+        "onset": 0,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          }
+        ],
+        "total": 4
+      },
+      {
+        "measure": 6,
+        "duration": 4,
+        "onset": 0,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          }
+        ],
+        "total": 4
+      },
+      {
+        "measure": 7,
+        "duration": 4,
+        "onset": 0,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          }
+        ],
+        "total": 4
+      },
+      {
+        "measure": 8,
+        "duration": 4,
+        "onset": 0,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          }
+        ],
+        "total": 4
+      },
+      {
+        "measure": 5,
+        "duration": 2,
+        "onset": 0,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Quarter detected as half"
+          }
+        ],
+        "total": 2
+      }
+    ],
+    "sampleDuration": [
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 3,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 3,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 3,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 3,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 4,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 4,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 4,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 4,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 5,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 5,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 6,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 6,
+        "message": "Quarter detected as half",
+        "code": "duration-mismatch"
+      }
+    ],
+    "sampleOnset": []
+  },
+  "piano-rhythm-tuplets-vector": {
+    "topDefects": [
+      {
+        "code": "onset-mismatch",
+        "class": "rhythm",
+        "label": "Onset timing difference",
+        "count": 33
+      },
+      {
+        "code": "duration-mismatch",
+        "class": "rhythm",
+        "label": "Duration mismatch",
+        "count": 17
+      },
+      {
+        "code": "tuplet-mismatch",
+        "class": "rhythm",
+        "label": "Tuplet mismatch",
+        "count": 10
+      }
+    ],
+    "durationCount": 17,
+    "onsetCount": 33,
+    "tupletCount": 10,
+    "durationClasses": [
+      [
+        "unparsed",
+        17
+      ]
+    ],
+    "onsetClasses": [
+      [
+        "unparsed",
+        33
+      ]
+    ],
+    "durationPairs": [
+      [
+        "null",
+        17
+      ]
+    ],
+    "worstMeasures": [
+      {
+        "measure": 3,
+        "duration": 3,
+        "onset": 2,
+        "tuplet": 10,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "0.333q detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "0.333q detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "0.333q detected as eighth"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.75 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.667 quarters"
+          },
+          {
+            "code": "tuplet-mismatch",
+            "message": "Tuplet none (expected 3:2)"
+          }
+        ],
+        "total": 15
+      },
+      {
+        "measure": 7,
+        "duration": 8,
+        "onset": 7,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          }
+        ],
+        "total": 15
+      },
+      {
+        "measure": 2,
+        "duration": 2,
+        "onset": 12,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "16th detected as dotted eighth"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "16th detected as dotted eighth"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          }
+        ],
+        "total": 14
+      },
+      {
+        "measure": 1,
+        "duration": 3,
+        "onset": 5,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as quarter"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "Eighth detected as 16th"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          }
+        ],
+        "total": 8
+      },
+      {
+        "measure": 4,
+        "duration": 1,
+        "onset": 3,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "duration-mismatch",
+            "class": "unparsed",
+            "message": "16th detected as quarter"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.25 quarters"
+          }
+        ],
+        "total": 4
+      },
+      {
+        "measure": 8,
+        "duration": 0,
+        "onset": 4,
+        "tuplet": 0,
+        "samples": [
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.75 quarters"
+          },
+          {
+            "code": "onset-mismatch",
+            "class": "unparsed",
+            "message": "Onset off by 0.5 quarters"
+          }
+        ],
+        "total": 4
+      }
+    ],
+    "sampleDuration": [
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Eighth detected as quarter",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 1,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "16th detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 2,
+        "message": "16th detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 3,
+        "message": "0.333q detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 3,
+        "message": "0.333q detected as quarter",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 3,
+        "message": "0.333q detected as eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 4,
+        "message": "16th detected as quarter",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 7,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 7,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 7,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 7,
+        "message": "Eighth detected as dotted eighth",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 7,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 7,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 7,
+        "message": "Eighth detected as 16th",
+        "code": "duration-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "pair": null,
+        "measureNumber": 7,
+        "message": "Eighth detected as dotted eighth",
+        "code": "duration-mismatch"
+      }
+    ],
+    "sampleOnset": [
+      {
+        "class": "unparsed",
+        "measureNumber": 1,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 1,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 1,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 1,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 1,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.5 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.75 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.25 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.75 quarters",
+        "code": "onset-mismatch"
+      },
+      {
+        "class": "unparsed",
+        "measureNumber": 2,
+        "message": "Onset off by 0.75 quarters",
+        "code": "onset-mismatch"
+      }
+    ]
+  }
+}

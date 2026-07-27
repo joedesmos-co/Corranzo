@@ -1,0 +1,1143 @@
+{
+  "id": "guitar-tab-sparse-vector",
+  "source": "tab-vector",
+  "rhythm": "17%",
+  "onsetTotal": 23,
+  "durTotal": 30,
+  "classCounts": {
+    "A_duration_cascade": 18,
+    "B_voice_separation": 0,
+    "C_chord_sequentialized": 5,
+    "D_rests": 0,
+    "E_tuplets": 0,
+    "F_beam_grouping": 0,
+    "G_measure_packing": 0
+  },
+  "classShares": {
+    "A_duration_cascade": 0.783,
+    "B_voice_separation": 0,
+    "C_chord_sequentialized": 0.217,
+    "D_rests": 0,
+    "E_tuplets": 0,
+    "F_beam_grouping": 0,
+    "G_measure_packing": 0
+  },
+  "samples": [
+    {
+      "measureNumber": 2,
+      "evalAlignment": "match",
+      "defectCodes": {
+        "extra-note": 1,
+        "duration-mismatch": 4,
+        "onset-mismatch": 3
+      },
+      "onsetDefects": [
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters"
+      ],
+      "classified": [
+        {
+          "message": "Onset off by 0.25 quarters",
+          "primary": "A_duration_cascade",
+          "deltaQ": 0.25,
+          "evidence": {
+            "hasDurationInMeasure": true,
+            "cascadeEvidence": 4,
+            "beamed": 0
+          }
+        },
+        {
+          "message": "Onset off by 0.25 quarters",
+          "primary": "A_duration_cascade",
+          "deltaQ": 0.25,
+          "evidence": {
+            "hasDurationInMeasure": true,
+            "cascadeEvidence": 4,
+            "beamed": 0
+          }
+        },
+        {
+          "message": "Onset off by 0.5 quarters",
+          "primary": "A_duration_cascade",
+          "deltaQ": 0.5,
+          "evidence": {
+            "hasDurationInMeasure": true,
+            "cascadeEvidence": 4,
+            "beamed": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "type": "note",
+          "start": 1,
+          "dur": 1,
+          "dtype": "16th",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            66
+          ],
+          "pitches": [
+            "F#4"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 323.44117647058823,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 2,
+          "dur": 3,
+          "dtype": "eighth",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            76
+          ],
+          "pitches": [
+            "E5"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 345.6209150326797,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 5,
+          "dur": 3,
+          "dtype": "eighth",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            69
+          ],
+          "pitches": [
+            "A4"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 381.50326797385617,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 8,
+          "dur": 3,
+          "dtype": "eighth",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            67
+          ],
+          "pitches": [
+            "G4"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 417.38562091503263,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 11,
+          "dur": 5,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            60
+          ],
+          "pitches": [
+            "C4"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 453.26797385620915,
+          "adj": {}
+        }
+      ],
+      "noteheads": [],
+      "source": "tab-vector"
+    },
+    {
+      "measureNumber": 3,
+      "evalAlignment": "match",
+      "defectCodes": {
+        "extra-note": 1,
+        "duration-mismatch": 4,
+        "onset-mismatch": 3
+      },
+      "onsetDefects": [
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters"
+      ],
+      "classified": [
+        {
+          "message": "Onset off by 0.25 quarters",
+          "primary": "A_duration_cascade",
+          "deltaQ": 0.25,
+          "evidence": {
+            "hasDurationInMeasure": true,
+            "cascadeEvidence": 4,
+            "beamed": 0
+          }
+        },
+        {
+          "message": "Onset off by 0.25 quarters",
+          "primary": "A_duration_cascade",
+          "deltaQ": 0.25,
+          "evidence": {
+            "hasDurationInMeasure": true,
+            "cascadeEvidence": 4,
+            "beamed": 0
+          }
+        },
+        {
+          "message": "Onset off by 0.5 quarters",
+          "primary": "A_duration_cascade",
+          "deltaQ": 0.5,
+          "evidence": {
+            "hasDurationInMeasure": true,
+            "cascadeEvidence": 4,
+            "beamed": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "type": "note",
+          "start": 1,
+          "dur": 1,
+          "dtype": "16th",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            67
+          ],
+          "pitches": [
+            "G4"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 522.7875816993464,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 2,
+          "dur": 3,
+          "dtype": "eighth",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            67
+          ],
+          "pitches": [
+            "G4"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 544.9673202614379,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 5,
+          "dur": 3,
+          "dtype": "eighth",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            62
+          ],
+          "pitches": [
+            "D4"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 580.8496732026143,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 8,
+          "dur": 3,
+          "dtype": "eighth",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            59
+          ],
+          "pitches": [
+            "B3"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 616.7320261437908,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 11,
+          "dur": 5,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            55
+          ],
+          "pitches": [
+            "G3"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 652.6143790849673,
+          "adj": {}
+        }
+      ],
+      "noteheads": [],
+      "source": "tab-vector"
+    },
+    {
+      "measureNumber": 6,
+      "evalAlignment": "match",
+      "defectCodes": {
+        "extra-note": 1,
+        "duration-mismatch": 4,
+        "onset-mismatch": 3
+      },
+      "onsetDefects": [
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters"
+      ],
+      "classified": [
+        {
+          "message": "Onset off by 0.25 quarters",
+          "primary": "A_duration_cascade",
+          "deltaQ": 0.25,
+          "evidence": {
+            "hasDurationInMeasure": true,
+            "cascadeEvidence": 4,
+            "beamed": 0
+          }
+        },
+        {
+          "message": "Onset off by 0.25 quarters",
+          "primary": "A_duration_cascade",
+          "deltaQ": 0.25,
+          "evidence": {
+            "hasDurationInMeasure": true,
+            "cascadeEvidence": 4,
+            "beamed": 0
+          }
+        },
+        {
+          "message": "Onset off by 0.5 quarters",
+          "primary": "A_duration_cascade",
+          "deltaQ": 0.5,
+          "evidence": {
+            "hasDurationInMeasure": true,
+            "cascadeEvidence": 4,
+            "beamed": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "type": "note",
+          "start": 1,
+          "dur": 1,
+          "dtype": "16th",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            70
+          ],
+          "pitches": [
+            "A#4"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 323.44117647058823,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 2,
+          "dur": 3,
+          "dtype": "eighth",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            76
+          ],
+          "pitches": [
+            "E5"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 345.6209150326797,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 5,
+          "dur": 3,
+          "dtype": "eighth",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            69
+          ],
+          "pitches": [
+            "A4"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 381.50326797385617,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 8,
+          "dur": 3,
+          "dtype": "eighth",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            67
+          ],
+          "pitches": [
+            "G4"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 417.38562091503263,
+          "adj": {}
+        },
+        {
+          "type": "note",
+          "start": 11,
+          "dur": 5,
+          "dtype": "quarter",
+          "dotted": false,
+          "clef": "treble",
+          "midi": [
+            60
+          ],
+          "pitches": [
+            "C4"
+          ],
+          "noteDur": [
+            null
+          ],
+          "beams": [
+            null
+          ],
+          "bStr": [
+            null
+          ],
+          "stem": [
+            null
+          ],
+          "cx": 453.26797385620915,
+          "adj": {}
+        }
+      ],
+      "noteheads": [],
+      "source": "tab-vector"
+    }
+  ],
+  "topDefects": [
+    {
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "label": "Duration mismatch",
+      "count": 30
+    },
+    {
+      "code": "onset-mismatch",
+      "class": "rhythm",
+      "label": "Onset timing difference",
+      "count": 23
+    },
+    {
+      "code": "extra-note",
+      "class": "pitch",
+      "label": "Extra note",
+      "count": 8
+    },
+    {
+      "code": "incorrect-pitch",
+      "class": "pitch",
+      "label": "Incorrect pitch",
+      "count": 4
+    },
+    {
+      "code": "incorrect-chord",
+      "class": "measure-structure",
+      "label": "Incorrect chord",
+      "count": 2
+    },
+    {
+      "code": "repeat-mismatch",
+      "class": "interpretation",
+      "label": "Repeat mismatch",
+      "count": 2
+    },
+    {
+      "code": "volta-mismatch",
+      "class": "interpretation",
+      "label": "Volta mismatch",
+      "count": 2
+    },
+    {
+      "code": "tempo-mismatch",
+      "class": "interpretation",
+      "label": "Tempo change mismatch",
+      "count": 1
+    }
+  ],
+  "worstMeasures": [
+    {
+      "measureNumber": 1,
+      "truthMeasureNumbers": [
+        1
+      ],
+      "generatedMeasureNumbers": [
+        1
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.52,
+      "defects": [
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note C4",
+          "measureNumber": 1
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as eighth",
+          "measureNumber": 1
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 1
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch F4 (expected E4)",
+          "measureNumber": 1
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as 1.25q",
+          "measureNumber": 1
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 1
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E4 (expected C4)",
+          "measureNumber": 1
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as eighth",
+          "measureNumber": 1
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 1
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 1
+        },
+        {
+          "code": "repeat-mismatch",
+          "class": "interpretation",
+          "message": "Repeat mismatch",
+          "measureNumber": 1
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "message": "Tempo 88 BPM missing or wrong at q=0",
+          "measureNumber": 1
+        }
+      ],
+      "summary": [
+        "Extra note C4",
+        "Quarter detected as eighth",
+        "Onset off by 0.5 quarters",
+        "Incorrect pitch F4 (expected E4)",
+        "Quarter detected as 1.25q",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch E4 (expected C4)",
+        "Quarter detected as eighth",
+        "Onset off by 0.5 quarters",
+        "Incorrect chord",
+        "Repeat mismatch",
+        "Tempo 88 BPM missing or wrong at q=0"
+      ],
+      "severity": 40
+    },
+    {
+      "measureNumber": 8,
+      "truthMeasureNumbers": [
+        8
+      ],
+      "generatedMeasureNumbers": [
+        8
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.52,
+      "defects": [
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note C5",
+          "measureNumber": 8
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 8
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as 1.25q",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "repeat-mismatch",
+          "class": "interpretation",
+          "message": "Repeat mismatch",
+          "measureNumber": 8
+        },
+        {
+          "code": "volta-mismatch",
+          "class": "interpretation",
+          "message": "Volta mismatch",
+          "measureNumber": 8
+        }
+      ],
+      "summary": [
+        "Extra note C5",
+        "Quarter detected as dotted eighth",
+        "Quarter detected as dotted eighth",
+        "Onset off by 0.25 quarters",
+        "Quarter detected as 1.25q",
+        "Onset off by 0.25 quarters",
+        "Quarter detected as dotted eighth",
+        "Onset off by 0.5 quarters",
+        "Repeat mismatch",
+        "Volta mismatch"
+      ],
+      "severity": 35
+    },
+    {
+      "measureNumber": 7,
+      "truthMeasureNumbers": [
+        7
+      ],
+      "generatedMeasureNumbers": [
+        7
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.52,
+      "defects": [
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note B4",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 7
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as 1.25q",
+          "measureNumber": 7
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 7
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 7
+        },
+        {
+          "code": "volta-mismatch",
+          "class": "interpretation",
+          "message": "Volta mismatch",
+          "measureNumber": 7
+        }
+      ],
+      "summary": [
+        "Extra note B4",
+        "Quarter detected as dotted eighth",
+        "Quarter detected as dotted eighth",
+        "Onset off by 0.25 quarters",
+        "Quarter detected as 1.25q",
+        "Onset off by 0.25 quarters",
+        "Quarter detected as dotted eighth",
+        "Onset off by 0.5 quarters",
+        "Volta mismatch"
+      ],
+      "severity": 33
+    },
+    {
+      "measureNumber": 5,
+      "truthMeasureNumbers": [
+        5
+      ],
+      "generatedMeasureNumbers": [
+        5
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.52,
+      "defects": [
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note C4",
+          "measureNumber": 5
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as eighth",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E4 (expected C4)",
+          "measureNumber": 5
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch A4 (expected E4)",
+          "measureNumber": 5
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as 1.25q",
+          "measureNumber": 5
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 5
+        }
+      ],
+      "summary": [
+        "Extra note C4",
+        "Quarter detected as eighth",
+        "Onset off by 0.5 quarters",
+        "Incorrect pitch E4 (expected C4)",
+        "Quarter detected as dotted eighth",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch A4 (expected E4)",
+        "Quarter detected as 1.25q",
+        "Incorrect chord"
+      ],
+      "severity": 32
+    },
+    {
+      "measureNumber": 2,
+      "truthMeasureNumbers": [
+        2
+      ],
+      "generatedMeasureNumbers": [
+        2
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.52,
+      "defects": [
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note F#4",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 2
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as 1.25q",
+          "measureNumber": 2
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 2
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 2
+        }
+      ],
+      "summary": [
+        "Extra note F#4",
+        "Quarter detected as dotted eighth",
+        "Quarter detected as dotted eighth",
+        "Onset off by 0.25 quarters",
+        "Quarter detected as 1.25q",
+        "Onset off by 0.25 quarters",
+        "Quarter detected as dotted eighth",
+        "Onset off by 0.5 quarters"
+      ],
+      "severity": 31
+    },
+    {
+      "measureNumber": 3,
+      "truthMeasureNumbers": [
+        3
+      ],
+      "generatedMeasureNumbers": [
+        3
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.52,
+      "defects": [
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note G4",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 3
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as 1.25q",
+          "measureNumber": 3
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as dotted eighth",
+          "measureNumber": 3
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 3
+        }
+      ],
+      "summary": [
+        "Extra note G4",
+        "Quarter detected as dotted eighth",
+        "Quarter detected as dotted eighth",
+        "Onset off by 0.25 quarters",
+        "Quarter detected as 1.25q",
+        "Onset off by 0.25 quarters",
+        "Quarter detected as dotted eighth",
+        "Onset off by 0.5 quarters"
+      ],
+      "severity": 31
+    }
+  ]
+}

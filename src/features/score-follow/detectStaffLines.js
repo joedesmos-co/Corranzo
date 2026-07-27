@@ -567,6 +567,35 @@ export function detectSystemBarlinesWithDiagnostics(
 }
 
 /**
+ * Drop spurious staff-line clusters that are far too short to be a real stave.
+ *
+ * A single degenerate band (e.g. two ink rows 1px apart) makes the stave count
+ * odd, which disables grand-staff pairing (`length % stavesPerSystem === 0`) and
+ * leaves each true treble/bass band as its own single-staff system — bass notes
+ * then map with treble geometry and blow up pitch error.
+ */
+export function filterViableStaves(staves) {
+  if (!Array.isArray(staves) || staves.length <= 1) {
+    return staves ?? []
+  }
+  const heights = staves
+    .map((stave) => stave.y1 - stave.y0)
+    .filter((height) => Number.isFinite(height) && height > 0)
+    .sort((left, right) => left - right)
+  if (!heights.length) {
+    return staves
+  }
+  const median = heights[Math.floor(heights.length / 2)]
+  const minHeight = Math.max(0.012, median * 0.35)
+  const filtered = staves.filter((stave) => {
+    const height = stave.y1 - stave.y0
+    const lineCount = stave.lineCount ?? stave.detectedLineYs?.length ?? 0
+    return height >= minHeight && lineCount >= 3
+  })
+  return filtered.length > 0 ? filtered : staves
+}
+
+/**
  * Full staff-line system detection for one page: detect staves, group into
  * systems using staves-per-system, and (optionally) attach a barline-based
  * measure-count estimate per system.
@@ -578,10 +607,15 @@ export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
   // Adaptive ink threshold drives BOTH staff-line and barline detection so light
   // engravings register consistently.
   const inkThreshold = options.darkThreshold ?? estimateInkThreshold(imageData, contentBounds)
-  const staves = detectStaffLineStaves(imageData, contentBounds, {
+  const rawStaves = detectStaffLineStaves(imageData, contentBounds, {
     ...options,
     darkThreshold: inkThreshold,
   })
+  // Only strip degenerate bands when pairing into multi-stave systems. On
+  // single-staff pages those bands rarely affect pitch, and removing them can
+  // reshuffle measure grids enough to expose unrelated sustain pairing noise.
+  const staves =
+    Math.max(1, Math.round(stavesPerSystem)) >= 2 ? filterViableStaves(rawStaves) : rawStaves
   const trace = detectStaffLineStaves.lastTrace ?? null
   const grouped = groupStavesIntoSystems(staves, stavesPerSystem)
 

@@ -1,0 +1,89 @@
+{
+  "id": "39-la-campanella-marcato-p4-m101-u+e4ac-291",
+  "source": "la-campanella",
+  "sourcePdf": "/Users/ryland/Downloads/etude-s-1413-in-g-minor-la-campanella-liszt.pdf",
+  "page": 4,
+  "measure": 101,
+  "expectedArticulation": "marcato",
+  "expectAbsent": false,
+  "sourcePriority": "PDF text / SMuFL glyph",
+  "rawArticulationCandidate": {
+    "glyph": "",
+    "codepoint": "U+E4AC",
+    "originalGlyph": "",
+    "originalCodepoint": "U+E4AC",
+    "x": 291.10764060356655,
+    "y": 835.4241033430233,
+    "width": 8.029551859533608,
+    "height": 27.20655556899225,
+    "candidateType": "marcato",
+    "placement": "above",
+    "normalization": null
+  },
+  "candidateType": "marcato",
+  "staffSystem": {
+    "page": 4,
+    "systemIndex": 8,
+    "clef": "treble"
+  },
+  "selectedNoteOrChord": {
+    "kind": "note",
+    "noteIndex": 6,
+    "restIndex": null,
+    "midi": 62,
+    "cx": 289.08483600548703,
+    "cy": 891.5376230523257,
+    "chordBroadcastCount": 1
+  },
+  "classification": "U+E4AC pipeline=marcato; manually verified=marcato",
+  "placement": "above",
+  "musicXmlSnippet": "<measure number=\"101\"><note><pitch><step>G</step><alter>1</alter><octave>5</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff></note><forward><duration>1</duration></forward><note><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><backup><duration>1</duration></backup><note><pitch><step>G</step><alter>1</alter><octave>5</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><staff>1</staff></note><note><pitch><step>B</step><octave>5</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note><note><chord/><pitch><step>F</step><alter>1</alter><octave>5</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note><note><chord/><pitch><step>E</step><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note><backup><duration>1</duration></backup><note><pitch><step>C</step><alter>2</alter><octave>4</octave></pitch><accidental>double-sharp</accidental><duration>1</duration><voice>1</voice><type>sixteenth</type><staff>1</staff><notations><articulations><strong-accent type=\"up\" placement=\"above\"/></articulations></notations></note></measure>",
+  "renderedResult": {
+    "present": true,
+    "geometry": {
+      "id": "note-marcato-note-m101-t402.724-1144-n1-staff-marcato",
+      "kind": "marcato",
+      "scope": "note",
+      "noteId": "note-m101-t402.724-1144-n1",
+      "groupId": "note-m101-t402.724-1144",
+      "symbol": null,
+      "source": "musicxml",
+      "placement": "above",
+      "chordNoteIds": [
+        "note-m101-t402.724-1144-n1"
+      ],
+      "status": "upcoming",
+      "shape": "text",
+      "text": "⌃",
+      "x": 44299.64,
+      "y": 82.2,
+      "fontSize": 18
+    },
+    "restFermataWrittenOnly": false
+  },
+  "playbackSemanticTrace": {
+    "id": "P1-m101-n1638",
+    "measureNumber": 101,
+    "midi": 62,
+    "quarterTime": 403.75,
+    "voice": 1,
+    "staff": 1,
+    "attackCount": 1,
+    "articulationSource": "marcato",
+    "writtenDurationSeconds": 0.1339285714285552,
+    "baseDurationSeconds": 0.08705357142856088,
+    "velocity": 0.66
+  },
+  "notationPlaybackAgree": true,
+  "failureLayerBefore": "1 articulation not detected",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-5/source-crops/39-la-campanella-marcato-p4-m101-u+e4ac-291.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-5/candidate-overlays/39-la-campanella-marcato-p4-m101-u+e4ac-291.png",
+    "musicXmlSnippet": "tmp/notation-fidelity-sprint-5/musicxml-snippets/39-la-campanella-marcato-p4-m101-u+e4ac-291.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-5/rendered-before/39-la-campanella-marcato-p4-m101-u+e4ac-291.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-5/rendered-after/39-la-campanella-marcato-p4-m101-u+e4ac-291.png"
+  }
+}

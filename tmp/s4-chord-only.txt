@@ -1,0 +1,42 @@
+OMR semantic corpus — baseline
+==============================
+label: s4-chord-only
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 15aa1db
+createdAt: 2026-07-18T22:24:50.788Z
+fixtures: 3/3 ok
+
+Scoreboard (mean across fixtures)
+- overall: 38.5%
+- pitch: 1.5%
+- rhythm: 50.7%
+- sustain: 66.7%
+- articulation: 33.3%
+- measureStructure: 17.2%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- missing-note [pitch] ×336 across 3 fixtures
+- extra-note [pitch] ×262 across 3 fixtures
+- incorrect-chord [measure-structure] ×236 across 3 fixtures
+- incorrect-pitch [pitch] ×111 across 3 fixtures
+- duration-mismatch [rhythm] ×76 across 3 fixtures
+- onset-mismatch [rhythm] ×63 across 2 fixtures
+- missing-accent [articulation] ×24 across 2 fixtures
+- missing-voice [measure-structure] ×16 across 2 fixtures
+- split-measure [measure-structure] ×15 across 2 fixtures
+- missing-staccato [articulation] ×8 across 1 fixtures
+- incorrect-tie [sustain] ×6 across 1 fixtures
+- extra-measure [measure-structure] ×4 across 2 fixtures
+- tempo-mismatch [interpretation] ×3 across 3 fixtures
+- repeat-mismatch [interpretation] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+
+Per-fixture summary
+- piano-grand-voices-vector: overall=42.3% R=66% P=0% S=100% A=0% M=30% I=0%
+  worst measures: #1(missing-note|missing-note|missing-note), #2(missing-note|missing-note|missing-note), #5(missing-note|missing-note|missing-note)
+- piano-dense-advanced-vector: overall=35.4% R=39% P=4% S=100% A=0% M=5% I=0%
+  worst measures: #2(split-measure|missing-note|missing-note), #6(split-measure|missing-note|missing-note), #3(split-measure|missing-note|missing-note)
+- guitar-standard-chords-vector: overall=37.8% R=48% P=0% S=0% A=100% M=17% I=0%
+  worst measures: #8(split-measure|missing-note|missing-note), #2(split-measure|missing-note|missing-note), #1(incorrect-pitch|onset-mismatch|incorrect-pitch)

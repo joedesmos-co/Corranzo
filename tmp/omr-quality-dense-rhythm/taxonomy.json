@@ -1,0 +1,153 @@
+{
+  "authority": "high-confidence one-to-one aligned real-score measures",
+  "sources": [
+    "minecraft",
+    "evangelion",
+    "gymnopedie",
+    "piano-articulation-scan",
+    "piano-grand-voices-vector",
+    "piano-rhythm-tuplets-vector",
+    "la-campanella",
+    "fantaisie-impromptu",
+    "moonlight-3",
+    "hungarian-dance-no5",
+    "carol-of-the-bells"
+  ],
+  "ranked": [
+    {
+      "rank": 1,
+      "category": "wrong note duration",
+      "count": 382
+    },
+    {
+      "rank": 2,
+      "category": "dense beam grouping",
+      "count": 262
+    },
+    {
+      "rank": 3,
+      "category": "dense chord separation",
+      "count": 149
+    },
+    {
+      "rank": 4,
+      "category": "missing rest",
+      "count": 66
+    },
+    {
+      "rank": 5,
+      "category": "tuplet grouping",
+      "count": 12
+    },
+    {
+      "rank": 6,
+      "category": "wrong rest duration",
+      "count": 2
+    },
+    {
+      "rank": 7,
+      "category": "invented rest",
+      "count": 1
+    }
+  ],
+  "sourceStrata": {
+    "rasterOnly": {
+      "total": 59,
+      "categories": {
+        "wrongNoteDuration": 26,
+        "wrongRestDuration": 0,
+        "missingRest": 0,
+        "inventedRest": 0,
+        "denseChordSeparation": 33,
+        "tupletGrouping": 0
+      }
+    },
+    "vectorOnly": {
+      "total": 553,
+      "categories": {
+        "wrongNoteDuration": 356,
+        "wrongRestDuration": 2,
+        "missingRest": 66,
+        "inventedRest": 1,
+        "denseChordSeparation": 116,
+        "tupletGrouping": 12
+      }
+    },
+    "note": "Raster/vector are source strata, not mutually exclusive causal categories."
+  },
+  "denseBeamGroupingAudit": {
+    "method": "Greedy one-to-one same-MIDI/staff matching within 0.25 quarters in aligned measures; compare MusicXML beam number/value.",
+    "matchedBeamedTruthNotes": 268,
+    "mismatchCount": 262,
+    "bySource": {
+      "minecraft": {
+        "matchedBeamedTruthNotes": 0,
+        "mismatches": 0
+      },
+      "evangelion": {
+        "matchedBeamedTruthNotes": 23,
+        "mismatches": 23
+      },
+      "gymnopedie": {
+        "matchedBeamedTruthNotes": 0,
+        "mismatches": 0
+      },
+      "piano-articulation-scan": {
+        "matchedBeamedTruthNotes": 0,
+        "mismatches": 0
+      },
+      "piano-grand-voices-vector": {
+        "matchedBeamedTruthNotes": 0,
+        "mismatches": 0
+      },
+      "piano-rhythm-tuplets-vector": {
+        "matchedBeamedTruthNotes": 0,
+        "mismatches": 0
+      },
+      "la-campanella": {
+        "matchedBeamedTruthNotes": 0,
+        "mismatches": 0
+      },
+      "fantaisie-impromptu": {
+        "matchedBeamedTruthNotes": 21,
+        "mismatches": 21
+      },
+      "moonlight-3": {
+        "matchedBeamedTruthNotes": 0,
+        "mismatches": 0
+      },
+      "hungarian-dance-no5": {
+        "matchedBeamedTruthNotes": 2,
+        "mismatches": 2
+      },
+      "carol-of-the-bells": {
+        "matchedBeamedTruthNotes": 222,
+        "mismatches": 216
+      }
+    }
+  },
+  "before": {
+    "wrongNoteDuration": 382,
+    "wrongRestDuration": 2,
+    "missingRest": 66,
+    "inventedRest": 1,
+    "denseChordSeparation": 149,
+    "tupletGrouping": 12
+  },
+  "after": {
+    "wrongNoteDuration": 356,
+    "wrongRestDuration": 2,
+    "missingRest": 66,
+    "inventedRest": 1,
+    "denseChordSeparation": 147,
+    "tupletGrouping": 12
+  },
+  "delta": {
+    "wrongNoteDuration": -26,
+    "wrongRestDuration": 0,
+    "missingRest": 0,
+    "inventedRest": 0,
+    "denseChordSeparation": -2,
+    "tupletGrouping": 0
+  }
+}

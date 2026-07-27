@@ -1,0 +1,55 @@
+{
+  "id": "07-minecraft-quarter-rest-control-p1-m14-u+e4e5-489",
+  "source": "minecraft",
+  "sourcePdf": "/Users/ryland/Downloads/beginner-minecraft-piano-themes-in-c-minecraft.pdf",
+  "page": 1,
+  "measure": 14,
+  "expectedArticulation": "staccato",
+  "expectAbsent": true,
+  "sourcePriority": "PDF text / SMuFL glyph",
+  "rawArticulationCandidate": {
+    "glyph": "",
+    "codepoint": "U+E4E5",
+    "originalGlyph": "",
+    "originalCodepoint": "U+E4E5",
+    "x": 488.88928361344597,
+    "y": 1042.624802019002,
+    "width": 7.836953781512606,
+    "height": 33.3457690023753,
+    "candidateType": "quarter-rest-control",
+    "placement": "above",
+    "normalization": null
+  },
+  "candidateType": "quarter-rest-control",
+  "staffSystem": {
+    "page": 1,
+    "systemIndex": 3,
+    "clef": null
+  },
+  "selectedNoteOrChord": null,
+  "classification": "U+E4E5 is a quarter rest/no-articulation control",
+  "placement": "above",
+  "musicXmlSnippet": "<measure number=\"14\"><note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff></note><backup><duration>4</duration></backup><note><pitch><step>E</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff></note><backup><duration>4</duration></backup><note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><note><chord/><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><backup><duration>3</duration></backup><note><rest/><duration>3</duration><voice>2</voice><type>eighth</type><staff>2</staff></note></measure>",
+  "renderedResult": {
+    "present": false,
+    "geometry": null,
+    "restFermataWrittenOnly": false
+  },
+  "playbackSemanticTrace": {
+    "attackCount": 0,
+    "articulationSource": "none",
+    "midi": null
+  },
+  "notationPlaybackAgree": true,
+  "failureLayerBefore": "2 detected but misclassified as staccato",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-5/source-crops/07-minecraft-quarter-rest-control-p1-m14-u+e4e5-489.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-5/candidate-overlays/07-minecraft-quarter-rest-control-p1-m14-u+e4e5-489.png",
+    "musicXmlSnippet": "tmp/notation-fidelity-sprint-5/musicxml-snippets/07-minecraft-quarter-rest-control-p1-m14-u+e4e5-489.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-5/rendered-before/07-minecraft-quarter-rest-control-p1-m14-u+e4e5-489.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-5/rendered-after/07-minecraft-quarter-rest-control-p1-m14-u+e4e5-489.png"
+  }
+}

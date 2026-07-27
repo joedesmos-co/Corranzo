@@ -4,8 +4,14 @@ import {
   systemConfidenceFromMeasures,
 } from './buildOmrDiagnostics.js'
 import { restsForMeasure, summarizeVectorRestDiagnostics, insertMixedMeasureRests, buildEmptyMeasureRestEvents } from './detectVectorRests.js'
-import { assignVectorStaccato, summarizeVectorStaccatoDiagnostics } from './detectVectorStaccato.js'
+import { recoverDigitGatedTripletEvents } from './recoverDigitGatedTriplets.js'
+import { assignVectorStaccato, assignVectorAugmentationDots, summarizeVectorStaccatoDiagnostics } from './detectVectorStaccato.js'
 import { assignVectorAccent, summarizeVectorAccentDiagnostics } from './detectVectorAccent.js'
+import {
+  assignVectorFermatasToRests,
+  assignVectorNotationArticulations,
+  summarizeVectorNotationArticulationDiagnostics,
+} from './detectVectorNotationArticulations.js'
 import { applyVectorPageTies } from './detectVectorTies.js'
 import {
   OMR_CHORD_MERGE_X,
@@ -53,10 +59,14 @@ const NOTEHEAD_GLYPHS = new Set([HALF_NOTEHEAD_GLYPH, WHOLE_NOTEHEAD_GLYPH, '\ue
 const SHARP_GLYPH = '\ue262'
 const NATURAL_GLYPH = '\ue261'
 const FLAT_GLYPH = '\ue260'
+const DOUBLE_SHARP_GLYPH = '\ue263'
+const DOUBLE_FLAT_GLYPH = '\ue264'
 const ACCIDENTAL_GLYPHS = new Map([
   [SHARP_GLYPH, { alter: 1, type: 'sharp' }],
   [NATURAL_GLYPH, { alter: 0, type: 'natural' }],
   [FLAT_GLYPH, { alter: -1, type: 'flat' }],
+  [DOUBLE_SHARP_GLYPH, { alter: 2, type: 'double-sharp' }],
+  [DOUBLE_FLAT_GLYPH, { alter: -2, type: 'double-flat' }],
 ])
 const TIME_DIGIT_GLYPHS = {
   '\ue083': 3,
@@ -81,10 +91,12 @@ export function textGlyphsToImage(pageText, imageData) {
     const scaleX = imageData.width / item.pageWidth
     const scaleY = imageData.height / item.pageHeight
     const charWidth = (item.width ?? 0) / Math.max(1, text.length)
+    const originalText = item.originalArticulationText ?? text
     for (let index = 0; index < text.length; index += 1) {
       const textX = item.x + charWidth * (index + 0.5)
       glyphs.push({
         text: text[index],
+        originalText: originalText[index] ?? text[index],
         sourceText: text,
         sourceIndex: index,
         sourceLength: text.length,
@@ -279,6 +291,18 @@ function noteheadsForMeasure(
   )
   const staccatoResult = assignVectorStaccato(glyphs, sortedNotes, measureBox, imageData)
   const accentResult = assignVectorAccent(glyphs, sortedNotes, measureBox, imageData)
+  const notationArticulationResult = assignVectorNotationArticulations(
+    glyphs,
+    sortedNotes,
+    measureBox,
+    imageData,
+  )
+  const augmentationDots = assignVectorAugmentationDots(
+    glyphs,
+    sortedNotes,
+    measureBox,
+    imageData,
+  )
   const allocationBounds = vectorGlyphAllocationBounds(measureBox, placement)
   const rhythmBounds = {
     left: allocationBounds.x0 * imageData.width,
@@ -289,16 +313,28 @@ function noteheadsForMeasure(
   const mappedNotes = sortedNotes.map((note, index) => {
       const localAccidental = localAccidentals.get(index) ?? null
       const stateKey = accidentalStateKey(note)
+      const carriedAlter = accidentalState.has(stateKey)
+        ? accidentalState.get(stateKey)
+        : null
       const resolved = resolveNotePitchWithMeasureState({
         naturalMidi: note.naturalMidi,
         keySignature,
         localAccidental,
-        carriedAlter: accidentalState.has(stateKey) ? accidentalState.get(stateKey) : null,
+        carriedAlter,
       })
       if (resolved.measureAccidentalState != null) {
         accidentalState.set(stateKey, resolved.measureAccidentalState)
       }
 
+      const staccatoArticulation =
+        staccatoResult.assignments.get(index) ?? null
+      const accentArticulation =
+        accentResult.assignments.get(index) ?? null
+      const notationArticulations = [
+        staccatoArticulation,
+        accentArticulation,
+        ...(notationArticulationResult.assignments.get(index) ?? []),
+      ].filter(Boolean)
       const withPitch = {
         ...note,
         midi: resolved.midi,
@@ -309,24 +345,56 @@ function noteheadsForMeasure(
               type: localAccidental.type,
               alter: localAccidental.alter,
               confidence: localAccidental.confidence,
+              courtesy:
+                carriedAlter != null &&
+                carriedAlter === resolved.measureAccidentalState,
             }
           : null,
-        articulation: staccatoResult.assignments.get(index) ?? null,
-        accentArticulation: accentResult.assignments.get(index) ?? null,
+        articulation: staccatoArticulation,
+        accentArticulation,
+        notationArticulations,
       }
-      return imageData?.data?.length
+      const enriched = imageData?.data?.length
         ? enrichNoteheadRhythm(imageData, withPitch, measureBox, inkThreshold, rhythmBounds)
         : withPitch
+      // Vector augmentation dots are authoritative; ink detectDot false-triggers.
+      const dotted = augmentationDots.has(index)
+      const baseType = enriched.durationType ?? 'quarter'
+      const baseDivisions =
+        OMR_DURATION_DIVISIONS[baseType] ?? OMR_DIVISIONS_PER_QUARTER
+      return {
+        ...enriched,
+        dotted,
+        durationDivisions: dotted ? Math.round(baseDivisions * 1.5) : baseDivisions,
+      }
     })
   return {
     notes: mappedNotes,
+    vectorAccidentalDiagnostics: localAccidentals.diagnostics ?? {
+      detectedCandidates: [],
+      selectedAttachments: [],
+      rejectedGlyphCount: 0,
+    },
     vectorStaccatoDiagnostics: {
       detectedStaccatoCount: staccatoResult.detectedStaccatoCount,
       appliedStaccatoCount: staccatoResult.appliedStaccatoCount,
+      detectedCandidates: staccatoResult.detectedCandidates,
+      selectedAttachments: staccatoResult.selectedAttachments,
+      rejectedCandidates: staccatoResult.rejectedCandidates,
     },
     vectorAccentDiagnostics: {
       detectedAccentCount: accentResult.detectedAccentCount,
       appliedAccentCount: accentResult.appliedAccentCount,
+      detectedCandidates: accentResult.detectedCandidates,
+      selectedAttachments: accentResult.selectedAttachments,
+      rejectedCandidates: accentResult.rejectedCandidates,
+    },
+    vectorNotationArticulationDiagnostics: {
+      detectedByType: notationArticulationResult.detectedByType,
+      appliedByType: notationArticulationResult.appliedByType,
+      detectedCandidates: notationArticulationResult.detectedCandidates,
+      selectedAttachments: notationArticulationResult.selectedAttachments,
+      rejectedCandidates: notationArticulationResult.rejectedCandidates,
     },
   }
 }
@@ -793,18 +861,41 @@ export function hasBeamEvidenceForNotes(notes) {
 }
 
 function inferredBeamDurationCap(notes) {
-  if (!hasBeamEvidenceForNotes(notes)) {
+  // Cap only on explicit beam counts. Tip-row strength alone is too noisy on
+  // quarters near staff lines and was shortening true quarters to eighths.
+  if (!(notes ?? []).some((note) => (note.beams ?? 0) >= 1)) {
     return null
   }
   let cap = OMR_DIVISIONS_PER_QUARTER
   for (const note of notes ?? []) {
-    if ((note.beamStrength ?? 0) >= 14) {
+    if ((note.beams ?? 0) >= 2) {
       cap = Math.min(cap, OMR_DURATION_DIVISIONS.sixteenth)
-    } else if ((note.beams ?? 0) >= 1 || (note.beamStrength ?? 0) >= 8) {
+    } else if ((note.beams ?? 0) >= 1) {
       cap = Math.min(cap, OMR_DURATION_DIVISIONS.eighth)
     }
   }
   return cap
+}
+
+/**
+ * Minimum duration implied by beam evidence. Gap-primary packing often invents
+ * sixteenth gaps between position-snapped starts; a primary beam means the note
+ * cannot be shorter than an eighth unless a secondary beam is present.
+ */
+export function inferredBeamDurationFloor(notes) {
+  // Require an explicit beam count from countBeams — not tip-row strength alone.
+  // Strength-only false positives on quarters caused Sprint 2 Q→eighth regressions
+  // when combined with the duration cap.
+  if (!(notes ?? []).some((note) => (note.beams ?? 0) >= 1)) {
+    return null
+  }
+  let floor = OMR_DURATION_DIVISIONS.eighth
+  for (const note of notes ?? []) {
+    if ((note.beams ?? 0) >= 2) {
+      floor = Math.min(floor, OMR_DURATION_DIVISIONS.sixteenth)
+    }
+  }
+  return floor
 }
 
 function countSameClefEventsInSpan(clefEvents, startIndex, spanDivisions) {
@@ -1207,7 +1298,7 @@ export function applyTerminalSameClefChordQuarterDurations(events, totalDivision
       return {
         ...event,
         durationDivisions,
-        ...durationMeta(durationDivisions),
+        ...durationMeta(durationDivisions, { allowDotted: hasDottedEvidence(event.notes) || event.dotted }),
         terminalSameClefChordQuarterAdjusted: true,
       }
     }),
@@ -1350,7 +1441,9 @@ export function extendDurationsPerClefVoice(events, totalDivisions) {
       return {
         ...event,
         durationDivisions,
-        ...durationMeta(durationDivisions),
+        ...durationMeta(durationDivisions, {
+          allowDotted: hasDottedEvidence(event.notes) || event.dotted,
+        }),
         perClefDurationAdjusted: !capped,
         ...(capped ? { perClefStretchCapped: true } : {}),
       }
@@ -1401,7 +1494,7 @@ export function applySameClefBeatQuarterFloors(events, totalDivisions) {
       return {
         ...event,
         durationDivisions,
-        ...durationMeta(durationDivisions),
+        ...durationMeta(durationDivisions, { allowDotted: hasDottedEvidence(event.notes) || event.dotted }),
         sameClefBeatQuarterAdjusted: true,
       }
     }),
@@ -1409,7 +1502,9 @@ export function applySameClefBeatQuarterFloors(events, totalDivisions) {
 }
 
 /**
- * Cap gap-stretched events when ink evidence shows a beamed subdivision.
+ * Cap gap-stretched events and floor gap-compressed events using beam evidence.
+ * Flooring only lifts sixteenth gaps under a primary beam — it must not shorten
+ * quarters (that is the cap's job, and only with real beam evidence).
  */
 export function refineEventDurationsFromBeamEvidence(events, totalDivisions = 16) {
   return sortVectorRhythmEvents(
@@ -1419,15 +1514,57 @@ export function refineEventDurationsFromBeamEvidence(events, totalDivisions = 16
       }
       const start = event.startDivision ?? 0
       const beamCap = inferredBeamDurationCap(event.notes)
-      if (beamCap == null || (event.durationDivisions ?? 0) <= beamCap) {
+      const beamFloor = inferredBeamDurationFloor(event.notes)
+      let duration = event.durationDivisions ?? 0
+      let adjusted = false
+      let floored = false
+      // Floor first: beamed notes packed as sixteenth gaps → eighth.
+      if (beamFloor != null && duration < beamFloor) {
+        duration = beamFloor
+        adjusted = true
+        floored = true
+      }
+      // Cap only when duration still exceeds the beam unit after flooring.
+      if (beamCap != null && duration > beamCap) {
+        duration = beamCap
+        adjusted = true
+      }
+      if (!adjusted) {
         return event
       }
-      const duration = Math.min(beamCap, Math.max(1, totalDivisions - start))
+      duration = Math.min(Math.max(1, duration), Math.max(1, totalDivisions - start))
       return {
         ...event,
         durationDivisions: duration,
-        ...durationMeta(duration),
+        ...durationMeta(duration, { allowDotted: hasDottedEvidence(event.notes) || event.dotted }),
         beamDurationAdjusted: true,
+        beamDurationFloored: floored || undefined,
+      }
+    }),
+  )
+}
+
+/**
+ * After flooring gap-compressed beamed notes to eighths, odd sixteenth onsets
+ * are almost always packing artifacts. Snap those starts back to the eighth
+ * grid so the previous-duration cascade does not keep reporting onset-mismatch.
+ */
+export function resnapFlooredBeamOnsets(events) {
+  const eighth = OMR_DURATION_DIVISIONS.eighth
+  return sortVectorRhythmEvents(
+    events.map((event) => {
+      if (event.type !== 'note' || !event.beamDurationFloored) {
+        return event
+      }
+      const start = event.startDivision ?? 0
+      if (start % eighth === 0) {
+        return event
+      }
+      const snapped = Math.floor(start / eighth) * eighth
+      return {
+        ...event,
+        startDivision: snapped,
+        beamOnsetResnapped: true,
       }
     }),
   )
@@ -1472,7 +1609,7 @@ export function refineUnsupportedUpperChordOverhangs(events) {
       return {
         ...event,
         durationDivisions,
-        ...durationMeta(durationDivisions),
+        ...durationMeta(durationDivisions, { allowDotted: hasDottedEvidence(event.notes) || event.dotted }),
         unsupportedUpperChordOverhangAdjusted: true,
       }
     }),
@@ -1517,7 +1654,7 @@ export function refineOpeningBassSubdivisionDurations(events, totalDivisions = 1
       return {
         ...event,
         durationDivisions,
-        ...durationMeta(durationDivisions),
+        ...durationMeta(durationDivisions, { allowDotted: hasDottedEvidence(event.notes) || event.dotted }),
         openingBassSubdivisionAdjusted: true,
       }
     }),
@@ -1539,11 +1676,16 @@ const VECTOR_DURATION_LADDER = [
  * Snap a raw division span to the nearest standard note value. Vector glyphs
  * carry no stem/flag information, so duration is inferred from the horizontal
  * gap to the next onset (see buildVectorEvents) and then quantised here.
+ * Dotted ladder rungs are only used when augmentation-dot evidence is present;
+ * otherwise gap lengths like 6 invent false dotted quarters.
  */
-export function durationMeta(durationDivisions) {
+export function durationMeta(durationDivisions, { allowDotted = false } = {}) {
   let best = VECTOR_DURATION_LADDER[VECTOR_DURATION_LADDER.length - 1]
   let bestDiff = Infinity
   for (const candidate of VECTOR_DURATION_LADDER) {
+    if (!allowDotted && candidate.dotted) {
+      continue
+    }
     const diff = Math.abs(candidate.divisions - durationDivisions)
     if (diff < bestDiff || (diff === bestDiff && candidate.divisions < best.divisions)) {
       bestDiff = diff
@@ -1551,6 +1693,166 @@ export function durationMeta(durationDivisions) {
     }
   }
   return { durationType: best.durationType, dotted: best.dotted }
+}
+
+function medianNumber(values) {
+  if (!values.length) {
+    return null
+  }
+  const sorted = [...values].sort((left, right) => left - right)
+  return sorted[Math.floor(sorted.length / 2)]
+}
+
+function vectorLaneHasExplicitDurationEvidence(events) {
+  return events.some((event) => {
+    const notes = event.notes ?? []
+    return (
+      hasDottedEvidence(notes) ||
+      hasBeamEvidenceForNotes(notes) ||
+      notes.some(
+        (note) =>
+          note.hollow === true ||
+          note.hollowGlyph === true ||
+          (note.durationDivisions ?? 0) >= OMR_DURATION_DIVISIONS.half,
+      )
+    )
+  })
+}
+
+function spacingWeight(ratio) {
+  if (ratio >= 0.75 && ratio <= 1.25) {
+    return 1
+  }
+  // Engraving spacing is intentionally sub-linear: a quarter-to-eighth gap is
+  // commonly about 1.5–2x, not a literal 2x.
+  if (ratio >= 1.45 && ratio <= 2.25) {
+    return 2
+  }
+  return null
+}
+
+/**
+ * Repack a dense vector lane from relative column spacing when absolute measure
+ * bounds introduce a left-margin offset.
+ *
+ * This is deliberately limited to complete, evidence-light lanes. Explicit
+ * beams, dots, hollow heads, late openings, longer gaps, and non-binary grids
+ * remain untouched. The common recovered shape is a quarter followed by four
+ * eighths in 3/4: absolute positions produce [0,5,7,9,11], while the relative
+ * spacing ratios prove [0,4,6,8,10].
+ */
+export function normalizeDenseVectorLaneSpacing(events, totalDivisions = 16) {
+  // The verified failure is a complete 3/4 lane. In 4/4 polyphony, the same
+  // visual spacing can describe a half-measure sixteenth passage with another
+  // voice carrying the remainder, so repacking it would be unsafe.
+  if (totalDivisions !== OMR_DIVISIONS_PER_QUARTER * 3) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const byClef = new Map()
+  for (const event of noteEvents) {
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    const lane = byClef.get(clef) ?? []
+    lane.push(event)
+    byClef.set(clef, lane)
+  }
+
+  const replacementByEvent = new Map()
+  const validUnits = new Set([
+    OMR_DURATION_DIVISIONS.sixteenth,
+    OMR_DURATION_DIVISIONS.eighth,
+    OMR_DIVISIONS_PER_QUARTER,
+  ])
+
+  for (const lane of byClef.values()) {
+    const sorted = [...lane].sort(
+      (left, right) =>
+        (left.cx ?? 0) - (right.cx ?? 0) ||
+        (left.startDivision ?? 0) - (right.startDivision ?? 0),
+    )
+    if (
+      sorted.length < 4 ||
+      (sorted[0]?.startDivision ?? 0) !== 0 ||
+      vectorLaneHasExplicitDurationEvidence(sorted)
+    ) {
+      continue
+    }
+
+    const gaps = []
+    let distinctColumns = true
+    for (let index = 1; index < sorted.length; index += 1) {
+      const gap = (sorted[index].cx ?? NaN) - (sorted[index - 1].cx ?? NaN)
+      if (!Number.isFinite(gap) || gap <= 2) {
+        distinctColumns = false
+        break
+      }
+      gaps.push(gap)
+    }
+    if (!distinctColumns) {
+      continue
+    }
+
+    const shortestHalf = [...gaps]
+      .sort((left, right) => left - right)
+      .slice(0, Math.ceil(gaps.length / 2))
+    const baseGap = medianNumber(shortestHalf)
+    if (!(baseGap > 0)) {
+      continue
+    }
+    const weights = gaps.map((gap) => spacingWeight(gap / baseGap))
+    if (weights.some((weight) => weight == null)) {
+      continue
+    }
+    const terminalWeight = medianNumber(
+      weights.slice(-Math.min(3, weights.length)),
+    )
+    const totalWeight =
+      weights.reduce((sum, weight) => sum + weight, 0) + terminalWeight
+    const unit = totalDivisions / totalWeight
+    if (!Number.isInteger(unit) || !validUnits.has(unit)) {
+      continue
+    }
+
+    const proposedStarts = [0]
+    for (const weight of weights) {
+      proposedStarts.push(proposedStarts.at(-1) + weight * unit)
+    }
+    const proposedDurations = [...weights, terminalWeight].map(
+      (weight) => weight * unit,
+    )
+    const startsChanged = sorted.some(
+      (event, index) =>
+        (event.startDivision ?? 0) !== proposedStarts[index],
+    )
+    if (!startsChanged) {
+      continue
+    }
+
+    for (let index = 0; index < sorted.length; index += 1) {
+      replacementByEvent.set(sorted[index], {
+        startDivision: proposedStarts[index],
+        durationDivisions: proposedDurations[index],
+      })
+    }
+  }
+
+  if (!replacementByEvent.size) {
+    return events
+  }
+  return sortVectorRhythmEvents(
+    events.map((event) => {
+      const replacement = replacementByEvent.get(event)
+      if (!replacement) {
+        return event
+      }
+      return {
+        ...event,
+        ...replacement,
+        ...durationMeta(replacement.durationDivisions),
+        vectorLaneSpacingAdjusted: true,
+      }
+    }),
+  )
 }
 
 /**
@@ -1617,7 +1919,16 @@ export function extendCombinedGrandStaffOpening(events, totalDivisions) {
     return events
   }
   const updated = [
-    { ...first, durationDivisions: extended, ...durationMeta(extended) },
+    {
+      ...first,
+      durationDivisions: extended,
+      ...durationMeta(extended, {
+        allowDotted:
+          hasDottedEvidence(first.notes) ||
+          first.dotted ||
+          extended === OMR_DURATION_DIVISIONS.half + OMR_DIVISIONS_PER_QUARTER,
+      }),
+    },
   ]
   if (sameStart) {
     const trebleDuration = sameStartTrebleDuration(
@@ -1630,7 +1941,12 @@ export function extendCombinedGrandStaffOpening(events, totalDivisions) {
     updated.push({
       ...second,
       durationDivisions: trebleDuration,
-      ...durationMeta(trebleDuration),
+      ...durationMeta(trebleDuration, {
+        allowDotted:
+          hasDottedEvidence(second.notes) ||
+          second.dotted ||
+          trebleDuration === OMR_DURATION_DIVISIONS.half + OMR_DIVISIONS_PER_QUARTER,
+      }),
     })
     updated.push(...events.slice(2))
   } else {
@@ -1731,14 +2047,18 @@ export function extendPenultimateHalfBeforeFinalQuarter(events, timeSignature, t
       return {
         ...event,
         durationDivisions: halfDivisions,
-        ...durationMeta(halfDivisions),
+        ...durationMeta(halfDivisions, {
+          allowDotted: hasDottedEvidence(event.notes) || event.dotted,
+        }),
       }
     }
     if (index === adjusted.length - 1) {
       return {
         ...event,
         durationDivisions: OMR_DIVISIONS_PER_QUARTER,
-        ...durationMeta(OMR_DIVISIONS_PER_QUARTER),
+        ...durationMeta(OMR_DIVISIONS_PER_QUARTER, {
+          allowDotted: hasDottedEvidence(event.notes) || event.dotted,
+        }),
       }
     }
     return event
@@ -1761,7 +2081,11 @@ function startDivisionFromPosition(
     return 0
   }
   const raw = Math.round(positionInMeasure * totalDivisions)
-  if (!denseMeasure) {
+  // Secondary beams prove a sixteenth grid; otherwise keep Sprint-1 snap rules.
+  // Do not force primary-beamed notes onto an eighth grid here — false beam ink
+  // on quarters (Sprint 2 regression) shortened gaps and capped Q→eighth.
+  const hasSecondaryBeam = (notes ?? []).some((note) => (note.beams ?? 0) >= 2)
+  if (!denseMeasure && !hasSecondaryBeam) {
     return snapStartDivision(raw, totalDivisions)
   }
   const grid = Math.max(1, OMR_DIVISIONS_PER_QUARTER / 4)
@@ -1793,32 +2117,159 @@ function dedupeNotesByMidi(notes = []) {
 }
 
 /**
- * Merge same-onset, same-clef fragments that share duration into one chord event.
+ * Merge same-onset, same-clef fragments into one chord event.
+ *
+ * Duration is intentionally not part of the merge key: gap packing often assigns
+ * different gap-derived durations to vertically stacked chord tones that share a
+ * snapped onset. Distant same-onset attacks (dx above the chord window) stay
+ * separate.
  */
 export function coalesceSameOnsetChordEvents(events) {
   const rests = events.filter((event) => event.type === 'rest')
-  const buckets = new Map()
+  const chordWindow = OMR_CHORD_MERGE_X
+  const merged = []
   for (const event of events) {
     if (event.type !== 'note') {
       continue
     }
     const start = event.startDivision ?? 0
     const clef = event.notes?.[0]?.clef ?? 'treble'
-    const duration = event.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
-    const cxBucket = Math.round(average((event.notes ?? []).map((note) => note.cx)) / 20)
-    const key = `${start}:${clef}:${duration}:${cxBucket}`
-    if (!buckets.has(key)) {
-      buckets.set(key, {
+    const cx = average((event.notes ?? []).map((note) => note.cx))
+    const match = merged.find((entry) => {
+      if ((entry.startDivision ?? 0) !== start) {
+        return false
+      }
+      if ((entry.notes?.[0]?.clef ?? 'treble') !== clef) {
+        return false
+      }
+      const entryCx = average((entry.notes ?? []).map((note) => note.cx))
+      if (!Number.isFinite(cx) || !Number.isFinite(entryCx)) {
+        return false
+      }
+      return Math.abs(entryCx - cx) <= chordWindow
+    })
+    if (!match) {
+      merged.push({
         ...event,
         notes: dedupeNotesByMidi(event.notes ?? []),
       })
       continue
     }
-    const bucket = buckets.get(key)
-    bucket.notes = dedupeNotesByMidi([...(bucket.notes ?? []), ...(event.notes ?? [])])
-    bucket.cx = average(bucket.notes.map((note) => note.cx))
+    match.notes = dedupeNotesByMidi([...(match.notes ?? []), ...(event.notes ?? [])])
+    match.cx = average(match.notes.map((note) => note.cx))
+    const nextDuration = Math.max(
+      match.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER,
+      event.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER,
+    )
+    if (nextDuration !== (match.durationDivisions ?? 0)) {
+      match.durationDivisions = nextDuration
+      Object.assign(
+        match,
+        durationMeta(nextDuration, {
+          allowDotted: hasDottedEvidence(match.notes) || match.dotted || event.dotted,
+        }),
+      )
+    }
   }
-  return sortVectorRhythmEvents([...rests, ...buckets.values()])
+  return sortVectorRhythmEvents([...rests, ...merged])
+}
+
+/**
+ * Dense multi-note attacks that land on odd sixteenth slots are usually
+ * chord-column snap noise (engraved dense textures are eighth chords). Snap
+ * those starts back to the eighth grid when the measure does not look like a
+ * real secondary-beamed sixteenth texture, then re-gap durations per clef.
+ */
+export function resnapDenseChordOnsets(events, totalDivisions = 16) {
+  const eighth = OMR_DURATION_DIVISIONS.eighth
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (noteEvents.length <= 5) {
+    return events
+  }
+  const multiNote = noteEvents.filter((event) => (event.notes?.length ?? 0) >= 2)
+  // Chord-dominated measures only. Sixteenth runs (tuplets) are mostly singles.
+  if (multiNote.length < 4 || multiNote.length < noteEvents.length * 0.6) {
+    return events
+  }
+  // Dense piano textures are grand-staff. Single-staff chord charts (guitar)
+  // should not be forced onto an eighth grid.
+  const clefs = new Set(
+    noteEvents.flatMap((event) => (event.notes ?? []).map((note) => note.clef ?? 'treble')),
+  )
+  if (clefs.size < 2) {
+    return events
+  }
+  const oddMulti = multiNote.filter((event) => (event.startDivision ?? 0) % eighth !== 0)
+  if (oddMulti.length < 2) {
+    return events
+  }
+  // Beamed eighth runs (common on tuplet/guitar textures) already sit near an
+  // eighth grid; resnapping their odd leftovers destroys intentional 16ths.
+  const primaryBeamedShare =
+    multiNote.filter((event) =>
+      (event.notes ?? []).some((note) => (note.beams ?? 0) === 1 || (note.beamStrength ?? 0) >= 8),
+    ).length / multiNote.length
+  if (primaryBeamedShare >= 0.45) {
+    return events
+  }
+  // Real sixteenth textures carry secondary beams on a large share of attacks.
+  const secondaryShare =
+    multiNote.filter((event) => (event.notes ?? []).some((note) => (note.beams ?? 0) >= 2)).length /
+    multiNote.length
+  if (secondaryShare >= 0.5) {
+    return events
+  }
+
+  const snapped = sortVectorRhythmEvents(
+    events.map((event) => {
+      if (event.type !== 'note' || (event.notes?.length ?? 0) < 2) {
+        return event
+      }
+      const start = event.startDivision ?? 0
+      if (start % eighth === 0) {
+        return event
+      }
+      return {
+        ...event,
+        startDivision: Math.floor(start / eighth) * eighth,
+        denseChordOnsetResnapped: true,
+      }
+    }),
+  )
+
+  const byClef = new Map()
+  for (const event of snapped) {
+    if (event.type !== 'note') {
+      continue
+    }
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    if (!byClef.has(clef)) {
+      byClef.set(clef, [])
+    }
+    byClef.get(clef).push(event)
+  }
+  for (const clefEvents of byClef.values()) {
+    clefEvents.sort((left, right) => (left.startDivision ?? 0) - (right.startDivision ?? 0))
+    for (let index = 0; index < clefEvents.length; index += 1) {
+      const event = clefEvents[index]
+      const touched =
+        event.denseChordOnsetResnapped ||
+        (index + 1 < clefEvents.length && clefEvents[index + 1].denseChordOnsetResnapped)
+      if (!touched) {
+        continue
+      }
+      const start = event.startDivision ?? 0
+      const nextStart =
+        index + 1 < clefEvents.length ? clefEvents[index + 1].startDivision ?? totalDivisions : totalDivisions
+      const duration = Math.max(1, Math.min(nextStart - start, totalDivisions - start))
+      const allowDotted = hasDottedEvidence(event.notes) || event.dotted
+      Object.assign(event, {
+        durationDivisions: duration,
+        ...durationMeta(duration, { allowDotted }),
+      })
+    }
+  }
+  return coalesceSameOnsetChordEvents(snapped)
 }
 
 export function clampMeasureEventDurations(events, totalDivisions) {
@@ -1840,7 +2291,7 @@ export function clampMeasureEventDurations(events, totalDivisions) {
     return {
       ...event,
       durationDivisions: clamped,
-      ...durationMeta(clamped),
+      ...durationMeta(clamped, { allowDotted: hasDottedEvidence(event.notes) || event.dotted }),
       durationClamped: true,
     }
   })
@@ -1935,13 +2386,24 @@ function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivis
           durationDivisions = Math.max(OMR_DIVISIONS_PER_QUARTER, totalDivisions - startDivision)
         }
       }
-      const meta = durationMeta(durationDivisions)
+      const allowDotted = hasDottedEvidence(group.notes)
+      const snappedDuration = allowDotted
+        ? durationDivisions
+        : VECTOR_DURATION_LADDER.filter((candidate) => !candidate.dotted).reduce(
+            (best, candidate) =>
+              Math.abs(candidate.divisions - durationDivisions) <
+              Math.abs(best - durationDivisions)
+                ? candidate.divisions
+                : best,
+            OMR_DIVISIONS_PER_QUARTER,
+          )
+      const meta = durationMeta(snappedDuration, { allowDotted })
       const positionInMeasure =
         groupAnchorPosition(group) ?? startDivision / totalDivisions
       return {
         type: 'note',
         startDivision,
-        durationDivisions,
+        durationDivisions: snappedDuration,
         ...meta,
         notes: group.notes,
         confidence: 0.9,
@@ -1953,11 +2415,19 @@ function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivis
       }
     }),
   )
+  events = normalizeDenseVectorLaneSpacing(events, totalDivisions)
   events = extendDurationsPerClefVoice(events, totalDivisions)
+  // Beam floor/cap on dense (subdivision) measures where gap packing invents
+  // sixteenth events. Avoid applying the cap to sparse/grand measures where
+  // false tip-row beams would shorten true quarters.
   if (denseMeasure) {
     events = refineEventDurationsFromBeamEvidence(events, totalDivisions)
+    events = resnapFlooredBeamOnsets(events)
   }
   events = coalesceSameOnsetChordEvents(events)
+  if (denseMeasure) {
+    events = resnapDenseChordOnsets(events, totalDivisions)
+  }
   events = extendCombinedGrandStaffOpening(events, totalDivisions)
   events = extendPenultimateHalfBeforeFinalQuarter(events, timeSignature, totalDivisions)
   events = refineUnsupportedUpperChordOverhangs(events)
@@ -1971,20 +2441,10 @@ export function buildVectorEvents(notes, measureBox, timeSignature, { rests = []
   const beats = timeSignature?.beats ?? 4
   const groups = mergeGroupsSharingBeat(groupVectorNoteheads(notes, { beats }), beats)
   const totalDivisions = Math.round(beats * OMR_DIVISIONS_PER_QUARTER * (4 / (timeSignature?.beatType ?? 4)))
+  // Do not invent a whole-measure rest when neither notes nor rest glyphs exist.
+  // Phantom empty-measure rests were a source of extra-rest on under-detected pages.
   if (!groups.length && !rests.length) {
-    return [
-      {
-        type: 'rest',
-        startDivision: 0,
-        durationDivisions: totalDivisions,
-        durationType: beats === 3 ? 'half' : 'whole',
-        dotted: beats === 3,
-        confidence: 0.5,
-        uncertain: true,
-        measureNumber: measureBox.measureNumber,
-        page: measureBox.page,
-      },
-    ]
+    return []
   }
 
   if (!groups.length && rests.length) {
@@ -2010,7 +2470,13 @@ export function buildVectorMeasureRecord({
   inkThreshold = 170,
   captureDetectorObservations = false,
 }) {
-  const { notes, vectorStaccatoDiagnostics, vectorAccentDiagnostics } = noteheadsForMeasure(
+  const {
+    notes,
+    vectorAccidentalDiagnostics,
+    vectorStaccatoDiagnostics,
+    vectorAccentDiagnostics,
+    vectorNotationArticulationDiagnostics,
+  } = noteheadsForMeasure(
     glyphs,
     imageData,
     measureBox,
@@ -2019,7 +2485,59 @@ export function buildVectorMeasureRecord({
     orphanGlyphs,
     inkThreshold,
   )
-  const detectedRests = restsForMeasure(glyphs, imageData, measureBox, notes)
+  const rawDetectedRests = restsForMeasure(
+    glyphs,
+    imageData,
+    measureBox,
+    notes,
+  )
+  const restFermataResult = assignVectorFermatasToRests(
+    glyphs,
+    rawDetectedRests,
+    measureBox,
+    imageData,
+  )
+  const detectedRests = rawDetectedRests.map((rest, index) => {
+    const fermata = restFermataResult.assignments.get(index)
+    return fermata
+      ? { ...rest, notationArticulations: [fermata] }
+      : rest
+  })
+  const selectedRestFermataKeys = new Set(
+    restFermataResult.selectedAttachments.map(
+      (entry) =>
+        `${entry.glyph.text}:${Math.round(entry.glyph.x)}:${Math.round(entry.glyph.y)}`,
+    ),
+  )
+  const combinedVectorNotationArticulationDiagnostics = {
+    ...vectorNotationArticulationDiagnostics,
+    detectedByType: {
+      ...vectorNotationArticulationDiagnostics.detectedByType,
+      fermata: Math.max(
+        vectorNotationArticulationDiagnostics.detectedByType?.fermata ?? 0,
+        restFermataResult.detectedCandidates.length,
+      ),
+    },
+    appliedByType: {
+      ...vectorNotationArticulationDiagnostics.appliedByType,
+      fermata:
+        (vectorNotationArticulationDiagnostics.appliedByType?.fermata ?? 0) +
+        restFermataResult.assignments.size,
+    },
+    selectedAttachments: [
+      ...(vectorNotationArticulationDiagnostics.selectedAttachments ?? []),
+      ...restFermataResult.selectedAttachments,
+    ],
+    rejectedCandidates: [
+      ...(vectorNotationArticulationDiagnostics.rejectedCandidates ?? []).filter(
+        (entry) =>
+          !selectedRestFermataKeys.has(
+            `${entry.glyph.text}:${Math.round(entry.glyph.x)}:${Math.round(entry.glyph.y)}`,
+          ),
+      ),
+      ...restFermataResult.rejectedCandidates,
+    ],
+  }
   const beats = timeSignature?.beats ?? 4
   const totalDivisions = Math.round(
     beats * OMR_DIVISIONS_PER_QUARTER * (4 / (timeSignature?.beatType ?? 4)),
@@ -2040,6 +2558,17 @@ export function buildVectorMeasureRecord({
     events = restApplyResult.events
   }
 
+  const tupletRecovery = recoverDigitGatedTripletEvents(events, {
+    glyphs,
+    measureBox,
+    imageData,
+    beats,
+    totalDivisions,
+  })
+  if (tupletRecovery.recovered) {
+    events = tupletRecovery.events
+  }
+
   const noteCount = notes.length
   const restCount = detectedRests.length
   const uncertain = noteCount === 0 && restCount === 0
@@ -2048,15 +2577,6 @@ export function buildVectorMeasureRecord({
       ? measureConfidenceFromRhythm({ uncertain: false }, notes)
       : 0.45
   const confidenceBreakdown = measureConfidenceBreakdown({ uncertain }, notes)
-  const vectorNoteMatching = summarizeMeasureNoteMatching({
-    measureNumber: measureBox.measureNumber,
-    page: measureBox.page,
-    vectorNoteCount: noteCount,
-    events,
-  })
-  const vectorChordDiagnostics = summarizeVectorChordGrouping(events)
-  const vectorRhythmDiagnostics = summarizeVectorRhythmDiagnostics(events, notes, totalDivisions)
-  const musicalEventReconstructionDiagnostics = summarizeMusicalEventReconstruction(events)
   const initialBeamStemGraph = buildBeamStemGraph({
     notes,
     events,
@@ -2077,7 +2597,22 @@ export function buildVectorMeasureRecord({
           inkThreshold,
         })
   const beamStemDiagnostics = summarizeBeamStemGraph(beamStemGraph)
-  const vectorBeamTopologyDiagnostics = summarizeAppliedVectorBeamTopology(events)
+  const vectorBeamTopologyDiagnostics =
+    summarizeAppliedVectorBeamTopology(events)
+  const vectorNoteMatching = summarizeMeasureNoteMatching({
+    measureNumber: measureBox.measureNumber,
+    page: measureBox.page,
+    vectorNoteCount: noteCount,
+    events,
+  })
+  const vectorChordDiagnostics = summarizeVectorChordGrouping(events)
+  const vectorRhythmDiagnostics = summarizeVectorRhythmDiagnostics(
+    events,
+    notes,
+    totalDivisions,
+  )
+  const musicalEventReconstructionDiagnostics =
+    summarizeMusicalEventReconstruction(events)
   return {
     measureNumber: measureBox.measureNumber,
     page: measureBox.page,
@@ -2097,7 +2632,10 @@ export function buildVectorMeasureRecord({
       skipped: restApplyResult.skipped,
     },
     vectorStaccatoDiagnostics,
+    vectorAccidentalDiagnostics,
     vectorAccentDiagnostics,
+    vectorNotationArticulationDiagnostics:
+      combinedVectorNotationArticulationDiagnostics,
     vectorNoteMatching,
     vectorChordDiagnostics,
     vectorRhythmDiagnostics,
@@ -2114,6 +2652,7 @@ export function buildVectorMeasureRecord({
 export function processVectorPageSystems({
   imageData,
   pageText,
+  vectorCurves = [],
   systems,
   systemMeasureBoxes,
   inheritedKeySignature = null,
@@ -2214,6 +2753,7 @@ export function processVectorPageSystems({
     measureRecords: flatRecords,
     measureBoxByNumber: measureBoxByNumberForTies,
     glyphs,
+    vectorCurves,
     imageData,
     inkThreshold,
   })
@@ -2229,6 +2769,8 @@ export function processVectorPageSystems({
     restDiagnostics: summarizeVectorRestDiagnostics(flatRecords),
     staccatoDiagnostics: summarizeVectorStaccatoDiagnostics(flatRecords),
     accentDiagnostics: summarizeVectorAccentDiagnostics(flatRecords),
+    notationArticulationDiagnostics:
+      summarizeVectorNotationArticulationDiagnostics(flatRecords),
   }
 }
 

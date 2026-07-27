@@ -1,0 +1,140 @@
+OMR semantic evaluation
+=======================
+schema v2 · evaluator v2.0.0 · 15aa1db · mode=written
+Alignment confidence: 96% (8 matched, 0 missing, 0 extra)
+
+Overall semantic score
+
+Pitch ........... 62%  (55/89; cov 100%)
+Rhythm .......... 82%  (143/174; cov 100%)
+Sustain ......... 0%  (0/2; cov 100%)
+Articulation .... 100%  (24/24; cov 100%)
+Measure ......... 75%  (48/64; cov 100%)
+Interpretation .. 80%  (4/5; cov 100%)
+Playback ........ 100%  (0/0; cov 100%)
+
+Overall .......... 71%
+First divergence: measure 1
+
+Worst measures
+- Measure 5 (severity 58): Missing note C5; Extra note A4; Onset off by 0.75 quarters
+- Measure 6 (severity 49): Incorrect pitch C5 (expected C#5); Half detected as quarter; Half detected as quarter
+- Measure 7 (severity 43): Incorrect pitch B4 (expected C5); Quarter detected as half; Half detected as quarter
+- Measure 8 (severity 40): Incorrect pitch A4 (expected G#4); Half detected as quarter; Half detected as quarter
+- Measure 3 (severity 35): Missing tie; Incorrect pitch G4 (expected G#4); Incorrect pitch F4 (expected F#4)
+
+Per-measure report
+
+Measure 1
+- Quarter detected as half
+- Quarter detected as half
+- Tempo 88 BPM missing or wrong at q=0
+
+Measure 2
+- Incorrect pitch F4 (expected F#4)
+- Quarter detected as half
+- Incorrect pitch F4 (expected F#4)
+- Quarter detected as half
+- Incorrect chord
+- Incorrect chord
+
+Measure 3
+- Missing tie
+- Incorrect pitch G4 (expected G#4)
+- Incorrect pitch F4 (expected F#4)
+- Quarter detected as half
+- Half detected as quarter
+- Half detected as quarter
+- Incorrect pitch G4 (expected G#4)
+- Quarter detected as half
+- Incorrect chord
+- Incorrect chord
+
+Measure 4
+- Incorrect pitch A4 (expected A#4)
+- Missing tie
+- Incorrect pitch A2 (expected A#2)
+- Quarter detected as half
+- Quarter detected as half
+- Half detected as quarter
+- Half detected as quarter
+- Incorrect chord
+
+Measure 5
+- Missing note C5
+- Extra note A4
+- Onset off by 0.75 quarters
+- Incorrect pitch F4 (expected G4)
+- Incorrect pitch G4 (expected A4)
+- Half detected as eighth
+- Half detected as eighth
+- Half detected as eighth
+- Incorrect pitch F3 (expected G3)
+- Half detected as eighth
+- Incorrect pitch B4 (expected D5)
+- Quarter detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch A4 (expected D5)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 6
+- Incorrect pitch C5 (expected C#5)
+- Half detected as quarter
+- Half detected as quarter
+- Incorrect pitch G4 (expected A4)
+- Incorrect pitch A4 (expected B4)
+- Incorrect pitch G3 (expected A3)
+- Incorrect pitch C5 (expected C#5)
+- Quarter detected as half
+- Incorrect pitch B4 (expected D5)
+- Incorrect pitch B4 (expected E5)
+- Incorrect pitch B4 (expected E5)
+- Quarter detected as half
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 7
+- Incorrect pitch B4 (expected C5)
+- Quarter detected as half
+- Half detected as quarter
+- Half detected as quarter
+- Incorrect pitch F4 (expected G4)
+- Incorrect pitch G4 (expected A4)
+- Incorrect pitch F3 (expected G3)
+- Incorrect pitch A4 (expected D5)
+- Incorrect pitch A4 (expected D5)
+- Quarter detected as half
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 8
+- Incorrect pitch A4 (expected G#4)
+- Half detected as quarter
+- Half detected as quarter
+- Incorrect pitch E4 (expected F#4)
+- Incorrect pitch G4 (expected A4)
+- Incorrect pitch A4 (expected G#4)
+- Quarter detected as half
+- Incorrect pitch F4 (expected B4)
+- Incorrect pitch F4 (expected B4)
+- Quarter detected as half
+- Incorrect chord
+- Incorrect chord
+
+Top recurring defects:
+1. Incorrect pitch (32)
+2. Duration mismatch (29)
+3. Incorrect chord (16)
+4. Missing tie (2)
+5. Onset timing difference (2)
+6. Extra note (1)
+7. Missing note (1)
+8. Tempo change mismatch (1)
+
+Top defect classes: Pitch (34), Rhythm (31), Measure structure (16), Sustain (ties) (2), Interpretation (1)
+
+Totals: 84 defects · 88 truth notes · 88 generated notes · 8→8 measures

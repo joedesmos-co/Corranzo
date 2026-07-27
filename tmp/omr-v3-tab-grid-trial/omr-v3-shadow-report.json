@@ -1,0 +1,2459 @@
+{
+  "generatedAt": "2026-07-17T04:16:54.558Z",
+  "manifestPath": "/Users/ryland/Documents/scoreflow/benchmarks/omr-benchmark.manifest.json",
+  "engine": "omr-v3-shadow",
+  "promoted": false,
+  "gate": {
+    "pass": false,
+    "status": "shadow-only",
+    "improvedFixtureCount": 0,
+    "requiredImprovedFixtureCount": 2,
+    "regressionCount": 0,
+    "policyViolations": [],
+    "comparisons": [
+      {
+        "id": "guitar-tab-sparse-vector",
+        "enforced": true,
+        "current": {
+          "pitchAccuracy": 0.7,
+          "durationAccuracy": 0.725,
+          "onsetAccuracy": 0.575,
+          "chordGroupingAccuracy": 0.8,
+          "noteDetectionF1": 0.8889,
+          "absoluteMeasureCountError": 0,
+          "systemCountAccuracy": 0,
+          "staffGroupAccuracy": null,
+          "notationTabPairingRecall": null,
+          "duplicateEventRate": 0,
+          "invalidEventRate": 0,
+          "voiceOverlapViolations": 0
+        },
+        "v3": {
+          "pitchAccuracy": 0.7,
+          "durationAccuracy": 0.725,
+          "onsetAccuracy": 0.575,
+          "chordGroupingAccuracy": 0.8,
+          "noteDetectionF1": 0.8889,
+          "absoluteMeasureCountError": 0,
+          "systemCountAccuracy": 0,
+          "staffGroupAccuracy": 0.5,
+          "notationTabPairingRecall": null,
+          "duplicateEventRate": 0,
+          "invalidEventRate": 0,
+          "voiceOverlapViolations": 0
+        },
+        "improvements": [],
+        "regressions": []
+      },
+      {
+        "id": "guitar-standard-chords-vector",
+        "enforced": true,
+        "current": {
+          "pitchAccuracy": 0,
+          "durationAccuracy": 0.1565,
+          "onsetAccuracy": 0.1391,
+          "chordGroupingAccuracy": 0.2061,
+          "noteDetectionF1": 0.3544,
+          "absoluteMeasureCountError": 8,
+          "systemCountAccuracy": 0,
+          "staffGroupAccuracy": null,
+          "notationTabPairingRecall": null,
+          "duplicateEventRate": 0,
+          "invalidEventRate": 0,
+          "voiceOverlapViolations": 0
+        },
+        "v3": {
+          "pitchAccuracy": 0,
+          "durationAccuracy": 0.1565,
+          "onsetAccuracy": 0.1391,
+          "chordGroupingAccuracy": 0.2061,
+          "noteDetectionF1": 0.3544,
+          "absoluteMeasureCountError": 8,
+          "systemCountAccuracy": 0,
+          "staffGroupAccuracy": 0.25,
+          "notationTabPairingRecall": 0,
+          "duplicateEventRate": 0,
+          "invalidEventRate": 0,
+          "voiceOverlapViolations": 0
+        },
+        "improvements": [],
+        "regressions": []
+      },
+      {
+        "id": "guitar-paired-chords-vector",
+        "enforced": true,
+        "current": {
+          "pitchAccuracy": 0.1121,
+          "durationAccuracy": 0.3621,
+          "onsetAccuracy": 0.5172,
+          "chordGroupingAccuracy": 0.4786,
+          "noteDetectionF1": 0.686,
+          "absoluteMeasureCountError": 2,
+          "systemCountAccuracy": 0,
+          "staffGroupAccuracy": null,
+          "notationTabPairingRecall": null,
+          "duplicateEventRate": 0,
+          "invalidEventRate": 0,
+          "voiceOverlapViolations": 0
+        },
+        "v3": {
+          "pitchAccuracy": 0.1121,
+          "durationAccuracy": 0.3621,
+          "onsetAccuracy": 0.5172,
+          "chordGroupingAccuracy": 0.4786,
+          "noteDetectionF1": 0.686,
+          "absoluteMeasureCountError": 2,
+          "systemCountAccuracy": 0,
+          "staffGroupAccuracy": 0.5,
+          "notationTabPairingRecall": 0.8901098901098901,
+          "duplicateEventRate": 0,
+          "invalidEventRate": 0,
+          "voiceOverlapViolations": 0
+        },
+        "improvements": [],
+        "regressions": []
+      },
+      {
+        "id": "guitar-techniques-paired-vector",
+        "enforced": true,
+        "current": {
+          "pitchAccuracy": 0.0313,
+          "durationAccuracy": 0.5,
+          "onsetAccuracy": 0.6563,
+          "chordGroupingAccuracy": 0.5385,
+          "noteDetectionF1": 0.7,
+          "absoluteMeasureCountError": 4,
+          "systemCountAccuracy": 0,
+          "staffGroupAccuracy": null,
+          "notationTabPairingRecall": null,
+          "duplicateEventRate": 0,
+          "invalidEventRate": 0,
+          "voiceOverlapViolations": 0
+        },
+        "v3": {
+          "pitchAccuracy": 0.0313,
+          "durationAccuracy": 0.5,
+          "onsetAccuracy": 0.6563,
+          "chordGroupingAccuracy": 0.5385,
+          "noteDetectionF1": 0.7,
+          "absoluteMeasureCountError": 4,
+          "systemCountAccuracy": 0,
+          "staffGroupAccuracy": 0.5,
+          "notationTabPairingRecall": 1,
+          "duplicateEventRate": 0,
+          "invalidEventRate": 0,
+          "voiceOverlapViolations": 0
+        },
+        "improvements": [],
+        "regressions": []
+      }
+    ],
+    "promotedToRuntime": false,
+    "candidates": {
+      "structure": "not-promoted",
+      "measureGeometry": "not-promoted",
+      "pianoGrouping": "not-promoted",
+      "guitarFusion": "not-promoted",
+      "fullV3": "not-promoted"
+    },
+    "unavailableEnforcedFixtures": [],
+    "unavailableEnforcedFixtureCount": 0
+  },
+  "productionGate": {
+    "pass": false,
+    "status": "blocked",
+    "promotedToRuntime": false,
+    "enforcedFixtureCount": 4,
+    "recognitionFixtureCount": 4,
+    "rejectionFixtureCount": 0,
+    "evaluatedRecognitionFixtureCount": 4,
+    "independentRecognitionFixtureCount": 4,
+    "independentlyRejectedFixtureCount": 0,
+    "regressionCount": 2,
+    "policyViolations": [],
+    "runtimeCandidateImplemented": false,
+    "rollbackVerified": false,
+    "blockers": [
+      {
+        "code": "enforced-regressions",
+        "count": 2,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-techniques-paired-vector"
+        ]
+      },
+      {
+        "code": "runtime-candidate-not-implemented"
+      },
+      {
+        "code": "rollback-not-verified"
+      }
+    ]
+  },
+  "fixtures": [
+    {
+      "fixtureId": "guitar-tab-sparse-vector",
+      "label": "CC0 Sparse TAB Technique Study",
+      "enforced": true,
+      "shadow": {
+        "status": "ready",
+        "engine": "omr-v3-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 2,
+              "rejectedPairingCount": 1
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-analysis-guitar-tab-sparse-vector-0:0",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.199,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-guitar-tab-sparse-vector-0:1",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.199,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 40,
+            "assignedSymbolCount": 40,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 40,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "guitarMeasureCount": 8,
+            "eventCount": 40,
+            "pairedCount": 0,
+            "duplicateEventCount": 0,
+            "unpairedDiagnosticCount": 8,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "legacy-runtime-events",
+            "sourceSymbolCount": 40,
+            "independentSourceSymbolCount": 0,
+            "independentSourceSymbolRate": 0,
+            "primaryEventCount": 40,
+            "independentPrimaryEventCount": 0,
+            "independentPrimaryEventRate": 0
+          }
+        },
+        "evidence": {
+          "mode": "legacy-runtime-events",
+          "sourceSymbolCount": 40,
+          "independentSourceSymbolCount": 0,
+          "independentSourceSymbolRate": 0,
+          "primaryEventCount": 40,
+          "independentPrimaryEventCount": 0,
+          "independentPrimaryEventRate": 0
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 8,
+            "primaryEventCount": 40,
+            "serializableEventCount": 40,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 8,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 8,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 0
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.7,
+              "matchedPitchAccuracy": 0.875,
+              "durationAccuracy": 0.725,
+              "matchedDurationAccuracy": 0.9063,
+              "onsetAccuracy": 0.575,
+              "matchedOnsetAccuracy": 0.7188,
+              "timeAccuracy": 0.075,
+              "matchedTimeAccuracy": 0.0938,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8,
+              "noteDetectionRecall": 1,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.8,
+              "pitchAccuracyAtCorrectOnset": 0.8696,
+              "orderSensitivePitchRecovery": 0.075
+            },
+            "v3": {
+              "pitchAccuracy": 0.7,
+              "matchedPitchAccuracy": 0.875,
+              "durationAccuracy": 0.725,
+              "matchedDurationAccuracy": 0.9063,
+              "onsetAccuracy": 0.575,
+              "matchedOnsetAccuracy": 0.7188,
+              "timeAccuracy": 0.075,
+              "matchedTimeAccuracy": 0.0938,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8,
+              "noteDetectionRecall": 1,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.8,
+              "pitchAccuracyAtCorrectOnset": 0.8696,
+              "orderSensitivePitchRecovery": 0.075
+            }
+          }
+        },
+        "current": {
+          "metrics": {
+            "pitchAccuracy": 0.7,
+            "matchedPitchAccuracy": 0.875,
+            "durationAccuracy": 0.725,
+            "matchedDurationAccuracy": 0.9063,
+            "onsetAccuracy": 0.575,
+            "matchedOnsetAccuracy": 0.7188,
+            "timeAccuracy": 0.075,
+            "matchedTimeAccuracy": 0.0938,
+            "measureCountAccuracy": 1,
+            "noteDetectionPrecision": 0.8,
+            "noteDetectionRecall": 1,
+            "noteDetectionF1": 0.8889,
+            "chordGroupingAccuracy": 0.8,
+            "pitchAccuracyAtCorrectOnset": 0.8696,
+            "orderSensitivePitchRecovery": 0.075
+          },
+          "structure": {
+            "absoluteMeasureCountError": 0,
+            "systemCountAccuracy": 0
+          },
+          "fusion": {
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          }
+        },
+        "v3": {
+          "serializer": {
+            "measureCount": 8,
+            "primaryEventCount": 40,
+            "serializableEventCount": 40,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 8,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 8,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 0
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.7,
+              "matchedPitchAccuracy": 0.875,
+              "durationAccuracy": 0.725,
+              "matchedDurationAccuracy": 0.9063,
+              "onsetAccuracy": 0.575,
+              "matchedOnsetAccuracy": 0.7188,
+              "timeAccuracy": 0.075,
+              "matchedTimeAccuracy": 0.0938,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8,
+              "noteDetectionRecall": 1,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.8,
+              "pitchAccuracyAtCorrectOnset": 0.8696,
+              "orderSensitivePitchRecovery": 0.075
+            },
+            "v3": {
+              "pitchAccuracy": 0.7,
+              "matchedPitchAccuracy": 0.875,
+              "durationAccuracy": 0.725,
+              "matchedDurationAccuracy": 0.9063,
+              "onsetAccuracy": 0.575,
+              "matchedOnsetAccuracy": 0.7188,
+              "timeAccuracy": 0.075,
+              "matchedTimeAccuracy": 0.0938,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8,
+              "noteDetectionRecall": 1,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.8,
+              "pitchAccuracyAtCorrectOnset": 0.8696,
+              "orderSensitivePitchRecovery": 0.075
+            }
+          }
+        }
+      },
+      "independentShadow": {
+        "status": "ready",
+        "engine": "omr-v3-independent-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 2,
+              "rejectedPairingCount": 1
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-guitar-tab-sparse-vector-0:0",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.199,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-guitar-tab-sparse-vector-0:1",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.199,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 40,
+            "assignedSymbolCount": 40,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 40,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "guitarMeasureCount": 8,
+            "eventCount": 40,
+            "pairedCount": 0,
+            "duplicateEventCount": 0,
+            "unpairedDiagnosticCount": 8,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "raw-detector-symbols",
+            "sourceSymbolCount": 40,
+            "independentSourceSymbolCount": 40,
+            "independentSourceSymbolRate": 1,
+            "primaryEventCount": 40,
+            "independentPrimaryEventCount": 40,
+            "independentPrimaryEventRate": 1
+          }
+        },
+        "evidence": {
+          "mode": "raw-detector-symbols",
+          "sourceSymbolCount": 40,
+          "independentSourceSymbolCount": 40,
+          "independentSourceSymbolRate": 1,
+          "primaryEventCount": 40,
+          "independentPrimaryEventCount": 40,
+          "independentPrimaryEventRate": 1
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 8,
+            "primaryEventCount": 40,
+            "serializableEventCount": 40,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 8,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 8,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 0
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.7,
+              "matchedPitchAccuracy": 0.875,
+              "durationAccuracy": 0.725,
+              "matchedDurationAccuracy": 0.9063,
+              "onsetAccuracy": 0.575,
+              "matchedOnsetAccuracy": 0.7188,
+              "timeAccuracy": 0.075,
+              "matchedTimeAccuracy": 0.0938,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8,
+              "noteDetectionRecall": 1,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.8,
+              "pitchAccuracyAtCorrectOnset": 0.8696,
+              "orderSensitivePitchRecovery": 0.075
+            },
+            "v3": {
+              "pitchAccuracy": 0.7,
+              "matchedPitchAccuracy": 0.875,
+              "durationAccuracy": 0.725,
+              "matchedDurationAccuracy": 0.9063,
+              "onsetAccuracy": 0.575,
+              "matchedOnsetAccuracy": 0.7188,
+              "timeAccuracy": 0.075,
+              "matchedTimeAccuracy": 0.0938,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8,
+              "noteDetectionRecall": 1,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.8,
+              "pitchAccuracyAtCorrectOnset": 0.8696,
+              "orderSensitivePitchRecovery": 0.075
+            }
+          }
+        },
+        "current": {
+          "metrics": {
+            "pitchAccuracy": 0.7,
+            "matchedPitchAccuracy": 0.875,
+            "durationAccuracy": 0.725,
+            "matchedDurationAccuracy": 0.9063,
+            "onsetAccuracy": 0.575,
+            "matchedOnsetAccuracy": 0.7188,
+            "timeAccuracy": 0.075,
+            "matchedTimeAccuracy": 0.0938,
+            "measureCountAccuracy": 1,
+            "noteDetectionPrecision": 0.8,
+            "noteDetectionRecall": 1,
+            "noteDetectionF1": 0.8889,
+            "chordGroupingAccuracy": 0.8,
+            "pitchAccuracyAtCorrectOnset": 0.8696,
+            "orderSensitivePitchRecovery": 0.075
+          },
+          "structure": {
+            "absoluteMeasureCountError": 0,
+            "systemCountAccuracy": 0
+          },
+          "fusion": {
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          }
+        },
+        "v3": {
+          "serializer": {
+            "measureCount": 8,
+            "primaryEventCount": 40,
+            "serializableEventCount": 40,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 8,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 8,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 0
+          },
+          "fusion": {
+            "notationTabPairingRecall": null,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.7,
+              "matchedPitchAccuracy": 0.875,
+              "durationAccuracy": 0.725,
+              "matchedDurationAccuracy": 0.9063,
+              "onsetAccuracy": 0.575,
+              "matchedOnsetAccuracy": 0.7188,
+              "timeAccuracy": 0.075,
+              "matchedTimeAccuracy": 0.0938,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8,
+              "noteDetectionRecall": 1,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.8,
+              "pitchAccuracyAtCorrectOnset": 0.8696,
+              "orderSensitivePitchRecovery": 0.075
+            },
+            "v3": {
+              "pitchAccuracy": 0.7,
+              "matchedPitchAccuracy": 0.875,
+              "durationAccuracy": 0.725,
+              "matchedDurationAccuracy": 0.9063,
+              "onsetAccuracy": 0.575,
+              "matchedOnsetAccuracy": 0.7188,
+              "timeAccuracy": 0.075,
+              "matchedTimeAccuracy": 0.0938,
+              "measureCountAccuracy": 1,
+              "noteDetectionPrecision": 0.8,
+              "noteDetectionRecall": 1,
+              "noteDetectionF1": 0.8889,
+              "chordGroupingAccuracy": 0.8,
+              "pitchAccuracyAtCorrectOnset": 0.8696,
+              "orderSensitivePitchRecovery": 0.075
+            }
+          }
+        }
+      }
+    },
+    {
+      "fixtureId": "guitar-standard-chords-vector",
+      "label": "CC0 Standard Guitar Chord Study",
+      "enforced": true,
+      "shadow": {
+        "status": "ready",
+        "engine": "omr-v3-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 4,
+              "rejectedPairingCount": 3
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-analysis-guitar-standard-chords-vector-0:0",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.199,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-guitar-standard-chords-vector-0:1",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.199,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-guitar-standard-chords-vector-0:2",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.19900000000000007,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-guitar-standard-chords-vector-0:3",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.19900000000000007,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 47,
+            "assignedSymbolCount": 47,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 39,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "guitarMeasureCount": 16,
+            "eventCount": 43,
+            "pairedCount": 0,
+            "duplicateEventCount": 0,
+            "unpairedDiagnosticCount": 0,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "legacy-runtime-events",
+            "sourceSymbolCount": 47,
+            "independentSourceSymbolCount": 0,
+            "independentSourceSymbolRate": 0,
+            "primaryEventCount": 43,
+            "independentPrimaryEventCount": 0,
+            "independentPrimaryEventRate": 0
+          }
+        },
+        "evidence": {
+          "mode": "legacy-runtime-events",
+          "sourceSymbolCount": 47,
+          "independentSourceSymbolCount": 0,
+          "independentSourceSymbolRate": 0,
+          "primaryEventCount": 43,
+          "independentPrimaryEventCount": 0,
+          "independentPrimaryEventRate": 0
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 16,
+            "primaryEventCount": 43,
+            "serializableEventCount": 43,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 16,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 4,
+            "staffGroupCount": 4,
+            "measureCount": 16,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.25,
+            "absoluteMeasureCountError": 8
+          },
+          "fusion": {
+            "notationTabPairingRecall": 0,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0,
+              "matchedPitchAccuracy": 0,
+              "durationAccuracy": 0.1565,
+              "matchedDurationAccuracy": 0.6429,
+              "onsetAccuracy": 0.1391,
+              "matchedOnsetAccuracy": 0.5714,
+              "timeAccuracy": 0,
+              "matchedTimeAccuracy": 0,
+              "measureCountAccuracy": 0.5,
+              "noteDetectionPrecision": 0.6512,
+              "noteDetectionRecall": 0.2435,
+              "noteDetectionF1": 0.3544,
+              "chordGroupingAccuracy": 0.2061,
+              "pitchAccuracyAtCorrectOnset": 0,
+              "orderSensitivePitchRecovery": 0
+            },
+            "v3": {
+              "pitchAccuracy": 0,
+              "matchedPitchAccuracy": 0,
+              "durationAccuracy": 0.1565,
+              "matchedDurationAccuracy": 0.6429,
+              "onsetAccuracy": 0.1391,
+              "matchedOnsetAccuracy": 0.5714,
+              "timeAccuracy": 0,
+              "matchedTimeAccuracy": 0,
+              "measureCountAccuracy": 0.5,
+              "noteDetectionPrecision": 0.6512,
+              "noteDetectionRecall": 0.2435,
+              "noteDetectionF1": 0.3544,
+              "chordGroupingAccuracy": 0.2061,
+              "pitchAccuracyAtCorrectOnset": 0,
+              "orderSensitivePitchRecovery": 0
+            }
+          }
+        },
+        "current": {
+          "metrics": {
+            "pitchAccuracy": 0,
+            "matchedPitchAccuracy": 0,
+            "durationAccuracy": 0.1565,
+            "matchedDurationAccuracy": 0.6429,
+            "onsetAccuracy": 0.1391,
+            "matchedOnsetAccuracy": 0.5714,
+            "timeAccuracy": 0,
+            "matchedTimeAccuracy": 0,
+            "measureCountAccuracy": 0.5,
+            "noteDetectionPrecision": 0.6512,
+            "noteDetectionRecall": 0.2435,
+            "noteDetectionF1": 0.3544,
+            "chordGroupingAccuracy": 0.2061,
+            "pitchAccuracyAtCorrectOnset": 0,
+            "orderSensitivePitchRecovery": 0
+          },
+          "structure": {
+            "absoluteMeasureCountError": 8,
+            "systemCountAccuracy": 0
+          },
+          "fusion": {
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          }
+        },
+        "v3": {
+          "serializer": {
+            "measureCount": 16,
+            "primaryEventCount": 43,
+            "serializableEventCount": 43,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 16,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 4,
+            "staffGroupCount": 4,
+            "measureCount": 16,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.25,
+            "absoluteMeasureCountError": 8
+          },
+          "fusion": {
+            "notationTabPairingRecall": 0,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0,
+              "matchedPitchAccuracy": 0,
+              "durationAccuracy": 0.1565,
+              "matchedDurationAccuracy": 0.6429,
+              "onsetAccuracy": 0.1391,
+              "matchedOnsetAccuracy": 0.5714,
+              "timeAccuracy": 0,
+              "matchedTimeAccuracy": 0,
+              "measureCountAccuracy": 0.5,
+              "noteDetectionPrecision": 0.6512,
+              "noteDetectionRecall": 0.2435,
+              "noteDetectionF1": 0.3544,
+              "chordGroupingAccuracy": 0.2061,
+              "pitchAccuracyAtCorrectOnset": 0,
+              "orderSensitivePitchRecovery": 0
+            },
+            "v3": {
+              "pitchAccuracy": 0,
+              "matchedPitchAccuracy": 0,
+              "durationAccuracy": 0.1565,
+              "matchedDurationAccuracy": 0.6429,
+              "onsetAccuracy": 0.1391,
+              "matchedOnsetAccuracy": 0.5714,
+              "timeAccuracy": 0,
+              "matchedTimeAccuracy": 0,
+              "measureCountAccuracy": 0.5,
+              "noteDetectionPrecision": 0.6512,
+              "noteDetectionRecall": 0.2435,
+              "noteDetectionF1": 0.3544,
+              "chordGroupingAccuracy": 0.2061,
+              "pitchAccuracyAtCorrectOnset": 0,
+              "orderSensitivePitchRecovery": 0
+            }
+          }
+        }
+      },
+      "independentShadow": {
+        "status": "ready",
+        "engine": "omr-v3-independent-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 4,
+              "rejectedPairingCount": 3
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-guitar-standard-chords-vector-0:0",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.199,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-guitar-standard-chords-vector-0:1",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.199,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-guitar-standard-chords-vector-0:2",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.19900000000000007,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-guitar-standard-chords-vector-0:3",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.19900000000000007,
+              "strongExternalWidthConsensus": true,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 43,
+            "assignedSymbolCount": 43,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 37,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "guitarMeasureCount": 16,
+            "eventCount": 43,
+            "pairedCount": 0,
+            "duplicateEventCount": 0,
+            "unpairedDiagnosticCount": 0,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "raw-detector-symbols",
+            "sourceSymbolCount": 43,
+            "independentSourceSymbolCount": 43,
+            "independentSourceSymbolRate": 1,
+            "primaryEventCount": 43,
+            "independentPrimaryEventCount": 43,
+            "independentPrimaryEventRate": 1
+          }
+        },
+        "evidence": {
+          "mode": "raw-detector-symbols",
+          "sourceSymbolCount": 43,
+          "independentSourceSymbolCount": 43,
+          "independentSourceSymbolRate": 1,
+          "primaryEventCount": 43,
+          "independentPrimaryEventCount": 43,
+          "independentPrimaryEventRate": 1
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 16,
+            "primaryEventCount": 43,
+            "serializableEventCount": 43,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 16,
+            "warningCount": 0,
+            "approximateQuantizationCount": 37,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 4,
+            "staffGroupCount": 4,
+            "measureCount": 16,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.25,
+            "absoluteMeasureCountError": 8
+          },
+          "fusion": {
+            "notationTabPairingRecall": 0,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0,
+              "matchedPitchAccuracy": 0,
+              "durationAccuracy": 0.1565,
+              "matchedDurationAccuracy": 0.6429,
+              "onsetAccuracy": 0.1391,
+              "matchedOnsetAccuracy": 0.5714,
+              "timeAccuracy": 0,
+              "matchedTimeAccuracy": 0,
+              "measureCountAccuracy": 0.5,
+              "noteDetectionPrecision": 0.6512,
+              "noteDetectionRecall": 0.2435,
+              "noteDetectionF1": 0.3544,
+              "chordGroupingAccuracy": 0.2061,
+              "pitchAccuracyAtCorrectOnset": 0,
+              "orderSensitivePitchRecovery": 0
+            },
+            "v3": {
+              "pitchAccuracy": 0,
+              "matchedPitchAccuracy": 0,
+              "durationAccuracy": 0.1739,
+              "matchedDurationAccuracy": 0.7143,
+              "onsetAccuracy": 0.1391,
+              "matchedOnsetAccuracy": 0.5714,
+              "timeAccuracy": 0.0261,
+              "matchedTimeAccuracy": 0.1071,
+              "measureCountAccuracy": 0.5,
+              "noteDetectionPrecision": 0.6512,
+              "noteDetectionRecall": 0.2435,
+              "noteDetectionF1": 0.3544,
+              "chordGroupingAccuracy": 0.2154,
+              "pitchAccuracyAtCorrectOnset": 0,
+              "orderSensitivePitchRecovery": 0
+            }
+          }
+        },
+        "current": {
+          "metrics": {
+            "pitchAccuracy": 0,
+            "matchedPitchAccuracy": 0,
+            "durationAccuracy": 0.1565,
+            "matchedDurationAccuracy": 0.6429,
+            "onsetAccuracy": 0.1391,
+            "matchedOnsetAccuracy": 0.5714,
+            "timeAccuracy": 0,
+            "matchedTimeAccuracy": 0,
+            "measureCountAccuracy": 0.5,
+            "noteDetectionPrecision": 0.6512,
+            "noteDetectionRecall": 0.2435,
+            "noteDetectionF1": 0.3544,
+            "chordGroupingAccuracy": 0.2061,
+            "pitchAccuracyAtCorrectOnset": 0,
+            "orderSensitivePitchRecovery": 0
+          },
+          "structure": {
+            "absoluteMeasureCountError": 8,
+            "systemCountAccuracy": 0
+          },
+          "fusion": {
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          }
+        },
+        "v3": {
+          "serializer": {
+            "measureCount": 16,
+            "primaryEventCount": 43,
+            "serializableEventCount": 43,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 16,
+            "warningCount": 0,
+            "approximateQuantizationCount": 37,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 4,
+            "staffGroupCount": 4,
+            "measureCount": 16,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.25,
+            "absoluteMeasureCountError": 8
+          },
+          "fusion": {
+            "notationTabPairingRecall": 0,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0,
+              "matchedPitchAccuracy": 0,
+              "durationAccuracy": 0.1565,
+              "matchedDurationAccuracy": 0.6429,
+              "onsetAccuracy": 0.1391,
+              "matchedOnsetAccuracy": 0.5714,
+              "timeAccuracy": 0,
+              "matchedTimeAccuracy": 0,
+              "measureCountAccuracy": 0.5,
+              "noteDetectionPrecision": 0.6512,
+              "noteDetectionRecall": 0.2435,
+              "noteDetectionF1": 0.3544,
+              "chordGroupingAccuracy": 0.2061,
+              "pitchAccuracyAtCorrectOnset": 0,
+              "orderSensitivePitchRecovery": 0
+            },
+            "v3": {
+              "pitchAccuracy": 0,
+              "matchedPitchAccuracy": 0,
+              "durationAccuracy": 0.1739,
+              "matchedDurationAccuracy": 0.7143,
+              "onsetAccuracy": 0.1391,
+              "matchedOnsetAccuracy": 0.5714,
+              "timeAccuracy": 0.0261,
+              "matchedTimeAccuracy": 0.1071,
+              "measureCountAccuracy": 0.5,
+              "noteDetectionPrecision": 0.6512,
+              "noteDetectionRecall": 0.2435,
+              "noteDetectionF1": 0.3544,
+              "chordGroupingAccuracy": 0.2154,
+              "pitchAccuracyAtCorrectOnset": 0,
+              "orderSensitivePitchRecovery": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "fixtureId": "guitar-paired-chords-vector",
+      "label": "CC0 Paired Notation and TAB Study",
+      "enforced": true,
+      "shadow": {
+        "status": "ready",
+        "engine": "omr-v3-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 2,
+              "rejectedPairingCount": 0
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-analysis-guitar-paired-chords-vector-0:0",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.199,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-guitar-paired-chords-vector-0:1",
+              "rawCandidateCount": 7,
+              "acceptedBoundaryCount": 5,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.15500000000000003,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 6,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 172,
+            "assignedSymbolCount": 172,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 34,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "guitarMeasureCount": 10,
+            "eventCount": 91,
+            "pairedCount": 81,
+            "duplicateEventCount": 0,
+            "unpairedDiagnosticCount": 10,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "legacy-runtime-events",
+            "sourceSymbolCount": 172,
+            "independentSourceSymbolCount": 0,
+            "independentSourceSymbolRate": 0,
+            "primaryEventCount": 91,
+            "independentPrimaryEventCount": 0,
+            "independentPrimaryEventRate": 0
+          }
+        },
+        "evidence": {
+          "mode": "legacy-runtime-events",
+          "sourceSymbolCount": 172,
+          "independentSourceSymbolCount": 0,
+          "independentSourceSymbolRate": 0,
+          "primaryEventCount": 91,
+          "independentPrimaryEventCount": 0,
+          "independentPrimaryEventRate": 0
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 10,
+            "primaryEventCount": 91,
+            "serializableEventCount": 91,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 10,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 10,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 2
+          },
+          "fusion": {
+            "notationTabPairingRecall": 0.8901098901098901,
+            "mirrorRelationshipCount": 81,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.1121,
+              "matchedPitchAccuracy": 0.1831,
+              "durationAccuracy": 0.3621,
+              "matchedDurationAccuracy": 0.5915,
+              "onsetAccuracy": 0.5172,
+              "matchedOnsetAccuracy": 0.8451,
+              "timeAccuracy": 0.0345,
+              "matchedTimeAccuracy": 0.0563,
+              "measureCountAccuracy": 0.8,
+              "noteDetectionPrecision": 0.7802,
+              "noteDetectionRecall": 0.6121,
+              "noteDetectionF1": 0.686,
+              "chordGroupingAccuracy": 0.4786,
+              "pitchAccuracyAtCorrectOnset": 0.2,
+              "orderSensitivePitchRecovery": 0.0948
+            },
+            "v3": {
+              "pitchAccuracy": 0.1121,
+              "matchedPitchAccuracy": 0.1831,
+              "durationAccuracy": 0.3621,
+              "matchedDurationAccuracy": 0.5915,
+              "onsetAccuracy": 0.5172,
+              "matchedOnsetAccuracy": 0.8451,
+              "timeAccuracy": 0.0345,
+              "matchedTimeAccuracy": 0.0563,
+              "measureCountAccuracy": 0.8,
+              "noteDetectionPrecision": 0.7802,
+              "noteDetectionRecall": 0.6121,
+              "noteDetectionF1": 0.686,
+              "chordGroupingAccuracy": 0.4786,
+              "pitchAccuracyAtCorrectOnset": 0.2,
+              "orderSensitivePitchRecovery": 0.0948
+            }
+          }
+        },
+        "current": {
+          "metrics": {
+            "pitchAccuracy": 0.1121,
+            "matchedPitchAccuracy": 0.1831,
+            "durationAccuracy": 0.3621,
+            "matchedDurationAccuracy": 0.5915,
+            "onsetAccuracy": 0.5172,
+            "matchedOnsetAccuracy": 0.8451,
+            "timeAccuracy": 0.0345,
+            "matchedTimeAccuracy": 0.0563,
+            "measureCountAccuracy": 0.8,
+            "noteDetectionPrecision": 0.7802,
+            "noteDetectionRecall": 0.6121,
+            "noteDetectionF1": 0.686,
+            "chordGroupingAccuracy": 0.4786,
+            "pitchAccuracyAtCorrectOnset": 0.2,
+            "orderSensitivePitchRecovery": 0.0948
+          },
+          "structure": {
+            "absoluteMeasureCountError": 2,
+            "systemCountAccuracy": 0
+          },
+          "fusion": {
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          }
+        },
+        "v3": {
+          "serializer": {
+            "measureCount": 10,
+            "primaryEventCount": 91,
+            "serializableEventCount": 91,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 10,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 10,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 2
+          },
+          "fusion": {
+            "notationTabPairingRecall": 0.8901098901098901,
+            "mirrorRelationshipCount": 81,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.1121,
+              "matchedPitchAccuracy": 0.1831,
+              "durationAccuracy": 0.3621,
+              "matchedDurationAccuracy": 0.5915,
+              "onsetAccuracy": 0.5172,
+              "matchedOnsetAccuracy": 0.8451,
+              "timeAccuracy": 0.0345,
+              "matchedTimeAccuracy": 0.0563,
+              "measureCountAccuracy": 0.8,
+              "noteDetectionPrecision": 0.7802,
+              "noteDetectionRecall": 0.6121,
+              "noteDetectionF1": 0.686,
+              "chordGroupingAccuracy": 0.4786,
+              "pitchAccuracyAtCorrectOnset": 0.2,
+              "orderSensitivePitchRecovery": 0.0948
+            },
+            "v3": {
+              "pitchAccuracy": 0.1121,
+              "matchedPitchAccuracy": 0.1831,
+              "durationAccuracy": 0.3621,
+              "matchedDurationAccuracy": 0.5915,
+              "onsetAccuracy": 0.5172,
+              "matchedOnsetAccuracy": 0.8451,
+              "timeAccuracy": 0.0345,
+              "matchedTimeAccuracy": 0.0563,
+              "measureCountAccuracy": 0.8,
+              "noteDetectionPrecision": 0.7802,
+              "noteDetectionRecall": 0.6121,
+              "noteDetectionF1": 0.686,
+              "chordGroupingAccuracy": 0.4786,
+              "pitchAccuracyAtCorrectOnset": 0.2,
+              "orderSensitivePitchRecovery": 0.0948
+            }
+          }
+        }
+      },
+      "independentShadow": {
+        "status": "ready",
+        "engine": "omr-v3-independent-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 2,
+              "rejectedPairingCount": 0
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-guitar-paired-chords-vector-0:0",
+              "rawCandidateCount": 5,
+              "acceptedBoundaryCount": 3,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.199,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 4,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-guitar-paired-chords-vector-0:1",
+              "rawCandidateCount": 7,
+              "acceptedBoundaryCount": 5,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.15500000000000003,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 6,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 207,
+            "assignedSymbolCount": 207,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 32,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "guitarMeasureCount": 10,
+            "eventCount": 68,
+            "pairedCount": 18,
+            "duplicateEventCount": 0,
+            "unpairedDiagnosticCount": 105,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "raw-detector-symbols",
+            "sourceSymbolCount": 207,
+            "independentSourceSymbolCount": 207,
+            "independentSourceSymbolRate": 1,
+            "primaryEventCount": 68,
+            "independentPrimaryEventCount": 68,
+            "independentPrimaryEventRate": 1
+          }
+        },
+        "evidence": {
+          "mode": "raw-detector-symbols",
+          "sourceSymbolCount": 207,
+          "independentSourceSymbolCount": 207,
+          "independentSourceSymbolRate": 1,
+          "primaryEventCount": 68,
+          "independentPrimaryEventCount": 68,
+          "independentPrimaryEventRate": 1
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 10,
+            "primaryEventCount": 68,
+            "serializableEventCount": 68,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 10,
+            "warningCount": 0,
+            "approximateQuantizationCount": 26,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 10,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 2
+          },
+          "fusion": {
+            "notationTabPairingRecall": 0.2647058823529412,
+            "mirrorRelationshipCount": 18,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.1121,
+              "matchedPitchAccuracy": 0.1831,
+              "durationAccuracy": 0.3621,
+              "matchedDurationAccuracy": 0.5915,
+              "onsetAccuracy": 0.5172,
+              "matchedOnsetAccuracy": 0.8451,
+              "timeAccuracy": 0.0345,
+              "matchedTimeAccuracy": 0.0563,
+              "measureCountAccuracy": 0.8,
+              "noteDetectionPrecision": 0.7802,
+              "noteDetectionRecall": 0.6121,
+              "noteDetectionF1": 0.686,
+              "chordGroupingAccuracy": 0.4786,
+              "pitchAccuracyAtCorrectOnset": 0.2,
+              "orderSensitivePitchRecovery": 0.0948
+            },
+            "v3": {
+              "pitchAccuracy": 0.1121,
+              "matchedPitchAccuracy": 0.2281,
+              "durationAccuracy": 0.319,
+              "matchedDurationAccuracy": 0.6491,
+              "onsetAccuracy": 0.1983,
+              "matchedOnsetAccuracy": 0.4035,
+              "timeAccuracy": 0.0172,
+              "matchedTimeAccuracy": 0.0351,
+              "measureCountAccuracy": 0.8,
+              "noteDetectionPrecision": 0.8382,
+              "noteDetectionRecall": 0.4914,
+              "noteDetectionF1": 0.6196,
+              "chordGroupingAccuracy": 0.4264,
+              "pitchAccuracyAtCorrectOnset": 0.2174,
+              "orderSensitivePitchRecovery": 0.0862
+            }
+          }
+        },
+        "current": {
+          "metrics": {
+            "pitchAccuracy": 0.1121,
+            "matchedPitchAccuracy": 0.1831,
+            "durationAccuracy": 0.3621,
+            "matchedDurationAccuracy": 0.5915,
+            "onsetAccuracy": 0.5172,
+            "matchedOnsetAccuracy": 0.8451,
+            "timeAccuracy": 0.0345,
+            "matchedTimeAccuracy": 0.0563,
+            "measureCountAccuracy": 0.8,
+            "noteDetectionPrecision": 0.7802,
+            "noteDetectionRecall": 0.6121,
+            "noteDetectionF1": 0.686,
+            "chordGroupingAccuracy": 0.4786,
+            "pitchAccuracyAtCorrectOnset": 0.2,
+            "orderSensitivePitchRecovery": 0.0948
+          },
+          "structure": {
+            "absoluteMeasureCountError": 2,
+            "systemCountAccuracy": 0
+          },
+          "fusion": {
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          }
+        },
+        "v3": {
+          "serializer": {
+            "measureCount": 10,
+            "primaryEventCount": 68,
+            "serializableEventCount": 68,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 10,
+            "warningCount": 0,
+            "approximateQuantizationCount": 26,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 10,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 2
+          },
+          "fusion": {
+            "notationTabPairingRecall": 0.2647058823529412,
+            "mirrorRelationshipCount": 18,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.1121,
+              "matchedPitchAccuracy": 0.1831,
+              "durationAccuracy": 0.3621,
+              "matchedDurationAccuracy": 0.5915,
+              "onsetAccuracy": 0.5172,
+              "matchedOnsetAccuracy": 0.8451,
+              "timeAccuracy": 0.0345,
+              "matchedTimeAccuracy": 0.0563,
+              "measureCountAccuracy": 0.8,
+              "noteDetectionPrecision": 0.7802,
+              "noteDetectionRecall": 0.6121,
+              "noteDetectionF1": 0.686,
+              "chordGroupingAccuracy": 0.4786,
+              "pitchAccuracyAtCorrectOnset": 0.2,
+              "orderSensitivePitchRecovery": 0.0948
+            },
+            "v3": {
+              "pitchAccuracy": 0.1121,
+              "matchedPitchAccuracy": 0.2281,
+              "durationAccuracy": 0.319,
+              "matchedDurationAccuracy": 0.6491,
+              "onsetAccuracy": 0.1983,
+              "matchedOnsetAccuracy": 0.4035,
+              "timeAccuracy": 0.0172,
+              "matchedTimeAccuracy": 0.0351,
+              "measureCountAccuracy": 0.8,
+              "noteDetectionPrecision": 0.8382,
+              "noteDetectionRecall": 0.4914,
+              "noteDetectionF1": 0.6196,
+              "chordGroupingAccuracy": 0.4264,
+              "pitchAccuracyAtCorrectOnset": 0.2174,
+              "orderSensitivePitchRecovery": 0.0862
+            }
+          }
+        }
+      }
+    },
+    {
+      "fixtureId": "guitar-techniques-paired-vector",
+      "label": "CC0 Guitar Technique Pairing Study",
+      "enforced": true,
+      "shadow": {
+        "status": "ready",
+        "engine": "omr-v3-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 2,
+              "rejectedPairingCount": 0
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-analysis-guitar-techniques-paired-vector-0:0",
+              "rawCandidateCount": 7,
+              "acceptedBoundaryCount": 5,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11199999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 6,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-analysis-guitar-techniques-paired-vector-0:1",
+              "rawCandidateCount": 7,
+              "acceptedBoundaryCount": 5,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11199999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 6,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 56,
+            "assignedSymbolCount": 56,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 28,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "guitarMeasureCount": 12,
+            "eventCount": 28,
+            "pairedCount": 28,
+            "duplicateEventCount": 0,
+            "unpairedDiagnosticCount": 0,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "legacy-runtime-events",
+            "sourceSymbolCount": 56,
+            "independentSourceSymbolCount": 0,
+            "independentSourceSymbolRate": 0,
+            "primaryEventCount": 28,
+            "independentPrimaryEventCount": 0,
+            "independentPrimaryEventRate": 0
+          }
+        },
+        "evidence": {
+          "mode": "legacy-runtime-events",
+          "sourceSymbolCount": 56,
+          "independentSourceSymbolCount": 0,
+          "independentSourceSymbolRate": 0,
+          "primaryEventCount": 28,
+          "independentPrimaryEventCount": 0,
+          "independentPrimaryEventRate": 0
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 12,
+            "primaryEventCount": 28,
+            "serializableEventCount": 28,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 12,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 12,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 4
+          },
+          "fusion": {
+            "notationTabPairingRecall": 1,
+            "mirrorRelationshipCount": 28,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.0313,
+              "matchedPitchAccuracy": 0.0476,
+              "durationAccuracy": 0.5,
+              "matchedDurationAccuracy": 0.7619,
+              "onsetAccuracy": 0.6563,
+              "matchedOnsetAccuracy": 1,
+              "timeAccuracy": 0.0313,
+              "matchedTimeAccuracy": 0.0476,
+              "measureCountAccuracy": 0.6667,
+              "noteDetectionPrecision": 0.75,
+              "noteDetectionRecall": 0.6563,
+              "noteDetectionF1": 0.7,
+              "chordGroupingAccuracy": 0.5385,
+              "pitchAccuracyAtCorrectOnset": 0.0476,
+              "orderSensitivePitchRecovery": 0
+            },
+            "v3": {
+              "pitchAccuracy": 0.0313,
+              "matchedPitchAccuracy": 0.0476,
+              "durationAccuracy": 0.5,
+              "matchedDurationAccuracy": 0.7619,
+              "onsetAccuracy": 0.6563,
+              "matchedOnsetAccuracy": 1,
+              "timeAccuracy": 0.0313,
+              "matchedTimeAccuracy": 0.0476,
+              "measureCountAccuracy": 0.6667,
+              "noteDetectionPrecision": 0.75,
+              "noteDetectionRecall": 0.6563,
+              "noteDetectionF1": 0.7,
+              "chordGroupingAccuracy": 0.5385,
+              "pitchAccuracyAtCorrectOnset": 0.0476,
+              "orderSensitivePitchRecovery": 0
+            }
+          }
+        },
+        "current": {
+          "metrics": {
+            "pitchAccuracy": 0.0313,
+            "matchedPitchAccuracy": 0.0476,
+            "durationAccuracy": 0.5,
+            "matchedDurationAccuracy": 0.7619,
+            "onsetAccuracy": 0.6563,
+            "matchedOnsetAccuracy": 1,
+            "timeAccuracy": 0.0313,
+            "matchedTimeAccuracy": 0.0476,
+            "measureCountAccuracy": 0.6667,
+            "noteDetectionPrecision": 0.75,
+            "noteDetectionRecall": 0.6563,
+            "noteDetectionF1": 0.7,
+            "chordGroupingAccuracy": 0.5385,
+            "pitchAccuracyAtCorrectOnset": 0.0476,
+            "orderSensitivePitchRecovery": 0
+          },
+          "structure": {
+            "absoluteMeasureCountError": 4,
+            "systemCountAccuracy": 0
+          },
+          "fusion": {
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          }
+        },
+        "v3": {
+          "serializer": {
+            "measureCount": 12,
+            "primaryEventCount": 28,
+            "serializableEventCount": 28,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 12,
+            "warningCount": 0,
+            "approximateQuantizationCount": 0,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 12,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 4
+          },
+          "fusion": {
+            "notationTabPairingRecall": 1,
+            "mirrorRelationshipCount": 28,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.0313,
+              "matchedPitchAccuracy": 0.0476,
+              "durationAccuracy": 0.5,
+              "matchedDurationAccuracy": 0.7619,
+              "onsetAccuracy": 0.6563,
+              "matchedOnsetAccuracy": 1,
+              "timeAccuracy": 0.0313,
+              "matchedTimeAccuracy": 0.0476,
+              "measureCountAccuracy": 0.6667,
+              "noteDetectionPrecision": 0.75,
+              "noteDetectionRecall": 0.6563,
+              "noteDetectionF1": 0.7,
+              "chordGroupingAccuracy": 0.5385,
+              "pitchAccuracyAtCorrectOnset": 0.0476,
+              "orderSensitivePitchRecovery": 0
+            },
+            "v3": {
+              "pitchAccuracy": 0.0313,
+              "matchedPitchAccuracy": 0.0476,
+              "durationAccuracy": 0.5,
+              "matchedDurationAccuracy": 0.7619,
+              "onsetAccuracy": 0.6563,
+              "matchedOnsetAccuracy": 1,
+              "timeAccuracy": 0.0313,
+              "matchedTimeAccuracy": 0.0476,
+              "measureCountAccuracy": 0.6667,
+              "noteDetectionPrecision": 0.75,
+              "noteDetectionRecall": 0.6563,
+              "noteDetectionF1": 0.7,
+              "chordGroupingAccuracy": 0.5385,
+              "pitchAccuracyAtCorrectOnset": 0.0476,
+              "orderSensitivePitchRecovery": 0
+            }
+          }
+        }
+      },
+      "independentShadow": {
+        "status": "ready",
+        "engine": "omr-v3-independent-shadow",
+        "promotedToRuntime": false,
+        "rollout": {
+          "shadow": true,
+          "rollback": false,
+          "requestedPromotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "promotions": {
+            "structure": false,
+            "measureGeometry": false,
+            "pianoGrouping": false,
+            "guitarFusion": false,
+            "fullV3": false
+          },
+          "anyPromotionRequested": false,
+          "anyPromotionEnabled": false,
+          "promotedToRuntime": false,
+          "mode": "shadow"
+        },
+        "stages": {
+          "pages": [
+            {
+              "pageIndex": 0,
+              "systemCount": 2,
+              "rejectedPairingCount": 0
+            }
+          ],
+          "structuralRecovery": {
+            "recoveredPairingCount": 0,
+            "recoveredPairings": []
+          },
+          "measures": [
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-guitar-techniques-paired-vector-0:0",
+              "rawCandidateCount": 7,
+              "acceptedBoundaryCount": 5,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11199999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 6,
+              "perSystemAlignment": 1
+            },
+            {
+              "systemId": "omr3:system:omr3-page-independent-shadow-guitar-techniques-paired-vector-0:1",
+              "rawCandidateCount": 7,
+              "acceptedBoundaryCount": 5,
+              "rejectedBoundaryCount": 0,
+              "inferredBoundaryCount": 0,
+              "trailingSpanRejected": false,
+              "expectedMeasureWidth": 0.11199999999999999,
+              "strongExternalWidthConsensus": false,
+              "completeGridEvidence": true,
+              "measureCount": 6,
+              "perSystemAlignment": 1
+            }
+          ],
+          "ownership": {
+            "inputSymbolCount": 60,
+            "assignedSymbolCount": 60,
+            "unassignedSymbolCount": 0,
+            "excludedSymbolCount": 0,
+            "onsetColumnCount": 32,
+            "mergedTabDigitCount": 0
+          },
+          "musical": {
+            "guitarMeasureCount": 12,
+            "eventCount": 25,
+            "pairedCount": 0,
+            "duplicateEventCount": 0,
+            "unpairedDiagnosticCount": 60,
+            "inputMutated": false
+          },
+          "evidence": {
+            "mode": "raw-detector-symbols",
+            "sourceSymbolCount": 60,
+            "independentSourceSymbolCount": 60,
+            "independentSourceSymbolRate": 1,
+            "primaryEventCount": 25,
+            "independentPrimaryEventCount": 25,
+            "independentPrimaryEventRate": 1
+          }
+        },
+        "evidence": {
+          "mode": "raw-detector-symbols",
+          "sourceSymbolCount": 60,
+          "independentSourceSymbolCount": 60,
+          "independentSourceSymbolRate": 1,
+          "primaryEventCount": 25,
+          "independentPrimaryEventCount": 25,
+          "independentPrimaryEventRate": 1
+        },
+        "evaluation": {
+          "serializer": {
+            "measureCount": 12,
+            "primaryEventCount": 25,
+            "serializableEventCount": 25,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 12,
+            "warningCount": 0,
+            "approximateQuantizationCount": 25,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 12,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 4
+          },
+          "fusion": {
+            "notationTabPairingRecall": 0,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.0313,
+              "matchedPitchAccuracy": 0.0476,
+              "durationAccuracy": 0.5,
+              "matchedDurationAccuracy": 0.7619,
+              "onsetAccuracy": 0.6563,
+              "matchedOnsetAccuracy": 1,
+              "timeAccuracy": 0.0313,
+              "matchedTimeAccuracy": 0.0476,
+              "measureCountAccuracy": 0.6667,
+              "noteDetectionPrecision": 0.75,
+              "noteDetectionRecall": 0.6563,
+              "noteDetectionF1": 0.7,
+              "chordGroupingAccuracy": 0.5385,
+              "pitchAccuracyAtCorrectOnset": 0.0476,
+              "orderSensitivePitchRecovery": 0
+            },
+            "v3": {
+              "pitchAccuracy": 0.0313,
+              "matchedPitchAccuracy": 0.0588,
+              "durationAccuracy": 0.1875,
+              "matchedDurationAccuracy": 0.3529,
+              "onsetAccuracy": 0.25,
+              "matchedOnsetAccuracy": 0.4706,
+              "timeAccuracy": 0.0313,
+              "matchedTimeAccuracy": 0.0588,
+              "measureCountAccuracy": 0.6667,
+              "noteDetectionPrecision": 0.68,
+              "noteDetectionRecall": 0.5313,
+              "noteDetectionF1": 0.5965,
+              "chordGroupingAccuracy": 0.4615,
+              "pitchAccuracyAtCorrectOnset": 0.125,
+              "orderSensitivePitchRecovery": 0
+            }
+          }
+        },
+        "current": {
+          "metrics": {
+            "pitchAccuracy": 0.0313,
+            "matchedPitchAccuracy": 0.0476,
+            "durationAccuracy": 0.5,
+            "matchedDurationAccuracy": 0.7619,
+            "onsetAccuracy": 0.6563,
+            "matchedOnsetAccuracy": 1,
+            "timeAccuracy": 0.0313,
+            "matchedTimeAccuracy": 0.0476,
+            "measureCountAccuracy": 0.6667,
+            "noteDetectionPrecision": 0.75,
+            "noteDetectionRecall": 0.6563,
+            "noteDetectionF1": 0.7,
+            "chordGroupingAccuracy": 0.5385,
+            "pitchAccuracyAtCorrectOnset": 0.0476,
+            "orderSensitivePitchRecovery": 0
+          },
+          "structure": {
+            "absoluteMeasureCountError": 4,
+            "systemCountAccuracy": 0
+          },
+          "fusion": {
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "voiceOverlapViolations": 0
+          }
+        },
+        "v3": {
+          "serializer": {
+            "measureCount": 12,
+            "primaryEventCount": 25,
+            "serializableEventCount": 25,
+            "invalidEventCount": 0,
+            "invalidEventRate": 0,
+            "duplicateEventCount": 0,
+            "duplicateEventRate": 0,
+            "voiceOverlapViolations": 0,
+            "emittedMeasureCount": 12,
+            "warningCount": 0,
+            "approximateQuantizationCount": 25,
+            "deterministic": true,
+            "promotedToRuntime": false
+          },
+          "structure": {
+            "systemCount": 2,
+            "staffGroupCount": 2,
+            "measureCount": 12,
+            "systemCountAccuracy": 0,
+            "staffGroupAccuracy": 0.5,
+            "absoluteMeasureCountError": 4
+          },
+          "fusion": {
+            "notationTabPairingRecall": 0,
+            "mirrorRelationshipCount": 0,
+            "duplicateEventRate": 0
+          },
+          "validity": {
+            "invalidEventRate": 0,
+            "invalidEventCount": 0,
+            "voiceOverlapViolations": 0
+          },
+          "accuracy": {
+            "current": {
+              "pitchAccuracy": 0.0313,
+              "matchedPitchAccuracy": 0.0476,
+              "durationAccuracy": 0.5,
+              "matchedDurationAccuracy": 0.7619,
+              "onsetAccuracy": 0.6563,
+              "matchedOnsetAccuracy": 1,
+              "timeAccuracy": 0.0313,
+              "matchedTimeAccuracy": 0.0476,
+              "measureCountAccuracy": 0.6667,
+              "noteDetectionPrecision": 0.75,
+              "noteDetectionRecall": 0.6563,
+              "noteDetectionF1": 0.7,
+              "chordGroupingAccuracy": 0.5385,
+              "pitchAccuracyAtCorrectOnset": 0.0476,
+              "orderSensitivePitchRecovery": 0
+            },
+            "v3": {
+              "pitchAccuracy": 0.0313,
+              "matchedPitchAccuracy": 0.0588,
+              "durationAccuracy": 0.1875,
+              "matchedDurationAccuracy": 0.3529,
+              "onsetAccuracy": 0.25,
+              "matchedOnsetAccuracy": 0.4706,
+              "timeAccuracy": 0.0313,
+              "matchedTimeAccuracy": 0.0588,
+              "measureCountAccuracy": 0.6667,
+              "noteDetectionPrecision": 0.68,
+              "noteDetectionRecall": 0.5313,
+              "noteDetectionF1": 0.5965,
+              "chordGroupingAccuracy": 0.4615,
+              "pitchAccuracyAtCorrectOnset": 0.125,
+              "orderSensitivePitchRecovery": 0
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,646 @@
+OMR semantic evaluation
+=======================
+schema v2 · evaluator v2.0.0 · 15aa1db · mode=written
+Alignment confidence: 61% (25 matched, 45 missing, 0 extra)
+
+Overall semantic score
+
+Pitch ........... 26%  (124/473; cov 100%)
+Rhythm .......... 87%  (270/312; cov 88%)
+Sustain ......... 0%  (0/5; cov 100%)
+Articulation .... 100%  (0/0; cov 100%)
+Measure ......... 62%  (106/170; cov 100%)
+Interpretation .. 33%  (1/3; cov 100%)
+Playback ........ 100%  (0/0; cov 100%)
+
+Overall .......... 58%
+First divergence: measure 1
+
+Worst measures
+- Measure 51 (severity 61): Merged measures 51,52 → 13; Missing note F#4; Missing rest (quarter)
+- Measure 42 (severity 49): Merged measures 42,43 → 10; Missing rest (dotted half); Missing rest (quarter)
+- Measure 47 (severity 44): Merged measures 47,48 → 11; Missing rest (quarter); Missing note F#4
+- Measure 40 (severity 37): Merged measures 40,41 → 9; Missing rest (dotted half); Missing rest (quarter)
+- Measure 49 (severity 33): Merged measures 49,50 → 12; Missing rest (quarter); Missing note F#4
+
+Per-measure report
+
+Measure 1
+- Missing rest (quarter)
+
+Measure 2
+- Missing rest (quarter)
+
+Measure 3
+- Missing rest (quarter)
+
+Measure 4
+- Missing rest (quarter)
+
+Measure 5
+- Missing rest (quarter)
+- Rest duration incorrect (dotted eighth; expected quarter)
+
+Measure 6
+- Missing rest (quarter)
+
+Measure 7 [merge]
+- Merged measures 7,8 → 7
+- Missing rest (quarter)
+- Missing note A4
+- Missing rest (quarter)
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note D2
+- Incorrect chord
+
+Measure 9 [missing]
+- Missing measure 9
+- Missing note F#4
+- Missing note B3
+- Missing note D4
+- Missing note F#4
+- Missing note G2
+
+Measure 10 [missing]
+- Missing measure 10
+- Missing note F#4
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note D2
+
+Measure 11 [missing]
+- Missing measure 11
+- Missing note F#4
+- Missing note B3
+- Missing note D4
+- Missing note F#4
+- Missing note G2
+
+Measure 12 [missing]
+- Missing measure 12
+- Missing note F#4
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note D2
+
+Measure 13 [missing]
+- Missing measure 13
+- Missing note F#5
+- Missing note A5
+- Missing note B3
+- Missing note D4
+- Missing note F#4
+- Missing note G2
+
+Measure 14 [missing]
+- Missing measure 14
+- Missing note G5
+- Missing note F#5
+- Missing note C#5
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note D2
+
+Measure 15 [missing]
+- Missing measure 15
+- Missing note B4
+- Missing note C#5
+- Missing note D5
+- Missing note B3
+- Missing note D4
+- Missing note F#4
+- Missing note G2
+
+Measure 16 [merge]
+- Merged measures 16,17 → 8
+- Missing rest (quarter)
+- Missing note C#5
+- Missing rest (quarter)
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note F#2
+- Incorrect chord
+
+Measure 18 [missing]
+- Missing measure 18
+- Missing note F#5
+- Missing note B3
+- Missing note D4
+- Missing note F#4
+- Missing note B1
+
+Measure 19 [missing]
+- Missing measure 19
+- Missing note E4
+- Missing note G3
+- Missing note B3
+- Missing note E2
+
+Measure 20 [missing]
+- Missing measure 20
+- Missing note E4
+- Missing note B3
+- Missing note D4
+- Missing note G4
+- Missing note E2
+
+Measure 21 [missing]
+- Missing measure 21
+- Missing note E4
+- Missing note F3
+- Missing note A3
+- Missing note D4
+- Missing note D2
+
+Measure 22 [missing]
+- Missing measure 22
+- Missing note A4
+- Missing note B4
+- Missing note C5
+- Missing note A3
+- Missing note C4
+- Missing note E4
+- Missing note A1
+
+Measure 23 [missing]
+- Missing measure 23
+- Missing note E5
+- Missing note D5
+- Missing note B4
+- Missing note G3
+- Missing note B3
+- Missing note E4
+- Missing note D2
+
+Measure 24 [missing]
+- Missing measure 24
+- Missing note D5
+- Missing note C5
+- Missing note B4
+- Missing note D3
+- Missing note G3
+- Missing note B3
+- Missing note E4
+- Missing note D2
+
+Measure 25 [missing]
+- Missing measure 25
+- Missing note D5
+- Missing note C3
+- Missing note E3
+- Missing note A3
+- Missing note D4
+- Missing note D2
+
+Measure 26 [missing]
+- Missing measure 26
+- Missing note D5
+- Missing note D5
+- Missing note C3
+- Missing note F#3
+- Missing note A3
+- Missing note D4
+- Missing note D2
+
+Measure 27 [missing]
+- Missing measure 27
+- Missing note E5
+- Missing note F5
+- Missing note G5
+- Missing note A3
+- Missing note C4
+- Missing note F4
+- Missing note D2
+
+Measure 28 [missing]
+- Missing measure 28
+- Missing note A5
+- Missing note C5
+- Missing note D5
+- Missing note A3
+- Missing note C4
+- Missing note E4
+- Missing note D2
+
+Measure 29 [missing]
+- Missing measure 29
+- Missing note E5
+- Missing note D5
+- Missing note B4
+- Missing note D3
+- Missing note G3
+- Missing note B3
+- Missing note E4
+- Missing note D2
+
+Measure 30 [missing]
+- Missing measure 30
+- Missing note D5
+- Missing note C3
+- Missing note E3
+- Missing note A3
+- Missing note D4
+- Missing note D2
+
+Measure 31 [missing]
+- Missing measure 31
+- Missing note D5
+- Missing note D5
+- Missing note C3
+- Missing note F#3
+- Missing note A3
+- Missing note D4
+- Missing note D2
+
+Measure 32 [missing]
+- Missing measure 32
+- Missing note G5
+- Missing note B3
+- Missing note E4
+- Missing note G4
+- Missing note E2
+
+Measure 33 [missing]
+- Missing measure 33
+- Missing note F#5
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note F#2
+
+Measure 34 [missing]
+- Missing measure 34
+- Missing note B4
+- Missing note A4
+- Missing note B4
+- Missing note B3
+- Missing note D4
+- Missing note F#4
+- Missing note B1
+
+Measure 35 [missing]
+- Missing measure 35
+- Missing note C#5
+- Missing note D5
+- Missing note E5
+- Missing note C#4
+- Missing note E4
+- Missing note A4
+- Missing note E2
+
+Measure 36 [missing]
+- Missing measure 36
+- Missing note C#5
+- Missing note D5
+- Missing note E5
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note A4
+- Missing note E2
+
+Measure 37 [missing]
+- Missing measure 37
+- Missing note F#4
+- Missing note A3
+- Missing note D4
+- Missing note B3
+- Missing note D4
+- Missing note G4
+- Missing note B2
+- Missing note E3
+- Missing note E2
+
+Measure 38 [missing]
+- Missing measure 38
+- Missing note C4
+- Missing note E4
+- Missing note A4
+- Missing note C5
+- Missing note A2
+- Missing note G3
+
+Measure 39 [missing]
+- Missing measure 39
+- Missing note D4
+- Missing note F#4
+- Missing note A4
+- Missing note D5
+- Missing note D2
+- Missing note A2
+- Missing note D3
+
+Measure 40 [merge]
+- Merged measures 40,41 → 9
+- Missing rest (dotted half)
+- Missing rest (quarter)
+- Missing rest (dotted half)
+- Missing rest (quarter)
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note D2
+- Extra note F#4
+- Incorrect chord
+
+Measure 42 [merge]
+- Merged measures 42,43 → 10
+- Missing rest (dotted half)
+- Missing rest (quarter)
+- Missing rest (dotted half)
+- Missing rest (quarter)
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note D2
+- Extra note F#4
+- Incorrect pitch C#4 (expected D4)
+- Incorrect pitch A3 (expected B3)
+- Incorrect pitch D2 (expected G2)
+- Incorrect chord
+- Incorrect chord
+
+Measure 44 [missing]
+- Missing measure 44
+- Missing note F#5
+- Missing note A5
+- Missing note B3
+- Missing note D4
+- Missing note F#4
+- Missing note G2
+
+Measure 45 [missing]
+- Missing measure 45
+- Missing note G5
+- Missing note F#5
+- Missing note C#5
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note D2
+
+Measure 46 [missing]
+- Missing measure 46
+- Missing note B4
+- Missing note C#5
+- Missing note D5
+- Missing note B3
+- Missing note D4
+- Missing note F#4
+- Missing note G2
+
+Measure 47 [merge]
+- Merged measures 47,48 → 11
+- Missing rest (quarter)
+- Missing note F#4
+- Missing rest (quarter)
+- Missing note B3
+- Missing note D4
+- Missing note F#4
+- Missing note G2
+- Incorrect pitch D4 (expected C#4)
+- Incorrect pitch B3 (expected A3)
+- Incorrect pitch F#4 (expected A4)
+- Incorrect pitch G2 (expected D2)
+- Incorrect chord
+- Incorrect chord
+
+Measure 49 [merge]
+- Merged measures 49,50 → 12
+- Missing rest (quarter)
+- Missing note F#4
+- Missing rest (quarter)
+- Missing note B3
+- Missing note D4
+- Missing note F#4
+- Missing note G2
+- Missing tie
+- Incorrect chord
+
+Measure 51 [merge]
+- Merged measures 51,52 → 13
+- Missing note F#4
+- Missing rest (quarter)
+- Missing rest (quarter)
+- Missing note F#5
+- Missing note A5
+- Missing rest (quarter)
+- Missing note B3
+- Missing note D4
+- Missing note F#4
+- Missing note G2
+- Extra rest (dotted eighth)
+- Extra note F#5
+- Extra note A5
+- Incorrect pitch D4 (expected C#4)
+- Incorrect pitch B3 (expected A3)
+- Incorrect pitch G2 (expected D2)
+- Incorrect chord
+- Incorrect chord
+
+Measure 53
+- Missing rest (quarter)
+
+Measure 54
+- Missing rest (quarter)
+
+Measure 55
+- Missing rest (quarter)
+
+Measure 56
+- Missing rest (quarter)
+
+Measure 57
+- Missing rest (quarter)
+
+Measure 58
+- Missing rest (quarter)
+- 9q detected as dotted half
+- Missing tie
+
+Measure 59
+- Missing rest (quarter)
+- Missing tie
+
+Measure 60
+- Missing rest (quarter)
+- Missing tie
+
+Measure 61
+- Missing rest (quarter)
+
+Measure 62
+- Missing rest (quarter)
+
+Measure 63 [merge]
+- Merged measures 63,64 → 24
+- Missing rest (quarter)
+- Missing note D5
+- Missing rest (quarter)
+- Missing note C3
+- Missing note E3
+- Missing note A3
+- Missing note D4
+- Missing note D2
+- Incorrect chord
+
+Measure 65 [missing]
+- Missing measure 65
+- Missing note D5
+- Missing note D5
+- Missing note C3
+- Missing note F#3
+- Missing note A3
+- Missing note D4
+- Missing note D2
+
+Measure 66 [missing]
+- Missing measure 66
+- Missing note E5
+- Missing note F5
+- Missing note G5
+- Missing note A3
+- Missing note C4
+- Missing note F4
+- Missing note D2
+
+Measure 67 [missing]
+- Missing measure 67
+- Missing note A5
+- Missing note C5
+- Missing note D5
+- Missing note A3
+- Missing note C4
+- Missing note E4
+- Missing note D2
+
+Measure 68 [missing]
+- Missing measure 68
+- Missing note E5
+- Missing note D5
+- Missing note B4
+- Missing note D3
+- Missing note G3
+- Missing note B3
+- Missing note E4
+- Missing note D2
+
+Measure 69
+- Missing rest (quarter)
+- 5q detected as dotted half
+- Missing tie
+
+Measure 70 [missing]
+- Missing measure 70
+- Missing note D5
+- Missing note D5
+- Missing note C3
+- Missing note F#3
+- Missing note A3
+- Missing note D4
+- Missing note D2
+
+Measure 71 [missing]
+- Missing measure 71
+- Missing note G5
+- Missing note B3
+- Missing note E4
+- Missing note G4
+- Missing note E2
+
+Measure 72 [missing]
+- Missing measure 72
+- Missing note F5
+- Missing note A3
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note E2
+
+Measure 73 [missing]
+- Missing measure 73
+- Missing note B4
+- Missing note C5
+- Missing note F5
+- Missing note A3
+- Missing note C4
+- Missing note F4
+- Missing note E2
+
+Measure 74 [missing]
+- Missing measure 74
+- Missing note E5
+- Missing note D5
+- Missing note C5
+- Missing note C4
+- Missing note E4
+- Missing note A4
+- Missing note E2
+
+Measure 75 [missing]
+- Missing measure 75
+- Missing note E5
+- Missing note D5
+- Missing note C5
+- Missing note A3
+- Missing note C4
+- Missing note F4
+- Missing note A4
+- Missing note E2
+
+Measure 76 [missing]
+- Missing measure 76
+- Missing note F4
+- Missing note A3
+- Missing note D4
+- Missing note B3
+- Missing note D4
+- Missing note G4
+- Missing note B2
+- Missing note E3
+- Missing note E2
+
+Measure 77 [missing]
+- Missing measure 77
+- Missing note C4
+- Missing note E4
+- Missing note A4
+- Missing note C5
+- Missing note A2
+- Missing note G3
+- Tempo 46 BPM missing or wrong at q=228
+
+Measure 78 [missing]
+- Missing measure 78
+- Missing note D4
+- Missing note F4
+- Missing note A4
+- Missing note D5
+- Missing note D2
+- Missing note A2
+- Missing note D3
+- Tempo 34 BPM missing or wrong at q=231
+
+Top recurring defects:
+1. Missing note (335)
+2. Missing measure (45)
+3. Missing rest (38)
+4. Incorrect chord (11)
+5. Incorrect pitch (10)
+6. Merged measure (8)
+7. Missing tie (5)
+8. Extra note (4)
+9. Dotted rhythm error (2)
+10. Tempo change mismatch (2)
+11. Extra rest (1)
+12. Rest duration incorrect (1)
+
+Top defect classes: Pitch (349), Measure structure (64), Rhythm (42), Sustain (ties) (5), Interpretation (2)
+
+Totals: 462 defects · 469 truth notes · 138 generated notes · 78→25 measures

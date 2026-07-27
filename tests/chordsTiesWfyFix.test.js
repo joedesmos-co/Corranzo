@@ -329,7 +329,7 @@ describe('piano chord WFY matching', () => {
     const checkpoint = pianoTriadCheckpoint()
     expect(checkpoint.isRollingChordMic).toBe(true)
     expect(checkpoint.isPianoChordMic).toBe(true)
-    expect(checkpoint.displayLabel).toBe('Play C chord')
+    expect(checkpoint.displayLabel).toBe('Play the C chord')
     expect(checkpoint.minimumRequiredTones).toBe(3)
   })
 

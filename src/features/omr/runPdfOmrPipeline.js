@@ -1,12 +1,17 @@
 import {
   extractPdfPageText,
+  extractPdfPageVectorCurves,
   getPdfPageCount,
+  pdfAnalysisCacheKey,
+  pinPdfAnalysisCache,
   renderPdfPageImageData,
+  unpinPdfAnalysisCache,
 } from '../score-follow/pdfPageAnalysis.js'
 import { buildOmrMusicXml } from './buildOmrMusicXml.js'
 import { promoteMeasureRhythmsWithClips } from './scoreGraphSolver.js'
-import { parseTempoFromTextItems } from './parseOmrTempoMarking.js'
+import { parseTempoFromTextItems, initialTempoFromMeasureRecords } from './parseOmrTempoMarking.js'
 import { buildOmrDiagnostics } from './buildOmrDiagnostics.js'
+import { applyDocumentVectorCurveContinuations } from './detectVectorTies.js'
 import { summarizeNoteMatchingReport } from './omrNoteMatchingDiagnostics.js'
 import { summarizeOrphanDiagnostics } from './vectorOrphanNoteheads.js'
 import { preprocessOmrPageImage } from './preprocessOmrPageImage.js'
@@ -51,6 +56,7 @@ import {
   omrPageProgressLabel,
   yieldToBrowser,
 } from './omrConstants.js'
+import { logOmrFailure, logOmrJobStart, logOmrProgress } from './omrJobDiagnostics.js'
 import { getInstrument } from '../instruments/instruments.js'
 import {
   computeDocumentStaffGapReference,
@@ -109,6 +115,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   const {
     renderPage = renderPdfPageImageData,
     extractPageText = extractPdfPageText,
+    extractPageCurves = extractPdfPageVectorCurves,
     analyzePage = null,
     onStatus = () => {},
     onProgress = null,
@@ -172,20 +179,184 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   onStatus(OMR_STATUS.ANALYZING)
 
   const phaseTracer = createOmrPhaseTracer(traceRunId)
+  const jobScoreId = options.scoreId ?? null
+  const jobPdfHash = options.pdfHash ?? null
+  const jobIdentity = { scoreId: jobScoreId, pdfHash: jobPdfHash, runId: traceRunId }
+  // Pin before any load so a concurrent clearPdfAnalysisCache (replacement /
+  // remount) cannot destroy this run's PDFDocumentProxy mid-analysis.
+  pinPdfAnalysisCache(traceRunId, jobIdentity)
+  // Do NOT clear the cache here — clearing/destroying at every pipeline start
+  // raced with remounts and killed in-flight documents (empty-page OMR failures).
+  // Replacement clears happen in invalidatePreviousScoreSideEffects instead.
   omrTrace('pipeline:pdf-load-start', {
     sourceType: typeof pdfSource === 'string' ? 'url' : 'bytes',
+    cacheKey: pdfAnalysisCacheKey(pdfSource, jobIdentity),
   }, traceRunId)
-  const totalPages = await phaseTracer.run('pdf-load', async () =>
-    numPagesOverride ?? (await getPdfPageCount(pdfSource)),
-  )
-  omrTrace('pipeline:pdf-load-success', { totalPages }, traceRunId)
-  throwIfCancelled(signal)
 
-  const pageCount = Math.min(totalPages, maxPages)
-  if (!pageCount) {
-    const assessment = assessOmrDifficulty({ pageCount: 0 })
-    throw new Error(assessment.message ?? 'Could not read any pages from the PDF.')
+  let totalPages
+  let pageCount
+  try {
+    totalPages = await phaseTracer.run('pdf-load', async () =>
+      numPagesOverride ?? (await getPdfPageCount(pdfSource, jobIdentity)),
+    )
+    omrTrace('pipeline:pdf-load-success', { totalPages }, traceRunId)
+    throwIfCancelled(signal)
+
+    pageCount = Math.min(totalPages, maxPages)
+    logOmrJobStart({
+      scoreId: jobScoreId,
+      generation: options.generation ?? null,
+      pdfHash: jobPdfHash,
+      runId: traceRunId,
+      pageCount,
+      totalPages,
+      cacheKey: pdfAnalysisCacheKey(pdfSource, jobIdentity),
+    })
+    if (!pageCount) {
+      const assessment = assessOmrDifficulty({ pageCount: 0 })
+      throw new Error(assessment.message ?? 'Could not read any pages from the PDF.')
+    }
+
+    const reportProgress = (progress) => {
+      logOmrProgress({
+        scoreId: jobScoreId,
+        runId: traceRunId,
+        currentPage: progress?.page ?? null,
+        totalPages: progress?.pageCount ?? pageCount,
+        label: progress?.label ?? null,
+      })
+      onProgress?.(progress)
+    }
+
+    // Always pass the same identity used for the initial load so page renders
+    // hit the pinned cache entry (scoreId+pdfHash vs bytes-hash must not diverge).
+    const usingDefaultExtract = extractPageText === extractPdfPageText
+    const usingDefaultCurveExtract = extractPageCurves === extractPdfPageVectorCurves
+    const renderPageBound = (source, pageNumber, targetWidth) =>
+      renderPage(source, pageNumber, targetWidth, jobIdentity)
+    const extractPageTextBound = (source, pageNumber) =>
+      extractPageText(source, pageNumber, jobIdentity)
+    const extractPageCurvesBound = (source, pageNumber) =>
+      extractPageCurves(source, pageNumber, jobIdentity)
+
+    return await runPdfOmrPipelineBody({
+      pdfSource,
+      options,
+      instrument,
+      comparisonMode,
+      omrV3Rollout,
+      needOmrV3Independent,
+      captureOmrV3Analysis,
+      stavesPerSystem,
+      phaseTracer,
+      traceRunId,
+      signal,
+      numPagesOverride,
+      maxPages,
+      preprocessPages,
+      allowPartialRecovery,
+      omrV3Rollback,
+      omrV3Confidence,
+      omrV3Shadow,
+      omrV3Compare,
+      omrV3RuntimeCandidate,
+      omrV3Promotions,
+      includeScoreGraph,
+      promoteScoreGraphClips,
+      title,
+      analyzePage,
+      renderPage: renderPageBound,
+      extractPageText: extractPageTextBound,
+      extractPageCurves: extractPageCurvesBound,
+      usingDefaultExtract,
+      usingDefaultCurveExtract,
+      onStatus,
+      reportProgress,
+      jobScoreId,
+      jobPdfHash,
+      jobIdentity,
+      totalPages,
+      pageCount,
+    })
+  } catch (error) {
+    logOmrFailure({
+      scoreId: jobScoreId,
+      runId: traceRunId,
+      pdfHash: jobPdfHash,
+      pageCount: pageCount ?? null,
+      totalPages: totalPages ?? null,
+      stage: error?.stage ?? error?.code ?? error?.difficulty?.code ?? 'pipeline',
+      error,
+      readablePages:
+        error?.diagnostics?.pagesWithSystems ??
+        error?.readablePages ??
+        error?.difficulty?.readablePages ??
+        null,
+      analysisResultSummary: error?.diagnostics
+        ? {
+            notes: error.diagnostics.notes ?? null,
+            measures: error.diagnostics.measures ?? null,
+            pagesWithSystems: error.diagnostics.pagesWithSystems ?? null,
+            overallConfidence: error.diagnostics.overallConfidence ?? null,
+            reasons: error.difficulty?.reasons ?? null,
+          }
+        : error?.message
+          ? { message: error.message }
+          : null,
+    })
+    throw error
+  } finally {
+    unpinPdfAnalysisCache(traceRunId, jobIdentity)
   }
+}
+
+/** Inner pipeline body — kept separate so pin/unpin always wraps the full run. */
+async function runPdfOmrPipelineBody({
+  pdfSource,
+  options,
+  instrument,
+  comparisonMode,
+  omrV3Rollout,
+  needOmrV3Independent,
+  captureOmrV3Analysis,
+  stavesPerSystem,
+  phaseTracer,
+  traceRunId,
+  signal,
+  numPagesOverride,
+  maxPages,
+  preprocessPages,
+  allowPartialRecovery,
+  omrV3Rollback,
+  omrV3Confidence,
+  omrV3Shadow,
+  omrV3Compare,
+  omrV3RuntimeCandidate,
+  omrV3Promotions,
+  includeScoreGraph,
+  promoteScoreGraphClips,
+  title,
+  analyzePage,
+  renderPage,
+  extractPageText,
+  extractPageCurves,
+  usingDefaultExtract = false,
+  usingDefaultCurveExtract = false,
+  onStatus,
+  reportProgress,
+  jobScoreId,
+  jobPdfHash,
+  jobIdentity,
+  totalPages,
+  pageCount,
+}) {
+  // Silence unused when destructured from options later paths.
+  void options
+  void maxPages
+  void jobScoreId
+  void jobPdfHash
+  void jobIdentity
+  void totalPages
 
   const measureRhythms = []
   const measureGridEntries = []
@@ -206,8 +377,14 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       detectedTieCount: 0,
       appliedTieCount: 0,
       appliedTiePairs: [],
+      appliedSlurCount: 0,
+      appliedSlurPairs: [],
       uncertainSlurCount: 0,
       tieControlGlyphCount: 0,
+      vectorCurveCandidateCount: 0,
+      vectorCurveAppliedCount: 0,
+      vectorCurveOrphanEndpointCount: 0,
+      openVectorCurveFragments: [],
     },
     rests: {
       detectedRestGlyphCount: 0,
@@ -222,6 +399,19 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     accent: {
       detectedAccentCount: 0,
       appliedAccentCount: 0,
+    },
+    notationArticulations: {
+      detectedByType: {
+        tenuto: 0,
+        marcato: 0,
+        fermata: 0,
+      },
+      appliedByType: {
+        tenuto: 0,
+        marcato: 0,
+        fermata: 0,
+      },
+      rejectedCandidateCount: 0,
     },
     orphans: {
       orphanNoteheadCount: 0,
@@ -315,7 +505,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     const pagePhase = phaseTracer.start(`page-${page}`)
     omrTrace(`pipeline:page-${page}:loop-start`, null, traceRunId)
     throwIfCancelled(signal)
-    onProgress?.({
+    reportProgress({
       page,
       pageCount,
       phase: 'analyze',
@@ -323,16 +513,23 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     })
 
     const shouldSkipDefaultTextExtraction =
-      numPagesOverride != null && extractPageText === extractPdfPageText
+      numPagesOverride != null && usingDefaultExtract
     const pageTextPromise = shouldSkipDefaultTextExtraction
       ? Promise.resolve([])
       : Promise.resolve().then(() => extractPageText(pdfSource, page)).catch(() => [])
+    const shouldSkipDefaultCurveExtraction =
+      numPagesOverride != null && usingDefaultCurveExtract
+    const pageCurvesPromise = shouldSkipDefaultCurveExtraction
+      ? Promise.resolve([])
+      : Promise.resolve().then(() => extractPageCurves(pdfSource, page)).catch(() => [])
     let rendered
     let pageText
+    let vectorCurves
     try {
-      [rendered, pageText] = await Promise.all([
+      [rendered, pageText, vectorCurves] = await Promise.all([
         renderPage(pdfSource, page),
         pageTextPromise,
+        pageCurvesPromise,
       ])
     } catch (error) {
       if (isAbortError(error, signal) || !allowPartialRecovery || pageCount === 1) throw error
@@ -360,7 +557,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     }
 
     if (preprocessPages) {
-      onProgress?.({
+      reportProgress({
         page,
         pageCount,
         phase: 'preprocess',
@@ -374,7 +571,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       preprocessLog.push({ page, applied: preprocessed.applied, quality: preprocessed.quality })
     }
 
-    onProgress?.({
+    reportProgress({
       page,
       pageCount,
       phase: 'detect',
@@ -392,6 +589,7 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
         page,
         measureNumberStart: measureCounter,
         pageText,
+        vectorCurves,
         stavesPerSystem,
         instrument,
         keySignature,
@@ -453,9 +651,17 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     if (pageTies) {
       diagnostics.ties.detectedTieCount += pageTies.detectedTieCount ?? 0
       diagnostics.ties.appliedTieCount += pageTies.appliedTieCount ?? 0
+      diagnostics.ties.appliedSlurCount += pageTies.appliedSlurCount ?? 0
       diagnostics.ties.uncertainSlurCount += pageTies.uncertainSlurCount ?? 0
       diagnostics.ties.tieControlGlyphCount += pageTies.tieControlGlyphCount ?? 0
+      diagnostics.ties.vectorCurveCandidateCount +=
+        pageTies.vectorCurveCandidateCount ?? 0
+      diagnostics.ties.vectorCurveAppliedCount += pageTies.vectorCurveAppliedCount ?? 0
       diagnostics.ties.appliedTiePairs.push(...(pageTies.appliedTiePairs ?? []))
+      diagnostics.ties.appliedSlurPairs.push(...(pageTies.appliedSlurPairs ?? []))
+      diagnostics.ties.openVectorCurveFragments.push(
+        ...(pageTies.openVectorCurveFragments ?? []),
+      )
     }
 
     const pageRests = pageResult.restDiagnostics
@@ -479,6 +685,19 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     if (pageAccent) {
       diagnostics.accent.detectedAccentCount += pageAccent.detectedAccentCount ?? 0
       diagnostics.accent.appliedAccentCount += pageAccent.appliedAccentCount ?? 0
+    }
+
+    const pageNotationArticulations =
+      pageResult.notationArticulationDiagnostics
+    if (pageNotationArticulations) {
+      for (const type of ['tenuto', 'marcato', 'fermata']) {
+        diagnostics.notationArticulations.detectedByType[type] +=
+          pageNotationArticulations.detectedByType?.[type] ?? 0
+        diagnostics.notationArticulations.appliedByType[type] +=
+          pageNotationArticulations.appliedByType?.[type] ?? 0
+      }
+      diagnostics.notationArticulations.rejectedCandidateCount +=
+        pageNotationArticulations.rejectedCandidateCount ?? 0
     }
 
     const pageTab = pageResult.tabDiagnostics
@@ -543,6 +762,30 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
     })
   }
 
+  const documentCurveContinuations = applyDocumentVectorCurveContinuations({
+    measureRecords: measureRhythms,
+    fragments: diagnostics.ties.openVectorCurveFragments,
+  })
+  diagnostics.ties.detectedTieCount +=
+    documentCurveContinuations.detectedTieCount ?? 0
+  diagnostics.ties.appliedTieCount +=
+    documentCurveContinuations.appliedTieCount ?? 0
+  diagnostics.ties.appliedSlurCount +=
+    documentCurveContinuations.appliedSlurCount ?? 0
+  diagnostics.ties.vectorCurveAppliedCount +=
+    (documentCurveContinuations.appliedTieCount ?? 0) +
+    (documentCurveContinuations.appliedSlurCount ?? 0)
+  diagnostics.ties.vectorCurveOrphanEndpointCount =
+    documentCurveContinuations.orphanFragmentCount ?? 0
+  diagnostics.ties.appliedTiePairs.push(
+    ...(documentCurveContinuations.appliedTiePairs ?? []),
+  )
+  diagnostics.ties.appliedSlurPairs.push(
+    ...(documentCurveContinuations.appliedSlurPairs ?? []),
+  )
+  diagnostics.ties.pairedPageContinuationCandidateIds =
+    documentCurveContinuations.pairedCandidateIds ?? []
+
   if (diagnostics.systems === 0) {
     const assessment = assessOmrDifficulty({
       overallConfidence: 0,
@@ -583,6 +826,14 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
   }
 
   onStatus(OMR_STATUS.BUILDING_PLAYBACK)
+
+  const measureTempo = initialTempoFromMeasureRecords(measureRhythms)
+  if (
+    !measureTempo.fromDefault &&
+    (measureTempo.confidence ?? 0) >= (tempo.confidence ?? 0)
+  ) {
+    tempo = measureTempo
+  }
 
   const musical = { keySignature, timeSignature, tempo }
   const layoutConsistency = validateOmrMultiPageLayout(pageDiagnostics)

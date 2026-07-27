@@ -60,11 +60,34 @@ describe('getTabPositionsForTimingMap', () => {
     expect(getTabPositionsForTimingMap(map, PIANO).size).toBe(0)
   })
 
-  it('caches per timing map + instrument', () => {
+  it('caches per timing map + instrument while ownership matches', () => {
     const map = parseMusicXml(simpleGuitarXml(), 'g.musicxml')
-    const first = getTabPositionsForTimingMap(map, GUITAR)
-    const second = getTabPositionsForTimingMap(map, GUITAR)
+    map.contentHash = 'hash-a'
+    const first = getTabPositionsForTimingMap(map, GUITAR, {
+      ownerPdfIdentity: 'pdf-a',
+      epoch: 1,
+    })
+    const second = getTabPositionsForTimingMap(map, GUITAR, {
+      ownerPdfIdentity: 'pdf-a',
+      epoch: 1,
+    })
     expect(second).toBe(first)
+  })
+
+  it('rebuilds when score ownership changes', () => {
+    const map = parseMusicXml(simpleGuitarXml(), 'g.musicxml')
+    map.contentHash = 'hash-a'
+    const first = getTabPositionsForTimingMap(map, GUITAR, {
+      ownerPdfIdentity: 'pdf-a',
+      epoch: 1,
+    })
+    const second = getTabPositionsForTimingMap(map, GUITAR, {
+      ownerPdfIdentity: 'pdf-b',
+      epoch: 2,
+      contentHash: 'hash-b',
+    })
+    expect(second).not.toBe(first)
+    expect(second.size).toBe(first.size)
   })
 })
 

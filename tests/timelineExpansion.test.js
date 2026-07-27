@@ -62,6 +62,16 @@ describe('repeat and ending expansion', () => {
     expect(performedOrder(t)).toBe('1,2,1,2,3,4,3,5')
   })
 
+  it('expands when the backward repeat sits on the second ending', () => {
+    const t = parseMusicXml(F.voltaBackwardOnSecondEnding())
+    expect(performedOrder(t)).toBe('1,2,3,1,2,4,5')
+  })
+
+  it('keeps a pickup outside a following repeated section', () => {
+    const t = parseMusicXml(F.pickupThenRepeat())
+    expect(performedOrder(t)).toBe('1,2,3,2,3,4')
+  })
+
   it('terminates on malformed repeats and reports diagnostics', () => {
     const t = parseMusicXml(F.malformedRepeats())
     const tl = t.performedMeasureTimeline

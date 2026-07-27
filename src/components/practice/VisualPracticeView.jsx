@@ -10,6 +10,7 @@ import {
   buildVisualLaneGroups,
   computeKeyboardRange,
   resolveVisualFrameTime,
+  resolveVisualKeySignature,
   resolveVisualTarget,
   selectVisualWindow,
 } from '../../features/practice/visualPracticeLane.js'
@@ -28,6 +29,8 @@ import {
   getTabPositionsForTimingMap,
   resolveStringsForTimingMap,
 } from '../../features/instruments/timingMapTabPositions.js'
+import { buildPianoPracticeInstruction } from '../../features/practice/pianoPracticeInstructions.js'
+import { INSTRUMENT_IDS } from '../../features/instruments/instruments.js'
 import { describeTabPosition } from '../../features/instruments/fretboard.js'
 import StaffVisualLane from './StaffVisualLane.jsx'
 import TabVisualLane from './TabVisualLane.jsx'
@@ -84,6 +87,20 @@ function VisualPracticeView({ timingSourceKind = null }) {
   }, [timingMap])
 
   const currentTime = tick.practiceTime ?? 0
+  const currentMeasureNumber =
+    groups.find((group) => group.timeSeconds >= currentTime - 0.001)
+      ?.measureNumber ??
+    groups[groups.length - 1]?.measureNumber ??
+    null
+  const keySignature = useMemo(
+    () =>
+      resolveVisualKeySignature(
+        timingMap,
+        currentTime,
+        currentMeasureNumber,
+      ),
+    [timingMap, currentTime, currentMeasureNumber],
+  )
   const visualDurationSeconds = useMemo(() => {
     const candidates = [
       tick.playbackDuration,
@@ -200,6 +217,7 @@ function VisualPracticeView({ timingSourceKind = null }) {
         }
         strings={laneStrings}
         tabPositions={tabPositions}
+        instrumentId={instrument.id}
       />
 
       {isFretboardLane ? (
@@ -219,6 +237,7 @@ function VisualPracticeView({ timingSourceKind = null }) {
           getFrameTime={getFrameTime}
           barlineTimes={barlineTimes}
           timeSignature={timeSignature}
+          keySignature={keySignature}
           durationSeconds={visualDurationSeconds}
           loopRegion={loopRegion}
         />
@@ -306,13 +325,20 @@ function useWfyVisualFrameTime({ rawFrameTime, waiting, checkpoint, checkpointIn
 }
 
 /**
- * Instrument-aware note callout: piano shows pitch labels; fretted
+ * Instrument-aware note callout: piano shows pedagogy instructions; fretted
  * instruments append the position ("E3 · fret 2 · D string").
  */
-function describeTargetNotes(targetGroup, strings, tabPositions) {
+function describeTargetNotes(targetGroup, strings, tabPositions, instrumentId = null) {
   if (targetGroup?.isChord) {
     if (targetGroup.displayLabel) {
       return targetGroup.displayLabel
+    }
+    if (instrumentId === INSTRUMENT_IDS.PIANO || targetGroup?.isPianoChordMic) {
+      return buildPianoPracticeInstruction({
+        expectedMidis: targetGroup.midis ?? targetGroup.expectedMidis,
+        notes: targetGroup.notes,
+        chordSymbol: targetGroup.chordSymbol ?? null,
+      })
     }
     if (targetGroup.chordSymbol) {
       return `Play ${targetGroup.chordSymbol} chord`
@@ -321,6 +347,16 @@ function describeTargetNotes(targetGroup, strings, tabPositions) {
       return 'Play this double-stop'
     }
     return `Play ${targetGroup.midis?.length ?? targetGroup.notes?.length ?? 0}-note chord`
+  }
+  if (instrumentId === INSTRUMENT_IDS.PIANO || targetGroup?.pianoHandTexture) {
+    return (
+      targetGroup.displayLabel ??
+      buildPianoPracticeInstruction({
+        expectedMidis: targetGroup.midis ?? targetGroup.expectedMidis,
+        notes: targetGroup.notes,
+        chordSymbol: targetGroup.chordSymbol ?? null,
+      })
+    )
   }
   const notes = targetGroup?.notes ?? []
   if (!strings) {
@@ -348,6 +384,7 @@ const VisualTargetHeader = memo(function VisualTargetHeader({
   micChordSequence = false,
   strings = null,
   tabPositions = null,
+  instrumentId = null,
 }) {
   if (complete) {
     return (
@@ -384,7 +421,7 @@ const VisualTargetHeader = memo(function VisualTargetHeader({
         {isWaitForYou ? 'Play this' : 'Next up'}
       </span>
       <strong className="visual-practice__target-notes">
-        {describeTargetNotes(targetGroup, strings, tabPositions)}
+        {describeTargetNotes(targetGroup, strings, tabPositions, instrumentId)}
         {targetGroup.isChord && micChordSequence ? ' (one at a time)' : ''}
       </strong>
       <span className="visual-practice__target-meta">

@@ -139,6 +139,7 @@ export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) 
       activeEndingNumbers = marking.endingStartNumbers
     }
 
+    const activeEndingNumbersBeforeSkip = activeEndingNumbers
     const skipForVolta = !shouldPlayMeasureOnPass(marking, sectionPass, activeEndingNumbers)
 
     // Decide stop/discontinue membership before clearing the bracket (P8).
@@ -147,6 +148,29 @@ export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) 
     if (skipForVolta) {
       if (endingClosesHere) {
         activeEndingNumbers = null
+      }
+      // Backward repeats may sit on a volta measure that is skipped on some
+      // passes. Honor the jump only when skipping a *later* ending on an
+      // earlier pass (e.g. skip ending 2 on pass 1). Do not re-jump when
+      // skipping an earlier ending on a later pass (e.g. skip ending 1 on
+      // pass 2) — that case must fall through to the next ending.
+      if (marking.backwardRepeat) {
+        const endingNumbers = marking.endingStartNumbers ?? activeEndingNumbersBeforeSkip
+        const skippingLaterEnding =
+          Array.isArray(endingNumbers) &&
+          endingNumbers.some((number) => number > sectionPass)
+        const sectionStart = findSectionStartIndex(markings, index)
+        const maxPasses = marking.backwardRepeatTimes ?? 2
+        if (skippingLaterEnding && sectionPass < maxPasses) {
+          if (sectionStart >= 0) {
+            sectionPass += 1
+            index = sectionStart
+            continue
+          }
+          sectionPass += 1
+          index = 0
+          continue
+        }
       }
       index += 1
       continue

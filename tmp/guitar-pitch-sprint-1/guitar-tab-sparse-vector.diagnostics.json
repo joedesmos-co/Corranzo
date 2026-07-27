@@ -1,0 +1,32 @@
+{
+  "tablature": {
+    "tabStaves": 2,
+    "tabNotes": 40,
+    "tabPositionalMeasures": 8,
+    "tabApproximateRhythmMeasures": 8,
+    "tabCompressedTimingMeasures": 0,
+    "tabEmptyMeasures": 0,
+    "attachedPositions": 0,
+    "pairedNotes": 0,
+    "unpairedNotationNotes": 0,
+    "unusedTabDigits": 0,
+    "lowConfidenceMeasures": 0,
+    "pairingConfidence": 1,
+    "tabOnly": true,
+    "rhythmApproximate": true,
+    "unsupportedMarkers": [
+      "capo",
+      "d-s-coda",
+      "coda",
+      "repeat-ending"
+    ],
+    "capoText": "Capo 2",
+    "warnings": [
+      "TAB notes detected — rhythm is approximate. Playback uses even spacing within each measure.",
+      "Capo marking detected — playback sounds at written TAB pitch; capo transposition is not applied. (Capo 2)",
+      "Repeat/coda markings were detected but not fully expanded. Playback follows the written measure order."
+    ]
+  },
+  "noteCount": 40,
+  "measureCount": 8
+}

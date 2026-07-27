@@ -1,0 +1,735 @@
+{
+  "id": "piano-dense-advanced-vector",
+  "source": "vector-glyphs",
+  "pageHist": {
+    "beams": {},
+    "bStr": {},
+    "dtype": {},
+    "stem": 0,
+    "noStem": 0
+  },
+  "eventDtype": {
+    "quarter": 45,
+    "eighth": 53,
+    "sixteenth": 47,
+    "half": 2,
+    "whole": 1
+  },
+  "beamedButSixteenth": 19,
+  "beamedEighth": 25,
+  "samples": [
+    {
+      "m": 2,
+      "events": [
+        {
+          "start": 0,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            0,
+            0
+          ],
+          "midi": [
+            76,
+            67,
+            40
+          ],
+          "pos": 0.0451028450595924
+        },
+        {
+          "start": 3,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter",
+            "eighth",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            1,
+            0
+          ],
+          "bStr": [
+            1,
+            11,
+            0
+          ],
+          "midi": [
+            79,
+            71,
+            64
+          ],
+          "pos": 0.17702326028450602
+        },
+        {
+          "start": 5,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "eighth",
+            "eighth"
+          ],
+          "beams": [
+            1,
+            1
+          ],
+          "bStr": [
+            10,
+            29
+          ],
+          "midi": [
+            76,
+            67
+          ],
+          "pos": 0.32708573625528653
+        },
+        {
+          "start": 5,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            2
+          ],
+          "midi": [
+            65
+          ],
+          "pos": 0.32708573625528653
+        },
+        {
+          "start": 7,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter",
+            "eighth",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            1,
+            0
+          ],
+          "bStr": [
+            1,
+            11,
+            0
+          ],
+          "midi": [
+            79,
+            71,
+            64
+          ],
+          "pos": 0.45900615148019985
+        },
+        {
+          "start": 9,
+          "dur": 4,
+          "dtype": "quarter",
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            1,
+            0
+          ],
+          "midi": [
+            76,
+            67,
+            40
+          ],
+          "pos": 0.5909265667051138
+        },
+        {
+          "start": 12,
+          "dur": 4,
+          "dtype": "quarter",
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            1,
+            2,
+            0
+          ],
+          "midi": [
+            71,
+            64,
+            35
+          ],
+          "pos": 0.7228469819300265
+        }
+      ]
+    },
+    {
+      "m": 3,
+      "events": [
+        {
+          "start": 3,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            0,
+            0
+          ],
+          "midi": [
+            71,
+            64,
+            35
+          ],
+          "pos": 0.16556096122659605
+        },
+        {
+          "start": 4,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            0,
+            0
+          ],
+          "midi": [
+            76,
+            67,
+            40
+          ],
+          "pos": 0.2554916703523513
+        },
+        {
+          "start": 6,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            1,
+            0,
+            0
+          ],
+          "midi": [
+            79,
+            71,
+            64
+          ],
+          "pos": 0.3454223794781069
+        },
+        {
+          "start": 7,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter",
+            "eighth"
+          ],
+          "beams": [
+            0,
+            1
+          ],
+          "bStr": [
+            4,
+            29
+          ],
+          "midi": [
+            76,
+            67
+          ],
+          "pos": 0.4353530886038627
+        },
+        {
+          "start": 7,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            1
+          ],
+          "midi": [
+            65
+          ],
+          "pos": 0.4353530886038627
+        },
+        {
+          "start": 8,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter",
+            "eighth"
+          ],
+          "beams": [
+            0,
+            1
+          ],
+          "bStr": [
+            1,
+            29
+          ],
+          "midi": [
+            79,
+            71
+          ],
+          "pos": 0.525283797729618
+        },
+        {
+          "start": 8,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            1
+          ],
+          "midi": [
+            69
+          ],
+          "pos": 0.525283797729618
+        },
+        {
+          "start": 10,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter",
+            "eighth"
+          ],
+          "beams": [
+            0,
+            1
+          ],
+          "bStr": [
+            1,
+            29
+          ],
+          "midi": [
+            76,
+            67
+          ],
+          "pos": 0.6152145068553738
+        },
+        {
+          "start": 10,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            1
+          ],
+          "midi": [
+            65
+          ],
+          "pos": 0.6152145068553738
+        },
+        {
+          "start": 11,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            1,
+            1,
+            0
+          ],
+          "midi": [
+            79,
+            71,
+            64
+          ],
+          "pos": 0.7051452159811291
+        },
+        {
+          "start": 13,
+          "dur": 3,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            1,
+            0,
+            0
+          ],
+          "midi": [
+            76,
+            67,
+            40
+          ],
+          "pos": 0.7950759251068849
+        }
+      ]
+    },
+    {
+      "m": 4,
+      "events": [
+        {
+          "start": 3,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            0,
+            0
+          ],
+          "midi": [
+            76,
+            67,
+            40
+          ],
+          "pos": 0.16479106262387977
+        },
+        {
+          "start": 4,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            0,
+            0
+          ],
+          "midi": [
+            79,
+            71,
+            64
+          ],
+          "pos": 0.2547217717496356
+        },
+        {
+          "start": 6,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter",
+            "eighth"
+          ],
+          "beams": [
+            0,
+            1
+          ],
+          "bStr": [
+            0,
+            29
+          ],
+          "midi": [
+            79,
+            67
+          ],
+          "pos": 0.3446524808753914
+        },
+        {
+          "start": 6,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            1
+          ],
+          "midi": [
+            65
+          ],
+          "pos": 0.3446524808753914
+        },
+        {
+          "start": 7,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter",
+            "eighth"
+          ],
+          "beams": [
+            0,
+            1
+          ],
+          "bStr": [
+            3,
+            29
+          ],
+          "midi": [
+            79,
+            71
+          ],
+          "pos": 0.4345831900011467
+        },
+        {
+          "start": 7,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            2
+          ],
+          "midi": [
+            69
+          ],
+          "pos": 0.4345831900011467
+        },
+        {
+          "start": 8,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "eighth"
+          ],
+          "beams": [
+            1
+          ],
+          "bStr": [
+            29
+          ],
+          "midi": [
+            76
+          ],
+          "pos": 0.5245138991269019
+        },
+        {
+          "start": 8,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            2
+          ],
+          "midi": [
+            72,
+            65
+          ],
+          "pos": 0.5245138991269019
+        },
+        {
+          "start": 10,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter",
+            "eighth"
+          ],
+          "beams": [
+            0,
+            1
+          ],
+          "bStr": [
+            4,
+            29
+          ],
+          "midi": [
+            79,
+            71
+          ],
+          "pos": 0.6144446082526578
+        },
+        {
+          "start": 10,
+          "dur": 2,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            2
+          ],
+          "midi": [
+            69
+          ],
+          "pos": 0.6144446082526578
+        },
+        {
+          "start": 11,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter",
+            "eighth"
+          ],
+          "beams": [
+            0,
+            1
+          ],
+          "bStr": [
+            2,
+            29
+          ],
+          "midi": [
+            79,
+            67
+          ],
+          "pos": 0.7043753173784131
+        },
+        {
+          "start": 12,
+          "dur": 1,
+          "dtype": "sixteenth",
+          "noteDur": [
+            "quarter"
+          ],
+          "beams": [
+            0
+          ],
+          "bStr": [
+            2
+          ],
+          "midi": [
+            65
+          ],
+          "pos": 0.72485134404639
+        },
+        {
+          "start": 13,
+          "dur": 3,
+          "dtype": "eighth",
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            0,
+            0
+          ],
+          "midi": [
+            79,
+            71,
+            64
+          ],
+          "pos": 0.7943060265041689
+        }
+      ]
+    }
+  ]
+}

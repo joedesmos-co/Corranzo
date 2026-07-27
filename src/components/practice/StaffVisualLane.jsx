@@ -11,9 +11,11 @@ import {
   NOTEHEAD_RY,
   STAFF_KIND,
   STAFF_LINE_GAP,
+  buildKeySignatureMarks,
   buildStaffGeometry,
   buildStaffLaneNotes,
   buildStaffLaneNotationMarkings,
+  buildStaffLaneRhythmMarks,
   buildStaffLaneStems,
 } from '../../features/practice/staffLaneLayout.js'
 import { resolveLaneNoteClass } from '../../features/practice/visualLaneFeedback.js'
@@ -68,6 +70,7 @@ function StaffVisualLane({
   getFrameTime,
   barlineTimes = [],
   timeSignature = null,
+  keySignature = null,
   durationSeconds = null,
   loopRegion = null,
 }) {
@@ -90,7 +93,7 @@ function StaffVisualLane({
   // the outer ledger margins symmetrically.
   const offsetY = (size.height > 0 ? size.height / scale - geometry.height : 0) / 2
 
-  const { notes, stems, noteMarkings, spanMarkings } = useMemo(() => {
+  const { notes, stems, beams, flags, dots, noteMarkings, spanMarkings } = useMemo(() => {
     const builtNotes = buildStaffLaneNotes(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
     })
@@ -102,7 +105,8 @@ function StaffVisualLane({
       pixelsPerSecond: PX_PER_SECOND,
       notes: builtNotes,
     })
-    return { notes: builtNotes, stems: builtStems, ...markings }
+    const rhythmMarks = buildStaffLaneRhythmMarks(builtNotes, builtStems)
+    return { notes: builtNotes, stems: builtStems, ...rhythmMarks, ...markings }
   }, [visibleGroups, geometry])
 
   // Barlines within the visible groups' span (deterministic x, like notes).
@@ -157,6 +161,20 @@ function StaffVisualLane({
   const treble = geometry.staves[STAFF_KIND.TREBLE]
   const bass = geometry.staves[STAFF_KIND.BASS]
   const glyphClefs = supportsClefGlyphs()
+  const keySignatureMarks = useMemo(
+    () => buildKeySignatureMarks(keySignature, geometry),
+    [keySignature, geometry],
+  )
+  const keyColumns = Math.max(
+    0,
+    ...keySignatureMarks.map((mark) => mark.column + 1),
+  )
+  const keyStartX = STAFF_LINE_GAP * 3.6
+  const keyColumnWidth = STAFF_LINE_GAP * 0.82
+  const timeSignatureX =
+    STAFF_LINE_GAP * 4.6 + keyColumns * keyColumnWidth
+  const staticMaskWidth =
+    STAFF_LINE_GAP * 6.8 + keyColumns * keyColumnWidth
 
   return (
     <div ref={containerRef} className="staff-lane" aria-hidden="true">
@@ -186,6 +204,23 @@ function StaffVisualLane({
                 y2={stem.y2}
               />
             ))}
+            {beams.map((beam) => (
+              <line
+                key={beam.id}
+                className={`staff-lane__beam staff-lane__note--${beam.status ?? 'upcoming'}`}
+                x1={beam.x1}
+                x2={beam.x2}
+                y1={beam.y1}
+                y2={beam.y2}
+              />
+            ))}
+            {flags.map((flag) => (
+              <path
+                key={flag.id}
+                className={`staff-lane__flag staff-lane__note--${flag.status ?? 'upcoming'}`}
+                d={flag.path}
+              />
+            ))}
             {spanMarkings.map((marking) => (
               <path
                 key={marking.id}
@@ -210,16 +245,23 @@ function StaffVisualLane({
                     vectorEffect="non-scaling-stroke"
                   />
                 ))}
-                {note.sharp && (
+                {note.accidentalGlyph && (
                   <text
-                    className="staff-lane__sharp"
-                    x={note.x + note.xOffset - NOTEHEAD_RX - 4}
+                    className={`staff-lane__accidental staff-lane__accidental--${note.accidentalType}${note.accidentalType === 'sharp' ? ' staff-lane__sharp' : ''}`}
+                    data-accidental={note.accidentalType}
+                    x={
+                      note.x +
+                      note.xOffset -
+                      NOTEHEAD_RX -
+                      4 -
+                      note.accidentalColumn * STAFF_LINE_GAP * 0.95
+                    }
                     y={note.y}
                     dominantBaseline="middle"
                     textAnchor="end"
                     fontSize={STAFF_LINE_GAP + 2}
                   >
-                    ♯
+                    {note.accidentalDisplayGlyph ?? note.accidentalGlyph}
                   </text>
                 )}
                 <ellipse
@@ -231,6 +273,15 @@ function StaffVisualLane({
                   transform={`rotate(-14 ${note.x + note.xOffset} ${note.y})`}
                 />
               </g>
+            ))}
+            {dots.map((dot) => (
+              <circle
+                key={dot.id}
+                className={`staff-lane__augmentation-dot staff-lane__note--${dot.status ?? 'upcoming'}`}
+                cx={dot.cx}
+                cy={dot.cy}
+                r={dot.r}
+              />
             ))}
             {noteMarkings.map((marking) => {
               const className = `staff-lane__articulation staff-lane__articulation--${marking.kind} staff-lane__note--${marking.status ?? 'upcoming'}`
@@ -281,7 +332,7 @@ function StaffVisualLane({
               className="staff-lane__mask"
               x={0}
               y={-STAFF_LINE_GAP * STAFF_MASK_OVERDRAW_GAPS}
-              width={STAFF_LINE_GAP * 6.8}
+              width={staticMaskWidth}
               height={geometry.height + STAFF_LINE_GAP * STAFF_MASK_OVERDRAW_GAPS * 2}
             />
             {geometry.lines.map((y) => (
@@ -317,11 +368,26 @@ function StaffVisualLane({
                 {glyphClefs ? BASS_CLEF_GLYPH : 'F'}
               </text>
             )}
+            {keySignatureMarks.map((mark) => (
+              <text
+                key={mark.id}
+                className={`staff-lane__key-accidental staff-lane__key-accidental--${mark.type}`}
+                data-key-accidental={mark.type}
+                data-key-cancellation={mark.cancellation || undefined}
+                x={keyStartX + mark.column * keyColumnWidth}
+                y={mark.y}
+                fontSize={STAFF_LINE_GAP * 1.45}
+                dominantBaseline="middle"
+                textAnchor="middle"
+              >
+                {mark.glyph}
+              </text>
+            ))}
             {timeSignature &&
               Object.values(geometry.staves).map((staff) => (
                 <g key={staff.kind} className="staff-lane__timesig">
                   <text
-                    x={STAFF_LINE_GAP * 4.6}
+                    x={timeSignatureX}
                     y={staff.lines[1]}
                     fontSize={STAFF_LINE_GAP * 2.2}
                     dominantBaseline="middle"
@@ -330,7 +396,7 @@ function StaffVisualLane({
                     {timeSignature.beats}
                   </text>
                   <text
-                    x={STAFF_LINE_GAP * 4.6}
+                    x={timeSignatureX}
                     y={staff.lines[3]}
                     fontSize={STAFF_LINE_GAP * 2.2}
                     dominantBaseline="middle"

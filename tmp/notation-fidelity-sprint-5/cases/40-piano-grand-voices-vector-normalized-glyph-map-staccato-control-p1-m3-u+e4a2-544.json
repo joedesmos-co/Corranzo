@@ -1,0 +1,99 @@
+{
+  "id": "40-piano-grand-voices-vector-normalized-glyph-map-staccato-control-p1-m3-u+e4a2-544",
+  "source": "piano-grand-voices-vector",
+  "sourcePdf": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf",
+  "page": 1,
+  "measure": 3,
+  "expectedArticulation": "staccato",
+  "expectAbsent": false,
+  "sourcePriority": "PDF text glyph / conservative page-font normalization",
+  "rawArticulationCandidate": {
+    "glyph": "",
+    "codepoint": "U+E4A2",
+    "originalGlyph": "",
+    "originalCodepoint": "U+E4A0",
+    "x": 543.578431372549,
+    "y": 246.70959595959584,
+    "width": 10.294117647058824,
+    "height": 14.704545454545455,
+    "candidateType": "staccato",
+    "placement": "above",
+    "normalization": {
+      "matchingFonts": [
+        "g_d9_f3"
+      ],
+      "mappedGlyphCount": 8,
+      "mapping": {
+        "U+E4A0": "U+E4A2",
+        "U+E4A3": "U+E4A0"
+      }
+    }
+  },
+  "candidateType": "staccato",
+  "staffSystem": {
+    "page": 1,
+    "systemIndex": 0,
+    "clef": "treble"
+  },
+  "selectedNoteOrChord": {
+    "kind": "note",
+    "noteIndex": 0,
+    "restIndex": null,
+    "midi": 71,
+    "cx": 545.375816993464,
+    "cy": 277.7525252525253,
+    "chordBroadcastCount": 3
+  },
+  "classification": "U+E4A2 pipeline=staccato; manually verified=staccato",
+  "placement": "above",
+  "musicXmlSnippet": "<measure number=\"3\"><note><pitch><step>B</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff></note><note><chord/><pitch><step>E</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff></note><backup><duration>4</duration></backup><note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><chord/><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><staccato placement=\"above\"/></articulations></notations></note><note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note><note><pitch><step>E</step><octave>3</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><note><chord/><pitch><step>A</step><octave>2</octave></pitch><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note><backup><duration>8</duration></backup><note><pitch><step>B</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note><note><chord/><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff></note><backup><duration>4</duration></backup><note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note></measure>",
+  "renderedResult": {
+    "present": true,
+    "geometry": {
+      "id": "note-staccato-note-m3-t4.000-8-n0-staff-dot",
+      "kind": "staccato",
+      "scope": "note",
+      "noteId": "note-m3-t4.000-8-n0",
+      "groupId": "note-m3-t4.000-8",
+      "symbol": null,
+      "source": "musicxml",
+      "placement": "above",
+      "chordNoteIds": [
+        "note-m3-t4.000-8-n0",
+        "note-m3-t4.000-8-n1",
+        "note-m3-t4.000-8-n2"
+      ],
+      "status": "upcoming",
+      "shape": "dot",
+      "x": 440,
+      "y": 46.2,
+      "r": 2.2
+    },
+    "restFermataWrittenOnly": false
+  },
+  "playbackSemanticTrace": {
+    "id": "P1-m3-n24",
+    "measureNumber": 3,
+    "midi": 71,
+    "quarterTime": 8,
+    "voice": 1,
+    "staff": 1,
+    "attackCount": 1,
+    "articulationSource": "staccato",
+    "writtenDurationSeconds": 0.5,
+    "baseDurationSeconds": 0.25,
+    "velocity": 0.7
+  },
+  "notationPlaybackAgree": true,
+  "failureLayerBefore": "none",
+  "failureLayerAfter": "none",
+  "correctBefore": true,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-5/source-crops/40-piano-grand-voices-vector-normalized-glyph-map-staccato-control-p1-m3-u+e4a2-544.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-5/candidate-overlays/40-piano-grand-voices-vector-normalized-glyph-map-staccato-control-p1-m3-u+e4a2-544.png",
+    "musicXmlSnippet": "tmp/notation-fidelity-sprint-5/musicxml-snippets/40-piano-grand-voices-vector-normalized-glyph-map-staccato-control-p1-m3-u+e4a2-544.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-5/rendered-before/40-piano-grand-voices-vector-normalized-glyph-map-staccato-control-p1-m3-u+e4a2-544.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-5/rendered-after/40-piano-grand-voices-vector-normalized-glyph-map-staccato-control-p1-m3-u+e4a2-544.png"
+  }
+}

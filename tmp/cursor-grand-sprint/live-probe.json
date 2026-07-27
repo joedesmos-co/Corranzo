@@ -1,0 +1,499 @@
+{
+  "pipeline": {
+    "notes": 88,
+    "measures": 8,
+    "confidence": 0.9071930860482028
+  },
+  "musical": {
+    "pianoMeasureCount": 8,
+    "ambiguousMeasureCount": 8,
+    "rejectedEventGroupCount": 0,
+    "unresolvedEventGroupCount": 0,
+    "recoveredUniformBeatGridCount": 0,
+    "recoveredMeasureEndCount": 21,
+    "voiceOverlapViolations": 0,
+    "inputMutated": false
+  },
+  "ownership": {
+    "inputSymbolCount": 88,
+    "assignedSymbolCount": 88,
+    "unassignedSymbolCount": 0,
+    "excludedSymbolCount": 0,
+    "onsetColumnCount": 32,
+    "mergedTabDigitCount": 0
+  },
+  "serializer": {
+    "measureCount": 8,
+    "primaryEventCount": 88,
+    "serializableEventCount": 88,
+    "invalidEventCount": 0,
+    "invalidEventRate": 0,
+    "duplicateEventCount": 0,
+    "duplicateEventRate": 0,
+    "voiceOverlapViolations": 0,
+    "emittedMeasureCount": 8,
+    "warningCount": 0,
+    "approximateQuantizationCount": 0,
+    "deterministic": true,
+    "promotedToRuntime": false
+  },
+  "v2": {
+    "metrics": {
+      "pitch": 0.625,
+      "matchedPitch": 0.6322,
+      "dur": 0.8182,
+      "onset": 0.9773,
+      "chord": 0.9775,
+      "f1": 0.9886
+    },
+    "totals": {
+      "matched": 87,
+      "wrongPitch": 32,
+      "wrongOnset": 1,
+      "wrongDur": 15,
+      "missing": 1,
+      "extra": 1,
+      "chordMismatch": 2
+    },
+    "pitchHist": {
+      "±1": 12,
+      "±2": 11,
+      "other:-5": 5,
+      "other:-3": 2,
+      "other:-6": 2
+    },
+    "pitchAtCorrectOnset": 32,
+    "pitchAtOnsetSamples": [
+      {
+        "m": 2,
+        "t": "F#4",
+        "g": "F4",
+        "dSemi": -1,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 2,
+        "t": "F#4",
+        "g": "F4",
+        "dSemi": -1,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 3,
+        "t": "G#4",
+        "g": "G4",
+        "dSemi": -1,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 3,
+        "t": "F#4",
+        "g": "F4",
+        "dSemi": -1,
+        "tOn": 1,
+        "gOn": 1,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 3,
+        "t": "G#4",
+        "g": "G4",
+        "dSemi": -1,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 4,
+        "t": "A#2",
+        "g": "A2",
+        "dSemi": -1,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 2,
+        "gv": 2
+      },
+      {
+        "m": 4,
+        "t": "A#4",
+        "g": "A4",
+        "dSemi": -1,
+        "tOn": 3,
+        "gOn": 3,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 5,
+        "t": "G4",
+        "g": "F4",
+        "dSemi": -2,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 5,
+        "t": "D5",
+        "g": "A4",
+        "dSemi": -5,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 5,
+        "t": "A4",
+        "g": "G4",
+        "dSemi": -2,
+        "tOn": 1,
+        "gOn": 1,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 5,
+        "t": "G3",
+        "g": "F3",
+        "dSemi": -2,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 2,
+        "gv": 2
+      },
+      {
+        "m": 5,
+        "t": "D5",
+        "g": "B4",
+        "dSemi": -3,
+        "tOn": 2,
+        "gOn": 1.75,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 6,
+        "t": "A4",
+        "g": "G4",
+        "dSemi": -2,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 6,
+        "t": "C#5",
+        "g": "C5",
+        "dSemi": -1,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 6,
+        "t": "E5",
+        "g": "B4",
+        "dSemi": -5,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 6,
+        "t": "B4",
+        "g": "A4",
+        "dSemi": -2,
+        "tOn": 1,
+        "gOn": 1,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 6,
+        "t": "A3",
+        "g": "G3",
+        "dSemi": -2,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 2,
+        "gv": 2
+      },
+      {
+        "m": 6,
+        "t": "C#5",
+        "g": "C5",
+        "dSemi": -1,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 6,
+        "t": "E5",
+        "g": "B4",
+        "dSemi": -5,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 6,
+        "t": "D5",
+        "g": "B4",
+        "dSemi": -3,
+        "tOn": 3,
+        "gOn": 3,
+        "tv": 1,
+        "gv": 1
+      }
+    ]
+  },
+  "v3": {
+    "metrics": {
+      "pitch": 0.625,
+      "matchedPitch": 0.625,
+      "dur": 0.8409,
+      "onset": 1,
+      "chord": 1,
+      "f1": 1
+    },
+    "totals": {
+      "matched": 88,
+      "wrongPitch": 33,
+      "wrongOnset": 0,
+      "wrongDur": 14,
+      "missing": 0,
+      "extra": 0,
+      "chordMismatch": 0
+    },
+    "pitchHist": {
+      "±1": 13,
+      "±2": 11,
+      "other:-5": 6,
+      "other:-3": 1,
+      "other:-6": 2
+    },
+    "pitchAtCorrectOnset": 33,
+    "pitchAtOnsetSamples": [
+      {
+        "m": 2,
+        "t": "F#4",
+        "g": "F4",
+        "dSemi": -1,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 2
+      },
+      {
+        "m": 2,
+        "t": "F#4",
+        "g": "F4",
+        "dSemi": -1,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 1,
+        "gv": 2
+      },
+      {
+        "m": 3,
+        "t": "G#4",
+        "g": "G4",
+        "dSemi": -1,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 2
+      },
+      {
+        "m": 3,
+        "t": "F#4",
+        "g": "F4",
+        "dSemi": -1,
+        "tOn": 1,
+        "gOn": 1,
+        "tv": 1,
+        "gv": 3
+      },
+      {
+        "m": 3,
+        "t": "G#4",
+        "g": "G4",
+        "dSemi": -1,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 1,
+        "gv": 2
+      },
+      {
+        "m": 4,
+        "t": "A#2",
+        "g": "A2",
+        "dSemi": -1,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 2,
+        "gv": 8
+      },
+      {
+        "m": 4,
+        "t": "A#4",
+        "g": "A4",
+        "dSemi": -1,
+        "tOn": 3,
+        "gOn": 3,
+        "tv": 1,
+        "gv": 3
+      },
+      {
+        "m": 5,
+        "t": "G4",
+        "g": "F4",
+        "dSemi": -2,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 3
+      },
+      {
+        "m": 5,
+        "t": "D5",
+        "g": "A4",
+        "dSemi": -5,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 2
+      },
+      {
+        "m": 5,
+        "t": "A4",
+        "g": "G4",
+        "dSemi": -2,
+        "tOn": 1,
+        "gOn": 1,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 5,
+        "t": "G3",
+        "g": "F3",
+        "dSemi": -2,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 2,
+        "gv": 6
+      },
+      {
+        "m": 5,
+        "t": "D5",
+        "g": "A4",
+        "dSemi": -5,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 1,
+        "gv": 3
+      },
+      {
+        "m": 5,
+        "t": "C5",
+        "g": "B4",
+        "dSemi": -1,
+        "tOn": 3,
+        "gOn": 3,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 6,
+        "t": "A4",
+        "g": "G4",
+        "dSemi": -2,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 3
+      },
+      {
+        "m": 6,
+        "t": "C#5",
+        "g": "C5",
+        "dSemi": -1,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 6,
+        "t": "E5",
+        "g": "B4",
+        "dSemi": -5,
+        "tOn": 0,
+        "gOn": 0,
+        "tv": 1,
+        "gv": 2
+      },
+      {
+        "m": 6,
+        "t": "B4",
+        "g": "A4",
+        "dSemi": -2,
+        "tOn": 1,
+        "gOn": 1,
+        "tv": 1,
+        "gv": 4
+      },
+      {
+        "m": 6,
+        "t": "A3",
+        "g": "G3",
+        "dSemi": -2,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 2,
+        "gv": 7
+      },
+      {
+        "m": 6,
+        "t": "C#5",
+        "g": "C5",
+        "dSemi": -1,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 1,
+        "gv": 1
+      },
+      {
+        "m": 6,
+        "t": "E5",
+        "g": "B4",
+        "dSemi": -5,
+        "tOn": 2,
+        "gOn": 2,
+        "tv": 1,
+        "gv": 2
+      }
+    ]
+  },
+  "measures": []
+}

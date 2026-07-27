@@ -50,14 +50,15 @@ describe('piano voice mix', () => {
     const state = createVoiceMixState()
     const t = 1.0
     const results = []
-    for (let i = 0; i < 6; i += 1) {
+    // Ducking starts above 8 overlapping voices (Sprint 1: keep dense chords loud).
+    for (let i = 0; i < 12; i += 1) {
       results.push(
         planNoteTrigger(state, { time: t, velocity: 0.85, duration: 0.5, note: `N${i}` }),
       )
     }
-    expect(state.maxSimultaneous).toBe(6)
+    expect(state.maxSimultaneous).toBe(12)
     expect(results[0].velocity).toBeCloseTo(0.85, 2)
-    expect(results[5].velocity).toBeLessThan(results[0].velocity)
+    expect(results[11].velocity).toBeLessThan(results[0].velocity)
     expect(state.densityReduced).toBeGreaterThan(0)
   })
 

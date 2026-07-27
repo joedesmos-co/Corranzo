@@ -1,0 +1,104 @@
+{
+  "title": "Rhythm Sprint 2 — Onset RCA",
+  "date": "2026-07-18T21:53:53.390Z",
+  "onsetSum": 132,
+  "taxonomyCounts": {
+    "A_duration_cascade": 45,
+    "B_voice_separation": 0,
+    "C_chord_sequentialized": 5,
+    "D_rests": 11,
+    "E_tuplets": 2,
+    "F_beam_grouping": 0,
+    "G_measure_packing": 69
+  },
+  "taxonomyShares": {
+    "A_duration_cascade": 0.341,
+    "B_voice_separation": 0,
+    "C_chord_sequentialized": 0.038,
+    "D_rests": 0.083,
+    "E_tuplets": 0.015,
+    "F_beam_grouping": 0,
+    "G_measure_packing": 0.523
+  },
+  "fixtures": [
+    {
+      "id": "piano-dense-advanced-vector",
+      "source": "vector-glyphs",
+      "rhythm": "30%",
+      "onset": 59,
+      "dur": 61,
+      "classCounts": {
+        "A_duration_cascade": 0,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 0,
+        "D_rests": 0,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 59
+      }
+    },
+    {
+      "id": "guitar-tab-sparse-vector",
+      "source": "tab-vector",
+      "rhythm": "17%",
+      "onset": 23,
+      "dur": 30,
+      "classCounts": {
+        "A_duration_cascade": 18,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 5,
+        "D_rests": 0,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      }
+    },
+    {
+      "id": "piano-rhythm-tuplets-vector",
+      "source": "vector-glyphs",
+      "rhythm": "48%",
+      "onset": 33,
+      "dur": 16,
+      "classCounts": {
+        "A_duration_cascade": 27,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 0,
+        "D_rests": 4,
+        "E_tuplets": 2,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      }
+    },
+    {
+      "id": "piano-articulation-scan",
+      "rhythm": "80%",
+      "onset": 7,
+      "dur": 0,
+      "classCounts": {
+        "A_duration_cascade": 0,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 0,
+        "D_rests": 7,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 0
+      }
+    },
+    {
+      "id": "guitar-standard-chords-vector",
+      "source": "vector-glyphs",
+      "rhythm": "45%",
+      "onset": 10,
+      "dur": 9,
+      "classCounts": {
+        "A_duration_cascade": 0,
+        "B_voice_separation": 0,
+        "C_chord_sequentialized": 0,
+        "D_rests": 0,
+        "E_tuplets": 0,
+        "F_beam_grouping": 0,
+        "G_measure_packing": 10
+      }
+    }
+  ]
+}

@@ -3321,6 +3321,29 @@
   flex-shrink: 0;
 }
 
+.practice-shortcuts {
+  margin: 0 0 8px;
+}
+
+.practice-shortcuts__summary {
+  cursor: pointer;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8fa3c4;
+  list-style: none;
+}
+
+.practice-shortcuts__summary::-webkit-details-marker {
+  display: none;
+}
+
+.practice-shortcuts .practice-shortcuts-hint {
+  margin-top: 8px;
+  pointer-events: auto;
+  text-align: left;
+}
+
 .practice-shortcuts-hint__touch {
   display: none;
 }
@@ -5374,12 +5397,18 @@
   stroke-width: 1;
 }
 
-.staff-lane__sharp {
+.staff-lane__sharp,
+.staff-lane__accidental,
+.staff-lane__key-accidental {
   fill: currentColor;
   paint-order: stroke fill;
   stroke: var(--sf-bg-panel);
   stroke-width: 2.4;
   user-select: none;
+}
+
+.staff-lane__key-accidental {
+  fill: var(--sf-text-muted);
 }
 
 .staff-lane__head {
@@ -5390,6 +5419,23 @@
   stroke: currentColor;
   stroke-width: 1.6;
   stroke-linecap: round;
+}
+
+.staff-lane__beam {
+  stroke: currentColor;
+  stroke-width: 4.8;
+  stroke-linecap: butt;
+}
+
+.staff-lane__flag {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.staff-lane__augmentation-dot {
+  fill: currentColor;
 }
 
 .staff-lane__span-mark {
@@ -5440,7 +5486,7 @@
 
 .tab-lane__sustain {
   fill: currentColor;
-  opacity: 0.42;
+  opacity: 0.18;
 }
 
 .visual-practice__legend-item--correct::before {

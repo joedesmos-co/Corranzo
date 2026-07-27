@@ -1,0 +1,99 @@
+{
+  "generatedAt": "2026-07-27T02:11:53.705Z",
+  "acceptanceAuthority": "36 manually verified real-score measures",
+  "caseCount": 36,
+  "sourceCount": 7,
+  "correctMeasures": {
+    "before": 21,
+    "after": 23
+  },
+  "wrongVoiceAssignments": {
+    "before": 8,
+    "after": 0
+  },
+  "chordSequentializationErrors": {
+    "before": 0,
+    "after": 0
+  },
+  "falseChordMerges": {
+    "before": 2,
+    "after": 0
+  },
+  "stemDirectionErrors": {
+    "before": 2,
+    "after": 0
+  },
+  "beamGroupErrors": {
+    "before": 0,
+    "after": 0
+  },
+  "restVoiceErrors": {
+    "before": 13,
+    "after": 13
+  },
+  "inventedVisibleRests": {
+    "before": 0,
+    "after": 0
+  },
+  "tupletGroupErrors": {
+    "before": 1,
+    "after": 1
+  },
+  "crossStaffAssignmentErrors": {
+    "before": 0,
+    "after": 0
+  },
+  "underfullOverfullMeasures": {
+    "before": 0,
+    "after": 0
+  },
+  "rendererOnlyFailures": {
+    "before": 0,
+    "after": 0
+  },
+  "frozenSemanticCorpusDelta": {
+    "overall": 0,
+    "pitch": 0,
+    "rhythm": 0,
+    "sustain": 0,
+    "articulation": 0,
+    "measureStructure": 0,
+    "interpretation": 0,
+    "regressions": 0,
+    "genericComparatorAccept": false,
+    "genericComparatorReason": "The frozen comparator requires rhythm > 0; this notation-only slice is intentionally semantic-neutral."
+  },
+  "sprint2Through5Regressions": {
+    "focusedTestsPassed": 38,
+    "focusedTestsFailed": 0,
+    "fullTestsPassed": 2626,
+    "fullTestsFailed": 9,
+    "fullTestsSkipped": 5,
+    "fullSuiteDelta": "7 added passing tests; the same 9 pre-existing unrelated failures remain.",
+    "build": "passed",
+    "targetedLint": "passed"
+  },
+  "playbackSignature": {
+    "beforeCount": 1557,
+    "afterCount": 1559,
+    "coreAttackDelta": "0 on all six comparable source baselines; the older Sprint 2 tuplet artifact differs by two attacks before this sprint and is excluded",
+    "perSourceCoreAttackDeltas": {
+      "minecraft": 0,
+      "evangelion": 0,
+      "gymnopedie": 0,
+      "piano-articulation-scan": 0,
+      "piano-grand-voices-vector": 0,
+      "la-campanella": 0,
+      "piano-rhythm-tuplets-vector": null
+    },
+    "selectedCaseMismatches": 0
+  },
+  "structurePromotion": {
+    "splitEventCount": 2,
+    "changedPitchCount": 0,
+    "changedOnsetCount": 0,
+    "changedDurationCount": 0,
+    "changedNoteCount": 0,
+    "detectorGate": "strong opposing-stem ownership >= 0.70 with singleton voice continuity, or overlapping events with printed long-value evidence"
+  }
+}

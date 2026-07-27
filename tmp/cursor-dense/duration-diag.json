@@ -1,0 +1,406 @@
+{
+  "musical": {
+    "pianoMeasureCount": 8,
+    "ambiguousMeasureCount": 8,
+    "rejectedEventGroupCount": 0,
+    "unresolvedEventGroupCount": 0,
+    "recoveredUniformBeatGridCount": 0,
+    "recoveredMeasureEndCount": 33,
+    "voiceOverlapViolations": 0,
+    "inputMutated": false
+  },
+  "evidence": {
+    "mode": "raw-detector-symbols",
+    "sourceSymbolCount": 262,
+    "independentSourceSymbolCount": 262,
+    "independentSourceSymbolRate": 1,
+    "primaryEventCount": 257,
+    "independentPrimaryEventCount": 257,
+    "independentPrimaryEventRate": 1
+  },
+  "symbolDurHist": [
+    [
+      "4",
+      79
+    ],
+    [
+      "6",
+      79
+    ],
+    [
+      "2",
+      78
+    ],
+    [
+      "1",
+      25
+    ],
+    [
+      "3",
+      1
+    ]
+  ],
+  "eventDurHist": [
+    [
+      "2",
+      76
+    ],
+    [
+      "4",
+      69
+    ],
+    [
+      "6",
+      53
+    ],
+    [
+      "1",
+      25
+    ],
+    [
+      "4.71402765461294",
+      7
+    ],
+    [
+      "3.271521003711369",
+      5
+    ],
+    [
+      "4.706337525753494",
+      3
+    ],
+    [
+      "3.278785198289844",
+      3
+    ],
+    [
+      "3.291103575933297",
+      3
+    ],
+    [
+      "2.0083615352157533",
+      2
+    ],
+    [
+      "4.659741641685921",
+      2
+    ],
+    [
+      "3.246822347029264",
+      2
+    ],
+    [
+      "3.1739433551198264",
+      2
+    ],
+    [
+      "4.652810457516345",
+      2
+    ],
+    [
+      "4.434448289119578",
+      1
+    ],
+    [
+      "3",
+      1
+    ],
+    [
+      "5.083050427419327",
+      1
+    ]
+  ],
+  "recoveryHist": [
+    [
+      "undefined",
+      224
+    ],
+    [
+      "clip-approximate-to-measure-end",
+      33
+    ]
+  ],
+  "gap": {
+    "gapExact": 29,
+    "gapShortenCandidates": 0,
+    "gapLengthenCandidates": 113,
+    "noGap": 115
+  },
+  "samples": [
+    {
+      "type": "lengthen",
+      "measure": 1,
+      "onset": 6.15,
+      "dur": 4,
+      "gap": 5.42,
+      "beamDur": null,
+      "beam": false,
+      "midi": 65,
+      "std": false
+    },
+    {
+      "type": "lengthen",
+      "measure": 1,
+      "onset": 6.15,
+      "dur": 2,
+      "gap": 3.89,
+      "beamDur": 2,
+      "beam": true,
+      "midi": 76,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 1,
+      "onset": 10.04,
+      "dur": 2,
+      "gap": 3.95,
+      "beamDur": 2,
+      "beam": true,
+      "midi": 76,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 1,
+      "onset": 3.03,
+      "dur": 6,
+      "gap": 7.01,
+      "beamDur": null,
+      "beam": false,
+      "midi": 64,
+      "std": false
+    },
+    {
+      "type": "lengthen",
+      "measure": 1,
+      "onset": 10.04,
+      "dur": 2,
+      "gap": 3.95,
+      "beamDur": 2,
+      "beam": true,
+      "midi": 67,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 1,
+      "onset": 7.34,
+      "dur": 2,
+      "gap": 2.7,
+      "beamDur": 2,
+      "beam": true,
+      "midi": 71,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 1,
+      "onset": 3.03,
+      "dur": 2,
+      "gap": 3.77,
+      "beamDur": 2,
+      "beam": true,
+      "midi": 71,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 1,
+      "onset": 6.8,
+      "dur": 4,
+      "gap": 4.77,
+      "beamDur": null,
+      "beam": false,
+      "midi": 67,
+      "std": false
+    },
+    {
+      "type": "lengthen",
+      "measure": 1,
+      "onset": 6.15,
+      "dur": 1,
+      "gap": 3.89,
+      "beamDur": null,
+      "beam": false,
+      "midi": 47,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 2,
+      "onset": 2.65,
+      "dur": 6,
+      "gap": 7.19,
+      "beamDur": null,
+      "beam": false,
+      "midi": 64,
+      "std": false
+    },
+    {
+      "type": "lengthen",
+      "measure": 2,
+      "onset": 2.65,
+      "dur": 6,
+      "gap": 7.19,
+      "beamDur": null,
+      "beam": false,
+      "midi": 71,
+      "std": false
+    },
+    {
+      "type": "lengthen",
+      "measure": 2,
+      "onset": 4.1,
+      "dur": 6,
+      "gap": 7.2,
+      "beamDur": null,
+      "beam": false,
+      "midi": 67,
+      "std": false
+    },
+    {
+      "type": "lengthen",
+      "measure": 2,
+      "onset": 4.1,
+      "dur": 2,
+      "gap": 2.88,
+      "beamDur": 2,
+      "beam": true,
+      "midi": 76,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 2,
+      "onset": 5.54,
+      "dur": 2,
+      "gap": 2.87,
+      "beamDur": 2,
+      "beam": true,
+      "midi": 71,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 2,
+      "onset": 5.54,
+      "dur": 6,
+      "gap": 7.18,
+      "beamDur": null,
+      "beam": false,
+      "midi": 79,
+      "std": false
+    },
+    {
+      "type": "lengthen",
+      "measure": 2,
+      "onset": 5.54,
+      "dur": 6,
+      "gap": 7.18,
+      "beamDur": null,
+      "beam": false,
+      "midi": 64,
+      "std": false
+    },
+    {
+      "type": "lengthen",
+      "measure": 2,
+      "onset": 8.41,
+      "dur": 2,
+      "gap": 4.31,
+      "beamDur": null,
+      "beam": false,
+      "midi": 71,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 2,
+      "onset": 2.65,
+      "dur": 6,
+      "gap": 8.64,
+      "beamDur": null,
+      "beam": false,
+      "midi": 43,
+      "std": false
+    },
+    {
+      "type": "lengthen",
+      "measure": 2,
+      "onset": 2.65,
+      "dur": 2,
+      "gap": 2.89,
+      "beamDur": null,
+      "beam": false,
+      "midi": 55,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 2,
+      "onset": 5.54,
+      "dur": 1,
+      "gap": 2.87,
+      "beamDur": null,
+      "beam": false,
+      "midi": 47,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 2,
+      "onset": 8.41,
+      "dur": 2,
+      "gap": 2.88,
+      "beamDur": null,
+      "beam": false,
+      "midi": 50,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 3,
+      "onset": 2.65,
+      "dur": 2,
+      "gap": 2.91,
+      "beamDur": 2,
+      "beam": true,
+      "midi": 67,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 3,
+      "onset": 5.56,
+      "dur": 2,
+      "gap": 2.84,
+      "beamDur": 2,
+      "beam": true,
+      "midi": 65,
+      "std": true
+    },
+    {
+      "type": "lengthen",
+      "measure": 3,
+      "onset": 2.65,
+      "dur": 6,
+      "gap": 7.18,
+      "beamDur": null,
+      "beam": false,
+      "midi": 76,
+      "std": false
+    },
+    {
+      "type": "lengthen",
+      "measure": 3,
+      "onset": 6.96,
+      "dur": 2,
+      "gap": 2.87,
+      "beamDur": 2,
+      "beam": true,
+      "midi": 69,
+      "std": true
+    }
+  ]
+}

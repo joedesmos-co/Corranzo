@@ -254,11 +254,17 @@ function assignNotesInCluster(notationNotes, tabNotes, options = {}) {
 }
 
 function mergeCombinedNote(notationNote, tabNote, confidence) {
+  // TAB digit MIDI is authoritative sounding pitch once paired. Notation MIDI
+  // remains available for diagnostics; frets are never used to invent pitches
+  // for unpaired notation notes.
+  const tabMidi = Number.isFinite(tabNote.midi) ? tabNote.midi : null
   return {
     ...notationNote,
+    notationMidi: notationNote.midi,
+    midi: tabMidi ?? notationNote.midi,
     string: tabNote.string,
     fret: tabNote.fret,
-    tabMidi: tabNote.midi,
+    tabMidi: tabMidi ?? tabNote.midi,
     tabX: tabNote.x,
     soundingPitch: true,
     notationTabPairConfidence: confidence,

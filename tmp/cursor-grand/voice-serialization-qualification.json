@@ -1,0 +1,75 @@
+{
+  "phase": "7",
+  "generatedAt": "2026-07-17T13:14:40.559Z",
+  "enforcedFixtures": [
+    "clean",
+    "dense",
+    "simple"
+  ],
+  "anyTruthApproved": false,
+  "totalTruthApproved": 0,
+  "totalStructuralApplied": 0,
+  "totalDurationCoupledApplied": 0,
+  "verdict": "NO — zero truth-approved measures on live enforced fixtures.",
+  "fixtures": [
+    {
+      "fixtureId": "clean",
+      "phase": "6b",
+      "liveEligible": true,
+      "scoreGraphAvailable": false,
+      "truthAvailable": false,
+      "anyTruthApproved": false,
+      "truthApprovedCount": 0,
+      "structuralAppliedCount": 0,
+      "blocker": "no-scoregraph-full",
+      "hotspotMeasures": [],
+      "hotspotQualification": [],
+      "measures": [],
+      "globalDelta": null,
+      "runtimeMetrics": null,
+      "recommendation": "Re-run live dashboard with includeScoreGraph and truth MXL."
+    },
+    {
+      "fixtureId": "dense",
+      "phase": "6b",
+      "liveEligible": true,
+      "scoreGraphAvailable": false,
+      "truthAvailable": false,
+      "anyTruthApproved": false,
+      "truthApprovedCount": 0,
+      "structuralAppliedCount": 0,
+      "blocker": "no-scoregraph-full",
+      "hotspotMeasures": [
+        7,
+        9,
+        121
+      ],
+      "hotspotQualification": [],
+      "measures": [],
+      "globalDelta": null,
+      "runtimeMetrics": null,
+      "recommendation": "Re-run live dashboard with includeScoreGraph and truth MXL."
+    },
+    {
+      "fixtureId": "simple",
+      "phase": "6b",
+      "liveEligible": true,
+      "scoreGraphAvailable": false,
+      "truthAvailable": false,
+      "anyTruthApproved": false,
+      "truthApprovedCount": 0,
+      "structuralAppliedCount": 0,
+      "blocker": "no-scoregraph-full",
+      "hotspotMeasures": [
+        10
+      ],
+      "hotspotQualification": [],
+      "measures": [],
+      "globalDelta": null,
+      "runtimeMetrics": null,
+      "recommendation": "Re-run live dashboard with includeScoreGraph and truth MXL."
+    }
+  ],
+  "phase8Recommendation": "Phase 8: strengthen accompaniment-lane detection; add onsetColumns[] observation for live IR.",
+  "phase7Recommendation": "Duration-coupled variants did not structurally apply on live fixtures."
+}

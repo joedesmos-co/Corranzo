@@ -1,0 +1,285 @@
+{
+  "version": 1,
+  "sprint": "notation-fidelity-sprint-1",
+  "cases": [
+    {
+      "id": "artic-m1-staccato-c4",
+      "source": "piano-articulation-scan",
+      "pdf": "benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf",
+      "page": 1,
+      "measureNumber": 1,
+      "midi": 60,
+      "expectedSymbol": "staccato",
+      "role": "mark",
+      "notes": "Chord-tone staccato on C4"
+    },
+    {
+      "id": "artic-m1-staccato-e4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 1,
+      "midi": 64,
+      "expectedSymbol": "staccato",
+      "role": "mark",
+      "notes": "Chord-tone staccato on E4"
+    },
+    {
+      "id": "artic-m1-staccato-g4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 1,
+      "midi": 67,
+      "expectedSymbol": "staccato",
+      "role": "mark",
+      "notes": "Chord-tone staccato on G4"
+    },
+    {
+      "id": "artic-m1-slur-start-f4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 1,
+      "midi": 65,
+      "expectedSymbol": "slur",
+      "role": "start",
+      "notes": "Two-note/phrase slur start on F4 (different pitch from stop)"
+    },
+    {
+      "id": "artic-m2-accent-d4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 2,
+      "midi": 62,
+      "expectedSymbol": "accent",
+      "role": "mark"
+    },
+    {
+      "id": "artic-m2-accent-fsharp4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 2,
+      "midi": 66,
+      "expectedSymbol": "accent",
+      "role": "mark"
+    },
+    {
+      "id": "artic-m2-accent-a4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 2,
+      "midi": 69,
+      "expectedSymbol": "accent",
+      "role": "mark"
+    },
+    {
+      "id": "artic-m2-slur-stop-g4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 2,
+      "midi": 67,
+      "expectedSymbol": "slur",
+      "role": "stop",
+      "notes": "Slur destination still attacks"
+    },
+    {
+      "id": "artic-m3-staccato-chord",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 3,
+      "midi": 64,
+      "expectedSymbol": "staccato",
+      "role": "mark"
+    },
+    {
+      "id": "artic-m3-tie-start-a4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 3,
+      "midi": 69,
+      "expectedSymbol": "tie",
+      "role": "start",
+      "notes": "Written tie start (truth MusicXML); verify not slur-confused"
+    },
+    {
+      "id": "artic-m4-tie-stop",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 4,
+      "midi": 70,
+      "expectedSymbol": "tie",
+      "role": "stop",
+      "notes": "Truth marks stop on Bb4 — same-pitch ownership audit case"
+    },
+    {
+      "id": "artic-m4-accent-f4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 4,
+      "midi": 65,
+      "expectedSymbol": "accent",
+      "role": "mark"
+    },
+    {
+      "id": "artic-m5-staccato-g4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 5,
+      "midi": 67,
+      "expectedSymbol": "staccato",
+      "role": "mark"
+    },
+    {
+      "id": "artic-m6-accent-a4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 6,
+      "midi": 69,
+      "expectedSymbol": "accent",
+      "role": "mark"
+    },
+    {
+      "id": "artic-m7-staccato-g4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 7,
+      "midi": 67,
+      "expectedSymbol": "staccato",
+      "role": "mark"
+    },
+    {
+      "id": "artic-m8-accent-e4",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 8,
+      "midi": 64,
+      "expectedSymbol": "accent",
+      "role": "mark"
+    },
+    {
+      "id": "artic-m1-no-tie-on-staccato-chord",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 1,
+      "midi": 60,
+      "expectedSymbol": "tie",
+      "expectAbsent": true,
+      "notes": "Staccato chord must not emit a false tie"
+    },
+    {
+      "id": "gym-tie-same-pitch-within-measure",
+      "source": "gymnopedie",
+      "pdf": "~/Downloads/gymnopedie-no-1-satie.pdf",
+      "page": 1,
+      "measureNumber": null,
+      "expectedSymbol": "tie",
+      "role": "start",
+      "status": "manual-pending",
+      "notes": "Clean engraved same-pitch tie within a measure — verify visually"
+    },
+    {
+      "id": "gym-tie-across-barline",
+      "source": "gymnopedie",
+      "page": 1,
+      "expectedSymbol": "tie",
+      "role": "start",
+      "status": "manual-pending",
+      "notes": "Tie across barline"
+    },
+    {
+      "id": "gym-tie-across-system",
+      "source": "gymnopedie",
+      "page": 1,
+      "expectedSymbol": "tie",
+      "role": "start",
+      "status": "manual-pending",
+      "notes": "Tie across system break if present on page 1"
+    },
+    {
+      "id": "gym-phrase-slur",
+      "source": "gymnopedie",
+      "page": 1,
+      "expectedSymbol": "slur",
+      "role": "start",
+      "status": "manual-pending",
+      "notes": "Longer phrase slur; must not become a tie"
+    },
+    {
+      "id": "minecraft-no-false-tie-noise",
+      "source": "minecraft",
+      "pdf": "~/Downloads/beginner-minecraft-piano-themes-in-c-minecraft.pdf",
+      "page": 1,
+      "expectedSymbol": "tie",
+      "expectAbsent": true,
+      "status": "manual-pending",
+      "notes": "Confusable: staff/scan noise must not invent ties on page 1 theme"
+    },
+    {
+      "id": "minecraft-staccato-if-printed",
+      "source": "minecraft",
+      "page": 1,
+      "expectedSymbol": "staccato",
+      "status": "manual-pending",
+      "notes": "If printed staccato appears, attach to correct note only"
+    },
+    {
+      "id": "evangelion-dense-chord-no-broadcast-tie",
+      "source": "evangelion",
+      "pdf": "~/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+      "page": 1,
+      "expectedSymbol": "tie",
+      "expectAbsent": true,
+      "status": "manual-pending",
+      "notes": "Dense page: do not broadcast chord-wide false ties"
+    },
+    {
+      "id": "confusable-augdot-not-staccato",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 3,
+      "expectedSymbol": "staccato",
+      "expectAbsent": true,
+      "midi": 69,
+      "notes": "Augmentation/dot-like region on tied A4 must not add staccato"
+    },
+    {
+      "id": "confusable-slur-not-tie-m1",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 1,
+      "midi": 65,
+      "expectedSymbol": "tie",
+      "expectAbsent": true,
+      "notes": "Slur start on F4 must not emit a tie"
+    },
+    {
+      "id": "no-articulation-plain-note",
+      "source": "piano-articulation-scan",
+      "page": 1,
+      "measureNumber": 1,
+      "midi": 65,
+      "expectedSymbol": "staccato",
+      "expectAbsent": true,
+      "notes": "Slurred F4 has no staccato"
+    },
+    {
+      "id": "partial-chord-tie-ownership",
+      "source": "gymnopedie",
+      "expectedSymbol": "tie",
+      "status": "manual-pending",
+      "notes": "When a chord is partially tied, only the tied pitch carries start/stop"
+    },
+    {
+      "id": "multi-note-tie-chain",
+      "source": "gymnopedie",
+      "expectedSymbol": "tie",
+      "status": "manual-pending",
+      "notes": "Multi-note tie chain retains ownership across measures"
+    },
+    {
+      "id": "simultaneous-tied-pitches",
+      "source": "evangelion",
+      "expectedSymbol": "tie",
+      "status": "manual-pending",
+      "notes": "Multiple simultaneous tied pitches — per-pitch state"
+    }
+  ]
+}

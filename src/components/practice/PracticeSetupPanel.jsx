@@ -5,13 +5,22 @@ import ScoreFollowApproximateHint from './ScoreFollowApproximateHint.jsx'
 
 export default function PracticeSetupPanel({ session, scoreFollow }) {
   const measureBounds = session.measure?.bounds
+  const setupPhase = scoreFollow?.setupStatus?.phase
+  const showSetupHeading =
+    setupPhase === 'failed' ||
+    setupPhase === 'needs-setup' ||
+    setupPhase === 'running' ||
+    scoreFollow?.alignmentMode ||
+    scoreFollow?.followNeedsSetup
 
   return (
     <div className="practice-setup">
-      <section className="practice-section practice-section--setup" aria-label="Score cursor setup">
-        <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">
-          Cursor setup
-        </h3>
+      <section className="practice-section practice-section--setup" aria-label="Score cursor">
+        {showSetupHeading ? (
+          <h3 className="practice-section__title practice-section__title--static practice-section__title--editorial">
+            Needs setup
+          </h3>
+        ) : null}
         <ScoreFollowApproximateHint label={scoreFollow?.followApproximateLabel} />
         {scoreFollow && (
           <ScoreFollowControls

@@ -1,0 +1,517 @@
+{
+  "id": "guitar-paired-chords-vector",
+  "rhythm": "73%",
+  "overall": "59%",
+  "topDefects": [
+    {
+      "code": "missing-note",
+      "class": "pitch",
+      "label": "Missing note",
+      "count": 61
+    },
+    {
+      "code": "incorrect-pitch",
+      "class": "pitch",
+      "label": "Incorrect pitch",
+      "count": 46
+    },
+    {
+      "code": "incorrect-chord",
+      "class": "measure-structure",
+      "label": "Incorrect chord",
+      "count": 40
+    },
+    {
+      "code": "extra-note",
+      "class": "pitch",
+      "label": "Extra note",
+      "count": 36
+    },
+    {
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "label": "Duration mismatch",
+      "count": 22
+    },
+    {
+      "code": "onset-mismatch",
+      "class": "rhythm",
+      "label": "Onset timing difference",
+      "count": 8
+    },
+    {
+      "code": "split-measure",
+      "class": "measure-structure",
+      "label": "Split measure",
+      "count": 2
+    },
+    {
+      "code": "repeat-mismatch",
+      "class": "interpretation",
+      "label": "Repeat mismatch",
+      "count": 1
+    }
+  ],
+  "samples": [
+    {
+      "measureNumber": 1,
+      "alignment": "match",
+      "eventCount": 4,
+      "starts": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "multiNoteEvents": 4,
+      "singleNoteEvents": 0,
+      "chordSummary": {
+        "onsetCount": 4,
+        "sequentialSameXCount": 0,
+        "fragmentedSameClefOnsets": 0
+      },
+      "sequentialPairCount": 0,
+      "cursorAdvanceSuspectCount": 0,
+      "nearChordSplitCount": 0,
+      "sequentialSameXPairs": [],
+      "stemShareCandidateCount": 0,
+      "stemShareCandidates": [],
+      "durHist": {
+        "quarter:d4": 4
+      },
+      "beamHist": {
+        "0": 10,
+        "1": 0,
+        "2": 0
+      },
+      "flagProbeCount": 10,
+      "flagProbe": [
+        {
+          "start": 0,
+          "midi": 65,
+          "noteDur": "quarter",
+          "eventDur": "quarter",
+          "eventDurDiv": 4,
+          "beams": 0,
+          "bStr": 2,
+          "doubleFlagLike": true,
+          "primary": 2,
+          "shortRuns": [
+            {
+              "y": 286.72474747474746,
+              "dir": -1,
+              "run": 10
+            },
+            {
+              "y": 289.72474747474746,
+              "dir": -1,
+              "run": 11
+            },
+            {
+              "y": 285.72474747474746,
+              "dir": -1,
+              "run": 8
+            }
+          ],
+          "secondaryShort": 0
+        },
+        {
+          "start": 0,
+          "midi": 64,
+          "noteDur": "quarter",
+          "eventDur": "quarter",
+          "eventDurDiv": 4,
+          "beams": 0,
+          "bStr": 2,
+          "doubleFlagLike": true,
+          "primary": 2,
+          "shortRuns": [
+            {
+              "y": 299.7954545454545,
+              "dir": -1,
+              "run": 10
+            },
+            {
+              "y": 302.7954545454545,
+              "dir": -1,
+              "run": 11
+            },
+            {
+              "y": 298.7954545454545,
+              "dir": -1,
+              "run": 8
+            }
+          ],
+          "secondaryShort": 0
+        },
+        {
+          "start": 0,
+          "midi": 59,
+          "noteDur": "quarter",
+          "eventDur": "quarter",
+          "eventDurDiv": 4,
+          "beams": 0,
+          "bStr": 2,
+          "doubleFlagLike": true,
+          "primary": 2,
+          "shortRuns": [
+            {
+              "y": 320.4015151515151,
+              "dir": -1,
+              "run": 10
+            },
+            {
+              "y": 321.4015151515151,
+              "dir": -1,
+              "run": 11
+            },
+            {
+              "y": 322.4015151515151,
+              "dir": -1,
+              "run": 12
+            },
+            {
+              "y": 323.4015151515151,
+              "dir": -1,
+              "run": 11
+            },
+            {
+              "y": 319.4015151515151,
+              "dir": -1,
+              "run": 8
+            }
+          ],
+          "secondaryShort": 0
+        },
+        {
+          "start": 4,
+          "midi": 65,
+          "noteDur": "quarter",
+          "eventDur": "quarter",
+          "eventDurDiv": 4,
+          "beams": 0,
+          "bStr": 2,
+          "doubleFlagLike": true,
+          "primary": 2,
+          "shortRuns": [
+            {
+              "y": 285.72474747474746,
+              "dir": -1,
+              "run": 8
+            },
+            {
+              "y": 286.72474747474746,
+              "dir": -1,
+              "run": 9
+            }
+          ],
+          "secondaryShort": 0
+        },
+        {
+          "start": 4,
+          "midi": 64,
+          "noteDur": "quarter",
+          "eventDur": "quarter",
+          "eventDurDiv": 4,
+          "beams": 0,
+          "bStr": 2,
+          "doubleFlagLike": true,
+          "primary": 2,
+          "shortRuns": [
+            {
+              "y": 298.7954545454545,
+              "dir": -1,
+              "run": 8
+            },
+            {
+              "y": 299.7954545454545,
+              "dir": -1,
+              "run": 9
+            }
+          ],
+          "secondaryShort": 0
+        },
+        {
+          "start": 8,
+          "midi": 65,
+          "noteDur": "quarter",
+          "eventDur": "quarter",
+          "eventDurDiv": 4,
+          "beams": 0,
+          "bStr": 2,
+          "doubleFlagLike": true,
+          "primary": 2,
+          "shortRuns": [
+            {
+              "y": 285.72474747474746,
+              "dir": -1,
+              "run": 8
+            },
+            {
+              "y": 286.72474747474746,
+              "dir": -1,
+              "run": 9
+            }
+          ],
+          "secondaryShort": 0
+        },
+        {
+          "start": 8,
+          "midi": 64,
+          "noteDur": "quarter",
+          "eventDur": "quarter",
+          "eventDurDiv": 4,
+          "beams": 0,
+          "bStr": 2,
+          "doubleFlagLike": true,
+          "primary": 2,
+          "shortRuns": [
+            {
+              "y": 298.7954545454545,
+              "dir": -1,
+              "run": 8
+            },
+            {
+              "y": 299.7954545454545,
+              "dir": -1,
+              "run": 9
+            }
+          ],
+          "secondaryShort": 0
+        },
+        {
+          "start": 8,
+          "midi": 59,
+          "noteDur": "quarter",
+          "eventDur": "quarter",
+          "eventDurDiv": 4,
+          "beams": 0,
+          "bStr": 2,
+          "doubleFlagLike": true,
+          "primary": 2,
+          "shortRuns": [
+            {
+              "y": 319.4015151515151,
+              "dir": -1,
+              "run": 8
+            },
+            {
+              "y": 320.4015151515151,
+              "dir": -1,
+              "run": 9
+            },
+            {
+              "y": 321.4015151515151,
+              "dir": -1,
+              "run": 10
+            },
+            {
+              "y": 322.4015151515151,
+              "dir": -1,
+              "run": 11
+            },
+            {
+              "y": 318.4015151515151,
+              "dir": -1,
+              "run": 7
+            }
+          ],
+          "secondaryShort": 0
+        },
+        {
+          "start": 12,
+          "midi": 65,
+          "noteDur": "quarter",
+          "eventDur": "quarter",
+          "eventDurDiv": 4,
+          "beams": 0,
+          "bStr": 2,
+          "doubleFlagLike": true,
+          "primary": 2,
+          "shortRuns": [
+            {
+              "y": 285.72474747474746,
+              "dir": -1,
+              "run": 8
+            },
+            {
+              "y": 286.72474747474746,
+              "dir": -1,
+              "run": 9
+            }
+          ],
+          "secondaryShort": 0
+        },
+        {
+          "start": 12,
+          "midi": 64,
+          "noteDur": "quarter",
+          "eventDur": "quarter",
+          "eventDurDiv": 4,
+          "beams": 0,
+          "bStr": 2,
+          "doubleFlagLike": true,
+          "primary": 2,
+          "shortRuns": [
+            {
+              "y": 298.7954545454545,
+              "dir": -1,
+              "run": 8
+            },
+            {
+              "y": 299.7954545454545,
+              "dir": -1,
+              "run": 9
+            },
+            {
+              "y": 300.7954545454545,
+              "dir": 1,
+              "run": 9
+            },
+            {
+              "y": 301.7954545454545,
+              "dir": 1,
+              "run": 10
+            }
+          ],
+          "secondaryShort": 0
+        }
+      ],
+      "secondaryHitCount": 0,
+      "secondaryHits": [],
+      "defectCodes": {
+        "extra-note": 3,
+        "duration-mismatch": 10,
+        "onset-mismatch": 6,
+        "incorrect-pitch": 9,
+        "incorrect-chord": 4,
+        "repeat-mismatch": 1,
+        "tempo-mismatch": 1
+      },
+      "events": [
+        {
+          "start": 0,
+          "dur": 4,
+          "dtype": "quarter",
+          "midis": [
+            65,
+            64,
+            59
+          ],
+          "noteCount": 3,
+          "cx": 191,
+          "pos": 0.044,
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            2,
+            2
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "stemX": [
+            194.5392156862745,
+            194.5392156862745,
+            194.5392156862745
+          ]
+        },
+        {
+          "start": 4,
+          "dur": 4,
+          "dtype": "quarter",
+          "midis": [
+            65,
+            64
+          ],
+          "noteCount": 2,
+          "cx": 217,
+          "pos": 0.254,
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            2
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter"
+          ],
+          "stemX": [
+            221.45098039215682,
+            221.45098039215682
+          ]
+        },
+        {
+          "start": 8,
+          "dur": 4,
+          "dtype": "quarter",
+          "midis": [
+            65,
+            64,
+            59
+          ],
+          "noteCount": 3,
+          "cx": 244,
+          "pos": 0.464,
+          "beams": [
+            0,
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            2,
+            2
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter",
+            "quarter"
+          ],
+          "stemX": [
+            248.36274509803923,
+            248.36274509803923,
+            248.36274509803923
+          ]
+        },
+        {
+          "start": 12,
+          "dur": 4,
+          "dtype": "quarter",
+          "midis": [
+            65,
+            64
+          ],
+          "noteCount": 2,
+          "cx": 271,
+          "pos": 0.674,
+          "beams": [
+            0,
+            0
+          ],
+          "bStr": [
+            2,
+            2
+          ],
+          "noteDur": [
+            "quarter",
+            "quarter"
+          ],
+          "stemX": [
+            275.2745098039216,
+            275.2745098039216
+          ]
+        }
+      ]
+    }
+  ]
+}

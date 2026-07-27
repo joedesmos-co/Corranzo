@@ -1,0 +1,5157 @@
+OMR semantic evaluation
+=======================
+schema v2 · evaluator v2.0.0 · 15aa1db · mode=written
+Alignment confidence: 75% (59 matched, 24 missing, 0 extra)
+
+Overall semantic score
+
+Pitch ........... 7%  (230/3479; cov 100%)
+Rhythm .......... 36%  (731/2033; cov 100%)
+Sustain ......... 0%  (0/16; cov 100%)
+Articulation .... 8%  (8/103; cov 100%)
+Measure ......... 38%  (128/333; cov 100%)
+Interpretation .. 0%  (0/55; cov 100%)
+Playback ........ 100%  (0/0; cov 100%)
+
+Overall .......... 27%
+First divergence: measure 1
+
+Worst measures
+- Measure 18 (severity 346): Merged measures 18,19 → 7; Missing note C#4; Missing note F#4
+- Measure 88 (severity 341): Merged measures 88,89 → 39; Missing note C5; Missing note C#5
+- Measure 86 (severity 335): Merged measures 86,87 → 38; Missing note D#6; Missing note A4
+- Measure 28 (severity 334): Merged measures 28,29 → 11; Missing note A4; Missing note G#2
+- Measure 34 (severity 331): Merged measures 34,35 → 14; Missing note E6; Missing note D#6
+
+Per-measure report
+
+Measure 1
+- 8q detected as whole
+- Missing tie
+- Missing accent
+- 8q detected as whole
+- Missing tie
+- Tempo 168 BPM missing or wrong at q=0
+
+Measure 2
+- Missing tie
+- Missing tie
+
+Measure 3
+- Missing rest (dotted half)
+- Missing rest (quarter)
+- Missing note C#2
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Extra note C#2
+- Extra note C#3
+- Extra note G#3
+- Extra note C#4
+- Extra note E4
+- Extra note C#4
+- Extra note G#3
+- Extra note C#3
+- Extra note G#3
+- Extra note C#4
+- Extra note E4
+- Extra note C#4
+- Extra note G#3
+- Incorrect chord
+- Incorrect chord
+
+Measure 4
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+
+Measure 5 [merge]
+- Merged measures 5,6 → 5
+- Missing rest (16th)
+- Missing rest (16th)
+- Missing note G#4
+- Missing note A4
+- Missing note G#4
+- Missing note G4
+- Missing note G#4
+- Missing note C#5
+- Missing note E5
+- Missing note D#5
+- Missing note C#5
+- Missing note D#5
+- Missing note C#5
+- Missing note C5
+- Missing note C#5
+- Missing note E5
+- Missing note G#5
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Missing note E3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.25 quarters
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+
+Measure 7 [missing]
+- Missing measure 7
+- Missing note A4
+- Missing note C#5
+- Missing note D#5
+- Missing note F#5
+- Missing note A5
+- Missing note C#6
+- Missing note D#6
+- Missing note B6
+- Missing note A6
+- Missing note G#6
+- Missing note F#6
+- Missing note E6
+- Missing note D#6
+- Missing note F#6
+- Missing note C#6
+- Missing note D#3
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note C#4
+- Missing note A3
+- Missing note F#3
+- Missing note C#4
+- Missing note D#4
+- Missing note A4
+- Missing note D#4
+- Missing note C#4
+
+Measure 8 [missing]
+- Missing measure 8
+- Missing note C6
+- Missing note D#6
+- Missing note A5
+- Missing note G#5
+- Missing note F#5
+- Missing note A5
+- Missing note E5
+- Missing note D#5
+- Missing note F#5
+- Missing note C#5
+- Missing note C5
+- Missing note D#5
+- Missing note A4
+- Missing note G#4
+- Missing note B4
+- Missing note A4
+- Missing note G#2
+- Missing note D#3
+- Missing note F#3
+- Missing note C4
+- Missing note F#3
+- Missing note D#3
+- Missing note G#2
+- Missing note D#3
+- Missing note F#3
+- Missing note C4
+- Missing note F#3
+- Missing note D#3
+
+Measure 9 [merge]
+- Merged measures 9,10 → 6
+- Missing note A4
+- Missing rest (16th)
+- Missing note G#4
+- Missing note A#4
+- Missing note G#4
+- Missing note G4
+- Missing note G#4
+- Missing note C#5
+- Missing note E5
+- Missing note D#5
+- Missing note C#5
+- Missing note D#5
+- Missing note C#5
+- Missing note C5
+- Missing note C#5
+- Missing note E5
+- Missing note G#5
+- Missing note C#3
+- Missing note G#3
+- Missing note A#3
+- Missing note E4
+- Missing note A#3
+- Missing note G#3
+- Missing note E3
+- Missing note G#3
+- Missing note A#3
+- Missing note C#4
+- Missing note A#3
+- Missing note G#3
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+
+Measure 11 [missing]
+- Missing measure 11
+- Missing note D#5
+- Missing note E5
+- Missing note D#5
+- Missing note D5
+- Missing note D#5
+- Missing note B5
+- Missing note A#5
+- Missing note G#5
+- Missing note G5
+- Missing note E6
+- Missing note D#6
+- Missing note C#6
+- Missing note B5
+- Missing note A#5
+- Missing note G#5
+- Missing note G5
+- Missing note D#3
+- Missing note G#3
+- Missing note B3
+- Missing note D#4
+- Missing note B3
+- Missing note G#3
+- Missing note D#3
+- Missing note A#3
+- Missing note C#4
+- Missing note G4
+- Missing note C#4
+- Missing note A#3
+
+Measure 12 [missing]
+- Missing measure 12
+- Missing note A#5
+- Missing note G#5
+- Missing note B5
+- Missing note D5
+- Missing note E5
+- Missing note D#5
+- Missing note G#5
+- Missing note A#4
+- Missing note C#5
+- Missing note B4
+- Missing note D#5
+- Missing note G4
+- Missing note A#4
+- Missing note G#4
+- Missing note G4
+- Missing note G#4
+- Missing note G#2
+- Missing note D#3
+- Missing note G#3
+- Missing note B3
+- Missing note G#3
+- Missing note D#3
+- Missing note G#2
+- Missing note D#3
+- Missing note G#3
+- Missing note B3
+- Missing note G#3
+- Missing note D#3
+
+Measure 13 [missing]
+- Missing measure 13
+- Missing note G#4
+- Missing note F#4
+- Missing note F4
+- Missing note F#4
+- Missing note G#4
+- Missing note G#5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note F4
+- Missing note F5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+
+Measure 14 [missing]
+- Missing measure 14
+- Missing note C#4
+- Missing note C#5
+- Missing note F#4
+- Missing note A4
+- Missing note D#4
+- Missing note D#5
+- Missing note F#4
+- Missing note A4
+- Missing note E4
+- Missing note E5
+- Missing note G#4
+- Missing note B4
+- Missing note G#4
+- Missing note G#5
+- Missing note B4
+- Missing note E5
+- Missing note B2
+- Missing note F#3
+- Missing note A3
+- Missing note B3
+- Missing note A3
+- Missing note F#3
+- Missing note E2
+- Missing note B2
+- Missing note E3
+- Missing note G#3
+- Missing note E3
+- Missing note B2
+
+Measure 15 [missing]
+- Missing measure 15
+- Missing note G#4
+- Missing note G#5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note F4
+- Missing note F5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+
+Measure 16 [missing]
+- Missing measure 16
+- Missing note F4
+- Missing note F5
+- Missing note B4
+- Missing note D#5
+- Missing note F#4
+- Missing note F#5
+- Missing note B4
+- Missing note D#5
+- Missing note A4
+- Missing note A5
+- Missing note B4
+- Missing note E5
+- Missing note G#4
+- Missing note G#5
+- Missing note B4
+- Missing note E5
+- Missing note B2
+- Missing note D#3
+- Missing note A3
+- Missing note B3
+- Missing note A3
+- Missing note D#3
+- Missing note E2
+- Missing note B2
+- Missing note E3
+- Missing note G#3
+- Missing note E3
+- Missing note B2
+
+Measure 17 [missing]
+- Missing measure 17
+- Missing note G#5
+- Missing note F#5
+- Missing note F5
+- Missing note F#5
+- Missing note G#4
+- Missing note G#5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note F4
+- Missing note F5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+
+Measure 18 [merge]
+- Merged measures 18,19 → 7
+- Missing note C#4
+- Missing note F#4
+- Missing note G#4
+- Missing note B4
+- Missing note B2
+- Missing note G#4
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note D#5
+- Missing note D#6
+- Missing note F#5
+- Missing note A5
+- Missing note C#5
+- Missing note C#6
+- Missing note F#5
+- Missing note A5
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+- Missing note A2
+- Missing note D#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note D#3
+- Extra note D#6
+- Extra note F#4
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.25 quarters
+- Missing accent
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.5 quarters
+- Missing accent
+- Onset off by 0.75 quarters
+- Missing accent
+- Onset off by 0.75 quarters
+- Missing accent
+- Incorrect pitch D#5 (expected E5)
+- Onset off by 0.5 quarters
+- 16th detected as dotted eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch C#5 (expected C5)
+- Onset off by 0.75 quarters
+- Incorrect pitch C#4 (expected B3)
+- 0.333q detected as eighth
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#5 (expected G#5)
+- Onset off by 0.75 quarters
+- Missing accent
+- Incorrect pitch D#3 (expected F#3)
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected G#3)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#5 (expected B4)
+- Incorrect pitch C#4 (expected E3)
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#5 (expected A4)
+- Onset off by 0.5 quarters
+- Incorrect pitch D#4 (expected E3)
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A5 (expected G#4)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch A5 (expected F#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch D#4 (expected B2)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch B5 (expected E4)
+- 16th detected as eighth
+- Incorrect pitch C#4 (expected E2)
+- 0.333q detected as eighth
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#6 (expected D#4)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch A4 (expected B2)
+- 0.333q detected as eighth
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+
+Measure 20 [merge]
+- Merged measures 20,21 → 8
+- Missing note C6
+- Missing note C6
+- Missing note C6
+- Missing note D#5
+- Missing note F#5
+- Missing note B4
+- Missing note B5
+- Missing note D#5
+- Missing note F#5
+- Missing note B4
+- Missing note B5
+- Missing note D#5
+- Missing note F#5
+- Missing note A#4
+- Missing note A#5
+- Missing note D#5
+- Missing note F#5
+- Missing note A2
+- Missing note D#3
+- Missing note F#3
+- Missing note B3
+- Missing note F#3
+- Missing note D#3
+- Missing note A#2
+- Missing note D#3
+- Missing note F#3
+- Missing note A#3
+- Missing note F#3
+- Missing note D#3
+- Extra note D#6
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.25 quarters
+- Onset off by 0.25 quarters
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- Onset off by 0.5 quarters
+- Incorrect pitch B4 (expected C5)
+- Onset off by 0.5 quarters
+- Incorrect pitch C6 (expected C#6)
+- 16th detected as quarter
+- Onset off by 0.25 quarters
+- Missing accent
+- Incorrect pitch A4 (expected C5)
+- Onset off by 0.25 quarters
+- Incorrect pitch A5 (expected C6)
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- Missing accent
+- Incorrect pitch E5 (expected C5)
+- Onset off by 0.5 quarters
+- Incorrect pitch C#5 (expected F#5)
+- Onset off by 0.5 quarters
+- Incorrect pitch G#5 (expected D#5)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch A4 (expected D#5)
+- Onset off by 0.5 quarters
+- Incorrect pitch A5 (expected C#5)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch G#4 (expected F#5)
+- Onset off by 0.5 quarters
+- Incorrect chord
+
+Measure 22 [missing]
+- Missing measure 22
+- Missing note A#4
+- Missing note A#5
+- Missing note D#5
+- Missing note F#5
+- Missing note A4
+- Missing note A5
+- Missing note D#5
+- Missing note F#5
+- Missing note A4
+- Missing note A5
+- Missing note D#5
+- Missing note F#5
+- Missing note A4
+- Missing note A5
+- Missing note D#5
+- Missing note F#5
+- Missing note C3
+- Missing note D#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note D#3
+- Missing note C3
+- Missing note D#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note D#3
+
+Measure 23 [missing]
+- Missing measure 23
+- Missing note C5
+- Missing note C6
+- Missing note D#5
+- Missing note F#5
+- Missing note B4
+- Missing note B5
+- Missing note D#5
+- Missing note F#5
+- Missing note B4
+- Missing note B5
+- Missing note D#5
+- Missing note F#5
+- Missing note A#4
+- Missing note A#5
+- Missing note D#5
+- Missing note F#5
+- Missing note A2
+- Missing note D#3
+- Missing note F#3
+- Missing note B3
+- Missing note F#3
+- Missing note D#3
+- Missing note A#2
+- Missing note D#3
+- Missing note F#3
+- Missing note A#3
+- Missing note F#3
+- Missing note D#3
+
+Measure 24 [merge]
+- Merged measures 24,25 → 9
+- Missing note C3
+- Missing note D#3
+- Missing rest (16th)
+- Missing note G#4
+- Missing note A4
+- Missing note G#4
+- Missing note G4
+- Missing note G#4
+- Missing note C#5
+- Missing note E5
+- Missing note D#5
+- Missing note C#5
+- Missing note D#5
+- Missing note C#5
+- Missing note C5
+- Missing note C#5
+- Missing note E5
+- Missing note G#5
+- Missing note C#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Missing note E3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Extra note E4
+- Onset off by 0.5 quarters
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch E5 (expected D#5)
+- Onset off by 0.583 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#4 (expected A4)
+- Onset off by 0.25 quarters
+- 0.333q detected as eighth
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E3 (expected D#3)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E5 (expected F#5)
+- Incorrect pitch C#3 (expected B2)
+- Tuplet none (expected 6:4)
+- Missing accent
+- Incorrect pitch G#4 (expected A4)
+- Onset off by 0.75 quarters
+- Incorrect pitch G#3 (expected A3)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#3 (expected F#3)
+- 0.333q detected as eighth
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C5 (expected G#4)
+- Incorrect pitch A#4 (expected D#5)
+- Incorrect pitch C#5 (expected F#5)
+- Incorrect pitch C#5 (expected F#5)
+- Onset off by 0.5 quarters
+- Incorrect pitch C#5 (expected F#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch C#4 (expected F#3)
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected F#3)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected F#3)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#5 (expected A5)
+- Missing accent
+- Incorrect pitch C#4 (expected D#3)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#4 (expected A#5)
+- Missing accent
+- Incorrect pitch E4 (expected D#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G4 (expected A5)
+- Onset off by 0.25 quarters
+- Missing accent
+- Incorrect chord
+- Tempo 152 BPM missing or wrong at q=94
+- Tempo 144 BPM missing or wrong at q=94.5
+- Tempo 132 BPM missing or wrong at q=95
+- Tempo 120 BPM missing or wrong at q=95.25
+- Tempo 112 BPM missing or wrong at q=95.5
+- Tempo 80 BPM missing or wrong at q=95.75
+
+Measure 26 [merge]
+- Merged measures 26,27 → 10
+- Missing rest (16th)
+- Missing note A4
+- Missing note D#5
+- Missing note C#5
+- Missing note D#5
+- Missing note C#5
+- Missing note C#5
+- Missing note E5
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Missing note E3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Missing rest (16th)
+- Missing note A4
+- Missing note C#5
+- Missing note D#5
+- Missing note F#5
+- Missing note A5
+- Missing note C#6
+- Missing note D#6
+- Missing note B6
+- Missing note A6
+- Missing note G#6
+- Missing note F#6
+- Missing note E6
+- Missing note D#6
+- Missing note F#6
+- Missing note C#6
+- Missing note D#3
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note C#4
+- Missing note A3
+- Missing note F#3
+- Missing note C#4
+- Missing note D#4
+- Missing note A4
+- Missing note D#4
+- Missing note C#4
+- Extra note A#4
+- Extra note D#5
+- Extra note C#5
+- Extra note D#5
+- Extra note C#5
+- Extra note C#5
+- Extra note E5
+- Extra note C#3
+- Extra note G#3
+- Extra note A#3
+- Extra note E4
+- Extra note A#3
+- Extra note G#3
+- Extra note E3
+- Extra note G#3
+- Extra note A#3
+- Extra note C#4
+- Extra note A#3
+- Extra note G#3
+- Onset off by 0.25 quarters
+- Onset off by 0.25 quarters
+- Onset off by 0.25 quarters
+- Onset off by 0.25 quarters
+- 16th detected as quarter
+- Onset off by 0.25 quarters
+
+Measure 28 [merge]
+- Merged measures 28,29 → 11
+- Missing note A4
+- Missing note G#2
+- Missing note A4
+- Missing note G#4
+- Missing note A4
+- Missing note G#4
+- Missing note G4
+- Missing note G#4
+- Missing note C#5
+- Missing note E5
+- Missing note D#5
+- Missing note C#5
+- Missing note D#5
+- Missing note C#5
+- Missing note C5
+- Missing note C#5
+- Missing note E5
+- Missing note G#5
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Missing note E3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Extra note E6
+- Extra note D#4
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G5 (expected F#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch A#5 (expected A5)
+- Onset off by 0.25 quarters
+- Incorrect pitch B3 (expected C4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected C4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#3 (expected F#3)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#3 (expected F#3)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch B5 (expected A5)
+- Onset off by 0.75 quarters
+- Incorrect pitch G#5 (expected F#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch D5 (expected E5)
+- Onset off by 0.75 quarters
+- Incorrect pitch A#3 (expected F#3)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#3 (expected F#3)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#5 (expected G#5)
+- Onset off by 0.25 quarters
+- Incorrect pitch G#5 (expected D#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch E5 (expected C6)
+- 16th detected as eighth
+- Incorrect pitch G#5 (expected B4)
+- Onset off by 0.25 quarters
+- Incorrect pitch C#4 (expected D#3)
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch B5 (expected C#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch A#5 (expected C5)
+- Onset off by 0.75 quarters
+- Incorrect pitch D#5 (expected D#6)
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch C#6 (expected A4)
+- Onset off by 0.25 quarters
+- Incorrect pitch B3 (expected G#2)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G4 (expected D#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#6 (expected G#4)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect chord
+- Incorrect chord
+
+Measure 30 [merge]
+- Merged measures 30,31 → 12
+- Missing note C#6
+- Missing note A4
+- Missing note B4
+- Missing note F4
+- Missing rest (16th)
+- Missing note D5
+- Missing note C#5
+- Missing note C5
+- Missing note C#5
+- Missing note F#5
+- Missing note A5
+- Missing note F#5
+- Missing note F5
+- Missing note F#5
+- Missing note F5
+- Missing note E5
+- Missing note F5
+- Missing note G#5
+- Missing note C#6
+- Missing note C#4
+- Missing note F#4
+- Missing note A4
+- Missing note F#4
+- Missing note C#4
+- Missing note G#3
+- Missing note C#4
+- Missing note F4
+- Missing note B4
+- Missing note F4
+- Missing note C#4
+- Extra note G#2
+- Extra note G#2
+- Onset off by 0.25 quarters
+- Onset off by 0.5 quarters
+- Incorrect pitch G#5 (expected A5)
+- Onset off by 0.25 quarters
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#5 (expected E5)
+- Onset off by 0.5 quarters
+- Incorrect pitch G#3 (expected A3)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#5 (expected F5)
+- Onset off by 0.25 quarters
+- Incorrect pitch B3 (expected C#4)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch B3 (expected C#4)
+- 0.333q detected as eighth
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#3 (expected F#3)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#5 (expected E5)
+- Onset off by 0.25 quarters
+- Incorrect pitch G#4 (expected C#5)
+- Onset off by 0.5 quarters
+- Incorrect pitch G#3 (expected C#4)
+- 0.333q detected as eighth
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch B4 (expected F5)
+- Onset off by 0.5 quarters
+- Incorrect pitch A#4 (expected F5)
+- Onset off by 0.25 quarters
+- Incorrect pitch A#5 (expected D#5)
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch B5 (expected D#5)
+- Onset off by 0.25 quarters
+- Incorrect pitch A#4 (expected F#5)
+- Onset off by 0.25 quarters
+- Incorrect pitch D#3 (expected C#4)
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#4 (expected F#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch G#4 (expected G#5)
+- Incorrect pitch G4 (expected F#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch D#3 (expected D#4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#3 (expected D#4)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#3 (expected F4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+- Incorrect chord
+
+Measure 32 [merge]
+- Merged measures 32,33 → 13
+- Missing note G#5
+- Missing note F#5
+- Missing note A5
+- Missing note C#6
+- Missing note A5
+- Missing note G#5
+- Missing note A5
+- Missing note G#5
+- Missing note G#5
+- Missing note C6
+- Missing note D#6
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note A4
+- Missing note F#4
+- Missing note C#4
+- Missing note C3
+- Missing note F#3
+- Missing note G#3
+- Missing note D#4
+- Missing note G#3
+- Missing note F#3
+- Missing note G#5
+- Missing note A5
+- Missing note G#5
+- Missing note G5
+- Missing note G#5
+- Missing note E6
+- Missing note D#6
+- Missing note D6
+- Missing note C#6
+- Missing note C6
+- Missing note B5
+- Missing note A#5
+- Missing note A5
+- Missing note G#5
+- Missing note G5
+- Missing note F#5
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#3
+- Missing note G#3
+- Missing note C4
+- Missing note F#4
+- Missing note C4
+- Missing note G#3
+- Extra note C5
+- Extra note C#5
+- Extra note F#5
+- Extra note C5
+- Extra note C#5
+- Extra note F5
+- Extra note C5
+- Extra note C#5
+- Extra note F#5
+- Extra note C5
+- Extra note C#5
+- Extra note A2
+- Extra note C#3
+- Extra note F#3
+- Extra note A3
+- Extra note F#3
+- Extra note C#3
+- Extra note A2
+- Extra note C#3
+- Extra note F#3
+- Extra note A3
+- Extra note F#3
+- Extra note C#3
+- 16th detected as quarter
+- Incorrect pitch F#4 (expected F5)
+- Unexpected accent
+- Incorrect pitch G#4 (expected F#5)
+- 16th detected as quarter
+- Onset off by 0.25 quarters
+- Unexpected accent
+- Incorrect pitch F#4 (expected G5)
+- Unexpected accent
+- Incorrect pitch F4 (expected F#5)
+- Onset off by 0.75 quarters
+- Unexpected accent
+- Incorrect chord
+
+Measure 34 [merge]
+- Merged measures 34,35 → 14
+- Missing note E6
+- Missing note D#6
+- Missing note E4
+- Missing note D#4
+- Missing note G#5
+- Missing rest (16th)
+- Missing note G#6
+- Missing note G6
+- Missing note F#6
+- Missing note F6
+- Missing note E6
+- Missing note D#6
+- Missing note D6
+- Missing note C#6
+- Missing note C6
+- Missing note B5
+- Missing note A#5
+- Missing note A5
+- Missing note G#5
+- Missing note G5
+- Missing note C#4
+- Missing note E4
+- Missing note G#4
+- Missing rest (eighth)
+- Missing rest (quarter)
+- Missing note G3
+- Missing note C#4
+- Missing note E4
+- Missing note A4
+- Missing rest (quarter)
+- Extra note C#4
+- Extra note G#4
+- Extra note B2
+- Onset off by 0.25 quarters
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.5 quarters
+- Incorrect pitch A3 (expected G#3)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A3 (expected G#3)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E5 (expected F#5)
+- Incorrect pitch B3 (expected C#4)
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected E3)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#5 (expected E5)
+- 16th detected as eighth
+- Incorrect pitch E3 (expected G#3)
+- Eighth detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch G#3 (expected C#4)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E5 (expected A5)
+- Onset off by 0.75 quarters
+- Incorrect pitch A4 (expected E5)
+- Incorrect pitch B4 (expected G5)
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch F#4 (expected E5)
+- Onset off by 0.25 quarters
+- Incorrect pitch B4 (expected A#5)
+- Incorrect pitch E3 (expected D#4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch B2 (expected C#4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#4 (expected B5)
+- Incorrect pitch D#4 (expected F#5)
+- Onset off by 0.75 quarters
+- Unexpected accent
+- Incorrect pitch A4 (expected C6)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch F#4 (expected C#6)
+- Onset off by 0.5 quarters
+- Incorrect pitch E2 (expected C#4)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E4 (expected D6)
+- Onset off by 0.25 quarters
+- Unexpected accent
+- Incorrect pitch B2 (expected A4)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 36 [merge]
+- Merged measures 36,37 → 15
+- Missing rest (whole)
+- Missing note G#3
+- Missing rest (eighth)
+- Missing note A6
+- Missing note G#6
+- Missing note E7
+- Missing note E6
+- Missing note F#6
+- Missing note E6
+- Missing note C#7
+- Missing note C#6
+- Missing note D#6
+- Missing note C#6
+- Missing note G#6
+- Missing note G#5
+- Missing rest (eighth)
+- Missing note E4
+- Missing note E5
+- Missing note C#4
+- Missing note C#5
+- Missing note G#3
+- Missing note G#4
+- Extra note A#2
+- Extra note C#3
+- Extra note F#3
+- Extra note A3
+- Extra note F#3
+- Extra note C#3
+- Extra note A#2
+- Extra note C#3
+- Extra note F#3
+- Extra note A3
+- Unexpected accent
+- Onset off by 0.5 quarters
+- Incorrect pitch C#5 (expected B4)
+- Incorrect pitch G#5 (expected F#5)
+- Onset off by 0.25 quarters
+- Incorrect pitch F#5 (expected F5)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch C5 (expected D5)
+- Onset off by 0.5 quarters
+- Incorrect pitch C5 (expected A#4)
+- Onset off by 0.5 quarters
+- Incorrect pitch F4 (expected G4)
+- Onset off by 0.75 quarters
+- Unexpected accent
+- Incorrect pitch C#5 (expected A4)
+- Onset off by 0.5 quarters
+- Incorrect pitch C#3 (expected G#2)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch G#4 (expected D#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch C5 (expected E4)
+- Onset off by 0.25 quarters
+- Incorrect pitch F5 (expected G#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch C#5 (expected D#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch F#4 (expected E5)
+- Onset off by 0.5 quarters
+- Unexpected accent
+- Incorrect pitch F#5 (expected C#4)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch F#3 (expected G#1)
+- Onset off by 0.75 quarters
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 38 [merge]
+- Merged measures 38,39 → 16
+- Missing note E4
+- Missing note F#4
+- Missing note E4
+- Missing note C#5
+- Missing note C#4
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note A4
+- Missing note A3
+- Missing note G#1
+- Missing note G#2
+- Missing note G#1
+- Missing note G#2
+- Missing note A1
+- Missing note A2
+- Extra note A4
+- Extra note A3
+- Extra note G#3
+- Missing accent
+- Onset off by 0.25 quarters
+- Unexpected accent
+- Onset off by 0.25 quarters
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Missing accent
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch F5 (expected E5)
+- Onset off by 0.25 quarters
+- Incorrect pitch D#5 (expected E5)
+- Onset off by 0.25 quarters
+- Quarter detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch B4 (expected C#5)
+- Incorrect pitch B4 (expected C#5)
+- Onset off by 0.25 quarters
+- Quarter detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch B4 (expected A4)
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch D#3 (expected E3)
+- Quarter detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch A3 (expected G#3)
+- Quarter detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch B3 (expected C#4)
+- Quarter detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch B2 (expected C#3)
+- Quarter detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch D#3 (expected C#3)
+- Quarter detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch B2 (expected G#2)
+- Quarter detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch A5 (expected C#6)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch E5 (expected G#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch B4 (expected G#5)
+- Onset off by 0.5 quarters
+- Incorrect pitch F4 (expected A5)
+- 16th detected as eighth
+- Incorrect pitch E3 (expected C#2)
+- Quarter detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch B2 (expected E4)
+- Quarter detected as eighth
+- Incorrect pitch F#4 (expected E6)
+- Onset off by 0.75 quarters
+- Unexpected accent
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 40 [merge]
+- Merged measures 40,41 → 17
+- Missing note C#4
+- Missing note G#3
+- Missing note C#4
+- Missing note G3
+- Missing note C#4
+- Missing note G#3
+- Missing note C4
+- Missing note G#3
+- Missing rest (half)
+- Missing rest (quarter)
+- Missing rest (quarter)
+- Missing rest (whole)
+- Missing note G#2
+- Missing note C#3
+- Missing note F3
+- Missing note G#3
+- Missing note C#4
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Missing note F3
+- Missing note C#3
+- Missing note G#2
+- Extra note C5
+- Extra note C#5
+- Extra note F#4
+- Extra note C#5
+- Extra note F4
+- Extra note C#5
+- Extra note F#4
+- Extra note C#5
+- Extra note A3
+- Extra note F#3
+- Extra note F#3
+- Extra note A3
+- Extra note F#3
+- Incorrect pitch A2 (expected G#2)
+- Quarter detected as eighth
+- 16th detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch A2 (expected G#2)
+- Half detected as 16th
+- Incorrect pitch C5 (expected G#4)
+- Incorrect pitch C5 (expected G#4)
+- Incorrect pitch C5 (expected G4)
+- Incorrect pitch C#3 (expected G2)
+- Quarter detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch C#3 (expected C#2)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch F5 (expected D#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch F#5 (expected D#4)
+- 16th detected as eighth
+- Incorrect pitch F#5 (expected D#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch G#5 (expected D#4)
+- 16th detected as quarter
+- Incorrect pitch C#3 (expected G#1)
+- Half detected as eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch C#3 (expected G1)
+- Quarter detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch F#3 (expected G#1)
+- Quarter detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Tempo 128 BPM missing or wrong at q=156
+- Tempo 120 BPM missing or wrong at q=156.5
+- Tempo 112 BPM missing or wrong at q=157
+- Tempo 104 BPM missing or wrong at q=157.5
+- Tempo 96 BPM missing or wrong at q=158
+- Tempo 88 BPM missing or wrong at q=158.5
+- Tempo 80 BPM missing or wrong at q=159
+- Tempo 72 BPM missing or wrong at q=159.5
+- Tempo 67 BPM missing or wrong at q=159.75
+
+Measure 42 [merge]
+- Merged measures 42,43 → 18
+- Missing rest (whole)
+- Missing note C#2
+- Missing note A#4
+- Missing note G#4
+- Missing note C#5
+- Missing note D#5
+- Missing note C#2
+- Missing note G#2
+- Missing note G#3
+- Missing note C4
+- Missing note D#4
+- Missing note C4
+- Missing note G#3
+- Missing note C#3
+- Missing note G#3
+- Missing note C4
+- Missing note F#4
+- Missing note C4
+- Missing note G#3
+- Extra note C#4
+- Extra note C#5
+- Extra note F#4
+- Extra note A4
+- Extra note D#4
+- Extra note D#5
+- Extra note F#4
+- Extra note A4
+- Extra note E4
+- Extra note E5
+- Extra note G#4
+- Extra note B4
+- Extra note G#4
+- Extra note G#5
+- Extra note E5
+- Extra note E2
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A3 (expected G#3)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch E3 (expected F3)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C3 (expected C#3)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C3 (expected C#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected F3)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch B3 (expected C#4)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch B4 (expected G#4)
+- Half detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch F#3 (expected C#4)
+- Onset off by 0.583 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E3 (expected G#2)
+- 0.667q detected as eighth
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Missing tie
+- Incorrect pitch A3 (expected G#2)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C3 (expected F4)
+- 0.333q detected as eighth
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+- Incorrect chord
+
+Measure 44 [merge]
+- Merged measures 44,45 → 19
+- Missing note F5
+- Missing note G#5
+- Missing rest (dotted half)
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Missing note C#3
+- Missing note G#3
+- Missing note F4
+- Missing note F4
+- Missing note G#3
+- Missing note F#5
+- Missing note F5
+- Missing note D#5
+- Missing note F5
+- Missing note C#5
+- Missing note F#4
+- Missing note F4
+- Missing note D#4
+- Missing note C#4
+- Missing note F#4
+- Missing note D#4
+- Missing note G#3
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C4
+- Missing note G#3
+- Missing note C#4
+- Missing note G#3
+- Missing note F3
+- Extra note G#4
+- Extra note G#5
+- Extra note F#5
+- Extra note C5
+- Extra note C#5
+- Extra note D#5
+- Extra note D#6
+- Extra note C#6
+- Extra note F#5
+- Extra note C5
+- Extra note C#5
+- Extra note F#4
+- Extra note A5
+- Extra note A5
+- Extra note A2
+- Extra note C#3
+- Extra note F#3
+- Extra note A3
+- Extra note F#3
+- Extra note C#3
+- Extra note A2
+- Extra note D#3
+- Extra note F#3
+- Extra note A3
+- Extra note F#3
+- Extra note D#3
+- Incorrect pitch C#5 (expected G#4)
+- Quarter detected as 16th
+- Missing accent
+- Incorrect pitch F#5 (expected G#4)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+- Incorrect chord
+
+Measure 46 [merge]
+- Merged measures 46,47 → 20
+- Missing note A#3
+- Missing note B4
+- Missing note A#4
+- Missing note D#5
+- Missing note F5
+- Missing note F3
+- Missing note A#3
+- Missing note D4
+- Missing note A#3
+- Missing note F3
+- Missing note A#2
+- Missing note A#3
+- Missing note D4
+- Missing note G#4
+- Missing note D4
+- Missing note A#3
+- Extra note C#6
+- Extra note D#5
+- Extra note F#5
+- Extra note C5
+- Extra note C6
+- Extra note D#5
+- Extra note F#5
+- Extra note C6
+- Extra note D#5
+- Extra note F#5
+- Extra note C5
+- Extra note C6
+- Extra note F#5
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C4 (expected C#4)
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#2 (expected F#2)
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected G#3)
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected G#3)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#3 (expected A#2)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#5 (expected G#4)
+- Half detected as quarter
+- Incorrect pitch C5 (expected A#4)
+- Whole detected as 16th
+- Missing tie
+- Missing accent
+- Incorrect pitch D#3 (expected A#3)
+- 0.333q detected as eighth
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#5 (expected A#4)
+- Half detected as 16th
+- Onset off by 0.5 quarters
+- Missing tie
+- Incorrect chord
+
+Measure 48 [merge]
+- Merged measures 48,49 → 21
+- Missing note F#5
+- Missing note D#3
+- Missing note F#4
+- Missing note A#3
+- Missing note F3
+- Missing note F4
+- Missing note A3
+- Missing note F#3
+- Missing note D#4
+- Missing note A#3
+- Missing note G#3
+- Missing note F#4
+- Missing note C4
+- Missing note F5
+- Missing note D#5
+- Missing note C#5
+- Missing note C#5
+- Missing note C5
+- Missing note C#5
+- Missing note D#5
+- Missing note C#5
+- Missing rest (half)
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#3
+- Missing note G3
+- Missing note C#4
+- Missing note D#4
+- Missing note C#4
+- Missing note G3
+- Extra note C6
+- Extra note F#5
+- Extra note B4
+- Extra note B5
+- Extra note A#2
+- Extra note D#3
+- Extra note F#3
+- Extra note B3
+- Extra note F#3
+- Extra note D#3
+- Quarter detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch F#5 (expected F5)
+- Quarter detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch D#5 (expected C#5)
+- Half detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch C5 (expected F5)
+- Quarter detected as eighth
+- Onset off by 0.25 quarters
+- Incorrect chord
+- Incorrect chord
+
+Measure 50 [merge]
+- Merged measures 50,51 → 22
+- Missing note G#2
+- Missing note F#3
+- Missing rest (dotted half)
+- Missing note A#3
+- Missing note A#4
+- Missing note G#4
+- Missing note C#5
+- Missing note D#5
+- Missing note G#2
+- Missing note D#3
+- Missing note G#3
+- Missing note C4
+- Missing note G#3
+- Missing note D#3
+- Missing note G#2
+- Missing note G#3
+- Missing note C4
+- Missing note F#4
+- Missing note C4
+- Missing note G#3
+- Extra note B4
+- Extra note B5
+- Extra note F#5
+- Extra note A#4
+- Extra note A#5
+- Extra note D#5
+- Extra note F#5
+- Extra note A#4
+- Extra note A#5
+- Extra note D#5
+- Extra note F#5
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A2 (expected G#2)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Unexpected accent
+- Incorrect pitch F#3 (expected G#3)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#3 (expected G#3)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch A3 (expected A#3)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C3 (expected D#3)
+- 0.333q detected as eighth
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Unexpected accent
+- Incorrect pitch A4 (expected G#4)
+- Half detected as 16th
+- Onset off by 0.25 quarters
+- Whole detected as 16th
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch F#3 (expected C4)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+
+Measure 52 [missing]
+- Missing measure 52
+- Missing note F5
+- Missing note G#5
+- Missing note G#4
+- Missing note G#4
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Missing note C#3
+- Missing note G#3
+- Missing note F4
+- Missing note F4
+- Missing note G#3
+
+Measure 53 [missing]
+- Missing measure 53
+- Missing note F#5
+- Missing note F5
+- Missing note D#5
+- Missing note F5
+- Missing note C#5
+- Missing note D#5
+- Missing note F5
+- Missing note D#5
+- Missing note C#5
+- Missing note D#5
+- Missing note F#4
+- Missing note F4
+- Missing note D#4
+- Missing note C#4
+- Missing note F#4
+- Missing note D#4
+- Missing note G#3
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C4
+- Missing note G#3
+- Missing note C#4
+- Missing note G#3
+- Missing note F3
+
+Measure 54 [merge]
+- Merged measures 54,55 → 23
+- Missing note F#2
+- Missing note C#4
+- Missing note B4
+- Missing note A#4
+- Missing note D#5
+- Missing note F5
+- Missing note F3
+- Missing note A#3
+- Missing note D4
+- Missing note A#3
+- Missing note F3
+- Missing note A#2
+- Missing note A#3
+- Missing note D4
+- Missing note G#4
+- Missing note D4
+- Missing note A#3
+- Extra note A5
+- Extra note D#5
+- Extra note F#5
+- Extra note A5
+- Extra note D#5
+- Extra note F#5
+- Extra note A5
+- Extra note D#5
+- Extra note F#5
+- Extra note C5
+- Extra note C6
+- Extra note F#5
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A3 (expected G#3)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected G#3)
+- 0.333q detected as eighth
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A4 (expected G#4)
+- Half detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch B2 (expected G#2)
+- 0.333q detected as eighth
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#3 (expected A#2)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A4 (expected A#4)
+- Whole detected as 16th
+- Onset off by 0.25 quarters
+- Missing tie
+- Missing accent
+- Incorrect pitch F#3 (expected C4)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#3 (expected A#3)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#5 (expected A#4)
+- Half detected as 16th
+- Onset off by 0.25 quarters
+- Missing tie
+- Incorrect pitch A2 (expected A#3)
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Unexpected accent
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 56 [merge]
+- Merged measures 56,57 → 24
+- Missing note D#4
+- Missing note F#4
+- Missing note C4
+- Missing note G4
+- Missing note G#4
+- Missing note A#4
+- Missing note G#4
+- Missing note F5
+- Missing note D#5
+- Missing note C#4
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Missing note C#3
+- Missing note G#3
+- Missing note C4
+- Missing note F#4
+- Missing note C4
+- Missing note G#3
+- Extra note B4
+- Extra note B5
+- Extra note D#5
+- Extra note B4
+- Extra note B5
+- Extra note D#5
+- Extra note A#4
+- Extra note A#5
+- Extra note A#4
+- Extra note A#5
+- Extra note F#5
+- Extra note A#2
+- Onset off by 0.25 quarters
+- Tuplet none (expected 3:2)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch A#3 (expected A3)
+- 0.333q detected as eighth
+- Tuplet none (expected 3:2)
+- Quarter detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch F#3 (expected F3)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 3:2)
+- Quarter detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch B3 (expected A#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch F#5 (expected F5)
+- Quarter detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch F#5 (expected F5)
+- Quarter detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch D#3 (expected C#3)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected G#3)
+- Onset off by 0.583 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#5 (expected C#5)
+- Missing dot
+- Onset off by 0.5 quarters
+- Incorrect pitch D#3 (expected G#3)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch B2 (expected A#3)
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 3:2)
+- Unexpected accent
+- Incorrect pitch F#3 (expected F#4)
+- Tuplet none (expected 3:2)
+- Incorrect pitch D#3 (expected F4)
+- Tuplet none (expected 3:2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 58 [merge]
+- Merged measures 58,59 → 25
+- Missing rest (eighth)
+- Missing note C#3
+- Missing note F4
+- Missing note C#4
+- Missing note A#4
+- Missing note A4
+- Missing note A#4
+- Missing note C5
+- Missing note G#2
+- Missing note D#3
+- Missing note G#3
+- Missing note C4
+- Missing note G#3
+- Missing note D#3
+- Missing note G#2
+- Missing note D#3
+- Missing note G3
+- Missing note C#4
+- Missing note G3
+- Missing note D#3
+- Extra note A4
+- Extra note A5
+- Extra note F#5
+- Extra note A4
+- Extra note A5
+- Extra note F#5
+- Extra note G#4
+- Extra note D#5
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Eighth detected as 16th
+- Onset off by 0.75 quarters
+- Unexpected accent
+- Incorrect pitch C3 (expected C#3)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Unexpected accent
+- Incorrect pitch A3 (expected G#3)
+- 0.333q detected as dotted eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected G#3)
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#5 (expected C#5)
+- Quarter detected as 16th
+- Half detected as 16th
+- Onset off by 0.75 quarters
+- Missing accent
+- Incorrect pitch D#3 (expected G#3)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected C4)
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected C#4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#3 (expected C4)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#5 (expected G#4)
+- Half detected as dotted eighth
+- Onset off by 0.75 quarters
+- Missing accent
+- Incorrect pitch D#3 (expected F#4)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+- Incorrect chord
+
+Measure 60 [merge]
+- Merged measures 60,61 → 26
+- Missing rest (eighth)
+- Missing note G#2
+- Missing note D#4
+- Missing note A#4
+- Missing note A4
+- Missing note A#4
+- Missing note D#5
+- Missing note D#2
+- Missing note D#3
+- Missing note G#3
+- Missing note C4
+- Missing note G#3
+- Missing note D#3
+- Missing note D#2
+- Missing note D#3
+- Missing note G3
+- Missing note C#4
+- Missing note G3
+- Missing note D#3
+- Extra note A4
+- Extra note G#4
+- Extra note G4
+- Extra note G#4
+- Extra note C#5
+- Extra note C#5
+- Extra note E4
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 7:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 7:4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.644 quarters
+- Tuplet none (expected 7:4)
+- Incorrect pitch C#4 (expected C4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E3 (expected D#3)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#3 (expected D#3)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C5 (expected A#4)
+- Missing dot
+- Onset off by 0.427 quarters
+- Tuplet none (expected 7:4)
+- Incorrect pitch D#5 (expected G#5)
+- Tuplet none (expected 7:4)
+- Incorrect pitch E5 (expected A#5)
+- Onset off by 0.535 quarters
+- Tuplet none (expected 7:4)
+- Incorrect pitch D#5 (expected C6)
+- Tuplet none (expected 7:4)
+- Missing tie
+- Incorrect pitch C#5 (expected C6)
+- 1.285q detected as 16th
+- Onset off by 0.5 quarters
+- Missing tie
+- Missing accent
+- Incorrect pitch C#4 (expected C#3)
+- 0.333q detected as eighth
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+- Incorrect chord
+
+Measure 62 [missing]
+- Missing measure 62
+- Missing note G#4
+- Missing note A#4
+- Missing note C#5
+- Missing note C5
+- Missing note A#4
+- Missing note G#2
+- Missing note D#3
+- Missing note G#3
+- Missing note C4
+- Missing note G#3
+- Missing note D#3
+- Missing note F#2
+- Missing note F#3
+- Missing note A#3
+- Missing note C#4
+- Missing note A#3
+- Missing note F#3
+
+Measure 63 [merge]
+- Merged measures 63,64 → 27
+- Missing note D#5
+- Missing note F5
+- Missing note G#5
+- Missing rest (dotted half)
+- Missing note G#4
+- Missing note G#4
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Missing note C#3
+- Missing note G#3
+- Missing note F4
+- Missing note F4
+- Missing note G#3
+- Extra note G#4
+- Extra note G4
+- Extra note C#5
+- Extra note A4
+- Extra note D#5
+- Extra note C#5
+- Extra note D#5
+- Extra note C#5
+- Extra note C#5
+- Extra note E5
+- Extra note G#5
+- Tuplet none (expected 6:4)
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E3 (expected D#3)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected C4)
+- Tuplet none (expected 6:4)
+- Incorrect pitch C5 (expected C#5)
+- Eighth detected as 16th
+- Incorrect pitch C#4 (expected C4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected C4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected C4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Half detected as quarter
+- Incorrect pitch E4 (expected D#4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E4 (expected F#4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#4 (expected A#4)
+- Eighth detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch C#3 (expected G#2)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch E5 (expected G#4)
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+
+Measure 65 [merge]
+- Merged measures 65,66 → 28
+- Missing note C#5
+- Missing note F#4
+- Missing note D#4
+- Missing note G#3
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C4
+- Missing note G#3
+- Missing note C#4
+- Missing note G#3
+- Missing note F3
+- Missing note G#4
+- Missing note A#4
+- Missing note D#3
+- Missing note G#3
+- Missing note C4
+- Missing note G#3
+- Missing note D#3
+- Missing note F#2
+- Missing note F#3
+- Missing note A#3
+- Missing note C#4
+- Missing note A#3
+- Missing note F#3
+- Extra note F#5
+- Extra note C#6
+- Extra note A4
+- Extra note A5
+- Extra note D#6
+- Extra note D#5
+- Extra note D#3
+- Extra note A3
+- Extra note C#4
+- Extra note A3
+- Extra note F#3
+- Extra note C#4
+- Extra note A4
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch E5 (expected F5)
+- Eighth detected as 16th
+- Missing accent
+- Quarter detected as eighth
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch F#4 (expected F4)
+- Quarter detected as eighth
+- Missing accent
+- Incorrect pitch F#5 (expected F5)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 3:2)
+- Quarter detected as 16th
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch D#5 (expected F5)
+- Quarter detected as eighth
+- Incorrect pitch F#5 (expected D#5)
+- 0.167q detected as eighth
+- Onset off by 0.417 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch G#5 (expected D#5)
+- Tuplet none (expected 3:2)
+- Incorrect pitch C#5 (expected F#5)
+- Quarter detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch A5 (expected D#5)
+- Quarter detected as eighth
+- Incorrect pitch C#4 (expected F#4)
+- Quarter detected as 16th
+- Onset off by 0.75 quarters
+- Missing accent
+- Incorrect pitch B5 (expected D#5)
+- 0.333q detected as eighth
+- Tuplet none (expected 3:2)
+- Incorrect pitch D#4 (expected G#2)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 67 [merge]
+- Merged measures 67,68 → 29
+- Missing note D4
+- Missing note F5
+- Missing note D#5
+- Missing note F5
+- Missing note F#4
+- Missing note A#3
+- Missing note F3
+- Missing note F4
+- Missing note A3
+- Missing note F#3
+- Missing note D#4
+- Missing note A#3
+- Missing note G#3
+- Missing note F#4
+- Missing note C4
+- Extra note C6
+- Extra note D#6
+- Extra note F#5
+- Extra note G#5
+- Extra note A#5
+- Extra note E5
+- Extra note D#5
+- Extra note F#5
+- Extra note C#5
+- Extra note G#4
+- Onset off by 0.25 quarters
+- Tuplet none (expected 3:2)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch F#3 (expected F3)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected F3)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#2 (expected A#2)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch C4 (expected D4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#2 (expected A#2)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch C5 (expected B4)
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch C4 (expected D4)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected A#3)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected A#3)
+- 0.333q detected as eighth
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch B4 (expected F5)
+- Eighth detected as 16th
+- Incorrect pitch D#3 (expected A#3)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#3 (expected A#3)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#4 (expected F#5)
+- Quarter detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch A#5 (expected A#4)
+- Half detected as eighth
+- Onset off by 0.5 quarters
+- Missing tie
+- Incorrect pitch D#3 (expected G#4)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 69 [merge]
+- Merged measures 69,70 → 30
+- Missing note G#3
+- Missing note C4
+- Missing note F#4
+- Missing note C#5
+- Missing rest (eighth)
+- Missing note G#5
+- Missing note C#3
+- Missing note G#3
+- Missing note C4
+- Missing note F#4
+- Missing note C4
+- Missing note G#3
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Extra note G#4
+- Extra note A#4
+- Extra note D#5
+- Extra note C#5
+- Eighth detected as 16th
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- 0.333q detected as dotted eighth
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.625 quarters
+- 0.333q detected as eighth
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected C4)
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E4 (expected F4)
+- 0.333q detected as eighth
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E5 (expected F5)
+- Missing dot
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch C#5 (expected A#4)
+- Onset off by 0.5 quarters
+- Incorrect pitch E3 (expected C#3)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#4 (expected C#5)
+- Missing dot
+- Incorrect pitch C#5 (expected D#5)
+- Half detected as 16th
+- Onset off by 0.25 quarters
+- Missing accent
+
+Measure 71 [merge]
+- Merged measures 71,72 → 31
+- Missing note A4
+- Missing note A#4
+- Missing note G#2
+- Missing note D#3
+- Missing note G#3
+- Missing note D#3
+- Missing note G#2
+- Missing note D#3
+- Missing note C#4
+- Missing note G3
+- Missing note D#3
+- Missing note G#4
+- Missing rest (eighth)
+- Missing note C6
+- Missing note C6
+- Missing note A#5
+- Missing note G#5
+- Missing note E5
+- Missing note C#5
+- Missing note A#4
+- Missing note G#5
+- Missing note G#2
+- Missing note D#3
+- Missing note G#3
+- Missing note C4
+- Missing note G#3
+- Missing note D#3
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Extra note C#5
+- Incorrect pitch G#3 (expected G3)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected C4)
+- 0.333q detected as eighth
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch B4 (expected G#4)
+- Half detected as 16th
+- Missing accent
+- Incorrect pitch E5 (expected A#4)
+- Missing dot
+- Onset off by 0.25 quarters
+- Incorrect pitch G#5 (expected C5)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch E4 (expected G#3)
+- 0.333q detected as dotted quarter
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+
+Measure 73 [merge]
+- Merged measures 73,74 → 32
+- Missing note A4
+- Missing note D#2
+- Missing note D#3
+- Missing note G#3
+- Missing note D#3
+- Missing note D#2
+- Missing note D#3
+- Missing note G3
+- Missing note G3
+- Missing note D#3
+- Missing note G#4
+- Missing rest (quarter)
+- Missing note A#4
+- Missing note C#5
+- Missing note C5
+- Missing note A#4
+- Missing note G#2
+- Missing note D#3
+- Missing note G#3
+- Missing note C4
+- Missing note G#3
+- Missing note D#3
+- Missing note F#2
+- Missing note F#3
+- Missing note A#3
+- Missing note C#4
+- Missing note A#3
+- Missing note F#3
+- Onset off by 0.5 quarters
+- Incorrect pitch D#4 (expected C#4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected C4)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected G#3)
+- 0.333q detected as 1.25q
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#5 (expected A#4)
+- Missing dot
+- Onset off by 0.75 quarters
+- Incorrect pitch E5 (expected A#4)
+- Missing dot
+- Onset off by 0.75 quarters
+- Incorrect pitch E5 (expected D#4)
+- Half detected as dotted eighth
+- Onset off by 0.5 quarters
+- Missing accent
+
+Measure 75 [merge]
+- Merged measures 75,76 → 33
+- Missing note G#2
+- Missing note D#3
+- Missing note G#3
+- Missing note C4
+- Missing note G#3
+- Missing note D#3
+- Missing note G#2
+- Missing note G#3
+- Missing note C4
+- Missing note F#4
+- Missing note C4
+- Missing note G#3
+- Missing note G#5
+- Missing rest (dotted half)
+- Missing note G#4
+- Missing note G#4
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Missing note C#3
+- Missing note G#3
+- Missing note F4
+- Missing note F4
+- Missing note G#3
+- Extra note E3
+- Extra note D#5
+- Extra note F#5
+- Extra note A#5
+- Extra note F#5
+- Extra note F#5
+- Extra note C#6
+- Extra note C#4
+- Extra note D#4
+- Extra note B1
+- Extra note E2
+- Extra note G#2
+- Extra note D#3
+- Extra note A2
+- Extra note E2
+- Incorrect pitch F5 (expected D#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch E5 (expected C#5)
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch G#5 (expected F5)
+- Half detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch C#5 (expected G#4)
+- Half detected as 16th
+- Incorrect pitch F5 (expected A#4)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch F5 (expected G#4)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 77 [missing]
+- Missing measure 77
+- Missing note F#5
+- Missing note F5
+- Missing note D#5
+- Missing note F5
+- Missing note C#5
+- Missing note D#5
+- Missing note F5
+- Missing note D#5
+- Missing note C#5
+- Missing note D#5
+- Missing note F#4
+- Missing note F4
+- Missing note D#4
+- Missing note C#4
+- Missing note F#4
+- Missing note D#4
+- Missing note G#3
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C4
+- Missing note G#3
+- Missing note C#4
+- Missing note G#3
+- Missing note F3
+
+Measure 78 [merge]
+- Merged measures 78,79 → 34
+- Missing note F#3
+- Missing note B4
+- Missing note A#4
+- Missing note D#5
+- Missing note F5
+- Missing note F3
+- Missing note A#3
+- Missing note D4
+- Missing note A#3
+- Missing note F3
+- Missing note A#2
+- Missing note A#3
+- Missing note D4
+- Missing note G#4
+- Missing note D4
+- Missing note A#3
+- Extra rest (16th)
+- Extra note D5
+- Extra note C#5
+- Extra note C5
+- Extra note F#5
+- Extra note A#5
+- Extra note F#5
+- Extra note F5
+- Extra note F#5
+- Extra note F5
+- Extra note E5
+- Extra note G#5
+- Extra note C#6
+- Incorrect pitch E2 (expected F#2)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch E2 (expected G#2)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch F4 (expected C#4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#4 (expected C4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E2 (expected A#2)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F4 (expected A#3)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#5 (expected G#4)
+- Half detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch C#5 (expected A#4)
+- Whole detected as 16th
+- Onset off by 0.75 quarters
+- Missing tie
+- Missing accent
+- Incorrect pitch F#4 (expected G#3)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch F5 (expected A#4)
+- Half detected as 16th
+- Onset off by 0.75 quarters
+- Missing tie
+- Incorrect pitch E2 (expected D#3)
+- Tuplet none (expected 6:4)
+- Incorrect pitch B4 (expected A#3)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#2 (expected D#3)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#4 (expected G#3)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch B1 (expected F#3)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+- Incorrect chord
+
+Measure 80 [merge]
+- Merged measures 80,81 → 35
+- Missing note A3
+- Missing note F#3
+- Missing note G4
+- Missing note G#4
+- Missing note A#4
+- Missing note G#4
+- Missing note F5
+- Missing note D#5
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note F4
+- Missing note C#4
+- Missing note G#3
+- Missing note C#3
+- Missing note G#3
+- Missing note C4
+- Missing note F#4
+- Missing note C4
+- Missing note G#3
+- Extra note G#5
+- Extra note G#5
+- Extra note F#5
+- Extra note A#5
+- Extra note C#6
+- Extra note A#5
+- Extra note G#5
+- Extra note A#5
+- Extra note G#5
+- Extra note C6
+- Extra note D#6
+- Extra note C#2
+- Extra note B5
+- Quarter detected as eighth
+- Quarter detected as eighth
+- Onset off by 0.417 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch F#4 (expected F4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch G5 (expected F5)
+- Quarter detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch G#4 (expected D#4)
+- Tuplet none (expected 3:2)
+- Incorrect pitch F#5 (expected D#5)
+- Quarter detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch D#5 (expected F#4)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch G#5 (expected C#5)
+- Missing dot
+- Onset off by 0.75 quarters
+- Incorrect pitch E2 (expected D#3)
+- 0.333q detected as eighth
+- Onset off by 0.5 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch A#4 (expected A#3)
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch E2 (expected F3)
+- 0.333q detected as eighth
+- Onset off by 0.75 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch E5 (expected C4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch D#5 (expected A#3)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 3:2)
+- Incorrect pitch E5 (expected G#3)
+- 0.333q detected as eighth
+- Onset off by 0.25 quarters
+- Tuplet none (expected 3:2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 82 [merge]
+- Merged measures 82,83 → 36
+- Missing note C#3
+- Missing note G#3
+- Missing note G#3
+- Missing rest (16th)
+- Missing note G#4
+- Missing note G4
+- Missing note G#4
+- Missing note C#5
+- Missing note E5
+- Missing note D#5
+- Missing note C#5
+- Missing note D#5
+- Missing note C#5
+- Missing note C5
+- Missing note C#5
+- Missing note E5
+- Missing note G#5
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Missing note E3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Extra note G#5
+- Extra note A#5
+- Extra note G5
+- Extra note G#5
+- Extra note E6
+- Extra note D#6
+- Extra note C#6
+- Extra note D6
+- Extra note C6
+- Incorrect pitch B4 (expected F#4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#5 (expected D#5)
+- Whole detected as 16th
+- Missing accent
+- Incorrect pitch E5 (expected F#4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#4 (expected C4)
+- 0.333q detected as dotted eighth
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#5 (expected A4)
+- Onset off by 0.75 quarters
+- Incorrect pitch E5 (expected C4)
+- Tuplet none (expected 6:4)
+- Incorrect pitch B5 (expected G#4)
+- Onset off by 0.75 quarters
+- Incorrect pitch E5 (expected C4)
+- 0.333q detected as eighth
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#5 (expected C4)
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#5 (expected G#3)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#5 (expected G#3)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#6 (expected C#3)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+- Incorrect chord
+- Tempo 76 BPM missing or wrong at q=324
+
+Measure 84 [merge]
+- Merged measures 84,85 → 37
+- Missing rest (16th)
+- Missing note G#4
+- Missing note G#4
+- Missing note G4
+- Missing note G#4
+- Missing note D#5
+- Missing note C#5
+- Missing note D#5
+- Missing note C#5
+- Missing note C5
+- Missing note C#5
+- Missing note G#5
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note G#3
+- Missing note E3
+- Missing note G#3
+- Missing note C#4
+- Missing note C#4
+- Missing note G#3
+- Missing rest (16th)
+- Missing note A4
+- Missing note C#5
+- Missing note D#5
+- Missing note F#5
+- Missing note A5
+- Missing note C#6
+- Missing note D#6
+- Missing note B6
+- Missing note A6
+- Missing note G#6
+- Missing note F#6
+- Missing note E6
+- Missing note D#6
+- Missing note F#6
+- Missing note C#6
+- Missing note D#3
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note C#4
+- Missing note A3
+- Missing note F#3
+- Missing note C#4
+- Missing note D#4
+- Missing note A4
+- Missing note D#4
+- Missing note C#4
+- Incorrect pitch G5 (expected E5)
+- 16th detected as quarter
+- Incorrect pitch F#5 (expected E5)
+- 16th detected as quarter
+- Onset off by 0.75 quarters
+- Incorrect pitch G#5 (expected C#5)
+- 16th detected as quarter
+- Onset off by 0.75 quarters
+- Incorrect pitch E5 (expected E4)
+- 0.333q detected as eighth
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#5 (expected A4)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch G#5 (expected E4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#6 (expected C#4)
+- 0.333q detected as 1.25q
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+
+Measure 86 [merge]
+- Merged measures 86,87 → 38
+- Missing note D#6
+- Missing note A4
+- Missing note G#4
+- Missing note A4
+- Missing note G#2
+- Missing note A4
+- Missing note G#4
+- Missing note A4
+- Missing note G#4
+- Missing note G4
+- Missing note G#4
+- Missing note C#5
+- Missing note E5
+- Missing note D#5
+- Missing note C#5
+- Missing note D#5
+- Missing note C#5
+- Missing note C5
+- Missing note C#5
+- Missing note E5
+- Missing note G#5
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Missing note E3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Extra note E6
+- Extra note D6
+- Extra note D#6
+- Extra note C#6
+- Extra note E4
+- Incorrect pitch F5 (expected F#5)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected C4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F3 (expected F#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#5 (expected E5)
+- Onset off by 0.75 quarters
+- Incorrect pitch C#4 (expected C4)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F5 (expected G#5)
+- Onset off by 0.25 quarters
+- Incorrect pitch F#5 (expected A5)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch C6 (expected A5)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch G#3 (expected D#3)
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#3 (expected D#3)
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#5 (expected F#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch G5 (expected D#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch F5 (expected C6)
+- Incorrect pitch F#5 (expected B4)
+- Onset off by 0.25 quarters
+- Incorrect pitch C#4 (expected F#3)
+- 0.333q detected as eighth
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#4 (expected F#3)
+- Tuplet none (expected 6:4)
+- Incorrect pitch A5 (expected C#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch G#5 (expected C5)
+- Onset off by 0.75 quarters
+- Incorrect pitch B5 (expected D#5)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch D#4 (expected D#3)
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected G#2)
+- 0.333q detected as eighth
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#4 (expected D#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 88 [merge]
+- Merged measures 88,89 → 39
+- Missing note C5
+- Missing note C#5
+- Missing note E4
+- Missing note A#3
+- Missing note E3
+- Missing note A#3
+- Missing note G#3
+- Missing note D#5
+- Missing note E5
+- Missing note D#5
+- Missing note D5
+- Missing note D#5
+- Missing note B5
+- Missing note A#5
+- Missing note G#5
+- Missing note G5
+- Missing note E6
+- Missing note D#6
+- Missing note C#6
+- Missing note B5
+- Missing note A#5
+- Missing note G#5
+- Missing note G5
+- Missing note D#3
+- Missing note G#3
+- Missing note B3
+- Missing note D#4
+- Missing note B3
+- Missing note G#3
+- Missing note D#3
+- Missing note A#3
+- Missing note C#4
+- Missing note G4
+- Missing note C#4
+- Missing note A#3
+- Extra note G#6
+- Extra note G6
+- Extra note G#4
+- Extra rest (eighth)
+- Extra rest (quarter)
+- Extra rest (quarter)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch G3 (expected G#3)
+- Tuplet none (expected 6:4)
+- Unexpected accent
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Unexpected accent
+- Incorrect pitch G5 (expected E5)
+- Incorrect pitch C#4 (expected A#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E4 (expected A#3)
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Unexpected accent
+- Incorrect pitch A5 (expected D#5)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch B5 (expected E5)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch A#5 (expected C#5)
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch C6 (expected D#5)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch G#5 (expected A#4)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch C#6 (expected C#5)
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch D6 (expected C#5)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch E4 (expected C#3)
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#4 (expected G#3)
+- Onset off by 0.583 quarters
+- Tuplet none (expected 6:4)
+- Unexpected accent
+- Incorrect pitch D#6 (expected G#4)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch E6 (expected G#4)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch F6 (expected G4)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch F#6 (expected G#4)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 90 [missing]
+- Missing measure 90
+- Missing note A#5
+- Missing note G#5
+- Missing note B5
+- Missing note D5
+- Missing note E5
+- Missing note D#5
+- Missing note G#5
+- Missing note A#4
+- Missing note C#5
+- Missing note B4
+- Missing note D#5
+- Missing note G4
+- Missing note A#4
+- Missing note G#4
+- Missing note G4
+- Missing note G#4
+- Missing note G#2
+- Missing note D#3
+- Missing note G#3
+- Missing note B3
+- Missing note G#3
+- Missing note D#3
+- Missing note G#2
+- Missing note D#3
+- Missing note G#3
+- Missing note B3
+- Missing note G#3
+- Missing note D#3
+
+Measure 91 [missing]
+- Missing measure 91
+- Missing note G#4
+- Missing note F#4
+- Missing note F4
+- Missing note F#4
+- Missing note G#4
+- Missing note G#5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note F4
+- Missing note F5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+
+Measure 92 [merge]
+- Merged measures 92,93 → 40
+- Missing note E4
+- Missing note E5
+- Missing note B2
+- Missing note F#3
+- Missing note A3
+- Missing note B3
+- Missing note A3
+- Missing note F#3
+- Missing note E2
+- Missing note B2
+- Missing note E3
+- Missing note G#3
+- Missing note E3
+- Missing note B2
+- Missing note G#5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note F4
+- Missing note F5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+- Extra note F#5
+- Extra rest (whole)
+- Onset off by 0.5 quarters
+- Onset off by 0.5 quarters
+- Incorrect pitch G4 (expected G#4)
+- Onset off by 0.25 quarters
+- Missing accent
+- Incorrect pitch D5 (expected C#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch A#4 (expected B4)
+- Onset off by 0.75 quarters
+- Incorrect pitch C5 (expected A4)
+- Onset off by 0.75 quarters
+- Incorrect pitch E4 (expected G#4)
+- Onset off by 0.75 quarters
+- Missing accent
+- Incorrect pitch B4 (expected F#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch F#4 (expected B4)
+- Onset off by 0.5 quarters
+- Incorrect pitch C#5 (expected F#4)
+- Onset off by 0.75 quarters
+- Incorrect pitch E5 (expected D#4)
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch D#4 (expected E5)
+- Onset off by 0.5 quarters
+- Incorrect pitch F5 (expected C#4)
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch C#4 (expected G#5)
+- Onset off by 0.25 quarters
+- Incorrect chord
+
+Measure 94 [missing]
+- Missing measure 94
+- Missing note F4
+- Missing note F5
+- Missing note B4
+- Missing note D#5
+- Missing note F#4
+- Missing note F#5
+- Missing note B4
+- Missing note D#5
+- Missing note A4
+- Missing note A5
+- Missing note B4
+- Missing note E5
+- Missing note G#4
+- Missing note G#5
+- Missing note B4
+- Missing note E5
+- Missing note B2
+- Missing note D#3
+- Missing note A3
+- Missing note B3
+- Missing note A3
+- Missing note D#3
+- Missing note E2
+- Missing note B2
+- Missing note E3
+- Missing note G#3
+- Missing note E3
+- Missing note B2
+
+Measure 95 [missing]
+- Missing measure 95
+- Missing note G#5
+- Missing note F#5
+- Missing note F5
+- Missing note F#5
+- Missing note G#4
+- Missing note G#5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note F4
+- Missing note F5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+
+Measure 96 [merge]
+- Merged measures 96,97 → 41
+- Missing note F#4
+- Missing note D#4
+- Missing note E4
+- Missing note G#4
+- Missing note B3
+- Missing note A3
+- Missing note F#3
+- Missing note G#3
+- Missing note E3
+- Missing note G#5
+- Missing note C5
+- Missing note C#5
+- Missing note F#4
+- Missing note F#5
+- Missing note C5
+- Missing note C#5
+- Missing note D#5
+- Missing note D#6
+- Missing note F#5
+- Missing note A5
+- Missing note C#5
+- Missing note C#6
+- Missing note F#5
+- Missing note A5
+- Missing note A2
+- Missing note C#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note C#3
+- Missing note A2
+- Missing note D#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note D#3
+- Extra rest (eighth)
+- Extra note G#1
+- Missing accent
+- Onset off by 0.25 quarters
+- Missing accent
+- Onset off by 0.25 quarters
+- 0.333q detected as quarter
+- Tuplet none (expected 6:4)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#3 (expected A3)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E5 (expected D#5)
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch C#5 (expected B4)
+- 0.333q detected as quarter
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#5 (expected E5)
+- Onset off by 0.75 quarters
+- Unexpected accent
+- Incorrect pitch C#5 (expected B4)
+- Onset off by 0.25 quarters
+- Incorrect pitch G#2 (expected B2)
+- 0.333q detected as quarter
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#3 (expected C#4)
+- Incorrect pitch G#5 (expected C#5)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Missing accent
+- Incorrect pitch F#5 (expected A4)
+- Onset off by 0.25 quarters
+- Unexpected accent
+- Incorrect pitch A2 (expected F#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch B1 (expected B2)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#5 (expected A4)
+- Onset off by 0.25 quarters
+- Unexpected accent
+- Incorrect pitch C#6 (expected G#4)
+- Incorrect pitch E6 (expected F#4)
+- Incorrect chord
+
+Measure 98 [missing]
+- Missing measure 98
+- Missing note C#5
+- Missing note C#6
+- Missing note D#5
+- Missing note F#5
+- Missing note C5
+- Missing note C6
+- Missing note D#5
+- Missing note F#5
+- Missing note C5
+- Missing note C6
+- Missing note D#5
+- Missing note F#5
+- Missing note C5
+- Missing note C6
+- Missing note D#5
+- Missing note F#5
+- Missing note G#2
+- Missing note D#3
+- Missing note F#3
+- Missing note C4
+- Missing note F#3
+- Missing note D#3
+- Missing note G#2
+- Missing note D#3
+- Missing note F#3
+- Missing note C4
+- Missing note F#3
+- Missing note D#3
+
+Measure 99 [missing]
+- Missing measure 99
+- Missing note C5
+- Missing note C6
+- Missing note D#5
+- Missing note F#5
+- Missing note B4
+- Missing note B5
+- Missing note D#5
+- Missing note F#5
+- Missing note B4
+- Missing note B5
+- Missing note D#5
+- Missing note F#5
+- Missing note A#4
+- Missing note A#5
+- Missing note D#5
+- Missing note F#5
+- Missing note A2
+- Missing note D#3
+- Missing note F#3
+- Missing note B3
+- Missing note F#3
+- Missing note D#3
+- Missing note A#2
+- Missing note D#3
+- Missing note F#3
+- Missing note A#3
+- Missing note F#3
+- Missing note D#3
+
+Measure 100 [missing]
+- Missing measure 100
+- Missing note A#4
+- Missing note A#5
+- Missing note D#5
+- Missing note F#5
+- Missing note A4
+- Missing note A5
+- Missing note D#5
+- Missing note F#5
+- Missing note A4
+- Missing note A5
+- Missing note D#5
+- Missing note F#5
+- Missing note A4
+- Missing note A5
+- Missing note D#5
+- Missing note F#5
+- Missing note C3
+- Missing note D#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note D#3
+- Missing note C3
+- Missing note D#3
+- Missing note F#3
+- Missing note A3
+- Missing note F#3
+- Missing note D#3
+
+Measure 101 [missing]
+- Missing measure 101
+- Missing note C5
+- Missing note C6
+- Missing note D#5
+- Missing note F#5
+- Missing note B4
+- Missing note B5
+- Missing note D#5
+- Missing note F#5
+- Missing note B4
+- Missing note B5
+- Missing note D#5
+- Missing note F#5
+- Missing note A#4
+- Missing note A#5
+- Missing note D#5
+- Missing note F#5
+- Missing note A2
+- Missing note D#3
+- Missing note F#3
+- Missing note B3
+- Missing note F#3
+- Missing note D#3
+- Missing note A#2
+- Missing note D#3
+- Missing note F#3
+- Missing note A#3
+- Missing note F#3
+- Missing note D#3
+
+Measure 102 [merge]
+- Merged measures 102,103 → 42
+- Missing note A4
+- Missing note B2
+- Missing note F#3
+- Missing note G#3
+- Missing note F#3
+- Missing rest (16th)
+- Missing note A4
+- Missing note G#4
+- Missing note G4
+- Missing note G#4
+- Missing note C#5
+- Missing note E5
+- Missing note D#5
+- Missing note C#5
+- Missing note D#5
+- Missing note C#5
+- Missing note C5
+- Missing note C#5
+- Missing note E5
+- Missing note G#5
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Missing note E3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Onset off by 0.25 quarters
+- Onset off by 0.25 quarters
+- Onset off by 0.5 quarters
+- Unexpected accent
+- Onset off by 0.5 quarters
+- Unexpected accent
+- Incorrect pitch E5 (expected D#5)
+- Onset off by 0.75 quarters
+- Missing accent
+- Incorrect pitch E3 (expected D#3)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E5 (expected D#5)
+- Onset off by 0.5 quarters
+- Incorrect pitch E3 (expected D#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E5 (expected F#5)
+- Onset off by 0.25 quarters
+- Incorrect pitch C#5 (expected D#5)
+- Onset off by 0.25 quarters
+- Incorrect pitch G#5 (expected A5)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Missing accent
+- Incorrect pitch C#3 (expected C3)
+- 0.333q detected as dotted eighth
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Missing accent
+- Incorrect pitch G#3 (expected F#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#5 (expected A4)
+- Incorrect pitch C#6 (expected A5)
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch E4 (expected G#4)
+- Onset off by 0.5 quarters
+- Incorrect pitch C#4 (expected A3)
+- 0.333q detected as dotted eighth
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#2 (expected D#3)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#4 (expected F#5)
+- Onset off by 0.25 quarters
+- Unexpected accent
+- Incorrect pitch G#4 (expected F#5)
+- Onset off by 0.5 quarters
+- Incorrect pitch E4 (expected F#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E2 (expected D#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch E6 (expected A#4)
+- Onset off by 0.75 quarters
+- Tempo 152 BPM missing or wrong at q=405
+- Tempo 144 BPM missing or wrong at q=406
+- Tempo 132 BPM missing or wrong at q=407
+- Tempo 120 BPM missing or wrong at q=407.25
+- Tempo 112 BPM missing or wrong at q=407.5
+- Tempo 80 BPM missing or wrong at q=407.75
+
+Measure 104 [merge]
+- Merged measures 104,105 → 43
+- Missing rest (16th)
+- Missing note G#5
+- Missing note E4
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing rest (16th)
+- Missing note C#5
+- Missing note D#5
+- Missing note F#5
+- Missing note A5
+- Missing note C#6
+- Missing note D#6
+- Missing note B6
+- Missing note A6
+- Missing note G#6
+- Missing note F#6
+- Missing note E6
+- Missing note D#6
+- Missing note F#6
+- Missing note C#6
+- Missing note D#3
+- Missing note A3
+- Missing note C#4
+- Missing note F#4
+- Missing note C#4
+- Missing note A3
+- Missing note F#3
+- Missing note C#4
+- Missing note D#4
+- Missing note A4
+- Missing note D#4
+- Missing note C#4
+- Extra note G#3
+- Onset off by 0.25 quarters
+- 0.333q detected as quarter
+- Tuplet none (expected 6:4)
+- Onset off by 0.75 quarters
+- Incorrect pitch A#4 (expected A4)
+- Onset off by 0.75 quarters
+- Incorrect pitch F#4 (expected G#4)
+- Onset off by 0.25 quarters
+- Unexpected accent
+- Incorrect pitch E4 (expected G4)
+- Onset off by 0.5 quarters
+- Incorrect pitch G#4 (expected C5)
+- Onset off by 0.5 quarters
+- Incorrect pitch D#4 (expected G#4)
+- Onset off by 0.25 quarters
+- Unexpected accent
+- Incorrect pitch C#4 (expected A4)
+- Onset off by 0.25 quarters
+- Incorrect pitch G#2 (expected E3)
+- 0.333q detected as quarter
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#4 (expected C#5)
+- Onset off by 0.25 quarters
+- Unexpected accent
+- Incorrect pitch D#4 (expected C#5)
+- Onset off by 0.25 quarters
+- Unexpected accent
+- Incorrect pitch A#2 (expected G#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected C#5)
+- Incorrect pitch G#2 (expected G#3)
+- 0.333q detected as quarter
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected D#5)
+- Onset off by 0.25 quarters
+- Incorrect pitch C#4 (expected E5)
+- Onset off by 0.5 quarters
+- Incorrect pitch A#3 (expected E5)
+- Incorrect pitch G#3 (expected D#5)
+- Onset off by 0.25 quarters
+- Incorrect pitch A#1 (expected G#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#1 (expected G#3)
+- 0.333q detected as quarter
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#2 (expected C#4)
+- 0.333q detected as quarter
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#1 (expected C#4)
+- 0.333q detected as quarter
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+
+Measure 106 [merge]
+- Merged measures 106,107 → 44
+- Missing note C6
+- Missing note D#6
+- Missing note C4
+- Missing note D#3
+- Missing note F#3
+- Missing note C4
+- Missing note F#3
+- Missing note D#3
+- Missing note A4
+- Missing note G#4
+- Missing note G4
+- Missing note G#4
+- Missing note C#5
+- Missing note E5
+- Missing note D#5
+- Missing note C#5
+- Missing note D#5
+- Missing note C#5
+- Missing note C5
+- Missing note C#5
+- Missing note E5
+- Missing note G#5
+- Missing note C#3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Missing note E3
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Onset off by 0.25 quarters
+- 0.333q detected as quarter
+- Tuplet none (expected 6:4)
+- Incorrect pitch A2 (expected G#2)
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#4 (expected A4)
+- Onset off by 0.5 quarters
+- Incorrect pitch G4 (expected C#5)
+- Onset off by 0.75 quarters
+- Incorrect pitch D#4 (expected A4)
+- Eighth detected as 16th
+- Onset off by 0.75 quarters
+- Missing tie
+- Unexpected accent
+- Incorrect pitch D#4 (expected C5)
+- Onset off by 0.5 quarters
+- Unexpected accent
+- Incorrect pitch G2 (expected D#3)
+- 0.333q detected as quarter
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C4 (expected A4)
+- Onset off by 0.75 quarters
+- Missing tie
+- Incorrect pitch G#4 (expected F#5)
+- Onset off by 0.5 quarters
+- Incorrect pitch G#3 (expected G#4)
+- Onset off by 0.5 quarters
+- Incorrect pitch D#4 (expected D#5)
+- Onset off by 0.75 quarters
+- Unexpected accent
+- Incorrect pitch C#4 (expected D#5)
+- Onset off by 0.5 quarters
+- Incorrect pitch C#4 (expected E5)
+- Onset off by 0.25 quarters
+- Incorrect pitch G#3 (expected B4)
+- Onset off by 0.75 quarters
+- Incorrect pitch D#4 (expected G#5)
+- Onset off by 0.75 quarters
+- Unexpected accent
+- Incorrect pitch G#1 (expected D#3)
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#4 (expected A5)
+- Onset off by 0.25 quarters
+- Incorrect pitch G3 (expected F#5)
+- Onset off by 0.25 quarters
+- Incorrect pitch G#1 (expected F#3)
+- 0.333q detected as quarter
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G1 (expected F#3)
+- 0.333q detected as quarter
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#3 (expected A5)
+- Onset off by 0.5 quarters
+
+Measure 108 [merge]
+- Merged measures 108,109 → 45
+- Missing note E5
+- Missing note D#5
+- Missing note E5
+- Missing note D#5
+- Missing note D5
+- Missing note D#5
+- Missing note F#5
+- Missing note A5
+- Missing note F#5
+- Missing note F5
+- Missing note F#5
+- Missing note F5
+- Missing note E5
+- Missing note F5
+- Missing note G#5
+- Missing note C#6
+- Missing note A4
+- Missing note B4
+- Missing rest (16th)
+- Missing note C#5
+- Missing note D5
+- Missing note C#5
+- Missing note C5
+- Missing note C#5
+- Missing note F#5
+- Missing note A5
+- Missing note F#5
+- Missing note F5
+- Missing note F#5
+- Missing note F5
+- Missing note E5
+- Missing note F5
+- Missing note G#5
+- Missing note C#6
+- Missing note F#4
+- Missing note A4
+- Missing note F#4
+- Missing note C#4
+- Missing note G#3
+- Missing note C#4
+- Missing note F4
+- Missing note B4
+- Missing note F4
+- Missing note C#4
+- Extra rest (whole)
+- 0.333q detected as eighth
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#4 (expected F4)
+- 0.333q detected as eighth
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#4 (expected C#4)
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#3 (expected G#3)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#3 (expected C#4)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected A3)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected C#4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#3 (expected D#4)
+- Onset off by 0.583 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#3 (expected F4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#2 (expected C#4)
+- Onset off by 0.583 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#2 (expected C#4)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch C#2 (expected F#3)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+
+Measure 110 [merge]
+- Merged measures 110,111 → 46
+- Missing note G#5
+- Missing note F#5
+- Missing note G#5
+- Missing note F#5
+- Missing note F5
+- Missing note F#5
+- Missing note A5
+- Missing note C#6
+- Missing note A5
+- Missing note G#5
+- Missing note A5
+- Missing note G#5
+- Missing note G5
+- Missing note G#5
+- Missing note C6
+- Missing note D#6
+- Missing note D#4
+- Missing note G#3
+- Missing note G#5
+- Missing note A5
+- Missing note G#5
+- Missing note G5
+- Missing note G#5
+- Missing note E6
+- Missing note D#6
+- Missing note D6
+- Missing note C#6
+- Missing note C6
+- Missing note B5
+- Missing note A#5
+- Missing note A5
+- Missing note G#5
+- Missing note G5
+- Missing note F#5
+- Missing note G#3
+- Missing note C#4
+- Missing note E4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#3
+- Missing note G#3
+- Missing note C4
+- Missing note F#4
+- Missing note C4
+- Missing note G#3
+- Extra rest (whole)
+- Extra note D#2
+- Onset off by 0.417 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#3 (expected G#3)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#4 (expected C#4)
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#3 (expected F#3)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#2 (expected C#3)
+- 0.333q detected as dotted eighth
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#3 (expected A3)
+- Onset off by 0.75 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch F#3 (expected C#4)
+- Onset off by 0.667 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#3 (expected F#4)
+- Onset off by 0.583 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#4 (expected C3)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#2 (expected A4)
+- Onset off by 0.5 quarters
+- Tuplet none (expected 6:4)
+- Incorrect chord
+
+Measure 112 [merge]
+- Merged measures 112,113 → 47
+- Missing note F#5
+- Missing note E5
+- Missing note D#5
+- Missing note E5
+- Missing note E6
+- Missing note D#6
+- Missing note D6
+- Missing note C#6
+- Missing note C6
+- Missing note B5
+- Missing note A5
+- Missing note D#4
+- Missing note G#5
+- Missing rest (16th)
+- Missing note G#6
+- Missing note G6
+- Missing note F#6
+- Missing note F6
+- Missing note E6
+- Missing note D#6
+- Missing note D6
+- Missing note C#6
+- Missing note C6
+- Missing note B5
+- Missing note A#5
+- Missing note A5
+- Missing note G#5
+- Missing note G5
+- Missing note C#4
+- Missing note E4
+- Missing note G#4
+- Missing rest (eighth)
+- Missing rest (quarter)
+- Missing note G3
+- Missing note C#4
+- Missing note E4
+- Missing note A4
+- Missing rest (quarter)
+- Extra note D#2
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Onset off by 0.25 quarters
+- Tuplet none (expected 6:4)
+- 0.333q detected as eighth
+- Onset off by 0.333 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch G#4 (expected A4)
+- 0.333q detected as eighth
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#3 (expected G#3)
+- Tuplet none (expected 6:4)
+- Incorrect pitch E5 (expected F#5)
+- Onset off by 0.25 quarters
+- Incorrect pitch A#3 (expected G#3)
+- 0.333q detected as eighth
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#3 (expected G#3)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch D#3 (expected F#3)
+- Tuplet none (expected 6:4)
+- Incorrect pitch D#5 (expected G5)
+- Onset off by 0.5 quarters
+- Incorrect pitch A#3 (expected D#4)
+- Onset off by 0.167 quarters
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#2 (expected E3)
+- Tuplet none (expected 6:4)
+- Incorrect pitch A#4 (expected E5)
+- 16th detected as half
+- Incorrect pitch A#4 (expected G#5)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch B4 (expected A#5)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 114 [merge]
+- Merged measures 114,115 → 48
+- Missing note F5
+- Missing note E5
+- Missing note D#5
+- Missing note D5
+- Missing note C#5
+- Missing note C5
+- Missing note B4
+- Missing note A4
+- Missing note G#4
+- Missing note G4
+- Missing note F#4
+- Missing note E4
+- Missing note D#4
+- Missing note C#4
+- Missing rest (whole)
+- Missing note G#3
+- Missing rest (eighth)
+- Missing note A6
+- Missing note G#6
+- Missing note E7
+- Missing note E6
+- Missing note F#6
+- Missing note E6
+- Missing note C#7
+- Missing note C#6
+- Missing note D#6
+- Missing note C#6
+- Missing note G#6
+- Missing note G#5
+- Missing rest (eighth)
+- Missing note E4
+- Missing note E5
+- Missing note C#4
+- Missing note C#5
+- Missing note G#3
+- Missing note G#4
+- Extra note D#3
+- Extra note A#3
+- Extra note D#4
+- Extra note F#4
+- Extra note D#4
+- Extra note A#3
+- Extra note D#3
+- 16th detected as quarter
+- Incorrect pitch A#5 (expected A#4)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Unexpected accent
+- Incorrect pitch A#3 (expected G#2)
+- Onset off by 0.75 quarters
+- Incorrect pitch F#4 (expected G#1)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 116 [merge]
+- Merged measures 116,117 → 49
+- Missing note A5
+- Missing note G#5
+- Missing note E6
+- Missing note F#5
+- Missing note E5
+- Missing note C#6
+- Missing note C#5
+- Missing note D#5
+- Missing note C#5
+- Missing note G#5
+- Missing note G#4
+- Missing note A4
+- Missing note G#4
+- Missing note E5
+- Missing note E4
+- Missing note E3
+- Missing note E4
+- Missing note C#3
+- Missing note G#2
+- Missing note E2
+- Missing note E3
+- Missing note F#4
+- Missing note E4
+- Missing note C#5
+- Missing note C#4
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note A4
+- Missing note A3
+- Missing note C#2
+- Missing note C#3
+- Missing note G#1
+- Missing note G#2
+- Missing note G#1
+- Missing note G#2
+- Missing note A1
+- Missing note A2
+- Incorrect pitch A#3 (expected G#3)
+- Quarter detected as eighth
+- Incorrect pitch F#4 (expected C#4)
+- Incorrect pitch A#4 (expected E5)
+- 16th detected as quarter
+- Onset off by 0.75 quarters
+- Unexpected accent
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 118 [merge]
+- Merged measures 118,119 → 50
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G4
+- Missing note G3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing note C4
+- Missing note G#3
+- Missing note G#1
+- Missing note G#2
+- Missing note G1
+- Missing note G2
+- Missing note G#1
+- Missing note G#2
+- Missing rest (quarter)
+- Missing rest (quarter)
+- Missing rest (quarter)
+- Missing rest (quarter)
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note A4
+- Missing note G#4
+- Missing note E5
+- Missing note E4
+- Missing note A4
+- Missing note G#4
+- Missing note E5
+- Missing note E4
+- Missing note A4
+- Missing note G#4
+- Missing note D#5
+- Missing note D#4
+- Missing note E5
+- Missing note E5
+- Missing note D#5
+- Missing note C#2
+- Missing note E3
+- Missing note C#3
+- Missing note G#2
+- Missing note C#2
+- Missing note F#3
+- Missing note C3
+- Missing note G#2
+- Extra note G#4
+- Extra note E4
+- Extra note A#3
+- Extra note F#4
+- Extra note D#4
+- Extra note A#3
+- Extra note E4
+- Extra note C#4
+- Extra note A#3
+- Extra note D#4
+- Extra note A#3
+- Extra note F#3
+- Incorrect pitch D#5 (expected G#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch E5 (expected G#4)
+- 16th detected as quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch F#5 (expected G#4)
+- 16th detected as dotted eighth
+- Onset off by 0.75 quarters
+- Incorrect pitch F#5 (expected D#4)
+- 16th detected as dotted eighth
+- Incorrect pitch G#5 (expected D#4)
+- 16th detected as eighth
+- Missing accent
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 120 [merge]
+- Merged measures 120,121 → 51
+- Missing note G#4
+- Missing note D#5
+- Missing note D#4
+- Missing note A4
+- Missing note G#4
+- Missing note C#4
+- Missing note E4
+- Missing note D#4
+- Missing note G#4
+- Missing note G#3
+- Missing note E4
+- Missing note D#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note A4
+- Missing note G#4
+- Missing note E5
+- Missing note E4
+- Missing note A4
+- Missing note G#4
+- Missing note E5
+- Missing note E4
+- Missing note A4
+- Missing note G#4
+- Missing note D#5
+- Missing note D#4
+- Missing note C#2
+- Missing note E3
+- Missing note C#3
+- Missing note G#2
+- Missing note C#2
+- Missing note F#3
+- Missing note C3
+- Missing note G#2
+- Extra note A#3
+- Extra note C#4
+- Extra note B3
+- Extra note D#4
+- Eighth detected as 16th
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch A#4 (expected A4)
+- 16th detected as eighth
+- Incorrect pitch G#3 (expected F#3)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch B4 (expected C#5)
+- Onset off by 0.5 quarters
+- Incorrect pitch E3 (expected C#3)
+- Eighth detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch G#3 (expected C3)
+- Onset off by 0.5 quarters
+- Incorrect pitch A#2 (expected C#2)
+- Incorrect pitch B3 (expected G#2)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch A#3 (expected C#2)
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 122 [merge]
+- Merged measures 122,123 → 52
+- Missing note G#4
+- Missing note D#5
+- Missing note D#4
+- Missing note A4
+- Missing note G#4
+- Missing note C#4
+- Missing note E4
+- Missing note D#4
+- Missing note G#3
+- Missing note D#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note A4
+- Missing note G#4
+- Missing note E5
+- Missing note E4
+- Missing note F#4
+- Missing note E4
+- Missing note C#5
+- Missing note C#4
+- Missing note A4
+- Missing note G#4
+- Missing note E5
+- Missing note E4
+- Missing note C#2
+- Missing note C#3
+- Missing note G#2
+- Missing note C#2
+- Missing note G#3
+- Missing note C#3
+- Missing note G#2
+- Extra note B3
+- Extra note D4
+- Extra note A#4
+- Incorrect pitch A#4 (expected A4)
+- Eighth detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch A#4 (expected G#4)
+- Missing accent
+- Incorrect pitch F#3 (expected E3)
+- Eighth detected as 16th
+- Incorrect pitch B4 (expected C#5)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch A#2 (expected G#2)
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch B3 (expected E3)
+- Eighth detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch A#2 (expected C#2)
+- Incorrect pitch E5 (expected G#4)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch B3 (expected C#3)
+- Onset off by 0.25 quarters
+- Incorrect pitch B3 (expected C3)
+- Onset off by 0.75 quarters
+- Incorrect pitch F#5 (expected E4)
+- Onset off by 0.5 quarters
+- Incorrect pitch D4 (expected G#2)
+- Onset off by 0.5 quarters
+- Incorrect pitch D4 (expected C#2)
+- Onset off by 0.5 quarters
+- Incorrect chord
+- Incorrect chord
+
+Measure 124 [merge]
+- Merged measures 124,125 → 53
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing note G#4
+- Missing note E4
+- Missing note F#4
+- Missing note E4
+- Missing note C#5
+- Missing note C#4
+- Missing note A4
+- Missing note G#4
+- Missing note E4
+- Missing note F#4
+- Missing note E4
+- Missing note C#5
+- Missing note C#4
+- Missing note A4
+- Missing note G#4
+- Missing note C#5
+- Missing note C#4
+- Missing note F#4
+- Missing note E4
+- Missing note C#5
+- Missing note C#4
+- Missing note A4
+- Missing note G#4
+- Missing note C#5
+- Missing note C#4
+- Missing note E3
+- Missing note C#3
+- Missing note G#2
+- Missing note C#2
+- Missing note E3
+- Missing note C#3
+- Missing note G#2
+- Extra note G#4
+- Extra note F#4
+- Extra note G#4
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Onset off by 0.5 quarters
+- 16th detected as dotted eighth
+- Onset off by 0.75 quarters
+- Missing accent
+- Incorrect pitch F#5 (expected E5)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch F#3 (expected C#3)
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch G#3 (expected C#3)
+- Incorrect pitch F#5 (expected A4)
+- 16th detected as eighth
+- Incorrect pitch G#5 (expected G#4)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect pitch A3 (expected G#2)
+- Onset off by 0.25 quarters
+- Incorrect pitch B3 (expected G#2)
+- Eighth detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch B3 (expected C#2)
+- Onset off by 0.75 quarters
+- Incorrect pitch C#4 (expected C#2)
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch E4 (expected C#2)
+- Eighth detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 126 [missing]
+- Missing measure 126
+- Missing note F#4
+- Missing note E4
+- Missing note C#5
+- Missing note C#4
+- Missing note A4
+- Missing note G#4
+- Missing note C#5
+- Missing note C#4
+- Missing note F#4
+- Missing note E4
+- Missing note C#5
+- Missing note C#4
+- Missing note A4
+- Missing note G#4
+- Missing note C#5
+- Missing note C#4
+- Missing note C#2
+- Missing note E3
+- Missing note C#3
+- Missing note G#2
+- Missing note C#2
+- Missing note E3
+- Missing note C#3
+- Missing note G#2
+
+Measure 127 [merge]
+- Merged measures 127,128 → 54
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note G#3
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing rest (quarter)
+- Missing rest (half)
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing rest (whole)
+- Extra note A#3
+- Extra note D#4
+- Extra note F#4
+- Extra note D#4
+- Extra note A#3
+- Extra note E3
+- Extra note G3
+- Extra note D#4
+- Extra note D#4
+- Extra note E4
+- Extra note G3
+- Incorrect pitch C#5 (expected G#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch D#5 (expected G#4)
+- Onset off by 0.5 quarters
+- Incorrect pitch E5 (expected G#4)
+- Incorrect pitch D#5 (expected G#4)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch D#5 (expected D#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch D#3 (expected C#2)
+- Quarter detected as eighth
+- Incorrect pitch E5 (expected C#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch F#5 (expected C#4)
+- 16th detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 129 [merge]
+- Merged measures 129,130 → 55
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note G#2
+- Missing note C#3
+- Missing note D#3
+- Extra note A#3
+- Extra note C#4
+- Extra note A#3
+- Extra note E3
+- Extra note A#2
+- Extra note E3
+- Extra note F#3
+- Extra note B3
+- Extra note G3
+- Incorrect pitch A#2 (expected G#2)
+- Whole detected as eighth
+- Incorrect pitch E3 (expected A#2)
+- Quarter detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch E5 (expected G#4)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Unexpected accent
+- Incorrect pitch E3 (expected C#2)
+- Whole detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect chord
+
+Measure 131 [merge]
+- Merged measures 131,132 → 56
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Extra note G#2
+- Extra note A#3
+- Extra note C#4
+- Extra note A#3
+- Extra note E3
+- Extra note A2
+- Extra note A#3
+- Extra note G#4
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch A4 (expected G#4)
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- Incorrect pitch B4 (expected G#4)
+- 16th detected as dotted eighth
+- Incorrect pitch E3 (expected F3)
+- Whole detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch D#5 (expected G#4)
+- Onset off by 0.75 quarters
+- Incorrect pitch C#4 (expected G#3)
+- Whole detected as eighth
+- Onset off by 0.5 quarters
+- Missing accent
+- Incorrect chord
+
+Measure 133 [merge]
+- Merged measures 133,134 → 57
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note D#4
+- Missing note C#4
+- Missing note G#4
+- Missing note G#3
+- Missing note F3
+- Missing note C#3
+- Extra note C#4
+- Extra note D#3
+- Extra note A#3
+- Extra note D#4
+- Extra note F#4
+- Extra note D#4
+- Extra note A#3
+- Extra note A#3
+- Extra note F#4
+- Extra note F#4
+- Incorrect pitch A#4 (expected G#4)
+- Onset off by 0.25 quarters
+- Unexpected accent
+- Incorrect pitch D#3 (expected F3)
+- Half detected as 16th
+- Onset off by 0.5 quarters
+- Incorrect pitch A#3 (expected F#3)
+- Half detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch E5 (expected G#4)
+- 16th detected as eighth
+- Incorrect pitch A#3 (expected D#3)
+- Half detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch F#5 (expected G#4)
+- 16th detected as dotted quarter
+- Onset off by 0.5 quarters
+- Incorrect pitch A#5 (expected G#4)
+- 16th detected as dotted eighth
+- Unexpected accent
+- Incorrect chord
+- Incorrect chord
+- Tempo 162 BPM missing or wrong at q=528
+- Tempo 160 BPM missing or wrong at q=529
+- Tempo 158 BPM missing or wrong at q=530
+- Tempo 156 BPM missing or wrong at q=531
+
+Measure 135 [merge]
+- Merged measures 135,136 → 58
+- Missing note C#4
+- Missing note F3
+- Missing note D#4
+- Missing note C#4
+- Missing note F3
+- Missing note F3
+- Missing note F3
+- Missing note F4
+- Missing note D#4
+- Missing note G#4
+- Missing note F#3
+- Missing note F4
+- Missing note D#4
+- Missing note G#4
+- Missing note F#3
+- Missing note F4
+- Missing note D#4
+- Missing note G#4
+- Missing note F#3
+- Missing note F4
+- Missing note D#4
+- Missing note G#4
+- Missing note F#3
+- Extra note G#4
+- Extra note E4
+- Extra note F#4
+- Extra note D#4
+- Extra note A#3
+- Extra note C#4
+- Extra note E4
+- Extra note A#3
+- Extra note D#4
+- Incorrect pitch D#5 (expected G#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch D#5 (expected G#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch E5 (expected G#4)
+- Onset off by 0.5 quarters
+- Incorrect pitch F#5 (expected G#4)
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Incorrect pitch E5 (expected D#4)
+- Onset off by 0.25 quarters
+- Incorrect pitch E5 (expected D#4)
+- Onset off by 0.5 quarters
+- Incorrect pitch F#3 (expected G#2)
+- Whole detected as 16th
+- Onset off by 0.25 quarters
+- Incorrect pitch F#5 (expected C#4)
+- Incorrect pitch G#5 (expected D#4)
+- 16th detected as quarter
+- Incorrect pitch F#5 (expected C#4)
+- 16th detected as dotted eighth
+- Onset off by 0.25 quarters
+- Unexpected accent
+- Incorrect pitch A#3 (expected G#2)
+- Whole detected as 16th
+- Onset off by 0.75 quarters
+- Incorrect pitch A#3 (expected G#1)
+- Whole detected as eighth
+- Onset off by 0.75 quarters
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Tempo 142 BPM missing or wrong at q=536.25
+- Tempo 140 BPM missing or wrong at q=537.5
+- Tempo 138 BPM missing or wrong at q=538.25
+- Tempo 136 BPM missing or wrong at q=539.25
+
+Measure 137 [merge]
+- Merged measures 137,138 → 59
+- Missing note F#3
+- Missing note G#3
+- Missing note C4
+- Missing note D#4
+- Missing note C#2
+- Missing note G#2
+- Missing note F#3
+- Missing note G#3
+- Missing note C4
+- Missing note C#2
+- Missing note G#2
+- Missing note F3
+- Missing note G#3
+- Missing note C#4
+- Missing note C#2
+- Missing note G#2
+- Missing note F3
+- Missing note G#3
+- Missing note C#4
+- Missing note C#2
+- Missing note G#2
+- Extra note B4
+- Extra note A#2
+- Extra note E3
+- Extra note A#3
+- Extra note C#4
+- Extra note A#3
+- Extra note E3
+- Extra note G#2
+- Extra note G#3
+- Extra note B3
+- Extra note D#4
+- Extra note B3
+- Extra note G#3
+- Incorrect pitch A#4 (expected D#4)
+- Whole detected as eighth
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Tempo 80 BPM missing or wrong at q=544
+
+Measure 25
+- Tempo 168 BPM missing or wrong at q=96
+
+Measure 39
+- Tempo 160 BPM missing or wrong at q=154
+- Tempo 152 BPM missing or wrong at q=154.5
+- Tempo 144 BPM missing or wrong at q=155
+- Tempo 136 BPM missing or wrong at q=155.5
+
+Measure 41
+- Tempo 62 BPM missing or wrong at q=160
+
+Measure 43
+- Tempo 80 BPM missing or wrong at q=168
+
+Measure 51
+- Tempo 80 BPM missing or wrong at q=200
+
+Measure 83
+- Tempo 168 BPM missing or wrong at q=328
+
+Measure 103
+- Tempo 168 BPM missing or wrong at q=408
+
+Measure 132
+- Tempo 166 BPM missing or wrong at q=524
+- Tempo 164 BPM missing or wrong at q=526
+
+Measure 134
+- Tempo 154 BPM missing or wrong at q=532
+- Tempo 152 BPM missing or wrong at q=532.5
+- Tempo 150 BPM missing or wrong at q=533
+- Tempo 148 BPM missing or wrong at q=533.5
+- Tempo 146 BPM missing or wrong at q=534.25
+- Tempo 144 BPM missing or wrong at q=535
+
+Measure 136
+- Tempo 132 BPM missing or wrong at q=540
+- Tempo 128 BPM missing or wrong at q=541
+- Tempo 122 BPM missing or wrong at q=542
+- Tempo 116 BPM missing or wrong at q=543
+
+Measure 138
+- Tempo 54 BPM missing or wrong at q=548
+
+Top recurring defects:
+1. Missing note (2270)
+2. Incorrect pitch (582)
+3. Onset timing difference (582)
+4. Extra note (397)
+5. Tuplet mismatch (344)
+6. Duration mismatch (308)
+7. Incorrect chord (126)
+8. Missing accent (95)
+9. Merged measure (55)
+10. Tempo change mismatch (55)
+11. Missing rest (52)
+12. Missing measure (24)
+13. Missing tie (16)
+14. Extra rest (8)
+15. Missing dot (8)
+
+Top defect classes: Pitch (3249), Rhythm (1302), Measure structure (205), Articulation (95), Interpretation (55), Sustain (ties) (16)
+
+Totals: 4922 defects · 3082 truth notes · 1209 generated notes · 138→59 measures

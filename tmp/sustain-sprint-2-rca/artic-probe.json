@@ -1,0 +1,739 @@
+{
+  "sustain": {
+    "numerator": 1,
+    "denominator": 20,
+    "truePositives": 1,
+    "falsePositives": 19,
+    "falseNegatives": 0,
+    "ignored": 0,
+    "unsupported": 0,
+    "presentInTruth": 1,
+    "compared": 20,
+    "coverage": 1,
+    "coveragePercent": "100%",
+    "score": 0.05,
+    "percent": "5%",
+    "reliable": true,
+    "displayPercent": "5%"
+  },
+  "defectCount": 9,
+  "defects": [
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "message": "Incorrect tie",
+      "measureNumber": 1
+    },
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "message": "Incorrect tie",
+      "measureNumber": 2
+    },
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "message": "Incorrect tie",
+      "measureNumber": 3
+    },
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "message": "Incorrect tie",
+      "measureNumber": 4
+    },
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "message": "Incorrect tie",
+      "measureNumber": 5
+    },
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "message": "Incorrect tie",
+      "measureNumber": 6
+    },
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "message": "Incorrect tie",
+      "measureNumber": 7
+    },
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "message": "Incorrect tie",
+      "measureNumber": 8
+    },
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "label": "Incorrect tie",
+      "count": 19
+    }
+  ],
+  "truthTied": [
+    {
+      "i": 28,
+      "step": "A",
+      "octave": "4",
+      "tieStart": true,
+      "tieStop": false,
+      "staccato": false,
+      "accent": false
+    },
+    {
+      "i": 39,
+      "step": "A",
+      "octave": "4",
+      "tieStart": false,
+      "tieStop": true,
+      "staccato": false,
+      "accent": false
+    }
+  ],
+  "genTiedCount": 47,
+  "genTied": [
+    {
+      "i": 6,
+      "step": "B",
+      "octave": "2",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>B</step><octave>2</octave></pitch><dot/><duration>4</duration><voice>2</voice><type>quarter</type><tie type=\"start\"/><notations><tied type=\"start\"/></not"
+    },
+    {
+      "i": 8,
+      "step": "A",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": false,
+      "artic": [],
+      "xml": "<note><pitch><step>A</step><octave>4</octave></pitch><dot/><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">begin</beam><tie type=\"start\"/><notations><tie"
+    },
+    {
+      "i": 9,
+      "step": "A",
+      "octave": "2",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>A</step><octave>2</octave></pitch><dot/><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 10,
+      "step": "A",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>A</step><octave>4</octave></pitch><dot/><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 11,
+      "step": "E",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>E</step><octave>4</octave></pitch><dot/><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 13,
+      "step": "A",
+      "octave": "2",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>A</step><octave>2</octave></pitch><dot/><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 14,
+      "step": "A",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": false,
+      "artic": [],
+      "xml": "<note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">begin</beam><tie type=\"start\"/><notations><tied type"
+    },
+    {
+      "i": 15,
+      "step": "D",
+      "octave": "3",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 17,
+      "step": "F",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 18,
+      "step": "A",
+      "octave": "2",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>A</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 24,
+      "step": "F",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 26,
+      "step": "F",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": false,
+      "artic": [],
+      "xml": "<note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><tie type=\"start\"/><notations><tied type=\"start\"/></notations></note>"
+    },
+    {
+      "i": 28,
+      "step": "C",
+      "octave": "5",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>C</step><octave>5</octave></pitch><dot/><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 29,
+      "step": "A",
+      "octave": "2",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>A</step><octave>2</octave></pitch><dot/><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 30,
+      "step": "D",
+      "octave": "3",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>D</step><octave>3</octave></pitch><dot/><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 33,
+      "step": "C",
+      "octave": "3",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>C</step><octave>3</octave></pitch><dot/><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 34,
+      "step": "C",
+      "octave": "5",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>C</step><octave>5</octave></pitch><dot/><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 38,
+      "step": "A",
+      "octave": "2",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": false,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><pitch><step>A</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">begin</beam><tie type=\"start\"/><notations><articulat"
+    },
+    {
+      "i": 39,
+      "step": "A",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 40,
+      "step": "C",
+      "octave": "5",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 41,
+      "step": "C",
+      "octave": "5",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 44,
+      "step": "B",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 45,
+      "step": "C",
+      "octave": "5",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": false,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">begin</beam><tie type=\"start\"/><notations><articulat"
+    },
+    {
+      "i": 46,
+      "step": "D",
+      "octave": "3",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 52,
+      "step": "C",
+      "octave": "3",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": false,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">begin</beam><tie type=\"start\"/><notations><articulat"
+    },
+    {
+      "i": 53,
+      "step": "C",
+      "octave": "5",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 56,
+      "step": "C",
+      "octave": "3",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 61,
+      "step": "B",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>B</step><octave>4</octave></pitch><dot/><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 62,
+      "step": "G",
+      "octave": "2",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>G</step><octave>2</octave></pitch><dot/><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 63,
+      "step": "D",
+      "octave": "3",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>D</step><octave>3</octave></pitch><dot/><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 67,
+      "step": "D",
+      "octave": "3",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>D</step><octave>3</octave></pitch><dot/><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 69,
+      "step": "B",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": false,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">begin</beam><tie type=\"start\"/><notations><articulat"
+    },
+    {
+      "i": 73,
+      "step": "B",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>B</step><octave>4</octave></pitch><dot/><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 74,
+      "step": "E",
+      "octave": "3",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>E</step><octave>3</octave></pitch><dot/><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 76,
+      "step": "C",
+      "octave": "5",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>C</step><octave>5</octave></pitch><dot/><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 80,
+      "step": "G",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>G</step><octave>4</octave></pitch><dot/><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 84,
+      "step": "A",
+      "octave": "2",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>A</step><octave>2</octave></pitch><dot/><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 85,
+      "step": "B",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>B</step><octave>4</octave></pitch><dot/><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 88,
+      "step": "G",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": false,
+      "artic": [],
+      "xml": "<note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">begin</beam><tie type=\"start\"/><notations><tied type"
+    },
+    {
+      "i": 94,
+      "step": "C",
+      "octave": "5",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>C</step><octave>5</octave></pitch><dot/><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 95,
+      "step": "F",
+      "octave": "3",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>F</step><octave>3</octave></pitch><dot/><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><not"
+    },
+    {
+      "i": 98,
+      "step": "F",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 99,
+      "step": "F",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 100,
+      "step": "F",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": false,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">begin</beam><tie type=\"start\"/><notations><articulat"
+    },
+    {
+      "i": 101,
+      "step": "F",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 103,
+      "step": "B",
+      "octave": "4",
+      "voice": "1",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [
+        "staccato"
+      ],
+      "xml": "<note><chord/><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    },
+    {
+      "i": 105,
+      "step": "A",
+      "octave": "2",
+      "voice": "2",
+      "type": "quarter",
+      "tieStart": true,
+      "tieStop": false,
+      "chord": true,
+      "artic": [],
+      "xml": "<note><chord/><pitch><step>A</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><beam number=\"1\">continue</beam><tie type=\"start\"/><notations"
+    }
+  ],
+  "reportKeys": [
+    "schemaVersion",
+    "evaluatorVersion",
+    "kind",
+    "mode",
+    "gitCommit",
+    "scores",
+    "scorePercents",
+    "classes",
+    "overall",
+    "overallPercent",
+    "labels",
+    "alignment",
+    "measures",
+    "worstMeasures",
+    "firstDivergence",
+    "topDefects",
+    "topDefectClasses",
+    "totals",
+    "tolerances",
+    "unsupportedFeatures",
+    "playback",
+    "options"
+  ]
+}

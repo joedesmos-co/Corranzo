@@ -11,6 +11,8 @@ import {
 } from '../../features/microphone-input/micInputConstants.js'
 import WaitForYouMatchSettingsPanel from './WaitForYouMatchSettingsPanel.jsx'
 import PracticeHelpTip from './PracticeHelpTip.jsx'
+import { buildPianoPracticeInstruction } from '../../features/practice/pianoPracticeInstructions.js'
+import { INSTRUMENT_IDS } from '../../features/instruments/instruments.js'
 
 function statusMessage(status, currentCheckpoint, checkpointMode, displayLabel) {
   if (displayLabel) {
@@ -56,12 +58,18 @@ function feedbackClassName(outcome) {
   }
 }
 
-function conciseChordTargetLabel(checkpoint, expectedMidis) {
+function conciseChordTargetLabel(checkpoint, expectedMidis, instrumentId = null) {
   if (!expectedMidis || expectedMidis.length <= 1) {
     return null
   }
   if (checkpoint?.displayLabel) {
     return checkpoint.displayLabel
+  }
+  if (instrumentId === INSTRUMENT_IDS.PIANO || checkpoint?.isPianoChordMic) {
+    return buildPianoPracticeInstruction({
+      ...checkpoint,
+      expectedMidis,
+    })
   }
   if (checkpoint?.chordSymbol) {
     return `Play ${checkpoint.chordSymbol} chord`
@@ -136,7 +144,7 @@ export default function WaitForYouSection({
   const expectedMidis = currentCheckpoint ? getExpectedMidis(currentCheckpoint) : []
   const isGuitarChordShape = Boolean(currentCheckpoint?.isGuitarChordShape)
   const isRollingChordMic = Boolean(currentCheckpoint?.isRollingChordMic)
-  const chordTargetLabel = conciseChordTargetLabel(currentCheckpoint, expectedMidis)
+  const chordTargetLabel = conciseChordTargetLabel(currentCheckpoint, expectedMidis, instrumentId)
   const detailsLabel = checkpointDetailsLabel(currentCheckpoint, expectedMidis)
   const showChordDetails = expectedMidis.length > 1 && Boolean(detailsLabel)
   const targetApproximate = Boolean(

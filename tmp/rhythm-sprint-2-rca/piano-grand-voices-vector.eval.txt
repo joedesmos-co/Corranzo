@@ -1,0 +1,309 @@
+OMR semantic evaluation
+=======================
+schema v2 · evaluator v2.0.0 · 15aa1db · mode=written
+Alignment confidence: 96% (8 matched, 0 missing, 0 extra)
+
+Overall semantic score
+
+Pitch ........... 0%  (0/144; cov 100%)
+Rhythm .......... 53%  (34/64; cov 100%)
+Sustain ......... 100%  (0/0; cov 100%)
+Articulation .... 0%  (0/16; cov 100%)
+Measure ......... 30%  (24/79; cov 100%)
+Interpretation .. 0%  (0/5; cov 100%)
+Playback ........ 100%  (0/0; cov 100%)
+
+Overall .......... 41%
+First divergence: measure 1
+
+Worst measures
+- Measure 1 (severity 99): Missing note G4; Missing note D4; Missing note F4
+- Measure 8 (severity 99): Missing note B4; Missing note F#4; Missing note A4
+- Measure 7 (severity 97): Missing note D5; Missing note A4; Missing note C5
+- Measure 2 (severity 95): Missing note A4; Missing note E4; Missing note G4
+- Measure 3 (severity 95): Missing note B4; Missing note F#4; Missing note A4
+
+Per-measure report
+
+Measure 1
+- Missing note G4
+- Missing note D4
+- Missing note F4
+- Missing note C2
+- Missing note G2
+- Missing note F2
+- Missing note C3
+- Extra note C4
+- Extra note E4
+- Extra note G4
+- Extra note D4
+- Extra note E4
+- Extra note G4
+- Extra note F4
+- Incorrect pitch C3 (expected E4)
+- Quarter detected as half
+- Incorrect pitch G2 (expected C4)
+- Quarter detected as half
+- Missing staccato
+- Incorrect pitch F2 (expected G4)
+- Quarter detected as half
+- Incorrect pitch C2 (expected E4)
+- Quarter detected as half
+- Missing staccato
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Repeat mismatch
+- Tempo 88 BPM missing or wrong at q=0
+
+Measure 2
+- Missing note A4
+- Missing note E4
+- Missing note G4
+- Missing note D2
+- Missing note A2
+- Missing note G2
+- Missing note D3
+- Extra note D4
+- Extra note F4
+- Extra note A4
+- Extra note E4
+- Extra note F4
+- Extra note A4
+- Extra note G4
+- Incorrect pitch D3 (expected F#4)
+- Quarter detected as half
+- Incorrect pitch A2 (expected D4)
+- Quarter detected as half
+- Missing accent
+- Incorrect pitch G2 (expected A4)
+- Quarter detected as half
+- Incorrect pitch D2 (expected F#4)
+- Quarter detected as half
+- Missing accent
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 3
+- Missing note B4
+- Missing note F#4
+- Missing note A4
+- Missing note E2
+- Missing note B2
+- Missing note A2
+- Missing note E3
+- Extra note E4
+- Extra note G4
+- Extra note B4
+- Extra note F4
+- Extra note G4
+- Extra note B4
+- Extra note A4
+- Incorrect pitch E3 (expected G#4)
+- Quarter detected as half
+- Incorrect pitch B2 (expected E4)
+- Quarter detected as half
+- Missing staccato
+- Incorrect pitch A2 (expected B4)
+- Quarter detected as half
+- Incorrect pitch E2 (expected G#4)
+- Quarter detected as half
+- Missing staccato
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 4
+- Missing note C5
+- Missing note G4
+- Missing note A#4
+- Missing note F2
+- Missing note C3
+- Missing note A#2
+- Missing note F3
+- Extra note F4
+- Extra note A4
+- Extra note C5
+- Extra note G4
+- Extra note A4
+- Extra note C5
+- Extra note A4
+- Incorrect pitch F3 (expected A4)
+- Quarter detected as half
+- Incorrect pitch C3 (expected F4)
+- Quarter detected as half
+- Missing accent
+- Incorrect pitch A2 (expected C5)
+- Quarter detected as half
+- Incorrect pitch F2 (expected A4)
+- Quarter detected as half
+- Missing accent
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 5
+- Missing note D5
+- Missing note A4
+- Missing note C5
+- Missing note G2
+- Missing note D3
+- Missing note C3
+- Missing note G3
+- Extra note F4
+- Extra note A4
+- Extra note B4
+- Extra note G4
+- Extra note B4
+- Extra note A4
+- Extra note B4
+- Incorrect pitch F3 (expected B4)
+- Incorrect pitch D3 (expected G4)
+- Quarter detected as half
+- Missing staccato
+- Incorrect pitch C3 (expected D5)
+- Incorrect pitch G2 (expected B4)
+- Quarter detected as half
+- Missing staccato
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 6
+- Missing note E5
+- Missing note B4
+- Missing note D5
+- Missing note A2
+- Missing note E3
+- Missing note D3
+- Missing note A3
+- Extra note G4
+- Extra note B4
+- Extra note C5
+- Extra note A4
+- Extra note B4
+- Extra note C5
+- Extra note B4
+- Incorrect pitch E3 (expected A4)
+- Quarter detected as half
+- Missing accent
+- Incorrect pitch G3 (expected C#5)
+- Quarter detected as half
+- Incorrect pitch D3 (expected E5)
+- Quarter detected as half
+- Incorrect pitch A2 (expected C#5)
+- Quarter detected as half
+- Missing accent
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 7
+- Missing note D5
+- Missing note A4
+- Missing note C5
+- Missing note G2
+- Missing note D3
+- Missing note C3
+- Missing note G3
+- Extra note F4
+- Extra note A4
+- Extra note B4
+- Extra note G4
+- Extra note A4
+- Extra note B4
+- Extra note B4
+- Incorrect pitch D3 (expected G4)
+- Quarter detected as half
+- Missing staccato
+- Incorrect pitch F3 (expected B4)
+- Quarter detected as half
+- Incorrect pitch C3 (expected D5)
+- Quarter detected as half
+- Incorrect pitch G2 (expected B4)
+- Quarter detected as half
+- Missing staccato
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Volta mismatch
+
+Measure 8
+- Missing note B4
+- Missing note F#4
+- Missing note A4
+- Missing note E2
+- Missing note B2
+- Missing note A2
+- Missing note E3
+- Extra note E4
+- Extra note F4
+- Extra note A4
+- Extra note E4
+- Extra note F4
+- Extra note A4
+- Extra note G4
+- Incorrect pitch E3 (expected G#4)
+- Quarter detected as half
+- Incorrect pitch B2 (expected E4)
+- Quarter detected as half
+- Missing accent
+- Incorrect pitch A2 (expected B4)
+- Quarter detected as half
+- Incorrect pitch E2 (expected G#4)
+- Quarter detected as half
+- Missing accent
+- Missing staff/voice lane (staff 2)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+- Repeat mismatch
+- Volta mismatch
+
+Top recurring defects:
+1. Extra note (56)
+2. Missing note (56)
+3. Incorrect chord (47)
+4. Incorrect pitch (32)
+5. Duration mismatch (30)
+6. Missing accent (8)
+7. Missing staccato (8)
+8. Missing voice (8)
+9. Repeat mismatch (2)
+10. Volta mismatch (2)
+11. Tempo change mismatch (1)
+
+Top defect classes: Pitch (144), Measure structure (55), Rhythm (30), Articulation (16), Interpretation (5)
+
+Totals: 250 defects · 88 truth notes · 88 generated notes · 8→8 measures

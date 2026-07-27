@@ -1,0 +1,1780 @@
+{
+  "kind": "semantic-corpus-delta",
+  "beforeLabel": "after-rhythm-sprint-3",
+  "afterLabel": "after-rhythm-sprint-4",
+  "compare": {
+    "accept": true,
+    "classDeltas": {
+      "pitch": -0.0003,
+      "rhythm": 0.0059,
+      "sustain": 0,
+      "articulation": 0,
+      "measureStructure": 0.0001,
+      "interpretation": 0,
+      "playback": 0
+    },
+    "overallDelta": 0.0008,
+    "improvements": [
+      {
+        "id": "piano-dense-advanced-vector",
+        "rhythmDelta": 0.0533,
+        "overallDelta": 0.0075
+      }
+    ],
+    "regressions": [],
+    "gateFailures": [],
+    "perFixture": [
+      {
+        "id": "piano-beginner-single-vector",
+        "beforeOverall": 0.7262,
+        "afterOverall": 0.7262,
+        "overallDelta": 0,
+        "deltas": {
+          "pitch": 0,
+          "rhythm": 0,
+          "sustain": 0,
+          "articulation": 0,
+          "measureStructure": 0,
+          "interpretation": 0,
+          "playback": 0
+        },
+        "before": {
+          "pitch": {
+            "score": 0.2424,
+            "percent": "24%",
+            "numerator": 8,
+            "denominator": 33,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.8413,
+            "percent": "84%",
+            "numerator": 53,
+            "denominator": 63,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 24,
+            "denominator": 24,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 1,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        },
+        "after": {
+          "pitch": {
+            "score": 0.2424,
+            "percent": "24%",
+            "numerator": 8,
+            "denominator": 33,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.8413,
+            "percent": "84%",
+            "numerator": 53,
+            "denominator": 63,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 24,
+            "denominator": 24,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 1,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        }
+      },
+      {
+        "id": "piano-grand-voices-vector",
+        "beforeOverall": 0.4229,
+        "afterOverall": 0.4229,
+        "overallDelta": 0,
+        "deltas": {
+          "pitch": 0,
+          "rhythm": 0,
+          "sustain": 0,
+          "articulation": 0,
+          "measureStructure": 0,
+          "interpretation": 0,
+          "playback": 0
+        },
+        "before": {
+          "pitch": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 144,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.6563,
+            "percent": "66%",
+            "numerator": 42,
+            "denominator": 64,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 16,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.3038,
+            "percent": "30%",
+            "numerator": 24,
+            "denominator": 79,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 5,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        },
+        "after": {
+          "pitch": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 144,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.6563,
+            "percent": "66%",
+            "numerator": 42,
+            "denominator": 64,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 16,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.3038,
+            "percent": "30%",
+            "numerator": 24,
+            "denominator": 79,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 5,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        }
+      },
+      {
+        "id": "piano-rhythm-tuplets-vector",
+        "beforeOverall": 0.537,
+        "afterOverall": 0.537,
+        "overallDelta": 0,
+        "deltas": {
+          "pitch": 0,
+          "rhythm": 0,
+          "sustain": 0,
+          "articulation": 0,
+          "measureStructure": 0,
+          "interpretation": 0,
+          "playback": 0
+        },
+        "before": {
+          "pitch": {
+            "score": 0.3971,
+            "percent": "40%",
+            "numerator": 27,
+            "denominator": 68,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.6343,
+            "percent": "63%",
+            "numerator": 85,
+            "denominator": 134,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 5,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.7273,
+            "percent": "73%",
+            "numerator": 24,
+            "denominator": 33,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 1,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        },
+        "after": {
+          "pitch": {
+            "score": 0.3971,
+            "percent": "40%",
+            "numerator": 27,
+            "denominator": 68,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.6343,
+            "percent": "63%",
+            "numerator": 85,
+            "denominator": 134,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 5,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.7273,
+            "percent": "73%",
+            "numerator": 24,
+            "denominator": 33,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 1,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        }
+      },
+      {
+        "id": "piano-articulation-scan",
+        "beforeOverall": 0.3449,
+        "afterOverall": 0.3449,
+        "overallDelta": 0,
+        "deltas": {
+          "pitch": 0,
+          "rhythm": 0,
+          "sustain": 0,
+          "articulation": 0,
+          "measureStructure": 0,
+          "interpretation": 0,
+          "playback": 0
+        },
+        "before": {
+          "pitch": {
+            "score": 0.0126,
+            "percent": "1%",
+            "numerator": 2,
+            "denominator": 159,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.9125,
+            "percent": "91%",
+            "numerator": 73,
+            "denominator": 80,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 0.0263,
+            "percent": "3%",
+            "numerator": 1,
+            "denominator": 38,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 0.1667,
+            "percent": "17%",
+            "numerator": 6,
+            "denominator": 36,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.2963,
+            "percent": "30%",
+            "numerator": 24,
+            "denominator": 81,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 5,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        },
+        "after": {
+          "pitch": {
+            "score": 0.0126,
+            "percent": "1%",
+            "numerator": 2,
+            "denominator": 159,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.9125,
+            "percent": "91%",
+            "numerator": 73,
+            "denominator": 80,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 0.0263,
+            "percent": "3%",
+            "numerator": 1,
+            "denominator": 38,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 0.1667,
+            "percent": "17%",
+            "numerator": 6,
+            "denominator": 36,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.2963,
+            "percent": "30%",
+            "numerator": 24,
+            "denominator": 81,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 5,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        }
+      },
+      {
+        "id": "piano-dense-advanced-vector",
+        "beforeOverall": 0.3536,
+        "afterOverall": 0.3611,
+        "overallDelta": 0.0075,
+        "deltas": {
+          "pitch": -0.0023,
+          "rhythm": 0.0533,
+          "sustain": 0,
+          "articulation": 0,
+          "measureStructure": 0.0011,
+          "interpretation": 0,
+          "playback": 0
+        },
+        "before": {
+          "pitch": {
+            "score": 0.0442,
+            "percent": "4%",
+            "numerator": 20,
+            "denominator": 452,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.3851,
+            "percent": "39%",
+            "numerator": 57,
+            "denominator": 148,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 16,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.046,
+            "percent": "5%",
+            "numerator": 8,
+            "denominator": 174,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 1,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        },
+        "after": {
+          "pitch": {
+            "score": 0.0419,
+            "percent": "4%",
+            "numerator": 19,
+            "denominator": 453,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.4384,
+            "percent": "44%",
+            "numerator": 64,
+            "denominator": 146,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 16,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.0471,
+            "percent": "5%",
+            "numerator": 8,
+            "denominator": 170,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 1,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        }
+      },
+      {
+        "id": "guitar-tab-sparse-vector",
+        "beforeOverall": 0.685,
+        "afterOverall": 0.685,
+        "overallDelta": 0,
+        "deltas": {
+          "pitch": 0,
+          "rhythm": 0,
+          "sustain": 0,
+          "articulation": 0,
+          "measureStructure": 0,
+          "interpretation": 0,
+          "playback": 0
+        },
+        "before": {
+          "pitch": {
+            "score": 0.7,
+            "percent": "70%",
+            "numerator": 28,
+            "denominator": 40,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.1719,
+            "percent": "17%",
+            "numerator": 11,
+            "denominator": 64,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.9231,
+            "percent": "92%",
+            "numerator": 24,
+            "denominator": 26,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 5,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        },
+        "after": {
+          "pitch": {
+            "score": 0.7,
+            "percent": "70%",
+            "numerator": 28,
+            "denominator": 40,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.1719,
+            "percent": "17%",
+            "numerator": 11,
+            "denominator": 64,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.9231,
+            "percent": "92%",
+            "numerator": 24,
+            "denominator": 26,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 5,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        }
+      },
+      {
+        "id": "guitar-standard-chords-vector",
+        "beforeOverall": 0.3781,
+        "afterOverall": 0.3781,
+        "overallDelta": 0,
+        "deltas": {
+          "pitch": 0,
+          "rhythm": 0,
+          "sustain": 0,
+          "articulation": 0,
+          "measureStructure": 0,
+          "interpretation": 0,
+          "playback": 0
+        },
+        "before": {
+          "pitch": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 133,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.48,
+            "percent": "48%",
+            "numerator": 24,
+            "denominator": 50,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 6,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.1667,
+            "percent": "17%",
+            "numerator": 10,
+            "denominator": 60,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 1,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        },
+        "after": {
+          "pitch": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 133,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.48,
+            "percent": "48%",
+            "numerator": 24,
+            "denominator": 50,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 6,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.1667,
+            "percent": "17%",
+            "numerator": 10,
+            "denominator": 60,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 1,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        }
+      },
+      {
+        "id": "guitar-paired-chords-vector",
+        "beforeOverall": 0.587,
+        "afterOverall": 0.587,
+        "overallDelta": 0,
+        "deltas": {
+          "pitch": 0,
+          "rhythm": 0,
+          "sustain": 0,
+          "articulation": 0,
+          "measureStructure": 0,
+          "interpretation": 0,
+          "playback": 0
+        },
+        "before": {
+          "pitch": {
+            "score": 0.0592,
+            "percent": "6%",
+            "numerator": 9,
+            "denominator": 152,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.7273,
+            "percent": "73%",
+            "numerator": 80,
+            "denominator": 110,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.3226,
+            "percent": "32%",
+            "numerator": 20,
+            "denominator": 62,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 2,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        },
+        "after": {
+          "pitch": {
+            "score": 0.0592,
+            "percent": "6%",
+            "numerator": 9,
+            "denominator": 152,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.7273,
+            "percent": "73%",
+            "numerator": 80,
+            "denominator": 110,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.3226,
+            "percent": "32%",
+            "numerator": 20,
+            "denominator": 62,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 2,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        }
+      },
+      {
+        "id": "guitar-techniques-paired-vector",
+        "beforeOverall": 0.5258,
+        "afterOverall": 0.5258,
+        "overallDelta": 0,
+        "deltas": {
+          "pitch": 0,
+          "rhythm": 0,
+          "sustain": 0,
+          "articulation": 0,
+          "measureStructure": 0,
+          "interpretation": 0,
+          "playback": 0
+        },
+        "before": {
+          "pitch": {
+            "score": 0.0476,
+            "percent": "5%",
+            "numerator": 2,
+            "denominator": 42,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.8333,
+            "percent": "83%",
+            "numerator": 30,
+            "denominator": 36,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 1,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.8,
+            "percent": "80%",
+            "numerator": 16,
+            "denominator": 20,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 1,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        },
+        "after": {
+          "pitch": {
+            "score": 0.0476,
+            "percent": "5%",
+            "numerator": 2,
+            "denominator": 42,
+            "coverage": 1,
+            "reliable": true
+          },
+          "rhythm": {
+            "score": 0.8333,
+            "percent": "83%",
+            "numerator": 30,
+            "denominator": 36,
+            "coverage": 1,
+            "reliable": true
+          },
+          "sustain": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 1,
+            "coverage": 1,
+            "reliable": true
+          },
+          "articulation": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          },
+          "measureStructure": {
+            "score": 0.8,
+            "percent": "80%",
+            "numerator": 16,
+            "denominator": 20,
+            "coverage": 1,
+            "reliable": true
+          },
+          "interpretation": {
+            "score": 0,
+            "percent": "0%",
+            "numerator": 0,
+            "denominator": 1,
+            "coverage": 1,
+            "reliable": true
+          },
+          "playback": {
+            "score": 1,
+            "percent": "100%",
+            "numerator": 0,
+            "denominator": 0,
+            "coverage": 1,
+            "reliable": true
+          }
+        }
+      }
+    ]
+  },
+  "beforeAggregate": {
+    "fixtureCount": 9,
+    "okCount": 9,
+    "failedCount": 0,
+    "meanOverall": 0.5067222222222223,
+    "classes": {
+      "pitch": {
+        "meanScore": 0.1670111111111111,
+        "meanCoverage": 1
+      },
+      "rhythm": {
+        "meanScore": 0.6268888888888889,
+        "meanCoverage": 1
+      },
+      "sustain": {
+        "meanScore": 0.5584777777777777,
+        "meanCoverage": 1
+      },
+      "articulation": {
+        "meanScore": 0.685188888888889,
+        "meanCoverage": 1
+      },
+      "measureStructure": {
+        "meanScore": 0.5095333333333333,
+        "meanCoverage": 1
+      },
+      "interpretation": {
+        "meanScore": 0,
+        "meanCoverage": 1
+      },
+      "playback": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      }
+    },
+    "topDefects": [
+      {
+        "code": "missing-note",
+        "class": "pitch",
+        "count": 465,
+        "fixtureCount": 8,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-techniques-paired-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "extra-note",
+        "class": "pitch",
+        "count": 393,
+        "fixtureCount": 9,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-techniques-paired-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "incorrect-chord",
+        "class": "measure-structure",
+        "count": 336,
+        "fixtureCount": 7,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "piano-articulation-scan",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "incorrect-pitch",
+        "class": "pitch",
+        "count": 269,
+        "fixtureCount": 9,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-techniques-paired-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "duration-mismatch",
+        "class": "rhythm",
+        "count": 149,
+        "fixtureCount": 8,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-techniques-paired-vector",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "onset-mismatch",
+        "class": "rhythm",
+        "count": 135,
+        "fixtureCount": 7,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "incorrect-tie",
+        "class": "sustain",
+        "count": 47,
+        "fixtureCount": 3,
+        "fixtures": [
+          "guitar-standard-chords-vector",
+          "piano-articulation-scan",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "missing-accent",
+        "class": "articulation",
+        "count": 35,
+        "fixtureCount": 3,
+        "fixtures": [
+          "piano-articulation-scan",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "missing-staccato",
+        "class": "articulation",
+        "count": 27,
+        "fixtureCount": 2,
+        "fixtures": [
+          "piano-articulation-scan",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "missing-voice",
+        "class": "measure-structure",
+        "count": 24,
+        "fixtureCount": 3,
+        "fixtures": [
+          "piano-articulation-scan",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "split-measure",
+        "class": "measure-structure",
+        "count": 21,
+        "fixtureCount": 4,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-techniques-paired-vector",
+          "piano-dense-advanced-vector"
+        ]
+      },
+      {
+        "code": "tempo-mismatch",
+        "class": "interpretation",
+        "count": 8,
+        "fixtureCount": 8,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-techniques-paired-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "repeat-mismatch",
+        "class": "interpretation",
+        "count": 7,
+        "fixtureCount": 4,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-tab-sparse-vector",
+          "piano-articulation-scan",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "volta-mismatch",
+        "class": "interpretation",
+        "count": 6,
+        "fixtureCount": 3,
+        "fixtures": [
+          "guitar-tab-sparse-vector",
+          "piano-articulation-scan",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "extra-measure",
+        "class": "measure-structure",
+        "count": 4,
+        "fixtureCount": 2,
+        "fixtures": [
+          "guitar-standard-chords-vector",
+          "piano-dense-advanced-vector"
+        ]
+      },
+      {
+        "code": "missing-rest",
+        "class": "rhythm",
+        "count": 4,
+        "fixtureCount": 2,
+        "fixtures": [
+          "piano-beginner-single-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "missing-dot",
+        "class": "rhythm",
+        "count": 3,
+        "fixtureCount": 2,
+        "fixtures": [
+          "piano-beginner-single-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "missing-tie",
+        "class": "sustain",
+        "count": 2,
+        "fixtureCount": 2,
+        "fixtures": [
+          "guitar-techniques-paired-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "dotted-rhythm-error",
+        "class": "rhythm",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "extra-rest",
+        "class": "rhythm",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-rhythm-tuplets-vector"
+        ]
+      }
+    ]
+  },
+  "afterAggregate": {
+    "fixtureCount": 9,
+    "okCount": 9,
+    "failedCount": 0,
+    "meanOverall": 0.5075555555555556,
+    "classes": {
+      "pitch": {
+        "meanScore": 0.16675555555555555,
+        "meanCoverage": 1
+      },
+      "rhythm": {
+        "meanScore": 0.6328111111111112,
+        "meanCoverage": 1
+      },
+      "sustain": {
+        "meanScore": 0.5584777777777777,
+        "meanCoverage": 1
+      },
+      "articulation": {
+        "meanScore": 0.685188888888889,
+        "meanCoverage": 1
+      },
+      "measureStructure": {
+        "meanScore": 0.5096555555555555,
+        "meanCoverage": 1
+      },
+      "interpretation": {
+        "meanScore": 0,
+        "meanCoverage": 1
+      },
+      "playback": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      }
+    },
+    "topDefects": [
+      {
+        "code": "missing-note",
+        "class": "pitch",
+        "count": 466,
+        "fixtureCount": 8,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-techniques-paired-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "extra-note",
+        "class": "pitch",
+        "count": 394,
+        "fixtureCount": 9,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-techniques-paired-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "incorrect-chord",
+        "class": "measure-structure",
+        "count": 332,
+        "fixtureCount": 7,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "piano-articulation-scan",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "incorrect-pitch",
+        "class": "pitch",
+        "count": 269,
+        "fixtureCount": 9,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-techniques-paired-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "duration-mismatch",
+        "class": "rhythm",
+        "count": 146,
+        "fixtureCount": 8,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-techniques-paired-vector",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "onset-mismatch",
+        "class": "rhythm",
+        "count": 129,
+        "fixtureCount": 7,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "incorrect-tie",
+        "class": "sustain",
+        "count": 47,
+        "fixtureCount": 3,
+        "fixtures": [
+          "guitar-standard-chords-vector",
+          "piano-articulation-scan",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "missing-accent",
+        "class": "articulation",
+        "count": 35,
+        "fixtureCount": 3,
+        "fixtures": [
+          "piano-articulation-scan",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "missing-staccato",
+        "class": "articulation",
+        "count": 27,
+        "fixtureCount": 2,
+        "fixtures": [
+          "piano-articulation-scan",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "missing-voice",
+        "class": "measure-structure",
+        "count": 24,
+        "fixtureCount": 3,
+        "fixtures": [
+          "piano-articulation-scan",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "split-measure",
+        "class": "measure-structure",
+        "count": 21,
+        "fixtureCount": 4,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-techniques-paired-vector",
+          "piano-dense-advanced-vector"
+        ]
+      },
+      {
+        "code": "tempo-mismatch",
+        "class": "interpretation",
+        "count": 8,
+        "fixtureCount": 8,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-standard-chords-vector",
+          "guitar-tab-sparse-vector",
+          "guitar-techniques-paired-vector",
+          "piano-articulation-scan",
+          "piano-beginner-single-vector",
+          "piano-dense-advanced-vector",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "repeat-mismatch",
+        "class": "interpretation",
+        "count": 7,
+        "fixtureCount": 4,
+        "fixtures": [
+          "guitar-paired-chords-vector",
+          "guitar-tab-sparse-vector",
+          "piano-articulation-scan",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "volta-mismatch",
+        "class": "interpretation",
+        "count": 6,
+        "fixtureCount": 3,
+        "fixtures": [
+          "guitar-tab-sparse-vector",
+          "piano-articulation-scan",
+          "piano-grand-voices-vector"
+        ]
+      },
+      {
+        "code": "extra-measure",
+        "class": "measure-structure",
+        "count": 4,
+        "fixtureCount": 2,
+        "fixtures": [
+          "guitar-standard-chords-vector",
+          "piano-dense-advanced-vector"
+        ]
+      },
+      {
+        "code": "missing-rest",
+        "class": "rhythm",
+        "count": 4,
+        "fixtureCount": 2,
+        "fixtures": [
+          "piano-beginner-single-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "missing-dot",
+        "class": "rhythm",
+        "count": 3,
+        "fixtureCount": 2,
+        "fixtures": [
+          "piano-beginner-single-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "missing-tie",
+        "class": "sustain",
+        "count": 2,
+        "fixtureCount": 2,
+        "fixtures": [
+          "guitar-techniques-paired-vector",
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "dotted-rhythm-error",
+        "class": "rhythm",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-rhythm-tuplets-vector"
+        ]
+      },
+      {
+        "code": "extra-rest",
+        "class": "rhythm",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-rhythm-tuplets-vector"
+        ]
+      }
+    ]
+  }
+}

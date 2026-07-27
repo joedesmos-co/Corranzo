@@ -1,0 +1,154 @@
+{
+  "id": "27-hungarian-dance-no5-sharp-m19-1-65-36",
+  "source": "hungarian-dance-no5",
+  "sourcePdf": "/Users/ryland/Downloads/hungarian-dance-no5.pdf",
+  "page": 1,
+  "measure": 19,
+  "expectedSymbol": "sharp",
+  "rawDetectedCandidates": [
+    {
+      "source": "clean MusicXML/SMuFL control",
+      "type": "sharp",
+      "writtenPitch": {
+        "step": "E",
+        "alter": 1,
+        "octave": 4
+      }
+    }
+  ],
+  "selectedAttachment": {
+    "noteId": "P1-m19-n213",
+    "midi": 65,
+    "staff": 1,
+    "voice": 1,
+    "quarterTime": 36
+  },
+  "staffPosition": {
+    "staff": 1,
+    "writtenPitch": {
+      "step": "E",
+      "alter": 1,
+      "octave": 4
+    }
+  },
+  "measureAccidentalState": "explicit printed accidental",
+  "keySignatureContext": {
+    "fifths": 3,
+    "mode": null,
+    "cancelFifths": null,
+    "staff": null,
+    "partId": "P1",
+    "quarterTime": 0,
+    "measureNumber": 1,
+    "timeSeconds": 0
+  },
+  "musicXmlSnippet": "<note default-x=\"20.62\" default-y=\"-40.00\">\n        <pitch>\n          <step>E</step>\n          <alter>1</alter>\n          <octave>4</octave>\n          </pitch>\n        <duration>60</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <dot/>\n        <accidental>sharp</accidental>\n        <stem>up</stem>\n        <staff>1</staff>\n        <notations>\n          <slur type=\"start\" placement=\"above\" number=\"1\"/>\n          </notations>\n        </note>",
+  "renderedResult": {
+    "writtenPitch": {
+      "step": "E",
+      "alter": 1,
+      "octave": 4
+    },
+    "accidental": {
+      "type": "sharp",
+      "printed": true,
+      "cautionary": false,
+      "editorial": false,
+      "parentheses": false,
+      "bracket": false,
+      "smufl": null
+    }
+  },
+  "soundingMidiBefore": 65,
+  "soundingMidiAfter": 65,
+  "playbackSignatureUnchanged": true,
+  "failureLayerBefore": "parser discarded explicit accidental; renderer used MIDI fallback",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "classification": "MusicXML correct; parser/renderer shared semantics restored",
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-4/source-crops/27-hungarian-dance-no5-sharp-m19-1-65-36.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-4/candidate-overlays/27-hungarian-dance-no5-sharp-m19-1-65-36.png",
+    "musicXmlSnippetFile": "tmp/notation-fidelity-sprint-4/musicxml-snippets/27-hungarian-dance-no5-sharp-m19-1-65-36.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-4/rendered-before/27-hungarian-dance-no5-sharp-m19-1-65-36.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-4/rendered-after/27-hungarian-dance-no5-sharp-m19-1-65-36.png",
+    "beforeRenderer": {
+      "keyMarks": [],
+      "notes": [
+        {
+          "midi": 65,
+          "writtenPitch": null,
+          "accidentalType": null,
+          "accidentalGlyph": null,
+          "accidentalDisplayGlyph": null,
+          "accidentalColumn": 0,
+          "staff": "treble",
+          "diatonic": 31
+        }
+      ]
+    },
+    "afterRenderer": {
+      "keyMarks": [
+        {
+          "staff": "treble",
+          "type": "sharp",
+          "column": 0,
+          "y": 36,
+          "cancellation": false
+        },
+        {
+          "staff": "treble",
+          "type": "sharp",
+          "column": 1,
+          "y": 54,
+          "cancellation": false
+        },
+        {
+          "staff": "treble",
+          "type": "sharp",
+          "column": 2,
+          "y": 30,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "sharp",
+          "column": 0,
+          "y": 168,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "sharp",
+          "column": 1,
+          "y": 186,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "sharp",
+          "column": 2,
+          "y": 162,
+          "cancellation": false
+        }
+      ],
+      "notes": [
+        {
+          "midi": 65,
+          "writtenPitch": {
+            "step": "E",
+            "alter": 1,
+            "octave": 4
+          },
+          "accidentalType": "sharp",
+          "accidentalGlyph": "♯",
+          "accidentalDisplayGlyph": "♯",
+          "accidentalColumn": 0,
+          "staff": "treble",
+          "diatonic": 30
+        }
+      ]
+    }
+  }
+}

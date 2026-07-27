@@ -1,0 +1,1739 @@
+{
+  "v2": {
+    "duration": 0.4685,
+    "onset": 0.6126,
+    "chord": 0.6048,
+    "f1": 0.804
+  },
+  "v3Independent": {
+    "metrics": {
+      "pitchAccuracy": 0.3153,
+      "matchedPitchAccuracy": 0.4375,
+      "durationAccuracy": 0.5856,
+      "matchedDurationAccuracy": 0.8125,
+      "onsetAccuracy": 0.6126,
+      "matchedOnsetAccuracy": 0.85,
+      "timeAccuracy": 0.027,
+      "matchedTimeAccuracy": 0.0375,
+      "measureCountAccuracy": 1,
+      "noteDetectionPrecision": 0.7207,
+      "noteDetectionRecall": 0.9091,
+      "noteDetectionF1": 0.804,
+      "chordGroupingAccuracy": 0.6048,
+      "pitchAccuracyAtCorrectOnset": 0.4265,
+      "orderSensitivePitchRecovery": 0.0721
+    },
+    "musical": {
+      "pianoMeasureCount": 8,
+      "ambiguousMeasureCount": 7,
+      "rejectedEventGroupCount": 0,
+      "unresolvedEventGroupCount": 0,
+      "recoveredUniformBeatGridCount": 0,
+      "recoveredMeasureEndCount": 0,
+      "voiceOverlapViolations": 0,
+      "inputMutated": false
+    },
+    "wrongDurationCount": 15,
+    "wrongDurations": [
+      {
+        "measureNumber": 3,
+        "onsetDiffQuarters": 0.75,
+        "timeDiffSeconds": 1.443,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m3-n31",
+          "measureNumber": 3,
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "midi": 45,
+          "label": "A2",
+          "partId": "P1",
+          "voice": 2
+        },
+        "generated": {
+          "id": "P1-m3-n30",
+          "measureNumber": 3,
+          "onsetQuarters": 2.75,
+          "durationQuarters": 1,
+          "midi": 45,
+          "label": "A2",
+          "partId": "P1",
+          "voice": 5
+        }
+      },
+      {
+        "measureNumber": 3,
+        "onsetDiffQuarters": 0.75,
+        "timeDiffSeconds": 1.443,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m3-n32",
+          "measureNumber": 3,
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "midi": 52,
+          "label": "E3",
+          "partId": "P1",
+          "voice": 2
+        },
+        "generated": {
+          "id": "P1-m3-n31",
+          "measureNumber": 3,
+          "onsetQuarters": 2.75,
+          "durationQuarters": 1,
+          "midi": 50,
+          "label": "D3",
+          "partId": "P1",
+          "voice": 5
+        }
+      },
+      {
+        "measureNumber": 4,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 2.182,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 7,
+        "truth": {
+          "id": "P1-m4-n40",
+          "measureNumber": 4,
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "midi": 41,
+          "label": "F2",
+          "partId": "P1",
+          "voice": 2
+        },
+        "generated": {
+          "id": "P1-m4-n44",
+          "measureNumber": 4,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 48,
+          "label": "C3",
+          "partId": "P1",
+          "voice": 6
+        }
+      },
+      {
+        "measureNumber": 4,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 2.182,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m4-n41",
+          "measureNumber": 4,
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "midi": 48,
+          "label": "C3",
+          "partId": "P1",
+          "voice": 2
+        },
+        "generated": {
+          "id": "P1-m4-n42",
+          "measureNumber": 4,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 48,
+          "label": "C3",
+          "partId": "P1",
+          "voice": 5
+        }
+      },
+      {
+        "measureNumber": 4,
+        "onsetDiffQuarters": 0.75,
+        "timeDiffSeconds": 2.92,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 19,
+        "truth": {
+          "id": "P1-m4-n43",
+          "measureNumber": 4,
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "midi": 53,
+          "label": "F3",
+          "partId": "P1",
+          "voice": 2
+        },
+        "generated": {
+          "id": "P1-m4-n40",
+          "measureNumber": 4,
+          "onsetQuarters": 1.25,
+          "durationQuarters": 1,
+          "midi": 72,
+          "label": "C5",
+          "partId": "P1",
+          "voice": 2
+        }
+      },
+      {
+        "measureNumber": 5,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 2.909,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -17,
+        "truth": {
+          "id": "P1-m5-n44",
+          "measureNumber": 5,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 67,
+          "label": "G4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m5-n56",
+          "measureNumber": 5,
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "midi": 50,
+          "label": "D3",
+          "partId": "P1",
+          "voice": 6
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 4.364,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m7-n73",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 2
+        },
+        "generated": {
+          "id": "P1-m7-n94",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 43,
+          "label": "G2",
+          "partId": "P1",
+          "voice": 6
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 4.364,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m7-n74",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "midi": 50,
+          "label": "D3",
+          "partId": "P1",
+          "voice": 2
+        },
+        "generated": {
+          "id": "P1-m7-n93",
+          "measureNumber": 7,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 48,
+          "label": "C3",
+          "partId": "P1",
+          "voice": 6
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.75,
+        "timeDiffSeconds": 4.352,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m7-n75",
+          "measureNumber": 7,
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "midi": 48,
+          "label": "C3",
+          "partId": "P1",
+          "voice": 2
+        },
+        "generated": {
+          "id": "P1-m7-n91",
+          "measureNumber": 7,
+          "onsetQuarters": 2.75,
+          "durationQuarters": 1,
+          "midi": 48,
+          "label": "C3",
+          "partId": "P1",
+          "voice": 5
+        }
+      },
+      {
+        "measureNumber": 7,
+        "onsetDiffQuarters": 0.75,
+        "timeDiffSeconds": 4.352,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": -2,
+        "truth": {
+          "id": "P1-m7-n76",
+          "measureNumber": 7,
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "midi": 55,
+          "label": "G3",
+          "partId": "P1",
+          "voice": 2
+        },
+        "generated": {
+          "id": "P1-m7-n92",
+          "measureNumber": 7,
+          "onsetQuarters": 2.75,
+          "durationQuarters": 1,
+          "midi": 53,
+          "label": "F3",
+          "partId": "P1",
+          "voice": 5
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 5.091,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 18,
+        "truth": {
+          "id": "P1-m8-n85",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "midi": 47,
+          "label": "B2",
+          "partId": "P1",
+          "voice": 2
+        },
+        "generated": {
+          "id": "P1-m8-n103",
+          "measureNumber": 8,
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "midi": 65,
+          "label": "F4",
+          "partId": "P1",
+          "voice": 2
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 5.455,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m8-n86",
+          "measureNumber": 8,
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "midi": 45,
+          "label": "A2",
+          "partId": "P1",
+          "voice": 2
+        },
+        "generated": {
+          "id": "P1-m8-n110",
+          "measureNumber": 8,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 45,
+          "label": "A2",
+          "partId": "P1",
+          "voice": 7
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 5.455,
+        "durationDiffQuarters": 1,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m8-n87",
+          "measureNumber": 8,
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "midi": 52,
+          "label": "E3",
+          "partId": "P1",
+          "voice": 2
+        },
+        "generated": {
+          "id": "P1-m8-n105",
+          "measureNumber": 8,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 52,
+          "label": "E3",
+          "partId": "P1",
+          "voice": 5
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 5.455,
+        "durationDiffQuarters": 0.5,
+        "pitchDeltaSemitones": 3,
+        "truth": {
+          "id": "P1-m8-n81",
+          "measureNumber": 8,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 68,
+          "label": "G#4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m8-n104",
+          "measureNumber": 8,
+          "onsetQuarters": 2,
+          "durationQuarters": 0.5,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 2
+        }
+      },
+      {
+        "measureNumber": 8,
+        "onsetDiffQuarters": 0,
+        "timeDiffSeconds": 5.455,
+        "durationDiffQuarters": 0.5,
+        "pitchDeltaSemitones": 0,
+        "truth": {
+          "id": "P1-m8-n82",
+          "measureNumber": 8,
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 1
+        },
+        "generated": {
+          "id": "P1-m8-n101",
+          "measureNumber": 8,
+          "onsetQuarters": 2,
+          "durationQuarters": 0.5,
+          "midi": 71,
+          "label": "B4",
+          "partId": "P1",
+          "voice": 1
+        }
+      }
+    ],
+    "wrongChordCount": 25,
+    "wrongChords": [
+      {
+        "measureNumber": 1,
+        "onsetQuarters": 0,
+        "truthCount": 5,
+        "generatedCount": 3,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 1,
+        "onsetQuarters": 2,
+        "truthCount": 4,
+        "generatedCount": 3,
+        "truthGroupIndex": 2
+      },
+      {
+        "measureNumber": 2,
+        "onsetQuarters": 0,
+        "truthCount": 5,
+        "generatedCount": 6,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "onsetQuarters": 1,
+        "truthCount": 1,
+        "generatedCount": 0
+      },
+      {
+        "measureNumber": 2,
+        "onsetQuarters": 2,
+        "truthCount": 4,
+        "generatedCount": 9,
+        "truthGroupIndex": 2
+      },
+      {
+        "measureNumber": 2,
+        "onsetQuarters": 3,
+        "truthCount": 1,
+        "generatedCount": 0
+      },
+      {
+        "measureNumber": 3,
+        "onsetQuarters": 0,
+        "truthCount": 5,
+        "generatedCount": 3,
+        "truthGroupIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "onsetQuarters": 2,
+        "truthCount": 4,
+        "generatedCount": 5,
+        "truthGroupIndex": 2
+      },
+      {
+        "measureNumber": 3,
+        "onsetQuarters": 3,
+        "truthCount": 1,
+        "generatedCount": 0
+      },
+      {
+        "measureNumber": 4,
+        "onsetQuarters": 0,
+        "truthCount": 5,
+        "generatedCount": 6,
+        "truthGroupIndex": 0
+      }
+    ],
+    "symbolStats": {
+      "symbolCount": 111,
+      "noteCount": 111,
+      "withStemGroup": 43,
+      "withBeamGroup": 2,
+      "withExactOnset": 111,
+      "withExactDuration": 0,
+      "stemDirections": {
+        "none": 36,
+        "up": 61,
+        "down": 14
+      }
+    },
+    "measureTraces": [
+      {
+        "measureNumber": 1,
+        "onsetColumnCount": 4,
+        "ambiguous": false,
+        "voices": [
+          {
+            "eventCount": 5,
+            "events": [
+              {
+                "midi": 67,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1-0.18699999999999997-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              },
+              {
+                "midi": 64,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1-0.18699999999999997-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              },
+              {
+                "midi": 62,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 67,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          },
+          {
+            "eventCount": 3,
+            "events": [
+              {
+                "midi": 43,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 48,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1-0.23766666666666666-false-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-1-0:0:0"
+              },
+              {
+                "midi": 47,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-1-0.23766666666666666-false-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-1-0:0:0"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "measureNumber": 2,
+        "onsetColumnCount": 4,
+        "ambiguous": true,
+        "voices": [
+          {
+            "eventCount": 3,
+            "events": [
+              {
+                "midi": 69,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 69,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2-0.4144-false-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              },
+              {
+                "midi": 65,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2-0.4144-false-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              }
+            ]
+          },
+          {
+            "eventCount": 4,
+            "events": [
+              {
+                "midi": 69,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2-0.35039999999999993-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:1"
+              },
+              {
+                "midi": 64,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2-0.35039999999999993-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:1"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2-0.4235-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:1"
+              },
+              {
+                "midi": 69,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2-0.4235-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:1"
+              }
+            ]
+          },
+          {
+            "eventCount": 1,
+            "events": [
+              {
+                "midi": 45,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          },
+          {
+            "eventCount": 6,
+            "events": [
+              {
+                "midi": 45,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2-0.35039999999999993-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-1-0:0:1"
+              },
+              {
+                "midi": 48,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2-0.35039999999999993-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-1-0:0:1"
+              },
+              {
+                "midi": 45,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2-0.35039999999999993-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-1-0:0:1"
+              },
+              {
+                "midi": 50,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2-0.4144-false-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-1-0:0:1"
+              },
+              {
+                "midi": 48,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2-0.4144-false-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-1-0:0:1"
+              },
+              {
+                "midi": 45,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-2-0.4144-false-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-1-0:0:1"
+              }
+            ]
+          },
+          {
+            "eventCount": 1,
+            "events": [
+              {
+                "midi": 52,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "measureNumber": 3,
+        "onsetColumnCount": 5,
+        "ambiguous": true,
+        "voices": [
+          {
+            "eventCount": 5,
+            "events": [
+              {
+                "midi": 67,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3-0.54-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              },
+              {
+                "midi": 65,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3-0.54-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              },
+              {
+                "midi": 65,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3-0.613-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              },
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3-0.613-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              }
+            ]
+          },
+          {
+            "eventCount": 2,
+            "events": [
+              {
+                "midi": 65,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          },
+          {
+            "eventCount": 2,
+            "events": [
+              {
+                "midi": 45,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3-0.613-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-1-0:0:0"
+              },
+              {
+                "midi": 50,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-3-0.613-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-1-0:0:0"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "measureNumber": 4,
+        "onsetColumnCount": 5,
+        "ambiguous": true,
+        "voices": [
+          {
+            "eventCount": 6,
+            "events": [
+              {
+                "midi": 65,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4-0.7386666666666667-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              },
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4-0.7386666666666667-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              },
+              {
+                "midi": 69,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4-0.8140000000000001-false-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              },
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4-0.8140000000000001-false-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              },
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4-0.857-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4-0.857-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:0"
+              }
+            ]
+          },
+          {
+            "eventCount": 4,
+            "events": [
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4-0.7493333333333334-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:1"
+              },
+              {
+                "midi": 69,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4-0.7493333333333334-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:1"
+              },
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4-0.821-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:1"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-0-4-0.821-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-0-staff-0-0:0:1"
+              }
+            ]
+          },
+          {
+            "eventCount": 2,
+            "events": [
+              {
+                "midi": 48,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 45,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          },
+          {
+            "eventCount": 1,
+            "events": [
+              {
+                "midi": 48,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "measureNumber": 5,
+        "onsetColumnCount": 6,
+        "ambiguous": true,
+        "voices": [
+          {
+            "eventCount": 6,
+            "events": [
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 69,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5-0.2432-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5-0.2432-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5-0.2432-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          },
+          {
+            "eventCount": 3,
+            "events": [
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5-0.253-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:1"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5-0.253-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:1"
+              }
+            ]
+          },
+          {
+            "eventCount": 2,
+            "events": [
+              {
+                "midi": 50,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 48,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          },
+          {
+            "eventCount": 4,
+            "events": [
+              {
+                "midi": 50,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5-0.19-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:1"
+              },
+              {
+                "midi": 48,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5-0.19-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:1"
+              },
+              {
+                "midi": 43,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-5-0.19-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:1"
+              },
+              {
+                "midi": 48,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "measureNumber": 6,
+        "onsetColumnCount": 7,
+        "ambiguous": true,
+        "voices": [
+          {
+            "eventCount": 6,
+            "events": [
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.34425000000000006-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.34425000000000006-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.41533333333333333-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.41533333333333333-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          },
+          {
+            "eventCount": 6,
+            "events": [
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.35359999999999997-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:1"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.35359999999999997-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:1"
+              },
+              {
+                "midi": 69,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.35359999999999997-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:1"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.425-false-5:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:1"
+              },
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.425-false-5:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:1"
+              }
+            ]
+          },
+          {
+            "eventCount": 3,
+            "events": [
+              {
+                "midi": 43,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.34425000000000006-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:0"
+              },
+              {
+                "midi": 50,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.34425000000000006-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:0"
+              },
+              {
+                "midi": 52,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          },
+          {
+            "eventCount": 3,
+            "events": [
+              {
+                "midi": 50,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.35359999999999997-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:1"
+              },
+              {
+                "midi": 48,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-6-0.35359999999999997-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:1"
+              },
+              {
+                "midi": 48,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "measureNumber": 7,
+        "onsetColumnCount": 5,
+        "ambiguous": true,
+        "voices": [
+          {
+            "eventCount": 8,
+            "events": [
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.543-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 69,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.543-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 67,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.543-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.543-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 67,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.6144000000000001-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.6144000000000001-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 72,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.6144000000000001-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              }
+            ]
+          },
+          {
+            "eventCount": 4,
+            "events": [
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.552-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:1"
+              },
+              {
+                "midi": 67,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.552-false-1:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:1"
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.588-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:1"
+              },
+              {
+                "midi": 69,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.588-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:1"
+              }
+            ]
+          },
+          {
+            "eventCount": 3,
+            "events": [
+              {
+                "midi": 45,
+                "duration": 8,
+                "durationExact": false,
+                "durationRecovery": "lane-gap-lengthen",
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 48,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.6144000000000001-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:0"
+              },
+              {
+                "midi": 53,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.6144000000000001-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:0"
+              }
+            ]
+          },
+          {
+            "eventCount": 3,
+            "events": [
+              {
+                "midi": 48,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.543-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:1"
+              },
+              {
+                "midi": 43,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.543-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:1"
+              },
+              {
+                "midi": 45,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-7-0.543-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "measureNumber": 8,
+        "onsetColumnCount": 6,
+        "ambiguous": true,
+        "voices": [
+          {
+            "eventCount": 7,
+            "events": [
+              {
+                "midi": 69,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8-0.7413333333333334-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 65,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8-0.7413333333333334-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 65,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8-0.7413333333333334-false-0:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 65,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8-0.7795000000000001-false-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 65,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8-0.7795000000000001-false-2:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-0-0:0:0"
+              },
+              {
+                "midi": 71,
+                "duration": 2,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 71,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          },
+          {
+            "eventCount": 2,
+            "events": [
+              {
+                "midi": 65,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              },
+              {
+                "midi": 71,
+                "duration": 2,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          },
+          {
+            "eventCount": 1,
+            "events": [
+              {
+                "midi": 52,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": null
+              }
+            ]
+          },
+          {
+            "eventCount": 2,
+            "events": [
+              {
+                "midi": 47,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8-0.824-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:1"
+              },
+              {
+                "midi": 48,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8-0.824-false-4:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:1"
+              }
+            ]
+          },
+          {
+            "eventCount": 3,
+            "events": [
+              {
+                "midi": 52,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8-0.8135000000000001-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:2"
+              },
+              {
+                "midi": 52,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8-0.8135000000000001-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:2"
+              },
+              {
+                "midi": 45,
+                "duration": 4,
+                "durationExact": false,
+                "stemGroupId": null,
+                "beamGroupId": null,
+                "chordGroupId": "omr3:chord:omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8:omr3-onset-omr3-measure-omr3-system-omr3-page-independent-shadow-pdf-omr-0-1-8-0.8135000000000001-false-3:omr3-staff-observation-omr3-page-independent-shadow-pdf-omr-0-legacy-page-1-system-1-staff-1-0:0:2"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "beamStemSummaries": [],
+  "scoreGraphMeasures": [
+    {
+      "measureNumber": 1,
+      "hasBeamStemGraph": false,
+      "noteCount": 8
+    },
+    {
+      "measureNumber": 2,
+      "hasBeamStemGraph": false,
+      "noteCount": 15
+    },
+    {
+      "measureNumber": 3,
+      "hasBeamStemGraph": false,
+      "noteCount": 9
+    },
+    {
+      "measureNumber": 4,
+      "hasBeamStemGraph": false,
+      "noteCount": 13
+    },
+    {
+      "measureNumber": 5,
+      "hasBeamStemGraph": false,
+      "noteCount": 15
+    },
+    {
+      "measureNumber": 6,
+      "hasBeamStemGraph": false,
+      "noteCount": 18
+    },
+    {
+      "measureNumber": 7,
+      "hasBeamStemGraph": false,
+      "noteCount": 18
+    },
+    {
+      "measureNumber": 8,
+      "hasBeamStemGraph": false,
+      "noteCount": 15
+    }
+  ],
+  "rawPageKeys": [
+    "pages",
+    "systems",
+    "measures",
+    "notes",
+    "uncertainMeasures",
+    "pagesWithSystems",
+    "preprocessPages",
+    "ties",
+    "rests",
+    "staccato",
+    "accent",
+    "orphans",
+    "tablature",
+    "overallConfidence",
+    "totalMeasures",
+    "musical",
+    "musicalEventReconstruction",
+    "beamStemReconstruction",
+    "scoreGraph",
+    "runtimeVsScoreGraph",
+    "scoreGraphFull",
+    "warnings",
+    "disclaimer",
+    "legacyOverallConfidence",
+    "omrV3Confidence",
+    "noteMatching",
+    "orphanNoteheads",
+    "staffGapNormalization",
+    "layoutConsistency",
+    "preprocessLog",
+    "partialRecovery",
+    "performance",
+    "difficulty",
+    "failureReasons",
+    "measureGrid",
+    "measureGridDiagnostics",
+    "measureGridDiagnosticsEntries",
+    "innerVoicePhaseCorrection",
+    "openingLeadNoteMerge",
+    "phantomColumnCorrection",
+    "terminalEarlyColumnCorrection",
+    "terminalSameClefChordQuarterCorrection"
+  ]
+}

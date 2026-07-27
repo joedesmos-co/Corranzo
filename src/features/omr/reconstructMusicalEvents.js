@@ -106,28 +106,53 @@ function splitChordToneCandidate(anchor, follower) {
   if (anchor?.type !== 'note' || follower?.type !== 'note') {
     return false
   }
-  if ((anchor.notes?.length ?? 0) < 3 || (follower.notes?.length ?? 0) !== 1) {
+  // Dense chords often arrive as 2+1 stacks after position snap; requiring 3+
+  // left the common two-note + orphan tone case sequentialized.
+  if ((anchor.notes?.length ?? 0) < 2 || (follower.notes?.length ?? 0) !== 1) {
     return false
   }
-  if (eventClef(anchor) !== eventClef(follower)) {
-    return false
-  }
+  // Only the immediate next subdivision. Gap=2 re-merges intentional
+  // same-staff inner-voice splits and loops with that splitter.
   if ((follower.startDivision ?? 0) - (anchor.startDivision ?? 0) !== 1) {
     return false
   }
-  if ((anchor.durationDivisions ?? OMR_DURATION_DIVISIONS.quarter) > OMR_DURATION_DIVISIONS.sixteenth) {
+  if (
+    (follower.musicalEventReconstructionReasons ?? []).includes(SAME_STAFF_INNER_VOICE_REASON)
+  ) {
     return false
   }
-  if ((follower.durationDivisions ?? 0) <= (anchor.durationDivisions ?? 0)) {
+  // Gap packing marks chord anchors as sixteenths/eighths; allow up to eighth.
+  if ((anchor.durationDivisions ?? OMR_DURATION_DIVISIONS.quarter) > OMR_DURATION_DIVISIONS.eighth) {
     return false
   }
-  if (Math.abs(eventCx(anchor) - eventCx(follower)) > SPLIT_CHORD_TONE_MAX_X) {
+  const dx = Math.abs(eventCx(anchor) - eventCx(follower))
+  if (eventClef(anchor) !== eventClef(follower)) {
     return false
   }
-  if (hasBeamEvidence(anchor) || hasBeamEvidence(follower)) {
+  if (dx > SPLIT_CHORD_TONE_MAX_X) {
     return false
   }
-  return noteInsideChordSpan(follower.notes[0], anchor.notes ?? [])
+  // Beamed followers are usually true sequential subdivisions, not chord tones.
+  if (hasBeamEvidence(follower)) {
+    return false
+  }
+  const followerMidi = follower.notes[0]?.midi
+  if (!Number.isFinite(followerMidi)) {
+    return false
+  }
+  if ((anchor.notes ?? []).some((note) => note.midi === followerMidi)) {
+    return false
+  }
+  if (noteInsideChordSpan(follower.notes[0], anchor.notes ?? [])) {
+    return true
+  }
+  const midis = (anchor.notes ?? []).map((note) => note.midi).filter(Number.isFinite)
+  if (midis.length < 2) {
+    return false
+  }
+  const low = Math.min(...midis)
+  const high = Math.max(...midis)
+  return followerMidi >= low - 5 && followerMidi <= high + 5
 }
 
 function mergeSplitChordTone(events, anchor, follower, totalDivisions) {

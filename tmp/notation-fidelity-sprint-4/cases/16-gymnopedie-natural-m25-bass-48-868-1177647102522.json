@@ -1,0 +1,251 @@
+{
+  "id": "16-gymnopedie-natural-m25-bass-48-868-1177647102522",
+  "source": "gymnopedie",
+  "sourcePdf": "/Users/ryland/Downloads/gymnopedie-no-1-satie.pdf",
+  "page": 1,
+  "measure": 25,
+  "expectedSymbol": "natural",
+  "rawDetectedCandidates": [
+    {
+      "glyphIndex": 0,
+      "noteIndex": 5,
+      "score": 10.17,
+      "type": "natural",
+      "alter": 0,
+      "glyph": {
+        "text": "",
+        "x": 857.9517900067228,
+        "y": 1247.7660840142519,
+        "fontName": "g_d1_f3"
+      },
+      "note": {
+        "measureNumber": 25,
+        "clef": "bass",
+        "naturalMidi": 48,
+        "cx": 868.1177647102522,
+        "cy": 1247.7660840142519
+      }
+    },
+    {
+      "glyphIndex": 0,
+      "noteIndex": 4,
+      "score": 31.66,
+      "type": "natural",
+      "alter": 0,
+      "glyph": {
+        "text": "",
+        "x": 857.9517900067228,
+        "y": 1247.7660840142519,
+        "fontName": "g_d1_f3"
+      },
+      "note": {
+        "measureNumber": 25,
+        "clef": "bass",
+        "naturalMidi": 52,
+        "cx": 868.1177647102522,
+        "cy": 1239.3634678266033
+      }
+    }
+  ],
+  "selectedAttachment": {
+    "noteIndex": 5,
+    "type": "natural",
+    "alter": 0,
+    "score": 10.17,
+    "glyph": {
+      "text": "",
+      "x": 857.9517900067228,
+      "y": 1247.7660840142519
+    },
+    "note": {
+      "measureNumber": 25,
+      "clef": "bass",
+      "naturalMidi": 48,
+      "cx": 868.1177647102522,
+      "cy": 1247.7660840142519
+    }
+  },
+  "staffPosition": {
+    "clef": "bass",
+    "naturalMidi": 48,
+    "writtenPitch": {
+      "step": "C",
+      "alter": null,
+      "octave": 3
+    },
+    "cx": 868.1177647102522,
+    "cy": 1247.7660840142519
+  },
+  "measureAccidentalState": 0,
+  "keySignatureContext": {
+    "fifths": 2,
+    "keyAlteration": 1
+  },
+  "musicXmlSnippet": "<note><chord/><pitch><step>C</step><octave>3</octave></pitch><accidental>natural</accidental><duration>8</duration><voice>2</voice><type>half</type><staff>2</staff></note>",
+  "renderedResult": {
+    "writtenPitch": {
+      "step": "C",
+      "alter": null,
+      "octave": 3
+    },
+    "accidental": {
+      "type": "natural",
+      "printed": true,
+      "cautionary": false,
+      "editorial": false,
+      "parentheses": false,
+      "bracket": false,
+      "smufl": null
+    }
+  },
+  "soundingMidiBefore": 48,
+  "soundingMidiAfter": 48,
+  "playbackSignatureUnchanged": true,
+  "failureLayerBefore": "MusicXML omitted printed accidental semantics",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "classification": "vector glyph detected and attached per note/chord tone",
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-4/source-crops/16-gymnopedie-natural-m25-bass-48-868-1177647102522.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-4/candidate-overlays/16-gymnopedie-natural-m25-bass-48-868-1177647102522.png",
+    "musicXmlSnippetFile": "tmp/notation-fidelity-sprint-4/musicxml-snippets/16-gymnopedie-natural-m25-bass-48-868-1177647102522.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-4/rendered-before/16-gymnopedie-natural-m25-bass-48-868-1177647102522.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-4/rendered-after/16-gymnopedie-natural-m25-bass-48-868-1177647102522.png",
+    "beforeRenderer": {
+      "keyMarks": [],
+      "notes": [
+        {
+          "midi": 62,
+          "writtenPitch": null,
+          "accidentalType": null,
+          "accidentalGlyph": null,
+          "accidentalDisplayGlyph": null,
+          "accidentalColumn": 0,
+          "staff": "bass",
+          "diatonic": 29
+        },
+        {
+          "midi": 57,
+          "writtenPitch": null,
+          "accidentalType": null,
+          "accidentalGlyph": null,
+          "accidentalDisplayGlyph": null,
+          "accidentalColumn": 0,
+          "staff": "bass",
+          "diatonic": 26
+        },
+        {
+          "midi": 52,
+          "writtenPitch": null,
+          "accidentalType": null,
+          "accidentalGlyph": null,
+          "accidentalDisplayGlyph": null,
+          "accidentalColumn": 0,
+          "staff": "bass",
+          "diatonic": 23
+        },
+        {
+          "midi": 48,
+          "writtenPitch": null,
+          "accidentalType": null,
+          "accidentalGlyph": null,
+          "accidentalDisplayGlyph": null,
+          "accidentalColumn": 0,
+          "staff": "bass",
+          "diatonic": 21
+        }
+      ]
+    },
+    "afterRenderer": {
+      "keyMarks": [
+        {
+          "staff": "treble",
+          "type": "sharp",
+          "column": 0,
+          "y": 36,
+          "cancellation": false
+        },
+        {
+          "staff": "treble",
+          "type": "sharp",
+          "column": 1,
+          "y": 54,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "sharp",
+          "column": 0,
+          "y": 168,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "sharp",
+          "column": 1,
+          "y": 186,
+          "cancellation": false
+        }
+      ],
+      "notes": [
+        {
+          "midi": 62,
+          "writtenPitch": {
+            "step": "D",
+            "alter": null,
+            "octave": 4
+          },
+          "accidentalType": null,
+          "accidentalGlyph": null,
+          "accidentalDisplayGlyph": null,
+          "accidentalColumn": 0,
+          "staff": "bass",
+          "diatonic": 29
+        },
+        {
+          "midi": 57,
+          "writtenPitch": {
+            "step": "A",
+            "alter": null,
+            "octave": 3
+          },
+          "accidentalType": null,
+          "accidentalGlyph": null,
+          "accidentalDisplayGlyph": null,
+          "accidentalColumn": 0,
+          "staff": "bass",
+          "diatonic": 26
+        },
+        {
+          "midi": 52,
+          "writtenPitch": {
+            "step": "E",
+            "alter": null,
+            "octave": 3
+          },
+          "accidentalType": null,
+          "accidentalGlyph": null,
+          "accidentalDisplayGlyph": null,
+          "accidentalColumn": 0,
+          "staff": "bass",
+          "diatonic": 23
+        },
+        {
+          "midi": 48,
+          "writtenPitch": {
+            "step": "C",
+            "alter": null,
+            "octave": 3
+          },
+          "accidentalType": "natural",
+          "accidentalGlyph": "♮",
+          "accidentalDisplayGlyph": "♮",
+          "accidentalColumn": 0,
+          "staff": "bass",
+          "diatonic": 21
+        }
+      ]
+    }
+  }
+}

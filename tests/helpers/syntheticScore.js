@@ -763,9 +763,14 @@ function drawFlatGlyph(img, cx, cy) {
 }
 
 function drawRepeatDots(img, x, y0, y1) {
-  const mid = Math.floor((y0 + y1) / 2)
-  fillRect(img, x - 1, mid - 2, x + 1, mid + 2)
-  fillRect(img, x - 1, mid - 10, x + 1, mid - 6)
+  // Place colon dots in the 2nd/3rd staff spaces (standard engraving),
+  // not on staff lines — matches real scores and the OMR colon detector.
+  const lineGap = 5
+  const staffTop = y0
+  const space2 = staffTop + lineGap * 1.5
+  const space3 = staffTop + lineGap * 2.5
+  fillRect(img, x - 1, Math.round(space2) - 1, x + 1, Math.round(space2) + 1)
+  fillRect(img, x - 1, Math.round(space3) - 1, x + 1, Math.round(space3) + 1)
 }
 
 function drawRepeatBarline(img, x, y0, y1) {

@@ -1,0 +1,110 @@
+OMR semantic evaluation
+=======================
+schema v2 · evaluator v2.0.0 · 15aa1db · mode=written
+Alignment confidence: 99% (8 matched, 0 missing, 0 extra)
+
+Overall semantic score
+
+Pitch ........... 91%  (60/66; cov 100%)
+Rhythm .......... 68%  (94/138; cov 100%)
+Sustain ......... 0%  (0/1; cov 100%)
+Articulation .... 100%  (0/0; cov 100%)
+Measure ......... 94%  (30/32; cov 100%)
+Interpretation .. 0%  (0/1; cov 100%)
+Playback ........ 100%  (0/0; cov 100%)
+
+Overall .......... 65%
+First divergence: measure 1
+
+Worst measures
+- Measure 2 (severity 64): 16th detected as eighth; Onset off by 0.25 quarters; Onset off by 0.25 quarters
+- Measure 7 (severity 42): Missing note E4; Missing note G4; Extra note E4
+- Measure 4 (severity 32): Missing rest (eighth); Missing rest (16th); Extra rest (16th)
+- Measure 8 (severity 28): Missing rest (quarter); 16th detected as eighth; Onset off by 0.25 quarters
+- Measure 1 (severity 22): Onset off by 0.25 quarters; Onset off by 0.25 quarters; Eighth detected as 16th
+
+Per-measure report
+
+Measure 1
+- Onset off by 0.25 quarters
+- Onset off by 0.25 quarters
+- Eighth detected as 16th
+- Onset off by 0.25 quarters
+- Onset off by 0.5 quarters
+- Tempo 88 BPM missing or wrong at q=0
+
+Measure 2
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- Onset off by 0.25 quarters
+- Onset off by 0.25 quarters
+- Onset off by 0.25 quarters
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- Onset off by 0.5 quarters
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- 16th detected as eighth
+- Onset off by 0.5 quarters
+- Onset off by 0.75 quarters
+- Onset off by 0.75 quarters
+
+Measure 4
+- Missing rest (eighth)
+- Missing rest (16th)
+- Extra rest (16th)
+- Onset off by 0.5 quarters
+- 16th detected as quarter
+- Onset off by 0.25 quarters
+- Missing dot
+- Onset off by 0.5 quarters
+
+Measure 5
+- Missing note C5
+- Extra note C5
+- Rest duration incorrect (eighth; expected quarter)
+- dotted half detected as quarter
+- Missing tie
+
+Measure 7
+- Missing note E4
+- Missing note G4
+- Extra note E4
+- Extra note G4
+- Onset off by 0.25 quarters
+- Onset off by 0.25 quarters
+- Eighth detected as dotted eighth
+- Onset off by 0.25 quarters
+- Eighth detected as dotted eighth
+- Onset off by 0.25 quarters
+- Incorrect chord
+- Incorrect chord
+
+Measure 8
+- Missing rest (quarter)
+- 16th detected as eighth
+- Onset off by 0.25 quarters
+- Quarter detected as eighth
+- Onset off by 0.5 quarters
+- Missing dot
+- Onset off by 0.75 quarters
+
+Top recurring defects:
+1. Onset timing difference (25)
+2. Duration mismatch (11)
+3. Extra note (3)
+4. Missing note (3)
+5. Missing rest (3)
+6. Incorrect chord (2)
+7. Missing dot (2)
+8. Dotted rhythm error (1)
+9. Extra rest (1)
+10. Missing tie (1)
+11. Rest duration incorrect (1)
+12. Tempo change mismatch (1)
+
+Top defect classes: Rhythm (44), Pitch (6), Measure structure (2), Sustain (ties) (1), Interpretation (1)
+
+Totals: 54 defects · 63 truth notes · 63 generated notes · 8→8 measures

@@ -1,0 +1,98 @@
+{
+  "id": "piano-rhythm-tuplets-vector",
+  "sustainPercent": "0%",
+  "tieDefects": [
+    {
+      "code": "incorrect-tie",
+      "class": "sustain",
+      "label": "Incorrect tie",
+      "count": 4
+    },
+    {
+      "code": "missing-tie",
+      "class": "sustain",
+      "label": "Missing tie",
+      "count": 1
+    }
+  ],
+  "truthTieCount": 2,
+  "genTieCount": 4,
+  "truthTies": [
+    {
+      "pitch": "C5",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "C5",
+      "start": false,
+      "stop": true,
+      "chord": false
+    }
+  ],
+  "genTies": [
+    {
+      "pitch": "E2",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "E2",
+      "start": false,
+      "stop": true,
+      "chord": false
+    },
+    {
+      "pitch": "G4",
+      "start": true,
+      "stop": false,
+      "chord": false
+    },
+    {
+      "pitch": "G4",
+      "start": false,
+      "stop": true,
+      "chord": false
+    }
+  ],
+  "smuflTieGlyphCount": 0,
+  "tieGlyphSamples": [],
+  "samples": [
+    {
+      "measure": 3,
+      "defects": [
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        },
+        {
+          "code": "incorrect-tie",
+          "message": "Incorrect tie"
+        }
+      ]
+    },
+    {
+      "measure": 5,
+      "defects": [
+        {
+          "code": "missing-tie",
+          "message": "Missing tie"
+        }
+      ]
+    }
+  ],
+  "tieDiagnostics": null,
+  "pipelineKeys": [
+    "ties"
+  ]
+}

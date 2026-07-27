@@ -1,0 +1,107 @@
+{
+  "id": "11-tchaikovsky-old-french-song-key-signature-m1-2",
+  "source": "tchaikovsky-old-french-song",
+  "sourcePdf": "/Users/ryland/Documents/scoreflow/benchmarks/cache/tchaikovsky-old-french-song/score.pdf",
+  "page": 1,
+  "measure": 1,
+  "expectedSymbol": "2 flat key signature",
+  "rawDetectedCandidates": [
+    {
+      "source": "clean MusicXML/SMuFL control",
+      "fifths": -2,
+      "measureNumber": 1
+    }
+  ],
+  "selectedAttachment": {
+    "partId": "Pe58dd16b23f2599f0acc17429e02842c",
+    "staff": "all staves"
+  },
+  "staffPosition": "standard key-signature order on each active staff",
+  "measureAccidentalState": "initial",
+  "keySignatureContext": {
+    "fifths": -2,
+    "mode": "minor",
+    "cancelFifths": null,
+    "staff": null,
+    "partId": "Pe58dd16b23f2599f0acc17429e02842c",
+    "quarterTime": 0,
+    "measureNumber": 1,
+    "timeSeconds": 0
+  },
+  "musicXmlSnippet": "<measure implicit=\"no\" number=\"1\">\n      <attributes>\n        <divisions>10080</divisions>\n        <key>\n          <fifths>-2</fifths>\n          <mode>minor</mode>\n        </key>\n        <time>\n          <beats>2</beats>\n          <beat-type>4</beat-type>\n        </time>\n        <clef>\n          <sign>G</sign>\n          <line>2</line>\n        </clef>\n      </attributes>\n      <direction>\n        <direction-type>\n          <metronome parentheses=\"no\">\n            <beat-unit>quarter</beat-unit>\n            <per-minute>70</per-minute>\n          </metronome>\n        </direction-type>\n        <sound tempo=\"70\" />\n      </direction>\n      <note dynamics=\"100.00\">\n        <pitch>\n          <step>D</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>5040</duration>\n        <instrument id=\"I147dcd40ac628488c5cfec02c00293fc\" />\n        <type>eighth</type>\n        <stem>up</stem>\n        <beam number=\"1\">begin</beam>\n      </note>\n      <note dynamics=\"100.00\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>5040</duration>\n        <instrument id=\"I147dcd40ac628488c5cfec02c00293fc\" />\n        <type>eighth</type>\n        <stem>up</stem>\n        <beam number=\"1\">end</beam>\n      </note>\n      <note dynamics=\"100.00\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>5040</duration>\n        <instrument id=\"I147dcd40ac628488c5cfec02c00293fc\" />\n        <type>eighth</type>\n        <stem>up</stem>\n        <beam number=\"1\">begin</beam>\n      </note>\n      <note dynamics=\"100.00\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>5040</duration>\n        <instrument id=\"I147dcd40ac628488c5cfec02c00293fc\" />\n        <type>eighth</type>\n        <accidental>flat</accidental>\n        <stem>up</stem>\n        <beam number=\"1\">end</beam>\n      </note>\n    </measure>",
+  "renderedResult": "4 visible key glyphs on grand staff",
+  "soundingMidiBefore": [
+    62,
+    null,
+    null,
+    67,
+    58,
+    55,
+    69,
+    60,
+    70,
+    62
+  ],
+  "soundingMidiAfter": [
+    62,
+    null,
+    null,
+    67,
+    58,
+    55,
+    69,
+    60,
+    70,
+    62
+  ],
+  "playbackSignatureUnchanged": true,
+  "failureLayerBefore": "MusicXML correct but renderer omitted key signature",
+  "failureLayerAfter": "none",
+  "correctBefore": false,
+  "correctAfter": true,
+  "classification": "key signature",
+  "artifacts": {
+    "sourceCrop": "tmp/notation-fidelity-sprint-4/source-crops/11-tchaikovsky-old-french-song-key-signature-m1-2.png",
+    "candidateOverlay": "tmp/notation-fidelity-sprint-4/candidate-overlays/11-tchaikovsky-old-french-song-key-signature-m1-2.png",
+    "musicXmlSnippetFile": "tmp/notation-fidelity-sprint-4/musicxml-snippets/11-tchaikovsky-old-french-song-key-signature-m1-2.musicxml",
+    "renderedBefore": "tmp/notation-fidelity-sprint-4/rendered-before/11-tchaikovsky-old-french-song-key-signature-m1-2.png",
+    "renderedAfter": "tmp/notation-fidelity-sprint-4/rendered-after/11-tchaikovsky-old-french-song-key-signature-m1-2.png",
+    "beforeRenderer": {
+      "keyMarks": [],
+      "notes": []
+    },
+    "afterRenderer": {
+      "keyMarks": [
+        {
+          "staff": "treble",
+          "type": "flat",
+          "column": 0,
+          "y": 60,
+          "cancellation": false
+        },
+        {
+          "staff": "treble",
+          "type": "flat",
+          "column": 1,
+          "y": 42,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "flat",
+          "column": 0,
+          "y": 192,
+          "cancellation": false
+        },
+        {
+          "staff": "bass",
+          "type": "flat",
+          "column": 1,
+          "y": 174,
+          "cancellation": false
+        }
+      ],
+      "notes": []
+    }
+  }
+}

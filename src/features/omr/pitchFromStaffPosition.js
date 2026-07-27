@@ -144,6 +144,37 @@ export function estimateLedgerLineCount(yNorm, lineYs) {
   return { direction: null, count: 0 }
 }
 
+/**
+ * Minimum normalized system height to treat a single detected band as a merged
+ * grand staff (two staffs + gap). Typical single 5-line bands are ~0.04; paired
+ * grand-staff systems are ~0.14–0.16. Splitting a short single-staff band into
+ * phantom treble/bass halves mis-assigns degrees (e.g. E4→E2, F4→E4).
+ */
+export const MERGED_GRAND_MIN_SYSTEM_HEIGHT = 0.07
+
+function fiveLinesFromStaffBounds(y0, y1) {
+  const lineGap = (y1 - y0) / 4
+  if (!(lineGap > 0)) {
+    return null
+  }
+  return [0, 1, 2, 3, 4].map((i) => y0 + i * lineGap)
+}
+
+function singleStaffLines(y0, y1) {
+  const treble = fiveLinesFromStaffBounds(y0, y1)
+  if (!treble) {
+    return { treble: [], bass: [], splitY: null, singleStaff: true }
+  }
+  return {
+    treble,
+    // Empty bass forces resolveStaffRoleForY onto the upper/treble mapping so
+    // a single detected band is not split into a phantom lower staff.
+    bass: [],
+    splitY: null,
+    singleStaff: true,
+  }
+}
+
 export function estimateGrandStaffLines(system) {
   const measuredStaves = Array.isArray(system?.staves)
     ? system.staves
@@ -164,8 +195,24 @@ export function estimateGrandStaffLines(system) {
     }
   }
 
+  if (measuredStaves.length === 1) {
+    return singleStaffLines(measuredStaves[0].y0, measuredStaves[0].y1)
+  }
+
   const { y0, y1 } = system
   const height = y1 - y0
+  if (!Number.isFinite(height) || height <= 0) {
+    return { treble: [], bass: [], splitY: null, singleStaff: true }
+  }
+
+  // groupStavesIntoSystems spreads a lone stave onto the system object
+  // (staveCount === 1, no nested staves[]). Use the full band as one staff
+  // unless the band is tall enough to be a merged grand-staff detection.
+  const staveCount = Math.max(1, Math.round(system?.staveCount ?? 1))
+  if (staveCount <= 1 && height < MERGED_GRAND_MIN_SYSTEM_HEIGHT) {
+    return singleStaffLines(y0, y1)
+  }
+
   const innerGap = height * 0.11
   const staffHeight = (height - innerGap) / 2
   const trebleTop = y0
@@ -436,10 +483,11 @@ export function detectStaffClefsFromGlyphs(glyphs, imageData, staffLines, { xMax
     source: 'default',
     detections: [],
   }
-  if (!staffLines?.treble?.length || !staffLines?.bass?.length || !imageData?.width) {
+  if (!staffLines?.treble?.length || !imageData?.width) {
     return result
   }
 
+  const singleStaff = !staffLines.bass?.length || staffLines.singleStaff === true
   const upperCandidates = []
   const lowerCandidates = []
   for (const glyph of glyphs ?? []) {
@@ -451,11 +499,27 @@ export function detectStaffClefsFromGlyphs(glyphs, imageData, staffLines, { xMax
       continue
     }
     const yNorm = glyph.y / imageData.height
+    const clefSign = glyph.text === BASS_CLEF_GLYPH ? 'bass' : 'treble'
+    if (singleStaff) {
+      const trebleDist = distanceToNearestStaffLine(yNorm, staffLines.treble)
+      const gap = staffLineGap(staffLines.treble)
+      // Clef glyphs sit left of the staff; accept when near the single band.
+      if (!(gap > 0) || trebleDist > gap * 6) {
+        continue
+      }
+      upperCandidates.push({
+        clefSign,
+        xNorm,
+        yNorm,
+        trebleDist,
+        bassDist: Infinity,
+      })
+      continue
+    }
     const staffRole = staffRoleForClefGlyph(yNorm, staffLines)
     if (!staffRole) {
       continue
     }
-    const clefSign = glyph.text === BASS_CLEF_GLYPH ? 'bass' : 'treble'
     const candidate = {
       clefSign,
       xNorm,
