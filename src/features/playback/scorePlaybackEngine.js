@@ -20,6 +20,9 @@ import { INSTRUMENT_STATUS } from './instrumentVoiceStatus.js'
 
 const LOOKAHEAD_SECONDS = 2.5
 const SCHEDULE_TICK_MS = 200
+/** Cap Tone trigger work per slice so dense windows cannot stall the main thread. */
+const MAX_TRIGGERS_PER_SCHEDULE_SLICE = 48
+const SCHEDULE_SLICE_YIELD_MS = 0
 const loadPianoInstrumentModule = () => import('./pianoInstrument.js')
 const DEFAULT_LOADERS = { loadPianoInstrument: loadPianoInstrumentModule }
 
@@ -83,6 +86,7 @@ export class ScorePlaybackEngine {
     this.onTimeUpdate = null
     this.progressFrameId = null
     this.scheduleTimerId = null
+    this.scheduleContinuationTimerId = null
     this.loadToken = 0
     this.offsetScoreSeconds = 0
     this.playbackRate = 1
@@ -548,6 +552,8 @@ export class ScorePlaybackEngine {
 
     const useMetronome = this.metronomeEnabled && !this.countInActive
     const events = useMetronome ? this.mergedScheduleEvents : this.noteEvents
+    const scheduleGeneration = this.scheduleGeneration
+    let triggersThisSlice = 0
 
     for (let index = this.scheduleEventIndex; index < events.length; index += 1) {
       const event = events[index]
@@ -557,7 +563,8 @@ export class ScorePlaybackEngine {
         const noteEnd = alignedStart + baseDuration
         if (alignedStart >= toScoreSeconds) {
           this.scheduleEventIndex = index
-          break
+          this.scheduledUntilScore = toScoreSeconds
+          return
         }
         if (noteEnd <= fromScoreSeconds || alignedStart >= toScoreSeconds) {
           continue
@@ -594,13 +601,20 @@ export class ScorePlaybackEngine {
           tieChainId: event.tieChainId ?? null,
         })
         this.scheduledEvents.add(event)
+        triggersThisSlice += 1
+        if (triggersThisSlice >= MAX_TRIGGERS_PER_SCHEDULE_SLICE) {
+          this.scheduleEventIndex = index + 1
+          this.queueScheduleWindowContinuation(fromScoreSeconds, toScoreSeconds, scheduleGeneration)
+          return
+        }
         continue
       }
 
       if (event.scoreTimeSeconds < fromScoreSeconds || event.scoreTimeSeconds >= toScoreSeconds) {
         if (event.scoreTimeSeconds >= toScoreSeconds) {
           this.scheduleEventIndex = index
-          break
+          this.scheduledUntilScore = toScoreSeconds
+          return
         }
         continue
       }
@@ -623,9 +637,40 @@ export class ScorePlaybackEngine {
       }
 
       this.scheduledEvents.add(event)
+      triggersThisSlice += 1
+      if (triggersThisSlice >= MAX_TRIGGERS_PER_SCHEDULE_SLICE) {
+        this.scheduleEventIndex = index + 1
+        this.queueScheduleWindowContinuation(fromScoreSeconds, toScoreSeconds, scheduleGeneration)
+        return
+      }
     }
 
     this.scheduledUntilScore = toScoreSeconds
+  }
+
+  queueScheduleWindowContinuation(fromScoreSeconds, toScoreSeconds, scheduleGeneration) {
+    if (typeof window === 'undefined' || typeof window.setTimeout !== 'function') {
+      // No event loop seam (rare). Leave the window incomplete; the schedule
+      // interval / next explicit scheduleWindow call resumes from scheduleEventIndex.
+      return
+    }
+    if (this.scheduleContinuationTimerId != null) {
+      return
+    }
+    this.scheduleContinuationTimerId = window.setTimeout(() => {
+      this.scheduleContinuationTimerId = null
+      if (!this.playing || this.scheduleGeneration !== scheduleGeneration) {
+        return
+      }
+      this.scheduleWindow(fromScoreSeconds, toScoreSeconds)
+    }, SCHEDULE_SLICE_YIELD_MS)
+  }
+
+  clearScheduleWindowContinuation() {
+    if (this.scheduleContinuationTimerId != null) {
+      window.clearTimeout(this.scheduleContinuationTimerId)
+      this.scheduleContinuationTimerId = null
+    }
   }
 
   rescheduleFrom(scoreSeconds) {
@@ -655,6 +700,7 @@ export class ScorePlaybackEngine {
   }
 
   stopScheduleLoop() {
+    this.clearScheduleWindowContinuation()
     if (this.scheduleTimerId != null) {
       window.clearInterval(this.scheduleTimerId)
       this.scheduleTimerId = null

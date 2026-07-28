@@ -7,7 +7,7 @@ import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
 import { OMR_DISCLAIMER } from './omrMusicalConstants.js'
 import { shouldEmitKeySignature } from './detectOmrKeySignature.js'
 import { shouldEmitTempo } from './parseOmrTempoMarking.js'
-import { shouldEmitRepeat, shouldEmitEnding } from './detectOmrRepeatBarline.js'
+import { shouldEmitRepeat, shouldEmitEnding, sanitizeOmrRepeatMarkings } from './detectOmrRepeatBarline.js'
 import {
   shouldEmitArticulation,
   shouldEmitDynamic,
@@ -597,7 +597,8 @@ export function buildVoiceSerializedOmrMusicXml({
   musical = {},
   includeDisclaimer = true,
 } = {}) {
-  const sortedMeasures = [...measures].sort((a, b) => a.measureNumber - b.measureNumber)
+  const sortedMeasuresRaw = [...measures].sort((a, b) => a.measureNumber - b.measureNumber)
+  const sortedMeasures = sanitizeOmrRepeatMarkings(sortedMeasuresRaw).measures
   if (!sortedMeasures.length) {
     throw new Error('No notes detected for experimental playback.')
   }

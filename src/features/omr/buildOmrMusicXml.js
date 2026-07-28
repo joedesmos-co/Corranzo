@@ -7,7 +7,7 @@ import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
 import { OMR_DISCLAIMER } from './omrMusicalConstants.js'
 import { TAB_APPROXIMATE_RHYTHM_WARNING } from './detectTabNotation.js'
 import { shouldEmitKeySignature } from './detectOmrKeySignature.js'
-import { shouldEmitRepeat, shouldEmitEnding } from './detectOmrRepeatBarline.js'
+import { shouldEmitRepeat, shouldEmitEnding, sanitizeOmrRepeatMarkings } from './detectOmrRepeatBarline.js'
 import {
   shouldEmitTempo,
   shouldEmitTempoMarking,
@@ -658,7 +658,9 @@ export function buildOmrMusicXml({
   /** Instrument definition; null keeps the long-standing piano emission. */
   instrument = null,
 } = {}) {
-  const sortedMeasures = [...measures].sort((a, b) => a.measureNumber - b.measureNumber)
+  const sortedMeasuresRaw = [...measures].sort((a, b) => a.measureNumber - b.measureNumber)
+  const repeatSanitize = sanitizeOmrRepeatMarkings(sortedMeasuresRaw)
+  const sortedMeasures = repeatSanitize.measures
   if (!sortedMeasures.length) {
     throw new Error('No notes detected for experimental playback.')
   }

@@ -1350,7 +1350,11 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const markings = measureBoundaries.map((boundary) => boundary.marking)
   const performedMeasureTimeline = buildPerformedMeasureTimeline(measures, markings, beats)
 
-  const durationSeconds = performedMeasureTimeline.performedDurationSeconds || writtenDurationSeconds
+  // Prefer written duration when repeat expansion was aborted or not used —
+  // never ship a pathological performed clock as the score duration.
+  const durationSeconds = performedMeasureTimeline.diagnostics?.usesPerformedTimeline
+    ? performedMeasureTimeline.performedDurationSeconds || writtenDurationSeconds
+    : writtenDurationSeconds || performedMeasureTimeline.performedDurationSeconds
 
   const pitchNotes = notes.filter(
     (note) => !note.isRest && note.midi != null && !note.isTabMirror,

@@ -38,6 +38,7 @@ import { buildHeldNoteDiagnostic } from './heldNoteDiagnostics.js'
 import { buildCursorMotionDiagnostic } from './cursorMotionDiagnostics.js'
 import { buildCursorMotionTimeline, resolveCursorMotion } from './cursorMotionTimeline.js'
 import { buildCursorMappingDebug } from './scoreFollowCursorMappingDebug.js'
+import { isPlaybackVisualsOffEnabled } from '../playback/playbackVisualsDiagnostics.js'
 import { buildScoreFollowPrecisionReport } from './scoreFollowPrecisionDiagnostics.js'
 import { buildOmrMeasureGridAnchors } from './omrMeasureGridAnchors.js'
 import { isNextGenAlignmentDiagnosticsEnabled } from './nextGenAlignmentFlag.js'
@@ -574,7 +575,8 @@ export default function useScoreFollow({
       !alignmentMode &&
       !semiAutoPreview &&
       cursor?.visible &&
-      !lockExactCursor,
+      !lockExactCursor &&
+      !isPlaybackVisualsOffEnabled(),
   )
 
   const resetSnapKey = [

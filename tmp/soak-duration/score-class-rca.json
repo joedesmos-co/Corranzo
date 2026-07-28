@@ -1,0 +1,212 @@
+[
+  {
+    "id": "evangelion",
+    "pdf": {
+      "pages": 8,
+      "textItems": 4003,
+      "textChars": 5317,
+      "operatorCount": 23208,
+      "paintImageOps": 0,
+      "fontCount": 7,
+      "fontsSample": [
+        "g_d0_f2",
+        "g_d0_f3",
+        "g_d0_f4",
+        "g_d0_f5",
+        "g_d0_f6",
+        "g_d0_f7",
+        "g_d0_f1"
+      ],
+      "textDensityPerPage": 664.6,
+      "opsPerPage": 2901
+    },
+    "class": "PASSING",
+    "omr": {
+      "validationOk": true,
+      "writtenMeasures": 125,
+      "writtenMin": 4.05,
+      "durationMin": 4.05,
+      "noteCount": 2808,
+      "restCount": 17,
+      "avgNotesPerMeasure": 22.46,
+      "maxNotesPerMeasure": 38,
+      "sparseMeasuresLe1": 0,
+      "sparseRatio": 0,
+      "repeatMarks": 0,
+      "backups": 885,
+      "ties": 28,
+      "beams": 538,
+      "chordTags": 1142,
+      "tempoBpm": 76,
+      "performedAbort": null,
+      "usesPerformed": false
+    }
+  },
+  {
+    "id": "minecraft",
+    "pdf": {
+      "pages": 3,
+      "textItems": 814,
+      "textChars": 1486,
+      "operatorCount": 3062,
+      "paintImageOps": 0,
+      "fontCount": 5,
+      "fontsSample": [
+        "g_d1_f2",
+        "g_d1_f3",
+        "g_d1_f4",
+        "g_d1_f5",
+        "g_d1_f1"
+      ],
+      "textDensityPerPage": 495.3,
+      "opsPerPage": 1021
+    },
+    "class": "SPARSE_FAILURE",
+    "omr": {
+      "validationOk": true,
+      "writtenMeasures": 113,
+      "writtenMin": 3.77,
+      "durationMin": 3.77,
+      "noteCount": 585,
+      "restCount": 21,
+      "avgNotesPerMeasure": 5.18,
+      "maxNotesPerMeasure": 12,
+      "sparseMeasuresLe1": 0,
+      "sparseRatio": 0,
+      "repeatMarks": 0,
+      "backups": 210,
+      "ties": 124,
+      "beams": 16,
+      "chordTags": 154,
+      "tempoBpm": 120,
+      "performedAbort": null,
+      "usesPerformed": false
+    }
+  },
+  {
+    "id": "hungarian-dance-no5",
+    "pdf": {
+      "pages": 4,
+      "textItems": 4420,
+      "textChars": 3314,
+      "operatorCount": 102858,
+      "paintImageOps": 0,
+      "fontCount": 7,
+      "fontsSample": [
+        "g_d2_f1",
+        "g_d2_f2",
+        "g_d2_f3",
+        "g_d2_f4",
+        "g_d2_f5",
+        "g_d2_f6",
+        "g_d2_f7"
+      ],
+      "textDensityPerPage": 828.5,
+      "opsPerPage": 25715
+    },
+    "class": "DENSE_FAILURE",
+    "omr": {
+      "validationOk": true,
+      "writtenMeasures": 105,
+      "writtenMin": 3.18,
+      "durationMin": 4.84,
+      "noteCount": 1501,
+      "restCount": 0,
+      "avgNotesPerMeasure": 14.43,
+      "maxNotesPerMeasure": 45,
+      "sparseMeasuresLe1": 0,
+      "sparseRatio": 0,
+      "repeatMarks": 1,
+      "backups": 312,
+      "ties": 22,
+      "beams": 62,
+      "chordTags": 748,
+      "tempoBpm": 120,
+      "performedAbort": null,
+      "usesPerformed": true
+    }
+  },
+  {
+    "id": "fantaisie-impromptu",
+    "pdf": {
+      "pages": 5,
+      "textItems": 7545,
+      "textChars": 5950,
+      "operatorCount": 215148,
+      "paintImageOps": 0,
+      "fontCount": 6,
+      "fontsSample": [
+        "g_d3_f1",
+        "g_d3_f2",
+        "g_d3_f3",
+        "g_d3_f4",
+        "g_d3_f5",
+        "g_d3_f6"
+      ],
+      "textDensityPerPage": 1190,
+      "opsPerPage": 43030
+    },
+    "class": "DURATION_FAILURE",
+    "omr": {
+      "validationOk": true,
+      "writtenMeasures": 193,
+      "writtenMin": 14.02,
+      "durationMin": 14.02,
+      "noteCount": 3034,
+      "restCount": 26,
+      "avgNotesPerMeasure": 15.88,
+      "maxNotesPerMeasure": 29,
+      "sparseMeasuresLe1": 0,
+      "sparseRatio": 0,
+      "repeatMarks": 4,
+      "backups": 828,
+      "ties": 16,
+      "beams": 1628,
+      "chordTags": 201,
+      "tempoBpm": 84,
+      "performedAbort": "multiple-orphan-backward-repeats",
+      "usesPerformed": false
+    }
+  },
+  {
+    "id": "la-campanella",
+    "pdf": {
+      "pages": 8,
+      "textItems": 13783,
+      "textChars": 8584,
+      "operatorCount": 359597,
+      "paintImageOps": 0,
+      "fontCount": 5,
+      "fontsSample": [
+        "g_d4_f1",
+        "g_d4_f2",
+        "g_d4_f3",
+        "g_d4_f4",
+        "g_d4_f5"
+      ],
+      "textDensityPerPage": 1073,
+      "opsPerPage": 44950
+    },
+    "class": "DURATION_FAILURE",
+    "omr": {
+      "validationOk": true,
+      "writtenMeasures": 189,
+      "writtenMin": 6.75,
+      "durationMin": 6.75,
+      "noteCount": 3976,
+      "restCount": 148,
+      "avgNotesPerMeasure": 21.38,
+      "maxNotesPerMeasure": 64,
+      "sparseMeasuresLe1": 1,
+      "sparseRatio": 0.005,
+      "repeatMarks": 4,
+      "backups": 904,
+      "ties": 16,
+      "beams": 1036,
+      "chordTags": 1471,
+      "tempoBpm": 112,
+      "performedAbort": "multiple-orphan-backward-repeats",
+      "usesPerformed": false
+    }
+  }
+]

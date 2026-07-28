@@ -62,9 +62,13 @@ export function logPianoAudioEngine(detail = {}) {
   })
 }
 
-/** Per-note trigger diagnostics (required Sprint 1 DEV report). */
+/** Per-note trigger diagnostics — explicit opt-in only (never default DEV spam). */
 export function logPianoTrigger(detail = {}) {
-  if (!isPianoPerfEnabled()) {
+  try {
+    if (typeof localStorage === 'undefined' || localStorage.getItem(PERF_STORAGE_KEY) !== '1') {
+      return
+    }
+  } catch {
     return
   }
   console.debug('PIANO TRIGGER:', {

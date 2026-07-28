@@ -1,5 +1,6 @@
 import { isInk } from './omrInk.js'
 import { OMR_MUSICAL_CONFIDENCE } from './omrMusicalConstants.js'
+import { detectUnsafeRepeatExpansion } from '../musicxml/parseMeasureRepeats.js'
 
 function inkAt(imageData, x, y, threshold) {
   const { data, width, height } = imageData
@@ -374,6 +375,57 @@ export function detectVoltaEnding(imageData, measureBox, inkThreshold, pageText 
 
 export function shouldEmitEnding(ending) {
   return (ending?.confidence ?? 0) >= OMR_MUSICAL_CONFIDENCE.ENDING
+}
+
+/**
+ * Drop OMR repeat marks that cannot expand safely (multiple orphans, multiple
+ * closers for one forward without endings). Keeps well-formed pairs and a
+ * single repeat-to-beginning. Does not invent replacements.
+ */
+export function sanitizeOmrRepeatMarkings(measureRecords) {
+  if (!Array.isArray(measureRecords) || measureRecords.length === 0) {
+    return { measures: measureRecords, stripped: false, reason: null }
+  }
+
+  const markings = measureRecords.map((measure) => {
+    const marking = measure?.repeatMarking
+    if (!marking || !shouldEmitRepeat(marking)) {
+      return {}
+    }
+    return {
+      forwardRepeat: Boolean(marking.forwardRepeat),
+      backwardRepeat: Boolean(marking.backwardRepeat),
+      endingStartNumbers: measure?.endingMarking?.endingStartNumbers,
+      endingStop: measure?.endingMarking?.endingStop,
+      endingDiscontinue: measure?.endingMarking?.endingDiscontinue,
+    }
+  })
+
+  const unsafe = detectUnsafeRepeatExpansion(markings)
+  if (!unsafe.unsafe) {
+    return { measures: measureRecords, stripped: false, reason: null }
+  }
+
+  const sanitized = measureRecords.map((measure) => {
+    if (!measure?.repeatMarking) {
+      return measure
+    }
+    return {
+      ...measure,
+      repeatMarking: null,
+      repeatMarkingQuarantined: {
+        reason: unsafe.reason,
+        prior: measure.repeatMarking,
+      },
+    }
+  })
+
+  return {
+    measures: sanitized,
+    stripped: true,
+    reason: unsafe.reason,
+    atMeasureIndex: unsafe.atMeasureIndex ?? null,
+  }
 }
 
 /**

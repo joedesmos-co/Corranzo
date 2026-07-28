@@ -1,9 +1,14 @@
 /**
  * Repeat / ending expansion — explicit interpreter over written measures.
  *
- * Each repeat section owns its own pass counter. Leaving a section resets pass to 1.
+ * Each repeat section owns its own pass counter (keyed by section start index).
+ * Leaving a section resets that section's pass to 1.
  * Same-measure forward+backward, repeat-to-beginning, times=N, and multi-measure
  * voltas are handled explicitly.
+ *
+ * Pathological OMR graphs (multiple orphan backwards, multiple closers for one
+ * forward without endings) fall back to written order instead of expanding until
+ * maxSteps — performed duration must stay musically plausible.
  */
 
 function shouldPlayMeasureOnPass(marking, pass, activeEndingNumbers) {
@@ -53,18 +58,114 @@ function buildPerformedBeats(entries, writtenBeats, measures) {
   return performedBeats
 }
 
+function buildWrittenOnlyEntries(measures) {
+  const entries = []
+  let performedTime = 0
+  for (let index = 0; index < measures.length; index += 1) {
+    const measure = measures[index]
+    const duration = Math.max(0, measure.endTimeSeconds - measure.startTimeSeconds)
+    entries.push({
+      performedIndex: entries.length,
+      writtenMeasureIndex: index,
+      writtenMeasureNumber: measure.number,
+      repeatPass: 1,
+      startTimeSeconds: performedTime,
+      endTimeSeconds: performedTime + duration,
+    })
+    performedTime += duration
+  }
+  return { entries, performedTime }
+}
+
 /** Index of the forward repeat that opens the current section (same measure counts). */
 function findSectionStartIndex(markings, backwardIndex) {
   const backward = markings[backwardIndex]
   if (backward?.forwardRepeat) {
     return backwardIndex
   }
-  for (let index = backwardIndex; index >= 0; index -= 1) {
-    if (markings[index]?.forwardRepeat) {
+  for (let index = backwardIndex - 1; index >= 0; index -= 1) {
+    const marking = markings[index] ?? {}
+    if (marking.forwardRepeat) {
       return index
+    }
+    // Do not pair across a prior backward closer unless ending brackets keep
+    // the same section open (1st/2nd endings). Otherwise this is repeat-to-
+    // beginning / a new orphan — pairing with an older forward does not terminate.
+    if (marking.backwardRepeat && !sectionHasEndingBrackets(markings, index, backwardIndex)) {
+      return -1
     }
   }
   return -1
+}
+
+function sectionHasEndingBrackets(markings, sectionStart, backwardIndex) {
+  for (let index = Math.max(0, sectionStart); index <= backwardIndex; index += 1) {
+    const marking = markings[index] ?? {}
+    if (
+      marking.endingStartNumbers?.length ||
+      marking.endingStop ||
+      marking.endingDiscontinue
+    ) {
+      return true
+    }
+  }
+  return false
+}
+
+/**
+ * Structures that the linear expander cannot finish safely.
+ * Legitimate single orphan (repeat-to-beginning) and volta pairs stay allowed.
+ */
+export function detectUnsafeRepeatExpansion(markings) {
+  let orphanBackwardCount = 0
+  let openForwardIndex = -1
+  let backwardClosersInSection = 0
+
+  for (let index = 0; index < markings.length; index += 1) {
+    const marking = markings[index] ?? {}
+
+    if (marking.forwardRepeat) {
+      openForwardIndex = index
+      backwardClosersInSection = 0
+    }
+
+    if (!marking.backwardRepeat) {
+      continue
+    }
+
+    if (openForwardIndex < 0) {
+      orphanBackwardCount += 1
+      if (orphanBackwardCount > 1) {
+        return {
+          unsafe: true,
+          reason: 'multiple-orphan-backward-repeats',
+          atMeasureIndex: index,
+        }
+      }
+      continue
+    }
+
+    backwardClosersInSection += 1
+    if (
+      backwardClosersInSection > 1 &&
+      !sectionHasEndingBrackets(markings, openForwardIndex, index)
+    ) {
+      return {
+        unsafe: true,
+        reason: 'multiple-backward-closers-without-endings',
+        atMeasureIndex: index,
+        forwardMeasureIndex: openForwardIndex,
+      }
+    }
+
+    // Simple (non-volta) closer consumes the open forward.
+    if (!sectionHasEndingBrackets(markings, openForwardIndex, index)) {
+      openForwardIndex = -1
+      backwardClosersInSection = 0
+    }
+  }
+
+  return { unsafe: false, reason: null }
 }
 
 /** Heuristic scan for repeat marks that cannot be interpreted reliably. */
@@ -102,7 +203,16 @@ function detectMalformedRepeats(markings) {
     uncertain = true
   }
 
-  return uncertain
+  const unsafe = detectUnsafeRepeatExpansion(markings)
+  if (unsafe.unsafe) {
+    uncertain = true
+  }
+
+  return { uncertain, unsafe }
+}
+
+function sectionPassKey(sectionStart) {
+  return sectionStart >= 0 ? sectionStart : -1
 }
 
 /**
@@ -112,23 +222,68 @@ function detectMalformedRepeats(markings) {
 export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) {
   const repeatSections = []
   const endings = []
-  const entries = []
-  let uncertain = detectMalformedRepeats(markings)
+  const { uncertain: initiallyUncertain, unsafe } = detectMalformedRepeats(markings)
+  let uncertain = initiallyUncertain
   let navigationUnsupported = false
+  let expansionAborted = false
+  let abortReason = unsafe.unsafe ? unsafe.reason : null
+
+  const hasRepeatMarks = markings.some(
+    (mark) =>
+      mark.forwardRepeat ||
+      mark.backwardRepeat ||
+      mark.endingStartNumbers?.length ||
+      mark.endingStop ||
+      mark.endingDiscontinue,
+  )
+
+  // Unsafe graphs must not drive performed duration — fall back before expanding.
+  if (unsafe.unsafe) {
+    const written = buildWrittenOnlyEntries(measures)
+    return {
+      entries: written.entries,
+      performedBeats: [],
+      performedDurationSeconds: written.performedTime,
+      diagnostics: {
+        writtenMeasureCount: measures.length,
+        performedMeasureCount: written.entries.length,
+        repeatSections: [],
+        endings: [],
+        endingPassCount: 1,
+        hasRepeatMarks,
+        fullyInterpreted: false,
+        usesPerformedTimeline: false,
+        navigationUnsupported: false,
+        expansionAborted: true,
+        abortReason: unsafe.reason,
+        firstUnsafeMeasureIndex: unsafe.atMeasureIndex ?? null,
+        warning:
+          'Some repeat marks could not be linked reliably. Measure display follows written score order.',
+      },
+    }
+  }
 
   let index = 0
-  /** Pass within the active repeat section (resets when a section completes). */
-  let sectionPass = 1
+  /** Pass within each repeat section (resets when that section completes). */
+  const sectionPasses = new Map()
   let performedTime = 0
   let steps = 0
   /** Ending bracket active across measures until stop/discontinue. */
   let activeEndingNumbers = null
   const maxSteps = measures.length * 40 + 16
+  const entries = []
+
+  const getSectionPass = (sectionStart) => sectionPasses.get(sectionPassKey(sectionStart)) ?? 1
+  const setSectionPass = (sectionStart, pass) => {
+    sectionPasses.set(sectionPassKey(sectionStart), pass)
+  }
 
   while (index < measures.length && steps < maxSteps) {
     steps += 1
     const marking = markings[index] ?? {}
     const measure = measures[index]
+    const activeSectionStart = findSectionStartIndex(markings, index)
+    const sectionPass = getSectionPass(activeSectionStart)
 
     if (marking.endingStartNumbers?.length) {
       endings.push({
@@ -161,14 +316,10 @@ export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) 
           endingNumbers.some((number) => number > sectionPass)
         const sectionStart = findSectionStartIndex(markings, index)
         const maxPasses = marking.backwardRepeatTimes ?? 2
-        if (skippingLaterEnding && sectionPass < maxPasses) {
-          if (sectionStart >= 0) {
-            sectionPass += 1
-            index = sectionStart
-            continue
-          }
-          sectionPass += 1
-          index = 0
+        const pass = getSectionPass(sectionStart)
+        if (skippingLaterEnding && pass < maxPasses) {
+          setSectionPass(sectionStart, pass + 1)
+          index = sectionStart >= 0 ? sectionStart : 0
           continue
         }
       }
@@ -194,6 +345,7 @@ export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) 
     if (marking.backwardRepeat) {
       const sectionStart = findSectionStartIndex(markings, index)
       const maxPasses = marking.backwardRepeatTimes ?? 2
+      const pass = getSectionPass(sectionStart)
 
       if (sectionStart >= 0) {
         repeatSections.push({
@@ -204,22 +356,22 @@ export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) 
           maxPasses,
         })
 
-        if (sectionPass < maxPasses) {
-          sectionPass += 1
+        if (pass < maxPasses) {
+          setSectionPass(sectionStart, pass + 1)
           index = sectionStart
           continue
         }
 
         // Section complete — reset pass for what follows.
-        sectionPass = 1
+        setSectionPass(sectionStart, 1)
       } else {
         // Repeat-to-beginning: no forward repeat in this section (P7).
-        if (sectionPass < maxPasses) {
-          sectionPass += 1
+        if (pass < maxPasses) {
+          setSectionPass(sectionStart, pass + 1)
           index = 0
           continue
         }
-        sectionPass = 1
+        setSectionPass(sectionStart, 1)
       }
     }
 
@@ -228,16 +380,34 @@ export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) 
 
   if (steps >= maxSteps) {
     uncertain = true
+    expansionAborted = true
+    abortReason = abortReason ?? 'max-steps'
   }
 
-  const hasRepeatMarks = markings.some(
-    (mark) =>
-      mark.forwardRepeat ||
-      mark.backwardRepeat ||
-      mark.endingStartNumbers?.length ||
-      mark.endingStop ||
-      mark.endingDiscontinue,
-  )
+  // Pathological expansion: discard and use written order for duration/playback clock.
+  if (expansionAborted || (uncertain && entries.length > measures.length * 4)) {
+    const written = buildWrittenOnlyEntries(measures)
+    return {
+      entries: written.entries,
+      performedBeats: [],
+      performedDurationSeconds: written.performedTime,
+      diagnostics: {
+        writtenMeasureCount: measures.length,
+        performedMeasureCount: written.entries.length,
+        repeatSections: [],
+        endings,
+        endingPassCount: 1,
+        hasRepeatMarks,
+        fullyInterpreted: false,
+        usesPerformedTimeline: false,
+        navigationUnsupported,
+        expansionAborted: true,
+        abortReason: abortReason ?? 'uncertain-expansion',
+        warning:
+          'Some repeat marks could not be linked reliably. Measure display follows written score order.',
+      },
+    }
+  }
 
   const expanded = entries.length > measures.length
   const usesPerformedTimeline = expanded
@@ -267,11 +437,13 @@ export function buildPerformedMeasureTimeline(measures, markings, writtenBeats) 
       performedMeasureCount: entries.length,
       repeatSections,
       endings,
-      endingPassCount: sectionPass,
+      endingPassCount: getSectionPass(-1),
       hasRepeatMarks,
       fullyInterpreted: !uncertain && !navigationUnsupported,
       usesPerformedTimeline,
       navigationUnsupported,
+      expansionAborted: false,
+      abortReason: null,
       warning,
     },
   }

@@ -4,6 +4,7 @@ import { useScoreFollowCursor } from '../../context/PracticeTickContext.jsx'
 import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
 import { WFY_STATUS } from '../../features/practice/waitForYouEngine.js'
 import usePracticePageFollow from '../../features/practice/usePracticePageFollow.js'
+import { isPlaybackVisualsOffEnabled } from '../../features/playback/playbackVisualsDiagnostics.js'
 
 export default function PracticePageFollowController({
   scrollContainerRef,
@@ -32,7 +33,10 @@ export default function PracticePageFollowController({
   )
 
   const pageFollowActive = Boolean(
-    scoreFollow.enabled && scoreFollow.canFollow && !scoreFollow.alignmentMode,
+    scoreFollow.enabled &&
+      scoreFollow.canFollow &&
+      !scoreFollow.alignmentMode &&
+      !isPlaybackVisualsOffEnabled(),
   )
 
   const noteFollowTarget = useMemo(() => {
