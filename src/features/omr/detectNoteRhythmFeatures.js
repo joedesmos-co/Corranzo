@@ -230,11 +230,25 @@ export function detectTieToNext(imageData, cx, cy, threshold, bounds) {
  * sixteenth. The tip-row scan cannot see a second beam; treating strength≥14 as
  * sixteenth produced mass Eighth→16th errors on dense vector scores.
  */
-export function inferNoteDuration({ hollow, stem, beams, dotted, beamStrength = 0 }) {
+export function inferNoteDuration({
+  hollow,
+  stem,
+  beams,
+  dotted,
+  beamStrength = 0,
+  noteheadGlyph = null,
+}) {
   let durationType = 'quarter'
   let confidence = OMR_RHYTHM_CONFIDENCE.MEDIUM
 
-  if (!stem) {
+  // SMuFL open heads distinguish whole vs half; prefer codepoint over stem ink.
+  if (noteheadGlyph === 'whole') {
+    durationType = 'whole'
+    confidence = 0.9
+  } else if (noteheadGlyph === 'half') {
+    durationType = 'half'
+    confidence = 0.88
+  } else if (!stem) {
     if (hollow) {
       durationType = 'whole'
       confidence = 0.74
@@ -285,7 +299,14 @@ export function enrichNoteheadRhythm(imageData, notehead, measureBox, inkThresho
   const beams = countBeams(imageData, stem, inkThreshold, bounds)
   const dotted = detectDot(imageData, notehead.cx, notehead.cy, inkThreshold)
   const tieStart = detectTieToNext(imageData, notehead.cx, notehead.cy, inkThreshold, bounds)
-  const rhythm = inferNoteDuration({ hollow, stem, beams, dotted, beamStrength })
+  const rhythm = inferNoteDuration({
+    hollow,
+    stem,
+    beams,
+    dotted,
+    beamStrength,
+    noteheadGlyph: notehead.noteheadGlyph ?? null,
+  })
 
   return {
     ...notehead,

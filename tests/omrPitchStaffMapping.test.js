@@ -56,6 +56,32 @@ describe('filterViableStaves', () => {
   })
 })
 
+describe('groupStavesIntoSystems odd-count orphan recovery', () => {
+  it('pairs treble/bass bands when one merged grand-staff leftover makes the count odd', () => {
+    // 8 pairable single staves + 1 oversized merged band (Fantaisie page-4 class).
+    const pairable = []
+    for (let system = 0; system < 8; system += 1) {
+      const base = 0.06 + system * 0.1
+      pairable.push(
+        { y0: base, y1: base + 0.015, center: base + 0.0075, lineCount: 6 },
+        { y0: base + 0.04, y1: base + 0.055, center: base + 0.0475, lineCount: 6 },
+      )
+    }
+    const merged = {
+      y0: 0.86,
+      y1: 0.91,
+      center: 0.885,
+      lineCount: 14,
+    }
+    const systems = groupStavesIntoSystems([...pairable, merged], 2)
+    expect(systems).toHaveLength(9)
+    expect(systems.filter((system) => system.staveCount === 2)).toHaveLength(8)
+    expect(systems.filter((system) => system.staveCount === 1)).toHaveLength(1)
+    expect(systems.at(-1).staveCount).toBe(1)
+    expect(systems.at(-1).center).toBeCloseTo(0.885, 3)
+  })
+})
+
 describe('resolveNoteheadYNorm', () => {
   it('applies a bounded center correction for notehead-sized glyphs', () => {
     const imageData = { height: 1000 }

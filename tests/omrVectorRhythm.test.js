@@ -7,6 +7,7 @@ import {
   extendDurationsPerClefVoice,
   extendPenultimateHalfBeforeFinalQuarter,
   eventsShareHarmonicPitch,
+  glyphAuthoritativeDurationDivisions,
   hasConfidentQuarterInference,
   hasBeamEvidenceForNotes,
   isDenseSubdivisionRun,
@@ -52,6 +53,66 @@ describe('durationMeta snaps a division span to the nearest note value', () => {
     })
     expect(durationMeta(12)).toMatchObject({ durationType: 'half', dotted: false })
     expect(durationMeta(4)).toMatchObject({ durationType: 'quarter', dotted: false })
+  })
+})
+
+describe('glyphAuthoritativeDurationDivisions', () => {
+  it('maps whole and half open-head glyphs to fixed divisions', () => {
+    expect(
+      glyphAuthoritativeDurationDivisions([{ noteheadGlyph: 'whole' }]),
+    ).toBe(16)
+    expect(
+      glyphAuthoritativeDurationDivisions([{ noteheadGlyph: 'half' }]),
+    ).toBe(8)
+    expect(
+      glyphAuthoritativeDurationDivisions([{ noteheadGlyph: 'half' }], { allowDotted: true }),
+    ).toBe(12)
+    expect(
+      glyphAuthoritativeDurationDivisions([{ noteheadGlyph: 'black' }]),
+    ).toBeNull()
+  })
+
+  it('prefers glyph duration over a large sparse gap that would invent a dotted half', () => {
+    const notes = [
+      {
+        cx: 40,
+        midi: 60,
+        naturalMidi: 60,
+        clef: 'treble',
+        positionInMeasure: 0,
+        noteheadGlyph: 'half',
+        hollowGlyph: true,
+        hollow: true,
+        durationType: 'half',
+        durationDivisions: 8,
+      },
+    ]
+    // One sparse half head; without glyph preference a full-measure gap becomes whole/dotted.
+    const events = buildVectorEvents(notes, measureBox, { beats: 4, beatType: 4 })
+    expect(events).toHaveLength(1)
+    expect(events[0].durationType).toBe('half')
+    expect(events[0].durationDivisions).toBe(8)
+    expect(events[0].dotted).toBeFalsy()
+  })
+
+  it('keeps a whole glyph as a whole on a sparse measure', () => {
+    const notes = [
+      {
+        cx: 40,
+        midi: 60,
+        naturalMidi: 60,
+        clef: 'bass',
+        positionInMeasure: 0,
+        noteheadGlyph: 'whole',
+        hollowGlyph: true,
+        hollow: true,
+        durationType: 'whole',
+        durationDivisions: 16,
+      },
+    ]
+    const events = buildVectorEvents(notes, measureBox, { beats: 4, beatType: 4 })
+    expect(events[0].durationType).toBe('whole')
+    expect(events[0].durationDivisions).toBe(16)
   })
 })
 

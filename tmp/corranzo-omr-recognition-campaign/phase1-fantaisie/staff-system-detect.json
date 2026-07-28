@@ -1,0 +1,704 @@
+[
+  {
+    "page": 1,
+    "staveCount": 16,
+    "systemCount": 8,
+    "mids": [
+      0.1,
+      0.2,
+      0.2,
+      0.3,
+      0.3,
+      0.4,
+      0.4,
+      0.5,
+      0.5,
+      0.6,
+      0.7,
+      0.7,
+      0.8,
+      0.8,
+      0.9,
+      0.9
+    ],
+    "gaps": [
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0
+    ],
+    "systems": [
+      {
+        "i": 0,
+        "staveCount": 2,
+        "y0": 0.1,
+        "y1": 0.168,
+        "barlineCount": 6,
+        "measureEstimate": 5,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 1,
+        "staveCount": 2,
+        "y0": 0.223,
+        "y1": 0.286,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 2,
+        "staveCount": 2,
+        "y0": 0.335,
+        "y1": 0.387,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 3,
+        "staveCount": 2,
+        "y0": 0.436,
+        "y1": 0.492,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 4,
+        "staveCount": 2,
+        "y0": 0.541,
+        "y1": 0.598,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 5,
+        "staveCount": 2,
+        "y0": 0.65,
+        "y1": 0.706,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 6,
+        "staveCount": 2,
+        "y0": 0.755,
+        "y1": 0.81,
+        "barlineCount": 6,
+        "measureEstimate": 5,
+        "barlineConfident": true,
+        "reason": "ok-with-borderline-candidates"
+      },
+      {
+        "i": 7,
+        "staveCount": 2,
+        "y0": 0.859,
+        "y1": 0.922,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      }
+    ]
+  },
+  {
+    "page": 2,
+    "staveCount": 16,
+    "systemCount": 8,
+    "mids": [
+      0.1,
+      0.1,
+      0.2,
+      0.2,
+      0.3,
+      0.3,
+      0.4,
+      0.4,
+      0.5,
+      0.6,
+      0.6,
+      0.7,
+      0.7,
+      0.8,
+      0.9,
+      0.9
+    ],
+    "gaps": [
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0.1,
+      0
+    ],
+    "systems": [
+      {
+        "i": 0,
+        "staveCount": 2,
+        "y0": 0.062,
+        "y1": 0.118,
+        "barlineCount": 6,
+        "measureEstimate": 5,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 1,
+        "staveCount": 2,
+        "y0": 0.168,
+        "y1": 0.219,
+        "barlineCount": 5,
+        "measureEstimate": 4,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 2,
+        "staveCount": 2,
+        "y0": 0.281,
+        "y1": 0.339,
+        "barlineCount": 5,
+        "measureEstimate": 4,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 3,
+        "staveCount": 2,
+        "y0": 0.39,
+        "y1": 0.451,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 4,
+        "staveCount": 2,
+        "y0": 0.501,
+        "y1": 0.568,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 5,
+        "staveCount": 2,
+        "y0": 0.622,
+        "y1": 0.687,
+        "barlineCount": 6,
+        "measureEstimate": 5,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 6,
+        "staveCount": 2,
+        "y0": 0.737,
+        "y1": 0.8,
+        "barlineCount": 6,
+        "measureEstimate": 5,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 7,
+        "staveCount": 2,
+        "y0": 0.85,
+        "y1": 0.915,
+        "barlineCount": 6,
+        "measureEstimate": 5,
+        "barlineConfident": true,
+        "reason": "ok"
+      }
+    ]
+  },
+  {
+    "page": 3,
+    "staveCount": 16,
+    "systemCount": 8,
+    "mids": [
+      0.1,
+      0.1,
+      0.2,
+      0.2,
+      0.3,
+      0.4,
+      0.4,
+      0.5,
+      0.5,
+      0.6,
+      0.6,
+      0.7,
+      0.8,
+      0.8,
+      0.9,
+      0.9
+    ],
+    "gaps": [
+      0,
+      0.1,
+      0,
+      0.1,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0.1,
+      0,
+      0.1,
+      0
+    ],
+    "systems": [
+      {
+        "i": 0,
+        "staveCount": 2,
+        "y0": 0.062,
+        "y1": 0.125,
+        "barlineCount": 5,
+        "measureEstimate": 4,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 1,
+        "staveCount": 2,
+        "y0": 0.173,
+        "y1": 0.246,
+        "barlineCount": 5,
+        "measureEstimate": 4,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 2,
+        "staveCount": 2,
+        "y0": 0.293,
+        "y1": 0.359,
+        "barlineCount": 6,
+        "measureEstimate": 5,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 3,
+        "staveCount": 2,
+        "y0": 0.407,
+        "y1": 0.47,
+        "barlineCount": 5,
+        "measureEstimate": 4,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 4,
+        "staveCount": 2,
+        "y0": 0.518,
+        "y1": 0.591,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 5,
+        "staveCount": 2,
+        "y0": 0.639,
+        "y1": 0.704,
+        "barlineCount": 6,
+        "measureEstimate": 5,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 6,
+        "staveCount": 2,
+        "y0": 0.752,
+        "y1": 0.815,
+        "barlineCount": 5,
+        "measureEstimate": 4,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 7,
+        "staveCount": 2,
+        "y0": 0.863,
+        "y1": 0.923,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      }
+    ]
+  },
+  {
+    "page": 4,
+    "staveCount": 17,
+    "systemCount": 17,
+    "mids": [
+      0.1,
+      0.1,
+      0.2,
+      0.2,
+      0.3,
+      0.3,
+      0.4,
+      0.4,
+      0.5,
+      0.5,
+      0.6,
+      0.6,
+      0.7,
+      0.7,
+      0.8,
+      0.8,
+      0.9
+    ],
+    "gaps": [
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1
+    ],
+    "systems": [
+      {
+        "i": 0,
+        "staveCount": 1,
+        "y0": 0.062,
+        "y1": 0.077,
+        "barlineCount": 8,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 1,
+        "staveCount": 1,
+        "y0": 0.11,
+        "y1": 0.125,
+        "barlineCount": 10,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 2,
+        "staveCount": 1,
+        "y0": 0.165,
+        "y1": 0.18,
+        "barlineCount": 7,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 3,
+        "staveCount": 1,
+        "y0": 0.201,
+        "y1": 0.216,
+        "barlineCount": 9,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 4,
+        "staveCount": 1,
+        "y0": 0.254,
+        "y1": 0.269,
+        "barlineCount": 8,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 5,
+        "staveCount": 1,
+        "y0": 0.295,
+        "y1": 0.31,
+        "barlineCount": 7,
+        "measureEstimate": 6,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 6,
+        "staveCount": 1,
+        "y0": 0.353,
+        "y1": 0.368,
+        "barlineCount": 7,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 7,
+        "staveCount": 1,
+        "y0": 0.395,
+        "y1": 0.409,
+        "barlineCount": 7,
+        "measureEstimate": 6,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 8,
+        "staveCount": 1,
+        "y0": 0.458,
+        "y1": 0.474,
+        "barlineCount": 8,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 9,
+        "staveCount": 1,
+        "y0": 0.499,
+        "y1": 0.514,
+        "barlineCount": 8,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 10,
+        "staveCount": 1,
+        "y0": 0.56,
+        "y1": 0.576,
+        "barlineCount": 10,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 11,
+        "staveCount": 1,
+        "y0": 0.599,
+        "y1": 0.615,
+        "barlineCount": 9,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 12,
+        "staveCount": 1,
+        "y0": 0.657,
+        "y1": 0.673,
+        "barlineCount": 7,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 13,
+        "staveCount": 1,
+        "y0": 0.704,
+        "y1": 0.72,
+        "barlineCount": 10,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 14,
+        "staveCount": 1,
+        "y0": 0.758,
+        "y1": 0.773,
+        "barlineCount": 7,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 15,
+        "staveCount": 1,
+        "y0": 0.798,
+        "y1": 0.814,
+        "barlineCount": 8,
+        "measureEstimate": null,
+        "barlineConfident": false,
+        "reason": "density-thinned"
+      },
+      {
+        "i": 16,
+        "staveCount": 1,
+        "y0": 0.863,
+        "y1": 0.911,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      }
+    ]
+  },
+  {
+    "page": 5,
+    "staveCount": 16,
+    "systemCount": 8,
+    "mids": [
+      0.1,
+      0.1,
+      0.2,
+      0.2,
+      0.3,
+      0.3,
+      0.4,
+      0.5,
+      0.5,
+      0.6,
+      0.6,
+      0.7,
+      0.7,
+      0.8,
+      0.8,
+      0.9
+    ],
+    "gaps": [
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1,
+      0,
+      0.1
+    ],
+    "systems": [
+      {
+        "i": 0,
+        "staveCount": 2,
+        "y0": 0.069,
+        "y1": 0.127,
+        "barlineCount": 5,
+        "measureEstimate": 4,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 1,
+        "staveCount": 2,
+        "y0": 0.178,
+        "y1": 0.239,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 2,
+        "staveCount": 2,
+        "y0": 0.289,
+        "y1": 0.355,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 3,
+        "staveCount": 2,
+        "y0": 0.405,
+        "y1": 0.463,
+        "barlineCount": 6,
+        "measureEstimate": 5,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 4,
+        "staveCount": 2,
+        "y0": 0.513,
+        "y1": 0.572,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 5,
+        "staveCount": 2,
+        "y0": 0.623,
+        "y1": 0.686,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 6,
+        "staveCount": 2,
+        "y0": 0.737,
+        "y1": 0.788,
+        "barlineCount": 4,
+        "measureEstimate": 3,
+        "barlineConfident": true,
+        "reason": "ok"
+      },
+      {
+        "i": 7,
+        "staveCount": 2,
+        "y0": 0.838,
+        "y1": 0.912,
+        "barlineCount": 6,
+        "measureEstimate": 5,
+        "barlineConfident": true,
+        "reason": "ok"
+      }
+    ]
+  }
+]

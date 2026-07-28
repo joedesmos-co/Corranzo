@@ -55,7 +55,21 @@ import {
 
 const HALF_NOTEHEAD_GLYPH = '\ue0a3'
 const WHOLE_NOTEHEAD_GLYPH = '\ue0a2'
-const NOTEHEAD_GLYPHS = new Set([HALF_NOTEHEAD_GLYPH, WHOLE_NOTEHEAD_GLYPH, '\ue0a4'])
+const BLACK_NOTEHEAD_GLYPH = '\ue0a4'
+const NOTEHEAD_GLYPHS = new Set([HALF_NOTEHEAD_GLYPH, WHOLE_NOTEHEAD_GLYPH, BLACK_NOTEHEAD_GLYPH])
+
+function noteheadGlyphKind(text) {
+  if (text === WHOLE_NOTEHEAD_GLYPH) {
+    return 'whole'
+  }
+  if (text === HALF_NOTEHEAD_GLYPH) {
+    return 'half'
+  }
+  if (text === BLACK_NOTEHEAD_GLYPH) {
+    return 'black'
+  }
+  return null
+}
 const SHARP_GLYPH = '\ue262'
 const NATURAL_GLYPH = '\ue261'
 const FLAT_GLYPH = '\ue260'
@@ -252,6 +266,8 @@ function noteheadsForMeasure(
       clef,
       // The glyph codepoint is authoritative for hollowness (half vs black)
       // on vector pages; ink probing misreads ledger-line noteheads.
+      // Whole (U+E0A2) vs half (U+E0A3) are distinct — both hollow, different values.
+      noteheadGlyph: noteheadGlyphKind(glyph.text),
       hollowGlyph:
         glyph.text === HALF_NOTEHEAD_GLYPH || glyph.text === WHOLE_NOTEHEAD_GLYPH,
       cx: glyph.x,
@@ -1418,6 +1434,13 @@ export function extendDurationsPerClefVoice(events, totalDivisions) {
           duration = terminalHalf
         }
       }
+      // Do not re-stretch whole/half glyphs past their codepoint value via gaps.
+      const glyphCap = glyphAuthoritativeDurationDivisions(event.notes ?? [], {
+        allowDotted: hasDottedEvidence(event.notes) || event.dotted,
+      })
+      if (glyphCap != null && duration > glyphCap) {
+        duration = glyphCap
+      }
       duration = Math.min(duration, Math.max(1, totalDivisions - start))
       durationByEvent.set(event, duration)
     }
@@ -1673,11 +1696,36 @@ const VECTOR_DURATION_LADDER = [
 ]
 
 /**
- * Snap a raw division span to the nearest standard note value. Vector glyphs
- * carry no stem/flag information, so duration is inferred from the horizontal
- * gap to the next onset (see buildVectorEvents) and then quantised here.
- * Dotted ladder rungs are only used when augmentation-dot evidence is present;
- * otherwise gap lengths like 6 invent false dotted quarters.
+ * Open notehead codepoints encode written value independently of X spacing.
+ * Used on sparse measures so large whitespace cannot invent longer values and
+ * packed false onsets cannot collapse wholes/halves to quarters.
+ */
+export function glyphAuthoritativeDurationDivisions(notes = [], { allowDotted = false } = {}) {
+  const kinds = (notes ?? [])
+    .map((note) => note?.noteheadGlyph)
+    .filter((kind) => kind === 'whole' || kind === 'half')
+  if (!kinds.length) {
+    return null
+  }
+  const wholeCount = kinds.filter((kind) => kind === 'whole').length
+  const halfCount = kinds.filter((kind) => kind === 'half').length
+  // Chord tones should agree; require a clear majority of open heads.
+  if (wholeCount >= halfCount && wholeCount >= Math.ceil(kinds.length / 2)) {
+    const base = OMR_DURATION_DIVISIONS.whole
+    return allowDotted ? Math.round(base * 1.5) : base
+  }
+  if (halfCount > 0 && halfCount >= wholeCount) {
+    const base = OMR_DURATION_DIVISIONS.half
+    return allowDotted ? Math.round(base * 1.5) : base
+  }
+  return null
+}
+
+/**
+ * Snap a raw division span to the nearest standard note value.
+ * Stem/flag/open-head glyphs also carry duration; gap inference is a fallback
+ * (see buildNoteEventsFromGroups). Dotted ladder rungs require augmentation-dot
+ * evidence — otherwise gap lengths like 6 invent false dotted quarters.
  */
 export function durationMeta(durationDivisions, { allowDotted = false } = {}) {
   let best = VECTOR_DURATION_LADDER[VECTOR_DURATION_LADDER.length - 1]
@@ -2387,7 +2435,7 @@ function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivis
         }
       }
       const allowDotted = hasDottedEvidence(group.notes)
-      const snappedDuration = allowDotted
+      let snappedDuration = allowDotted
         ? durationDivisions
         : VECTOR_DURATION_LADDER.filter((candidate) => !candidate.dotted).reduce(
             (best, candidate) =>
@@ -2397,6 +2445,17 @@ function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivis
                 : best,
             OMR_DIVISIONS_PER_QUARTER,
           )
+      // Sparse measures: explicit whole/half glyphs outrank X-gap estimation.
+      // Dense subdivision measures keep gap packing (beams/tuplets).
+      if (!denseMeasure) {
+        const glyphDuration = glyphAuthoritativeDurationDivisions(group.notes, {
+          allowDotted,
+        })
+        if (glyphDuration != null) {
+          const measureRemaining = Math.max(1, totalDivisions - startDivision)
+          snappedDuration = Math.min(glyphDuration, measureRemaining)
+        }
+      }
       const meta = durationMeta(snappedDuration, { allowDotted })
       const positionInMeasure =
         groupAnchorPosition(group) ?? startDivision / totalDivisions

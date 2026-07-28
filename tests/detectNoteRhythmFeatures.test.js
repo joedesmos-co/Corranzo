@@ -28,6 +28,27 @@ function makeImage(width, height, paint) {
 }
 
 describe('inferNoteDuration beam classification', () => {
+  it('uses whole/half notehead glyphs over stem ink', () => {
+    expect(
+      inferNoteDuration({
+        hollow: true,
+        stem: { length: 20, direction: 'up' },
+        beams: 0,
+        dotted: false,
+        noteheadGlyph: 'whole',
+      }).durationType,
+    ).toBe('whole')
+    expect(
+      inferNoteDuration({
+        hollow: true,
+        stem: null,
+        beams: 0,
+        dotted: false,
+        noteheadGlyph: 'half',
+      }).durationType,
+    ).toBe('half')
+  })
+
   it('treats saturated beamStrength as eighth, not sixteenth', () => {
     const stem = { x: 40, tipY: 20, length: 18, direction: 'up' }
     expect(

@@ -1,0 +1,134 @@
+{
+  "writtenMeasures": 193,
+  "writtenDurationSeconds": 840.9142857142857,
+  "writtenMinutes": 14.015,
+  "noteCount": 3034,
+  "tempoChanges": [
+    {
+      "quarterTime": 0,
+      "bpm": 84
+    },
+    {
+      "quarterTime": 176,
+      "bpm": 50
+    }
+  ],
+  "timeSignatures": [
+    {
+      "quarterTime": 0,
+      "beats": 4,
+      "beatType": 4
+    }
+  ],
+  "validation": null,
+  "pageMeasureCounts": [
+    {
+      "systems": 8,
+      "measures": 28,
+      "notes": 0,
+      "systemMeasures": [
+        5,
+        3,
+        3,
+        3,
+        3,
+        3,
+        5,
+        3
+      ]
+    },
+    {
+      "systems": 8,
+      "measures": 31,
+      "notes": 0,
+      "systemMeasures": [
+        5,
+        4,
+        3,
+        3,
+        3,
+        5,
+        4,
+        4
+      ]
+    },
+    {
+      "systems": 8,
+      "measures": 30,
+      "notes": 0,
+      "systemMeasures": [
+        4,
+        4,
+        5,
+        4,
+        3,
+        3,
+        3,
+        4
+      ]
+    },
+    {
+      "systems": 17,
+      "measures": 78,
+      "notes": 0,
+      "systemMeasures": [
+        4,
+        4,
+        5,
+        4,
+        7,
+        6,
+        3,
+        4,
+        4,
+        2,
+        8,
+        4,
+        5,
+        5,
+        4,
+        6,
+        3
+      ]
+    },
+    {
+      "systems": 8,
+      "measures": 26,
+      "notes": 0,
+      "systemMeasures": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        3,
+        3,
+        4
+      ]
+    }
+  ],
+  "musical": {
+    "keySignature": {
+      "fifths": 4,
+      "mode": "major",
+      "confidence": 0.9,
+      "source": "vector-glyphs"
+    },
+    "timeSignature": {
+      "beats": 4,
+      "beatType": 4,
+      "confidence": 0
+    },
+    "tempo": {
+      "bpm": 84,
+      "confidence": 0.84,
+      "fromDefault": false,
+      "source": "metronome-mark",
+      "beatUnit": "quarter",
+      "dots": 0,
+      "markBpm": 84,
+      "words": null
+    }
+  },
+  "omrMs": 1932
+}

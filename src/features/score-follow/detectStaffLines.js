@@ -301,6 +301,125 @@ export function detectStaffLineStaves(imageData, contentBounds, options = {}) {
 }
 
 /**
+ * Try pairing `staves` into fixed-size chunks when gap structure is consistent.
+ * Returns null when count is wrong or gaps do not support chunking.
+ */
+function tryChunkStaves(staves, perSystem) {
+  if (
+    !Array.isArray(staves) ||
+    perSystem < 2 ||
+    staves.length < perSystem ||
+    staves.length % perSystem !== 0
+  ) {
+    return null
+  }
+  const intra = []
+  const inter = []
+  for (let i = 1; i < staves.length; i += 1) {
+    const gap = staves[i].center - staves[i - 1].center
+    if (i % perSystem === 0) {
+      inter.push(gap)
+    } else {
+      intra.push(gap)
+    }
+  }
+  if (!chunkingIsConsistent(inter, intra)) {
+    return null
+  }
+  const systems = []
+  for (let i = 0; i < staves.length; i += perSystem) {
+    systems.push(mergeStaveGroup(staves.slice(i, i + perSystem)))
+  }
+  return systems
+}
+
+/** Prefer treating oversized (merged) or tiny (ghost) bands as unpaired orphans. */
+function staveOutlierScore(stave, medianHeight, medianLines) {
+  const height = Math.max(0, (stave.y1 ?? 0) - (stave.y0 ?? 0))
+  const lines = stave.lineCount ?? stave.detectedLineYs?.length ?? 0
+  const heightRatio = medianHeight > 0 ? height / medianHeight : 1
+  const lineRatio = medianLines > 0 ? lines / medianLines : 1
+  const heightScore = Math.max(heightRatio, 1 / Math.max(heightRatio, 1e-3))
+  const lineScore = Math.max(lineRatio, 1 / Math.max(lineRatio, 1e-3))
+  return heightScore + lineScore
+}
+
+/**
+ * When stave count is not divisible by stavesPerSystem, one merged grand-staff
+ * band (or a ghost) often sits among otherwise pairable treble/bass bands.
+ * Leaving the anomalous remainder unpaired restores pairing for the rest —
+ * without this, `length % perSystem !== 0` forces every stave into its own
+ * system and doubles written measure count on that page.
+ */
+function tryChunkStavesWithOrphans(staves, perSystem) {
+  const remainder = staves.length % perSystem
+  if (remainder === 0 || staves.length <= perSystem) {
+    return null
+  }
+  const heights = staves
+    .map((stave) => stave.y1 - stave.y0)
+    .filter((height) => Number.isFinite(height) && height > 0)
+    .sort((left, right) => left - right)
+  const medianHeight = heights.length ? heights[Math.floor(heights.length / 2)] : 0
+  const lineCounts = staves
+    .map((stave) => stave.lineCount ?? stave.detectedLineYs?.length ?? 0)
+    .sort((left, right) => left - right)
+  const medianLines = lineCounts.length ? lineCounts[Math.floor(lineCounts.length / 2)] : 0
+
+  let best = null
+  // remainder=1 is the common Fantaisie/dense-page failure; also allow small
+  // remainder with bounded search when pages have a few merged leftovers.
+  if (remainder === 1) {
+    for (let drop = 0; drop < staves.length; drop += 1) {
+      const subset = staves.filter((_, index) => index !== drop)
+      const paired = tryChunkStaves(subset, perSystem)
+      if (!paired) {
+        continue
+      }
+      const orphanScore = staveOutlierScore(staves[drop], medianHeight, medianLines)
+      if (!best || orphanScore > best.orphanScore) {
+        best = { paired, orphans: [staves[drop]], orphanScore }
+      }
+    }
+  } else if (remainder === 2 && staves.length <= 24) {
+    for (let i = 0; i < staves.length; i += 1) {
+      for (let j = i + 1; j < staves.length; j += 1) {
+        const subset = staves.filter((_, index) => index !== i && index !== j)
+        const paired = tryChunkStaves(subset, perSystem)
+        if (!paired) {
+          continue
+        }
+        const orphanScore =
+          staveOutlierScore(staves[i], medianHeight, medianLines) +
+          staveOutlierScore(staves[j], medianHeight, medianLines)
+        if (!best || orphanScore > best.orphanScore) {
+          best = { paired, orphans: [staves[i], staves[j]], orphanScore }
+        }
+      }
+    }
+  }
+
+  if (!best) {
+    return null
+  }
+  // Require a clear geometric outlier so we do not collapse evenly-detected
+  // single-staff systems just because dropping a random band happens to pass
+  // the gap test on a reduced set.
+  const orphanIsOutlier = best.orphans.every((stave) => {
+    const height = Math.max(0, (stave.y1 ?? 0) - (stave.y0 ?? 0))
+    const lines = stave.lineCount ?? stave.detectedLineYs?.length ?? 0
+    const heightRatio = medianHeight > 0 ? height / medianHeight : 1
+    const lineRatio = medianLines > 0 ? lines / medianLines : 1
+    return heightRatio >= 1.75 || heightRatio <= 0.45 || lineRatio >= 1.75 || lineRatio <= 0.45
+  })
+  if (!orphanIsOutlier) {
+    return null
+  }
+  const orphanSystems = best.orphans.map((stave) => ({ ...stave, staveCount: 1 }))
+  return [...best.paired, ...orphanSystems].sort((left, right) => left.center - right.center)
+}
+
+/**
  * Group detected staves into systems.
  *
  * The reliable discriminator is the GAP STRUCTURE, not a fixed chunk size,
@@ -311,6 +430,8 @@ export function detectStaffLineStaves(imageData, contentBounds, options = {}) {
  *     the large gaps. This pairs treble+bass into one system.
  *   - Uniform gaps → each detected stave is already its own system (merged
  *     grand staff, or genuinely single-staff systems).
+ *   - Odd stave counts with one merged leftover: leave the anomalous band as a
+ *     solo system and pair the remaining even set when gaps support it.
  *
  * `stavesPerSystem` (from MusicXML) is used as a cross-check / cap, not as the
  * sole grouping rule.
@@ -328,23 +449,14 @@ export function groupStavesIntoSystems(staves, stavesPerSystem = 1) {
   // rather than a fixed ratio, because airy classical engraving (Satie) has a
   // within-pair gap only slightly smaller than the between-system gap — but the
   // separation is still clean (every inter-gap exceeds every intra-gap).
-  if (perSystem >= 2 && staves.length > perSystem && staves.length % perSystem === 0) {
-    const intra = []
-    const inter = []
-    for (let i = 1; i < staves.length; i += 1) {
-      const gap = staves[i].center - staves[i - 1].center
-      if (i % perSystem === 0) {
-        inter.push(gap) // gap at a chunk boundary
-      } else {
-        intra.push(gap) // gap inside a chunk
-      }
+  if (perSystem >= 2 && staves.length > perSystem) {
+    const direct = tryChunkStaves(staves, perSystem)
+    if (direct) {
+      return direct
     }
-    if (chunkingIsConsistent(inter, intra)) {
-      const systems = []
-      for (let i = 0; i < staves.length; i += perSystem) {
-        systems.push(mergeStaveGroup(staves.slice(i, i + perSystem)))
-      }
-      return systems
+    const withOrphans = tryChunkStavesWithOrphans(staves, perSystem)
+    if (withOrphans) {
+      return withOrphans
     }
   }
 
