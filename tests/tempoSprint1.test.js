@@ -249,6 +249,23 @@ describe('Tempo Recognition Sprint 1', () => {
     expect(records[1].tempoMarkings?.[0]?.quarterBpm).toBe(110)
   })
 
+  it('keeps exact Presto near the top of later pages (system-start return)', () => {
+    // PDF y near page top → low midY; previously discarded as header noise.
+    const pageText = [textItem('Presto', { x: 12, y: 92, pageHeight: 100, pageWidth: 100 })]
+    const candidates = collectTempoCandidatesFromText(pageText, { pageNumber: 4 })
+    expect(candidates.some((entry) => entry.words === 'Presto' && entry.quarterBpm === 168)).toBe(true)
+  })
+
+  it('recovers leading Moderato from mid-score expressive phrases on later pages', () => {
+    const pageText = [
+      textItem('Moderato cantabile', { x: 12, y: 40, pageHeight: 100, pageWidth: 100 }),
+    ]
+    const candidates = collectTempoCandidatesFromText(pageText, { pageNumber: 2 })
+    const mark = candidates.find((entry) => /moderato/i.test(entry.words ?? ''))
+    expect(mark?.quarterBpm).toBe(108)
+    expect(mark?.words).toMatch(/Moderato/i)
+  })
+
   it('SMuFL metronome quarter glyph groups with digits', () => {
     const pageText = [
       textItem(String.fromCodePoint(0xeca5), { x: 12, y: 75, width: 8 }),

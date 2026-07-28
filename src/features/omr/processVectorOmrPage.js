@@ -1441,6 +1441,18 @@ export function extendDurationsPerClefVoice(events, totalDivisions) {
       if (glyphCap != null && duration > glyphCap) {
         duration = glyphCap
       }
+      // Explicit dots on filled heads: do not stretch a dotted quarter into a
+      // half via gaps. Prefer noteheadGlyph tags so ink hollow false-positives
+      // do not block the cap.
+      const hasOpenGlyph = (event.notes ?? []).some(
+        (note) => note?.noteheadGlyph === 'whole' || note?.noteheadGlyph === 'half',
+      )
+      if (!hasOpenGlyph) {
+        const dottedCap = dottedWrittenDurationDivisions(event.notes ?? [])
+        if (dottedCap != null && duration > dottedCap) {
+          duration = dottedCap
+        }
+      }
       duration = Math.min(duration, Math.max(1, totalDivisions - start))
       durationByEvent.set(event, duration)
     }
@@ -1719,6 +1731,26 @@ export function glyphAuthoritativeDurationDivisions(notes = [], { allowDotted = 
     return allowDotted ? Math.round(base * 1.5) : base
   }
   return null
+}
+
+/**
+ * Explicit augmentation-dot evidence already encodes 1.5× the written base on
+ * each note (see processVectorOmrPage enrich). Prefer that over X-gap on sparse
+ * measures so large whitespace cannot promote dotted quarters to dotted halves.
+ */
+export function dottedWrittenDurationDivisions(notes = []) {
+  const dottedNotes = (notes ?? []).filter((note) => note?.dotted === true)
+  if (!dottedNotes.length) {
+    return null
+  }
+  const values = dottedNotes
+    .map((note) => note.durationDivisions)
+    .filter((divisions) => Number.isFinite(divisions) && divisions > 0)
+  if (!values.length) {
+    return null
+  }
+  // Chord tones share one written duration — take the consistent (max) value.
+  return Math.max(...values)
 }
 
 /**
@@ -2448,12 +2480,24 @@ function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivis
       // Sparse measures: explicit whole/half glyphs outrank X-gap estimation.
       // Dense subdivision measures keep gap packing (beams/tuplets).
       if (!denseMeasure) {
+        const measureRemaining = Math.max(1, totalDivisions - startDivision)
         const glyphDuration = glyphAuthoritativeDurationDivisions(group.notes, {
           allowDotted,
         })
         if (glyphDuration != null) {
-          const measureRemaining = Math.max(1, totalDivisions - startDivision)
           snappedDuration = Math.min(glyphDuration, measureRemaining)
+        } else if (allowDotted) {
+          // Prefer written dotted value only when the onset is filled-head
+          // (no whole/half glyph). Open glyphs keep glyph/gap sustain behavior.
+          const hasOpenGlyph = (group.notes ?? []).some(
+            (note) => note?.noteheadGlyph === 'whole' || note?.noteheadGlyph === 'half',
+          )
+          if (!hasOpenGlyph) {
+            const writtenDotted = dottedWrittenDurationDivisions(group.notes)
+            if (writtenDotted != null) {
+              snappedDuration = Math.min(writtenDotted, measureRemaining)
+            }
+          }
         }
       }
       const meta = durationMeta(snappedDuration, { allowDotted })

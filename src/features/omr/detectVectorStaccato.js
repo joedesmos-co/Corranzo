@@ -212,6 +212,9 @@ function isAugmentationDotGlyph(glyph) {
  * Bind SMuFL / period augmentation dots to the nearest notehead beside them.
  * Vector scores should not rely on ink detectDot, which false-triggers on
  * neighboring noteheads and articulation marks.
+ *
+ * One printed augmentation dot may apply to an entire same-onset chord (shared
+ * written duration) without attaching to neighboring onsets or other voices.
  */
 export function assignVectorAugmentationDots(glyphs, notes, measureBox, imageData) {
   const assignments = new Map()
@@ -249,6 +252,23 @@ export function assignVectorAugmentationDots(glyphs, notes, measureBox, imageDat
     }
     claimed.add(glyphKey)
     assignments.set(bestIndex, true)
+
+    // Propagate to same-onset chord tones (near-identical X, same staff/clef).
+    const anchor = notes[bestIndex]
+    const clef = anchor?.clef ?? 'treble'
+    for (let index = 0; index < notes.length; index += 1) {
+      if (index === bestIndex || assignments.has(index)) {
+        continue
+      }
+      const sibling = notes[index]
+      if ((sibling?.clef ?? 'treble') !== clef) {
+        continue
+      }
+      if (Math.abs((sibling?.cx ?? 0) - (anchor?.cx ?? 0)) > 3) {
+        continue
+      }
+      assignments.set(index, true)
+    }
   }
 
   return assignments

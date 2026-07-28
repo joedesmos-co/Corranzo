@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   assignVectorStaccato,
+  assignVectorAugmentationDots,
   isAugmentationDotRelativeToNote,
   isStaccatoRelativeToNote,
   RHYTHM_DOT_GLYPH,
@@ -115,6 +116,49 @@ describe('assignVectorStaccato', () => {
     )
     expect(detectedStaccatoCount).toBe(0)
     expect(assignments.size).toBe(0)
+  })
+})
+
+describe('assignVectorAugmentationDots', () => {
+  it('binds a rhythm-dot glyph beside a notehead', () => {
+    const notes = [trebleNote(300, 170)]
+    const assignments = assignVectorAugmentationDots(
+      [{ text: RHYTHM_DOT_GLYPH, x: 318, y: 170 }],
+      notes,
+      measureBox,
+      imageData,
+    )
+    expect(assignments.get(0)).toBe(true)
+  })
+
+  it('applies one printed augmentation dot to a same-onset chord', () => {
+    const notes = [
+      trebleNote(300, 170, 67),
+      trebleNote(300, 183, 64),
+      trebleNote(300, 196, 60),
+    ]
+    const assignments = assignVectorAugmentationDots(
+      [{ text: RHYTHM_DOT_GLYPH, x: 318, y: 183 }],
+      notes,
+      measureBox,
+      imageData,
+    )
+    expect(assignments.size).toBe(3)
+    expect(assignments.get(0)).toBe(true)
+    expect(assignments.get(1)).toBe(true)
+    expect(assignments.get(2)).toBe(true)
+  })
+
+  it('does not attach an augmentation dot to a later onset at a different X', () => {
+    const notes = [trebleNote(300, 170, 60), trebleNote(420, 170, 62)]
+    const assignments = assignVectorAugmentationDots(
+      [{ text: RHYTHM_DOT_GLYPH, x: 318, y: 170 }],
+      notes,
+      measureBox,
+      imageData,
+    )
+    expect(assignments.get(0)).toBe(true)
+    expect(assignments.has(1)).toBe(false)
   })
 })
 

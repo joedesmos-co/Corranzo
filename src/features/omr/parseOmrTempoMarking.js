@@ -18,6 +18,13 @@ const MARK_BPM_BOUNDS = Object.freeze({ min: 20, max: 400 })
 const TEMPO_WORD_RE =
   /^(grave|largo|lent|lento|adagio|andante|moderato|allegretto|allegro|vivace|presto|a\s*tempo)$/i
 
+/** Leading tempo word in a short expressive phrase ("Moderato cantabile"). */
+const LEADING_TEMPO_WORD_RE =
+  /^(grave|largo|lent|lento|adagio|andante|moderato|allegretto|allegro|vivace|presto)\b/i
+
+const EMBEDDED_TEMPO_WORD_RE =
+  /\b(grave|largo|lent|lento|adagio|andante|moderato|allegretto|allegro|vivace|presto)\b/i
+
 /** SMuFL metronome note glyphs (U+ECA0–ECB6) → MusicXML beat-unit. */
 export const SMUFL_METRONOME_BEAT_UNIT = Object.freeze({
   0xeca0: 'breve',
@@ -345,34 +352,40 @@ export function collectTempoCandidatesFromText(pageText = [], { pageNumber = 1 }
       } else if (key === 'a tempo' || key === 'atempo') {
         entry.aTempo = true
       }
-      // Later pages: ignore header-style words unless they look like mid-score directions.
-      if (pageNumber > 1 && norm.midY < 0.08) {
+      // Later pages: ignore header-band noise, but keep exact mapped tempo words /
+      // a tempo even near the top — system-start Presto/Allegro is common there.
+      if (pageNumber > 1 && norm.midY < 0.08 && mapped == null && !entry.aTempo) {
         return
       }
       candidates.push(entry)
       return
     }
-    // Short expressive phrases that contain a tempo word ("Lent et douloureux").
-    if (pageNumber === 1 && norm.text.length <= 40) {
-      const embedded = norm.text.match(
-        /\b(grave|largo|lent|lento|adagio|andante|moderato|allegretto|allegro|vivace|presto)\b/i,
-      )
+    // Short expressive phrases that begin with (or contain) a tempo word.
+    // Applies on every page — "Moderato cantabile" often appears mid-score.
+    if (norm.text.length <= 40) {
+      const leading = norm.text.match(LEADING_TEMPO_WORD_RE)
+      const embedded = leading ?? norm.text.match(EMBEDDED_TEMPO_WORD_RE)
       if (embedded) {
         const key = embedded[1].toLowerCase()
         const mapped = TEMPO_WORD_BPM[key]
-        // Prefer marks near the header when geometry is known; allow when page size missing.
         const geometryKnown = (item.pageWidth ?? 0) > 1 && (item.pageHeight ?? 0) > 1
-        if (geometryKnown && norm.midY >= 0.25) {
+        // Page-1 titles mid-page: require leading word or header band.
+        // Later pages: allow staff-band phrases (reject only extreme footer).
+        if (pageNumber === 1 && geometryKnown && !leading && norm.midY >= 0.25) {
+          return
+        }
+        if (pageNumber > 1 && geometryKnown && norm.midY > 0.97) {
           return
         }
         if (mapped != null && isPlayableBpm(mapped)) {
           usedIndices.add(index)
           candidates.push({
             kind: 'word',
-            words: embedded[1],
+            // Preserve the printed phrase when the tempo word leads it.
+            words: leading ? norm.text.replace(/\s+/g, ' ').trim() : embedded[1],
             bpm: mapped,
             quarterBpm: mapped,
-            confidence: 0.74,
+            confidence: leading ? 0.76 : 0.74,
             source: `word:${key}`,
             beatUnit: null,
             dots: 0,

@@ -3,6 +3,7 @@ import {
   buildVectorEvents,
   applyTerminalSameClefChordQuarterDurations,
   durationMeta,
+  dottedWrittenDurationDivisions,
   extendCombinedGrandStaffOpening,
   extendDurationsPerClefVoice,
   extendPenultimateHalfBeforeFinalQuarter,
@@ -72,6 +73,14 @@ describe('glyphAuthoritativeDurationDivisions', () => {
     ).toBeNull()
   })
 
+  it('does not invent open-head duration for pure black heads', () => {
+    expect(
+      glyphAuthoritativeDurationDivisions([
+        { noteheadGlyph: 'black', dotted: true, durationDivisions: 6 },
+      ]),
+    ).toBeNull()
+  })
+
   it('prefers glyph duration over a large sparse gap that would invent a dotted half', () => {
     const notes = [
       {
@@ -113,6 +122,95 @@ describe('glyphAuthoritativeDurationDivisions', () => {
     const events = buildVectorEvents(notes, measureBox, { beats: 4, beatType: 4 })
     expect(events[0].durationType).toBe('whole')
     expect(events[0].durationDivisions).toBe(16)
+  })
+})
+
+describe('dottedWrittenDurationDivisions', () => {
+  it('returns null without augmentation-dot evidence', () => {
+    expect(
+      dottedWrittenDurationDivisions([
+        { noteheadGlyph: 'black', durationDivisions: 4, dotted: false },
+      ]),
+    ).toBeNull()
+  })
+
+  it('prefers written dotted-quarter over a large sparse gap', () => {
+    expect(
+      dottedWrittenDurationDivisions([
+        {
+          noteheadGlyph: 'black',
+          durationType: 'quarter',
+          durationDivisions: 6,
+          dotted: true,
+        },
+      ]),
+    ).toBe(6)
+
+    const notes = [
+      {
+        cx: 40,
+        midi: 60,
+        naturalMidi: 60,
+        clef: 'treble',
+        positionInMeasure: 0,
+        noteheadGlyph: 'black',
+        hollow: false,
+        durationType: 'quarter',
+        durationDivisions: 6,
+        dotted: true,
+      },
+      {
+        cx: 200,
+        midi: 62,
+        naturalMidi: 62,
+        clef: 'treble',
+        positionInMeasure: 0.85,
+        noteheadGlyph: 'black',
+        hollow: false,
+        durationType: 'quarter',
+        durationDivisions: 4,
+        dotted: false,
+      },
+    ]
+    const events = buildVectorEvents(notes, measureBox, { beats: 4, beatType: 4 })
+    const first = events.find((event) => event.notes?.[0]?.midi === 60)
+    expect(first.durationType).toBe('quarter')
+    expect(first.dotted).toBe(true)
+    expect(first.durationDivisions).toBe(6)
+  })
+
+  it('still keeps dotted half when the open half glyph is authoritative', () => {
+    const notes = [
+      {
+        cx: 40,
+        midi: 60,
+        naturalMidi: 60,
+        clef: 'treble',
+        positionInMeasure: 0,
+        noteheadGlyph: 'half',
+        hollowGlyph: true,
+        hollow: true,
+        durationType: 'half',
+        durationDivisions: 12,
+        dotted: true,
+      },
+      {
+        cx: 180,
+        midi: 62,
+        naturalMidi: 62,
+        clef: 'treble',
+        positionInMeasure: 0.75,
+        noteheadGlyph: 'black',
+        durationType: 'quarter',
+        durationDivisions: 4,
+        dotted: false,
+      },
+    ]
+    const events = buildVectorEvents(notes, measureBox, { beats: 4, beatType: 4 })
+    const first = events.find((event) => event.notes?.[0]?.midi === 60)
+    expect(first.durationType).toBe('half')
+    expect(first.dotted).toBe(true)
+    expect(first.durationDivisions).toBe(12)
   })
 })
 
