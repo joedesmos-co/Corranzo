@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import PracticePageFollowController from './PracticePageFollowController.jsx'
 import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
 import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
@@ -9,10 +9,12 @@ import {
   loadPracticeViewMode,
   savePracticeViewMode,
 } from '../../features/practice/practiceViewMode.js'
+import { useInstrument } from '../../context/instrumentContext.js'
 import PdfViewer from '../PdfViewer.jsx'
 import PracticeControlPanel from './PracticeControlPanel.jsx'
 import ScoreFollowSetupStatus from './ScoreFollowSetupStatus.jsx'
 import OmrQualityWarningBanner from './OmrQualityWarningBanner.jsx'
+import RecognitionProblemReportDialog from '../omr/RecognitionProblemReportDialog.jsx'
 import VisualPracticeView from './VisualPracticeView.jsx'
 import PracticeErrorBoundary from './PracticeErrorBoundary.jsx'
 import '../../styles/practice.css'
@@ -21,6 +23,7 @@ export default function PracticeView({
   pdfFile,
   fileName,
   pdfMeta = null,
+  pdfBuffer = null,
   pageNumber,
   numPages,
   paperTheme,
@@ -36,8 +39,11 @@ export default function PracticeView({
   omrOwnerScoreId = null,
   omrWarningDismissedScoreIds = null,
   onDismissOmrQualityWarning = null,
+  musicXmlSource = null,
+  activeScoreSnapshot = null,
 }) {
   const { session, scoreFollow, waitForYouNoteTarget } = usePracticeSessionContext()
+  const { instrumentId } = useInstrument()
   const practiceErrorResetKey = [
     session.waitForYou.currentCheckpoint?.id ?? 'none',
     session.waitForYou.checkpointIndex,
@@ -46,10 +52,37 @@ export default function PracticeView({
   const pdfActionsRef = useRef(null)
   const pdfScrollRef = useRef(null)
   const sessionRef = useRef(session)
-  sessionRef.current = session
+
+  useEffect(() => {
+    sessionRef.current = session
+  }, [session])
 
   const [viewMode, setViewMode] = useState(() => loadPracticeViewMode())
   const isVisualView = viewMode === PRACTICE_VIEW_MODE.VISUAL
+  const [reportOpen, setReportOpen] = useState(false)
+  const [reportDefaultCategory, setReportDefaultCategory] = useState(null)
+  const [trackedScoreKey, setTrackedScoreKey] = useState(null)
+  const scoreKey =
+    omrOwnerScoreId ??
+    activeScoreSnapshot?.scoreId ??
+    musicXmlSource?.ownerScoreId ??
+    null
+
+  // Score replacement closes an open report dialog and clears draft category.
+  if (scoreKey !== trackedScoreKey) {
+    setTrackedScoreKey(scoreKey)
+    if (reportOpen) {
+      setReportOpen(false)
+    }
+    if (reportDefaultCategory != null) {
+      setReportDefaultCategory(null)
+    }
+  }
+
+  const openReportDialog = useCallback((options = {}) => {
+    setReportDefaultCategory(options.defaultCategory ?? null)
+    setReportOpen(true)
+  }, [])
 
   const handleViewModeChange = useCallback((mode) => {
     setViewMode(mode)
@@ -141,6 +174,7 @@ export default function PracticeView({
                     ownerScoreId={omrOwnerScoreId}
                     dismissedScoreIds={omrWarningDismissedScoreIds}
                     onDismiss={onDismissOmrQualityWarning}
+                    onReportProblem={() => openReportDialog({ defaultCategory: null })}
                   />
                   <ScoreFollowSetupStatus setupStatus={scoreFollow.setupStatus} />
                   <PdfViewer
@@ -165,6 +199,25 @@ export default function PracticeView({
               pdfFileName={fileName || null}
               pdfPageNumber={pageNumber}
               waitForYouNoteTarget={waitForYouNoteTarget}
+              onReportRecognitionProblem={() => openReportDialog({ defaultCategory: null })}
+            />
+            <RecognitionProblemReportDialog
+              open={reportOpen}
+              onClose={() => setReportOpen(false)}
+              ownerScoreId={scoreKey}
+              mode="score"
+              activeScore={
+                activeScoreSnapshot ??
+                (typeof window !== 'undefined' ? window.__SCOREFLOW_ACTIVE_SCORE__ : null)
+              }
+              musicXmlSource={musicXmlSource}
+              pdfMeta={pdfMeta}
+              pdfBuffer={pdfBuffer}
+              instrumentId={instrumentId}
+              generation={activeScoreSnapshot?.generation ?? null}
+              timingMap={session.timing?.timingMap ?? null}
+              diagnostics={musicXmlSource?.omrMeta?.diagnostics ?? null}
+              defaultCategory={reportDefaultCategory}
             />
           </PracticeErrorBoundary>
         </PracticeWorkspaceLayout>

@@ -2576,6 +2576,7 @@ export default function App() {
           pdfFile={pdfFile}
           fileName={fileName}
           pdfMeta={pdfMeta}
+          pdfBuffer={pdfBuffer}
           pageNumber={pageNumber}
           numPages={numPages}
           paperTheme={paperTheme}
@@ -2605,6 +2606,8 @@ export default function App() {
               return next
             })
           }}
+          musicXmlSource={musicXmlSource}
+          activeScoreSnapshot={activeScoreRef.current}
         />
       </PracticeSessionProvider>
     )

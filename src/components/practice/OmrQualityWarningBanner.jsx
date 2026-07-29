@@ -14,6 +14,7 @@ export default function OmrQualityWarningBanner({
   ownerScoreId = null,
   dismissedScoreIds = null,
   onDismiss = null,
+  onReportProblem = null,
 }) {
   const acceptance = quality?.acceptance ?? null
   const scoreKey = ownerScoreId ?? quality?.ownerScoreId ?? null
@@ -41,18 +42,29 @@ export default function OmrQualityWarningBanner({
   return (
     <div className="omr-quality-warning" role="status" aria-live="polite">
       <p className="omr-quality-warning__text">{message}</p>
-      <button
-        type="button"
-        className="omr-quality-warning__dismiss"
-        onClick={() => {
-          if (scoreKey) {
-            setLocalDismissedKey(scoreKey)
-          }
-          onDismiss?.(scoreKey)
-        }}
-      >
-        Dismiss
-      </button>
+      <div className="omr-quality-warning__actions">
+        {typeof onReportProblem === 'function' && (
+          <button
+            type="button"
+            className="omr-quality-warning__report"
+            onClick={() => onReportProblem({ source: 'warning-banner', scoreKey })}
+          >
+            Report recognition problem
+          </button>
+        )}
+        <button
+          type="button"
+          className="omr-quality-warning__dismiss"
+          onClick={() => {
+            if (scoreKey) {
+              setLocalDismissedKey(scoreKey)
+            }
+            onDismiss?.(scoreKey)
+          }}
+        >
+          Dismiss
+        </button>
+      </div>
     </div>
   )
 }

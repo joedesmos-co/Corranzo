@@ -28,6 +28,8 @@ import {
   noteOmrWorkerSettled,
   registerOmrRunStart,
 } from '../../features/library/scoreSourceGenerationGate.js'
+import RecognitionProblemReportDialog from '../omr/RecognitionProblemReportDialog.jsx'
+import '../../styles/recognitionProblemReport.css'
 
 function resetOmrPanelState(setters) {
   setters.setIsGenerating(false)
@@ -52,6 +54,19 @@ function formatOmrFailureMessage(error) {
   return 'We could not get timing ready from this PDF. You can try again, or upload MusicXML/MXL for the most accurate timing.'
 }
 
+function pdfBytesFromOmrSource(pdfSource) {
+  if (pdfSource instanceof ArrayBuffer) {
+    return pdfSource
+  }
+  if (ArrayBuffer.isView(pdfSource)) {
+    return pdfSource.buffer.slice(pdfSource.byteOffset, pdfSource.byteOffset + pdfSource.byteLength)
+  }
+  if (pdfSource && typeof pdfSource === 'object' && pdfSource.data != null) {
+    return pdfBytesFromOmrSource(pdfSource.data)
+  }
+  return null
+}
+
 export default function PdfOmrPlaybackPanel({
   pdfSource = null,
   pdfFileUrl = null,
@@ -73,6 +88,10 @@ export default function PdfOmrPlaybackPanel({
   const [devFlags, setDevFlags] = useState(() => getOmrDiagnosticFlags())
   const [devCopyStatus, setDevCopyStatus] = useState('')
   const [hasDiagnostics, setHasDiagnostics] = useState(false)
+  const [reportOpen, setReportOpen] = useState(false)
+  const [failureReport, setFailureReport] = useState(null)
+  const [reportDiagnostics, setReportDiagnostics] = useState(null)
+  const [reportRunMeta, setReportRunMeta] = useState(null)
   const abortRef = useRef(null)
   const activeRunRef = useRef(0)
   const completedRunRef = useRef(false)
@@ -97,6 +116,10 @@ export default function PdfOmrPlaybackPanel({
     setError(null)
     setSummary(null)
     setHasDiagnostics(false)
+    setFailureReport(null)
+    setReportDiagnostics(null)
+    setReportRunMeta(null)
+    setReportOpen(false)
     resetOmrPanelState({ setIsGenerating, setStatus, setProgressLabel })
     endOmrUiBlock()
     releaseOmrUiLocks()
@@ -275,6 +298,7 @@ export default function PdfOmrPlaybackPanel({
         omrV3RuntimePromotion: result.omrV3RuntimePromotion ?? null,
       }
       setHasDiagnostics(Boolean(result.diagnostics || result.omrV3Comparison))
+      setReportDiagnostics(lastDiagnosticsRef.current)
       lastRunMetaRef.current = {
         runId,
         noteCount: result.noteCount,
@@ -284,6 +308,7 @@ export default function PdfOmrPlaybackPanel({
         outputEngine: selectedOutput.engine,
         comparisonStatus: result.omrV3Comparison?.status ?? null,
       }
+      setReportRunMeta(lastRunMetaRef.current)
 
       cancelActiveOmrWorker()
       endOmrUiBlock()
@@ -396,9 +421,41 @@ export default function PdfOmrPlaybackPanel({
       resetInFinally = false
       const message = formatOmrFailureMessage(err)
       omrTrace('ui:setError', { message }, runId)
+      const failureDiagnostics = err?.diagnostics ?? null
+      if (failureDiagnostics) {
+        lastDiagnosticsRef.current = failureDiagnostics
+      }
+      lastRunMetaRef.current = {
+        runId,
+        stage: err?.code ?? err?.stage ?? err?.difficulty?.reasons?.[0] ?? null,
+        scoreId: runScoreId,
+        pdfIdentity: runPdfIdentity,
+        practiceSessionEpoch: runPracticeSessionEpoch,
+        pageCount: err?.pageCount ?? failureDiagnostics?.pages ?? null,
+        overallConfidence: err?.overallConfidence ?? failureDiagnostics?.overallConfidence ?? null,
+      }
+      const failedSafety = err?.quality?.safetyChecks ?? err?.acceptance?.safetyChecks ?? null
+      setFailureReport({
+        stage: lastRunMetaRef.current.stage,
+        exceptionName: err?.name ?? null,
+        exceptionMessage: err?.message ?? null,
+        exceptionStack: import.meta.env.DEV ? err?.stack ?? null : null,
+        pageCount: lastRunMetaRef.current.pageCount,
+        perPageConfidence: Array.isArray(failureDiagnostics?.pages)
+          ? failureDiagnostics.pages.map((page) => ({
+              page: page?.page ?? page?.pageNumber ?? null,
+              confidence: page?.confidence ?? null,
+            }))
+          : [],
+        acceptanceGate: err?.acceptance ?? err?.quality ?? null,
+        failedSafetyChecks: failedSafety,
+        acceptance: err?.acceptance?.acceptance ?? err?.quality?.acceptance ?? null,
+      })
+      setHasDiagnostics(Boolean(failureDiagnostics || lastRunMetaRef.current.stage))
+      setReportDiagnostics(lastDiagnosticsRef.current)
+      setReportRunMeta(lastRunMetaRef.current)
       setError(message)
       setSummary(null)
-      setHasDiagnostics(false)
       setIsGenerating(false)
       setProgressLabel('')
       setStatus(OMR_STATUS.FAILED)
@@ -582,6 +639,40 @@ export default function PdfOmrPlaybackPanel({
           {error}
         </p>
       )}
+      {!isGenerating && status === OMR_STATUS.FAILED && (hasDiagnostics || failureReport) && (
+        <button
+          type="button"
+          className="recognition-report-trigger library-omr-panel__report"
+          onClick={() => setReportOpen(true)}
+        >
+          Report recognition problem
+        </button>
+      )}
+      <RecognitionProblemReportDialog
+        open={reportOpen}
+        onClose={() => setReportOpen(false)}
+        ownerScoreId={
+          (typeof window !== 'undefined'
+            ? window.__SCOREFLOW_ACTIVE_SCORE__?.scoreId
+            : null) ??
+          getActiveScoreSourceGeneration().activeScoreId ??
+          reportRunMeta?.scoreId ??
+          null
+        }
+        mode="omr-failure"
+        activeScore={
+          typeof window !== 'undefined' ? window.__SCOREFLOW_ACTIVE_SCORE__ ?? null : null
+        }
+        musicXmlSource={null}
+        pdfMeta={pdfFileName ? { fileName: pdfFileName } : null}
+        pdfBuffer={pdfBytesFromOmrSource(pdfSource)}
+        instrumentId={instrumentId}
+        generation={practiceSessionEpoch}
+        diagnostics={reportDiagnostics}
+        omrRunMeta={reportRunMeta}
+        failure={failureReport}
+        defaultCategory="failed-to-generate"
+      />
       {showDevTools && (
         <div className="profile-dev-tools library-omr-panel__dev-tools" aria-label="OMR developer tools">
           <span className="profile-dev-tools__label">OMR diagnostics</span>

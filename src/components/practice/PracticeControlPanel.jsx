@@ -32,6 +32,7 @@ export default memo(function PracticeControlPanel({
   pdfFileName,
   pdfPageNumber = 1,
   waitForYouNoteTarget = null,
+  onReportRecognitionProblem = null,
 }) {
   const { session, scoreFollow, practicePiece, practiceStats } = usePracticeSessionContext()
   const diagnosticsSummary = buildDiagnosticsSummary(session)
@@ -278,6 +279,15 @@ export default memo(function PracticeControlPanel({
 
             <section className="practice-more__group" aria-label="Help">
               <h4 className="practice-more__group-title">Help</h4>
+              {typeof onReportRecognitionProblem === 'function' && (
+                <button
+                  type="button"
+                  className="recognition-report-trigger"
+                  onClick={() => onReportRecognitionProblem()}
+                >
+                  Report recognition problem
+                </button>
+              )}
               <details className="practice-shortcuts">
                 <summary className="practice-shortcuts__summary">Keyboard shortcuts</summary>
                 <p className="practice-shortcuts-hint" aria-label="Keyboard shortcuts">
