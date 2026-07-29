@@ -1,0 +1,391 @@
+{
+  "beamish": {
+    "beamsGe1": 118,
+    "beamStrengthGe8": 118,
+    "flags": 0,
+    "stem": 193,
+    "durationTypes": {
+      "quarter": 269,
+      "eighth": 70,
+      "sixteenth": 47,
+      "half": 31
+    },
+    "eventTypes": {
+      "quarter": 181,
+      "half": 60,
+      "eighth": 152,
+      "sixteenth": 24
+    },
+    "beamAdj": 62,
+    "topo": 51,
+    "strengthDist": {
+      "0": 269,
+      "1-7": 30,
+      "28+": 91,
+      "16-27": 23,
+      "8-15": 4
+    }
+  },
+  "samples": [
+    {
+      "beams": 0,
+      "beamStrength": 1,
+      "noteDur": "quarter",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "down",
+        "len": 29
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 2,
+      "noteDur": "quarter",
+      "eventDur": "half",
+      "eventDiv": 12,
+      "stem": {
+        "dir": "up",
+        "len": 30
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 1,
+      "beamStrength": 29,
+      "noteDur": "eighth",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "down",
+        "len": 9
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "down",
+        "len": 11
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": null,
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 2,
+      "beamStrength": 18,
+      "noteDur": "sixteenth",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "down",
+        "len": 25
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 1,
+      "beamStrength": 29,
+      "noteDur": "eighth",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "down",
+        "len": 9
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": null,
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 1,
+      "beamStrength": 29,
+      "noteDur": "eighth",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "up",
+        "len": 32
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 2,
+      "beamStrength": 29,
+      "noteDur": "sixteenth",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "down",
+        "len": 38
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "half",
+      "eventDiv": 12,
+      "stem": null,
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 1,
+      "beamStrength": 29,
+      "noteDur": "eighth",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "down",
+        "len": 9
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "down",
+        "len": 11
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": null,
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 2,
+      "beamStrength": 20,
+      "noteDur": "sixteenth",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "down",
+        "len": 25
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 1,
+      "beamStrength": 29,
+      "noteDur": "eighth",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "down",
+        "len": 9
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": null,
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 1,
+      "beamStrength": 29,
+      "noteDur": "eighth",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "up",
+        "len": 32
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "down",
+        "len": 23
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "half",
+      "eventDiv": 9,
+      "stem": null,
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "eighth",
+      "eventDiv": 2,
+      "stem": null,
+      "beamAdj": true,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "eighth",
+      "eventDiv": 2,
+      "stem": {
+        "dir": "down",
+        "len": 11
+      },
+      "beamAdj": true,
+      "topo": false
+    },
+    {
+      "beams": 1,
+      "beamStrength": 29,
+      "noteDur": "eighth",
+      "eventDur": "eighth",
+      "eventDiv": 2,
+      "stem": {
+        "dir": "down",
+        "len": 9
+      },
+      "beamAdj": true,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 1,
+      "noteDur": "quarter",
+      "eventDur": "quarter",
+      "eventDiv": 4,
+      "stem": {
+        "dir": "down",
+        "len": 21
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "eighth",
+      "eventDiv": 2,
+      "stem": null,
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 1,
+      "beamStrength": 29,
+      "noteDur": "eighth",
+      "eventDur": "eighth",
+      "eventDiv": 2,
+      "stem": {
+        "dir": "down",
+        "len": 9
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 2,
+      "beamStrength": 29,
+      "noteDur": "sixteenth",
+      "eventDur": "sixteenth",
+      "eventDiv": 1,
+      "stem": {
+        "dir": "up",
+        "len": 32
+      },
+      "beamAdj": true,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 1,
+      "noteDur": "quarter",
+      "eventDur": "eighth",
+      "eventDiv": 2,
+      "stem": {
+        "dir": "up",
+        "len": 28
+      },
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "quarter",
+      "eventDur": "half",
+      "eventDiv": 8,
+      "stem": null,
+      "beamAdj": false,
+      "topo": false
+    },
+    {
+      "beams": 0,
+      "beamStrength": 0,
+      "noteDur": "half",
+      "eventDur": "half",
+      "eventDiv": 8,
+      "stem": null,
+      "beamAdj": false,
+      "topo": false
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import {
   broadcastArticulationToChordMates,
   staffSpacePixelsForArticulation,
 } from './articulationGeometry.js'
+import { isOmrProvenanceEnabled } from './omrDiagnosticFlags.js'
 
 /**
  * SMuFL articulation glyphs in vector PDF text (Bravura / Bravura Text).
@@ -215,27 +216,94 @@ function isAugmentationDotGlyph(glyph) {
  *
  * One printed augmentation dot may apply to an entire same-onset chord (shared
  * written duration) without attaching to neighboring onsets or other voices.
+ *
+ * When DEV provenance is enabled, returns `{ assignments, diagnostics }` so
+ * callers can inspect geometry / owners / rejection reasons. Production callers
+ * that ignore the shape still receive a Map when provenance is off (unchanged).
  */
+function competingDotInterpretationScores(glyph, notes, measureBox, imageData) {
+  let articulationScore = 0
+  const x0 = (measureBox.playableX0 ?? measureBox.x0 ?? 0) * imageData.width
+  const x1 = (measureBox.x1 ?? 1) * imageData.width
+  const edgeDist = Math.min(Math.abs(glyph.x - x0), Math.abs(glyph.x - x1))
+  const measureWidth = Math.max(1, x1 - x0)
+  // Repeat dots sit near barlines; score rises toward either measure edge.
+  const repeatDotScore = Math.max(0, 1 - edgeDist / (measureWidth * 0.18))
+  for (const note of notes ?? []) {
+    const staffSpace = staffSpacePixels(measureBox, imageData, note.clef)
+    if (!isStaccatoRelativeToNote(glyph, note, staffSpace)) {
+      continue
+    }
+    const dx = Math.abs(glyph.x - note.cx)
+    const dy = Math.abs(glyph.y - note.cy)
+    articulationScore = Math.max(articulationScore, 1 / (1 + dx + dy * 0.75))
+  }
+  return { articulationScore, repeatDotScore }
+}
+
 export function assignVectorAugmentationDots(glyphs, notes, measureBox, imageData) {
+  const collect = isOmrProvenanceEnabled()
   const assignments = new Map()
   const claimed = new Set()
+  const diagnostics = collect ? [] : null
 
   for (const glyph of glyphs ?? []) {
     if (!isAugmentationDotGlyph(glyph)) {
       continue
     }
+    const competing = collect
+      ? competingDotInterpretationScores(glyph, notes, measureBox, imageData)
+      : null
     if (!glyphInMeasureBox(glyph, measureBox, imageData)) {
+      if (diagnostics) {
+        diagnostics.push({
+          glyph: { text: glyph.text, x: glyph.x, y: glyph.y },
+          geometry: { x: glyph.x, y: glyph.y },
+          possibleOwners: [],
+          augmentationScore: 0,
+          articulationScore: competing.articulationScore,
+          repeatDotScore: competing.repeatDotScore,
+          rejectionReason: 'outside-measure',
+          finalOwner: null,
+        })
+      }
       continue
     }
 
+    const possibleOwners = []
     let bestIndex = null
     let bestScore = Infinity
     for (let index = 0; index < notes.length; index += 1) {
       const note = notes[index]
-      if (!isAugmentationDotRelativeToNote(glyph, note)) {
+      const dx = glyph.x - note.cx
+      const dy = Math.abs(glyph.y - note.cy)
+      const gate = Math.max(4, dx * 0.35)
+      const compatible = dx >= 3 && dx <= 24 && dy <= gate
+      const score = Math.abs(dx) + dy * 0.5
+      if (collect) {
+        possibleOwners.push({
+          noteIndex: index,
+          cx: note.cx,
+          cy: note.cy,
+          midi: note.midi ?? null,
+          clef: note.clef ?? null,
+          dx,
+          dy,
+          gate,
+          compatible,
+          augmentationScore: compatible ? 1 / (1 + score) : 0,
+          rejectionReason: compatible
+            ? null
+            : dx < 3
+              ? 'dxTooSmall'
+              : dx > 24
+                ? 'dxTooLarge'
+                : 'dyFail',
+        })
+      }
+      if (!compatible) {
         continue
       }
-      const score = Math.abs(glyph.x - note.cx) + Math.abs(glyph.y - note.cy) * 0.5
       if (score >= bestScore) {
         continue
       }
@@ -244,15 +312,42 @@ export function assignVectorAugmentationDots(glyphs, notes, measureBox, imageDat
     }
 
     if (bestIndex == null) {
+      if (diagnostics) {
+        diagnostics.push({
+          glyph: { text: glyph.text, x: glyph.x, y: glyph.y },
+          geometry: { x: glyph.x, y: glyph.y },
+          possibleOwners,
+          augmentationScore: 0,
+          articulationScore: competing.articulationScore,
+          repeatDotScore: competing.repeatDotScore,
+          rejectionReason:
+            possibleOwners.find((owner) => owner.rejectionReason)?.rejectionReason ??
+            'no-compatible-note',
+          finalOwner: null,
+        })
+      }
       continue
     }
     const glyphKey = `${glyph.text}:${Math.round(glyph.x)}:${Math.round(glyph.y)}`
     if (claimed.has(glyphKey) || assignments.has(bestIndex)) {
+      if (diagnostics) {
+        diagnostics.push({
+          glyph: { text: glyph.text, x: glyph.x, y: glyph.y },
+          geometry: { x: glyph.x, y: glyph.y },
+          possibleOwners,
+          augmentationScore: 1 / (1 + bestScore),
+          articulationScore: competing.articulationScore,
+          repeatDotScore: competing.repeatDotScore,
+          rejectionReason: claimed.has(glyphKey) ? 'glyph-already-claimed' : 'note-already-dotted',
+          finalOwner: null,
+        })
+      }
       continue
     }
     claimed.add(glyphKey)
     assignments.set(bestIndex, true)
 
+    const chordOwners = [bestIndex]
     // Propagate to same-onset chord tones (near-identical X, same staff/clef).
     const anchor = notes[bestIndex]
     const clef = anchor?.clef ?? 'treble'
@@ -268,8 +363,30 @@ export function assignVectorAugmentationDots(glyphs, notes, measureBox, imageDat
         continue
       }
       assignments.set(index, true)
+      chordOwners.push(index)
+    }
+
+    if (diagnostics) {
+      diagnostics.push({
+        glyph: { text: glyph.text, x: glyph.x, y: glyph.y },
+        geometry: { x: glyph.x, y: glyph.y },
+        possibleOwners,
+        augmentationScore: 1 / (1 + bestScore),
+        articulationScore: competing.articulationScore,
+        repeatDotScore: competing.repeatDotScore,
+        rejectionReason: null,
+        finalOwner: {
+          noteIndex: bestIndex,
+          chordNoteIndexes: chordOwners,
+          midi: notes[bestIndex]?.midi ?? null,
+          clef: notes[bestIndex]?.clef ?? null,
+        },
+      })
     }
   }
 
+  if (collect) {
+    return { assignments, diagnostics }
+  }
   return assignments
 }

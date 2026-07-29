@@ -1,0 +1,36 @@
+
+=== FANTAISIE ===
+fantaisie scoreId=score-66dad16c-5245-48ac-bc41-bb432e9eb06c dur=- events=-
+fantaisie scoreId=score-66dad16c-5245-48ac-bc41-bb432e9eb06c dur=312.2984126984127 events=3020
+PASS  F1-upload-omr: duration=312.3s alert=none
+PASS  F2-duration-5min: minutes=5.205 (expect ~5.16)
+PASS  F3-initial-tempo: BPM at start≈84 (100% · 84 BPM) time=0:06
+PASS  F4-largo-slows: BPM at Largo region≈50 time=2:11
+PASS  F5-moderato-return: BPM after Largo≈108 (expect ~108) time=2:26
+PASS  F6-presto-fast: BPM near Presto≈168 (expect ~168) time=4:01
+PASS  F7-end-sync: owner match + BPM=168 time=4:41
+PASS  F8-boundary-seek: after boundary seek BPM=108 time=2:29
+PASS  F9-cursor-owner: ownerScoreId=score-66dad16c-5245-48ac-bc41-bb432e9eb06c
+
+=== MINECRAFT ===
+minecraft scoreId=score-f39b1d42-5bf5-4ab7-91d8-571626f7e0f1 dur=226 events=540
+PASS  M10-upload-omr: duration=226.0s measures=113
+PASS  M11-dotted-quarters-present: quarter.=17 (before 0)
+PASS  M12-single-dot: no double-dot types in hist
+PASS  M13-dotted-quarter-duration: ok=17 bad=0
+PASS  M14-no-false-dot-explosion: quarter.=17
+PASS  M15-whole-half-sensible: whole=144 half=136 half.=134
+PASS  M16-whole-regression-bounded: whole delta=-7 (151→144 expected class)
+PASS  M17-ties-present: tie starts=62
+PASS  M18-chord-dots-no-staccato-swap: staccato path separate; Minecraft has no staccato requirement
+
+=== EVANGELION ===
+evangelion scoreId=score-0442209d-1857-4eae-b881-8ecde920cff2 dur=- events=-
+evangelion scoreId=score-0442209d-1857-4eae-b881-8ecde920cff2 dur=243.1077694235589 events=2794
+PASS  E19-measures: measures=125
+PASS  E19b-duration: minutes=4.052
+PASS  E20-no-false-dot-increase: quarter.=15
+PASS  E21-piano-playback: events=2794
+PASS  E22-no-console-exceptions: none blocking (9 known transport update-depth warnings during programmatic seek)
+
+Wrote /Users/ryland/Documents/scoreflow/tmp/corranzo-p1-tempo-dots/SMOKE_RESULTS.md

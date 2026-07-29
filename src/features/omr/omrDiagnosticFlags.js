@@ -20,6 +20,9 @@
  *
  * Emit compact V2↔V3 disagreement telemetry to the console (dev only):
  *   localStorage.setItem('scoreflow:omr-v3-telemetry', '1')
+ *
+ * Rhythm provenance (duration / dot / beam decision chains; default OFF):
+ *   localStorage.setItem('scoreflow:omr-provenance', '1')
  */
 
 export const OMR_DIAGNOSTIC_FLAG = {
@@ -29,6 +32,7 @@ export const OMR_DIAGNOSTIC_FLAG = {
   V3_COMPARE: 'scoreflow:omr-v3-compare',
   V3_PREFER: 'scoreflow:omr-v3-prefer',
   V3_TELEMETRY: 'scoreflow:omr-v3-telemetry',
+  PROVENANCE: 'scoreflow:omr-provenance',
 }
 
 const memoryFlags = new Map()
@@ -73,7 +77,13 @@ export function getOmrDiagnosticFlags() {
     v3Compare: readFlag(OMR_DIAGNOSTIC_FLAG.V3_COMPARE, false),
     v3Prefer: readFlag(OMR_DIAGNOSTIC_FLAG.V3_PREFER, false),
     v3Telemetry: readFlag(OMR_DIAGNOSTIC_FLAG.V3_TELEMETRY, false),
+    // Default OFF — collectors allocate only when explicitly enabled.
+    provenance: readFlag(OMR_DIAGNOSTIC_FLAG.PROVENANCE, false),
   }
+}
+
+export function isOmrProvenanceEnabled() {
+  return Boolean(getOmrDiagnosticFlags().provenance)
 }
 
 /**
@@ -121,5 +131,6 @@ export function formatOmrDiagnosticHelp() {
     `  ${OMR_DIAGNOSTIC_FLAG.V3_COMPARE}=1 — run V2+V3 comparison (V2 stays user-visible)`,
     `  ${OMR_DIAGNOSTIC_FLAG.V3_PREFER}=1 — prefer V3 MusicXML in developer UI only`,
     `  ${OMR_DIAGNOSTIC_FLAG.V3_TELEMETRY}=1 — log compact V2↔V3 disagreement telemetry`,
+    `  ${OMR_DIAGNOSTIC_FLAG.PROVENANCE}=1 — collect duration/dot/beam decision provenance (default off)`,
   ].join('\n')
 }

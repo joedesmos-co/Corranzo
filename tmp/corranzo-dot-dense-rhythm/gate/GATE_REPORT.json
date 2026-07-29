@@ -1,0 +1,276 @@
+{
+  "provenanceEnabled": false,
+  "cases": [
+    {
+      "id": "minecraft",
+      "noteCount": 585,
+      "measureCount": 113,
+      "hist": {
+        "types": {
+          "half": 270,
+          "quarter": 119,
+          "whole": 144,
+          "eighth": 59,
+          "sixteenth": 12
+        },
+        "dottedQuarter": 17,
+        "dottedHalf": 134,
+        "dots": 154,
+        "beams": 16,
+        "ties": 0,
+        "tied": 0,
+        "tempos": [],
+        "measures": 113
+      },
+      "sha": "60c54f809302d7a40608d7d3266b93a08d3d62cc113fe548c8cc888d90631854",
+      "hasRhythmProvenance": false,
+      "fingerprint": {
+        "whole": 144,
+        "half": 270,
+        "quarter": 119,
+        "eighth": 59,
+        "sixteenth": 12,
+        "dottedQuarter": 17,
+        "dottedHalf": 134,
+        "dots": 154,
+        "beams": 16,
+        "measures": 113
+      },
+      "baselineFingerprint": {
+        "whole": 144,
+        "half": 270,
+        "quarter": 119,
+        "eighth": 59,
+        "sixteenth": 12,
+        "dottedQuarter": 17,
+        "dottedHalf": 134,
+        "dots": 154,
+        "beams": 16,
+        "measures": 113
+      }
+    },
+    {
+      "id": "evangelion",
+      "noteCount": 2808,
+      "measureCount": 125,
+      "hist": {
+        "types": {
+          "half": 14,
+          "quarter": 440,
+          "eighth": 1899,
+          "sixteenth": 463,
+          "whole": 8
+        },
+        "dottedQuarter": 15,
+        "dottedHalf": 0,
+        "dots": 201,
+        "beams": 538,
+        "ties": 0,
+        "tied": 0,
+        "tempos": [
+          76,
+          126
+        ],
+        "measures": 125
+      },
+      "sha": "9ec8220cf7c3fdbd5f9b78ec809d69d429da2c8569d8b993d0f3ab86da97646e",
+      "hasRhythmProvenance": false
+    },
+    {
+      "id": "hungarian",
+      "noteCount": 1501,
+      "measureCount": 105,
+      "hist": {
+        "types": {
+          "quarter": 800,
+          "half": 156,
+          "eighth": 437,
+          "sixteenth": 108
+        },
+        "dottedQuarter": 0,
+        "dottedHalf": 2,
+        "dots": 8,
+        "beams": 62,
+        "ties": 0,
+        "tied": 0,
+        "tempos": [
+          120,
+          144,
+          144
+        ],
+        "measures": 105
+      },
+      "sha": "7812ea131d06fad481c49ec3058f4215987032b8d761116b22210a73073153fb",
+      "hasRhythmProvenance": false,
+      "fingerprint": {
+        "whole": 0,
+        "half": 156,
+        "quarter": 800,
+        "eighth": 437,
+        "sixteenth": 108,
+        "dottedQuarter": 0,
+        "dottedHalf": 2,
+        "dots": 8,
+        "beams": 62,
+        "measures": 105
+      },
+      "baselineFingerprint": {
+        "whole": 0,
+        "half": 156,
+        "quarter": 800,
+        "eighth": 437,
+        "sixteenth": 108,
+        "dottedQuarter": 0,
+        "dottedHalf": 2,
+        "dots": 8,
+        "beams": 62,
+        "measures": 105
+      }
+    },
+    {
+      "id": "fantaisie",
+      "noteCount": 3028,
+      "measureCount": 144,
+      "hist": {
+        "types": {
+          "whole": 18,
+          "sixteenth": 2180,
+          "eighth": 740,
+          "quarter": 97,
+          "half": 18
+        },
+        "dottedQuarter": 0,
+        "dottedHalf": 12,
+        "dots": 27,
+        "beams": 1725,
+        "ties": 4,
+        "tied": 4,
+        "tempos": [
+          120,
+          84,
+          84,
+          50,
+          108,
+          108,
+          168,
+          168
+        ],
+        "measures": 144
+      },
+      "sha": "b31dfd46ad003601881cdd593871ea4b3562384b97edbdfd0f4754d906452c12",
+      "hasRhythmProvenance": false
+    }
+  ],
+  "checks": [
+    {
+      "name": "minecraft:no-provenance-payload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "minecraft:notes",
+      "ok": true,
+      "detail": "notes=585"
+    },
+    {
+      "name": "minecraft:rhythm-fingerprint-equiv",
+      "ok": true,
+      "detail": "match"
+    },
+    {
+      "name": "minecraft:dotted-quarter",
+      "ok": true,
+      "detail": "dottedQuarter=17"
+    },
+    {
+      "name": "minecraft:whole",
+      "ok": true,
+      "detail": "whole=144"
+    },
+    {
+      "name": "minecraft:dots",
+      "ok": true,
+      "detail": "dots=154"
+    },
+    {
+      "name": "evangelion:no-provenance-payload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "evangelion:notes",
+      "ok": true,
+      "detail": "notes=2808"
+    },
+    {
+      "name": "evangelion:dotted-quarter",
+      "ok": true,
+      "detail": "dottedQuarter=15"
+    },
+    {
+      "name": "evangelion:beams",
+      "ok": true,
+      "detail": "beams=538"
+    },
+    {
+      "name": "evangelion:measures",
+      "ok": true,
+      "detail": "measures=125"
+    },
+    {
+      "name": "hungarian:no-provenance-payload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "hungarian:notes",
+      "ok": true,
+      "detail": "notes=1501"
+    },
+    {
+      "name": "hungarian:rhythm-fingerprint-equiv",
+      "ok": true,
+      "detail": "match"
+    },
+    {
+      "name": "fantaisie:no-provenance-payload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "fantaisie:notes",
+      "ok": true,
+      "detail": "notes=3028"
+    },
+    {
+      "name": "fantaisie:tempo-84",
+      "ok": true,
+      "detail": "tempos=120,84,50,108,168"
+    },
+    {
+      "name": "fantaisie:tempo-50",
+      "ok": true,
+      "detail": "tempos=120,84,50,108,168"
+    },
+    {
+      "name": "fantaisie:tempo-108",
+      "ok": true,
+      "detail": "tempos=120,84,50,108,168"
+    },
+    {
+      "name": "fantaisie:tempo-168",
+      "ok": true,
+      "detail": "tempos=120,84,50,108,168"
+    },
+    {
+      "name": "provenance-ab:musicxml-fingerprint",
+      "ok": true,
+      "detail": "off===on"
+    },
+    {
+      "name": "provenance-ab:payload-only-when-on",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

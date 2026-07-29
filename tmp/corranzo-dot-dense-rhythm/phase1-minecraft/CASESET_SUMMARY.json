@@ -1,0 +1,510 @@
+{
+  "baselineCommit": "541f607e230611e37f377f4a106f42ab57822c65",
+  "genHist": {
+    "half.": 134,
+    "quarter": 97,
+    "half": 136,
+    "whole": 144,
+    "eighth": 49,
+    "sixteenth": 5,
+    "quarter.": 17,
+    "eighth.": 3
+  },
+  "pageAudits": [
+    {
+      "page": 1,
+      "heads": 105,
+      "dots": 23,
+      "kindCounts": {
+        "whole": 8,
+        "black": 53,
+        "half": 44
+      },
+      "matchedDots": 5,
+      "unmatchedDots": 18,
+      "failReasons": {
+        "dyFail": 15,
+        "dxTooSmall": 1,
+        "dxTooLarge": 2
+      },
+      "matchedByKind": {
+        "half": 5
+      }
+    },
+    {
+      "page": 2,
+      "heads": 230,
+      "dots": 46,
+      "kindCounts": {
+        "whole": 65,
+        "half": 112,
+        "black": 53
+      },
+      "matchedDots": 26,
+      "unmatchedDots": 20,
+      "failReasons": {
+        "dyFail": 17,
+        "dxTooSmall": 2,
+        "dxTooLarge": 1
+      },
+      "matchedByKind": {
+        "half": 26
+      }
+    },
+    {
+      "page": 3,
+      "heads": 252,
+      "dots": 64,
+      "kindCounts": {
+        "whole": 92,
+        "half": 39,
+        "black": 121
+      },
+      "matchedDots": 35,
+      "unmatchedDots": 29,
+      "failReasons": {
+        "dyFail": 25,
+        "dxTooLarge": 2,
+        "dxTooSmall": 2
+      },
+      "matchedByKind": {
+        "half": 9,
+        "black": 26
+      }
+    }
+  ],
+  "totals": {
+    "heads": 587,
+    "dots": 133,
+    "matched": 66,
+    "unmatched": 67,
+    "failReasons": {
+      "dyFail": 57,
+      "dxTooSmall": 5,
+      "dxTooLarge": 5
+    },
+    "matchedByKind": {
+      "half": 40,
+      "black": 26
+    },
+    "headKinds": {
+      "whole": 165,
+      "black": 227,
+      "half": 195
+    }
+  },
+  "truthAudit": {
+    "truthHist": {
+      "half": 125,
+      "quarter": 129,
+      "half.": 70,
+      "whole": 165,
+      "eighth": 49,
+      "quarter.": 49
+    },
+    "genHist": {
+      "half.": 134,
+      "quarter": 97,
+      "half": 136,
+      "whole": 144,
+      "eighth": 49,
+      "sixteenth": 5,
+      "quarter.": 17,
+      "eighth.": 3
+    },
+    "truthDQ": 49,
+    "genDQ": 17,
+    "truthWhole": 165,
+    "genWhole": 144,
+    "truthHalf": 125,
+    "genHalf": 136,
+    "truthHalfDot": 70,
+    "genHalfDot": 134,
+    "missingDQMeasures": [
+      79,
+      83,
+      85,
+      87,
+      89,
+      91,
+      93,
+      95,
+      97,
+      99,
+      101,
+      103,
+      105,
+      107
+    ],
+    "partialDQMeasures": [],
+    "sampleMissing": {
+      "79": [
+        {
+          "m": 79,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "B3",
+          "chord": false
+        },
+        {
+          "m": 79,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "E4",
+          "chord": true
+        }
+      ],
+      "83": [
+        {
+          "m": 83,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "A3",
+          "chord": false
+        },
+        {
+          "m": 83,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "C4",
+          "chord": true
+        }
+      ],
+      "85": [
+        {
+          "m": 85,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "D4",
+          "chord": false
+        },
+        {
+          "m": 85,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "F4",
+          "chord": true
+        },
+        {
+          "m": 85,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "A4",
+          "chord": true
+        },
+        {
+          "m": 85,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "F4",
+          "chord": false
+        }
+      ],
+      "87": [
+        {
+          "m": 87,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "B3",
+          "chord": false
+        },
+        {
+          "m": 87,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "E4",
+          "chord": true
+        },
+        {
+          "m": 87,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "B4",
+          "chord": true
+        },
+        {
+          "m": 87,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "C5",
+          "chord": false
+        }
+      ],
+      "89": [
+        {
+          "m": 89,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "G3",
+          "chord": false
+        },
+        {
+          "m": 89,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "B3",
+          "chord": true
+        },
+        {
+          "m": 89,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "B4",
+          "chord": false
+        }
+      ],
+      "91": [
+        {
+          "m": 91,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "F4",
+          "chord": false
+        },
+        {
+          "m": 91,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "E4",
+          "chord": false
+        },
+        {
+          "m": 91,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "F3",
+          "chord": false
+        },
+        {
+          "m": 91,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "A3",
+          "chord": false
+        },
+        {
+          "m": 91,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "C4",
+          "chord": true
+        }
+      ],
+      "93": [
+        {
+          "m": 93,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "D4",
+          "chord": false
+        },
+        {
+          "m": 93,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "F4",
+          "chord": true
+        },
+        {
+          "m": 93,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "A4",
+          "chord": true
+        }
+      ],
+      "95": [
+        {
+          "m": 95,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "B3",
+          "chord": false
+        },
+        {
+          "m": 95,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "E4",
+          "chord": true
+        },
+        {
+          "m": 95,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "B4",
+          "chord": true
+        },
+        {
+          "m": 95,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "C5",
+          "chord": false
+        }
+      ],
+      "97": [
+        {
+          "m": 97,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "G3",
+          "chord": false
+        },
+        {
+          "m": 97,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "B3",
+          "chord": true
+        },
+        {
+          "m": 97,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "B4",
+          "chord": false
+        }
+      ],
+      "99": [
+        {
+          "m": 99,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "F4",
+          "chord": false
+        },
+        {
+          "m": 99,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "E4",
+          "chord": false
+        },
+        {
+          "m": 99,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "F3",
+          "chord": false
+        },
+        {
+          "m": 99,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "A3",
+          "chord": false
+        },
+        {
+          "m": 99,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "C4",
+          "chord": true
+        }
+      ],
+      "101": [
+        {
+          "m": 101,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "D4",
+          "chord": false
+        },
+        {
+          "m": 101,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "F4",
+          "chord": true
+        },
+        {
+          "m": 101,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "A4",
+          "chord": true
+        },
+        {
+          "m": 101,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "F5",
+          "chord": false
+        }
+      ],
+      "103": [
+        {
+          "m": 103,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "B3",
+          "chord": false
+        },
+        {
+          "m": 103,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "E4",
+          "chord": true
+        },
+        {
+          "m": 103,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "B4",
+          "chord": true
+        },
+        {
+          "m": 103,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "C5",
+          "chord": false
+        }
+      ],
+      "105": [
+        {
+          "m": 105,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "B4",
+          "chord": false
+        }
+      ],
+      "107": [
+        {
+          "m": 107,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "E4",
+          "chord": false
+        },
+        {
+          "m": 107,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "F3",
+          "chord": false
+        },
+        {
+          "m": 107,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "A3",
+          "chord": false
+        },
+        {
+          "m": 107,
+          "type": "quarter",
+          "dots": 1,
+          "pitch": "C4",
+          "chord": true
+        }
+      ]
+    },
+    "hitMeasures": [
+      88
+    ]
+  }
+}

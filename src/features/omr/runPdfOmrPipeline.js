@@ -11,6 +11,8 @@ import { buildOmrMusicXml } from './buildOmrMusicXml.js'
 import { promoteMeasureRhythmsWithClips } from './scoreGraphSolver.js'
 import { parseTempoFromTextItems, initialTempoFromMeasureRecords } from './parseOmrTempoMarking.js'
 import { buildOmrDiagnostics } from './buildOmrDiagnostics.js'
+import { summarizeRhythmProvenance } from './omrRhythmProvenance.js'
+import { isOmrProvenanceEnabled } from './omrDiagnosticFlags.js'
 import { applyDocumentVectorCurveContinuations } from './detectVectorTies.js'
 import { summarizeNoteMatchingReport } from './omrNoteMatchingDiagnostics.js'
 import { summarizeOrphanDiagnostics } from './vectorOrphanNoteheads.js'
@@ -1352,6 +1354,11 @@ async function runPdfOmrPipelineBody({
 
   const noteMatching = summarizeNoteMatchingReport(measureRhythms)
   const orphanNoteheads = summarizeOrphanDiagnostics(orphanDiagnosticsPages)
+  const rhythmProvenance = isOmrProvenanceEnabled()
+    ? summarizeRhythmProvenance(
+        measureRhythms.map((measure) => measure.rhythmProvenance).filter(Boolean),
+      )
+    : null
   const staffGapNormalization = {
     documentReference: computeDocumentStaffGapReference(documentStaffGapSamples),
     pages: staffGapNormalizationPages,
@@ -1399,6 +1406,7 @@ async function runPdfOmrPipelineBody({
       terminalEarlyColumnCorrection: terminalEarlyColumnCorrectionSummary,
       terminalSameClefChordQuarterCorrection,
       ...(promoteScoreGraphClips ? { scoreGraphClipPromotion } : {}),
+      ...(rhythmProvenance ? { rhythmProvenance } : {}),
     },
     measureGrid,
     measureGridDiagnostics,

@@ -7,9 +7,12 @@ import { OMR_STATUS, OMR_STATUS_LABEL, yieldToBrowser } from '../../features/omr
 import { nextOmrTraceRunId, omrTrace } from '../../features/omr/omrTrace.js'
 import {
   buildOmrDiagnosticExport,
+  buildOmrProvenancePackage,
   copyOmrDiagnosticExport,
   describeOmrDevTools,
+  downloadOmrProvenancePackage,
   toggleOmrDebug,
+  toggleOmrProvenance,
   toggleOmrTrace,
   toggleOmrV3Compare,
   toggleOmrV3Prefer,
@@ -458,6 +461,25 @@ export default function PdfOmrPlaybackPanel({
     }
   }, [])
 
+  const handleDownloadProvenance = useCallback(() => {
+    const activeScore =
+      typeof window !== 'undefined' ? window.__SCOREFLOW_ACTIVE_SCORE__ : null
+    const bundle = buildOmrProvenancePackage({
+      diagnostics: lastDiagnosticsRef.current,
+      runMeta: lastRunMetaRef.current,
+      activeScore,
+    })
+    const result = downloadOmrProvenancePackage(bundle)
+    setDevCopyStatus(
+      result.ok
+        ? `Provenance downloaded (${result.fileName}).`
+        : 'Provenance export failed — see console.',
+    )
+    if (!result.ok) {
+      console.info(result.text)
+    }
+  }, [])
+
   const handleToggleTrace = useCallback(() => {
     const next = toggleOmrTrace(!devFlags.trace)
     setDevFlags(next)
@@ -467,6 +489,11 @@ export default function PdfOmrPlaybackPanel({
     const next = toggleOmrDebug(!devFlags.debug)
     setDevFlags(next)
   }, [devFlags.debug])
+
+  const handleToggleProvenance = useCallback(() => {
+    const next = toggleOmrProvenance(!devFlags.provenance)
+    setDevFlags(next)
+  }, [devFlags.provenance])
 
   const handleToggleV3Compare = useCallback(() => {
     const next = toggleOmrV3Compare(!devFlags.v3Compare)
@@ -556,6 +583,15 @@ export default function PdfOmrPlaybackPanel({
           </button>
           <button
             type="button"
+            className="profile-dev-tools__btn"
+            onClick={handleDownloadProvenance}
+            disabled={!hasDiagnostics}
+            title="Download duration/dot/beam provenance package for the last OMR run"
+          >
+            Export provenance JSON
+          </button>
+          <button
+            type="button"
             className={`profile-dev-tools__btn${devFlags.trace ? '' : ' profile-dev-tools__btn--muted'}`}
             onClick={handleToggleTrace}
             aria-pressed={devFlags.trace}
@@ -569,6 +605,15 @@ export default function PdfOmrPlaybackPanel({
             aria-pressed={devFlags.debug}
           >
             Debug {devFlags.debug ? 'on' : 'off'}
+          </button>
+          <button
+            type="button"
+            className={`profile-dev-tools__btn${devFlags.provenance ? '' : ' profile-dev-tools__btn--muted'}`}
+            onClick={handleToggleProvenance}
+            aria-pressed={Boolean(devFlags.provenance)}
+            title="Collect duration/dot/beam decision chains on the next OMR run (default off)"
+          >
+            Provenance {devFlags.provenance ? 'on' : 'off'}
           </button>
           <button
             type="button"

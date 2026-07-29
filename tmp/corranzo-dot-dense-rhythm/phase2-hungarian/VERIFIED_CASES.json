@@ -1,0 +1,948 @@
+{
+  "truthHist55": {
+    "quarter.": 39,
+    "eighth": 521,
+    "16th": 132,
+    "half": 18,
+    "eighth.": 9,
+    "quarter": 51,
+    "32nd": 3,
+    "16th.": 5
+  },
+  "genHist55": {
+    "quarter": 362,
+    "half": 90,
+    "eighth": 299,
+    "sixteenth": 84,
+    "eighth.": 4
+  },
+  "sampled": 65,
+  "promotionsToQuarter": 30,
+  "correctShortOrExact": 9,
+  "missingPitch": 0,
+  "truthBeamNotes": 328,
+  "genBeamNotes": 39,
+  "classCounts": {
+    "promoted_to_quarter": 30,
+    "correct": 9,
+    "16th->eighth": 13,
+    "eighth->half": 6,
+    "eighth.->half": 1,
+    "eighth->sixteenth": 1,
+    "16th->eighth.": 1,
+    "quarter->half": 4
+  },
+  "cases": [
+    {
+      "m": 1,
+      "onset": 60,
+      "pitch": "F4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "eighth",
+      "truthBeams": [],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 1,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 1,
+      "onset": 20,
+      "pitch": "A2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 2,
+      "onset": 60,
+      "pitch": "F4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "eighth",
+      "truthBeams": [],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 2,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 2,
+      "onset": 20,
+      "pitch": "A2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 3,
+      "onset": 60,
+      "pitch": "F4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "begin",
+        "begin"
+      ],
+      "genType": "sixteenth",
+      "genBeams": [],
+      "class": "correct"
+    },
+    {
+      "m": 3,
+      "onset": 70,
+      "pitch": "G4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "end",
+        "end"
+      ],
+      "genType": "eighth",
+      "genBeams": [],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 3,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 4,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "half",
+      "genBeams": [],
+      "class": "eighth->half"
+    },
+    {
+      "m": 4,
+      "onset": 20,
+      "pitch": "A2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 4,
+      "onset": 40,
+      "pitch": "C2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 5,
+      "onset": 60,
+      "pitch": "E4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "begin",
+        "begin"
+      ],
+      "genType": "eighth",
+      "genBeams": [
+        "begin"
+      ],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 5,
+      "onset": 70,
+      "pitch": "F4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "end",
+        "end"
+      ],
+      "genType": "eighth",
+      "genBeams": [
+        "end"
+      ],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 5,
+      "onset": 0,
+      "pitch": "B3",
+      "voice": "5",
+      "staff": "1",
+      "truthType": "eighth.",
+      "truthBeams": [],
+      "genType": "half",
+      "genBeams": [],
+      "class": "eighth.->half"
+    },
+    {
+      "m": 6,
+      "onset": 0,
+      "pitch": "A3",
+      "voice": "2",
+      "staff": "1",
+      "truthType": "eighth",
+      "truthBeams": [],
+      "genType": "half",
+      "genBeams": [],
+      "class": "eighth->half"
+    },
+    {
+      "m": 6,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "half",
+      "genBeams": [],
+      "class": "eighth->half"
+    },
+    {
+      "m": 6,
+      "onset": 20,
+      "pitch": "A2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 7,
+      "onset": 0,
+      "pitch": "B3",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "begin",
+        "begin"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 7,
+      "onset": 10,
+      "pitch": "A3",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "continue",
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 7,
+      "onset": 20,
+      "pitch": "A3",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "end",
+        "end"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 8,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "half",
+      "genBeams": [],
+      "class": "eighth->half"
+    },
+    {
+      "m": 8,
+      "onset": 20,
+      "pitch": "A2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 8,
+      "onset": 40,
+      "pitch": "C2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 9,
+      "onset": 60,
+      "pitch": "F4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "begin",
+        "begin"
+      ],
+      "genType": "eighth",
+      "genBeams": [],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 9,
+      "onset": 70,
+      "pitch": "A4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "end",
+        "end"
+      ],
+      "genType": "eighth",
+      "genBeams": [],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 9,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 10,
+      "onset": 60,
+      "pitch": "A4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "eighth",
+      "truthBeams": [],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 10,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 10,
+      "onset": 20,
+      "pitch": "A2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 11,
+      "onset": 60,
+      "pitch": "A4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "begin",
+        "begin"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 11,
+      "onset": 70,
+      "pitch": "B4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "end",
+        "end"
+      ],
+      "genType": "sixteenth",
+      "genBeams": [],
+      "class": "correct"
+    },
+    {
+      "m": 11,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "sixteenth",
+      "genBeams": [],
+      "class": "eighth->sixteenth"
+    },
+    {
+      "m": 12,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "half",
+      "genBeams": [],
+      "class": "eighth->half"
+    },
+    {
+      "m": 12,
+      "onset": 20,
+      "pitch": "A2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 12,
+      "onset": 40,
+      "pitch": "C2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 13,
+      "onset": 0,
+      "pitch": "D5",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "begin",
+        "begin"
+      ],
+      "genType": "eighth",
+      "genBeams": [
+        "begin"
+      ],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 13,
+      "onset": 10,
+      "pitch": "E5",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "continue",
+        "continue"
+      ],
+      "genType": "eighth",
+      "genBeams": [
+        "continue"
+      ],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 13,
+      "onset": 20,
+      "pitch": "F5",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "continue",
+        "continue"
+      ],
+      "genType": "eighth",
+      "genBeams": [
+        "end"
+      ],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 14,
+      "onset": 0,
+      "pitch": "B4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "begin",
+        "begin"
+      ],
+      "genType": "eighth.",
+      "genBeams": [
+        "begin"
+      ],
+      "class": "16th->eighth."
+    },
+    {
+      "m": 14,
+      "onset": 10,
+      "pitch": "C5",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "continue",
+        "continue"
+      ],
+      "genType": "eighth",
+      "genBeams": [],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 14,
+      "onset": 20,
+      "pitch": "D5",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "continue",
+        "continue"
+      ],
+      "genType": "eighth",
+      "genBeams": [],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 15,
+      "onset": 0,
+      "pitch": "B4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "begin",
+        "begin"
+      ],
+      "genType": "sixteenth",
+      "genBeams": [],
+      "class": "correct"
+    },
+    {
+      "m": 15,
+      "onset": 10,
+      "pitch": "A4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "continue",
+        "continue"
+      ],
+      "genType": "eighth",
+      "genBeams": [
+        "continue"
+      ],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 15,
+      "onset": 20,
+      "pitch": "A4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "continue",
+        "continue"
+      ],
+      "genType": "eighth",
+      "genBeams": [
+        "continue"
+      ],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 16,
+      "onset": 40,
+      "pitch": "A4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "eighth",
+      "truthBeams": [],
+      "genType": "half",
+      "genBeams": [],
+      "class": "eighth->half"
+    },
+    {
+      "m": 16,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 16,
+      "onset": 20,
+      "pitch": "A2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "end"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 17,
+      "onset": 60,
+      "pitch": "F4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "eighth",
+      "truthBeams": [],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 17,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 17,
+      "onset": 20,
+      "pitch": "A2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 18,
+      "onset": 60,
+      "pitch": "F4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "eighth",
+      "truthBeams": [],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 18,
+      "onset": 0,
+      "pitch": "F2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "begin"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 18,
+      "onset": 20,
+      "pitch": "A2",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "eighth",
+      "truthBeams": [
+        "continue"
+      ],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "promoted_to_quarter"
+    },
+    {
+      "m": 19,
+      "onset": 60,
+      "pitch": "F4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "16th",
+      "truthBeams": [
+        "begin",
+        "begin"
+      ],
+      "genType": "eighth",
+      "genBeams": [],
+      "class": "16th->eighth"
+    },
+    {
+      "m": 7,
+      "onset": 30,
+      "pitch": "G3",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "quarter",
+      "truthBeams": [],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "correct"
+    },
+    {
+      "m": 16,
+      "onset": 0,
+      "pitch": "F4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "quarter",
+      "truthBeams": [],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "correct"
+    },
+    {
+      "m": 32,
+      "onset": 0,
+      "pitch": "F4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "quarter",
+      "truthBeams": [],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "correct"
+    },
+    {
+      "m": 33,
+      "onset": 0,
+      "pitch": "C5",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "quarter",
+      "truthBeams": [],
+      "genType": "half",
+      "genBeams": [],
+      "class": "quarter->half"
+    },
+    {
+      "m": 33,
+      "onset": 40,
+      "pitch": "C5",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "quarter",
+      "truthBeams": [],
+      "genType": "half",
+      "genBeams": [],
+      "class": "quarter->half"
+    },
+    {
+      "m": 33,
+      "onset": 20,
+      "pitch": "F3",
+      "voice": "5",
+      "staff": "2",
+      "truthType": "quarter",
+      "truthBeams": [],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "correct"
+    },
+    {
+      "m": 35,
+      "onset": 20,
+      "pitch": "B4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "quarter",
+      "truthBeams": [],
+      "genType": "half",
+      "genBeams": [],
+      "class": "quarter->half"
+    },
+    {
+      "m": 37,
+      "onset": 0,
+      "pitch": "B4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "quarter",
+      "truthBeams": [],
+      "genType": "half",
+      "genBeams": [],
+      "class": "quarter->half"
+    },
+    {
+      "m": 37,
+      "onset": 40,
+      "pitch": "B4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "quarter",
+      "truthBeams": [],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "correct"
+    },
+    {
+      "m": 39,
+      "onset": 20,
+      "pitch": "A4",
+      "voice": "1",
+      "staff": "1",
+      "truthType": "quarter",
+      "truthBeams": [],
+      "genType": "quarter",
+      "genBeams": [],
+      "class": "correct"
+    }
+  ]
+}

@@ -2,7 +2,12 @@
  * Developer helpers for copying OMR diagnostic bundles and managing trace flags.
  */
 
-import { formatOmrDiagnosticHelp, getOmrDiagnosticFlags, setOmrDiagnosticFlag, OMR_DIAGNOSTIC_FLAG } from './omrDiagnosticFlags.js'
+import {
+  formatOmrDiagnosticHelp,
+  getOmrDiagnosticFlags,
+  setOmrDiagnosticFlag,
+  OMR_DIAGNOSTIC_FLAG,
+} from './omrDiagnosticFlags.js'
 import { groupAccuracyReportErrors } from './omrDiagnosticGrouping.js'
 
 function compactDiagnostics(diagnostics = {}) {
@@ -79,6 +84,23 @@ function compactDiagnostics(diagnostics = {}) {
       : null,
     preprocessLog: diagnostics.preprocessLog ?? null,
     layoutConsistency: diagnostics.layoutConsistency ?? null,
+    rhythmProvenance: diagnostics.rhythmProvenance
+      ? {
+          version: diagnostics.rhythmProvenance.version ?? 1,
+          noteDurationCount: diagnostics.rhythmProvenance.noteDurationCount ?? 0,
+          dotCandidateCount: diagnostics.rhythmProvenance.dotCandidateCount ?? 0,
+          beamCandidateCount: diagnostics.rhythmProvenance.beamCandidateCount ?? 0,
+          beamDurationOverwrittenLater:
+            diagnostics.rhythmProvenance.beamDurationOverwrittenLater ?? 0,
+          chordCoalesceOverrides:
+            diagnostics.rhythmProvenance.chordCoalesceOverrides ?? 0,
+          unassignedDots: diagnostics.rhythmProvenance.unassignedDots ?? 0,
+          rejectedBeams: diagnostics.rhythmProvenance.rejectedBeams ?? 0,
+          noteDurations: diagnostics.rhythmProvenance.noteDurations ?? [],
+          dotCandidates: diagnostics.rhythmProvenance.dotCandidates ?? [],
+          beamCandidates: diagnostics.rhythmProvenance.beamCandidates ?? [],
+        }
+      : null,
   }
 }
 
@@ -105,6 +127,42 @@ export function buildOmrDiagnosticExport({
   return payload
 }
 
+/**
+ * Structured DEV provenance package for the active score (duration/dot/beam).
+ * Empty when provenance was disabled during the OMR run.
+ */
+export function buildOmrProvenancePackage({
+  diagnostics = null,
+  runMeta = null,
+  activeScore = null,
+} = {}) {
+  const provenance = diagnostics?.rhythmProvenance ?? null
+  return {
+    version: 1,
+    kind: 'omr-rhythm-provenance',
+    exportedAt: new Date().toISOString(),
+    flags: getOmrDiagnosticFlags(),
+    run: runMeta,
+    activeScore: activeScore
+      ? {
+          scoreId: activeScore.scoreId ?? null,
+          generation: activeScore.generation ?? null,
+          musicXmlSourceType: activeScore.musicXml?.sourceType ?? null,
+          noteCount: activeScore.musicXml?.omrMeta?.noteCount ?? null,
+          measureCount: activeScore.musicXml?.omrMeta?.measureCount ?? null,
+          pdfFileName: activeScore.musicXml?.omrMeta?.pdfFileName ?? null,
+        }
+      : null,
+    provenance: provenance ?? {
+      enabled: false,
+      noteDurations: [],
+      dotCandidates: [],
+      beamCandidates: [],
+      hint: 'Enable DEV Provenance before OMR (scoreflow:omr-provenance=1), then re-run.',
+    },
+  }
+}
+
 export function serializeOmrDiagnosticExport(bundle) {
   return JSON.stringify(bundle, null, 2)
 }
@@ -118,12 +176,34 @@ export async function copyOmrDiagnosticExport(bundle) {
   return { ok: false, text, bytes: text.length }
 }
 
+export function downloadOmrProvenancePackage(bundle, fileName = null) {
+  const text = serializeOmrDiagnosticExport(bundle)
+  const resolvedName =
+    fileName ||
+    `omr-provenance-${bundle?.activeScore?.scoreId ?? 'score'}-${Date.now()}.json`
+  if (typeof document === 'undefined') {
+    return { ok: false, text, fileName: resolvedName, bytes: text.length }
+  }
+  const blob = new Blob([text], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const anchor = document.createElement('a')
+  anchor.href = url
+  anchor.download = resolvedName
+  anchor.click()
+  URL.revokeObjectURL(url)
+  return { ok: true, fileName: resolvedName, bytes: text.length }
+}
+
 export function toggleOmrTrace(enabled) {
   return setOmrDiagnosticFlag(OMR_DIAGNOSTIC_FLAG.TRACE, enabled)
 }
 
 export function toggleOmrDebug(enabled) {
   return setOmrDiagnosticFlag(OMR_DIAGNOSTIC_FLAG.DEBUG, enabled)
+}
+
+export function toggleOmrProvenance(enabled) {
+  return setOmrDiagnosticFlag(OMR_DIAGNOSTIC_FLAG.PROVENANCE, enabled)
 }
 
 export function toggleOmrV3Compare(enabled) {

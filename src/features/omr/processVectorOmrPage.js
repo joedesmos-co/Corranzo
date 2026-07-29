@@ -41,6 +41,10 @@ import { enrichNoteheadRhythm } from './detectNoteRhythmFeatures.js'
 import { vectorGlyphAllocationBounds } from './vectorGlyphMeasureBounds.js'
 import { summarizeVectorRhythmDiagnostics } from './vectorRhythmDiagnostics.js'
 import {
+  createMeasureRhythmProvenance,
+  beamTypeFromCount,
+} from './omrRhythmProvenance.js'
+import {
   reconstructMusicalEvents,
   summarizeMusicalEventReconstruction,
 } from './reconstructMusicalEvents.js'
@@ -313,12 +317,20 @@ function noteheadsForMeasure(
     measureBox,
     imageData,
   )
-  const augmentationDots = assignVectorAugmentationDots(
+  const augmentationDotResult = assignVectorAugmentationDots(
     glyphs,
     sortedNotes,
     measureBox,
     imageData,
   )
+  const augmentationDots =
+    augmentationDotResult instanceof Map
+      ? augmentationDotResult
+      : augmentationDotResult.assignments
+  const augmentationDotDiagnostics =
+    augmentationDotResult instanceof Map
+      ? null
+      : augmentationDotResult.diagnostics
   const allocationBounds = vectorGlyphAllocationBounds(measureBox, placement)
   const rhythmBounds = {
     left: allocationBounds.x0 * imageData.width,
@@ -412,6 +424,7 @@ function noteheadsForMeasure(
       selectedAttachments: notationArticulationResult.selectedAttachments,
       rejectedCandidates: notationArticulationResult.rejectedCandidates,
     },
+    augmentationDotDiagnostics,
   }
 }
 
@@ -2377,9 +2390,26 @@ export function clampMeasureEventDurations(events, totalDivisions) {
   })
 }
 
-function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivisions, beats) {
+function buildNoteEventsFromGroups(
+  groups,
+  measureBox,
+  timeSignature,
+  totalDivisions,
+  beats,
+  provenance = null,
+) {
   const usePositionStarts = shouldInferRhythmFromPositions(groups, beats)
   const denseMeasure = groups.length > beats
+
+  function track(stage, functionName, run) {
+    if (!provenance) {
+      return run()
+    }
+    const before = events
+    const next = run()
+    provenance.recordStage(stage, functionName, before, next)
+    return next
+  }
 
   if (usePositionStarts) {
     const slotsPerMeasure = Math.max(4, beats * 4)
@@ -2518,29 +2548,68 @@ function buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivis
       }
     }),
   )
-  events = normalizeDenseVectorLaneSpacing(events, totalDivisions)
-  events = extendDurationsPerClefVoice(events, totalDivisions)
+  if (provenance) {
+    events.forEach((event, index) => {
+      provenance.recordInitialEvent(event, index, {
+        gapType: event.durationType,
+        gapConfidence: 0.6,
+      })
+    })
+  }
+  events = track('normalize-dense-lane', 'normalizeDenseVectorLaneSpacing', () =>
+    normalizeDenseVectorLaneSpacing(events, totalDivisions),
+  )
+  events = track('extend-per-clef-voice', 'extendDurationsPerClefVoice', () =>
+    extendDurationsPerClefVoice(events, totalDivisions),
+  )
   // Beam floor/cap on dense (subdivision) measures where gap packing invents
   // sixteenth events. Avoid applying the cap to sparse/grand measures where
   // false tip-row beams would shorten true quarters.
   if (denseMeasure) {
-    events = refineEventDurationsFromBeamEvidence(events, totalDivisions)
-    events = resnapFlooredBeamOnsets(events)
+    events = track('beam-refine', 'refineEventDurationsFromBeamEvidence', () =>
+      refineEventDurationsFromBeamEvidence(events, totalDivisions),
+    )
+    events = track('beam-onset-resnap', 'resnapFlooredBeamOnsets', () =>
+      resnapFlooredBeamOnsets(events),
+    )
   }
-  events = coalesceSameOnsetChordEvents(events)
+  events = track('chord-coalesce', 'coalesceSameOnsetChordEvents', () =>
+    coalesceSameOnsetChordEvents(events),
+  )
   if (denseMeasure) {
-    events = resnapDenseChordOnsets(events, totalDivisions)
+    events = track('dense-chord-resnap', 'resnapDenseChordOnsets', () =>
+      resnapDenseChordOnsets(events, totalDivisions),
+    )
   }
-  events = extendCombinedGrandStaffOpening(events, totalDivisions)
-  events = extendPenultimateHalfBeforeFinalQuarter(events, timeSignature, totalDivisions)
-  events = refineUnsupportedUpperChordOverhangs(events)
-  events = refineOpeningBassSubdivisionDurations(events, totalDivisions)
-  events = reconstructMusicalEvents(events, { totalDivisions })
-  events = applySameClefBeatQuarterFloors(events, totalDivisions)
-  return clampMeasureEventDurations(events, totalDivisions)
+  events = track('grand-staff-opening', 'extendCombinedGrandStaffOpening', () =>
+    extendCombinedGrandStaffOpening(events, totalDivisions),
+  )
+  events = track('penultimate-half', 'extendPenultimateHalfBeforeFinalQuarter', () =>
+    extendPenultimateHalfBeforeFinalQuarter(events, timeSignature, totalDivisions),
+  )
+  events = track('upper-chord-overhang', 'refineUnsupportedUpperChordOverhangs', () =>
+    refineUnsupportedUpperChordOverhangs(events),
+  )
+  events = track('opening-bass-subdivision', 'refineOpeningBassSubdivisionDurations', () =>
+    refineOpeningBassSubdivisionDurations(events, totalDivisions),
+  )
+  events = track('musical-event-reconstruct', 'reconstructMusicalEvents', () =>
+    reconstructMusicalEvents(events, { totalDivisions }),
+  )
+  events = track('same-clef-beat-quarter-floor', 'applySameClefBeatQuarterFloors', () =>
+    applySameClefBeatQuarterFloors(events, totalDivisions),
+  )
+  return track('clamp-measure', 'clampMeasureEventDurations', () =>
+    clampMeasureEventDurations(events, totalDivisions),
+  )
 }
 
-export function buildVectorEvents(notes, measureBox, timeSignature, { rests = [] } = {}) {
+export function buildVectorEvents(
+  notes,
+  measureBox,
+  timeSignature,
+  { rests = [], provenance = null } = {},
+) {
   const beats = timeSignature?.beats ?? 4
   const groups = mergeGroupsSharingBeat(groupVectorNoteheads(notes, { beats }), beats)
   const totalDivisions = Math.round(beats * OMR_DIVISIONS_PER_QUARTER * (4 / (timeSignature?.beatType ?? 4)))
@@ -2554,7 +2623,14 @@ export function buildVectorEvents(notes, measureBox, timeSignature, { rests = []
     return buildEmptyMeasureRestEvents(rests, measureBox, totalDivisions)
   }
 
-  const noteEvents = buildNoteEventsFromGroups(groups, measureBox, timeSignature, totalDivisions, beats)
+  const noteEvents = buildNoteEventsFromGroups(
+    groups,
+    measureBox,
+    timeSignature,
+    totalDivisions,
+    beats,
+    provenance,
+  )
   if (!rests.length) {
     return noteEvents
   }
@@ -2579,6 +2655,7 @@ export function buildVectorMeasureRecord({
     vectorStaccatoDiagnostics,
     vectorAccentDiagnostics,
     vectorNotationArticulationDiagnostics,
+    augmentationDotDiagnostics,
   } = noteheadsForMeasure(
     glyphs,
     imageData,
@@ -2646,14 +2723,29 @@ export function buildVectorMeasureRecord({
     beats * OMR_DIVISIONS_PER_QUARTER * (4 / (timeSignature?.beatType ?? 4)),
   )
 
+  const provenance = createMeasureRhythmProvenance({
+    measureNumber: measureBox.measureNumber,
+    page: measureBox.page,
+    systemIndex: measureBox.systemIndex,
+  })
+  if (provenance && augmentationDotDiagnostics) {
+    provenance.addDotCandidates(augmentationDotDiagnostics)
+  }
+
   let events
   let restApplyResult = { appliedCount: 0, skipped: [] }
   if (notes.length === 0) {
-    events = buildVectorEvents(notes, measureBox, timeSignature, { rests: detectedRests })
+    events = buildVectorEvents(notes, measureBox, timeSignature, {
+      rests: detectedRests,
+      provenance,
+    })
   } else if (!detectedRests.length) {
-    events = buildVectorEvents(notes, measureBox, timeSignature)
+    events = buildVectorEvents(notes, measureBox, timeSignature, { provenance })
   } else {
-    const noteEvents = buildVectorEvents(notes, measureBox, timeSignature, { rests: [] })
+    const noteEvents = buildVectorEvents(notes, measureBox, timeSignature, {
+      rests: [],
+      provenance,
+    })
     restApplyResult = insertMixedMeasureRests(noteEvents, detectedRests, {
       measureBox,
       totalDivisions,
@@ -2689,6 +2781,15 @@ export function buildVectorMeasureRecord({
   })
   const eventsBeforeBeamTopology = events
   events = applyVectorPrimaryBeamTopology(events, initialBeamStemGraph)
+  if (provenance && events !== eventsBeforeBeamTopology) {
+    provenance.recordStage(
+      'beam-topology',
+      'applyVectorPrimaryBeamTopology',
+      eventsBeforeBeamTopology,
+      events,
+      { reason: 'primary-beam-topology' },
+    )
+  }
   const beamStemGraph =
     events === eventsBeforeBeamTopology
       ? initialBeamStemGraph
@@ -2702,6 +2803,56 @@ export function buildVectorMeasureRecord({
   const beamStemDiagnostics = summarizeBeamStemGraph(beamStemGraph)
   const vectorBeamTopologyDiagnostics =
     summarizeAppliedVectorBeamTopology(events)
+
+  if (provenance) {
+    const beamRows = []
+    for (const note of notes ?? []) {
+      const beams = note.beams ?? 0
+      const strength = note.beamStrength ?? 0
+      if (beams < 1 && strength < 8) {
+        continue
+      }
+      beamRows.push({
+        sourcePathId: note.sourcePathId ?? note.glyphId ?? null,
+        geometryClassification:
+          beams >= 2 ? 'secondary-or-thicker' : strength >= 8 ? 'primary-beam' : 'weak-tip',
+        compatibleStems: note.stem
+          ? [{ direction: note.stem.direction ?? note.stem, length: note.stem.length ?? null }]
+          : [],
+        attachmentScore: strength >= 8 ? Math.min(1, strength / 28) : 0,
+        selectedBeamGroup: null,
+        beamCount: beams,
+        beamStrength: strength,
+        beamDerivedType: beamTypeFromCount(beams),
+        rejectionReason: beams < 1 ? 'strength-without-count' : null,
+        durationOverwrittenLater: false,
+        noteMidi: note.midi ?? null,
+        cx: note.cx,
+        cy: note.cy,
+      })
+    }
+    for (const ownership of beamStemGraph?.eventOwnership ?? []) {
+      const conf = Number(ownership?.beamConfidence ?? ownership?.confidence ?? 0)
+      beamRows.push({
+        sourcePathId: ownership?.attachedBeamIds?.[0] ?? ownership?.beamGroupId ?? null,
+        geometryClassification: 'beam-stem-graph',
+        compatibleStems: ownership?.attachedStemIds ?? [],
+        attachmentScore: conf,
+        selectedBeamGroup: ownership?.beamGroupId ?? null,
+        beamCount: ownership?.beamCount ?? null,
+        beamConfidence: conf,
+        rejectionReason:
+          conf > 0 && conf < 0.7
+            ? 'below-beam-confidence-gate'
+            : (ownership?.attachedBeamIds?.length ?? 0) === 0
+              ? 'no-attached-beams'
+              : null,
+        durationOverwrittenLater: false,
+      })
+    }
+    provenance.addBeamCandidates(beamRows)
+  }
+
   const vectorNoteMatching = summarizeMeasureNoteMatching({
     measureNumber: measureBox.measureNumber,
     page: measureBox.page,
@@ -2716,6 +2867,20 @@ export function buildVectorMeasureRecord({
   )
   const musicalEventReconstructionDiagnostics =
     summarizeMusicalEventReconstruction(events)
+  let rhythmProvenance = null
+  if (provenance) {
+    rhythmProvenance = provenance.finalize()
+    for (const note of rhythmProvenance.noteDurations ?? []) {
+      if (!note.beamDurationOverwrittenLater) {
+        continue
+      }
+      for (const beam of rhythmProvenance.beamCandidates ?? []) {
+        if (beam.noteMidi != null && note.midis?.includes(beam.noteMidi)) {
+          beam.durationOverwrittenLater = true
+        }
+      }
+    }
+  }
   return {
     measureNumber: measureBox.measureNumber,
     page: measureBox.page,
@@ -2746,6 +2911,7 @@ export function buildVectorMeasureRecord({
     beamStemGraph,
     beamStemDiagnostics,
     vectorBeamTopologyDiagnostics,
+    ...(rhythmProvenance ? { rhythmProvenance } : {}),
     ...(captureDetectorObservations
       ? { detectorObservations: { noteheads: notes, rests: detectedRests } }
       : {}),
