@@ -212,6 +212,7 @@ export default function App() {
   const [fileHelpSignal, setFileHelpSignal] = useState(0)
   const [pdfSoftWarning, setPdfSoftWarning] = useState(null)
   const [practicePdfReady, setPracticePdfReady] = useState(false)
+  const [omrWarningDismissedScoreIds, setOmrWarningDismissedScoreIds] = useState(() => new Set())
   const activeViewRef = useRef(activeView)
   const libraryNavAtRef = useRef(0)
   const omrRunStartedAtRef = useRef(0)
@@ -892,6 +893,9 @@ export default function App() {
     measureCount,
     measureGrid,
     warnings = [],
+    acceptance: omrAcceptance = null,
+    quality = null,
+    overallConfidence = null,
     sourcePdfFileName = null,
     sourcePdfFileUrl = null,
     sourceInstrumentId = null,
@@ -1148,6 +1152,30 @@ export default function App() {
       pdfFileName: stablePdfMeta.fileName,
       createdAt: new Date().toISOString(),
     }
+    if (omrAcceptance || quality) {
+      omrMeta.quality = {
+        ...(quality && typeof quality === 'object' ? quality : {}),
+        acceptance: omrAcceptance ?? quality?.acceptance ?? null,
+        confidenceBand: quality?.confidenceBand ?? null,
+        warningReasons: quality?.warningReasons ?? [],
+        overallConfidence:
+          typeof overallConfidence === 'number' ? overallConfidence : quality?.extractionSummary?.overallConfidence ?? null,
+        safetyChecks: {
+          ...(quality?.safetyChecks ?? {}),
+          musicXmlParsed: true,
+          playbackTimelineValid: playbackValidation.ok === true,
+          finitePositiveDuration: Number(playbackValidation.durationSeconds) > 0,
+          nonzeroPlayableEvents: Number(playbackValidation.noteCount) > 0,
+          activeScoreOwnershipPending: true,
+        },
+        extractionSummary: quality?.extractionSummary ?? {
+          noteCount: playbackValidation.noteCount ?? noteCount ?? 0,
+          measureCount: playbackValidation.measureCount ?? measureCount ?? 0,
+          durationSeconds: playbackValidation.durationSeconds,
+        },
+        sourceIdentity: commitPdfIdentity ?? buildPdfSourceIdentity(stablePdfMeta),
+      }
+    }
     const omrWarnings = [...new Set((warnings ?? []).filter(Boolean))].slice(0, 8)
     if (omrWarnings.length) {
       omrMeta.warnings = omrWarnings
@@ -1195,6 +1223,18 @@ export default function App() {
       clearGeneratedPlaybackAfterOmrFailure()
       setLibraryFeedback({ type: 'error', message })
       return { ok: false, message }
+    }
+
+    if (nextMusicXmlSource.omrMeta?.quality) {
+      nextMusicXmlSource.omrMeta.quality = {
+        ...nextMusicXmlSource.omrMeta.quality,
+        ownerScoreId,
+        safetyChecks: {
+          ...(nextMusicXmlSource.omrMeta.quality.safetyChecks ?? {}),
+          activeScoreOwnershipPending: false,
+          activeScoreOwnershipMatches: true,
+        },
+      }
     }
 
     const ownerIdentity = nextMusicXmlSource.ownerPdfIdentity
@@ -2547,6 +2587,24 @@ export default function App() {
           timingSourceKind={musicXmlSource?.source ?? null}
           onReloadPractice={() => setPracticeRemountKey((key) => key + 1)}
           onReturnToLibrary={() => navigateToView('library')}
+          omrQuality={musicXmlSource?.omrMeta?.quality ?? null}
+          omrOwnerScoreId={
+            musicXmlSource?.omrMeta?.quality?.ownerScoreId ??
+            musicXmlSource?.ownerScoreId ??
+            activeScoreRef.current?.scoreId ??
+            null
+          }
+          omrWarningDismissedScoreIds={omrWarningDismissedScoreIds}
+          onDismissOmrQualityWarning={(scoreId) => {
+            if (!scoreId) {
+              return
+            }
+            setOmrWarningDismissedScoreIds((prev) => {
+              const next = new Set(prev)
+              next.add(scoreId)
+              return next
+            })
+          }}
         />
       </PracticeSessionProvider>
     )

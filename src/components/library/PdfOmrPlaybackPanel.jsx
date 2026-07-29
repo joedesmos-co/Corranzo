@@ -4,6 +4,7 @@ import { useInstrument } from '../../context/instrumentContext.js'
 import { describePdfSourceType, isPdfBufferAttached } from '../../features/omr/omrPdfSource.js'
 import { beginOmrUiBlock, endOmrUiBlock, releaseOmrUiLocks } from '../../features/omr/omrUiGuard.js'
 import { OMR_STATUS, OMR_STATUS_LABEL, yieldToBrowser } from '../../features/omr/omrConstants.js'
+import { OMR_ACCEPTANCE, OMR_QUALITY_WARNING_MESSAGE } from '../../features/omr/assessOmrAcceptance.js'
 import { nextOmrTraceRunId, omrTrace } from '../../features/omr/omrTrace.js'
 import {
   buildOmrDiagnosticExport,
@@ -302,6 +303,9 @@ export default function PdfOmrPlaybackPanel({
         diagnostics: lastDiagnosticsRef.current,
         warnings: result.warnings ?? [],
         measureGrid: result.measureGrid,
+        acceptance: result.acceptance ?? null,
+        quality: result.quality ?? null,
+        overallConfidence: result.overallConfidence ?? null,
         sourcePdfFileName: pdfFileName ?? null,
         sourcePdfFileUrl: pdfFileUrl ?? null,
         sourceInstrumentId: instrumentId,
@@ -349,13 +353,21 @@ export default function PdfOmrPlaybackPanel({
       const tabApproximateHint = result.diagnostics?.tablature?.rhythmApproximate
         ? ' · TAB rhythm approximate'
         : ''
+      const qualityHint =
+        result.acceptance === OMR_ACCEPTANCE.WARNING ? ' · lower confidence — compare with PDF' : ''
       setSummary(
-        `${result.noteCount} notes · ${result.measureCount} measures${uncertainHint}${confidenceHint}${tabApproximateHint}`,
+        `${result.noteCount} notes · ${result.measureCount} measures${uncertainHint}${confidenceHint}${tabApproximateHint}${qualityHint}`,
       )
       setError(null)
       setIsGenerating(false)
       setProgressLabel('')
       setStatus(OMR_STATUS.READY)
+      if (result.acceptance === OMR_ACCEPTANCE.WARNING) {
+        onFeedbackRef.current?.({
+          type: 'info',
+          message: OMR_QUALITY_WARNING_MESSAGE,
+        })
+      }
     } catch (err) {
       noteOmrWorkerSettled({
         runId,

@@ -12,6 +12,7 @@ import {
 import PdfViewer from '../PdfViewer.jsx'
 import PracticeControlPanel from './PracticeControlPanel.jsx'
 import ScoreFollowSetupStatus from './ScoreFollowSetupStatus.jsx'
+import OmrQualityWarningBanner from './OmrQualityWarningBanner.jsx'
 import VisualPracticeView from './VisualPracticeView.jsx'
 import PracticeErrorBoundary from './PracticeErrorBoundary.jsx'
 import '../../styles/practice.css'
@@ -31,6 +32,10 @@ export default function PracticeView({
   timingSourceKind = null,
   onReloadPractice = null,
   onReturnToLibrary = null,
+  omrQuality = null,
+  omrOwnerScoreId = null,
+  omrWarningDismissedScoreIds = null,
+  onDismissOmrQualityWarning = null,
 }) {
   const { session, scoreFollow, waitForYouNoteTarget } = usePracticeSessionContext()
   const practiceErrorResetKey = [
@@ -131,6 +136,12 @@ export default function PracticeView({
                 <VisualPracticeView timingSourceKind={timingSourceKind} />
               ) : (
                 <div className="practice-workspace__score">
+                  <OmrQualityWarningBanner
+                    quality={omrQuality}
+                    ownerScoreId={omrOwnerScoreId}
+                    dismissedScoreIds={omrWarningDismissedScoreIds}
+                    onDismiss={onDismissOmrQualityWarning}
+                  />
                   <ScoreFollowSetupStatus setupStatus={scoreFollow.setupStatus} />
                   <PdfViewer
                     variant="practice"

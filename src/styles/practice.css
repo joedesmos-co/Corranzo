@@ -216,6 +216,48 @@
   justify-content: flex-end;
 }
 
+.practice-workspace__score > .omr-quality-warning {
+  position: relative;
+  z-index: 28;
+  margin: 8px 12px 0;
+}
+
+.omr-quality-warning {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sf-space-md);
+  padding: var(--sf-space-sm) var(--sf-space-md);
+  border: 1px solid var(--sf-border-muted);
+  background: var(--sf-bg-elevated, rgba(255, 255, 255, 0.04));
+}
+
+.omr-quality-warning__text {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--sf-text-primary);
+}
+
+.omr-quality-warning__dismiss {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--sf-text-muted);
+  font: inherit;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.omr-quality-warning__dismiss:hover,
+.omr-quality-warning__dismiss:focus-visible {
+  color: var(--sf-text-primary);
+}
+
 .practice-control-panel .score-follow-setup-status,
 .practice-setup .score-follow-setup-status {
   position: static;

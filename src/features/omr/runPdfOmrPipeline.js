@@ -19,6 +19,11 @@ import { summarizeOrphanDiagnostics } from './vectorOrphanNoteheads.js'
 import { preprocessOmrPageImage } from './preprocessOmrPageImage.js'
 import { processOmrPageAnalysis } from './processOmrPage.js'
 import { assessOmrDifficulty, OMR_FAILURE_REASON } from './assessOmrDifficulty.js'
+import {
+  assessOmrAcceptance,
+  buildOmrQualityMetadata,
+  OMR_ACCEPTANCE,
+} from './assessOmrAcceptance.js'
 import { validateOmrMultiPageLayout } from './validateOmrMultiPage.js'
 import { omrDebugStep } from './omrDebug.js'
 import { omrTrace, createOmrPhaseTracer } from './omrTrace.js'
@@ -907,17 +912,42 @@ async function runPdfOmrPipelineBody({
     uncertainMeasures: diagnostics.uncertainMeasures,
     layoutConsistency,
   })
+  const acceptanceDecision = assessOmrAcceptance({
+    overallConfidence: richDiagnostics.overallConfidence,
+    pagesWithSystems: diagnostics.pagesWithSystems,
+    pageCount,
+    noteCount: diagnostics.notes,
+    measureCount: diagnostics.measures,
+    uncertainMeasures: diagnostics.uncertainMeasures,
+    layoutConsistency,
+    systems: diagnostics.systems,
+    pages: richDiagnostics.pages,
+  })
+  const qualityMeta = buildOmrQualityMetadata(acceptanceDecision)
 
-  if (difficulty.tooDifficult) {
-    const error = new Error(difficulty.message ?? OMR_TOO_DIFFICULT_MESSAGE)
-    error.code = OMR_FAILURE_REASON.LOW_CONFIDENCE
-    error.difficulty = difficulty
+  if (acceptanceDecision.acceptance === OMR_ACCEPTANCE.REJECTED) {
+    const primaryRejectReason =
+      acceptanceDecision.rejectReasons[0] ??
+      difficulty.reasons[0] ??
+      OMR_FAILURE_REASON.LOW_CONFIDENCE
+    const error = new Error(
+      acceptanceDecision.message ?? difficulty.message ?? OMR_TOO_DIFFICULT_MESSAGE,
+    )
+    error.code = primaryRejectReason
+    error.difficulty = {
+      ...difficulty,
+      tooDifficult: true,
+    }
+    error.acceptance = acceptanceDecision
+    error.quality = qualityMeta
     error.diagnostics = {
       ...diagnostics,
       ...richDiagnostics,
       layoutConsistency,
       preprocessLog,
-      difficulty,
+      difficulty: error.difficulty,
+      acceptance: acceptanceDecision,
+      quality: qualityMeta,
     }
     attachOmrV3RejectionObservation(error, omrV3Analysis)
     throw error
@@ -1339,6 +1369,9 @@ async function runPdfOmrPipelineBody({
   if (difficulty.reasons.length) {
     warnings.push(`Quality notes: ${difficulty.reasons.join(', ')}`)
   }
+  if (acceptanceDecision.acceptance === OMR_ACCEPTANCE.WARNING) {
+    pushUnique(warnings, [acceptanceDecision.message])
+  }
   if (partialRecovery.recovered) {
     const failedPageCount = partialRecovery.failedPages.length
     const isolatedRegionCount = partialRecovery.isolatedRegions.length
@@ -1350,6 +1383,7 @@ async function runPdfOmrPipelineBody({
   omrTrace('pipeline:success', {
     noteCount,
     measureCount: diagnostics.measures,
+    acceptance: acceptanceDecision.acceptance,
   }, traceRunId)
 
   const noteMatching = summarizeNoteMatchingReport(measureRhythms)
@@ -1396,6 +1430,8 @@ async function runPdfOmrPipelineBody({
         analysisHandoffCopies: analyzePage ? partialRecovery.successfulPages : 0,
       },
       difficulty,
+      acceptance: acceptanceDecision,
+      quality: qualityMeta,
       failureReasons: difficulty.reasons,
       measureGrid,
       measureGridDiagnostics,
@@ -1419,6 +1455,8 @@ async function runPdfOmrPipelineBody({
     overallConfidence: richDiagnostics.overallConfidence,
     disclaimer: richDiagnostics.disclaimer,
     warnings,
+    acceptance: acceptanceDecision.acceptance,
+    quality: qualityMeta,
     measurePlaybackReport,
     measurePlaybackReportText: formatOmrMeasurePlaybackReport(measurePlaybackReport),
   }
