@@ -854,6 +854,32 @@ export function blankPage(width = 460, height = 620) {
 }
 
 /**
+ * Decorative title/cover page: sparse ornament ink that must not form staff
+ * systems or invent playable notes. Used by negative-page isolation tests.
+ *
+ * Dense hatching is intentionally avoided here — it can false-trigger staff
+ * detection and invent noteheads. Classification heuristics for hatching are
+ * covered directly in `tests/omrNegativePage.test.js`.
+ */
+export function decorativeCoverPage({ width = 460, height = 620 } = {}) {
+  const img = createPage(width, height)
+  const titleY = Math.floor(height * 0.36)
+  hLine(img, titleY, Math.floor(width * 0.28), Math.floor(width * 0.72), 40)
+  hLine(img, titleY + 14, Math.floor(width * 0.34), Math.floor(width * 0.66), 55)
+  hLine(img, Math.floor(height * 0.52), Math.floor(width * 0.4), Math.floor(width * 0.6), 70)
+  hLine(img, Math.floor(height * 0.58), Math.floor(width * 0.42), Math.floor(width * 0.58), 90)
+  for (const [cx, cy] of [
+    [28, 28],
+    [width - 28, 28],
+    [28, height - 28],
+    [width - 28, height - 28],
+  ]) {
+    fillRect(img, cx - 4, cy - 4, cx + 4, cy + 4, 50)
+  }
+  return img
+}
+
+/**
  * Degrade a clean rhythmic page to mimic a scanned PDF: gray wash, noise, low contrast.
  */
 export function scannedPianoPage(options = {}) {

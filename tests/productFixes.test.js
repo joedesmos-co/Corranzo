@@ -250,7 +250,12 @@ describe('Fix D: useScoreFollowDisplayCursor accepts real-time callbacks (source
 
     expect(src).toMatch(/midiData:\s*midiSource\?\.data/)
     expect(src).toMatch(/musicXmlData:\s*musicXmlSource\?\.data/)
-    expect(src).toMatch(/midiSource\?\.data,\s*musicXmlSource\?\.fileName/)
+    // Revision key must include byteLength (and MusicXML content key) so same-name
+    // reloads with new buffers still remount practice state.
+    expect(src).toMatch(/sourcesRevisionKey/)
+    expect(src).toMatch(/midiSource\?\.data\?\.byteLength/)
+    expect(src).toMatch(/musicXmlSource\?\.data\?\.byteLength/)
+    expect(src).toMatch(/musicXmlSourceKey\(musicXmlSource\)/)
   })
 })
 

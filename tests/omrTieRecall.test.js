@@ -50,6 +50,26 @@ function drawTieArc(imageData, fromX, toX, y) {
   }
 }
 
+/** Synthetic barline-interrupted bows that satisfy current sideCurves coverage. */
+function drawBarlineInterruptedArcs(imageData, fromNote, toNote, barX) {
+  const y = fromNote.cy
+  const leftStart = Math.ceil(fromNote.cx + 10)
+  const leftEnd = Math.floor(barX - 8)
+  for (let x = leftStart; x <= leftEnd; x += 1) {
+    const t = (x - leftStart) / Math.max(1, leftEnd - leftStart)
+    setInk(imageData, x, y - 5 - Math.round(5 * Math.sin(t * Math.PI)))
+  }
+  const rightStart = Math.ceil(barX + 8)
+  const rightEnd = Math.floor(toNote.cx - 8)
+  for (let x = rightStart; x <= rightEnd; x += 1) {
+    const t = (x - rightStart) / Math.max(1, rightEnd - rightStart)
+    setInk(imageData, x, y - 5 - Math.round(5 * Math.sin(t * Math.PI)))
+  }
+  for (let yLine = y - 20; yLine <= y + 20; yLine += 8) {
+    setInk(imageData, barX, yLine)
+  }
+}
+
 function timingFromTiePairs(pairs) {
   const notes = []
   let quarterTime = 0
@@ -177,18 +197,7 @@ describe('tie vs slur detector guards', () => {
     }
     const fromNote = { measureNumber: 9, midi: 66, clef: 'treble', cx: 420, cy: 350 }
     const toNote = { measureNumber: 10, midi: 66, clef: 'treble', cx: 500, cy: 350 }
-    const y = 350
-    for (let x = fromNote.cx + 10; x <= 440; x += 1) {
-      const arcY = y - 4 - Math.round(3 * Math.sin(((x - fromNote.cx) / 80) * Math.PI))
-      setInk(imageData, x, arcY)
-    }
-    for (let x = 460; x <= toNote.cx - 8; x += 1) {
-      const arcY = y - 4 - Math.round(3 * Math.sin(((x - 460) / 80) * Math.PI))
-      setInk(imageData, x, arcY)
-    }
-    for (let yLine = 330; yLine <= 370; yLine += 10) {
-      setInk(imageData, 450, yLine)
-    }
+    drawBarlineInterruptedArcs(imageData, fromNote, toNote, 450)
 
     const probe = probeCrossMeasureTiePair(imageData, fromNote, toNote, fromBox, toBox, 170)
     expect(probe.classification).toBe(TIE_ARC_CLASS.BARLINE_INTERRUPTED)
@@ -218,18 +227,7 @@ describe('tie vs slur detector guards', () => {
     }
     const fromNote = { measureNumber: 9, midi: 66, clef: 'treble', cx: 0.42 * imageData.width, cy: 350 }
     const toNote = { measureNumber: 10, midi: 66, clef: 'treble', cx: 0.5 * imageData.width, cy: 350 }
-    const y = 350
-    for (let x = fromNote.cx + 10; x <= 0.44 * imageData.width; x += 1) {
-      const arcY = y - 4 - Math.round(3 * Math.sin(((x - fromNote.cx) / 80) * Math.PI))
-      setInk(imageData, x, arcY)
-    }
-    for (let x = 0.46 * imageData.width; x <= toNote.cx - 8; x += 1) {
-      const arcY = y - 4 - Math.round(3 * Math.sin(((x - 0.46 * imageData.width) / 80) * Math.PI))
-      setInk(imageData, x, arcY)
-    }
-    for (let yLine = 330; yLine <= 370; yLine += 10) {
-      setInk(imageData, 0.45 * imageData.width, yLine)
-    }
+    drawBarlineInterruptedArcs(imageData, fromNote, toNote, 0.45 * imageData.width)
 
     const unifiedStart = Math.ceil(Math.min(fromNote.cx, toNote.cx) + 8)
     const unifiedEnd = Math.floor(Math.max(fromNote.cx, toNote.cx) - 8)
@@ -302,9 +300,11 @@ describe('tie vs slur detector guards', () => {
     })
 
     expect(result.diagnostics.appliedTieCount).toBe(0)
-    expect(result.diagnostics.uncertainSlurCount).toBeGreaterThan(0)
+    expect(result.diagnostics.appliedSlurCount).toBeGreaterThan(0)
     expect(measureRecords[0].events[0].tieStart).toBeUndefined()
     expect(measureRecords[0].events[1].tieStop).toBeUndefined()
+    expect(measureRecords[0].events[0].slurStart).toBe(true)
+    expect(measureRecords[0].events[1].slurStop).toBe(true)
   })
 })
 

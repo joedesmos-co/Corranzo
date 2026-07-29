@@ -26,15 +26,38 @@ function toBytes(input) {
     return null
   }
   if (input instanceof ArrayBuffer) {
-    return new Uint8Array(input)
+    // Copy — never return a view of a buffer pdf.js may later transfer/detach.
+    return new Uint8Array(input.slice(0))
   }
   if (ArrayBuffer.isView(input)) {
-    return new Uint8Array(input.buffer, input.byteOffset, input.byteLength)
+    // TypedArray(view) copies element-wise; avoids sharing the caller's buffer.
+    return new Uint8Array(input)
   }
   if (typeof input === 'object' && input.data != null) {
     return toBytes(input.data)
   }
   return null
+}
+
+/**
+ * Clone byte-backed PDF sources before pdf.js load.
+ * pdf.js may transfer/detach the ArrayBuffer; callers (and later cache-key
+ * recomputation) must keep a valid copy of the original bytes.
+ */
+function clonePdfSourceForLoad(pdfSource) {
+  if (pdfSource == null || typeof pdfSource === 'string') {
+    return pdfSource
+  }
+  if (pdfSource instanceof ArrayBuffer) {
+    return pdfSource.slice(0)
+  }
+  if (ArrayBuffer.isView(pdfSource)) {
+    return new Uint8Array(pdfSource)
+  }
+  if (typeof pdfSource === 'object' && pdfSource.data != null) {
+    return { ...pdfSource, data: clonePdfSourceForLoad(pdfSource.data) }
+  }
+  return pdfSource
 }
 
 /** Fast content fingerprint — length alone is NOT unique across PDFs. */
@@ -184,7 +207,7 @@ async function loadPdfDocument(pdfSource, identity = {}) {
       // Soft-evict: keep the pinned document alive; caller must finish first.
       // Loading a second document without destroying the pinned one.
       const pdfjs = await resolvePdfjs()
-      const next = await pdfjs.getDocument(pdfSource).promise
+      const next = await pdfjs.getDocument(clonePdfSourceForLoad(pdfSource)).promise
       // Do not replace the pinned cache entry — return an uncached doc for this call.
       // (OMR should pin before load so this path is rare.)
       logPdfCache('miss-uncached-while-pinned', { ...identity, cacheKey: key })
@@ -200,7 +223,7 @@ async function loadPdfDocument(pdfSource, identity = {}) {
   const pdfjs = await resolvePdfjs()
   const nextGeneration = cacheGeneration + 1
   cacheGeneration = nextGeneration
-  const loaded = await pdfjs.getDocument(pdfSource).promise
+  const loaded = await pdfjs.getDocument(clonePdfSourceForLoad(pdfSource)).promise
   // A concurrent clear/pin race: only publish if generation still matches intent.
   if (cacheGeneration !== nextGeneration) {
     await destroyDocument(loaded, nextGeneration, 'stale-load-discard')

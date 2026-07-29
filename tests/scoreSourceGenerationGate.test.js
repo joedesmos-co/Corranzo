@@ -66,6 +66,7 @@ describe('scoreSourceGenerationGate', () => {
       activePdfIdentity: 'pdf-b',
       activeEpoch: 2,
       activeOmrRunId: null,
+      activeScoreId: null,
     })
     expect(
       assertScoreSourceMutationAllowed({

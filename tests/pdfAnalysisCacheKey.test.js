@@ -47,6 +47,22 @@ describe('pdfAnalysisCacheKey', () => {
   it('prefixes blob URLs so they do not collide with byte keys', () => {
     expect(pdfAnalysisCacheKey('blob:http://localhost/a')).toMatch(/^url:/)
   })
+
+  it('toBytes copies views so cache keys do not share a transferable buffer', () => {
+    const bytes = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8])
+    const keyBefore = pdfAnalysisCacheKey({ data: bytes })
+    // Simulate pdf.js transfer/detach of a *different* consumer copy — the
+    // caller's bytes must still hash identically after the pipeline pattern.
+    const consumerCopy = new Uint8Array(bytes)
+    try {
+      const channel = new MessageChannel()
+      channel.port1.postMessage(consumerCopy.buffer, [consumerCopy.buffer])
+    } catch {
+      // Transfer may be unavailable; still assert caller bytes stay hashable.
+    }
+    expect(pdfAnalysisCacheKey({ data: bytes })).toBe(keyBefore)
+    expect(bytes.byteLength).toBe(8)
+  })
 })
 
 describe('clearPdfAnalysisCache pin guard', () => {

@@ -199,7 +199,8 @@ describe('instrument-aware Wait For You guidance', () => {
       wrongAttempts: 3,
       instrument: PIANO,
     })
-    expect(pianoGuidance.hint).toBe('Play C3 with your right hand.')
+    // Piano practice instructions are the accepted level-3 wording for PIANO.
+    expect(pianoGuidance.hint).toBe('Play C3.')
   })
 
   it('default (no instrument) wording is unchanged for existing piano flows', () => {

@@ -32,6 +32,7 @@ import { GUITAR_SCORE_TARGET } from '../src/features/score-follow/guitarScoreTar
 import {
   setPdfAnalysisCanvasFactory,
   setPdfjsLoader,
+  pdfAnalysisCacheKey,
 } from '../src/features/score-follow/pdfPageAnalysis.js'
 import {
   assessBundledMeasureCursorX,
@@ -384,6 +385,8 @@ describe('Guitar demo fixtures', () => {
   it('can run local OMR from the TAB regression PDF alone', async () => {
     await configureNodePdfAnalysis()
     const pdfData = new Uint8Array(readFileSync(fixturePath(GUITAR_TAB_REGRESSION_PATHS.pdf)))
+    const sourceByteLength = pdfData.byteLength
+    const sourceFingerprint = pdfData[0]
 
     const result = await runPdfOmrPipeline(
       { data: pdfData, isEvalSupported: false },
@@ -393,6 +396,12 @@ describe('Guitar demo fixtures', () => {
     const playable = timingMap.notes.filter(
       (note) => !note.isRest && !note.isTabMirror && note.midi != null,
     )
+
+    // Source bytes must remain valid for every later consumer (cache key, re-run, etc.).
+    expect(pdfData.byteLength).toBe(sourceByteLength)
+    expect(pdfData[0]).toBe(sourceFingerprint)
+    expect(() => new Uint8Array(pdfData)).not.toThrow()
+    expect(pdfAnalysisCacheKey({ data: pdfData })).toMatch(/^bytes:/)
 
     expect(result.noteCount).toBe(28)
     expect(result.measureCount).toBe(7)
