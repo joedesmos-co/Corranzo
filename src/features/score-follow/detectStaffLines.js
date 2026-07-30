@@ -708,6 +708,36 @@ export function filterViableStaves(staves) {
 }
 
 /**
+ * Select staves before system grouping.
+ *
+ * Multi-staff pages retain the existing viability filter. Single-staff pages
+ * now drop only unmistakable ledger ghosts: two-row, sub-percent-height bands
+ * beside at least one normal stave. This keeps genuinely small five-line
+ * systems while preventing low chord ledger fragments from becoming systems.
+ */
+export function selectViableStavesForSystemGrouping(staves, stavesPerSystem = 1) {
+  if (!Array.isArray(staves) || staves.length <= 1) {
+    return staves ?? []
+  }
+  const perSystem = Math.max(1, Math.round(stavesPerSystem))
+  const viable = filterViableStaves(staves)
+  if (perSystem >= 2 || viable.length === staves.length) {
+    return viable
+  }
+  const viableSet = new Set(viable)
+  const removed = staves.filter((stave) => !viableSet.has(stave))
+  const unmistakableLedgerGhosts =
+    viable.length > 0 &&
+    removed.length > 0 &&
+    removed.every((stave) => {
+      const height = Math.max(0, (stave.y1 ?? 0) - (stave.y0 ?? 0))
+      const lineCount = stave.lineCount ?? stave.detectedLineYs?.length ?? 0
+      return height <= 0.006 && lineCount <= 2
+    })
+  return unmistakableLedgerGhosts ? viable : staves
+}
+
+/**
  * Full staff-line system detection for one page: detect staves, group into
  * systems using staves-per-system, and (optionally) attach a barline-based
  * measure-count estimate per system.
@@ -723,11 +753,7 @@ export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
     ...options,
     darkThreshold: inkThreshold,
   })
-  // Only strip degenerate bands when pairing into multi-stave systems. On
-  // single-staff pages those bands rarely affect pitch, and removing them can
-  // reshuffle measure grids enough to expose unrelated sustain pairing noise.
-  const staves =
-    Math.max(1, Math.round(stavesPerSystem)) >= 2 ? filterViableStaves(rawStaves) : rawStaves
+  const staves = selectViableStavesForSystemGrouping(rawStaves, stavesPerSystem)
   const trace = detectStaffLineStaves.lastTrace ?? null
   const grouped = groupStavesIntoSystems(staves, stavesPerSystem)
 

@@ -234,6 +234,7 @@ function noteheadsForMeasure(
   orphanGlyphs = [],
   inkThreshold = 170,
   vectorAccidentalPaths = [],
+  vectorAugmentationDotPaths = [],
 ) {
   const notes = []
   const consumed = new Set()
@@ -338,7 +339,7 @@ function noteheadsForMeasure(
     imageData,
   )
   const augmentationDotResult = assignVectorAugmentationDots(
-    glyphs,
+    [...glyphs, ...vectorAugmentationDotPaths],
     sortedNotes,
     measureBox,
     imageData,
@@ -2718,6 +2719,7 @@ export function buildVectorMeasureRecord({
   inkThreshold = 170,
   captureDetectorObservations = false,
   vectorAccidentalPaths = [],
+  vectorAugmentationDotPaths = [],
 }) {
   const {
     notes,
@@ -2735,6 +2737,7 @@ export function buildVectorMeasureRecord({
     orphanGlyphs,
     inkThreshold,
     vectorAccidentalPaths,
+    vectorAugmentationDotPaths,
   )
   const rawDetectedRests = restsForMeasure(
     glyphs,
@@ -2996,6 +2999,7 @@ export function processVectorPageSystems({
   pageText,
   vectorCurves = [],
   vectorAccidentalPaths = [],
+  vectorAugmentationDotPaths = [],
   systems,
   systemMeasureBoxes,
   inheritedKeySignature = null,
@@ -3042,6 +3046,7 @@ export function processVectorPageSystems({
         inkThreshold,
         captureDetectorObservations,
         vectorAccidentalPaths,
+        vectorAugmentationDotPaths,
       })
       noteCount += record.vectorNoteCount ?? 0
       return record
@@ -3081,6 +3086,7 @@ export function processVectorPageSystems({
         orphanGlyphs,
         inkThreshold,
         captureDetectorObservations,
+        vectorAugmentationDotPaths,
       })
       noteCount += (rebuilt.vectorNoteCount ?? 0) - (previous.vectorNoteCount ?? 0)
       measureRecordsBySystem[systemIndex][measureIndex] = rebuilt

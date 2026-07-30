@@ -17,6 +17,7 @@ export const PATH_ACCIDENTAL_GLYPHS = {
   natural: '\uE261',
   flat: '\uE260',
 }
+export const PATH_AUGMENTATION_DOT_GLYPH = '\uE1E7'
 
 const PDF_PATH_MOVE_TO = 0
 const PDF_PATH_LINE_TO = 1
@@ -144,6 +145,40 @@ function staffGapPixels(lineYs, imageData) {
 }
 
 /**
+ * Identify a compact filled Bézier circle. Engravers commonly emit
+ * augmentation dots as PDF paths instead of text-layer SMuFL glyphs.
+ * Size, fill, curvature, closure, and near-square aspect are all required so
+ * noteheads, open circles, staff scraps, and line caps do not qualify.
+ */
+export function classifyAugmentationDotPathGeometry(
+  path,
+  { staffGap = 12, filled = false } = {},
+) {
+  if (!filled || !path?.bounds) {
+    return null
+  }
+  const { width, height } = path.bounds
+  const aspect = width / Math.max(height, 1e-6)
+  if (
+    width < staffGap * 0.18 ||
+    height < staffGap * 0.18 ||
+    width > staffGap * 0.52 ||
+    height > staffGap * 0.52 ||
+    aspect < 0.72 ||
+    aspect > 1.38 ||
+    (path.curveCount ?? 0) < 3 ||
+    ((path.closeCount ?? 0) < 1 && (path.curveCount ?? 0) < 4)
+  ) {
+    return null
+  }
+  return {
+    text: PATH_AUGMENTATION_DOT_GLYPH,
+    confidence: 0.94,
+    reason: 'filled-circular-path',
+  }
+}
+
+/**
  * Classify accidental type from path stroke geometry (not bbox alone).
  */
 export function classifyAccidentalPathGeometry(path, { staffGap = 12 } = {}) {
@@ -245,7 +280,7 @@ export function classifyAccidentalPathGeometry(path, { staffGap = 12 } = {}) {
  * Also clusters nearby thin vertical/horizontal fragments into sharp composites
  * when engravers emit separate stroke paths.
  */
-export function extractPdfVectorAccidentalPathsFromOperatorList({
+export function extractPdfVectorPathSymbolsFromOperatorList({
   operatorList,
   ops,
   viewportTransform,
@@ -258,9 +293,19 @@ export function extractPdfVectorAccidentalPathsFromOperatorList({
     !ops ||
     !Array.isArray(viewportTransform)
   ) {
-    return []
+    return { accidentalPaths: [], augmentationDotPaths: [] }
   }
 
+  const fillOperations = new Set(
+    [
+      ops.fill,
+      ops.eoFill,
+      ops.fillStroke,
+      ops.eoFillStroke,
+      ops.closeFillStroke,
+      ops.closeEOFillStroke,
+    ].filter(Number.isFinite),
+  )
   const paintOperations = new Set(
     [
       ops.fill,
@@ -277,6 +322,7 @@ export function extractPdfVectorAccidentalPathsFromOperatorList({
   let currentTransform = [1, 0, 0, 1, 0, 0]
   const transformStack = []
   const candidates = []
+  const augmentationDotPaths = []
   const fragments = []
   const staffGapGuess = Math.max(8, targetWidth * 0.014)
 
@@ -313,6 +359,29 @@ export function extractPdfVectorAccidentalPathsFromOperatorList({
     }
 
     const { bounds } = parsed
+    const dotClassification = classifyAugmentationDotPathGeometry(parsed, {
+      staffGap: staffGapGuess,
+      filled: fillOperations.has(paintOperation),
+    })
+    if (dotClassification) {
+      augmentationDotPaths.push({
+        candidateId: `pdf-dot-p${pageNumber}-op${operatorIndex}`,
+        source: 'vector-path',
+        page: pageNumber,
+        operatorIndex,
+        paintOperation,
+        text: dotClassification.text,
+        confidence: dotClassification.confidence,
+        reason: dotClassification.reason,
+        x: (bounds.x0 + bounds.x1) / 2,
+        y: (bounds.y0 + bounds.y1) / 2,
+        bounds,
+        moveCount: parsed.moveCount,
+        lineCount: parsed.lineCount,
+        curveCount: parsed.curveCount,
+        closeCount: parsed.closeCount,
+      })
+    }
     if (
       bounds.width > 0 &&
       bounds.height > 0 &&
@@ -422,7 +491,35 @@ export function extractPdfVectorAccidentalPathsFromOperatorList({
     })
   }
 
-  return candidates
+  // Repeat barlines use a vertical pair of equal filled circles. Preserve the
+  // candidates for diagnostics, but tag the pair so note-level augmentation
+  // ownership can reject it without rejecting a legitimate single dot merely
+  // because that note is engraved near a measure boundary.
+  for (let i = 0; i < augmentationDotPaths.length; i += 1) {
+    for (let j = i + 1; j < augmentationDotPaths.length; j += 1) {
+      const left = augmentationDotPaths[i]
+      const right = augmentationDotPaths[j]
+      const dx = Math.abs(left.x - right.x)
+      const dy = Math.abs(left.y - right.y)
+      if (
+        dx <= staffGapGuess * 0.3 &&
+        dy >= staffGapGuess * 0.55 &&
+        dy <= staffGapGuess * 1.25
+      ) {
+        left.repeatPairCandidate = true
+        right.repeatPairCandidate = true
+      }
+    }
+  }
+
+  return {
+    accidentalPaths: candidates,
+    augmentationDotPaths,
+  }
+}
+
+export function extractPdfVectorAccidentalPathsFromOperatorList(options = {}) {
+  return extractPdfVectorPathSymbolsFromOperatorList(options).accidentalPaths
 }
 
 function inkAt(imageData, x, y, threshold) {

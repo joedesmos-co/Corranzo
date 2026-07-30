@@ -9,7 +9,12 @@ import {
   summarizePitchErrorRootCauses,
   summarizePitchErrors,
 } from '../src/features/omr/omrPitchErrorAnalysis.js'
-import { normalizedStaffLineYs, filterViableStaves, groupStavesIntoSystems } from '../src/features/score-follow/detectStaffLines.js'
+import {
+  normalizedStaffLineYs,
+  filterViableStaves,
+  groupStavesIntoSystems,
+  selectViableStavesForSystemGrouping,
+} from '../src/features/score-follow/detectStaffLines.js'
 import {
   midiFromStaffPosition,
   resolveNoteheadYNorm,
@@ -53,6 +58,18 @@ describe('filterViableStaves', () => {
     const systems = groupStavesIntoSystems(viable, 2)
     expect(systems).toHaveLength(2)
     expect(systems.every((system) => system.staveCount === 2)).toBe(true)
+  })
+
+  it('drops ledger-fragment ghost bands before grouping a single-staff score', () => {
+    const staves = [
+      { y0: 0.214, y1: 0.255, center: 0.2345, lineCount: 7 },
+      { y0: 0.505, y1: 0.546, center: 0.5255, lineCount: 7 },
+      { y0: 0.565, y1: 0.566, center: 0.5655, lineCount: 2 },
+      { y0: 0.585, y1: 0.586, center: 0.5855, lineCount: 2 },
+    ]
+    const viable = selectViableStavesForSystemGrouping(staves, 1)
+    expect(viable).toHaveLength(2)
+    expect(groupStavesIntoSystems(viable, 1)).toHaveLength(2)
   })
 })
 

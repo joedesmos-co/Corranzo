@@ -23,6 +23,7 @@ const VECTOR_STEM_OFFSET_RATIO_MIN = 0.3
 const VECTOR_STEM_OFFSET_RATIO_MAX = 0.5
 const WIDE_SPAN_SPLIT_MIN_RATIO = 1.68
 const WIDE_SPAN_SPLIT_MAX_PARTS = 3
+const VECTOR_SINGLETON_COLUMN_CLUSTER_DISTANCE = 0.006
 
 function average(values) {
   if (!values.length) {
@@ -160,6 +161,31 @@ export function rejectVectorNoteColumns(barlines, noteheadXNorms = [], imageWidt
     rejectedCount: barlines.length - filtered.length,
     candidateOffsets,
   }
+}
+
+/**
+ * Vector note-column rejection is reliable for monophonic/singleton attacks:
+ * each vertical beside a head is a stem, not a barline. In chordal textures,
+ * staggered heads and accidentals make the same proximity evidence ambiguous,
+ * so retain the pixel barline path.
+ */
+export function shouldUseVectorNoteColumnHints(noteheadXNorms = []) {
+  if (noteheadXNorms.length < 3) {
+    return false
+  }
+  const positions = noteheadXNorms
+    .map((entry) => (Number.isFinite(entry) ? entry : entry?.x))
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right)
+  if (positions.length < 3) {
+    return false
+  }
+  for (let index = 1; index < positions.length; index += 1) {
+    if (positions[index] - positions[index - 1] <= VECTOR_SINGLETON_COLUMN_CLUSTER_DISTANCE) {
+      return false
+    }
+  }
+  return true
 }
 
 /**

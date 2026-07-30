@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import {
+  classifyAugmentationDotPathGeometry,
   classifyAccidentalInkBlob,
   classifyAccidentalPathGeometry,
   detectVectorPathAccidentals,
+  extractPdfVectorPathSymbolsFromOperatorList,
   PATH_ACCIDENTAL_GLYPHS,
 } from '../src/features/omr/detectVectorPathAccidentals.js'
 import { assignLocalAccidentals } from '../src/features/omr/omrPitchAlteration.js'
@@ -77,6 +79,69 @@ const measureBox = {
 }
 
 describe('detectVectorPathAccidentals geometry', () => {
+  it('extracts a filled circular PDF path as an augmentation-dot candidate', () => {
+    const circlePath = [
+      0, 0, 2.5,
+      2, 0, 1.1, 1.1, 0, 2.5, 0,
+      2, 3.9, 0, 5, 1.1, 5, 2.5,
+      2, 5, 3.9, 3.9, 5, 2.5, 5,
+      2, 1.1, 5, 0, 3.9, 0, 2.5,
+      3,
+    ]
+    const symbols = extractPdfVectorPathSymbolsFromOperatorList({
+      operatorList: {
+        fnArray: [11],
+        argsArray: [[21, [circlePath]]],
+      },
+      ops: {
+        constructPath: 11,
+        fill: 21,
+      },
+      viewportTransform: [1, 0, 0, 1, 0, 0],
+      pageNumber: 2,
+      targetWidth: 1000,
+    })
+
+    expect(symbols.accidentalPaths).toHaveLength(0)
+    expect(symbols.augmentationDotPaths).toHaveLength(1)
+    expect(symbols.augmentationDotPaths[0]).toMatchObject({
+      candidateId: 'pdf-dot-p2-op0',
+      source: 'vector-path',
+      reason: 'filled-circular-path',
+    })
+  })
+
+  it('rejects notehead-sized and stroked circular paths as augmentation dots', () => {
+    const circular = {
+      bounds: { width: 5, height: 5, x0: 0, x1: 5, y0: 0, y1: 5 },
+      curveCount: 4,
+      closeCount: 1,
+      moveCount: 1,
+      lineCount: 0,
+    }
+    expect(
+      classifyAugmentationDotPathGeometry(circular, {
+        staffGap: 14,
+        filled: true,
+      }),
+    ).not.toBeNull()
+    expect(
+      classifyAugmentationDotPathGeometry(
+        {
+          ...circular,
+          bounds: { width: 12, height: 10, x0: 0, x1: 12, y0: 0, y1: 10 },
+        },
+        { staffGap: 14, filled: true },
+      ),
+    ).toBeNull()
+    expect(
+      classifyAugmentationDotPathGeometry(circular, {
+        staffGap: 14,
+        filled: false,
+      }),
+    ).toBeNull()
+  })
+
   it('classifies a sharp path from cross stroke geometry', () => {
     const classification = classifyAccidentalPathGeometry(
       {

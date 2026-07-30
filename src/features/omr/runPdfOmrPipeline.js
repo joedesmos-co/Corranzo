@@ -601,6 +601,9 @@ async function runPdfOmrPipelineBody({
         vectorAccidentalPaths: Array.isArray(vectorCurves?.accidentalPaths)
           ? vectorCurves.accidentalPaths
           : [],
+        vectorAugmentationDotPaths: Array.isArray(vectorCurves?.augmentationDotPaths)
+          ? vectorCurves.augmentationDotPaths
+          : [],
         stavesPerSystem,
         instrument,
         keySignature,

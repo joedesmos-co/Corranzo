@@ -131,6 +131,45 @@ describe('assignVectorAugmentationDots', () => {
     expect(assignments.get(0)).toBe(true)
   })
 
+  it('normalizes a filled PDF path dot from visual center to notehead font baseline', () => {
+    const notes = [trebleNote(300, 170)]
+    const assignments = assignVectorAugmentationDots(
+      [
+        {
+          text: RHYTHM_DOT_GLYPH,
+          x: 318,
+          y: 160,
+          source: 'vector-path',
+          reason: 'filled-circular-path',
+        },
+      ],
+      notes,
+      measureBox,
+      imageData,
+    )
+    expect(assignments.get(0)).toBe(true)
+  })
+
+  it('rejects a filled PDF path circle tagged as part of a repeat-dot pair', () => {
+    const notes = [trebleNote(300, 170)]
+    const assignments = assignVectorAugmentationDots(
+      [
+        {
+          text: RHYTHM_DOT_GLYPH,
+          x: 318,
+          y: 160,
+          source: 'vector-path',
+          reason: 'filled-circular-path',
+          repeatPairCandidate: true,
+        },
+      ],
+      notes,
+      measureBox,
+      imageData,
+    )
+    expect(assignments.size).toBe(0)
+  })
+
   it('applies one printed augmentation dot to a same-onset chord', () => {
     const notes = [
       trebleNote(300, 170, 67),

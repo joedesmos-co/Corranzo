@@ -5,6 +5,7 @@ import {
   mergeTrailingNarrowMeasureSpans,
   MIN_MEASURE_SPAN_FRAC,
   rejectVectorNoteColumns,
+  shouldUseVectorNoteColumnHints,
   splitWideMeasureSpans,
 } from '../src/features/omr/buildOmrMeasureGrid.js'
 import {
@@ -128,6 +129,25 @@ describe('splitWideMeasureSpans', () => {
 })
 
 describe('rejectVectorNoteColumns', () => {
+  it('uses stem-column hints for singleton attacks but not dense chord stacks', () => {
+    expect(
+      shouldUseVectorNoteColumnHints([
+        { x: 0.2, width: 0.015 },
+        { x: 0.35, width: 0.015 },
+        { x: 0.5, width: 0.015 },
+        { x: 0.65, width: 0.015 },
+      ]),
+    ).toBe(true)
+    expect(
+      shouldUseVectorNoteColumnHints([
+        { x: 0.2, width: 0.015 },
+        { x: 0.2025, width: 0.015 },
+        { x: 0.204, width: 0.015 },
+        { x: 0.5, width: 0.015 },
+      ]),
+    ).toBe(false)
+  })
+
   it('rejects a resolved note stem but keeps an ambiguous small-glyph column', () => {
     const resolved = rejectVectorNoteColumns(
       [0.4],

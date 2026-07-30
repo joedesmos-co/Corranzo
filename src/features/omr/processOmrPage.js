@@ -1,6 +1,9 @@
 import { detectContentBounds } from '../score-follow/detectStaffSystems.js'
 import { detectStaffLineSystems } from '../score-follow/detectStaffLines.js'
-import { buildMeasureBoxesForSystemWithDiagnostics } from './buildOmrMeasureGrid.js'
+import {
+  buildMeasureBoxesForSystemWithDiagnostics,
+  shouldUseVectorNoteColumnHints,
+} from './buildOmrMeasureGrid.js'
 import { detectNoteheadsInMeasure } from './detectOmrNoteheads.js'
 import { assembleMeasureRhythm } from './assembleOmrMeasureRhythm.js'
 import { finalizeRasterPageTies } from './finalizeRasterPageTies.js'
@@ -217,6 +220,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     pageText: rawPageText = [],
     vectorCurves = [],
     vectorAccidentalPaths = [],
+    vectorAugmentationDotPaths = [],
     stavesPerSystem = OMR_PIANO_STAVES_PER_SYSTEM,
     dense = false,
     keySignature: inheritedKeySignature = null,
@@ -338,6 +342,21 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       })
       continue
     }
+    const systemVectorNoteheads = vectorGlyphs
+      .filter((glyph) => {
+        const yNorm = glyph.y / imageData.height
+        return (
+          /^[\uE0A2-\uE0A4]$/.test(glyph.text ?? '') &&
+          yNorm >= system.y0 - 0.035 &&
+          yNorm <= system.y1 + 0.035
+        )
+      })
+      .map((glyph) => ({
+        x: glyph.x / imageData.width,
+        width: glyph.width / imageData.width,
+      }))
+    const useVectorNoteColumnHints =
+      !tabAnalysisActive || shouldUseVectorNoteColumnHints(systemVectorNoteheads)
     const { measureBoxes, diagnostics: gridDiagnostics } = buildMeasureBoxesForSystemWithDiagnostics({
       page,
       systemIndex,
@@ -346,19 +365,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       imageData,
       measureNumberStart: measureCounter,
       darkThreshold: Math.min(inkThreshold, Math.max(145, inkThreshold - 22)),
-      vectorNoteheadXNorms: (tabAnalysisActive ? [] : vectorGlyphs)
-        .filter((glyph) => {
-          const yNorm = glyph.y / imageData.height
-          return (
-            /^[\uE0A2-\uE0A4]$/.test(glyph.text ?? '') &&
-            yNorm >= system.y0 - 0.035 &&
-            yNorm <= system.y1 + 0.035
-          )
-        })
-        .map((glyph) => ({
-          x: glyph.x / imageData.width,
-          width: glyph.width / imageData.width,
-        })),
+      vectorNoteheadXNorms: useVectorNoteColumnHints ? systemVectorNoteheads : [],
     })
 
     measureCounter += measureBoxes.length
@@ -623,6 +630,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       pageText,
       vectorCurves,
       vectorAccidentalPaths,
+      vectorAugmentationDotPaths,
       systems,
       systemMeasureBoxes,
       inheritedKeySignature,

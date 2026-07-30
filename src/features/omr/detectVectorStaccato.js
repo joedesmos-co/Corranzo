@@ -269,6 +269,21 @@ export function assignVectorAugmentationDots(glyphs, notes, measureBox, imageDat
       }
       continue
     }
+    if (glyph.source === 'vector-path' && glyph.repeatPairCandidate) {
+      if (diagnostics) {
+        diagnostics.push({
+          glyph: { text: glyph.text, x: glyph.x, y: glyph.y },
+          geometry: { x: glyph.x, y: glyph.y },
+          possibleOwners: [],
+          augmentationScore: 0,
+          articulationScore: competing.articulationScore,
+          repeatDotScore: competing.repeatDotScore,
+          rejectionReason: 'path-repeat-dot-pair',
+          finalOwner: null,
+        })
+      }
+      continue
+    }
 
     const possibleOwners = []
     let bestIndex = null
@@ -276,7 +291,14 @@ export function assignVectorAugmentationDots(glyphs, notes, measureBox, imageDat
     for (let index = 0; index < notes.length; index += 1) {
       const note = notes[index]
       const dx = glyph.x - note.cx
-      const dy = Math.abs(glyph.y - note.cy)
+      const staffSpace = staffSpacePixels(measureBox, imageData, note.clef)
+      // PDF paths use their actual visual center, while vector notehead text
+      // items expose a font baseline. Normalize only the cross-source case.
+      const ownerY =
+        glyph.source === 'vector-path'
+          ? glyph.y + staffSpace * 0.5
+          : glyph.y
+      const dy = Math.abs(ownerY - note.cy)
       const gate = Math.max(4, dx * 0.35)
       const compatible = dx >= 3 && dx <= 24 && dy <= gate
       const score = Math.abs(dx) + dy * 0.5
@@ -289,6 +311,7 @@ export function assignVectorAugmentationDots(glyphs, notes, measureBox, imageDat
           clef: note.clef ?? null,
           dx,
           dy,
+          ownerY,
           gate,
           compatible,
           augmentationScore: compatible ? 1 / (1 + score) : 0,
