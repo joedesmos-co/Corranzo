@@ -655,7 +655,7 @@ describe('extendDurationsPerClefVoice', () => {
     expect(events[0].durationDivisions).toBe(2)
   })
 
-  it('still lengthens inferred quarters when a foreign clef interrupts the gap', () => {
+  it('preserves filled-head enrich duration instead of stretching across a foreign clef', () => {
     const events = extendDurationsPerClefVoice(
       [
         {
@@ -670,6 +670,8 @@ describe('extendDurationsPerClefVoice', () => {
               confidence: 0.8,
               stem: { x: 1, tipY: 1 },
               hollow: false,
+              noteheadGlyph: 'black',
+              beams: 0,
             },
           ],
         },
@@ -684,6 +686,33 @@ describe('extendDurationsPerClefVoice', () => {
           startDivision: 8,
           durationDivisions: 4,
           notes: [{ clef: 'treble', midi: 74 }],
+        },
+      ],
+      16,
+    )
+    expect(events[0].durationDivisions).toBe(4)
+  })
+
+  it('still lengthens bass without filled-head enrich evidence when a foreign clef interrupts', () => {
+    const events = extendDurationsPerClefVoice(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 4,
+          notes: [{ clef: 'bass', midi: 40 }],
+        },
+        {
+          type: 'note',
+          startDivision: 4,
+          durationDivisions: 4,
+          notes: [{ clef: 'treble', midi: 60 }],
+        },
+        {
+          type: 'note',
+          startDivision: 8,
+          durationDivisions: 4,
+          notes: [{ clef: 'bass', midi: 43 }],
         },
       ],
       16,
@@ -724,7 +753,7 @@ describe('extendDurationsPerClefVoice', () => {
     expect(events[0].durationDivisions).toBe(4)
   })
 
-  it('does not apply quarter ink inference on subdivision grid gaps', () => {
+  it('recovers gap-collapsed quarters when enrich stem evidence is confident', () => {
     const events = extendDurationsPerClefVoice(
       [
         {
@@ -739,6 +768,8 @@ describe('extendDurationsPerClefVoice', () => {
               confidence: 0.8,
               stem: { x: 1, tipY: 1 },
               hollow: false,
+              beams: 0,
+              beamStrength: 0,
             },
           ],
         },
@@ -747,6 +778,49 @@ describe('extendDurationsPerClefVoice', () => {
           startDivision: 4,
           durationDivisions: 4,
           notes: [{ clef: 'treble', midi: 74 }],
+        },
+      ],
+      16,
+    )
+    expect(events[0].durationDivisions).toBe(4)
+  })
+
+  it('does not promote subdivision runs that pack three-plus attacks into a beat', () => {
+    const events = extendDurationsPerClefVoice(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 2,
+          notes: [
+            {
+              clef: 'treble',
+              midi: 72,
+              durationDivisions: 4,
+              confidence: 0.8,
+              stem: { x: 1, tipY: 1 },
+              hollow: false,
+              beams: 0,
+            },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 1,
+          durationDivisions: 1,
+          notes: [{ clef: 'treble', midi: 74, beams: 0 }],
+        },
+        {
+          type: 'note',
+          startDivision: 2,
+          durationDivisions: 1,
+          notes: [{ clef: 'treble', midi: 76, beams: 0 }],
+        },
+        {
+          type: 'note',
+          startDivision: 4,
+          durationDivisions: 4,
+          notes: [{ clef: 'treble', midi: 77 }],
         },
       ],
       16,
@@ -1465,11 +1539,13 @@ describe('per-clef rhythm helpers', () => {
             confidence: 0.8,
             stem: { x: 1, tipY: 1 },
             hollow: false,
+            beams: 0,
+            beamStrength: 0,
           },
         ],
         2,
       ),
-    ).toBe(false)
+    ).toBe(true)
   })
 })
 

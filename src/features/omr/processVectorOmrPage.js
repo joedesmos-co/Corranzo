@@ -870,9 +870,10 @@ function hasQuarterStemInk(notes) {
 }
 
 export function hasConfidentQuarterInference(notes, globalDuration = OMR_DIVISIONS_PER_QUARTER) {
-  if (globalDuration <= OMR_DURATION_DIVISIONS.eighth + 1) {
-    return false
-  }
+  void globalDuration
+  // Trust stem+enrich evidence even when gap packing already collapsed the
+  // event duration to an eighth. The old globalDuration≤eighth gate blocked
+  // recovering written quarters (common 1→0.5 / inventory duration errors).
   return hasQuarterStemInk(notes)
 }
 
@@ -1465,6 +1466,10 @@ export function extendDurationsPerClefVoice(events, totalDivisions) {
         if (dottedCap != null && duration > dottedCap) {
           duration = dottedCap
         }
+        const filledCap = filledHeadWrittenDurationCap(event.notes ?? [])
+        if (filledCap != null && duration > filledCap) {
+          duration = filledCap
+        }
       }
       duration = Math.min(duration, Math.max(1, totalDivisions - start))
       durationByEvent.set(event, duration)
@@ -1764,6 +1769,39 @@ export function dottedWrittenDurationDivisions(notes = []) {
   }
   // Chord tones share one written duration — take the consistent (max) value.
   return Math.max(...values)
+}
+
+/**
+ * Unbeamed filled (black) heads already carry a written enrich duration from
+ * stem/flag inference. Gap stretch and foreign-clef sustains must not promote
+ * those values to longer open-head lengths (quarter→half is the common failure).
+ */
+export function filledHeadWrittenDurationCap(notes = []) {
+  const values = (notes ?? [])
+    .filter((note) => {
+      if (!note) {
+        return false
+      }
+      if (note.noteheadGlyph === 'whole' || note.noteheadGlyph === 'half') {
+        return false
+      }
+      if (note.dotted === true) {
+        return false
+      }
+      if ((note.beams ?? 0) >= 1 || (note.beamStrength ?? 0) >= 8) {
+        return false
+      }
+      if (!note.stem) {
+        return false
+      }
+      return Number.isFinite(note.durationDivisions) && note.durationDivisions > 0
+    })
+    .map((note) => note.durationDivisions)
+  if (!values.length) {
+    return null
+  }
+  // Conservative: do not stretch past the shortest written enrich in the chord.
+  return Math.min(...values)
 }
 
 /**
