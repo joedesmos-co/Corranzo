@@ -165,6 +165,12 @@ export default function PracticeView({
             )}
             <div className="practice-workspace__main">
               <PracticeViewSwitchBar viewMode={viewMode} onViewModeChange={handleViewModeChange} />
+              <PracticeTimingPrepBanner
+                isLoading={Boolean(session.timing?.isLoading)}
+                hasTimingMap={Boolean(session.timing?.timingMap)}
+                hasMusicXml={Boolean(session.hasMusicXml)}
+                error={session.timing?.error ?? null}
+              />
               {isVisualView ? (
                 <VisualPracticeView timingSourceKind={timingSourceKind} />
               ) : (
@@ -252,6 +258,65 @@ const PracticeViewSwitchBar = memo(function PracticeViewSwitchBar({
           </button>
         ))}
       </div>
+    </div>
+  )
+})
+
+const PracticeTimingPrepBanner = memo(function PracticeTimingPrepBanner({
+  isLoading,
+  hasTimingMap,
+  hasMusicXml,
+  error,
+}) {
+  useEffect(() => {
+    if (hasTimingMap && !isLoading && typeof window !== 'undefined') {
+      const marks = window.__SCOREFLOW_PRACTICE_PREP__?.marks ?? []
+      if (!marks.some((entry) => entry.stage === 'first-usable-controls')) {
+        const entry = {
+          stage: 'first-usable-controls',
+          at: performance.now?.() ?? Date.now(),
+        }
+        window.__SCOREFLOW_PRACTICE_PREP__ = {
+          marks: [...marks, entry],
+          last: entry,
+        }
+        try {
+          performance.mark('practice-prep:first-usable-controls')
+        } catch {
+          // ignore
+        }
+      }
+    }
+  }, [hasTimingMap, isLoading])
+
+  if (error) {
+    return (
+      <div
+        className="practice-timing-prep practice-timing-prep--error"
+        role="status"
+        data-testid="practice-timing-prep"
+        data-prep-state="error"
+      >
+        Timing could not be prepared. Library and navigation stay available —
+        try reopening the piece or uploading a cleaner MusicXML.
+      </div>
+    )
+  }
+
+  if (!hasMusicXml || hasTimingMap || !isLoading) {
+    return null
+  }
+
+  return (
+    <div
+      className="practice-timing-prep"
+      role="status"
+      aria-live="polite"
+      data-testid="practice-timing-prep"
+      data-prep-state="preparing"
+    >
+      Preparing timing for practice… Controls unlock when the score timeline is ready.
+      Navigation and Library stay available.
     </div>
   )
 })

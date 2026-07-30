@@ -336,22 +336,33 @@ async function main() {
     fail('E-reload', 'reload left no playable score')
   }
 
-  // F. Piano ↔ Guitar
+  // F. Piano ↔ Guitar clears live incompatible practice
   console.log('\n=== F: Piano ↔ Guitar ===')
   const scoreBeforeSwitch = (await readState(page)).active?.scoreId
-  for (let i = 0; i < 3; i += 1) {
-    await page.getByRole('radio', { name: 'Guitar', exact: true }).click({ force: true })
-    await page.waitForTimeout(600)
+  await page.getByRole('radio', { name: 'Guitar', exact: true }).click({ force: true })
+  await page.waitForTimeout(800)
+  const afterGuitar = await readState(page)
+  const libraryAfterGuitar =
+    /\/library\/?$/.test(new URL(page.url()).pathname) ||
+    (await page.locator('.library-main').first().isVisible().catch(() => false))
+  for (let i = 0; i < 2; i += 1) {
     await page.getByRole('radio', { name: 'Piano', exact: true }).click({ force: true })
-    await page.waitForTimeout(600)
+    await page.waitForTimeout(400)
+    await page.getByRole('radio', { name: 'Guitar', exact: true }).click({ force: true })
+    await page.waitForTimeout(400)
   }
   const afterSwitch = await readState(page)
-  if (scoreBeforeSwitch && afterSwitch.active?.scoreId === scoreBeforeSwitch) {
-    pass('F-instrument-switch-retained', scoreBeforeSwitch)
-  } else if ((afterSwitch.snap?.playableEventCount ?? 0) > 0) {
-    pass('F-instrument-switch-playable')
+  if (!libraryAfterGuitar) {
+    fail('F-instrument-switch', 'switch did not open Library')
+  } else if (afterGuitar.active?.scoreId && afterGuitar.active.scoreId === scoreBeforeSwitch) {
+    fail('F-instrument-switch', 'Guitar kept Piano ActiveScore live')
   } else {
-    fail('F-instrument-switch', 'lost playable score during instrument toggling')
+    pass('F-instrument-switch-cleared', `before=${scoreBeforeSwitch}`)
+  }
+  if ((afterSwitch.snap?.playableEventCount ?? 0) > 0 && afterSwitch.active?.scoreId === scoreBeforeSwitch) {
+    fail('F-instrument-switch-rapid', 'rapid toggling left original score live')
+  } else {
+    pass('F-instrument-switch-rapid-cleared')
   }
 
   // H. Library → user PDF → Library

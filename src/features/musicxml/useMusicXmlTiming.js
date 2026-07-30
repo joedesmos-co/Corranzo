@@ -7,7 +7,10 @@ import {
 } from '../library/scoreSourceContentIdentity.js'
 import { withTimeout } from '../../utils/asyncWithTimeout.js'
 import { loadMusicXmlFile } from './loadMusicXmlFile.js'
-import { parseMusicXml } from './parseMusicXml.js'
+import {
+  getOrParseTimingMap,
+  markPracticePrepStage,
+} from './timingMapCache.js'
 import { getDebugState } from './timingQuery.js'
 
 const TIMING_PARSE_TIMEOUT_MS = 30_000
@@ -38,6 +41,11 @@ export default function useMusicXmlTiming(musicXmlSource, queryTime = 0) {
     const loadGeneration = loadGenerationRef.current + 1
     loadGenerationRef.current = loadGeneration
     const expectedHash = xmlContentHash
+    markPracticePrepStage('practice-timing-load-start', {
+      xmlSourceKey,
+      xmlContentHash: expectedHash,
+      loadGeneration,
+    })
 
     async function load() {
       setIsLoading(true)
@@ -62,8 +70,12 @@ export default function useMusicXmlTiming(musicXmlSource, queryTime = 0) {
           ownerPdfIdentity: musicXmlSource?.ownerPdfIdentity ?? null,
           sourceType: musicXmlSource?.source ?? null,
         })
-        const parsed = await withTimeout(
-          Promise.resolve().then(() => parseMusicXml(xmlString, xmlFileName)),
+        const { timingMap: parsed, fromCache, durationMs } = await withTimeout(
+          Promise.resolve().then(() =>
+            getOrParseTimingMap(xmlString, xmlFileName, {
+              contentHash: parsedStringHash ?? expectedHash,
+            }),
+          ),
           TIMING_PARSE_TIMEOUT_MS,
           'Timing file took too long to parse. It may be corrupt or very large.',
         )
@@ -75,10 +87,14 @@ export default function useMusicXmlTiming(musicXmlSource, queryTime = 0) {
             loadGeneration,
             currentGeneration: loadGenerationRef.current,
           })
+          markPracticePrepStage('practice-timing-stale-discard', {
+            loadGeneration,
+            fromCache,
+          })
           return
         }
         // Stamp content identity onto the timing map so playback can key off it.
-        parsed.contentHash = parsedStringHash
+        parsed.contentHash = parsedStringHash ?? expectedHash ?? parsed.contentHash ?? null
         parsed.sourceContentKey = xmlSourceKey
         parsed.ownerScoreId =
           musicXmlSource?.ownerScoreId ??
@@ -87,6 +103,15 @@ export default function useMusicXmlTiming(musicXmlSource, queryTime = 0) {
             : null)
         parsed.ownerPdfIdentity = musicXmlSource?.ownerPdfIdentity ?? null
         setTimingMap(parsed)
+        markPracticePrepStage('practice-timing-ready', {
+          xmlSourceKey,
+          contentHash: parsed.contentHash,
+          fromCache,
+          parseDurationMs: durationMs,
+          measureCount: parsed.measures?.length ?? null,
+          noteCount: parsed.noteCount ?? parsed.notes?.length ?? null,
+          loadGeneration,
+        })
         pushScoreSourceContentTrace('timing-parse-applied', {
           xmlSourceKey,
           xmlContentHash: expectedHash,
@@ -96,11 +121,16 @@ export default function useMusicXmlTiming(musicXmlSource, queryTime = 0) {
           noteCount: parsed.noteCount ?? parsed.notes?.length ?? null,
           durationSeconds: parsed.durationSeconds ?? null,
           firstMidi: parsed.notes?.find((note) => note.midi != null)?.midi ?? null,
+          fromCache,
         })
       } catch (loadError) {
         if (loadGenerationRef.current === loadGeneration) {
           setTimingMap(null)
           setError(formatMusicXmlImportError(loadError))
+          markPracticePrepStage('practice-timing-error', {
+            loadGeneration,
+            message: loadError instanceof Error ? loadError.message : String(loadError),
+          })
         }
       } finally {
         if (loadGenerationRef.current === loadGeneration) {
@@ -121,6 +151,7 @@ export default function useMusicXmlTiming(musicXmlSource, queryTime = 0) {
     xmlContentHash,
     musicXmlSource?.ownerPdfIdentity,
     musicXmlSource?.source,
+    musicXmlSource?.ownerScoreId,
   ])
 
   const debugState = useMemo(

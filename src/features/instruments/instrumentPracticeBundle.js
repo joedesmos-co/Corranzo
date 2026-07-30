@@ -2,12 +2,12 @@
  * Instrument-scoped active practice state.
  *
  * Each instrument keeps its own bundle (PDF/MIDI/MusicXML/prefs). Switching
- * instruments restores that instrument's saved bundle when one exists.
+ * instruments saves the outgoing instrument's upload into that instrument's
+ * library slot, clears the live practice session, and leaves the destination
+ * instrument empty until the user explicitly opens a compatible score.
  *
- * When the destination instrument has no score yet, the active score is
- * carried forward so Piano↔Guitar keep the same score identity. Instrument-
- * specific derived state (fret maps, WFY prefs) is still reset via the App
- * epoch/remount path.
+ * Piano ↔ Guitar must never silently carry an incompatible live practice
+ * session. Cross-instrument reuse requires an explicit future action.
  */
 
 import { normalizeInstrumentId } from './instruments.js'
@@ -58,68 +58,26 @@ export function bundleHasActiveFile(bundle) {
 }
 
 /**
- * Carry an active score into an empty instrument slot.
- * Clones PDF blob URL + ArrayBuffers so each instrument can clear independently.
- * Practice prefs are not carried — those stay instrument-specific.
- */
-export function carryScoreBundleToInstrument(sourceBundle, nextInstrumentId) {
-  if (!bundleHasActiveFile(sourceBundle)) {
-    return createEmptyInstrumentBundle()
-  }
-  const pdfBuffer = sourceBundle.pdfBuffer.slice(0)
-  let pdfFile = sourceBundle.pdfFile
-  if (typeof URL !== 'undefined' && typeof Blob !== 'undefined') {
-    pdfFile = URL.createObjectURL(new Blob([pdfBuffer], { type: 'application/pdf' }))
-  }
-  const cloneCompanion = (companion) => {
-    if (!companion?.data) {
-      return companion ?? null
-    }
-    return {
-      ...companion,
-      data: companion.data.slice(0),
-    }
-  }
-  return snapshotInstrumentBundle({
-    ...sourceBundle,
-    instrumentId: normalizeInstrumentId(nextInstrumentId),
-    pdfFile,
-    pdfBuffer,
-    midiSource: cloneCompanion(sourceBundle.midiSource),
-    musicXmlSource: cloneCompanion(sourceBundle.musicXmlSource),
-    practicePrefs: null,
-  })
-}
-
-/**
  * Resolve which bundle to apply on an instrument switch.
- * - Destination has its own score → use it
- * - Destination empty + source has score → carry source score
- * - Otherwise → empty
+ *
+ * Default behavior clears the live session. Destination uploads remain in the
+ * store for Library reopen, but are not auto-activated (avoids silently
+ * converting Piano practice into Guitar practice or vice versa).
  */
 export function resolveInstrumentSwitchBundle({
   outgoingBundle = null,
   incomingBundle = null,
   nextInstrumentId = null,
 } = {}) {
-  if (bundleHasActiveFile(incomingBundle)) {
-    return {
-      bundle: snapshotInstrumentBundle({
-        ...incomingBundle,
-        instrumentId: normalizeInstrumentId(nextInstrumentId),
-      }),
-      carried: false,
-    }
-  }
-  if (bundleHasActiveFile(outgoingBundle)) {
-    return {
-      bundle: carryScoreBundleToInstrument(outgoingBundle, nextInstrumentId),
-      carried: true,
-    }
-  }
+  void outgoingBundle
+  void incomingBundle
   return {
-    bundle: createEmptyInstrumentBundle(),
+    bundle: {
+      ...createEmptyInstrumentBundle(),
+      instrumentId: normalizeInstrumentId(nextInstrumentId),
+    },
     carried: false,
+    clearedLiveSession: true,
   }
 }
 

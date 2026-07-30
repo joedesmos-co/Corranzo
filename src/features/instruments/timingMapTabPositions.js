@@ -48,6 +48,19 @@ export function getTabPositionsForTimingMap(timingMap, instrument, ownership = {
   }
 
   const owner = resolveGuitarMappingOwner(timingMap, ownership)
+  const activeScore =
+    typeof window !== 'undefined' ? window.__SCOREFLOW_ACTIVE_SCORE__ : null
+  // Instrument switch re-renders Practice with the new instrument before the
+  // App effect clears the live session. A hard ActiveScore assert would crash
+  // the tree; return empty mapping until ownership matches again.
+  if (
+    activeScore?.scoreId &&
+    owner.ownerScoreId &&
+    owner.ownerScoreId !== activeScore.scoreId
+  ) {
+    return new Map()
+  }
+
   let byInstrument = positionCache.get(timingMap)
   if (!byInstrument) {
     byInstrument = new Map()

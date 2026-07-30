@@ -1,4 +1,4 @@
-import { parseMusicXml } from '../musicxml/parseMusicXml.js'
+import { getOrParseTimingMap, markPracticePrepStage } from '../musicxml/timingMapCache.js'
 
 const MIN_PLAYABLE_DURATION_SECONDS = 0.25
 export const OMR_GENERATED_PLAYBACK_LIMITS = {
@@ -15,10 +15,13 @@ function reject(message, details = {}) {
     durationSeconds: details.durationSeconds ?? 0,
     noteCount: details.noteCount ?? 0,
     measureCount: details.measureCount ?? 0,
+    timingMap: null,
+    contentHash: null,
   }
 }
 
 export function validateOmrGeneratedPlayback(musicXmlString, fileName = 'score.omr.musicxml') {
+  markPracticePrepStage('omr-validate-start', { fileName })
   if (typeof musicXmlString !== 'string' || musicXmlString.trim().length === 0) {
     return reject('Generated playback failed — empty MusicXML.')
   }
@@ -31,7 +34,10 @@ export function validateOmrGeneratedPlayback(musicXmlString, fileName = 'score.o
   }
 
   try {
-    const timingMap = parseMusicXml(musicXmlString, fileName)
+    const { timingMap, contentHash, fromCache, durationMs } = getOrParseTimingMap(
+      musicXmlString,
+      fileName,
+    )
     const durationSeconds = timingMap.durationSeconds ?? 0
     const noteCount = timingMap.noteCount ?? timingMap.notes?.filter((note) => !note.isRest && note.midi != null).length ?? 0
     const measureCount = timingMap.measures?.length ?? 0
@@ -73,12 +79,23 @@ export function validateOmrGeneratedPlayback(musicXmlString, fileName = 'score.o
       )
     }
 
+    markPracticePrepStage('omr-validate-ok', {
+      contentHash,
+      fromCache,
+      parseDurationMs: durationMs,
+      noteCount,
+      measureCount,
+      durationSeconds,
+    })
+
     return {
       ok: true,
       message: '',
       durationSeconds,
       noteCount,
       measureCount,
+      timingMap,
+      contentHash,
     }
   } catch (error) {
     return reject(

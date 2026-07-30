@@ -321,8 +321,18 @@ export default function usePracticeSession({
     [waitForYou.currentCheckpoint, instrumentId, guidanceTabPositions],
   )
 
+  const playAlongInputActive =
+    practiceActive &&
+    !isWaitForYou &&
+    wfyInputSourceReady &&
+    playback.isPlaying &&
+    (wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE ||
+      wfyInputSource === WFY_INPUT_SOURCE.MIDI)
+
+  // Defer full-score lane materialization until play-along input is actually
+  // active — heavy scores paid this cost on every Practice mount.
   const playAlongLaneGroups = useMemo(() => {
-    if (isWaitForYou || !timing.timingMap) {
+    if (!playAlongInputActive || isWaitForYou || !timing.timingMap) {
       return []
     }
     return buildVisualLaneGroups(
@@ -335,6 +345,7 @@ export default function usePracticeSession({
       },
     )
   }, [
+    playAlongInputActive,
     isWaitForYou,
     timing.timingMap,
     loop.enabled,
@@ -343,14 +354,6 @@ export default function usePracticeSession({
     instrumentId,
     guidanceTabPositions,
   ])
-
-  const playAlongInputActive =
-    practiceActive &&
-    !isWaitForYou &&
-    wfyInputSourceReady &&
-    playback.isPlaying &&
-    (wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE ||
-      wfyInputSource === WFY_INPUT_SOURCE.MIDI)
 
   const playAlongFeedback = usePlayAlongLaneFeedback({
     active: playAlongInputActive,

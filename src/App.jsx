@@ -373,42 +373,35 @@ export default function App() {
     })
     setPracticeRemountKey((key) => key + 1)
     resetPdfViewerRuntime()
+    // Clearing live practice (instrument switch) must drop stale automation
+    // snapshots so Guitar cannot appear to still hold Piano's timeline.
+    // Publish an empty ActiveScore synchronously so a late engine.load cannot
+    // re-publish Piano's playback snapshot under the outgoing scoreId.
+    if (!bundleHasActiveFile(next)) {
+      const emptyScore = syncActiveScoreFromLegacy(null, {
+        pdfFile: null,
+        pdfBuffer: null,
+        pdfMeta: null,
+        fileName: '',
+        musicXmlSource: null,
+        midiSource: null,
+        generation: nextEpoch,
+        activeOmrRunId: null,
+      })
+      activeScoreRef.current = emptyScore
+      setActiveScoreIdOnGate(null)
+      publishActiveScore(emptyScore, { reason: 'instrument-switch-clear' })
+      if (typeof window !== 'undefined') {
+        window.__SCOREFLOW_AUTHORITATIVE_SOURCE__ = null
+        window.__SCOREFLOW_PLAYBACK_SNAPSHOT__ = null
+        window.__SCOREFLOW_GUITAR_PLAYBACK_TRACE__ = null
+        window.__SCOREFLOW_PRACTICE_PREP__ = { marks: [], last: null }
+        window.__SCOREFLOW_LIVE_PRACTICE_EPOCH__ = nextEpoch
+      }
+    } else if (typeof window !== 'undefined') {
+      window.__SCOREFLOW_LIVE_PRACTICE_EPOCH__ = nextEpoch
+    }
   }, [resetPdfViewerRuntime])
-
-  // Save the outgoing instrument's prefs/history, but NEVER replace activeScore.
-  // Piano ↔ Guitar only changes interpretation; the same scoreId stays active.
-  useEffect(() => {
-    const nextInstrument = normalizeInstrumentId(instrumentId)
-    const previousInstrument = activeInstrumentRef.current
-    if (nextInstrument === previousInstrument) {
-      return
-    }
-
-    const store = instrumentBundleStoreRef.current
-    const outgoing = snapshotInstrumentBundle(liveBundleRef.current)
-    store.set(previousInstrument, outgoing)
-    activeInstrumentRef.current = nextInstrument
-
-    // Mirror the active score into the destination slot for My Uploads listing,
-    // but do not apply a different bundle's MusicXML/PDF.
-    const carried = {
-      ...outgoing,
-      instrumentId: nextInstrument,
-      practicePrefs: store.get(nextInstrument)?.practicePrefs ?? null,
-    }
-    store.set(nextInstrument, carried)
-    practicePrefsRef.current = carried.practicePrefs ?? null
-    setInitialPracticePrefs(carried.practicePrefs ?? null)
-    setPracticeRemountKey((key) => key + 1)
-    setInstrumentBundleRevision((value) => value + 1)
-    logScoreSourceLifecycle('instrument-switch-score-retained', {
-      fromInstrument: previousInstrument,
-      toInstrument: nextInstrument,
-      scoreId: activeScoreRef.current?.scoreId ?? null,
-      pdfIdentity: buildPdfSourceIdentity(outgoing.pdfMeta),
-      musicXmlOwner: outgoing.musicXmlSource?.ownerScoreId ?? outgoing.musicXmlSource?.ownerPdfIdentity ?? null,
-    })
-  }, [instrumentId])
 
   const getInstrumentSessionBundles = useCallback(() => {
     const bundles = Object.fromEntries(instrumentBundleStoreRef.current.entries())
@@ -469,6 +462,50 @@ export default function App() {
       window.history.pushState({}, '', nextPath)
     }
   }, [])
+
+  // Instrument switch: keep each instrument's library uploads, but never silently
+  // carry an incompatible live practice session (Piano score must not stay open
+  // as Guitar practice, and vice versa). Clear live playback/practice state and
+  // return to Library for the newly selected instrument. Do not delete uploads
+  // and do not enqueue OMR.
+  useEffect(() => {
+    const nextInstrument = normalizeInstrumentId(instrumentId)
+    const previousInstrument = activeInstrumentRef.current
+    if (nextInstrument === previousInstrument) {
+      return
+    }
+
+    const store = instrumentBundleStoreRef.current
+    const outgoing = snapshotInstrumentBundle(liveBundleRef.current)
+    // Only persist a non-empty live bundle. An empty live snapshot must not wipe
+    // the previous instrument's saved My Uploads entry.
+    if (bundleHasActiveFile(outgoing)) {
+      store.set(previousInstrument, {
+        ...outgoing,
+        instrumentId: previousInstrument,
+      })
+    }
+    activeInstrumentRef.current = nextInstrument
+
+    const destinationPrefs = store.get(nextInstrument)?.practicePrefs ?? null
+    applyInstrumentBundle({
+      ...createEmptyInstrumentBundle(),
+      instrumentId: nextInstrument,
+      practicePrefs: destinationPrefs,
+    })
+    setInstrumentBundleRevision((value) => value + 1)
+    const destinationHasUpload = Boolean(store.get(nextInstrument)?.pdfFile)
+    setLibraryTab(destinationHasUpload ? LIBRARY_TABS.UPLOADS : LIBRARY_TABS.PRACTICE)
+    setSidebarOpen(true)
+    navigateToView('library')
+    logScoreSourceLifecycle('instrument-switch-session-cleared', {
+      fromInstrument: previousInstrument,
+      toInstrument: nextInstrument,
+      preservedOutgoingScoreId: outgoing.musicXmlSource?.ownerScoreId ?? null,
+      preservedOutgoingPdfIdentity: buildPdfSourceIdentity(outgoing.pdfMeta),
+      destinationHadSavedBundle: destinationHasUpload,
+    })
+  }, [instrumentId, applyInstrumentBundle, navigateToView, setSidebarOpen])
 
   const goHome = useCallback(() => {
     const home = getHomeNavigationTarget()
@@ -2214,20 +2251,37 @@ export default function App() {
     const targetInstrument = normalizeInstrumentId(targetInstrumentId)
     const currentInstrument = normalizeInstrumentId(activeInstrumentRef.current)
     const store = instrumentBundleStoreRef.current
+    const live = snapshotInstrumentBundle(liveBundleRef.current)
 
     if (targetInstrument !== currentInstrument) {
-      store.set(currentInstrument, snapshotInstrumentBundle(liveBundleRef.current))
+      // Persist the outgoing upload without wiping it when live is already empty.
+      if (bundleHasActiveFile(live)) {
+        store.set(currentInstrument, live)
+      }
       const targetBundle = store.get(targetInstrument)
-      if (!targetBundle?.pdfFile) {
+      if (!bundleHasActiveFile(targetBundle)) {
         setLibraryFeedback({
           type: 'error',
           message: 'That uploaded piece is no longer available. Add the files again to practice it.',
         })
         return
       }
+      // Update the active-instrument ref before setInstrumentId so the switch
+      // effect does not clear the bundle we are about to open.
       activeInstrumentRef.current = targetInstrument
       applyInstrumentBundle(targetBundle)
       setInstrumentId(targetInstrument)
+    } else if (!bundleHasActiveFile(live)) {
+      // Same instrument after an instrument-switch clear — reopen from the store.
+      const targetBundle = store.get(targetInstrument)
+      if (!bundleHasActiveFile(targetBundle)) {
+        setLibraryFeedback({
+          type: 'error',
+          message: 'That uploaded piece is no longer available. Add the files again to practice it.',
+        })
+        return
+      }
+      applyInstrumentBundle(targetBundle)
     }
 
     setLibraryFeedback({ type: 'info', message: 'Opened Practice.' })

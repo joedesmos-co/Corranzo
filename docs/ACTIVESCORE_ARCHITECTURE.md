@@ -13,7 +13,7 @@ stamp and check `ownerScoreId`.
 |---|---|
 | Parallel PDF vs MusicXML React state | Synced into one `activeScore`; PDF change mints **new** `scoreId` |
 | OMR re-parent stamp | MusicXML gets `ownerScoreId` of the score that started OMR; reject on mismatch |
-| Instrument bundle swap on Piano↔Guitar | Switch retains `scoreId`; remounts derived view only |
+| Instrument bundle swap on Piano↔Guitar | Switch **clears** the live practice session and returns to Library; each instrument keeps its own My Uploads entry. No silent Piano↔Guitar conversion. |
 | Sync re-parent of stale companion | PDF identity change drops companions unless they already own the new PDF |
 | PDF analysis document cache | Fixed key for `{ data: Uint8Array }` (was always `'buffer'`); clear on PDF replace + OMR start |
 

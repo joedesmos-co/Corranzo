@@ -159,6 +159,10 @@ export default function useScorePlayback({
         setError((previous) => (previous == null ? previous : null))
         setMappingWarning((previous) => (previous == null ? previous : null))
         setAudioSource((previous) => (previous === 'musicxml' ? previous : 'musicxml'))
+        if (typeof window !== 'undefined') {
+          window.__SCOREFLOW_PLAYBACK_SNAPSHOT__ = null
+          window.__SCOREFLOW_GUITAR_PLAYBACK_TRACE__ = null
+        }
         pushScoreSourceContentTrace('playback-engine-cleared', {
           timingRevision: null,
         })
@@ -257,8 +261,30 @@ export default function useScorePlayback({
           instrumentId,
           playableEventCount: eventSummary.count,
         })
-        // Expose for browser automation assertions.
+        // Expose for browser automation assertions. Refuse to publish when the
+        // live ActiveScore no longer owns this timeline (instrument-switch clear
+        // or A→B replace racing a late engine.load).
         if (typeof window !== 'undefined') {
+          const liveScoreId = window.__SCOREFLOW_ACTIVE_SCORE__?.scoreId ?? null
+          const liveHash = window.__SCOREFLOW_ACTIVE_SCORE__?.musicXml?.hash ?? null
+          const liveEpoch = window.__SCOREFLOW_LIVE_PRACTICE_EPOCH__ ?? null
+          const mapEpoch = timingMap.practiceSessionEpoch ?? timingMap.generation ?? null
+          if (
+            (ownerScoreId && liveScoreId && ownerScoreId !== liveScoreId) ||
+            (expectedContentHash && liveHash && expectedContentHash !== liveHash) ||
+            (!liveScoreId && !window.__SCOREFLOW_ACTIVE_SCORE__?.pdf) ||
+            (liveEpoch != null && mapEpoch != null && Number(liveEpoch) !== Number(mapEpoch))
+          ) {
+            pushScoreSourceContentTrace('playback-snapshot-suppressed-stale', {
+              expectedContentHash,
+              ownerScoreId,
+              liveScoreId,
+              liveHash,
+              liveEpoch,
+              mapEpoch,
+            })
+            return
+          }
           window.__SCOREFLOW_PLAYBACK_SNAPSHOT__ = {
             timingContentHash: expectedContentHash,
             timingRevision,

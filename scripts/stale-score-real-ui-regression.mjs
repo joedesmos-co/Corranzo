@@ -208,29 +208,35 @@ async function main() {
     failures.push('Reload: MusicXML hash changed away from B')
   }
 
-  console.log('\n=== Piano ↔ Guitar: same scoreId ===')
+  console.log('\n=== Piano ↔ Guitar: clears incompatible live practice ===')
   const beforeSwitch = reloaded.active.scoreId
+  const beforeHash = reloaded.active.musicXmlHash
   await page.getByRole('radio', { name: 'Guitar', exact: true }).click({ force: true })
   await page.waitForTimeout(1500)
   const afterGuitar = await readActive(page)
+  const onLibraryAfterGuitar =
+    /\/library\/?$/.test(new URL(page.url()).pathname) ||
+    (await page.locator('.library-main').first().isVisible().catch(() => false))
   await page.getByRole('radio', { name: 'Piano', exact: true }).click({ force: true })
   await page.waitForTimeout(1500)
   const afterPiano = await readActive(page)
   report.instrumentSwitch = {
     before: beforeSwitch,
-    afterGuitar: afterGuitar.active?.scoreId,
-    afterPiano: afterPiano.active?.scoreId,
-    guitarXml: afterGuitar.active?.musicXmlHash,
-    pianoXml: afterPiano.active?.musicXmlHash,
+    beforeHash,
+    afterGuitar: afterGuitar.active?.scoreId ?? null,
+    afterPiano: afterPiano.active?.scoreId ?? null,
+    guitarXml: afterGuitar.active?.musicXmlHash ?? null,
+    pianoXml: afterPiano.active?.musicXmlHash ?? null,
+    onLibraryAfterGuitar,
   }
-  if (afterGuitar.active?.scoreId !== beforeSwitch) {
-    failures.push('Guitar switch changed scoreId')
+  if (!onLibraryAfterGuitar) {
+    failures.push('Guitar switch did not open Library')
   }
-  if (afterPiano.active?.scoreId !== beforeSwitch) {
-    failures.push('Piano round-trip changed scoreId')
+  if (afterGuitar.active?.scoreId && afterGuitar.active.scoreId === beforeSwitch) {
+    failures.push('Guitar switch kept Piano ActiveScore live')
   }
-  if (afterGuitar.active?.musicXmlHash !== beforeReload) {
-    failures.push('Guitar switch changed MusicXML hash')
+  if (afterGuitar.active?.musicXmlHash && afterGuitar.active.musicXmlHash === beforeHash) {
+    failures.push('Guitar switch kept Piano MusicXML hash live')
   }
 
   const outDir = path.join(root, 'tmp/stale-score-real-ui')

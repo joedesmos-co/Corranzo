@@ -185,6 +185,23 @@
   position: relative;
 }
 
+.practice-timing-prep {
+  margin: 0 0 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--sf-border);
+  background: var(--sf-surface-raised, rgba(18, 18, 18, 0.72));
+  color: var(--sf-text-secondary);
+  font-size: var(--sf-font-sidebar-min);
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+.practice-timing-prep--error {
+  color: var(--sf-text-primary);
+  border-color: var(--sf-border-strong);
+}
+
 .score-follow-setup-status {
   position: static;
   margin: 0 0 10px;

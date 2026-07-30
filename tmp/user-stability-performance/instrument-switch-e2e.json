@@ -1,0 +1,50 @@
+{
+  "passes": [
+    {
+      "name": "1-library-after-piano-to-guitar",
+      "detail": ""
+    },
+    {
+      "name": "4-no-piano-timeline-on-guitar",
+      "detail": ""
+    },
+    {
+      "name": "2-library-after-guitar-to-piano",
+      "detail": ""
+    },
+    {
+      "name": "2-no-guitar-timeline-on-piano",
+      "detail": ""
+    },
+    {
+      "name": "5-reopen-piano-upload",
+      "detail": "opened Practice; timeline may still be preparing"
+    },
+    {
+      "name": "6-library-after-rapid-switch",
+      "detail": ""
+    },
+    {
+      "name": "7-switch-while-paused",
+      "detail": ""
+    },
+    {
+      "name": "8-switch-while-playing",
+      "detail": ""
+    },
+    {
+      "name": "8-playback-stopped",
+      "detail": ""
+    },
+    {
+      "name": "9-switch-with-report-dialog",
+      "detail": ""
+    },
+    {
+      "name": "9-report-dialog-closed-or-unmounted",
+      "detail": ""
+    }
+  ],
+  "failures": [],
+  "at": "2026-07-30T02:26:21.539Z"
+}

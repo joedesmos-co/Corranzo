@@ -361,34 +361,46 @@ async function main() {
       await dismissWfyInputModalIfOpen(page)
       await selectInstrument(page, 'Piano')
       await dismissWfyInputModalIfOpen(page)
-      await page.getByRole('button', { name: 'Library', exact: true }).click()
-      await page.waitForTimeout(800)
-      const pianoLibrary = await practiceLibraryCardsVisible(page).catch(() => false)
+      await page.waitForTimeout(600)
+      const pianoLibrary =
+        /\/library\/?$/.test(new URL(page.url()).pathname) ||
+        (await practiceLibraryCardsVisible(page).catch(() => false))
       if (!pianoLibrary) {
-        await fail(`Piano Library cards after switch ${i + 1}`, 'Practice cards not visible')
+        await page.getByRole('button', { name: 'Library', exact: true }).click()
+        await page.waitForTimeout(800)
       }
-      const pianoPdf = await practiceScoreCanvasVisible(page).catch(() => false)
-      if (!pianoPdf) {
-        await fail(`Piano Practice score after switch ${i + 1}`, 'Canvas not visible')
+      if (!(await practiceLibraryCardsVisible(page).catch(() => false))) {
+        await fail(`Piano Library cards after switch ${i + 1}`, 'Practice cards not visible')
       }
 
       await selectInstrument(page, 'Guitar')
       await page.waitForTimeout(600)
       await dismissWfyInputModalIfOpen(page)
-      await page.getByRole('button', { name: 'Library', exact: true }).click()
-      await page.waitForTimeout(800)
-      const guitarLibrary = await practiceLibraryCardsVisible(page).catch(() => false)
+      const guitarLibrary =
+        /\/library\/?$/.test(new URL(page.url()).pathname) ||
+        (await practiceLibraryCardsVisible(page).catch(() => false))
       if (!guitarLibrary) {
+        await page.getByRole('button', { name: 'Library', exact: true }).click()
+        await page.waitForTimeout(800)
+      }
+      if (!(await practiceLibraryCardsVisible(page).catch(() => false))) {
         await fail(`Guitar Library cards after switch ${i + 1}`, 'Practice cards not visible')
       }
-      const guitarPdf = await practiceScoreCanvasVisible(page).catch(() => false)
-      if (!guitarPdf) {
-        await fail(`Guitar Practice score after switch ${i + 1}`, 'Canvas not visible')
+      // Instrument switch must clear incompatible live Practice — no leftover score canvas.
+      const leftoverPractice = await practiceScoreCanvasVisible(page).catch(() => false)
+      if (leftoverPractice) {
+        await fail(
+          `Guitar switch cleared Practice after switch ${i + 1}`,
+          'Practice canvas still visible after instrument switch',
+        )
       }
     }
-    await pass('Repeated Piano ↔ Guitar switches keep Library cards and Practice scores')
+    await pass('Repeated Piano ↔ Guitar switches open Library and clear live Practice')
 
-    // Score / Visual views
+    // Score / Visual views — reload a piece after switch clears live practice
+    await dismissWfyInputModalIfOpen(page)
+    await selectInstrument(page, 'Piano')
+    await loadDemo(page)
     await dismissWfyInputModalIfOpen(page)
     await page.getByRole('button', { name: 'Practice', exact: true }).click()
     await page.waitForTimeout(1000)

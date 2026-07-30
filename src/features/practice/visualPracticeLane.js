@@ -23,6 +23,14 @@ const TARGET_EPSILON_SECONDS = 0.12
  * sorted high pitch first so stacking reads top-down like a staff).
  */
 export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}) {
+  const cacheKey = buildVisualLaneCacheKey(timingMap, loopRegion, options)
+  if (cacheKey) {
+    const cached = visualLaneGroupCache.get(cacheKey)
+    if (cached) {
+      return cached
+    }
+  }
+
   const checkpoints = buildNoteCheckpoints(timingMap, loopRegion, {
     practiceScope: options.practiceScope,
   }).map((checkpoint) =>
@@ -32,7 +40,7 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}
     }),
   )
 
-  return checkpoints.map((checkpoint) => {
+  const groups = checkpoints.map((checkpoint) => {
     const notes = [...(checkpoint.notes ?? [])]
       .filter((note) => isFiniteMidi(note.midi))
       .sort((a, b) => b.midi - a.midi)
@@ -130,6 +138,40 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}
       notes,
     }
   })
+
+  if (cacheKey) {
+    if (visualLaneGroupCache.has(cacheKey)) {
+      visualLaneGroupCache.delete(cacheKey)
+    }
+    visualLaneGroupCache.set(cacheKey, groups)
+    while (visualLaneGroupCache.size > MAX_VISUAL_LANE_CACHE) {
+      const oldest = visualLaneGroupCache.keys().next().value
+      visualLaneGroupCache.delete(oldest)
+    }
+  }
+  return groups
+}
+
+const MAX_VISUAL_LANE_CACHE = 6
+/** @type {Map<string, Array<object>>} */
+const visualLaneGroupCache = new Map()
+
+function buildVisualLaneCacheKey(timingMap, loopRegion, options = {}) {
+  const contentHash =
+    timingMap?.contentHash ??
+    timingMap?.sourceContentKey ??
+    timingMap?.ownerScoreId ??
+    null
+  if (!contentHash) {
+    return null
+  }
+  const loopKey = loopRegion
+    ? `${loopRegion.start ?? ''}:${loopRegion.end ?? ''}`
+    : 'full'
+  const scope = options.practiceScope ?? 'both'
+  const instrument = options.instrumentId ?? 'none'
+  const tabEpoch = options.tabPositions?.size ?? 0
+  return `${contentHash}|${loopKey}|${scope}|${instrument}|tab:${tabEpoch}`
 }
 
 /**
