@@ -29,6 +29,7 @@ import {
   assignLocalAccidentals,
   resolveNotePitchWithMeasureState,
 } from './omrPitchAlteration.js'
+import { detectVectorPathAccidentals } from './detectVectorPathAccidentals.js'
 import { dedupeNoteheads } from './omrNoteDedupe.js'
 import { summarizeMeasureNoteMatching } from './omrNoteMatchingDiagnostics.js'
 import { vectorGlyphInMeasure } from './vectorGlyphMeasureBounds.js'
@@ -227,6 +228,7 @@ function noteheadsForMeasure(
   placement = {},
   orphanGlyphs = [],
   inkThreshold = 170,
+  vectorAccidentalPaths = [],
 ) {
   const notes = []
   const consumed = new Set()
@@ -302,13 +304,26 @@ function noteheadsForMeasure(
       ACCIDENTAL_GLYPHS.has(glyph.text) &&
       glyphInBox(glyph, measureBox, imageData, { usePlayableStart: false, yPad: 0.03 }),
   )
+  const pathAccidentalResult = detectVectorPathAccidentals({
+    imageData,
+    notes: sortedNotes,
+    measureBox,
+    inkThreshold,
+    pathCandidates: vectorAccidentalPaths,
+    textAccidentalGlyphs: measureAccidentalGlyphs,
+    accidentalGlyphs: ACCIDENTAL_GLYPHS,
+  })
   const localAccidentals = assignLocalAccidentals(
-    measureAccidentalGlyphs,
+    [...measureAccidentalGlyphs, ...pathAccidentalResult.glyphs],
     imageData,
     measureBox,
     sortedNotes,
     ACCIDENTAL_GLYPHS,
   )
+  localAccidentals.diagnostics = {
+    ...(localAccidentals.diagnostics ?? {}),
+    pathInk: pathAccidentalResult.diagnostics,
+  }
   const staccatoResult = assignVectorStaccato(glyphs, sortedNotes, measureBox, imageData)
   const accentResult = assignVectorAccent(glyphs, sortedNotes, measureBox, imageData)
   const notationArticulationResult = assignVectorNotationArticulations(
@@ -2686,6 +2701,7 @@ export function buildVectorMeasureRecord({
   orphanGlyphs = [],
   inkThreshold = 170,
   captureDetectorObservations = false,
+  vectorAccidentalPaths = [],
 }) {
   const {
     notes,
@@ -2702,6 +2718,7 @@ export function buildVectorMeasureRecord({
     measurePlacement,
     orphanGlyphs,
     inkThreshold,
+    vectorAccidentalPaths,
   )
   const rawDetectedRests = restsForMeasure(
     glyphs,
@@ -2960,6 +2977,7 @@ export function processVectorPageSystems({
   imageData,
   pageText,
   vectorCurves = [],
+  vectorAccidentalPaths = [],
   systems,
   systemMeasureBoxes,
   inheritedKeySignature = null,
@@ -3005,6 +3023,7 @@ export function processVectorPageSystems({
         measurePlacement,
         inkThreshold,
         captureDetectorObservations,
+        vectorAccidentalPaths,
       })
       noteCount += record.vectorNoteCount ?? 0
       return record

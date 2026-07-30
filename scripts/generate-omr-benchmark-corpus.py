@@ -40,7 +40,7 @@ DIVISIONS = 12
 MEASURE_DURATION = DIVISIONS * 4
 PAGE_WIDTH, PAGE_HEIGHT = letter
 GUITAR_TUNING = [64, 59, 55, 50, 45, 40]  # string 1 first
-GENERATOR_VERSION = 1
+GENERATOR_VERSION = 2
 
 NOTEHEAD_BLACK = "\ue0a4"
 NOTEHEAD_HALF = "\ue0a3"
@@ -55,6 +55,9 @@ REST_EIGHTH = "\ue4e6"
 REST_16TH = "\ue4e7"
 ARTIC_STACCATO = "\ue4a0"
 ARTIC_ACCENT = "\ue4a3"
+
+# Accidental outlines are drawn as PDF paths (not text-layer glyphs) so the
+# OMR path/ink accidental primitive can be evaluated without SMuFL text.
 
 STEP_NAMES = ["C", "D", "E", "F", "G", "A", "B"]
 NATURAL_SEMITONES = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
@@ -715,6 +718,90 @@ def draw_music_glyph(c: canvas.Canvas, glyph: str, x: float, y: float, size: flo
     c.drawString(x, y, glyph)
 
 
+def draw_path_accidental(c: canvas.Canvas, alter: int, x: float, y: float, size: float = 11.0) -> None:
+    """Draw a local accidental as one filled path (not a text glyph).
+
+    Coordinates are notehead-centered; the mark is placed to the left.
+    A single constructPath keeps sharp/flat/natural geometry classifiable
+    without relying on fragment clustering.
+    """
+    ax = x - size * 1.15
+    ay = y
+    c.setFillColorRGB(0.02, 0.02, 0.02)
+    c.setStrokeColorRGB(0.02, 0.02, 0.02)
+    path = c.beginPath()
+    if alter > 0:
+        hw = size * 0.14
+        gap = size * 0.28
+        # Left vertical
+        path.moveTo(ax - gap - hw / 2, ay - size * 0.55)
+        path.lineTo(ax - gap + hw / 2, ay - size * 0.55)
+        path.lineTo(ax - gap + hw / 2, ay + size * 0.55)
+        path.lineTo(ax - gap - hw / 2, ay + size * 0.55)
+        path.close()
+        # Right vertical
+        path.moveTo(ax + gap - hw / 2, ay - size * 0.55)
+        path.lineTo(ax + gap + hw / 2, ay - size * 0.55)
+        path.lineTo(ax + gap + hw / 2, ay + size * 0.55)
+        path.lineTo(ax + gap - hw / 2, ay + size * 0.55)
+        path.close()
+        # Lower horizontal (slight slant)
+        path.moveTo(ax - size * 0.42, ay - size * 0.18 - hw / 2)
+        path.lineTo(ax + size * 0.42, ay - size * 0.18 - hw / 2 + size * 0.08)
+        path.lineTo(ax + size * 0.42, ay - size * 0.18 + hw / 2 + size * 0.08)
+        path.lineTo(ax - size * 0.42, ay - size * 0.18 + hw / 2)
+        path.close()
+        # Upper horizontal
+        path.moveTo(ax - size * 0.42, ay + size * 0.18 - hw / 2)
+        path.lineTo(ax + size * 0.42, ay + size * 0.18 - hw / 2 + size * 0.08)
+        path.lineTo(ax + size * 0.42, ay + size * 0.18 + hw / 2 + size * 0.08)
+        path.lineTo(ax - size * 0.42, ay + size * 0.18 + hw / 2)
+        path.close()
+        c.drawPath(path, stroke=0, fill=1)
+        return
+    if alter < 0:
+        stem_w = size * 0.16
+        path.moveTo(ax - size * 0.28, ay - size * 0.55)
+        path.lineTo(ax - size * 0.28 + stem_w, ay - size * 0.55)
+        path.lineTo(ax - size * 0.28 + stem_w, ay + size * 0.6)
+        path.lineTo(ax - size * 0.28, ay + size * 0.6)
+        path.close()
+        path.moveTo(ax - size * 0.12, ay + size * 0.05)
+        path.curveTo(
+            ax + size * 0.55,
+            ay + size * 0.35,
+            ax + size * 0.5,
+            ay - size * 0.15,
+            ax - size * 0.12,
+            ay - size * 0.35,
+        )
+        path.close()
+        c.drawPath(path, stroke=0, fill=1)
+        return
+    hw = size * 0.15
+    path.moveTo(ax - size * 0.32, ay - size * 0.55)
+    path.lineTo(ax - size * 0.32 + hw, ay - size * 0.55)
+    path.lineTo(ax - size * 0.32 + hw, ay + size * 0.55)
+    path.lineTo(ax - size * 0.32, ay + size * 0.55)
+    path.close()
+    path.moveTo(ax + size * 0.12, ay - size * 0.55)
+    path.lineTo(ax + size * 0.12 + hw, ay - size * 0.55)
+    path.lineTo(ax + size * 0.12 + hw, ay + size * 0.55)
+    path.lineTo(ax + size * 0.12, ay + size * 0.55)
+    path.close()
+    path.moveTo(ax - size * 0.32, ay + size * 0.08)
+    path.lineTo(ax - size * 0.32 + size * 0.6, ay + size * 0.08)
+    path.lineTo(ax - size * 0.32 + size * 0.6, ay + size * 0.08 + hw)
+    path.lineTo(ax - size * 0.32, ay + size * 0.08 + hw)
+    path.close()
+    path.moveTo(ax - size * 0.18, ay - size * 0.22)
+    path.lineTo(ax - size * 0.18 + size * 0.6, ay - size * 0.22)
+    path.lineTo(ax - size * 0.18 + size * 0.6, ay - size * 0.22 + hw)
+    path.lineTo(ax - size * 0.18, ay - size * 0.22 + hw)
+    path.close()
+    c.drawPath(path, stroke=0, fill=1)
+
+
 def draw_standard_event(
     c: canvas.Canvas,
     event: dict[str, Any],
@@ -746,6 +833,10 @@ def draw_standard_event(
     for chord_index, midi in enumerate(event["pitches"]):
         y = staff_y(midi, bottom, gap, clef)
         stagger = 2.5 if chord_index > 0 and positions and abs(y - positions[-1][1]) < gap * 0.65 else 0
+        _step, alter, _octave = midi_to_pitch(midi)
+        if alter:
+            # Column-stack accidentals left of the chord tone they alter.
+            draw_path_accidental(c, alter, x - 5 + stagger, y, size=10.5)
         draw_music_glyph(c, glyph, x - 5 + stagger, y - 4, 15)
         positions.append((x + stagger, y))
         if y < bottom - gap * 0.65 or y > bottom + gap * 4.65:

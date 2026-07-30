@@ -524,11 +524,12 @@ async function runPdfOmrPipelineBody({
     const pageTextPromise = shouldSkipDefaultTextExtraction
       ? Promise.resolve([])
       : Promise.resolve().then(() => extractPageText(pdfSource, page)).catch(() => [])
-    const shouldSkipDefaultCurveExtraction =
-      numPagesOverride != null && usingDefaultCurveExtract
-    const pageCurvesPromise = shouldSkipDefaultCurveExtraction
-      ? Promise.resolve([])
-      : Promise.resolve().then(() => extractPageCurves(pdfSource, page)).catch(() => [])
+    // Always extract vector curves/accidental paths. Skipping this when
+    // numPages is predeclared drops path-derived ties and accidentals even
+    // though page pixels were supplied by a custom renderer.
+    const pageCurvesPromise = Promise.resolve()
+      .then(() => extractPageCurves(pdfSource, page))
+      .catch(() => [])
     let rendered
     let pageText
     let vectorCurves
@@ -597,6 +598,9 @@ async function runPdfOmrPipelineBody({
         measureNumberStart: measureCounter,
         pageText,
         vectorCurves,
+        vectorAccidentalPaths: Array.isArray(vectorCurves?.accidentalPaths)
+          ? vectorCurves.accidentalPaths
+          : [],
         stavesPerSystem,
         instrument,
         keySignature,

@@ -48,7 +48,13 @@ export function resolveMeasureNotePitch({
           keyAlteration: keyed.source === 'key-signature' ? keyed.alter : null,
           localAccidental: localAccidental.type ?? 'natural',
           localAccidentalAlter: 0,
-          accidentalSource: localAccidental.glyph ? 'vector-glyph' : 'explicit',
+          accidentalSource:
+            localAccidental.glyph?.source === 'vector-path' ||
+            localAccidental.glyph?.source === 'vector-ink'
+              ? localAccidental.glyph.source
+              : localAccidental.glyph
+                ? 'vector-glyph'
+                : 'explicit',
           measureAccidentalState: { mode: 'natural' },
         },
         accidentalState: { mode: 'natural' },
@@ -66,7 +72,13 @@ export function resolveMeasureNotePitch({
         keyAlteration: keyed.source === 'key-signature' ? keyed.alter : null,
         localAccidental: localAccidental.type ?? (localAccidental.alter > 0 ? 'sharp' : 'flat'),
         localAccidentalAlter: localAccidental.alter,
-        accidentalSource: localAccidental.glyph ? 'vector-glyph' : 'explicit',
+        accidentalSource:
+          localAccidental.glyph?.source === 'vector-path' ||
+          localAccidental.glyph?.source === 'vector-ink'
+            ? localAccidental.glyph.source
+            : localAccidental.glyph
+              ? 'vector-glyph'
+              : 'explicit',
         measureAccidentalState: { mode: 'explicit', alter: localAccidental.alter },
       },
       accidentalState: { mode: 'explicit', alter: localAccidental.alter },
@@ -151,7 +163,13 @@ export function resolveNotePitchWithMeasureState({
           keyAlteration: keyedDefault.alter,
           localAccidental: localAccidental.type ?? 'natural',
           localAccidentalAlter: 0,
-          accidentalSource: localAccidental.glyph ? 'vector-glyph' : 'explicit',
+          accidentalSource:
+            localAccidental.glyph?.source === 'vector-path' ||
+            localAccidental.glyph?.source === 'vector-ink'
+              ? localAccidental.glyph.source
+              : localAccidental.glyph
+                ? 'vector-glyph'
+                : 'explicit',
           measureAccidentalState: 0,
         },
       }
@@ -168,7 +186,13 @@ export function resolveNotePitchWithMeasureState({
         keyAlteration: keyedDefault.alter,
         localAccidental: localAccidental.type ?? (localAccidental.alter > 0 ? 'sharp' : 'flat'),
         localAccidentalAlter: localAccidental.alter,
-        accidentalSource: localAccidental.glyph ? 'vector-glyph' : 'explicit',
+        accidentalSource:
+          localAccidental.glyph?.source === 'vector-path' ||
+          localAccidental.glyph?.source === 'vector-ink'
+            ? localAccidental.glyph.source
+            : localAccidental.glyph
+              ? 'vector-glyph'
+              : 'explicit',
         measureAccidentalState: localAccidental.alter,
       },
     }
