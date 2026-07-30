@@ -62,6 +62,7 @@ import {
   applyVectorPrimaryBeamTopology,
   summarizeAppliedVectorBeamTopology,
 } from './applyVectorBeamTopology.js'
+import { packJointPolyphonicRhythm } from './jointPolyphonicRhythm.js'
 
 const HALF_NOTEHEAD_GLYPH = '\ue0a3'
 const WHOLE_NOTEHEAD_GLYPH = '\ue0a2'
@@ -2467,6 +2468,7 @@ function buildNoteEventsFromGroups(
   totalDivisions,
   beats,
   provenance = null,
+  { jointPacking = true } = {},
 ) {
   const usePositionStarts = shouldInferRhythmFromPositions(groups, beats)
   const denseMeasure = groups.length > beats
@@ -2669,6 +2671,11 @@ function buildNoteEventsFromGroups(
   events = track('same-clef-beat-quarter-floor', 'applySameClefBeatQuarterFloors', () =>
     applySameClefBeatQuarterFloors(events, totalDivisions),
   )
+  if (jointPacking) {
+    events = track('joint-polyphonic-pack', 'packJointPolyphonicRhythm', () =>
+      packJointPolyphonicRhythm(events, { totalDivisions }).events,
+    )
+  }
   return track('clamp-measure', 'clampMeasureEventDurations', () =>
     clampMeasureEventDurations(events, totalDivisions),
   )
@@ -2678,7 +2685,7 @@ export function buildVectorEvents(
   notes,
   measureBox,
   timeSignature,
-  { rests = [], provenance = null } = {},
+  { rests = [], provenance = null, deferJointPacking = false } = {},
 ) {
   const beats = timeSignature?.beats ?? 4
   const groups = mergeGroupsSharingBeat(groupVectorNoteheads(notes, { beats }), beats)
@@ -2700,12 +2707,17 @@ export function buildVectorEvents(
     totalDivisions,
     beats,
     provenance,
+    { jointPacking: !deferJointPacking && !rests.length },
   )
   if (!rests.length) {
     return noteEvents
   }
 
-  return insertMixedMeasureRests(noteEvents, rests, { measureBox, totalDivisions }).events
+  const events = insertMixedMeasureRests(noteEvents, rests, {
+    measureBox,
+    totalDivisions,
+  }).events
+  return packJointPolyphonicRhythm(events, { totalDivisions }).events
 }
 
 export function buildVectorMeasureRecord({
@@ -2819,12 +2831,17 @@ export function buildVectorMeasureRecord({
     const noteEvents = buildVectorEvents(notes, measureBox, timeSignature, {
       rests: [],
       provenance,
+      // Preserve the original note geometry until detected rests have had a
+      // chance to claim their voice slots. Joint packing then sees both.
+      deferJointPacking: true,
     })
     restApplyResult = insertMixedMeasureRests(noteEvents, detectedRests, {
       measureBox,
       totalDivisions,
     })
-    events = restApplyResult.events
+    events = packJointPolyphonicRhythm(restApplyResult.events, {
+      totalDivisions,
+    }).events
   }
 
   const tupletRecovery = recoverDigitGatedTripletEvents(events, {
