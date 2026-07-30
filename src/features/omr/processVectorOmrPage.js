@@ -31,6 +31,11 @@ import {
 } from './omrPitchAlteration.js'
 import { detectVectorPathAccidentals } from './detectVectorPathAccidentals.js'
 import { dedupeNoteheads } from './omrNoteDedupe.js'
+import {
+  adjacentSlotChordShareAllowed,
+  beginAdjacentSlotDiagnostics,
+  takeAdjacentSlotDiagnostics,
+} from './omrAdjacentSlotChordGrouping.js'
 import { summarizeMeasureNoteMatching } from './omrNoteMatchingDiagnostics.js'
 import { vectorGlyphInMeasure } from './vectorGlyphMeasureBounds.js'
 import {
@@ -521,7 +526,17 @@ function groupsShareBeatSlot(left, right, slotsPerMeasure, chordMergeX = OMR_CHO
       const leftSlot = beatSlotForPosition(leftPosition, slotsPerMeasure)
       const rightSlot = beatSlotForPosition(rightPosition, slotsPerMeasure)
       if (leftSlot !== rightSlot) {
-        return false
+        // Conservative adjacent-slot exception for stacked chord tones only.
+        if (
+          leftSlot != null &&
+          rightSlot != null &&
+          Math.abs(leftSlot - rightSlot) === 1 &&
+          adjacentSlotChordShareAllowed(leftNotes, rightNotes, { chordMergeX })
+        ) {
+          // Fall through to horizontal proximity check below.
+        } else {
+          return false
+        }
       }
     }
   }
@@ -643,6 +658,7 @@ function mergeGroupsByChordProximity(groups, chordMergeX, slotsPerMeasure = null
 }
 
 function groupVectorNoteheads(notes, { beats = 4 } = {}) {
+  beginAdjacentSlotDiagnostics()
   const slotsPerMeasure = Math.max(4, beats * 4)
   const chordMergeX = vectorChordMergeXPx(notes, beats)
   const groups = []
@@ -2915,6 +2931,7 @@ export function buildVectorMeasureRecord({
     events,
   })
   const vectorChordDiagnostics = summarizeVectorChordGrouping(events)
+  const adjacentSlotChordGroupingDiagnostics = takeAdjacentSlotDiagnostics()
   const vectorRhythmDiagnostics = summarizeVectorRhythmDiagnostics(
     events,
     notes,
@@ -2961,6 +2978,7 @@ export function buildVectorMeasureRecord({
       combinedVectorNotationArticulationDiagnostics,
     vectorNoteMatching,
     vectorChordDiagnostics,
+    adjacentSlotChordGroupingDiagnostics,
     vectorRhythmDiagnostics,
     musicalEventReconstructionDiagnostics,
     beamStemGraph,
