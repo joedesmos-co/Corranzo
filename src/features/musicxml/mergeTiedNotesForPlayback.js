@@ -61,7 +61,10 @@ export function applyTieSustainToNotes(notes) {
     if (chainHead && note !== chainHead && note.tieStop && sameTieVoice(chainHead, note)) {
       chainHead.durationQuarters += note.durationQuarters
       chainHead.durationDivisions += note.durationDivisions
-      chainHead.tieStop = !note.tieStart || note.tieStop
+      // Do not mutate written tieStart/tieStop on the chain head. Playback
+      // sustain is expressed via duration merge + suppressPlaybackAttack only.
+      // Overwriting tieStop on the head falsely doubles stop counts in notation
+      // summaries and semantic sustain comparisons.
       note.suppressPlaybackAttack = true
       note.tieChainId = chainHead.tieChainId
       if (!note.tieStart) {

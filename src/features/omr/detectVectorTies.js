@@ -7,6 +7,9 @@ export const SLUR_END_GLYPH = '\ue8e5'
 
 const MAX_SAME_MEASURE_TIE_PX = 96
 const MAX_CROSS_MEASURE_TIE_PX = 140
+/** Reject competing pairs whose scores differ by at most this margin. */
+const TIE_MATCH_AMBIGUITY_MARGIN = 6
+const TIE_ENDPOINT_CANDIDATE_LIMIT = 6
 
 function inkAt(imageData, x, y, threshold) {
   const { data, width, height } = imageData
@@ -37,6 +40,7 @@ function flattenMeasureNotes(measureRecords) {
           startDivision: event.startDivision ?? 0,
           midi: note.midi,
           clef: note.clef,
+          voice: note.voice ?? event.voice ?? null,
           cx: note.cx ?? event.cx,
           cy: note.cy,
           lineYs: note.pitchMapping?.lineYs ?? null,
@@ -285,6 +289,47 @@ function curveLooksTieLike(curve, note, measureBoxByNumber, imageData) {
   )
 }
 
+/**
+ * Prefer same-pitch, same-clef, forward-onset attachments so stacked chord
+ * heads each claim their own curve instead of collapsing onto one note.
+ */
+function selectBestCurveEndpointPair(startCandidates, endCandidates) {
+  let best = null
+  const starts = startCandidates.slice(0, TIE_ENDPOINT_CANDIDATE_LIMIT)
+  const ends = endCandidates.slice(0, TIE_ENDPOINT_CANDIDATE_LIMIT)
+  for (const start of starts) {
+    for (const end of ends) {
+      if (start.instance.instanceIndex === end.instance.instanceIndex) {
+        continue
+      }
+      if (!isLaterOnset(start.instance, end.instance)) {
+        continue
+      }
+      if ((start.instance.clef ?? 'treble') !== (end.instance.clef ?? 'treble')) {
+        continue
+      }
+      const samePitch = start.instance.midi === end.instance.midi
+      const sameVoice =
+        start.instance.voice == null ||
+        end.instance.voice == null ||
+        start.instance.voice === end.instance.voice
+      const total =
+        start.score +
+        end.score +
+        (samePitch ? 0 : 12) +
+        (sameVoice ? 0 : 8)
+      if (
+        !best ||
+        total < best.total ||
+        (total === best.total && samePitch && !best.samePitch)
+      ) {
+        best = { start, end, total, samePitch }
+      }
+    }
+  }
+  return best
+}
+
 function classifyCurvePair(
   instances,
   from,
@@ -418,8 +463,9 @@ function collectPdfVectorCurvePairs({
     })
     const diagnostic = curveDiagnostic(curve, startCandidates, endCandidates)
     diagnostics.push(diagnostic)
-    const start = startCandidates[0]?.instance ?? null
-    const end = endCandidates[0]?.instance ?? null
+    const selected = selectBestCurveEndpointPair(startCandidates, endCandidates)
+    const start = selected?.start?.instance ?? null
+    const end = selected?.end?.instance ?? null
 
     if (start && end && start.instanceIndex !== end.instanceIndex) {
       const decision = classifyCurvePair(
@@ -430,11 +476,12 @@ function collectPdfVectorCurvePairs({
         measureBoxByNumber,
         imageData,
       )
-      diagnostic.selectedStart = attachmentDiagnostic(startCandidates[0])
-      diagnostic.selectedEnd = attachmentDiagnostic(endCandidates[0])
+      diagnostic.selectedStart = attachmentDiagnostic(selected.start)
+      diagnostic.selectedEnd = attachmentDiagnostic(selected.end)
       diagnostic.classification = decision.classification
       diagnostic.failureReason = decision.failureReason
       if (decision.classification === 'tie' || decision.classification === 'slur') {
+        const spanPx = Math.abs((end.cx ?? 0) - (start.cx ?? 0))
         directPairs.push({
           from: start,
           to: end,
@@ -442,13 +489,27 @@ function collectPdfVectorCurvePairs({
           candidateIds: [curve.candidateId],
           archDirection: curve.archDirection,
           classification: decision.classification,
+          matchScore: selected.total + spanPx * 0.2,
         })
       }
       continue
     }
 
-    if (start) {
-      const bounds = systemBounds.get(start.systemIndex)
+    const nearestStart = startCandidates[0]?.instance ?? null
+    const nearestEnd = endCandidates[0]?.instance ?? null
+    if (
+      nearestStart &&
+      nearestEnd &&
+      nearestStart.instanceIndex !== nearestEnd.instanceIndex
+    ) {
+      diagnostic.selectedStart = attachmentDiagnostic(startCandidates[0])
+      diagnostic.selectedEnd = attachmentDiagnostic(endCandidates[0])
+      diagnostic.failureReason = 'no-valid-endpoint-pair'
+      continue
+    }
+
+    if (nearestStart) {
+      const bounds = systemBounds.get(nearestStart.systemIndex)
       if (isAtSystemEdge(curve.end, 'right', bounds, imageData)) {
         diagnostic.selectedStart = attachmentDiagnostic(startCandidates[0])
         diagnostic.classification = 'outgoing-system-fragment'
@@ -456,8 +517,8 @@ function collectPdfVectorCurvePairs({
         continue
       }
     }
-    if (end) {
-      const bounds = systemBounds.get(end.systemIndex)
+    if (nearestEnd) {
+      const bounds = systemBounds.get(nearestEnd.systemIndex)
       if (isAtSystemEdge(curve.start, 'left', bounds, imageData)) {
         diagnostic.selectedEnd = attachmentDiagnostic(endCandidates[0])
         diagnostic.classification = 'incoming-system-fragment'
@@ -467,7 +528,7 @@ function collectPdfVectorCurvePairs({
     }
 
     diagnostic.failureReason =
-      start || end ? 'orphan-curve-endpoint' : 'no-note-endpoint-attachment'
+      nearestStart || nearestEnd ? 'orphan-curve-endpoint' : 'no-note-endpoint-attachment'
   }
 
   const stitchedPairs = []
@@ -531,6 +592,7 @@ function collectPdfVectorCurvePairs({
       ],
       archDirection: stitch.outgoing.curve.archDirection,
       classification: stitch.decision.classification,
+      matchScore: stitch.score,
     })
   }
 
@@ -1073,6 +1135,28 @@ function eventRefKey(ref) {
   return `${ref.measureNumber}:${ref.eventIndex}:${ref.noteIndex ?? 0}`
 }
 
+function tiePairMatchScore(pair) {
+  if (Number.isFinite(pair.matchScore)) {
+    return pair.matchScore
+  }
+  const from = pair.from
+  const to = pair.to
+  const dx = Math.abs((to.cx ?? 0) - (from.cx ?? 0))
+  const dy = Math.abs((to.cy ?? 0) - (from.cy ?? 0))
+  const sourceRank =
+    pair.source === 'control-glyph'
+      ? 0
+      : pair.source?.startsWith('pdf-vector-path')
+        ? 1
+        : pair.source === 'ink-arc'
+          ? 3
+          : 2
+  const voicePenalty =
+    from.voice != null && to.voice != null && from.voice !== to.voice ? 8 : 0
+  // Prefer locally spanning ties when multiple curves share an endpoint.
+  return sourceRank * 20 + dy * 2 + dx * 0.2 + voicePenalty
+}
+
 /**
  * Mark tie start/stop on the specific pitch instances, not the whole event.
  * Event-level flags remain as a coarse signal for single-note events only.
@@ -1094,15 +1178,21 @@ function clearInheritedTieMarks(measureRecords) {
   }
 }
 
+/**
+ * Exclusive one-to-one ownership: a note may not be reused by multiple unrelated
+ * curves. Prefer the highest-confidence valid pairing; reject ambiguous contests
+ * rather than inventing a tie. Distinct chord pitches keep separate ownership.
+ */
 function applyTieMarks(measureRecords, tiePairs) {
   const recordByMeasure = new Map(measureRecords.map((record) => [record.measureNumber, record]))
   const applied = new Set()
+  const usedSource = new Set()
+  const usedDestination = new Set()
+  const rejected = new Set()
 
+  const candidates = []
   for (const pair of tiePairs) {
     const key = `${eventRefKey(pair.from)}->${eventRefKey(pair.to)}`
-    if (applied.has(key)) {
-      continue
-    }
     const fromRecord = recordByMeasure.get(pair.from.measureNumber)
     const toRecord = recordByMeasure.get(pair.to.measureNumber)
     const fromEvent = fromRecord?.events?.[pair.from.eventIndex]
@@ -1124,19 +1214,67 @@ function applyTieMarks(measureRecords, tiePairs) {
     ) {
       continue
     }
-    fromNote.tieStart = true
-    fromNote.tiePlacement = pair.archDirection ?? null
-    toNote.tieStop = true
-    toNote.tiePlacement = pair.archDirection ?? null
-    if ((fromEvent.notes?.length ?? 0) === 1) {
-      fromEvent.tieStart = true
-      fromEvent.tiePlacement = pair.archDirection ?? null
+    candidates.push({
+      pair,
+      key,
+      fromKey: eventRefKey(pair.from),
+      toKey: eventRefKey(pair.to),
+      score: tiePairMatchScore(pair),
+      fromEvent,
+      toEvent,
+      fromNote,
+      toNote,
+    })
+  }
+
+  candidates.sort(
+    (left, right) =>
+      left.score - right.score ||
+      left.fromKey.localeCompare(right.fromKey) ||
+      left.toKey.localeCompare(right.toKey),
+  )
+
+  for (const candidate of candidates) {
+    if (rejected.has(candidate.key) || applied.has(candidate.key)) {
+      continue
     }
-    if ((toEvent.notes?.length ?? 0) === 1) {
-      toEvent.tieStop = true
-      toEvent.tiePlacement = pair.archDirection ?? null
+    if (usedSource.has(candidate.fromKey) || usedDestination.has(candidate.toKey)) {
+      continue
     }
-    applied.add(key)
+
+    const competitors = candidates.filter(
+      (other) =>
+        other.key !== candidate.key &&
+        !rejected.has(other.key) &&
+        !applied.has(other.key) &&
+        !usedSource.has(other.fromKey) &&
+        !usedDestination.has(other.toKey) &&
+        (other.fromKey === candidate.fromKey || other.toKey === candidate.toKey) &&
+        other.score - candidate.score <= TIE_MATCH_AMBIGUITY_MARGIN,
+    )
+    if (competitors.length > 0) {
+      rejected.add(candidate.key)
+      for (const other of competitors) {
+        rejected.add(other.key)
+      }
+      continue
+    }
+
+    candidate.fromNote.tieStart = true
+    candidate.fromNote.tiePlacement = candidate.pair.archDirection ?? null
+    candidate.toNote.tieStop = true
+    candidate.toNote.tiePlacement = candidate.pair.archDirection ?? null
+    if ((candidate.fromEvent.notes?.length ?? 0) === 1) {
+      candidate.fromEvent.tieStart = true
+      candidate.fromEvent.tiePlacement = candidate.pair.archDirection ?? null
+    }
+    if ((candidate.toEvent.notes?.length ?? 0) === 1) {
+      candidate.toEvent.tieStop = true
+      candidate.toEvent.tiePlacement = candidate.pair.archDirection ?? null
+    }
+    usedSource.add(candidate.fromKey)
+    usedDestination.add(candidate.toKey)
+    applied.add(candidate.key)
   }
 
   return applied.size

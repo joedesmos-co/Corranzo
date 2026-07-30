@@ -431,6 +431,40 @@ describe('tie playback sustain', () => {
     expect(notes[1].suppressPlaybackAttack).toBe(true)
   })
 
+  it('preserves written tieStart/tieStop flags while merging playback duration', () => {
+    const notes = [
+      {
+        partId: 'P1',
+        voice: 1,
+        midi: 67,
+        quarterTime: 0,
+        durationQuarters: 1,
+        durationDivisions: 1,
+        tieStart: true,
+        tieStop: false,
+        isRest: false,
+      },
+      {
+        partId: 'P1',
+        voice: 1,
+        midi: 67,
+        quarterTime: 1,
+        durationQuarters: 1,
+        durationDivisions: 1,
+        tieStart: false,
+        tieStop: true,
+        isRest: false,
+      },
+    ]
+    applyTieSustainToNotes(notes)
+    expect(notes[0].tieStart).toBe(true)
+    expect(notes[0].tieStop).toBe(false)
+    expect(notes[1].tieStart).toBe(false)
+    expect(notes[1].tieStop).toBe(true)
+    expect(notes[0].durationQuarters).toBe(2)
+    expect(notes[1].suppressPlaybackAttack).toBe(true)
+  })
+
   it('does not stamp ties onto untied chord mates in MusicXML', () => {
     const xml = buildOmrMusicXml({
       measures: [
@@ -469,5 +503,314 @@ describe('tie playback sustain', () => {
     )
     expect(tiedStarts).toHaveLength(1)
     expect(untiedMates.length).toBeGreaterThan(0)
+  })
+})
+
+function vectorCurve(candidateId, start, end, archDirection = 'above') {
+  return {
+    candidateId,
+    source: 'pdf-vector-path',
+    page: 1,
+    start: { ...start, tangent: { dx: 1, dy: 0 } },
+    end: { ...end, tangent: { dx: 1, dy: 0 } },
+    bounds: {
+      x0: start.x,
+      x1: end.x,
+      y0: Math.min(start.y, end.y) - 8,
+      y1: Math.max(start.y, end.y),
+      width: end.x - start.x,
+      height: 8,
+    },
+    archDirection,
+  }
+}
+
+function staffBox(measureNumber, systemIndex, x0, x1) {
+  return {
+    measureNumber,
+    page: 1,
+    systemIndex,
+    x0,
+    playableX0: x0,
+    x1,
+    y0: 0.08,
+    y1: 0.42,
+    staffLines: {
+      treble: [0.31, 0.32, 0.33, 0.34, 0.35],
+      bass: [0.5, 0.51, 0.52, 0.53, 0.54],
+    },
+  }
+}
+
+describe('exclusive vector tie pairing geometry', () => {
+  it('keeps only one tie when two curves compete for one source note', () => {
+    const measureRecords = [
+      {
+        measureNumber: 1,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [{ midi: 72, clef: 'treble', cx: 300, cy: 350 }],
+          },
+          {
+            type: 'note',
+            startDivision: 4,
+            durationDivisions: 4,
+            notes: [{ midi: 72, clef: 'treble', cx: 380, cy: 350 }],
+          },
+          {
+            type: 'note',
+            startDivision: 8,
+            durationDivisions: 4,
+            notes: [{ midi: 72, clef: 'treble', cx: 460, cy: 350 }],
+          },
+        ],
+      },
+    ]
+    const result = applyVectorPageTies({
+      measureRecords,
+      measureBoxByNumber: new Map([[1, staffBox(1, 0, 0.2, 0.7)]]),
+      vectorCurves: [
+        // Clear winner: tight geometry to the nearer destination.
+        vectorCurve('src-compete-a', { x: 306, y: 350 }, { x: 374, y: 350 }),
+        // Competitor: same source, farther destination (worse score, exclusive drop).
+        vectorCurve('src-compete-b', { x: 306, y: 350 }, { x: 454, y: 350 }),
+      ],
+      imageData: blankImage(1000, 1000),
+    })
+
+    expect(result.diagnostics.appliedTieCount).toBe(1)
+    expect(measureRecords[0].events[0].notes[0].tieStart).toBe(true)
+    expect(measureRecords[0].events[1].notes[0].tieStop).toBe(true)
+    expect(measureRecords[0].events[2].notes[0].tieStop).toBeUndefined()
+  })
+
+  it('keeps only one tie when two curves compete for one destination note', () => {
+    const measureRecords = [
+      {
+        measureNumber: 1,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [{ midi: 72, clef: 'treble', cx: 280, cy: 350 }],
+          },
+          {
+            type: 'note',
+            startDivision: 4,
+            durationDivisions: 4,
+            notes: [{ midi: 72, clef: 'treble', cx: 360, cy: 350 }],
+          },
+          {
+            type: 'note',
+            startDivision: 8,
+            durationDivisions: 4,
+            notes: [{ midi: 72, clef: 'treble', cx: 440, cy: 350 }],
+          },
+        ],
+      },
+    ]
+    const result = applyVectorPageTies({
+      measureRecords,
+      measureBoxByNumber: new Map([[1, staffBox(1, 0, 0.2, 0.7)]]),
+      vectorCurves: [
+        vectorCurve('dst-compete-a', { x: 366, y: 350 }, { x: 434, y: 350 }),
+        vectorCurve('dst-compete-b', { x: 286, y: 350 }, { x: 434, y: 350 }),
+      ],
+      imageData: blankImage(1000, 1000),
+    })
+
+    expect(result.diagnostics.appliedTieCount).toBe(1)
+    expect(measureRecords[0].events[2].notes[0].tieStop).toBe(true)
+    const starts = measureRecords[0].events.filter((event) => event.notes[0].tieStart)
+    expect(starts).toHaveLength(1)
+  })
+
+  it('preserves separate ties on multiple chord pitches', () => {
+    const measureRecords = [
+      {
+        measureNumber: 1,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [
+              { midi: 72, clef: 'treble', cx: 300, cy: 350 },
+              { midi: 76, clef: 'treble', cx: 300, cy: 330 },
+            ],
+          },
+        ],
+      },
+      {
+        measureNumber: 2,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [
+              { midi: 72, clef: 'treble', cx: 380, cy: 350 },
+              { midi: 76, clef: 'treble', cx: 380, cy: 330 },
+            ],
+          },
+        ],
+      },
+    ]
+    const result = applyVectorPageTies({
+      measureRecords,
+      measureBoxByNumber: new Map([
+        [1, staffBox(1, 0, 0.2, 0.34)],
+        [2, staffBox(2, 0, 0.34, 0.5)],
+      ]),
+      vectorCurves: [
+        vectorCurve('chord-tie-72', { x: 306, y: 350 }, { x: 374, y: 350 }),
+        vectorCurve('chord-tie-76', { x: 306, y: 330 }, { x: 374, y: 330 }),
+      ],
+      imageData: blankImage(1000, 1000),
+    })
+
+    expect(result.diagnostics.appliedTieCount).toBe(2)
+    expect(measureRecords[0].events[0].notes[0].tieStart).toBe(true)
+    expect(measureRecords[0].events[0].notes[1].tieStart).toBe(true)
+    expect(measureRecords[1].events[0].notes[0].tieStop).toBe(true)
+    expect(measureRecords[1].events[0].notes[1].tieStop).toBe(true)
+  })
+
+  it('pairs a same-pitch cross-measure tie', () => {
+    const measureRecords = [
+      {
+        measureNumber: 1,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [{ midi: 67, clef: 'treble', cx: 300, cy: 340 }],
+          },
+        ],
+      },
+      {
+        measureNumber: 2,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [{ midi: 67, clef: 'treble', cx: 380, cy: 340 }],
+          },
+        ],
+      },
+    ]
+    const result = applyVectorPageTies({
+      measureRecords,
+      measureBoxByNumber: new Map([
+        [1, staffBox(1, 0, 0.2, 0.34)],
+        [2, staffBox(2, 0, 0.34, 0.5)],
+      ]),
+      vectorCurves: [vectorCurve('cross-bar', { x: 306, y: 340 }, { x: 374, y: 340 })],
+      imageData: blankImage(1000, 1000),
+    })
+
+    expect(result.diagnostics.appliedTieCount).toBe(1)
+    expect(measureRecords[0].events[0].notes[0].tieStart).toBe(true)
+    expect(measureRecords[1].events[0].notes[0].tieStop).toBe(true)
+  })
+
+  it('does not turn slur-like different-pitch curves into ties', () => {
+    const measureRecords = [
+      {
+        measureNumber: 1,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [{ midi: 72, clef: 'treble', cx: 300, cy: 350 }],
+          },
+          {
+            type: 'note',
+            startDivision: 4,
+            durationDivisions: 4,
+            notes: [{ midi: 76, clef: 'treble', cx: 500, cy: 330 }],
+          },
+        ],
+      },
+    ]
+    const result = applyVectorPageTies({
+      measureRecords,
+      measureBoxByNumber: new Map([[1, staffBox(1, 0, 0.2, 0.7)]]),
+      vectorCurves: [vectorCurve('slur-like', { x: 306, y: 342 }, { x: 494, y: 322 })],
+      imageData: blankImage(1000, 1000),
+    })
+
+    expect(result.diagnostics.appliedTieCount).toBe(0)
+    expect(result.diagnostics.appliedSlurCount).toBe(1)
+    expect(measureRecords[0].events[0].notes[0].tieStart).toBeUndefined()
+    expect(measureRecords[0].events[1].notes[0].tieStop).toBeUndefined()
+  })
+
+  it('rejects ambiguous competing geometry instead of inventing a tie', () => {
+    const measureRecords = [
+      {
+        measureNumber: 1,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [{ midi: 72, clef: 'treble', cx: 300, cy: 350 }],
+          },
+          {
+            type: 'note',
+            startDivision: 4,
+            durationDivisions: 4,
+            voice: 1,
+            notes: [{ midi: 72, clef: 'treble', voice: 1, cx: 400, cy: 338 }],
+          },
+          {
+            type: 'note',
+            startDivision: 4,
+            durationDivisions: 4,
+            voice: 2,
+            notes: [{ midi: 72, clef: 'treble', voice: 2, cx: 400, cy: 362 }],
+          },
+        ],
+      },
+    ]
+    const result = applyVectorPageTies({
+      measureRecords,
+      measureBoxByNumber: new Map([[1, staffBox(1, 0, 0.2, 0.7)]]),
+      vectorCurves: [
+        // Same onset destinations with mirrored geometry from one source.
+        vectorCurve('ambig-a', { x: 306, y: 350 }, { x: 394, y: 338 }),
+        vectorCurve('ambig-b', { x: 306, y: 350 }, { x: 394, y: 362 }),
+      ],
+      imageData: blankImage(1000, 1000),
+    })
+
+    expect(result.diagnostics.appliedTieCount).toBe(0)
+    expect(measureRecords[0].events[0].notes[0].tieStart).toBeUndefined()
+    expect(measureRecords[0].events[1].notes[0].tieStop).toBeUndefined()
+    expect(measureRecords[0].events[2].notes[0].tieStop).toBeUndefined()
   })
 })
