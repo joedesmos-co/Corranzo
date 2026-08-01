@@ -83,6 +83,30 @@ describe('micAttackLatch attack-aware rearm (unit)', () => {
     ).toBe(true)
   })
 
+  it('rearms a repeated bass note from a hammer transient when RMS stays compressed', () => {
+    const latch = createMicAttackLatchState()
+    markMicAttackConsumed(latch, { consumedMidis: [36] })
+    for (let index = 0; index < 8; index += 1) {
+      updateMicAttackRelease(latch, true, {
+        rms: 0.09 - index * 0.002,
+        spectralEnergy: 0.001 - index * 0.00002,
+      })
+    }
+    const frame = ringingFrame({ rms: 0.08, detected: [36], midiFloat: 36.02 })
+    frame.spectralEnergy = 0.00155
+    frame.signalShape = 'sustained'
+    frame.v2Notes = [{
+      midi: 36,
+      detected: true,
+      confidence: 0.9,
+      ratio: 5.2,
+      harmonicSupport: 0.62,
+    }]
+    expect(getMicAttackRearmReason(latch, frame, { expectedMidis: [36] })).toBe(
+      'low-note-transient',
+    )
+  })
+
   it('rearms when a different expected note becomes dominant while the old note rings', () => {
     const latch = createMicAttackLatchState()
     markMicAttackConsumed(latch, { consumedMidis: [64] })

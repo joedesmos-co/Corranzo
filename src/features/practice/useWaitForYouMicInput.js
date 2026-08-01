@@ -764,6 +764,7 @@ export default function useWaitForYouMicInput({
 
       updateMicAttackRelease(attackLatchRef.current, Boolean(frame.gateOpen), {
         rms: frame.filteredRms ?? frame.rms ?? null,
+        spectralEnergy: frame.spectralEnergy ?? null,
       })
       if (
         frame.calibrating ||

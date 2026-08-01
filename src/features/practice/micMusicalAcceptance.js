@@ -6,6 +6,8 @@ import { MIC_SIGNAL_SHAPE } from '../microphone-input/micSignalShape.js'
  * speech (formant resonance) measures ≥ 0.52.
  */
 export const MIC_HARMONIC_HIGH_LOW_MAX = 0.45
+/** Low piano register where a decaying middle tone commonly lands on h4+. */
+export const MIC_INDEPENDENT_BASS_ANCHOR_MAX_MIDI = 47
 
 /** Partials after the peak must decay — formant speech piles energy on h4+. */
 function harmonicDecayAfterStrongest(magnitudes, strongestIndex) {
@@ -59,6 +61,28 @@ function hasElectricHarmonicRichProfile(note, frame) {
   return strongestIndex >= 1 && (distortedLike || v2Confidence >= 0.35)
 }
 
+function hasIndependentBassFundamentalAnchor(note, frame, strongestIndex) {
+  if (
+    !note?.isBass ||
+    strongestIndex !== 0 ||
+    !Number.isFinite(note?.midi) ||
+    note.midi > MIC_INDEPENDENT_BASS_ANCHOR_MAX_MIDI
+  ) {
+    return false
+  }
+  const magnitudes = note.harmonicMagnitudes ?? []
+  const lowEnergy = (magnitudes[0] ?? 0) + (magnitudes[1] ?? 0)
+  const upperTailEnergy = (magnitudes[4] ?? 0) + (magnitudes[5] ?? 0)
+  if (!(lowEnergy > 0) || upperTailEnergy / lowEnergy > 0.2) {
+    return false
+  }
+  const independentMidi = frame?.dominantPitchMidiFloat ?? frame?.midiFloat
+  return (
+    Number.isFinite(independentMidi) &&
+    Math.abs(independentMidi - note.midi) * 100 <= 75
+  )
+}
+
 function hasInstrumentLikeHarmonicProfile(v2Notes = [], frame = null) {
   const note = v2Notes.find((entry) => entry?.detected)
   const magnitudes = note?.harmonicMagnitudes
@@ -90,6 +114,15 @@ function hasInstrumentLikeHarmonicProfile(v2Notes = [], frame = null) {
   const strongestAllowed = note?.isBass ? strongestIndex <= 1 : strongestIndex === 0
   if (!strongestAllowed) {
     return false
+  }
+
+  // A previous middle-register note can ring exactly on h4/h5 of the next
+  // bass target and trip the voice/formant cap below. Preserve that cap unless
+  // the bass fundamental itself is strongest AND the independent time-domain
+  // tracker agrees with the exact register. An octave-related wrong note does
+  // not satisfy this absolute-pitch check.
+  if (hasIndependentBassFundamentalAnchor(note, frame, strongestIndex)) {
+    return true
   }
 
   // …or piles disproportionate energy into partials 4-6 relative to 1-2.

@@ -190,6 +190,54 @@ describe('micMusicalAcceptance', () => {
     expect(micMusicalRejectReason(frame)).toBe('non-musical-formant-harmonics')
   })
 
+  it('accepts an exact independently anchored bass fundamental under old-note H4 contamination', () => {
+    const frame = {
+      gateOpen: true,
+      v2Active: true,
+      v2DetectedMidis: [36],
+      dominantPitchMidiFloat: 36.03,
+      v2Notes: [
+        {
+          midi: 36,
+          detected: true,
+          isBass: true,
+          harmonicMagnitudes: [0.3, 0.1, 0.04, 0.25, 0.03, 0.02],
+        },
+      ],
+      signalShape: MIC_SIGNAL_SHAPE.SUSTAINED,
+      clarity: 0.82,
+      zeroCrossingRate: 0.02,
+      spectralEnergy: 0.005,
+      crestFactor: 3,
+    }
+    expect(isMusicalMicFrame(frame)).toBe(true)
+    expect(micMusicalRejectReason(frame)).toBeNull()
+  })
+
+  it('does not use the bass exception for an octave-related independent pitch', () => {
+    const frame = {
+      gateOpen: true,
+      v2Active: true,
+      v2DetectedMidis: [36],
+      dominantPitchMidiFloat: 48.01,
+      v2Notes: [
+        {
+          midi: 36,
+          detected: true,
+          isBass: true,
+          harmonicMagnitudes: [0.3, 0.1, 0.04, 0.25, 0.03, 0.02],
+        },
+      ],
+      signalShape: MIC_SIGNAL_SHAPE.SUSTAINED,
+      clarity: 0.82,
+      zeroCrossingRate: 0.02,
+      spectralEnergy: 0.005,
+      crestFactor: 3,
+    }
+    expect(isMusicalMicFrame(frame)).toBe(false)
+    expect(micMusicalRejectReason(frame)).toBe('non-musical-formant-harmonics')
+  })
+
   it('rejects sweeping voiced speech frames during the formant-heavy sweep', () => {
     // Honest speech synthesis (glottal pulses + formants + prosody drift).
     // Voiced talking hits formant-resonant windows that the harmonic profile

@@ -35,7 +35,8 @@
     "mic:polyphony-replay": "node scripts/mic-polyphony-replay.mjs",
     "mic:generate-polyphony-clips": "node scripts/generate-mic-polyphony-clips.mjs",
     "mic:import-uiowa-fixtures": "node scripts/import-uiowa-mic-fixtures.mjs",
-    "mic:capture-real-fixture": "node scripts/capture-real-mic-fixture.mjs"
+    "mic:capture-real-fixture": "node scripts/capture-real-mic-fixture.mjs",
+    "mic:final-release": "node scripts/final-mic-release-corpus.mjs"
   },
   "dependencies": {
     "@tonejs/midi": "^2.0.28",

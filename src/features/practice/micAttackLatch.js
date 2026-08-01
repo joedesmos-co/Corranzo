@@ -27,6 +27,12 @@ export const MIC_ATTACK_REARM_DOMINANCE_CENTS = 75
 export const MIC_ATTACK_REARM_SCORE_CONFIDENCE = 0.48
 export const MIC_ATTACK_REARM_SCORE_RATIO = 2.2
 export const MIC_ATTACK_REARM_SMALL_RISE_RATIO = 1.08
+/** Bass hammer/pluck transient relative to the ringing frame's recent floor. */
+export const MIC_ATTACK_REARM_TRANSIENT_RATIO = 1.55
+export const MIC_ATTACK_REARM_TRANSIENT_MARGIN = 0.00035
+export const MIC_ATTACK_REARM_LOW_MIDI_MAX = 59
+export const MIC_ATTACK_REARM_MIN_FRAMES = 6
+export const MIC_ATTACK_REARM_LOW_RMS_RATIO = 1.45
 
 export function createMicAttackLatchState() {
   return {
@@ -34,6 +40,8 @@ export function createMicAttackLatchState() {
     gateClosedFrames: 0,
     consumedMidis: [],
     envelopeRms: null,
+    envelopeSpectralEnergy: null,
+    framesSinceConsumed: 0,
   }
 }
 
@@ -45,12 +53,18 @@ export function resetMicAttackLatch(state) {
   state.gateClosedFrames = 0
   state.consumedMidis = []
   state.envelopeRms = null
+  state.envelopeSpectralEnergy = null
+  state.framesSinceConsumed = 0
 }
 
 export function updateMicAttackRelease(
   state,
   gateOpen,
-  { releaseFrames = MIC_ATTACK_RELEASE_FRAMES, rms = null } = {},
+  {
+    releaseFrames = MIC_ATTACK_RELEASE_FRAMES,
+    rms = null,
+    spectralEnergy = null,
+  } = {},
 ) {
   if (!state) {
     return
@@ -61,6 +75,15 @@ export function updateMicAttackRelease(
     // consume). A later frame that jumps back above this floor is a new attack.
     if (state.awaitingRelease && rms != null && Number.isFinite(rms)) {
       state.envelopeRms = state.envelopeRms == null ? rms : Math.min(state.envelopeRms, rms)
+    }
+    if (state.awaitingRelease) {
+      state.framesSinceConsumed += 1
+      if (spectralEnergy != null && Number.isFinite(spectralEnergy)) {
+        state.envelopeSpectralEnergy =
+          state.envelopeSpectralEnergy == null
+            ? spectralEnergy
+            : Math.min(state.envelopeSpectralEnergy, spectralEnergy)
+      }
     }
     return
   }
@@ -82,6 +105,8 @@ export function markMicAttackConsumed(state, { consumedMidis = [] } = {}) {
   state.gateClosedFrames = 0
   state.consumedMidis = consumedMidis.filter((midi) => Number.isFinite(midi))
   state.envelopeRms = null
+  state.envelopeSpectralEnergy = null
+  state.framesSinceConsumed = 0
 }
 
 function absCentsToNearest(midiFloat, midis) {
@@ -116,6 +141,61 @@ function bestExpectedNoteEvidence(frame, expectedMidis = []) {
   return best
 }
 
+function hasLowNoteTransientEvidence(
+  state,
+  frame,
+  expectedMidis,
+  {
+    transientRatio,
+    transientMargin,
+    lowMidiMax,
+    minFrames,
+    lowRmsRatio,
+    scoreConfidence,
+    scoreRatio,
+  },
+) {
+  if ((state.framesSinceConsumed ?? 0) < minFrames) {
+    return false
+  }
+  const lowExpected = expectedMidis.filter(
+    (midi) => Number.isFinite(midi) && midi <= lowMidiMax,
+  )
+  if (!lowExpected.length) {
+    return false
+  }
+  const noteEvidence = bestExpectedNoteEvidence(frame, lowExpected)
+  if (
+    !noteEvidence ||
+    (noteEvidence.confidence ?? 0) < scoreConfidence ||
+    (noteEvidence.ratio ?? 0) < scoreRatio ||
+    (noteEvidence.harmonicSupport ?? 0) < 0.45
+  ) {
+    return false
+  }
+  if (frame.signalShape !== 'sustained' && frame.signalShape !== 'distorted') {
+    return false
+  }
+  const spectralEnergy = frame.spectralEnergy
+  const baseline = state.envelopeSpectralEnergy
+  const transientRise = Boolean(
+    Number.isFinite(spectralEnergy) &&
+      Number.isFinite(baseline) &&
+      baseline > 0 &&
+      spectralEnergy >= baseline * transientRatio &&
+      spectralEnergy - baseline >= transientMargin,
+  )
+  const rms = frame.filteredRms ?? frame.rms
+  const rmsBaseline = state.envelopeRms
+  const lowEnergyRise = Boolean(
+    Number.isFinite(rms) &&
+      Number.isFinite(rmsBaseline) &&
+      rmsBaseline > 0 &&
+      rms >= rmsBaseline * lowRmsRatio,
+  )
+  return transientRise || lowEnergyRise
+}
+
 /**
  * Return the evidence type that should rearm the latch while the previous note
  * still rings (gate never closed). Rearming only unlocks matching — the musical
@@ -132,6 +212,11 @@ export function getMicAttackRearmReason(
     dominanceCents = MIC_ATTACK_REARM_DOMINANCE_CENTS,
     scoreConfidence = MIC_ATTACK_REARM_SCORE_CONFIDENCE,
     scoreRatio = MIC_ATTACK_REARM_SCORE_RATIO,
+    transientRatio = MIC_ATTACK_REARM_TRANSIENT_RATIO,
+    transientMargin = MIC_ATTACK_REARM_TRANSIENT_MARGIN,
+    lowMidiMax = MIC_ATTACK_REARM_LOW_MIDI_MAX,
+    minFrames = MIC_ATTACK_REARM_MIN_FRAMES,
+    lowRmsRatio = MIC_ATTACK_REARM_LOW_RMS_RATIO,
   } = {},
 ) {
   if (!state?.awaitingRelease || !frame?.gateOpen) {
@@ -149,6 +234,25 @@ export function getMicAttackRearmReason(
     rms >= state.envelopeRms * riseRatio
   ) {
     return 'energy-rise'
+  }
+
+  // A bass re-attack can be obvious in the hammer/pluck transient while a
+  // long, compressed decay barely changes whole-window RMS. Require a coherent
+  // expected low-note harmonic family and a sharp first-difference-energy rise
+  // over the ringing baseline; steady sustain and broadband/percussive frames
+  // cannot use this path.
+  if (
+    hasLowNoteTransientEvidence(state, frame, expectedMidis, {
+      transientRatio,
+      transientMargin,
+      lowMidiMax,
+      minFrames,
+      lowRmsRatio,
+      scoreConfidence,
+      scoreRatio,
+    })
+  ) {
+    return 'low-note-transient'
   }
 
   // 2. Different-note dominance: the next checkpoint expects a note the

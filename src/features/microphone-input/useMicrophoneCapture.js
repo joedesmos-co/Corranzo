@@ -21,6 +21,62 @@ function createAudioContext() {
 }
 
 /**
+ * Observe browser-owned microphone resources for interruption. Returns an
+ * idempotent cleanup so restart/disable never accumulates duplicate listeners.
+ */
+export function attachCaptureRecoveryListeners({
+  stream,
+  context,
+  mediaDevices,
+  onInterrupted,
+} = {}) {
+  const track = stream?.getAudioTracks?.()[0] ?? null
+  let disposed = false
+  const cleanups = []
+
+  const cleanup = () => {
+    if (disposed) return
+    disposed = true
+    for (const remove of cleanups.splice(0)) {
+      remove()
+    }
+  }
+
+  const interrupt = (reason) => {
+    if (disposed) return
+    cleanup()
+    onInterrupted?.(reason)
+  }
+
+  const listen = (target, type, handler) => {
+    if (!target?.addEventListener) return
+    target.addEventListener(type, handler)
+    cleanups.push(() => target.removeEventListener?.(type, handler))
+  }
+
+  listen(track, 'ended', () => interrupt('stream-ended'))
+  listen(context, 'statechange', () => {
+    if (context?.state === 'closed') {
+      interrupt('audio-context-closed')
+      return
+    }
+    if (context?.state === 'suspended' || context?.state === 'interrupted') {
+      if (globalThis.document?.visibilityState === 'hidden') {
+        return
+      }
+      Promise.resolve(context.resume?.()).catch(() => interrupt('audio-context-resume-failed'))
+    }
+  })
+  listen(mediaDevices, 'devicechange', () => {
+    if (!track || track.readyState === 'ended') {
+      interrupt('input-device-changed')
+    }
+  })
+
+  return cleanup
+}
+
+/**
  * Instrument input is NOT speech. Chrome's default getUserMedia turns on
  * echoCancellation / noiseSuppression / autoGainControl, all tuned for voice:
  * the noise suppressor treats sustained musical tones as background noise and
@@ -84,6 +140,9 @@ export default function useMicrophoneCapture({ active = false } = {}) {
   const bufferRef = useRef(null)
   const activeRef = useRef(active)
   const requestTokenRef = useRef(0)
+  const recoveryCleanupRef = useRef(null)
+  const recoveryHandlerRef = useRef(null)
+  const requestAccessRef = useRef(null)
 
   const support = isMicrophoneSupported()
     ? MIC_SUPPORT.SUPPORTED
@@ -98,6 +157,8 @@ export default function useMicrophoneCapture({ active = false } = {}) {
   const [captureSettings, setCaptureSettings] = useState(null)
 
   const closeCurrentCapture = useCallback(() => {
+    recoveryCleanupRef.current?.()
+    recoveryCleanupRef.current = null
     stopStream(streamRef.current)
     streamRef.current = null
     analyserRef.current = null
@@ -118,6 +179,30 @@ export default function useMicrophoneCapture({ active = false } = {}) {
     requestTokenRef.current += 1
     closeCurrentCapture()
   }, [closeCurrentCapture])
+
+  const recoverInterruptedCapture = useCallback(
+    (reason) => {
+      if (!activeRef.current) return
+      requestTokenRef.current += 1
+      closeCurrentCapture()
+      setErrorMessage('Microphone input was interrupted. Reconnecting…')
+      queueMicrotask(() => {
+        if (activeRef.current) {
+          requestAccessRef.current?.({ recoveryReason: reason })
+        }
+      })
+    },
+    [closeCurrentCapture],
+  )
+  useEffect(() => {
+    recoveryHandlerRef.current = recoverInterruptedCapture
+
+    return () => {
+      if (recoveryHandlerRef.current === recoverInterruptedCapture) {
+        recoveryHandlerRef.current = null
+      }
+    }
+  }, [recoverInterruptedCapture])
 
   const requestAccess = useCallback(async () => {
     if (support !== MIC_SUPPORT.SUPPORTED) {
@@ -164,6 +249,12 @@ export default function useMicrophoneCapture({ active = false } = {}) {
       contextRef.current = context
       analyserRef.current = analyser
       bufferRef.current = new Float32Array(analyser.fftSize)
+      recoveryCleanupRef.current = attachCaptureRecoveryListeners({
+        stream,
+        context,
+        mediaDevices: navigator.mediaDevices,
+        onInterrupted: (reason) => recoveryHandlerRef.current?.(reason),
+      })
 
       setPermission(MIC_PERMISSION.GRANTED)
       setIsListening(true)
@@ -191,6 +282,15 @@ export default function useMicrophoneCapture({ active = false } = {}) {
       return false
     }
   }, [support, closeCurrentCapture])
+  useEffect(() => {
+    requestAccessRef.current = requestAccess
+
+    return () => {
+      if (requestAccessRef.current === requestAccess) {
+        requestAccessRef.current = null
+      }
+    }
+  }, [requestAccess])
 
   const disable = useCallback(() => {
     teardown()
