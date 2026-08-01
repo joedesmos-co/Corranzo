@@ -21,8 +21,10 @@ const CLEF_BOTTOM_DIATONIC = {
   treble: { step: 'E', octave: 4 },
   bass: { step: 'G', octave: 2 },
 }
-const MIN_LEDGER_DIATONIC_OFFSET = -8
-const MAX_LEDGER_DIATONIC_OFFSET = 18
+// Allow stacked ledger lines for extreme-register chords (e.g. guitar open-E
+// written on treble). Returning null here silently drops real noteheads.
+const MIN_LEDGER_DIATONIC_OFFSET = -16
+const MAX_LEDGER_DIATONIC_OFFSET = 24
 
 function positiveModulo(value, divisor) {
   return ((value % divisor) + divisor) % divisor

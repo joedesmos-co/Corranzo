@@ -3,15 +3,18 @@ import { staffLineGap } from './pitchFromStaffPosition.js'
 /** Trailing noteheads on the last system measure can sit slightly past the barline. */
 const LAST_MEASURE_X_PAD = 0.028
 const DEFAULT_Y_PAD = 0.035
+/** Staff-space pad so extreme ledger stacks stay in-measure (not orphaned). */
+const LEDGER_STAFF_SPACE_PAD = 8
 
 /**
  * Normalized bounds for assigning vector SMuFL noteheads to a measure.
- * Uses measure x0 (not playableX0) and a modest vertical pad for ledger tails.
+ * Uses measure x0 (not playableX0) and a vertical pad for ledger tails.
  */
 export function vectorGlyphAllocationBounds(measureBox, { isLastInSystem = false } = {}) {
   const trebleLines = measureBox?.staffLines?.treble ?? []
-  const gap = staffLineGap(trebleLines)
-  const yPad = Math.max(DEFAULT_Y_PAD, gap > 0 ? gap * 3 : 0)
+  const bassLines = measureBox?.staffLines?.bass ?? []
+  const gap = Math.max(staffLineGap(trebleLines), staffLineGap(bassLines))
+  const yPad = Math.max(DEFAULT_Y_PAD, gap > 0 ? gap * LEDGER_STAFF_SPACE_PAD : 0)
 
   return {
     x0: measureBox.x0,

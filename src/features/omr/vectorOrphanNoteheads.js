@@ -1,6 +1,7 @@
 import {
   distanceToNearestStaffLine,
   resolvePitchFromGrandStaff,
+  staffLineGap,
 } from './pitchFromStaffPosition.js'
 import { vectorGlyphInMeasure } from './vectorGlyphMeasureBounds.js'
 
@@ -8,8 +9,10 @@ export const VECTOR_NOTEHEAD_GLYPHS = new Set(['\ue0a3', '\ue0a4', '\ue0a2'])
 
 /** Horizontal slack for noteheads in the gap between systems. */
 export const ORPHAN_INTER_SYSTEM_X_PAD = 0.025
-/** Max normalized distance from a staff line for orphan acceptance. */
+/** Floor for orphan staff distance (ordinary near-staff recovery). */
 export const ORPHAN_MAX_STAFF_DIST = 0.02
+/** Extreme ledger stacks may sit several staff spaces off the five-line band. */
+export const ORPHAN_MAX_LEDGER_STAFF_SPACES = 8
 /** Min margin between best and second-best system staff distance. */
 export const ORPHAN_SYSTEM_AMBIGUITY_MARGIN = 0.008
 
@@ -64,6 +67,21 @@ function systemStaffDistance(yNorm, boxes) {
   return staffDistanceForMeasure(yNorm, boxes[0])
 }
 
+function orphanMaxStaffDistance(boxes) {
+  const measureBox = boxes?.[0]
+  if (!measureBox) {
+    return ORPHAN_MAX_STAFF_DIST
+  }
+  const gap = Math.max(
+    staffLineGap(measureBox.staffLines?.treble ?? []),
+    staffLineGap(measureBox.staffLines?.bass ?? []),
+  )
+  if (!(gap > 0)) {
+    return ORPHAN_MAX_STAFF_DIST
+  }
+  return Math.max(ORPHAN_MAX_STAFF_DIST, gap * ORPHAN_MAX_LEDGER_STAFF_SPACES)
+}
+
 export function orphanHorizontalDistance(xNorm, measureBox, { isFirstInSystem = false, isLastInSystem = false } = {}) {
   const leftPad = isFirstInSystem ? ORPHAN_INTER_SYSTEM_X_PAD : 0
   const rightPad = isLastInSystem ? ORPHAN_INTER_SYSTEM_X_PAD : 0
@@ -92,7 +110,8 @@ function resolveOrphanMeasureCandidate({
   systemScores.sort((left, right) => left.staffDistance - right.staffDistance)
   const best = systemScores[0]
   const second = systemScores[1]
-  if (!best || best.staffDistance > ORPHAN_MAX_STAFF_DIST) {
+  const maxStaffDistance = orphanMaxStaffDistance(systemMeasureBoxes[best?.systemIndex] ?? [])
+  if (!best || best.staffDistance > maxStaffDistance) {
     return { reason: ORPHAN_REJECTION.FAR_FROM_STAFF }
   }
   if (
