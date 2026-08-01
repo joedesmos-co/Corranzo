@@ -298,10 +298,7 @@ function staffRoleToLinesKey(staffRole) {
   return staffRole === 'lower' ? 'bass' : 'treble'
 }
 
-/**
- * Shift glyph anchor toward notehead center for pitch mapping (bounded).
- */
-export function resolveNoteheadYNorm(glyph, imageData, lineYs) {
+function resolveMetricNoteheadYNorm(glyph, imageData, lineYs) {
   if (!glyph || !imageData?.height) {
     return null
   }
@@ -320,6 +317,336 @@ export function resolveNoteheadYNorm(glyph, imageData, lineYs) {
   }
   const centerFactor = Math.min(0.2, 0.08 + heightRatio * 0.05)
   return anchorYNorm - heightNorm * centerFactor
+}
+
+function lineYsInPixels(lineYs, imageHeight) {
+  if (!Array.isArray(lineYs) || !lineYs.length) {
+    return []
+  }
+  const scale = lineYs.every((value) => Math.abs(value) <= 1.5)
+    ? imageHeight
+    : 1
+  return lineYs.map((value) => value * scale)
+}
+
+function pixelIsInk(imageData, x, y, threshold) {
+  if (
+    x < 0 ||
+    y < 0 ||
+    x >= imageData.width ||
+    y >= imageData.height
+  ) {
+    return false
+  }
+  const index = (y * imageData.width + x) * 4
+  const alpha = imageData.data[index + 3] / 255
+  const luminance =
+    (0.299 * imageData.data[index] +
+      0.587 * imageData.data[index + 1] +
+      0.114 * imageData.data[index + 2]) *
+      alpha +
+    255 * (1 - alpha)
+  return luminance < threshold
+}
+
+function metricAnchorResult(glyph, imageData, lineYs, rejectedReason = null) {
+  const yNorm = resolveMetricNoteheadYNorm(glyph, imageData, lineYs)
+  return {
+    yNorm,
+    fallbackYNorm: yNorm,
+    rawYNorm: imageData?.height ? glyph?.y / imageData.height : null,
+    source: 'glyph-metrics-fallback',
+    confidence: 0.45,
+    visualBounds: null,
+    suppressedStaffOrLedgerRows: 0,
+    suppressedStemColumns: 0,
+    rejectedReason,
+  }
+}
+
+function collectCompactRowComponents({
+  imageData,
+  left,
+  right,
+  top,
+  bottom,
+  suppressedRows,
+  suppressedColumns,
+  inkThreshold,
+}) {
+  const pixels = new Map()
+  for (let y = top; y <= bottom; y += 1) {
+    if (suppressedRows.has(y)) {
+      continue
+    }
+    for (let x = left; x <= right; x += 1) {
+      if (
+        suppressedColumns.has(x) ||
+        !pixelIsInk(imageData, x, y, inkThreshold)
+      ) {
+        continue
+      }
+      pixels.set(`${x}:${y}`, { x, y })
+    }
+  }
+
+  const components = []
+  while (pixels.size) {
+    const first = pixels.values().next().value
+    const queue = [first]
+    pixels.delete(`${first.x}:${first.y}`)
+    const component = {
+      top: first.y,
+      bottom: first.y,
+      left: first.x,
+      right: first.x,
+      pixels: 0,
+    }
+    for (let index = 0; index < queue.length; index += 1) {
+      const point = queue[index]
+      component.top = Math.min(component.top, point.y)
+      component.bottom = Math.max(component.bottom, point.y)
+      component.left = Math.min(component.left, point.x)
+      component.right = Math.max(component.right, point.x)
+      component.pixels += 1
+      // Bridge only the narrow gaps left by suppressed staff or ledger rows.
+      for (let dy = -3; dy <= 3; dy += 1) {
+        for (let dx = -1; dx <= 1; dx += 1) {
+          if (dx === 0 && dy === 0) {
+            continue
+          }
+          const key = `${point.x + dx}:${point.y + dy}`
+          const neighbor = pixels.get(key)
+          if (neighbor) {
+            pixels.delete(key)
+            queue.push(neighbor)
+          }
+        }
+      }
+    }
+    components.push(component)
+  }
+  return components
+}
+
+/**
+ * Resolve a notehead's visual center from local rendered ink. PDF text origins
+ * and glyph boxes vary by music font, so the metric anchor is retained unless
+ * one compact head-shaped component survives staff-line and stem suppression.
+ */
+export function resolveNoteheadAnchor(
+  glyph,
+  imageData,
+  lineYs,
+  { inkThreshold = 170 } = {},
+) {
+  const fallback = metricAnchorResult(glyph, imageData, lineYs)
+  if (!glyph || !imageData?.data || !imageData.width || !imageData.height) {
+    return { ...fallback, rejectedReason: 'missing-image-geometry' }
+  }
+  if (glyph.legacyMusicFontNormalized) {
+    return { ...fallback, rejectedReason: 'legacy-font-profile-unavailable' }
+  }
+
+  const pixelLines = lineYsInPixels(lineYs, imageData.height)
+  const gapPx = staffLineGap(pixelLines)
+  if (!(gapPx >= 4)) {
+    return { ...fallback, rejectedReason: 'missing-local-staff-spacing' }
+  }
+
+  const glyphX = Number(glyph.x)
+  const glyphY = Number(glyph.y)
+  const glyphWidth = Math.max(1, Number(glyph.width) || gapPx * 0.8)
+  const glyphHeight = Math.max(1, Number(glyph.height) || gapPx)
+  if (!Number.isFinite(glyphX) || !Number.isFinite(glyphY)) {
+    return { ...fallback, rejectedReason: 'invalid-glyph-origin' }
+  }
+
+  const metricY = (fallback.yNorm ?? glyphY / imageData.height) * imageData.height
+  const supportRadius = Math.ceil(Math.max(gapPx * 1.7, glyphWidth * 1.1))
+  const leftSupport = Math.max(0, Math.floor(glyphX - supportRadius))
+  const rightSupport = Math.min(
+    imageData.width - 1,
+    Math.ceil(glyphX + supportRadius),
+  )
+  const left = Math.max(0, Math.floor(glyphX - gapPx * 0.3))
+  const right = Math.min(imageData.width - 1, Math.ceil(glyphX + gapPx * 1.15))
+  const top = Math.max(
+    0,
+    Math.floor(Math.min(metricY, glyphY) - Math.max(gapPx * 1.35, glyphHeight * 0.9)),
+  )
+  const bottom = Math.min(
+    imageData.height - 1,
+    Math.ceil(glyphY + gapPx * 0.3),
+  )
+  if (right <= left || bottom <= top) {
+    return { ...fallback, rejectedReason: 'empty-anchor-window' }
+  }
+
+  const suppressedRows = new Set()
+  const horizontalSupportThreshold = Math.max(
+    gapPx * 1.02,
+    (right - left + 1) * 0.82,
+  )
+  for (let y = top; y <= bottom; y += 1) {
+    let run = 0
+    let longestRun = 0
+    for (let x = leftSupport; x <= rightSupport; x += 1) {
+      if (pixelIsInk(imageData, x, y, inkThreshold)) {
+        run += 1
+        longestRun = Math.max(longestRun, run)
+      } else {
+        run = 0
+      }
+    }
+    if (longestRun >= horizontalSupportThreshold) {
+      suppressedRows.add(y)
+    }
+  }
+
+  const suppressedColumns = new Set()
+  const verticalSupportThreshold = Math.max(
+    gapPx * 0.9,
+    (bottom - top + 1) * 0.42,
+  )
+  for (let x = left; x <= right; x += 1) {
+    let count = 0
+    for (let y = top; y <= bottom; y += 1) {
+      if (
+        !suppressedRows.has(y) &&
+        pixelIsInk(imageData, x, y, inkThreshold)
+      ) {
+        count += 1
+      }
+    }
+    if (count >= verticalSupportThreshold) {
+      suppressedColumns.add(x)
+    }
+  }
+
+  const rowComponents = collectCompactRowComponents({
+    imageData,
+    left,
+    right,
+    top,
+    bottom,
+    suppressedRows,
+    suppressedColumns,
+    inkThreshold,
+  })
+    .map((component) => {
+      const width = component.right - component.left + 1
+      const height = component.bottom - component.top + 1
+      const centerX = (component.left + component.right) / 2
+      const centerY = (component.top + component.bottom) / 2
+      const widthRatio = width / gapPx
+      const heightRatio = height / gapPx
+      const xDistance = Math.abs(centerX - glyphX) / gapPx
+      const metricDistance = Math.abs(centerY - metricY) / gapPx
+      const xOriginOffset = (centerX - glyphX) / gapPx
+      const yOriginOffset = (glyphY - centerY) / gapPx
+      return {
+        ...component,
+        width,
+        height,
+        centerX,
+        centerY,
+        widthRatio,
+        heightRatio,
+        xDistance,
+        metricDistance,
+        xOriginOffset,
+        yOriginOffset,
+        score:
+          Math.abs(xOriginOffset - 0.55) * 0.2 +
+          Math.abs(yOriginOffset - 0.51) * 0.8 +
+          Math.abs(widthRatio - 0.86) * 0.25 +
+          Math.abs(heightRatio - 0.54) * 0.25,
+      }
+    })
+  const headSized = rowComponents
+    .filter(
+      (component) =>
+        component.widthRatio >= 0.42 &&
+        component.widthRatio <= 1.05 &&
+        component.heightRatio >= 0.22 &&
+        component.heightRatio <= 0.7,
+    )
+
+  if (!headSized.length) {
+    return {
+      ...fallback,
+      suppressedStaffOrLedgerRows: suppressedRows.size,
+      suppressedStemColumns: suppressedColumns.size,
+      rejectedReason: 'no-head-sized-component',
+    }
+  }
+
+  const verticallyCompeting = headSized.some((component, index) =>
+    headSized.some(
+      (candidate, candidateIndex) =>
+        candidateIndex > index &&
+        Math.abs(candidate.centerY - component.centerY) >= gapPx * 0.35 &&
+        Math.abs(candidate.centerY - component.centerY) <= gapPx * 1.25 &&
+        Math.abs(candidate.centerX - component.centerX) <= gapPx * 0.18 &&
+        Math.abs(candidate.width - component.width) <= gapPx * 0.25,
+    ),
+  )
+  if (verticallyCompeting) {
+    return {
+      ...fallback,
+      suppressedStaffOrLedgerRows: suppressedRows.size,
+      suppressedStemColumns: suppressedColumns.size,
+      rejectedReason: 'ambiguous-components',
+    }
+  }
+
+  const compact = headSized
+    .filter(
+      (component) =>
+        component.xOriginOffset >= -0.32 &&
+        component.xOriginOffset <= 0.95 &&
+        component.yOriginOffset >= 0.45 &&
+        component.yOriginOffset <= 1,
+    )
+    .sort((leftComponent, rightComponent) =>
+      leftComponent.score - rightComponent.score
+    )
+
+  if (!compact.length) {
+    return {
+      ...fallback,
+      suppressedStaffOrLedgerRows: suppressedRows.size,
+      suppressedStemColumns: suppressedColumns.size,
+      rejectedReason: 'component-outside-font-origin-range',
+    }
+  }
+
+  const selected = compact[0]
+  return {
+    yNorm: selected.centerY / imageData.height,
+    fallbackYNorm: fallback.yNorm,
+    rawYNorm: glyphY / imageData.height,
+    source: 'ink-notehead-geometry',
+    confidence: 0.96,
+    visualBounds: {
+      x: selected.left,
+      y: selected.top,
+      width: selected.width,
+      height: selected.height,
+    },
+    suppressedStaffOrLedgerRows: suppressedRows.size,
+    suppressedStemColumns: suppressedColumns.size,
+    localStaffGapNorm: gapPx / imageData.height,
+    rejectedReason: null,
+  }
+}
+
+/**
+ * Backward-compatible scalar anchor for callers that do not need provenance.
+ */
+export function resolveNoteheadYNorm(glyph, imageData, lineYs) {
+  return resolveNoteheadAnchor(glyph, imageData, lineYs).yNorm
 }
 
 /**

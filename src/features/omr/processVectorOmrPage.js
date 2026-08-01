@@ -21,7 +21,7 @@ import {
 import {
   detectStaffClefsFromGlyphs,
   midiToWrittenPitch,
-  resolveNoteheadYNorm,
+  resolveNoteheadAnchor,
   resolvePitchFromGrandStaff,
 } from './pitchFromStaffPosition.js'
 import {
@@ -130,6 +130,8 @@ export function textGlyphsToImage(pageText, imageData) {
         width: charWidth * scaleX,
         height: (item.height ?? 0) * scaleY,
         fontName: item.fontName ?? '',
+        originalLegacyText: item.originalLegacyText?.[index] ?? null,
+        legacyMusicFontNormalized: Boolean(item.legacyMusicFontNormalized),
       })
     }
   }
@@ -259,8 +261,13 @@ function noteheadsForMeasure(
       measureBox.staffLines,
       measureBox.staffClefs,
     )
-    const yNorm =
-      resolveNoteheadYNorm(glyph, imageData, roughMapping.lineYs) ?? yRough
+    const noteheadAnchor = resolveNoteheadAnchor(
+      glyph,
+      imageData,
+      roughMapping.lineYs,
+      { inkThreshold },
+    )
+    const yNorm = noteheadAnchor.yNorm ?? yRough
     const pitchMapping = resolvePitchFromGrandStaff(
       yNorm,
       measureBox.staffLines,
@@ -287,6 +294,13 @@ function noteheadsForMeasure(
       cy: glyph.y,
       xNorm,
       yNorm,
+      noteheadAnchor,
+      noteheadFont: {
+        fontName: glyph.fontName ?? null,
+        glyph: glyph.text ?? null,
+        originalGlyph: glyph.originalLegacyText ?? glyph.text ?? null,
+        legacyNormalized: Boolean(glyph.legacyMusicFontNormalized),
+      },
       pitchMapping,
       positionInMeasure: (glyph.x - left) / Math.max(1, right - left),
       measureNumber: measureBox.measureNumber,

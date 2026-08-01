@@ -129,7 +129,12 @@ export function normalizeLegacyMusicFontGlyphs(pageText = []) {
     if (!changed) {
       return item
     }
-    return { ...item, text: mappedText }
+    return {
+      ...item,
+      text: mappedText,
+      originalLegacyText: text,
+      legacyMusicFontNormalized: true,
+    }
   })
 
   diagnostics.mappedGlyphCount = mappedGlyphCount
