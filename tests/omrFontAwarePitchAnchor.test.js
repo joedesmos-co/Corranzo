@@ -140,6 +140,10 @@ describe("font-aware notehead pitch anchors", () => {
     const anchor = resolveNoteheadAnchor(glyph(110, 92), page, LINES);
     expect(anchor.yNorm * page.height).toBeCloseTo(80, 1);
     expect(anchor.suppressedStaffOrLedgerRows).toBeGreaterThan(0);
+    expect(
+      anchor.source === "ink-notehead-geometry" ||
+        anchor.source === "ledger-masked-ink-notehead-geometry",
+    ).toBe(true);
   });
 
   it("uses the owned head when multiple ledger lines are present", () => {
@@ -218,13 +222,29 @@ describe("font-aware notehead pitch anchors", () => {
     expect(midiFromStaffPosition(anchor.yNorm, normalized, "bass")).toBe(50);
   });
 
-  it("rejects two equally plausible vertical components as ambiguous", () => {
+  it("selects the stacked head nearest the glyph origin instead of abandoning ink", () => {
     const page = image();
     staff(page, LINES);
     ellipse(page, 110, 135, 8, 5);
     ellipse(page, 110, 155, 8, 5);
     const anchor = resolveNoteheadAnchor(
       glyph(110, 166, { height: 46 }),
+      page,
+      LINES,
+    );
+    expect(anchor.source).toBe("ink-notehead-geometry");
+    expect(Math.round(anchor.yNorm * page.height)).toBe(155);
+    expect(anchor.competingHeadCandidates?.length).toBeGreaterThan(1);
+  });
+
+  it("still rejects two equally plausible vertical components as ambiguous", () => {
+    const page = image();
+    staff(page, LINES);
+    ellipse(page, 110, 135, 8, 5);
+    ellipse(page, 110, 155, 8, 5);
+    // Baseline midway between heads → near-equal origin scores.
+    const anchor = resolveNoteheadAnchor(
+      glyph(110, 155, { height: 46 }),
       page,
       LINES,
     );

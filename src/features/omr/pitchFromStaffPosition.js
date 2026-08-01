@@ -2,6 +2,8 @@
  * Extended staff pitch mapping with ledger-line range and written pitch output.
  */
 
+import { partitionHorizontalRowsForInkRecovery } from './localLedgerStaffClassifier.js'
+
 export const CLEF_BOTTOM_MIDI = {
   treble: 64, // E4
   bass: 43, // G2
@@ -431,6 +433,186 @@ function collectCompactRowComponents({
   return components
 }
 
+function longestHorizontalInkRun(imageData, y, left, right, inkThreshold) {
+  let run = 0
+  let longest = 0
+  let longestStart = left
+  let longestEnd = left
+  let currentStart = left
+  for (let x = left; x <= right; x += 1) {
+    if (pixelIsInk(imageData, x, y, inkThreshold)) {
+      if (run === 0) {
+        currentStart = x
+      }
+      run += 1
+      if (run > longest) {
+        longest = run
+        longestStart = currentStart
+        longestEnd = x
+      }
+    } else {
+      run = 0
+    }
+  }
+  return { longest, runStart: longestStart, runEnd: longestEnd }
+}
+
+function verticalInkExtent(imageData, x, y, inkThreshold, radius = 3) {
+  if (!pixelIsInk(imageData, x, y, inkThreshold)) {
+    return 0
+  }
+  let top = y
+  let bottom = y
+  for (let dy = 1; dy <= radius; dy += 1) {
+    if (pixelIsInk(imageData, x, y - dy, inkThreshold)) {
+      top = y - dy
+    } else {
+      break
+    }
+  }
+  for (let dy = 1; dy <= radius; dy += 1) {
+    if (pixelIsInk(imageData, x, y + dy, inkThreshold)) {
+      bottom = y + dy
+    } else {
+      break
+    }
+  }
+  return bottom - top + 1
+}
+
+function collectCompactRowComponentsMasked({
+  imageData,
+  left,
+  right,
+  top,
+  bottom,
+  suppressedRows,
+  maskedLedgerRows,
+  suppressedColumns,
+  inkThreshold,
+}) {
+  const pixels = new Map()
+  for (let y = top; y <= bottom; y += 1) {
+    if (suppressedRows.has(y)) {
+      continue
+    }
+    for (let x = left; x <= right; x += 1) {
+      if (suppressedColumns.has(x)) {
+        continue
+      }
+      if (
+        maskedLedgerRows.has(y) &&
+        verticalInkExtent(imageData, x, y, inkThreshold) <= 2
+      ) {
+        continue
+      }
+      if (!pixelIsInk(imageData, x, y, inkThreshold)) {
+        continue
+      }
+      pixels.set(`${x}:${y}`, { x, y })
+    }
+  }
+
+  const components = []
+  while (pixels.size) {
+    const first = pixels.values().next().value
+    const queue = [first]
+    pixels.delete(`${first.x}:${first.y}`)
+    const component = {
+      top: first.y,
+      bottom: first.y,
+      left: first.x,
+      right: first.x,
+      pixels: 0,
+    }
+    for (let index = 0; index < queue.length; index += 1) {
+      const point = queue[index]
+      component.top = Math.min(component.top, point.y)
+      component.bottom = Math.max(component.bottom, point.y)
+      component.left = Math.min(component.left, point.x)
+      component.right = Math.max(component.right, point.x)
+      component.pixels += 1
+      for (let dy = -3; dy <= 3; dy += 1) {
+        for (let dx = -1; dx <= 1; dx += 1) {
+          if (dx === 0 && dy === 0) {
+            continue
+          }
+          const key = `${point.x + dx}:${point.y + dy}`
+          const neighbor = pixels.get(key)
+          if (neighbor) {
+            pixels.delete(key)
+            queue.push(neighbor)
+          }
+        }
+      }
+    }
+    components.push(component)
+  }
+  return components
+}
+
+function buildLedgerClassifierProvenance(partitioned) {
+  const acceptedLedgerRows = partitioned.acceptedLedgerRows
+    .map((row) => row.y)
+    .sort((left, right) => left - right)
+  const suppressedStaffRows = [...partitioned.suppressedStaffRows].sort(
+    (left, right) => left - right,
+  )
+  const ambiguousRows = partitioned.ambiguousRows
+    .map((row) => row.y)
+    .sort((left, right) => left - right)
+  let result = 'staff-like-suppressed'
+  if (acceptedLedgerRows.length && suppressedStaffRows.length) {
+    result = 'mixed-staff-and-local-ledger'
+  } else if (acceptedLedgerRows.length) {
+    result = 'local-ledger-preserved'
+  }
+  const confidences = partitioned.classifications
+    .map((entry) => entry.confidence)
+    .filter(Number.isFinite)
+  const confidence = confidences.length
+    ? confidences.reduce((sum, value) => sum + value, 0) / confidences.length
+    : 0.35
+  return {
+    result,
+    confidence,
+    acceptedLedgerRows,
+    suppressedStaffRows,
+    ambiguousRows,
+    maskedLedgerStrokeRows: acceptedLedgerRows,
+    featuresUsed: [
+      'lengthRelativeToSystem',
+      'lengthRelativeToLocalWindow',
+      'staffBandMembership',
+      'halfSpaceAlignment',
+      'noteheadOrChordProximity',
+    ],
+  }
+}
+
+function anchorDiagnostics(
+  fallback,
+  {
+    ledgerClassifier,
+    suppressedRows,
+    maskedLedgerRows,
+    suppressedColumns,
+    gapPx,
+    imageData,
+    extra = {},
+  },
+) {
+  return {
+    ...fallback,
+    ...extra,
+    suppressedStaffOrLedgerRows: suppressedRows.size + maskedLedgerRows.size,
+    suppressedOrMaskedRowCount: suppressedRows.size + maskedLedgerRows.size,
+    suppressedStemColumns: suppressedColumns.size,
+    localStaffGapNorm: gapPx / imageData.height,
+    ledgerClassifier,
+  }
+}
+
 /**
  * Resolve a notehead's visual center from local rendered ink. PDF text origins
  * and glyph boxes vary by music font, so the metric anchor is retained unless
@@ -440,7 +622,7 @@ export function resolveNoteheadAnchor(
   glyph,
   imageData,
   lineYs,
-  { inkThreshold = 170 } = {},
+  { inkThreshold = 170, chordColumnXs = null } = {},
 ) {
   const fallback = metricAnchorResult(glyph, imageData, lineYs)
   if (!glyph || !imageData?.data || !imageData.width || !imageData.height) {
@@ -485,26 +667,55 @@ export function resolveNoteheadAnchor(
     return { ...fallback, rejectedReason: 'empty-anchor-window' }
   }
 
-  const suppressedRows = new Set()
   const horizontalSupportThreshold = Math.max(
     gapPx * 1.02,
     (right - left + 1) * 0.82,
   )
+  const localWindowWidth = rightSupport - leftSupport + 1
+  const candidateRows = []
   for (let y = top; y <= bottom; y += 1) {
-    let run = 0
-    let longestRun = 0
-    for (let x = leftSupport; x <= rightSupport; x += 1) {
-      if (pixelIsInk(imageData, x, y, inkThreshold)) {
-        run += 1
-        longestRun = Math.max(longestRun, run)
-      } else {
-        run = 0
-      }
+    const local = longestHorizontalInkRun(
+      imageData,
+      y,
+      leftSupport,
+      rightSupport,
+      inkThreshold,
+    )
+    if (local.longest < horizontalSupportThreshold * 0.5) {
+      continue
     }
-    if (longestRun >= horizontalSupportThreshold) {
-      suppressedRows.add(y)
-    }
+    const system = longestHorizontalInkRun(
+      imageData,
+      y,
+      0,
+      imageData.width - 1,
+      inkThreshold,
+    )
+    candidateRows.push({
+      y,
+      longestRunPx: local.longest,
+      runStart: local.runStart,
+      runEnd: local.runEnd,
+      lengthRelativeToSystem: system.longest / imageData.width,
+      lengthRelativeToLocalWindow: local.longest / localWindowWidth,
+    })
   }
+
+  const staffTopPx = Math.min(...pixelLines)
+  const staffBottomPx = Math.max(...pixelLines)
+  const partitioned = partitionHorizontalRowsForInkRecovery(candidateRows, {
+    gapPx,
+    staffTopPx,
+    staffBottomPx,
+    noteheadX: glyphX,
+    chordColumnXs: chordColumnXs ?? [glyphX],
+    systemEventSupport: 0,
+  })
+  const ledgerClassifier = buildLedgerClassifierProvenance(partitioned)
+  const suppressedRows = new Set(partitioned.suppressedStaffRows)
+  const maskedLedgerRows = new Set(
+    partitioned.acceptedLedgerRows.map((row) => row.y),
+  )
 
   const suppressedColumns = new Set()
   const verticalSupportThreshold = Math.max(
@@ -514,10 +725,16 @@ export function resolveNoteheadAnchor(
   for (let x = left; x <= right; x += 1) {
     let count = 0
     for (let y = top; y <= bottom; y += 1) {
+      if (suppressedRows.has(y)) {
+        continue
+      }
       if (
-        !suppressedRows.has(y) &&
-        pixelIsInk(imageData, x, y, inkThreshold)
+        maskedLedgerRows.has(y) &&
+        verticalInkExtent(imageData, x, y, inkThreshold) <= 2
       ) {
+        continue
+      }
+      if (pixelIsInk(imageData, x, y, inkThreshold)) {
         count += 1
       }
     }
@@ -526,62 +743,68 @@ export function resolveNoteheadAnchor(
     }
   }
 
-  const rowComponents = collectCompactRowComponents({
+  const rowComponents = collectCompactRowComponentsMasked({
     imageData,
     left,
     right,
     top,
     bottom,
     suppressedRows,
+    maskedLedgerRows,
     suppressedColumns,
     inkThreshold,
+  }).map((component) => {
+    const width = component.right - component.left + 1
+    const height = component.bottom - component.top + 1
+    const centerX = (component.left + component.right) / 2
+    const centerY = (component.top + component.bottom) / 2
+    const widthRatio = width / gapPx
+    const heightRatio = height / gapPx
+    const xDistance = Math.abs(centerX - glyphX) / gapPx
+    const metricDistance = Math.abs(centerY - metricY) / gapPx
+    const xOriginOffset = (centerX - glyphX) / gapPx
+    const yOriginOffset = (glyphY - centerY) / gapPx
+    return {
+      ...component,
+      width,
+      height,
+      centerX,
+      centerY,
+      widthRatio,
+      heightRatio,
+      xDistance,
+      metricDistance,
+      xOriginOffset,
+      yOriginOffset,
+      score:
+        Math.abs(xOriginOffset - 0.55) * 0.2 +
+        Math.abs(yOriginOffset - 0.51) * 0.8 +
+        Math.abs(widthRatio - 0.86) * 0.25 +
+        Math.abs(heightRatio - 0.54) * 0.25,
+    }
   })
-    .map((component) => {
-      const width = component.right - component.left + 1
-      const height = component.bottom - component.top + 1
-      const centerX = (component.left + component.right) / 2
-      const centerY = (component.top + component.bottom) / 2
-      const widthRatio = width / gapPx
-      const heightRatio = height / gapPx
-      const xDistance = Math.abs(centerX - glyphX) / gapPx
-      const metricDistance = Math.abs(centerY - metricY) / gapPx
-      const xOriginOffset = (centerX - glyphX) / gapPx
-      const yOriginOffset = (glyphY - centerY) / gapPx
-      return {
-        ...component,
-        width,
-        height,
-        centerX,
-        centerY,
-        widthRatio,
-        heightRatio,
-        xDistance,
-        metricDistance,
-        xOriginOffset,
-        yOriginOffset,
-        score:
-          Math.abs(xOriginOffset - 0.55) * 0.2 +
-          Math.abs(yOriginOffset - 0.51) * 0.8 +
-          Math.abs(widthRatio - 0.86) * 0.25 +
-          Math.abs(heightRatio - 0.54) * 0.25,
-      }
-    })
-  const headSized = rowComponents
-    .filter(
-      (component) =>
-        component.widthRatio >= 0.42 &&
-        component.widthRatio <= 1.05 &&
-        component.heightRatio >= 0.22 &&
-        component.heightRatio <= 0.7,
-    )
+  const headSized = rowComponents.filter(
+    (component) =>
+      component.widthRatio >= 0.42 &&
+      component.widthRatio <= 1.05 &&
+      component.heightRatio >= 0.22 &&
+      component.heightRatio <= 0.7,
+  )
+
+  const diagnosticsBase = {
+    ledgerClassifier,
+    suppressedRows,
+    maskedLedgerRows,
+    suppressedColumns,
+    gapPx,
+    imageData,
+  }
 
   if (!headSized.length) {
-    return {
-      ...fallback,
-      suppressedStaffOrLedgerRows: suppressedRows.size,
-      suppressedStemColumns: suppressedColumns.size,
-      rejectedReason: 'no-head-sized-component',
-    }
+    return anchorDiagnostics(fallback, {
+      ...diagnosticsBase,
+      extra: { rejectedReason: 'no-head-sized-component' },
+    })
   }
 
   const verticallyCompeting = headSized.some((component, index) =>
@@ -594,53 +817,94 @@ export function resolveNoteheadAnchor(
         Math.abs(candidate.width - component.width) <= gapPx * 0.25,
     ),
   )
+
+  let selected = null
+  let selectedFromCompetition = false
+  let competingHeadCandidates = null
+
   if (verticallyCompeting) {
-    return {
-      ...fallback,
-      suppressedStaffOrLedgerRows: suppressedRows.size,
-      suppressedStemColumns: suppressedColumns.size,
-      rejectedReason: 'ambiguous-components',
+    const ranked = [...headSized].sort(
+      (leftComponent, rightComponent) =>
+        leftComponent.score - rightComponent.score,
+    )
+    competingHeadCandidates = ranked.map((component) => ({
+      centerY: component.centerY,
+      centerX: component.centerX,
+      score: component.score,
+      yOriginOffset: component.yOriginOffset,
+    }))
+    const best = ranked[0]
+    const second = ranked[1]
+    const clearWinner =
+      ranked.length >= 2 && second.score - best.score >= 0.12
+    const inRelaxedOriginBand =
+      best.xOriginOffset >= -0.32 &&
+      best.xOriginOffset <= 0.95 &&
+      best.yOriginOffset >= 0.35 &&
+      best.yOriginOffset <= 1.15
+    if (clearWinner && inRelaxedOriginBand) {
+      selected = best
+      selectedFromCompetition = true
+    } else {
+      return anchorDiagnostics(fallback, {
+        ...diagnosticsBase,
+        extra: {
+          rejectedReason: 'ambiguous-components',
+          competingHeadCandidates,
+        },
+      })
     }
+  } else {
+    const compact = headSized
+      .filter(
+        (component) =>
+          component.xOriginOffset >= -0.32 &&
+          component.xOriginOffset <= 0.95 &&
+          component.yOriginOffset >= 0.45 &&
+          component.yOriginOffset <= 1,
+      )
+      .sort(
+        (leftComponent, rightComponent) =>
+          leftComponent.score - rightComponent.score,
+      )
+
+    if (!compact.length) {
+      return anchorDiagnostics(fallback, {
+        ...diagnosticsBase,
+        extra: { rejectedReason: 'component-outside-font-origin-range' },
+      })
+    }
+
+    selected = compact[0]
   }
 
-  const compact = headSized
-    .filter(
-      (component) =>
-        component.xOriginOffset >= -0.32 &&
-        component.xOriginOffset <= 0.95 &&
-        component.yOriginOffset >= 0.45 &&
-        component.yOriginOffset <= 1,
-    )
-    .sort((leftComponent, rightComponent) =>
-      leftComponent.score - rightComponent.score
-    )
+  const confidence = selectedFromCompetition
+    ? 0.84
+    : maskedLedgerRows.size
+      ? 0.9
+      : 0.96
 
-  if (!compact.length) {
-    return {
-      ...fallback,
-      suppressedStaffOrLedgerRows: suppressedRows.size,
-      suppressedStemColumns: suppressedColumns.size,
-      rejectedReason: 'component-outside-font-origin-range',
-    }
-  }
-
-  const selected = compact[0]
   return {
     yNorm: selected.centerY / imageData.height,
     fallbackYNorm: fallback.yNorm,
     rawYNorm: glyphY / imageData.height,
-    source: 'ink-notehead-geometry',
-    confidence: 0.96,
+    source: maskedLedgerRows.size
+      ? 'ledger-masked-ink-notehead-geometry'
+      : 'ink-notehead-geometry',
+    confidence,
     visualBounds: {
       x: selected.left,
       y: selected.top,
       width: selected.width,
       height: selected.height,
     },
-    suppressedStaffOrLedgerRows: suppressedRows.size,
+    suppressedStaffOrLedgerRows: suppressedRows.size + maskedLedgerRows.size,
+    suppressedOrMaskedRowCount: suppressedRows.size + maskedLedgerRows.size,
     suppressedStemColumns: suppressedColumns.size,
     localStaffGapNorm: gapPx / imageData.height,
     rejectedReason: null,
+    ledgerClassifier,
+    competingHeadCandidates,
   }
 }
 
