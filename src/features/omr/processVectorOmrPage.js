@@ -2271,23 +2271,237 @@ function startDivisionFromPosition(
   return Math.max(0, Math.min(totalDivisions - 1, Math.round(clamped / grid) * grid))
 }
 
-function alignOpeningGroupStart(starts, groups, beats, usePositionStarts) {
+/**
+ * When position packing snaps the first content column into the first beat but
+ * not onto the barline, translate the onset grid left by that offset.
+ * Recovered ledger tones already share their chord column; this keeps that
+ * shared onset barline-aligned instead of delaying every chord member.
+ *
+ * Full-grid translation is limited to coarse eighth-aligned column packs and
+ * chord-dominated packs whose opening landed on a dense sixteenth snap.
+ * Monophonic sixteenth runs keep the legacy first-slot pull so subdivision
+ * spacing is preserved.
+ */
+export function alignOpeningGroupStart(starts, groups, beats, usePositionStarts) {
   if (!usePositionStarts || !starts.length || !groups.length) {
     return starts
   }
-  const grid = Math.max(1, OMR_DIVISIONS_PER_QUARTER / 2)
+  const firstStart = starts[0]
+  if (!(firstStart > 0)) {
+    return starts
+  }
+  const eighthGrid = Math.max(1, OMR_DIVISIONS_PER_QUARTER / 2)
   const openingFraction = 1 / Math.max(1, beats)
   const firstPosition =
     groups[0]?.positionInMeasure ?? groups[0]?.notes?.[0]?.positionInMeasure ?? null
-  if (
-    starts[0] > 0 &&
-    starts[0] <= grid &&
-    Number.isFinite(firstPosition) &&
-    firstPosition < openingFraction * 0.55
-  ) {
+  if (!Number.isFinite(firstPosition)) {
+    return starts
+  }
+  if (!(firstStart <= OMR_DIVISIONS_PER_QUARTER && firstPosition < openingFraction)) {
+    // Legacy: pull only the opening slot to the barline when it already sits on
+    // the first eighth and the head is near the playable start.
+    if (firstStart <= eighthGrid && firstPosition < openingFraction * 0.55) {
+      return [0, ...starts.slice(1)]
+    }
+    return starts
+  }
+
+  const openingIsChord = (groups[0]?.notes?.length ?? 0) >= 2
+  // Dense tuplet / sixteenth textures (many attacks per bar) must keep their
+  // relative grid. Only translate sparse chord-column packs where recovered
+  // ledger tones share a handful of visual columns.
+  const sparseChordPack = groups.length <= beats + 2
+  const eighthAlignedCount = starts.filter((start) => start % eighthGrid === 0).length
+  const mostlyEighthAligned = eighthAlignedCount >= Math.ceil(starts.length * 0.75)
+  // Only translate whole grids for visual chord columns. Monophonic sixteenth /
+  // tuplet runs keep legacy first-slot behavior so subdivision spacing survives.
+  if (sparseChordPack && mostlyEighthAligned && openingIsChord) {
+    return starts.map((start) => Math.max(0, start - firstStart))
+  }
+
+  // Dense snap can park a chord column on an odd sixteenth (e.g. 3). Translate
+  // by the eighth floor so every tone of the visual chord moves together without
+  // inventing a monophonic sixteenth grid shift. Require the opening group itself
+  // to be a chord so lone recovered orphans are not force-pulled to the barline.
+  const multiNoteGroups = groups.filter((group) => (group.notes?.length ?? 0) >= 2).length
+  const chordDominated =
+    sparseChordPack &&
+    openingIsChord &&
+    multiNoteGroups >= Math.ceil(groups.length * 0.5)
+  if (chordDominated) {
+    const shift = Math.floor(firstStart / eighthGrid) * eighthGrid
+    let next =
+      shift > 0 ? starts.map((start) => Math.max(0, start - shift)) : [...starts]
+    // Residual odd sixteenth on the opening column after the eighth translate is
+    // still first-beat snap noise for chord packs — pull only that slot to 0.
+    if (next[0] > 0 && next[0] < eighthGrid) {
+      next = [0, ...next.slice(1)]
+    }
+    if (next.some((start, index) => start !== starts[index])) {
+      return next
+    }
+  }
+
+  // Legacy: pull only the opening slot to the barline when it already sits on
+  // the first eighth and the head is near the playable start.
+  if (firstStart <= eighthGrid && firstPosition < openingFraction * 0.55) {
     return [0, ...starts.slice(1)]
   }
   return starts
+}
+
+/**
+ * Re-apply opening barline alignment after beam onset resnap when the opening
+ * attack is a multi-note chord column. Dense measures often snap to an odd
+ * sixteenth, floor that opening to an eighth, then leave the whole chord grid
+ * delayed by one eighth — recovered ledger tones amplify the mismatch count
+ * without changing chord membership.
+ */
+export function alignOpeningEventStarts(events, beats = 4) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (noteEvents.length < 2) {
+    return events
+  }
+  const sorted = [...noteEvents].sort(
+    (left, right) =>
+      (left.startDivision ?? 0) - (right.startDivision ?? 0) ||
+      (left.cx ?? 0) - (right.cx ?? 0),
+  )
+  if ((sorted[0]?.notes?.length ?? 0) < 2) {
+    return events
+  }
+  if (sorted.length > beats + 2) {
+    return events
+  }
+  const starts = sorted.map((event) => event.startDivision ?? 0)
+  const groups = sorted.map((event) => ({
+    positionInMeasure: event.positionInMeasure,
+    notes: event.notes ?? [],
+  }))
+  const nextStarts = alignOpeningGroupStart(starts, groups, beats, true)
+  if (nextStarts.every((start, index) => start === starts[index])) {
+    return events
+  }
+  const startByEvent = new Map(sorted.map((event, index) => [event, nextStarts[index]]))
+  return sortVectorRhythmEvents(
+    events.map((event) => {
+      if (!startByEvent.has(event)) {
+        return event
+      }
+      return {
+        ...event,
+        startDivision: startByEvent.get(event),
+        openingOnsetAligned: true,
+      }
+    }),
+  )
+}
+
+/**
+ * After a sparse chord pack is barline-aligned, an eighth-run prefix often leaves
+ * the remaining columns compressed on the sixteenth grid. Expand that compressed
+ * tail onto the next quarter beats so recovered ledger tones keep chord membership
+ * without stealing later truth onsets.
+ *
+ * Applies only to the common "one extra column" chart shape (beats+1 attacks),
+ * e.g. two opening eighths then quarters in 4/4 → [0,2,4,8,12].
+ */
+export function refineSparseChordColumnStarts(starts, beats, totalDivisions) {
+  const eighth = OMR_DURATION_DIVISIONS.eighth
+  const quarter = OMR_DIVISIONS_PER_QUARTER
+  if (
+    !Array.isArray(starts) ||
+    starts.length !== beats + 1 ||
+    (starts[0] ?? 0) !== 0 ||
+    totalDivisions < beats * quarter
+  ) {
+    return starts
+  }
+  const pickups = starts.length - beats
+  const ideal = [0]
+  for (let index = 1; index <= pickups; index += 1) {
+    ideal.push(index * eighth)
+  }
+  while (ideal.length < starts.length) {
+    if (ideal.length === pickups + 1) {
+      ideal.push((pickups + 1) * eighth)
+      continue
+    }
+    ideal.push(ideal[ideal.length - 1] + quarter)
+  }
+  if (ideal[ideal.length - 1] > totalDivisions - 1) {
+    return starts
+  }
+  const compressed = starts.some((start, index) => start < ideal[index])
+  if (!compressed) {
+    return starts
+  }
+  // Do not rewrite grids that already overshoot the ideal (true late entries).
+  if (starts.some((start, index) => start > ideal[index] + eighth)) {
+    return starts
+  }
+  return ideal
+}
+
+export function refineSparseChordColumnOnsets(events, beats = 4, totalDivisions = 16) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (noteEvents.length < 4 || noteEvents.length > beats + 2) {
+    return events
+  }
+  const sorted = [...noteEvents].sort(
+    (left, right) =>
+      (left.startDivision ?? 0) - (right.startDivision ?? 0) ||
+      (left.cx ?? 0) - (right.cx ?? 0),
+  )
+  if ((sorted[0]?.notes?.length ?? 0) < 2) {
+    return events
+  }
+  const multiNote = sorted.filter((event) => (event.notes?.length ?? 0) >= 2).length
+  if (multiNote < Math.ceil(sorted.length * 0.5)) {
+    return events
+  }
+  const starts = sorted.map((event) => event.startDivision ?? 0)
+  const nextStarts = refineSparseChordColumnStarts(starts, beats, totalDivisions)
+  if (nextStarts.every((start, index) => start === starts[index])) {
+    return events
+  }
+  const startByEvent = new Map(sorted.map((event, index) => [event, nextStarts[index]]))
+  const remapped = sortVectorRhythmEvents(
+    events.map((event) => {
+      if (!startByEvent.has(event)) {
+        return event
+      }
+      return {
+        ...event,
+        startDivision: startByEvent.get(event),
+        sparseChordColumnRefined: true,
+      }
+    }),
+  )
+  // Re-gap durations on the refined single-clef chord timeline.
+  const refinedNotes = remapped
+    .filter((event) => event.type === 'note')
+    .sort(
+      (left, right) =>
+        (left.startDivision ?? 0) - (right.startDivision ?? 0) ||
+        (left.cx ?? 0) - (right.cx ?? 0),
+    )
+  for (let index = 0; index < refinedNotes.length; index += 1) {
+    const event = refinedNotes[index]
+    const start = event.startDivision ?? 0
+    const nextStart =
+      index + 1 < refinedNotes.length
+        ? refinedNotes[index + 1].startDivision ?? totalDivisions
+        : totalDivisions
+    const duration = Math.max(1, Math.min(nextStart - start, totalDivisions - start))
+    Object.assign(event, {
+      durationDivisions: duration,
+      ...durationMeta(duration, {
+        allowDotted: hasDottedEvidence(event.notes) || event.dotted,
+      }),
+    })
+  }
+  return remapped
 }
 
 function dedupeNotesByMidi(notes = []) {
@@ -2657,6 +2871,14 @@ function buildNoteEventsFromGroups(
     )
     events = track('beam-onset-resnap', 'resnapFlooredBeamOnsets', () =>
       resnapFlooredBeamOnsets(events),
+    )
+    // Beam flooring can leave an eighth-delayed chord grid that opening-group
+    // align could not shift while the head still sat on an odd sixteenth.
+    events = track('opening-onset-align', 'alignOpeningEventStarts', () =>
+      alignOpeningEventStarts(events, beats),
+    )
+    events = track('sparse-chord-column-refine', 'refineSparseChordColumnOnsets', () =>
+      refineSparseChordColumnOnsets(events, beats, totalDivisions),
     )
   }
   events = track('chord-coalesce', 'coalesceSameOnsetChordEvents', () =>
