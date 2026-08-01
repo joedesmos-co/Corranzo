@@ -214,6 +214,27 @@ describe('buildStaffLaneStems', () => {
     expect(stem.y2).toBe(Math.min(...noteYs) - STEM_LENGTH_GAPS * STAFF_LINE_GAP)
   })
 
+  it('gives overlapping voices on one staff distinct render identities', () => {
+    const stems = buildStaffLaneStems(
+      [
+        {
+          id: 'same-onset',
+          timeSeconds: 1,
+          notes: [
+            { midi: 67, durationSeconds: 0.5, voice: 1 },
+            { midi: 71, durationSeconds: 0.5, voice: 2 },
+          ],
+        },
+      ],
+      geometry,
+      { pixelsPerSecond: px },
+    )
+
+    expect(stems).toHaveLength(2)
+    expect(new Set(stems.map((stem) => stem.id)).size).toBe(2)
+    expect(stems.map((stem) => stem.voice)).toEqual([1, 2])
+  })
+
   it('splits stems per staff for cross-staff groups', () => {
     const stems = buildStaffLaneStems([group('both', 0, [48, 72])], geometry, {
       pixelsPerSecond: px,

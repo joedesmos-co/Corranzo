@@ -525,18 +525,13 @@ async function loadDemo(page) {
 }
 
 async function clickPracticeMode(page, modeLabel) {
-  const option = page
-    .getByRole('radiogroup', { name: 'Practice mode' })
-    .locator('label')
-    .filter({ hasText: modeLabel })
-  const alreadySelected = await option
-    .evaluate((node) => node.classList.contains('practice-mode__option--selected'))
-    .catch(() => false)
+  const option = page.getByRole('radio', { name: modeLabel, exact: true })
+  const alreadySelected = await option.isChecked().catch(() => false)
   if (alreadySelected) {
     await sleep(200)
     return
   }
-  await option.click()
+  await option.click({ force: true })
   await sleep(500)
 }
 
@@ -1094,6 +1089,13 @@ async function main() {
       await loadDemo(page)
     }
     await ensurePracticeView(page)
+    const guitarPracticeModes = await page
+      .getByRole('radiogroup', { name: 'Practice mode' })
+      .count()
+    if (guitarPracticeModes === 0) {
+      await loadDemo(page)
+      await ensurePracticeView(page)
+    }
     await clickPracticeMode(page, 'Wait For You')
     await clickInputSource(page, 'Microphone')
     await sleep(400)

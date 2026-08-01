@@ -3,7 +3,7 @@ import {
   INSTRUMENT_IDS,
   normalizeInstrumentId,
 } from '../features/instruments/instruments.js'
-import practiceLibraryManifest from '../../public/fixtures/practice-library/manifest.json'
+import practiceLibraryManifest from '../../public/fixtures/practice-library/manifest.json' with { type: 'json' }
 
 function curatedPracticePaths(id) {
   return {

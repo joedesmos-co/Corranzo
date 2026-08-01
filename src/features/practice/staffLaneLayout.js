@@ -545,7 +545,7 @@ export function buildStaffLaneStems(
     const length = STEM_LENGTH_GAPS * STAFF_LINE_GAP
 
     stems.push({
-      id: `stem-${chord[0].groupId}-${chord[0].staffKind}`,
+      id: `stem-${chord[0].groupId}-${chord[0].staffKind}-v${chord[0].voice ?? 1}`,
       groupId: chord[0].groupId,
       staffKind: chord[0].staffKind,
       voice: chord[0].voice ?? 1,

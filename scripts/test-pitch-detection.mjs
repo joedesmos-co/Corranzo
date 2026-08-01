@@ -122,7 +122,10 @@ const match = evaluateMicNoteInput(checkpoint, 64, {
   allowOctaveMistakes: false,
   micChordMode: MIC_CHORD_MODES.ANY_TONE,
 })
-assert(match.outcome === MATCH_OUTCOME.COMPLETE, 'mic chord accepts one matching pitch')
+assert(
+  match.outcome === MATCH_OUTCOME.CHORD_PROGRESS,
+  'mic chord keeps one matching pitch as partial progress',
+)
 
 const bassTargets = getMicChordMatchTargets(checkpoint, { micChordMode: MIC_CHORD_MODES.BASS })
 assert(bassTargets.expected[0] === 60, 'bass mode picks lowest tone')
@@ -132,7 +135,7 @@ assert(passesNoiseGate(0.02, 0.006), 'noise gate opens for strong signal')
 // Cents tolerance: 40 cents sharp is rejected at ±30, accepted at ±50.
 assert(quantizeMidi(60.4, 30) === null, 'cents tolerance rejects 40c at ±30')
 assert(quantizeMidi(60.4, 50) === 60, 'cents tolerance accepts 40c at ±50')
-assert(normalizeMatchSettings({}).micCentsTolerance === 30, 'default mic cents tolerance is 30')
+assert(normalizeMatchSettings({}).micCentsTolerance === 35, 'default mic cents tolerance is 35')
 
 // Unstable jumping pitch is rejected (never holds a single pitch).
 const unstable = createNoteStabilizer({ holdFrames: 4, minClarity: 0.35, minRms: 0.005, attackFrames: 1 })
