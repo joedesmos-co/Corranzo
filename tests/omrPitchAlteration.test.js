@@ -181,4 +181,116 @@ describe('assignLocalAccidentals', () => {
     expect(assignments.get(0)?.type).toBe('sharp')
     expect(assignments.get(1)).toBeUndefined()
   })
+
+  it('uses a page-calibrated path offset to select the engraved owner column', () => {
+    const notes = [
+      {
+        cx: 270,
+        cy: 318,
+        yNorm: 0.318,
+        clef: 'bass',
+        naturalMidi: 48,
+        noteheadAnchor: {
+          source: 'ink-notehead-geometry',
+          confidence: 0.96,
+        },
+      },
+      {
+        cx: 290,
+        cy: 318,
+        yNorm: 0.318,
+        clef: 'bass',
+        naturalMidi: 53,
+        noteheadAnchor: {
+          source: 'ink-notehead-geometry',
+          confidence: 0.96,
+        },
+      },
+    ]
+    const calibration = {
+      models: new Map([
+        [
+          'vector-path\u001fsharp',
+          {
+            source: 'vector-path',
+            type: 'sharp',
+            preferredDxSpaces: 2,
+            confidence: 0.9,
+          },
+        ],
+      ]),
+    }
+    const assignments = assignLocalAccidentals(
+      [
+        {
+          text: '\uE262',
+          accidentalType: 'sharp',
+          source: 'vector-path',
+          pathCandidateId: 'pdf-acc-p1-op12',
+          confidence: 0.9,
+          x: 250,
+          y: 318,
+          bounds: { x0: 244, x1: 256, y0: 306, y1: 330 },
+        },
+      ],
+      imageData,
+      measureBox,
+      notes,
+      ACCIDENTAL_GLYPHS,
+      { accidentalPathCalibration: calibration },
+    )
+
+    expect(assignments.get(0)).toBeUndefined()
+    expect(assignments.get(1)?.type).toBe('sharp')
+  })
+
+  it('keeps legacy matching for an untrusted target when a page model exists', () => {
+    const calibration = {
+      models: new Map([
+        [
+          'vector-path\u001fsharp',
+          {
+            source: 'vector-path',
+            type: 'sharp',
+            preferredDxSpaces: 2,
+            confidence: 0.9,
+          },
+        ],
+      ]),
+    }
+    const assignments = assignLocalAccidentals(
+      [
+        {
+          text: '\uE262',
+          accidentalType: 'sharp',
+          source: 'vector-path',
+          pathCandidateId: 'pdf-acc-p1-op13',
+          confidence: 0.9,
+          x: 250,
+          y: 318,
+          bounds: { x0: 244, x1: 256, y0: 306, y1: 330 },
+        },
+      ],
+      imageData,
+      measureBox,
+      [
+        {
+          cx: 280,
+          cy: 318,
+          yNorm: 0.318,
+          clef: 'bass',
+          naturalMidi: 53,
+          noteheadAnchor: {
+            source: 'glyph-metrics-fallback',
+            confidence: 0.7,
+          },
+        },
+      ],
+      ACCIDENTAL_GLYPHS,
+      { accidentalPathCalibration: calibration },
+    )
+
+    expect(assignments.get(0)?.type).toBe('sharp')
+    expect(assignments.get(0)?.pathCalibration).toBeNull()
+  })
 })

@@ -810,6 +810,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         vector.notationArticulationDiagnostics,
       noteheadFallbackCalibrationDiagnostics:
         vector.noteheadFallbackCalibrationDiagnostics,
+      accidentalPathCalibrationDiagnostics:
+        vector.accidentalPathCalibrationDiagnostics,
       orphanDiagnostics: vector.orphanDiagnostics,
       staffGapNormalization: staffGapNormalizationResult.staffGapNormalization,
       legacyFontNormalization: legacyFontNormalization.applied

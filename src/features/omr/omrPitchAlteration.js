@@ -1,4 +1,8 @@
 import { applyAlterToMidi, distanceToNearestStaffLine, midiToWrittenPitch } from './pitchFromStaffPosition.js'
+import {
+  accidentalPathHorizontalResidual,
+  lookupAccidentalPathCalibration,
+} from './accidentalPathCalibration.js'
 
 const SHARP_STEPS = ['F', 'C', 'G', 'D', 'A', 'E', 'B']
 const FLAT_STEPS = ['B', 'E', 'A', 'D', 'G', 'C', 'F']
@@ -255,10 +259,67 @@ function staffGapPixels(lineYs, imageData) {
   return Math.max(4, ((sorted[sorted.length - 1] - sorted[0]) / 4) * imageData.height)
 }
 
-function accidentalAnchorY(note, imageData) {
-  return note?.noteheadAnchor?.calibration && Number.isFinite(note.yNorm)
-    ? note.yNorm * imageData.height
-    : note?.cy
+const TRUSTED_OPTICAL_NOTEHEAD_SOURCES = new Set([
+  'ink-notehead-geometry',
+  'ledger-masked-ink-notehead-geometry',
+  'self-calibrated-glyph-fallback',
+])
+const MIN_TRUSTED_OPTICAL_NOTEHEAD_CONFIDENCE = 0.8
+
+function trustedOpticalNoteheadAnchor(note) {
+  const anchor = note?.noteheadAnchor
+  if (!Number.isFinite(note?.yNorm)) {
+    return null
+  }
+  if (anchor?.calibration) {
+    return {
+      source: anchor.source ?? 'self-calibrated-glyph-fallback',
+      confidence: Number(anchor.confidence ?? anchor.calibration.confidence ?? 1),
+    }
+  }
+  if (
+    !TRUSTED_OPTICAL_NOTEHEAD_SOURCES.has(anchor?.source) ||
+    Number(anchor?.confidence) < MIN_TRUSTED_OPTICAL_NOTEHEAD_CONFIDENCE
+  ) {
+    return null
+  }
+  return {
+    source: anchor.source,
+    confidence: Number(anchor.confidence),
+  }
+}
+
+function accidentalAnchorDetails(
+  note,
+  imageData,
+  { useTrustedOptical = false } = {},
+) {
+  const trustedAnchor = trustedOpticalNoteheadAnchor(note)
+  const hasCalibratedAnchor = Boolean(note?.noteheadAnchor?.calibration)
+  const usesOpticalAnchor =
+    hasCalibratedAnchor || (useTrustedOptical && Boolean(trustedAnchor))
+  return {
+    y:
+      usesOpticalAnchor && Number.isFinite(note?.yNorm)
+        ? note.yNorm * imageData.height
+        : note?.cy,
+    source: usesOpticalAnchor
+      ? trustedAnchor?.source ?? 'self-calibrated-glyph-fallback'
+      : 'glyph-origin',
+    confidence: usesOpticalAnchor ? trustedAnchor?.confidence ?? null : null,
+    usesOpticalAnchor,
+  }
+}
+
+function directVectorPathAccidental(glyph) {
+  const pathId = glyph?.pathCandidateId ?? glyph?.candidateId
+  return Boolean(
+    glyph?.source === 'vector-path' &&
+      typeof pathId === 'string' &&
+      /(?:^|-)op\d+$/i.test(pathId) &&
+      !/cluster/i.test(pathId) &&
+      !/cluster/i.test(glyph?.reason ?? ''),
+  )
 }
 
 export function accidentalMatchWindow(measureBox, lineYs, imageData) {
@@ -272,12 +333,33 @@ export function accidentalMatchWindow(measureBox, lineYs, imageData) {
   }
 }
 
-export function accidentalMatchScore(note, glyph, window, lineYs, imageData) {
+function accidentalMatchResult(
+  note,
+  glyph,
+  window,
+  lineYs,
+  imageData,
+  {
+    accidentalPathCalibration = null,
+    accidentalType = glyph?.accidentalType ?? null,
+  } = {},
+) {
   const dx = note.cx - glyph.x
   if (dx <= 0 || dx > window.maxDx) {
     return null
   }
-  const noteAnchorY = accidentalAnchorY(note, imageData)
+  const staffGap = staffGapPixels(lineYs, imageData)
+  const pathModel =
+    directVectorPathAccidental(glyph) && trustedOpticalNoteheadAnchor(note)
+    ? lookupAccidentalPathCalibration(
+        accidentalPathCalibration,
+        accidentalType,
+      )
+    : null
+  const anchorDetails = accidentalAnchorDetails(note, imageData, {
+    useTrustedOptical: Boolean(pathModel),
+  })
+  const noteAnchorY = anchorDetails.y
   const dy = Math.abs(noteAnchorY - glyph.y)
   if (dy > window.maxDy) {
     return null
@@ -286,10 +368,82 @@ export function accidentalMatchScore(note, glyph, window, lineYs, imageData) {
   const glyphLineDist =
     distanceToNearestStaffLine(glyph.y / imageData.height, lineYs) * imageData.height
   const lineMismatch = Math.abs(noteLineDist - glyphLineDist)
-  return dx + dy * 2.5 + lineMismatch * 5
+
+  if (pathModel) {
+    const boundsX1 = Number(glyph?.bounds?.x1)
+    const horizontal = accidentalPathHorizontalResidual({
+      noteX: note.cx,
+      glyphX: glyph.x,
+      staffGap,
+      type: accidentalType,
+      calibration: accidentalPathCalibration,
+    })
+    if (
+      !Number.isFinite(boundsX1) ||
+      boundsX1 >= note.cx ||
+      dy > staffGap * 0.32 ||
+      !horizontal ||
+      horizontal.residualSpaces > 0.35
+    ) {
+      return null
+    }
+    return {
+      score:
+        pathModel.preferredDxSpaces * staffGap +
+        horizontal.residualPixels +
+        dy * 2.5 +
+        lineMismatch * 5,
+      pathCalibration: {
+        source: 'page-vector-path-offset',
+        type: accidentalType,
+        preferredDxSpaces: pathModel.preferredDxSpaces,
+        observedDxSpaces: horizontal.dxSpaces,
+        residualSpaces: horizontal.residualSpaces,
+        confidence: pathModel.confidence,
+      },
+      noteAnchorY,
+      noteAnchorSource: anchorDetails.source,
+      noteAnchorConfidence: anchorDetails.confidence,
+      verticalResidualPixels: dy,
+    }
+  }
+
+  return {
+    score: dx + dy * 2.5 + lineMismatch * 5,
+    pathCalibration: null,
+    noteAnchorY,
+    noteAnchorSource: anchorDetails.source,
+    noteAnchorConfidence: anchorDetails.confidence,
+    verticalResidualPixels: dy,
+  }
 }
 
-export function assignLocalAccidentals(glyphs, imageData, measureBox, notes, accidentalGlyphs) {
+export function accidentalMatchScore(
+  note,
+  glyph,
+  window,
+  lineYs,
+  imageData,
+  options = {},
+) {
+  return accidentalMatchResult(
+    note,
+    glyph,
+    window,
+    lineYs,
+    imageData,
+    options,
+  )?.score ?? null
+}
+
+export function assignLocalAccidentals(
+  glyphs,
+  imageData,
+  measureBox,
+  notes,
+  accidentalGlyphs,
+  { accidentalPathCalibration = null } = {},
+) {
   const candidates = []
 
   for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex += 1) {
@@ -307,11 +461,32 @@ export function assignLocalAccidentals(glyphs, imageData, measureBox, notes, acc
       if (glyph.x < window.minX) {
         continue
       }
-      const score = accidentalMatchScore(note, glyph, window, lineYs, imageData)
-      if (score == null) {
+      const match = accidentalMatchResult(
+        note,
+        glyph,
+        window,
+        lineYs,
+        imageData,
+        {
+          accidentalPathCalibration,
+          accidentalType: accidental.type,
+        },
+      )
+      if (!match) {
         continue
       }
-      candidates.push({ glyphIndex, noteIndex, score, accidental, glyph })
+      candidates.push({
+        glyphIndex,
+        noteIndex,
+        score: match.score,
+        pathCalibration: match.pathCalibration,
+        noteAnchorY: match.noteAnchorY,
+        noteAnchorSource: match.noteAnchorSource,
+        noteAnchorConfidence: match.noteAnchorConfidence,
+        verticalResidualPixels: match.verticalResidualPixels,
+        accidental,
+        glyph,
+      })
     }
   }
 
@@ -331,6 +506,11 @@ export function assignLocalAccidentals(glyphs, imageData, measureBox, notes, acc
       glyph: candidate.glyph,
       score: candidate.score,
       confidence: 0.9,
+      pathCalibration: candidate.pathCalibration,
+      noteAnchorY: candidate.noteAnchorY,
+      noteAnchorSource: candidate.noteAnchorSource,
+      noteAnchorConfidence: candidate.noteAnchorConfidence,
+      verticalResidualPixels: candidate.verticalResidualPixels,
     })
   }
 
@@ -341,6 +521,8 @@ export function assignLocalAccidentals(glyphs, imageData, measureBox, notes, acc
       score: Number(candidate.score.toFixed(2)),
       type: candidate.accidental.type,
       alter: candidate.accidental.alter,
+      pathCalibration: candidate.pathCalibration,
+      verticalResidualPixels: candidate.verticalResidualPixels,
       glyph: {
         text: candidate.glyph.text,
         x: candidate.glyph.x,
@@ -358,7 +540,9 @@ export function assignLocalAccidentals(glyphs, imageData, measureBox, notes, acc
         naturalMidi: notes[candidate.noteIndex]?.naturalMidi ?? null,
         cx: notes[candidate.noteIndex]?.cx ?? null,
         cy: notes[candidate.noteIndex]?.cy ?? null,
-        anchorY: accidentalAnchorY(notes[candidate.noteIndex], imageData) ?? null,
+        anchorY: candidate.noteAnchorY ?? null,
+        anchorSource: candidate.noteAnchorSource,
+        anchorConfidence: candidate.noteAnchorConfidence,
       },
     })),
     selectedAttachments: [...assignments.entries()].map(
@@ -367,6 +551,8 @@ export function assignLocalAccidentals(glyphs, imageData, measureBox, notes, acc
         type: accidental.type,
         alter: accidental.alter,
         score: Number(accidental.score.toFixed(2)),
+        pathCalibration: accidental.pathCalibration,
+        verticalResidualPixels: accidental.verticalResidualPixels,
         glyph: {
           text: accidental.glyph.text,
           x: accidental.glyph.x,
@@ -385,7 +571,9 @@ export function assignLocalAccidentals(glyphs, imageData, measureBox, notes, acc
           naturalMidi: notes[noteIndex]?.naturalMidi ?? null,
           cx: notes[noteIndex]?.cx ?? null,
           cy: notes[noteIndex]?.cy ?? null,
-          anchorY: accidentalAnchorY(notes[noteIndex], imageData) ?? null,
+          anchorY: accidental.noteAnchorY ?? null,
+          anchorSource: accidental.noteAnchorSource,
+          anchorConfidence: accidental.noteAnchorConfidence,
         },
       }),
     ),

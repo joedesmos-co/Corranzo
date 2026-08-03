@@ -23,6 +23,7 @@ import {
   midiToWrittenPitch,
   resolveNoteheadAnchor,
   resolvePitchFromGrandStaff,
+  staffLineGap,
 } from './pitchFromStaffPosition.js'
 import {
   accidentalStateKey,
@@ -68,6 +69,11 @@ import {
   buildNoteheadFallbackCalibrations,
   createNoteheadFallbackCalibrationSample,
 } from './noteheadFallbackCalibration.js'
+import {
+  ACCIDENTAL_PATH_CALIBRATION_LIMITS,
+  buildAccidentalPathCalibrations,
+  createAccidentalPathCalibrationSample,
+} from './accidentalPathCalibration.js'
 
 const HALF_NOTEHEAD_GLYPH = '\ue0a3'
 const WHOLE_NOTEHEAD_GLYPH = '\ue0a2'
@@ -343,6 +349,7 @@ function noteheadsForMeasure(
   vectorAccidentalPaths = [],
   vectorAugmentationDotPaths = [],
   noteheadFallbackCalibration = null,
+  accidentalPathCalibration = null,
 ) {
   const notes = []
   const consumed = new Set()
@@ -453,6 +460,7 @@ function noteheadsForMeasure(
     measureBox,
     sortedNotes,
     ACCIDENTAL_GLYPHS,
+    { accidentalPathCalibration },
   )
   localAccidentals.diagnostics = {
     ...(localAccidentals.diagnostics ?? {}),
@@ -3082,6 +3090,7 @@ export function buildVectorMeasureRecord({
   vectorAccidentalPaths = [],
   vectorAugmentationDotPaths = [],
   noteheadFallbackCalibration = null,
+  accidentalPathCalibration = null,
 }) {
   const {
     notes,
@@ -3101,6 +3110,7 @@ export function buildVectorMeasureRecord({
     vectorAccidentalPaths,
     vectorAugmentationDotPaths,
     noteheadFallbackCalibration,
+    accidentalPathCalibration,
   )
   const rawDetectedRests = restsForMeasure(
     glyphs,
@@ -3377,6 +3387,104 @@ export function buildVectorMeasureRecord({
   }
 }
 
+function directAccidentalPathCandidateId(candidate) {
+  const candidateId = candidate?.candidateId ?? candidate?.pathCandidateId
+  if (
+    candidate?.source !== 'vector-path' ||
+    typeof candidateId !== 'string' ||
+    !/(?:^|-)op\d+$/i.test(candidateId) ||
+    /cluster/i.test(candidateId) ||
+    /cluster/i.test(candidate?.reason ?? '') ||
+    Number(candidate?.confidence) <
+      ACCIDENTAL_PATH_CALIBRATION_LIMITS.minConfidence
+  ) {
+    return null
+  }
+  return candidateId
+}
+
+function distinctDirectAccidentalPathCount(pathCandidates = []) {
+  return new Set(
+    pathCandidates.map(directAccidentalPathCandidateId).filter(Boolean),
+  ).size
+}
+
+/**
+ * Learn page/type engraving distance using only direct vector accidentals and
+ * independently trusted notehead anchors. Expected notes and evaluator output
+ * never enter this pass.
+ */
+export function buildPageAccidentalPathCalibration({
+  vectorAccidentalPaths = [],
+  imageData,
+  measureRecordsBySystem = [],
+  measureBoxByNumber = new Map(),
+  placementByMeasure = new Map(),
+} = {}) {
+  const samples = []
+  const directCandidateCount = distinctDirectAccidentalPathCount(
+    vectorAccidentalPaths,
+  )
+
+  for (const record of measureRecordsBySystem.flat()) {
+    const measureBox = measureBoxByNumber.get(record.measureNumber)
+    if (!measureBox) {
+      continue
+    }
+    const placement = placementByMeasure.get(record.measureNumber) ?? {}
+    const playableStart =
+      (measureBox.playableX0 ?? measureBox.x0) * imageData.width
+    const paths = vectorAccidentalPaths.filter(
+      (candidate) =>
+        directAccidentalPathCandidateId(candidate) &&
+        candidate.x >= playableStart - 2 &&
+        vectorGlyphInMeasure(candidate, measureBox, imageData, placement),
+    )
+    const notes = record.detectorObservations?.noteheads ?? []
+    for (const candidate of paths) {
+      for (const note of notes) {
+        const lineYs =
+          note.clef === 'treble'
+            ? measureBox.staffLines?.treble
+            : measureBox.staffLines?.bass
+        const gapNorm = staffLineGap(lineYs ?? [])
+        const staffGap = gapNorm * imageData.height
+        if (!(staffGap > 0)) {
+          continue
+        }
+        const sample = createAccidentalPathCalibrationSample({
+          glyph: {
+            ...candidate,
+            pathCandidateId:
+              candidate.pathCandidateId ?? candidate.candidateId,
+          },
+          note,
+          type: candidate.type,
+          staffGap,
+          imageData,
+          measureId: record.measureNumber,
+        })
+        if (sample) {
+          samples.push(sample)
+        }
+      }
+    }
+  }
+
+  const calibration = buildAccidentalPathCalibrations(samples)
+  return {
+    ...calibration,
+    diagnostics: {
+      scope: 'page-vector-path-type',
+      directCandidateCount,
+      rawSampleCount: samples.length,
+      eligibleSampleCount: calibration.eligibleSampleCount,
+      accepted: calibration.accepted,
+      rejected: calibration.rejected,
+    },
+  }
+}
+
 export function processVectorPageSystems({
   imageData,
   pageText,
@@ -3402,7 +3510,7 @@ export function processVectorPageSystems({
     (detectedTimeSignature.confidence ?? 0) > 0
       ? detectedTimeSignature
       : inheritedTimeSignature ?? detectedTimeSignature
-  const measureRecordsBySystem = []
+  let measureRecordsBySystem = []
   const staffClefsBySystem = new Map()
   const placementByMeasure = new Map()
   const measureBoxByNumber = new Map()
@@ -3422,6 +3530,14 @@ export function processVectorPageSystems({
     staffClefsBySystem,
     inkThreshold,
   })
+  const directAccidentalPathCount = distinctDirectAccidentalPathCount(
+    vectorAccidentalPaths,
+  )
+  const shouldAttemptAccidentalPathCalibration =
+    directAccidentalPathCount >=
+    ACCIDENTAL_PATH_CALIBRATION_LIMITS.minDistinctPaths
+  const internalCaptureDetectorObservations =
+    captureDetectorObservations || shouldAttemptAccidentalPathCalibration
 
   for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
     const boxes = systemMeasureBoxes[systemIndex] ?? []
@@ -3441,7 +3557,7 @@ export function processVectorPageSystems({
         timeSignature,
         measurePlacement,
         inkThreshold,
-        captureDetectorObservations,
+        captureDetectorObservations: internalCaptureDetectorObservations,
         vectorAccidentalPaths,
         vectorAugmentationDotPaths,
         noteheadFallbackCalibration,
@@ -3483,13 +3599,76 @@ export function processVectorPageSystems({
         measurePlacement,
         orphanGlyphs,
         inkThreshold,
-        captureDetectorObservations,
+        captureDetectorObservations: internalCaptureDetectorObservations,
+        vectorAccidentalPaths,
         vectorAugmentationDotPaths,
         noteheadFallbackCalibration,
       })
       noteCount += (rebuilt.vectorNoteCount ?? 0) - (previous.vectorNoteCount ?? 0)
       measureRecordsBySystem[systemIndex][measureIndex] = rebuilt
       break
+    }
+  }
+
+  let accidentalPathCalibration = {
+    models: new Map(),
+    eligibleSampleCount: 0,
+    accepted: [],
+    rejected: [],
+    diagnostics: {
+      scope: 'page-vector-path-type',
+      attempted: false,
+      directCandidateCount: directAccidentalPathCount,
+      rawSampleCount: 0,
+      eligibleSampleCount: 0,
+      accepted: [],
+      rejected: [],
+    },
+  }
+  if (shouldAttemptAccidentalPathCalibration) {
+    accidentalPathCalibration = buildPageAccidentalPathCalibration({
+      vectorAccidentalPaths,
+      imageData,
+      measureRecordsBySystem,
+      measureBoxByNumber,
+      placementByMeasure,
+    })
+    accidentalPathCalibration.diagnostics.attempted = true
+  }
+
+  if (accidentalPathCalibration.models.size > 0) {
+    noteCount = 0
+    measureRecordsBySystem = systemMeasureBoxes.map((boxes) =>
+      boxes.map((measureBox) => {
+        const enrichedBox = measureBoxByNumber.get(measureBox.measureNumber)
+        const measurePlacement =
+          placementByMeasure.get(measureBox.measureNumber) ?? {}
+        const orphanGlyphs =
+          orphanResult.assignments
+            .get(measureBox.measureNumber)
+            ?.map((entry) => entry.glyph) ?? []
+        const record = buildVectorMeasureRecord({
+          glyphs,
+          imageData,
+          measureBox: enrichedBox,
+          keySignature,
+          timeSignature,
+          measurePlacement,
+          orphanGlyphs,
+          inkThreshold,
+          captureDetectorObservations,
+          vectorAccidentalPaths,
+          vectorAugmentationDotPaths,
+          noteheadFallbackCalibration,
+          accidentalPathCalibration,
+        })
+        noteCount += record.vectorNoteCount ?? 0
+        return record
+      }),
+    )
+  } else if (!captureDetectorObservations) {
+    for (const record of measureRecordsBySystem.flat()) {
+      delete record.detectorObservations
     }
   }
 
@@ -3537,6 +3716,17 @@ export function processVectorPageSystems({
         }
         return counts
       }, {}),
+    },
+    accidentalPathCalibrationDiagnostics: {
+      ...accidentalPathCalibration.diagnostics,
+      appliedCount: flatRecords.reduce(
+        (sum, record) =>
+          sum +
+          (record.vectorAccidentalDiagnostics?.selectedAttachments ?? []).filter(
+            (attachment) => attachment.pathCalibration,
+          ).length,
+        0,
+      ),
     },
   }
 }
