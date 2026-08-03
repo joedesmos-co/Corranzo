@@ -66,6 +66,41 @@ function drawNatural(imageData, cx, cy, size = 14) {
   fillRect(imageData, cx - size * 0.18, cy - size * 0.22, size * 0.6, hw)
 }
 
+function completeSharpPath(x, y) {
+  return [
+    0, x + 2, y,
+    1, x + 2, y + 16,
+    0, x + 8, y,
+    1, x + 8, y + 16,
+    0, x, y + 5,
+    1, x + 10, y + 6,
+    0, x, y + 11,
+    1, x + 10, y + 12,
+  ]
+}
+
+function rectanglePath(x0, y0, x1, y1) {
+  return [
+    0, x0, y0,
+    1, x1, y0,
+    1, x1, y1,
+    1, x0, y1,
+    1, x0, y0,
+    3,
+  ]
+}
+
+function filledCirclePath(x, y) {
+  return [
+    0, x, y + 2.5,
+    2, x, y + 1.1, x + 1.1, y, x + 2.5, y,
+    2, x + 3.9, y, x + 5, y + 1.1, x + 5, y + 2.5,
+    2, x + 5, y + 3.9, x + 3.9, y + 5, x + 2.5, y + 5,
+    2, x + 1.1, y + 5, x, y + 3.9, x, y + 2.5,
+    3,
+  ]
+}
+
 const measureBox = {
   x0: 0.05,
   playableX0: 0.12,
@@ -140,6 +175,88 @@ describe('detectVectorPathAccidentals geometry', () => {
         filled: false,
       }),
     ).toBeNull()
+  })
+
+  it('does not reuse independently classified complete paths in sharp clusters', () => {
+    const paths = [
+      completeSharpPath(100, 90),
+      completeSharpPath(101, 90),
+      completeSharpPath(102, 90),
+    ]
+    const symbols = extractPdfVectorPathSymbolsFromOperatorList({
+      operatorList: {
+        fnArray: paths.map(() => 11),
+        argsArray: paths.map((path) => [21, [path]]),
+      },
+      ops: {
+        constructPath: 11,
+        fill: 21,
+      },
+      viewportTransform: [1, 0, 0, 1, 0, 0],
+      pageNumber: 3,
+      targetWidth: 1000,
+    })
+
+    expect(symbols.accidentalPaths).toHaveLength(3)
+    expect(symbols.accidentalPaths.every((candidate) => candidate.reason === 'path-cross')).toBe(
+      true,
+    )
+    expect(
+      symbols.accidentalPaths.some((candidate) => candidate.candidateId.includes('-cluster-')),
+    ).toBe(false)
+  })
+
+  it('still clusters separately painted sharp strokes', () => {
+    const paths = [
+      rectanglePath(101, 90, 103, 106),
+      rectanglePath(107, 90, 109, 106),
+      rectanglePath(99, 95, 111, 97),
+      rectanglePath(99, 101, 111, 103),
+    ]
+    const symbols = extractPdfVectorPathSymbolsFromOperatorList({
+      operatorList: {
+        fnArray: paths.map(() => 11),
+        argsArray: paths.map((path) => [21, [path]]),
+      },
+      ops: {
+        constructPath: 11,
+        fill: 21,
+      },
+      viewportTransform: [1, 0, 0, 1, 0, 0],
+      pageNumber: 4,
+      targetWidth: 1000,
+    })
+
+    expect(symbols.accidentalPaths).toHaveLength(1)
+    expect(symbols.accidentalPaths[0]).toMatchObject({
+      candidateId: 'pdf-acc-p4-cluster-0',
+      reason: 'path-cluster-sharp',
+      type: 'sharp',
+    })
+  })
+
+  it('does not reuse a complete augmentation dot to meet the sharp cluster size', () => {
+    const paths = [
+      rectanglePath(101, 90, 103, 106),
+      rectanglePath(99, 95, 111, 97),
+      filledCirclePath(103, 96),
+    ]
+    const symbols = extractPdfVectorPathSymbolsFromOperatorList({
+      operatorList: {
+        fnArray: paths.map(() => 11),
+        argsArray: paths.map((path) => [21, [path]]),
+      },
+      ops: {
+        constructPath: 11,
+        fill: 21,
+      },
+      viewportTransform: [1, 0, 0, 1, 0, 0],
+      pageNumber: 5,
+      targetWidth: 1000,
+    })
+
+    expect(symbols.augmentationDotPaths).toHaveLength(1)
+    expect(symbols.accidentalPaths).toHaveLength(0)
   })
 
   it('classifies a sharp path from cross stroke geometry', () => {
@@ -302,12 +419,17 @@ describe('detectVectorPathAccidentals geometry', () => {
           type: 'sharp',
           alter: 1,
           confidence: 0.9,
+          reason: 'path-cross',
           x: 128,
           y: 120,
           bounds: { x0: 120, x1: 136, y0: 108, y1: 132, width: 16, height: 24 },
         },
       ],
       accidentalGlyphs: ACCIDENTAL_GLYPHS,
+    })
+    expect(glyphs[0]).toMatchObject({
+      pathCandidateId: 'chord-sharp',
+      reason: 'path-cross',
     })
     const assigned = assignLocalAccidentals(glyphs, imageData, measureBox, notes, ACCIDENTAL_GLYPHS)
     expect(assigned.get(1)?.type).toBe('sharp')

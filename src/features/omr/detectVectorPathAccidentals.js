@@ -382,7 +382,20 @@ export function extractPdfVectorPathSymbolsFromOperatorList({
         closeCount: parsed.closeCount,
       })
     }
+
+    const classification = classifyAccidentalPathGeometry(parsed, {
+      staffGap: staffGapGuess,
+    })
+    const directlyClassifiedAccidental =
+      classification != null && classification.confidence >= 0.62
+
+    // Complete paths already emitted as accidentals or augmentation dots are
+    // not fragments. Reusing them here can synthesize a second, wider sharp
+    // from several independently valid glyphs in the same dense chord column.
+    // Only unclassified geometry remains eligible for composite recovery.
     if (
+      !dotClassification &&
+      !directlyClassifiedAccidental &&
       bounds.width > 0 &&
       bounds.height > 0 &&
       bounds.width < staffGapGuess * 3.5 &&
@@ -395,10 +408,7 @@ export function extractPdfVectorPathSymbolsFromOperatorList({
       })
     }
 
-    const classification = classifyAccidentalPathGeometry(parsed, {
-      staffGap: staffGapGuess,
-    })
-    if (!classification || classification.confidence < 0.62) {
+    if (!directlyClassifiedAccidental) {
       continue
     }
 
@@ -838,6 +848,7 @@ export function detectVectorPathAccidentals({
       source: 'vector-path',
       confidence: candidate.confidence,
       pathCandidateId: candidate.candidateId,
+      reason: candidate.reason,
       accidentalType: candidate.type,
       alter: candidate.alter,
       bounds: candidate.bounds,
