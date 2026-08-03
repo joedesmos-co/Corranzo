@@ -63,6 +63,11 @@ import {
   summarizeAppliedVectorBeamTopology,
 } from './applyVectorBeamTopology.js'
 import { packJointPolyphonicRhythm } from './jointPolyphonicRhythm.js'
+import {
+  applyNoteheadFallbackCalibration,
+  buildNoteheadFallbackCalibrations,
+  createNoteheadFallbackCalibrationSample,
+} from './noteheadFallbackCalibration.js'
 
 const HALF_NOTEHEAD_GLYPH = '\ue0a3'
 const WHOLE_NOTEHEAD_GLYPH = '\ue0a2'
@@ -98,6 +103,105 @@ const TIME_DIGIT_GLYPHS = {
   '\ue084': 4,
 }
 const VECTOR_MIN_NOTEHEADS = 12
+
+function noteheadAnchorCacheKey(glyph, lineYs = []) {
+  return [
+    glyph?.fontName ?? '',
+    glyph?.text ?? '',
+    Number(glyph?.x).toFixed(4),
+    Number(glyph?.y).toFixed(4),
+    lineYs.map((value) => Number(value).toFixed(6)).join(','),
+  ].join('|')
+}
+
+function rawNoteheadAnchor(
+  glyph,
+  imageData,
+  lineYs,
+  inkThreshold,
+  calibration,
+) {
+  const cacheKey = noteheadAnchorCacheKey(glyph, lineYs)
+  const cached = calibration?.anchorCache?.get(cacheKey)
+  if (cached) {
+    return cached
+  }
+  const anchor = resolveNoteheadAnchor(glyph, imageData, lineYs, {
+    inkThreshold,
+  })
+  calibration?.anchorCache?.set(cacheKey, anchor)
+  return anchor
+}
+
+export function buildPageNoteheadFallbackCalibration({
+  glyphs,
+  imageData,
+  systems,
+  systemMeasureBoxes,
+  staffClefsBySystem,
+  inkThreshold = 170,
+}) {
+  const anchorCache = new Map()
+  const samples = []
+  const sampledGlyphs = new Set()
+
+  for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
+    const boxes = systemMeasureBoxes[systemIndex] ?? []
+    const referenceBox = boxes[0]
+    if (!referenceBox) {
+      continue
+    }
+    const staffClefs = staffClefsBySystem.get(systemIndex)
+    const staffLines = referenceBox.staffLines
+    for (const glyph of glyphs) {
+      if (
+        !NOTEHEAD_GLYPHS.has(glyph.text) ||
+        sampledGlyphs.has(glyph) ||
+        !boxes.some((measureBox, measureIndex) =>
+          vectorGlyphInMeasure(glyph, measureBox, imageData, {
+            isLastInSystem: measureIndex === boxes.length - 1,
+          }),
+        )
+      ) {
+        continue
+      }
+      sampledGlyphs.add(glyph)
+      const roughMapping = resolvePitchFromGrandStaff(
+        glyph.y / imageData.height,
+        staffLines,
+        staffClefs,
+      )
+      const anchor = rawNoteheadAnchor(
+        glyph,
+        imageData,
+        roughMapping.lineYs,
+        inkThreshold,
+        { anchorCache },
+      )
+      const sample = createNoteheadFallbackCalibrationSample({
+        glyph,
+        anchor,
+        imageData,
+      })
+      if (sample) {
+        samples.push(sample)
+      }
+    }
+  }
+
+  const calibration = buildNoteheadFallbackCalibrations(samples)
+  return {
+    ...calibration,
+    anchorCache,
+    diagnostics: {
+      scope: 'page-font-glyph',
+      sampledGlyphCount: sampledGlyphs.size,
+      eligibleSampleCount: calibration.eligibleSampleCount,
+      accepted: calibration.accepted,
+      rejected: calibration.rejected,
+    },
+  }
+}
 
 function average(values) {
   if (!values.length) {
@@ -238,6 +342,7 @@ function noteheadsForMeasure(
   inkThreshold = 170,
   vectorAccidentalPaths = [],
   vectorAugmentationDotPaths = [],
+  noteheadFallbackCalibration = null,
 ) {
   const notes = []
   const consumed = new Set()
@@ -261,12 +366,20 @@ function noteheadsForMeasure(
       measureBox.staffLines,
       measureBox.staffClefs,
     )
-    const noteheadAnchor = resolveNoteheadAnchor(
+    const uncalibratedAnchor = rawNoteheadAnchor(
       glyph,
       imageData,
       roughMapping.lineYs,
-      { inkThreshold },
+      inkThreshold,
+      noteheadFallbackCalibration,
     )
+    const noteheadAnchor = applyNoteheadFallbackCalibration({
+      anchor: uncalibratedAnchor,
+      glyph,
+      imageData,
+      lineYs: roughMapping.lineYs,
+      calibration: noteheadFallbackCalibration,
+    })
     const yNorm = noteheadAnchor.yNorm ?? yRough
     const pitchMapping = resolvePitchFromGrandStaff(
       yNorm,
@@ -2968,6 +3081,7 @@ export function buildVectorMeasureRecord({
   captureDetectorObservations = false,
   vectorAccidentalPaths = [],
   vectorAugmentationDotPaths = [],
+  noteheadFallbackCalibration = null,
 }) {
   const {
     notes,
@@ -2986,6 +3100,7 @@ export function buildVectorMeasureRecord({
     inkThreshold,
     vectorAccidentalPaths,
     vectorAugmentationDotPaths,
+    noteheadFallbackCalibration,
   )
   const rawDetectedRests = restsForMeasure(
     glyphs,
@@ -3195,6 +3310,20 @@ export function buildVectorMeasureRecord({
   )
   const musicalEventReconstructionDiagnostics =
     summarizeMusicalEventReconstruction(events)
+  const noteheadFallbackCalibrationDiagnostics = {
+    appliedCount: notes.filter(
+      (note) =>
+        note.noteheadAnchor?.source === 'self-calibrated-glyph-fallback',
+    ).length,
+    byInkRejectionReason: notes.reduce((counts, note) => {
+      if (note.noteheadAnchor?.source !== 'self-calibrated-glyph-fallback') {
+        return counts
+      }
+      const reason = note.noteheadAnchor.inkRejectedReason ?? 'unknown'
+      counts[reason] = (counts[reason] ?? 0) + 1
+      return counts
+    }, {}),
+  }
   let rhythmProvenance = null
   if (provenance) {
     rhythmProvenance = provenance.finalize()
@@ -3232,6 +3361,7 @@ export function buildVectorMeasureRecord({
     vectorAccentDiagnostics,
     vectorNotationArticulationDiagnostics:
       combinedVectorNotationArticulationDiagnostics,
+    noteheadFallbackCalibrationDiagnostics,
     vectorNoteMatching,
     vectorChordDiagnostics,
     adjacentSlotChordGroupingDiagnostics,
@@ -3282,6 +3412,20 @@ export function processVectorPageSystems({
     const boxes = systemMeasureBoxes[systemIndex] ?? []
     const staffClefs = detectStaffClefsFromGlyphs(glyphs, imageData, boxes[0]?.staffLines)
     staffClefsBySystem.set(systemIndex, staffClefs)
+  }
+
+  const noteheadFallbackCalibration = buildPageNoteheadFallbackCalibration({
+    glyphs,
+    imageData,
+    systems,
+    systemMeasureBoxes,
+    staffClefsBySystem,
+    inkThreshold,
+  })
+
+  for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
+    const boxes = systemMeasureBoxes[systemIndex] ?? []
+    const staffClefs = staffClefsBySystem.get(systemIndex)
     const measures = boxes.map((measureBox, measureIndex) => {
       const measurePlacement = {
         isLastInSystem: measureIndex === boxes.length - 1,
@@ -3300,6 +3444,7 @@ export function processVectorPageSystems({
         captureDetectorObservations,
         vectorAccidentalPaths,
         vectorAugmentationDotPaths,
+        noteheadFallbackCalibration,
       })
       noteCount += record.vectorNoteCount ?? 0
       return record
@@ -3340,6 +3485,7 @@ export function processVectorPageSystems({
         inkThreshold,
         captureDetectorObservations,
         vectorAugmentationDotPaths,
+        noteheadFallbackCalibration,
       })
       noteCount += (rebuilt.vectorNoteCount ?? 0) - (previous.vectorNoteCount ?? 0)
       measureRecordsBySystem[systemIndex][measureIndex] = rebuilt
@@ -3374,6 +3520,24 @@ export function processVectorPageSystems({
     accentDiagnostics: summarizeVectorAccentDiagnostics(flatRecords),
     notationArticulationDiagnostics:
       summarizeVectorNotationArticulationDiagnostics(flatRecords),
+    noteheadFallbackCalibrationDiagnostics: {
+      ...noteheadFallbackCalibration.diagnostics,
+      appliedCount: flatRecords.reduce(
+        (sum, record) =>
+          sum +
+          (record.noteheadFallbackCalibrationDiagnostics?.appliedCount ?? 0),
+        0,
+      ),
+      byInkRejectionReason: flatRecords.reduce((counts, record) => {
+        for (const [reason, count] of Object.entries(
+          record.noteheadFallbackCalibrationDiagnostics
+            ?.byInkRejectionReason ?? {},
+        )) {
+          counts[reason] = (counts[reason] ?? 0) + count
+        }
+        return counts
+      }, {}),
+    },
   }
 }
 
