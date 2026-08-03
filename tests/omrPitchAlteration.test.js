@@ -157,4 +157,28 @@ describe('assignLocalAccidentals', () => {
     )
     expect(alignedScore).toBeLessThan(misalignedScore)
   })
+
+  it('matches accidentals to the calibrated optical notehead position', () => {
+    const notes = [
+      {
+        cx: 330,
+        cy: 350,
+        yNorm: 0.318,
+        clef: 'bass',
+        naturalMidi: 53,
+        noteheadAnchor: { calibration: { scope: 'page-font-glyph' } },
+      },
+      { cx: 330, cy: 318, yNorm: 0.35, clef: 'bass', naturalMidi: 48 },
+    ]
+    const assignments = assignLocalAccidentals(
+      [{ text: '\uE262', x: 290, y: 318 }],
+      imageData,
+      measureBox,
+      notes,
+      ACCIDENTAL_GLYPHS,
+    )
+
+    expect(assignments.get(0)?.type).toBe('sharp')
+    expect(assignments.get(1)).toBeUndefined()
+  })
 })

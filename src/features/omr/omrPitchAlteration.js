@@ -255,6 +255,12 @@ function staffGapPixels(lineYs, imageData) {
   return Math.max(4, ((sorted[sorted.length - 1] - sorted[0]) / 4) * imageData.height)
 }
 
+function accidentalAnchorY(note, imageData) {
+  return note?.noteheadAnchor?.calibration && Number.isFinite(note.yNorm)
+    ? note.yNorm * imageData.height
+    : note?.cy
+}
+
 export function accidentalMatchWindow(measureBox, lineYs, imageData) {
   const staffGap = staffGapPixels(lineYs, imageData)
   const maxDx = Math.max(24, staffGap * 3.2)
@@ -271,7 +277,8 @@ export function accidentalMatchScore(note, glyph, window, lineYs, imageData) {
   if (dx <= 0 || dx > window.maxDx) {
     return null
   }
-  const dy = Math.abs(note.cy - glyph.y)
+  const noteAnchorY = accidentalAnchorY(note, imageData)
+  const dy = Math.abs(noteAnchorY - glyph.y)
   if (dy > window.maxDy) {
     return null
   }
@@ -339,6 +346,11 @@ export function assignLocalAccidentals(glyphs, imageData, measureBox, notes, acc
         x: candidate.glyph.x,
         y: candidate.glyph.y,
         fontName: candidate.glyph.fontName ?? null,
+        source: candidate.glyph.source ?? null,
+        candidateId:
+          candidate.glyph.pathCandidateId ?? candidate.glyph.candidateId ?? null,
+        reason: candidate.glyph.reason ?? null,
+        bounds: candidate.glyph.bounds ?? null,
       },
       note: {
         measureNumber: notes[candidate.noteIndex]?.measureNumber ?? null,
@@ -346,6 +358,7 @@ export function assignLocalAccidentals(glyphs, imageData, measureBox, notes, acc
         naturalMidi: notes[candidate.noteIndex]?.naturalMidi ?? null,
         cx: notes[candidate.noteIndex]?.cx ?? null,
         cy: notes[candidate.noteIndex]?.cy ?? null,
+        anchorY: accidentalAnchorY(notes[candidate.noteIndex], imageData) ?? null,
       },
     })),
     selectedAttachments: [...assignments.entries()].map(
@@ -358,6 +371,13 @@ export function assignLocalAccidentals(glyphs, imageData, measureBox, notes, acc
           text: accidental.glyph.text,
           x: accidental.glyph.x,
           y: accidental.glyph.y,
+          source: accidental.glyph.source ?? null,
+          candidateId:
+            accidental.glyph.pathCandidateId ??
+            accidental.glyph.candidateId ??
+            null,
+          reason: accidental.glyph.reason ?? null,
+          bounds: accidental.glyph.bounds ?? null,
         },
         note: {
           measureNumber: notes[noteIndex]?.measureNumber ?? null,
@@ -365,6 +385,7 @@ export function assignLocalAccidentals(glyphs, imageData, measureBox, notes, acc
           naturalMidi: notes[noteIndex]?.naturalMidi ?? null,
           cx: notes[noteIndex]?.cx ?? null,
           cy: notes[noteIndex]?.cy ?? null,
+          anchorY: accidentalAnchorY(notes[noteIndex], imageData) ?? null,
         },
       }),
     ),
